@@ -1,0 +1,11 @@
+services:
+  web:
+    build: .
+    ports:
+      - 3000:3000
+    tty: true
+    volumes:
+      - .:/usr/src/app:cached
+      - ./node_modules:/usr/src/app/node_modules:cached
+    environment:
+      - NODE_ENV=development
