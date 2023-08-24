@@ -6,6 +6,7 @@
   "workspaceFolder": "/usr/src/app",
   // Use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
   "dockerComposeFile": ["../compose.yaml"],
+  "mounts": ["source=${localEnv:HOME}/.ssh,target=/home/node/.ssh,type=bind,consistency=cached"],
   // Features to add to the dev container. More info: https://containers.dev/features.
   // "features": {},
   //
