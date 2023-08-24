@@ -8,7 +8,9 @@ node_modules
 !.env.example
 
 # Ignore files for PNPM, NPM and YARN
+/.pnpm-store
 pnpm-lock.yaml
 package-lock.json
 yarn.lock
-/.pnpm-store
+vite.config.js.timestamp-*
+vite.config.ts.timestamp-*
