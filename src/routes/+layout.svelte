@@ -18,6 +18,7 @@
 
 <!-- TODO: Extract component -->
 <!-- TODO: Use const -->
+<!-- TODO: Change default color if needs -->
 <Navbar let:hidden let:toggle>
   <NavBrand href="/">
     <img src="favicon.png" class="mr-3 h-6 sm:h-9" alt="AtCoder HogeHoges Logo" />
