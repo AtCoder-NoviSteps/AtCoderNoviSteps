@@ -1,10 +1,66 @@
 <!-- TODO: Add styles -->
-<nav>
-  AtCoder HogeHoges
+<script>
+  import '../app.css';
+  import {
+    Footer,
+    FooterCopyright,
+    Dropdown,
+    DropdownItem,
+    DropdownDivider,
+    Navbar,
+    NavBrand,
+    NavLi,
+    NavUl,
+    NavHamburger,
+  } from 'flowbite-svelte';
+  import { Icon } from 'flowbite-svelte-icons';
+</script>
 
-  <a href="/">Home</a>
-  <a href="/about">About</a>
-  <a href="/problems">Problems</a>
-</nav>
+<!-- TODO: Extract component -->
+<!-- TODO: Use const -->
+<Navbar let:hidden let:toggle>
+  <NavBrand href="/">
+    <img src="favicon.png" class="mr-3 h-6 sm:h-9" alt="AtCoder HogeHoges Logo" />
+    <span class="self-center whitespace-nowrap text-xl font-semibold dark:text-white"
+      >AtCoder HogeHoges</span
+    >
+  </NavBrand>
+  <NavHamburger on:click={toggle} />
+  <NavUl {hidden}>
+    <NavLi href="/">Home</NavLi>
+    <NavLi href="/about">About</NavLi>
+    <NavLi href="/problems">Problems</NavLi>
+    <NavLi id="nav-external-links" class="cursor-pointer">
+      Links
+      <Icon
+        name="chevron-down-outline"
+        class="w-3 h-3 ml-2 text-primary-800 dark:text-white inline"
+      />
+    </NavLi>
+    <Dropdown triggeredBy="#nav-external-links" class="w-44 z-20">
+      <DropdownItem href="https://atcoder.jp" target="_blank" rel="noreferrer">
+        AtCoder
+      </DropdownItem>
+      <DropdownItem href="https://github.com/" target="_blank" rel="noreferrer">
+        GitHub
+      </DropdownItem>
+      <DropdownDivider />
+      <DropdownItem href="https://kenkoooo.com/atcoder/#/" target="_blank" rel="noreferrer">
+        AtCoder Problems
+      </DropdownItem>
+      <!-- TODO: Add login / lougout -->
+    </Dropdown>
+  </NavUl>
+</Navbar>
 
 <slot />
+
+<!-- FIXME: Expect to be centered because it moves to the left edge when the pixel is less than 768. -->
+<Footer>
+  <FooterCopyright
+    href="/"
+    by="AtCoder HogeHoges team, "
+    year={2023}
+    spanClass="w-screen text-center"
+  />
+</Footer>
