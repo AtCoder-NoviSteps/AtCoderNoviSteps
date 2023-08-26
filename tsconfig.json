@@ -5,6 +5,8 @@
     "checkJs": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
+    "incremental": true,
+    "moduleResolution": "nodenext",
     "outDir": "./build",
     "paths": {
       "@/*": ["./src/*"],
