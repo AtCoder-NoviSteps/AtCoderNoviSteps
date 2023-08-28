@@ -10,7 +10,7 @@
 
   export let data;
 
-  import { ATCODER_BASE_URL, ATCODER_BASE_CONTEST_URL } from '$lib/constants/urls';
+  import { ATCODER_BASE_CONTEST_URL } from '$lib/constants/urls';
 
   let tasks = data.tasks;
   let tasks10Kyu = tasks.filter((task) => task.grade === '10Kyu');
