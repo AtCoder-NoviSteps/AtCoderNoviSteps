@@ -19,6 +19,7 @@
 <!-- FIXME: タイトルのフォントをやや大きく -->
 <h1>Problems</h1>
 
+<!-- TODO: 他の級・段も表示できるように -->
 <!-- TODO: Extract a component. -->
 <h2>10級</h2>
 <div>
