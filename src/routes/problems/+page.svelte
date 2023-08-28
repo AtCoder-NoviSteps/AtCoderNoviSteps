@@ -10,6 +10,8 @@
 
   export let data;
 
+  import { ATCODER_BASE_URL, ATCODER_BASE_CONTEST_URL } from '$lib/constants/urls';
+
   let tasks = data.tasks;
   let tasks10Kyu = tasks.filter((task) => task.grade === '10Kyu');
 </script>
@@ -36,8 +38,24 @@
       {#each tasks10Kyu as task}
         <TableBodyRow>
           <TableBodyCell>{task.submission_result}</TableBodyCell>
-          <TableBodyCell>{task.contest_id.toUpperCase()}</TableBodyCell>
-          <TableBodyCell>{task.title}</TableBodyCell>
+          <TableBodyCell>
+            <a
+              href="{ATCODER_BASE_CONTEST_URL}/{task.contest_id}"
+              class="font-medium text-primary-600 hover:underline dark:text-primary-500"
+              target="_blank"
+              rel="noreferrer"
+            >
+              {task.contest_id.toUpperCase()}
+            </a>
+          </TableBodyCell>
+          <TableBodyCell>
+            <a
+              href="/problems/{task.id}"
+              class="font-medium text-primary-600 hover:underline dark:text-primary-500"
+            >
+              {task.title}
+            </a>
+          </TableBodyCell>
           <TableBodyCell>編集</TableBodyCell>
         </TableBodyRow>
       {/each}
