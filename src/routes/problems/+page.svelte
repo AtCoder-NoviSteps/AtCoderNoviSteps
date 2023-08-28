@@ -28,7 +28,9 @@
       <TableHeadCell>提出状況</TableHeadCell>
       <TableHeadCell>コンテスト名</TableHeadCell>
       <TableHeadCell>問題名</TableHeadCell>
-      <TableHeadCell>...</TableHeadCell>
+      <TableHeadCell>
+        <span class="sr-only">編集</span>
+      </TableHeadCell>
     </TableHead>
     <TableBody tableBodyClass="divide-y">
       {#each tasks10Kyu as task}
