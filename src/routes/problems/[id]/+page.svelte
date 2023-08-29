@@ -24,6 +24,7 @@
 
 <!-- TODO: Add face icons. -->
 <!-- HACK: flowbite-svelte-icons has few face icon. -->
+<!-- TODO: Add tooltips to buttons for submission results -->
 <div class="flex flex-col items-center">
   <Button class="w-screen max-w-lg md:max-w-xl m-3">No Sub</Button>
   <Button class="w-screen max-w-lg md:max-w-xl m-3">AC</Button>
