@@ -7,6 +7,10 @@
   let task = data.task;
 
   const taskUrl = `${ATCODER_BASE_CONTEST_URL}/${task.contest_id}/tasks/${task.id}`;
+
+  const handleClick = () => {
+    alert('clicked');
+  };
 </script>
 
 <div class="max-w-lg md:max-w-2xl mx-auto mb-3">
@@ -33,13 +37,19 @@
 
 <!-- TODO: Add face icons. -->
 <!-- HACK: flowbite-svelte-icons has few face icon. -->
-<!-- TODO: Add tooltips to buttons for submission results -->
-<!-- FIXME: ボタンの色をAtCoder本家に合わせる -->
 <!-- TODO: ボタンをクリックしたら、回答状況に応じてイメージ画像を差し替え -->
+<!-- FIXME: ボタンの色をAtCoder本家に合わせる -->
 <!-- FIXME: ハードコーディングしている部分を定数に差し替え -->
+<!-- TODO: Add tooltips to buttons for submission results -->
 <!-- See: https://tailwindcss.com/docs/align-items -->
 <div class="flex flex-col items-center">
-  <Button color="light" shadow class="w-screen max-w-lg md:max-w-xl m-3">No Sub</Button>
-  <Button color="green" shadow class="w-screen max-w-lg md:max-w-xl m-3">AC</Button>
-  <Button color="yellow" shadow class="w-screen max-w-lg md:max-w-xl m-3">WA</Button>
+  <Button color="light" shadow class="w-screen max-w-lg md:max-w-xl m-3" on:click={handleClick}>
+    No Sub
+  </Button>
+  <Button color="green" shadow class="w-screen max-w-lg md:max-w-xl m-3" on:click={handleClick}>
+    AC
+  </Button>
+  <Button color="yellow" shadow class="w-screen max-w-lg md:max-w-xl m-3" on:click={handleClick}>
+    WA
+  </Button>
 </div>
