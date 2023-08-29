@@ -12,6 +12,7 @@
   //
   // Use 'forwardPorts' to make a list of ports inside the container available locally.
   "forwardPorts": [3000],
+  "shutdownAction": "none",
   //
   // Use 'postCreateCommand' to run commands after the container is created.
   // "postCreateCommand": "yarn install",
@@ -43,7 +44,9 @@
             "mode": "auto"
           }
         ],
-        "files.associations": {},
+        "files.associations": {
+          "*.css": "tailwindcss"
+        },
         "files.insertFinalNewline": true,
         "files.trimFinalNewlines": true,
         "files.trimTrailingWhitespace": true,
@@ -62,6 +65,7 @@
         "svelte.enable-ts-plugin": true
       },
       "extensions": [
+        "bradlc.vscode-tailwindcss",
         "christian-kohler.path-intellisense",
         "csstools.postcss",
         "dbaeumer.vscode-eslint",
