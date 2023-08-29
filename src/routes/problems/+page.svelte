@@ -19,12 +19,13 @@
 <!-- TODO: Add styles -->
 <!-- FIXME: テーブルのフォントをやや大きく -->
 <!-- FIXME: タイトルのフォントをやや大きく -->
-<h1>Problems</h1>
 
 <!-- TODO: 他の級・段も表示できるように -->
 <!-- TODO: Extract a component. -->
-<h2>10級</h2>
-<div>
+<div class="container mx-auto w-5/6">
+  <h1>Problems</h1>
+  <h2>10級</h2>
+
   <Table shadow>
     <TableHead>
       <TableHeadCell>提出状況</TableHeadCell>
