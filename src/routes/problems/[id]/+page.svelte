@@ -23,7 +23,15 @@
 <!-- TODO: 回答状況に合わせてイメージ画像を差し替え -->
 <!-- FIXME: ハードコーディングしている部分を定数に差し替え -->
 <!-- <p>{task.submission_result}</p> -->
-<Card img="../../favicon.png" href={taskUrl} horizontal class="mb-10 mx-auto" size="md">
+<Card
+  img="../../favicon.png"
+  href={taskUrl}
+  target="_blank"
+  rel="noreferrer"
+  horizontal
+  class="mb-10 mx-auto"
+  size="md"
+>
   <h4 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
     {task.grade.replace('Kyu', '級').replace('Dan', '段')}
   </h4>
