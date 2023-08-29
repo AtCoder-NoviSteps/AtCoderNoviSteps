@@ -1,5 +1,5 @@
 <script>
-  import { Card, Button } from 'flowbite-svelte';
+  import { Card, Button, Breadcrumb, BreadcrumbItem } from 'flowbite-svelte';
   import { ATCODER_BASE_CONTEST_URL } from '$lib/constants/urls';
   import ExternalLinkIcon from '$lib/components/ExternalLinkIcon.svelte';
 
@@ -9,12 +9,12 @@
   const taskUrl = `${ATCODER_BASE_CONTEST_URL}/${task.contest_id}/tasks/${task.id}`;
 </script>
 
-<!-- TODO: Add styles -->
-<!-- 両端に5%程度スペースを空ける -->
-<h1 class="text-2xl">Problems details</h1>
-
-<!-- TODO: パンくずリストを追加 -->
-<!-- 問題リスト > 問題名 -->
+<div class="max-w-lg md:max-w-2xl mx-auto mb-3">
+  <Breadcrumb aria-label="">
+    <BreadcrumbItem href="/problems" home>Problems</BreadcrumbItem>
+    <BreadcrumbItem>{task.title}</BreadcrumbItem>
+  </Breadcrumb>
+</div>
 
 <!-- TODO: 回答状況に合わせてイメージ画像を差し替え -->
 <!-- <p>{task.submission_result}</p> -->
