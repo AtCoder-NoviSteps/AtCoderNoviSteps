@@ -12,10 +12,9 @@
 </script>
 
 <!-- TODO: 他の級・段も表示できるように -->
-<!-- TODO: テーブルの各項目の比率を揃える -->
 <!-- FIXME: コードの重複があるので、リファクタリング -->
 <div class="container mx-auto w-5/6">
-  <h1 class="text-3xl mb-3">Problems</h1>
+  <h1 class="text-3xl">Problems</h1>
   <TaskList grade="10級" tasks={tasks10Kyu} />
   <TaskList grade="9級" tasks={tasks9Kyu} />
 </div>

@@ -15,14 +15,14 @@
   export let tasks: Tasks;
 </script>
 
-<h2 class="text-xl mb-1">{grade}</h2>
+<h2 class="text-xl mt-4 mb-2">{grade}</h2>
 
 <Table shadow class="text-md">
   <TableHead class="text-md">
-    <TableHeadCell>提出状況</TableHeadCell>
-    <TableHeadCell>コンテスト名</TableHeadCell>
-    <TableHeadCell>問題名</TableHeadCell>
-    <TableHeadCell>
+    <TableHeadCell class="w-1/6">提出状況</TableHeadCell>
+    <TableHeadCell class="w-1/6">コンテスト名</TableHeadCell>
+    <TableHeadCell class="w-1/2">問題名</TableHeadCell>
+    <TableHeadCell class="w-1/6">
       <span class="sr-only">編集</span>
     </TableHeadCell>
   </TableHead>
