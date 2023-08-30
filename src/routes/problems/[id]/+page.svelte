@@ -13,51 +13,54 @@
   };
 </script>
 
-<div class="max-w-lg md:max-w-2xl mx-auto mb-3">
-  <Breadcrumb aria-label="">
-    <BreadcrumbItem href="/problems" home>Problems</BreadcrumbItem>
-    <BreadcrumbItem>{task.title}</BreadcrumbItem>
-  </Breadcrumb>
-</div>
+<div class="container mx-auto w-5/6">
+  <!-- FIXME: ホームアイコンを問題リストを表すアイコンに変更 -->
+  <div class="max-w-lg md:max-w-2xl mx-auto mb-3">
+    <Breadcrumb aria-label="">
+      <BreadcrumbItem href="/problems" home>Problems</BreadcrumbItem>
+      <BreadcrumbItem>{task.title}</BreadcrumbItem>
+    </Breadcrumb>
+  </div>
 
-<!-- TODO: 回答状況に合わせてイメージ画像を差し替え -->
-<!-- FIXME: ハードコーディングしている部分を定数に差し替え -->
-<!-- <p>{task.submission_result}</p> -->
-<Card
-  img="../../favicon.png"
-  href={taskUrl}
-  target="_blank"
-  rel="noreferrer"
-  horizontal
-  class="mb-10 mx-auto"
-  size="md"
->
-  <h4 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-    {task.grade.replace('Kyu', '級').replace('Dan', '段')}
-  </h4>
-  <h5 class="mb-2 text-3xl tracking-tight text-gray-900 dark:text-white flex">
-    <div class="mr-2">
-      {task.title}
-    </div>
-    <ExternalLinkIcon />
-  </h5>
-</Card>
+  <!-- TODO: 回答状況に合わせてイメージ画像を差し替え -->
+  <!-- FIXME: ハードコーディングしている部分を定数に差し替え -->
+  <!-- <p>{task.submission_result}</p> -->
+  <Card
+    img="../../favicon.png"
+    href={taskUrl}
+    target="_blank"
+    rel="noreferrer"
+    horizontal
+    class="mb-7 mx-auto"
+    size="md"
+  >
+    <h4 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+      {task.grade.replace('Kyu', '級').replace('Dan', '段')}
+    </h4>
+    <h5 class="mb-2 text-3xl tracking-tight text-gray-900 dark:text-white flex">
+      <div class="mr-2">
+        {task.title}
+      </div>
+      <ExternalLinkIcon />
+    </h5>
+  </Card>
 
-<!-- TODO: Add face icons. -->
-<!-- HACK: flowbite-svelte-icons has few face icon. -->
-<!-- TODO: ボタンをクリックしたら、回答状況に応じてイメージ画像を差し替え -->
-<!-- FIXME: ボタンの色をAtCoder本家に合わせる -->
-<!-- FIXME: ハードコーディングしている部分を定数に差し替え -->
-<!-- TODO: Add tooltips to buttons for submission results -->
-<!-- See: https://tailwindcss.com/docs/align-items -->
-<div class="flex flex-col items-center">
-  <Button color="light" shadow class="w-screen max-w-lg md:max-w-xl m-3" on:click={handleClick}>
-    No Sub
-  </Button>
-  <Button color="green" shadow class="w-screen max-w-lg md:max-w-xl m-3" on:click={handleClick}>
-    AC
-  </Button>
-  <Button color="yellow" shadow class="w-screen max-w-lg md:max-w-xl m-3" on:click={handleClick}>
-    WA
-  </Button>
+  <!-- TODO: Add face icons. -->
+  <!-- HACK: flowbite-svelte-icons has few face icon. -->
+  <!-- TODO: ボタンをクリックしたら、回答状況に応じてイメージ画像を差し替え -->
+  <!-- FIXME: ボタンの色をAtCoder本家に合わせる -->
+  <!-- FIXME: ハードコーディングしている部分を定数に差し替え -->
+  <!-- TODO: Add tooltips to buttons for submission results -->
+  <!-- See: https://tailwindcss.com/docs/align-items -->
+  <div class="flex flex-col items-center">
+    <Button color="light" shadow class="w-full max-w-md md:max-w-xl m-3" on:click={handleClick}>
+      No Sub
+    </Button>
+    <Button color="green" shadow class="w-full max-w-md md:max-w-xl m-3" on:click={handleClick}>
+      AC
+    </Button>
+    <Button color="yellow" shadow class="w-full max-w-md md:max-w-xl m-3" on:click={handleClick}>
+      WA
+    </Button>
+  </div>
 </div>

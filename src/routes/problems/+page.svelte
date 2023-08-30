@@ -11,6 +11,7 @@
   let tasks9Kyu = tasks.filter((task: Task) => task.grade === '9Kyu');
 </script>
 
+<!-- TODO: Searchを追加 -->
 <!-- TODO: 他の級・段も表示できるように -->
 <!-- FIXME: コードの重複があるので、リファクタリング -->
 <div class="container mx-auto w-5/6">
