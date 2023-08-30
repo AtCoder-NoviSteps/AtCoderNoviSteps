@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import {
     Dropdown,
     DropdownItem,
@@ -9,13 +9,9 @@
     NavHamburger,
   } from 'flowbite-svelte';
   import { Icon } from 'flowbite-svelte-icons';
-  // FIXME: Update tsconfig.json.
-  // @ts-ignore
-  import { PRODUCT_NAME } from '$lib/constants/product-info.ts';
-  // @ts-ignore
-  import { navbarLinks } from '$lib/constants/navbar-links.ts';
-  // @ts-ignore
-  import { externalLinks } from '$lib/constants/external-links.ts';
+  import { PRODUCT_NAME } from '$lib/constants/product-info';
+  import { navbarLinks } from '$lib/constants/navbar-links';
+  import { externalLinks } from '$lib/constants/external-links';
 </script>
 
 <!-- TODO: Add logo. -->

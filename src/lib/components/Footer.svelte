@@ -1,13 +1,11 @@
-<script>
+<script lang="ts">
   import { Footer, FooterCopyright } from 'flowbite-svelte';
 
-  // FIXME: Update tsconfig.json.
-  // @ts-ignore
-  import { PRODUCT_NAME } from '$lib/constants/product-info.ts';
+  import { PRODUCT_NAME } from '$lib/constants/product-info';
 </script>
 
 <!-- FIXME: Expect to be centered because it moves to the left edge when the pixel is less than 768. -->
-<Footer>
+<Footer class="shadow-none">
   <FooterCopyright
     href="/"
     by="{PRODUCT_NAME} team, "
