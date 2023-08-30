@@ -1,5 +1,5 @@
-export const PRODUCT_NAME = 'AtCoder HogeHoges' as string;
+export const PRODUCT_NAME: string = 'AtCoder HogeHoges';
 
-export const PRODUCT_URL = '' as string;
+export const PRODUCT_URL: string = '';
 
-export const PRODUCT_DESCRIPTION = '' as string;
+export const PRODUCT_DESCRIPTION: string = '';
