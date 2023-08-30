@@ -11,6 +11,10 @@
   <h2 class="text-xl mt-4 mb-2">本サービスの目的</h2>
   <Skeleton size="md" class="my-8" />
 
+  <!-- Usage -->
+  <h2 class="text-xl mt-4 mb-2">使い方</h2>
+  <Skeleton size="md" class="my-8" />
+
   <!-- Glossary -->
   <div class="mt-5 mb-5">
     <Heading tag="h2" customSize="text-xl" class="mb-2 text-xl text-gray-900 dark:text-white">
