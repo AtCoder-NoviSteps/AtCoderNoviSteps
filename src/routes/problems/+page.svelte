@@ -1,61 +1,21 @@
 <script lang="ts">
-  import {
-    Table,
-    TableBody,
-    TableBodyCell,
-    TableBodyRow,
-    TableHead,
-    TableHeadCell,
-  } from 'flowbite-svelte';
+  import type { Tasks, Task } from '$lib/types/task';
+  import TaskList from '$lib/components/TaskList.svelte';
 
   export let data;
 
-  import { ATCODER_BASE_CONTEST_URL } from '$lib/constants/urls';
+  let tasks: Tasks = data.tasks;
 
-  let tasks = data.tasks;
-  let tasks10Kyu = tasks.filter((task) => task.grade === '10Kyu');
+  // FIXME: コードの重複があるので、リファクタリング
+  let tasks10Kyu = tasks.filter((task: Task) => task.grade === '10Kyu');
+  let tasks9Kyu = tasks.filter((task: Task) => task.grade === '9Kyu');
 </script>
 
 <!-- TODO: 他の級・段も表示できるように -->
-<!-- TODO: Extract a component. -->
+<!-- TODO: テーブルの各項目の比率を揃える -->
+<!-- FIXME: コードの重複があるので、リファクタリング -->
 <div class="container mx-auto w-5/6">
   <h1 class="text-3xl mb-3">Problems</h1>
-  <h2 class="text-xl mb-1">10級</h2>
-
-  <Table shadow class="text-md">
-    <TableHead class="text-md">
-      <TableHeadCell>提出状況</TableHeadCell>
-      <TableHeadCell>コンテスト名</TableHeadCell>
-      <TableHeadCell>問題名</TableHeadCell>
-      <TableHeadCell>
-        <span class="sr-only">編集</span>
-      </TableHeadCell>
-    </TableHead>
-    <TableBody tableBodyClass="divide-y">
-      {#each tasks10Kyu as task}
-        <TableBodyRow>
-          <TableBodyCell>{task.submission_result}</TableBodyCell>
-          <TableBodyCell>
-            <a
-              href="{ATCODER_BASE_CONTEST_URL}/{task.contest_id}"
-              class="font-medium text-primary-600 hover:underline dark:text-primary-500"
-              target="_blank"
-              rel="noreferrer"
-            >
-              {task.contest_id.toUpperCase()}
-            </a>
-          </TableBodyCell>
-          <TableBodyCell>
-            <a
-              href="/problems/{task.id}"
-              class="font-medium text-primary-600 hover:underline dark:text-primary-500"
-            >
-              {task.title}
-            </a>
-          </TableBodyCell>
-          <TableBodyCell>編集</TableBodyCell>
-        </TableBodyRow>
-      {/each}
-    </TableBody>
-  </Table>
+  <TaskList grade="10級" tasks={tasks10Kyu} />
+  <TaskList grade="9級" tasks={tasks9Kyu} />
 </div>
