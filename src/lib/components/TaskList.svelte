@@ -17,6 +17,8 @@
 
 <h2 class="text-xl mt-4 mb-2">{grade}</h2>
 
+<!-- TODO: 「編集」ボタンを押したときに問題情報を更新できるようにする -->
+<!-- TODO: 問題が多くなってきたら、ページネーションを導入する -->
 <Table shadow class="text-md">
   <TableHead class="text-md">
     <TableHeadCell class="w-1/6">提出状況</TableHeadCell>
