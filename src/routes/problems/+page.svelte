@@ -16,18 +16,14 @@
   let tasks10Kyu = tasks.filter((task) => task.grade === '10Kyu');
 </script>
 
-<!-- TODO: Add styles -->
-<!-- FIXME: テーブルのフォントをやや大きく -->
-<!-- FIXME: タイトルのフォントをやや大きく -->
-
 <!-- TODO: 他の級・段も表示できるように -->
 <!-- TODO: Extract a component. -->
 <div class="container mx-auto w-5/6">
-  <h1>Problems</h1>
-  <h2>10級</h2>
+  <h1 class="text-3xl mb-3">Problems</h1>
+  <h2 class="text-xl mb-1">10級</h2>
 
-  <Table shadow>
-    <TableHead>
+  <Table shadow class="text-md">
+    <TableHead class="text-md">
       <TableHeadCell>提出状況</TableHeadCell>
       <TableHeadCell>コンテスト名</TableHeadCell>
       <TableHeadCell>問題名</TableHeadCell>
