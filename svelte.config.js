@@ -13,7 +13,7 @@ const config = {
     // See https://kit.svelte.dev/docs/adapters for more information about adapters.
     adapter: adapter({
       // See: https://vercel.com/docs/edge-network/regions
-      regions: 'hnd1', // Tokyo, Japan.
+      regions: ['hnd1'], // Tokyo, Japan.
     }),
   },
 };
