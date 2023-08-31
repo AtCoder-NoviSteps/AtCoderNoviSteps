@@ -144,3 +144,6 @@ vite.config.ts.timestamp-*
 
 # VS Code
 .history
+
+# Vercel
+.vercel
