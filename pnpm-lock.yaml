@@ -38,13 +38,13 @@ devDependencies:
     specifier: ^3.0.3
     version: 3.0.3(@sveltejs/kit@1.24.1)
   '@sveltejs/kit':
-    specifier: ^1.24.0
+    specifier: ^1.24.1
     version: 1.24.1(svelte@4.2.0)(vite@4.4.9)
   '@typescript-eslint/eslint-plugin':
     specifier: ^6.5.0
     version: 6.6.0(@typescript-eslint/parser@6.6.0)(eslint@8.48.0)(typescript@5.2.2)
   '@typescript-eslint/parser':
-    specifier: ^6.5.0
+    specifier: ^6.6.0
     version: 6.6.0(eslint@8.48.0)(typescript@5.2.2)
   eslint:
     specifier: ^8.48.0
@@ -56,7 +56,7 @@ devDependencies:
     specifier: ^2.33.0
     version: 2.33.0(eslint@8.48.0)(svelte@4.2.0)
   flowbite-svelte:
-    specifier: ^0.44.4
+    specifier: ^0.44.8
     version: 0.44.8(svelte@4.2.0)
   flowbite-svelte-icons:
     specifier: ^0.3.6
