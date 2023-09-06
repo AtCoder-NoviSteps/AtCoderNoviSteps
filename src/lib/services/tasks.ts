@@ -1,7 +1,9 @@
-// TODO: Enable to fetch data from the database via API.
+import { error } from '@sveltejs/kit';
 import { tasks } from '$lib/server/sample_data';
 import type { Task, Tasks } from '$lib/types/task';
+import { NOT_FOUND } from '$lib/constants/http-response-status-codes';
 
+// TODO: Enable to fetch data from the database.
 export async function getTasks(): Promise<Tasks> {
   return tasks.map((task: Task) => ({
     contest_id: task.contest_id,
@@ -11,4 +13,12 @@ export async function getTasks(): Promise<Tasks> {
     user_id: task.user_id,
     submission_result: task.submission_result,
   }));
+}
+
+export async function getTask(slug: string): Promise<Task> {
+  const task = tasks.find((task) => task.id === slug);
+
+  if (!task) throw error(NOT_FOUND);
+
+  return task;
 }
