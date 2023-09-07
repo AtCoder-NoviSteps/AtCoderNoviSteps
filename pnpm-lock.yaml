@@ -57,7 +57,7 @@ devDependencies:
     version: 2.33.0(eslint@8.48.0)(svelte@4.2.0)
   flowbite-svelte:
     specifier: ^0.44.8
-    version: 0.44.10(svelte@4.2.0)
+    version: 0.44.13(svelte@4.2.0)
   flowbite-svelte-icons:
     specifier: ^0.3.6
     version: 0.3.6(svelte@4.2.0)(tailwind-merge@1.14.0)(tailwindcss@3.3.3)
@@ -1573,11 +1573,11 @@ packages:
       tailwindcss: 3.3.3
     dev: true
 
-  /flowbite-svelte@0.44.10(svelte@4.2.0):
-    resolution: {integrity: sha512-4IjSIZeBRYx0bAGDXqV+pudKn1iaA8c+dvW9PD0GZ0xOliblr174XxJt9OCy+nk2hc08U/BTGg/Qf2jMojw/TA==}
+  /flowbite-svelte@0.44.13(svelte@4.2.0):
+    resolution: {integrity: sha512-d8M5TFamDezILXPDQen+7V6wW6NbeCKlE8gAMWabTR1N0CQftXlzIptXuqAwtdcV7S4etdqHPe5h7/oRpm/1aA==}
     engines: {node: '>=16.0.0', npm: '>=7.0.0'}
     peerDependencies:
-      svelte: ^3.55.1 || ^4.0.0
+      svelte: ^4.0.0
     dependencies:
       '@floating-ui/dom': 1.5.1
       apexcharts: 3.42.0
