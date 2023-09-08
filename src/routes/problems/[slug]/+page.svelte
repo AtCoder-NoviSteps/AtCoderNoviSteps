@@ -2,12 +2,31 @@
   import { Card, Button, Breadcrumb, BreadcrumbItem } from 'flowbite-svelte';
   import { ATCODER_BASE_CONTEST_URL } from '$lib/constants/urls';
   import ExternalLinkIcon from '$lib/components/ExternalLinkIcon.svelte';
+  import type { ButtonColor } from '$lib/types/flowbite-svelte-wrapper';
 
   export let data;
   let task = data.task;
 
   // FIXME: 汎用的な処理なので、外部ファイルにまとめる
   const taskUrl = `${ATCODER_BASE_CONTEST_URL}/${task.contest_id}/tasks/${task.id}`;
+
+  const buttons = [
+    {
+      submission_status: 'NoSub',
+      color: 'light' as ButtonColor,
+      label: 'No Sub',
+    },
+    {
+      submission_status: 'AC',
+      color: 'green' as ButtonColor,
+      label: 'AC',
+    },
+    {
+      submission_status: 'WA',
+      color: 'yellow' as ButtonColor,
+      label: 'WA',
+    },
+  ];
 </script>
 
 <div class="container mx-auto w-5/6">
@@ -45,42 +64,22 @@
   <!-- HACK: flowbite-svelte-icons has few face icon. -->
   <!-- TODO: ボタンをクリックしたら、回答状況に応じてイメージ画像を差し替え -->
   <!-- FIXME: ボタンの色をAtCoder本家に合わせる -->
-  <!-- FIXME: ハードコーディングしている部分を定数に差し替え -->
   <!-- TODO: Add tooltips to buttons for submission results -->
   <!-- See: https://tailwindcss.com/docs/align-items -->
-  <form class="flex flex-col items-center" name="hoge" method="post">
-    <Button
-      id="NoSub"
-      name="submissionStatus"
-      value="NoSub"
-      color="light"
-      shadow
-      class="w-full max-w-md md:max-w-xl m-3"
-      type="submit"
-    >
-      No Sub
-    </Button>
-    <Button
-      id="AC"
-      name="submissionStatus"
-      value="AC"
-      color="green"
-      shadow
-      class="w-full max-w-md md:max-w-xl m-3"
-      type="submit"
-    >
-      AC
-    </Button>
-    <Button
-      id="WA"
-      name="submissionStatus"
-      value="WA"
-      color="yellow"
-      shadow
-      class="w-full max-w-md md:max-w-xl m-3"
-      type="submit"
-    >
-      WA
-    </Button>
+  <!-- See: https://bobbyhadz.com/blog/typescript-type-string-is-not-assignable-to-type -->
+  <form class="flex flex-col items-center" method="post">
+    {#each buttons as button}
+      <Button
+        id="button.submission_status"
+        name="submissionStatus"
+        value={button.submission_status}
+        color={button.color}
+        shadow
+        class="w-full max-w-md md:max-w-xl m-3"
+        type="submit"
+      >
+        {button.label}
+      </Button>
+    {/each}
   </form>
 </div>
