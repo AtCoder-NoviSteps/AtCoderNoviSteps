@@ -16,7 +16,7 @@ export async function getTasks(): Promise<Tasks> {
     title: task.title,
     grade: task.grade,
     user_id: task.user_id,
-    submission_result: task.submission_result,
+    submission_status: task.submission_status,
   }));
 
   if (!db.has(userId)) {
@@ -34,4 +34,11 @@ export async function getTask(slug: string): Promise<Task> {
   if (!task) throw error(NOT_FOUND, `問題 ${slug} は見つかりませんでした。`);
 
   return task;
+}
+
+export async function updateTask(slug: string, submissionStatus: string) {
+  // TODO: useIdを動的に変更できるようにする。
+  const userId = 'hogehoge';
+  const taskResult: Task = db.get(userId).find((task: Task) => task.id === slug);
+  taskResult.submission_status = submissionStatus;
 }

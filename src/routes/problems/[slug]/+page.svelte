@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { Card, Button, Breadcrumb, BreadcrumbItem } from 'flowbite-svelte';
   import { ATCODER_BASE_CONTEST_URL } from '$lib/constants/urls';
   import ExternalLinkIcon from '$lib/components/ExternalLinkIcon.svelte';
@@ -6,11 +6,8 @@
   export let data;
   let task = data.task;
 
+  // FIXME: 汎用的な処理なので、外部ファイルにまとめる
   const taskUrl = `${ATCODER_BASE_CONTEST_URL}/${task.contest_id}/tasks/${task.id}`;
-
-  const handleClick = () => {
-    alert('clicked');
-  };
 </script>
 
 <div class="container mx-auto w-5/6">
@@ -24,7 +21,6 @@
 
   <!-- TODO: 回答状況に合わせてイメージ画像を差し替え -->
   <!-- FIXME: ハードコーディングしている部分を定数に差し替え -->
-  <!-- <p>{task.submission_result}</p> -->
   <Card
     img="../../favicon.png"
     href={taskUrl}
@@ -52,15 +48,39 @@
   <!-- FIXME: ハードコーディングしている部分を定数に差し替え -->
   <!-- TODO: Add tooltips to buttons for submission results -->
   <!-- See: https://tailwindcss.com/docs/align-items -->
-  <div class="flex flex-col items-center">
-    <Button color="light" shadow class="w-full max-w-md md:max-w-xl m-3" on:click={handleClick}>
+  <form class="flex flex-col items-center" name="hoge" method="post">
+    <Button
+      id="NoSub"
+      name="submissionStatus"
+      value="NoSub"
+      color="light"
+      shadow
+      class="w-full max-w-md md:max-w-xl m-3"
+      type="submit"
+    >
       No Sub
     </Button>
-    <Button color="green" shadow class="w-full max-w-md md:max-w-xl m-3" on:click={handleClick}>
+    <Button
+      id="AC"
+      name="submissionStatus"
+      value="AC"
+      color="green"
+      shadow
+      class="w-full max-w-md md:max-w-xl m-3"
+      type="submit"
+    >
       AC
     </Button>
-    <Button color="yellow" shadow class="w-full max-w-md md:max-w-xl m-3" on:click={handleClick}>
+    <Button
+      id="WA"
+      name="submissionStatus"
+      value="WA"
+      color="yellow"
+      shadow
+      class="w-full max-w-md md:max-w-xl m-3"
+      type="submit"
+    >
       WA
     </Button>
-  </div>
+  </form>
 </div>
