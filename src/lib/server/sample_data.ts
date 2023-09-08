@@ -6,7 +6,7 @@ export const tasks = [
     title: 'A - Water Pressure',
     grade: '10Kyu',
     user_id: 'hogehoge',
-    submission_result: 'WA',
+    submission_status: 'WA',
   },
   {
     contest_id: 'abc214',
@@ -14,7 +14,7 @@ export const tasks = [
     title: 'A - New Generation ABC',
     grade: '10Kyu',
     user_id: 'hogehoge',
-    submission_result: 'AC',
+    submission_status: 'AC',
   },
   {
     contest_id: 'abc202',
@@ -22,6 +22,6 @@ export const tasks = [
     title: 'A - Three Dice',
     grade: '9Kyu',
     user_id: 'hogehoge',
-    submission_result: 'NoSub',
+    submission_status: 'NoSub',
   },
 ];

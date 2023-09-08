@@ -4,7 +4,7 @@ export type Task = {
   title: string;
   grade: string;
   user_id: string;
-  submission_result: string;
+  submission_status: string;
 };
 
 export type Tasks = Task[];

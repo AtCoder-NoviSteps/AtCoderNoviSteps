@@ -31,7 +31,7 @@
   <TableBody tableBodyClass="divide-y">
     {#each tasks as task}
       <TableBodyRow>
-        <TableBodyCell>{task.submission_result}</TableBodyCell>
+        <TableBodyCell>{task.submission_status}</TableBodyCell>
         <TableBodyCell>
           <a
             href="{ATCODER_BASE_CONTEST_URL}/{task.contest_id}"
