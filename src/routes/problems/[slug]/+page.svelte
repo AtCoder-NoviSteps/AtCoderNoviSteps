@@ -3,6 +3,7 @@
   import { ATCODER_BASE_CONTEST_URL } from '$lib/constants/urls';
   import ExternalLinkIcon from '$lib/components/ExternalLinkIcon.svelte';
   import type { ButtonColor } from '$lib/types/flowbite-svelte-wrapper';
+  import { submissionStatusLabels } from '$lib/types/submission';
 
   export let data;
   let task = data.task;
@@ -12,19 +13,19 @@
 
   const buttons = [
     {
-      submission_status: 'NoSub',
+      submission_status: 'ns',
       color: 'light' as ButtonColor,
-      label: 'No Sub',
+      label: submissionStatusLabels.ns,
     },
     {
-      submission_status: 'AC',
+      submission_status: 'ac',
       color: 'green' as ButtonColor,
-      label: 'AC',
+      label: submissionStatusLabels.ac,
     },
     {
-      submission_status: 'WA',
+      submission_status: 'wa',
       color: 'yellow' as ButtonColor,
-      label: 'WA',
+      label: submissionStatusLabels.wa,
     },
   ];
 </script>
