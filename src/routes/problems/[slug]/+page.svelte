@@ -40,9 +40,10 @@
   </div>
 
   <!-- TODO: 回答状況に合わせてイメージ画像を差し替え -->
+  <!-- TODO: カード: イメージ画像に余白を追加 -->
   <!-- FIXME: ハードコーディングしている部分を定数に差し替え -->
   <Card
-    img="../../favicon.png"
+    img="../../{task.submission_status}.png"
     href={taskUrl}
     target="_blank"
     rel="noreferrer"
