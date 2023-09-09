@@ -1,0 +1,48 @@
+# See:
+# https://docs.github.com/en/actions/guides/building-and-testing-nodejs#building-and-testing-your-code
+# https://pnpm.io/ja/continuous-integration#github-actions
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [18.x]
+
+    steps:
+      - name: Check out Git repository
+        uses: actions/checkout@v3
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Build
+        run: pnpm build
+
+      - name: Lint
+        run: pnpm lint
+
+      - name: Unit test
+        run: pnpm test:unit
+
+      # TODO: Run integration test
+      # - name: Integration test
+      #   run: pnpm test:integration
