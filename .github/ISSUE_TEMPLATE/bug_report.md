@@ -23,8 +23,8 @@ about: Create a report to help us improve.
 
 - Smartphone (please complete the following information):
 
-  Device: [e.g. iPhone15]
-  OS: [e.g. iOS16.5]
+  Device: [e.g. iPhone15, Android13]
+  OS: [e.g. iOS16.5, Android 13]
   Browser [e.g. Chrome, Safari]
   Version [e.g. 16.5]
 
