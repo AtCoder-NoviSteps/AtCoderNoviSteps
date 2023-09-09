@@ -71,7 +71,7 @@
   <form class="flex flex-col items-center" method="post">
     {#each buttons as button}
       <Button
-        id="button.submission_status"
+        id={button.submission_status}
         name="submissionStatus"
         value={button.submission_status}
         color={button.color}
