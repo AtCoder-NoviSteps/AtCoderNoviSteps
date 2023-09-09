@@ -15,5 +15,6 @@ ENV NODE_PATH=/node_modules
 ENV PATH=$PATH:/node_modules/.bin
 
 RUN pnpm install
+RUN pnpm update -i --latest
 
 CMD ["pnpm", "dev"]

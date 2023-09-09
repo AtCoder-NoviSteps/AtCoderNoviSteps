@@ -23,13 +23,13 @@
     "@sveltejs/adapter-auto": "^2.1.0",
     "@sveltejs/adapter-vercel": "^3.0.3",
     "@sveltejs/kit": "^1.24.1",
-    "@typescript-eslint/eslint-plugin": "^6.5.0",
+    "@typescript-eslint/eslint-plugin": "^6.6.0",
     "@typescript-eslint/parser": "^6.6.0",
-    "eslint": "^8.48.0",
+    "eslint": "^8.49.0",
     "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-svelte": "^2.33.0",
-    "flowbite-svelte": "^0.44.8",
-    "flowbite-svelte-icons": "^0.3.6",
+    "flowbite-svelte": "^0.44.15",
+    "flowbite-svelte-icons": "^0.4.3",
     "prettier": "^3.0.3",
     "prettier-plugin-svelte": "^3.0.3",
     "prettier-plugin-tailwindcss": "^0.5.4",
@@ -38,15 +38,15 @@
     "tslib": "^2.6.2",
     "typescript": "^5.2.2",
     "vite": "^4.4.9",
-    "vitest": "^0.34.3"
+    "vitest": "^0.34.4"
   },
   "type": "module",
   "dependencies": {
     "@popperjs/core": "^2.11.8",
     "autoprefixer": "^10.4.15",
     "flowbite": "^1.8.1",
-    "pnpm": "^8.7.1",
-    "svelte-add": "2023.8.27-0.0",
+    "pnpm": "^8.7.4",
+    "svelte-add": "2023.8.31-0.0",
     "tailwind-merge": "^1.14.0",
     "tailwindcss": "^3.3.3"
   }

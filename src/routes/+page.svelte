@@ -1,6 +1,6 @@
 <script>
   import { Heading, P, Button } from 'flowbite-svelte';
-  import { Icon } from 'flowbite-svelte-icons';
+  import { ArrowRightOutline } from 'flowbite-svelte-icons';
 </script>
 
 <!-- TODO: かっこいいロゴを入れる -->
@@ -15,7 +15,7 @@
     <Button href="/problems" class="w-screen md:w-1/3 m-2">問題を解く</Button>
     <Button color="alternative" href="/about" class="w-screen md:w-1/3 m-2">
       使い方を見る
-      <Icon name="arrow-right-outline" class="w-3.5 h-3.5 ml-2" />
+      <ArrowRightOutline class="w-3.5 h-3.5 ml-2" />
     </Button>
   </div>
 

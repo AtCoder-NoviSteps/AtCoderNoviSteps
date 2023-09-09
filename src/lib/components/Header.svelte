@@ -8,7 +8,7 @@
     NavUl,
     NavHamburger,
   } from 'flowbite-svelte';
-  import { Icon } from 'flowbite-svelte-icons';
+  import { ChevronDownOutline } from 'flowbite-svelte-icons';
   import { PRODUCT_NAME } from '$lib/constants/product-info';
   import { navbarLinks } from '$lib/constants/navbar-links';
   import { externalLinks } from '$lib/constants/external-links';
@@ -30,10 +30,7 @@
     {/each}
     <NavLi id="nav-external-links" class="cursor-pointer">
       Links
-      <Icon
-        name="chevron-down-outline"
-        class="w-3 h-3 ml-2 text-primary-800 dark:text-white inline"
-      />
+      <ChevronDownOutline class="w-3 h-3 ml-2 text-primary-800 dark:text-white inline" />
     </NavLi>
     <Dropdown triggeredBy="#nav-external-links" class="w-44 z-20">
       {#each externalLinks as externalLink}
