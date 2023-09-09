@@ -1,16 +1,33 @@
-<script>
+<script lang="ts">
   import { Card, Button, Breadcrumb, BreadcrumbItem } from 'flowbite-svelte';
   import { ATCODER_BASE_CONTEST_URL } from '$lib/constants/urls';
   import ExternalLinkIcon from '$lib/components/ExternalLinkIcon.svelte';
+  import type { ButtonColor } from '$lib/types/flowbite-svelte-wrapper';
+  import { submissionStatusLabels } from '$lib/types/submission';
 
   export let data;
   let task = data.task;
 
+  // FIXME: 汎用的な処理なので、外部ファイルにまとめる
   const taskUrl = `${ATCODER_BASE_CONTEST_URL}/${task.contest_id}/tasks/${task.id}`;
 
-  const handleClick = () => {
-    alert('clicked');
-  };
+  const buttons = [
+    {
+      submission_status: 'ns',
+      color: 'light' as ButtonColor,
+      label: submissionStatusLabels.ns,
+    },
+    {
+      submission_status: 'ac',
+      color: 'green' as ButtonColor,
+      label: submissionStatusLabels.ac,
+    },
+    {
+      submission_status: 'wa',
+      color: 'yellow' as ButtonColor,
+      label: submissionStatusLabels.wa,
+    },
+  ];
 </script>
 
 <div class="container mx-auto w-5/6">
@@ -24,7 +41,6 @@
 
   <!-- TODO: 回答状況に合わせてイメージ画像を差し替え -->
   <!-- FIXME: ハードコーディングしている部分を定数に差し替え -->
-  <!-- <p>{task.submission_result}</p> -->
   <Card
     img="../../favicon.png"
     href={taskUrl}
@@ -49,18 +65,21 @@
   <!-- HACK: flowbite-svelte-icons has few face icon. -->
   <!-- TODO: ボタンをクリックしたら、回答状況に応じてイメージ画像を差し替え -->
   <!-- FIXME: ボタンの色をAtCoder本家に合わせる -->
-  <!-- FIXME: ハードコーディングしている部分を定数に差し替え -->
   <!-- TODO: Add tooltips to buttons for submission results -->
   <!-- See: https://tailwindcss.com/docs/align-items -->
-  <div class="flex flex-col items-center">
-    <Button color="light" shadow class="w-full max-w-md md:max-w-xl m-3" on:click={handleClick}>
-      No Sub
-    </Button>
-    <Button color="green" shadow class="w-full max-w-md md:max-w-xl m-3" on:click={handleClick}>
-      AC
-    </Button>
-    <Button color="yellow" shadow class="w-full max-w-md md:max-w-xl m-3" on:click={handleClick}>
-      WA
-    </Button>
-  </div>
+  <!-- See: https://bobbyhadz.com/blog/typescript-type-string-is-not-assignable-to-type -->
+  <form class="flex flex-col items-center" method="post">
+    {#each buttons as button}
+      <Button
+        name="submissionStatus"
+        value={button.submission_status}
+        color={button.color}
+        shadow
+        class="w-full max-w-md md:max-w-xl m-3"
+        type="submit"
+      >
+        {button.label}
+      </Button>
+    {/each}
+  </form>
 </div>

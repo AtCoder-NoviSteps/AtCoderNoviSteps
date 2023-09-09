@@ -10,6 +10,7 @@
 
   import type { Tasks } from '$lib/types/task';
   import { ATCODER_BASE_CONTEST_URL } from '$lib/constants/urls';
+  import { submissionStatusLabels } from '$lib/types/submission';
 
   export let grade: string;
   export let tasks: Tasks;
@@ -31,7 +32,7 @@
   <TableBody tableBodyClass="divide-y">
     {#each tasks as task}
       <TableBodyRow>
-        <TableBodyCell>{task.submission_result}</TableBodyCell>
+        <TableBodyCell>{submissionStatusLabels[task.submission_status]}</TableBodyCell>
         <TableBodyCell>
           <a
             href="{ATCODER_BASE_CONTEST_URL}/{task.contest_id}"
