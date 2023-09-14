@@ -1,5 +1,6 @@
 <script lang="ts">
   import {
+    Img,
     Table,
     TableBody,
     TableBodyCell,
@@ -10,7 +11,6 @@
 
   import type { Tasks } from '$lib/types/task';
   import { ATCODER_BASE_CONTEST_URL } from '$lib/constants/urls';
-  import { submissionStatusLabels } from '$lib/types/submission';
 
   export let grade: string;
   export let tasks: Tasks;
@@ -20,7 +20,8 @@
 
 <!-- TODO: 「編集」ボタンを押したときに問題情報を更新できるようにする -->
 <!-- TODO: 問題が多くなってきたら、ページネーションを導入する -->
-<Table shadow class="text-md">
+<!-- TODO: 回答状況に応じて、フィルタリングできるようにする -->
+<Table shadow hoverable={true} class="text-md">
   <TableHead class="text-md">
     <TableHeadCell class="w-1/6">提出状況</TableHeadCell>
     <TableHeadCell class="w-1/6">コンテスト名</TableHeadCell>
@@ -32,7 +33,13 @@
   <TableBody tableBodyClass="divide-y">
     {#each tasks as task}
       <TableBodyRow>
-        <TableBodyCell>{submissionStatusLabels[task.submission_status]}</TableBodyCell>
+        <TableBodyCell class="p-3">
+          <Img
+            src="../../{task.submission_status}.png"
+            alt={task.submission_status}
+            class="md:h-16 md:w-16"
+          />
+        </TableBodyCell>
         <TableBodyCell>
           <a
             href="{ATCODER_BASE_CONTEST_URL}/{task.contest_id}"
