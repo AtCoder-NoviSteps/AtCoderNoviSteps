@@ -9,11 +9,11 @@
     TableHeadCell,
   } from 'flowbite-svelte';
 
-  import type { Tasks } from '$lib/types/task';
+  import type { TaskResults } from '$lib/types/task';
   import { ATCODER_BASE_CONTEST_URL } from '$lib/constants/urls';
 
   export let grade: string;
-  export let tasks: Tasks;
+  export let taskResults: TaskResults;
 </script>
 
 <h2 class="text-xl mt-4 mb-2">{grade}</h2>
@@ -31,31 +31,31 @@
     </TableHeadCell>
   </TableHead>
   <TableBody tableBodyClass="divide-y">
-    {#each tasks as task}
+    {#each taskResults as taskResult}
       <TableBodyRow>
         <TableBodyCell class="p-3">
           <Img
-            src="../../{task.submission_status}.png"
-            alt={task.submission_status}
+            src="../../{taskResult.submission_status}.png"
+            alt={taskResult.submission_status}
             class="md:h-16 md:w-16"
           />
         </TableBodyCell>
         <TableBodyCell>
           <a
-            href="{ATCODER_BASE_CONTEST_URL}/{task.contest_id}"
+            href="{ATCODER_BASE_CONTEST_URL}/{taskResult.contest_id}"
             class="font-medium text-primary-600 hover:underline dark:text-primary-500"
             target="_blank"
             rel="noreferrer"
           >
-            {task.contest_id.toUpperCase()}
+            {taskResult.contest_id.toUpperCase()}
           </a>
         </TableBodyCell>
         <TableBodyCell>
           <a
-            href="/problems/{task.id}"
+            href="/problems/{taskResult.id}"
             class="font-medium text-primary-600 hover:underline dark:text-primary-500"
           >
-            {task.title}
+            {taskResult.title}
           </a>
         </TableBodyCell>
         <TableBodyCell>編集</TableBodyCell>

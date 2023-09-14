@@ -1,5 +1,5 @@
 // TODO: Enable to fetch data from the database via API.
-export const tasks = [
+export const taskResults = [
   {
     contest_id: 'abc231',
     id: 'abc231_a',

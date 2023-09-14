@@ -6,10 +6,10 @@
   import { submissionStatusLabels } from '$lib/types/submission';
 
   export let data;
-  let task = data.task;
+  let taskResult = data.taskResult;
 
   // FIXME: 汎用的な処理なので、外部ファイルにまとめる
-  const taskUrl = `${ATCODER_BASE_CONTEST_URL}/${task.contest_id}/tasks/${task.id}`;
+  const taskUrl = `${ATCODER_BASE_CONTEST_URL}/${taskResult.contest_id}/tasks/${taskResult.id}`;
 
   const buttons = [
     {
@@ -35,7 +35,7 @@
   <div class="max-w-lg md:max-w-2xl mx-auto mb-3">
     <Breadcrumb aria-label="">
       <BreadcrumbItem href="/problems" home>Problems</BreadcrumbItem>
-      <BreadcrumbItem>{task.title}</BreadcrumbItem>
+      <BreadcrumbItem>{taskResult.title}</BreadcrumbItem>
     </Breadcrumb>
   </div>
 
@@ -50,16 +50,16 @@
   >
     <Img
       class="object-cover rounded-t-lg w-64 h-64 p-4 md:h-auto md:w-48 md:rounded-none md:rounded-l-lg"
-      src="../../{task.submission_status}.png"
-      alt={task.submission_status}
+      src="../../{taskResult.submission_status}.png"
+      alt={taskResult.submission_status}
     />
     <div class="flex flex-col justify-between p-4 leading-normal">
       <h4 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-        {task.grade.replace('Kyu', '級').replace('Dan', '段')}
+        {taskResult.grade.replace('Kyu', '級').replace('Dan', '段')}
       </h4>
       <h5 class="mb-2 text-3xl tracking-tight text-gray-900 dark:text-white flex">
         <div class="mr-2">
-          {task.title}
+          {taskResult.title}
         </div>
         <ExternalLinkIcon />
       </h5>

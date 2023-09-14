@@ -1,4 +1,6 @@
-export type Task = {
+// TODO: Add Task and Tasks type
+
+export type TaskResult = {
   contest_id: string;
   id: string;
   title: string;
@@ -7,4 +9,4 @@ export type Task = {
   submission_status: string;
 };
 
-export type Tasks = Task[];
+export type TaskResults = TaskResult[];

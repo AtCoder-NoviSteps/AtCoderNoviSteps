@@ -1,12 +1,12 @@
-import * as tasks from '$lib/services/tasks';
+import * as crud from '$lib/services/task_results';
 import { fail, type Actions } from '@sveltejs/kit';
 // import { redirect } from '@sveltejs/kit';
 
 // TODO: ユーザを識別できるようにする。
 export async function load({ params }) {
-  const task = await tasks.getTask(params.slug as string);
+  const taskResult = await crud.getTaskResult(params.slug as string);
 
-  return { task };
+  return { taskResult: taskResult };
 }
 
 export const actions = {
@@ -16,7 +16,7 @@ export const actions = {
 
     try {
       const submissionStatus = response.get('submissionStatus') as string;
-      await tasks.updateTask(slug, submissionStatus);
+      await crud.updateTaskResult(slug, submissionStatus);
     } catch (error) {
       return fail(400, { slug });
     }
