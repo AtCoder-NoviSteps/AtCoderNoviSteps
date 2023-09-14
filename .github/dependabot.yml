@@ -11,7 +11,7 @@ updates:
     # Check the npm registry for updates every day (weekdays)
     schedule:
       interval: 'daily'
-    versioning-strategy: increase-if-necessary
+    versioning-strategy: increase
 
   - package-ecosystem: 'github-actions'
     # Workflow files stored in the
