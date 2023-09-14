@@ -1,0 +1,7 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:base", ":prHourlyLimitNone"],
+  "timezone": "Asia/Tokyo",
+  "schedule": ["before 5am"],
+  "dependencyDashboard": true
+}
