@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Button, Breadcrumb, BreadcrumbItem } from 'flowbite-svelte';
+  import { Button, Breadcrumb, BreadcrumbItem, Img } from 'flowbite-svelte';
   import { ATCODER_BASE_CONTEST_URL } from '$lib/constants/urls';
   import ExternalLinkIcon from '$lib/components/ExternalLinkIcon.svelte';
   import type { ButtonColor } from '$lib/types/flowbite-svelte-wrapper';
@@ -48,7 +48,7 @@
     rel="noreferrer"
     class="flex flex-col items-center bg-white border border-gray-200 rounded-lg max-w-lg mt-8 mb-8 mx-auto shadow md:flex-row md:max-w-xl hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700"
   >
-    <img
+    <Img
       class="object-cover rounded-t-lg w-64 h-64 p-4 md:h-auto md:w-48 md:rounded-none md:rounded-l-lg"
       src="../../{task.submission_status}.png"
       alt={task.submission_status}
