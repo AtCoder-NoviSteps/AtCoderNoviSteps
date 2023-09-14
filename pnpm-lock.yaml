@@ -59,8 +59,8 @@ devDependencies:
     specifier: 0.44.15
     version: 0.44.15(svelte@4.2.0)
   flowbite-svelte-icons:
-    specifier: 0.4.3
-    version: 0.4.3(svelte@4.2.0)(tailwind-merge@1.14.0)(tailwindcss@3.3.3)
+    specifier: 0.4.4
+    version: 0.4.4(svelte@4.2.0)(tailwind-merge@1.14.0)(tailwindcss@3.3.3)
   prettier:
     specifier: 3.0.3
     version: 3.0.3
@@ -1528,8 +1528,8 @@ packages:
     resolution: {integrity: sha512-5nqDSxl8nn5BSNxyR3n4I6eDmbolI6WT+QqR547RwxQapgjQBmtktdP+HTBb/a/zLsbzERTONyUB5pefh5TtjQ==}
     dev: true
 
-  /flowbite-svelte-icons@0.4.3(svelte@4.2.0)(tailwind-merge@1.14.0)(tailwindcss@3.3.3):
-    resolution: {integrity: sha512-tDw9sI+wAZJVNInr/Wh6l4iz3SeOvVnxjL8DiqUnvakLRawIcneAYUKUzQQaazCbsNmgUkKo3HKOpqWwR0y1Zg==}
+  /flowbite-svelte-icons@0.4.4(svelte@4.2.0)(tailwind-merge@1.14.0)(tailwindcss@3.3.3):
+    resolution: {integrity: sha512-fOZri6HYYyo13olXQzvoid19hlYR/HjzQobpzBPkj8QseCJ9R1uWR7bNlhPl5vFCElqcfm3UooYiwT4rKKiqzQ==}
     peerDependencies:
       svelte: ^3.54.0 || ^4.0.0
       tailwind-merge: ^1.13.2
