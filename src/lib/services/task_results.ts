@@ -1,7 +1,8 @@
 import { error } from '@sveltejs/kit';
 import db from '$lib/server/database';
-import { tasks, answers } from '$lib/server/sample_data';
-import type { Task, TaskResult, TaskResults } from '$lib/types/task';
+import { answers } from '$lib/server/sample_data';
+import { getTasks } from '$lib/services/tasks';
+import type { Task, Tasks, TaskResult, TaskResults } from '$lib/types/task';
 import { NOT_FOUND } from '$lib/constants/http-response-status-codes';
 
 // TODO: Enable to fetch data from the database.
@@ -20,15 +21,9 @@ export async function getTaskResults(): Promise<TaskResults> {
     answersMap.set(answer.task_id, answer);
   });
 
-  const sampleTaskResults: TaskResults = tasks.map((task: Task) => {
-    const taskResult: TaskResult = {
-      contest_id: task.contest_id,
-      task_id: task.task_id,
-      title: task.title,
-      grade: task.grade,
-      user_id: userId,
-      submission_status: 'ns', // FIXME: Use const
-    };
+  const tasks: Tasks = getTasks();
+  const sampleTaskResults = tasks.map((task: Task) => {
+    const taskResult = createTaskResult(userId, task);
 
     if (answersMap.has(task.task_id)) {
       const answer = answersMap.get(task.task_id);
@@ -43,6 +38,19 @@ export async function getTaskResults(): Promise<TaskResults> {
   }
 
   return Array.from(db.get(userId).values());
+}
+
+export function createTaskResult(userId: string, task: Task): TaskResult {
+  const taskResult: TaskResult = {
+    contest_id: task.contest_id,
+    task_id: task.task_id,
+    title: task.title,
+    grade: task.grade,
+    user_id: userId,
+    submission_status: 'ns', // FIXME: Use const
+  };
+
+  return taskResult;
 }
 
 export async function getTaskResult(slug: string): Promise<TaskResult> {
