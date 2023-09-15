@@ -56,10 +56,6 @@ export async function getTaskResult(slug: string): Promise<TaskResult> {
 }
 
 export async function updateTaskResult(slug: string, submissionStatus: string) {
-  // TODO: useIdを動的に変更できるようにする。
-  const userId = 'hogehoge';
-  const taskResult: TaskResult = db
-    .get(userId)
-    .find((taskResult: TaskResult) => taskResult.id === slug);
+  const taskResult: TaskResult = await getTaskResult(slug);
   taskResult.submission_status = submissionStatus;
 }
