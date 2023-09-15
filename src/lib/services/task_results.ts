@@ -1,7 +1,7 @@
 import { error } from '@sveltejs/kit';
 import db from '$lib/server/database';
-import { answers } from '$lib/server/sample_data';
 import { getTasks } from '$lib/services/tasks';
+import { getAnswers } from './answers';
 import type { Task, Tasks, TaskResult, TaskResults } from '$lib/types/task';
 import { NOT_FOUND } from '$lib/constants/http-response-status-codes';
 
@@ -15,18 +15,13 @@ export async function getTaskResults(): Promise<TaskResults> {
   const userId = 'hogehoge';
 
   // TODO: ユーザIDを指定したら、解答の一覧を取得できるようにする。
-  const answersMap = new Map();
-
-  answers.map((answer) => {
-    answersMap.set(answer.task_id, answer);
-  });
-
   const tasks: Tasks = getTasks();
+  const answers = getAnswers();
   const sampleTaskResults = tasks.map((task: Task) => {
     const taskResult = createTaskResult(userId, task);
 
-    if (answersMap.has(task.task_id)) {
-      const answer = answersMap.get(task.task_id);
+    if (answers.has(task.task_id)) {
+      const answer = answers.get(task.task_id);
       taskResult.submission_status = answer.submission_status;
     }
 
