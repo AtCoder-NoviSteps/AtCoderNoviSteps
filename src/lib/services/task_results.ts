@@ -1,23 +1,42 @@
 import { error } from '@sveltejs/kit';
 import db from '$lib/server/database';
-import { taskResults } from '$lib/server/sample_data';
+import { tasks, answers } from '$lib/server/sample_data';
 import type { TaskResult, TaskResults } from '$lib/types/task';
 import { NOT_FOUND } from '$lib/constants/http-response-status-codes';
 
 // TODO: Enable to fetch data from the database.
 export async function getTaskResults(): Promise<TaskResults> {
-  // FIXME: 問題そのものとユーザの回答状況を分離 + ここでデータをO(N + M)で合成
+  // FIXME: 問題一覧と特定のユーザの回答状況を使ってデータを結合
+  // 計算量: 問題数をN、特定のユーザの解答数をMとすると、O(N + M)になるはず。
 
   // TODO: useIdを動的に変更できるようにする。
+  // TODO: getUser(userId)を用意して、取得できるようにする。
   const userId = 'hogehoge';
-  const sampleTaskResults = taskResults.map((taskResult: TaskResult) => ({
-    contest_id: taskResult.contest_id,
-    id: taskResult.id,
-    title: taskResult.title,
-    grade: taskResult.grade,
-    user_id: taskResult.user_id,
-    submission_status: taskResult.submission_status,
-  }));
+
+  // TODO: ユーザIDを指定したら、解答の一覧を取得できるようにする。
+  const answersMap = new Map();
+
+  answers.map((answer) => {
+    answersMap.set(answer.task_id, answer);
+  });
+
+  const sampleTaskResults: TaskResults = tasks.map((task) => {
+    const taskResult: TaskResult = {
+      contest_id: task.contest_id,
+      id: task.task_id,
+      title: task.title,
+      grade: task.grade,
+      user_id: userId,
+      submission_status: 'ns', // FIXME: Use const
+    };
+
+    if (answersMap.has(task.task_id)) {
+      const answer = answersMap.get(task.task_id);
+      taskResult.submission_status = answer.submission_status;
+    }
+
+    return taskResult;
+  });
 
   if (!db.has(userId)) {
     db.set(userId, sampleTaskResults);
