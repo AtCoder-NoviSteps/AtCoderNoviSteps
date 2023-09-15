@@ -9,7 +9,7 @@
   let taskResult = data.taskResult;
 
   // FIXME: 汎用的な処理なので、外部ファイルにまとめる
-  const taskUrl = `${ATCODER_BASE_CONTEST_URL}/${taskResult.contest_id}/tasks/${taskResult.id}`;
+  const taskUrl = `${ATCODER_BASE_CONTEST_URL}/${taskResult.contest_id}/tasks/${taskResult.task_id}`;
 
   const buttons = [
     {
