@@ -52,7 +52,7 @@
         </TableBodyCell>
         <TableBodyCell>
           <a
-            href="/problems/{taskResult.id}"
+            href="/problems/{taskResult.task_id}"
             class="font-medium text-primary-600 hover:underline dark:text-primary-500"
           >
             {taskResult.title}

@@ -1,7 +1,7 @@
 import { error } from '@sveltejs/kit';
 import db from '$lib/server/database';
 import { tasks, answers } from '$lib/server/sample_data';
-import type { TaskResult, TaskResults } from '$lib/types/task';
+import type { Task, TaskResult, TaskResults } from '$lib/types/task';
 import { NOT_FOUND } from '$lib/constants/http-response-status-codes';
 
 // TODO: Enable to fetch data from the database.
@@ -20,10 +20,10 @@ export async function getTaskResults(): Promise<TaskResults> {
     answersMap.set(answer.task_id, answer);
   });
 
-  const sampleTaskResults: TaskResults = tasks.map((task) => {
+  const sampleTaskResults: TaskResults = tasks.map((task: Task) => {
     const taskResult: TaskResult = {
       contest_id: task.contest_id,
-      id: task.task_id,
+      task_id: task.task_id,
       title: task.title,
       grade: task.grade,
       user_id: userId,
@@ -48,7 +48,9 @@ export async function getTaskResults(): Promise<TaskResults> {
 export async function getTaskResult(slug: string): Promise<TaskResult> {
   // TODO: useIdを動的に変更できるようにする。
   const userId = 'hogehoge';
-  const task: TaskResult = db.get(userId).find((taskResult: TaskResult) => taskResult.id === slug);
+  const task: TaskResult = db
+    .get(userId)
+    .find((taskResult: TaskResult) => taskResult.task_id === slug);
 
   if (!task) throw error(NOT_FOUND, `問題 ${slug} は見つかりませんでした。`);
 
