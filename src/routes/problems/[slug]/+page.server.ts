@@ -1,7 +1,7 @@
 import { fail, type Actions } from '@sveltejs/kit';
 import * as crud from '$lib/services/task_results';
-import { BAD_REQUEST } from '$lib/constants/http-response-status-codes';
-// import { redirect } from '@sveltejs/kit';
+import { BAD_REQUEST, TEMPORARY_REDIRECT } from '$lib/constants/http-response-status-codes';
+import { redirect } from '@sveltejs/kit';
 
 // TODO: ユーザを識別できるようにする。
 export async function load({ params }) {
@@ -22,7 +22,7 @@ export const actions = {
       return fail(BAD_REQUEST, { slug });
     }
 
-    // HACK: 回答状況をクリックした後に、問題一覧ページに戻った方が良い?
-    // throw redirect(307, '/problems');
+    // HACK: 回答状況をクリックした後に問題一覧ページに戻るのをユーザが望んでいるか?
+    throw redirect(TEMPORARY_REDIRECT, '/problems');
   },
 } satisfies Actions;
