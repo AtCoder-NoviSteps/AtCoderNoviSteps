@@ -11,7 +11,10 @@
   // "features": {},
   //
   // Use 'forwardPorts' to make a list of ports inside the container available locally.
-  "forwardPorts": [5173],
+  "forwardPorts": [
+    5173,
+    5432 // for postgres
+  ],
   "shutdownAction": "none",
   //
   // Use 'postCreateCommand' to run commands after the container is created.
@@ -59,6 +62,9 @@
         "[svelte]": {
           "editor.defaultFormatter": "svelte.svelte-vscode"
         },
+        "[prisma]": {
+          "editor.defaultFormatter": "Prisma.prisma"
+        },
         "[markdown]": {
           "editor.formatOnSave": false
         },
@@ -71,10 +77,11 @@
         "dbaeumer.vscode-eslint",
         "esbenp.prettier-vscode",
         "formulahendry.auto-rename-tag",
+        "ms-playwright.playwright",
+        "Prisma.prisma",
         "streetsidesoftware.code-spell-checker",
-        "vscode-icons-team.vscode-icons",
         "svelte.svelte-vscode",
-        "ms-playwright.playwright"
+        "vscode-icons-team.vscode-icons"
       ]
     }
   }
