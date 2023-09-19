@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { enhance } from '$app/forms';
   import { Button, Breadcrumb, BreadcrumbItem, Img } from 'flowbite-svelte';
   import { ATCODER_BASE_CONTEST_URL } from '$lib/constants/urls';
   import ExternalLinkIcon from '$lib/components/ExternalLinkIcon.svelte';
@@ -72,7 +73,7 @@
   <!-- TODO: Add tooltips to buttons for submission results -->
   <!-- See: https://tailwindcss.com/docs/align-items -->
   <!-- See: https://bobbyhadz.com/blog/typescript-type-string-is-not-assignable-to-type -->
-  <form class="flex flex-col items-center" method="post">
+  <form method="post" class="flex flex-col items-center" use:enhance>
     {#each buttons as button}
       <Button
         name="submissionStatus"
