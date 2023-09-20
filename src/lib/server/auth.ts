@@ -11,6 +11,14 @@ export const auth = lucia({
   env: dev ? 'DEV' : 'PROD',
   middleware: sveltekit(),
   adapter: prisma(client),
+
+  // https://lucia-auth.com/reference/lucia/interfaces/#user
+  getUserAttributes: (userData) => {
+    return {
+      userId: userData.id,
+      username: userData.username,
+    };
+  },
 });
 
 export type Auth = typeof auth;
