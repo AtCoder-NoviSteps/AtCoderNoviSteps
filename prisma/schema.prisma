@@ -19,7 +19,7 @@ model User {
 
   // here you can add custom fields for your user
   // e.g. name, email, username, roles, etc.
-  name       String   @unique
+  username   String   @unique
   role       Roles    @default(USER)
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
