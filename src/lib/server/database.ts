@@ -1,5 +1,7 @@
-// In a real app, this data would live in a database,
-// rather than in memory. But for now, we cheat.
-const db = new Map();
+// See:
+// https://lucia-auth.com/getting-started/sveltekit/
+import { PrismaClient } from '@prisma/client';
 
-export default db;
+const client = new PrismaClient();
+
+export default client;

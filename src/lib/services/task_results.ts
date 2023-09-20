@@ -1,9 +1,14 @@
 import { error } from '@sveltejs/kit';
-import db from '$lib/server/database';
 import { getTasks } from '$lib/services/tasks';
 import { getAnswers } from './answers';
 import type { Task, Tasks, TaskResult, TaskResults } from '$lib/types/task';
 import { NOT_FOUND } from '$lib/constants/http-response-status-codes';
+
+// In a real app, this data would live in a database,
+// rather than in memory. But for now, we cheat.
+// DBから取得した問題一覧とログインしているユーザの回答を紐付けしたデータ保持
+// HACK: よりスマート、かつ、セキュリティにも安全な方法があるはず
+const taskResultsMap = new Map();
 
 // TODO: Enable to fetch data from the database.
 export async function getTaskResults(): Promise<TaskResults> {
@@ -28,11 +33,11 @@ export async function getTaskResults(): Promise<TaskResults> {
     return taskResult;
   });
 
-  if (!db.has(userId)) {
-    db.set(userId, sampleTaskResults);
+  if (!taskResultsMap.has(userId)) {
+    taskResultsMap.set(userId, sampleTaskResults);
   }
 
-  return Array.from(db.get(userId).values());
+  return Array.from(taskResultsMap.get(userId).values());
 }
 
 export function createTaskResult(userId: string, task: Task): TaskResult {
@@ -51,7 +56,7 @@ export function createTaskResult(userId: string, task: Task): TaskResult {
 export async function getTaskResult(slug: string): Promise<TaskResult> {
   // TODO: useIdを動的に変更できるようにする。
   const userId = 'hogehoge';
-  const task: TaskResult = db
+  const task: TaskResult = taskResultsMap
     .get(userId)
     .find((taskResult: TaskResult) => taskResult.task_id === slug);
 

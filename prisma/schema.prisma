@@ -9,3 +9,48 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+// See:
+// https://lucia-auth.com/database-adapters/prisma/
+model User {
+  id           String    @id @unique
+  auth_session Session[]
+  key          Key[]
+
+  // here you can add custom fields for your user
+  // e.g. name, email, username, roles, etc.
+  name       String   @unique
+  role       Roles    @default(USER)
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  @@map("user")
+}
+
+// See:
+// https://www.prisma.io/docs/concepts/components/prisma-schema/data-model#defining-enums
+enum Roles {
+  ADMIN
+  USER
+}
+
+model Session {
+  id             String @id @unique
+  user_id        String
+  active_expires BigInt
+  idle_expires   BigInt
+  user           User   @relation(references: [id], fields: [user_id], onDelete: Cascade)
+
+  @@index([user_id])
+  @@map("session")
+}
+
+model Key {
+  id              String  @id @unique
+  hashed_password String?
+  user_id         String
+  user            User    @relation(references: [id], fields: [user_id], onDelete: Cascade)
+
+  @@index([user_id])
+  @@map("key")
+}
