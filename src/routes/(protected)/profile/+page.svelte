@@ -11,7 +11,6 @@
 <!-- TODO: UIライブラリを利用して見た目を整える -->
 <h1>Profile</h1>
 
-<p>User id: {data.userId}</p>
 <p>User name: {data.username}</p>
 
 <form method="post" action="logout?/logout" use:enhance>
