@@ -1,7 +1,10 @@
+<!-- See: -->
+<!-- https://lucia-auth.com/guidebook/sign-in-with-username-and-password/sveltekit/ -->
 <script lang="ts">
   import { enhance } from '$app/forms';
 </script>
 
+<!-- TODO: UIライブラリを利用して見た目を整える -->
 <h1>Log in</h1>
 
 <form method="post" use:enhance>
