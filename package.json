@@ -43,7 +43,7 @@
   "type": "module",
   "dependencies": {
     "@popperjs/core": "2.11.8",
-    "autoprefixer": "10.4.15",
+    "autoprefixer": "10.4.16",
     "flowbite": "1.8.1",
     "pnpm": "8.7.6",
     "svelte-add": "2023.8.31-0.0",
