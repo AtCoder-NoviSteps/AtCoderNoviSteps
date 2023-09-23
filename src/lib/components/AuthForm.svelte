@@ -20,8 +20,8 @@
   let showPassword = false;
 </script>
 
+<!-- TODO: ゲストユーザ(お試し用)としてログインできるようにする -->
 <!-- TODO: containerのデフォルト値を設定できないか? -->
-<!-- TODO: ログインとほぼ同じなので、コンポーネント化 -->
 <!-- TODO: バリデーションの結果を表示 -->
 <!-- See: -->
 <!-- https://flowbite-svelte.com/docs/components/card#Card_with_form_inputs -->
