@@ -3,6 +3,7 @@
 import { redirect } from '@sveltejs/kit';
 
 import type { PageServerLoad } from './$types';
+import type { Roles } from '$lib/types/user';
 
 export const load: PageServerLoad = async ({ locals }) => {
   const session = await locals.auth.validate();
@@ -12,7 +13,8 @@ export const load: PageServerLoad = async ({ locals }) => {
   }
 
   return {
-    userId: session.user.userId,
-    username: session.user.username,
+    userId: session.user.userId as string,
+    username: session.user.username as string,
+    role: session.user.role as Roles,
   };
 };

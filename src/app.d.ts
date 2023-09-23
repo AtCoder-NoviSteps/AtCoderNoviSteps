@@ -1,4 +1,7 @@
 // See https://kit.svelte.dev/docs/types#app
+
+import type { Roles } from '$lib/types/user';
+
 // for information about these interfaces
 declare global {
   namespace App {
@@ -19,6 +22,7 @@ declare global {
     type Auth = import('$lib/server/auth').Auth;
     type UserAttributes = {
       username: string;
+      role: Roles;
     };
     // type SessionAttributes = {};
   }
