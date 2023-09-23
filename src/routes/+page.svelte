@@ -1,6 +1,7 @@
 <script>
   import { Heading, P, Button } from 'flowbite-svelte';
-  import { ArrowRightOutline } from 'flowbite-svelte-icons';
+  // @ts-ignore
+  import ArrowRightOutline from 'flowbite-svelte-icons/ArrowRightOutline.svelte';
 </script>
 
 <!-- TODO: かっこいいロゴを入れる -->

@@ -8,7 +8,9 @@
     NavUl,
     NavHamburger,
   } from 'flowbite-svelte';
-  import { ChevronDownOutline } from 'flowbite-svelte-icons';
+  // @ts-ignore
+  import ChevronDownOutline from 'flowbite-svelte-icons/ChevronDownOutline.svelte';
+
   import { PRODUCT_NAME } from '$lib/constants/product-info';
   import { navbarLinks } from '$lib/constants/navbar-links';
   import { externalLinks } from '$lib/constants/external-links';
@@ -39,6 +41,5 @@
         </DropdownItem>
       {/each}
     </Dropdown>
-    <!-- TODO: Add login / lougout -->
   </NavUl>
 </Navbar>
