@@ -27,9 +27,19 @@
   </NavBrand>
   <NavHamburger on:click={toggle} />
   <NavUl {hidden}>
+    <!-- Internal Links-->
     {#each navbarLinks as navbarLink}
       <NavLi href={navbarLink.path}>{navbarLink.title}</NavLi>
     {/each}
+
+    <!-- TODO: Add login / logout -->
+    <!-- if currentUser exists -->
+    <!-- アカウントページを表示 -->
+    <NavLi href="/profile">Profile</NavLi>
+    <!-- else -->
+    <!-- 登録・ログインページを表示 -->
+
+    <!-- External Links-->
     <NavLi id="nav-external-links" class="cursor-pointer">
       Links
       <ChevronDownOutline class="w-3 h-3 ml-2 text-primary-800 dark:text-white inline" />
