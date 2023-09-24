@@ -35,7 +35,7 @@
     <!-- TODO: Add login / logout -->
     <!-- if currentUser exists -->
     <!-- アカウントページを表示 -->
-    <NavLi href="/profile">Profile</NavLi>
+    <!-- <NavLi href="/profile">Profile</NavLi> -->
     <!-- else -->
     <!-- 登録・ログインページを表示 -->
 
