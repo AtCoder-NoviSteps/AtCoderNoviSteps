@@ -1,6 +1,5 @@
 <script lang="ts">
-  import { enhance } from '$app/forms';
-  import { Card, Button, Label, Input, Checkbox } from 'flowbite-svelte';
+  import { Card, Button, Label, Input, Helper, Checkbox } from 'flowbite-svelte';
 
   // 必要なコンポーネントだけを読み込んで、コンパイルを時間を短縮
   // @ts-ignore
@@ -11,18 +10,21 @@
   import EyeSlashOutline from 'flowbite-svelte-icons/EyeSlashOutline.svelte';
 
   // FIXME: 構造体に相当するものを利用した方が拡張・修正がしやすくなるかもしれせまん
+  export let formProperties;
   export let title: string;
   export let submitButtonLabel: string;
   export let confirmationMessage: string;
   export let alternativePageName: string;
   export let alternativePageLink: string;
 
+  const { form, message, errors, submitting, enhance } = formProperties;
+
   let showPassword = false;
 </script>
 
 <!-- TODO: ゲストユーザ(お試し用)としてログインできるようにする -->
+<!-- FIXME: コンポーネントが巨大になってきたと思われるので、分割しましょう -->
 <!-- TODO: containerのデフォルト値を設定できないか? -->
-<!-- TODO: バリデーションの結果を表示 -->
 <!-- See: -->
 <!-- https://flowbite-svelte.com/docs/components/card#Card_with_form_inputs -->
 <!-- https://github.com/themesberg/flowbite-svelte-icons/tree/main/src/lib -->
@@ -31,21 +33,52 @@
     <form method="post" use:enhance class="flex flex-col space-y-6">
       <h3 class="text-xl font-medium text-gray-900 dark:text-white">{title}</h3>
 
+      <!-- TODO: フォームへの入力値そのもの以外のエラーへの対応 -->
+      <!-- {#if message}
+        <span>{$message}</span>
+      {/if} -->
+
       <!-- User name -->
       <Label class="space-y-2">
-        <span>ユーザ名</span>
-        <Input name="username" placeholder="chokudai" required>
+        <span>
+          <p>ユーザ名</p>
+          <p>（5〜24文字で、半角英数字のみ）</p>
+        </span>
+
+        <Input
+          name="username"
+          placeholder="chokudai"
+          aria-invalid={$errors.username ? 'true' : undefined}
+          bind:value={$form.username}
+          disabled={$submitting}
+          required
+        >
           <UserOutlineSolid slot="left" class="w-5 h-5" />
         </Input>
+
+        <!-- エラーメッセージがあれば表示 -->
+        {#if $errors.username}
+          <Helper class="mt-2" color="red">
+            <span class="font-medium">{$errors.username}</span>
+          </Helper>
+        {/if}
       </Label>
 
       <!-- Password -->
       <Label class="space-y-2">
-        <span>パスワード</span>
+        <!-- HACK: 注意書きはTooltipで表示させる? -->
+        <span>
+          <p>パスワード</p>
+          <p>（8文字以上で、半角英文字(小・大)と数字を各1文字以上）</p>
+        </span>
+
         <Input
           type={showPassword ? 'text' : 'password'}
           name="password"
           placeholder="•••••••"
+          aria-invalid={$errors.password ? 'true' : undefined}
+          bind:value={$form.password}
+          disabled={$submitting}
           required
         >
           <!-- Show / hide password -->
@@ -61,6 +94,13 @@
             {/if}
           </button>
         </Input>
+
+        <!-- エラーメッセージがあれば表示 -->
+        {#if $errors.password}
+          <Helper class="mt-2" color="red">
+            <span class="font-medium">{$errors.password}</span>
+          </Helper>
+        {/if}
       </Label>
 
       <!-- TODO: ログイン画面で、パスワードの記録・忘れた場合のリセット機能を追加 -->
@@ -71,7 +111,9 @@
       </a>
     </div> -->
 
-      <Button type="submit" class="w-full">{submitButtonLabel}</Button>
+      <Button type="submit" class="w-full" disabled={$submitting}>
+        {submitButtonLabel}
+      </Button>
 
       <div class="text-sm font-medium text-gray-500 dark:text-gray-300">
         {confirmationMessage}

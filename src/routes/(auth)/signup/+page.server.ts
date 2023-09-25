@@ -1,9 +1,33 @@
 // See:
 // https://lucia-auth.com/guidebook/sign-in-with-username-and-password/sveltekit/
+// https://superforms.rocks/get-started
+// https://zod.dev/?id=basic-usage
+// https://developer.mozilla.org/ja/docs/Web/JavaScript/Guide/Regular_expressions/Character_classes
+// https://regex101.com/
+// https://qiita.com/mpyw/items/886218e7b418dfed254b
+import { z } from 'zod';
+import { superValidate } from 'sveltekit-superforms/server';
+
 import { auth } from '$lib/server/auth';
 import { fail, redirect } from '@sveltejs/kit';
 
 import type { Actions, PageServerLoad } from './$types';
+
+// TODO: 別ファイルとして切り出す
+const schema = z.object({
+  username: z
+    .string()
+    .min(5, { message: '5文字以上入力してください' })
+    .max(24, { message: '24文字になるまで削除してください' })
+    .regex(/^[\w]*$/, { message: '半角英数字のみを利用してください' }),
+  password: z
+    .string()
+    .min(8, { message: '8文字以上入力してください' })
+    .max(128, { message: '128文字になるまで削除してください' })
+    .regex(/^(?=.*?[a-z])(?=.*?[A-Z])(?=.*?\d)[a-zA-Z\d]{8,128}$/, {
+      message: '半角英文字(小・大)・数字をそれぞれ1文字以上含めてください',
+    }),
+});
 
 export const load: PageServerLoad = async ({ locals }) => {
   const session = await locals.auth.validate();
@@ -12,43 +36,31 @@ export const load: PageServerLoad = async ({ locals }) => {
     throw redirect(302, '/');
   }
 
-  return {};
+  const form = await superValidate(null, schema);
+
+  return { form };
 };
 
-// TODO: FormとValidationライブラリを導入
 export const actions: Actions = {
   default: async ({ request, locals }) => {
-    const formData = await request.formData();
-    const username = formData.get('username');
-    const password = formData.get('password');
+    const form = await superValidate(request, schema);
 
-    // 入力のチェック
-    // TODO: 仕様を決めて、改めてチェック
-    // TODO: エラーメッセージを日本語に
-    if (typeof username !== 'string' || username.length < 4 || username.length > 31) {
-      return fail(400, {
-        message: 'Invalid username',
-      });
-    }
-
-    if (typeof password !== 'string' || password.length < 6 || password.length > 255) {
-      return fail(400, {
-        message: 'Invalid password',
-      });
+    if (!form.valid) {
+      console.log(form);
+      return fail(400, { form });
     }
 
     try {
       const user = await auth.createUser({
         key: {
           providerId: 'username', // auth method
-          providerUserId: username.toLowerCase(), // unique id when using "username" auth method
-          password, // hashed by Lucia
+          providerUserId: form.data.username.toLowerCase(), // unique id when using "username" auth method
+          password: form.data.password, // hashed by Lucia
         },
         attributes: {
-          username,
+          username: form.data.username,
         },
       });
-      console.log(user);
 
       const session = await auth.createSession({
         userId: user.userId,
@@ -61,6 +73,8 @@ export const actions: Actions = {
       // check for unique constraint error in user table
 
       // TODO: 例外処理の方法を調べて実装
+      // 既に登録されている場合は、ユーザ名 or パスワードを変えるようにメッセージを出す
+      // return fail(400, { form });
       // if (e instanceof SomeDatabaseError && e.message === USER_TABLE_UNIQUE_CONSTRAINT_ERROR) {
       //   return fail(400, {
       //     message: 'Username already taken',
@@ -68,7 +82,8 @@ export const actions: Actions = {
       // }
 
       return fail(500, {
-        message: 'An unknown error occurred',
+        message: 'サーバでエラーが発生しました',
+        form: form,
       });
     }
 
