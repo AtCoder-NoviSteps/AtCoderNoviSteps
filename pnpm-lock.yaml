@@ -88,6 +88,9 @@ devDependencies:
   svelte-check:
     specifier: 3.5.2
     version: 3.5.2(postcss@8.4.30)(svelte@4.2.1)
+  sveltekit-superforms:
+    specifier: ^1.7.2
+    version: 1.7.2(@sveltejs/kit@1.25.0)(svelte@4.2.1)(zod@3.22.2)
   tslib:
     specifier: 2.6.2
     version: 2.6.2
@@ -100,6 +103,9 @@ devDependencies:
   vitest:
     specifier: 0.34.5
     version: 0.34.5
+  zod:
+    specifier: ^3.22.2
+    version: 3.22.2
 
 packages:
 
@@ -3006,6 +3012,18 @@ packages:
       magic-string: 0.30.3
       periscopic: 3.1.0
 
+  /sveltekit-superforms@1.7.2(@sveltejs/kit@1.25.0)(svelte@4.2.1)(zod@3.22.2):
+    resolution: {integrity: sha512-3zhMynkNWCQF+af2NlsVhi5n03+NEnPy0jzL7EVO3aiYDlJ/9LY1GNI09Mac5UVlJDPS00oB8q3qQUhZSX/gSg==}
+    peerDependencies:
+      '@sveltejs/kit': 1.x
+      svelte: 3.x || 4.x
+      zod: 3.x
+    dependencies:
+      '@sveltejs/kit': 1.25.0(svelte@4.2.1)(vite@4.4.9)
+      svelte: 4.2.1
+      zod: 3.22.2
+    dev: true
+
   /svg.draggable.js@2.2.2:
     resolution: {integrity: sha512-JzNHBc2fLQMzYCZ90KZHN2ohXL0BQJGQimK1kGk6AvSeibuKcIdDX9Kr0dT9+UJ5O8nYA0RB839Lhvk4CY4MZw==}
     engines: {node: '>= 0.8.0'}
@@ -3434,4 +3452,8 @@ packages:
   /yocto-queue@1.0.0:
     resolution: {integrity: sha512-9bnSc/HEW2uRy67wc+T8UwauLuPJVn28jb+GtJY16iiKWyvmYJRXVT4UamsAEGQfPohgr2q4Tq0sQbQlxTfi1g==}
     engines: {node: '>=12.20'}
+    dev: true
+
+  /zod@3.22.2:
+    resolution: {integrity: sha512-wvWkphh5WQsJbVk1tbx1l1Ly4yg+XecD+Mq280uBGt9wa5BKSWf4Mhp6GmrkPixhMxmabYY7RbzlwVP32pbGCg==}
     dev: true
