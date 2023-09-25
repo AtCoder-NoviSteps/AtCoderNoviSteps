@@ -22,7 +22,7 @@
     "@playwright/test": "1.38.1",
     "@sveltejs/adapter-auto": "2.1.0",
     "@sveltejs/adapter-vercel": "3.0.3",
-    "@sveltejs/kit": "1.25.0",
+    "@sveltejs/kit": "1.25.1",
     "@typescript-eslint/eslint-plugin": "6.7.2",
     "@typescript-eslint/parser": "6.7.2",
     "eslint": "8.49.0",
