@@ -17,7 +17,7 @@
     "format": "prettier --write .",
     "test:integration": "playwright test",
     "test:unit": "vitest",
-    "postinstall": "pnpm prisma generate"
+    "postinstall": "prisma generate"
   },
   "devDependencies": {
     "@playwright/test": "1.38.1",
