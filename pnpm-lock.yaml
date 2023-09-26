@@ -2886,7 +2886,7 @@ packages:
     resolution: {integrity: sha512-8Dyfzqmo622orHICexeboIuAeNG3oiukjAAwVwVbuVIAxglpr2SEBrofy2NpjHjouBu7QsK5X5rs48FoTf0uQA==}
     hasBin: true
     dependencies:
-      '@typescript-eslint/typescript-estree': 6.7.2(typescript@5.2.2)
+      '@typescript-eslint/typescript-estree': 6.7.3(typescript@5.2.2)
       detect-package-manager: 2.0.1
       dom-serializer: 2.0.0
       domhandler: 5.0.3
