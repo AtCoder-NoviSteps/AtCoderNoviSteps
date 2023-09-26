@@ -1,7 +1,9 @@
 <script lang="ts">
-  import { Card, Button, Label, Input, Helper, Checkbox } from 'flowbite-svelte';
+  import { Card, Button, Label, Input, Helper } from 'flowbite-svelte';
 
   // 必要なコンポーネントだけを読み込んで、コンパイルを時間を短縮
+  // モジュールは読み込めているのに以下のエラーが発生するため、やむなく@ts-ignoreを使用
+  // Cannot find module 'flowbite-svelte-icons/xxx.svelte' or its corresponding type declarations.ts(2307)
   // @ts-ignore
   import UserOutlineSolid from 'flowbite-svelte-icons/UserCircleSolid.svelte';
   // @ts-ignore
@@ -17,7 +19,7 @@
   export let alternativePageName: string;
   export let alternativePageLink: string;
 
-  const { form, message, errors, submitting, enhance } = formProperties;
+  const { form, errors, submitting, enhance } = formProperties;
 
   let showPassword = false;
 </script>
