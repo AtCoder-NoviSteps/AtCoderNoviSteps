@@ -16,7 +16,8 @@
     "lint": "prettier --check . && eslint .",
     "format": "prettier --write .",
     "test:integration": "playwright test",
-    "test:unit": "vitest"
+    "test:unit": "vitest",
+    "postinstall": "pnpm prisma generate"
   },
   "devDependencies": {
     "@playwright/test": "1.38.1",
