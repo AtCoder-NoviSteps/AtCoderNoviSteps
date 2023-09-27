@@ -9,3 +9,24 @@ services:
       - ./node_modules:/usr/src/app/node_modules:cached
     environment:
       - NODE_ENV=development
+      - DATABASE_URL=postgresql://db_user:db_password@db:5432/test_db
+    command: sleep infinity
+    depends_on:
+      - db
+
+  db:
+    image: postgres:latest
+    restart: unless-stopped
+    volumes:
+      - postgres-data:/var/lib/postgresql/data:cached
+    environment:
+      POSTGRES_USER: db_user
+      POSTGRES_PASSWORD: db_password
+      POSTGRES_DB: test_db
+      POSTGRES_INITDB_ARGS: '--encoding=UTF8'
+    ports:
+      - 5432:5432
+
+volumes:
+  postgres-data:
+    driver: local
