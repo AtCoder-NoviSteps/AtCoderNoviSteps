@@ -19,7 +19,7 @@ export const load: PageServerLoad = async ({ locals }) => {
 
   const form = await superValidate(null, authSchema);
 
-  return { form };
+  return { form: { ...form, message: '' } };
 };
 
 export const actions: Actions = {
@@ -27,7 +27,13 @@ export const actions: Actions = {
     const form = await superValidate(request, authSchema);
 
     if (!form.valid) {
-      return fail(400, { form });
+      return fail(400, {
+        form: {
+          ...form,
+          message:
+            'ログインできませんでした。登録したユーザ名 / パスワードとなるように修正してください。',
+        },
+      });
     }
 
     try {
@@ -51,11 +57,20 @@ export const actions: Actions = {
       ) {
         // user does not exist or invalid password
         return fail(400, {
-          form: { ...form, message: 'ログインに失敗したため、もう一度お試しください' },
+          form: {
+            ...form,
+            message:
+              'ログインできませんでした。登録したユーザ名 / パスワードとなるように修正してください。',
+          },
         });
       }
 
-      return fail(500, { form: { ...form, message: '不明なエラー' } });
+      return fail(500, {
+        form: {
+          ...form,
+          message: 'サーバでエラーが発生しました。本サービスの開発・運営チームに連絡してください。',
+        },
+      });
     }
 
     // redirect to

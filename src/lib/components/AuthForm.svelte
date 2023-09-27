@@ -19,7 +19,7 @@
   export let alternativePageName: string;
   export let alternativePageLink: string;
 
-  const { form, errors, submitting, enhance } = formProperties;
+  const { form, message, errors, submitting, enhance } = formProperties;
 
   let showPassword = false;
 </script>
@@ -35,10 +35,11 @@
     <form method="post" use:enhance class="flex flex-col space-y-6">
       <h3 class="text-xl font-medium text-gray-900 dark:text-white">{title}</h3>
 
-      <!-- TODO: フォームへの入力値そのもの以外のエラーへの対応 -->
-      <!-- {#if message}
-        <span>{$message}</span>
-      {/if} -->
+      {#if $message}
+        <Helper class="mt-2" color="red">
+          <span class="font-medium">{$message}</span>
+        </Helper>
+      {/if}
 
       <!-- User name -->
       <Label class="space-y-2">

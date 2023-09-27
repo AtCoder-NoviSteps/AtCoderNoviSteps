@@ -3,6 +3,8 @@
 // https://superforms.rocks/get-started
 import { superValidate } from 'sveltekit-superforms/server';
 import { fail, redirect } from '@sveltejs/kit';
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
+import { LuciaError } from 'lucia';
 
 import { authSchema } from '$lib/zod/schema';
 import { auth } from '$lib/server/auth';
@@ -18,15 +20,22 @@ export const load: PageServerLoad = async ({ locals }) => {
 
   const form = await superValidate(null, authSchema);
 
-  return { form };
+  return { form: { ...form, message: '' } };
 };
 
+// FIXME: エラー処理に共通部分があるため、リファクタリングをしましょう。
 export const actions: Actions = {
   default: async ({ request, locals }) => {
     const form = await superValidate(request, authSchema);
 
     if (!form.valid) {
-      return fail(400, { form });
+      return fail(400, {
+        form: {
+          ...form,
+          message:
+            'アカウントを作成できませんでした。指定された条件を満たすようにユーザ名 / パスワードを修正してください。',
+        },
+      });
     }
 
     try {
@@ -50,19 +59,28 @@ export const actions: Actions = {
     } catch (e) {
       // this part depends on the database you're using
       // check for unique constraint error in user table
-
-      // TODO: 例外処理の方法を調べて実装
-      // 既に登録されている場合は、ユーザ名 or パスワードを変えるようにメッセージを出す
-      // return fail(400, { form });
-      // if (e instanceof SomeDatabaseError && e.message === USER_TABLE_UNIQUE_CONSTRAINT_ERROR) {
-      //   return fail(400, {
-      //     message: 'Username already taken',
-      //   });
-      // }
+      // See:
+      // https://www.prisma.io/docs/reference/api-reference/error-reference#prismaclientknownrequesterror
+      // https://www.prisma.io/docs/concepts/components/prisma-client/handling-exceptions-and-errors
+      // https://lucia-auth.com/basics/error-handling/
+      if (
+        (e instanceof PrismaClientKnownRequestError && e.code === 'P2002') ||
+        (e instanceof LuciaError && e.message === 'AUTH_DUPLICATE_KEY_ID')
+      ) {
+        return fail(400, {
+          form: {
+            ...form,
+            message:
+              'アカウントを作成できませんでした。指定されたユーザ名はすでに使用されているため、修正・変更してください。',
+          },
+        });
+      }
 
       return fail(500, {
-        message: 'サーバでエラーが発生しました',
-        form: form,
+        form: {
+          ...form,
+          message: 'サーバでエラーが発生しました。本サービスの開発・運営チームに連絡してください。',
+        },
       });
     }
 
