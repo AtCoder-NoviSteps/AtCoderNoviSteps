@@ -1,7 +1,7 @@
 // For format details, see https://aka.ms/devcontainer.json. For config options, see the
 // README at: https://github.com/devcontainers/templates/tree/main/src/javascript-node
 {
-  "name": "sandbox",
+  "name": "AtCoder Novisteps",
   "service": "web",
   "workspaceFolder": "/usr/src/app",
   // Use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
@@ -15,7 +15,7 @@
     5173,
     5432 // for postgres
   ],
-  "shutdownAction": "none",
+  // "shutdownAction": "none",
   //
   // Use 'postCreateCommand' to run commands after the container is created.
   // "postCreateCommand": "yarn install",

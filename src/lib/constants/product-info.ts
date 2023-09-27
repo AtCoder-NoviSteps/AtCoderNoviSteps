@@ -1,4 +1,4 @@
-export const PRODUCT_NAME: string = 'AtCoder HogeHoges';
+export const PRODUCT_NAME: string = 'AtCoder Novisteps';
 
 export const PRODUCT_URL: string = '';
 
