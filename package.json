@@ -1,9 +1,9 @@
 {
-  "name": "sandbox",
+  "name": "atcoder-novisteps",
   "version": "0.0.1",
   "description": "",
   "private": true,
-  "bugs": "",
+  "bugs": "https://github.com/KATO-Hiro/AtCoderNovisteps/issues",
   "homepage": "",
   "license": "MIT",
   "scripts": {
