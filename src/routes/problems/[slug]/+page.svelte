@@ -56,7 +56,7 @@
     />
     <div class="flex flex-col justify-between p-4 leading-normal">
       <h4 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-        {taskResult.grade.replace('Kyu', '級').replace('Dan', '段')}
+        {taskResult.grade.replace('Kyu', 'Q').replace('Dan', 'D')}
       </h4>
       <h5 class="mb-2 text-3xl tracking-tight text-gray-900 dark:text-white flex">
         <div class="mr-2">
