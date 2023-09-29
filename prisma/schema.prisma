@@ -1,6 +1,5 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -12,45 +11,36 @@ datasource db {
 
 // See:
 // https://lucia-auth.com/database-adapters/prisma/
-model User {
-  id           String    @id @unique
-  auth_session Session[]
-  key          Key[]
+model key {
+  id              String  @id @unique
+  hashed_password String?
+  user_id         String
+  user            user    @relation(fields: [user_id], references: [id], onDelete: Cascade)
 
-  // here you can add custom fields for your user
-  // e.g. name, email, username, roles, etc.
-  username   String   @unique
-  role       Roles    @default(USER)
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
-
-  @@map("user")
+  @@index([user_id])
 }
 
-// See:
-// https://www.prisma.io/docs/concepts/components/prisma-schema/data-model#defining-enums
-enum Roles {
-  ADMIN
-  USER
-}
-
-model Session {
+model session {
   id             String @id @unique
   user_id        String
   active_expires BigInt
   idle_expires   BigInt
-  user           User   @relation(references: [id], fields: [user_id], onDelete: Cascade)
+  user           user   @relation(fields: [user_id], references: [id], onDelete: Cascade)
 
   @@index([user_id])
-  @@map("session")
 }
 
-model Key {
-  id              String  @id @unique
-  hashed_password String?
-  user_id         String
-  user            User    @relation(references: [id], fields: [user_id], onDelete: Cascade)
+model user {
+  id         String    @id @unique
+  username   String    @unique
+  role       Roles     @default(USER)
+  created_at DateTime  @default(now())
+  updated_at DateTime
+  key        key[]
+  session    session[]
+}
 
-  @@index([user_id])
-  @@map("key")
+enum Roles {
+  ADMIN
+  USER
 }
