@@ -30,21 +30,12 @@
   <!-- Grade -->
   <div class="mt-5 mb-5">
     <Heading tag="h2" customSize="text-xl" class="mb-2 text-xl text-gray-900 dark:text-white">
-      難易度の目安
+      難易度
     </Heading>
+    <!-- FIXME: もう少しビジュアルを整えましょう -->
+    <!-- 注: 難易度の基準は非公開 -->
     <List tag="ul" class="space-y-1 text-gray-500 dark:text-gray-400">
-      <Li>10級: 準備中</Li>
-      <Li>9級: 準備中</Li>
-      <Li>8級: 準備中</Li>
-      <Li>7級: 準備中</Li>
-      <Li>6級: 準備中</Li>
-      <Li>5級: 準備中</Li>
-      <Li>4級: 準備中</Li>
-      <Li>3級: 準備中</Li>
-      <Li>2級: 準備中</Li>
-      <Li>1級: 準備中</Li>
-      <Li>初段: 準備中</Li>
-      <Li>...段: 準備中</Li>
+      <Li>(簡単) 10Q、9Q、8Q、7Q、6Q、5Q、4Q、3Q、2Q、1Q、1D、2D、3D、4D、5D、6D、7D (最難関)</Li>
     </List>
   </div>
 
