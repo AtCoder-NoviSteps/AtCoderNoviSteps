@@ -57,3 +57,40 @@ model Key {
   @@index([user_id])
   @@map("key")
 }
+
+model Task {
+  id String @id @unique
+  // task_answers TaskAnswer[]
+
+  contest_id String
+  task_id    String
+  title      String
+  grade      TaskGrade @default(PENDING)
+  created_at DateTime  @default(now())
+  updated_at DateTime  @updatedAt
+
+  @@map("task")
+}
+
+// 10Q(最も簡単)〜7D(最難関)。
+// 注: 基準は非公開。
+enum TaskGrade {
+  PENDING // 未確定
+  Q10 // 10Qのように表記したいが、数字を最初の文字として利用できないため
+  Q9
+  Q8
+  Q7
+  Q6
+  Q5
+  Q4
+  Q3
+  Q2
+  Q1
+  D1
+  D2
+  D3
+  D4
+  D5
+  D6
+  D7
+}
