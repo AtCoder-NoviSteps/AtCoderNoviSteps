@@ -21,12 +21,13 @@
   },
   "devDependencies": {
     "@playwright/test": "1.39.0",
+    "@quramy/prisma-fabbrica": "2.0.2",
     "@sveltejs/adapter-auto": "2.1.0",
     "@sveltejs/adapter-vercel": "3.0.3",
     "@sveltejs/kit": "1.26.0",
     "@typescript-eslint/eslint-plugin": "6.8.0",
     "@typescript-eslint/parser": "6.8.0",
-    "eslint": "8.50.0",
+    "eslint": "8.52.0",
     "eslint-config-prettier": "9.0.0",
     "eslint-plugin-svelte": "2.34.0",
     "flowbite-svelte": "0.44.18",
@@ -34,7 +35,7 @@
     "prettier": "3.0.3",
     "prettier-plugin-svelte": "3.0.3",
     "prettier-plugin-tailwindcss": "0.5.6",
-    "prisma": "5.3.1",
+    "prisma": "5.4.2",
     "svelte": "4.2.2",
     "svelte-check": "3.5.2",
     "sveltekit-superforms": "1.8.0",
@@ -48,7 +49,7 @@
   "dependencies": {
     "@lucia-auth/adapter-prisma": "3.0.2",
     "@popperjs/core": "2.11.8",
-    "@prisma/client": "5.3.1",
+    "@prisma/client": "5.4.2",
     "autoprefixer": "10.4.16",
     "flowbite": "1.8.1",
     "lucia": "2.7.1",
@@ -56,6 +57,6 @@
     "svelte-add": "2023.9.17-0.0",
     "tailwind-merge": "1.14.0",
     "tailwindcss": "3.3.3",
-    "vercel": "32.4.1"
+    "vercel": "32.5.0"
   }
 }

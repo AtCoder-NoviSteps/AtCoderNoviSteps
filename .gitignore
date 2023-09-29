@@ -147,3 +147,6 @@ vite.config.ts.timestamp-*
 
 # Vercel
 .vercel
+
+# Prisma
+prisma/.fabbrica
