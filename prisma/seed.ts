@@ -2,8 +2,7 @@
 // // https://www.prisma.io/docs/getting-started/quickstart
 import { PrismaClient, Roles } from '@prisma/client';
 import { initialize, defineUserFactory, defineKeyFactory, defineTaskFactory } from './.fabbrica';
-
-import { generateScryptHash } from '../src/lib/utils/scrypt-hash';
+import { generateLuciaPasswordHash } from 'lucia/utils';
 
 const prisma = new PrismaClient();
 initialize({ prisma });
@@ -19,12 +18,14 @@ const users = [
   { name: 'Frank', role: Roles.USER },
 ];
 
+// See:
+// https://lucia-auth.com/reference/lucia/modules/utils/#generateluciapasswordhash
 async function addUser(user, password: string, userFactory, keyFactory) {
   const currentUser = await userFactory.createForConnect({
     username: user.name,
     role: user.role,
   });
-  const hashed_password = await generateScryptHash(password);
+  const hashed_password = await generateLuciaPasswordHash(password);
 
   await keyFactory.create({
     user: { connect: currentUser },
@@ -43,6 +44,7 @@ async function main() {
 
   users.map(async (user) => {
     const password = 'Ch0kuda1';
+    // TODO: 既にDBに存在する場合は追加しないようにしましょう
     await addUser(user, password, userFactory, keyFactory);
   });
 }
