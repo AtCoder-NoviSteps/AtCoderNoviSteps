@@ -37,15 +37,22 @@ async function addUser(user, password: string, userFactory, keyFactory) {
 // See:
 // https://github.com/TeemuKoivisto/sveltekit-monorepo-template/blob/main/packages/db/prisma/seed.ts
 // https://lucia-auth.com/basics/keys/#password-hashing
-// https://datatracker.ietf.org/doc/html/rfc7914#page-3
+// https://www.prisma.io/docs/reference/api-reference/prisma-client-reference#findunique
 async function main() {
   const userFactory = defineUserFactory();
   const keyFactory = defineKeyFactory({ defaultData: { user: userFactory } });
 
   users.map(async (user) => {
     const password = 'Ch0kuda1';
-    // TODO: 既にDBに存在する場合は追加しないようにしましょう
-    await addUser(user, password, userFactory, keyFactory);
+    const registeredUser = await prisma.user.findUnique({
+      where: {
+        username: user.name,
+      },
+    });
+
+    if (!registeredUser) {
+      await addUser(user, password, userFactory, keyFactory);
+    }
   });
 }
 
