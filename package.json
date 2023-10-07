@@ -17,7 +17,8 @@
     "format": "prettier --write .",
     "test:integration": "playwright test",
     "test:unit": "vitest",
-    "postinstall": "prisma generate"
+    "postinstall": "prisma generate",
+    "seed": "pnpm dlx vite-node ./prisma/seed.ts"
   },
   "devDependencies": {
     "@playwright/test": "1.39.0",
