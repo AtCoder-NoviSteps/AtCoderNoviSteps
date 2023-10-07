@@ -35,7 +35,7 @@
     <!-- FIXME: もう少しビジュアルを整えましょう -->
     <!-- 注: 難易度の基準は非公開 -->
     <List tag="ul" class="space-y-1 text-gray-500 dark:text-gray-400">
-      <Li>(簡単) 10Q、9Q、8Q、7Q、6Q、5Q、4Q、3Q、2Q、1Q、1D、2D、3D、4D、5D、6D、7D (最難関)</Li>
+      <Li>(簡単) 11Q、10Q、9Q、8Q、7Q、6Q、5Q、4Q、3Q、2Q、1Q、1D、2D、3D、4D、5D、6D (最難関)</Li>
     </List>
   </div>
 
