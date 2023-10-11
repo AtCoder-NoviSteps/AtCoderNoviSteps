@@ -62,9 +62,9 @@ jobs:
 
     runs-on: ubuntu-latest
 
-    environment:
-      name: preview
-      url: ${{ steps.deploy.outputs.url }}
+    # environment:
+    #   name: preview
+    #   url: ${{ steps.deploy.outputs.url }}
 
     steps:
       - name: Check out Git repository
@@ -92,8 +92,12 @@ jobs:
         run: vercel build --token=${{ secrets.VERCEL_TOKEN }}
 
       - name: Deploy Project Artifacts to Vercel
-        id: deploy
-        run: echo "url=$(vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }})" >> $GITHUB_OUTPUT
+        run: vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }}
+
+      # TODO: Enable to go directly from the pull request page to view preview deployment.
+      # - name: Deploy Project Artifacts to Vercel
+      #   id: deploy
+      #   run: echo "url=$(vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }})" >> $GITHUB_OUTPUT
 
       # TODO: Prepare staging domain.
       # - name: Assign staging domain to deployment (if main branch)
