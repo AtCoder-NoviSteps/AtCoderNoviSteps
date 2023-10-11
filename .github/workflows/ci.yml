@@ -11,6 +11,9 @@ env:
 
 on:
   push:
+    branches:
+      - 'main'
+      - 'release'
   pull_request:
 
 jobs:
@@ -53,7 +56,7 @@ jobs:
       #   run: pnpm test:integration
 
   preview:
-    if: ${{ github.ref != 'refs/heads/release' }}
+    if: ${{ github.ref != 'refs/heads/main' }}
 
     needs: build
 
@@ -98,7 +101,7 @@ jobs:
       #   run: vercel alias ${{ steps.deploy.outputs.url }} stg.my-service.com --scope=my-team --token=${{ secrets.VERCEL_TOKEN }}
 
   production:
-    if: ${{ github.ref == 'refs/heads/release' }}
+    if: ${{ github.ref == 'refs/heads/main' }}
 
     needs: build
 
