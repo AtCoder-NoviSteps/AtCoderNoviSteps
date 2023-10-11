@@ -1,11 +1,16 @@
 # See:
 # https://docs.github.com/en/actions/guides/building-and-testing-nodejs#building-and-testing-your-code
 # https://pnpm.io/ja/continuous-integration#github-actions
+# https://vercel.com/guides/how-can-i-use-github-actions-with-vercel
+# https://zenn.dev/ttskch/articles/691fb62fbb6b1b
 name: CI
+
+env:
+  VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+  VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
 
 on:
   push:
-    branches: [main]
   pull_request:
 
 jobs:
@@ -46,3 +51,83 @@ jobs:
       # TODO: Run integration test
       # - name: Integration test
       #   run: pnpm test:integration
+
+  preview:
+    if: ${{ github.ref != 'refs/heads/release' }}
+
+    needs: build
+
+    runs-on: ubuntu-latest
+
+    environment:
+      name: preview
+      url: ${{ steps.deploy.outputs.url }}
+
+    steps:
+      - name: Check out Git repository
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          check-latest: true
+          cache: 'pnpm'
+
+      - name: Install Vercel CLI
+        run: pnpm install vercel@latest
+
+      - name: Pull Vercel Environment Information
+        run: vercel pull --yes --environment=preview --token=${{ secrets.VERCEL_TOKEN }}
+
+      - name: Build Project Artifacts
+        run: vercel build --token=${{ secrets.VERCEL_TOKEN }}
+
+      - name: Deploy Project Artifacts to Vercel
+        id: deploy
+        run: echo "url=$(vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }})" >> $GITHUB_OUTPUT
+
+      # TODO: Prepare staging domain.
+      # - name: Assign staging domain to deployment (if main branch)
+      #   if: ${{ github.ref == 'refs/heads/main' }}
+      #   run: vercel alias ${{ steps.deploy.outputs.url }} stg.my-service.com --scope=my-team --token=${{ secrets.VERCEL_TOKEN }}
+
+  production:
+    if: ${{ github.ref == 'refs/heads/release' }}
+
+    needs: build
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out Git repository
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          check-latest: true
+          cache: 'pnpm'
+
+      - name: Install Vercel CLI
+        run: pnpm install vercel@latest
+
+      - name: Pull Vercel Environment Information
+        run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
+
+      - name: Build Project Artifacts
+        run: vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
+
+      - name: Deploy Project Artifacts to Vercel
+        run: vercel deploy --prod --prebuilt --token=${{ secrets.VERCEL_TOKEN }}
