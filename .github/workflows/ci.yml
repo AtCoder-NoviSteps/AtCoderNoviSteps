@@ -86,14 +86,14 @@ jobs:
         run: pnpm add --global vercel@latest
 
       - name: Pull Vercel Environment Information
-        run: pnpm vercel pull --yes --environment=preview --token=${{ secrets.VERCEL_TOKEN }}
+        run: vercel pull --yes --environment=preview --token=${{ secrets.VERCEL_TOKEN }}
 
       - name: Build Project Artifacts
-        run: pnpm vercel build --token=${{ secrets.VERCEL_TOKEN }}
+        run: vercel build --token=${{ secrets.VERCEL_TOKEN }}
 
       - name: Deploy Project Artifacts to Vercel
         id: deploy
-        run: echo "url=$(pnpm vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }})" >> $GITHUB_OUTPUT
+        run: echo "url=$(vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }})" >> $GITHUB_OUTPUT
 
       # TODO: Prepare staging domain.
       # - name: Assign staging domain to deployment (if main branch)
@@ -127,10 +127,10 @@ jobs:
         run: pnpm add --global vercel@latest
 
       - name: Pull Vercel Environment Information
-        run: pnpm vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
+        run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
 
       - name: Build Project Artifacts
-        run: pnpm vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
+        run: vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
 
       - name: Deploy Project Artifacts to Vercel
-        run: pnpm vercel deploy --prod --prebuilt --token=${{ secrets.VERCEL_TOKEN }}
+        run: vercel deploy --prod --prebuilt --token=${{ secrets.VERCEL_TOKEN }}
