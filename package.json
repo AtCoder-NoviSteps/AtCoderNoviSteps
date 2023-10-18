@@ -18,7 +18,8 @@
     "test:integration": "playwright test",
     "test:unit": "vitest",
     "postinstall": "prisma generate",
-    "seed": "pnpm dlx vite-node ./prisma/seed.ts"
+    "db:seed": "pnpm dlx vite-node ./prisma/seed.ts",
+    "db:studio": "pnpm dlx prisma studio"
   },
   "devDependencies": {
     "@playwright/test": "1.39.0",
