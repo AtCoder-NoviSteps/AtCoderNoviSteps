@@ -70,7 +70,7 @@ model Task {
   // task_answers TaskAnswer[]
 
   contest_id String
-  task_id    String
+  task_id    String    @unique
   title      String
   grade      TaskGrade @default(PENDING)
   created_at DateTime  @default(now())
