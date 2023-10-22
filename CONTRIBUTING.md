@@ -15,10 +15,36 @@
 
 ## 開発環境
 
+### バックエンド
+
+- [Supabase](https://supabase.com/): BaaS
+
+### フロントエンド
+
+- [Node.js](https://nodejs.org): JavaScriptのランタイム
+- [TypeScript](https://www.typescriptlang.org/): 開発言語
+- [SvelteKit](https://kit.svelte.dev/): 汎用フレームワーク
+- [Flowbite Svelte](https://flowbite-svelte.com/): UIライブラリ
+- [Prisma](https://www.prisma.io/): ORM
+- [Lucia](https://lucia-auth.com/): 認証ライブラリ
+- [Superforms](https://superforms.rocks/)、[Zod](https://zod.dev/): バリデーション
+- [pnpm](https://pnpm.io/ja/): パッケージマネージャ
+- [ESLint](https://eslint.org/)、[Prettier](https://prettier.io/): 文法およびフォーマットチェッカー
+
+### インフラ
+
 - [Docker Desktop](https://www.docker.com/products/docker-desktop)
+- [PostgreSQL](https://www.postgresql.org/): Relational DB
+
+### エディタと拡張機能
+
 - [Visual Studio Code (VS Code)](https://code.visualstudio.com/)
 - [Visual Studio Code Dev Containers](https://code.visualstudio.com/docs/remote/containers)
-- TODO: 主要な開発ツールを追記しましょう。
+
+### ホスティング、CI・CD関連
+
+- [Vercel](https://vercel.com/)
+- [GitHub Actions](https://docs.github.com/en/actions)
 
 ## プルリクエストの作成方法
 
@@ -60,6 +86,7 @@
 
 ### (共通) ローカルの開発サーバを起動
 
+- 新しいターミナルを開いてください。
 - 依存関係にあるライブラリをインストールし、開発サーバを起動します。
 
   `pnpm install`
