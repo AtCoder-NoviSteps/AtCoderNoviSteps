@@ -36,7 +36,7 @@
 - [Docker Desktop](https://www.docker.com/products/docker-desktop)
 - [PostgreSQL](https://www.postgresql.org/): Relational DB
 
-### エディタ
+### エディタと拡張機能
 
 - [Visual Studio Code (VS Code)](https://code.visualstudio.com/)
 - [Visual Studio Code Dev Containers](https://code.visualstudio.com/docs/remote/containers)
