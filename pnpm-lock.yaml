@@ -7,7 +7,7 @@ settings:
 dependencies:
   '@lucia-auth/adapter-prisma':
     specifier: 3.0.2
-    version: 3.0.2(@prisma/client@5.3.1)(lucia@2.7.1)
+    version: 3.0.2(@prisma/client@5.3.1)(lucia@2.7.2)
   '@popperjs/core':
     specifier: 2.11.8
     version: 2.11.8
@@ -21,8 +21,8 @@ dependencies:
     specifier: 1.8.1
     version: 1.8.1
   lucia:
-    specifier: 2.7.1
-    version: 2.7.1
+    specifier: 2.7.2
+    version: 2.7.2
   pnpm:
     specifier: 8.9.2
     version: 8.9.2
@@ -480,14 +480,14 @@ packages:
       '@jridgewell/sourcemap-codec': 1.4.15
     dev: false
 
-  /@lucia-auth/adapter-prisma@3.0.2(@prisma/client@5.3.1)(lucia@2.7.1):
+  /@lucia-auth/adapter-prisma@3.0.2(@prisma/client@5.3.1)(lucia@2.7.2):
     resolution: {integrity: sha512-EyJWZene1/zasPwPctv8wwNErZt5mwwm5JATbhg+kXr3R8pbC7lJfVzDTAeeFClVH5k/FywRcsBl3JkPaNIcow==}
     peerDependencies:
       '@prisma/client': ^4.2.0 || ^5.0.0
       lucia: ^2.0.0
     dependencies:
       '@prisma/client': 5.3.1(prisma@5.3.1)
-      lucia: 2.7.1
+      lucia: 2.7.2
     dev: false
 
   /@mapbox/node-pre-gyp@1.0.11:
@@ -2737,8 +2737,8 @@ packages:
     dependencies:
       yallist: 4.0.0
 
-  /lucia@2.7.1:
-    resolution: {integrity: sha512-EHDTajS1YWA7Q37jd29Far1l4nfZgsWLp4hDQeaQhVpJd2WKQqA3626kJYmOj1CTweVMkE54xFi5JIph+agZkQ==}
+  /lucia@2.7.2:
+    resolution: {integrity: sha512-fEsD5EW8k3JxEhp3Cor+ar3dAfSY/QAjN/gQArfxbp1bludR7zzyW6s/gmy1cuGvABASTuZxgwCyBz0Osbg6WA==}
     dev: false
 
   /magic-string@0.27.0:
