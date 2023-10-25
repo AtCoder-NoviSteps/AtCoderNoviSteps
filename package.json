@@ -55,7 +55,7 @@
     "pnpm": "8.9.2",
     "svelte-add": "2023.9.17-0.0",
     "tailwind-merge": "1.14.0",
-    "tailwindcss": "3.3.4",
+    "tailwindcss": "3.3.5",
     "vercel": "32.5.0"
   }
 }
