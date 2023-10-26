@@ -50,7 +50,7 @@
     "@popperjs/core": "2.11.8",
     "@prisma/client": "5.5.2",
     "autoprefixer": "10.4.16",
-    "flowbite": "1.8.1",
+    "flowbite": "2.0.0",
     "lucia": "2.7.2",
     "pnpm": "8.9.2",
     "svelte-add": "2023.9.17-0.0",
