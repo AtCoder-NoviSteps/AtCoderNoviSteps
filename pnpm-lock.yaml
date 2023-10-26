@@ -18,8 +18,8 @@ dependencies:
     specifier: 10.4.16
     version: 10.4.16(postcss@8.4.31)
   flowbite:
-    specifier: 1.8.1
-    version: 1.8.1
+    specifier: 2.0.0
+    version: 2.0.0
   lucia:
     specifier: 2.7.2
     version: 2.7.2
@@ -2266,6 +2266,14 @@ packages:
     dependencies:
       '@popperjs/core': 2.11.8
       mini-svg-data-uri: 1.4.4
+    dev: true
+
+  /flowbite@2.0.0:
+    resolution: {integrity: sha512-gP/iC/WuznQ5XBzikhaSs4RDs49zrvoAdHbWMHSY3l7nVJX0xJz+dELIlLjh+czLdEVTMLxUjuARYYwCb5q34A==}
+    dependencies:
+      '@popperjs/core': 2.11.8
+      mini-svg-data-uri: 1.4.4
+    dev: false
 
   /for-each@0.3.3:
     resolution: {integrity: sha512-jqYfLp7mo9vIyQf8ykW2v7A+2N4QjeCeI5+Dz9XraiO1ign81wjiH7Fb9vSOWvQfNtmSa4H2RoQTrrXivdUZmw==}
