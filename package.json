@@ -24,7 +24,7 @@
     "@sveltejs/adapter-auto": "2.1.0",
     "@sveltejs/adapter-vercel": "3.0.3",
     "@sveltejs/kit": "1.27.1",
-    "@typescript-eslint/eslint-plugin": "6.9.0",
+    "@typescript-eslint/eslint-plugin": "6.9.1",
     "@typescript-eslint/parser": "6.9.0",
     "eslint": "8.52.0",
     "eslint-config-prettier": "9.0.0",
