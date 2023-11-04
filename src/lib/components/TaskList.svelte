@@ -18,8 +18,6 @@
   export let taskResults: TaskResults;
 </script>
 
-<!-- <h2 class="text-xl mt-4 mb-2">{grade}</h2> -->
-
 <Accordion flush class="mt-4 mb-2">
   <AccordionItem>
     <span slot="header" class="text-xl">{grade}</span>
