@@ -9,6 +9,9 @@
 
   // FIXME: コードの重複があるので、リファクタリング
   // HACK: Enumの変数を利用してループで処理できないか?
+  let tasks_pendings = taskResults.filter(
+    (taskResult: TaskResult) => taskResult.grade === TaskGrade.PENDING,
+  );
   let tasks_11Q = taskResults.filter(
     (taskResult: TaskResult) => taskResult.grade === TaskGrade.Q11,
   );
@@ -39,6 +42,10 @@
 <!-- FIXME: コードの重複があるので、リファクタリング -->
 <div class="container mx-auto w-5/6">
   <h1 class="text-3xl">Problems</h1>
+  {#if tasks_pendings.length > 0}
+    <!-- Adminのみ表示 -->
+    <TaskList grade="Pending" taskResults={tasks_pendings} />
+  {/if}
   {#if tasks_11Q.length > 0}
     <TaskList grade="11Q" taskResults={tasks_11Q} />
   {/if}
