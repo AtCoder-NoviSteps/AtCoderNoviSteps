@@ -7,6 +7,7 @@ export const tasks = [
     problem_index: 'G',
     name: 'Two Kinds of Base',
     title: 'G. Two Kinds of Base',
+    grade: 'D4',
   },
   {
     id: 'abc322_f',
@@ -14,6 +15,7 @@ export const tasks = [
     problem_index: 'F',
     name: 'Vacation Query',
     title: 'F. Vacation Query',
+    grade: 'D2',
   },
   {
     id: 'abc322_e',
@@ -21,6 +23,7 @@ export const tasks = [
     problem_index: 'E',
     name: 'Product Development',
     title: 'E. Product Development',
+    grade: 'Q1',
   },
   {
     id: 'abc322_d',
@@ -28,6 +31,7 @@ export const tasks = [
     problem_index: 'D',
     name: 'Polyomino',
     title: 'D. Polyomino',
+    grade: 'Q1',
   },
   {
     id: 'abc322_c',
@@ -35,6 +39,7 @@ export const tasks = [
     problem_index: 'C',
     name: 'Festival',
     title: 'C. Festival',
+    grade: 'Q5',
   },
   {
     id: 'abc322_b',
@@ -42,6 +47,7 @@ export const tasks = [
     problem_index: 'B',
     name: 'Prefix and Suffix',
     title: 'B. Prefix and Suffix',
+    grade: 'Q6',
   },
   {
     id: 'abc322_a',
@@ -49,6 +55,7 @@ export const tasks = [
     problem_index: 'A',
     name: 'First ABC 2',
     title: 'A. First ABC 2',
+    grade: 'Q7',
   },
   {
     id: 'abc321_g',
@@ -56,6 +63,7 @@ export const tasks = [
     problem_index: 'G',
     name: 'Electric Circuit',
     title: 'G. Electric Circuit',
+    grade: 'D4',
   },
   {
     id: 'abc321_f',
@@ -63,6 +71,7 @@ export const tasks = [
     problem_index: 'F',
     name: '#(subset sum = K) with Add and Erase ',
     title: 'F. #(subset sum = K) with Add and Erase ',
+    grade: 'D2',
   },
   {
     id: 'abc321_e',
@@ -70,6 +79,7 @@ export const tasks = [
     problem_index: 'E',
     name: 'Complete Binary Tree',
     title: 'E. Complete Binary Tree',
+    grade: 'D2',
   },
   {
     id: 'abc321_d',
@@ -77,6 +87,7 @@ export const tasks = [
     problem_index: 'D',
     name: 'Set Menu',
     title: 'D. Set Menu',
+    grade: 'Q2',
   },
   {
     id: 'abc321_c',
@@ -84,6 +95,7 @@ export const tasks = [
     problem_index: 'C',
     name: '321-like Searcher',
     title: 'C. 321-like Searcher',
+    grade: 'Q2',
   },
   {
     id: 'abc321_b',
@@ -91,6 +103,7 @@ export const tasks = [
     problem_index: 'B',
     name: 'Cutoff',
     title: 'B. Cutoff',
+    grade: 'Q4',
   },
   {
     id: 'abc321_a',
@@ -98,6 +111,7 @@ export const tasks = [
     problem_index: 'A',
     name: '321-like Checker',
     title: 'A. 321-like Checker',
+    grade: 'Q7',
   },
   {
     id: 'abc320_g',
@@ -140,6 +154,7 @@ export const tasks = [
     problem_index: 'B',
     name: 'Longest Palindrome',
     title: 'B. Longest Palindrome',
+    grade: 'Q6',
   },
   {
     id: 'abc320_a',
@@ -147,6 +162,7 @@ export const tasks = [
     problem_index: 'A',
     name: 'Leyland Number',
     title: 'A. Leyland Number',
+    grade: 'Q7',
   },
   {
     id: 'abc319_g',
@@ -189,6 +205,7 @@ export const tasks = [
     problem_index: 'B',
     name: 'Measure',
     title: 'B. Measure',
+    grade: 'Q6',
   },
   {
     id: 'abc319_a',
@@ -196,6 +213,7 @@ export const tasks = [
     problem_index: 'A',
     name: 'Legendary Players',
     title: 'A. Legendary Players',
+    grade: 'Q7',
   },
   {
     id: 'abc318_h',
@@ -252,6 +270,7 @@ export const tasks = [
     problem_index: 'A',
     name: 'Full Moon',
     title: 'A. Full Moon',
+    grade: 'Q7',
   },
   {
     id: 'abc317_h',
@@ -308,6 +327,7 @@ export const tasks = [
     problem_index: 'A',
     name: 'Potions',
     title: 'A. Potions',
+    grade: 'Q7',
   },
   {
     id: 'abc315_h',
@@ -329,6 +349,7 @@ export const tasks = [
     problem_index: 'F',
     name: 'Shortcuts',
     title: 'F. Shortcuts',
+    grade: 'D1',
   },
   {
     id: 'abc315_e',
@@ -364,6 +385,7 @@ export const tasks = [
     problem_index: 'A',
     name: 'tcdr',
     title: 'A. tcdr',
+    grade: 'Q8',
   },
   {
     id: 'abc314_h',
@@ -420,6 +442,7 @@ export const tasks = [
     problem_index: 'A',
     name: '3.14',
     title: 'A. 3.14',
+    grade: 'Q7',
   },
   {
     id: 'abc313_h',
@@ -469,6 +492,7 @@ export const tasks = [
     problem_index: 'B',
     name: 'Who is Saikyo?',
     title: 'B. Who is Saikyo?',
+    grade: 'Q4',
   },
   {
     id: 'abc313_a',
@@ -476,6 +500,7 @@ export const tasks = [
     problem_index: 'A',
     name: 'To Be Saikyo',
     title: 'A. To Be Saikyo',
+    grade: 'Q6',
   },
   {
     id: 'abc312_h',
@@ -532,6 +557,7 @@ export const tasks = [
     problem_index: 'A',
     name: 'Chord',
     title: 'A. Chord',
+    grade: 'Q8',
   },
   {
     id: 'abc311_h',
@@ -581,6 +607,7 @@ export const tasks = [
     problem_index: 'B',
     name: 'Vacation Together',
     title: 'B. Vacation Together',
+    grade: 'Q6',
   },
   {
     id: 'abc311_a',
@@ -588,6 +615,7 @@ export const tasks = [
     problem_index: 'A',
     name: 'First ABC',
     title: 'A. First ABC',
+    grade: 'Q7',
   },
   {
     id: 'abc310_h',
@@ -644,6 +672,7 @@ export const tasks = [
     problem_index: 'A',
     name: 'Order Something Else',
     title: 'A. Order Something Else',
+    grade: 'Q7',
   },
   {
     id: 'abc309_h',
@@ -693,6 +722,7 @@ export const tasks = [
     problem_index: 'B',
     name: 'Rotate',
     title: 'B. Rotate',
+    grade: 'Q5',
   },
   {
     id: 'abc309_a',
@@ -700,6 +730,7 @@ export const tasks = [
     problem_index: 'A',
     name: 'Nine',
     title: 'A. Nine',
+    grade: 'Q7',
   },
   {
     id: 'abc308_h',
@@ -742,6 +773,7 @@ export const tasks = [
     problem_index: 'C',
     name: 'Standings',
     title: 'C. Standings',
+    grade: 'Q3',
   },
   {
     id: 'abc308_b',
@@ -756,6 +788,7 @@ export const tasks = [
     problem_index: 'A',
     name: 'New Scheme',
     title: 'A. New Scheme',
+    grade: 'Q7',
   },
   {
     id: 'abc307_h',
@@ -812,6 +845,7 @@ export const tasks = [
     problem_index: 'A',
     name: 'Weekly Records',
     title: 'A. Weekly Records',
+    grade: 'Q7',
   },
   {
     id: 'abc306_h',
@@ -868,6 +902,7 @@ export const tasks = [
     problem_index: 'A',
     name: 'Echo',
     title: 'A. Echo',
+    grade: 'Q8',
   },
   {
     id: 'abc305_h',
@@ -924,6 +959,7 @@ export const tasks = [
     problem_index: 'A',
     name: 'Water Station',
     title: 'A. Water Station',
+    grade: 'Q7',
   },
   {
     id: 'abc304_h',
@@ -980,6 +1016,7 @@ export const tasks = [
     problem_index: 'A',
     name: 'First Player',
     title: 'A. First Player',
+    grade: 'Q7',
   },
   {
     id: 'abc303_h',
@@ -1036,6 +1073,7 @@ export const tasks = [
     problem_index: 'A',
     name: 'Similar String',
     title: 'A. Similar String',
+    grade: 'Q7',
   },
   {
     id: 'abc302_h',
@@ -1092,6 +1130,7 @@ export const tasks = [
     problem_index: 'A',
     name: 'Attack',
     title: 'A. Attack',
+    grade: 'Q7',
   },
   {
     id: 'abc301_h',
@@ -1148,6 +1187,7 @@ export const tasks = [
     problem_index: 'A',
     name: 'Overall Winner',
     title: 'A. Overall Winner',
+    grade: 'Q7',
   },
   {
     id: 'abc300_h',
@@ -1204,5 +1244,6 @@ export const tasks = [
     problem_index: 'A',
     name: 'N-choice question',
     title: 'A. N-choice question',
+    grade: 'Q8',
   },
 ];
