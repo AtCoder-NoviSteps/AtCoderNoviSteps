@@ -90,6 +90,7 @@ async function addTask(task, taskFactory) {
     contest_id: task.contest_id,
     task_id: task.id,
     title: task.title,
+    grade: task.grade,
   });
 }
 
