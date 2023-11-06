@@ -51,7 +51,7 @@
     "@prisma/client": "5.5.2",
     "autoprefixer": "10.4.16",
     "flowbite": "2.0.0",
-    "lucia": "2.7.2",
+    "lucia": "2.7.3",
     "pnpm": "8.10.2",
     "svelte-add": "2023.9.17-0.0",
     "tailwind-merge": "1.14.0",
