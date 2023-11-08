@@ -69,14 +69,25 @@ model Task {
   id String @id @unique
   // task_answers TaskAnswer[]
 
-  contest_id String
-  task_id    String    @unique
-  title      String
-  grade      TaskGrade @default(PENDING)
-  created_at DateTime  @default(now())
-  updated_at DateTime  @updatedAt
+  contest_type ContestType @default(ABC)
+  contest_id   String
+  task_id      String      @unique
+  title        String
+  grade        TaskGrade   @default(PENDING)
+  created_at   DateTime    @default(now())
+  updated_at   DateTime    @updatedAt
 
   @@map("task")
+}
+
+enum ContestType {
+  ABC // AtCoder Beginner Contest
+  EDPC // Educational DP Contest / DP まとめコンテスト
+  TDPC // Typical DP Contest
+  JOI // Japanese Olympiad in Informatics
+  TYPICAL90 // 競プロ典型 90 問
+  TESSOKU_BOOK // 競技プログラミングの鉄則
+  MATH_AND_ALGORITHM // アルゴリズムと数学
 }
 
 // 11Q(最も簡単)〜6D(最難関)。
