@@ -69,13 +69,14 @@ model Task {
   id String @id @unique
   // task_answers TaskAnswer[]
 
-  contest_type ContestType @default(ABC)
-  contest_id   String
-  task_id      String      @unique
-  title        String
-  grade        TaskGrade   @default(PENDING)
-  created_at   DateTime    @default(now())
-  updated_at   DateTime    @updatedAt
+  contest_type                ContestType               @default(ABC)
+  contest_id                  String
+  task_id                     String                    @unique
+  title                       String
+  grade                       TaskGrade                 @default(PENDING)
+  atcoder_problems_difficulty AtcoderProblemsDifficulty @default(PENDING)
+  created_at                  DateTime                  @default(now())
+  updated_at                  DateTime                  @updatedAt
 
   @@map("task")
 }
@@ -111,4 +112,20 @@ enum TaskGrade {
   D4
   D5
   D6
+}
+
+enum AtcoderProblemsDifficulty {
+  PENDING // 未確定
+  UNAVAILABLE
+  GRAY
+  BROWN
+  GREEN
+  CYAN
+  BLUE
+  YELLOW
+  ORANGE
+  RED
+  BRONZE
+  SILVER
+  GOLD
 }
