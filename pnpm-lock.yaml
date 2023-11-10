@@ -18,8 +18,8 @@ dependencies:
     specifier: 10.4.16
     version: 10.4.16(postcss@8.4.31)
   flowbite:
-    specifier: 2.0.0
-    version: 2.0.0
+    specifier: 2.1.1
+    version: 2.1.1
   lucia:
     specifier: 2.7.3
     version: 2.7.3
@@ -2275,13 +2275,13 @@ packages:
     dependencies:
       '@floating-ui/dom': 1.5.3
       apexcharts: 3.44.0
-      flowbite: 2.0.0
+      flowbite: 2.1.1
       svelte: 4.2.2
       tailwind-merge: 2.0.0
     dev: true
 
-  /flowbite@2.0.0:
-    resolution: {integrity: sha512-gP/iC/WuznQ5XBzikhaSs4RDs49zrvoAdHbWMHSY3l7nVJX0xJz+dELIlLjh+czLdEVTMLxUjuARYYwCb5q34A==}
+  /flowbite@2.1.1:
+    resolution: {integrity: sha512-FkTwNXlfWRXUhSsiE9D4bEqLN8ywdunW2qOz1z7gN+Co7h9EQIJf/Fr4xgq1NJPFa+6MeMf08QLzviU7LqB/rQ==}
     dependencies:
       '@popperjs/core': 2.11.8
       mini-svg-data-uri: 1.4.4
