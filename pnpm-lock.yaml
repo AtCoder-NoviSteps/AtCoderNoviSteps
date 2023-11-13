@@ -24,8 +24,8 @@ dependencies:
     specifier: 2.7.3
     version: 2.7.3
   pnpm:
-    specifier: 8.10.2
-    version: 8.10.2
+    specifier: 8.10.4
+    version: 8.10.4
   svelte-add:
     specifier: 2023.9.17-0.0
     version: 2023.9.17-0.0
@@ -3289,8 +3289,8 @@ packages:
       fsevents: 2.3.2
     dev: true
 
-  /pnpm@8.10.2:
-    resolution: {integrity: sha512-B4IJPVumx62UYggbwe8HdQFqS0EJ7KHh/tzqbxEBQ69fUJk9s2xCfU+oxivjkgoyJNsS2nGdJGyhndnxgEjDPA==}
+  /pnpm@8.10.4:
+    resolution: {integrity: sha512-KH7bZKf5dYOIhK80/tKuRqbwbD9Khkd59TP0OES/Wr8yJqBKQnhQSrEYYRpxDW4XFLUnKhoxLy5vJTz1h7mlVA==}
     engines: {node: '>=16.14'}
     hasBin: true
     dev: false
