@@ -31,7 +31,7 @@
     "eslint-plugin-svelte": "2.35.0",
     "flowbite-svelte": "0.44.19",
     "flowbite-svelte-icons": "0.4.4",
-    "prettier": "3.0.3",
+    "prettier": "3.1.0",
     "prettier-plugin-svelte": "3.1.0",
     "prettier-plugin-tailwindcss": "0.5.7",
     "prisma": "5.5.2",
