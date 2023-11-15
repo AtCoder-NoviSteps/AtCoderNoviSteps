@@ -52,7 +52,7 @@
     "autoprefixer": "10.4.16",
     "flowbite": "2.1.1",
     "lucia": "2.7.4",
-    "pnpm": "8.10.4",
+    "pnpm": "8.10.5",
     "svelte-add": "2023.9.17-0.0",
     "tailwind-merge": "1.14.0",
     "tailwindcss": "3.3.5",
