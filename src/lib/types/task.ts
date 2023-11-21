@@ -40,6 +40,8 @@ export const TaskGrade: { [key in TaskGradeOrigin]: key } = {
 // Re-exporting the original type with the original name.
 export type TaskGrade = TaskGradeOrigin;
 
+export const taskGradeValues = Object.values(TaskGrade);
+
 export interface TaskResult extends Task {
   user_id: string;
   submission_status: string;
