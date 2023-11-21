@@ -15,7 +15,7 @@ services:
       - db
 
   db:
-    image: postgres:latest
+    image: postgres:15.1
     restart: unless-stopped
     volumes:
       - postgres-data:/var/lib/postgresql/data:cached
