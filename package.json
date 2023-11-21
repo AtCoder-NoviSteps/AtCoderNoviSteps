@@ -28,7 +28,7 @@
     "@typescript-eslint/parser": "6.12.0",
     "eslint": "8.54.0",
     "eslint-config-prettier": "9.0.0",
-    "eslint-plugin-svelte": "2.35.0",
+    "eslint-plugin-svelte": "2.35.1",
     "flowbite-svelte": "0.44.19",
     "flowbite-svelte-icons": "0.4.4",
     "prettier": "3.1.0",
