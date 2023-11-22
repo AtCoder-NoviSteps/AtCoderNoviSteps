@@ -3,6 +3,7 @@ import type { TaskGrade as TaskGradeOrigin } from '@prisma/client';
 
 export interface Task {
   contest_id: string;
+  task_table_index: string;
   task_id: string;
   title: string;
   grade: string;

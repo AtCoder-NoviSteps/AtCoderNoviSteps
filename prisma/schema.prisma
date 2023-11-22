@@ -71,6 +71,7 @@ model Task {
 
   contest_type                ContestType               @default(ABC)
   contest_id                  String
+  task_table_index            String // 問題一覧を表示するときに使用。AtCoder Problemsに準拠。
   task_id                     String                    @unique
   title                       String
   grade                       TaskGrade                 @default(PENDING)
