@@ -17,10 +17,13 @@
     "format": "prettier --write .",
     "test:integration": "playwright test",
     "test:unit": "vitest",
-    "postinstall": "prisma generate"
+    "postinstall": "prisma generate",
+    "db:seed": "pnpm dlx vite-node ./prisma/seed.ts",
+    "db:studio": "pnpm dlx prisma studio"
   },
   "devDependencies": {
     "@playwright/test": "1.40.0",
+    "@quramy/prisma-fabbrica": "2.0.2",
     "@sveltejs/adapter-auto": "2.1.1",
     "@sveltejs/adapter-vercel": "3.1.0",
     "@sveltejs/kit": "1.27.6",

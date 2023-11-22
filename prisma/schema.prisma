@@ -8,6 +8,13 @@ generator client {
   binaryTargets = ["native", "rhel-openssl-1.0.x"]
 }
 
+// See:
+// https://github.com/Quramy/prisma-fabbrica
+generator fabbrica {
+  provider = "prisma-fabbrica"
+  output   = ".fabbrica"
+}
+
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
@@ -56,4 +63,70 @@ model Key {
 
   @@index([user_id])
   @@map("key")
+}
+
+model Task {
+  id String @id @unique
+  // task_answers TaskAnswer[]
+
+  contest_type                ContestType               @default(ABC)
+  contest_id                  String
+  task_table_index            String // 問題一覧を表示するときに使用。AtCoder Problemsに準拠。
+  task_id                     String                    @unique
+  title                       String
+  grade                       TaskGrade                 @default(PENDING)
+  atcoder_problems_difficulty AtcoderProblemsDifficulty @default(PENDING)
+  created_at                  DateTime                  @default(now())
+  updated_at                  DateTime                  @updatedAt
+
+  @@map("task")
+}
+
+enum ContestType {
+  ABC // AtCoder Beginner Contest
+  EDPC // Educational DP Contest / DP まとめコンテスト
+  TDPC // Typical DP Contest
+  JOI // Japanese Olympiad in Informatics
+  TYPICAL90 // 競プロ典型 90 問
+  TESSOKU_BOOK // 競技プログラミングの鉄則
+  MATH_AND_ALGORITHM // アルゴリズムと数学
+}
+
+// 11Q(最も簡単)〜6D(最難関)。
+// 注: 基準は非公開。
+enum TaskGrade {
+  PENDING // 未確定
+  Q11 // 11Qのように表記したいが、数字を最初の文字として利用できないため
+  Q10
+  Q9
+  Q8
+  Q7
+  Q6
+  Q5
+  Q4
+  Q3
+  Q2
+  Q1
+  D1
+  D2
+  D3
+  D4
+  D5
+  D6
+}
+
+enum AtcoderProblemsDifficulty {
+  PENDING // 未確定
+  UNAVAILABLE
+  GRAY
+  BROWN
+  GREEN
+  CYAN
+  BLUE
+  YELLOW
+  ORANGE
+  RED
+  BRONZE
+  SILVER
+  GOLD
 }

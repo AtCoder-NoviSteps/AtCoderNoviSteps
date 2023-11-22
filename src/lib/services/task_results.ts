@@ -1,7 +1,7 @@
 import { error } from '@sveltejs/kit';
 import { getTasks } from '$lib/services/tasks';
 import { getAnswers } from './answers';
-import type { Task, Tasks, TaskResult, TaskResults } from '$lib/types/task';
+import type { Task, TaskResult, TaskResults } from '$lib/types/task';
 import { NOT_FOUND } from '$lib/constants/http-response-status-codes';
 
 // In a real app, this data would live in a database,
@@ -19,8 +19,7 @@ export async function getTaskResults(): Promise<TaskResults> {
   // TODO: getUser(userId)を用意して、取得できるようにする。
   const userId = 'hogehoge';
 
-  // TODO: ユーザIDを指定したら、解答の一覧を取得できるようにする。
-  const tasks: Tasks = getTasks();
+  const tasks = await getTasks();
   const answers = getAnswers();
   const sampleTaskResults = tasks.map((task: Task) => {
     const taskResult = createTaskResult(userId, task);
