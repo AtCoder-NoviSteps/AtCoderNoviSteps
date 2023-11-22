@@ -36,8 +36,8 @@ dependencies:
     specifier: 3.3.5
     version: 3.3.5
   vercel:
-    specifier: 32.5.5
-    version: 32.5.5
+    specifier: 32.5.6
+    version: 32.5.6
 
 devDependencies:
   '@playwright/test':
@@ -1172,8 +1172,8 @@ packages:
       ts-morph: 12.0.0
     dev: false
 
-  /@vercel/next@4.0.14:
-    resolution: {integrity: sha512-29x93X278ElpbftrSgHvdY9OGVZkHurm3ST/WbdyE/AASEuqwOvShkpAoQl8idlFJFHPjd4c2v5xv1ZVyEb6sg==}
+  /@vercel/next@4.0.15:
+    resolution: {integrity: sha512-BxMxIJrya7MS6IWrQIaQaYHPmq7WoZFLX909RBpNoAG5wgzrTrW756d2EsibBwGo7sQYBv2atyI5GqBIHzYbWg==}
     dependencies:
       '@vercel/nft': 0.24.2
     transitivePeerDependencies:
@@ -1264,8 +1264,8 @@ packages:
       ajv: 6.12.6
     dev: false
 
-  /@vercel/ruby@2.0.2:
-    resolution: {integrity: sha512-MqFynhtZ905L210DWAbgkiEQEK39LTtp9eL2Nm6PjzhjNzU6hV0UfK8Z24vU9CC6J4mrUTTZx396fH7XTYJWqg==}
+  /@vercel/ruby@2.0.3:
+    resolution: {integrity: sha512-INZjBvBxQlANvj7LvHeXtfjpU+ZtwGL45vyys5+hI594MokpkrKdzUaTuK4kUX+KsEJUR7Xule5JiS89fW77BA==}
     dev: false
 
   /@vercel/static-build@2.0.12:
@@ -5208,8 +5208,8 @@ packages:
       spdx-expression-parse: 3.0.1
     dev: true
 
-  /vercel@32.5.5:
-    resolution: {integrity: sha512-243EMaVsFyqrbbiD7kNfGTc+AYQ86k8PaQzFIELFzKRV7cbGWUGqmPiHNZR4XZlHd96S3FHGqWz5HNtzZKQNEQ==}
+  /vercel@32.5.6:
+    resolution: {integrity: sha512-r6MaU4qiMg2xqSCD8qUt6iEG65BL+8PE2tCryANQ5cmYpK2Yg+IAeM1Fsbm/K7eox24S5ubXji3Um8FXrMNHpQ==}
     engines: {node: '>= 16'}
     hasBin: true
     dependencies:
@@ -5217,12 +5217,12 @@ packages:
       '@vercel/fun': 1.1.0
       '@vercel/go': 3.0.3
       '@vercel/hydrogen': 1.0.1
-      '@vercel/next': 4.0.14
+      '@vercel/next': 4.0.15
       '@vercel/node': 3.0.11
       '@vercel/python': 4.1.0
       '@vercel/redwood': 2.0.5
       '@vercel/remix-builder': 2.0.11
-      '@vercel/ruby': 2.0.2
+      '@vercel/ruby': 2.0.3
       '@vercel/static-build': 2.0.12
       chokidar: 3.3.1
     transitivePeerDependencies:
