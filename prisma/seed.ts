@@ -4,7 +4,10 @@ import { PrismaClient, Roles } from '@prisma/client';
 import { initialize, defineUserFactory, defineKeyFactory, defineTaskFactory } from './.fabbrica';
 import { generateLuciaPasswordHash } from 'lucia/utils';
 
+import { classifyContest } from '../src/lib/utils/contest';
+
 import { tasks } from './tasks';
+// import { tasks } from './tasks_for_production';
 
 const prisma = new PrismaClient();
 initialize({ prisma });
@@ -87,6 +90,7 @@ function addTasks() {
 
 async function addTask(task, taskFactory) {
   await taskFactory.create({
+    contest_type: classifyContest(task.contest_id),
     contest_id: task.contest_id,
     task_table_index: task.problem_index,
     task_id: task.id,
