@@ -13,6 +13,7 @@
 
   import type { TaskResults } from '$lib/types/task';
   import { ATCODER_BASE_CONTEST_URL } from '$lib/constants/urls';
+  import { getContestNameLabel } from '$lib/utils/contest';
 
   export let grade: string;
   export let taskResults: TaskResults;
@@ -51,7 +52,7 @@
                 target="_blank"
                 rel="noreferrer"
               >
-                {taskResult.contest_id.toUpperCase()}
+                {getContestNameLabel(taskResult.contest_id)}
               </a>
             </TableBodyCell>
             <TableBodyCell>

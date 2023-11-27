@@ -31,3 +31,19 @@ export const classifyContest = (contest_id: string) => {
     return ContestType.JOI;
   }
 };
+
+export const getContestNameLabel = (contest_id: string) => {
+  if (contest_id === 'APG4b') {
+    return 'APG4b';
+  }
+
+  if (contest_id === 'practice2') {
+    return 'ACL Practice';
+  }
+
+  if (contest_id === 'dp') {
+    return 'EDPC';
+  }
+
+  return contest_id.toUpperCase();
+};
