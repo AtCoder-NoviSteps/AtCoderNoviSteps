@@ -36,8 +36,8 @@ dependencies:
     specifier: 3.3.5
     version: 3.3.5
   vercel:
-    specifier: 32.5.6
-    version: 32.5.6
+    specifier: 32.6.0
+    version: 32.6.0
 
 devDependencies:
   '@playwright/test':
@@ -1161,8 +1161,8 @@ packages:
       fs-extra: 11.1.0
     dev: false
 
-  /@vercel/go@3.0.3:
-    resolution: {integrity: sha512-XhrmpsACxNo64ojhscL//Mq+XEfm3VXlx/UIUcHzJJXdvFnz7DEzh1zs0AtdpVgZbYhPQ7rW3GIejaHrIJnN5w==}
+  /@vercel/go@3.0.4:
+    resolution: {integrity: sha512-hMIJm2xwU1HT56YRNF8HNOnIFNH7WnGl1l2D6lc6UJk7XdCCh1Dm0nsqLqki2SprTUh3I+53pTQaqgRsFGf06A==}
     dev: false
 
   /@vercel/hydrogen@1.0.1:
@@ -1245,8 +1245,8 @@ packages:
       - supports-color
     dev: false
 
-  /@vercel/remix-builder@2.0.11:
-    resolution: {integrity: sha512-blp+PPXFZ4KWLHrh0PZfR9Er/yOQAzPJLbmvJtfJIBnes8SVmIWB89xl+P89HVruknK+FNvCotEFCU41DUjoWw==}
+  /@vercel/remix-builder@2.0.12:
+    resolution: {integrity: sha512-tm0dIJJcVm5CuJmWYJMqqz9h2gI2rysOTmbPdzEjZmFFzwcrI+745crFMbCXN++LJCLhyhXaMuktdWqQ4laimg==}
     dependencies:
       '@vercel/nft': 0.24.2
       '@vercel/static-config': 3.0.0
@@ -1268,8 +1268,8 @@ packages:
     resolution: {integrity: sha512-INZjBvBxQlANvj7LvHeXtfjpU+ZtwGL45vyys5+hI594MokpkrKdzUaTuK4kUX+KsEJUR7Xule5JiS89fW77BA==}
     dev: false
 
-  /@vercel/static-build@2.0.12:
-    resolution: {integrity: sha512-7X7fhkdoxOInbjvXcswiv7AtAj9a1A/DojJuHh8iDNBMOti/umNSjEp1Orzm7sr7qmLEuSAcZrGoBa8R5jVKEQ==}
+  /@vercel/static-build@2.0.13:
+    resolution: {integrity: sha512-2+8v7QsRBVF31St8+OVZpJQHwOroXgP4ZoGX8/ppZhBh/Y7qfQds0mlECEnjdLHEdMIFwXCfuvUvcD5LfmjjAA==}
     dependencies:
       '@vercel/gatsby-plugin-vercel-analytics': 1.0.11
       '@vercel/gatsby-plugin-vercel-builder': 2.0.11
@@ -5208,22 +5208,22 @@ packages:
       spdx-expression-parse: 3.0.1
     dev: true
 
-  /vercel@32.5.6:
-    resolution: {integrity: sha512-r6MaU4qiMg2xqSCD8qUt6iEG65BL+8PE2tCryANQ5cmYpK2Yg+IAeM1Fsbm/K7eox24S5ubXji3Um8FXrMNHpQ==}
+  /vercel@32.6.0:
+    resolution: {integrity: sha512-FCJ4Mg7h4L9qbiwLy3GhwV0KrQLGQYfgmx35kG/DJcWnG+kTR32faOzi53poqzwLR9/nU/ABhLP6jihhj25qKw==}
     engines: {node: '>= 16'}
     hasBin: true
     dependencies:
       '@vercel/build-utils': 7.2.5
       '@vercel/fun': 1.1.0
-      '@vercel/go': 3.0.3
+      '@vercel/go': 3.0.4
       '@vercel/hydrogen': 1.0.1
       '@vercel/next': 4.0.15
       '@vercel/node': 3.0.11
       '@vercel/python': 4.1.0
       '@vercel/redwood': 2.0.5
-      '@vercel/remix-builder': 2.0.11
+      '@vercel/remix-builder': 2.0.12
       '@vercel/ruby': 2.0.3
-      '@vercel/static-build': 2.0.12
+      '@vercel/static-build': 2.0.13
       chokidar: 3.3.1
     transitivePeerDependencies:
       - '@swc/core'
