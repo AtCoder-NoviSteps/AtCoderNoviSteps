@@ -76,6 +76,10 @@ FIXME: 対象ユーザをより明確にした上で、説明文を推敲しま�
 
 [GitHub Sponsors](https://github.com/sponsors/KATO-Hiro)で寄付していただいた方には、いくつかの特典をご用意しております。
 
+### 💚 AtCoder Clans Sponsor
+
+- [chokudai](https://github.com/chokudai)
+
 ### 🍨 Ice Cream Supporter
 
 - ia7ck
