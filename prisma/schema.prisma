@@ -79,7 +79,38 @@ model Task {
   created_at                  DateTime                  @default(now())
   updated_at                  DateTime                  @updatedAt
 
+  tasktags TaskTag[]
+
   @@map("task")
+}
+
+model Tag {
+  id           String   @id @unique
+  is_published Boolean  @default(false)
+  is_official  Boolean
+  name         String   @unique
+  priority     String
+  created_at   DateTime @default(now())
+  updated_at   DateTime @updatedAt
+
+  tasktags TaskTag[]
+
+  @@map("tag")
+}
+
+model TaskTag {
+  id       String @id
+  task_id  String
+  tag_id   String
+  priority Int
+
+  tasks Task[]
+  tags  Tag[]
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  @@map("tasktag")
 }
 
 enum ContestType {

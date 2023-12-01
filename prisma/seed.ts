@@ -1,10 +1,12 @@
 // // See:
 // // https://www.prisma.io/docs/getting-started/quickstart
 import { PrismaClient, Roles } from '@prisma/client';
-import { initialize, defineUserFactory, defineKeyFactory, defineTaskFactory } from './.fabbrica';
+import { initialize, defineUserFactory, defineKeyFactory, defineTaskFactory , defineTagFactory, defineTaskTagFactory } from './.fabbrica';
 import { generateLuciaPasswordHash } from 'lucia/utils';
 
 import { tasks } from './tasks';
+import { tags } from './tags';
+import { tasktags } from './tasktags';
 
 const prisma = new PrismaClient();
 initialize({ prisma });
@@ -27,6 +29,8 @@ const users = [
 async function main() {
   addUsers();
   addTasks();
+  addTags();
+  addTaskTags();
 }
 
 function addUsers() {
@@ -92,6 +96,64 @@ async function addTask(task, taskFactory) {
     task_id: task.id,
     title: task.title,
     grade: task.grade,
+  });
+}
+
+async function addTags() {
+  const tagFactory = defineTagFactory();
+
+  tags.map(async (tag) => {
+    const registeredTag = await prisma.tag.findMany({
+      where: {
+        id: tag.id
+      },
+    });
+
+    if (registeredTag.length === 0) {
+      console.log('tag id:', tag.id, 'was registered.');
+      await addTag(tag, tagFactory);
+    } else {
+      console.log('tag id:', tag.id, 'has already been registered.');
+    }
+  });
+}
+
+async function addTag(tag, tagFactory) {
+  await tagFactory.create({
+    id: tag.id,
+    name: tag.name,
+    is_official: tag.is_official,
+    is_published: tag.is_published,
+    title: tag.title
+  });
+}
+
+async function addTaskTags() {
+  const taskTagFactory = defineTaskTagFactory();
+
+  tasktags.map(async (tasktag) => {
+    const registeredTaskTag = await prisma.taskTag.findMany({
+      where: {
+        task_id: tasktag.task_id,
+        tag_id: tasktag.tag_id
+      },
+    });
+
+    if (registeredTaskTag.length === 0) {
+      console.log('tag id:', tasktag.tag_id, 'task_id:', tasktag.task_id, 'was registered.');
+      await addTaskTag(tasktag, taskTagFactory);
+    } else {
+      console.log('tag id:', tasktag.id,'task id:', tasktag.task_id, 'has already been registered.');
+    }
+  });
+}
+
+async function addTaskTag(tasktag, taskTagFactory) {
+  await taskTagFactory.create({
+    id: tasktag.id,
+    task_id: tasktag.task_id,
+    tag_id: tasktag.tag_id,
+    priority: tasktag.priority,
   });
 }
 
