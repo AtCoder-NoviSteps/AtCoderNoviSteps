@@ -238,3 +238,9 @@
    `git push origin <your-current-branch>`
 
 6. プルリクエストを作成します。
+
+### トラブルシューティング
+
+- エラー: Docker Desktop で Vite を利用したときに Segmentation Fault が発生
+  - 対処方法: Docker Desktopで「Use Visualization Framework」のチェックを外す
+  - 参考資料: https://qiita.com/naoto24kawa/items/160aad0ca58642216a0a
