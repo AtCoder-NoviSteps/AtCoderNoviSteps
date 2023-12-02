@@ -57,13 +57,14 @@
 
 ### (初回のみ) 本レポジトリの内容をローカル環境にダウンロード
 
-1. [本レポジトリ](https://github.com/KATO-Hiro/AtCoderNovisteps)の画面右上にある「Fork」ボタンを押します。
+0. [AtCoder NoviSteps](https://github.com/AtCoder-NoviSteps)にメンバー申請をします。[@KATO-Hiro](https://twitter.com/k_hiro1818)にDMなどでご連絡いただければ、GitHubで登録しているメールアドレスに招待メールが届きますので、承認してください。
+1. [本レポジトリ](https://github.com/AtCoder-NoviSteps/AtCoderNoviSteps)の画面右上にある「Fork」ボタンを押します。
 2. ターミナルなどを利用して、本レポジトリの内容をローカル環境にダウンロードします。
 
    `git clone https://github.com/<your-account>/AtCoderNovisteps.git`
 
    例:
-   `git clone https://github.com/KATO-Hiro/AtCoderNovisteps.git`
+   `git clone https://github.com/AtCoder-NoviSteps/AtCoderNoviSteps.git`
 
 3. 作業ディレクトリを`../AtCoderNovisteps`に変更します。
 
@@ -72,7 +73,56 @@
    `git remote add root_branch https://github.com/<your-account>/AtCoderNovisteps.git`
 
    例:
-   `git remote add root_branch https://github.com/KATO-Hiro/AtCoderNovisteps.git`
+   `git remote add root_branch https://github.com/AtCoder-NoviSteps/AtCoderNoviSteps.git`
+
+### (Dockerのみ利用するユーザ向け) 開発環境のインストールとローカルの開発サーバを起動
+
+<details>
+  <summary>手順</summary>
+
+- Docker Composeのバージョンを確認します (動作チェックも兼ねています)。
+
+  `docker compose --version`
+
+- コンテナの利用状況を確認します。
+
+  `docker compose ps`
+  
+- もしコンテナが起動している場合は、一度停止させます。
+
+  `docker compose down`
+
+- コンテナを起動し、webコンテナとdbコンテナが起動しているか確認します。
+
+  `docker compose up - d`
+
+  `docker compose ps`
+
+- 関連するパッケージのインストールとDBの初期設定を行います。
+
+  `docker compose exec web pnpm install`
+
+  `docker compose exec web pnpm exec playwright install`
+
+  `docker compose exec web pnpm exec playwright install-deps`
+
+  `docker compose exec -e DATABASE_URL=postgresql://db_user:db_password@db:5432/test_db web pnpm prisma db push`
+
+  `docker compose exec web pnpm prisma generate`
+
+- 開発サーバ(port番号: 5173)を起動します。その後、以下のリンクを順番にクリックしてください。
+  - Note: リンクのアドレス・ポート番号は、環境によって変わる可能性もあります。
+
+  `docker compose exec web pnpm dev --host`
+
+  http://172.18.0.3:5173
+  http://127.0.0.1:5173/
+
+- ホーム画面が起動し、ユーザの登録・ログインができれば、環境構築は完了です。
+
+- Note: 後述の「(共通) ローカルの開発サーバを起動」の操作を実行したい場合は、該当コマンドの前に`docker compose exec web `を追加してください。
+
+</details>
 
 ### (共通) 開発環境のインストール
 
@@ -87,9 +137,13 @@
 ### (共通) ローカルの開発サーバを起動
 
 - 新しいターミナルを開いてください。
-- 依存関係にあるライブラリをインストールし、開発サーバを起動します。
+- 依存関係にあるライブラリのインストールとデータベースの初期化を行い、開発サーバを起動します。
 
   `pnpm install`
+  `pnpm exec playwright install`
+  `pnpm exec playwright install-deps`
+
+  `pnpm dlx prisma db push`
 
   `pnpm dev`
 
@@ -101,6 +155,16 @@
 
   `pnpm dev -- --open`
 
+- 先ほどとは異なるターミナルで以下のコマンドをそれぞれ実行すると、データベースの初期データ投入やローカル環境でのテーブル・サンプルデータが閲覧できます。
+
+  `pnpm db:seed`
+
+  `pnpm db:studio`
+
+- 以下のリンクをクリックしてください。
+
+   <http://localhost:5555/>
+  
 ### (共通) ソースコードやドキュメントの加筆・修正
 
 <details>
