@@ -87,7 +87,7 @@
 - コンテナの利用状況を確認します。
 
   `docker compose ps`
-  
+
 - もしコンテナが起動している場合は、一度停止させます。
 
   `docker compose down`
@@ -111,6 +111,7 @@
   `docker compose exec web pnpm prisma generate`
 
 - 開発サーバ(port番号: 5173)を起動します。その後、以下のリンクを順番にクリックしてください。
+
   - Note: リンクのアドレス・ポート番号は、環境によって変わる可能性もあります。
 
   `docker compose exec web pnpm dev --host`
@@ -163,8 +164,8 @@
 
 - 以下のリンクをクリックしてください。
 
-   <http://localhost:5555/>
-  
+  <http://localhost:5555/>
+
 ### (共通) ソースコードやドキュメントの加筆・修正
 
 <details>
