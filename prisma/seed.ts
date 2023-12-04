@@ -237,8 +237,6 @@ async function addTaskTags() {
 async function addTaskTag(task_tag, taskTagFactory) {
   await taskTagFactory.create({
     id: task_tag.id,
-    //task_id: task_tag.task_id,
-    //tag_id: task_tag.tag_id,
     priority: task_tag.priority,
     task: {
       connect: { task_id: task_tag.task_id },
