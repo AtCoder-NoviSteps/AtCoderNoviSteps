@@ -14,9 +14,9 @@ import { generateLuciaPasswordHash } from 'lucia/utils';
 import { classifyContest } from '../src/lib/utils/contest';
 
 import { tasks } from './tasks';
-// import { tasks } from './tasks_for_production';
 import { tags } from './tags';
-import { tasktags } from './tasktags';
+import { task_tags } from './task_tags';
+// import { tasks } from './tasks_for_production';
 
 const prisma = new PrismaClient();
 initialize({ prisma });
@@ -89,25 +89,50 @@ function addTasks() {
         task_id: task.id,
       },
     });
+    const registeredTaskTag = await prisma.taskTag.findMany({
+      where: {
+        task_id: task.id,
+      },
+    });
 
     if (registeredTask.length === 0) {
       console.log('task id:', task.id, 'was registered.');
-      await addTask(task, taskFactory);
+      await addTask(task, taskFactory, registeredTaskTag.length !== 0);
     } else {
       console.log('task id:', task.id, 'has already been registered.');
     }
   });
 }
 
-async function addTask(task, taskFactory) {
-  await taskFactory.create({
-    contest_type: classifyContest(task.contest_id),
-    contest_id: task.contest_id,
-    task_table_index: task.problem_index,
-    task_id: task.id,
-    title: task.title,
-    grade: task.grade,
-  });
+async function addTask(task, taskFactory, isHavingTaskTag) {
+  if (isHavingTaskTag) {
+    await taskFactory.create({
+      contest_type: classifyContest(task.contest_id),
+      contest_id: task.contest_id,
+      task_table_index: task.problem_index,
+      task_id: task.id,
+      title: task.title,
+      grade: task.grade,
+      tags: {
+        create: [
+          {
+            tag: {
+              connect: { task_id: task.task_id },
+            },
+          },
+        ],
+      },
+    });
+  } else {
+    await taskFactory.create({
+      contest_type: classifyContest(task.contest_id),
+      contest_id: task.contest_id,
+      task_table_index: task.problem_index,
+      task_id: task.id,
+      title: task.title,
+      grade: task.grade,
+    });
+  }
 }
 
 async function addTags() {
@@ -120,57 +145,105 @@ async function addTags() {
       },
     });
 
+    const registeredTaskTag = await prisma.taskTag.findMany({
+      where: {
+        tag_id: tag.id,
+      },
+    });
+
     if (registeredTag.length === 0) {
       console.log('tag id:', tag.id, 'was registered.');
-      await addTag(tag, tagFactory);
+      await addTag(tag, tagFactory, registeredTaskTag.length !== 0);
     } else {
       console.log('tag id:', tag.id, 'has already been registered.');
     }
   });
 }
 
-async function addTag(tag, tagFactory) {
-  await tagFactory.create({
-    id: tag.id,
-    name: tag.name,
-    is_official: tag.is_official,
-    is_published: tag.is_published,
-    title: tag.title,
-  });
+async function addTag(tag, tagFactory, isHavingTaskTag) {
+  if (isHavingTaskTag) {
+    await tagFactory.create({
+      id: tag.id,
+      name: tag.name,
+      is_official: tag.is_official,
+      is_published: tag.is_published,
+      tasks: {
+        create: [
+          {
+            task: {
+              connect: { tag_id: tag.id },
+            },
+          },
+        ],
+      },
+    });
+  } else {
+    await tagFactory.create({
+      id: tag.id,
+      name: tag.name,
+      is_official: tag.is_official,
+      is_published: tag.is_published,
+    });
+  }
 }
 
 async function addTaskTags() {
-  const taskTagFactory = defineTaskTagFactory();
+  const taskFactory = defineTaskFactory();
+  const tagFactory = defineTagFactory();
+  const taskTagFactory = defineTaskTagFactory({
+    defaultData: { task: taskFactory, tag: tagFactory },
+  });
 
-  tasktags.map(async (tasktag) => {
+  task_tags.map(async (task_tag) => {
     const registeredTaskTag = await prisma.taskTag.findMany({
       where: {
-        task_id: tasktag.task_id,
-        tag_id: tasktag.tag_id,
+        AND: [{ task_id: task_tag.task_id }, { tag_id: task_tag.tag_id }],
       },
     });
 
-    if (registeredTaskTag.length === 0) {
-      console.log('tag id:', tasktag.tag_id, 'task_id:', tasktag.task_id, 'was registered.');
-      await addTaskTag(tasktag, taskTagFactory);
-    } else {
+    const registeredTask = await prisma.task.findMany({
+      where: {
+        task_id: task_tag.task_id,
+      },
+    });
+
+    const registeredTag = await prisma.tag.findMany({
+      where: {
+        id: task_tag.tag_id,
+      },
+    });
+
+    if (
+      registeredTaskTag.length === 0 &&
+      registeredTag.length === 1 &&
+      registeredTask.length === 1
+    ) {
+      console.log('tag id:', task_tag.tag_id, 'task_id:', task_tag.task_id, 'was registered.');
+      await addTaskTag(task_tag, taskTagFactory);
+    } else if (registeredTaskTag.length !== 0) {
       console.log(
         'tag id:',
-        tasktag.id,
+        task_tag.tag_id,
         'task id:',
-        tasktag.task_id,
+        task_tag.task_id,
         'has already been registered.',
       );
+    } else if (registeredTag.length !== 1 || registeredTask.length !== 1) {
+      console.log('tag id:', task_tag.tag_id, ' or task id:', task_tag.task_id, 'is missing.');
     }
   });
 }
 
-async function addTaskTag(tasktag, taskTagFactory) {
+async function addTaskTag(task_tag, taskTagFactory) {
   await taskTagFactory.create({
-    id: tasktag.id,
-    task_id: tasktag.task_id,
-    tag_id: tasktag.tag_id,
-    priority: tasktag.priority,
+    id: task_tag.id,
+    priority: task_tag.priority,
+    task: {
+      connect: { task_id: task_tag.task_id },
+    },
+    tag: {
+      connect: { id: task_tag.tag_id },
+    },
   });
 }
 
