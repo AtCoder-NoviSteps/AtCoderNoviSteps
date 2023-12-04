@@ -79,7 +79,7 @@ model Task {
   created_at                  DateTime                  @default(now())
   updated_at                  DateTime                  @updatedAt
 
-  tasktags TaskTag[]
+  tags TaskTag[]
 
   @@map("task")
 }
@@ -89,27 +89,27 @@ model Tag {
   is_published Boolean  @default(false)
   is_official  Boolean
   name         String   @unique
-  priority     String
   created_at   DateTime @default(now())
   updated_at   DateTime @updatedAt
 
-  tasktags TaskTag[]
+  tasks TaskTag[]
 
   @@map("tag")
 }
 
 model TaskTag {
-  id       String @id
+  id       String
   task_id  String
   tag_id   String
   priority Int
 
-  tasks Task[]
-  tags  Tag[]
+  task Task? @relation(fields: [task_id], references: [task_id])
+  tag  Tag?  @relation(fields: [tag_id], references: [id])
 
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 
+  @@id([task_id, tag_id])
   @@map("tasktag")
 }
 
