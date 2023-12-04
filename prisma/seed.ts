@@ -1,10 +1,20 @@
 // // See:
 // // https://www.prisma.io/docs/getting-started/quickstart
 import { PrismaClient, Roles } from '@prisma/client';
-import { initialize, defineUserFactory, defineKeyFactory, defineTaskFactory , defineTagFactory, defineTaskTagFactory } from './.fabbrica';
+import {
+  initialize,
+  defineUserFactory,
+  defineKeyFactory,
+  defineTaskFactory,
+  defineTagFactory,
+  defineTaskTagFactory,
+} from './.fabbrica';
 import { generateLuciaPasswordHash } from 'lucia/utils';
 
+import { classifyContest } from '../src/lib/utils/contest';
+
 import { tasks } from './tasks';
+// import { tasks } from './tasks_for_production';
 import { tags } from './tags';
 import { tasktags } from './tasktags';
 
@@ -91,6 +101,7 @@ function addTasks() {
 
 async function addTask(task, taskFactory) {
   await taskFactory.create({
+    contest_type: classifyContest(task.contest_id),
     contest_id: task.contest_id,
     task_table_index: task.problem_index,
     task_id: task.id,
@@ -105,7 +116,7 @@ async function addTags() {
   tags.map(async (tag) => {
     const registeredTag = await prisma.tag.findMany({
       where: {
-        id: tag.id
+        id: tag.id,
       },
     });
 
@@ -124,7 +135,7 @@ async function addTag(tag, tagFactory) {
     name: tag.name,
     is_official: tag.is_official,
     is_published: tag.is_published,
-    title: tag.title
+    title: tag.title,
   });
 }
 
@@ -135,7 +146,7 @@ async function addTaskTags() {
     const registeredTaskTag = await prisma.taskTag.findMany({
       where: {
         task_id: tasktag.task_id,
-        tag_id: tasktag.tag_id
+        tag_id: tasktag.tag_id,
       },
     });
 
@@ -143,7 +154,13 @@ async function addTaskTags() {
       console.log('tag id:', tasktag.tag_id, 'task_id:', tasktag.task_id, 'was registered.');
       await addTaskTag(tasktag, taskTagFactory);
     } else {
-      console.log('tag id:', tasktag.id,'task id:', tasktag.task_id, 'has already been registered.');
+      console.log(
+        'tag id:',
+        tasktag.id,
+        'task id:',
+        tasktag.task_id,
+        'has already been registered.',
+      );
     }
   });
 }

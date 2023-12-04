@@ -115,6 +115,10 @@ model TaskTag {
 
 enum ContestType {
   ABC // AtCoder Beginner Contest
+  APG4B // C++入門 AtCoder Programming Guide for beginners
+  ABS // AtCoder Beginners Selection
+  ACL_PRACTICE // AtCoder Library Practice Contest
+  PAST // Practical Algorithm Skill Test (アルゴリズム実技検定)
   EDPC // Educational DP Contest / DP まとめコンテスト
   TDPC // Typical DP Contest
   JOI // Japanese Olympiad in Informatics

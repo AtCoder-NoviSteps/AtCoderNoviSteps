@@ -76,6 +76,10 @@ FIXME: 対象ユーザをより明確にした上で、説明文を推敲しま�
 
 [GitHub Sponsors](https://github.com/sponsors/KATO-Hiro)で寄付していただいた方には、いくつかの特典をご用意しております。
 
+### 💚 AtCoder Clans Sponsor
+
+- [chokudai](https://github.com/chokudai)
+
 ### 🍨 Ice Cream Supporter
 
 - ia7ck
@@ -135,9 +139,9 @@ FIXME: 対象ユーザをより明確にした上で、説明文を推敲しま�
 - [ハンドルネーム](連絡先)
   - 役割:
   - 貢献内容(予定も含む):
-- [ハンドルネーム](連絡先)
-  - 役割:
-  - 貢献内容(予定も含む):
+- [@toshi201](https://twitter.com/toshicon201)
+  - 役割:アプリ開発
+  - 貢献内容(予定も含む):アプリ開発
 - [@あべみ](https://twitter.com/prettyhappycatty)
   - 役割:アプリ開発
   - 貢献内容(予定も含む):アプリ開発
