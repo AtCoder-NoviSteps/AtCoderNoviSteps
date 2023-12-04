@@ -36,8 +36,8 @@ dependencies:
     specifier: 3.3.5
     version: 3.3.5
   vercel:
-    specifier: 32.6.0
-    version: 32.6.0
+    specifier: 32.6.1
+    version: 32.6.1
 
 devDependencies:
   '@playwright/test':
@@ -5208,8 +5208,8 @@ packages:
       spdx-expression-parse: 3.0.1
     dev: true
 
-  /vercel@32.6.0:
-    resolution: {integrity: sha512-FCJ4Mg7h4L9qbiwLy3GhwV0KrQLGQYfgmx35kG/DJcWnG+kTR32faOzi53poqzwLR9/nU/ABhLP6jihhj25qKw==}
+  /vercel@32.6.1:
+    resolution: {integrity: sha512-isEjDN1/rZEEHV2HVe2lGHkxuzvmih2luBAB42fDhhecIYs2gGKRLy+vIkJweRWRTlFMHjOHGPTYo7VfzQ10Ug==}
     engines: {node: '>= 16'}
     hasBin: true
     dependencies:
