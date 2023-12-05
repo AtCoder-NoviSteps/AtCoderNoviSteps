@@ -7,7 +7,7 @@
   "homepage": "",
   "license": "MIT",
   "lint-staged": {
-    "**/*.{js,jsx,ts,tsx}": "pnpm lint"
+    "**/*.{js,jsx,ts,tsx}": "pnpm format && pnpm lint"
   },
   "scripts": {
     "dev": "vite dev",
