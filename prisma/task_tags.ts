@@ -1,6 +1,6 @@
 export const task_tags = [
   {
-    id: "1",
+    id: '1',
     tag_id: '1',
     task_id: 'abc323_d',
     priority: 50,
