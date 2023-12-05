@@ -6,6 +6,12 @@
   "bugs": "https://github.com/AtCoder-NoviSteps/AtCoderNoviSteps/issues",
   "homepage": "",
   "license": "MIT",
+  "lint-staged": {
+    "**/*.{js,jsx,ts,tsx}": [
+      "pnpm format",
+      "pnpm lint"
+    ]
+  },
   "scripts": {
     "dev": "vite dev",
     "build": "prisma generate && vite build",
@@ -19,7 +25,8 @@
     "test:unit": "vitest",
     "postinstall": "prisma generate",
     "db:seed": "pnpm dlx vite-node ./prisma/seed.ts",
-    "db:studio": "pnpm dlx prisma studio"
+    "db:studio": "pnpm dlx prisma studio",
+    "prepare": "husky install"
   },
   "devDependencies": {
     "@playwright/test": "1.40.1",
@@ -27,13 +34,15 @@
     "@sveltejs/adapter-auto": "2.1.1",
     "@sveltejs/adapter-vercel": "3.1.0",
     "@sveltejs/kit": "1.27.6",
-    "@typescript-eslint/eslint-plugin": "6.13.1",
-    "@typescript-eslint/parser": "6.13.1",
-    "eslint": "8.54.0",
-    "eslint-config-prettier": "9.0.0",
+    "@typescript-eslint/eslint-plugin": "6.13.2",
+    "@typescript-eslint/parser": "6.13.2",
+    "eslint": "8.55.0",
+    "eslint-config-prettier": "9.1.0",
     "eslint-plugin-svelte": "2.35.1",
     "flowbite-svelte": "0.44.20",
     "flowbite-svelte-icons": "0.4.4",
+    "husky": "^8.0.0",
+    "lint-staged": "^15.2.0",
     "prettier": "3.1.0",
     "prettier-plugin-svelte": "3.1.2",
     "prettier-plugin-tailwindcss": "0.5.7",
@@ -59,6 +68,6 @@
     "svelte-add": "2023.9.17-0.0",
     "tailwind-merge": "1.14.0",
     "tailwindcss": "3.3.5",
-    "vercel": "32.6.0"
+    "vercel": "32.6.1"
   }
 }
