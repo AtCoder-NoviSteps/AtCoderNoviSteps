@@ -8,7 +8,7 @@
   "license": "MIT",
   "lint-staged": {
     "**/*.{js,jsx,ts,tsx}": "pnpm run lint",
-    "*": "pnpm build"
+    "*": "pnpm preview"
   },
   "scripts": {
     "dev": "vite dev",
