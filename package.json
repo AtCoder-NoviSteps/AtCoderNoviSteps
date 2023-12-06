@@ -60,7 +60,7 @@
   "dependencies": {
     "@lucia-auth/adapter-prisma": "3.0.2",
     "@popperjs/core": "2.11.8",
-    "@prisma/client": "5.6.0",
+    "@prisma/client": "5.7.0",
     "autoprefixer": "10.4.16",
     "flowbite": "2.2.0",
     "lucia": "2.7.4",
