@@ -3,6 +3,7 @@ import { getTasks } from '$lib/services/tasks';
 import { getAnswers } from './answers';
 import type { Task, TaskResult, TaskResults } from '$lib/types/task';
 import { NOT_FOUND } from '$lib/constants/http-response-status-codes';
+import { default as db } from '$lib/server/database';
 
 // In a real app, this data would live in a database,
 // rather than in memory. But for now, we cheat.
@@ -46,6 +47,7 @@ export function createTaskResult(userId: string, task: Task): TaskResult {
     title: task.title,
     grade: task.grade,
     user_id: userId,
+    task_table_index: task.task_table_index,
     submission_status: 'ns', // FIXME: Use const
   };
 
@@ -67,4 +69,47 @@ export async function getTaskResult(slug: string): Promise<TaskResult> {
 export async function updateTaskResult(slug: string, submissionStatus: string) {
   const taskResult: TaskResult = await getTaskResult(slug);
   taskResult.submission_status = submissionStatus;
+}
+
+export async function getTasksWithTagIds(tagIds_string: string): Promise<TaskResults> {
+  const taskResultsMap = new Map();
+
+  const userId = 'hogehoge';
+  const tagIds = tagIds_string.split(',');
+  const taskIdByTagIds = await db.taskTag.groupBy({
+    by: ['task_id'],
+    where: {
+      tag_id: { in: tagIds },
+    },
+    having: {
+      task_id: { _count: { equals: tagIds.length } },
+    },
+  });
+
+  const taskIds = taskIdByTagIds.map((item) => item.task_id);
+
+  const tasks = await db.task.findMany({
+    where: {
+      task_id: { in: taskIds },
+    },
+  });
+
+  const answers = getAnswers();
+
+  const sampleTaskResults = tasks.map((task: Task) => {
+    const taskResult = createTaskResult(userId, task);
+
+    if (answers.has(task.task_id)) {
+      const answer = answers.get(task.task_id);
+      taskResult.submission_status = answer.submission_status;
+    }
+
+    return taskResult;
+  });
+
+  if (!taskResultsMap.has(userId)) {
+    taskResultsMap.set(userId, sampleTaskResults);
+  }
+
+  return Array.from(taskResultsMap.get(userId).values());
 }
