@@ -64,6 +64,7 @@
     "autoprefixer": "10.4.16",
     "flowbite": "2.2.0",
     "lucia": "2.7.4",
+    "playwright": "^1.40.1",
     "pnpm": "8.11.0",
     "svelte-add": "2023.9.17-0.0",
     "tailwind-merge": "1.14.0",
