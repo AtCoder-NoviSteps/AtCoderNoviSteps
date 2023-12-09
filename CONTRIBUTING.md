@@ -240,5 +240,9 @@
 ### トラブルシューティング
 
 - エラー: Docker Desktop で Vite を利用したときに Segmentation Fault が発生
+
   - 対処方法: Docker Desktopで「Use Visualization Framework」のチェックを外す
   - 参考資料: https://qiita.com/naoto24kawa/items/160aad0ca58642216a0a
+
+- エラー: コミットを実行したときに、`hint: The '.husky/pre-commit' hook was ignored because it's not set as executable.`と表示される
+  - 対処方法: ターミナルで`chmod ug+x .husky/*`を実行する
