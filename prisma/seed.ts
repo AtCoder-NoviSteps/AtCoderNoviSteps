@@ -99,7 +99,7 @@ function addTasks() {
       console.log('task id:', task.id, 'was registered.');
       await addTask(task, taskFactory, registeredTaskTag.length !== 0);
     } else {
-      console.log('task id:', task.id, 'has already been registered.');
+      //console.log('task id:', task.id, 'has already been registered.');
     }
   });
 }
@@ -155,7 +155,7 @@ async function addTags() {
       console.log('tag id:', tag.id, 'was registered.');
       await addTag(tag, tagFactory, registeredTaskTag.length !== 0);
     } else {
-      console.log('tag id:', tag.id, 'has already been registered.');
+      //console.log('tag id:', tag.id, 'has already been registered.');
     }
   });
 }
@@ -221,15 +221,15 @@ async function addTaskTags() {
       console.log('tag id:', task_tag.tag_id, 'task_id:', task_tag.task_id, 'was registered.');
       await addTaskTag(task_tag, taskTagFactory);
     } else if (registeredTaskTag.length !== 0) {
-      console.log(
-        'tag id:',
-        task_tag.tag_id,
-        'task id:',
-        task_tag.task_id,
-        'has already been registered.',
-      );
+      //console.log(
+      //  'tag id:',
+      //  task_tag.tag_id,
+      //  'task id:',
+      //  task_tag.task_id,
+      //  'has already been registered.',
+      //);
     } else if (registeredTag.length !== 1 || registeredTask.length !== 1) {
-      console.log('tag id:', task_tag.tag_id, ' or task id:', task_tag.task_id, 'is missing.');
+      //console.log('tag id:', task_tag.tag_id, ' or task id:', task_tag.task_id, 'is missing.');
     }
   });
 }

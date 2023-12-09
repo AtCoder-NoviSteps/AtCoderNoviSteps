@@ -51,7 +51,7 @@
     "svelte-check": "3.6.2",
     "sveltekit-superforms": "1.11.0",
     "tslib": "2.6.2",
-    "typescript": "5.3.2",
+    "typescript": "5.3.3",
     "vite": "4.5.1",
     "vitest": "0.34.6",
     "zod": "3.22.4"
@@ -64,6 +64,7 @@
     "autoprefixer": "10.4.16",
     "flowbite": "2.2.0",
     "lucia": "2.7.4",
+    "playwright": "^1.40.1",
     "pnpm": "8.11.0",
     "svelte-add": "2023.9.17-0.0",
     "tailwind-merge": "1.14.0",
