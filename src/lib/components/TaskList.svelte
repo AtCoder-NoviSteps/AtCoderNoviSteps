@@ -16,12 +16,39 @@
   import { getContestNameLabel } from '$lib/utils/contest';
 
   export let grade: string;
+  export let gradeColor: string;
   export let taskResults: TaskResults;
+
+  // TODO: ユーザの設定に応じて、ACかどうかの判定を変更できるようにする
+  // TODO: 別ファイルに切り出す
+  const accepted = 'ac';
+  let acceptedCount = taskResults.filter(
+    (taskResult) => taskResult.submission_status === accepted,
+  ).length;
+  let acceptedRatioPercent = (acceptedCount / taskResults.length) * 100;
 </script>
 
 <Accordion flush class="mt-4 mb-2">
   <AccordionItem>
-    <span slot="header" class="text-xl">{grade}</span>
+    <span slot="header" class="text-xl flex justify-around w-full place-items-center">
+      <div class="w-1/12 text-center">{grade}</div>
+      <!-- HACK: 本来であれば、Flowbite SvelteにあるProgressbarのcolor属性で色を指定したいが、同属性の拡張方法が分からないのでFlowbiteのコンポーネントをやむなく利用 -->
+      <!-- See: -->
+      <!-- https://flowbite.com/docs/components/progress/ -->
+      <!-- https://flowbite-svelte.com/docs/pages/typescript -->
+      <!-- https://flowbite.com/docs/components/progress/ -->
+      <!-- https://blog.canopas.com/designing-stunning-progress-bars-made-easy-with-tailwind-css-ae620ba7b4be -->
+      <div class="w-7/12 md:w-8/12 lg:w-9/12 rounded-full border border-gray-200 p-1">
+        <div class="rounded-full h-6">
+          <div class={`${gradeColor} h-6 rounded-full`} style={`width: ${acceptedRatioPercent}%`}>
+            <span class="p-1">{`${acceptedRatioPercent}%`}</span>
+          </div>
+        </div>
+      </div>
+      <div class="text-sm w-1/12 text-center">
+        {acceptedCount} / {taskResults.length}
+      </div>
+    </span>
 
     <!-- TODO: 「編集」ボタンを押したときに問題情報を更新できるようにする -->
     <!-- TODO: 問題が多くなってきたら、ページネーションを導入する -->
