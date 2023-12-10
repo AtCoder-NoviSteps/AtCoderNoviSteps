@@ -38,10 +38,11 @@
       <!-- https://flowbite-svelte.com/docs/pages/typescript -->
       <!-- https://flowbite.com/docs/components/progress/ -->
       <!-- https://blog.canopas.com/designing-stunning-progress-bars-made-easy-with-tailwind-css-ae620ba7b4be -->
+      <!-- https://developer.mozilla.org/ja/docs/Web/JavaScript/Reference/Global_Objects/Number/toFixed -->
       <div class="w-7/12 md:w-8/12 lg:w-9/12 rounded-full border border-gray-200 p-1">
         <div class="rounded-full h-6">
           <div class={`${gradeColor} h-6 rounded-full`} style={`width: ${acceptedRatioPercent}%`}>
-            <span class="p-1">{`${acceptedRatioPercent}%`}</span>
+            <span class="text-sm p-1">{`${acceptedRatioPercent.toFixed(1)}%`}</span>
           </div>
         </div>
       </div>
