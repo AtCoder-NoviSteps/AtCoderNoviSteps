@@ -41,13 +41,15 @@
       <!-- https://developer.mozilla.org/ja/docs/Web/JavaScript/Reference/Global_Objects/Number/toFixed -->
       <div class="w-7/12 md:w-8/12 lg:w-9/12 rounded-full border border-gray-200 p-1">
         <div class="rounded-full h-6">
-          <div class={`${gradeColor} h-6 rounded-full`} style={`width: ${acceptedRatioPercent}%`}>
-            <span class="text-sm p-1">{`${acceptedRatioPercent.toFixed(1)}%`}</span>
-          </div>
+          <div
+            class={`${gradeColor} h-6 rounded-full`}
+            style={`width: ${acceptedRatioPercent}%`}
+          ></div>
         </div>
       </div>
       <div class="text-sm w-1/12 text-center">
         {acceptedCount} / {taskResults.length}
+        {`(${acceptedRatioPercent.toFixed(1)}%)`}
       </div>
     </span>
 
