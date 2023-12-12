@@ -135,12 +135,12 @@ model TaskAnswer {
 model SubmissionStatus {
   id       String  @id @unique
   username String?
+  is_AC    Boolean @default(false)
 
   label_name String
   image_path String
 
-  //task_answer TaskAnswer[]
-  TaskAnswer TaskAnswer[]
+  task_answer TaskAnswer[]
 
   @@map("submissionstatus")
 }
