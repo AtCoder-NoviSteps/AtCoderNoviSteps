@@ -27,6 +27,8 @@ model User {
   auth_session Session[]
   key          Key[]
 
+  taskAnswer TaskAnswer[]
+
   // here you can add custom fields for your user
   // e.g. name, email, username, roles, etc.
   username   String   @unique
@@ -66,8 +68,8 @@ model Key {
 }
 
 model Task {
-  id String @id @unique
-  // task_answers TaskAnswer[]
+  id           String       @id @unique
+  task_answers TaskAnswer[]
 
   contest_type                ContestType               @default(ABC)
   contest_id                  String
@@ -111,6 +113,36 @@ model TaskTag {
 
   @@id([task_id, tag_id])
   @@map("tasktag")
+}
+
+model TaskAnswer {
+  id        String @unique
+  task_id   String
+  username  String
+  status_id String
+
+  task   Task?             @relation(fields: [task_id], references: [task_id])
+  user   User?             @relation(fields: [username], references: [username])
+  status SubmissionStatus? @relation(fields: [status_id], references: [id])
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  @@id([task_id, username])
+  @@map("taskanswer")
+}
+
+model SubmissionStatus {
+  id       String  @id @unique
+  username String?
+
+  label_name String
+  image_path String
+
+  //task_answer TaskAnswer[]
+  TaskAnswer TaskAnswer[]
+
+  @@map("submissionstatus")
 }
 
 enum ContestType {
