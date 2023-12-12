@@ -45,8 +45,8 @@ dependencies:
     specifier: 3.3.6
     version: 3.3.6
   vercel:
-    specifier: 32.7.0
-    version: 32.7.0
+    specifier: 32.7.1
+    version: 32.7.1
 
 devDependencies:
   '@playwright/test':
@@ -1402,8 +1402,8 @@ packages:
       - supports-color
     dev: false
 
-  /@vercel/remix-builder@2.0.13:
-    resolution: {integrity: sha512-aSLkRu8WKa+MYVdPBdPD7sIO8/r8HcU5GxtjP1DD5bS1sJn97U8ay6ix8lDGpzw6s85t01idCA5P+GujRU+0UA==}
+  /@vercel/remix-builder@2.0.14:
+    resolution: {integrity: sha512-c+ILERSRq404sf6kt0qWhYhuxWkkoTEm2FdLoUnVs21K6kzGtJMJbUExEHoPZvN9a0tq86ZU86jVvRZV6WL0cQ==}
     dependencies:
       '@vercel/nft': 0.24.2
       '@vercel/static-config': 3.0.0
@@ -6185,8 +6185,8 @@ packages:
       spdx-expression-parse: 3.0.1
     dev: true
 
-  /vercel@32.7.0:
-    resolution: {integrity: sha512-aZlDUswkL1cCGXPQlOAV1Z+gTf1ugq6KpQmM+WTjSM4YUM4OrtbBBUNweMhjpGaFw1GoJKe6dWcR+mYGVRGh9A==}
+  /vercel@32.7.1:
+    resolution: {integrity: sha512-GGKZxQX1an8UxwRuAcsnGQuPm7/gNYIuhnepqKnOJ2NuyrgJ0Ve1WE66mk0F5QqQ84ZAk88O8aXMTBVVPwkmmA==}
     engines: {node: '>= 16'}
     hasBin: true
     dependencies:
@@ -6198,7 +6198,7 @@ packages:
       '@vercel/node': 3.0.12
       '@vercel/python': 4.1.0
       '@vercel/redwood': 2.0.5
-      '@vercel/remix-builder': 2.0.13
+      '@vercel/remix-builder': 2.0.14
       '@vercel/ruby': 2.0.4
       '@vercel/static-build': 2.0.14
       chokidar: 3.3.1
