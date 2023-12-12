@@ -11,6 +11,7 @@
     TableHeadCell,
   } from 'flowbite-svelte';
 
+  import ThermometerProgressBar from '$lib/components/ThermometerProgressBar.svelte';
   import type { TaskResults } from '$lib/types/task';
   import { ATCODER_BASE_CONTEST_URL } from '$lib/constants/urls';
   import { getContestNameLabel } from '$lib/utils/contest';
@@ -32,21 +33,10 @@
   <AccordionItem>
     <span slot="header" class="text-xl flex justify-around w-full place-items-center">
       <div class="w-1/12 text-center">{grade}</div>
-      <!-- HACK: 本来であれば、Flowbite SvelteにあるProgressbarのcolor属性で色を指定したいが、同属性の拡張方法が分からないのでFlowbiteのコンポーネントをやむなく利用 -->
+      <!-- TODO: 配色を修正 -->
+      <ThermometerProgressBar {gradeColor} {acceptedRatioPercent} />
       <!-- See: -->
-      <!-- https://flowbite.com/docs/components/progress/ -->
-      <!-- https://flowbite-svelte.com/docs/pages/typescript -->
-      <!-- https://flowbite.com/docs/components/progress/ -->
-      <!-- https://blog.canopas.com/designing-stunning-progress-bars-made-easy-with-tailwind-css-ae620ba7b4be -->
       <!-- https://developer.mozilla.org/ja/docs/Web/JavaScript/Reference/Global_Objects/Number/toFixed -->
-      <div class="w-7/12 md:w-8/12 lg:w-9/12 rounded-full border border-gray-200 p-1">
-        <div class="rounded-full h-6">
-          <div
-            class={`${gradeColor} h-6 rounded-full`}
-            style={`width: ${acceptedRatioPercent}%`}
-          ></div>
-        </div>
-      </div>
       <div class="text-sm w-1/12 text-center">
         {acceptedCount} / {taskResults.length}
         {`(${acceptedRatioPercent.toFixed(1)}%)`}
