@@ -33,8 +33,8 @@ dependencies:
     specifier: ^1.40.1
     version: 1.40.1
   pnpm:
-    specifier: 8.11.0
-    version: 8.11.0
+    specifier: 8.12.0
+    version: 8.12.0
   svelte-add:
     specifier: 2023.9.17-0.0
     version: 2023.9.17-0.0
@@ -45,8 +45,8 @@ dependencies:
     specifier: 3.3.6
     version: 3.3.6
   vercel:
-    specifier: 32.6.1
-    version: 32.6.1
+    specifier: 32.7.0
+    version: 32.7.0
 
 devDependencies:
   '@playwright/test':
@@ -69,10 +69,10 @@ devDependencies:
     version: 6.1.5(@types/jest@29.5.11)(vitest@0.34.6)
   '@typescript-eslint/eslint-plugin':
     specifier: 6.13.2
-    version: 6.13.2(@typescript-eslint/parser@6.13.2)(eslint@8.55.0)(typescript@5.3.3)
+    version: 6.13.2(@typescript-eslint/parser@6.14.0)(eslint@8.55.0)(typescript@5.3.3)
   '@typescript-eslint/parser':
-    specifier: 6.13.2
-    version: 6.13.2(eslint@8.55.0)(typescript@5.3.3)
+    specifier: 6.14.0
+    version: 6.14.0(eslint@8.55.0)(typescript@5.3.3)
   '@vitest/coverage-v8':
     specifier: ^0.34.6
     version: 0.34.6(vitest@0.34.6)
@@ -104,14 +104,14 @@ devDependencies:
     specifier: ^15.2.0
     version: 15.2.0
   prettier:
-    specifier: 3.1.0
-    version: 3.1.0
+    specifier: 3.1.1
+    version: 3.1.1
   prettier-plugin-svelte:
     specifier: 3.1.2
-    version: 3.1.2(prettier@3.1.0)(svelte@4.2.8)
+    version: 3.1.2(prettier@3.1.1)(svelte@4.2.8)
   prettier-plugin-tailwindcss:
     specifier: 0.5.9
-    version: 0.5.9(prettier-plugin-svelte@3.1.2)(prettier@3.1.0)
+    version: 0.5.9(prettier-plugin-svelte@3.1.2)(prettier@3.1.1)
   prisma:
     specifier: 5.7.0
     version: 5.7.0
@@ -1094,7 +1094,7 @@ packages:
     dependencies:
       '@types/yargs-parser': 21.0.3
 
-  /@typescript-eslint/eslint-plugin@6.13.2(@typescript-eslint/parser@6.13.2)(eslint@8.55.0)(typescript@5.3.3):
+  /@typescript-eslint/eslint-plugin@6.13.2(@typescript-eslint/parser@6.14.0)(eslint@8.55.0)(typescript@5.3.3):
     resolution: {integrity: sha512-3+9OGAWHhk4O1LlcwLBONbdXsAhLjyCFogJY/cWy2lxdVJ2JrcTF2pTGMaLl2AE7U1l31n8Py4a8bx5DLf/0dQ==}
     engines: {node: ^16.0.0 || >=18.0.0}
     peerDependencies:
@@ -1106,7 +1106,7 @@ packages:
         optional: true
     dependencies:
       '@eslint-community/regexpp': 4.10.0
-      '@typescript-eslint/parser': 6.13.2(eslint@8.55.0)(typescript@5.3.3)
+      '@typescript-eslint/parser': 6.14.0(eslint@8.55.0)(typescript@5.3.3)
       '@typescript-eslint/scope-manager': 6.13.2
       '@typescript-eslint/type-utils': 6.13.2(eslint@8.55.0)(typescript@5.3.3)
       '@typescript-eslint/utils': 6.13.2(eslint@8.55.0)(typescript@5.3.3)
@@ -1123,8 +1123,8 @@ packages:
       - supports-color
     dev: true
 
-  /@typescript-eslint/parser@6.13.2(eslint@8.55.0)(typescript@5.3.3):
-    resolution: {integrity: sha512-MUkcC+7Wt/QOGeVlM8aGGJZy1XV5YKjTpq9jK6r6/iLsGXhBVaGP5N0UYvFsu9BFlSpwY9kMretzdBH01rkRXg==}
+  /@typescript-eslint/parser@6.14.0(eslint@8.55.0)(typescript@5.3.3):
+    resolution: {integrity: sha512-QjToC14CKacd4Pa7JK4GeB/vHmWFJckec49FR4hmIRf97+KXole0T97xxu9IFiPxVQ1DBWrQ5wreLwAGwWAVQA==}
     engines: {node: ^16.0.0 || >=18.0.0}
     peerDependencies:
       eslint: ^7.0.0 || ^8.0.0
@@ -1133,10 +1133,10 @@ packages:
       typescript:
         optional: true
     dependencies:
-      '@typescript-eslint/scope-manager': 6.13.2
-      '@typescript-eslint/types': 6.13.2
-      '@typescript-eslint/typescript-estree': 6.13.2(typescript@5.3.3)
-      '@typescript-eslint/visitor-keys': 6.13.2
+      '@typescript-eslint/scope-manager': 6.14.0
+      '@typescript-eslint/types': 6.14.0
+      '@typescript-eslint/typescript-estree': 6.14.0(typescript@5.3.3)
+      '@typescript-eslint/visitor-keys': 6.14.0
       debug: 4.3.4
       eslint: 8.55.0
       typescript: 5.3.3
@@ -1150,6 +1150,14 @@ packages:
     dependencies:
       '@typescript-eslint/types': 6.13.2
       '@typescript-eslint/visitor-keys': 6.13.2
+    dev: true
+
+  /@typescript-eslint/scope-manager@6.14.0:
+    resolution: {integrity: sha512-VT7CFWHbZipPncAZtuALr9y3EuzY1b1t1AEkIq2bTXUPKw+pHoXflGNG5L+Gv6nKul1cz1VH8fz16IThIU0tdg==}
+    engines: {node: ^16.0.0 || >=18.0.0}
+    dependencies:
+      '@typescript-eslint/types': 6.14.0
+      '@typescript-eslint/visitor-keys': 6.14.0
     dev: true
 
   /@typescript-eslint/type-utils@6.13.2(eslint@8.55.0)(typescript@5.3.3):
@@ -1177,6 +1185,11 @@ packages:
     engines: {node: ^16.0.0 || >=18.0.0}
     dev: true
 
+  /@typescript-eslint/types@6.14.0:
+    resolution: {integrity: sha512-uty9H2K4Xs8E47z3SnXEPRNDfsis8JO27amp2GNCnzGETEW3yTqEIVg5+AI7U276oGF/tw6ZA+UesxeQ104ceA==}
+    engines: {node: ^16.0.0 || >=18.0.0}
+    dev: true
+
   /@typescript-eslint/types@6.9.1:
     resolution: {integrity: sha512-BUGslGOb14zUHOUmDB2FfT6SI1CcZEJYfF3qFwBeUrU6srJfzANonwRYHDpLBuzbq3HaoF2XL2hcr01c8f8OaQ==}
     engines: {node: ^16.0.0 || >=18.0.0}
@@ -1193,6 +1206,27 @@ packages:
     dependencies:
       '@typescript-eslint/types': 6.13.2
       '@typescript-eslint/visitor-keys': 6.13.2
+      debug: 4.3.4
+      globby: 11.1.0
+      is-glob: 4.0.3
+      semver: 7.5.4
+      ts-api-utils: 1.0.3(typescript@5.3.3)
+      typescript: 5.3.3
+    transitivePeerDependencies:
+      - supports-color
+    dev: true
+
+  /@typescript-eslint/typescript-estree@6.14.0(typescript@5.3.3):
+    resolution: {integrity: sha512-yPkaLwK0yH2mZKFE/bXkPAkkFgOv15GJAUzgUVonAbv0Hr4PK/N2yaA/4XQbTZQdygiDkpt5DkxPELqHguNvyw==}
+    engines: {node: ^16.0.0 || >=18.0.0}
+    peerDependencies:
+      typescript: '*'
+    peerDependenciesMeta:
+      typescript:
+        optional: true
+    dependencies:
+      '@typescript-eslint/types': 6.14.0
+      '@typescript-eslint/visitor-keys': 6.14.0
       debug: 4.3.4
       globby: 11.1.0
       is-glob: 4.0.3
@@ -1251,6 +1285,14 @@ packages:
       eslint-visitor-keys: 3.4.3
     dev: true
 
+  /@typescript-eslint/visitor-keys@6.14.0:
+    resolution: {integrity: sha512-fB5cw6GRhJUz03MrROVuj5Zm/Q+XWlVdIsFj+Zb1Hvqouc8t+XP2H5y53QYU/MGtd2dPg6/vJJlhoX3xc2ehfw==}
+    engines: {node: ^16.0.0 || >=18.0.0}
+    dependencies:
+      '@typescript-eslint/types': 6.14.0
+      eslint-visitor-keys: 3.4.3
+    dev: true
+
   /@typescript-eslint/visitor-keys@6.9.1:
     resolution: {integrity: sha512-MUaPUe/QRLEffARsmNfmpghuQkW436DvESW+h+M52w0coICHRfD6Np9/K6PdACwnrq1HmuLl+cSPZaJmeVPkSw==}
     engines: {node: ^16.0.0 || >=18.0.0}
@@ -1263,8 +1305,8 @@ packages:
     resolution: {integrity: sha512-zuVdFrMJiuCDQUMCzQaD6KL28MjnqqN8XnAqiEq9PNm/hCPTSGfrXCOfwj1ow4LFb/tNymJPwsNbVePc1xFqrQ==}
     dev: true
 
-  /@vercel/build-utils@7.2.5:
-    resolution: {integrity: sha512-rlXL7Kjwfl8c8CQ9fYpP/+AunFZbaXXf89OT+7G8E/CGRM+hAYrGF+N3Kz1X8TfwfNlSCqPs7VQriOKKajUS0g==}
+  /@vercel/build-utils@7.3.0:
+    resolution: {integrity: sha512-RJwqrGYSk75auHZqWmlSL+a5JsWv+4SF1AxNQJ+KpF3XWZ/8yThkN/jHBfNxMmW6VvNczSVtMaXI0/2Sess6Eg==}
     dev: false
 
   /@vercel/error-utils@2.0.2:
@@ -1306,11 +1348,11 @@ packages:
       web-vitals: 0.2.4
     dev: false
 
-  /@vercel/gatsby-plugin-vercel-builder@2.0.11:
-    resolution: {integrity: sha512-2G83Rj1gxL6X1/Cc0di+10xQ/ZYaaI1Mhi7kC8rUVApWY4cNJfFPsogB+DQ/fC6m+YAh3qajcbF6pnmVZk5K3Q==}
+  /@vercel/gatsby-plugin-vercel-builder@2.0.12:
+    resolution: {integrity: sha512-S1RkywrUItewqg06T3L4cgYfiwi2BFngHIIerhOYhVuD9A+yfMgxnH5dkbu6nujmV1SEws+Q92wSiPfLPmO0eA==}
     dependencies:
       '@sinclair/typebox': 0.25.24
-      '@vercel/build-utils': 7.2.5
+      '@vercel/build-utils': 7.3.0
       '@vercel/routing-utils': 3.1.0
       esbuild: 0.14.47
       etag: 1.8.1
@@ -1357,14 +1399,14 @@ packages:
       - encoding
       - supports-color
 
-  /@vercel/node@3.0.11:
-    resolution: {integrity: sha512-J6ETfnfHNCnomEaEVTdbr/J1t1+SDYTx7nawCRux+Gn2JDrQ6y1K0YIi61FLLd7uIhShqJ4DzfImih7zKxxeeg==}
+  /@vercel/node@3.0.12:
+    resolution: {integrity: sha512-OiNHiUe1LX/CfDrQ07ntPsoYhJiC38mEeErYeqA6YNVAz3QGdX3pthiaIig2KPqeeYkEx5bSkVIqQtQOTJBuLQ==}
     dependencies:
       '@edge-runtime/node-utils': 2.2.1
       '@edge-runtime/primitives': 4.0.5
       '@edge-runtime/vm': 3.1.7
       '@types/node': 14.18.33
-      '@vercel/build-utils': 7.2.5
+      '@vercel/build-utils': 7.3.0
       '@vercel/error-utils': 2.0.2
       '@vercel/nft': 0.24.2
       '@vercel/static-config': 3.0.0
@@ -1401,8 +1443,8 @@ packages:
       - supports-color
     dev: false
 
-  /@vercel/remix-builder@2.0.12:
-    resolution: {integrity: sha512-tm0dIJJcVm5CuJmWYJMqqz9h2gI2rysOTmbPdzEjZmFFzwcrI+745crFMbCXN++LJCLhyhXaMuktdWqQ4laimg==}
+  /@vercel/remix-builder@2.0.13:
+    resolution: {integrity: sha512-aSLkRu8WKa+MYVdPBdPD7sIO8/r8HcU5GxtjP1DD5bS1sJn97U8ay6ix8lDGpzw6s85t01idCA5P+GujRU+0UA==}
     dependencies:
       '@vercel/nft': 0.24.2
       '@vercel/static-config': 3.0.0
@@ -1420,15 +1462,15 @@ packages:
       ajv: 6.12.6
     dev: false
 
-  /@vercel/ruby@2.0.3:
-    resolution: {integrity: sha512-INZjBvBxQlANvj7LvHeXtfjpU+ZtwGL45vyys5+hI594MokpkrKdzUaTuK4kUX+KsEJUR7Xule5JiS89fW77BA==}
+  /@vercel/ruby@2.0.4:
+    resolution: {integrity: sha512-EpZyfF6wFGzFDmubFIh/EZtYpKindmXx/69xSfKEBTVU0afgljyOOICbyZePe5tvigfOEBLSLgrt/2nN+MlLtA==}
     dev: false
 
-  /@vercel/static-build@2.0.13:
-    resolution: {integrity: sha512-2+8v7QsRBVF31St8+OVZpJQHwOroXgP4ZoGX8/ppZhBh/Y7qfQds0mlECEnjdLHEdMIFwXCfuvUvcD5LfmjjAA==}
+  /@vercel/static-build@2.0.14:
+    resolution: {integrity: sha512-l5eQtJbk5Pc+P8XARDnpcbX4LnK3bGy7uf6S1aFOD4h6F8iBdg0agWTufZnq5BI91pcPVICPazM5BYhigIEznQ==}
     dependencies:
       '@vercel/gatsby-plugin-vercel-analytics': 1.0.11
-      '@vercel/gatsby-plugin-vercel-builder': 2.0.11
+      '@vercel/gatsby-plugin-vercel-builder': 2.0.12
       '@vercel/static-config': 3.0.0
       ts-morph: 12.0.0
     dev: false
@@ -2965,6 +3007,7 @@ packages:
 
   /fast-json-stable-stringify@2.1.0:
     resolution: {integrity: sha512-lhd/wF+Lk98HZoTCtlVraHtfh5XYijIjalXck7saUtuanSDyLMxnHhSXEDJqHxD7msR8D0uCmqlkwjCV8xvwHw==}
+    requiresBuild: true
 
   /fast-levenshtein@2.0.6:
     resolution: {integrity: sha512-DCXu6Ifhqcks7TZKY3Hxp3y6qphY5SJZmrWMDrKcERSOXWQdMhU9Ig/PYrzyw/ul9jOIyh0N4M0tbC5hodg8dw==}
@@ -3915,6 +3958,7 @@ packages:
 
   /json-schema-traverse@0.4.1:
     resolution: {integrity: sha512-xbbCH5dCYU5T8LcEhhuh7HJ88HXuW3qsI3Y0zOZFKfZEHcpWiHU/Jxzk629Brsab/mMiHQti9wMP+845RPe3Vg==}
+    requiresBuild: true
 
   /json-schema-traverse@1.0.0:
     resolution: {integrity: sha512-NM8/P9n3XjXhIZn1lLhkFaACTOURQXjWhV4BA/RnOv8xvgqtqpAX9IO4mRQxSx1Rlo4tqzeqb0sOlruaOy3dug==}
@@ -4707,8 +4751,8 @@ packages:
     optionalDependencies:
       fsevents: 2.3.2
 
-  /pnpm@8.11.0:
-    resolution: {integrity: sha512-nfh8FsmNsntOBR14fmfyIH7EfoCcywe/e17ErNzRYTNVg5o40LkAFEkj1qcFdwC3TSoMyxVYvrJBZHoSBqmnqw==}
+  /pnpm@8.12.0:
+    resolution: {integrity: sha512-J5J4+Dvngvb6rvusvMxQMwHE7Cza/UCYPnwmru7nw4Jw9cjmNbQ0ZGkbiXq+FnW0DAbfbtrd6SJTK3NoqppSZw==}
     engines: {node: '>=16.14'}
     hasBin: true
     dev: false
@@ -4834,17 +4878,17 @@ packages:
       svelte: 4.2.8
     dev: false
 
-  /prettier-plugin-svelte@3.1.2(prettier@3.1.0)(svelte@4.2.8):
+  /prettier-plugin-svelte@3.1.2(prettier@3.1.1)(svelte@4.2.8):
     resolution: {integrity: sha512-7xfMZtwgAWHMT0iZc8jN4o65zgbAQ3+O32V6W7pXrqNvKnHnkoyQCGCbKeUyXKZLbYE0YhFRnamfxfkEGxm8qA==}
     peerDependencies:
       prettier: ^3.0.0
       svelte: ^3.2.0 || ^4.0.0-next.0 || ^5.0.0-next.0
     dependencies:
-      prettier: 3.1.0
+      prettier: 3.1.1
       svelte: 4.2.8
     dev: true
 
-  /prettier-plugin-tailwindcss@0.5.9(prettier-plugin-svelte@3.1.2)(prettier@3.1.0):
+  /prettier-plugin-tailwindcss@0.5.9(prettier-plugin-svelte@3.1.2)(prettier@3.1.1):
     resolution: {integrity: sha512-9x3t1s2Cjbut2QiP+O0mDqV3gLXTe2CgRlQDgucopVkUdw26sQi53p/q4qvGxMLBDfk/dcTV57Aa/zYwz9l8Ew==}
     engines: {node: '>=14.21.3'}
     peerDependencies:
@@ -4893,8 +4937,8 @@ packages:
       prettier-plugin-twig-melody:
         optional: true
     dependencies:
-      prettier: 3.1.0
-      prettier-plugin-svelte: 3.1.2(prettier@3.1.0)(svelte@4.2.8)
+      prettier: 3.1.1
+      prettier-plugin-svelte: 3.1.2(prettier@3.1.1)(svelte@4.2.8)
     dev: true
 
   /prettier@2.8.8:
@@ -4903,8 +4947,8 @@ packages:
     hasBin: true
     dev: false
 
-  /prettier@3.1.0:
-    resolution: {integrity: sha512-TQLvXjq5IAibjh8EpBIkNKxO749UEWABoiIZehEPiY4GNpVdhaFKqSTu+QrlU6D2dPAfubRmtJTi4K4YkQ5eXw==}
+  /prettier@3.1.1:
+    resolution: {integrity: sha512-22UbSzg8luF4UuZtzgiUOfcGM8s4tjBv6dJRT7j275NXsy2jb4aJa4NNveul5x4eqlF1wuhuR2RElK71RvmVaw==}
     engines: {node: '>=14'}
     hasBin: true
     dev: true
@@ -6209,22 +6253,22 @@ packages:
       spdx-expression-parse: 3.0.1
     dev: true
 
-  /vercel@32.6.1:
-    resolution: {integrity: sha512-isEjDN1/rZEEHV2HVe2lGHkxuzvmih2luBAB42fDhhecIYs2gGKRLy+vIkJweRWRTlFMHjOHGPTYo7VfzQ10Ug==}
+  /vercel@32.7.0:
+    resolution: {integrity: sha512-aZlDUswkL1cCGXPQlOAV1Z+gTf1ugq6KpQmM+WTjSM4YUM4OrtbBBUNweMhjpGaFw1GoJKe6dWcR+mYGVRGh9A==}
     engines: {node: '>= 16'}
     hasBin: true
     dependencies:
-      '@vercel/build-utils': 7.2.5
+      '@vercel/build-utils': 7.3.0
       '@vercel/fun': 1.1.0
       '@vercel/go': 3.0.4
       '@vercel/hydrogen': 1.0.1
       '@vercel/next': 4.0.15
-      '@vercel/node': 3.0.11
+      '@vercel/node': 3.0.12
       '@vercel/python': 4.1.0
       '@vercel/redwood': 2.0.5
-      '@vercel/remix-builder': 2.0.12
-      '@vercel/ruby': 2.0.3
-      '@vercel/static-build': 2.0.13
+      '@vercel/remix-builder': 2.0.13
+      '@vercel/ruby': 2.0.4
+      '@vercel/static-build': 2.0.14
       chokidar: 3.3.1
     transitivePeerDependencies:
       - '@swc/core'
