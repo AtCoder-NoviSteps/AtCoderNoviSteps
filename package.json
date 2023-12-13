@@ -34,7 +34,7 @@
     "@quramy/prisma-fabbrica": "2.0.2",
     "@sveltejs/adapter-auto": "2.1.1",
     "@sveltejs/adapter-vercel": "3.1.0",
-    "@sveltejs/kit": "1.29.1",
+    "@sveltejs/kit": "1.30.2",
     "@testing-library/jest-dom": "^6.1.4",
     "@typescript-eslint/eslint-plugin": "6.14.0",
     "@typescript-eslint/parser": "6.14.0",
