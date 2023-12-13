@@ -2,6 +2,7 @@
   import type { TaskResults, TaskResult } from '$lib/types/task';
   import TaskList from '$lib/components/TaskList.svelte';
   import { TaskGrade, taskGradeValues } from '$lib/types/task';
+  import { getTaskGradeColor } from '$lib/utils/task';
 
   export let data;
 
@@ -36,6 +37,7 @@
     {#if taskResultsForEachGrade.get(taskGrade).length > 0}
       <TaskList
         grade={getTaskGradeLabel(taskGrade)}
+        gradeColor={getTaskGradeColor(taskGrade)}
         taskResults={taskResultsForEachGrade.get(taskGrade)}
       />
     {/if}
