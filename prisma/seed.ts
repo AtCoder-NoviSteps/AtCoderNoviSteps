@@ -267,6 +267,7 @@ async function addSubmissionStatus(submission_status, submissionStatusFactory) {
     id: submission_status.id,
     label_name: submission_status.label_name,
     image_path: submission_status.image_path,
+    button_color: submission_status.button_color,
     is_AC: submission_status.is_AC,
   });
 }
