@@ -14,7 +14,7 @@ export const submission_statuses = [
   {
     id: '3',
     label_name: 'AC',
-    image_path: 'ad.png',
+    image_path: 'ac.png',
     is_AC: true,
   },
 ];
