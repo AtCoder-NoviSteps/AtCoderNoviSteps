@@ -38,8 +38,12 @@
       <!-- See: -->
       <!-- https://developer.mozilla.org/ja/docs/Web/JavaScript/Reference/Global_Objects/Number/toFixed -->
       <div class="text-sm w-1/12 text-center">
-        {acceptedCount} / {taskResults.length}
-        {`(${acceptedRatioPercent.toFixed(1)}%)`}
+        <div>
+          {acceptedCount} / {taskResults.length}
+        </div>
+        <div>
+          {`(${acceptedRatioPercent.toFixed(1)}%)`}
+        </div>
       </div>
     </span>
 
