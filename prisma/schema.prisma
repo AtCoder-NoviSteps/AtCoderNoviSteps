@@ -137,8 +137,9 @@ model SubmissionStatus {
   username String?
   is_AC    Boolean @default(false)
 
-  label_name String
-  image_path String
+  label_name   String
+  image_path   String
+  button_color String
 
   task_answer TaskAnswer[]
 

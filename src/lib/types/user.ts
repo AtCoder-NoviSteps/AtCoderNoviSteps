@@ -3,8 +3,10 @@ export enum Roles {
   USER = 'USER',
 }
 
-export type AuthUser = {
+export type User = {
   userId: string;
   username: string;
   role: Roles;
 };
+
+export interface AuthUser extends User {}

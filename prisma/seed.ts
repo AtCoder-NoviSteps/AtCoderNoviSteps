@@ -1,6 +1,6 @@
 // // See:
 // // https://www.prisma.io/docs/getting-started/quickstart
-import { PrismaClient, Roles } from '@prisma/client';
+import { PrismaClient } from '@prisma/client';
 import {
   initialize,
   defineUserFactory,
@@ -15,6 +15,7 @@ import { generateLuciaPasswordHash } from 'lucia/utils';
 
 import { classifyContest } from '../src/lib/utils/contest';
 
+import { users } from './users';
 import { tasks } from './tasks';
 import { tags } from './tags';
 import { task_tags } from './task_tags';
@@ -24,18 +25,6 @@ import { submission_statuses } from './submission_statuses';
 
 const prisma = new PrismaClient();
 initialize({ prisma });
-
-const users = [
-  { name: 'admin', role: Roles.ADMIN },
-  { name: 'guest', role: Roles.USER },
-  { name: 'Alice', role: Roles.USER },
-  { name: 'Bob23', role: Roles.USER },
-  { name: 'Carol', role: Roles.USER },
-  { name: 'Dave4', role: Roles.USER },
-  { name: 'Ellen', role: Roles.USER },
-  { name: 'Frank', role: Roles.USER },
-  { name: 'hogehoge', role: Roles.USER },
-];
 
 // See:
 // https://github.com/TeemuKoivisto/sveltekit-monorepo-template/blob/main/packages/db/prisma/seed.ts
@@ -278,6 +267,7 @@ async function addSubmissionStatus(submission_status, submissionStatusFactory) {
     id: submission_status.id,
     label_name: submission_status.label_name,
     image_path: submission_status.image_path,
+    button_color: submission_status.button_color,
     is_AC: submission_status.is_AC,
   });
 }
