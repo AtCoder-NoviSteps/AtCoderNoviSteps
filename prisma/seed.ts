@@ -285,7 +285,7 @@ async function addAnswers() {
 
     const registeredUser = await prisma.user.findMany({
       where: {
-        username: answer.username,
+        id: answer.user_id,
       },
     });
 

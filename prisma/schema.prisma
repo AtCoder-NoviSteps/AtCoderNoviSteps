@@ -118,17 +118,17 @@ model TaskTag {
 model TaskAnswer {
   id        String @unique
   task_id   String
-  username  String
+  user_id   String
   status_id String
 
   task   Task?             @relation(fields: [task_id], references: [task_id])
-  user   User?             @relation(fields: [username], references: [username])
+  user   User?             @relation(fields: [user_id], references: [id])
   status SubmissionStatus? @relation(fields: [status_id], references: [id])
 
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 
-  @@id([task_id, username])
+  @@id([task_id, user_id])
   @@map("taskanswer")
 }
 
