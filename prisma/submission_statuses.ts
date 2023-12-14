@@ -21,5 +21,3 @@ export const submission_statuses = [
     button_color: 'green',
   },
 ];
-
-//https://www.webdesignrankings.com/resources/lolcolors/
