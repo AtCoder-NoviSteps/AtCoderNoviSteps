@@ -3,32 +3,13 @@
   import { Button, Breadcrumb, BreadcrumbItem, Img } from 'flowbite-svelte';
   import { ATCODER_BASE_CONTEST_URL } from '$lib/constants/urls';
   import ExternalLinkIcon from '$lib/components/ExternalLinkIcon.svelte';
-  import type { ButtonColor } from '$lib/types/flowbite-svelte-wrapper';
-  import { submissionStatusLabels } from '$lib/types/submission';
 
   export let data;
   let taskResult = data.taskResult;
 
   // FIXME: 汎用的な処理なので、外部ファイルにまとめる
   const taskUrl = `${ATCODER_BASE_CONTEST_URL}/${taskResult.contest_id}/tasks/${taskResult.task_id}`;
-
-  const buttons = [
-    {
-      submission_status: 'ns',
-      color: 'light' as ButtonColor,
-      label: submissionStatusLabels.ns,
-    },
-    {
-      submission_status: 'ac',
-      color: 'green' as ButtonColor,
-      label: submissionStatusLabels.ac,
-    },
-    {
-      submission_status: 'wa',
-      color: 'yellow' as ButtonColor,
-      label: submissionStatusLabels.wa,
-    },
-  ];
+  let buttons = data.buttons;
 </script>
 
 <div class="container mx-auto w-5/6">
@@ -78,12 +59,12 @@
       <Button
         name="submissionStatus"
         value={button.submission_status}
-        color={button.color}
+        color={button.button_color}
         shadow
         class="w-full max-w-md md:max-w-xl m-3"
         type="submit"
       >
-        {button.label}
+        {button.label_name}
       </Button>
     {/each}
   </form>

@@ -3,11 +3,15 @@ import * as crud from '$lib/services/task_results';
 import { BAD_REQUEST, TEMPORARY_REDIRECT } from '$lib/constants/http-response-status-codes';
 import { redirect } from '@sveltejs/kit';
 
+import { getButtons } from '$lib/services/submission_status';
+//export let buttonColor: string
+
 // TODO: ユーザを識別できるようにする。
 export async function load({ params }) {
   const taskResult = await crud.getTaskResult(params.slug as string);
+  const buttons = await getButtons();
 
-  return { taskResult: taskResult };
+  return { taskResult: taskResult, buttons: buttons };
 }
 
 export const actions = {

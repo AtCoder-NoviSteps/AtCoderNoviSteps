@@ -129,6 +129,7 @@ model TaskAnswer {
   updated_at DateTime @updatedAt
 
   @@id([task_id, user_id])
+  @@unique([task_id, user_id])
   @@map("taskanswer")
 }
 

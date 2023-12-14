@@ -46,6 +46,7 @@ export const taskGradeValues = Object.values(TaskGrade);
 export interface TaskResult extends Task {
   user_id: string;
   submission_status: string;
+  status_id: string;
 }
 
 export type TaskResults = TaskResult[];

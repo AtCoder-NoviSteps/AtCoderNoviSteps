@@ -314,7 +314,7 @@ async function addAnswer(answer, taskAnswerFactory) {
     },
     //username: answer.username,
     user: {
-      connect: { username: answer.username },
+      connect: { id: answer.user_id },
     },
     status: {
       connect: { id: answer.status_id },

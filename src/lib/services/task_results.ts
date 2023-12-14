@@ -1,9 +1,10 @@
 import { error } from '@sveltejs/kit';
 import { getTasks } from '$lib/services/tasks';
-import { getAnswers } from './answers';
+import * as answer_crud from './answers';
 import type { Task, TaskResult, TaskResults } from '$lib/types/task';
 import { NOT_FOUND } from '$lib/constants/http-response-status-codes';
 import { default as db } from '$lib/server/database';
+import { getSubmissionStatus } from './submission_status';
 
 // In a real app, this data would live in a database,
 // rather than in memory. But for now, we cheat.
@@ -21,12 +22,13 @@ export async function getTaskResults(): Promise<TaskResults> {
   const userId = 'hogehoge';
 
   const tasks = await getTasks();
-  const answers = getAnswers();
+  const answers = answer_crud.getAnswers();
   const sampleTaskResults = tasks.map((task: Task) => {
     const taskResult = createTaskResult(userId, task);
 
     if (answers.has(task.task_id)) {
       const answer = answers.get(task.task_id);
+      taskResult.status_id = answer.status_id;
       taskResult.submission_status = answer.submission_status;
     }
 
@@ -48,6 +50,7 @@ export function createTaskResult(userId: string, task: Task): TaskResult {
     grade: task.grade,
     user_id: userId,
     task_table_index: task.task_table_index,
+    status_id: '1',
     submission_status: 'ns', // FIXME: Use const
   };
 
@@ -68,6 +71,7 @@ export async function getTaskResult(slug: string): Promise<TaskResult> {
 
 export async function updateTaskResult(slug: string, submissionStatus: string) {
   const taskResult: TaskResult = await getTaskResult(slug);
+  taskResult.status_id = (await getSubmissionStatus()).get(submissionStatus).id;
   taskResult.submission_status = submissionStatus;
 }
 
@@ -94,7 +98,7 @@ export async function getTasksWithTagIds(tagIds_string: string): Promise<TaskRes
     },
   });
 
-  const answers = getAnswers();
+  const answers = answer_crud.getAnswers();
 
   const sampleTaskResults = tasks.map((task: Task) => {
     const taskResult = createTaskResult(userId, task);
