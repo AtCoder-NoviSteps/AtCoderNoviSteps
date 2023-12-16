@@ -69,7 +69,7 @@
     "@testing-library/svelte": "^4.0.5",
     "@types/jest": "^29.5.11",
     "autoprefixer": "10.4.16",
-    "flowbite": "2.2.0",
+    "flowbite": "2.2.1",
     "lucia": "2.7.5",
     "playwright": "^1.40.1",
     "pnpm": "8.12.1",
