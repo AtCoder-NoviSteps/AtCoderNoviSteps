@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { ButtonGroup, Button, Tabs, TabItem } from 'flowbite-svelte';
+  import { Tabs, TabItem } from 'flowbite-svelte';
 
   import type { TaskResults, TaskResult } from '$lib/types/task';
   import TaskList from '$lib/components/TaskList.svelte';
