@@ -1,5 +1,19 @@
-import { TaskGrade } from '$lib/types/task';
+import { ContestType } from '$lib/types/contest';
+import { TaskGrade, type TaskResult } from '$lib/types/task';
 
+// See:
+// https://github.com/kenkoooo/AtCoderProblems/blob/master/atcoder-problems-frontend/src/pages/TablePage/AtCoderRegularTable.tsx
+export const getTaskTableHeaderName = (contestType: ContestType, taskResult: TaskResult) => {
+  if (contestType === ContestType.ABC && taskResult.task_table_index === 'H') {
+    return 'H/Ex';
+  } else if (taskResult.task_table_index === 'Ex') {
+    return 'H/Ex';
+  }
+
+  return taskResult.task_table_index;
+};
+
+// FIXME: よりスマートに記述できるようにする
 // https://tailwindcss.com/docs/customizing-colors
 // https://tailwindcss.com/docs/content-configuration#dynamic-class-names
 export const getTaskGradeColor = (grade: string) => {
