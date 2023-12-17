@@ -3,6 +3,7 @@
 
   import type { TaskResults, TaskResult } from '$lib/types/task';
   import TaskList from '$lib/components/TaskList.svelte';
+  import TaskTable from '$lib/components/TaskTable.svelte';
   import { TaskGrade, taskGradeValues } from '$lib/types/task';
   import { getTaskGradeColor } from '$lib/utils/task';
   export let data;
@@ -60,25 +61,7 @@
     <TabItem>
       <span slot="title" class="text-lg">Table</span>
 
-      <!-- TODO: コンポーネントとして切り出す -->
-      <!-- TODO: ボタンの並び順を決める -->
-      <!-- FIXME: 冗長な記述をリファクタリング -->
-      <ButtonGroup class="m-4 contents-center">
-        <Button outline color="primary">ABC</Button>
-        <Button outline color="primary">APG4b</Button>
-        <Button outline color="primary">ABS</Button>
-        <Button outline color="primary">PAST</Button>
-        <Button outline color="primary">Tessoku Book</Button>
-        <Button outline color="primary">Math and Algorithm</Button>
-        <Button outline color="primary">Typical90</Button>
-        <Button outline color="primary">EDPC</Button>
-        <Button outline color="primary">TDPC</Button>
-        <Button outline color="primary">ACL Practice</Button>
-        <Button outline color="primary">JOI</Button>
-      </ButtonGroup>
-
-      <!-- TODO: 条件に一致する問題をフィルタリングする -->
-      <!-- TODO: 該当する問題をテーブル形式で表示する -->
+      <TaskTable {taskResults} />
     </TabItem>
 
     <TabItem>
