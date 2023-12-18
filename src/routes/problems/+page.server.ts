@@ -14,11 +14,11 @@ export async function load({ locals, url }) {
   const tagIds: string | null = params.get('tagIds');
   if (tagIds != null) {
     return {
-      taskResults: (await crud.getTasksWithTagIds(tagIds)) as TaskResults,
+      taskResults: (await crud.getTasksWithTagIds(tagIds, session?.user.userId)) as TaskResults,
     };
   } else {
     return {
-      taskResults: (await crud.getTaskResults()) as TaskResults,
+      taskResults: (await crud.getTaskResults(session?.user.userId)) as TaskResults,
     };
   }
 }

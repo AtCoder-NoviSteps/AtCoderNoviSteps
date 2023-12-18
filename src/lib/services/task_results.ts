@@ -1,35 +1,45 @@
 import { error } from '@sveltejs/kit';
-import { getTasks } from '$lib/services/tasks';
+import { getTasks, getTask } from '$lib/services/tasks';
 import * as answer_crud from './answers';
-import type { Task, TaskResult, TaskResults } from '$lib/types/task';
+import type { TaskResult, TaskResults } from '$lib/types/task';
+import type { Task } from '$lib/types/task';
 import { NOT_FOUND } from '$lib/constants/http-response-status-codes';
 import { default as db } from '$lib/server/database';
-import { getSubmissionStatus } from './submission_status';
+import { getSubmissionStatusMapWithId, getSubmissionStatusMapWithName } from './submission_status';
+import type { TaskAnswer } from '../types/answer';
 
 // In a real app, this data would live in a database,
 // rather than in memory. But for now, we cheat.
 // DBから取得した問題一覧とログインしているユーザの回答を紐付けしたデータ保持
 // HACK: よりスマート、かつ、セキュリティにも安全な方法があるはず
-const taskResultsMap = new Map();
+//const taskResultsMap = new Map();
+
+const statusById = await getSubmissionStatusMapWithId();
+const statusByName = await getSubmissionStatusMapWithName();
 
 // TODO: Enable to fetch data from the database.
-export async function getTaskResults(): Promise<TaskResults> {
+export async function getTaskResults(userId: string): Promise<TaskResults> {
+  const taskResultsMap = new Map();
+
   // FIXME: 問題一覧と特定のユーザの回答状況を使ってデータを結合
   // 計算量: 問題数をN、特定のユーザの解答数をMとすると、O(N + M)になるはず。
 
   // TODO: useIdを動的に変更できるようにする。
   // TODO: getUser(userId)を用意して、取得できるようにする。
-  const userId = 'hogehoge';
+  //const userId = 'hogehoge';
 
   const tasks = await getTasks();
-  const answers = answer_crud.getAnswers();
+  const answers = await answer_crud.getAnswers(userId);
   const sampleTaskResults = tasks.map((task: Task) => {
-    const taskResult = createTaskResult(userId, task);
+    const taskResult = createDefaultTaskResult(userId, task);
 
     if (answers.has(task.task_id)) {
       const answer = answers.get(task.task_id);
-      taskResult.status_id = answer.status_id;
-      taskResult.submission_status = answer.submission_status;
+      const status = statusById.get(answer.status_id);
+      taskResult.status_name = status.status_name;
+      taskResult.submission_status_image_path = status.image_path;
+      taskResult.is_ac = status.is_ac;
+      //console.log(status)
     }
 
     return taskResult;
@@ -39,10 +49,12 @@ export async function getTaskResults(): Promise<TaskResults> {
     taskResultsMap.set(userId, sampleTaskResults);
   }
 
+  //console.log(taskResultsMap.get(userId))
+
   return Array.from(taskResultsMap.get(userId).values());
 }
 
-export function createTaskResult(userId: string, task: Task): TaskResult {
+export function createDefaultTaskResult(userId: string, task: Task): TaskResult {
   const taskResult: TaskResult = {
     contest_id: task.contest_id,
     task_id: task.task_id,
@@ -51,34 +63,82 @@ export function createTaskResult(userId: string, task: Task): TaskResult {
     user_id: userId,
     task_table_index: task.task_table_index,
     status_id: '1',
-    submission_status: 'ns', // FIXME: Use const
+    status_name: 'ns', // FIXME: Use const
+    submission_status_image_path: 'ns.png',
+    is_ac: false,
   };
 
   return taskResult;
 }
 
-export async function getTaskResult(slug: string): Promise<TaskResult> {
+export async function getTaskResult(slug: string, userId: string) {
   // TODO: useIdを動的に変更できるようにする。
-  const userId = 'hogehoge';
-  const task: TaskResult = taskResultsMap
-    .get(userId)
-    .find((taskResult: TaskResult) => taskResult.task_id === slug);
+  //const userId = 'hogehoge';
+  //const task: TaskResult = taskResultsMap
+  //  .get(userId)
+  //  .find((taskResult: TaskResult) => taskResult.task_id === slug);
 
-  if (!task) throw error(NOT_FOUND, `問題 ${slug} は見つかりませんでした。`);
+  const task = await getTask(slug);
 
-  return task;
+  if (!task || task.length == 0) {
+    throw error(NOT_FOUND, `問題 ${slug} は見つかりませんでした。`);
+  }
+
+  const taskResult = createDefaultTaskResult(userId, task[0]);
+  const taskanswer: TaskAnswer | null = await answer_crud.getAnswer(slug, userId);
+
+  if (!taskanswer) {
+    return taskResult;
+  }
+
+  const status = statusById.get(taskanswer.status_id);
+  taskResult.status_id = status.status_id;
+  taskResult.status_name = status.status_name;
+  taskResult.submission_status_image_path = status.image_path;
+  taskResult.is_ac = status.is_ac;
+  taskResult.user_id = userId;
+
+  //console.log(taskResult.status_id, taskResult.status_name, taskResult.user_id)
+
+  return taskResult;
 }
 
-export async function updateTaskResult(slug: string, submissionStatus: string) {
-  const taskResult: TaskResult = await getTaskResult(slug);
-  taskResult.status_id = (await getSubmissionStatus()).get(submissionStatus).id;
-  taskResult.submission_status = submissionStatus;
+export async function updateTaskResult(slug: string, submissionStatus: string, userId: string) {
+  const taskResult: TaskResult | null = await getTaskResult(slug, userId);
+
+  if (taskResult) {
+    //taskResult.status_id = statusByName.get(submissionStatus).id;
+    //taskResult.submission_status = submissionStatus;
+    const status_id = statusByName.get(submissionStatus).id;
+
+    const resisteredTaskAnswer = await db.taskAnswer.findMany({
+      where: { task_id: slug, user_id: userId },
+    });
+
+    if (resisteredTaskAnswer.length == 0) {
+      console.log('invoke createTaskResult(', slug, submissionStatus, userId, ')');
+      await answer_crud.createAnswer(slug, userId, status_id);
+    }
+
+    console.log('invoke updateTaskResult(', slug, submissionStatus, userId, ')');
+    await db.taskAnswer.update({
+      where: {
+        task_id_user_id: { task_id: slug, user_id: userId },
+      },
+      data: {
+        status_id: status_id,
+      },
+    });
+  }
 }
 
-export async function getTasksWithTagIds(tagIds_string: string): Promise<TaskResults> {
+export async function getTasksWithTagIds(
+  tagIds_string: string,
+  userId: string,
+): Promise<TaskResults> {
   const taskResultsMap = new Map();
 
-  const userId = 'hogehoge';
+  //const userId = 'hogehoge';
   const tagIds = tagIds_string.split(',');
   const taskIdByTagIds = await db.taskTag.groupBy({
     by: ['task_id'],
@@ -98,14 +158,14 @@ export async function getTasksWithTagIds(tagIds_string: string): Promise<TaskRes
     },
   });
 
-  const answers = answer_crud.getAnswers();
+  const answers = await answer_crud.getAnswers(userId);
 
   const sampleTaskResults = tasks.map((task: Task) => {
-    const taskResult = createTaskResult(userId, task);
+    const taskResult = createDefaultTaskResult(userId, task);
 
     if (answers.has(task.task_id)) {
       const answer = answers.get(task.task_id);
-      taskResult.submission_status = answer.submission_status;
+      taskResult.status_name = answer.status_name;
     }
 
     return taskResult;

@@ -1,6 +1,6 @@
 import { default as db } from '$lib/server/database';
-
-import type { Task, TaskGrade } from '$lib/types/task';
+import type { TaskGrade } from '$lib/types/task';
+import type { Task } from '$lib/types/task';
 
 // See:
 // https://www.prisma.io/docs/concepts/components/prisma-client/filtering-and-sorting
@@ -10,8 +10,9 @@ export async function getTasks(): Promise<Task[]> {
   return tasks;
 }
 
-export async function getTask(task_id: string) {
-  const task = await db.task.findUnique({
+export async function getTask(task_id: string): Promise<Task[]> {
+  //本当はfindUniqueで取得したいがうまくいかない
+  const task = await db.task.findMany({
     where: {
       task_id: task_id,
     },

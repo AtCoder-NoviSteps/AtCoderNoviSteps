@@ -22,10 +22,7 @@
 
   // TODO: ユーザの設定に応じて、ACかどうかの判定を変更できるようにする
   // TODO: 別ファイルに切り出す
-  const accepted = 'ac';
-  let acceptedCount = taskResults.filter(
-    (taskResult) => taskResult.submission_status === accepted,
-  ).length;
+  let acceptedCount = taskResults.filter((taskResult) => taskResult.is_ac).length;
   let acceptedRatioPercent = (acceptedCount / taskResults.length) * 100;
 </script>
 
@@ -64,8 +61,8 @@
           <TableBodyRow>
             <TableBodyCell class="p-3">
               <Img
-                src="../../{taskResult.submission_status}.png"
-                alt={taskResult.submission_status}
+                src="../../{taskResult.submission_status_image_path}"
+                alt={taskResult.submission_status_image_path}
                 class="md:h-16 md:w-16"
               />
             </TableBodyCell>

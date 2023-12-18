@@ -32,8 +32,8 @@
   >
     <Img
       class="object-cover rounded-t-lg w-64 h-64 p-4 md:h-auto md:w-48 md:rounded-none md:rounded-l-lg"
-      src="../../{taskResult.submission_status}.png"
-      alt={taskResult.submission_status}
+      src="../../{taskResult.submission_status_image_path}"
+      alt={taskResult.submission_status_image_path}
     />
     <div class="flex flex-col justify-between p-4 leading-normal">
       <h4 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
@@ -58,7 +58,7 @@
     {#each buttons as button}
       <Button
         name="submissionStatus"
-        value={button.submission_status}
+        value={button.status_name}
         color={button.button_color}
         shadow
         class="w-full max-w-md md:max-w-xl m-3"

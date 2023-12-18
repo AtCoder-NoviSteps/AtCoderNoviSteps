@@ -134,13 +134,16 @@ model TaskAnswer {
 }
 
 model SubmissionStatus {
-  id       String  @id @unique
-  username String?
-  is_AC    Boolean @default(false)
+  id String @id @unique
+
+  user_id     String?
+  status_name String  @unique
+  is_AC       Boolean @default(false)
 
   label_name   String
   image_path   String
   button_color String
+  sort_order   Int    @default(10)
 
   task_answer TaskAnswer[]
 
