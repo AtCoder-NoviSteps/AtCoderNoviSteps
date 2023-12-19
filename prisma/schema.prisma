@@ -13,6 +13,7 @@ generator client {
 generator fabbrica {
   provider = "prisma-fabbrica"
   output   = "../src/lib/services/.fabbrica"
+  tsconfig = "../tsconfig.json"
 }
 
 datasource db {
