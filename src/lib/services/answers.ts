@@ -3,7 +3,8 @@ import { answers } from '$lib/server/sample_data';
 
 //server/databaseのインポートでは保存がうまくいかず。
 import { PrismaClient } from '@prisma/client';
-import { initialize, defineTaskAnswerFactory } from '../../../prisma/.fabbrica';
+import { defineTaskAnswerFactory } from '../../../prisma/.fabbrica';
+import { initialize } from '@quramy/prisma-fabbrica/lib/internal';
 const prisma = new PrismaClient();
 initialize({ prisma });
 
