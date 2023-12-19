@@ -116,11 +116,11 @@ export async function updateTaskResult(slug: string, submissionStatus: string, u
     });
 
     if (resisteredTaskAnswer.length == 0) {
-      console.log('invoke createTaskResult(', slug, submissionStatus, userId, ')');
+      //console.log('invoke createTaskResult(', slug, submissionStatus, userId, ')');
       await answer_crud.createAnswer(slug, userId, status_id);
     }
 
-    console.log('invoke updateTaskResult(', slug, submissionStatus, userId, ')');
+    //console.log('invoke updateTaskResult(', slug, submissionStatus, userId, ')');
     await db.taskAnswer.update({
       where: {
         task_id_user_id: { task_id: slug, user_id: userId },
@@ -164,8 +164,13 @@ export async function getTasksWithTagIds(
     const taskResult = createDefaultTaskResult(userId, task);
 
     if (answers.has(task.task_id)) {
+      //TODO 同じコードがあるからまとめたい
       const answer = answers.get(task.task_id);
-      taskResult.status_name = answer.status_name;
+      const status = statusById.get(answer.status_id);
+      taskResult.status_name = status.status_name;
+      taskResult.submission_status_image_path = status.image_path;
+      taskResult.is_ac = status.is_ac;
+      taskResult.user_id = userId;
     }
 
     return taskResult;
