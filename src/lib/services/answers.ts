@@ -3,9 +3,7 @@
 
 //server/databaseのインポートでは保存がうまくいかず。
 // import { PrismaClient } from '@prisma/client';
-// HACK: fabbricaからエクスポートされておらず、ライブラリを直接インポートしてみる。
-import { initialize } from '@quramy/prisma-fabbrica/lib/internal';
-import { defineTaskAnswerFactory } from '../../__generated__/fabbrica/index';
+import { initialize, defineTaskAnswerFactory } from '../../../prisma/.fabbrica';
 
 import { default as prisma } from '$lib/server/database';
 // const prisma = new PrismaClient();
