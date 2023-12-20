@@ -2,12 +2,13 @@
 //import taskAnswerSchema from '$lib/server/taskanswer';
 
 //server/databaseのインポートでは保存がうまくいかず。
-import { PrismaClient } from '@prisma/client';
+// import { PrismaClient } from '@prisma/client';
 // HACK: fabbricaからエクスポートされておらず、ライブラリを直接インポートしてみる。
 import { initialize } from '@quramy/prisma-fabbrica/lib/internal';
-import { defineTaskAnswerFactory } from '../../__generated__/fabbrica';
+import { defineTaskAnswerFactory } from '../../__generated__/fabbrica/index';
 
-const prisma = new PrismaClient();
+import { default as prisma } from '$lib/server/database';
+// const prisma = new PrismaClient();
 initialize({ prisma });
 
 //あとで入れ替える
