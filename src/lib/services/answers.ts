@@ -3,7 +3,7 @@
 
 //server/databaseのインポートでは保存がうまくいかず。
 import { PrismaClient } from '@prisma/client';
-import { initialize, defineTaskAnswerFactory } from '../../__generated__/fabbrica';
+import { initialize, defineTaskAnswerFactory } from '@lib/server/__generated__/fabbrica';
 
 const prisma = new PrismaClient();
 initialize({ prisma });
