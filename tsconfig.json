@@ -28,5 +28,5 @@
   "include": ["src/**/*.d.ts", "src/*", "src/**/*.ts", "src/**/*.svelte"],
   "exclude": ["node_modules"],
   "target": "es5",
-  "module": "commonjs",
+  "module": "commonjs"
 }

@@ -10,16 +10,6 @@ initialize({ prisma });
 
 //import type { TaskAnswer } from '@prisma/client';
 
-// TODO: useIdを動的に変更できるようにする。
-export function getAnswersMock() {
-  const answersMap = new Map();
-
-  answers.map((answer) => {
-    answersMap.set(answer.task_id, answer);
-  });
-  return answersMap;
-}
-
 //あとで入れ替える
 export async function getAnswers(user_id: string) {
   const answers_from_db = prisma.taskAnswer.findMany({
