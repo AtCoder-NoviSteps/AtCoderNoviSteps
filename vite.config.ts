@@ -8,4 +8,10 @@ export default defineConfig({
     environment: 'jsdom',
     globals: true,
   },
+  build: {
+    rollupOptions: {
+      external: ['@lib/server/__generated__/fabbrica'],
+      // https://rollupjs.org/configuration-options/
+    },
+  },
 });
