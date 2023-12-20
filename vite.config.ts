@@ -8,10 +8,4 @@ export default defineConfig({
     environment: 'jsdom',
     globals: true,
   },
-  //https://github.com/rollup/plugins/issues/71
-  build: {
-    rollupOptions: {
-      external: ['@project/library'],
-    },
-  },
 });

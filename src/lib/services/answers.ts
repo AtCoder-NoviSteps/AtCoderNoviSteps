@@ -3,8 +3,8 @@ import { answers } from '$lib/server/sample_data';
 
 //server/databaseのインポートでは保存がうまくいかず。
 import { PrismaClient } from '@prisma/client';
-import { initialize, defineTaskAnswerFactory } from './.fabbrica';
-//import { initialize } from '@quramy/prisma-fabbrica/lib/internal';
+import * as fabbrica from './.fabbrica';
+import { initialize } from '@quramy/prisma-fabbrica/lib/internal';
 const prisma = new PrismaClient();
 initialize({ prisma });
 
@@ -50,7 +50,7 @@ export async function getAnswer(task_id: string, user_id: string) {
 }
 // TODO: createAnswer()
 export async function createAnswer(task_id: string, user_id: string, status_id: string) {
-  const taskAnswerFactory = defineTaskAnswerFactory();
+  const taskAnswerFactory = fabbrica.defineTaskAnswerFactory();
   const taskAnser = await taskAnswerFactory.create({
     //task_id: answer.task_id,
     task: {
