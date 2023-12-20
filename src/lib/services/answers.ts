@@ -8,8 +8,6 @@ import { initialize, defineTaskAnswerFactory } from '../../__generated__/fabbric
 const prisma = new PrismaClient();
 initialize({ prisma });
 
-//import type { TaskAnswer } from '@prisma/client';
-
 //あとで入れ替える
 export async function getAnswers(user_id: string) {
   const answers_from_db = prisma.taskAnswer.findMany({

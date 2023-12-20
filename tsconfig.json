@@ -27,6 +27,6 @@
   // from the referenced tsconfig.json - TypeScript does not merge them in
   "include": ["src/**/*.d.ts", "src/*", "src/**/*.ts", "src/**/*.svelte"],
   "exclude": ["node_modules"],
-  "target": "es5",
+  "target": "es2020",
   "module": "commonjs"
 }
