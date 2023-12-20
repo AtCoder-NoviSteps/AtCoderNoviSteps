@@ -1,10 +1,10 @@
-import { answers } from '$lib/server/sample_data';
+//import { answers } from '$lib/server/sample_data';
 //import taskAnswerSchema from '$lib/server/taskanswer';
 
 //server/databaseのインポートでは保存がうまくいかず。
 import { PrismaClient } from '@prisma/client';
-import * as fabbrica from './.fabbrica';
-import { initialize } from '@quramy/prisma-fabbrica/lib/internal';
+import { initialize, defineTaskAnswerFactory } from '../../__generated__/fabbrica';
+
 const prisma = new PrismaClient();
 initialize({ prisma });
 
@@ -50,7 +50,7 @@ export async function getAnswer(task_id: string, user_id: string) {
 }
 // TODO: createAnswer()
 export async function createAnswer(task_id: string, user_id: string, status_id: string) {
-  const taskAnswerFactory = fabbrica.defineTaskAnswerFactory();
+  const taskAnswerFactory = defineTaskAnswerFactory();
   const taskAnser = await taskAnswerFactory.create({
     //task_id: answer.task_id,
     task: {

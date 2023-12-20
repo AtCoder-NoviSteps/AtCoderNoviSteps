@@ -11,10 +11,10 @@ generator client {
 // See:
 // https://github.com/Quramy/prisma-fabbrica
 generator fabbrica {
-  provider    = "prisma-fabbrica"
-  output      = "../src/lib/services/.fabbrica"
-  tsconfig    = "../tsconfig.json"
-  noTranspile = true
+  provider = "prisma-fabbrica"
+  //output      = "../src/lib/services/.fabbrica"
+  tsconfig = "../tsconfig.json"
+  //noTranspile = true
 }
 
 datasource db {
