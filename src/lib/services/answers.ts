@@ -5,7 +5,8 @@
 // import { PrismaClient } from '@prisma/client';
 // prisma.taskAnswer.createが実行できれば、defineTaskAnswerFactoryをインポートしなくて済むはずです。
 // また、initializeは、内部メソッドを直接インポートすることで対処できそうです。
-import { initialize, defineTaskAnswerFactory } from '../../__generated__/fabbrica';
+import { initialize } from '@quramy/prisma-fabbrica/lib/internal';
+import { defineTaskAnswerFactory } from '../../__generated__/fabbrica';
 
 import { default as prisma } from '$lib/server/database';
 // const prisma = new PrismaClient();
