@@ -1,4 +1,4 @@
 {
-    "files": [],
-    "references": [{ "path": "packages/prisma-fabbrica" }]
-  }
+  "files": [],
+  "references": [{ "path": "packages/prisma-fabbrica" }]
+}

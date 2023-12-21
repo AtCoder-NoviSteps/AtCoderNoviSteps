@@ -3,7 +3,7 @@
 
 //server/databaseのインポートでは保存がうまくいかず。
 import { PrismaClient } from '@prisma/client';
-import { initialize, defineTaskAnswerFactory } from '/src/lib/server/__generated__/fabbrica';
+import { initialize, defineTaskAnswerFactory } from '../server/__generated__/fabbrica';
 // import { PrismaClient } from '@prisma/client';
 // prisma.taskAnswer.createが実行できれば、defineTaskAnswerFactoryをインポートしなくて済むはずです。
 // また、initializeは、内部メソッドを直接インポートすることで対処できそうです。

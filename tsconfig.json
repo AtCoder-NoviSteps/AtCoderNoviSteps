@@ -12,18 +12,16 @@
     "moduleResolution": "node",
     "outDir": "build",
 
-
     /* Projects */
     "composite": true /* Enable constraints that allow a TypeScript project to be used with project references. */,
 
     /* Language and Environment */
-    "target": "es2020" ,
+    "target": "es2020",
     /* Modules */
-    "module": "commonjs", /* Specify what module code is generated. */
+    "module": "esnext" /* Specify what module code is generated. */,
 
     "noUnusedLocals": true /* Enable error reporting when local variables aren't read. */,
     "noUnusedParameters": true /* Raise an error when a function parameter isn't read. */,
-
 
     "paths": {
       "@/*": ["src/*"],
