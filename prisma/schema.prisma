@@ -12,7 +12,7 @@ generator client {
 // https://github.com/Quramy/prisma-fabbrica
 generator fabbrica {
   provider = "prisma-fabbrica"
-  output   = "../src/lib/server/__generated__/fabbrica"
+  output   = ".fabbrica"
   tsconfig = "../tsconfig.json"
   //noTranspile = true
 }
