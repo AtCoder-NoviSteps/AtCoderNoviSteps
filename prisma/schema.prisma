@@ -13,14 +13,14 @@ generator client {
 generator fabbrica {
   provider = "prisma-fabbrica"
   output   = ".fabbrica"
-  tsconfig = "../tsconfig.json"
+  //tsconfig = "../tsconfig.json"
   //noTranspile = true
 }
 
 datasource db {
-  provider     = "postgresql"
-  url          = env("DATABASE_URL")
-  relationMode = "prisma"
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  //relationMode = "prisma"
 }
 
 // See:
