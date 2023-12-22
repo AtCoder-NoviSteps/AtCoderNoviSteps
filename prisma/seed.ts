@@ -10,7 +10,7 @@ import {
   defineTaskTagFactory,
   defineTaskAnswerFactory,
   defineSubmissionStatusFactory,
-} from '../../app/src/__generated__/fabbrica';
+} from './.fabbrica';
 import { generateLuciaPasswordHash } from 'lucia/utils';
 
 import { classifyContest } from '../src/lib/utils/contest';
