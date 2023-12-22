@@ -18,3 +18,6 @@ RUN pnpm install
 RUN pnpm update -i --latest
 
 CMD ["pnpm", "dev"]
+
+COPY --from=build /app/prisma/schema.prisma /app/build/server/chunks/schema.prisma
+COPY --from=build /app/node_modules/prisma /tmp/prisma-engines
