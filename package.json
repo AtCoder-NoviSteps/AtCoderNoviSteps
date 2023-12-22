@@ -31,7 +31,6 @@
   },
   "devDependencies": {
     "@playwright/test": "1.40.1",
-    "@quramy/prisma-fabbrica": "2.0.2",
     "@sveltejs/adapter-auto": "2.1.1",
     "@sveltejs/adapter-vercel": "3.1.0",
     "@sveltejs/kit": "1.30.3",
@@ -66,6 +65,7 @@
     "@lucia-auth/adapter-prisma": "3.0.2",
     "@popperjs/core": "2.11.8",
     "@prisma/client": "5.7.1",
+    "@quramy/prisma-fabbrica": "2.0.2",
     "@testing-library/svelte": "^4.0.5",
     "@types/jest": "^29.5.11",
     "autoprefixer": "10.4.16",
