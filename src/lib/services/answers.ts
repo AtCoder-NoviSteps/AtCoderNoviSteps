@@ -70,19 +70,6 @@ export async function createAnswer(task_id: string, user_id: string, status_id: 
   const taskAnswer = await prisma.taskAnswer.create({
     data: taskanswerInput,
   });
-  //const taskAnser = await taskAnswerFactory.create({
-  //task_id: answer.task_id,
-  //  task: {
-  //    connect: { task_id: task_id },
-  //  },
-  //username: answer.username,
-  // user: {
-  //    connect: { id: user_id },
-  //  },
-  //  status: {
-  //    connect: { id: status_id },
-  //  },
-  //});
 
   return taskAnswer;
 }

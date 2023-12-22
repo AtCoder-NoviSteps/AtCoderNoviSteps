@@ -14,4 +14,3 @@ package-lock.json
 yarn.lock
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
-src/lib/server/__generated__/*
