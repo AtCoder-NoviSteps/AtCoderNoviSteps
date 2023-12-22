@@ -13,7 +13,7 @@ generator client {
 generator fabbrica {
   provider = "prisma-fabbrica"
   output   = ".fabbrica"
-  tsconfig = "../tsconfig.json"
+  //tsconfig = "../tsconfig.json"
   //noTranspile = true
 }
 
