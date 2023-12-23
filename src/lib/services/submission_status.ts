@@ -1,8 +1,35 @@
-import client from '$lib/server/database';
+//import client from '$lib/server/database';
+
+export const submission_statuses = [
+  {
+    id: '1',
+    status_name: 'ns',
+    label_name: 'No Sub',
+    image_path: 'ns.png',
+    is_AC: false,
+    button_color: 'light',
+  },
+  {
+    id: '2',
+    status_name: 'wa',
+    label_name: 'WA',
+    image_path: 'wa.png',
+    is_AC: false,
+    button_color: 'yellow',
+  },
+  {
+    id: '3',
+    status_name: 'ac',
+    label_name: 'AC',
+    image_path: 'ac.png',
+    is_AC: true,
+    button_color: 'green',
+  },
+];
 
 export async function getSubmissionStatusMapWithId() {
-  const defaultStatus = await client.submissionStatus.findMany({ orderBy: { id: 'asc' } });
-
+  //const defaultStatus = await client.submissionStatus.findMany({ orderBy: { id: 'asc' } });
+  const defaultStatus = submission_statuses;
   const statusMap = new Map();
 
   defaultStatus.map((status) => {
@@ -21,7 +48,8 @@ export async function getSubmissionStatusMapWithId() {
 }
 
 export async function getSubmissionStatusMapWithName() {
-  const defaultStatus = await client.submissionStatus.findMany({ orderBy: { id: 'asc' } });
+  //const defaultStatus = await client.submissionStatus.findMany({ orderBy: { id: 'asc' } });
+  const defaultStatus = submission_statuses;
 
   const statusMap = new Map();
 
