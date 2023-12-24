@@ -8,8 +8,8 @@ import {
   defineTaskFactory,
   defineTagFactory,
   defineTaskTagFactory,
-  //defineTaskAnswerFactory,
-  //defineSubmissionStatusFactory,
+  defineTaskAnswerFactory,
+  defineSubmissionStatusFactory,
 } from './.fabbrica';
 import { generateLuciaPasswordHash } from 'lucia/utils';
 
@@ -19,9 +19,9 @@ import { users } from './users';
 import { tasks } from './tasks';
 import { tags } from './tags';
 import { task_tags } from './task_tags';
-//import { answers } from './answers';
-//import { submission_statuses } from './submission_statuses';
-// import { tasks } from './tasks_for_production';
+import { answers } from './answers';
+import { submission_statuses } from './submission_statuses';
+//import { tasks } from './tasks_for_production';
 
 const prisma = new PrismaClient();
 initialize({ prisma });
@@ -35,8 +35,8 @@ async function main() {
   addTasks();
   addTags();
   addTaskTags();
-  //addSubmissionStatuses();
-  //addAnswers();
+  addSubmissionStatuses();
+  addAnswers();
 }
 
 function addUsers() {
@@ -244,6 +244,85 @@ async function addTaskTag(task_tag, taskTagFactory) {
 }
 
 //insert data to submission_status table
+async function addSubmissionStatuses() {
+  const submissionStatusFactory = defineSubmissionStatusFactory();
+
+  submission_statuses.map(async (submission_status) => {
+    const registeredSubmissionStatus = await prisma.submissionStatus.findMany({
+      where: {
+        id: submission_status.id,
+      },
+    });
+
+    if (registeredSubmissionStatus.length === 0) {
+      console.log('submission_status id:', submission_status.id, 'was registered.');
+      await addSubmissionStatus(submission_status, submissionStatusFactory);
+    } else {
+      //console.log('tag id:', tag.id, 'has already been registered.');
+    }
+  });
+}
+
+async function addSubmissionStatus(submission_status, submissionStatusFactory) {
+  await submissionStatusFactory.create({
+    id: submission_status.id,
+    status_name: submission_status.status_name,
+    label_name: submission_status.label_name,
+    image_path: submission_status.image_path,
+    button_color: submission_status.button_color,
+    is_AC: submission_status.is_AC,
+  });
+}
+
+//insert data to answer table
+async function addAnswers() {
+  const answerFactory = defineTaskAnswerFactory();
+
+  answers.map(async (answer) => {
+    const registeredAnswer = await prisma.taskAnswer.findMany({
+      where: {
+        id: answer.id,
+      },
+    });
+
+    const registeredUser = await prisma.user.findMany({
+      where: {
+        id: answer.user_id,
+      },
+    });
+
+    if (registeredAnswer.length === 0 && registeredUser.length === 1) {
+      console.log('answer id:', answer.id, 'was registered.');
+      await addAnswer(answer, answerFactory);
+    } else {
+      console.log(
+        'answer len:',
+        registeredAnswer.length,
+        'user len:',
+        registeredUser.length,
+        answer.id,
+        'was not registered.',
+      );
+    }
+  });
+}
+
+async function addAnswer(answer, taskAnswerFactory) {
+  await taskAnswerFactory.create({
+    id: answer.id,
+    //task_id: answer.task_id,
+    task: {
+      connect: { task_id: answer.task_id },
+    },
+    //username: answer.username,
+    user: {
+      connect: { id: answer.user_id },
+    },
+    status: {
+      connect: { id: answer.status_id },
+    },
+  });
+}
 
 main()
   .catch(async (e) => {
