@@ -10,6 +10,8 @@
 
   let taskResultsForEachGrade = new Map();
 
+  //console.log(taskResults)
+
   taskGradeValues.map((grade) => {
     taskResultsForEachGrade.set(
       grade,

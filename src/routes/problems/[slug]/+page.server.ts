@@ -3,21 +3,36 @@ import * as crud from '$lib/services/task_results';
 import { BAD_REQUEST, TEMPORARY_REDIRECT } from '$lib/constants/http-response-status-codes';
 import { redirect } from '@sveltejs/kit';
 
-// TODO: ユーザを識別できるようにする。
-export async function load({ params }) {
-  const taskResult = await crud.getTaskResult(params.slug as string);
+import { getButtons } from '$lib/services/submission_status';
+//export let buttonColor: string
 
-  return { taskResult: taskResult };
+const buttons = await getButtons();
+
+// TODO: ユーザを識別できるようにする。
+export async function load({ locals, params }) {
+  const session = await locals.auth.validate();
+  if (!session) {
+    throw redirect(302, '/login');
+  }
+
+  const taskResult = await crud.getTaskResult(params.slug as string, session?.user.userId);
+  //console.log(taskResult)
+
+  return { taskResult: taskResult, buttons: buttons };
 }
 
 export const actions = {
-  default: async ({ request, params }) => {
+  default: async ({ request, params, locals }) => {
     const response = await request.formData();
     const slug = params.slug as string;
 
+    const session = await locals.auth.validate();
+    const userId = session?.user.userId;
+
     try {
       const submissionStatus = response.get('submissionStatus') as string;
-      await crud.updateTaskResult(slug, submissionStatus);
+      //console.log('update:', slug, userId, submissionStatus);
+      await crud.updateTaskResult(slug, submissionStatus, userId);
     } catch (error) {
       return fail(BAD_REQUEST, { slug });
     }

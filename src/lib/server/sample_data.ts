@@ -31,15 +31,18 @@ export const answers = [
     task_id: 'abc231_a',
     user_id: 'hogehoge',
     submission_status: 'wa',
+    status_id: '2',
   },
   {
     task_id: 'abc214_a',
     user_id: 'hogehoge',
     submission_status: 'ac',
+    status_id: '3',
   },
   {
     task_id: 'abc202_a',
     user_id: 'hogehoge',
     submission_status: 'ns',
+    status_id: '1',
   },
 ];

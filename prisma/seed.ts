@@ -21,7 +21,7 @@ import { tags } from './tags';
 import { task_tags } from './task_tags';
 import { answers } from './answers';
 import { submission_statuses } from './submission_statuses';
-// import { tasks } from './tasks_for_production';
+//import { tasks } from './tasks_for_production';
 
 const prisma = new PrismaClient();
 initialize({ prisma });
@@ -64,6 +64,7 @@ function addUsers() {
 // https://lucia-auth.com/reference/lucia/modules/utils/#generateluciapasswordhash
 async function addUser(user, password: string, userFactory, keyFactory) {
   const currentUser = await userFactory.createForConnect({
+    id: user.id,
     username: user.name,
     role: user.role,
   });
@@ -265,6 +266,7 @@ async function addSubmissionStatuses() {
 async function addSubmissionStatus(submission_status, submissionStatusFactory) {
   await submissionStatusFactory.create({
     id: submission_status.id,
+    status_name: submission_status.status_name,
     label_name: submission_status.label_name,
     image_path: submission_status.image_path,
     button_color: submission_status.button_color,
@@ -314,7 +316,7 @@ async function addAnswer(answer, taskAnswerFactory) {
     },
     //username: answer.username,
     user: {
-      connect: { username: answer.username },
+      connect: { id: answer.user_id },
     },
     status: {
       connect: { id: answer.status_id },

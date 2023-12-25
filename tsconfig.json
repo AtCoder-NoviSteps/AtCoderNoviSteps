@@ -11,6 +11,7 @@
     "isolatedModules": true,
     "moduleResolution": "node",
     "outDir": "build",
+
     "paths": {
       "@/*": ["src/*"],
       "$lib": ["src/lib"],
