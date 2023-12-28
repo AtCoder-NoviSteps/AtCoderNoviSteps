@@ -1,19 +1,14 @@
-const authorizeUrl = 'https://atcoder-auth.kenkoooo.com/api/authorize';
-const confirmUrl = 'https://atcoder-auth.kenkoooo.com/api/confirm ';
-const verifyUrl = 'https://atcoder-auth.kenkoooo.com/api/verify';
+const confirmUrl = 'https://prettyhappy.sakura.ne.jp/php_curl/index.php';
 
-export async function authorize(username: string) {
+import { sha256 } from '$lib/utils/hash';
+import { default as db } from '$lib/server/database';
+
+export async function confirm(username: string, atcoder_username: string) {
   try {
-    const postData = {
-      user_id: username,
-    };
-    const response = await fetch(authorizeUrl, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(postData),
-    });
+    const url = confirmUrl + '?user=' + atcoder_username;
+    const response = await fetch(url);
+
+    console.log(username);
     if (!response.ok) {
       throw new Error('Network response was not ok');
     }
@@ -25,50 +20,17 @@ export async function authorize(username: string) {
   }
 }
 
-export async function confirm(username: string, secret: string) {
-  try {
-    const postData = {
-      user_id: username,
-      secret: secret,
-    };
-    const response = await fetch(confirmUrl, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(postData),
-    });
-    if (!response.ok) {
-      throw new Error('Network response was not ok');
-    }
-    return response.json();
-  } catch (error) {
-    // Handle error
-    console.error('There was a problem fetching data:', error);
-    throw error;
-  }
-}
-
-export async function verify(username: string, token: string) {
-  try {
-    const postData = {
-      user_id: username,
-      token: token,
-    };
-    const response = await fetch(verifyUrl, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(postData),
-    });
-    if (!response.ok) {
-      throw new Error('Network response was not ok');
-    }
-    return response.json();
-  } catch (error) {
-    // Handle error
-    console.error('There was a problem fetching data:', error);
-    throw error;
-  }
+export async function generate(username: string) {
+  //ハッシュを作る
+  const date = new Date().toISOString();
+  const validationCode = await sha256(username + date);
+  const user = await db.user.update({
+    where: {
+      username: username,
+    },
+    data: {
+      atcoder_validation_code: validationCode,
+    },
+  });
+  return user.atcoder_validation_code;
 }

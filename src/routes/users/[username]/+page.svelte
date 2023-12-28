@@ -2,7 +2,7 @@
   export let data;
   let username = data.username;
   let isLoggedIn = data.isLoggedIn;
-  import UserForm from '$lib/components/UserForm.svelte';
+  import UserProfile from '$lib/components/UserProfile.svelte';
 </script>
 
-<UserForm {username} {isLoggedIn} />
+<UserProfile {username} {isLoggedIn} />

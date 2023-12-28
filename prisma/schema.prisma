@@ -34,10 +34,13 @@ model User {
 
   // here you can add custom fields for your user
   // e.g. name, email, username, roles, etc.
-  username   String   @unique
-  role       Roles    @default(USER)
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
+  username                  String   @unique
+  role                      Roles    @default(USER)
+  atcoder_validation_code   String   @default("")
+  atcoder_username          String   @default("")
+  atcoder_validation_status Boolean? @default(false)
+  created_at                DateTime @default(now())
+  updated_at                DateTime @updatedAt
 
   @@map("user")
 }
@@ -140,7 +143,7 @@ model SubmissionStatus {
   id String @id @unique
 
   user_id     String?
-  status_name String  @unique
+  status_name String
   is_AC       Boolean @default(false)
 
   label_name   String
