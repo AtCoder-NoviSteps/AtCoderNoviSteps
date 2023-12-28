@@ -75,10 +75,13 @@
     </p>
   </TabItem>
   <TabItem title="退会">
-    <p class="text-sm text-gray-500 dark:text-gray-400">
-      <b>Disabled:</b>
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
-      et dolore magna aliqua.
-    </p>
+    <form action="delete">
+      <Label class="space-y-2">
+        <span>Username</span>
+        <Input size="md" disabled readonly label="Username" bind:value={username} />
+      </Label>
+
+      <Button disabled readonly type="submit">Delete Account</Button>
+    </form>
   </TabItem>
 </Tabs>
