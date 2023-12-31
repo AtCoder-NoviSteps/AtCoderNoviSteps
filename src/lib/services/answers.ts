@@ -15,6 +15,8 @@ import { initialize } from '@quramy/prisma-fabbrica/lib/internal';
 //const prisma = new PrismaClient();
 import { default as prisma } from '$lib/server/database';
 import type { TaskAnswer } from '@prisma/client';
+import { sha256 } from '$lib/utils/hash';
+
 initialize({ prisma });
 
 //あとで入れ替える
@@ -44,14 +46,6 @@ export async function getAnswer(task_id: string, user_id: string) {
     return null;
   }
   return answers_from_db[0];
-}
-
-async function sha256(text: string) {
-  const uint8 = new TextEncoder().encode(text);
-  const digest = await crypto.subtle.digest('SHA-256', uint8);
-  return Array.from(new Uint8Array(digest))
-    .map((v) => v.toString(16).padStart(2, '0'))
-    .join('');
 }
 
 // TODO: createAnswer()
