@@ -72,7 +72,7 @@
   <form method="POST" action="?/reset">
     <Input size="md" type="hidden" name="username" bind:value={username} />
     <Input size="md" type="hidden" name="atcoder_username" bind:value={atcoder_username} />
-    <Button type="submit">Edit</Button>
+    <Button type="submit">Reset</Button>
   </form>
 {/if}
 
@@ -95,6 +95,6 @@
       <span>AtCoder Username:{atcoder_username}</span>
     </Label>
 
-    <Button type="submit">Edit</Button>
+    <Button type="submit">Reset</Button>
   </form>
 {/if}
