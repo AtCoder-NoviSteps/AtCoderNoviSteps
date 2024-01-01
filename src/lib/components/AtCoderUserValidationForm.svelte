@@ -92,7 +92,7 @@
     <!-- atcoder_usernameを表示（変更不可）-->
     <Input size="md" type="hidden" name="atcoder_username" bind:value={atcoder_username} />
     <Label class="space-y-2">
-      <span>Username:{atcoder_username}</span>
+      <span>AtCoder Username:{atcoder_username}</span>
     </Label>
 
     <Button type="submit">Edit</Button>

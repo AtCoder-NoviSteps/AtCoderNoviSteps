@@ -14,7 +14,7 @@ async function confirm(atcoder_username: string, atcoder_validation_code: string
 
     const jsonData = await response.json(); // JSONデータを取得して変数に格納
     //console.log(jsonData); // データをコンソールに出力（確認用）
-    console.log(jsonData.contents); // データをコンソールに出力（確認用）
+    //console.log(jsonData.contents); // データをコンソールに出力（確認用）
 
     //responseに、atcoder_validation_codeと一致するものがあれば、trueを返す
     return jsonData.contents?.some((item: string) => item === atcoder_validation_code);
@@ -94,6 +94,6 @@ export async function reset(username: string) {
     });
     return true;
   } catch (e) {
-    console.log('Can*t update user');
+    console.log('Cant update user');
   }
 }

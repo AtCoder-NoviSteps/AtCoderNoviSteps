@@ -25,6 +25,8 @@ export async function load({ locals }) {
       atcoder_username: user?.atcoder_username as string,
       atcoder_validationcode: user?.atcoder_validation_code as string,
       is_validated: user?.atcoder_validation_status as boolean,
+      message_type: '',
+      message: '',
     };
   } catch (e) {
     console.log("Can't find usrname:", session?.user.username);
@@ -36,33 +38,31 @@ export const actions: Actions = {
   generate: async ({ request }) => {
     console.log('users->actions->generate');
     const formData = await request.formData();
-    console.log(formData);
+    //console.log(formData);
     const username = formData.get('username')?.toString() as string;
     const atcoder_username = formData.get('atcoder_username')?.toString() as string;
 
-    console.log('ここにvalidationCodeを作成してデータベースに登録するコードを書きます');
+    //console.log('ここにvalidationCodeを作成してデータベースに登録するコードを書きます');
     const validationCode = await validationService.generate(username, atcoder_username);
-    console.log(validationCode);
+    //console.log(validationCode);
 
     return {
       success: true,
-      user: {
-        username: username,
-        atcoder_username: atcoder_username,
-        atcoder_validationcode: validationCode,
-      },
+      username: username,
+      atcoder_username: atcoder_username,
+      atcoder_validationcode: validationCode,
     };
   },
 
   validate: async ({ request }) => {
     console.log('users->actions->validate');
     const formData = await request.formData();
-    console.log(formData);
+    //console.log(formData);
     const username = formData.get('username')?.toString() as string;
     const atcoder_username = formData.get('atcoder_username')?.toString() as string;
     const atcoder_validationcode = formData.get('atcoder_validationcode')?.toString() as string;
 
-    console.log('ここにvalidationCodeを作成してデータベースに登録するコードを書きます');
+    //console.log('validateを呼び、AtCoderの所属欄とAPI呼び出した結果が一致しているかを確認');
     const is_validated = await validationService.validate(atcoder_username);
 
     return {
@@ -71,6 +71,8 @@ export const actions: Actions = {
         username: username,
         atcoder_username: atcoder_username,
         atcoder_validationcode: atcoder_validationcode,
+        message_type: 'green',
+        message: 'Successfuly validated.',
       },
     };
   },
@@ -78,21 +80,21 @@ export const actions: Actions = {
   reset: async ({ request }) => {
     console.log('users->actions->edit');
     const formData = await request.formData();
-    console.log(formData);
+    //console.log(formData);
     const username = formData.get('username')?.toString() as string;
     const atcoder_username = formData.get('atcoder_username')?.toString() as string;
 
-    console.log('ここに、AtCoderのユーザ名とValicationCodeをリセットするコードを書きます');
+    //console.log('AtCoderのユーザ名とValicationCodeをリセットする。');
     const validationCode = await validationService.reset(username);
-    console.log(validationCode);
+    //console.log(validationCode);
 
     return {
       success: true,
-      user: {
-        username: username,
-        atcoder_username: atcoder_username,
-        atcoder_validationcode: validationCode,
-      },
+      username: username,
+      atcoder_username: atcoder_username,
+      atcoder_validationcode: validationCode,
+      message_type: 'green',
+      message: 'Successfuly reset.',
     };
   },
 
@@ -103,17 +105,17 @@ export const actions: Actions = {
     const username = formData.get('username')?.toString() as string;
     const atcoder_username = formData.get('atcoder_username')?.toString() as string;
 
-    console.log('ここにvalidationCodeを作成してデータベースに登録するコードを書きます');
-    const validationCode = await validationService.generate(username, atcoder_username);
-    console.log(validationCode);
+    console.log('TOdoユーザを削除するコードを書きます');
+    //const validationCode = await validationService.generate(username, atcoder_username);
+    //console.log(validationCode);
 
     return {
       success: true,
-      user: {
-        username: username,
-        atcoder_username: atcoder_username,
-        atcoder_validationcode: validationCode,
-      },
+      username: username,
+      atcoder_username: atcoder_username,
+      atcoder_validationcode: false,
+      message_type: 'green',
+      message: 'Successfuly deleted.',
     };
   },
 };
