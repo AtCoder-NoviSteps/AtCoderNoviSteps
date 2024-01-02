@@ -16,7 +16,7 @@
   export let status: string;
 </script>
 
-{#if status == 'nothing'}
+{#if status === 'nothing'}
   <form method="POST" action="?/generate">
     <!-- hiddenでusernameを持つのは共通-->
     <Input size="md" type="hidden" name="username" bind:value={username} />
@@ -35,9 +35,7 @@
     </Label>
     <Button type="submit">Generate</Button>
   </form>
-{/if}
-
-{#if status == 'generated'}
+{:else if status == 'generated'}
   <form method="POST" action="?/validate">
     <p class="text-sm text-gray-500 dark:text-gray-400">
       <b>Status: Generated</b>
@@ -74,9 +72,7 @@
     <Input size="md" type="hidden" name="atcoder_username" bind:value={atcoder_username} />
     <Button type="submit">Reset</Button>
   </form>
-{/if}
-
-{#if status == 'validated'}
+{:else if status === 'validated'}
   <form method="POST" action="?/reset">
     <p class="text-sm text-gray-500 dark:text-gray-400">
       <b>Status: Validated</b>

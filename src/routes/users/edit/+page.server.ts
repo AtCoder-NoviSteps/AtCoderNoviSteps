@@ -7,6 +7,9 @@ import type { Actions } from './$types';
 
 import { redirect } from '@sveltejs/kit';
 
+//export let action_result = false;
+//export let action_result_message = "";
+
 export async function load({ locals }) {
   const session = await locals.auth.validate();
   if (!session) {
@@ -51,6 +54,7 @@ export const actions: Actions = {
       username: username,
       atcoder_username: atcoder_username,
       atcoder_validationcode: validationCode,
+      is_tab_atcoder: true,
     };
   },
 
@@ -63,7 +67,7 @@ export const actions: Actions = {
     const atcoder_validationcode = formData.get('atcoder_validationcode')?.toString() as string;
 
     //console.log('validateを呼び、AtCoderの所属欄とAPI呼び出した結果が一致しているかを確認');
-    const is_validated = await validationService.validate(atcoder_username);
+    const is_validated = await validationService.validate(username);
 
     return {
       success: is_validated,

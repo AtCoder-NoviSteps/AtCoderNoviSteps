@@ -19,7 +19,6 @@ import { sha256 } from '$lib/utils/hash';
 
 initialize({ prisma });
 
-//あとで入れ替える
 export async function getAnswers(user_id: string) {
   const answers_from_db = prisma.taskAnswer.findMany({
     where: {
@@ -32,6 +31,23 @@ export async function getAnswers(user_id: string) {
     answersMap.set(answer.task_id, answer);
   });
   return answersMap;
+}
+
+export async function getAnswersOrderedByUpdatedDesc(user_id: string): Promise<TaskAnswer[]> {
+  const answers_from_db = await prisma.taskAnswer.findMany({
+    where: {
+      user_id: { equals: user_id },
+    },
+    orderBy: {
+      updated_at: 'desc',
+    },
+    take: -1, // Reverse the list
+    include: {
+      task: true,
+    },
+  });
+
+  return answers_from_db;
 }
 
 export async function getAnswer(task_id: string, user_id: string) {
