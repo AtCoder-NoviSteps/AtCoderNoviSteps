@@ -39,7 +39,6 @@ export async function getTaskResults(userId: string): Promise<TaskResults> {
       taskResult.status_name = status.status_name;
       taskResult.submission_status_image_path = status.image_path;
       taskResult.is_ac = status.is_ac;
-      //console.log(status)
     }
 
     return taskResult;
@@ -49,7 +48,34 @@ export async function getTaskResults(userId: string): Promise<TaskResults> {
     taskResultsMap.set(userId, sampleTaskResults);
   }
 
-  //console.log(taskResultsMap.get(userId))
+  return Array.from(taskResultsMap.get(userId).values());
+}
+
+// TODO: Enable to fetch data from the database.
+export async function getTaskResultsOnlyResultExists(userId: string): Promise<TaskResults> {
+  const taskResultsMap = new Map();
+
+  // TODO: answerの降順にしたい
+
+  const tasks = await getTasks();
+  const answers = await answer_crud.getAnswers(userId);
+  const tasksHasAnswer = tasks.filter((task) => answers.has(task.task_id));
+  const sampleTaskResults = tasksHasAnswer.map((task: Task) => {
+    const taskResult = createDefaultTaskResult(userId, task);
+
+    const answer = answers.get(task.task_id);
+    const status = statusById.get(answer.status_id);
+    taskResult.status_name = status.status_name;
+    taskResult.submission_status_image_path = status.image_path;
+    taskResult.is_ac = status.is_ac;
+    taskResult.updated_at = answer.updated_at;
+
+    return taskResult;
+  });
+
+  if (!taskResultsMap.has(userId)) {
+    taskResultsMap.set(userId, sampleTaskResults);
+  }
 
   return Array.from(taskResultsMap.get(userId).values());
 }
@@ -66,11 +92,11 @@ export function createDefaultTaskResult(userId: string, task: Task): TaskResult 
     status_name: 'ns', // FIXME: Use const
     submission_status_image_path: 'ns.png',
     is_ac: false,
+    updated_at: new Date(),
   };
 
   return taskResult;
 }
-
 export async function getTaskResult(slug: string, userId: string) {
   // TODO: useIdを動的に変更できるようにする。
   //const userId = 'hogehoge';
