@@ -35,7 +35,7 @@
     </Label>
     <Button type="submit">Generate</Button>
   </form>
-{:else if status == 'generated'}
+{:else if status === 'generated'}
   <form method="POST" action="?/validate">
     <p class="text-sm text-gray-500 dark:text-gray-400">
       <b>Status: Generated</b>
