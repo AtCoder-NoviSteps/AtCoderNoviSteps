@@ -6,7 +6,7 @@
   export let isLoggedIn = false;
 </script>
 
-{#if username.length == 0}
+{#if username.length === 0}
   This user is not found.
 {:else}
   <div class=" flex flex-wrap justify-center space-x-4 rtl:space-x-reverse">
