@@ -25,6 +25,7 @@ export async function load({ locals, params }) {
     return {
       userId: user?.id as string,
       username: user?.username as string,
+      atcoder_username: user?.atcoder_username as string,
       role: user?.role as Roles,
       isLoggedIn: (session?.user.userId === user?.id) as boolean,
       taskResults: taskResults,

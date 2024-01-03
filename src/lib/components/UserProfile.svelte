@@ -2,7 +2,7 @@
   import { Table, TableBody, TableBodyCell, TableBodyRow, Avatar, Button } from 'flowbite-svelte';
 
   export let username = '';
-  export let atcoder_id = '';
+  export let atcoder_username = '';
   export let isLoggedIn = false;
 </script>
 
@@ -20,8 +20,8 @@
         <TableBodyCell>{username}</TableBodyCell>
       </TableBodyRow>
       <TableBodyRow>
-        <TableBodyCell>AtCoderId</TableBodyCell>
-        <TableBodyCell>{atcoder_id}</TableBodyCell>
+        <TableBodyCell>AtCoder username</TableBodyCell>
+        <TableBodyCell>{atcoder_username}</TableBodyCell>
       </TableBodyRow>
     </TableBody>
   </Table>
