@@ -21,9 +21,7 @@
     <TableHeadCell class="w-1/6">提出状況</TableHeadCell>
     <TableHeadCell class="w-1/6">コンテスト名</TableHeadCell>
     <TableHeadCell class="w-1/2">問題名</TableHeadCell>
-    <TableHeadCell class="w-1/6">
-      <span class="sr-only">編集</span>
-    </TableHeadCell>
+    <TableHeadCell class="w-1/6">更新時間</TableHeadCell>
   </TableHead>
   <TableBody tableBodyClass="divide-y">
     {#each taskResults as taskResult}
@@ -53,7 +51,7 @@
             {taskResult.title}
           </a>
         </TableBodyCell>
-        <TableBodyCell>編集</TableBodyCell>
+        <TableBodyCell>{taskResult.updated_at.toLocaleString()}</TableBodyCell>
       </TableBodyRow>
     {/each}
   </TableBody>

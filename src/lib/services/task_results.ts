@@ -68,6 +68,7 @@ export async function getTaskResultsOnlyResultExists(userId: string): Promise<Ta
     taskResult.status_name = status.status_name;
     taskResult.submission_status_image_path = status.image_path;
     taskResult.is_ac = status.is_ac;
+    taskResult.updated_at = answer.updated_at;
 
     return taskResult;
   });
@@ -91,6 +92,7 @@ export function createDefaultTaskResult(userId: string, task: Task): TaskResult 
     status_name: 'ns', // FIXME: Use const
     submission_status_image_path: 'ns.png',
     is_ac: false,
+    updated_at: new Date(),
   };
 
   return taskResult;

@@ -7,8 +7,11 @@
   import TaskListSorted from '$lib/components/TaskListSorted.svelte';
 </script>
 
-<div class="container mx-auto w-5/6">
+<div class="container mx-auto w-1/2">
   <UserProfile {username} {isLoggedIn} />
+</div>
+
+<div class="container mx-auto w-5/6">
   {#if taskResults}
     <h1 class="text-3xl">Problems</h1>
     <TaskListSorted {taskResults} />
