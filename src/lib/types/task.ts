@@ -9,6 +9,14 @@ export interface Task {
   grade: string;
 }
 
+export interface ImportTask {
+  id: string;
+  contest_id: string;
+  problem_index: string;
+  task_id: string;
+  title: string;
+}
+
 export type Tasks = Task[];
 
 // See:
