@@ -122,8 +122,8 @@ devDependencies:
     specifier: 3.6.2
     version: 3.6.2(postcss@8.4.32)(svelte@4.2.8)
   sveltekit-superforms:
-    specifier: 1.13.1
-    version: 1.13.1(@sveltejs/kit@1.30.3)(svelte@4.2.8)(zod@3.22.4)
+    specifier: 1.13.2
+    version: 1.13.2(@sveltejs/kit@1.30.3)(svelte@4.2.8)(zod@3.22.4)
   tslib:
     specifier: 2.6.2
     version: 2.6.2
@@ -5064,8 +5064,8 @@ packages:
       magic-string: 0.30.5
       periscopic: 3.1.0
 
-  /sveltekit-superforms@1.13.1(@sveltejs/kit@1.30.3)(svelte@4.2.8)(zod@3.22.4):
-    resolution: {integrity: sha512-aWHAV6t6+7g37IGFNLRtbRIoqfC3a56Hf4/tTUNFZfwO2mOQGfeMb49WWBLdZZTrFRPGngfNRUxQzeoO3GspnQ==}
+  /sveltekit-superforms@1.13.2(@sveltejs/kit@1.30.3)(svelte@4.2.8)(zod@3.22.4):
+    resolution: {integrity: sha512-5PKnL1v+9P3G6HPissMlAyV7bNjvrPAkfkAEgJcrCH5lSkaw23Wf8obUMD4EDwLp3b5d6J7JPQCR6hYUsi2BLg==}
     peerDependencies:
       '@sveltejs/kit': 1.x || 2.x
       svelte: 3.x || 4.x
