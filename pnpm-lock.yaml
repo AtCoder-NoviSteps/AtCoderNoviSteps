@@ -98,8 +98,8 @@ devDependencies:
     specifier: ^8.0.0
     version: 8.0.3
   jsdom:
-    specifier: ^23.1.0
-    version: 23.1.0
+    specifier: ^23.2.0
+    version: 23.2.0
   lint-staged:
     specifier: ^15.2.0
     version: 15.2.0
@@ -135,7 +135,7 @@ devDependencies:
     version: 4.5.1(@types/node@14.18.33)
   vitest:
     specifier: 0.34.6
-    version: 0.34.6(@vitest/ui@0.34.7)(jsdom@23.1.0)(playwright@1.40.1)
+    version: 0.34.6(@vitest/ui@0.34.7)(jsdom@23.2.0)(playwright@1.40.1)
   zod:
     specifier: 3.22.4
     version: 3.22.4
@@ -161,6 +161,14 @@ packages:
     dependencies:
       '@jridgewell/gen-mapping': 0.3.3
       '@jridgewell/trace-mapping': 0.3.20
+
+  /@asamuzakjp/dom-selector@2.0.1:
+    resolution: {integrity: sha512-QJAJffmCiymkv6YyQ7voyQb5caCth6jzZsQncYCpHXrJ7RqdYG5y43+is8mnFcYubdOkr7cn1+na9BdFMxqw7w==}
+    dependencies:
+      bidi-js: 1.0.3
+      css-tree: 2.3.1
+      is-potential-custom-element-name: 1.0.1
+    dev: true
 
   /@babel/code-frame@7.22.13:
     resolution: {integrity: sha512-XktuhWlJ5g+3TJXc5upd9Ks1HutSArik6jf2eAjYFyIOf4ej3RN+184cZbzDvbPnuTJIUhPKKJE3cIsYTiAT3w==}
@@ -846,7 +854,7 @@ packages:
       dom-accessibility-api: 0.6.3
       lodash: 4.17.21
       redent: 3.0.0
-      vitest: 0.34.6(@vitest/ui@0.34.7)(jsdom@23.1.0)(playwright@1.40.1)
+      vitest: 0.34.6(@vitest/ui@0.34.7)(jsdom@23.2.0)(playwright@1.40.1)
     dev: true
 
   /@testing-library/svelte@4.0.5(svelte@4.2.8):
@@ -1345,7 +1353,7 @@ packages:
       std-env: 3.6.0
       test-exclude: 6.0.0
       v8-to-istanbul: 9.2.0
-      vitest: 0.34.6(@vitest/ui@0.34.7)(jsdom@23.1.0)(playwright@1.40.1)
+      vitest: 0.34.6(@vitest/ui@0.34.7)(jsdom@23.2.0)(playwright@1.40.1)
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -1392,7 +1400,7 @@ packages:
       pathe: 1.1.1
       picocolors: 1.0.0
       sirv: 2.0.3
-      vitest: 0.34.6(@vitest/ui@0.34.7)(jsdom@23.1.0)(playwright@1.40.1)
+      vitest: 0.34.6(@vitest/ui@0.34.7)(jsdom@23.2.0)(playwright@1.40.1)
     dev: true
 
   /@vitest/utils@0.34.6:
@@ -1657,6 +1665,12 @@ packages:
 
   /balanced-match@1.0.2:
     resolution: {integrity: sha512-3oSeUO0TMV67hN1AmbXsK4yaqU7tjiHlbxRDZOpH0KW9+CeX4bRAaX0Anxt0tx2MrpRpWwQaPwIlISEJhYU5Pw==}
+
+  /bidi-js@1.0.3:
+    resolution: {integrity: sha512-RKshQI1R3YQ+n9YJz2QQ147P66ELpa1FQEg20Dk8oW9t2KgLbpDLLp9aGZ7y8WHSshDknG0bknqGw5/tyCs5tw==}
+    dependencies:
+      require-from-string: 2.0.2
+    dev: true
 
   /binary-extensions@2.2.0:
     resolution: {integrity: sha512-jDctJ/IVQbZoJykoeHbhXpOlNBqGNcwXJKJog42E5HDPUwQTSdjCHdihjj0DlnheQ7blbT6dHOafNAiS8ooQKA==}
@@ -3477,8 +3491,8 @@ packages:
       argparse: 2.0.1
     dev: true
 
-  /jsdom@23.1.0:
-    resolution: {integrity: sha512-wRscu8dBFxi7O65Cvi0jFRDv0Qa7XEHPix8Qg/vlXHLAMQsRWV1EDeQHBermzXf4Dt7JtFgBLbva3iTcBZDXEQ==}
+  /jsdom@23.2.0:
+    resolution: {integrity: sha512-L88oL7D/8ufIES+Zjz7v0aes+oBMh2Xnh3ygWvL0OaICOomKEPKuPnIfBJekiXr+BHbbMjrWn/xqrDQuxFTeyA==}
     engines: {node: '>=18'}
     peerDependencies:
       canvas: ^2.11.2
@@ -3486,6 +3500,7 @@ packages:
       canvas:
         optional: true
     dependencies:
+      '@asamuzakjp/dom-selector': 2.0.1
       cssstyle: 4.0.1
       data-urls: 5.0.0
       decimal.js: 10.4.3
@@ -3494,7 +3509,6 @@ packages:
       http-proxy-agent: 7.0.0
       https-proxy-agent: 7.0.2
       is-potential-custom-element-name: 1.0.1
-      nwsapi: 2.2.7
       parse5: 7.1.2
       rrweb-cssom: 0.6.0
       saxes: 6.0.0
@@ -3946,10 +3960,6 @@ packages:
       console-control-strings: 1.1.0
       gauge: 3.0.2
       set-blocking: 2.0.0
-
-  /nwsapi@2.2.7:
-    resolution: {integrity: sha512-ub5E4+FBPKwAZx0UwIQOjYWGHTEq5sPqHQNRN8Z9e4A7u3Tj1weLJsL59yH9vmvqEtBHaOmT6cYQKIZOxp35FQ==}
-    dev: true
 
   /object-assign@4.1.1:
     resolution: {integrity: sha512-rJgTQnkUnH1sFw8yT6VSU3zD3sWmu6sZhIseY8VX+GRu3P6F7Fu+JNDoXfklElbLJSnc3FUQHVe4cU5hj+BcUg==}
@@ -4527,7 +4537,6 @@ packages:
   /require-from-string@2.0.2:
     resolution: {integrity: sha512-Xf0nWe6RseziFMu+Ap9biiUbmplq6S9/p+7w7YXP/JBHhrUDDUhwa+vANyubuqfZWTveU//DYVGsDG7RKL/vEw==}
     engines: {node: '>=0.10.0'}
-    dev: false
 
   /requires-port@1.0.0:
     resolution: {integrity: sha512-KigOCHcocU3XODJxsu8i/j8T9tzT4adHiecwORRQ0ZZFcp7ahwXuRU1m+yuO90C5ZUyGeGfocHDI14M3L3yDAQ==}
@@ -5604,7 +5613,7 @@ packages:
       vite: 4.5.1(@types/node@14.18.33)
     dev: true
 
-  /vitest@0.34.6(@vitest/ui@0.34.7)(jsdom@23.1.0)(playwright@1.40.1):
+  /vitest@0.34.6(@vitest/ui@0.34.7)(jsdom@23.2.0)(playwright@1.40.1):
     resolution: {integrity: sha512-+5CALsOvbNKnS+ZHMXtuUC7nL8/7F1F2DnHGjSsszX8zCjWSSviphCb/NuS9Nzf4Q03KyyDRBAXhF/8lffME4Q==}
     engines: {node: '>=v14.18.0'}
     hasBin: true
@@ -5649,7 +5658,7 @@ packages:
       cac: 6.7.14
       chai: 4.3.10
       debug: 4.3.4
-      jsdom: 23.1.0
+      jsdom: 23.2.0
       local-pkg: 0.4.3
       magic-string: 0.30.5
       pathe: 1.1.1
