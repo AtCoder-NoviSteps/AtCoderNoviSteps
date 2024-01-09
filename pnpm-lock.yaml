@@ -42,8 +42,8 @@ dependencies:
     specifier: 1.14.0
     version: 1.14.0
   tailwindcss:
-    specifier: 3.4.0
-    version: 3.4.0
+    specifier: 3.4.1
+    version: 3.4.1
   vercel:
     specifier: 33.0.2
     version: 33.0.2
@@ -93,7 +93,7 @@ devDependencies:
     version: 0.44.21(svelte@4.2.8)
   flowbite-svelte-icons:
     specifier: 0.4.4
-    version: 0.4.4(svelte@4.2.8)(tailwind-merge@1.14.0)(tailwindcss@3.4.0)
+    version: 0.4.4(svelte@4.2.8)(tailwind-merge@1.14.0)(tailwindcss@3.4.1)
   husky:
     specifier: ^8.0.0
     version: 8.0.3
@@ -2813,7 +2813,7 @@ packages:
     resolution: {integrity: sha512-36yxDn5H7OFZQla0/jFJmbIKTdZAQHngCedGxiMmpNfEZM0sdEeT+WczLQrjK6D7o2aiyLYDnkw0R3JK0Qv1RQ==}
     dev: true
 
-  /flowbite-svelte-icons@0.4.4(svelte@4.2.8)(tailwind-merge@1.14.0)(tailwindcss@3.4.0):
+  /flowbite-svelte-icons@0.4.4(svelte@4.2.8)(tailwind-merge@1.14.0)(tailwindcss@3.4.1):
     resolution: {integrity: sha512-fOZri6HYYyo13olXQzvoid19hlYR/HjzQobpzBPkj8QseCJ9R1uWR7bNlhPl5vFCElqcfm3UooYiwT4rKKiqzQ==}
     peerDependencies:
       svelte: ^3.54.0 || ^4.0.0
@@ -2822,7 +2822,7 @@ packages:
     dependencies:
       svelte: 4.2.8
       tailwind-merge: 1.14.0
-      tailwindcss: 3.4.0
+      tailwindcss: 3.4.1
     dev: true
 
   /flowbite-svelte@0.44.21(svelte@4.2.8):
@@ -5186,8 +5186,8 @@ packages:
       '@babel/runtime': 7.23.2
     dev: true
 
-  /tailwindcss@3.4.0:
-    resolution: {integrity: sha512-VigzymniH77knD1dryXbyxR+ePHihHociZbXnLZHUyzf2MMs2ZVqlUrZ3FvpXP8pno9JzmILt1sZPD19M3IxtA==}
+  /tailwindcss@3.4.1:
+    resolution: {integrity: sha512-qAYmXRfk3ENzuPBakNK0SRrUDipP8NQnEY6772uDhflcQz5EhRdD7JNZxyrFHVQNCwULPBn6FNPp9brpO7ctcA==}
     engines: {node: '>=14.0.0'}
     hasBin: true
     dependencies:
