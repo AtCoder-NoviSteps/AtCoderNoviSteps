@@ -1,9 +1,11 @@
 <script lang="ts">
+  import { Tabs, TabItem } from 'flowbite-svelte';
+
   import type { TaskResults, TaskResult } from '$lib/types/task';
   import TaskList from '$lib/components/TaskList.svelte';
+  import TaskTable from '$lib/components/TaskTable.svelte';
   import { TaskGrade, taskGradeValues } from '$lib/types/task';
   import { getTaskGradeColor } from '$lib/utils/task';
-
   export let data;
 
   let taskResults: TaskResults = data.taskResults;
@@ -31,17 +33,42 @@
 </script>
 
 <!-- TODO: Searchを追加 -->
-<!-- TODO: コンテスト種類をトグルボタンで切り替えられるようにする -->
-<!-- TODO: Pendingは、Adminのみ表示 -->
 <div class="container mx-auto w-5/6">
   <h1 class="text-3xl">Problems</h1>
-  {#each taskGradeValues as taskGrade}
-    {#if taskResultsForEachGrade.get(taskGrade).length > 0}
-      <TaskList
-        grade={getTaskGradeLabel(taskGrade)}
-        gradeColor={getTaskGradeColor(taskGrade)}
-        taskResults={taskResultsForEachGrade.get(taskGrade)}
-      />
-    {/if}
-  {/each}
+
+  <!-- See: -->
+  <!-- https://flowbite-svelte.com/docs/components/tabs -->
+  <Tabs style="underline" contentClass="bg-white">
+    <TabItem>
+      <span slot="title" class="text-lg">Latest</span>
+      <div class="m-4">Comming Soon.</div>
+    </TabItem>
+
+    <TabItem open>
+      <span slot="title" class="text-lg">Grade</span>
+
+      {#each taskGradeValues as taskGrade}
+        <!-- TODO: Pendingは、Adminのみ表示 -->
+        {#if taskResultsForEachGrade.get(taskGrade).length > 0}
+          <TaskList
+            grade={getTaskGradeLabel(taskGrade)}
+            gradeColor={getTaskGradeColor(taskGrade)}
+            taskResults={taskResultsForEachGrade.get(taskGrade)}
+          />
+        {/if}
+      {/each}
+    </TabItem>
+
+    <!-- TODO: コンテスト種類をトグルボタンで切り替えられるようにする -->
+    <TabItem>
+      <span slot="title" class="text-lg">Table</span>
+
+      <TaskTable {taskResults} />
+    </TabItem>
+
+    <TabItem>
+      <span slot="title" class="text-lg">Tags</span>
+      <div class="m-4">Comming Soon.</div>
+    </TabItem>
+  </Tabs>
 </div>
