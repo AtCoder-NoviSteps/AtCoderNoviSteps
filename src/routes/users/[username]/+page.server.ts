@@ -16,6 +16,18 @@ export async function load({ locals, params }) {
   try {
     const user = await userService.getUser(params.username as string);
     console.log(user?.id);
+
+    if (!user) {
+      return {
+        userId: params.username as string,
+        username: '' as string,
+        atcoder_username: '' as string,
+        role: '' as string,
+        isLoggedIn: false as boolean,
+        taskResults: null,
+      };
+    }
+
     const taskResults = await taskResultService.getTaskResultsOnlyResultExists(user?.id as string);
     taskResults.sort((firstObject: TaskResult, secondObject: TaskResult) =>
       firstObject.updated_at > secondObject.updated_at ? -1 : 1,

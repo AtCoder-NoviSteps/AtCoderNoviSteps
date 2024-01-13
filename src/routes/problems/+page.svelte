@@ -7,6 +7,7 @@
   export let data;
 
   let taskResults: TaskResults = data.taskResults;
+  let isAdmin: boolean = data.isAdmin;
 
   let taskResultsForEachGrade = new Map();
 
@@ -41,6 +42,7 @@
         grade={getTaskGradeLabel(taskGrade)}
         gradeColor={getTaskGradeColor(taskGrade)}
         taskResults={taskResultsForEachGrade.get(taskGrade)}
+        {isAdmin}
       />
     {/if}
   {/each}

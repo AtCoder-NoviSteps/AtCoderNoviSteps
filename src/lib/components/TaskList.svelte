@@ -19,6 +19,7 @@
   export let grade: string;
   export let gradeColor: string;
   export let taskResults: TaskResults;
+  export let isAdmin: boolean; // Admin権限がある場合は、編集リンクを表示する
 
   // TODO: ユーザの設定に応じて、ACかどうかの判定を変更できるようにする
   // TODO: 別ファイルに切り出す
@@ -84,7 +85,16 @@
                 {taskResult.title}
               </a>
             </TableBodyCell>
-            <TableBodyCell>編集</TableBodyCell>
+            <TableBodyCell>
+              {#if isAdmin}
+                <a
+                  href="/tasks/{taskResult.task_id}"
+                  class="font-medium text-primary-600 hover:underline dark:text-primary-500"
+                >
+                  編集
+                </a>
+              {/if}
+            </TableBodyCell>
           </TableBodyRow>
         {/each}
       </TableBody>
