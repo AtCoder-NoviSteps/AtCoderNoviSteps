@@ -1,7 +1,9 @@
 <script lang="ts">
   import { enhance } from '$app/forms';
-  import { Button, Breadcrumb, BreadcrumbItem, Img } from 'flowbite-svelte';
+  import { Breadcrumb, BreadcrumbItem, Img } from 'flowbite-svelte';
+
   import { ATCODER_BASE_CONTEST_URL } from '$lib/constants/urls';
+  import SubmissionStatusButton from '$lib/components/SubmissionStatusButton.svelte';
   import ExternalLinkIcon from '$lib/components/ExternalLinkIcon.svelte';
 
   export let data;
@@ -50,22 +52,18 @@
 
   <!-- TODO: Add face icons. -->
   <!-- HACK: flowbite-svelte-icons has few face icon. -->
-  <!-- FIXME: ボタンの色をAtCoder本家に合わせる -->
   <!-- TODO: Add tooltips to buttons for submission results -->
   <!-- See: https://tailwindcss.com/docs/align-items -->
   <!-- See: https://bobbyhadz.com/blog/typescript-type-string-is-not-assignable-to-type -->
   <form method="post" class="flex flex-col items-center" use:enhance>
     {#each buttons as button}
-      <Button
-        name="submissionStatus"
+      <SubmissionStatusButton
         value={button.status_name}
-        color={button.button_color}
-        shadow
-        class="w-full max-w-md md:max-w-xl m-3"
-        type="submit"
-      >
-        {button.label_name}
-      </Button>
+        textColor={button.text_color}
+        bgColor={button.button_color}
+        bgColorOnHover={button.button_color_on_hover}
+        labelName={button.label_name}
+      />
     {/each}
   </form>
 </div>

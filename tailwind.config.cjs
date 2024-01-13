@@ -54,6 +54,19 @@ const config = {
           bronze: '',
           silver: '',
           gold: '',
+          ns: '#ffffff',
+          wa: {
+            default: '#f0ad4e',
+            hover: '#d97706',
+          },
+          ac: {
+            default: '#5cb85c',
+            hover: '#449d44',
+            with_editorial: {
+              default: '#00aeef',
+              hover: '#21a0db',
+            },
+          },
         },
       },
     },

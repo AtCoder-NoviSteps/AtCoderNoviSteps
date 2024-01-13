@@ -13,7 +13,7 @@
   let message_type = data.message_type;
 
   export let status = 'nothing';
-  if (data.is_validated == true) {
+  if (data.is_validated === true) {
     status = 'validated';
   }
   if (data.atcoder_username.length > 0 && data.atcoder_validationcode.length > 0) {
@@ -21,12 +21,12 @@
   }
 </script>
 
-{#if message_type == 'default'}
+{#if message_type === 'default'}
   <Alert>
     <span class="font-medium">Message:</span>
     {message}
   </Alert>
-{:else if message_type == 'green'}
+{:else if message_type === 'green'}
   <Alert color="green">
     <span class="font-medium">Success alert!</span>
     Change a few things up and try submitting again.
@@ -61,7 +61,7 @@
   <TabItem title="AtCoder連携">
     <AtCoderUserValidationForm {username} {atcoder_username} {atcoder_validationcode} {status} />
   </TabItem>
-  {#if atcoder_is_validated == true}
+  {#if atcoder_is_validated === true}
     <TabItem>
       <span slot="title" class="text-gray-400 dark:text-gray-500">インポート</span>
       <p class="text-sm text-gray-500 dark:text-gray-400">
