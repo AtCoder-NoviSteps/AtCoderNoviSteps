@@ -1,10 +1,13 @@
-import { redirect } from '@sveltejs/kit';
+import { redirect, type Actions } from '@sveltejs/kit';
 
 //import type { Roles } from '$lib/types/user';
 import type { Contest, Task, ImportTask } from '$lib/types/task';
 import * as taskService from '$lib/services/tasks';
 import * as userService from '$lib/services/users';
 import * as problemApiService from '$lib/services/problemsApiService';
+
+import { sha256 } from '$lib/utils/hash';
+
 import { Roles } from '$lib/types/user';
 
 export async function load({ locals }) {
@@ -56,6 +59,7 @@ export async function load({ locals }) {
           importTaskJson.contest_id == contest_id && !taskMap.has(importTaskJson.id),
       ),
     );
+
     //const ary = unregisteredTasksInContest.get(contest_id) ?? []
     //if (ary.length > 0){
     //  filteredContests.push(importContestsJson[i])
@@ -84,3 +88,37 @@ export async function load({ locals }) {
     importContests: importContests,
   };
 }
+
+export const actions: Actions = {
+  create: async ({ request }) => {
+    try {
+      console.log('users->actions->generate');
+      const formData = await request.formData();
+      console.log(formData);
+      const contest_id = formData.get('contest_id')?.toString() as string;
+
+      const tasks = await problemApiService.getTasks();
+
+      //console.log(contest_id)
+      //console.log(tasks[0])
+
+      const tasksByContestId = tasks.filter((task: ImportTask) => task.contest_id === contest_id);
+
+      //console.log(tasksByContestId)
+
+      tasksByContestId.map(async (task: ImportTask) => {
+        const id = (await sha256(contest_id + task.title)) as string;
+        //console.log(id)
+        await taskService.createTask(id, task.id, task.contest_id, task.problem_index, task.title);
+      });
+    } catch {
+      return {
+        success: false,
+      };
+    }
+
+    return {
+      success: true,
+    };
+  },
+};
