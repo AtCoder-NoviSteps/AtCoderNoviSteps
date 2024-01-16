@@ -8,6 +8,7 @@
     TableHeadCell,
     Button,
     Label,
+    Input,
   } from 'flowbite-svelte';
 
   import type { Contest } from '$lib/types/task';
@@ -56,7 +57,11 @@
             {/each}
           </TableBodyCell>
           <TableBodyCell>
-            <Button>インポート</Button>
+            <form method="POST" action="?/create">
+              <Input size="md" type="hidden" name="contest_id" bind:value={importContest.id} />
+
+              <Button type="submit">インポート</Button>
+            </form>
           </TableBodyCell>
         </TableBodyRow>
       {/if}
