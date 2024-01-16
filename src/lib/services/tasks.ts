@@ -22,8 +22,26 @@ export async function getTask(task_id: string): Promise<Task[]> {
   return task;
 }
 
-// TODO: createTask()
+export async function createTask(
+  id: string,
+  task_id: string,
+  contest_id: string,
+  task_table_index: string,
+  title: string,
+) {
+  const task = await db.task.create({
+    data: {
+      id: id,
+      task_id: task_id,
+      contest_id: contest_id,
+      //contest_type: contest_type,
+      task_table_index: task_table_index,
+      title: title,
+    },
+  });
 
+  console.log(task);
+}
 export async function updateTask(task_id: string, task_grade: TaskGrade) {
   const task = await db.task.update({
     where: { task_id: task_id },
