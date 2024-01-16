@@ -43,7 +43,7 @@
     "eslint": "8.56.0",
     "eslint-config-prettier": "9.1.0",
     "eslint-plugin-svelte": "2.35.1",
-    "flowbite-svelte": "0.44.21",
+    "flowbite-svelte": "0.44.22",
     "flowbite-svelte-icons": "0.4.4",
     "husky": "^8.0.0",
     "jsdom": "^23.2.0",
