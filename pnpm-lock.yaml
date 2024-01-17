@@ -53,8 +53,8 @@ devDependencies:
     specifier: 1.41.0
     version: 1.41.0
   '@quramy/prisma-fabbrica':
-    specifier: 2.0.2
-    version: 2.0.2(@prisma/client@5.8.1)(typescript@5.3.3)
+    specifier: 2.1.0
+    version: 2.1.0(@prisma/client@5.8.1)(typescript@5.3.3)
   '@sveltejs/adapter-auto':
     specifier: 2.1.1
     version: 2.1.1(@sveltejs/kit@1.30.3)
@@ -737,8 +737,8 @@ packages:
     resolution: {integrity: sha512-woHCFsEQ8DyYT9mTlO++iWSw9WP7cVtH2d3P4VQ521qQlPCUpozEbFszyCLkRJPXcGi4ci9J6v4mw/v5RsdDzA==}
     dev: true
 
-  /@quramy/prisma-fabbrica@2.0.2(@prisma/client@5.8.1)(typescript@5.3.3):
-    resolution: {integrity: sha512-Tlmvx/Ah3dhRNHsI+/8TM4Sh2KeaqekF6KU8vTn+YzFyegTLHs0GsriBTDWHSGq40aQrDlMtz6SdWO+U0ml0kQ==}
+  /@quramy/prisma-fabbrica@2.1.0(@prisma/client@5.8.1)(typescript@5.3.3):
+    resolution: {integrity: sha512-9vUmDC+ZkaixWq8w86PTdNducHN5uIBdU/li1KGu1MIH5W3ZYO74QJUTbDsH06I8fZN1orlkbv1W9TWNG3Bzkg==}
     hasBin: true
     peerDependencies:
       '@prisma/client': ^5.0.0
