@@ -54,6 +54,10 @@ export const TaskGrade: { [key in TaskGradeOrigin]: key } = {
   D6: 'D6',
 } as const;
 
+export function getTaskGrade(taskGrade: string): TaskGradeOrigin | undefined {
+  return TaskGrade[taskGrade as TaskGradeOrigin];
+}
+
 // Re-exporting the original type with the original name.
 export type TaskGrade = TaskGradeOrigin;
 

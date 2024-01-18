@@ -1,7 +1,7 @@
 import { redirect, type Actions } from '@sveltejs/kit';
 
 //import type { Roles } from '$lib/types/user';
-import type { Contest, Task, ImportTask } from '$lib/types/task';
+import { type Contest, type Task, type ImportTask, TaskGrade, getTaskGrade } from '$lib/types/task';
 import * as taskService from '$lib/services/tasks';
 import * as userService from '$lib/services/users';
 import * as problemApiService from '$lib/services/problemsApiService';
@@ -99,16 +99,10 @@ export const actions: Actions = {
 
       const tasks = await problemApiService.getTasks();
 
-      //console.log(contest_id)
-      //console.log(tasks[0])
-
       const tasksByContestId = tasks.filter((task: ImportTask) => task.contest_id === contest_id);
-
-      //console.log(tasksByContestId)
 
       tasksByContestId.map(async (task: ImportTask) => {
         const id = (await sha256(contest_id + task.title)) as string;
-        //console.log(id)
         await taskService.createTask(id, task.id, task.contest_id, task.problem_index, task.title);
       });
     } catch {
@@ -120,5 +114,53 @@ export const actions: Actions = {
     return {
       success: true,
     };
+  },
+
+  update: async ({ request }) => {
+    try {
+      console.log('users->actions->generate');
+      const formData = await request.formData();
+      console.log(formData);
+      const task_id = formData.get('task_id')?.toString();
+
+      const task_grade_str: string | null = formData.get('task_grade')?.toString() || '';
+
+      //POSTされてこなかった場合は抜ける
+      if (task_grade_str === '') {
+        return {
+          success: true,
+        };
+      }
+
+      // Assuming getTaskGrade function is defined as mentioned before
+      const task_grade: TaskGrade | undefined = task_grade_str
+        ? getTaskGrade(task_grade_str)
+        : TaskGrade.PENDING;
+
+      if (!task_id || task_grade === undefined) {
+        return {
+          success: false,
+        };
+      }
+
+      await taskService.updateTask(task_id, task_grade);
+      const contest_id = formData.get('contest_id')?.toString() as string;
+
+      const tasks = await problemApiService.getTasks();
+
+      const tasksByContestId = tasks.filter((task: ImportTask) => task.contest_id === contest_id);
+
+      tasksByContestId.map(async (task: ImportTask) => {
+        const id = (await sha256(contest_id + task.title)) as string;
+        console.log(id);
+        await taskService.createTask(id, task.id, task.contest_id, task.problem_index, task.title);
+      });
+    } catch {
+      return {
+        success: false,
+      };
+    }
+
+    throw redirect(301, '/problems/');
   },
 };
