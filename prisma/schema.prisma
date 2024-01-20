@@ -9,6 +9,15 @@ generator client {
 }
 
 // See:
+// https://dev.classmethod.jp/articles/prisma_er_diagram_auto_generation/
+generator erd {
+  provider                  = "prisma-erd-generator"
+  theme                     = "forest"
+  output                    = "ERD.md"
+  includeRelationFromFields = true
+}
+
+// See:
 // https://github.com/Quramy/prisma-fabbrica
 generator fabbrica {
   provider = "prisma-fabbrica"
