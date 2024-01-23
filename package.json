@@ -73,7 +73,7 @@
     "flowbite": "2.2.1",
     "lucia": "2.7.6",
     "playwright": "^1.41.0",
-    "pnpm": "8.14.1",
+    "pnpm": "8.14.2",
     "prisma-erd-generator": "^1.11.2",
     "svelte-add": "2023.9.17-0.0",
     "tailwind-merge": "1.14.0",
