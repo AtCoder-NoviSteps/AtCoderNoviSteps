@@ -20,6 +20,22 @@
     );
   });
 
+  const countTasks = (taskGrade: TaskGrade) => {
+    return taskResultsForEachGrade.get(taskGrade).length;
+  };
+
+  const isShowTaskList = (isAdmin: boolean, taskGrade: TaskGrade): boolean => {
+    if (isAdmin) {
+      return true;
+    }
+
+    if (taskGrade !== TaskGrade.PENDING) {
+      return true;
+    }
+
+    return false;
+  };
+
   // TODO: Move to common lib.
   // Q11 → 11Q、D1 → 1D
   function getTaskGradeLabel(taskGrade: TaskGrade) {
@@ -33,11 +49,12 @@
 
 <!-- TODO: Searchを追加 -->
 <!-- TODO: コンテスト種類をトグルボタンで切り替えられるようにする -->
-<!-- TODO: Pendingは、Adminのみ表示 -->
 <div class="container mx-auto w-5/6">
   <h1 class="text-3xl">Problems</h1>
   {#each taskGradeValues as taskGrade}
-    {#if taskResultsForEachGrade.get(taskGrade).length > 0}
+    <!-- Pendingは、Adminのみ表示。-->
+    <!-- HACK: Svelteでcontinueに相当する構文は確認できず(2024年1月時点)。 -->
+    {#if countTasks(taskGrade) > 0 && isShowTaskList(isAdmin, taskGrade)}
       <TaskList
         grade={getTaskGradeLabel(taskGrade)}
         gradeColor={getTaskGradeColor(taskGrade)}
