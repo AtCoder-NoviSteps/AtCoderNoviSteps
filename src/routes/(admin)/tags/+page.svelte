@@ -6,6 +6,6 @@
 </script>
 
 <div class="container mx-auto w-5/6">
-  <h1 class="text-3xl">Import Contests</h1>
+  <h1 class="text-3xl">Tags</h1>
   <TagListForEdit {tags} />
 </div>
