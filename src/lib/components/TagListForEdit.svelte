@@ -28,8 +28,7 @@
     <TableHeadCell class="w-1/3">タグ名</TableHeadCell>
     <TableHeadCell class="w-1/8">公式</TableHeadCell>
     <TableHeadCell class="w-1/8">公開中</TableHeadCell>
-    <TableHeadCell class="w-1/8">問題数</TableHeadCell>
-    <TableHeadCell class="w-1/8"><!--操作--></TableHeadCell>
+    <TableHeadCell class="w-1/8"></TableHeadCell>
   </TableHead>
   <TableBody tableBodyClass="divide-y">
     {#each tags as tag}
