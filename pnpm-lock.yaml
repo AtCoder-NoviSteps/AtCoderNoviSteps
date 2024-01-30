@@ -18,8 +18,8 @@ dependencies:
     specifier: 5.8.1
     version: 5.8.1(prisma@5.8.1)
   '@testing-library/svelte':
-    specifier: ^4.0.5
-    version: 4.0.5(svelte@4.2.9)
+    specifier: ^4.1.0
+    version: 4.1.0(svelte@4.2.9)
   '@types/jest':
     specifier: ^29.5.11
     version: 29.5.11
@@ -927,8 +927,8 @@ packages:
       vitest: 0.34.6(@vitest/ui@0.34.7)(jsdom@24.0.0)(playwright@1.41.1)
     dev: true
 
-  /@testing-library/svelte@4.0.5(svelte@4.2.9):
-    resolution: {integrity: sha512-P7X3mpYv/My4hBZfxVxTFV5KcA+EoWfRCguWP7WQdYj6HMdg/L+LiwG4ocvLe+hupedrC7dwcy85JlxKplJp2g==}
+  /@testing-library/svelte@4.1.0(svelte@4.2.9):
+    resolution: {integrity: sha512-MJqe7x9WowkiAVdk9mvazEC2ktFZdmK2OqFVoO557PC37aBemQ4ozqdK3yrG34Zg9kuln3qgTVeLSh08e69AMw==}
     engines: {node: '>= 10'}
     peerDependencies:
       svelte: ^3 || ^4

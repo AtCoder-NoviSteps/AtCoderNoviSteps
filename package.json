@@ -67,7 +67,7 @@
     "@mermaid-js/mermaid-cli": "^10.6.1",
     "@popperjs/core": "2.11.8",
     "@prisma/client": "5.8.1",
-    "@testing-library/svelte": "^4.0.5",
+    "@testing-library/svelte": "^4.1.0",
     "@types/jest": "^29.5.11",
     "autoprefixer": "10.4.17",
     "flowbite": "2.2.1",
