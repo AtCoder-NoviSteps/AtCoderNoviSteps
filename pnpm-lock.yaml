@@ -71,8 +71,8 @@ devDependencies:
     specifier: 1.30.3
     version: 1.30.3(svelte@4.2.9)(vite@4.5.2)
   '@testing-library/jest-dom':
-    specifier: ^6.2.1
-    version: 6.3.0(@types/jest@29.5.11)(vitest@0.34.6)
+    specifier: ^6.4.0
+    version: 6.4.0(@types/jest@29.5.11)(vitest@0.34.6)
   '@typescript-eslint/eslint-plugin':
     specifier: 6.20.0
     version: 6.20.0(@typescript-eslint/parser@6.19.1)(eslint@8.56.0)(typescript@5.3.3)
@@ -894,8 +894,8 @@ packages:
       pretty-format: 27.5.1
     dev: false
 
-  /@testing-library/jest-dom@6.3.0(@types/jest@29.5.11)(vitest@0.34.6):
-    resolution: {integrity: sha512-hJVIrkFizEQxoWsGBlycTcQhrpoCH4DhXfrnHFFXgkx3Xdm15zycsq5Ep+vpw4W8S0NJa8cxDHcuJib+1tEbhg==}
+  /@testing-library/jest-dom@6.4.0(@types/jest@29.5.11)(vitest@0.34.6):
+    resolution: {integrity: sha512-GgGT3OR8qhIjk2SBMy51AYDWoMnAyR/cwjZO4SttuBmIQ9wWy9QmVOeaSbgT5Bm0J6qLBaf4+dsJWfisvafoaA==}
     engines: {node: '>=14', npm: '>=6', yarn: '>=1'}
     peerDependencies:
       '@jest/globals': '>= 28'
