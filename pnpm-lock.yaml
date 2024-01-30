@@ -9,8 +9,8 @@ dependencies:
     specifier: 3.0.2
     version: 3.0.2(@prisma/client@5.8.1)(lucia@2.7.7)
   '@mermaid-js/mermaid-cli':
-    specifier: ^10.6.1
-    version: 10.6.1(typescript@5.3.3)
+    specifier: ^10.7.0
+    version: 10.7.0(typescript@5.3.3)
   '@popperjs/core':
     specifier: 2.11.8
     version: 2.11.8
@@ -601,8 +601,8 @@ packages:
       - encoding
       - supports-color
 
-  /@mermaid-js/mermaid-cli@10.6.1(typescript@5.3.3):
-    resolution: {integrity: sha512-OH2uOXW3/GBaMGagVF7Fzu/9TJrGge+Bu/+Tm8OyIaRBaKa2NN+3SggJOmr5s51oTPaGKu/X1XBDoauvtlXAPg==}
+  /@mermaid-js/mermaid-cli@10.7.0(typescript@5.3.3):
+    resolution: {integrity: sha512-b1kHdzSStWaxoNdU5KnzXJ/OQzYqFo4mZsHobX44l6gb2s1O6DzD0g801VzxUmcJ+5OWt6piDL1Ug//cQUsrZg==}
     engines: {node: ^14.13 || >=16.0}
     hasBin: true
     dependencies:
@@ -4672,7 +4672,7 @@ packages:
     peerDependencies:
       '@prisma/client': ^4.0.0 || ^5.0.0
     dependencies:
-      '@mermaid-js/mermaid-cli': 10.6.1(typescript@5.3.3)
+      '@mermaid-js/mermaid-cli': 10.7.0(typescript@5.3.3)
       '@prisma/client': 5.8.1(prisma@5.8.1)
       '@prisma/generator-helper': 5.7.1
       dotenv: 16.3.2
@@ -4757,7 +4757,7 @@ packages:
 
   /puppeteer@19.11.1(typescript@5.3.3):
     resolution: {integrity: sha512-39olGaX2djYUdhaQQHDZ0T0GwEp+5f9UB9HmEP0qHfdQHIq0xGQZuAZ5TLnJIc/88SrPLpEflPC+xUqOTv3c5g==}
-    deprecated: < 21.3.7 is no longer supported
+    deprecated: < 21.5.0 is no longer supported
     requiresBuild: true
     dependencies:
       '@puppeteer/browsers': 0.5.0(typescript@5.3.3)
@@ -5757,6 +5757,7 @@ packages:
 
   /undici-types@5.26.5:
     resolution: {integrity: sha512-JlCMO+ehdEIKqlFxk6IfVoAUVmgz7cU7zD/h9XZ0qzeosSHmUJVOzSQvvYSYWXkFXC+IfLKSIffhv0sVZup6pA==}
+    requiresBuild: true
 
   /undici@5.26.5:
     resolution: {integrity: sha512-cSb4bPFd5qgR7qr2jYAi0hlX9n5YKK2ONKkLFkxl+v/9BvC0sOpZjBHDBSXc5lWAf5ty9oZdRXytBIHzgUcerw==}
