@@ -64,7 +64,7 @@
   "type": "module",
   "dependencies": {
     "@lucia-auth/adapter-prisma": "3.0.2",
-    "@mermaid-js/mermaid-cli": "^10.6.1",
+    "@mermaid-js/mermaid-cli": "^10.7.0",
     "@popperjs/core": "2.11.8",
     "@prisma/client": "5.8.1",
     "@testing-library/svelte": "^4.1.0",
