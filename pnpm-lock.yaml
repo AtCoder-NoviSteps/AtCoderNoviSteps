@@ -51,8 +51,8 @@ dependencies:
     specifier: 3.4.1
     version: 3.4.1
   vercel:
-    specifier: 33.4.0
-    version: 33.4.0
+    specifier: 33.4.1
+    version: 33.4.1
 
 devDependencies:
   '@playwright/test':
@@ -1441,8 +1441,8 @@ packages:
     resolution: {integrity: sha512-Gfm8HDech41vf+EPleRzgoJUnDTJerKgckMm4KX0JT860gV9XBMSOWYH7eMWHmMza104+HRCWL7wT6OlpftF2Q==}
     dev: false
 
-  /@vercel/static-build@2.1.0:
-    resolution: {integrity: sha512-mSP3UNckqr3aqTx8fAbUiM/5E4llgJeUWFf1/RgUUqt5T5QnxZ2n10HagHSZ/fHCx1bT+J8jdty8Aq7v+vJt2Q==}
+  /@vercel/static-build@2.2.0:
+    resolution: {integrity: sha512-PG8/X6bk8K6sztAKckwo/miBdOU1EUmH5ct0oSXlZl7lv80v81axJrZ8YnqSmRyFT5+WR6e9Njk0Biz5FtyQ8w==}
     dependencies:
       '@vercel/gatsby-plugin-vercel-analytics': 1.0.11
       '@vercel/gatsby-plugin-vercel-builder': 2.0.16
@@ -5845,8 +5845,8 @@ packages:
       convert-source-map: 2.0.0
     dev: true
 
-  /vercel@33.4.0:
-    resolution: {integrity: sha512-uB8XcTvARBsJtXCbhm/+F3qtV/FQXYYxx6jyUMfMU8izmOmWUlcSOmARbctL4vZ3Izj4ku+P4S25aDQFNmhGYQ==}
+  /vercel@33.4.1:
+    resolution: {integrity: sha512-WR5rM9900CW6Z+jlEltF0f87CjHoppz1dJpZ1VzLPWOrgsvVMOcCginyCRhFyxT/AmkpGT7T3DjzKW9Tpx376Q==}
     engines: {node: '>= 16'}
     hasBin: true
     dependencies:
@@ -5860,7 +5860,7 @@ packages:
       '@vercel/redwood': 2.0.6
       '@vercel/remix-builder': 2.0.18
       '@vercel/ruby': 2.0.5
-      '@vercel/static-build': 2.1.0
+      '@vercel/static-build': 2.2.0
       chokidar: 3.3.1
     transitivePeerDependencies:
       - '@swc/core'
