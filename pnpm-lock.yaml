@@ -21,8 +21,8 @@ dependencies:
     specifier: ^4.1.0
     version: 4.1.0(svelte@4.2.9)
   '@types/jest':
-    specifier: ^29.5.11
-    version: 29.5.11
+    specifier: ^29.5.12
+    version: 29.5.12
   autoprefixer:
     specifier: 10.4.17
     version: 10.4.17(postcss@8.4.32)
@@ -72,7 +72,7 @@ devDependencies:
     version: 1.30.3(svelte@4.2.9)(vite@4.5.2)
   '@testing-library/jest-dom':
     specifier: ^6.4.1
-    version: 6.4.1(@types/jest@29.5.11)(vitest@0.34.6)
+    version: 6.4.1(@types/jest@29.5.12)(vitest@0.34.6)
   '@typescript-eslint/eslint-plugin':
     specifier: 6.20.0
     version: 6.20.0(@typescript-eslint/parser@6.20.0)(eslint@8.56.0)(typescript@5.3.3)
@@ -894,7 +894,7 @@ packages:
       pretty-format: 27.5.1
     dev: false
 
-  /@testing-library/jest-dom@6.4.1(@types/jest@29.5.11)(vitest@0.34.6):
+  /@testing-library/jest-dom@6.4.1(@types/jest@29.5.12)(vitest@0.34.6):
     resolution: {integrity: sha512-Z7qMM3J2Zw5H/nC2/5CYx5YcuaD56JmDFKNIozZ89VIo6o6Y9FMhssics4e2madEKYDNEpZz3+glPGz0yWMOag==}
     engines: {node: '>=14', npm: '>=6', yarn: '>=1'}
     peerDependencies:
@@ -917,7 +917,7 @@ packages:
     dependencies:
       '@adobe/css-tools': 4.3.2
       '@babel/runtime': 7.23.8
-      '@types/jest': 29.5.11
+      '@types/jest': 29.5.12
       aria-query: 5.3.0
       chalk: 3.0.0
       css.escape: 1.5.1
@@ -1001,8 +1001,8 @@ packages:
     dependencies:
       '@types/istanbul-lib-report': 3.0.3
 
-  /@types/jest@29.5.11:
-    resolution: {integrity: sha512-S2mHmYIVe13vrm6q4kN6fLYYAka15ALQki/vgDC3mIukEOx8WJlv0kQPM+d4w8Gp6u0uSdKND04IlTXBv0rwnQ==}
+  /@types/jest@29.5.12:
+    resolution: {integrity: sha512-eDC8bTvT/QhYdxJAulQikueigY5AsdBRH2yDKW3yveW7svY3+DzN84/2NUgkw10RTiJbWqZrTtoGVdYlvFJdLw==}
     dependencies:
       expect: 29.7.0
       pretty-format: 29.7.0
