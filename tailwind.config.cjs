@@ -3,9 +3,10 @@ const config = {
     './src/**/*.{html,js,svelte,ts}',
     './node_modules/flowbite-svelte/**/*.{html,js,svelte,ts}',
     './node_modules/flowbite-svelte-icons/**/*.{html,js,svelte,ts}',
+    './node_modules/stwui/**/*.{svelte,js,ts,html}',
   ],
 
-  plugins: [require('flowbite/plugin')],
+  plugins: [require('@tailwindcss/forms'), require('flowbite/plugin'), require('stwui/plugin')],
 
   darkMode: 'class',
 

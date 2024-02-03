@@ -1,5 +1,8 @@
 <script lang="ts">
   import { Label, Input, Button, P } from 'flowbite-svelte';
+  // @ts-ignore
+  import ClipboardOutline from 'flowbite-svelte-icons/ClipboardOutline.svelte';
+  import { copyToClipboard } from 'stwui/utils/copyToClipboard';
   //import type { ActionForm } from './$types';
 
   export let username: string;
@@ -14,6 +17,12 @@
 
   // for generated/validated -> notiong, push "edit" button ( "edit" is available)
   export let status: string;
+
+  // TODO: クリックしたときに、Copied!といったメッセージを表示できるようにしたい。
+  // WHY: コピーができているか、確認できるようにするため
+  const handleClick = () => {
+    copyToClipboard(atcoder_validationcode);
+  };
 </script>
 
 {#if status === 'nothing'}
@@ -75,10 +84,13 @@
         bind:value={atcoder_validationcode}
       />
 
-      <!-- TODO: コピペ用のボタンを追加 -->
       <Label class="space-y-2">
         <span>本人確認用の文字列</span>
-        <Input size="md" bind:value={atcoder_validationcode} />
+        <div>
+          <Input size="md" bind:value={atcoder_validationcode}>
+            <ClipboardOutline slot="right" class="w-5 h-5" on:click={handleClick} />
+          </Input>
+        </div>
       </Label>
 
       <Button type="submit" class="w-full">本人確認</Button>
