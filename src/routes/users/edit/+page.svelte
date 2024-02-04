@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Tabs, TabItem, Label, Input, Button, Alert } from 'flowbite-svelte';
+  import { Tabs, TabItem, Button, Alert } from 'flowbite-svelte';
 
   import AtCoderUserValidationForm from '$lib/components/AtCoderUserValidationForm.svelte';
   import ContainerWrapper from '$lib/components/ContainerWrapper.svelte';
