@@ -3,6 +3,8 @@
 
   import AtCoderUserValidationForm from '$lib/components/AtCoderUserValidationForm.svelte';
   import ContainerWrapper from '$lib/components/ContainerWrapper.svelte';
+  import FormWrapper from '$lib/components/FormWrapper.svelte';
+  import ReadOnlyLabel from '$lib/components/ReadOnlyLabel.svelte';
   import SubmissionButton from '$lib/components/SubmissionButton.svelte';
   //import type { ActionForm } from './$types';
   export let data;
@@ -42,18 +44,12 @@
     <TabItem open>
       <span slot="title" class="text-lg">基本情報</span>
       <ContainerWrapper>
-        <form action="update" class="w-full max-w-md mt-6 space-y-6">
-          <Label class="space-y-2">
-            <span>ユーザ名</span>
-            <Input size="md" disabled readonly label="Username" bind:value={username} />
-          </Label>
-          <Label class="space-y-2">
-            <span>AtCoder ID</span>
-            <Input size="md" disabled readonly label="AtCoder ID" value={atcoder_username} />
-          </Label>
+        <FormWrapper action="update">
+          <ReadOnlyLabel labelName="ユーザ名" inputValue={username} />
+          <ReadOnlyLabel labelName="AtCoder ID" inputValue={atcoder_username} />
 
           <SubmissionButton labelName="保存" />
-        </form>
+        </FormWrapper>
       </ContainerWrapper>
     </TabItem>
 
@@ -94,13 +90,10 @@
     <TabItem>
       <span slot="title" class="text-lg">アカウント削除</span>
       <ContainerWrapper>
-        <form action="/users/delete" class="w-full max-w-md mt-6 space-y-6">
-          <Label class="space-y-2">
-            <span>ユーザ名</span>
-            <Input size="md" disabled readonly label="Username" bind:value={username} />
-          </Label>
+        <FormWrapper action="/users/delete">
+          <ReadOnlyLabel labelName="ユーザ名" inputValue={username} />
           <Button disabled readonly type="submit" class="w-full">アカウントを削除</Button>
-        </form>
+        </FormWrapper>
       </ContainerWrapper>
     </TabItem>
   </Tabs>

@@ -6,6 +6,8 @@
   //import type { ActionForm } from './$types';
 
   import ContainerWrapper from '$lib/components/ContainerWrapper.svelte';
+  import FormWrapper from '$lib/components/FormWrapper.svelte';
+  import ReadOnlyLabel from '$lib/components/ReadOnlyLabel.svelte';
   import SubmissionButton from '$lib/components/SubmissionButton.svelte';
 
   export let username: string;
@@ -30,7 +32,7 @@
 
 {#if status === 'nothing'}
   <ContainerWrapper>
-    <form method="POST" action="?/generate" class="w-full max-w-md space-y-6">
+    <FormWrapper action="?/generate" marginTop="">
       <h3 class="text-xl text-center mt-6 font-medium text-gray-900 dark:text-white">
         本人確認の準備中
       </h3>
@@ -39,10 +41,8 @@
 
       <!-- hiddenでusernameを持つのは共通-->
       <Input size="md" type="hidden" name="username" bind:value={username} />
-      <Label class="space-y-2">
-        <span>ユーザ名</span>
-        <Input size="md" disabled readonly bind:value={username} />
-      </Label>
+      <ReadOnlyLabel labelName="ユーザ名" inputValue={username} />
+
       <Label class="space-y-2">
         <!-- AtCoder IDを修正できるのは、notingのステータスの時のみ-->
         <span>AtCoder ID</span>
@@ -56,11 +56,11 @@
       </Label>
 
       <SubmissionButton labelName="文字列を生成" />
-    </form>
+    </FormWrapper>
   </ContainerWrapper>
 {:else if status === 'generated'}
   <ContainerWrapper>
-    <form method="POST" action="?/validate" class="w-full max-w-md space-y-6">
+    <FormWrapper action="?/validate" marginTop="">
       <h3 class="text-xl text-center mt-6 font-medium text-gray-900 dark:text-white">本人確認中</h3>
 
       <P PsizeType="md" class="mt-6">
@@ -69,17 +69,11 @@
 
       <!-- hiddenでusernameを持つのは共通-->
       <Input size="md" type="hidden" name="username" bind:value={username} />
-      <Label class="space-y-2">
-        <span>ユーザ名</span>
-        <Input size="md" disabled readonly bind:value={username} />
-      </Label>
+      <ReadOnlyLabel labelName="ユーザ名" inputValue={username} />
 
       <!-- atcoder_usernameとvalidation_code は編集不可-->
       <Input size="md" type="hidden" name="atcoder_username" bind:value={atcoder_username} />
-      <Label class="space-y-2">
-        <span>AtCoder ID</span>
-        <Input size="md" disabled readonly bind:value={atcoder_username} />
-      </Label>
+      <ReadOnlyLabel labelName="AtCoder ID" inputValue={atcoder_username} />
 
       <Input
         size="md"
@@ -98,35 +92,29 @@
       </Label>
 
       <SubmissionButton labelName="本人確認" />
-    </form>
+    </FormWrapper>
 
-    <form method="POST" action="?/reset" class="w-full max-w-md space-y-6">
+    <FormWrapper action="?/reset" marginTop="">
       <Input size="md" type="hidden" name="username" bind:value={username} />
       <Input size="md" type="hidden" name="atcoder_username" bind:value={atcoder_username} />
 
       <SubmissionButton labelName="リセット" />
-    </form>
+    </FormWrapper>
   </ContainerWrapper>
 {:else if status === 'validated'}
   <ContainerWrapper>
-    <form method="POST" action="?/reset" class="w-full max-w-md mt-6 space-y-6">
+    <FormWrapper action="?/reset">
       <h3 class="text-xl text-center font-medium text-gray-900 dark:text-white">本人確認済</h3>
 
       <!-- hiddenでusernameを持つのは共通-->
       <Input size="md" type="hidden" name="username" bind:value={username} />
-      <Label class="space-y-2">
-        <span>ユーザ名</span>
-        <Input size="md" disabled readonly bind:value={username} />
-      </Label>
+      <ReadOnlyLabel labelName="ユーザ名" inputValue={username} />
 
       <!-- atcoder_usernameを表示（変更不可）-->
       <Input size="md" type="hidden" name="atcoder_username" bind:value={atcoder_username} />
-      <Label class="space-y-2">
-        <span>AtCoder ID</span>
-        <Input size="md" disabled readonly bind:value={atcoder_username} />
-      </Label>
+      <ReadOnlyLabel labelName="AtCoder ID" inputValue={atcoder_username} />
 
       <SubmissionButton labelName="リセット" />
-    </form>
+    </FormWrapper>
   </ContainerWrapper>
 {/if}
