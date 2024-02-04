@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Label, Input, Button, P } from 'flowbite-svelte';
+  import { Label, Input, P } from 'flowbite-svelte';
   // @ts-ignore
   import ClipboardOutline from 'flowbite-svelte-icons/ClipboardOutline.svelte';
   import { copyToClipboard } from 'stwui/utils/copyToClipboard';
