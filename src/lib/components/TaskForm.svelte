@@ -23,7 +23,7 @@
 </script>
 
 <a href="/tasks"> タスク一覧へもどる（パンくずリストにしたい） </a>
-<br>
+<br />
 Edit Task
 <form method="POST" action="/tasks?/update">
   <Table shadow hoverable={true} class="text-md">
