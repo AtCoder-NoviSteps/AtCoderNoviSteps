@@ -4,3 +4,5 @@ export interface Tag {
   is_official: boolean;
   is_published: boolean;
 }
+
+export type Tags = Tag[];
