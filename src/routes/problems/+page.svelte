@@ -18,8 +18,8 @@
   <!-- See: -->
   <!-- https://flowbite-svelte.com/docs/components/tabs -->
   <Tabs style="underline" contentClass="bg-white">
-    <!-- Grade -->
-    <TabItemWrapper isOpen={true} title="Grade">
+    <!-- Grades -->
+    <TabItemWrapper isOpen={true} title="Grades">
       <TaskGradeList {taskResults} {isAdmin}></TaskGradeList>
     </TabItemWrapper>
 
