@@ -5,6 +5,9 @@
   import { copyToClipboard } from 'stwui/utils/copyToClipboard';
   //import type { ActionForm } from './$types';
 
+  import ContainerWrapper from '$lib/components/ContainerWrapper.svelte';
+  import SubmissionButton from '$lib/components/SubmissionButton.svelte';
+
   export let username: string;
   export let atcoder_username: string;
   export let atcoder_validationcode: string;
@@ -26,7 +29,7 @@
 </script>
 
 {#if status === 'nothing'}
-  <div class="container mx-auto w-5/6 flex flex-col items-center">
+  <ContainerWrapper>
     <form method="POST" action="?/generate" class="w-full max-w-md space-y-6">
       <h3 class="text-xl text-center mt-6 font-medium text-gray-900 dark:text-white">
         本人確認の準備中
@@ -51,11 +54,12 @@
           bind:value={atcoder_username}
         />
       </Label>
-      <Button type="submit" class="w-full">文字列を生成</Button>
+
+      <SubmissionButton labelName="文字列を生成" />
     </form>
-  </div>
+  </ContainerWrapper>
 {:else if status === 'generated'}
-  <div class="container mx-auto w-5/6 flex flex-col items-center">
+  <ContainerWrapper>
     <form method="POST" action="?/validate" class="w-full max-w-md space-y-6">
       <h3 class="text-xl text-center mt-6 font-medium text-gray-900 dark:text-white">本人確認中</h3>
 
@@ -93,17 +97,18 @@
         </div>
       </Label>
 
-      <Button type="submit" class="w-full">本人確認</Button>
+      <SubmissionButton labelName="本人確認" />
     </form>
 
     <form method="POST" action="?/reset" class="w-full max-w-md space-y-6">
       <Input size="md" type="hidden" name="username" bind:value={username} />
       <Input size="md" type="hidden" name="atcoder_username" bind:value={atcoder_username} />
-      <Button type="submit" class="w-full">リセット</Button>
+
+      <SubmissionButton labelName="リセット" />
     </form>
-  </div>
+  </ContainerWrapper>
 {:else if status === 'validated'}
-  <div class="container mx-auto w-5/6 flex flex-col items-center">
+  <ContainerWrapper>
     <form method="POST" action="?/reset" class="w-full max-w-md mt-6 space-y-6">
       <h3 class="text-xl text-center font-medium text-gray-900 dark:text-white">本人確認済</h3>
 
@@ -121,7 +126,7 @@
         <Input size="md" disabled readonly bind:value={atcoder_username} />
       </Label>
 
-      <Button type="submit" class="w-full">リセット</Button>
+      <SubmissionButton labelName="リセット" />
     </form>
-  </div>
+  </ContainerWrapper>
 {/if}

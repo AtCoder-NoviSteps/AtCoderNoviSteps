@@ -1,6 +1,9 @@
 <script lang="ts">
   import { Tabs, TabItem, Label, Input, Button, Alert } from 'flowbite-svelte';
+
   import AtCoderUserValidationForm from '$lib/components/AtCoderUserValidationForm.svelte';
+  import ContainerWrapper from '$lib/components/ContainerWrapper.svelte';
+  import SubmissionButton from '$lib/components/SubmissionButton.svelte';
   //import type { ActionForm } from './$types';
   export let data;
   //export let form;
@@ -38,7 +41,7 @@
     <!-- 基本情報 -->
     <TabItem open>
       <span slot="title" class="text-lg">基本情報</span>
-      <div class="flex flex-col items-center">
+      <ContainerWrapper>
         <form action="update" class="w-full max-w-md mt-6 space-y-6">
           <Label class="space-y-2">
             <span>ユーザ名</span>
@@ -48,9 +51,10 @@
             <span>AtCoder ID</span>
             <Input size="md" disabled readonly label="AtCoder ID" value={atcoder_username} />
           </Label>
-          <Button type="submit" class="w-full">保存</Button>
+
+          <SubmissionButton labelName="保存" />
         </form>
-      </div>
+      </ContainerWrapper>
     </TabItem>
 
     <!-- ステータス -->
@@ -89,7 +93,7 @@
     <!-- アカウント削除 -->
     <TabItem>
       <span slot="title" class="text-lg">アカウント削除</span>
-      <div class="flex flex-col items-center">
+      <ContainerWrapper>
         <form action="/users/delete" class="w-full max-w-md mt-6 space-y-6">
           <Label class="space-y-2">
             <span>ユーザ名</span>
@@ -97,7 +101,7 @@
           </Label>
           <Button disabled readonly type="submit" class="w-full">アカウントを削除</Button>
         </form>
-      </div>
+      </ContainerWrapper>
     </TabItem>
   </Tabs>
 </div>
