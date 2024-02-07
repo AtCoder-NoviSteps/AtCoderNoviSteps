@@ -13,7 +13,7 @@
   // Use 'forwardPorts' to make a list of ports inside the container available locally.
   "forwardPorts": [
     5173,
-    5432, // for postgres
+    5432 // for postgres
   ],
   // "shutdownAction": "none",
   //
@@ -29,46 +29,46 @@
           "xml",
           "javascript",
           "typescript",
-          "svelte",
+          "svelte"
         ],
         "css.validate": false,
         "editor.codeActionsOnSave": {
-          "source.fixAll": true,
+          "source.fixAll": true
         },
         "editor.defaultFormatter": "esbenp.prettier-vscode",
         "editor.formatOnSave": true,
         "editor.formatOnPaste": false,
         "editor.quickSuggestions": {
-          "strings": true,
+          "strings": true
         },
         "eslint.validate": ["html"],
         "eslint.workingDirectories": [
           {
-            "mode": "auto",
-          },
+            "mode": "auto"
+          }
         ],
         "files.associations": {
-          "*.css": "tailwindcss",
+          "*.css": "tailwindcss"
         },
         "files.insertFinalNewline": true,
         "files.trimFinalNewlines": true,
         "files.trimTrailingWhitespace": true,
         "[javascript]": {
-          "editor.defaultFormatter": "esbenp.prettier-vscode",
+          "editor.defaultFormatter": "esbenp.prettier-vscode"
         },
         "[typescript]": {
-          "editor.defaultFormatter": "esbenp.prettier-vscode",
+          "editor.defaultFormatter": "esbenp.prettier-vscode"
         },
         "[svelte]": {
-          "editor.defaultFormatter": "svelte.svelte-vscode",
+          "editor.defaultFormatter": "svelte.svelte-vscode"
         },
         "[prisma]": {
-          "editor.defaultFormatter": "Prisma.prisma",
+          "editor.defaultFormatter": "Prisma.prisma"
         },
         "[markdown]": {
-          "editor.formatOnSave": false,
+          "editor.formatOnSave": false
         },
-        "svelte.enable-ts-plugin": true,
+        "svelte.enable-ts-plugin": true
       },
       "extensions": [
         "bradlc.vscode-tailwindcss",
@@ -81,10 +81,10 @@
         "Prisma.prisma",
         "streetsidesoftware.code-spell-checker",
         "svelte.svelte-vscode",
-        "vscode-icons-team.vscode-icons",
-      ],
-    },
-  },
+        "vscode-icons-team.vscode-icons"
+      ]
+    }
+  }
   //
   // Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
   // "remoteUser": "root"
