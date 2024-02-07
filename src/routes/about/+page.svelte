@@ -1,11 +1,12 @@
 <script lang="ts">
+  import HeadingOne from '$lib/components/HeadingOne.svelte';
   import { Li, List, Heading, Skeleton } from 'flowbite-svelte';
 </script>
 
 <!-- TODO: 各項目を記載する -->
 <!-- TODO: 必要に応じて、コンポーネントに分解する -->
 <div class="container mx-auto w-5/6">
-  <h1 class="text-3xl">About</h1>
+  <HeadingOne title="About" />
 
   <!-- Purpose -->
   <h2 class="text-xl mt-4 mb-2">本サービスの目的</h2>

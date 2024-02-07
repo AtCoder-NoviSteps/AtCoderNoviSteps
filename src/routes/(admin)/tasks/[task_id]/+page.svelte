@@ -1,4 +1,5 @@
 <script>
+  import HeadingOne from '$lib/components/HeadingOne.svelte';
   import TaskForm from '$lib/components/TaskForm.svelte';
   import TagListForEdit from '$lib/components/TagListForEdit.svelte';
   export let data;
@@ -11,6 +12,6 @@
 </div>
 
 <div class="container mx-auto w-5/6">
-  <h1 class="text-3xl">Tags</h1>
+  <HeadingOne title="Tags" />
   <TagListForEdit {tags} />
 </div>
