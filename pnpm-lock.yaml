@@ -9,8 +9,8 @@ dependencies:
     specifier: 3.0.2
     version: 3.0.2(@prisma/client@5.9.1)(lucia@2.7.7)
   '@mermaid-js/mermaid-cli':
-    specifier: 10.7.0
-    version: 10.7.0(typescript@5.3.3)
+    specifier: 10.8.0
+    version: 10.8.0(typescript@5.3.3)
   '@popperjs/core':
     specifier: 2.11.8
     version: 2.11.8
@@ -607,8 +607,8 @@ packages:
       - encoding
       - supports-color
 
-  /@mermaid-js/mermaid-cli@10.7.0(typescript@5.3.3):
-    resolution: {integrity: sha512-b1kHdzSStWaxoNdU5KnzXJ/OQzYqFo4mZsHobX44l6gb2s1O6DzD0g801VzxUmcJ+5OWt6piDL1Ug//cQUsrZg==}
+  /@mermaid-js/mermaid-cli@10.8.0(typescript@5.3.3):
+    resolution: {integrity: sha512-xZsGR88RsP72SAXyvjU23HzsKHsq6b7/kbnmQrEuIcPrJGPOckFiP9nzHvPh3Z04MjvpDJVjtbIspt2ZQwUzzA==}
     engines: {node: ^14.13 || >=16.0}
     hasBin: true
     dependencies:
@@ -4673,7 +4673,7 @@ packages:
     peerDependencies:
       '@prisma/client': ^4.0.0 || ^5.0.0
     dependencies:
-      '@mermaid-js/mermaid-cli': 10.7.0(typescript@5.3.3)
+      '@mermaid-js/mermaid-cli': 10.8.0(typescript@5.3.3)
       '@prisma/client': 5.9.1(prisma@5.9.1)
       '@prisma/generator-helper': 5.7.1
       dotenv: 16.3.2
