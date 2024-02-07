@@ -113,14 +113,14 @@ devDependencies:
     specifier: 15.2.2
     version: 15.2.2
   prettier:
-    specifier: 3.2.4
-    version: 3.2.4
+    specifier: 3.2.5
+    version: 3.2.5
   prettier-plugin-svelte:
     specifier: 3.1.2
-    version: 3.1.2(prettier@3.2.4)(svelte@4.2.10)
+    version: 3.1.2(prettier@3.2.5)(svelte@4.2.10)
   prettier-plugin-tailwindcss:
     specifier: 0.5.11
-    version: 0.5.11(prettier-plugin-svelte@3.1.2)(prettier@3.2.4)
+    version: 0.5.11(prettier-plugin-svelte@3.1.2)(prettier@3.2.5)
   prisma:
     specifier: 5.9.1
     version: 5.9.1
@@ -4567,17 +4567,17 @@ packages:
       svelte: 4.2.10
     dev: false
 
-  /prettier-plugin-svelte@3.1.2(prettier@3.2.4)(svelte@4.2.10):
+  /prettier-plugin-svelte@3.1.2(prettier@3.2.5)(svelte@4.2.10):
     resolution: {integrity: sha512-7xfMZtwgAWHMT0iZc8jN4o65zgbAQ3+O32V6W7pXrqNvKnHnkoyQCGCbKeUyXKZLbYE0YhFRnamfxfkEGxm8qA==}
     peerDependencies:
       prettier: ^3.0.0
       svelte: ^3.2.0 || ^4.0.0-next.0 || ^5.0.0-next.0
     dependencies:
-      prettier: 3.2.4
+      prettier: 3.2.5
       svelte: 4.2.10
     dev: true
 
-  /prettier-plugin-tailwindcss@0.5.11(prettier-plugin-svelte@3.1.2)(prettier@3.2.4):
+  /prettier-plugin-tailwindcss@0.5.11(prettier-plugin-svelte@3.1.2)(prettier@3.2.5):
     resolution: {integrity: sha512-AvI/DNyMctyyxGOjyePgi/gqj5hJYClZ1avtQvLlqMT3uDZkRbi4HhGUpok3DRzv9z7Lti85Kdj3s3/1CeNI0w==}
     engines: {node: '>=14.21.3'}
     peerDependencies:
@@ -4626,8 +4626,8 @@ packages:
       prettier-plugin-twig-melody:
         optional: true
     dependencies:
-      prettier: 3.2.4
-      prettier-plugin-svelte: 3.1.2(prettier@3.2.4)(svelte@4.2.10)
+      prettier: 3.2.5
+      prettier-plugin-svelte: 3.1.2(prettier@3.2.5)(svelte@4.2.10)
     dev: true
 
   /prettier@2.8.8:
@@ -4636,8 +4636,8 @@ packages:
     hasBin: true
     dev: false
 
-  /prettier@3.2.4:
-    resolution: {integrity: sha512-FWu1oLHKCrtpO1ypU6J0SbK2d9Ckwysq6bHj/uaCP26DxrPpppCLQRGVuqAxSTvhF00AcvDRyYrLNW7ocBhFFQ==}
+  /prettier@3.2.5:
+    resolution: {integrity: sha512-3/GWa9aOC0YeD7LUfvOG2NiDyhOWRvt1k+rcKhOuYnMY24iiCphgneUfJDyFXd6rZCAnuLBv6UeAULtrhT/F4A==}
     engines: {node: '>=14'}
     hasBin: true
     dev: true
