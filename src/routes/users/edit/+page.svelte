@@ -1,6 +1,11 @@
 <script lang="ts">
-  import { Tabs, TabItem, Label, Input, Button, Alert } from 'flowbite-svelte';
+  import { Tabs, TabItem, Button, Alert } from 'flowbite-svelte';
+
   import AtCoderUserValidationForm from '$lib/components/AtCoderUserValidationForm.svelte';
+  import ContainerWrapper from '$lib/components/ContainerWrapper.svelte';
+  import FormWrapper from '$lib/components/FormWrapper.svelte';
+  import ReadOnlyLabel from '$lib/components/ReadOnlyLabel.svelte';
+  import SubmissionButton from '$lib/components/SubmissionButton.svelte';
   //import type { ActionForm } from './$types';
   export let data;
   //export let form;
@@ -33,59 +38,63 @@
   </Alert>
 {/if}
 
-<Tabs>
-  <TabItem open title="基本情報編集">
-    <p class="text-sm text-gray-500 dark:text-gray-400">
-      <b>TODO:基本情報を編集するページ</b>
-    </p>
-    <form action="update">
-      <Label class="space-y-2">
-        <span>Username</span>
-        <Input size="md" disabled readonly label="Username" bind:value={username} />
-      </Label>
-      <Label class="space-y-2">
-        <span>AtCoder Id</span>
-        <Input size="md" disabled readonly label="AtCoder ID" value={atcoder_username} />
-      </Label>
-      <Button type="submit">Save</Button>
-    </form>
-  </TabItem>
-  <TabItem disabled>
-    <span slot="title" class="text-gray-400 dark:text-gray-500">ステータス編集</span>
-    <p class="text-sm text-gray-500 dark:text-gray-400">
-      <b>Settings:</b>
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
-      et dolore magna aliqua.
-    </p>
-  </TabItem>
-  <TabItem title="AtCoder連携">
-    <AtCoderUserValidationForm {username} {atcoder_username} {atcoder_validationcode} {status} />
-  </TabItem>
-  {#if atcoder_is_validated === true}
-    <TabItem>
-      <span slot="title" class="text-gray-400 dark:text-gray-500">インポート</span>
-      <p class="text-sm text-gray-500 dark:text-gray-400">
-        <b>TODO:Taskのインポートボタンを作成する</b>
-      </p>
+<div class="container mx-auto w-5/6 lg:w-3/4">
+  <Tabs style="underline" contentClass="bg-white">
+    <!-- 基本情報 -->
+    <TabItem open>
+      <span slot="title" class="text-lg">基本情報</span>
+      <ContainerWrapper>
+        <FormWrapper action="update">
+          <ReadOnlyLabel labelName="ユーザ名" inputValue={username} />
+          <ReadOnlyLabel labelName="AtCoder ID" inputValue={atcoder_username} />
+
+          <SubmissionButton labelName="保存" />
+        </FormWrapper>
+      </ContainerWrapper>
     </TabItem>
-  {:else}
+
+    <!-- ステータス -->
     <TabItem disabled>
-      <span slot="title" class="text-gray-400 dark:text-gray-500">インポート</span>
+      <span slot="title" class="text-lg text-gray-400 dark:text-gray-500">ステータス編集</span>
       <p class="text-sm text-gray-500 dark:text-gray-400">
-        <b>Disabled:</b>
+        <b>Settings:</b>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
+        labore et dolore magna aliqua.
       </p>
     </TabItem>
-  {/if}
-  <TabItem title="退会">
-    <form action="/users/delete">
-      <p class="text-sm text-gray-500 dark:text-gray-400">
-        <b>TODO:基本情報を編集するページ</b>
-      </p>
-      <Label class="space-y-2">
-        <span>Username</span>
-        <Input size="md" disabled readonly label="Username" bind:value={username} />
-      </Label>
-      <Button disabled readonly type="submit">Delete Account</Button>
-    </form>
-  </TabItem>
-</Tabs>
+
+    <!-- AtCoder IDを利用した認証 -->
+    <TabItem>
+      <span slot="title" class="text-lg">AtCoder IDを設定</span>
+      <AtCoderUserValidationForm {username} {atcoder_username} {atcoder_validationcode} {status} />
+    </TabItem>
+
+    <!-- 問題の回答状況をインポート (AtCoder ProblemsのAPIを使用) -->
+    {#if atcoder_is_validated === true}
+      <TabItem>
+        <span slot="title" class="text-lg text-gray-400 dark:text-gray-500">インポート</span>
+        <p class="text-sm text-gray-500 dark:text-gray-400">
+          <b>TODO:Taskのインポートボタンを作成する</b>
+        </p>
+      </TabItem>
+    {:else}
+      <TabItem disabled>
+        <span slot="title" class="text-lg text-gray-400 dark:text-gray-500">インポート</span>
+        <p class="text-sm text-gray-500 dark:text-gray-400">
+          <b>Disabled:</b>
+        </p>
+      </TabItem>
+    {/if}
+
+    <!-- アカウント削除 -->
+    <TabItem>
+      <span slot="title" class="text-lg">アカウント削除</span>
+      <ContainerWrapper>
+        <FormWrapper action="/users/delete">
+          <ReadOnlyLabel labelName="ユーザ名" inputValue={username} />
+          <Button disabled readonly type="submit" class="w-full">アカウントを削除</Button>
+        </FormWrapper>
+      </ContainerWrapper>
+    </TabItem>
+  </Tabs>
+</div>

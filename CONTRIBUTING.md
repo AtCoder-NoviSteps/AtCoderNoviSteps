@@ -24,7 +24,7 @@
 - [Node.js](https://nodejs.org): JavaScriptのランタイム
 - [TypeScript](https://www.typescriptlang.org/): 開発言語
 - [SvelteKit](https://kit.svelte.dev/): 汎用フレームワーク
-- [Flowbite Svelte](https://flowbite-svelte.com/): UIライブラリ
+- [Flowbite Svelte](https://flowbite-svelte.com/)、[STWUI](https://stwui.vercel.app/): UIライブラリ
 - [Prisma](https://www.prisma.io/): ORM
 - [Lucia](https://lucia-auth.com/): 認証ライブラリ
 - [Superforms](https://superforms.rocks/)、[Zod](https://zod.dev/): バリデーション

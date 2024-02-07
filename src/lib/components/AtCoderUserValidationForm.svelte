@@ -1,6 +1,14 @@
 <script lang="ts">
-  import { Label, Input, Button } from 'flowbite-svelte';
+  import { Label, Input, P } from 'flowbite-svelte';
+  // @ts-ignore
+  import ClipboardOutline from 'flowbite-svelte-icons/ClipboardOutline.svelte';
+  import { copyToClipboard } from 'stwui/utils/copyToClipboard';
   //import type { ActionForm } from './$types';
+
+  import ContainerWrapper from '$lib/components/ContainerWrapper.svelte';
+  import FormWrapper from '$lib/components/FormWrapper.svelte';
+  import ReadOnlyLabel from '$lib/components/ReadOnlyLabel.svelte';
+  import SubmissionButton from '$lib/components/SubmissionButton.svelte';
 
   export let username: string;
   export let atcoder_username: string;
@@ -14,83 +22,99 @@
 
   // for generated/validated -> notiong, push "edit" button ( "edit" is available)
   export let status: string;
+
+  // TODO: クリックしたときに、Copied!といったメッセージを表示できるようにしたい。
+  // WHY: コピーができているか、確認できるようにするため
+  const handleClick = () => {
+    copyToClipboard(atcoder_validationcode);
+  };
 </script>
 
 {#if status === 'nothing'}
-  <form method="POST" action="?/generate">
-    <!-- hiddenでusernameを持つのは共通-->
-    <Input size="md" type="hidden" name="username" bind:value={username} />
-    <Label class="space-y-2">
-      <span>Username:{username}</span>
-    </Label>
-    <Label class="space-y-2">
-      <!-- AtCoderIdを修正できるのは、notingのステータスの時のみ-->
-      <span>AtCoder Username</span>
+  <ContainerWrapper>
+    <FormWrapper action="?/generate" marginTop="">
+      <h3 class="text-xl text-center mt-6 font-medium text-gray-900 dark:text-white">
+        本人確認の準備中
+      </h3>
+
+      <P PsizeType="md" class="mt-6">AtCoder IDを入力し、本人確認用の文字列を生成してください。</P>
+
+      <!-- hiddenでusernameを持つのは共通-->
+      <Input size="md" type="hidden" name="username" bind:value={username} />
+      <ReadOnlyLabel labelName="ユーザ名" inputValue={username} />
+
+      <Label class="space-y-2">
+        <!-- AtCoder IDを修正できるのは、notingのステータスの時のみ-->
+        <span>AtCoder ID</span>
+        <Input
+          size="md"
+          label="atcoder_username"
+          name="atcoder_username"
+          placeholder="chokudai"
+          bind:value={atcoder_username}
+        />
+      </Label>
+
+      <SubmissionButton labelName="文字列を生成" />
+    </FormWrapper>
+  </ContainerWrapper>
+{:else if status === 'generated'}
+  <ContainerWrapper>
+    <FormWrapper action="?/validate" marginTop="">
+      <h3 class="text-xl text-center mt-6 font-medium text-gray-900 dark:text-white">本人確認中</h3>
+
+      <P PsizeType="md" class="mt-6">
+        AtCoderの所属欄に生成した文字列を貼り付けてから、「本人確認」ボタンを押してください。
+      </P>
+
+      <!-- hiddenでusernameを持つのは共通-->
+      <Input size="md" type="hidden" name="username" bind:value={username} />
+      <ReadOnlyLabel labelName="ユーザ名" inputValue={username} />
+
+      <!-- atcoder_usernameとvalidation_code は編集不可-->
+      <Input size="md" type="hidden" name="atcoder_username" bind:value={atcoder_username} />
+      <ReadOnlyLabel labelName="AtCoder ID" inputValue={atcoder_username} />
+
       <Input
         size="md"
-        label="atcoder_username"
-        name="atcoder_username"
-        bind:value={atcoder_username}
+        type="hidden"
+        name="usernatcoder_validationcodeame"
+        bind:value={atcoder_validationcode}
       />
-    </Label>
-    <Button type="submit">Generate</Button>
-  </form>
-{:else if status === 'generated'}
-  <form method="POST" action="?/validate">
-    <p class="text-sm text-gray-500 dark:text-gray-400">
-      <b>Status: Generated</b>
-      AtCoderの所属欄に、validationCodeを入力し、Validateボタンをクリックしてください。
-    </p>
 
-    <!-- hiddenでusernameを持つのは共通-->
-    <Input size="md" type="hidden" name="username" bind:value={username} />
-    <Label class="space-y-2">
-      <span>Username:{username}</span>
-    </Label>
+      <Label class="space-y-2">
+        <span>本人確認用の文字列</span>
+        <div>
+          <Input size="md" bind:value={atcoder_validationcode}>
+            <ClipboardOutline slot="right" class="w-5 h-5" on:click={handleClick} />
+          </Input>
+        </div>
+      </Label>
 
-    <!-- atcoder_usernameとvalidation_code は編集不可-->
-    <Input size="md" type="hidden" name="atcoder_username" bind:value={atcoder_username} />
-    <Label class="space-y-2">
-      <span>AtCoder Username:{atcoder_username}</span>
-    </Label>
+      <SubmissionButton labelName="本人確認" />
+    </FormWrapper>
 
-    <Input
-      size="md"
-      type="hidden"
-      name="usernatcoder_validationcodeame"
-      bind:value={atcoder_validationcode}
-    />
-    <Label class="space-y-2">
-      <span>Validation Code:{atcoder_validationcode}</span>
-    </Label>
+    <FormWrapper action="?/reset" marginTop="">
+      <Input size="md" type="hidden" name="username" bind:value={username} />
+      <Input size="md" type="hidden" name="atcoder_username" bind:value={atcoder_username} />
 
-    <Button type="submit">Validate</Button>
-  </form>
-
-  <form method="POST" action="?/reset">
-    <Input size="md" type="hidden" name="username" bind:value={username} />
-    <Input size="md" type="hidden" name="atcoder_username" bind:value={atcoder_username} />
-    <Button type="submit">Reset</Button>
-  </form>
+      <SubmissionButton labelName="リセット" />
+    </FormWrapper>
+  </ContainerWrapper>
 {:else if status === 'validated'}
-  <form method="POST" action="?/reset">
-    <p class="text-sm text-gray-500 dark:text-gray-400">
-      <b>Status: Validated</b>
-      This AtCoder Username is Validated.
-    </p>
+  <ContainerWrapper>
+    <FormWrapper action="?/reset">
+      <h3 class="text-xl text-center font-medium text-gray-900 dark:text-white">本人確認済</h3>
 
-    <!-- hiddenでusernameを持つのは共通-->
-    <Input size="md" type="hidden" name="username" bind:value={username} />
-    <Label class="space-y-2">
-      <span>Username:{username}</span>
-    </Label>
+      <!-- hiddenでusernameを持つのは共通-->
+      <Input size="md" type="hidden" name="username" bind:value={username} />
+      <ReadOnlyLabel labelName="ユーザ名" inputValue={username} />
 
-    <!-- atcoder_usernameを表示（変更不可）-->
-    <Input size="md" type="hidden" name="atcoder_username" bind:value={atcoder_username} />
-    <Label class="space-y-2">
-      <span>AtCoder Username:{atcoder_username}</span>
-    </Label>
+      <!-- atcoder_usernameを表示（変更不可）-->
+      <Input size="md" type="hidden" name="atcoder_username" bind:value={atcoder_username} />
+      <ReadOnlyLabel labelName="AtCoder ID" inputValue={atcoder_username} />
 
-    <Button type="submit">Reset</Button>
-  </form>
+      <SubmissionButton labelName="リセット" />
+    </FormWrapper>
+  </ContainerWrapper>
 {/if}
