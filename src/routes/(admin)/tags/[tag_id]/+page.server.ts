@@ -21,6 +21,8 @@ export async function load({ locals, params }) {
   const tags: Tag[] = await tagService.getTag(params.tag_id as string);
   const tasks: Task[] = await taskTagService.getTasks(params.tag_id as string);
 
+  //Jsonから、必要なtag
+
   console.log(tags[0]);
   console.log(user.role);
   console.log(session?.user.role);
