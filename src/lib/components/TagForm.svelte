@@ -24,6 +24,9 @@
   //export const isAdmin: boolean; // Admin権限がある場合は、編集リンクを表示する
 </script>
 
+<a href="/tags"> タグ一覧へもどる（パンくずリストにしたい） </a>
+<br />
+Edit Tag
 <form method="POST" action="/tags?/update">
   <Table shadow hoverable={true} class="text-md">
     <TableBody tableBodyClass="divide-y">
@@ -69,7 +72,8 @@
 <Table shadow hoverable={true} class="text-md">
   <TableHead class="text-md">
     <TableHeadCell class="w-1/6">コンテストID</TableHeadCell>
-    <TableHeadCell class="w-5/6">問題名</TableHeadCell>
+    <TableHeadCell class="w-4/6">問題名</TableHeadCell>
+    <TableHeadCell class="w-5/6"></TableHeadCell>
   </TableHead>
   <TableBody tableBodyClass="divide-y">
     {#each tasks as task}
@@ -90,6 +94,14 @@
             class="font-medium text-primary-600 hover:underline dark:text-primary-500"
           >
             {task.title}
+          </a>
+        </TableBodyCell>
+        <TableBodyCell>
+          <a
+            href="/tasks/{task.task_id}"
+            class="font-medium text-primary-600 hover:underline dark:text-primary-500"
+          >
+            編集
           </a>
         </TableBodyCell>
       </TableBodyRow>

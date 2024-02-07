@@ -52,7 +52,11 @@
           </Label>
         </TableBodyCell>
         <TableBodyCell>
-          <a href="/tags/{tag.id}">編集</a>
+          {#if tag.id !== 'undefined'}
+            <a href="/tags/{tag.id}">編集</a>
+          {:else}
+            未登録
+          {/if}
         </TableBodyCell>
       </TableBodyRow>
     {/each}
