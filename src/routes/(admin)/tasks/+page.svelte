@@ -1,4 +1,5 @@
 <script>
+  import HeadingOne from '$lib/components/HeadingOne.svelte';
   import TaskListForEdit from '$lib/components/TaskListForEdit.svelte';
   export let data;
   //let tasks = data.tasks;
@@ -6,6 +7,6 @@
 </script>
 
 <div class="container mx-auto w-5/6">
-  <h1 class="text-3xl">Import Contests</h1>
+  <HeadingOne title="Import Contests" />
   <TaskListForEdit {importContests} />
 </div>

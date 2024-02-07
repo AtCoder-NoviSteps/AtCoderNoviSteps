@@ -8,14 +8,16 @@
 
   import type { PageData } from './$types';
 
+  import HeadingOne from '$lib/components/HeadingOne.svelte';
+
   export let data: PageData;
 </script>
 
 <!-- TODO: コンポーネントとして切り出す -->
 {#if data.username}
   <div class="container mx-auto w-5/6">
-    <h1 class="text-3xl">Profile</h1>
-    <h2 class="text-2xl mt-3 mb-3">{data.username}</h2>
+    <HeadingOne title="Profile" />
+    <h2 class="text-2xl font-normal mt-3 mb-3">{data.username}</h2>
 
     <p>準備中</p>
 

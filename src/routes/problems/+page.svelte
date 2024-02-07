@@ -1,6 +1,7 @@
 <script lang="ts">
   import { Tabs } from 'flowbite-svelte';
 
+  import HeadingOne from '$lib/components/HeadingOne.svelte';
   import TabItemWrapper from '$lib/components/TabItemWrapper.svelte';
   import type { TaskResults } from '$lib/types/task';
   import TaskGradeList from '$lib/components/TaskGradeList.svelte';
@@ -13,7 +14,7 @@
 
 <!-- TODO: Searchを追加 -->
 <div class="container mx-auto w-5/6">
-  <h1 class="text-3xl">Problems</h1>
+  <HeadingOne title="Problems" />
 
   <!-- See: -->
   <!-- https://flowbite-svelte.com/docs/components/tabs -->
