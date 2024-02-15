@@ -134,8 +134,8 @@ devDependencies:
     specifier: 3.6.4
     version: 3.6.4(postcss@8.4.32)(svelte@4.2.11)
   sveltekit-superforms:
-    specifier: 2.1.0
-    version: 2.1.0(@sveltejs/kit@1.30.3)(@types/json-schema@7.0.14)(esbuild-runner@2.2.2)(esbuild@0.18.20)(svelte@4.2.11)
+    specifier: 2.2.0
+    version: 2.2.0(@sveltejs/kit@1.30.3)(@types/json-schema@7.0.14)(esbuild-runner@2.2.2)(esbuild@0.18.20)(svelte@4.2.11)
   tslib:
     specifier: 2.6.2
     version: 2.6.2
@@ -693,6 +693,13 @@ packages:
   /@popperjs/core@2.11.8:
     resolution: {integrity: sha512-P1st0aksCrn9sGZhp8GMYwBnQsbvAWsZAX44oXNNvLHGqAOcoVxmjZiohstwQ7SqKnbR47akdNi+uleWD8+g6A==}
 
+  /@poppinss/macroable@1.0.1:
+    resolution: {integrity: sha512-bO3+rnqGhE+gdx4DOyYjY9jCm2+c5Ncyl2Gmst0w271rIFnsB00btonpdmAqvFNzS8rcas+APGm+47fYMmkpQA==}
+    engines: {node: '>=18.16.0'}
+    requiresBuild: true
+    dev: true
+    optional: true
+
   /@prisma/client@5.9.1(prisma@5.9.1):
     resolution: {integrity: sha512-caSOnG4kxcSkhqC/2ShV7rEoWwd3XrftokxJqOCMVvia4NYV/TPtJlS9C2os3Igxw/Qyxumj9GBQzcStzECvtQ==}
     engines: {node: '>=16.13'}
@@ -1112,6 +1119,12 @@ packages:
 
   /@types/stack-utils@2.0.3:
     resolution: {integrity: sha512-9aEbYZ3TbYMznPdcdr3SmIrLXwC/AKZXQeCf9Pgao5CKb8CyHuEX5jzWPTkvregvhRJHcpRO6BFoGW9ycaOkYw==}
+
+  /@types/validator@13.11.9:
+    resolution: {integrity: sha512-FCTsikRozryfayPuiI46QzH3fnrOoctTjvOYZkho9BTFLCOZ2rgZJHMOVgCOfttjPJcgOx52EpkY0CMfy87MIw==}
+    requiresBuild: true
+    dev: true
+    optional: true
 
   /@types/yargs-parser@21.0.3:
     resolution: {integrity: sha512-I4q9QU9MQv4oEOz4tAHJtNz1cwuLxn2F3xcc2iV5WdqLPpUnj30aUuxt1mAxYTG+oe8CZMV/+6rU4S4gRDzqtQ==}
@@ -1544,6 +1557,29 @@ packages:
       ts-morph: 12.0.0
     dev: false
 
+  /@vinejs/compiler@2.4.0:
+    resolution: {integrity: sha512-qEhp+Ux4wCeyYlQpB5TddjlRRyxbZz4RVYG/UHGnnnn3eOw326dZGCJldOOEl6huBFoOguMUQfhKLLSjJ0v+XQ==}
+    engines: {node: '>=18.0.0'}
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /@vinejs/vine@1.7.1:
+    resolution: {integrity: sha512-24FYCIMrQZbhUKkVyAApz5/eN34FBVuhayty1RyCNvdvYF2TpZpO/+NyjELW3JRtbIDfrAvr1+pYdJfRIovcbA==}
+    engines: {node: '>=18.16.0'}
+    requiresBuild: true
+    dependencies:
+      '@poppinss/macroable': 1.0.1
+      '@types/validator': 13.11.9
+      '@vinejs/compiler': 2.4.0
+      camelcase: 8.0.0
+      dayjs: 1.11.10
+      dlv: 1.1.3
+      normalize-url: 8.0.0
+      validator: 13.11.0
+    dev: true
+    optional: true
+
   /@vitest/coverage-v8@0.34.6(vitest@0.34.6):
     resolution: {integrity: sha512-fivy/OK2d/EsJFoEoxHFEnNGTg+MmdZBAVK9Ka4qhXR2K3J0DS08vcGVwzDtXSuUMabLv4KtPcpSKkcMXFDViw==}
     peerDependencies:
@@ -1968,6 +2004,13 @@ packages:
   /camelcase-css@2.0.1:
     resolution: {integrity: sha512-QOSvevhslijgYwRx6Rv7zKdMF8lbRmx+uQGx2+vDc+KI/eBnsy9kit5aj23AgGu3pa4t9AgwbnXWqS+iOY+2aA==}
     engines: {node: '>= 6'}
+
+  /camelcase@8.0.0:
+    resolution: {integrity: sha512-8WB3Jcas3swSvjIeA2yvCJ+Miyz5l1ZmB6HFb9R1317dt9LCQoswg/BGrmAmkWVEszSrrg4RwmO46qIm2OEnSA==}
+    engines: {node: '>=16'}
+    requiresBuild: true
+    dev: true
+    optional: true
 
   /caniuse-lite@1.0.30001578:
     resolution: {integrity: sha512-J/jkFgsQ3NEl4w2lCoM9ZPxrD+FoBNJ7uJUpGVjIg/j0OwJosWM36EPDv+Yyi0V4twBk9pPmlFS+PLykgEvUmg==}
@@ -4333,6 +4376,13 @@ packages:
     engines: {node: '>=0.10.0'}
     dev: false
 
+  /normalize-url@8.0.0:
+    resolution: {integrity: sha512-uVFpKhj5MheNBJRTiMZ9pE/7hD1QTeEvugSJW/OmLzAp78PB5O6adfMNTvmfKhXBkvCzC+rqifWcVYpGFwTjnw==}
+    engines: {node: '>=14.16'}
+    requiresBuild: true
+    dev: true
+    optional: true
+
   /npm-run-path@4.0.1:
     resolution: {integrity: sha512-S48WzZW777zhNIrn7gxOlISNAqi9ZC/uQFnRdbeIHhZhCA6UqpkOT8T1G7BvfdgP4Er8gF4sUbaS0i7QvIfCWw==}
     engines: {node: '>=8'}
@@ -5601,8 +5651,8 @@ packages:
       magic-string: 0.30.5
       periscopic: 3.1.0
 
-  /sveltekit-superforms@2.1.0(@sveltejs/kit@1.30.3)(@types/json-schema@7.0.14)(esbuild-runner@2.2.2)(esbuild@0.18.20)(svelte@4.2.11):
-    resolution: {integrity: sha512-Tl3drSPGklOsIG2wbLSM/DZmir/EZfHcB+rbQd2xIx2byqGHm4HGRA7aP9X5cft1d3CqSFJUPTmuTqLurMipZw==}
+  /sveltekit-superforms@2.2.0(@sveltejs/kit@1.30.3)(@types/json-schema@7.0.14)(esbuild-runner@2.2.2)(esbuild@0.18.20)(svelte@4.2.11):
+    resolution: {integrity: sha512-a0oceymCqJyBnT53prNOn/wnFfrzahOsM78lk0LFrN/fhk7aV7JURiWLkPvrAwDP6QPkzc5PPHmBcK/7Qjzljw==}
     requiresBuild: true
     peerDependencies:
       '@sveltejs/kit': 1.x || 2.x
@@ -5618,6 +5668,7 @@ packages:
       '@gcornut/valibot-json-schema': 0.0.22(@types/json-schema@7.0.14)(esbuild-runner@2.2.2)(esbuild@0.18.20)(valibot@0.28.1)
       '@sinclair/typebox': 0.32.14
       '@sodaru/yup-to-json-schema': 2.0.1
+      '@vinejs/vine': 1.7.1
       arktype: 1.0.29-alpha
       joi: 17.12.1
       superstruct: 1.0.3
@@ -6114,6 +6165,13 @@ packages:
 
   /valibot@0.28.1:
     resolution: {integrity: sha512-zQnjwNJuXk6362Leu0+4eFa/SMwRom3/hEvH6s1EGf3oXIPbo2WFKDra9ymnbVh3clLRvd8hw4sKF5ruI2Lyvw==}
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /validator@13.11.0:
+    resolution: {integrity: sha512-Ii+sehpSfZy+At5nPdnyMhx78fEoPDkR2XW/zimHEL3MyGJQOCQ7WeP20jPYRz7ZCpcKLB21NxuXHF3bxjStBQ==}
+    engines: {node: '>= 0.10'}
     requiresBuild: true
     dev: true
     optional: true
