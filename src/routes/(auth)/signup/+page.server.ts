@@ -2,6 +2,7 @@
 // https://lucia-auth.com/guidebook/sign-in-with-username-and-password/sveltekit/
 // https://superforms.rocks/get-started
 import { superValidate } from 'sveltekit-superforms/server';
+import { zod } from 'sveltekit-superforms/adapters';
 import { fail, redirect } from '@sveltejs/kit';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import { LuciaError } from 'lucia';
@@ -18,7 +19,7 @@ export const load: PageServerLoad = async ({ locals }) => {
     throw redirect(302, '/');
   }
 
-  const form = await superValidate(null, authSchema);
+  const form = await superValidate(null, zod(authSchema));
 
   return { form: { ...form, message: '' } };
 };
@@ -26,7 +27,7 @@ export const load: PageServerLoad = async ({ locals }) => {
 // FIXME: エラー処理に共通部分があるため、リファクタリングをしましょう。
 export const actions: Actions = {
   default: async ({ request, locals }) => {
-    const form = await superValidate(request, authSchema);
+    const form = await superValidate(request, zod(authSchema));
 
     if (!form.valid) {
       return fail(400, {
