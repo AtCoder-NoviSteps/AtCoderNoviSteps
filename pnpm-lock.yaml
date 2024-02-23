@@ -98,8 +98,8 @@ devDependencies:
     specifier: 2.35.1
     version: 2.35.1(eslint@8.56.0)(svelte@4.2.11)
   flowbite-svelte:
-    specifier: 0.44.23
-    version: 0.44.23(svelte@4.2.11)
+    specifier: 0.44.24
+    version: 0.44.24(svelte@4.2.11)
   flowbite-svelte-icons:
     specifier: 0.4.4
     version: 0.4.4(svelte@4.2.11)(tailwind-merge@1.14.0)(tailwindcss@3.4.1)
@@ -476,12 +476,6 @@ packages:
     resolution: {integrity: sha512-JUFJad5lv7jxj926GPgymrWQxxjPYuJNiNjNMzqT+HiuP6Vl3dk5xzG+8sTX96np0ZAluvaMzPsjhHZ5rNuNQQ==}
     engines: {node: '>=14'}
 
-  /@floating-ui/core@1.5.3:
-    resolution: {integrity: sha512-O0WKDOo0yhJuugCx6trZQj5jVJ9yR0ystG2JaNAemYUWce+pmM6WUEFIibnWyEJKdrDxhm75NoSRME35FNaM/Q==}
-    dependencies:
-      '@floating-ui/utils': 0.2.1
-    dev: true
-
   /@floating-ui/core@1.6.0:
     resolution: {integrity: sha512-PcF++MykgmTj3CIyOQbKA/hDzOAiqI3mhuoN44WRCopIs1sgoDoU4oty4Jtqaj/y3oDU6fnVSm4QG0a3t5i0+g==}
     dependencies:
@@ -491,12 +485,12 @@ packages:
   /@floating-ui/dom@1.5.4:
     resolution: {integrity: sha512-jByEsHIY+eEdCjnTVu+E3ephzTOzkQ8hgUfGwos+bg7NlH33Zc5uO+QHz1mrQUOgIKKDD1RtS201P9NvAfq3XQ==}
     dependencies:
-      '@floating-ui/core': 1.5.3
+      '@floating-ui/core': 1.6.0
       '@floating-ui/utils': 0.2.1
     dev: true
 
-  /@floating-ui/dom@1.6.1:
-    resolution: {integrity: sha512-iA8qE43/H5iGozC3W0YSnVSW42Vh522yyM1gj+BqRwVsTNOyr231PsXDaV04yT39PsO0QL2QpbI/M0ZaLUQgRQ==}
+  /@floating-ui/dom@1.6.3:
+    resolution: {integrity: sha512-RnDthu3mzPlQ31Ss/BTwQ1zjzIhr3lk1gZB1OC56h/1vEtaXkESrOqL5fQVMfXpwGtRwX+YsZBdyHtJMQnkArw==}
     dependencies:
       '@floating-ui/core': 1.6.0
       '@floating-ui/utils': 0.2.1
@@ -1779,8 +1773,8 @@ packages:
       normalize-path: 3.0.0
       picomatch: 2.3.1
 
-  /apexcharts@3.45.2:
-    resolution: {integrity: sha512-PpuM4sJWy70sUh5U1IFn1m1p45MdHSChLUNnqEoUUUHSU2IHZugFrsVNhov1S8Q0cvfdrCRCvdBtHGSs6PSAWQ==}
+  /apexcharts@3.46.0:
+    resolution: {integrity: sha512-ELAY6vj8JQD7QLktKasTzwm9Wt0qxqfQSo+3QWS7G7I774iK8HCkG1toGsqJH0mkK6PtYBtnSIe66uUcwoCw1w==}
     dependencies:
       '@yr/monotone-cubic-spline': 1.0.3
       svg.draggable.js: 2.2.2
@@ -3162,14 +3156,14 @@ packages:
       tailwindcss: 3.4.1
     dev: true
 
-  /flowbite-svelte@0.44.23(svelte@4.2.11):
-    resolution: {integrity: sha512-F79/iRLLs5WHYX1CqFx5Maqookit1tLpN0VmHR91tcuFEcHY5BRyLXb7hVehwj16wvG7/N0Blchlz55HyqPjhQ==}
+  /flowbite-svelte@0.44.24(svelte@4.2.11):
+    resolution: {integrity: sha512-kXhJZHGpBVq5RFOoYnzRCEM8eFa81DVp4KjUbBsLJptKhizbSSBJuYApWIQb9pBCS8EBhX4PAX+RsgEDZfEqtA==}
     engines: {node: '>=18.0.0', pnpm: '>=8.0.0'}
     peerDependencies:
       svelte: ^4.0.0
     dependencies:
-      '@floating-ui/dom': 1.6.1
-      apexcharts: 3.45.2
+      '@floating-ui/dom': 1.6.3
+      apexcharts: 3.46.0
       flowbite: 2.3.0
       svelte: 4.2.11
       tailwind-merge: 2.2.1
