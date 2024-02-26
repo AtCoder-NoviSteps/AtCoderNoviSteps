@@ -134,8 +134,8 @@ devDependencies:
     specifier: 3.6.4
     version: 3.6.4(postcss@8.4.32)(svelte@4.2.12)
   sveltekit-superforms:
-    specifier: 2.5.0
-    version: 2.5.0(@sveltejs/kit@1.30.4)(@types/json-schema@7.0.14)(esbuild-runner@2.2.2)(esbuild@0.18.20)(svelte@4.2.12)
+    specifier: 2.6.2
+    version: 2.6.2(@sveltejs/kit@1.30.4)(@types/json-schema@7.0.14)(esbuild-runner@2.2.2)(esbuild@0.18.20)(svelte@4.2.12)
   tslib:
     specifier: 2.6.2
     version: 2.6.2
@@ -3875,8 +3875,8 @@ packages:
     resolution: {integrity: sha512-gFqAIbuKyyso/3G2qhiO2OM6shY6EPP/R0+mkDbyspxKazh8BXDC5FiFsUjlczgdNz/vfra0da2y+aHrusLG/Q==}
     hasBin: true
 
-  /joi@17.12.1:
-    resolution: {integrity: sha512-vtxmq+Lsc5SlfqotnfVjlViWfOL9nt/avKNbKYizwf6gsCfq9NYY/ceYRMFD8XDdrjJ9abJyScWmhmIiy+XRtQ==}
+  /joi@17.12.2:
+    resolution: {integrity: sha512-RonXAIzCiHLc8ss3Ibuz45u28GOsWE1UpfDXLbN/9NKbL4tCJf8TWYVKsoYuuh+sAUt7fsSNpA+r2+TBA6Wjmw==}
     requiresBuild: true
     dependencies:
       '@hapi/hoek': 9.3.0
@@ -5645,9 +5645,8 @@ packages:
       magic-string: 0.30.5
       periscopic: 3.1.0
 
-  /sveltekit-superforms@2.5.0(@sveltejs/kit@1.30.4)(@types/json-schema@7.0.14)(esbuild-runner@2.2.2)(esbuild@0.18.20)(svelte@4.2.12):
-    resolution: {integrity: sha512-mMWvmpHpq1iYyawnb8H7NZb+f79z0I81Dx1xPbOak7yIrrwR8wdFnFCCXxdLnIXVAhwhd60jAQraYHcvCaZGgQ==}
-    requiresBuild: true
+  /sveltekit-superforms@2.6.2(@sveltejs/kit@1.30.4)(@types/json-schema@7.0.14)(esbuild-runner@2.2.2)(esbuild@0.18.20)(svelte@4.2.12):
+    resolution: {integrity: sha512-a2dlCO5v+AiDJjEmVlUfEec4Spx/2VC5lp6yEh97sKsIQsNY63lwL8Uh9PmgzOGerDchUwlB008nAZJJf9PDng==}
     peerDependencies:
       '@sveltejs/kit': 1.x || 2.x
       svelte: 3.x || 4.x || >=5.0.0-next.51
@@ -5664,7 +5663,7 @@ packages:
       '@sodaru/yup-to-json-schema': 2.0.1
       '@vinejs/vine': 1.7.1
       arktype: 1.0.29-alpha
-      joi: 17.12.1
+      joi: 17.12.2
       superstruct: 1.0.3
       valibot: 0.28.1
       yup: 1.3.3
