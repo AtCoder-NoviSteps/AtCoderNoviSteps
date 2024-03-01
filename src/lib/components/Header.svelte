@@ -46,7 +46,7 @@
       </Dropdown>
     {/if}
 
-    <!-- ternal Links -->
+    <!-- external Links -->
     {#each navbarLinks as navbarLink}
       <NavLi href={navbarLink.path}>{navbarLink.title}</NavLi>
     {/each}
