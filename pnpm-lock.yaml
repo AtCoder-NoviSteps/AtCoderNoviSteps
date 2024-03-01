@@ -44,6 +44,9 @@ dependencies:
   svelte-add:
     specifier: 2023.9.17-0.0
     version: 2023.9.17-0.0
+  svelte-eslint-parser:
+    specifier: ^0.33.1
+    version: 0.33.1(svelte@4.2.12)
   tailwind-merge:
     specifier: 1.14.0
     version: 1.14.0
@@ -1678,7 +1681,6 @@ packages:
       acorn: ^6.0.0 || ^7.0.0 || ^8.0.0
     dependencies:
       acorn: 8.11.2
-    dev: true
 
   /acorn-walk@8.3.0:
     resolution: {integrity: sha512-FS7hV565M5l1R08MXqo8odwMTB02C2UqzB17RVgu9EyuYFBqJZ3/ZY97sQD5FewVu1UyDFc1yztUDrAwT0EypA==}
@@ -2885,7 +2887,6 @@ packages:
     dependencies:
       esrecurse: 4.3.0
       estraverse: 5.3.0
-    dev: true
 
   /eslint-visitor-keys@3.4.3:
     resolution: {integrity: sha512-wpc+LXeiyiisxPlEkUzU6svyS1frIO3Mgxj1fdy7Pm8Ygzguax2N3Fa/D/ag1WqbOprdI+uY6wMUl8/a2G+iag==}
@@ -2949,7 +2950,6 @@ packages:
       acorn: 8.11.2
       acorn-jsx: 5.3.2(acorn@8.11.2)
       eslint-visitor-keys: 3.4.3
-    dev: true
 
   /esprima@4.0.1:
     resolution: {integrity: sha512-eGuFFw7Upda+g4p+QHvnW0RyTX/SVeJBDM/gCtMARO0cLuT2HcEKnTPvhjV6aGeqrCB/sbNop0Kszm0jsaWU4A==}
@@ -2969,12 +2969,10 @@ packages:
     engines: {node: '>=4.0'}
     dependencies:
       estraverse: 5.3.0
-    dev: true
 
   /estraverse@5.3.0:
     resolution: {integrity: sha512-MMdARuVEQziNTeJD8DgMqmhwR11BRQ/cBP+pLtYdSTnf3MIO8fFeiINEbX36ZdNlfU/7A9f3gUw49B3oQsvwBA==}
     engines: {node: '>=4.0'}
-    dev: true
 
   /estree-walker@2.0.2:
     resolution: {integrity: sha512-Rfkk/Mp/DL7JVje3u18FxFujQlTNR2q6QfMSMB7AvCBx91NGj/ba3kCfza0f6dVDbw7YlRf/nDrn7pQrCCyQ/w==}
@@ -4631,32 +4629,10 @@ packages:
       pathe: 1.1.1
     dev: true
 
-  /playwright-core@1.41.2:
-    resolution: {integrity: sha512-VaTvwCA4Y8kxEe+kfm2+uUUw5Lubf38RxF7FpBxLPmGe5sdNkSg5e3ChEigaGrX7qdqT3pt2m/98LiyvU2x6CA==}
-    engines: {node: '>=16'}
-    hasBin: true
-    dev: true
-
   /playwright-core@1.42.0:
     resolution: {integrity: sha512-0HD9y8qEVlcbsAjdpBaFjmaTHf+1FeIddy8VJLeiqwhcNqGCBe4Wp2e8knpqiYbzxtxarxiXyNDw2cG8sCaNMQ==}
     engines: {node: '>=16'}
     hasBin: true
-
-  /playwright-core@1.42.0:
-    resolution: {integrity: sha512-0HD9y8qEVlcbsAjdpBaFjmaTHf+1FeIddy8VJLeiqwhcNqGCBe4Wp2e8knpqiYbzxtxarxiXyNDw2cG8sCaNMQ==}
-    engines: {node: '>=16'}
-    hasBin: true
-    dev: true
-
-  /playwright@1.41.2:
-    resolution: {integrity: sha512-v0bOa6H2GJChDL8pAeLa/LZC4feoAMbSQm1/jF/ySsWWoaNItvrMP7GEkvEEFyCTUYKMxjQKaTSg5up7nR6/8A==}
-    engines: {node: '>=16'}
-    hasBin: true
-    dependencies:
-      playwright-core: 1.41.2
-    optionalDependencies:
-      fsevents: 2.3.2
-    dev: true
 
   /playwright@1.42.0:
     resolution: {integrity: sha512-Ko7YRUgj5xBHbntrgt4EIw/nE//XBHOKVKnBjO1KuZkmkhlbgyggTe5s9hjqQ1LpN+Xg+kHsQyt5Pa0Bw5XpvQ==}
@@ -4666,16 +4642,6 @@ packages:
       playwright-core: 1.42.0
     optionalDependencies:
       fsevents: 2.3.2
-
-  /playwright@1.42.0:
-    resolution: {integrity: sha512-Ko7YRUgj5xBHbntrgt4EIw/nE//XBHOKVKnBjO1KuZkmkhlbgyggTe5s9hjqQ1LpN+Xg+kHsQyt5Pa0Bw5XpvQ==}
-    engines: {node: '>=16'}
-    hasBin: true
-    dependencies:
-      playwright-core: 1.42.0
-    optionalDependencies:
-      fsevents: 2.3.2
-    dev: true
 
   /pnpm@8.15.4:
     resolution: {integrity: sha512-C9Opvp6w6aaSZ23uwAowO6IYuiedmSQUdWFrOY267t0RFG+SwoQ0WPVXsdEn4J1MFx4QW9zWthACs5aFqAFrng==}
@@ -4761,7 +4727,6 @@ packages:
       postcss: ^8.4.29
     dependencies:
       postcss: 8.4.32
-    dev: true
 
   /postcss-selector-parser@6.0.13:
     resolution: {integrity: sha512-EaV1Gl4mUEV4ddhDnv/xtj7sxwrwxdetHdWUGnT4VJQf+4d05v6lHYZr8N573k5Z0BViss7BDhfWtKS3+sfAqQ==}
@@ -5600,7 +5565,6 @@ packages:
       postcss: 8.4.32
       postcss-scss: 4.0.9(postcss@8.4.32)
       svelte: 4.2.12
-    dev: true
 
   /svelte-hmr@0.15.3(svelte@4.2.12):
     resolution: {integrity: sha512-41snaPswvSf8TJUhlkoJBekRrABDXDMdpNpT2tfHIv4JuhgvHqLMhEPGtaQn0BmbNSTkuz2Ed20DF2eHw0SmBQ==}
@@ -5683,6 +5647,23 @@ packages:
     peerDependencies:
       '@sveltejs/kit': 1.x || 2.x
       svelte: 3.x || 4.x || >=5.0.0-next.51
+    peerDependenciesMeta:
+      '@sinclair/typebox':
+        optional: true
+      '@vinejs/vine':
+        optional: true
+      arktype:
+        optional: true
+      joi:
+        optional: true
+      superstruct:
+        optional: true
+      valibot:
+        optional: true
+      yup:
+        optional: true
+      zod:
+        optional: true
     dependencies:
       '@sveltejs/kit': 1.30.4(svelte@4.2.12)(vite@4.5.2)
       devalue: 4.3.2
