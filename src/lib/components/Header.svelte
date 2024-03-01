@@ -12,8 +12,11 @@
   import ChevronDownOutline from 'flowbite-svelte-icons/ChevronDownOutline.svelte';
 
   import { PRODUCT_NAME } from '$lib/constants/product-info';
-  import { navbarLinks } from '$lib/constants/navbar-links';
+  import { navbarDashboardLinks, navbarLinks } from '$lib/constants/navbar-links';
   import { externalLinks } from '$lib/constants/external-links';
+
+  export let isAdmin: boolean;
+  console.log(isAdmin);
 </script>
 
 <!-- TODO: Add logo. -->
@@ -26,8 +29,24 @@
     </span>
   </NavBrand>
   <NavHamburger on:click={toggle} />
+
   <NavUl {hidden}>
-    <!-- Internal Links-->
+    <!-- Dashboard (Admin only) -->
+    {#if isAdmin}
+      <NavLi id="nav-dashboard" class="cursor-pointer">
+        Dashboard
+        <ChevronDownOutline class="w-3 h-3 ml-2 text-primary-800 dark:text-white inline" />
+      </NavLi>
+      <Dropdown triggeredBy="#nav-dashboard" class="w-44 z-20">
+        {#each navbarDashboardLinks as navbarDashboardLink}
+          <DropdownItem href={navbarDashboardLink.path} rel="noreferrer">
+            {navbarDashboardLink.title}
+          </DropdownItem>
+        {/each}
+      </Dropdown>
+    {/if}
+
+    <!-- ternal Links -->
     {#each navbarLinks as navbarLink}
       <NavLi href={navbarLink.path}>{navbarLink.title}</NavLi>
     {/each}
@@ -39,7 +58,7 @@
     <!-- else -->
     <!-- 登録・ログインページを表示 -->
 
-    <!-- External Links-->
+    <!-- External Links -->
     <NavLi id="nav-external-links" class="cursor-pointer">
       Links
       <ChevronDownOutline class="w-3 h-3 ml-2 text-primary-800 dark:text-white inline" />
