@@ -9,6 +9,7 @@
   import type { PageData } from './$types';
 
   import HeadingOne from '$lib/components/HeadingOne.svelte';
+  import { PRODUCT_CATCH_PHRASE } from '$lib/constants/product-info';
 
   export let data: PageData;
 </script>
@@ -33,7 +34,7 @@
   <!-- TODO: かっこいいロゴを入れる -->
   <div class="container mx-auto w-2/3 text-center">
     <Heading tag="h1" class="mb-4" customSize="text-4xl font-extrabold  md:text-5xl lg:text-6xl">
-      TODO: サービスのキャッチフレーズを書く
+      {PRODUCT_CATCH_PHRASE}
     </Heading>
     <P class="mb-6 text-lg lg:text-xl sm:px-16 xl:px-48 dark:text-gray-400">
       TODO: サービスの特徴・意義を一言で要約
