@@ -1,4 +1,6 @@
 import { test, expect } from '@playwright/test';
+import { PRODUCT_CATCH_PHRASE } from '../src/lib/constants/product-info.ts';
+
 test('login logout', async ({ page }) => {
   await page.goto('/');
   await page.getByRole('button', { name: '問題を解く' }).click();
@@ -7,7 +9,5 @@ test('login logout', async ({ page }) => {
   await page.locator('input[name="password"]').fill('Ch0kuda1');
   await page.getByRole('button', { name: 'ログイン' }).click();
   await page.getByRole('button', { name: 'Log out' }).click();
-  await expect(
-    page.getByRole('heading', { name: 'TODO: サービスのキャッチフレーズを書く' }),
-  ).toBeVisible();
+  await expect(page.getByRole('heading', { name: PRODUCT_CATCH_PHRASE })).toBeVisible();
 });
