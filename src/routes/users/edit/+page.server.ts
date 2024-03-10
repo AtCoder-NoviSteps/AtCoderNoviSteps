@@ -102,16 +102,16 @@ export const actions: Actions = {
     };
   },
 
-  delete: async ({ request }) => {
+  delete: async ({ request, locals }) => {
     console.log('users->actions->delete');
     const formData = await request.formData();
-    console.log(formData);
     const username = formData.get('username')?.toString() as string;
     const atcoder_username = formData.get('atcoder_username')?.toString() as string;
 
-    console.log('TOdoユーザを削除するコードを書きます');
     //const validationCode = await validationService.generate(username, atcoder_username);
     //console.log(validationCode);
+    await userService.deleteUser(username);
+    locals.auth.setSession(null); // remove cookie
 
     return {
       success: true,
