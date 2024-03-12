@@ -37,7 +37,16 @@
       {PRODUCT_CATCH_PHRASE}
     </Heading>
     <P class="mb-6 text-lg lg:text-xl sm:px-16 xl:px-48 dark:text-gray-400">
-      TODO: サービスの特徴・意義を一言で要約
+      【非公式】競技プログラミングサイト
+      <a
+        href="https://atcoder.jp/"
+        class="font-medium text-primary-600 hover:underline dark:text-primary-500"
+        target="_blank"
+        rel="noreferrer"
+      >
+        AtCoder
+      </a>
+      で出題された問題のうち、主にAtCoder Beginner Contest (通称、ABC) の A〜C問題の難易度を細分化し、段階的に必要な知識を習得できるようにサポートします。
     </P>
     <div class="flex flex-wrap md:justify-center md:items-center">
       <Button href="/problems" class="w-screen md:w-1/3 m-2">問題を解く</Button>
