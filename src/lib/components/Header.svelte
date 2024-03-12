@@ -63,7 +63,7 @@
       Links
       <ChevronDownOutline class="w-3 h-3 ml-2 text-primary-800 dark:text-white inline" />
     </NavLi>
-    <Dropdown triggeredBy="#nav-external-links" class="w-44 z-20">
+    <Dropdown triggeredBy="#nav-external-links" class="w-48 z-20">
       {#each externalLinks as externalLink}
         <DropdownItem href={externalLink.path} target="_blank" rel="noreferrer">
           {externalLink.title}
