@@ -130,6 +130,8 @@ model TaskTag {
   @@map("tasktag")
 }
 
+// See:
+// https://www.prisma.io/docs/orm/more/upgrade-guides/upgrading-versions/upgrading-to-prisma-3/referential-actions
 model TaskAnswer {
   id        String @unique
   task_id   String
@@ -137,7 +139,7 @@ model TaskAnswer {
   status_id String
 
   task   Task?             @relation(fields: [task_id], references: [task_id])
-  user   User?             @relation(fields: [user_id], references: [id])
+  user   User?             @relation(fields: [user_id], references: [id], onDelete: Cascade)
   status SubmissionStatus? @relation(fields: [status_id], references: [id])
 
   created_at DateTime @default(now())

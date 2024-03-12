@@ -7,9 +7,6 @@ import type { Actions } from './$types';
 
 import { redirect } from '@sveltejs/kit';
 
-//export let action_result = false;
-//export let action_result_message = "";
-
 export async function load({ locals }) {
   const session = await locals.auth.validate();
   if (!session) {
@@ -17,7 +14,6 @@ export async function load({ locals }) {
   }
 
   try {
-    console.log('load');
     const user = await userService.getUser(session?.user.username as string);
 
     return {
@@ -32,7 +28,7 @@ export async function load({ locals }) {
       message: '',
     };
   } catch (e) {
-    console.log("Can't find usrname:", session?.user.username);
+    console.log("Can't find username:", session?.user.username);
     throw redirect(302, '/login');
   }
 }
@@ -41,13 +37,11 @@ export const actions: Actions = {
   generate: async ({ request }) => {
     console.log('users->actions->generate');
     const formData = await request.formData();
-    //console.log(formData);
     const username = formData.get('username')?.toString() as string;
     const atcoder_username = formData.get('atcoder_username')?.toString() as string;
 
     //console.log('ここにvalidationCodeを作成してデータベースに登録するコードを書きます');
     const validationCode = await validationService.generate(username, atcoder_username);
-    //console.log(validationCode);
 
     return {
       success: true,
@@ -61,7 +55,6 @@ export const actions: Actions = {
   validate: async ({ request }) => {
     console.log('users->actions->validate');
     const formData = await request.formData();
-    //console.log(formData);
     const username = formData.get('username')?.toString() as string;
     const atcoder_username = formData.get('atcoder_username')?.toString() as string;
     const atcoder_validationcode = formData.get('atcoder_validationcode')?.toString() as string;
@@ -76,7 +69,7 @@ export const actions: Actions = {
         atcoder_username: atcoder_username,
         atcoder_validationcode: atcoder_validationcode,
         message_type: 'green',
-        message: 'Successfuly validated.',
+        message: 'Successfully validated.',
       },
     };
   },
@@ -84,13 +77,11 @@ export const actions: Actions = {
   reset: async ({ request }) => {
     console.log('users->actions->edit');
     const formData = await request.formData();
-    //console.log(formData);
     const username = formData.get('username')?.toString() as string;
     const atcoder_username = formData.get('atcoder_username')?.toString() as string;
 
     //console.log('AtCoderのユーザ名とValicationCodeをリセットする。');
     const validationCode = await validationService.reset(username);
-    //console.log(validationCode);
 
     return {
       success: true,
@@ -98,20 +89,18 @@ export const actions: Actions = {
       atcoder_username: atcoder_username,
       atcoder_validationcode: validationCode,
       message_type: 'green',
-      message: 'Successfuly reset.',
+      message: 'Successfully reset.',
     };
   },
 
-  delete: async ({ request }) => {
+  delete: async ({ request, locals }) => {
     console.log('users->actions->delete');
     const formData = await request.formData();
-    console.log(formData);
     const username = formData.get('username')?.toString() as string;
     const atcoder_username = formData.get('atcoder_username')?.toString() as string;
 
-    console.log('TOdoユーザを削除するコードを書きます');
-    //const validationCode = await validationService.generate(username, atcoder_username);
-    //console.log(validationCode);
+    await userService.deleteUser(username);
+    locals.auth.setSession(null); // remove cookie
 
     return {
       success: true,
@@ -119,7 +108,7 @@ export const actions: Actions = {
       atcoder_username: atcoder_username,
       atcoder_validationcode: false,
       message_type: 'green',
-      message: 'Successfuly deleted.',
+      message: 'Successfully deleted.',
     };
   },
 };

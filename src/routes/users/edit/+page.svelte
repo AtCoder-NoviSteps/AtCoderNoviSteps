@@ -1,15 +1,18 @@
 <script lang="ts">
-  import { Tabs, TabItem, Button, Alert } from 'flowbite-svelte';
+  import { Tabs, TabItem, Alert } from 'flowbite-svelte';
 
   import AtCoderUserValidationForm from '$lib/components/AtCoderUserValidationForm.svelte';
+  import UserAccountDeletionForm from '$lib/components/UserAccountDeletionForm.svelte';
   import ContainerWrapper from '$lib/components/ContainerWrapper.svelte';
   import FormWrapper from '$lib/components/FormWrapper.svelte';
   import ReadOnlyLabel from '$lib/components/ReadOnlyLabel.svelte';
   import SubmissionButton from '$lib/components/SubmissionButton.svelte';
-  //import type { ActionForm } from './$types';
-  export let data;
-  //export let form;
 
+  import { Roles } from '$lib/types/user';
+
+  export let data;
+
+  let role = data.role;
   let username = data.username;
   let atcoder_username = data.atcoder_username;
   let atcoder_validationcode = data.atcoder_validationcode;
@@ -24,6 +27,10 @@
   if (data.atcoder_username.length > 0 && data.atcoder_validationcode.length > 0) {
     status = 'generated';
   }
+
+  const isGeneralUser = (userRole: Roles, userName: string) => {
+    return userRole === Roles.USER && userName !== 'guest';
+  };
 </script>
 
 {#if message_type === 'default'}
@@ -86,15 +93,12 @@
       </TabItem>
     {/if}
 
-    <!-- アカウント削除 -->
-    <TabItem>
-      <span slot="title" class="text-lg">アカウント削除</span>
-      <ContainerWrapper>
-        <FormWrapper action="/users/delete">
-          <ReadOnlyLabel labelName="ユーザ名" inputValue={username} />
-          <Button disabled readonly type="submit" class="w-full">アカウントを削除</Button>
-        </FormWrapper>
-      </ContainerWrapper>
-    </TabItem>
+    <!-- アカウント削除 (ゲストを除いた一般ユーザのみ) -->
+    {#if isGeneralUser(role, username)}
+      <TabItem>
+        <span slot="title" class="text-lg">アカウント削除</span>
+        <UserAccountDeletionForm {username} />
+      </TabItem>
+    {/if}
   </Tabs>
 </div>
