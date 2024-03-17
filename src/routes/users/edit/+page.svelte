@@ -2,11 +2,11 @@
   import { Tabs, TabItem, Alert } from 'flowbite-svelte';
 
   import AtCoderUserValidationForm from '$lib/components/AtCoderUserValidationForm.svelte';
+  import FormToImportSubmissions from '$lib/components/FormToImportSubmissions.svelte';
   import UserAccountDeletionForm from '$lib/components/UserAccountDeletionForm.svelte';
   import ContainerWrapper from '$lib/components/ContainerWrapper.svelte';
   import FormWrapper from '$lib/components/FormWrapper.svelte';
   import ReadOnlyLabel from '$lib/components/ReadOnlyLabel.svelte';
-  import SubmissionButton from '$lib/components/SubmissionButton.svelte';
 
   import { Roles } from '$lib/types/user';
 
@@ -16,7 +16,7 @@
   let username = data.username;
   let atcoder_username = data.atcoder_username;
   let atcoder_validationcode = data.atcoder_validationcode;
-  let atcoder_is_validated = data.is_validated;
+  let atcoder_account_is_validated = data.is_validated;
   let message = data.message;
   let message_type = data.message_type;
 
@@ -55,43 +55,33 @@
           <ReadOnlyLabel labelName="ユーザ名" inputValue={username} />
           <ReadOnlyLabel labelName="AtCoder ID" inputValue={atcoder_username} />
 
-          <SubmissionButton labelName="保存" />
+          <!-- <SubmissionButton labelName="保存" /> -->
         </FormWrapper>
       </ContainerWrapper>
     </TabItem>
 
-    <!-- ステータス -->
-    <TabItem disabled>
-      <span slot="title" class="text-lg text-gray-400 dark:text-gray-500">ステータス編集</span>
-      <p class="text-sm text-gray-500 dark:text-gray-400">
-        <b>Settings:</b>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
-        labore et dolore magna aliqua.
-      </p>
-    </TabItem>
-
-    <!-- AtCoder IDを利用した認証 -->
+    <!-- AtCoder IDによる認証 (本人確認) -->
     <TabItem>
       <span slot="title" class="text-lg">AtCoder IDを設定</span>
       <AtCoderUserValidationForm {username} {atcoder_username} {atcoder_validationcode} {status} />
     </TabItem>
 
     <!-- 問題の回答状況をインポート (AtCoder ProblemsのAPIを使用) -->
-    {#if atcoder_is_validated === true}
-      <TabItem>
-        <span slot="title" class="text-lg text-gray-400 dark:text-gray-500">インポート</span>
-        <p class="text-sm text-gray-500 dark:text-gray-400">
-          <b>TODO:Taskのインポートボタンを作成する</b>
-        </p>
-      </TabItem>
-    {:else}
-      <TabItem disabled>
-        <span slot="title" class="text-lg text-gray-400 dark:text-gray-500">インポート</span>
-        <p class="text-sm text-gray-500 dark:text-gray-400">
-          <b>Disabled:</b>
-        </p>
-      </TabItem>
-    {/if}
+    <!-- 前提条件: AtCoder IDによる本人確認が済んでいる -->
+    <TabItem>
+      <span slot="title" class="text-lg">問題の回答状況をインポート</span>
+      <FormToImportSubmissions {username} {atcoder_username} {atcoder_account_is_validated} />
+    </TabItem>
+
+    <!-- TODO: 回答に関するステータスを編集できるようにする -->
+    <!-- <TabItem disabled>
+      <span slot="title" class="text-lg text-gray-400 dark:text-gray-500">ステータス編集</span>
+      <p class="text-sm text-gray-500 dark:text-gray-400">
+        <b>Settings:</b>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
+        labore et dolore magna aliqua.
+      </p>
+    </TabItem> -->
 
     <!-- アカウント削除 (ゲストを除いた一般ユーザのみ) -->
     {#if isGeneralUser(role, username)}

@@ -111,4 +111,19 @@ export const actions: Actions = {
       message: 'Successfully deleted.',
     };
   },
+
+  fetch: async ({ request }) => {
+    console.log('users->actions->fetch');
+    // FIXME: 他のActionsと重複したコードが多いので、汎用メソッドとして切り出す
+    const formData = await request.formData();
+    const username = formData.get('username')?.toString() as string;
+    const atcoder_username = formData.get('atcoder_username')?.toString() as string;
+    // TODO: フォームからAtCoder ProblemsのSubmission APIで指定する日時データを取得
+
+    console.log(username);
+    console.log(atcoder_username);
+  },
+
+  // TODO: 回答状況をまとめてインポートできるようにする
+  // TODO: 回答状況を指定してインポートできるようにする
 };
