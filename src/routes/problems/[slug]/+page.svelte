@@ -2,15 +2,13 @@
   import { enhance } from '$app/forms';
   import { Breadcrumb, BreadcrumbItem, Img } from 'flowbite-svelte';
 
-  import { ATCODER_BASE_CONTEST_URL } from '$lib/constants/urls';
   import SubmissionStatusButton from '$lib/components/SubmissionStatusButton.svelte';
   import ExternalLinkIcon from '$lib/components/ExternalLinkIcon.svelte';
+  import { taskUrl } from '$lib/utils/task';
 
   export let data;
-  let taskResult = data.taskResult;
 
-  // FIXME: 汎用的な処理なので、外部ファイルにまとめる
-  const taskUrl = `${ATCODER_BASE_CONTEST_URL}/${taskResult.contest_id}/tasks/${taskResult.task_id}`;
+  let taskResult = data.taskResult;
   let buttons = data.buttons;
 </script>
 
@@ -27,7 +25,7 @@
   <!-- See: https://flowbite.com/docs/components/card/#card-with-image -->
   <!-- FIXME: ハードコーディングしている部分を定数に差し替え -->
   <a
-    href={taskUrl}
+    href={taskUrl(taskResult)}
     target="_blank"
     rel="noreferrer"
     class="flex flex-col items-center bg-white border border-gray-200 rounded-lg max-w-lg mt-8 mb-8 mx-auto shadow md:flex-row md:max-w-xl hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700"

@@ -1,4 +1,9 @@
-import { TaskGrade } from '$lib/types/task';
+import { TaskGrade, type TaskResult } from '$lib/types/task';
+import { ATCODER_BASE_CONTEST_URL } from '$lib/constants/urls';
+
+export const taskUrl = (taskResult: TaskResult) => {
+  return `${ATCODER_BASE_CONTEST_URL}/${taskResult.contest_id}/tasks/${taskResult.task_id}`;
+};
 
 // https://tailwindcss.com/docs/customizing-colors
 // https://tailwindcss.com/docs/content-configuration#dynamic-class-names

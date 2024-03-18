@@ -15,6 +15,7 @@
   import type { TaskResults } from '$lib/types/task';
   import { ATCODER_BASE_CONTEST_URL } from '$lib/constants/urls';
   import { getContestNameLabel } from '$lib/utils/contest';
+  import { taskUrl } from '$lib/utils/task';
 
   export let grade: string;
   export let gradeColor: string;
@@ -79,7 +80,9 @@
             </TableBodyCell>
             <TableBodyCell>
               <a
-                href="/problems/{taskResult.task_id}"
+                href={taskUrl(taskResult)}
+                target="_blank"
+                rel="noreferrer"
                 class="font-medium text-primary-600 hover:underline dark:text-primary-500"
               >
                 {taskResult.title}
@@ -92,6 +95,13 @@
                   class="font-medium text-primary-600 hover:underline dark:text-primary-500"
                 >
                   編集
+                </a>
+              {:else}
+                <a
+                  href="/problems/{taskResult.task_id}"
+                  class="font-medium text-primary-600 hover:underline dark:text-primary-500"
+                >
+                  回答を更新
                 </a>
               {/if}
             </TableBodyCell>
