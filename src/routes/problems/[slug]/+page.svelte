@@ -4,7 +4,7 @@
 
   import SubmissionStatusButton from '$lib/components/SubmissionStatusButton.svelte';
   import ExternalLinkIcon from '$lib/components/ExternalLinkIcon.svelte';
-  import { taskUrl } from '$lib/utils/task.js';
+  import { taskUrl } from '$lib/utils/task';
 
   export let data;
 

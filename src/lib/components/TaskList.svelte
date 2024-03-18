@@ -15,7 +15,7 @@
   import type { TaskResults } from '$lib/types/task';
   import { ATCODER_BASE_CONTEST_URL } from '$lib/constants/urls';
   import { getContestNameLabel } from '$lib/utils/contest';
-  import { taskUrl } from '$lib/utils/task.js';
+  import { taskUrl } from '$lib/utils/task';
 
   export let grade: string;
   export let gradeColor: string;
