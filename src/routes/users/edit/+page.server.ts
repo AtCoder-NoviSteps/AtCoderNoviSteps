@@ -3,6 +3,7 @@
 import type { Roles } from '$lib/types/user';
 import * as userService from '$lib/services/users';
 import * as validationService from '$lib/services/validateApiService';
+import * as atCoderProblemsService from '$lib/services/problemsApiService';
 import type { Actions } from './$types';
 
 import { redirect } from '@sveltejs/kit';
@@ -122,6 +123,12 @@ export const actions: Actions = {
 
     console.log(username);
     console.log(atcoder_username);
+
+    const submissions = await atCoderProblemsService.getUserSubmissions(
+      atcoder_username,
+      1710000000,
+    );
+    console.log(submissions);
   },
 
   // TODO: 回答状況をまとめてインポートできるようにする
