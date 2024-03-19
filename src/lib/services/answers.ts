@@ -1,18 +1,5 @@
-//import { answers } from '$lib/server/sample_data';
-//import taskAnswerSchema from '$lib/server/taskanswer';
-
-//server/databaseのインポートでは保存がうまくいかず。
-//import { PrismaClient } from '@prisma/client';
-//import {defineTaskAnswerFactory } from '../../../prisma/.fabbrica';
-// import { PrismaClient } from '@prisma/client';
-// prisma.taskAnswer.createが実行できれば、defineTaskAnswerFactoryをインポートしなくて済むはずです。
-// また、initializeは、内部メソッドを直接インポートすることで対処できそうです。
-
 import { initialize } from '@quramy/prisma-fabbrica/lib/internal';
-//import { initialize, defineTaskAnswerFactory } from '../../__generated__/fabbrica';
 
-//import { default as prisma } from '$lib/server/database';
-//const prisma = new PrismaClient();
 import { default as prisma } from '$lib/server/database';
 import type { TaskAnswer } from '@prisma/client';
 import { sha256 } from '$lib/utils/hash';
@@ -64,7 +51,6 @@ export async function getAnswer(task_id: string, user_id: string) {
   return answers_from_db[0];
 }
 
-// TODO: createAnswer()
 export async function createAnswer(task_id: string, user_id: string, status_id: string) {
   const id = await sha256(task_id + user_id);
   const taskanswerInput: TaskAnswer = {
@@ -76,7 +62,6 @@ export async function createAnswer(task_id: string, user_id: string, status_id: 
     updated_at: new Date(),
   };
 
-  //const taskAnswerFactory = defineTaskAnswerFactory();
   const taskAnswer = await prisma.taskAnswer.create({
     data: taskanswerInput,
   });

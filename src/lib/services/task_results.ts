@@ -8,26 +8,15 @@ import { default as db } from '$lib/server/database';
 import { getSubmissionStatusMapWithId, getSubmissionStatusMapWithName } from './submission_status';
 import type { TaskAnswer } from '../types/answer';
 
-// In a real app, this data would live in a database,
-// rather than in memory. But for now, we cheat.
 // DBから取得した問題一覧とログインしているユーザの回答を紐付けしたデータ保持
-// HACK: よりスマート、かつ、セキュリティにも安全な方法があるはず
-//const taskResultsMap = new Map();
-
 const statusById = await getSubmissionStatusMapWithId();
 const statusByName = await getSubmissionStatusMapWithName();
 
-// TODO: Enable to fetch data from the database.
 export async function getTaskResults(userId: string): Promise<TaskResults> {
   const taskResultsMap = new Map();
 
-  // FIXME: 問題一覧と特定のユーザの回答状況を使ってデータを結合
-  // 計算量: 問題数をN、特定のユーザの解答数をMとすると、O(N + M)になるはず。
-
-  // TODO: useIdを動的に変更できるようにする。
-  // TODO: getUser(userId)を用意して、取得できるようにする。
-  //const userId = 'hogehoge';
-
+  // 問題一覧と特定のユーザの回答状況を使ってデータを結合
+  // 計算量: 問題数をN、特定のユーザの解答数をMとすると、O(N + M)になるはず
   const tasks = await getTasks();
   const answers = await answer_crud.getAnswers(userId);
   const sampleTaskResults = tasks.map((task: Task) => {
@@ -51,12 +40,10 @@ export async function getTaskResults(userId: string): Promise<TaskResults> {
   return Array.from(taskResultsMap.get(userId).values());
 }
 
-// TODO: Enable to fetch data from the database.
 export async function getTaskResultsOnlyResultExists(userId: string): Promise<TaskResults> {
   const taskResultsMap = new Map();
 
   // TODO: answerの降順にしたい
-
   const tasks = await getTasks();
   const answers = await answer_crud.getAnswers(userId);
   const tasksHasAnswer = tasks.filter((task) => answers.has(task.task_id));
@@ -98,12 +85,6 @@ export function createDefaultTaskResult(userId: string, task: Task): TaskResult 
   return taskResult;
 }
 export async function getTaskResult(slug: string, userId: string) {
-  // TODO: useIdを動的に変更できるようにする。
-  //const userId = 'hogehoge';
-  //const task: TaskResult = taskResultsMap
-  //  .get(userId)
-  //  .find((taskResult: TaskResult) => taskResult.task_id === slug);
-
   const task = await getTask(slug);
 
   if (!task || task.length == 0) {
@@ -124,8 +105,6 @@ export async function getTaskResult(slug: string, userId: string) {
   taskResult.is_ac = status.is_ac;
   taskResult.user_id = userId;
 
-  //console.log(taskResult.status_id, taskResult.status_name, taskResult.user_id)
-
   return taskResult;
 }
 
@@ -133,8 +112,6 @@ export async function updateTaskResult(slug: string, submissionStatus: string, u
   const taskResult: TaskResult | null = await getTaskResult(slug, userId);
 
   if (taskResult) {
-    //taskResult.status_id = statusByName.get(submissionStatus).id;
-    //taskResult.submission_status = submissionStatus;
     const status_id = statusByName.get(submissionStatus).id;
 
     const resisteredTaskAnswer = await db.taskAnswer.findMany({
@@ -142,11 +119,10 @@ export async function updateTaskResult(slug: string, submissionStatus: string, u
     });
 
     if (resisteredTaskAnswer.length == 0) {
-      //console.log('invoke createTaskResult(', slug, submissionStatus, userId, ')');
       await answer_crud.createAnswer(slug, userId, status_id);
     }
+    console.log('foo');
 
-    //console.log('invoke updateTaskResult(', slug, submissionStatus, userId, ')');
     await db.taskAnswer.update({
       where: {
         task_id_user_id: { task_id: slug, user_id: userId },
@@ -155,6 +131,7 @@ export async function updateTaskResult(slug: string, submissionStatus: string, u
         status_id: status_id,
       },
     });
+    console.log(status_id);
   }
 }
 
@@ -164,7 +141,6 @@ export async function getTasksWithTagIds(
 ): Promise<TaskResults> {
   const taskResultsMap = new Map();
 
-  //const userId = 'hogehoge';
   const tagIds = tagIds_string.split(',');
   const taskIdByTagIds = await db.taskTag.groupBy({
     by: ['task_id'],
