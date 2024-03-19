@@ -1,3 +1,5 @@
+import { delay } from '$lib/utils/time';
+
 // See:
 // https://github.com/kenkoooo/AtCoderProblems/blob/master/doc/api.md
 const allProblemsUrl = 'https://kenkoooo.com/atcoder/resources/problems.json';
@@ -51,7 +53,7 @@ export async function getUserSubmissions(
   start_time_in_unix_second: number,
 ) {
   const url = userSubmissionsUrl(atcoder_username, start_time_in_unix_second);
-  const userSubmissions = await fetchAtCoderProblemsAPI(url, '');
+  const userSubmissions = await fetchAtCoderProblemsAPI(url, 'Failed to fetch submissions: ');
 
   return userSubmissions;
 }
@@ -80,9 +82,4 @@ async function fetchAtCoderProblemsAPI(url: string, error_messages: string) {
     console.error(error_messages, error);
     throw error;
   }
-}
-
-// TODO: Extract method.
-function delay(milliseconds: number) {
-  return new Promise((resolve) => setTimeout(resolve, milliseconds));
 }
