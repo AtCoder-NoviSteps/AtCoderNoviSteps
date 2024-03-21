@@ -11,11 +11,9 @@
   export let atcoder_account_is_validated: boolean;
 </script>
 
-<!-- FIXME: 体裁を修正 -->
 {#if atcoder_account_is_validated}
   <ContainerWrapper>
     <FormWrapper action="?/fetch">
-      <Input size="sm" type="hidden" name="username" bind:value={username} />
       <ReadOnlyLabel labelName="ユーザ名" inputValue={username} />
 
       <Input size="md" type="hidden" name="atcoder_username" bind:value={atcoder_username} />

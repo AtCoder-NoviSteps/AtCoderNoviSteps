@@ -1,6 +1,7 @@
 import { default as db } from '$lib/server/database';
 import type { TaskGrade } from '$lib/types/task';
 import type { Task } from '$lib/types/task';
+import * as answerCrud from '$lib/services/answers';
 
 // See:
 // https://www.prisma.io/docs/concepts/components/prisma-client/filtering-and-sorting
@@ -54,6 +55,24 @@ export async function updateTask(task_id: string, task_grade: TaskGrade) {
 }
 
 // TODO: deleteTask()
+
+export async function extractUnansweredTasks(userId: string): Promise<Map<string, Task>> {
+  const tasks = await getTasks();
+  const answers = await answerCrud.getAnswers(userId);
+  const unansweredTasksMap: Map<string, Task> = new Map();
+
+  // HACK: 一度回答し、その後で「No Sub」に変更した場合を考慮する必要があるか?
+  // 現状では、上記の操作を許容していないはず
+  tasks.map((task: Task) => {
+    const taskId = task.task_id;
+
+    if (!answers.has(taskId)) {
+      unansweredTasksMap.set(taskId, task);
+    }
+  });
+
+  return unansweredTasksMap;
+}
 
 // Note:
 // Uncomment only when executing the following commands directly from the script.
