@@ -58,7 +58,7 @@
     "svelte-check": "3.6.8",
     "sveltekit-superforms": "2.10.6",
     "tslib": "2.6.2",
-    "typescript": "5.4.2",
+    "typescript": "5.4.3",
     "vite": "4.5.2",
     "vitest": "0.34.6",
     "zod": "3.22.4"
