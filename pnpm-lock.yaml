@@ -91,6 +91,12 @@ devDependencies:
   '@vitest/ui':
     specifier: 0.34.7
     version: 0.34.7(vitest@0.34.6)
+  date-fns:
+    specifier: ^3.6.0
+    version: 3.6.0
+  date-picker-svelte:
+    specifier: ^2.11.0
+    version: 2.11.0(svelte@4.2.12)
   eslint:
     specifier: 8.57.0
     version: 8.57.0
@@ -2295,6 +2301,18 @@ packages:
     dependencies:
       whatwg-mimetype: 4.0.0
       whatwg-url: 14.0.0
+    dev: true
+
+  /date-fns@3.6.0:
+    resolution: {integrity: sha512-fRHTG8g/Gif+kSh50gaGEdToemgfj74aRX3swtiouboip5JDLAyDE9F11nHMIcvOaXeOC6D7SpNhi7uFyB7Uww==}
+    dev: true
+
+  /date-picker-svelte@2.11.0(svelte@4.2.12):
+    resolution: {integrity: sha512-iaYxY2mZN6uJ1AidZUFy0MorGzdMUeaD5G8z6NIbg22GIn/9ZdnkonTY7I3+zrPp85eGZx/Ws9sCJVhMyV7sog==}
+    peerDependencies:
+      svelte: ^3.24.0 || ^4.0.0
+    dependencies:
+      svelte: 4.2.12
     dev: true
 
   /dayjs@1.11.10:
@@ -5643,6 +5661,23 @@ packages:
     peerDependencies:
       '@sveltejs/kit': 1.x || 2.x
       svelte: 3.x || 4.x || >=5.0.0-next.51
+    peerDependenciesMeta:
+      '@sinclair/typebox':
+        optional: true
+      '@vinejs/vine':
+        optional: true
+      arktype:
+        optional: true
+      joi:
+        optional: true
+      superstruct:
+        optional: true
+      valibot:
+        optional: true
+      yup:
+        optional: true
+      zod:
+        optional: true
     dependencies:
       '@sveltejs/kit': 1.30.4(svelte@4.2.12)(vite@4.5.2)
       devalue: 4.3.2
