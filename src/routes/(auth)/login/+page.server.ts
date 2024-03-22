@@ -9,13 +9,19 @@ import { LuciaError } from 'lucia';
 import { authSchema } from '$lib/zod/schema';
 import { auth } from '$lib/server/auth';
 
+import {
+  BAD_REQUEST,
+  FOUND,
+  INTERNAL_SERVER_ERROR,
+} from '$lib/constants/http-response-status-codes';
+
 import type { Actions, PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ locals }) => {
   const session = await locals.auth.validate();
 
   if (session) {
-    throw redirect(302, '/');
+    throw redirect(FOUND, '/');
   }
 
   const form = await superValidate(null, zod(authSchema));
@@ -28,7 +34,7 @@ export const actions: Actions = {
     const form = await superValidate(request, zod(authSchema));
 
     if (!form.valid) {
-      return fail(400, {
+      return fail(BAD_REQUEST, {
         form: {
           ...form,
           message:
@@ -57,7 +63,7 @@ export const actions: Actions = {
         (e.message === 'AUTH_INVALID_KEY_ID' || e.message === 'AUTH_INVALID_PASSWORD')
       ) {
         // user does not exist or invalid password
-        return fail(400, {
+        return fail(BAD_REQUEST, {
           form: {
             ...form,
             message:
@@ -66,7 +72,7 @@ export const actions: Actions = {
         });
       }
 
-      return fail(500, {
+      return fail(INTERNAL_SERVER_ERROR, {
         form: {
           ...form,
           message: 'サーバでエラーが発生しました。本サービスの開発・運営チームに連絡してください。',
@@ -76,6 +82,6 @@ export const actions: Actions = {
 
     // redirect to
     // make sure you don't throw inside a try/catch block!
-    throw redirect(302, '/');
+    throw redirect(FOUND, '/problems');
   },
 };
