@@ -58,7 +58,7 @@
     "svelte-check": "3.6.8",
     "sveltekit-superforms": "2.10.6",
     "tslib": "2.6.2",
-    "typescript": "5.4.2",
+    "typescript": "5.4.3",
     "vite": "4.5.2",
     "vitest": "0.34.6",
     "zod": "3.22.4"
@@ -71,7 +71,7 @@
     "@prisma/client": "5.11.0",
     "@testing-library/svelte": "4.1.0",
     "@types/jest": "29.5.12",
-    "autoprefixer": "10.4.18",
+    "autoprefixer": "10.4.19",
     "flowbite": "2.3.0",
     "lucia": "2.7.7",
     "playwright": "1.42.1",
