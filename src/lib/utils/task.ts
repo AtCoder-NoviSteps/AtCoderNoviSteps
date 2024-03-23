@@ -68,7 +68,7 @@ export const getTaskGradeColor = (grade: string) => {
 };
 
 // Q11 → 11Q、D1 → 1D
-export const getTaskGradeLabel = (taskGrade: TaskGrade) => {
+export const getTaskGradeLabel = (taskGrade: TaskGrade | string) => {
   if (taskGrade === TaskGrade.PENDING) {
     return TaskGrade.PENDING;
   } else {

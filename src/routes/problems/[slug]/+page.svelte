@@ -4,7 +4,7 @@
 
   import SubmissionStatusButton from '$lib/components/SubmissionStatusButton.svelte';
   import ExternalLinkIcon from '$lib/components/ExternalLinkIcon.svelte';
-  import { taskUrl } from '$lib/utils/task';
+  import { getTaskGradeLabel, taskUrl } from '$lib/utils/task';
 
   export let data;
 
@@ -37,7 +37,7 @@
     />
     <div class="flex flex-col justify-between p-4 leading-normal">
       <h4 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-        {taskResult.grade.replace('Kyu', 'Q').replace('Dan', 'D')}
+        {getTaskGradeLabel(taskResult.grade)}
       </h4>
       <h5 class="mb-2 text-3xl tracking-tight text-gray-900 dark:text-white flex">
         <div class="mr-2">
