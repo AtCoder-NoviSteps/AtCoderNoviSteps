@@ -15,7 +15,7 @@
   import type { TaskResults } from '$lib/types/task';
   import { ATCODER_BASE_CONTEST_URL } from '$lib/constants/urls';
   import { getContestNameLabel } from '$lib/utils/contest';
-  import { taskUrl } from '$lib/utils/task';
+  import { taskUrl, toWhiteTextIfNeeds } from '$lib/utils/task';
 
   export let grade: string;
   export let gradeColor: string;
@@ -31,9 +31,12 @@
 <Accordion flush class="mt-4 mb-2">
   <AccordionItem>
     <span slot="header" class="text-xl flex justify-around w-full place-items-center">
-      <div class="w-1/12 text-center">{grade}</div>
-      <!-- TODO: 配色を修正 -->
-      <ThermometerProgressBar {gradeColor} {acceptedRatioPercent} />
+      <div class="w-1/12 text-center rounded-lg {toWhiteTextIfNeeds(grade)} {gradeColor}">
+        {grade}
+      </div>
+
+      <ThermometerProgressBar gradeColor="bg-atcoder-ac-default" {acceptedRatioPercent} />
+
       <!-- See: -->
       <!-- https://developer.mozilla.org/ja/docs/Web/JavaScript/Reference/Global_Objects/Number/toFixed -->
       <div class="text-sm w-1/12 text-center">

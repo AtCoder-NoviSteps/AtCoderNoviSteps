@@ -1,6 +1,6 @@
 <script lang="ts">
   import TaskList from '$lib/components/TaskList.svelte';
-  import { getTaskGradeColor } from '$lib/utils/task';
+  import { getTaskGradeColor, getTaskGradeLabel } from '$lib/utils/task';
   import type { TaskResults, TaskResult } from '$lib/types/task';
   import { TaskGrade, taskGradeValues } from '$lib/types/task';
 
@@ -31,16 +31,6 @@
     }
 
     return false;
-  };
-
-  // TODO: Move to common lib.
-  // Q11 → 11Q、D1 → 1D
-  const getTaskGradeLabel = (taskGrade: TaskGrade) => {
-    if (taskGrade === TaskGrade.PENDING) {
-      return TaskGrade.PENDING;
-    } else {
-      return taskGrade.slice(1) + taskGrade.slice(0, 1);
-    }
   };
 </script>
 
