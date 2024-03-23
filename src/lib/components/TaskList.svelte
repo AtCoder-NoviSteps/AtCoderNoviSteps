@@ -68,7 +68,7 @@
               <Img
                 src="../../{taskResult.submission_status_image_path}"
                 alt={taskResult.submission_status_image_path}
-                class="md:h-16 md:w-16"
+                class="h-8 w-8"
               />
             </TableBodyCell>
             <TableBodyCell>
