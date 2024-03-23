@@ -5,8 +5,7 @@ TODO: 本サービスのロゴを掲載しましょう。
 <p align="center">
     <img width="140" src="https://user-images.githubusercontent.com/" />
   <p align="center">
-  【非公式】 競技プログラミングサイト
-    <a href="https://atcoder.jp/">AtCoder</a> 上の問題について、取組み状況を記録していくサイトです。
+    【非公式】 競技プログラミングサイト<a href="https://atcoder.jp/">AtCoder</a> 上の問題について、取組み状況を記録していくサイトです。<br>
     各問題が細かく難易度付けされており、必要な知識を段階的に習得できます。
   </p>
 </p>
