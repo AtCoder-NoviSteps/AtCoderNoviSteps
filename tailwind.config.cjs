@@ -59,13 +59,16 @@ const config = {
           wa: {
             default: '#f0ad4e',
             hover: '#d97706',
+            background: '#fae4c4',
           },
           ac: {
             default: '#5cb85c',
             hover: '#449d44',
+            background: '#dbefdb',
             with_editorial: {
               default: '#00aeef',
               hover: '#21a0db',
+              background: '#c6edfb',
             },
           },
         },

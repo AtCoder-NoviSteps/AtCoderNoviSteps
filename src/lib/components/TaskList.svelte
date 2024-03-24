@@ -12,6 +12,7 @@
   } from 'flowbite-svelte';
 
   import ThermometerProgressBar from '$lib/components/ThermometerProgressBar.svelte';
+  import { getBackgroundColorFrom } from '$lib/services/submission_status';
   import type { TaskResults } from '$lib/types/task';
   import { ATCODER_BASE_CONTEST_URL } from '$lib/constants/urls';
   import { getContestNameLabel } from '$lib/utils/contest';
@@ -35,7 +36,7 @@
         {grade}
       </div>
 
-      <ThermometerProgressBar gradeColor="bg-atcoder-ac-default" {acceptedRatioPercent} />
+      <ThermometerProgressBar gradeColor="bg-primary-500" {acceptedRatioPercent} />
 
       <!-- See: -->
       <!-- https://developer.mozilla.org/ja/docs/Web/JavaScript/Reference/Global_Objects/Number/toFixed -->
@@ -52,8 +53,8 @@
     <!-- TODO: 「編集」ボタンを押したときに問題情報を更新できるようにする -->
     <!-- TODO: 問題が多くなってきたら、ページネーションを導入する -->
     <!-- TODO: 回答状況に応じて、フィルタリングできるようにする -->
-    <Table shadow hoverable={true} class="text-md">
-      <TableHead class="text-md">
+    <Table shadow class="text-md">
+      <TableHead class="text-sm">
         <TableHeadCell class="w-1/6">提出状況</TableHeadCell>
         <TableHeadCell class="w-1/6">コンテスト名</TableHeadCell>
         <TableHeadCell class="w-1/2">問題名</TableHeadCell>
@@ -63,7 +64,7 @@
       </TableHead>
       <TableBody tableBodyClass="divide-y">
         {#each taskResults as taskResult}
-          <TableBodyRow>
+          <TableBodyRow class={getBackgroundColorFrom(taskResult.status_name)}>
             <TableBodyCell class="p-3">
               <Img
                 src="../../{taskResult.submission_status_image_path}"
