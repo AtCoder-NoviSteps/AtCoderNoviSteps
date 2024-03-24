@@ -4,6 +4,7 @@
 
   import SubmissionStatusButton from '$lib/components/SubmissionStatusButton.svelte';
   import ExternalLinkIcon from '$lib/components/ExternalLinkIcon.svelte';
+  import { getBackgroundColorFrom } from '$lib/services/submission_status';
   import { getTaskGradeLabel, taskUrl } from '$lib/utils/task';
 
   export let data;
@@ -28,7 +29,9 @@
     href={taskUrl(taskResult)}
     target="_blank"
     rel="noreferrer"
-    class="flex flex-col items-center bg-white border border-gray-200 rounded-lg max-w-lg mt-8 mb-8 mx-auto shadow md:flex-row md:max-w-xl hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700"
+    class="flex flex-col items-center
+    {getBackgroundColorFrom(taskResult.status_name)}
+    border border-gray-200 rounded-lg max-w-lg mt-8 mb-8 mx-auto shadow md:flex-row md:max-w-xl dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700"
   >
     <Img
       class="object-cover rounded-t-lg w-64 h-64 p-4 md:h-auto md:w-48 md:rounded-none md:rounded-l-lg"
