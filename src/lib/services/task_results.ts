@@ -88,7 +88,7 @@ export function createDefaultTaskResult(userId: string, task: Task): TaskResult 
     grade: task.grade,
     user_id: userId,
     task_table_index: task.task_table_index,
-    status_id: '1',
+    status_id: '4',
     status_name: 'ns', // FIXME: Use const
     submission_status_image_path: 'ns.png',
     is_ac: false,
