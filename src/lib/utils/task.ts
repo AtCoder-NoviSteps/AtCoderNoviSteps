@@ -66,3 +66,32 @@ export const getTaskGradeColor = (grade: string) => {
 
   return color;
 };
+
+// Q11 → 11Q、D1 → 1D
+export const getTaskGradeLabel = (taskGrade: TaskGrade | string) => {
+  if (taskGrade === TaskGrade.PENDING) {
+    return TaskGrade.PENDING;
+  } else {
+    return taskGrade.slice(1) + taskGrade.slice(0, 1);
+  }
+};
+
+// See:
+// https://developer.mozilla.org/ja/docs/Web/JavaScript/Reference/Global_Objects/Array/includes
+export const toWhiteTextIfNeeds = (grade: string) => {
+  const gradeToWhiteText = [
+    `${getTaskGradeLabel(TaskGrade.Q3)}`,
+    `${getTaskGradeLabel(TaskGrade.Q2)}`,
+    `${getTaskGradeLabel(TaskGrade.D1)}`,
+    `${getTaskGradeLabel(TaskGrade.D2)}`,
+    `${getTaskGradeLabel(TaskGrade.D4)}`,
+    `${getTaskGradeLabel(TaskGrade.D5)}`,
+    `${getTaskGradeLabel(TaskGrade.D6)}`,
+  ];
+
+  if (gradeToWhiteText.includes(grade)) {
+    return 'text-white';
+  } else {
+    return 'text-black';
+  }
+};

@@ -24,21 +24,22 @@
       <TaskGradeList {taskResults} {isAdmin}></TaskGradeList>
     </TabItemWrapper>
 
+    <!-- HACK: 以下、各テーブルを実装するまで非表示 -->
     <!-- Tags -->
-    <TabItemWrapper title="Tags">
+    <!-- <TabItemWrapper title="Tags">
       <div class="m-4">Comming Soon.</div>
-    </TabItemWrapper>
+    </TabItemWrapper> -->
 
     <!-- Latest -->
-    <TabItemWrapper title="Latest">
+    <!-- <TabItemWrapper title="Latest">
       <div class="m-4">Comming Soon.</div>
-    </TabItemWrapper>
+    </TabItemWrapper> -->
 
     <!-- Table -->
     <!-- TODO: コンテスト種類をトグルボタンで切り替えられるようにする -->
-    <TabItemWrapper title="Table">
-      <!-- <TaskTable {taskResults} /> -->
-      <div class="m-4">Comming Soon.</div>
-    </TabItemWrapper>
+    <!-- <TabItemWrapper title="Table"> -->
+    <!-- <TaskTable {taskResults} /> -->
+    <!-- <div class="m-4">Comming Soon.</div>
+    </TabItemWrapper> -->
   </Tabs>
 </div>
