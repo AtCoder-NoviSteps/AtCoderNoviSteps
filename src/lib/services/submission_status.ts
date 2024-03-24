@@ -26,7 +26,7 @@ export const submission_statuses = [
   {
     id: '3',
     status_name: 'wa',
-    label_name: 'WA',
+    label_name: '挑戦中',
     image_path: 'wa.png',
     is_AC: false,
     text_color: 'text-white', // TODO: Add column and value to schema.
@@ -36,7 +36,7 @@ export const submission_statuses = [
   {
     id: '4',
     status_name: 'ns',
-    label_name: 'No Sub',
+    label_name: '未挑戦',
     image_path: 'ns.png',
     is_AC: false,
     text_color: 'text-black', // TODO: Add column and value to schema.
