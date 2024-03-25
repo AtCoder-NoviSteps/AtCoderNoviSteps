@@ -7,6 +7,6 @@
 </script>
 
 <div class="container mx-auto w-5/6">
-  <HeadingOne title="Tags" />
+  <HeadingOne title="タグ一覧" />
   <TagListForEdit {tags} />
 </div>

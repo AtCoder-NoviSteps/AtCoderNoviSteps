@@ -17,7 +17,7 @@
   <!-- FIXME: ホームアイコンを問題リストを表すアイコンに変更 -->
   <div class="max-w-lg md:max-w-2xl mx-auto mb-3">
     <Breadcrumb aria-label="">
-      <BreadcrumbItem href="/problems" home>Problems</BreadcrumbItem>
+      <BreadcrumbItem href="/problems" home>問題</BreadcrumbItem>
       <BreadcrumbItem>{taskResult.title}</BreadcrumbItem>
     </Breadcrumb>
   </div>
