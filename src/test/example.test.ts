@@ -6,6 +6,6 @@ import { expect, test } from 'vitest';
 // Aboutページ
 test('routes/about/+page.svelte', () => {
   render(About);
-  const Element = screen.getByText(/About/);
+  const Element = screen.getByText(/サービスの説明/);
   expect(Element).toBeInTheDocument();
 });
