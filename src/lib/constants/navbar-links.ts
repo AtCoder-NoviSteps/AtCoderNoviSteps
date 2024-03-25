@@ -1,12 +1,12 @@
 export const navbarLinks = [
-  { title: `Home`, path: `/` },
-  { title: `Problems`, path: `/problems` },
-  { title: `Settings`, path: `/users/edit` },
-  { title: `About`, path: `/about` },
+  { title: `ホーム`, path: `/` },
+  { title: `問題`, path: `/problems` },
+  { title: `設定`, path: `/users/edit` },
+  { title: `サービスの説明`, path: `/about` },
 ];
 
 export const navbarDashboardLinks = [
-  { title: `Contests`, path: `/tasks` },
-  { title: `Tasks`, path: `/problems` },
-  { title: `Tags`, path: `/tags` },
+  { title: `問題のインポート`, path: `/tasks` },
+  { title: `問題一覧`, path: `/problems` },
+  { title: `タグ一覧`, path: `/tags` },
 ];

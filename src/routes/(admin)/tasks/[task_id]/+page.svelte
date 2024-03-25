@@ -12,6 +12,6 @@
 </div>
 
 <div class="container mx-auto w-5/6">
-  <HeadingOne title="Tags" />
+  <HeadingOne title="タグ" />
   <TagListForEdit {tags} />
 </div>

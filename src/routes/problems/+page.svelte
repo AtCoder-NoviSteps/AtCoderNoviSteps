@@ -14,13 +14,13 @@
 
 <!-- TODO: Searchを追加 -->
 <div class="container mx-auto w-5/6">
-  <HeadingOne title="Problems" />
+  <HeadingOne title="問題" />
 
   <!-- See: -->
   <!-- https://flowbite-svelte.com/docs/components/tabs -->
   <Tabs style="underline" contentClass="bg-white">
     <!-- Grades -->
-    <TabItemWrapper isOpen={true} title="Grades">
+    <TabItemWrapper isOpen={true} title="グレード">
       <TaskGradeList {taskResults} {isAdmin}></TaskGradeList>
     </TabItemWrapper>
 
