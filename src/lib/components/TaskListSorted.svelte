@@ -17,7 +17,7 @@
 </script>
 
 <Table shadow hoverable={true} class="text-md">
-  <TableHead class="text-md">
+  <TableHead class="text-md bg-gray-100">
     <TableHeadCell class="w-1/6">提出状況</TableHeadCell>
     <TableHeadCell class="w-1/6">コンテスト名</TableHeadCell>
     <TableHeadCell class="w-1/2">問題名</TableHeadCell>
