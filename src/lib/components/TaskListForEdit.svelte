@@ -24,7 +24,7 @@
 <!-- TODO: 問題が多くなってきたら、ページネーションを導入する -->
 <!-- TODO: 回答状況に応じて、フィルタリングできるようにする -->
 <Table shadow hoverable={true} class="text-md" divClass="">
-  <TableHead class="text-md  bg-gray-100">
+  <TableHead class="text-md bg-gray-100">
     <TableHeadCell class="w-1/8">コンテストID</TableHeadCell>
     <TableHeadCell class="w-1/3">コンテスト名</TableHeadCell>
     <TableHeadCell class="w-1/3">問題名</TableHeadCell>
