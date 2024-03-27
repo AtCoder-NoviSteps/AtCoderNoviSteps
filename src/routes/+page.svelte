@@ -48,22 +48,23 @@
     </div>
   {/if}
 
-  <!-- TODO: 特徴的な機能をビジュアルを活用しながら示す -->
-  <div class="flex flex-wrap justify-center">
-    <Heading tag="h2" class="mt-12 mb-3" customSize="text-xl font-medium  md:text-2xl lg:text-3xl">
-      問題の回答状況を自分で記録できる
-    </Heading>
-    <p>AC (正解)、解説AC、挑戦中、未挑戦から選べます</p>
+  <!-- 主要な機能 + スクリーンショット -->
+  <!-- FIXME: 重複部分をコンポーネント化 -->
+  <Heading tag="h2" class="mt-12 mb-3" customSize="text-xl font-medium  md:text-2xl lg:text-3xl">
+    問題の回答状況を自分で記録できる
+  </Heading>
+  <p>AC (正解)、解説AC、挑戦中、未挑戦から選べます</p>
 
+  <div class="flex flex-wrap justify-center items-center">
     <Img class="p-4" src="../../update_answer.png" alt="update answer" />
   </div>
 
-  <div class="flex flex-wrap justify-center">
-    <Heading tag="h2" class="mt-6 mb-3" customSize="text-xl font-medium  md:text-2xl lg:text-3xl">
-      ちょっと難しい問題に挑戦
-    </Heading>
-    <p>問題が17段階で難易度付けされており、少しずつ新しい知識を身につけられます</p>
+  <Heading tag="h2" class="mt-6 mb-3" customSize="text-xl font-medium  md:text-2xl lg:text-3xl">
+    ちょっと難しい問題に挑戦
+  </Heading>
+  <p>問題が17段階で難易度付けされており、少しずつ新しい知識を身につけられます</p>
 
+  <div class="flex flex-wrap justify-center items-center">
     <Img class="mt-4" src="../../grade_11Q_6Q.png" alt="grade from 11Q to 6Q" />
     <Img class="" src="../../grade_5Q_2D.png" alt="grade from 5Q to 2D" />
     <Img class="" src="../../grade_3D_6D.png" alt="grade from 3D to 6D" />
