@@ -14,7 +14,7 @@
 
 <!-- TODO: Searchを追加 -->
 <div class="container mx-auto w-5/6">
-  <HeadingOne title="問題" />
+  <HeadingOne title="問題一覧" />
 
   <!-- See: -->
   <!-- https://flowbite-svelte.com/docs/components/tabs -->

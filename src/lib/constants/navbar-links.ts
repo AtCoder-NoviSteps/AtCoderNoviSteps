@@ -1,7 +1,7 @@
 export const navbarLinks = [
   { title: `ホーム`, path: `/` },
-  { title: `問題`, path: `/problems` },
-  { title: `設定`, path: `/users/edit` },
+  { title: `問題一覧`, path: `/problems` },
+  { title: `ユーザ設定`, path: `/users/edit` },
   { title: `サービスの説明`, path: `/about` },
 ];
 
