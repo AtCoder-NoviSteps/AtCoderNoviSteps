@@ -51,8 +51,8 @@ dependencies:
     specifier: 1.14.0
     version: 1.14.0
   tailwindcss:
-    specifier: 3.4.1
-    version: 3.4.1
+    specifier: 3.4.2
+    version: 3.4.2
   vercel:
     specifier: 33.6.1
     version: 33.6.1
@@ -75,7 +75,7 @@ devDependencies:
     version: 1.30.4(svelte@4.2.12)(vite@4.5.2)
   '@tailwindcss/forms':
     specifier: 0.5.7
-    version: 0.5.7(tailwindcss@3.4.1)
+    version: 0.5.7(tailwindcss@3.4.2)
   '@testing-library/jest-dom':
     specifier: 6.4.2
     version: 6.4.2(@types/jest@29.5.12)(vitest@0.34.6)
@@ -105,7 +105,7 @@ devDependencies:
     version: 0.44.24(svelte@4.2.12)
   flowbite-svelte-icons:
     specifier: 0.4.4
-    version: 0.4.4(svelte@4.2.12)(tailwind-merge@1.14.0)(tailwindcss@3.4.1)
+    version: 0.4.4(svelte@4.2.12)(tailwind-merge@1.14.0)(tailwindcss@3.4.2)
   husky:
     specifier: 9.0.11
     version: 9.0.11
@@ -959,13 +959,13 @@ packages:
       - supports-color
     dev: true
 
-  /@tailwindcss/forms@0.5.7(tailwindcss@3.4.1):
+  /@tailwindcss/forms@0.5.7(tailwindcss@3.4.2):
     resolution: {integrity: sha512-QE7X69iQI+ZXwldE+rzasvbJiyV/ju1FGHH0Qn2W3FKbuYtqp8LKcy6iSw79fVUT5/Vvf+0XgLCeYVG+UV6hOw==}
     peerDependencies:
       tailwindcss: '>=3.0.0 || >= 3.0.0-alpha.1'
     dependencies:
       mini-svg-data-uri: 1.4.4
-      tailwindcss: 3.4.1
+      tailwindcss: 3.4.2
     dev: true
 
   /@testing-library/dom@9.3.3:
@@ -3143,7 +3143,7 @@ packages:
     resolution: {integrity: sha512-36yxDn5H7OFZQla0/jFJmbIKTdZAQHngCedGxiMmpNfEZM0sdEeT+WczLQrjK6D7o2aiyLYDnkw0R3JK0Qv1RQ==}
     dev: true
 
-  /flowbite-svelte-icons@0.4.4(svelte@4.2.12)(tailwind-merge@1.14.0)(tailwindcss@3.4.1):
+  /flowbite-svelte-icons@0.4.4(svelte@4.2.12)(tailwind-merge@1.14.0)(tailwindcss@3.4.2):
     resolution: {integrity: sha512-fOZri6HYYyo13olXQzvoid19hlYR/HjzQobpzBPkj8QseCJ9R1uWR7bNlhPl5vFCElqcfm3UooYiwT4rKKiqzQ==}
     peerDependencies:
       svelte: ^3.54.0 || ^4.0.0
@@ -3152,7 +3152,7 @@ packages:
     dependencies:
       svelte: 4.2.12
       tailwind-merge: 1.14.0
-      tailwindcss: 3.4.1
+      tailwindcss: 3.4.2
     dev: true
 
   /flowbite-svelte@0.44.24(svelte@4.2.12):
@@ -5741,8 +5741,8 @@ packages:
       '@babel/runtime': 7.23.8
     dev: true
 
-  /tailwindcss@3.4.1:
-    resolution: {integrity: sha512-qAYmXRfk3ENzuPBakNK0SRrUDipP8NQnEY6772uDhflcQz5EhRdD7JNZxyrFHVQNCwULPBn6FNPp9brpO7ctcA==}
+  /tailwindcss@3.4.2:
+    resolution: {integrity: sha512-1kIzVecynNKMhhX8mPTOwTkkVHupUTMbEvk4n1ByxdM8sQTJ8fE41Y4TdORG6GmiVXHhfZ/++0hiIFJFwfadsA==}
     engines: {node: '>=14.0.0'}
     hasBin: true
     dependencies:
