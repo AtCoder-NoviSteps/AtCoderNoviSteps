@@ -12,13 +12,11 @@
   } from 'flowbite-svelte';
 
   import type { Contest } from '$lib/types/task';
-  //import { ATCODER_BASE_CONTEST_URL } from '$lib/constants/urls';
   import { getContestNameLabel } from '$lib/utils/contest';
   import { newline } from '$lib/utils/newline';
-  //import { tasks } from '../server/sample_data';
 
   //gradeでソート済みのTaskのリストと、APIから取得したtasklistを表示する
-  //xport let tasks: Task[];
+  //export let tasks: Task[];
   //APIから取得したリストで、データベースに追加していないTaskのリストにする
   export let importContests: Contest[];
 </script>
@@ -26,7 +24,7 @@
 <!-- TODO: 問題が多くなってきたら、ページネーションを導入する -->
 <!-- TODO: 回答状況に応じて、フィルタリングできるようにする -->
 <Table shadow hoverable={true} class="text-md" divClass="">
-  <TableHead class="text-md">
+  <TableHead class="text-md bg-gray-100">
     <TableHeadCell class="w-1/8">コンテストID</TableHeadCell>
     <TableHeadCell class="w-1/3">コンテスト名</TableHeadCell>
     <TableHeadCell class="w-1/3">問題名</TableHeadCell>

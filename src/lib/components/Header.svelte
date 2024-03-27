@@ -34,7 +34,7 @@
     <!-- Dashboard (Admin only) -->
     {#if isAdmin}
       <NavLi id="nav-dashboard" class="cursor-pointer">
-        Dashboard
+        管理画面
         <ChevronDownOutline class="w-3 h-3 ml-2 text-primary-800 dark:text-white inline" />
       </NavLi>
       <Dropdown triggeredBy="#nav-dashboard" class="w-44 z-20">
@@ -60,7 +60,7 @@
 
     <!-- External Links -->
     <NavLi id="nav-external-links" class="cursor-pointer">
-      Links
+      外部リンク
       <ChevronDownOutline class="w-3 h-3 ml-2 text-primary-800 dark:text-white inline" />
     </NavLi>
     <Dropdown triggeredBy="#nav-external-links" class="w-48 z-20">

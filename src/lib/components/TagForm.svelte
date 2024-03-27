@@ -70,7 +70,7 @@ Edit Tag
 このタグがつけられている問題一覧
 
 <Table shadow hoverable={true} class="text-md">
-  <TableHead class="text-md">
+  <TableHead class="text-md bg-gray-100">
     <TableHeadCell class="w-1/6">コンテストID</TableHeadCell>
     <TableHeadCell class="w-4/6">問題名</TableHeadCell>
     <TableHeadCell class="w-5/6"></TableHeadCell>

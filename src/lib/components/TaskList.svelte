@@ -54,7 +54,7 @@
     <!-- TODO: 問題が多くなってきたら、ページネーションを導入する -->
     <!-- TODO: 回答状況に応じて、フィルタリングできるようにする -->
     <Table shadow class="text-md">
-      <TableHead class="text-sm">
+      <TableHead class="text-sm bg-gray-100">
         <TableHeadCell class="w-1/6">提出状況</TableHeadCell>
         <TableHeadCell class="w-1/6">コンテスト名</TableHeadCell>
         <TableHeadCell class="w-1/2">問題名</TableHeadCell>
