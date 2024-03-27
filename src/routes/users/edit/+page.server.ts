@@ -1,9 +1,16 @@
 //See https://tech-blog.rakus.co.jp/entry/20230209/sveltekit#%E3%82%B9%E3%83%AC%E3%83%83%E3%83%89%E6%8A%95%E7%A8%BF%E7%94%BB%E9%9D%A2
 
+import type { Actions } from './$types';
 import type { Roles } from '$lib/types/user';
+import type { Task } from '$lib/types/task';
+import type { TaskAnswer } from '$lib/types/answer';
+
 import * as userService from '$lib/services/users';
 import * as validationService from '$lib/services/validateApiService';
-import type { Actions } from './$types';
+import * as taskService from '$lib/services/tasks';
+import * as answerService from '$lib/services/answers';
+
+import { SEE_OTHER } from '$lib/constants/http-response-status-codes';
 
 import { redirect } from '@sveltejs/kit';
 
@@ -111,4 +118,56 @@ export const actions: Actions = {
       message: 'Successfully deleted.',
     };
   },
+
+  fetch: async ({ request, locals }) => {
+    console.log('users->actions->fetch');
+    console.time();
+
+    // FIXME: 他のActionsと重複したコードが多いので、汎用メソッドとして切り出す
+    const session = await locals.auth.validate();
+    const userId = session?.user.userId;
+
+    const formData = await request.formData();
+    const atcoder_username = formData.get('atcoder_username')?.toString() as string;
+    // AtCoder ProblemsのUser Submissions APIのデータ取得の起点となる日を取得
+    const startDateInUnixSecond = formData.get('start_date_in_unix_second') as unknown as number;
+
+    // 本アプリでユーザが未登録 / 未回答の問題を抽出
+    const unansweredTasks: Map<string, Task> = await taskService.extractUnansweredTasks(userId);
+
+    // 上記の問題のうち、AtCoder ProblemsのSubmission APIから取得できた回答(ACもしくはWA)を抽出
+    // 2024年3月時点の仕様: 同じ問題で複数の提出がある場合は、最新の結果のみ取得
+    const fetchedTaskAnswers: Map<string, TaskAnswer> =
+      await answerService.extractUnregisteredAnswersFromSubmissionsAPI(
+        atcoder_username,
+        startDateInUnixSecond,
+        unansweredTasks,
+        userId,
+      );
+
+    console.log(`Fetched answers count: ${fetchedTaskAnswers.size}`);
+
+    // 回答状況をDBに登録
+    fetchedTaskAnswers.forEach(async (taskAnswer: TaskAnswer, taskId: string) => {
+      const userId: string = taskAnswer.user_id;
+      const answerStatusId: string = taskAnswer.status_id;
+      const answer = await answerService.getAnswer(taskId, userId);
+
+      if (!answer) {
+        await answerService.createAnswer(taskId, userId, answerStatusId);
+      }
+    });
+
+    console.timeEnd();
+
+    throw redirect(SEE_OTHER, '/problems');
+
+    // FIXME: 可能であれば、結果を通知してから画面を遷移させたい
+    // return {
+    //   success: true,
+    //   atcoder_username: atcoder_username,
+    // };
+  },
 };
+
+// TODO: インポートする問題をユーザが選択してから、回答状況を一括で処理できるようにする
