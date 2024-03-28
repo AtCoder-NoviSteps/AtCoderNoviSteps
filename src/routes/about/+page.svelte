@@ -6,6 +6,7 @@
     { name: '@けんちょん', account: 'https://twitter.com/drken1215' },
     { name: '@ウルズニャー', account: 'https://twitter.com/uruzunyaa' },
     { name: '@nonon', account: 'https://twitter.com/nonon_math' },
+    { name: '@わさせき', account: 'https://twitter.com/wasaseki' },
     { name: '@toshi201', account: 'https://twitter.com/toshicon201' },
     { name: '@あべみ', account: 'https://twitter.com/prettyhappycatty' },
     { name: '@hiro', account: 'https://twitter.com/k_hiro1818' },
