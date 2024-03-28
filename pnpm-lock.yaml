@@ -137,8 +137,8 @@ devDependencies:
     specifier: 3.6.8
     version: 3.6.8(postcss@8.4.32)(svelte@4.2.12)
   sveltekit-superforms:
-    specifier: 2.11.0
-    version: 2.11.0(@sveltejs/kit@1.30.4)(@types/json-schema@7.0.14)(esbuild-runner@2.2.2)(esbuild@0.18.20)(svelte@4.2.12)
+    specifier: 2.12.0
+    version: 2.12.0(@sveltejs/kit@1.30.4)(@types/json-schema@7.0.14)(esbuild-runner@2.2.2)(esbuild@0.18.20)(svelte@4.2.12)
   tslib:
     specifier: 2.6.2
     version: 2.6.2
@@ -503,8 +503,8 @@ packages:
     resolution: {integrity: sha512-9TANp6GPoMtYzQdt54kfAyMmz1+osLlXdg2ENroU7zzrtflTLrrC/lgrIfaSe+Wu0b89GKccT7vxXA0MoAIO+Q==}
     dev: true
 
-  /@gcornut/valibot-json-schema@0.0.26(@types/json-schema@7.0.14)(esbuild-runner@2.2.2)(esbuild@0.18.20)(valibot@0.30.0):
-    resolution: {integrity: sha512-8eZpGLP1awX9UGEK+VUFiyXnjiIV/h5RPC7wt2KQG6O7YkXEw7t2pUxHhR5ULcoN0BsZ3FOWZqyzu3tFF7aXxw==}
+  /@gcornut/valibot-json-schema@0.0.27(@types/json-schema@7.0.14)(esbuild-runner@2.2.2)(esbuild@0.18.20)(valibot@0.30.0):
+    resolution: {integrity: sha512-xcMaUStVgQzPrK3d7PuLFbQ+3qSp6LzaLExAm52E3FKmUfjQa7Sw5cDK6Hfu/8WT0yfGsuSCuJ5uT1sosjR9Qg==}
     hasBin: true
     requiresBuild: true
     peerDependencies:
@@ -861,8 +861,8 @@ packages:
   /@sinclair/typebox@0.27.8:
     resolution: {integrity: sha512-+Fj43pSMwJs4KRrH/938Uf+uAELIgVBmQzg/q1YG10djyfA3TnrU8N8XzqCh/okZdszqBQTZf96idMfE5lnwTA==}
 
-  /@sinclair/typebox@0.32.15:
-    resolution: {integrity: sha512-5Lrwo7VOiWEBJBhHmqNmf3TPB9ll8gcEshvYJyAIJyCZ2PF48MFOtiDHJNj8+FsNcqImaQYmxVkKBCBlyAa/wg==}
+  /@sinclair/typebox@0.32.20:
+    resolution: {integrity: sha512-ziK497ILSIYMxD/thl496idIb03IZPlha04itLQu1xAFQbumWZ+Dj4PMMCkDRpAYhvVSdmRlTjGu2B2MA5RplQ==}
     requiresBuild: true
     dev: true
     optional: true
@@ -5638,8 +5638,8 @@ packages:
       magic-string: 0.30.5
       periscopic: 3.1.0
 
-  /sveltekit-superforms@2.11.0(@sveltejs/kit@1.30.4)(@types/json-schema@7.0.14)(esbuild-runner@2.2.2)(esbuild@0.18.20)(svelte@4.2.12):
-    resolution: {integrity: sha512-wRAznfYi9sOp4aQd2kb/SIafqHX4LROn5ojIXEbp2Pss9EPy69tmArQFm3JaiBC0hU72bAlUOTFSmVABTF9TEA==}
+  /sveltekit-superforms@2.12.0(@sveltejs/kit@1.30.4)(@types/json-schema@7.0.14)(esbuild-runner@2.2.2)(esbuild@0.18.20)(svelte@4.2.12):
+    resolution: {integrity: sha512-gAZbJbkij0crd5vRT09rYI/XvBq0etAv2j5U95bb3hioYo2TATv8jGCvsPHrCRJQwuJJrIp/xQRJpgSAPuUq2Q==}
     peerDependencies:
       '@sveltejs/kit': 1.x || 2.x
       svelte: 3.x || 4.x || >=5.0.0-next.51
@@ -5651,8 +5651,8 @@ packages:
       svelte: 4.2.12
       ts-deepmerge: 7.0.0
     optionalDependencies:
-      '@gcornut/valibot-json-schema': 0.0.26(@types/json-schema@7.0.14)(esbuild-runner@2.2.2)(esbuild@0.18.20)(valibot@0.30.0)
-      '@sinclair/typebox': 0.32.15
+      '@gcornut/valibot-json-schema': 0.0.27(@types/json-schema@7.0.14)(esbuild-runner@2.2.2)(esbuild@0.18.20)(valibot@0.30.0)
+      '@sinclair/typebox': 0.32.20
       '@sodaru/yup-to-json-schema': 2.0.1
       '@vinejs/vine': 1.8.0
       arktype: 1.0.29-alpha
@@ -5661,7 +5661,7 @@ packages:
       valibot: 0.30.0
       yup: 1.4.0
       zod: 3.22.4
-      zod-to-json-schema: 3.22.4(zod@3.22.4)
+      zod-to-json-schema: 3.22.5(zod@3.22.4)
     transitivePeerDependencies:
       - '@types/json-schema'
       - esbuild
@@ -6620,8 +6620,8 @@ packages:
     dev: true
     optional: true
 
-  /zod-to-json-schema@3.22.4(zod@3.22.4):
-    resolution: {integrity: sha512-2Ed5dJ+n/O3cU383xSY28cuVi0BCQhF8nYqWU5paEpl7fVdqdAmiLdqLyfblbNdfOFwFfi/mqU4O1pwc60iBhQ==}
+  /zod-to-json-schema@3.22.5(zod@3.22.4):
+    resolution: {integrity: sha512-+akaPo6a0zpVCCseDed504KBJUQpEW5QZw7RMneNmKw+fGaML1Z9tUNLnHHAC8x6dzVRO1eB2oEMyZRnuBZg7Q==}
     requiresBuild: true
     peerDependencies:
       zod: ^3.22.4
