@@ -137,8 +137,8 @@ devDependencies:
     specifier: 3.6.8
     version: 3.6.8(postcss@8.4.32)(svelte@4.2.12)
   sveltekit-superforms:
-    specifier: 2.12.0
-    version: 2.12.0(@sveltejs/kit@1.30.4)(@types/json-schema@7.0.14)(esbuild-runner@2.2.2)(esbuild@0.18.20)(svelte@4.2.12)
+    specifier: 2.12.2
+    version: 2.12.2(@sveltejs/kit@1.30.4)(@types/json-schema@7.0.14)(esbuild-runner@2.2.2)(esbuild@0.18.20)(svelte@4.2.12)
   tslib:
     specifier: 2.6.2
     version: 2.6.2
@@ -5638,8 +5638,8 @@ packages:
       magic-string: 0.30.5
       periscopic: 3.1.0
 
-  /sveltekit-superforms@2.12.0(@sveltejs/kit@1.30.4)(@types/json-schema@7.0.14)(esbuild-runner@2.2.2)(esbuild@0.18.20)(svelte@4.2.12):
-    resolution: {integrity: sha512-gAZbJbkij0crd5vRT09rYI/XvBq0etAv2j5U95bb3hioYo2TATv8jGCvsPHrCRJQwuJJrIp/xQRJpgSAPuUq2Q==}
+  /sveltekit-superforms@2.12.2(@sveltejs/kit@1.30.4)(@types/json-schema@7.0.14)(esbuild-runner@2.2.2)(esbuild@0.18.20)(svelte@4.2.12):
+    resolution: {integrity: sha512-fFOXaluP1os/Tamx7gzwhT3tXPAfqZ8KYRC0UfXdXeUtlUIUfiGrIifDJ26/9uePmF8Zhqy2M0XjG8W9kQnJpg==}
     peerDependencies:
       '@sveltejs/kit': 1.x || 2.x
       svelte: 3.x || 4.x || >=5.0.0-next.51
