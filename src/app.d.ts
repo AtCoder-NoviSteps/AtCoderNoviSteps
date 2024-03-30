@@ -1,6 +1,6 @@
 // See https://kit.svelte.dev/docs/types#app
 
-import type { Roles } from '$lib/types/user';
+import type { Roles } from '@prisma/client';
 
 // for information about these interfaces
 declare global {
@@ -8,6 +8,13 @@ declare global {
     // interface Error {}
     interface Locals {
       auth: import('lucia').AuthRequest;
+      user: {
+        id: string;
+        name: string;
+        role: Roles;
+        atcoder_name: string;
+        is_validated: boolean | null;
+      };
     }
     // interface PageData {}
     // interface Platform {}

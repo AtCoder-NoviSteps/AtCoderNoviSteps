@@ -1,12 +1,12 @@
 <script lang="ts">
   import { Tabs, TabItem, Alert } from 'flowbite-svelte';
 
-  import AtCoderUserValidationForm from '$lib/components/AtCoderUserValidationForm.svelte';
+  // import AtCoderUserValidationForm from '$lib/components/AtCoderUserValidationForm.svelte';
   import UserAccountDeletionForm from '$lib/components/UserAccountDeletionForm.svelte';
   import ContainerWrapper from '$lib/components/ContainerWrapper.svelte';
   import FormWrapper from '$lib/components/FormWrapper.svelte';
   import ReadOnlyLabel from '$lib/components/ReadOnlyLabel.svelte';
-  import SubmissionButton from '$lib/components/SubmissionButton.svelte';
+  // import SubmissionButton from '$lib/components/SubmissionButton.svelte';
 
   import { Roles } from '$lib/types/user';
 
@@ -14,9 +14,9 @@
 
   let role = data.role;
   let username = data.username;
-  let atcoder_username = data.atcoder_username;
-  let atcoder_validationcode = data.atcoder_validationcode;
-  let atcoder_is_validated = data.is_validated;
+  // let atcoder_username = data.atcoder_username;
+  // let atcoder_validationcode = data.atcoder_validationcode;
+  // let atcoder_is_validated = data.is_validated;
   let message = data.message;
   let message_type = data.message_type;
 
@@ -53,31 +53,23 @@
       <ContainerWrapper>
         <FormWrapper action="update">
           <ReadOnlyLabel labelName="ユーザ名" inputValue={username} />
-          <ReadOnlyLabel labelName="AtCoder ID" inputValue={atcoder_username} />
+          <!-- <ReadOnlyLabel labelName="AtCoder ID" inputValue={atcoder_username} /> -->
 
-          <SubmissionButton labelName="保存" />
+          <!-- <SubmissionButton labelName="保存" /> -->
         </FormWrapper>
       </ContainerWrapper>
     </TabItem>
 
-    <!-- ステータス -->
-    <TabItem disabled>
-      <span slot="title" class="text-lg text-gray-400 dark:text-gray-500">ステータス編集</span>
-      <p class="text-sm text-gray-500 dark:text-gray-400">
-        <b>Settings:</b>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
-        labore et dolore magna aliqua.
-      </p>
-    </TabItem>
-
+    <!-- FIXME: フォーム送信時に、基本情報ページが表示されてしまう不具合が修正されるまでは非公開 -->
     <!-- AtCoder IDを利用した認証 -->
-    <TabItem>
+    <!-- <TabItem>
       <span slot="title" class="text-lg">AtCoder IDを設定</span>
       <AtCoderUserValidationForm {username} {atcoder_username} {atcoder_validationcode} {status} />
-    </TabItem>
+    </TabItem> -->
 
+    <!-- FIXME: 回答状況が正しく取得されないバグが修正されるまでは非公開 -->
     <!-- 問題の回答状況をインポート (AtCoder ProblemsのAPIを使用) -->
-    {#if atcoder_is_validated === true}
+    <!-- {#if atcoder_is_validated === true}
       <TabItem>
         <span slot="title" class="text-lg text-gray-400 dark:text-gray-500">インポート</span>
         <p class="text-sm text-gray-500 dark:text-gray-400">
@@ -91,7 +83,18 @@
           <b>Disabled:</b>
         </p>
       </TabItem>
-    {/if}
+    {/if} -->
+
+    <!-- TODO: 実装できるまで非公開 -->
+    <!-- ステータス -->
+    <!-- <TabItem disabled>
+      <span slot="title" class="text-lg text-gray-400 dark:text-gray-500">ステータス編集</span>
+      <p class="text-sm text-gray-500 dark:text-gray-400">
+        <b>Settings:</b>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
+        labore et dolore magna aliqua.
+      </p>
+    </TabItem> -->
 
     <!-- アカウント削除 (ゲストを除いた一般ユーザのみ) -->
     {#if isGeneralUser(role, username)}

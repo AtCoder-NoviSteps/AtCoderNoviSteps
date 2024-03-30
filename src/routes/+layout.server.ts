@@ -4,8 +4,10 @@ import { Roles } from '$lib/types/user';
 
 export const load = async ({ locals }) => {
   const session = await locals.auth.validate();
+  const user = locals.user;
 
   return {
     isAdmin: session?.user.role === Roles.ADMIN,
+    user: user,
   };
 };

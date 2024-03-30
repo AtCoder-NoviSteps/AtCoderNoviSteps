@@ -1,4 +1,7 @@
 <script lang="ts">
+  import { page } from '$app/stores';
+  import { enhance } from '$app/forms';
+
   import {
     Dropdown,
     DropdownItem,
@@ -14,13 +17,9 @@
   import { PRODUCT_NAME } from '$lib/constants/product-info';
   import { navbarDashboardLinks, navbarLinks } from '$lib/constants/navbar-links';
   import { externalLinks } from '$lib/constants/external-links';
-
-  export let isAdmin: boolean;
-  console.log(isAdmin);
 </script>
 
 <!-- TODO: Add logo. -->
-<!-- TODO: Change default color if needs. -->
 <Navbar let:hidden let:toggle>
   <NavBrand href="/">
     <img src="favicon.png" class="mr-3 h-6 sm:h-9" alt="{PRODUCT_NAME} Logo" />
@@ -32,7 +31,7 @@
 
   <NavUl {hidden}>
     <!-- Dashboard (Admin only) -->
-    {#if isAdmin}
+    {#if $page.data.isAdmin}
       <NavLi id="nav-dashboard" class="cursor-pointer">
         管理画面
         <ChevronDownOutline class="w-3 h-3 ml-2 text-primary-800 dark:text-white inline" />
@@ -51,12 +50,21 @@
       <NavLi href={navbarLink.path}>{navbarLink.title}</NavLi>
     {/each}
 
-    <!-- TODO: Add login / logout -->
-    <!-- if currentUser exists -->
-    <!-- アカウントページを表示 -->
-    <!-- <NavLi href="/profile">Profile</NavLi> -->
-    <!-- else -->
-    <!-- 登録・ログインページを表示 -->
+    {#if !$page.data.user}
+      <NavLi href="/login">ログイン</NavLi>
+      <NavLi href="/signup">アカウント作成</NavLi>
+    {:else}
+      <!-- TODO: アカウントページを表示 -->
+      <!-- HACK: 相対パスを使っているため、3階層以上のパスがあるときに動作しない可能性が高い -->
+      <form
+        method="post"
+        action="../logout?/logout"
+        use:enhance
+        class="py-2 pe-4 ps-3 md:p-0 rounded text-gray-700 hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-primary-700"
+      >
+        <button name="logout" value="Log out" type="submit"> ログアウト </button>
+      </form>
+    {/if}
 
     <!-- External Links -->
     <NavLi id="nav-external-links" class="cursor-pointer">
