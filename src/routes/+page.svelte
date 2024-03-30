@@ -1,16 +1,11 @@
 <!-- See: -->
 <!-- https://lucia-auth.com/guidebook/sign-in-with-username-and-password/sveltekit/ -->
 <script lang="ts">
-  import { enhance } from '$app/forms';
   import { Heading, P, Button, Img } from 'flowbite-svelte';
   // @ts-ignore
   import ArrowRightOutline from 'flowbite-svelte-icons/ArrowRightOutline.svelte';
 
-  import type { PageData } from './$types';
-
   import { PRODUCT_CATCH_PHRASE } from '$lib/constants/product-info';
-
-  export let data: PageData;
 </script>
 
 <!-- TODO: かっこいいロゴを入れる -->
@@ -37,16 +32,6 @@
       <ArrowRightOutline class="w-3.5 h-3.5 ml-2" />
     </Button>
   </div>
-
-  {#if data.username}
-    <!-- See: -->
-    <!-- https://tailwindcss.com/docs/justify-content#end -->
-    <div class="flex flex-wrap justify-center items-center">
-      <form method="post" action="logout?/logout" use:enhance>
-        <Button name="logout" value="Log out" class="w-full m-2" type="submit">ログアウト</Button>
-      </form>
-    </div>
-  {/if}
 
   <!-- 主要な機能 + スクリーンショット -->
   <!-- FIXME: 重複部分をコンポーネント化 -->

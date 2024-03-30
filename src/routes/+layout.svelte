@@ -3,13 +3,9 @@
 
   import Header from '$lib/components/Header.svelte';
   import Footer from '$lib/components/Footer.svelte';
-
-  export let data;
-
-  $: isAdmin = data.isAdmin;
 </script>
 
-<Header {isAdmin} />
+<Header />
 
 <slot />
 
