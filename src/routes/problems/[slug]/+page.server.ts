@@ -4,11 +4,9 @@ import { BAD_REQUEST, TEMPORARY_REDIRECT } from '$lib/constants/http-response-st
 import { redirect } from '@sveltejs/kit';
 
 import { getButtons } from '$lib/services/submission_status';
-//export let buttonColor: string
 
 const buttons = await getButtons();
 
-// TODO: ユーザを識別できるようにする。
 export async function load({ locals, params }) {
   const session = await locals.auth.validate();
   if (!session) {
@@ -16,7 +14,6 @@ export async function load({ locals, params }) {
   }
 
   const taskResult = await crud.getTaskResult(params.slug as string, session?.user.userId);
-  //console.log(taskResult)
 
   return { taskResult: taskResult, buttons: buttons };
 }
