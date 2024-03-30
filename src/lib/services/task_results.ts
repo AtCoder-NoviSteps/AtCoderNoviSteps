@@ -137,11 +137,11 @@ export async function updateTaskResult(slug: string, submissionStatus: string, u
     //taskResult.submission_status = submissionStatus;
     const status_id = statusByName.get(submissionStatus).id;
 
-    const resisteredTaskAnswer = await db.taskAnswer.findMany({
+    const registeredTaskAnswer = await db.taskAnswer.findMany({
       where: { task_id: slug, user_id: userId },
     });
 
-    if (resisteredTaskAnswer.length == 0) {
+    if (registeredTaskAnswer.length == 0) {
       //console.log('invoke createTaskResult(', slug, submissionStatus, userId, ')');
       await answer_crud.createAnswer(slug, userId, status_id);
     }
