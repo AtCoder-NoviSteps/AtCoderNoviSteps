@@ -56,8 +56,13 @@
     {:else}
       <!-- TODO: アカウントページを表示 -->
       <!-- HACK: 相対パスを使っているため、3階層以上のパスがあるときに動作しない可能性が高い -->
-      <form method="post" action="../logout?/logout" use:enhance>
-        <button name="logout" value="Log out" type="submit">ログアウト</button>
+      <form
+        method="post"
+        action="../logout?/logout"
+        use:enhance
+        class="py-2 pe-4 ps-3 md:p-0 rounded text-gray-700 hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-primary-700"
+      >
+        <button name="logout" value="Log out" type="submit" class=""> ログアウト </button>
       </form>
     {/if}
 
