@@ -1,11 +1,29 @@
 <!-- See: -->
 <!-- https://lucia-auth.com/guidebook/sign-in-with-username-and-password/sveltekit/ -->
 <script lang="ts">
-  import { Heading, P, Button, Img } from 'flowbite-svelte';
+  import { Heading, P, Button, Img, Carousel } from 'flowbite-svelte';
   // @ts-ignore
   import ArrowRightOutline from 'flowbite-svelte-icons/ArrowRightOutline.svelte';
 
   import { PRODUCT_CATCH_PHRASE } from '$lib/constants/product-info';
+
+  const images = [
+    {
+      alt: 'Problem Grades from 11Q to 4Q',
+      src: '../../grade_11Q_4Q.png',
+      title: 'Problem-Grades-from-11Q-to-4Q',
+    },
+    {
+      alt: 'Problem Grades from 3Q to 6D',
+      src: '../../grade_3Q_6D.png',
+      title: 'Problem-Grades-from-3Q-to-6D',
+    },
+    {
+      alt: 'Problems of Grade 5Q',
+      src: '../../grade_5Q_details.png',
+      title: 'Problems-of-Grade-5Q',
+    },
+  ];
 </script>
 
 <!-- TODO: かっこいいロゴを入れる -->
@@ -49,9 +67,9 @@
   </Heading>
   <p>17段階で難易度付けされており、自分の実力に合った問題が探せます</p>
 
-  <div class="flex flex-wrap justify-center items-center">
-    <Img class="mt-4" src="../../grade_11Q_6Q.png" alt="grade from 11Q to 6Q" />
-    <Img class="" src="../../grade_5Q_2D.png" alt="grade from 5Q to 2D" />
-    <Img class="" src="../../grade_3D_6D.png" alt="grade from 3D to 6D" />
+  <div class="m-4">
+    <Carousel {images} imgClass="object-contain h-full w-fit" let:Controls class="min-h-[540px]">
+      <Controls class="items-center text-primary-700 pt-4" />
+    </Carousel>
   </div>
 </div>
