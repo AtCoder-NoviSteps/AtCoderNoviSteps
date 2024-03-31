@@ -68,7 +68,13 @@
   <p>17段階で難易度付けされており、自分の実力に合った問題が探せます</p>
 
   <div class="m-4">
-    <Carousel {images} imgClass="object-contain h-full w-fit" let:Controls class="min-h-[540px]">
+    <Carousel
+      duration={3000}
+      {images}
+      imgClass="object-contain h-full w-fit"
+      let:Controls
+      class="min-h-[540px]"
+    >
       <Controls class="items-center text-primary-700 pt-4" />
     </Carousel>
   </div>
