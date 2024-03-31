@@ -12,8 +12,9 @@
   } from 'flowbite-svelte';
 
   import ThermometerProgressBar from '$lib/components/ThermometerProgressBar.svelte';
-  import { getBackgroundColorFrom } from '$lib/services/submission_status';
+  import { getBackgroundColorFrom, submission_statuses } from '$lib/services/submission_status';
   import type { TaskResults } from '$lib/types/task';
+  import type { SubmissionRatios } from '$lib/types/submission';
   import { ATCODER_BASE_CONTEST_URL } from '$lib/constants/urls';
   import { getContestNameLabel } from '$lib/utils/contest';
   import { taskUrl, toWhiteTextIfNeeds } from '$lib/utils/task';
@@ -27,6 +28,26 @@
   // TODO: 別ファイルに切り出す
   let acceptedCount = taskResults.filter((taskResult) => taskResult.is_ac).length;
   let acceptedRatioPercent = (acceptedCount / taskResults.length) * 100;
+
+  const getRatioPercent = (taskResults: TaskResults, statusName: string) => {
+    const count = taskResults.filter((taskResult) => taskResult.status_name === statusName).length;
+    const ratioPercent = (count / taskResults.length) * 100;
+
+    return ratioPercent;
+  };
+
+  const submissionRatios: SubmissionRatios = submission_statuses
+    .filter((status) => status.status_name !== 'ns')
+    .map((status) => {
+      const name = status.status_name;
+      const results = {
+        name: name,
+        ratioPercent: getRatioPercent(taskResults, name),
+        color: status.background_color,
+      };
+
+      return results;
+    });
 </script>
 
 <Accordion flush class="mt-4 mb-2">
@@ -36,7 +57,7 @@
         {grade}
       </div>
 
-      <ThermometerProgressBar gradeColor="bg-primary-500" {acceptedRatioPercent} />
+      <ThermometerProgressBar {submissionRatios} />
 
       <!-- See: -->
       <!-- https://developer.mozilla.org/ja/docs/Web/JavaScript/Reference/Global_Objects/Number/toFixed -->

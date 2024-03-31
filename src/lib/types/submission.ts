@@ -5,3 +5,11 @@ export const submissionStatusLabels: Record<string, string> = {
   wa: 'WA',
   ac: 'AC',
 } as const;
+
+export type SubmissionRatio = {
+  name: string;
+  ratioPercent: number;
+  color: string;
+};
+
+export type SubmissionRatios = SubmissionRatio[];
