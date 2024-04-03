@@ -22,7 +22,7 @@
 <!-- TODO: Add logo. -->
 <Navbar let:hidden let:toggle>
   <NavBrand href="/">
-    <img src="favicon.png" class="mr-3 h-6 sm:h-9" alt="{PRODUCT_NAME} Logo" />
+    <img src="../../../favicon.png" class="mr-3 h-6 sm:h-9" alt="{PRODUCT_NAME} Logo" />
     <span class="self-center whitespace-nowrap text-xl font-semibold dark:text-white">
       {PRODUCT_NAME}
     </span>
