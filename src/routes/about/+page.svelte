@@ -1,6 +1,18 @@
 <script lang="ts">
   import HeadingOne from '$lib/components/HeadingOne.svelte';
-  import { Li, List, Heading, Skeleton } from 'flowbite-svelte';
+  import ExternalLinkWrapper from '$lib/components/ExternalLinkWrapper.svelte';
+  import { Li, List, Heading } from 'flowbite-svelte';
+
+  const features = [
+    {
+      description:
+        '回答を自分で記録: 各問題の回答状況について、AC (正解)、解説AC、挑戦中、未挑戦から選んで記録できます。',
+    },
+    {
+      description:
+        '難易度の細分化: 17段階で難易度付けされており、現在の実力より一歩先の問題に挑戦できます。',
+    },
+  ];
 
   const members = [
     { name: '@けんちょん', account: 'https://twitter.com/drken1215' },
@@ -13,25 +25,84 @@
   ];
 </script>
 
-<!-- TODO: 各項目を記載する -->
-<!-- TODO: 必要に応じて、コンポーネントに分解する -->
-<div class="container mx-auto w-5/6">
+<div class="container mx-auto w-2/3">
   <HeadingOne title="サービスの説明" />
 
-  <!-- Purpose -->
-  <h2 class="text-xl mt-4 mb-2">本サービスの目的</h2>
-  <Skeleton size="md" class="my-8" />
+  <div class="mt-5 mb-5">
+    <Heading tag="h2" class="text-xl mb-2 text-gray-900 dark:text-white">特長</Heading>
+    <List tag="ul" class="ml-6 space-y-1">
+      {#each features as feature}
+        <Li>{feature.description}</Li>
+      {/each}
+    </List>
+  </div>
+
+  <div class="mt-5 mb-5">
+    <Heading tag="h2" class="text-xl mb-2 text-gray-900 dark:text-white">対象ユーザ</Heading>
+    <List tag="ul" class="ml-6 space-y-1">
+      <Li>
+        <ExternalLinkWrapper
+          url="https://atcoder.jp/contests/APG4b"
+          description="C++入門 AtCoder Programming Guide for beginners(APG4b)"
+        />
+        の
+        <ExternalLinkWrapper
+          url="https://atcoder.jp/contests/APG4b/tasks/APG4b_f"
+          description="1.05.実行順序と入力"
+        />
+        まで、独力でこなせる文章読解力と基礎学力がある。
+      </Li>
+      <Li>
+        記事
+        <ExternalLinkWrapper
+          url="https://qiita.com/drken/items/fd4e5e3630d0f5859067"
+          description="AtCoder に登録したら次にやること ～ これだけ解けば十分闘える！過去問精選10問 ～"
+        />
+        を読み、問題集
+        <ExternalLinkWrapper
+          url="https://atcoder.jp/contests/abs"
+          description="AtCoder Beginners Selection"
+        />
+        を解いた。
+      </Li>
+      <Li>茶色コーダー(レーティング400〜799)を目指している。さらに上位を目指したい。</Li>
+      <Li>問題の解答状況を自分で記録・確認したい。</Li>
+    </List>
+  </div>
 
   <!-- Usage -->
-  <h2 class="text-xl mt-4 mb-2">使い方</h2>
-  <Skeleton size="md" class="my-8" />
+  <div class="mt-5 mb-5">
+    <Heading tag="h2" class="text-xl mb-2 text-gray-900 dark:text-white">使い方</Heading>
+    <List tag="ol" class="ml-6 space-y-1">
+      <Li>(初回のみ) ユーザ名とパスワードを入力して、アカウントを作成します。</Li>
+      <Li
+        >ログインします。お試し用のアカウント(ユーザ名: guest、パスワード:
+        HelloGuest)を利用することもできます。
+      </Li>
+      <Li>グレード(難易度)および問題を選び、「回答状況を更新」ボタンを押します。</Li>
+      <Li>4種類のボタンのうち、該当する回答状況を押します。</Li>
+    </List>
+  </div>
 
   <!-- Glossary -->
   <div class="mt-5 mb-5">
     <Heading tag="h2" customSize="text-xl" class="mb-2 text-xl text-gray-900 dark:text-white">
       用語集
     </Heading>
-    <List tag="ul" class="space-y-1 text-gray-500 dark:text-gray-400">
+
+    <!-- Grade -->
+    <Heading tag="h3" customSize="text-md" class="ml-6">難易度</Heading>
+    <!-- FIXME: もう少しビジュアルを整えましょう -->
+    <!-- 注: 難易度の基準は非公開 -->
+    <List tag="ul" class="ml-12 space-y-1">
+      <Li>
+        (易しい) 11Q、10Q、9Q、8Q、7Q、6Q、5Q、4Q、3Q、2Q、1Q、1D、2D、3D、4D、5D、6D (難しい)
+      </Li>
+    </List>
+
+    <!-- Submission status -->
+    <Heading tag="h3" customSize="text-md" class="ml-6 mt-3">回答状況</Heading>
+    <List tag="ul" class="ml-12 space-y-1">
       <Li>AC: 自力で正解</Li>
       <Li>解説AC: 公式もしくは有志の解説を読んで正解</Li>
       <Li>挑戦中: 少なくとも1回以上提出して、不正解</Li>
@@ -39,38 +110,15 @@
     </List>
   </div>
 
-  <!-- Grade -->
-  <div class="mt-5 mb-5">
-    <Heading tag="h2" customSize="text-xl" class="mb-2 text-xl text-gray-900 dark:text-white">
-      難易度
-    </Heading>
-    <!-- FIXME: もう少しビジュアルを整えましょう -->
-    <!-- 注: 難易度の基準は非公開 -->
-    <List tag="ul" class="space-y-1 text-gray-500 dark:text-gray-400">
-      <Li>
-        (易しい) 11Q、10Q、9Q、8Q、7Q、6Q、5Q、4Q、3Q、2Q、1Q、1D、2D、3D、4D、5D、6D (難しい)
-      </Li>
-    </List>
-  </div>
+  <!-- 連絡先 -->
 
   <!-- Members -->
-  <!-- TODO: メンバーの許可が得られれば、ハンドル名 + Xアカウントのアドレス -->
-  <!-- TODO: 冗長なコードをリファクタリング -->
   <div class="mt-5 mb-5">
-    <Heading tag="h2" customSize="text-xl" class="mb-2 text-xl text-gray-900 dark:text-white">
-      開発メンバー
-    </Heading>
-    <List tag="ul" class="space-y-1 text-gray-500 dark:text-gray-400">
+    <Heading tag="h2" class="mb-2 text-xl text-gray-900 dark:text-white">開発メンバー</Heading>
+    <List tag="ul" class="ml-6 space-y-1">
       {#each members as member}
         <Li>
-          <a
-            href={member.account}
-            class="font-medium text-primary-600 hover:underline dark:text-primary-500"
-            target="_blank"
-            rel="noreferrer"
-          >
-            {member.name}
-          </a>
+          <ExternalLinkWrapper url={member.account} description={member.name} />
         </Li>
       {/each}
     </List>
