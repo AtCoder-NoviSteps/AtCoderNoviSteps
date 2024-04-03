@@ -5,11 +5,10 @@ import { PRODUCT_DESCRIPTION, PRODUCT_NAME } from '$lib/constants/product-info';
 // https://lucia-auth.com/guidebook/sign-in-with-username-and-password/sveltekit/
 import { Roles } from '$lib/types/user';
 
-// TODO: SNS用のサムネイルを追加
 const getBaseMetaTags = (url: URL) => {
   const title: string = PRODUCT_NAME;
   const description: string = PRODUCT_DESCRIPTION;
-  const imageUrl: string = '';
+  const imageUrl: string = '../../favicon.png';
   const imageAlt: string = PRODUCT_NAME;
 
   const baseMetaTags = Object.freeze({
