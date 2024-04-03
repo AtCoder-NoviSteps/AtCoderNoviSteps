@@ -110,6 +110,29 @@
     </List>
   </div>
 
+  <!-- Privacy Policy -->
+  <div class="mt-5 mb-5">
+    <Heading tag="h2" class="mb-2 text-xl text-gray-900 dark:text-white">
+      プライバシーポリシー
+    </Heading>
+    <div class="ml-6">
+      <p>本サイトでは、Googleによるアクセス解析ツール「Googleアナリティクス」を利用しています。</p>
+      <br />
+      <p>
+        同ツールでは、トラフィックデータの収集のためにCookieを使用しております。このトラフィックデータは匿名で収集されており、個人を特定するものではありません。利用規約、および、プライバシーポリシーに関する説明は、
+        <ExternalLinkWrapper
+          url="https://policies.google.com/technologies/partner-sites?hl=ja"
+          description="外部リンク"
+        />
+        をご覧ください。
+      </p>
+      <br />
+      <p>
+        また、収集されたデータは、本サイトのサービスを改善する目的以外で利用することはありません。
+      </p>
+    </div>
+  </div>
+
   <!-- 連絡先 -->
 
   <!-- Members -->
