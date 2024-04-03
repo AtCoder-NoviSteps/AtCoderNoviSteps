@@ -36,12 +36,16 @@ TODO: 本サービスのロゴを掲載しましょう。
 
 **_DEMO_**
 
-TODO: どんなサービスなのかイメージしやすいように、デモ（主要な機能の画像か短い動画）を追加しましょう。
-
 <div align="center">
-
-![demo](https://user-images.githubusercontent.com)
-
+  <video
+    width="720"
+    src="https://github.com/AtCoder-NoviSteps/AtCoderNoviSteps/assets/13990347/f75675a8-8f28-41c5-82b0-8fc70812fa15"
+    autoplay
+    muted
+    controls
+    loop
+  >
+  </video>
 </div>
 
 ## 特長
@@ -104,8 +108,6 @@ FIXME: 対象ユーザをより明確にした上で、説明文を推敲しま�
 - [一覧]() - TODO: 主要な参考資料を明記しましょう。
 
 ## 開発・運営メンバーと役割分担
-
-- TODO: 連絡先とチームでの役割・貢献した内容などを手短にまとめましょう。随時、加筆・修正されることを想定しています。
 
 - [@けんちょん](https://twitter.com/drken1215)
   - 役割: 本プロジェクトの発起人・全体統括（難易度付け、アプリ開発）
