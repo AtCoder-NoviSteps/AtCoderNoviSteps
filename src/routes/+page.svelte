@@ -59,7 +59,14 @@
   <p>AC (正解)、解説AC、挑戦中、未挑戦から選べます</p>
 
   <div class="flex flex-wrap justify-center items-center">
-    <Img class="p-4" src="../../update_answer.png" alt="update answer" />
+    <video
+      width="720"
+      src="https://github.com/AtCoder-NoviSteps/AtCoderNoviSteps/assets/13990347/f75675a8-8f28-41c5-82b0-8fc70812fa15"
+      autoplay
+      muted
+      controls
+      loop
+    ></video>
   </div>
 
   <Heading tag="h2" class="mt-6 mb-3" customSize="text-xl font-medium  md:text-2xl lg:text-3xl">
