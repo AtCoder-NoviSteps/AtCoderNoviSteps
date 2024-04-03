@@ -82,6 +82,9 @@ devDependencies:
   '@testing-library/jest-dom':
     specifier: 6.4.2
     version: 6.4.2(@types/jest@29.5.12)(vitest@0.34.6)
+  '@types/gtag.js':
+    specifier: ^0.0.19
+    version: 0.0.19
   '@typescript-eslint/eslint-plugin':
     specifier: 7.0.0
     version: 7.0.0(@typescript-eslint/parser@6.21.0)(eslint@8.57.0)(typescript@5.4.3)
@@ -1081,6 +1084,10 @@ packages:
 
   /@types/estree@1.0.4:
     resolution: {integrity: sha512-2JwWnHK9H+wUZNorf2Zr6ves96WHoWDJIftkcxPKsS7Djta6Zu519LarhRNljPXkpsZR2ZMwNCPeW7omW07BJw==}
+
+  /@types/gtag.js@0.0.19:
+    resolution: {integrity: sha512-KHoDzrf9rSd0mooKN576PjExpdk/XRrNu4RQnmigsScSTSidwyOUe9kDrHz9UPKjiBrx2QEsSkexbJSgS0j72w==}
+    dev: true
 
   /@types/istanbul-lib-coverage@2.0.6:
     resolution: {integrity: sha512-2QF/t/auWm0lsy8XtKVPG19v3sSOQlJe/YHZgfjb/KBBHOGSV+J2q/S671rcq9uTBrLAXmZpqJiaQbMT+zNU1w==}
@@ -5672,6 +5679,23 @@ packages:
     peerDependencies:
       '@sveltejs/kit': 1.x || 2.x
       svelte: 3.x || 4.x || >=5.0.0-next.51
+    peerDependenciesMeta:
+      '@sinclair/typebox':
+        optional: true
+      '@vinejs/vine':
+        optional: true
+      arktype:
+        optional: true
+      joi:
+        optional: true
+      superstruct:
+        optional: true
+      valibot:
+        optional: true
+      yup:
+        optional: true
+      zod:
+        optional: true
     dependencies:
       '@sveltejs/kit': 1.30.4(svelte@4.2.12)(vite@4.5.2)
       devalue: 4.3.2
