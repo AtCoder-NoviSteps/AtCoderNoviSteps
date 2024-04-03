@@ -1,7 +1,7 @@
 <!-- See: -->
 <!-- https://lucia-auth.com/guidebook/sign-in-with-username-and-password/sveltekit/ -->
 <script lang="ts">
-  import { Heading, P, Button, Img, Carousel } from 'flowbite-svelte';
+  import { Heading, P, Button, Carousel } from 'flowbite-svelte';
   // @ts-ignore
   import ArrowRightOutline from 'flowbite-svelte-icons/ArrowRightOutline.svelte';
 
