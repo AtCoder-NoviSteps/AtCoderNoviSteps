@@ -8,6 +8,7 @@
   import '../app.css';
 
   import Header from '$lib/components/Header.svelte';
+  import GoogleAnalytics from '$lib/components/GoogleAnalytics.svelte';
   import Footer from '$lib/components/Footer.svelte';
 
   export let data;
@@ -18,6 +19,7 @@
 <Header />
 
 <MetaTags {...metaTags} />
+<GoogleAnalytics />
 
 <slot />
 
