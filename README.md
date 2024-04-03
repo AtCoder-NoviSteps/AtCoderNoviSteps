@@ -1,7 +1,5 @@
 # AtCoder NoviSteps
 
-TODO: 本サービスのロゴを掲載しましょう。
-
 <p align="center">
     <img width="140" src="https://user-images.githubusercontent.com/" />
   <p align="center">
@@ -50,30 +48,27 @@ TODO: 本サービスのロゴを掲載しましょう。
 
 ## 特長
 
-TODO: 本サービスの特長を5つ程度のキーワードとそれぞれ1文程度で簡潔に説明できるようにしましょう。
-
-- **キーワード**: 準備中。
-- **キーワード**: 準備中。
-- **キーワード**: 準備中。
-- **キーワード**: 準備中。
-- **キーワード**: 準備中。
-
-## (暫定版) 対象ユーザとメリット
-
-FIXME: 対象ユーザをより明確にした上で、説明文を推敲しましょう。
-
-- [AtCoder](https://atcoder.jp/)に登録したが、何から始めればよいか知りたい。
-- 記事「[AtCoder に登録したら次にやること ～ これだけ解けば十分闘える！過去問精選10問 ～](https://qiita.com/drken/items/fd4e5e3630d0f5859067)」を読み、問題集「[AtCoder Beginners Selection](https://atcoder.jp/contests/abs)」を解いた。
-- 問題の解答状況を自分で記録・確認したい。
-- 茶色コーダーを目指している。さらに上位を目指したい。
+- **回答を自分で記録**: 各問題の回答状況について、AC (正解)、解説AC、挑戦中、未挑戦から選んで記録できます。
+- **難易度の細分化**: 17段階で難易度付けされており、現在の実力より一歩先の問題に挑戦できます。
 
 ## 主な機能
 
-- TODO: 準備中。
+- 問題の回答状況の記録
+- 自分に合った難易度の問題が選べる
+
+## 対象ユーザ
+
+- [C++入門 AtCoder Programming Guide for beginners(APG4b)](https://atcoder.jp/contests/APG4b)の[1.05.実行順序と入力](https://atcoder.jp/contests/APG4b/tasks/APG4b_f)まで、独力でこなせる文章読解力と基礎学力がある。
+- 記事「[AtCoder に登録したら次にやること ～ これだけ解けば十分闘える！過去問精選10問 ～](https://qiita.com/drken/items/fd4e5e3630d0f5859067)」を読み、問題集「[AtCoder Beginners Selection](https://atcoder.jp/contests/abs)」を解いた。
+- 茶色コーダー(レーティング400〜799)を目指している。さらに上位を目指したい。
+- 問題の解答状況を自分で記録・確認したい。
 
 ## 使い方
 
-- TODO: 準備中。
+1. (初回のみ) ユーザ名とパスワードを入力して、アカウントを作成します。
+2. ログインします。お試し用のアカウント(ユーザ名: guest、パスワード: HelloGuest)を利用することもできます。
+3. グレード(難易度)および問題を選び、「回答状況を更新」ボタンを押します。
+4. 4種類のボタンのうち、該当する回答状況を押します。
 
 ## 本サービスのスポンサー(敬称略・順不同)
 
@@ -105,7 +100,8 @@ FIXME: 対象ユーザをより明確にした上で、説明文を推敲しま�
 
 ## 関連プロジェクト・参考資料
 
-- [一覧]() - TODO: 主要な参考資料を明記しましょう。
+- Readme Driven Development; RDD<sup>[archive.org](http://web.archive.org/web/20220313000343/https://qiita.com/b4b4r07/items/c80d53db9a0fd59086ec)</sup>
+- [Favicon Generator - Text to Favicon - favicon.io](https://favicon.io/favicon-generator/)
 
 ## 開発・運営メンバーと役割分担
 
