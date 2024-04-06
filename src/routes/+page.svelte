@@ -56,7 +56,7 @@
   <Heading tag="h2" class="mt-12 mb-3" customSize="text-xl font-medium  md:text-2xl lg:text-3xl">
     問題の回答状況を自分で記録できる
   </Heading>
-  <p>AC (正解)、解説AC、挑戦中、未挑戦から選べます</p>
+  <p>「AC」「解説AC」「挑戦中」「未挑戦」から選べます</p>
 
   <div class="flex flex-wrap justify-center items-center">
     <video
