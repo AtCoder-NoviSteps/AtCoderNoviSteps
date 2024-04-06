@@ -36,7 +36,7 @@
 <div align="center">
   <video
     width="720"
-    src="https://github.com/AtCoder-NoviSteps/AtCoderNoviSteps/assets/13990347/f75675a8-8f28-41c5-82b0-8fc70812fa15"
+    src="https://github.com/AtCoder-NoviSteps/AtCoderNoviSteps/assets/13990347/2363f257-df03-4dfd-b8af-d28e9d1ec8f0"
     autoplay
     muted
     controls
