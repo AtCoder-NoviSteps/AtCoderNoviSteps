@@ -9,27 +9,50 @@
     TableHeadCell,
   } from 'flowbite-svelte';
 
-  // FIXME: 実際のデータに置き換え
-  const dummySubmissionRatios = [
-    {
-      name: 'ac',
-      ratioPercent: Math.random() * 100,
-      color: 'bg-atcoder-ac-background',
-    },
-    {
-      name: 'ac_with_editorial',
-      ratioPercent: Math.random() * 50,
-      color: 'bg-atcoder-ac-with_editorial-background',
-    },
-    {
-      name: 'wa',
-      ratioPercent: Math.random() * 10,
-      color: 'bg-atcoder-wa-background',
-    },
-  ];
-
   import HeadingOne from '$lib/components/HeadingOne.svelte';
   import ThermometerProgressBar from '$lib/components/ThermometerProgressBar.svelte';
+
+  // FIXME: 実際のデータに置き換え
+  const dummySubmissionRatios = (
+    acRatio: number,
+    acWithEditorialRatio: number,
+    waRatio: number,
+  ) => {
+    const ratios = [
+      {
+        name: 'ac',
+        ratioPercent: acRatio,
+        color: 'bg-atcoder-ac-background',
+      },
+      {
+        name: 'ac_with_editorial',
+        ratioPercent: acWithEditorialRatio,
+        color: 'bg-atcoder-ac-with_editorial-background',
+      },
+      {
+        name: 'wa',
+        ratioPercent: waRatio,
+        color: 'bg-atcoder-wa-background',
+      },
+    ];
+
+    return ratios;
+  };
+
+  const sampleWorkbooks = [
+    {
+      id: 1,
+      author: 'novisteps_admin',
+      title: '標準入出力',
+      dummySubmissionRatios: dummySubmissionRatios(80, 5, 5),
+    },
+    {
+      id: 2,
+      author: 'novisteps_admin',
+      title: '1個の整数値を受け取る',
+      dummySubmissionRatios: dummySubmissionRatios(50, 25, 10),
+    },
+  ];
 </script>
 
 <div class="container mx-auto w-5/6">
@@ -54,42 +77,30 @@
         <span class="sr-only">編集</span>
       </TableHeadCell>
     </TableHead>
-    <!-- TODO: ダミーデータをオブジェクトとしてまとめて、eachで取り出せるように -->
+
     <TableBody tableBodyClass="divide-y">
-      <!-- TODO: 問題集の名称にリンクを付ける -->
       <!-- TODO: 編集にリンクを付ける -->
       <!-- TODO: 削除にゴミ箱マークを付ける -->
-      <!-- TODO: プログレスバーを付ける (できればコンポーネントを再利用) -->
-      <TableBodyRow>
-        <TableBodyCell>novisteps_admin</TableBodyCell>
-        <TableBodyCell>
-          <a
-            href="/workbooks/1"
-            class="font-medium text-primary-600 hover:underline dark:text-primary-500"
-          >
-            標準入出力
-          </a>
-        </TableBodyCell>
-        <TableBodyCell>
-          <ThermometerProgressBar submissionRatios={dummySubmissionRatios} width="w-fulll" />
-        </TableBodyCell>
-        <TableBodyCell>編集 / 削除</TableBodyCell>
-      </TableBodyRow>
-      <TableBodyRow>
-        <TableBodyCell>novisteps_admin</TableBodyCell>
-        <TableBodyCell>
-          <a
-            href="/workbooks/2"
-            class="font-medium text-primary-600 hover:underline dark:text-primary-500"
-          >
-            1個の整数値を受け取る
-          </a>
-        </TableBodyCell>
-        <TableBodyCell>
-          <ThermometerProgressBar submissionRatios={dummySubmissionRatios} width="w-full" />
-        </TableBodyCell>
-        <TableBodyCell>編集 / 削除</TableBodyCell>
-      </TableBodyRow>
+      {#each sampleWorkbooks as workbook}
+        <TableBodyRow>
+          <TableBodyCell>{workbook.author}</TableBodyCell>
+          <TableBodyCell>
+            <a
+              href="/workbooks/{workbook.id}"
+              class="font-medium text-primary-600 hover:underline dark:text-primary-500"
+            >
+              {workbook.title}
+            </a>
+          </TableBodyCell>
+          <TableBodyCell>
+            <ThermometerProgressBar
+              submissionRatios={workbook.dummySubmissionRatios}
+              width="w-full"
+            />
+          </TableBodyCell>
+          <TableBodyCell>編集 / 削除</TableBodyCell>
+        </TableBodyRow>
+      {/each}
     </TableBody>
   </Table>
 </div>
