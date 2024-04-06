@@ -6,22 +6,22 @@
   const features = [
     {
       description:
-        '回答を自分で記録: 各問題の回答状況について、AC (正解)、解説AC、挑戦中、未挑戦から選んで記録できます。',
+        '回答を自分で記録：各問題の回答状況について、「AC」「解説AC」「挑戦中」「未挑戦」から選んで記録できます。',
     },
     {
       description:
-        '難易度の細分化: 17段階で難易度付けされており、現在の実力より一歩先の問題に挑戦できます。',
+        '難易度の細分化：17段階で難易度付けされており、現在の実力より一歩先の問題に挑戦できます。',
     },
   ];
 
   const members = [
     { name: '@けんちょん', account: 'https://twitter.com/drken1215' },
+    { name: '@hiro', account: 'https://twitter.com/k_hiro1818' },
     { name: '@ウルズニャー', account: 'https://twitter.com/uruzunyaa' },
     { name: '@nonon', account: 'https://twitter.com/nonon_math' },
+    { name: '@あべみ', account: 'https://twitter.com/prettyhappycatty' },
     { name: '@わさせき', account: 'https://twitter.com/wasaseki' },
     { name: '@toshi201', account: 'https://twitter.com/toshicon201' },
-    { name: '@あべみ', account: 'https://twitter.com/prettyhappycatty' },
-    { name: '@hiro', account: 'https://twitter.com/k_hiro1818' },
   ];
 </script>
 
@@ -38,12 +38,12 @@
   </div>
 
   <div class="mt-5 mb-5">
-    <Heading tag="h2" class="text-xl mb-2 text-gray-900 dark:text-white">対象ユーザ</Heading>
+    <Heading tag="h2" class="text-xl mb-2 text-gray-900 dark:text-white">予備知識</Heading>
     <List tag="ul" class="ml-6 space-y-1">
       <Li>
         <ExternalLinkWrapper
           url="https://atcoder.jp/contests/APG4b"
-          description="C++入門 AtCoder Programming Guide for beginners(APG4b)"
+          description="C++入門 AtCoder Programming Guide for beginners (APG4b)"
         />
         の
         <ExternalLinkWrapper
@@ -52,6 +52,12 @@
         />
         まで、独力でこなせる文章読解力と基礎学力がある。
       </Li>
+    </List>
+  </div>
+
+  <div class="mt-5 mb-5">
+    <Heading tag="h2" class="text-xl mb-2 text-gray-900 dark:text-white">対象ユーザ</Heading>
+    <List tag="ul" class="ml-6 space-y-1">
       <Li>
         記事
         <ExternalLinkWrapper
@@ -65,7 +71,7 @@
         />
         を解いた。
       </Li>
-      <Li>茶色コーダー(レーティング400〜799)を目指している。さらに上位を目指したい。</Li>
+      <Li>茶色コーダー (レーティング400 — 799) を目指している。さらに上位を目指したい。</Li>
       <Li>問題の解答状況を自分で記録・確認したい。</Li>
     </List>
   </div>
@@ -75,12 +81,12 @@
     <Heading tag="h2" class="text-xl mb-2 text-gray-900 dark:text-white">使い方</Heading>
     <List tag="ol" class="ml-6 space-y-1">
       <Li>(初回のみ) ユーザ名とパスワードを入力して、アカウントを作成します。</Li>
-      <Li
-        >ログインします。お試し用のアカウント(ユーザ名: guest、パスワード:
-        HelloGuest)を利用することもできます。
+      <Li>
+        ログインします。お試し用のアカウント (ユーザ名: guest、パスワード: HelloGuest)
+        を利用することもできます。
       </Li>
-      <Li>グレード(難易度)および問題を選び、「回答状況を更新」ボタンを押します。</Li>
-      <Li>4種類のボタンのうち、該当する回答状況を押します。</Li>
+      <Li>グレードおよび問題を選び、「回答状況を更新」ボタンを押します。</Li>
+      <Li>4種類のボタン (デフォルトは、「未挑戦」) のうち、該当する回答状況を押します。</Li>
     </List>
   </div>
 
@@ -91,7 +97,7 @@
     </Heading>
 
     <!-- Grade -->
-    <Heading tag="h3" customSize="text-md" class="ml-6">難易度</Heading>
+    <Heading tag="h3" customSize="text-md" class="ml-6">グレード (難易度)</Heading>
     <!-- FIXME: もう少しビジュアルを整えましょう -->
     <!-- 注: 難易度の基準は非公開 -->
     <List tag="ul" class="ml-12 space-y-1">
@@ -101,12 +107,12 @@
     </List>
 
     <!-- Submission status -->
-    <Heading tag="h3" customSize="text-md" class="ml-6 mt-3">回答状況</Heading>
+    <Heading tag="h3" customSize="text-md" class="ml-6 mt-3">回答状況の例</Heading>
     <List tag="ul" class="ml-12 space-y-1">
-      <Li>AC: 自力で正解</Li>
-      <Li>解説AC: 公式もしくは有志の解説を読んで正解</Li>
-      <Li>挑戦中: 少なくとも1回以上提出して、不正解</Li>
-      <Li>未挑戦: これから問題を解く</Li>
+      <Li>AC：正解した</Li>
+      <Li>解説AC：公式もしくは有志の解説を読んで正解した</Li>
+      <Li>挑戦中：不正解もしくは考察中</Li>
+      <Li>未挑戦：これから問題を解く</Li>
     </List>
   </div>
 
@@ -116,13 +122,20 @@
       プライバシーポリシー
     </Heading>
     <div class="ml-6">
-      <p>本サイトでは、Googleによるアクセス解析ツール「Googleアナリティクス」を利用しています。</p>
+      <p>
+        本サイトでは、アクセス解析ツール
+        <ExternalLinkWrapper
+          url="https://analytics.google.com/"
+          description="Googleアナリティクス"
+        />
+        を利用しています。
+      </p>
       <br />
       <p>
-        同ツールでは、トラフィックデータの収集のためにCookieを使用しております。このトラフィックデータは匿名で収集されており、個人を特定するものではありません。利用規約、および、プライバシーポリシーに関する説明は、
+        同ツールでは、トラフィックデータの収集のためにCookieを使用しております。データは匿名で収集されており、個人を特定するものではありません。利用規約、および、プライバシーポリシーに関する説明は、
         <ExternalLinkWrapper
           url="https://policies.google.com/technologies/partner-sites?hl=ja"
-          description="外部リンク"
+          description="こちら"
         />
         をご覧ください。
       </p>
@@ -137,7 +150,9 @@
 
   <!-- Members -->
   <div class="mt-5 mb-5">
-    <Heading tag="h2" class="mb-2 text-xl text-gray-900 dark:text-white">開発メンバー</Heading>
+    <Heading tag="h2" class="mb-2 text-xl text-gray-900 dark:text-white">
+      開発・運営メンバー
+    </Heading>
     <List tag="ul" class="ml-6 space-y-1">
       {#each members as member}
         <Li>

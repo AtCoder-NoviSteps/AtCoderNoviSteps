@@ -54,9 +54,9 @@ export const classifyContest = (contest_id: string) => {
 // See:
 // https://jsprimer.net/basic/map-and-set/
 export const contestTypePriorities: Map<ContestType, number> = new Map([
-  [ContestType.ABC, 0],
-  [ContestType.APG4B, 1],
-  [ContestType.ABS, 2],
+  [ContestType.ABS, 0],
+  [ContestType.ABC, 1],
+  [ContestType.APG4B, 2],
   [ContestType.TYPICAL90, 3],
   [ContestType.EDPC, 4],
   [ContestType.TDPC, 5],

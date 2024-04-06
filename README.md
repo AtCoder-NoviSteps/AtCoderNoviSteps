@@ -21,8 +21,8 @@
     <a href="https://github.com/KATO-Hiro/AtCoderNovisteps/blob/main/LICENSE">
         <img src="https://img.shields.io/badge/license-MIT-brightgreen.svg?style=plastic" alt="License: MIT" />
     </a>
-    <a href="https://twitter.com/x">
-        <img src="https://img.shields.io/twitter/follow/x?style=social" alt="Twitter Follow" />
+    <a href="https://twitter.com/acnovisteps">
+        <img src="https://img.shields.io/twitter/follow/acnovisteps?style=social" alt="AtCoder NoviSteps" />
     </a>
 </p>
 
@@ -48,7 +48,7 @@
 
 ## 特長
 
-- **回答を自分で記録**: 各問題の回答状況について、AC (正解)、解説AC、挑戦中、未挑戦から選んで記録できます。
+- **回答を自分で記録**: 各問題の回答状況について、「AC (正解)」「解説AC」「挑戦中」「未挑戦」から選んで記録できます。
 - **難易度の細分化**: 17段階で難易度付けされており、現在の実力より一歩先の問題に挑戦できます。
 
 ## 主な機能
@@ -56,19 +56,22 @@
 - 問題の回答状況の記録
 - 自分に合った難易度の問題が選べる
 
+## 予備知識
+
+- [C++入門 AtCoder Programming Guide for beginners (APG4b)](https://atcoder.jp/contests/APG4b)の[1.05.実行順序と入力](https://atcoder.jp/contests/APG4b/tasks/APG4b_f)まで、独力でこなせる文章読解力と基礎学力がある。
+
 ## 対象ユーザ
 
-- [C++入門 AtCoder Programming Guide for beginners(APG4b)](https://atcoder.jp/contests/APG4b)の[1.05.実行順序と入力](https://atcoder.jp/contests/APG4b/tasks/APG4b_f)まで、独力でこなせる文章読解力と基礎学力がある。
 - 記事「[AtCoder に登録したら次にやること ～ これだけ解けば十分闘える！過去問精選10問 ～](https://qiita.com/drken/items/fd4e5e3630d0f5859067)」を読み、問題集「[AtCoder Beginners Selection](https://atcoder.jp/contests/abs)」を解いた。
-- 茶色コーダー(レーティング400〜799)を目指している。さらに上位を目指したい。
+- 茶色コーダー(レーティング400 — 799)を目指している。さらに上位を目指したい。
 - 問題の解答状況を自分で記録・確認したい。
 
 ## 使い方
 
 1. (初回のみ) ユーザ名とパスワードを入力して、アカウントを作成します。
-2. ログインします。お試し用のアカウント(ユーザ名: guest、パスワード: HelloGuest)を利用することもできます。
-3. グレード(難易度)および問題を選び、「回答状況を更新」ボタンを押します。
-4. 4種類のボタンのうち、該当する回答状況を押します。
+2. ログインします。お試し用のアカウント (ユーザ名: guest、パスワード: HelloGuest) を利用することもできます。
+3. グレード (難易度) および問題を選び、「回答状況を更新」ボタンを押します。
+4. 4種類のボタン (デフォルトは、「未挑戦」) のうち、該当する回答状況を押します。
 
 ## 本サービスのスポンサー(敬称略・順不同)
 
@@ -94,7 +97,7 @@
 
 ## ご要望、ご報告、お気付きの点など
 
-- [連絡先]() - TODO: プロジェクトの代表者の連絡先、もしくは、連絡専用のSNSアカウントなどを用意しましょう。
+- [連絡先](https://twitter.com/acnovisteps)
 
 - [本プロジェクトへの参加方法](https://github.com/KATO-Hiro/AtCoderNovisteps/blob/main/CONTRIBUTING.md)
 
@@ -107,25 +110,25 @@
 
 - [@けんちょん](https://twitter.com/drken1215)
   - 役割: 本プロジェクトの発起人・全体統括（難易度付け、アプリ開発）
-  - 貢献内容: 開発メンバーの募集、プロジェクト全体管理・運営、問題の難易度評価など
+  - 貢献内容: 開発メンバーの募集、プロジェクト全体管理・運営、問題の難易度評価、問題集作成など
+- [@hiro](https://twitter.com/k_hiro1818)
+  - 役割: 主にアプリ開発
+  - 貢献内容(予定も含む): アプリの仕様に関する提案・技術選定・設計・実装
 - [@ウルズニャー](https://twitter.com/uruzunyaa)
   - 役割: 問題の難易度評価
   - 貢献内容(予定も含む): 問題の難易度評価
 - [@nonon](https://twitter.com/nonon_math)
   - 役割: 問題の難易度評価
-  - 貢献内容(予定も含む): 問題の難易度評価
-- [@わさせき](https://twitter.com/wasaseki)
-  - 役割: アプリ開発
-  - 貢献内容(予定も含む): デザイン
-- [@toshi201](https://twitter.com/toshicon201)
-  - 役割: アプリ開発
-  - 貢献内容(予定も含む): アプリ開発
+  - 貢献内容(予定も含む): 問題の難易度評価、問題集作成
 - [@あべみ](https://twitter.com/prettyhappycatty)
   - 役割: アプリ開発
   - 貢献内容(予定も含む): アプリ開発
-- [@hiro](https://twitter.com/k_hiro1818)
-  - 役割: 主にアプリ開発
-  - 貢献内容(予定も含む): アプリの仕様に関する提案・技術選定・設計・実装
+- [@わさせき](https://twitter.com/wasaseki)
+  - 役割: アプリ開発
+  - 貢献内容(予定も含む): デザイン監修
+- [@toshi201](https://twitter.com/toshicon201)
+  - 役割: アプリ開発
+  - 貢献内容(予定も含む): アプリ開発
 
 ## ライセンス
 
