@@ -56,6 +56,8 @@
     {:else}
       <!-- TODO: アカウントページを表示 -->
       <!-- HACK: 相対パスを使っているため、3階層以上のパスがあるときに動作しない可能性が高い -->
+      <NavLi href="/users/edit">ユーザ設定</NavLi>
+
       <form
         method="post"
         action="../logout?/logout"
