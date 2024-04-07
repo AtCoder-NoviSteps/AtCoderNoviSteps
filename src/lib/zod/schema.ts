@@ -9,7 +9,7 @@ export const authSchema = z.object({
     .string()
     .min(5, { message: '5文字以上入力してください' })
     .max(24, { message: '24文字になるまで削除してください' })
-    .regex(/^[\w]*$/, { message: '半角英数字のみを利用してください' }),
+    .regex(/^[\w]*$/, { message: '半角英数字と_のみを利用してください' }),
   password: z
     .string()
     .min(8, { message: '8文字以上入力してください' })
