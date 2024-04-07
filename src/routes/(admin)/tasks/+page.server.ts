@@ -6,6 +6,7 @@ import * as userService from '$lib/services/users';
 import * as problemApiService from '$lib/services/problemsApiService';
 
 import { sha256 } from '$lib/utils/hash';
+import { classifyContest } from '$lib/utils/contest';
 
 import { Roles } from '$lib/types/user';
 
@@ -34,13 +35,13 @@ export async function load({ locals }) {
   //APIから取得した、contest_id-ImportTaskのマップ
   const unregisteredTasksInContest = new Map<string, ImportTask[]>();
 
-  const thres = '1469275200'; //abc042
-
   //対象コンテストに絞る
+  // See: src/lib/utils/contest.ts
   for (let i = 0; i < importContestsJson.length; i++) {
     const contest_id = importContestsJson[i].id;
+    const contest_type = classifyContest(contest_id);
 
-    if (importContestsJson[i].start_epoch_second < thres) {
+    if (contest_type === null) {
       continue;
     }
 
@@ -76,12 +77,10 @@ export const actions: Actions = {
       const contest_id = formData.get('contest_id')?.toString() as string;
 
       const tasks = await problemApiService.getTasks();
-
       const tasksByContestId = tasks.filter((task: ImportTask) => task.contest_id === contest_id);
 
       tasksByContestId.map(async (task: ImportTask) => {
         const id = (await sha256(contest_id + task.title)) as string;
-        // HACK: ここが怪しい
         await taskService.createTask(id, task.id, task.contest_id, task.problem_index, task.title);
       });
     } catch {

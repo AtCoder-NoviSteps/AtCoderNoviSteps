@@ -1,4 +1,5 @@
 import { default as db } from '$lib/server/database';
+import { classifyContest } from '$lib/utils/contest';
 import type { TaskGrade } from '$lib/types/task';
 import type { Task } from '$lib/types/task';
 
@@ -17,9 +18,14 @@ export async function getTask(task_id: string): Promise<Task[]> {
       task_id: task_id,
     },
   });
-  console.log(task);
 
   return task;
+}
+
+export async function isExistsTask(task_id: string) {
+  const registeredTask = await getTask(task_id);
+
+  return registeredTask.length >= 1;
 }
 
 export async function createTask(
@@ -29,12 +35,19 @@ export async function createTask(
   task_table_index: string,
   title: string,
 ) {
+  const registeredTask = await isExistsTask(task_id);
+  const contest_type = classifyContest(contest_id);
+
+  if (registeredTask || contest_type === null) {
+    return;
+  }
+
   const task = await db.task.create({
     data: {
       id: id,
       task_id: task_id,
       contest_id: contest_id,
-      //contest_type: contest_type,
+      contest_type: contest_type,
       task_table_index: task_table_index,
       title: title,
     },
@@ -42,6 +55,7 @@ export async function createTask(
 
   console.log(task);
 }
+
 export async function updateTask(task_id: string, task_grade: TaskGrade) {
   const task = await db.task.update({
     where: { task_id: task_id },
