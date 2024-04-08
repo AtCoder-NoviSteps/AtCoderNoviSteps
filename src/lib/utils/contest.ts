@@ -83,12 +83,28 @@ export const getContestNameLabel = (contest_id: string) => {
     return 'APG4b';
   }
 
-  if (contest_id === 'practice2') {
-    return 'ACL Practice';
+  if (contest_id === 'typical90') {
+    return '競プロ典型 90 問';
   }
 
   if (contest_id === 'dp') {
     return 'EDPC';
+  }
+
+  if (contest_id === 'tdpc') {
+    return 'Typical DP Contest';
+  }
+
+  if (contest_id === 'practice2') {
+    return 'ACL Practice';
+  }
+
+  if (contest_id === 'tessoku-book') {
+    return '競技プログラミングの鉄則';
+  }
+
+  if (contest_id === 'math-and-algorithm') {
+    return 'アルゴリズムと数学';
   }
 
   return contest_id.toUpperCase();
