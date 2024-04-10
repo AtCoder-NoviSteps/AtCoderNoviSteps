@@ -7,7 +7,7 @@ export const classifyContest = (contest_id: string) => {
     return ContestType.ABC;
   }
 
-  if (contest_id === 'APG4b') {
+  if (contest_id.startsWith('APG4b')) {
     return ContestType.APG4B;
   }
 
@@ -79,8 +79,8 @@ export function getContestPriority(contestId: string): number {
 }
 
 export const getContestNameLabel = (contest_id: string) => {
-  if (contest_id === 'APG4b') {
-    return 'APG4b';
+  if (contest_id === 'APG4b' || contest_id === 'APG4bPython') {
+    return contest_id;
   }
 
   if (contest_id === 'typical90') {
@@ -92,7 +92,7 @@ export const getContestNameLabel = (contest_id: string) => {
   }
 
   if (contest_id === 'tdpc') {
-    return 'Typical DP Contest';
+    return 'TDPC';
   }
 
   if (contest_id === 'practice2') {
