@@ -19,7 +19,7 @@
     { name: '@hiro', account: 'https://twitter.com/k_hiro1818' },
     { name: '@ウルズニャー', account: 'https://twitter.com/uruzunyaa' },
     { name: '@nonon', account: 'https://twitter.com/nonon_math' },
-    { name: '@あべみ', account: 'https://twitter.com/prettyhappycatty' },
+    { name: '@あべみ', account: 'https://twitter.com/cats0830v' },
     { name: '@わさせき', account: 'https://twitter.com/wasaseki' },
     { name: '@toshi201', account: 'https://twitter.com/toshicon201' },
   ];
