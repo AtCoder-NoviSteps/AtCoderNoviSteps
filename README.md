@@ -119,7 +119,7 @@
 - [@nonon](https://twitter.com/nonon_math)
   - 役割: 問題の難易度評価
   - 貢献内容(予定も含む): 問題の難易度評価、問題集作成
-- [@あべみ](https://twitter.com/prettyhappycatty)
+- [@あべみ](https://twitter.com/cats0830v)
   - 役割: アプリ開発
   - 貢献内容(予定も含む): アプリ開発
 - [@わさせき](https://twitter.com/wasaseki)
