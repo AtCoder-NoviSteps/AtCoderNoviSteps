@@ -7,5 +7,6 @@
 <List class="mt-1.5 ms-4 list-disc list-inside">
   <Li>アカウント</Li>
   <Li>登録した回答状況</Li>
-  <Li>AtCoder IDとの連携</Li>
+  <!-- TODO: AtCoderアカウントと連携できるようになったら表示する -->
+  <!-- <Li>AtCoder IDとの連携</Li> -->
 </List>
