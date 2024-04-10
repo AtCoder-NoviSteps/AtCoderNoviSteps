@@ -97,7 +97,7 @@ export async function getSubmissionStatusMapWithName() {
 // HACK: 暫定的なメソッドで処理
 // 理由: getSubmissionStatusMapWithName()を利用する場合は、async と awaitが必要だが、UIの背景色が変更されない。
 // 懸念事項: 将来的には、DBから回答ステータスを取り出すことになる。
-//          TaskResultを拡張するのが自然か? (ただし、テーブルが肥大化すぎるようにも思える)
+//          TaskResultを拡張するのが自然か? (ただし、テーブルが肥大化しすぎるようにも思える)
 export const getBackgroundColorFrom = (statusName: string) => {
   const defaultStatus = submission_statuses;
   const submissionStatusByName = new Map();

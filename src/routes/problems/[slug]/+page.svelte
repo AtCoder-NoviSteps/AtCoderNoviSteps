@@ -24,7 +24,6 @@
 
   <!-- 回答状況を表す画像のサイズ・余白などをカスタマイズするため、Flowbiteを利用している -->
   <!-- See: https://flowbite.com/docs/components/card/#card-with-image -->
-  <!-- FIXME: ハードコーディングしている部分を定数に差し替え -->
   <a
     href={taskUrl(taskResult)}
     target="_blank"
@@ -36,7 +35,7 @@
     <Img
       class="object-cover rounded-t-lg w-64 h-64 p-4 md:h-auto md:w-48 md:rounded-none md:rounded-l-lg"
       src="../../{taskResult.submission_status_image_path}"
-      alt={taskResult.submission_status_image_path}
+      alt={taskResult.submission_status_label_name}
     />
     <div class="flex flex-col justify-between p-4 leading-normal">
       <h4 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
@@ -52,7 +51,6 @@
   </a>
 
   <!-- TODO: Add face icons. -->
-  <!-- HACK: flowbite-svelte-icons has few face icon. -->
   <!-- TODO: Add tooltips to buttons for submission results -->
   <!-- See: https://tailwindcss.com/docs/align-items -->
   <!-- See: https://bobbyhadz.com/blog/typescript-type-string-is-not-assignable-to-type -->

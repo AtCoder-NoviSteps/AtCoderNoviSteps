@@ -68,6 +68,7 @@ export interface TaskResult extends Task {
   status_name: string;
   status_id: string;
   submission_status_image_path: string;
+  submission_status_label_name: string;
   is_ac: boolean;
   updated_at: Date;
 }
