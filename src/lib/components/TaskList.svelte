@@ -89,7 +89,7 @@
             <TableBodyCell class="p-3">
               <Img
                 src="../../{taskResult.submission_status_image_path}"
-                alt={taskResult.submission_status_image_path}
+                alt={taskResult.submission_status_label_name}
                 class="h-8 w-8"
               />
             </TableBodyCell>

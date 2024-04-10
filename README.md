@@ -21,13 +21,13 @@
         <img src="https://img.shields.io/badge/license-MIT-brightgreen.svg?style=plastic" alt="License: MIT" />
     </a>
     <a href="https://twitter.com/acnovisteps">
-        <img src="https://img.shields.io/twitter/follow/acnovisteps?style=social" alt="AtCoder NoviSteps" />
+        <img src="https://img.shields.io/twitter/follow/acnovisteps?style=social&logo=twitter" alt="Follow @acnovisteps on Twitter" />
     </a>
 </p>
 
 <p align="center">
   <a href="https://github.com/sponsors/KATO-Hiro">
-    <img src="https://img.shields.io/static/v1?label=Sponsor&message=%E2%9D%A4&logo=GitHub&color=ff69b4"/>
+    <img src="https://img.shields.io/static/v1?label=Sponsor&message=%E2%9D%A4&logo=GitHub&color=ff69b4" alt="GitHub Sponsors"/>
   </a>
 </p>
 
