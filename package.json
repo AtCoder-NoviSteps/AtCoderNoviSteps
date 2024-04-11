@@ -74,6 +74,7 @@
     "@testing-library/svelte": "4.1.0",
     "@types/jest": "29.5.12",
     "autoprefixer": "10.4.19",
+    "debug": "4.3.4",
     "flowbite": "2.3.0",
     "just-extend": "6.2.0",
     "lucia": "2.7.7",
@@ -84,6 +85,8 @@
     "svelte-eslint-parser": "^0.34.1",
     "tailwind-merge": "1.14.0",
     "tailwindcss": "3.4.3",
+    "tar": "7.0.0",
+    "undici": "6.12.0",
     "vercel": "33.7.0"
   }
 }
