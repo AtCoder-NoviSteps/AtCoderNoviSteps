@@ -82,6 +82,10 @@
 
 - [chokudai](https://github.com/chokudai)
 
+### 🌐 Domain Supporter
+
+- [KoyanagiHitoshi](https://github.com/KoyanagiHitoshi)
+
 ### 🍨 Ice Cream Supporter
 
 - ia7ck
