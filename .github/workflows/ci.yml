@@ -108,7 +108,7 @@ jobs:
 
       - name: Assign staging domain to deployment (if staging branch)
         if: ${{ github.ref != 'refs/heads/main' }}
-        run: vercel alias set ${{ steps.deploy.outputs.url }} staging-atcoder-novisteps.com --scope=AtCoder-NoviSteps --token=${{ secrets.VERCEL_TOKEN }}
+        run: vercel alias set ${{ steps.deploy.outputs.url }} staging-atcoder-novisteps.com --scope=atcoder-novisteps --token=${{ secrets.VERCEL_TOKEN }}
 
   production:
     if: ${{ github.ref == 'refs/heads/main' }}
