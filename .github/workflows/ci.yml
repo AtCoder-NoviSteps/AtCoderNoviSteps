@@ -133,6 +133,17 @@ jobs:
           check-latest: true
           cache: 'pnpm'
 
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Build
+        run: pnpm build
+
+      - name: Apply all pending migrations to the database
+        run: pnpm dlx prisma migrate deploy
+        env:
+          DATABASE_URL: ${{ secrets.PRODUCTION_DATABASE_URL }}
+
       - name: Install Vercel CLI
         run: pnpm add --global vercel@latest
 
