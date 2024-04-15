@@ -13,7 +13,7 @@ on:
   push:
     branches:
       - 'main'
-      - 'release'
+      - 'staging'
   pull_request:
 
 jobs:
@@ -82,6 +82,17 @@ jobs:
           check-latest: true
           cache: 'pnpm'
 
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Build
+        run: pnpm build
+
+      - name: Apply all pending migrations to the database
+        run: pnpm dlx prisma migrate deploy
+        env:
+          DATABASE_URL: ${{ secrets.PREVIEW_DATABASE_URL }}
+
       - name: Install Vercel CLI
         run: pnpm add --global vercel@latest
 
@@ -95,10 +106,9 @@ jobs:
         id: deploy
         run: echo "url=$(vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }})" >> $GITHUB_OUTPUT
 
-      # TODO: Prepare staging domain.
-      # - name: Assign staging domain to deployment (if main branch)
-      #   if: ${{ github.ref == 'refs/heads/main' }}
-      #   run: vercel alias ${{ steps.deploy.outputs.url }} stg.my-service.com --scope=my-team --token=${{ secrets.VERCEL_TOKEN }}
+      - name: Assign staging domain to deployment (if staging branch)
+        if: ${{ github.ref != 'refs/heads/main' }}
+        run: vercel alias set ${{ steps.deploy.outputs.url }} ${{ secrets.STAGING_DOMAIN }} --scope=${{ secrets.VERCEL_SCOPE }} --token=${{ secrets.VERCEL_TOKEN }}
 
   production:
     if: ${{ github.ref == 'refs/heads/main' }}
