@@ -116,8 +116,8 @@ devDependencies:
     specifier: 2.37.0
     version: 2.37.0(eslint@8.57.0)(svelte@4.2.14)
   flowbite-svelte:
-    specifier: 0.44.24
-    version: 0.44.24(svelte@4.2.14)
+    specifier: 0.45.0
+    version: 0.45.0(svelte@4.2.14)
   flowbite-svelte-icons:
     specifier: 0.4.4
     version: 0.4.4(svelte@4.2.14)(tailwind-merge@1.14.0)(tailwindcss@3.4.3)
@@ -3381,9 +3381,9 @@ packages:
       tailwindcss: 3.4.3
     dev: true
 
-  /flowbite-svelte@0.44.24(svelte@4.2.14):
-    resolution: {integrity: sha512-kXhJZHGpBVq5RFOoYnzRCEM8eFa81DVp4KjUbBsLJptKhizbSSBJuYApWIQb9pBCS8EBhX4PAX+RsgEDZfEqtA==}
-    engines: {node: '>=18.0.0', pnpm: '>=8.0.0'}
+  /flowbite-svelte@0.45.0(svelte@4.2.14):
+    resolution: {integrity: sha512-laYG6CXvQ7huzrqI24jf8mYwBEw3kGesVCpS9WgIg6jUgBPzaYba/R4FPPdKei3LQBRj8V/pzzUERzUPizm7Aw==}
+    engines: {node: '>=20.0.0', pnpm: '>=8.0.0'}
     peerDependencies:
       svelte: ^4.0.0
     dependencies:
