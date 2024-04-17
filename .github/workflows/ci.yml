@@ -3,6 +3,11 @@
 # https://pnpm.io/ja/continuous-integration#github-actions
 # https://vercel.com/guides/how-can-i-use-github-actions-with-vercel
 # https://zenn.dev/ttskch/articles/691fb62fbb6b1b
+# https://vercel.com/guides/set-up-a-staging-environment-on-vercel
+# https://vercel.com/docs/projects/domains/add-a-domain#verify-domain-access
+# https://vercel.com/docs/cli/global-options#scope
+# https://www.prisma.io/docs/orm/prisma-client/deployment/deploy-database-changes-with-prisma-migrate
+# https://www.prisma.io/docs/orm/prisma-migrate/workflows/baselining
 name: CI
 
 env:
