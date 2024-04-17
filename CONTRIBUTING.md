@@ -134,7 +134,9 @@
 - 依存関係にあるライブラリのインストールとデータベースの初期化を行い、開発サーバを起動します。
 
   `pnpm install`
+
   `pnpm exec playwright install`
+
   `pnpm exec playwright install-deps`
 
   `pnpm dlx prisma db push`
@@ -161,41 +163,47 @@
 
 ### (共通) ソースコードやドキュメントの加筆・修正
 
+注: 2024年4月以降、ブランチを以下のように分けています。
+
+`staging` : 開発・運営チームの検証用環境です(デフォルトブランチ)。
+
+`main`: 一般公開用の環境です。バグの修正のような緊急性の高い作業とき飲み指定します。
+
 #### 本レポジトリの最新の状態を反映させる方法
 
 1. 本レポジトリの最新の内容を取得します。
 
 `git fetch root_branch`
 
-2. 取得した内容をご自身のローカル上のブランチにマージします。`main`の部分を変えれば、別のブランチにすることも可能です。
+2. 取得した内容をご自身のローカル上のブランチにマージします。`staging`の部分を変えれば、別のブランチにすることも可能です。
 
-`git merge root_branch/main`
+`git merge root_branch/staging`
 
 3. ご自身のリモートブランチを更新します。
 
-`git push origin main`
+`git push origin staging`
 
 #### 作業用のブランチ作成からプルリクエスト作成まで
 
 1. 作業用のブランチを作成します。
 
-`git checkout -b <your-new-branch-for-working>`
+`git checkout -b <your-new-branch-for-working> origin/staging`
 
 例: GitHubのIssue番号や機能名・ドキュメントやバグの種類などを表すキーワードを使います。
 
-`git checkout -b "#998244353"`
+`git checkout -b "#998244353" origin/staging`
 
-`git checkout -b "feature/feature-name"`
+`git checkout -b "feature/feature-name" origin/staging`
 
-`git checkout -b "docs/docs-name"`
+`git checkout -b "docs/docs-name" origin/staging`
 
-`git checkout -b "bugfix/bug-name"`
+`git checkout -b "bugfix/bug-name" origin/staging`
 
 2. ソースコードやドキュメントの加筆・修正を行います。以下のコマンドを実行し、アプリが意図した通りに動作するか確認してください。
 
 - 本レポジトリの最新の状態を取り込み、開発サーバが起動するか確認
 
-  `git pull origin main`
+  `git pull origin staging`
 
   `pnpm install`
 
