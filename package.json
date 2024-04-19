@@ -63,7 +63,7 @@
     "typescript": "5.4.5",
     "vite": "4.5.3",
     "vitest": "0.34.6",
-    "zod": "3.22.4"
+    "zod": "3.22.5"
   },
   "type": "module",
   "dependencies": {
