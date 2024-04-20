@@ -170,6 +170,7 @@ model SubmissionStatus {
 model WorkBook {
   id           Int          @id @default(autoincrement())
   userId       String
+  title        String
   isPublished  Boolean      @default(false)
   isOfficial   Boolean      @default(false)
   workBookType WorkBookType @default(CREATED_BY_USER)
