@@ -3,6 +3,7 @@
 // https://regex101.com/
 // https://qiita.com/mpyw/items/886218e7b418dfed254b
 import { z } from 'zod';
+// import { WorkBookType } from '@prisma/client';
 
 export const authSchema = z.object({
   username: z
@@ -17,4 +18,14 @@ export const authSchema = z.object({
     .regex(/^(?=.*?[a-z])(?=.*?[A-Z])(?=.*?\d)[a-zA-Z\d]{8,128}$/, {
       message: '半角英文字(小・大)・数字をそれぞれ1文字以上含めてください',
     }),
+});
+
+export const workBookSchema = z.object({
+  userId: z.string(),
+  title: z.string(),
+  isPublished: z.boolean(),
+  isOfficial: z.boolean(),
+  // TODO: 以下の属性を追加
+  // workBookType: z.nativeEnum(WorkBookType),
+  // workBookTasks: zで配列扱えるようにする。
 });
