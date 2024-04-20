@@ -22,25 +22,22 @@ generator erd {
 generator fabbrica {
   provider = "prisma-fabbrica"
   output   = ".fabbrica"
-  //tsconfig = "../tsconfig.json"
-  //noTranspile = true
 }
 
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
-  //relationMode = "prisma"
 }
+
+// Note: Lucia v3 + v3 Prisma adaperでは、全てのフィールドがキャメルケースであることが要求されている。
+//       段階的に移行を進めるため、modelを追加・修正する場合は、キャメルケースで記述する。
+// See:
+// https://lucia-auth.com/upgrade-v3/prisma/postgresql
 
 // See:
 // https://lucia-auth.com/database-adapters/prisma/
 model User {
-  id           String    @id @unique
-  auth_session Session[]
-  key          Key[]
-
-  taskAnswer TaskAnswer[]
-
+  id                        String   @id @unique
   // here you can add custom fields for your user
   // e.g. name, email, username, roles, etc.
   username                  String   @unique
@@ -50,6 +47,11 @@ model User {
   atcoder_validation_status Boolean? @default(false)
   created_at                DateTime @default(now())
   updated_at                DateTime @updatedAt
+
+  auth_session Session[]
+  key          Key[]
+  taskAnswer   TaskAnswer[]
+  workBooks    WorkBook[]
 
   @@map("user")
 }
@@ -66,7 +68,8 @@ model Session {
   user_id        String
   active_expires BigInt
   idle_expires   BigInt
-  user           User   @relation(references: [id], fields: [user_id], onDelete: Cascade)
+
+  user User @relation(references: [id], fields: [user_id], onDelete: Cascade)
 
   @@index([user_id])
   @@map("session")
@@ -76,16 +79,15 @@ model Key {
   id              String  @id @unique
   hashed_password String?
   user_id         String
-  user            User    @relation(references: [id], fields: [user_id], onDelete: Cascade)
+
+  user User @relation(references: [id], fields: [user_id], onDelete: Cascade)
 
   @@index([user_id])
   @@map("key")
 }
 
 model Task {
-  id           String       @id @unique
-  task_answers TaskAnswer[]
-
+  id                          String                    @id @unique
   contest_type                ContestType               @default(ABC)
   contest_id                  String
   task_table_index            String // 問題一覧を表示するときに使用。AtCoder Problemsに準拠。
@@ -96,7 +98,9 @@ model Task {
   created_at                  DateTime                  @default(now())
   updated_at                  DateTime                  @updatedAt
 
-  tags TaskTag[]
+  tags          TaskTag[]
+  task_answers  TaskAnswer[]
+  workBookTasks WorkBookTask[]
 
   @@map("task")
 }
@@ -115,16 +119,15 @@ model Tag {
 }
 
 model TaskTag {
-  id       String
-  task_id  String
-  tag_id   String
-  priority Int
+  id         String
+  task_id    String
+  tag_id     String
+  priority   Int
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
 
   task Task? @relation(fields: [task_id], references: [task_id])
   tag  Tag?  @relation(fields: [tag_id], references: [id])
-
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
 
   @@id([task_id, tag_id])
   @@map("tasktag")
@@ -133,17 +136,16 @@ model TaskTag {
 // See:
 // https://www.prisma.io/docs/orm/more/upgrade-guides/upgrading-versions/upgrading-to-prisma-3/referential-actions
 model TaskAnswer {
-  id        String @unique
-  task_id   String
-  user_id   String
-  status_id String
+  id         String   @unique
+  task_id    String
+  user_id    String
+  status_id  String
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
 
   task   Task?             @relation(fields: [task_id], references: [task_id])
   user   User?             @relation(fields: [user_id], references: [id], onDelete: Cascade)
   status SubmissionStatus? @relation(fields: [status_id], references: [id])
-
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
 
   @@id([task_id, user_id])
   @@unique([task_id, user_id])
@@ -151,20 +153,47 @@ model TaskAnswer {
 }
 
 model SubmissionStatus {
-  id String @id @unique
-
-  user_id     String?
-  status_name String
-  is_AC       Boolean @default(false)
-
+  id           String  @id @unique
+  user_id      String?
+  status_name  String
+  is_AC        Boolean @default(false)
   label_name   String
   image_path   String
   button_color String
-  sort_order   Int    @default(10)
+  sort_order   Int     @default(10)
 
   task_answer TaskAnswer[]
 
   @@map("submissionstatus")
+}
+
+model WorkBook {
+  id           Int          @id @default(autoincrement())
+  userId       String
+  isPublished  Boolean      @default(false)
+  isOfficial   Boolean      @default(false)
+  workBookType WorkBookType @default(CREATED_BY_USER)
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+
+  user User @relation(references: [id], fields: [userId])
+
+  workBookTasks WorkBookTask[]
+
+  @@map("workbook")
+}
+
+model WorkBookTask {
+  id         String   @id @unique
+  workBookId Int
+  taskId     String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  workBook WorkBook @relation(references: [id], fields: [workBookId])
+  task     Task     @relation(references: [id], fields: [taskId])
+
+  @@map("workbooktask")
 }
 
 enum ContestType {
@@ -218,4 +247,12 @@ enum AtcoderProblemsDifficulty {
   BRONZE
   SILVER
   GOLD
+}
+
+// TODO: テーマ別とジャンル別の違いを言語化する。
+enum WorkBookType {
+  CREATED_BY_USER // (デフォルト) ユーザ作成: サービスの利用者がさまざまなコンセプトで作成
+  TEXTBOOK // 教科書: 例題の解法を理解すれば、その本質部分を真似することで解ける類題
+  SOLUTION // 解法別: 使い方をマスターしたいアルゴリズム・データ構造・考え方・実装方針 (総称して解法と表記) をさまざまなパターンで考察しながら練習できる
+  THEME // テーマ別: さまざまな解法 (解法別より狭義) を横断し得るものをまとめている
 }

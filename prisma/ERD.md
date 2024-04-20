@@ -63,6 +63,15 @@ SILVER SILVER
 GOLD GOLD
         }
     
+
+
+        WorkBookType {
+            CREATED_BY_USER CREATED_BY_USER
+TEXTBOOK TEXTBOOK
+SOLUTION SOLUTION
+THEME THEME
+        }
+    
   "user" {
     String id "🗝️"
     String username 
@@ -145,17 +154,39 @@ GOLD GOLD
     Int sort_order 
     }
   
+
+  "workbook" {
+    Int id "🗝️"
+    String userId 
+    Boolean isPublished 
+    Boolean isOfficial 
+    WorkBookType workBookType 
+    DateTime createdAt 
+    DateTime updatedAt 
+    }
+  
+
+  "workbooktask" {
+    String id "🗝️"
+    Int workBookId 
+    String taskId 
+    DateTime createdAt 
+    DateTime updatedAt 
+    }
+  
+    "user" o|--|| "Roles" : "enum:role"
     "user" o{--}o "session" : "auth_session"
     "user" o{--}o "key" : "key"
     "user" o{--}o "taskanswer" : "taskAnswer"
-    "user" o|--|| "Roles" : "enum:role"
+    "user" o{--}o "workbook" : "workBooks"
     "session" o|--|| "user" : "user"
     "key" o|--|| "user" : "user"
-    "task" o{--}o "taskanswer" : "task_answers"
     "task" o|--|| "ContestType" : "enum:contest_type"
     "task" o|--|| "TaskGrade" : "enum:grade"
     "task" o|--|| "AtcoderProblemsDifficulty" : "enum:atcoder_problems_difficulty"
     "task" o{--}o "tasktag" : "tags"
+    "task" o{--}o "taskanswer" : "task_answers"
+    "task" o{--}o "workbooktask" : "workBookTasks"
     "tag" o{--}o "tasktag" : "tasks"
     "tasktag" o|--|o "task" : "task"
     "tasktag" o|--|o "tag" : "tag"
@@ -163,4 +194,9 @@ GOLD GOLD
     "taskanswer" o|--|o "user" : "user"
     "taskanswer" o|--|o "submissionstatus" : "status"
     "submissionstatus" o{--}o "taskanswer" : "task_answer"
+    "workbook" o|--|| "WorkBookType" : "enum:workBookType"
+    "workbook" o|--|| "user" : "user"
+    "workbook" o{--}o "workbooktask" : "workBookTasks"
+    "workbooktask" o|--|| "workbook" : "workBook"
+    "workbooktask" o|--|| "task" : "task"
 ```
