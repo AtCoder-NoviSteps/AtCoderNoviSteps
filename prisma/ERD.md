@@ -63,6 +63,15 @@ SILVER SILVER
 GOLD GOLD
         }
     
+
+
+        WorkBookType {
+            CREATED_BY_USER CREATED_BY_USER
+TEXTBOOK TEXTBOOK
+SOLUTION SOLUTION
+THEME THEME
+        }
+    
   "user" {
     String id "🗝️"
     String username 
@@ -145,9 +154,21 @@ GOLD GOLD
     Int sort_order 
     }
   
+
+  "workbook" {
+    Int id "🗝️"
+    String userId 
+    Boolean isPublished 
+    Boolean isOfficial 
+    WorkBookType workBookType 
+    DateTime createdAt 
+    DateTime updatedAt 
+    }
+  
     "user" o{--}o "session" : "auth_session"
     "user" o{--}o "key" : "key"
     "user" o{--}o "taskanswer" : "taskAnswer"
+    "user" o{--}o "workbook" : "WorkBook"
     "user" o|--|| "Roles" : "enum:role"
     "session" o|--|| "user" : "user"
     "key" o|--|| "user" : "user"
@@ -163,4 +184,6 @@ GOLD GOLD
     "taskanswer" o|--|o "user" : "user"
     "taskanswer" o|--|o "submissionstatus" : "status"
     "submissionstatus" o{--}o "taskanswer" : "task_answer"
+    "workbook" o|--|| "WorkBookType" : "enum:workBookType"
+    "workbook" o|--|| "user" : "user"
 ```

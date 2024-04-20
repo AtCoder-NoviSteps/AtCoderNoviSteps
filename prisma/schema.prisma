@@ -32,6 +32,11 @@ datasource db {
   //relationMode = "prisma"
 }
 
+// Note: Lucia v3 + v3 Prisma adaperでは、全てのフィールドがキャメルケースであることが要求されている。
+//       段階的に移行を進めるため、modelを追加・修正する場合は、キャメルケースで記述する。
+// See:
+// https://lucia-auth.com/upgrade-v3/prisma/postgresql
+
 // See:
 // https://lucia-auth.com/database-adapters/prisma/
 model User {
@@ -40,6 +45,7 @@ model User {
   key          Key[]
 
   taskAnswer TaskAnswer[]
+  WorkBook   WorkBook[]
 
   // here you can add custom fields for your user
   // e.g. name, email, username, roles, etc.
@@ -167,6 +173,24 @@ model SubmissionStatus {
   @@map("submissionstatus")
 }
 
+model WorkBook {
+  id Int @id @default(autoincrement())
+
+  userId       String
+  isPublished  Boolean      @default(false)
+  isOfficial   Boolean      @default(false)
+  workBookType WorkBookType @default(CREATED_BY_USER)
+
+  user User @relation(references: [id], fields: [userId])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("workbook")
+}
+
+// TODO: 問題集を構成する問題を保持するテーブルを追加
+
 enum ContestType {
   ABC // AtCoder Beginner Contest
   APG4B // C++入門 AtCoder Programming Guide for beginners
@@ -218,4 +242,12 @@ enum AtcoderProblemsDifficulty {
   BRONZE
   SILVER
   GOLD
+}
+
+// TODO: テーマ別とジャンル別の違いを言語化する。
+enum WorkBookType {
+  CREATED_BY_USER // (デフォルト) ユーザ作成: サービスの利用者がさまざまなコンセプトで作成
+  TEXTBOOK // 教科書: 例題の解法を理解すれば、その本質部分を真似することで解ける類題
+  SOLUTION // 解法別: 使い方をマスターしたいアルゴリズム・データ構造・考え方・実装方針 (総称して解法と表記) をさまざまなパターンで考察しながら練習できる
+  THEME // テーマ別: さまざまな解法 (解法別より狭義) を横断し得るものをまとめている
 }
