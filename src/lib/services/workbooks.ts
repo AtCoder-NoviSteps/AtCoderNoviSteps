@@ -1,26 +1,22 @@
-// import { default as db } from '$lib/server/database';
+import { default as db } from '$lib/server/database';
+import type { WorkBook, WorkBookType } from '$lib/types/workbook';
 
 // TODO: getWorkBooks()
 
 // TODO: getWorkBook(workBookId)
 
-// TODO: createWorkBook()
-export async function createWorkBook(workBook) {
-  // const workBook = await db.workbook.create({
-  //   data: {
-  //     // id: id,
-  //     // workBookにある属性はまとめて、dbに追加したい
-  //     // 理由: 記述量を減らす + コードリーディングの手間を減らすため
-  //     userId: workBook.userId,
-  //     title: workBook.title,
-  //     isPublished: workBook.isPublished,
-  //     isOfficial: workBook.isOfficial,
-  //     workBookType: workBook.workBookType,
-  //     createdAt: new Date(),
-  //     updatedAt: new Date(),
-  //   },
-  // });
-  console.log(workBook);
+export async function createWorkBook(workBook: WorkBook) {
+  const newWorkBook = await db.workBook.create({
+    data: {
+      userId: workBook.userId,
+      title: workBook.title,
+      isPublished: workBook.isPublished,
+      isOfficial: workBook.isOfficial,
+      workBookType: workBook.workBookType as WorkBookType,
+    },
+  });
+
+  console.log(newWorkBook);
 }
 
 // TODO: updateWorkBook(workBookId)

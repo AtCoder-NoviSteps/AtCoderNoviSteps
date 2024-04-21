@@ -3,7 +3,7 @@
 // https://regex101.com/
 // https://qiita.com/mpyw/items/886218e7b418dfed254b
 import { z } from 'zod';
-// import { WorkBookType } from '@prisma/client';
+import { WorkBookType } from '$lib/types/workbook';
 
 export const authSchema = z.object({
   username: z
@@ -22,10 +22,10 @@ export const authSchema = z.object({
 
 export const workBookSchema = z.object({
   userId: z.string(),
-  title: z.string(),
+  title: z.string(), // TODO: 文字数は1文字以上、かつ、上限を設ける。
   isPublished: z.boolean(),
   isOfficial: z.boolean(),
+  workBookType: z.nativeEnum(WorkBookType),
   // TODO: 以下の属性を追加
-  // workBookType: z.nativeEnum(WorkBookType),
   // workBookTasks: zで配列扱えるようにする。
 });

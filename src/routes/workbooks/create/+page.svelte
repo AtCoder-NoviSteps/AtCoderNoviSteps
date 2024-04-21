@@ -18,16 +18,39 @@
 
   import HeadingOne from '$lib/components/HeadingOne.svelte';
   import SubmissionButton from '$lib/components/SubmissionButton.svelte';
+  import { WorkBookType } from '$lib/types/workbook';
 
   export let data;
 
   const { form } = superForm(data.form);
-  console.log(form);
+  const user = data.user;
+  const isAdmin = data.isAdmin;
+
+  $form.userId = user.id;
+  $form.isOfficial = isAdmin;
+  $form.workBookType = isAdmin ? WorkBookType.TEXTBOOK : WorkBookType.CREATED_BY_USER;
 
   let isPublished = [
     { value: false, name: '非公開' },
     { value: true, name: '公開' },
   ];
+
+  const workBookType = (isAdmin: boolean) => {
+    if (isAdmin) {
+      const types = [
+        { value: WorkBookType.TEXTBOOK, name: '教科書' },
+        { value: WorkBookType.SOLUTION, name: '解法別' },
+        { value: WorkBookType.GENRE, name: 'ジャンル別' },
+        { value: WorkBookType.THEME, name: 'テーマ別' },
+      ];
+
+      return types;
+    } else {
+      const types = [{ value: WorkBookType.CREATED_BY_USER, name: 'ユーザ作成' }];
+
+      return types;
+    }
+  };
 </script>
 
 <!-- TODO: パンくずリストを用意 -->
@@ -44,11 +67,12 @@
     </Breadcrumb>
 
     <!-- 作者 -->
-    TODO: ユーザ名は自動的に取得できるようにする
     <Label class="space-y-2">
       <span>ユーザ名</span>
-      <Input size="md" name="userId" bind:value={$form.userId} />
+      <Input size="md" name="userName" readonly bind:value={user.name} />
     </Label>
+
+    <Input type="hidden" size="md" name="userId" bind:value={$form.userId} />
 
     <!-- タイトル -->
     <!-- TODO: バリデーションを追加 -->
@@ -57,12 +81,24 @@
       <Input size="md" name="title" bind:value={$form.title} />
     </Label>
 
-    <!-- 問題集の種類を指定 -->
-
     <!-- 一般公開の有無 -->
     <Label class="space-y-2">
       <span>公開状況</span>
       <Select class="" name="isPublished" items={isPublished} bind:value={$form.isPublished} />
+    </Label>
+
+    <!-- 管理者 / 一般ユーザ -->
+    <Input type="hidden" size="md" name="isOfficial" bind:value={$form.isOfficial} />
+
+    <!-- 管理者のみ: 問題集の区分を指定-->
+    <Label class="space-y-2">
+      <span>問題集の区分</span>
+      <Select
+        class=""
+        name="workBookType"
+        items={workBookType(isAdmin)}
+        bind:value={$form.workBookType}
+      />
     </Label>
 
     <!-- 問題を検索 -->

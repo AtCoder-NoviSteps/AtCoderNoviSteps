@@ -58,8 +58,7 @@
 <div class="container mx-auto w-5/6">
   <HeadingOne title="(準備中) 問題集" />
 
-  TODO: 新規作成ボタンを押したら、問題集を作成できるようにする <br />
-  <!-- TODO: 新規作成ボタンから、createページへ -->
+  <!-- 新規作成ボタンから、createページへ -->
   <Button href="/workbooks/create" type="submit">新規作成</Button>
 
   <!-- TODO: 一覧(ダミーデータ)を追加 -->
