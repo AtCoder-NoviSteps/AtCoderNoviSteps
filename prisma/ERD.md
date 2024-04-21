@@ -69,6 +69,7 @@ GOLD GOLD
             CREATED_BY_USER CREATED_BY_USER
 TEXTBOOK TEXTBOOK
 SOLUTION SOLUTION
+GENRE GENRE
 THEME THEME
         }
     
@@ -158,6 +159,7 @@ THEME THEME
   "workbook" {
     Int id "🗝️"
     String userId 
+    String title 
     Boolean isPublished 
     Boolean isOfficial 
     WorkBookType workBookType 
