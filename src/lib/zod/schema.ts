@@ -22,7 +22,7 @@ export const authSchema = z.object({
 
 export const workBookSchema = z.object({
   userId: z.string(),
-  title: z.string(), // TODO: 文字数は1文字以上、かつ、上限を設ける。
+  title: z.string().min(3, { message: '3文字以上入力してください' }), // TODO: 文字数の上限を設ける。
   isPublished: z.boolean(),
   isOfficial: z.boolean(),
   workBookType: z.nativeEnum(WorkBookType),
