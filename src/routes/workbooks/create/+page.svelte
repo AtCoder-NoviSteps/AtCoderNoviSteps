@@ -1,6 +1,5 @@
 <script lang="ts">
   import { enhance } from '$app/forms';
-  import SuperDebug from 'sveltekit-superforms';
   import { superForm } from 'sveltekit-superforms/client';
   import {
     Breadcrumb,
@@ -135,9 +134,10 @@
       {/each}
     </TableBody> -->
     <!-- </Table> -->
+
     <!-- 作成ボタンを追加 -->
-    <SubmissionButton labelName="作成" />
+    <div class="flex flex-wrap md:justify-center md:items-center">
+      <SubmissionButton width="w-full md:max-w-md " labelName="作成" />
+    </div>
   </form>
 </div>
-
-<SuperDebug data={$form} />
