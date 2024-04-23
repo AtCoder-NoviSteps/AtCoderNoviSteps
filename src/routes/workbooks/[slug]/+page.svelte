@@ -26,6 +26,7 @@
   let workbook = data.workbook;
 </script>
 
+<!-- TODO: コンポーネントとして切り出す -->
 <div class="container mx-auto w-5/6">
   <HeadingOne title="(準備中) 問題集の詳細" />
 
@@ -76,11 +77,11 @@
       <!-- TODO: コンテスト名、問題名にリンクを付ける -->
       <!-- TODO: 編集にリンクを付ける -->
       <!-- TODO: 削除にゴミ箱マークを付ける -->
-      {#each workbook.tasks as foo}
+      {#each workbook.tasks as task}
         <TableBodyRow>
-          <TableBodyCell>{foo.status_name}</TableBodyCell>
-          <TableBodyCell>{foo.contest_id}</TableBodyCell>
-          <TableBodyCell>{foo.title}</TableBodyCell>
+          <TableBodyCell>{task.status_name}</TableBodyCell>
+          <TableBodyCell>{task.contest_id}</TableBodyCell>
+          <TableBodyCell>{task.title}</TableBodyCell>
           <TableBodyCell>削除</TableBodyCell>
         </TableBodyRow>
       {/each}
