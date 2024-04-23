@@ -1,3 +1,9 @@
+import * as crud from '$lib/services/workbooks';
+
 export async function load() {
-  console.log('workbooks page called');
+  const workbooks = await crud.getWorkBooks();
+
+  // TODO: workbookのidからユーザ名を取得できるようにする
+
+  return { workbooks: workbooks };
 }

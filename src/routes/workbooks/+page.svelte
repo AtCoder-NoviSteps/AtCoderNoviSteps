@@ -9,6 +9,10 @@
     TableHeadCell,
   } from 'flowbite-svelte';
 
+  export let data;
+
+  const workbooks = data.workbooks;
+
   import HeadingOne from '$lib/components/HeadingOne.svelte';
   import ThermometerProgressBar from '$lib/components/ThermometerProgressBar.svelte';
 
@@ -98,6 +102,32 @@
             />
           </TableBodyCell>
           <TableBodyCell>編集 / 削除</TableBodyCell>
+        </TableBodyRow>
+      {/each}
+    </TableBody>
+  </Table>
+
+  <br />
+
+  <Table shadow class="text-md">
+    <TableHead class="text-sm bg-gray-100">
+      <TableHeadCell class="w-1/12">作者</TableHeadCell>
+      <TableHeadCell class="w-1/4">タイトル</TableHeadCell>
+      <TableHeadCell class="w-7/12">回答状況</TableHeadCell>
+      <TableHeadCell class="w-1/12">
+        <span class="sr-only">編集</span>
+      </TableHeadCell>
+    </TableHead>
+
+    <TableBody tableBodyClass="divide-y">
+      {#each workbooks as workbook}
+        <TableBodyRow>
+          <TableBodyCell>{workbook.userId}</TableBodyCell>
+          <TableBodyCell>
+            {workbook.title}
+          </TableBodyCell>
+          <TableBodyCell>{'準備中'}</TableBodyCell>
+          <TableBodyCell>{'編集 / 削除'}</TableBodyCell>
         </TableBodyRow>
       {/each}
     </TableBody>

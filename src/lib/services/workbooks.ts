@@ -1,7 +1,11 @@
 import { default as db } from '$lib/server/database';
 import type { WorkBook, WorkBookType } from '$lib/types/workbook';
 
-// TODO: getWorkBooks()
+export async function getWorkBooks() {
+  const workbooks = await db.workBook.findMany({ orderBy: { id: 'asc' } });
+
+  return workbooks;
+}
 
 // TODO: getWorkBook(workBookId)
 
