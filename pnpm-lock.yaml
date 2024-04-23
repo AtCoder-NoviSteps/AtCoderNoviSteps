@@ -63,8 +63,8 @@ dependencies:
     specifier: 7.0.0
     version: 7.0.0
   undici:
-    specifier: 6.13.0
-    version: 6.13.0
+    specifier: 6.14.0
+    version: 6.14.0
   vercel:
     specifier: 34.1.1
     version: 34.1.1
@@ -116,8 +116,8 @@ devDependencies:
     specifier: 2.37.0
     version: 2.37.0(eslint@8.57.0)(svelte@4.2.15)
   flowbite-svelte:
-    specifier: 0.45.1
-    version: 0.45.1(svelte@4.2.15)
+    specifier: 0.46.0
+    version: 0.46.0(svelte@4.2.15)
   flowbite-svelte-icons:
     specifier: 0.4.4
     version: 0.4.4(svelte@4.2.15)(tailwind-merge@1.14.0)(tailwindcss@3.4.3)
@@ -170,8 +170,8 @@ devDependencies:
     specifier: 0.34.6
     version: 0.34.6(@vitest/ui@0.34.7)(jsdom@24.0.0)(playwright@1.43.1)
   zod:
-    specifier: 3.22.5
-    version: 3.22.5
+    specifier: 3.23.0
+    version: 3.23.0
 
 packages:
 
@@ -3381,8 +3381,8 @@ packages:
       tailwindcss: 3.4.3
     dev: true
 
-  /flowbite-svelte@0.45.1(svelte@4.2.15):
-    resolution: {integrity: sha512-KMimns3ir0ONFUzQqSEtgG1bOdJK1sOCYPN+PpOxR75w456t6k2HYAcbn+fD/nVKbznq0oabD0vr1Errdefacg==}
+  /flowbite-svelte@0.46.0(svelte@4.2.15):
+    resolution: {integrity: sha512-Qw4zX4nCbxP5ZemksC9/EVGE9WRnD8FsR5CrdZRxm1RGkMOv2nrKxDQ8MXHF/GwdEutFU5UeaQncQuqgY5DoVg==}
     engines: {node: '>=18.0.0', pnpm: '>=8.0.0'}
     peerDependencies:
       svelte: ^4.0.0
@@ -5962,8 +5962,8 @@ packages:
       superstruct: 1.0.4
       valibot: 0.30.0
       yup: 1.4.0
-      zod: 3.22.5
-      zod-to-json-schema: 3.22.5(zod@3.22.5)
+      zod: 3.23.0
+      zod-to-json-schema: 3.22.5(zod@3.23.0)
     transitivePeerDependencies:
       - '@types/json-schema'
       - esbuild
@@ -6390,9 +6390,9 @@ packages:
       '@fastify/busboy': 2.1.1
     dev: true
 
-  /undici@6.13.0:
-    resolution: {integrity: sha512-Q2rtqmZWrbP8nePMq7mOJIN98M0fYvSgV89vwl/BQRT4mDOeY2GXZngfGpcBBhtky3woM7G24wZV3Q304Bv6cw==}
-    engines: {node: '>=18.0'}
+  /undici@6.14.0:
+    resolution: {integrity: sha512-esJ/x2QU5boTG6thdA0o4qP3cv/oPx9mcQGcp8TAHI+ZBTa0EvM9Jiyp0ILdPGLGxs5HATTKrJqAK+YhrSFicg==}
+    engines: {node: '>=18.17'}
     dev: false
 
   /universalify@0.1.2:
@@ -6947,16 +6947,16 @@ packages:
     dev: true
     optional: true
 
-  /zod-to-json-schema@3.22.5(zod@3.22.5):
+  /zod-to-json-schema@3.22.5(zod@3.23.0):
     resolution: {integrity: sha512-+akaPo6a0zpVCCseDed504KBJUQpEW5QZw7RMneNmKw+fGaML1Z9tUNLnHHAC8x6dzVRO1eB2oEMyZRnuBZg7Q==}
     requiresBuild: true
     peerDependencies:
       zod: ^3.22.4
     dependencies:
-      zod: 3.22.5
+      zod: 3.23.0
     dev: true
     optional: true
 
-  /zod@3.22.5:
-    resolution: {integrity: sha512-HqnGsCdVZ2xc0qWPLdO25WnseXThh0kEYKIdV5F/hTHO75hNZFp8thxSeHhiPrHZKrFTo1SOgkAj9po5bexZlw==}
+  /zod@3.23.0:
+    resolution: {integrity: sha512-OFLT+LTocvabn6q76BTwVB0hExEBS0IduTr3cqZyMqEDbOnYmcU+y0tUAYbND4uwclpBGi4I4UUBGzylWpjLGA==}
     dev: true
