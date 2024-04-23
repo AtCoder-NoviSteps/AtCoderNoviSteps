@@ -8,6 +8,7 @@
 # https://vercel.com/docs/cli/global-options#scope
 # https://www.prisma.io/docs/orm/prisma-client/deployment/deploy-database-changes-with-prisma-migrate
 # https://www.prisma.io/docs/orm/prisma-migrate/workflows/baselining
+# https://github.com/pnpm/action-setup/issues/99#issuecomment-1918361558
 name: CI
 
 env:
@@ -33,10 +34,8 @@ jobs:
       - name: Check out Git repository
         uses: actions/checkout@v4
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v3
-        with:
-          version: 8
+      - name: Use corepack
+        run: corepack enable
 
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4
@@ -75,10 +74,8 @@ jobs:
       - name: Check out Git repository
         uses: actions/checkout@v4
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v3
-        with:
-          version: 8
+      - name: Use corepack
+        run: corepack enable
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -97,9 +94,6 @@ jobs:
         run: pnpm dlx prisma migrate deploy
         env:
           DATABASE_URL: ${{ secrets.PREVIEW_DATABASE_URL }}
-
-      - name: Install Vercel CLI
-        run: pnpm add --global vercel@latest
 
       - name: Pull Vercel Environment Information
         run: vercel pull --yes --environment=preview --token=${{ secrets.VERCEL_TOKEN }}
@@ -126,10 +120,8 @@ jobs:
       - name: Check out Git repository
         uses: actions/checkout@v4
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v3
-        with:
-          version: 8
+      - name: Use corepack
+        run: corepack enable
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -148,9 +140,6 @@ jobs:
         run: pnpm dlx prisma migrate deploy
         env:
           DATABASE_URL: ${{ secrets.PRODUCTION_DATABASE_URL }}
-
-      - name: Install Vercel CLI
-        run: pnpm add --global vercel@latest
 
       - name: Pull Vercel Environment Information
         run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
