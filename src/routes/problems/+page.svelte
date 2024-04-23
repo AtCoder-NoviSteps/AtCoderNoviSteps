@@ -34,7 +34,7 @@
 
   <!-- See: -->
   <!-- https://flowbite-svelte.com/docs/components/tabs -->
-  <Tabs style="underline" contentClass="bg-white">
+  <Tabs tabStyle="underline" contentClass="bg-white">
     <!-- Grades -->
     <TabItemWrapper isOpen={true} title="グレード">
       <TaskGradeList {taskResults} {isAdmin}></TaskGradeList>
