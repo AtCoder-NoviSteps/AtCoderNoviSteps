@@ -105,11 +105,11 @@
     <br />
 
     <!-- 問題一覧 -->
-    TODO: 問題一覧ページのコンポーネントを再利用する
     <Label class="space-y-2">
       <span>問題一覧</span>
     </Label>
 
+    TODO: 指定した問題を表示できるようにする
     <!-- <Table shadow class="text-md">
       <TableHead class="text-sm bg-gray-100">
         <TableHeadCell class="w-1/6">提出状況</TableHeadCell>
