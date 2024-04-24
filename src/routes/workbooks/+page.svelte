@@ -16,6 +16,21 @@
   import HeadingOne from '$lib/components/HeadingOne.svelte';
   import ThermometerProgressBar from '$lib/components/ThermometerProgressBar.svelte';
 
+  const getPublicationStatusLabel = (isPublished: boolean) => {
+    if (isPublished) {
+      return '公開';
+    } else {
+      return '非公開';
+    }
+  };
+  const getPublicationStatusColor = (isPublished: boolean) => {
+    if (isPublished) {
+      return 'bg-primary-200';
+    } else {
+      return 'bg-red-200';
+    }
+  };
+
   // FIXME: 実際のデータに置き換え
   const dummySubmissionRatios = (
     acRatio: number,
@@ -42,21 +57,6 @@
 
     return ratios;
   };
-
-  const sampleWorkbooks = [
-    {
-      id: 1,
-      author: 'novisteps_admin',
-      title: '標準入出力',
-      dummySubmissionRatios: dummySubmissionRatios(80, 5, 5),
-    },
-    {
-      id: 2,
-      author: 'novisteps_admin',
-      title: '1個の整数値を受け取る',
-      dummySubmissionRatios: dummySubmissionRatios(50, 25, 10),
-    },
-  ];
 </script>
 
 <div class="container mx-auto w-5/6">
@@ -65,50 +65,13 @@
   <!-- 新規作成ボタンから、createページへ -->
   <Button href="/workbooks/create" type="submit">新規作成</Button>
 
-  <!-- TODO: 一覧(ダミーデータ)を追加 -->
   <!-- TODO: ページネーションを追加 -->
   <br />
   TODO: 問題集の作成者のみ編集 / 削除ができるようにする <br />
   TODO: 実際のデータに置き換える <br />
-  TODO: ページネーションを追加する
-  <Table shadow class="text-md">
-    <TableHead class="text-sm bg-gray-100">
-      <TableHeadCell class="w-1/12">作者</TableHeadCell>
-      <TableHeadCell class="w-1/4">タイトル</TableHeadCell>
-      <TableHeadCell class="w-7/12">回答状況</TableHeadCell>
-      <TableHeadCell class="w-1/12">
-        <span class="sr-only">編集</span>
-      </TableHeadCell>
-    </TableHead>
-
-    <TableBody tableBodyClass="divide-y">
-      <!-- TODO: 編集にリンクを付ける -->
-      <!-- TODO: 削除にゴミ箱マークを付ける -->
-      {#each sampleWorkbooks as workbook}
-        <TableBodyRow>
-          <TableBodyCell>{workbook.author}</TableBodyCell>
-          <TableBodyCell>
-            <a
-              href="/workbooks/{workbook.id}"
-              class="font-medium text-primary-600 hover:underline dark:text-primary-500"
-            >
-              {workbook.title}
-            </a>
-          </TableBodyCell>
-          <TableBodyCell>
-            <ThermometerProgressBar
-              submissionRatios={workbook.dummySubmissionRatios}
-              width="w-full"
-            />
-          </TableBodyCell>
-          <TableBodyCell>編集 / 削除</TableBodyCell>
-        </TableBodyRow>
-      {/each}
-    </TableBody>
-  </Table>
-
-  <br />
-
+  TODO: 問題集の区分ごとに分ける <br />
+  TODO: ページネーションを追加する <br />
+  <!-- TODO: コンポーネントとして切り出す -->
   <Table shadow class="text-md">
     <TableHead class="text-sm bg-gray-100">
       <TableHeadCell class="w-1/12">作者</TableHeadCell>
@@ -122,11 +85,26 @@
     <TableBody tableBodyClass="divide-y">
       {#each workbooks as workbook}
         <TableBodyRow>
-          <TableBodyCell>{workbook.userId}</TableBodyCell>
+          <TableBodyCell>{workbook.author}</TableBodyCell>
           <TableBodyCell>
-            {workbook.title}
+            <div>
+              <span class="p-1 rounded-lg {getPublicationStatusColor(workbook.isPublished)}">
+                {getPublicationStatusLabel(workbook.isPublished)}
+              </span>
+              <a
+                href="/workbooks/{workbook.id}"
+                class="font-medium text-primary-600 hover:underline dark:text-primary-500"
+              >
+                {workbook.title}
+              </a>
+            </div>
           </TableBodyCell>
-          <TableBodyCell>{'準備中'}</TableBodyCell>
+          <TableBodyCell>
+            <ThermometerProgressBar
+              submissionRatios={dummySubmissionRatios(80, 5, 5)}
+              width="w-full"
+            />
+          </TableBodyCell>
           <TableBodyCell>{'編集 / 削除'}</TableBodyCell>
         </TableBodyRow>
       {/each}
