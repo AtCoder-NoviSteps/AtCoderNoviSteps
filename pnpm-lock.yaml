@@ -7,7 +7,7 @@ settings:
 dependencies:
   '@lucia-auth/adapter-prisma':
     specifier: 3.0.2
-    version: 3.0.2(@prisma/client@5.12.1)(lucia@2.7.7)
+    version: 3.0.2(@prisma/client@5.13.0)(lucia@2.7.7)
   '@mermaid-js/mermaid-cli':
     specifier: 10.8.0
     version: 10.8.0(typescript@5.4.5)
@@ -15,8 +15,8 @@ dependencies:
     specifier: 2.11.8
     version: 2.11.8
   '@prisma/client':
-    specifier: 5.12.1
-    version: 5.12.1(prisma@5.13.0)
+    specifier: 5.13.0
+    version: 5.13.0(prisma@5.13.0)
   '@testing-library/svelte':
     specifier: 5.0.1
     version: 5.0.1(svelte@4.2.15)
@@ -46,7 +46,7 @@ dependencies:
     version: 9.0.5
   prisma-erd-generator:
     specifier: 1.11.2
-    version: 1.11.2(@prisma/client@5.12.1)(typescript@5.4.5)
+    version: 1.11.2(@prisma/client@5.13.0)(typescript@5.4.5)
   svelte-add:
     specifier: 2023.9.17-0.0
     version: 2023.9.17-0.0
@@ -75,7 +75,7 @@ devDependencies:
     version: 1.43.1
   '@quramy/prisma-fabbrica':
     specifier: 2.1.2
-    version: 2.1.2(@prisma/client@5.12.1)(typescript@5.4.5)
+    version: 2.1.2(@prisma/client@5.13.0)(typescript@5.4.5)
   '@sveltejs/adapter-auto':
     specifier: 2.1.1
     version: 2.1.1(@sveltejs/kit@1.30.4)
@@ -851,13 +851,13 @@ packages:
       '@jridgewell/sourcemap-codec': 1.4.15
     dev: false
 
-  /@lucia-auth/adapter-prisma@3.0.2(@prisma/client@5.12.1)(lucia@2.7.7):
+  /@lucia-auth/adapter-prisma@3.0.2(@prisma/client@5.13.0)(lucia@2.7.7):
     resolution: {integrity: sha512-EyJWZene1/zasPwPctv8wwNErZt5mwwm5JATbhg+kXr3R8pbC7lJfVzDTAeeFClVH5k/FywRcsBl3JkPaNIcow==}
     peerDependencies:
       '@prisma/client': ^4.2.0 || ^5.0.0
       lucia: ^2.0.0
     dependencies:
-      '@prisma/client': 5.12.1(prisma@5.13.0)
+      '@prisma/client': 5.13.0(prisma@5.13.0)
       lucia: 2.7.7
     dev: false
 
@@ -940,8 +940,8 @@ packages:
     dev: true
     optional: true
 
-  /@prisma/client@5.12.1(prisma@5.13.0):
-    resolution: {integrity: sha512-6/JnizEdlSBxDIdiLbrBdMW5NqDxOmhXAJaNXiPpgzAPr/nLZResT6MMpbOHLo5yAbQ1Vv5UU8PTPRzb0WIxdA==}
+  /@prisma/client@5.13.0(prisma@5.13.0):
+    resolution: {integrity: sha512-uYdfpPncbZ/syJyiYBwGZS8Gt1PTNoErNYMuqHDa2r30rNSFtgTA/LXsSk55R7pdRTMi5pHkeP9B14K6nHmwkg==}
     engines: {node: '>=16.13'}
     requiresBuild: true
     peerDependencies:
@@ -1055,14 +1055,14 @@ packages:
       - supports-color
     dev: false
 
-  /@quramy/prisma-fabbrica@2.1.2(@prisma/client@5.12.1)(typescript@5.4.5):
+  /@quramy/prisma-fabbrica@2.1.2(@prisma/client@5.13.0)(typescript@5.4.5):
     resolution: {integrity: sha512-FKzqANAT7sPrQdBRB3pvJSsTM95OeeamZnWlvNia7JR7wx/SkTO5C263xV3sGqUwfLd44qbNKUmF1ZjaN9ES/w==}
     hasBin: true
     peerDependencies:
       '@prisma/client': ^5.0.0
       typescript: ^3.0.0 || ^4.0.0 || ^5.0.0
     dependencies:
-      '@prisma/client': 5.12.1(prisma@5.13.0)
+      '@prisma/client': 5.13.0(prisma@5.13.0)
       '@prisma/generator-helper': 5.12.1
       '@prisma/internals': 5.12.1
       short-uuid: 4.2.2
@@ -5162,7 +5162,7 @@ packages:
       parse-ms: 2.1.0
     dev: false
 
-  /prisma-erd-generator@1.11.2(@prisma/client@5.12.1)(typescript@5.4.5):
+  /prisma-erd-generator@1.11.2(@prisma/client@5.13.0)(typescript@5.4.5):
     resolution: {integrity: sha512-abo2EBIjqJALfjm8p+uOsQk38DlU3rlLJA9/cOvcLLt8A9bjMkRwlqaZDAD/iXVZcXJRJPgJ98fEviTa+w8oTQ==}
     engines: {node: '>=14'}
     hasBin: true
@@ -5170,7 +5170,7 @@ packages:
       '@prisma/client': ^4.0.0 || ^5.0.0
     dependencies:
       '@mermaid-js/mermaid-cli': 10.8.0(typescript@5.4.5)
-      '@prisma/client': 5.12.1(prisma@5.13.0)
+      '@prisma/client': 5.13.0(prisma@5.13.0)
       '@prisma/generator-helper': 5.12.1
       dotenv: 16.4.5
     transitivePeerDependencies:
