@@ -63,8 +63,8 @@ dependencies:
     specifier: 7.0.0
     version: 7.0.0
   undici:
-    specifier: 6.14.0
-    version: 6.14.0
+    specifier: 6.14.1
+    version: 6.14.1
   vercel:
     specifier: 34.1.1
     version: 34.1.1
@@ -6390,8 +6390,8 @@ packages:
       '@fastify/busboy': 2.1.1
     dev: true
 
-  /undici@6.14.0:
-    resolution: {integrity: sha512-esJ/x2QU5boTG6thdA0o4qP3cv/oPx9mcQGcp8TAHI+ZBTa0EvM9Jiyp0ILdPGLGxs5HATTKrJqAK+YhrSFicg==}
+  /undici@6.14.1:
+    resolution: {integrity: sha512-mAel3i4BsYhkeVPXeIPXVGPJKeBzqCieZYoFsbWfUzd68JmHByhc1Plit5WlylxXFaGpgkZB8mExlxnt+Q1p7A==}
     engines: {node: '>=18.17'}
     dev: false
 
