@@ -79,7 +79,7 @@
     "just-extend": "6.2.0",
     "lucia": "2.7.7",
     "playwright": "1.43.1",
-    "pnpm": "9.0.5",
+    "pnpm": "9.0.6",
     "prisma-erd-generator": "1.11.2",
     "svelte-add": "2023.9.17-0.0",
     "svelte-eslint-parser": "^0.34.1",
