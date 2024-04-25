@@ -51,8 +51,8 @@ dependencies:
     specifier: 2023.9.17-0.0
     version: 2023.9.17-0.0
   svelte-eslint-parser:
-    specifier: ^0.34.1
-    version: 0.34.1(svelte@4.2.15)
+    specifier: ^0.35.0
+    version: 0.35.0(svelte@4.2.15)
   tailwind-merge:
     specifier: 1.14.0
     version: 1.14.0
@@ -5802,23 +5802,6 @@ packages:
       - sugarss
     dev: true
 
-  /svelte-eslint-parser@0.34.1(svelte@4.2.15):
-    resolution: {integrity: sha512-9+uLA1pqI9AZioKVGJzYYmlOZWxfoCXSbAM9iaNm7H01XlYlzRTtJfZgl9o3StQGN41PfGJIbkKkfk3e/pHFfA==}
-    engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
-    peerDependencies:
-      svelte: ^3.37.0 || ^4.0.0 || ^5.0.0-next.94
-    peerDependenciesMeta:
-      svelte:
-        optional: true
-    dependencies:
-      eslint-scope: 7.2.2
-      eslint-visitor-keys: 3.4.3
-      espree: 9.6.1
-      postcss: 8.4.38
-      postcss-scss: 4.0.9(postcss@8.4.38)
-      svelte: 4.2.15
-    dev: false
-
   /svelte-eslint-parser@0.35.0(svelte@4.2.15):
     resolution: {integrity: sha512-CtbPseajW0gjwEvHiuzYJkPDjAcHz2FaHt540j6RVYrZgnE6xWkzUBodQ4I3nV+G5AS0Svt8K6aIA/CIU9xT2Q==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
@@ -5834,7 +5817,6 @@ packages:
       postcss: 8.4.38
       postcss-scss: 4.0.9(postcss@8.4.38)
       svelte: 4.2.15
-    dev: true
 
   /svelte-hmr@0.15.3(svelte@4.2.15):
     resolution: {integrity: sha512-41snaPswvSf8TJUhlkoJBekRrABDXDMdpNpT2tfHIv4JuhgvHqLMhEPGtaQn0BmbNSTkuz2Ed20DF2eHw0SmBQ==}
