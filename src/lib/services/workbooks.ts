@@ -7,7 +7,15 @@ export async function getWorkBooks() {
   return workbooks;
 }
 
-// TODO: getWorkBook(workBookId)
+export async function getWorkBook(workBookId: number) {
+  const workBook = await db.workBook.findUnique({
+    where: {
+      id: workBookId,
+    },
+  });
+
+  return workBook;
+}
 
 export async function createWorkBook(workBook: WorkBook) {
   const newWorkBook = await db.workBook.create({
