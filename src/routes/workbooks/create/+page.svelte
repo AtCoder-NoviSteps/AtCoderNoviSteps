@@ -16,6 +16,8 @@
   } from 'flowbite-svelte';
 
   import HeadingOne from '$lib/components/HeadingOne.svelte';
+  import InputFieldWrapper from '$lib/components/InputFieldWrapper.svelte';
+  import SelectWrapper from '$lib/components/SelectWrapper.svelte';
   import SubmissionButton from '$lib/components/SubmissionButton.svelte';
   import { WorkBookType } from '$lib/types/workbook';
 
@@ -57,48 +59,39 @@
   <form method="post" use:enhance>
     <HeadingOne title="問題集を作成" />
 
-    <!-- TODO: まずは、ベタ打ちでコンポーネントを用意 -->
     <!-- TODO: 問題集の詳細ページのコンポーネントとほぼ共通しているので再利用する -->
-
     <Breadcrumb aria-label="">
       <BreadcrumbItem href="/workbooks" home>問題集一覧</BreadcrumbItem>
-      <!-- <BreadcrumbItem>{workbook.title}</BreadcrumbItem> -->
     </Breadcrumb>
 
-    <!-- 作者 -->
-    <Label class="space-y-2">
-      <span>ユーザ名</span>
-      <Input size="md" name="userName" readonly bind:value={user.name} />
-    </Label>
-
-    <Input type="hidden" size="md" name="userId" bind:value={$form.userId} />
+    <!-- (ユーザには非表示) 作者 -->
+    <InputFieldWrapper inputFieldType="hidden" inputFieldName="userId" inputValue={$form.userId} />
 
     <!-- タイトル -->
-    <!-- TODO: バリデーションを追加 -->
-    <Label class="space-y-2">
-      <span>タイトル</span>
-      <Input size="md" name="title" bind:value={$form.title} />
-    </Label>
+    <InputFieldWrapper labelName="タイトル" inputFieldName="title" inputValue={$form.title} />
 
     <!-- 一般公開の有無 -->
-    <Label class="space-y-2">
-      <span>公開状況</span>
-      <Select class="" name="isPublished" items={isPublished} bind:value={$form.isPublished} />
-    </Label>
+    <SelectWrapper
+      labelName="公開状況"
+      innerName="isPublished"
+      items={isPublished}
+      inputValue={$form.isPublished}
+    />
 
-    <!-- 管理者 / 一般ユーザ -->
-    <Input type="hidden" size="md" name="isOfficial" bind:value={$form.isOfficial} />
+    <!-- (ユーザには非表示) 管理者 / 一般ユーザ -->
+    <InputFieldWrapper
+      inputFieldType="hidden"
+      inputFieldName="isOfficial"
+      inputValue={$form.isOfficial}
+    />
 
     <!-- 管理者のみ: 問題集の区分を指定-->
-    <Label class="space-y-2">
-      <span>問題集の区分</span>
-      <Select
-        class=""
-        name="workBookType"
-        items={workBookType(isAdmin)}
-        bind:value={$form.workBookType}
-      />
-    </Label>
+    <SelectWrapper
+      labelName="問題集の区分"
+      innerName="workBookType"
+      items={workBookType(isAdmin)}
+      inputValue={$form.workBookType}
+    />
 
     <!-- 問題を検索 -->
     TODO: 問題を検索して、追加できるようにする
