@@ -5,7 +5,7 @@
 
   import ContainerWrapper from '$lib/components/ContainerWrapper.svelte';
   import FormWrapper from '$lib/components/FormWrapper.svelte';
-  import ReadOnlyLabel from '$lib/components/ReadOnlyLabel.svelte';
+  import LabelWrapper from '$lib/components/LabelWrapper.svelte';
   import WarningMessageOnDeletingAccount from '$lib/components/WarningMessageOnDeletingAccount.svelte';
 
   export let username: string;
@@ -30,7 +30,7 @@
       <WarningMessageOnDeletingAccount />
     </Alert>
 
-    <ReadOnlyLabel labelName="ユーザ名" inputValue={username} />
+    <LabelWrapper labelName="ユーザ名" inputValue={username} />
     <Checkbox on:click={toggleDeleteButton}>同意する</Checkbox>
 
     {#if showDeleteButton}

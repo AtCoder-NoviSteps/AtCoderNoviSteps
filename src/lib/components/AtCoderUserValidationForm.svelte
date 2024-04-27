@@ -7,7 +7,7 @@
 
   import ContainerWrapper from '$lib/components/ContainerWrapper.svelte';
   import FormWrapper from '$lib/components/FormWrapper.svelte';
-  import ReadOnlyLabel from '$lib/components/ReadOnlyLabel.svelte';
+  import LabelWrapper from '$lib/components/LabelWrapper.svelte';
   import SubmissionButton from '$lib/components/SubmissionButton.svelte';
 
   export let username: string;
@@ -41,7 +41,7 @@
 
       <!-- hiddenでusernameを持つのは共通-->
       <Input size="md" type="hidden" name="username" bind:value={username} />
-      <ReadOnlyLabel labelName="ユーザ名" inputValue={username} />
+      <LabelWrapper labelName="ユーザ名" inputValue={username} />
 
       <Label class="space-y-2">
         <!-- AtCoder IDを修正できるのは、notingのステータスの時のみ-->
@@ -69,11 +69,11 @@
 
       <!-- hiddenでusernameを持つのは共通-->
       <Input size="md" type="hidden" name="username" bind:value={username} />
-      <ReadOnlyLabel labelName="ユーザ名" inputValue={username} />
+      <LabelWrapper labelName="ユーザ名" inputValue={username} />
 
       <!-- atcoder_usernameとvalidation_code は編集不可-->
       <Input size="md" type="hidden" name="atcoder_username" bind:value={atcoder_username} />
-      <ReadOnlyLabel labelName="AtCoder ID" inputValue={atcoder_username} />
+      <LabelWrapper labelName="AtCoder ID" inputValue={atcoder_username} />
 
       <Input
         size="md"
@@ -108,11 +108,11 @@
 
       <!-- hiddenでusernameを持つのは共通-->
       <Input size="md" type="hidden" name="username" bind:value={username} />
-      <ReadOnlyLabel labelName="ユーザ名" inputValue={username} />
+      <LabelWrapper labelName="ユーザ名" inputValue={username} />
 
       <!-- atcoder_usernameを表示（変更不可）-->
       <Input size="md" type="hidden" name="atcoder_username" bind:value={atcoder_username} />
-      <ReadOnlyLabel labelName="AtCoder ID" inputValue={atcoder_username} />
+      <LabelWrapper labelName="AtCoder ID" inputValue={atcoder_username} />
 
       <SubmissionButton labelName="リセット" />
     </FormWrapper>
