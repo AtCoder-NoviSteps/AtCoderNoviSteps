@@ -1,9 +1,21 @@
 import { default as db } from '$lib/server/database';
 import type { WorkBook, WorkBookType } from '$lib/types/workbook';
 
-// TODO: getWorkBooks()
+export async function getWorkBooks() {
+  const workbooks = await db.workBook.findMany({ orderBy: { id: 'asc' } });
 
-// TODO: getWorkBook(workBookId)
+  return workbooks;
+}
+
+export async function getWorkBook(workBookId: number) {
+  const workBook = await db.workBook.findUnique({
+    where: {
+      id: workBookId,
+    },
+  });
+
+  return workBook;
+}
 
 export async function createWorkBook(workBook: WorkBook) {
   const newWorkBook = await db.workBook.create({

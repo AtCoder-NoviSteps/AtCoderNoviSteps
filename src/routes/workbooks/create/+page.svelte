@@ -5,8 +5,6 @@
     Breadcrumb,
     BreadcrumbItem,
     Label,
-    Input,
-    Select,
     // Table,
     // TableBody,
     // TableBodyCell,
@@ -16,40 +14,17 @@
   } from 'flowbite-svelte';
 
   import HeadingOne from '$lib/components/HeadingOne.svelte';
+  import WorkBookInputFields from '$lib/components/WorkBooks/WorkBookInputFields.svelte';
   import SubmissionButton from '$lib/components/SubmissionButton.svelte';
-  import { WorkBookType } from '$lib/types/workbook';
+  import { WorkBookType } from '$lib/types/workbook.js';
 
   export let data;
 
   const { form } = superForm(data.form);
-  const user = data.user;
-  const isAdmin = data.isAdmin;
 
-  $form.userId = user.id;
-  $form.isOfficial = isAdmin;
-  $form.workBookType = isAdmin ? WorkBookType.TEXTBOOK : WorkBookType.CREATED_BY_USER;
-
-  let isPublished = [
-    { value: false, name: '非公開' },
-    { value: true, name: '公開' },
-  ];
-
-  const workBookType = (isAdmin: boolean) => {
-    if (isAdmin) {
-      const types = [
-        { value: WorkBookType.TEXTBOOK, name: '教科書' },
-        { value: WorkBookType.SOLUTION, name: '解法別' },
-        { value: WorkBookType.GENRE, name: 'ジャンル別' },
-        { value: WorkBookType.THEME, name: 'テーマ別' },
-      ];
-
-      return types;
-    } else {
-      const types = [{ value: WorkBookType.CREATED_BY_USER, name: 'ユーザ作成' }];
-
-      return types;
-    }
-  };
+  $form.userId = data.author.id;
+  $form.isOfficial = data.isAdmin;
+  $form.workBookType = $form.isOfficial ? WorkBookType.TEXTBOOK : WorkBookType.CREATED_BY_USER;
 </script>
 
 <!-- TODO: パンくずリストを用意 -->
@@ -57,48 +32,18 @@
   <form method="post" use:enhance>
     <HeadingOne title="問題集を作成" />
 
-    <!-- TODO: まずは、ベタ打ちでコンポーネントを用意 -->
     <!-- TODO: 問題集の詳細ページのコンポーネントとほぼ共通しているので再利用する -->
-
     <Breadcrumb aria-label="">
       <BreadcrumbItem href="/workbooks" home>問題集一覧</BreadcrumbItem>
-      <!-- <BreadcrumbItem>{workbook.title}</BreadcrumbItem> -->
     </Breadcrumb>
 
-    <!-- 作者 -->
-    <Label class="space-y-2">
-      <span>ユーザ名</span>
-      <Input size="md" name="userName" readonly bind:value={user.name} />
-    </Label>
-
-    <Input type="hidden" size="md" name="userId" bind:value={$form.userId} />
-
-    <!-- タイトル -->
-    <!-- TODO: バリデーションを追加 -->
-    <Label class="space-y-2">
-      <span>タイトル</span>
-      <Input size="md" name="title" bind:value={$form.title} />
-    </Label>
-
-    <!-- 一般公開の有無 -->
-    <Label class="space-y-2">
-      <span>公開状況</span>
-      <Select class="" name="isPublished" items={isPublished} bind:value={$form.isPublished} />
-    </Label>
-
-    <!-- 管理者 / 一般ユーザ -->
-    <Input type="hidden" size="md" name="isOfficial" bind:value={$form.isOfficial} />
-
-    <!-- 管理者のみ: 問題集の区分を指定-->
-    <Label class="space-y-2">
-      <span>問題集の区分</span>
-      <Select
-        class=""
-        name="workBookType"
-        items={workBookType(isAdmin)}
-        bind:value={$form.workBookType}
-      />
-    </Label>
+    <WorkBookInputFields
+      authorId={$form.userId}
+      title={$form.title}
+      isPublished={$form.isPublished}
+      isOfficial={$form.isOfficial}
+      workBookType={$form.workBookType}
+    />
 
     <!-- 問題を検索 -->
     TODO: 問題を検索して、追加できるようにする

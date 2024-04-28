@@ -3,8 +3,6 @@
     Breadcrumb,
     BreadcrumbItem,
     Label,
-    Input,
-    Select,
     Table,
     TableHead,
     TableHeadCell,
@@ -14,19 +12,15 @@
   } from 'flowbite-svelte';
 
   import HeadingOne from '$lib/components/HeadingOne.svelte';
-
-  // let selectedValue: boolean = false;
-
-  let isPublished = [
-    { value: false, name: '非公開' },
-    { value: true, name: '公開' },
-  ];
+  import WorkBookInputFields from '$lib/components/WorkBooks/WorkBookInputFields.svelte';
 
   export let data;
+
   let workbook = data.workbook;
+  let authorId = data.authorId;
+  let tasks = data.tasks;
 </script>
 
-<!-- TODO: コンポーネントとして切り出す -->
 <div class="container mx-auto w-5/6">
   <HeadingOne title="(準備中) 問題集の詳細" />
 
@@ -35,24 +29,15 @@
     <BreadcrumbItem>{workbook.title}</BreadcrumbItem>
   </Breadcrumb>
 
-  <!-- 作者 -->
-  <Label class="space-y-2">
-    <span>ユーザ名</span>
-    <Input size="md" value={workbook.author} />
-  </Label>
+  <WorkBookInputFields
+    {authorId}
+    title={workbook.title}
+    isPublished={workbook.isPublished}
+    isOfficial={workbook.isOfficial}
+    workBookType={workbook.workBookType}
+  />
 
-  <!-- タイトル -->
-  <Label class="space-y-2">
-    <span>タイトル</span>
-    <Input size="md" value={workbook.title} />
-  </Label>
-
-  <!-- 一般公開の有無 -->
-  <Label class="space-y-2">
-    <span>公開状況</span>
-    <Select class="" items={isPublished} bind:value={workbook.isPublished} />
-  </Label>
-
+  <!-- TODO: コンポーネントとして切り出す -->
   <!-- 問題を検索 -->
   TODO: 問題を検索して、追加できるようにする
   <br />
@@ -63,28 +48,31 @@
     <span>問題一覧</span>
   </Label>
 
-  <Table shadow class="text-md">
-    <TableHead class="text-sm bg-gray-100">
-      <TableHeadCell class="w-1/6">提出状況</TableHeadCell>
-      <TableHeadCell class="w-1/6">コンテスト名</TableHeadCell>
-      <TableHeadCell class="w-7/12">問題名</TableHeadCell>
-      <TableHeadCell class="w-1/12">
-        <span class="sr-only">編集</span>
-      </TableHeadCell>
-    </TableHead>
-    <!-- TODO: ダミーデータをオブジェクトとしてまとめて、eachで取り出せるように -->
-    <TableBody tableBodyClass="divide-y">
-      <!-- TODO: コンテスト名、問題名にリンクを付ける -->
-      <!-- TODO: 編集にリンクを付ける -->
-      <!-- TODO: 削除にゴミ箱マークを付ける -->
-      {#each workbook.tasks as task}
-        <TableBodyRow>
-          <TableBodyCell>{task.status_name}</TableBodyCell>
-          <TableBodyCell>{task.contest_id}</TableBodyCell>
-          <TableBodyCell>{task.title}</TableBodyCell>
-          <TableBodyCell>削除</TableBodyCell>
-        </TableBodyRow>
-      {/each}
-    </TableBody>
-  </Table>
+  {#if tasks !== null}
+    <Table shadow class="text-md">
+      <TableHead class="text-sm bg-gray-100">
+        <TableHeadCell class="w-1/6">提出状況</TableHeadCell>
+        <TableHeadCell class="w-1/6">コンテスト名</TableHeadCell>
+        <TableHeadCell class="w-7/12">問題名</TableHeadCell>
+        <TableHeadCell class="w-1/12">
+          <span class="sr-only">編集</span>
+        </TableHeadCell>
+      </TableHead>
+      <TableBody tableBodyClass="divide-y">
+        <!-- TODO: コンテスト名、問題名にリンクを付ける -->
+        <!-- TODO: 編集にリンクを付ける -->
+        <!-- TODO: 削除にゴミ箱マークを付ける -->
+        {#each tasks as task}
+          <TableBodyRow>
+            <TableBodyCell>{task.status_name}</TableBodyCell>
+            <TableBodyCell>{task.contest_id}</TableBodyCell>
+            <TableBodyCell>{task.title}</TableBodyCell>
+            <TableBodyCell>削除</TableBodyCell>
+          </TableBodyRow>
+        {/each}
+      </TableBody>
+    </Table>
+  {:else}
+    {'問題を1問以上登録してください。'}
+  {/if}
 </div>

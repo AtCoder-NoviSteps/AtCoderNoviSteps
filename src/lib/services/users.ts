@@ -10,6 +10,15 @@ export async function getUser(username: string) {
   return user;
 }
 
+export async function getUserById(userId: string) {
+  const user = await db.user.findUnique({
+    where: {
+      id: userId,
+    },
+  });
+  return user;
+}
+
 export async function deleteUser(username: string) {
   const user = await db.user.delete({
     where: {

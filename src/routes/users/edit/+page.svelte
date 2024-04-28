@@ -5,7 +5,7 @@
   import UserAccountDeletionForm from '$lib/components/UserAccountDeletionForm.svelte';
   import ContainerWrapper from '$lib/components/ContainerWrapper.svelte';
   import FormWrapper from '$lib/components/FormWrapper.svelte';
-  import ReadOnlyLabel from '$lib/components/ReadOnlyLabel.svelte';
+  import LabelWrapper from '$lib/components/LabelWrapper.svelte';
   // import SubmissionButton from '$lib/components/SubmissionButton.svelte';
 
   import { Roles } from '$lib/types/user';
@@ -52,8 +52,8 @@
       <span slot="title" class="text-lg">基本情報</span>
       <ContainerWrapper>
         <FormWrapper action="update">
-          <ReadOnlyLabel labelName="ユーザ名" inputValue={username} />
-          <!-- <ReadOnlyLabel labelName="AtCoder ID" inputValue={atcoder_username} /> -->
+          <LabelWrapper labelName="ユーザ名" inputValue={username} />
+          <!-- <LabelWrapper labelName="AtCoder ID" inputValue={atcoder_username} /> -->
 
           <!-- <SubmissionButton labelName="保存" /> -->
         </FormWrapper>
