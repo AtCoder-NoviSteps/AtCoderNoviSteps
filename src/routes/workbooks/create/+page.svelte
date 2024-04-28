@@ -16,6 +16,7 @@
   import HeadingOne from '$lib/components/HeadingOne.svelte';
   import WorkBookInputFields from '$lib/components/WorkBooks/WorkBookInputFields.svelte';
   import SubmissionButton from '$lib/components/SubmissionButton.svelte';
+  import { WorkBookType } from '$lib/types/workbook.js';
 
   export let data;
 
@@ -23,6 +24,7 @@
 
   $form.authorId = data.author.id;
   $form.isOfficial = data.isAdmin;
+  $form.workBookType = $form.isOfficial ? WorkBookType.TEXTBOOK : WorkBookType.CREATED_BY_USER;
 </script>
 
 <!-- TODO: パンくずリストを用意 -->
@@ -40,6 +42,7 @@
       title={$form.title}
       isPublished={$form.isPublished}
       isOfficial={$form.isOfficial}
+      workBookType={$form.workBookType}
     />
 
     <!-- 問題を検索 -->
