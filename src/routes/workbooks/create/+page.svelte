@@ -5,8 +5,6 @@
     Breadcrumb,
     BreadcrumbItem,
     Label,
-    Input,
-    Select,
     // Table,
     // TableBody,
     // TableBodyCell,
@@ -16,42 +14,15 @@
   } from 'flowbite-svelte';
 
   import HeadingOne from '$lib/components/HeadingOne.svelte';
-  import InputFieldWrapper from '$lib/components/InputFieldWrapper.svelte';
-  import SelectWrapper from '$lib/components/SelectWrapper.svelte';
+  import WorkBookInputFields from '$lib/components/WorkBooks/WorkBookInputFields.svelte';
   import SubmissionButton from '$lib/components/SubmissionButton.svelte';
-  import { WorkBookType } from '$lib/types/workbook';
 
   export let data;
 
   const { form } = superForm(data.form);
-  const user = data.user;
-  const isAdmin = data.isAdmin;
 
-  $form.userId = user.id;
-  $form.isOfficial = isAdmin;
-  $form.workBookType = isAdmin ? WorkBookType.TEXTBOOK : WorkBookType.CREATED_BY_USER;
-
-  let isPublished = [
-    { value: false, name: '非公開' },
-    { value: true, name: '公開' },
-  ];
-
-  const workBookType = (isAdmin: boolean) => {
-    if (isAdmin) {
-      const types = [
-        { value: WorkBookType.TEXTBOOK, name: '教科書' },
-        { value: WorkBookType.SOLUTION, name: '解法別' },
-        { value: WorkBookType.GENRE, name: 'ジャンル別' },
-        { value: WorkBookType.THEME, name: 'テーマ別' },
-      ];
-
-      return types;
-    } else {
-      const types = [{ value: WorkBookType.CREATED_BY_USER, name: 'ユーザ作成' }];
-
-      return types;
-    }
-  };
+  $form.authorId = data.author.id;
+  $form.isOfficial = data.isAdmin;
 </script>
 
 <!-- TODO: パンくずリストを用意 -->
@@ -64,33 +35,11 @@
       <BreadcrumbItem href="/workbooks" home>問題集一覧</BreadcrumbItem>
     </Breadcrumb>
 
-    <!-- (ユーザには非表示) 作者 -->
-    <InputFieldWrapper inputFieldType="hidden" inputFieldName="userId" inputValue={$form.userId} />
-
-    <!-- タイトル -->
-    <InputFieldWrapper labelName="タイトル" inputFieldName="title" inputValue={$form.title} />
-
-    <!-- 一般公開の有無 -->
-    <SelectWrapper
-      labelName="公開状況"
-      innerName="isPublished"
-      items={isPublished}
-      inputValue={$form.isPublished}
-    />
-
-    <!-- (ユーザには非表示) 管理者 / 一般ユーザ -->
-    <InputFieldWrapper
-      inputFieldType="hidden"
-      inputFieldName="isOfficial"
-      inputValue={$form.isOfficial}
-    />
-
-    <!-- 管理者のみ: 問題集の区分を指定-->
-    <SelectWrapper
-      labelName="問題集の区分"
-      innerName="workBookType"
-      items={workBookType(isAdmin)}
-      inputValue={$form.workBookType}
+    <WorkBookInputFields
+      authorId={$form.authorId}
+      title={$form.title}
+      isPublished={$form.isPublished}
+      isOfficial={$form.isOfficial}
     />
 
     <!-- 問題を検索 -->

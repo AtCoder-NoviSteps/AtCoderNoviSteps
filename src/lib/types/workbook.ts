@@ -1,7 +1,7 @@
 import type { WorkBookType as WorkBookTypeOrigin } from '@prisma/client';
 
 export type WorkBook = {
-  userId: string;
+  authorId: string;
   title: string;
   isPublished: boolean;
   isOfficial: boolean;

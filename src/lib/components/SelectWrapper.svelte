@@ -4,7 +4,7 @@
   export let labelName: string = '';
   export let innerName: string;
   export let items;
-  export let inputValue: any;
+  export let inputValue: unknown;
 </script>
 
 <Label class="space-y-2">

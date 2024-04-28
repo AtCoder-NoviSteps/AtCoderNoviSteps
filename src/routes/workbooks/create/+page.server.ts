@@ -20,7 +20,7 @@ export const load = async ({ locals }) => {
   const isAdmin = user.role === Roles.ADMIN;
   const form = await superValidate(null, zod(workBookSchema));
 
-  return { form: form, user: user, isAdmin: isAdmin };
+  return { form: form, author: user, isAdmin: isAdmin };
 };
 
 export const actions = {

@@ -4,7 +4,7 @@
   export let labelName: string = '';
   export let inputFieldType: InputType | undefined = undefined;
   export let inputFieldName: string;
-  export let inputValue: any;
+  export let inputValue: unknown;
 </script>
 
 <Label class="space-y-2">

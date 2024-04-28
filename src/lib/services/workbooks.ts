@@ -20,7 +20,7 @@ export async function getWorkBook(workBookId: number) {
 export async function createWorkBook(workBook: WorkBook) {
   const newWorkBook = await db.workBook.create({
     data: {
-      userId: workBook.userId,
+      userId: workBook.authorId,
       title: workBook.title,
       isPublished: workBook.isPublished,
       isOfficial: workBook.isOfficial,
