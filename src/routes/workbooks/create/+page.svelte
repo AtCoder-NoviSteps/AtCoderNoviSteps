@@ -40,6 +40,7 @@
     <WorkBookInputFields
       authorId={$form.userId}
       title={$form.title}
+      description={$form.description}
       isPublished={$form.isPublished}
       isOfficial={$form.isOfficial}
       workBookType={$form.workBookType}

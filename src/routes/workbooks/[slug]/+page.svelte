@@ -32,6 +32,7 @@
   <WorkBookInputFields
     {authorId}
     title={workbook.title}
+    description={workbook.description}
     isPublished={workbook.isPublished}
     isOfficial={workbook.isOfficial}
     workBookType={workbook.workBookType}

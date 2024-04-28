@@ -22,6 +22,7 @@ export async function createWorkBook(workBook: WorkBook) {
     data: {
       userId: workBook.userId,
       title: workBook.title,
+      description: workBook.description,
       isPublished: workBook.isPublished,
       isOfficial: workBook.isOfficial,
       workBookType: workBook.workBookType as WorkBookType,
