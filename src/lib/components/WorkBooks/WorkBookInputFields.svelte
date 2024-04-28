@@ -33,7 +33,7 @@
 </script>
 
 <!-- (ユーザには非表示) 作者 -->
-<InputFieldWrapper inputFieldType="hidden" inputFieldName="authorId" inputValue={authorId} />
+<InputFieldWrapper inputFieldType="hidden" inputFieldName="userId" inputValue={authorId} />
 
 <!-- タイトル -->
 <InputFieldWrapper labelName="タイトル" inputFieldName="title" inputValue={title} />

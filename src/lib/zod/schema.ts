@@ -21,7 +21,7 @@ export const authSchema = z.object({
 });
 
 export const workBookSchema = z.object({
-  authorId: z.string(),
+  userId: z.string(),
   title: z.string().min(3, { message: '3文字以上入力してください' }), // TODO: 文字数の上限を設ける。
   isPublished: z.boolean(),
   isOfficial: z.boolean(),

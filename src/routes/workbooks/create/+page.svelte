@@ -22,7 +22,7 @@
 
   const { form } = superForm(data.form);
 
-  $form.authorId = data.author.id;
+  $form.userId = data.author.id;
   $form.isOfficial = data.isAdmin;
   $form.workBookType = $form.isOfficial ? WorkBookType.TEXTBOOK : WorkBookType.CREATED_BY_USER;
 </script>
@@ -38,7 +38,7 @@
     </Breadcrumb>
 
     <WorkBookInputFields
-      authorId={$form.authorId}
+      authorId={$form.userId}
       title={$form.title}
       isPublished={$form.isPublished}
       isOfficial={$form.isOfficial}

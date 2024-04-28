@@ -1,12 +1,20 @@
 import type { WorkBookType as WorkBookTypeOrigin } from '@prisma/client';
 
 export type WorkBook = {
-  authorId: string;
+  userId: string;
   title: string;
   isPublished: boolean;
   isOfficial: boolean;
   workBookType: WorkBookType;
 };
+
+export type WorkBooks = WorkBook[];
+
+export interface WorkbookWithAuthor extends WorkBook {
+  author: string;
+}
+
+export type WorkbooksWithAuthors = WorkbookWithAuthor[];
 
 // HACK: enumを使うときは毎回書いているので、もっと簡略化できないか?
 export const WorkBookType: { [key in WorkBookTypeOrigin]: key } = {

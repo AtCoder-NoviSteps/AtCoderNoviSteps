@@ -1,62 +1,49 @@
 <script lang="ts">
-  import {
-    Button,
-    Table,
-    TableBody,
-    TableBodyCell,
-    TableBodyRow,
-    TableHead,
-    TableHeadCell,
-  } from 'flowbite-svelte';
+  import { Button, Tabs } from 'flowbite-svelte';
 
   export let data;
 
   const workbooks = data.workbooks;
 
   import HeadingOne from '$lib/components/HeadingOne.svelte';
-  import ThermometerProgressBar from '$lib/components/ThermometerProgressBar.svelte';
+  import TabItemWrapper from '$lib/components/TabItemWrapper.svelte';
+  import WorkBookList from '$lib/components/WorkBooks/WorkBookList.svelte';
+  import { type WorkbooksWithAuthors, type WorkBook, WorkBookType } from '$lib/types/workbook';
 
-  const getPublicationStatusLabel = (isPublished: boolean) => {
-    if (isPublished) {
-      return '公開';
-    } else {
-      return '非公開';
-    }
-  };
-  const getPublicationStatusColor = (isPublished: boolean) => {
-    if (isPublished) {
-      return 'bg-primary-200';
-    } else {
-      return 'bg-red-200';
-    }
+  const getWorkBooksByType = (workbooks: WorkbooksWithAuthors, workBookType: WorkBookType) => {
+    const filteredWorkbooks = workbooks.filter(
+      (workbook: WorkBook) => workbook.workBookType === workBookType,
+    );
+    return filteredWorkbooks;
   };
 
-  // FIXME: 実際のデータに置き換え
-  const dummySubmissionRatios = (
-    acRatio: number,
-    acWithEditorialRatio: number,
-    waRatio: number,
-  ) => {
-    const ratios = [
-      {
-        name: 'ac',
-        ratioPercent: acRatio,
-        color: 'bg-atcoder-ac-background',
-      },
-      {
-        name: 'ac_with_editorial',
-        ratioPercent: acWithEditorialRatio,
-        color: 'bg-atcoder-ac-with_editorial-background',
-      },
-      {
-        name: 'wa',
-        ratioPercent: waRatio,
-        color: 'bg-atcoder-wa-background',
-      },
-    ];
-
-    return ratios;
-  };
+  const workBookTabs = [
+    {
+      title: '教科書',
+      workBookType: WorkBookType.TEXTBOOK,
+      isOpen: true,
+    },
+    {
+      title: '解法別',
+      workBookType: WorkBookType.SOLUTION,
+      isOpen: false,
+    },
+    {
+      title: 'ジャンル別',
+      workBookType: WorkBookType.GENRE,
+      isOpen: false,
+    },
+    {
+      title: 'テーマ別',
+      workBookType: WorkBookType.THEME,
+      isOpen: false,
+    },
+    {
+      title: 'ユーザ作成',
+      workBookType: WorkBookType.CREATED_BY_USER,
+      isOpen: false,
+    },
+  ];
 </script>
 
 <div class="container mx-auto w-5/6">
@@ -67,47 +54,17 @@
 
   <!-- TODO: ページネーションを追加 -->
   <br />
+  TODO: 問題集の作成者のみ、「非公開」の問題集を表示できるようにする <br />
   TODO: 問題集の作成者のみ編集 / 削除ができるようにする <br />
-  TODO: 実際のデータに置き換える <br />
-  TODO: 問題集の区分ごとに分ける <br />
+  TODO: 問題や回答状況を実際のデータに置き換える <br />
   TODO: ページネーションを追加する <br />
-  <!-- TODO: コンポーネントとして切り出す -->
-  <Table shadow class="text-md">
-    <TableHead class="text-sm bg-gray-100">
-      <TableHeadCell class="w-1/12">作者</TableHeadCell>
-      <TableHeadCell class="w-1/4">タイトル</TableHeadCell>
-      <TableHeadCell class="w-7/12">回答状況</TableHeadCell>
-      <TableHeadCell class="w-1/12">
-        <span class="sr-only">編集</span>
-      </TableHeadCell>
-    </TableHead>
-
-    <TableBody tableBodyClass="divide-y">
-      {#each workbooks as workbook}
-        <TableBodyRow>
-          <TableBodyCell>{workbook.author}</TableBodyCell>
-          <TableBodyCell>
-            <div>
-              <span class="p-1 rounded-lg {getPublicationStatusColor(workbook.isPublished)}">
-                {getPublicationStatusLabel(workbook.isPublished)}
-              </span>
-              <a
-                href="/workbooks/{workbook.id}"
-                class="font-medium text-primary-600 hover:underline dark:text-primary-500"
-              >
-                {workbook.title}
-              </a>
-            </div>
-          </TableBodyCell>
-          <TableBodyCell>
-            <ThermometerProgressBar
-              submissionRatios={dummySubmissionRatios(80, 5, 5)}
-              width="w-full"
-            />
-          </TableBodyCell>
-          <TableBodyCell>{'編集 / 削除'}</TableBodyCell>
-        </TableBodyRow>
-      {/each}
-    </TableBody>
-  </Table>
+  <Tabs tabStyle="underline" contentClass="bg-white">
+    {#each workBookTabs as workBookTab}
+      <TabItemWrapper isOpen={workBookTab.isOpen} title={workBookTab.title}>
+        <div class="mt-6">
+          <WorkBookList workbooks={getWorkBooksByType(workbooks, workBookTab.workBookType)} />
+        </div>
+      </TabItemWrapper>
+    {/each}
+  </Tabs>
 </div>
