@@ -5,6 +5,7 @@
 
   export let authorId: string;
   export let title: string;
+  export let description: string;
   export let isPublished: boolean;
   export let isOfficial: boolean;
   export let workBookType: WorkBookType;
@@ -37,6 +38,9 @@
 
 <!-- タイトル -->
 <InputFieldWrapper labelName="タイトル" inputFieldName="title" inputValue={title} />
+
+<!-- 説明 -->
+<InputFieldWrapper labelName="説明" inputFieldName="description" inputValue={description} />
 
 <!-- 一般公開の有無 -->
 <SelectWrapper

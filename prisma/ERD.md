@@ -160,6 +160,7 @@ THEME THEME
     Int id "🗝️"
     String userId 
     String title 
+    String description 
     Boolean isPublished 
     Boolean isOfficial 
     WorkBookType workBookType 

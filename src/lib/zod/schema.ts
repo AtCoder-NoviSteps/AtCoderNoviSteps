@@ -23,6 +23,10 @@ export const authSchema = z.object({
 export const workBookSchema = z.object({
   userId: z.string(),
   title: z.string().min(3, { message: '3文字以上入力してください' }), // TODO: 文字数の上限を設ける。
+  description: z
+    .string()
+    .min(0, { message: '' })
+    .max(300, { message: '300文字になるまで削除してください' }),
   isPublished: z.boolean(),
   isOfficial: z.boolean(),
   workBookType: z.nativeEnum(WorkBookType),
