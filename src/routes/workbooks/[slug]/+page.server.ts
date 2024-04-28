@@ -2,7 +2,7 @@ import { error } from '@sveltejs/kit';
 
 import * as workBooksCrud from '$lib/services/workbooks';
 import * as userCrud from '$lib/services/users';
-import { NOT_FOUND } from '$lib/constants/http-response-status-codes';
+import { BAD_REQUEST, NOT_FOUND } from '$lib/constants/http-response-status-codes';
 
 // FIXME: データベースから取得できるようになったら削除する
 const sampleWorkbook = new Map();
@@ -28,9 +28,16 @@ sampleWorkbook.set(2, {
 });
 
 // TODO: 一般公開するまでは、管理者のみアクセスできるようにする
+// See:
+// https://developer.mozilla.org/ja/docs/Web/JavaScript/Reference/Global_Objects/parseInt
+// https://developer.mozilla.org/ja/docs/Web/JavaScript/Reference/Global_Objects/Number/isNaN
 export async function load({ params }) {
-  // TODO: idが数字以外ならエラーを返す
-  const id = Number(params.slug);
+  const id = parseInt(params.slug);
+
+  if (Number.isNaN(id)) {
+    throw error(BAD_REQUEST, `不正な問題集idです。`);
+  }
+
   const workbook = await workBooksCrud.getWorkBook(id);
 
   if (!workbook) {
