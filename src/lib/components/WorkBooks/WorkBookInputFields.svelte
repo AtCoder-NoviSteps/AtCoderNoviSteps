@@ -7,6 +7,7 @@
   export let title: string;
   export let isPublished: boolean;
   export let isOfficial: boolean;
+  export let workBookType: WorkBookType;
 
   let isPublishedOptions = [
     { value: false, name: '非公開' },
@@ -29,10 +30,6 @@
       return types;
     }
   };
-
-  let workBookType: WorkBookType = isOfficial
-    ? WorkBookType.TEXTBOOK
-    : WorkBookType.CREATED_BY_USER;
 </script>
 
 <!-- (ユーザには非表示) 作者 -->

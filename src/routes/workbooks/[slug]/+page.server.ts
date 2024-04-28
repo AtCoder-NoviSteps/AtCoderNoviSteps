@@ -47,7 +47,7 @@ export async function load({ params }) {
   }
 
   // ユーザが問題集を作成したあとに、アカウントが削除されていないかを確認
-  const author = workbookAuthor ? workbookAuthor.username : 'unknown';
+  const authorId = workbookAuthor ? workbookAuthor.id : 'unknown';
 
-  return { workbook: workbook, author: author, tasks: tasks };
+  return { workbook: workbook, authorId: authorId, tasks: tasks };
 }

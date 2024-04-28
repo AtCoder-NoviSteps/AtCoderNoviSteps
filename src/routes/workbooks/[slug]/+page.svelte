@@ -3,8 +3,6 @@
     Breadcrumb,
     BreadcrumbItem,
     Label,
-    Input,
-    Select,
     Table,
     TableHead,
     TableHeadCell,
@@ -14,21 +12,15 @@
   } from 'flowbite-svelte';
 
   import HeadingOne from '$lib/components/HeadingOne.svelte';
-
-  // let selectedValue: boolean = false;
-
-  let isPublished = [
-    { value: false, name: '非公開' },
-    { value: true, name: '公開' },
-  ];
+  import WorkBookInputFields from '$lib/components/WorkBooks/WorkBookInputFields.svelte';
 
   export let data;
+
   let workbook = data.workbook;
-  let author = data.author;
+  let authorId = data.authorId;
   let tasks = data.tasks;
 </script>
 
-<!-- TODO: コンポーネントとして切り出す -->
 <div class="container mx-auto w-5/6">
   <HeadingOne title="(準備中) 問題集の詳細" />
 
@@ -37,24 +29,15 @@
     <BreadcrumbItem>{workbook.title}</BreadcrumbItem>
   </Breadcrumb>
 
-  <!-- 作者 -->
-  <Label class="space-y-2">
-    <span>ユーザ名</span>
-    <Input size="md" value={author} />
-  </Label>
+  <WorkBookInputFields
+    {authorId}
+    title={workbook.title}
+    isPublished={workbook.isPublished}
+    isOfficial={workbook.isOfficial}
+    workBookType={workbook.workBookType}
+  />
 
-  <!-- タイトル -->
-  <Label class="space-y-2">
-    <span>タイトル</span>
-    <Input size="md" value={workbook.title} />
-  </Label>
-
-  <!-- 一般公開の有無 -->
-  <Label class="space-y-2">
-    <span>公開状況</span>
-    <Select class="" items={isPublished} bind:value={workbook.isPublished} />
-  </Label>
-
+  <!-- TODO: コンポーネントとして切り出す -->
   <!-- 問題を検索 -->
   TODO: 問題を検索して、追加できるようにする
   <br />
