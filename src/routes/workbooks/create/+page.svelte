@@ -4,13 +4,14 @@
   import {
     Breadcrumb,
     BreadcrumbItem,
+    Input,
     Label,
-    // Table,
-    // TableBody,
-    // TableBodyCell,
-    // TableBodyRow,
-    // TableHead,
-    // TableHeadCell,
+    Table,
+    TableBody,
+    TableBodyCell,
+    TableBodyRow,
+    TableHead,
+    TableHeadCell,
   } from 'flowbite-svelte';
 
   import HeadingOne from '$lib/components/HeadingOne.svelte';
@@ -25,6 +26,33 @@
   $form.userId = data.author.id;
   $form.isOfficial = data.isAdmin;
   $form.workBookType = $form.isOfficial ? WorkBookType.TEXTBOOK : WorkBookType.CREATED_BY_USER;
+
+  // TODO: 検索したデータと置き換え
+  let workBookTasks = [
+    { id: 1, contestId: 'ABC350', title: 'A. foo' },
+    { id: 2, contestId: 'ABC350', title: 'B. bar' },
+    { id: 3, contestId: 'ABC350', title: 'C. hoge' },
+  ];
+
+  let newTask = '';
+  let newWorkBookTaskId = 0;
+
+  function addWorkBookTask() {
+    // TODO: URLやタイトルからコンテストidを取得できるようにする
+    workBookTasks = [
+      ...workBookTasks,
+      { id: newWorkBookTaskId, contestId: 'ABC351', title: newTask },
+    ];
+    newTask = '';
+  }
+
+  $: {
+    if (workBookTasks.length === 0) {
+      newWorkBookTaskId = 1;
+    } else {
+      newWorkBookTaskId = Math.max(...workBookTasks.map((task) => task.id)) + 1;
+    }
+  }
 </script>
 
 <!-- TODO: パンくずリストを用意 -->
@@ -46,40 +74,53 @@
       workBookType={$form.workBookType}
     />
 
-    <!-- 問題を検索 -->
-    TODO: 問題を検索して、追加できるようにする
-    <br />
-
     <!-- 問題一覧 -->
     <Label class="space-y-2">
       <span>問題一覧</span>
     </Label>
 
     TODO: 指定した問題を表示できるようにする
-    <!-- <Table shadow class="text-md">
+    <!-- TODO: コンポーネントとして切り出す -->
+    <Table shadow class="text-md">
       <TableHead class="text-sm bg-gray-100">
-        <TableHeadCell class="w-1/6">提出状況</TableHeadCell>
         <TableHeadCell class="w-1/6">コンテスト名</TableHeadCell>
         <TableHeadCell class="w-7/12">問題名</TableHeadCell>
         <TableHeadCell class="w-1/12">
           <span class="sr-only">編集</span>
         </TableHeadCell>
-      </TableHead> -->
-    <!-- TODO: ダミーデータをオブジェクトとしてまとめて、eachで取り出せるように -->
-    <!-- <TableBody tableBodyClass="divide-y"> -->
-    <!-- TODO: コンテスト名、問題名にリンクを付ける -->
-    <!-- TODO: 編集にリンクを付ける -->
-    <!-- TODO: 削除にゴミ箱マークを付ける -->
-    <!-- {#each workbook.tasks as task}
-        <TableBodyRow>
-          <TableBodyCell>{task.status_name}</TableBodyCell>
-          <TableBodyCell>{task.contest_id}</TableBodyCell>
-          <TableBodyCell>{task.title}</TableBodyCell>
-          <TableBodyCell>削除</TableBodyCell>
-        </TableBodyRow>
-      {/each}
-    </TableBody> -->
-    <!-- </Table> -->
+      </TableHead>
+
+      <TableBody tableBodyClass="divide-y">
+        <!-- TODO: コンテスト名、問題名にリンクを付ける -->
+        <!-- TODO: 編集にリンクを付ける -->
+        <!-- TODO: 削除にゴミ箱マークを付ける -->
+        {#each workBookTasks as task}
+          <TableBodyRow>
+            <TableBodyCell>{task.contestId}</TableBodyCell>
+            <TableBodyCell>{task.title}</TableBodyCell>
+            <TableBodyCell>編集 / 削除</TableBodyCell>
+          </TableBodyRow>
+        {:else}
+          問題を1問以上登録してください。
+        {/each}
+      </TableBody>
+    </Table>
+
+    <!-- 問題を検索 -->
+    TODO: 問題を検索して、追加できるようにする
+    <!-- TODO: コンポーネントとして切り出す -->
+    <form on:submit|preventDefault={addWorkBookTask}>
+      <Label></Label>
+      <Input
+        type="text"
+        bind:value={newTask}
+        on:keydown={(event) => {
+          if (event.target instanceof HTMLInputElement) {
+            newTask = event.target.value;
+          }
+        }}
+      />
+    </form>
 
     <!-- 作成ボタンを追加 -->
     <div class="flex flex-wrap md:justify-center md:items-center">
