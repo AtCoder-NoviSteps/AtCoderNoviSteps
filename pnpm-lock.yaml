@@ -89,8 +89,8 @@ devDependencies:
     specifier: 0.5.7
     version: 0.5.7(tailwindcss@3.4.3)
   '@testing-library/jest-dom':
-    specifier: 6.4.2
-    version: 6.4.2(@types/jest@29.5.12)(vitest@0.34.6)
+    specifier: 6.4.5
+    version: 6.4.5(@types/jest@29.5.12)(vitest@0.34.6)
   '@types/gtag.js':
     specifier: ^0.0.19
     version: 0.0.19
@@ -1202,8 +1202,8 @@ packages:
       pretty-format: 27.5.1
     dev: false
 
-  /@testing-library/jest-dom@6.4.2(@types/jest@29.5.12)(vitest@0.34.6):
-    resolution: {integrity: sha512-CzqH0AFymEMG48CpzXFriYYkOjk6ZGPCLMhW9e9jg3KMCn5OfJecF8GtGW7yGfR/IgCe3SX8BSwjdzI6BBbZLw==}
+  /@testing-library/jest-dom@6.4.5(@types/jest@29.5.12)(vitest@0.34.6):
+    resolution: {integrity: sha512-AguB9yvTXmCnySBP1lWjfNNUwpbElsaQ567lt2VdGqAdHtpieLgjmcVyv1q7PMIvLbgpDdkWV5Ydv3FEejyp2A==}
     engines: {node: '>=14', npm: '>=6', yarn: '>=1'}
     peerDependencies:
       '@jest/globals': '>= 28'
