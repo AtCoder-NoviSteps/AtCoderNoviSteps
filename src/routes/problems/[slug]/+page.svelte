@@ -25,7 +25,7 @@
   <!-- 回答状況を表す画像のサイズ・余白などをカスタマイズするため、Flowbiteを利用している -->
   <!-- See: https://flowbite.com/docs/components/card/#card-with-image -->
   <a
-    href={taskUrl(taskResult)}
+    href={taskUrl(taskResult.contest_id, taskResult.task_id)}
     target="_blank"
     rel="noreferrer"
     class="flex flex-col items-center

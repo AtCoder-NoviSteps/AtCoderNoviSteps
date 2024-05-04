@@ -105,7 +105,7 @@
             </TableBodyCell>
             <TableBodyCell>
               <a
-                href={taskUrl(taskResult)}
+                href={taskUrl(taskResult.contest_id, taskResult.task_id)}
                 target="_blank"
                 rel="noreferrer"
                 class="font-medium text-primary-600 hover:underline dark:text-primary-500"
