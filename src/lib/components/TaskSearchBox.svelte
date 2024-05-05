@@ -4,65 +4,28 @@
   import { Input, Listgroup, ListgroupItem } from 'flowbite-svelte';
 
   import type { WorkBookTaskCreate } from '$lib/types/workbook';
-  import type { Task } from '$lib/types/task';
+  import type { Task, Tasks } from '$lib/types/task';
   import { taskUrl } from '$lib/utils/task';
 
-  export let workBookTasks: WorkBookTaskCreate[];
+  export let tasks: Tasks = [];
+  export let workBookTasks: WorkBookTaskCreate[] = [];
 
-  // TODO: DBから問題を取得できるようにする
-  let filteredTasks = [
-    {
-      contest_id: 'ABC351',
-      task_table_index: 'A',
-      task_id: 'abc351_a',
-      title: 'A. hoge',
-      grade: '',
-    },
-    {
-      contest_id: 'ABC351',
-      task_table_index: 'B',
-      task_id: 'abc351_b',
-      title: 'B. fuga',
-      grade: '',
-    },
-    {
-      contest_id: 'ABC351',
-      task_table_index: 'C',
-      task_id: 'abc351_c',
-      title: 'C. piyo',
-      grade: '',
-    },
-    {
-      contest_id: 'ABC351',
-      task_table_index: 'D',
-      task_id: 'abc351_d',
-      title: 'D. foo',
-      grade: '',
-    },
-    {
-      contest_id: 'ABC351',
-      task_table_index: 'E',
-      task_id: 'abc351_e',
-      title: 'E. bar',
-      grade: '',
-    },
-    {
-      contest_id: 'ABC351',
-      task_table_index: 'F',
-      task_id: 'abc351_f',
-      title: 'F. bizz',
-      grade: '',
-    },
-    {
-      contest_id: 'ABC351',
-      task_table_index: 'G',
-      task_id: 'abc351_g',
-      title: 'G. buzz',
-      grade: '',
-    },
-  ];
+  const isMatched = (task: Task, searchWords: string): boolean => {
+    if (searchWords === undefined || searchWords.length === 0) {
+      return false;
+    }
+
+    return searchWords
+      .split(/\s/)
+      .every(
+        (word) =>
+          (word.trim().length > 0 && task.title.toLowerCase().includes(word.toLowerCase())) ||
+          taskUrl(task.contest_id, task.task_id).toLowerCase().includes(word.toLowerCase()),
+      );
+  };
 
   $: searchWordsOrURL = '';
+  $: filteredTasks = tasks.filter((task: Task) => isMatched(task, searchWordsOrURL)).slice(0, 20);
 
   const PENDING = -1;
   let focusingId = PENDING;

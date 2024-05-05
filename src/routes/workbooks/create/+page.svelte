@@ -33,6 +33,59 @@
     { id: 2, contestId: 'ABC350', taskId: 'abc351_b', title: 'B. bar' },
     { id: 3, contestId: 'ABC350', taskId: 'abc351_c', title: 'C. hoge' },
   ];
+
+  // TODO: DBから問題を取得できるようにする
+  const dummyTasks = [
+    {
+      contest_id: 'ABC351',
+      task_table_index: 'A',
+      task_id: 'abc351_a',
+      title: 'A. hoge',
+      grade: '',
+    },
+    {
+      contest_id: 'ABC351',
+      task_table_index: 'B',
+      task_id: 'abc351_b',
+      title: 'B. fuga',
+      grade: '',
+    },
+    {
+      contest_id: 'ABC351',
+      task_table_index: 'C',
+      task_id: 'abc351_c',
+      title: 'C. piyo',
+      grade: '',
+    },
+    {
+      contest_id: 'ABC351',
+      task_table_index: 'D',
+      task_id: 'abc351_d',
+      title: 'D. foo',
+      grade: '',
+    },
+    {
+      contest_id: 'ABC351',
+      task_table_index: 'E',
+      task_id: 'abc351_e',
+      title: 'E. bar',
+      grade: '',
+    },
+    {
+      contest_id: 'ABC351',
+      task_table_index: 'F',
+      task_id: 'abc351_f',
+      title: 'F. bizz',
+      grade: '',
+    },
+    {
+      contest_id: 'ABC351',
+      task_table_index: 'G',
+      task_id: 'abc351_g',
+      title: 'G. buzz',
+      grade: '',
+    },
+  ];
 </script>
 
 <!-- TODO: パンくずリストを用意 -->
@@ -87,8 +140,7 @@
     </Table>
 
     <!-- 問題を検索 -->
-    TODO: 問題を検索して、追加できるようにする
-    <TaskSearchBox bind:workBookTasks />
+    <TaskSearchBox tasks={dummyTasks} bind:workBookTasks />
 
     <!-- 作成ボタンを追加 -->
     <div class="flex flex-wrap md:justify-center md:items-center">
