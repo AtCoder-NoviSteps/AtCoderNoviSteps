@@ -5,6 +5,7 @@
 
   import type { WorkBookTaskCreate } from '$lib/types/workbook';
   import type { Task, Tasks } from '$lib/types/task';
+  import { getContestNameLabel } from '$lib/utils/contest';
   import { taskUrl } from '$lib/utils/task';
 
   export let tasks: Tasks = [];
@@ -45,7 +46,7 @@
       ...workBookTasks,
       {
         id: newWorkBookTaskId,
-        contestId: selectedTask.contest_id,
+        contestId: getContestNameLabel(selectedTask.contest_id),
         taskId: selectedTask.task_id,
         title: selectedTask.title,
       },

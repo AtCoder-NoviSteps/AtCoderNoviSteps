@@ -13,11 +13,12 @@
     TableHeadCell,
   } from 'flowbite-svelte';
 
+  import type { Tasks } from '$lib/types/task.js';
   import HeadingOne from '$lib/components/HeadingOne.svelte';
   import WorkBookInputFields from '$lib/components/WorkBooks/WorkBookInputFields.svelte';
   import TaskSearchBox from '$lib/components/TaskSearchBox.svelte';
   import SubmissionButton from '$lib/components/SubmissionButton.svelte';
-  import { WorkBookType } from '$lib/types/workbook.js';
+  import { WorkBookType, type WorkBookTaskCreate } from '$lib/types/workbook';
 
   export let data;
 
@@ -27,65 +28,9 @@
   $form.isOfficial = data.isAdmin;
   $form.workBookType = $form.isOfficial ? WorkBookType.TEXTBOOK : WorkBookType.CREATED_BY_USER;
 
-  // TODO: 検索したデータと置き換え
-  $: workBookTasks = [
-    { id: 1, contestId: 'ABC350', taskId: 'abc351_a', title: 'A. foo' },
-    { id: 2, contestId: 'ABC350', taskId: 'abc351_b', title: 'B. bar' },
-    { id: 3, contestId: 'ABC350', taskId: 'abc351_c', title: 'C. hoge' },
-  ];
+  $: workBookTasks = [] as WorkBookTaskCreate[];
 
-  // TODO: DBから問題を取得できるようにする
-  const dummyTasks = [
-    {
-      contest_id: 'ABC351',
-      task_table_index: 'A',
-      task_id: 'abc351_a',
-      title: 'A. hoge',
-      grade: '',
-    },
-    {
-      contest_id: 'ABC351',
-      task_table_index: 'B',
-      task_id: 'abc351_b',
-      title: 'B. fuga',
-      grade: '',
-    },
-    {
-      contest_id: 'ABC351',
-      task_table_index: 'C',
-      task_id: 'abc351_c',
-      title: 'C. piyo',
-      grade: '',
-    },
-    {
-      contest_id: 'ABC351',
-      task_table_index: 'D',
-      task_id: 'abc351_d',
-      title: 'D. foo',
-      grade: '',
-    },
-    {
-      contest_id: 'ABC351',
-      task_table_index: 'E',
-      task_id: 'abc351_e',
-      title: 'E. bar',
-      grade: '',
-    },
-    {
-      contest_id: 'ABC351',
-      task_table_index: 'F',
-      task_id: 'abc351_f',
-      title: 'F. bizz',
-      grade: '',
-    },
-    {
-      contest_id: 'ABC351',
-      task_table_index: 'G',
-      task_id: 'abc351_g',
-      title: 'G. buzz',
-      grade: '',
-    },
-  ];
+  const tasks: Tasks = data.tasks;
 </script>
 
 <!-- TODO: パンくずリストを用意 -->
@@ -112,35 +57,36 @@
       <span>問題一覧</span>
     </Label>
 
-    TODO: 指定した問題を表示できるようにする
     <!-- TODO: コンポーネントとして切り出す -->
-    <Table shadow class="text-md">
-      <TableHead class="text-sm bg-gray-100">
-        <TableHeadCell class="w-1/6">コンテスト名</TableHeadCell>
-        <TableHeadCell class="w-7/12">問題名</TableHeadCell>
-        <TableHeadCell class="w-1/12">
-          <span class="sr-only">編集</span>
-        </TableHeadCell>
-      </TableHead>
+    {#if workBookTasks.length > 0}
+      <Table shadow class="text-md">
+        <TableHead class="text-sm bg-gray-100">
+          <TableHeadCell class="w-1/6">コンテスト名</TableHeadCell>
+          <TableHeadCell class="w-7/12">問題名</TableHeadCell>
+          <TableHeadCell class="w-1/12">
+            <span class="sr-only">編集</span>
+          </TableHeadCell>
+        </TableHead>
 
-      <TableBody tableBodyClass="divide-y">
-        <!-- TODO: コンテスト名、問題名にリンクを付ける -->
-        <!-- TODO: 編集にリンクを付ける -->
-        <!-- TODO: 削除にゴミ箱マークを付ける -->
-        {#each workBookTasks as task}
-          <TableBodyRow>
-            <TableBodyCell>{task.contestId}</TableBodyCell>
-            <TableBodyCell>{task.title}</TableBodyCell>
-            <TableBodyCell>編集 / 削除</TableBodyCell>
-          </TableBodyRow>
-        {:else}
-          問題を1問以上登録してください。
-        {/each}
-      </TableBody>
-    </Table>
+        <TableBody tableBodyClass="divide-y">
+          <!-- TODO: コンテスト名、問題名にリンクを付ける -->
+          <!-- TODO: 編集にリンクを付ける -->
+          <!-- TODO: 削除にゴミ箱マークを付ける -->
+          {#each workBookTasks as task}
+            <TableBodyRow>
+              <TableBodyCell>{task.contestId}</TableBodyCell>
+              <TableBodyCell>{task.title}</TableBodyCell>
+              <TableBodyCell>編集 / 削除</TableBodyCell>
+            </TableBodyRow>
+          {/each}
+        </TableBody>
+      </Table>
+    {:else}
+      問題を1問以上登録してください。
+    {/if}
 
     <!-- 問題を検索 -->
-    <TaskSearchBox tasks={dummyTasks} bind:workBookTasks />
+    <TaskSearchBox {tasks} bind:workBookTasks />
 
     <!-- 作成ボタンを追加 -->
     <div class="flex flex-wrap md:justify-center md:items-center">
