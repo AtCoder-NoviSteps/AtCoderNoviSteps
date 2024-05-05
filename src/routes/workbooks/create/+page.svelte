@@ -33,8 +33,6 @@
     { id: 2, contestId: 'ABC350', taskId: 'abc351_b', title: 'B. bar' },
     { id: 3, contestId: 'ABC350', taskId: 'abc351_c', title: 'C. hoge' },
   ];
-
-  $: searchWordsOrURL = '';
 </script>
 
 <!-- TODO: パンくずリストを用意 -->
@@ -90,7 +88,7 @@
 
     <!-- 問題を検索 -->
     TODO: 問題を検索して、追加できるようにする
-    <TaskSearchBox {searchWordsOrURL} bind:workBookTasks />
+    <TaskSearchBox bind:workBookTasks />
 
     <!-- 作成ボタンを追加 -->
     <div class="flex flex-wrap md:justify-center md:items-center">

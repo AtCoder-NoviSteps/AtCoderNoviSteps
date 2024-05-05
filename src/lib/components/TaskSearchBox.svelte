@@ -1,15 +1,13 @@
 <!-- See: -->
 <!-- https://github.com/kenkoooo/AtCoderProblems/blob/master/atcoder-problems-frontend/src/components/ProblemSearchBox.tsx -->
 <script lang="ts">
-  import type { WorkBookTaskCreate } from '$lib/types/workbook';
-
-  export let searchWordsOrURL = '';
-  export let workBookTasks: WorkBookTaskCreate[];
-
   import { Input, Listgroup, ListgroupItem } from 'flowbite-svelte';
 
+  import type { WorkBookTaskCreate } from '$lib/types/workbook';
   import type { Task } from '$lib/types/task';
   import { taskUrl } from '$lib/utils/task';
+
+  export let workBookTasks: WorkBookTaskCreate[];
 
   // TODO: DBから問題を取得できるようにする
   let filteredTasks = [
@@ -63,6 +61,8 @@
       grade: '',
     },
   ];
+
+  $: searchWordsOrURL = '';
 
   const PENDING = -1;
   let focusingId = PENDING;
