@@ -28,3 +28,19 @@ export const WorkBookType: { [key in WorkBookTypeOrigin]: key } = {
 
 // Re-exporting the original type with the original name.
 export type WorkBookType = WorkBookTypeOrigin;
+
+export type WorkBookTask = {
+  id: number;
+  workBookId: number;
+  contestId: string;
+  taskId: string;
+};
+
+export type WorkBookTasks = WorkBookTask[];
+
+export type WorkBookTaskCreate = {
+  id: number;
+  contestId: string;
+  taskId: string;
+  title: string;
+};
