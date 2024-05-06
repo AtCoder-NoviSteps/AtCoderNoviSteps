@@ -3,13 +3,15 @@
 <script lang="ts">
   import { Input, Listgroup, ListgroupItem } from 'flowbite-svelte';
 
-  import type { WorkBookTaskCreate } from '$lib/types/workbook';
+  import type { WorkBookTaskBase, WorkBookTaskCreate } from '$lib/types/workbook';
   import type { Task, Tasks } from '$lib/types/task';
   import { getContestNameLabel } from '$lib/utils/contest';
   import { taskUrl } from '$lib/utils/task';
 
   export let tasks: Tasks = [];
-  export let workBookTasks: WorkBookTaskCreate[] = [];
+  // HACK: やむなくデータベースへの保存用と問題集作成・編集用で分けている。
+  export let workBookTasks: WorkBookTaskBase[] = [];
+  export let workBookTasksForTable: WorkBookTaskCreate[] = [];
 
   const isMatched = (task: Task, searchWords: string): boolean => {
     if (searchWords === undefined || searchWords.length === 0) {
@@ -45,10 +47,17 @@
     workBookTasks = [
       ...workBookTasks,
       {
+        taskId: selectedTask.task_id,
+        priority: newWorkBookTaskId, // 1に近いほど優先度が高い
+      },
+    ];
+    workBookTasksForTable = [
+      ...workBookTasksForTable,
+      {
         contestId: getContestNameLabel(selectedTask.contest_id),
         taskId: selectedTask.task_id,
         title: selectedTask.title,
-        priority: newWorkBookTaskId, // 1に近いほど優先度が高い
+        priority: newWorkBookTaskId,
       },
     ];
   }
