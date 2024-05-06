@@ -13,12 +13,28 @@
 
   import HeadingOne from '$lib/components/HeadingOne.svelte';
   import WorkBookInputFields from '$lib/components/WorkBooks/WorkBookInputFields.svelte';
+  import type { Task } from '$lib/types/task';
+  import { getContestNameLabel } from '$lib/utils/contest';
 
   export let data;
 
-  let workbook = data.workbook;
+  let workBook = data.workbook;
+  let workBookTasks = workBook.workBookTasks;
   let authorId = data.authorId;
-  let tasks = data.tasks;
+  let tasks = data.tasks; // workBookTasksのtaskIdから問題情報を取得
+
+  const getTask = (taskId: string): Task | undefined => {
+    return tasks.get(taskId);
+  };
+
+  const getContestName = (taskId: string): string => {
+    const contestId = getTask(taskId)?.contest_id as string;
+    return getContestNameLabel(contestId);
+  };
+
+  const getTaskName = (taskId: string): string => {
+    return getTask(taskId)?.title as string;
+  };
 </script>
 
 <div class="container mx-auto w-5/6">
@@ -26,16 +42,16 @@
 
   <Breadcrumb aria-label="">
     <BreadcrumbItem href="/workbooks" home>問題集一覧</BreadcrumbItem>
-    <BreadcrumbItem>{workbook.title}</BreadcrumbItem>
+    <BreadcrumbItem>{workBook.title}</BreadcrumbItem>
   </Breadcrumb>
 
   <WorkBookInputFields
     {authorId}
-    workBookTitle={workbook.title}
-    description={workbook.description}
-    isPublished={workbook.isPublished}
-    isOfficial={workbook.isOfficial}
-    workBookType={workbook.workBookType}
+    workBookTitle={workBook.title}
+    description={workBook.description}
+    isPublished={workBook.isPublished}
+    isOfficial={workBook.isOfficial}
+    workBookType={workBook.workBookType}
   />
 
   <!-- TODO: コンポーネントとして切り出す -->
@@ -49,7 +65,7 @@
     <span>問題一覧</span>
   </Label>
 
-  {#if tasks !== null}
+  {#if workBookTasks.length >= 1}
     <Table shadow class="text-md">
       <TableHead class="text-sm bg-gray-100">
         <TableHeadCell class="w-1/6">提出状況</TableHeadCell>
@@ -63,11 +79,11 @@
         <!-- TODO: コンテスト名、問題名にリンクを付ける -->
         <!-- TODO: 編集にリンクを付ける -->
         <!-- TODO: 削除にゴミ箱マークを付ける -->
-        {#each tasks as task}
+        {#each workBookTasks as workBookTask}
           <TableBodyRow>
-            <TableBodyCell>{task.status_name}</TableBodyCell>
-            <TableBodyCell>{task.contest_id}</TableBodyCell>
-            <TableBodyCell>{task.title}</TableBodyCell>
+            <TableBodyCell>{'準備中'}</TableBodyCell>
+            <TableBodyCell>{getContestName(workBookTask.taskId)}</TableBodyCell>
+            <TableBodyCell>{getTaskName(workBookTask.taskId)}</TableBodyCell>
             <TableBodyCell>削除</TableBodyCell>
           </TableBodyRow>
         {/each}

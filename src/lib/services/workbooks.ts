@@ -12,6 +12,9 @@ export async function getWorkBook(workBookId: number) {
     where: {
       id: workBookId,
     },
+    include: {
+      workBookTasks: true,
+    },
   });
 
   return workBook;
