@@ -189,7 +189,7 @@ model WorkBookTask {
   id         String   @id @unique
   workBookId Int
   taskId     String
-  priority   Int // 1に近いほど優先度が高い
+  priority   Int // 1以上。1に近いほど優先度が高い
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
 
