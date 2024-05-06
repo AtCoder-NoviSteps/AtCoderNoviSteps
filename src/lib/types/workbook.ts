@@ -7,6 +7,7 @@ export type WorkBook = {
   isPublished: boolean;
   isOfficial: boolean;
   workBookType: WorkBookType;
+  workBookTasks: WorkBookTaskBase[];
 };
 
 export type WorkBooks = WorkBook[];
