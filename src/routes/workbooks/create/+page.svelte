@@ -18,7 +18,11 @@
   import TaskSearchBox from '$lib/components/TaskSearchBox.svelte';
   import InputFieldWrapper from '$lib/components/InputFieldWrapper.svelte';
   import SubmissionButton from '$lib/components/SubmissionButton.svelte';
-  import { WorkBookType, type WorkBookTaskCreate } from '$lib/types/workbook';
+  import {
+    WorkBookType,
+    type WorkBookTaskBase,
+    type WorkBookTaskCreate,
+  } from '$lib/types/workbook';
 
   export let data;
 
@@ -26,7 +30,7 @@
   // https://superforms.rocks/concepts/nested-data
   const initialData = {
     ...data.form,
-    workBookTasks: [] as WorkBookTaskCreate[],
+    workBookTasks: [] as WorkBookTaskBase[],
   };
   const { form, enhance } = superForm(initialData, {
     dataType: 'json',
