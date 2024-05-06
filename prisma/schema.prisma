@@ -186,7 +186,7 @@ model WorkBook {
 }
 
 model WorkBookTask {
-  id         String   @id @unique
+  id         String   @id @default(uuid())
   workBookId Int
   taskId     String
   priority   Int // 1以上。1に近いほど優先度が高い
