@@ -20,6 +20,12 @@ export const authSchema = z.object({
     }),
 });
 
+const workBookTaskSchema = z.object({
+  workBookId: z.number().nonnegative().optional(),
+  taskId: z.string(),
+  priority: z.number().positive(),
+});
+
 export const workBookSchema = z.object({
   userId: z.string(),
   title: z.string().min(3, { message: '3文字以上入力してください' }), // TODO: 文字数の上限を設ける。
@@ -30,6 +36,5 @@ export const workBookSchema = z.object({
   isPublished: z.boolean(),
   isOfficial: z.boolean(),
   workBookType: z.nativeEnum(WorkBookType),
-  // TODO: 以下の属性を追加
-  // workBookTasks: zで配列扱えるようにする。
+  workBookTasks: z.array(workBookTaskSchema).min(1).max(200),
 });

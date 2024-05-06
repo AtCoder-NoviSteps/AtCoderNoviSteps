@@ -12,12 +12,26 @@ export async function getWorkBook(workBookId: number) {
     where: {
       id: workBookId,
     },
+    include: {
+      workBookTasks: true,
+    },
   });
 
   return workBook;
 }
 
+// See:
+// https://www.prisma.io/docs/orm/prisma-schema/data-model/relations#create-a-record-and-nested-records
 export async function createWorkBook(workBook: WorkBook) {
+  const newWorkBookTasks = await Promise.all(
+    workBook.workBookTasks.map(async (task) => {
+      return {
+        taskId: task.taskId,
+        priority: task.priority,
+      };
+    }),
+  );
+
   const newWorkBook = await db.workBook.create({
     data: {
       userId: workBook.userId,
@@ -26,6 +40,12 @@ export async function createWorkBook(workBook: WorkBook) {
       isPublished: workBook.isPublished,
       isOfficial: workBook.isOfficial,
       workBookType: workBook.workBookType as WorkBookType,
+      workBookTasks: {
+        create: newWorkBookTasks,
+      },
+    },
+    include: {
+      workBookTasks: true,
     },
   });
 

@@ -11,6 +11,17 @@ export async function getTasks(): Promise<Task[]> {
   return tasks;
 }
 
+export async function getTasksByTaskId(): Promise<Map<string, Task>> {
+  const tasks = await db.task.findMany();
+  const tasksMap = new Map();
+
+  (await tasks).map((task) => {
+    tasksMap.set(task.task_id, task);
+  });
+
+  return tasksMap;
+}
+
 export async function getTask(task_id: string): Promise<Task[]> {
   //本当はfindUniqueで取得したいがうまくいかない
   const task = await db.task.findMany({

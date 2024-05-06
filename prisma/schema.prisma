@@ -186,14 +186,15 @@ model WorkBook {
 }
 
 model WorkBookTask {
-  id         String   @id @unique
+  id         String   @id @default(uuid())
   workBookId Int
   taskId     String
+  priority   Int // 1以上。1に近いほど優先度が高い
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
 
   workBook WorkBook @relation(references: [id], fields: [workBookId], onDelete: Cascade)
-  task     Task     @relation(references: [id], fields: [taskId])
+  task     Task     @relation(references: [task_id], fields: [taskId])
 
   @@map("workbooktask")
 }

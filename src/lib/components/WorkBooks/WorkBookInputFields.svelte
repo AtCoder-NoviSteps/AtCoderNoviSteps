@@ -4,7 +4,7 @@
   import { WorkBookType } from '$lib/types/workbook';
 
   export let authorId: string;
-  export let title: string;
+  export let workBookTitle: string;
   export let description: string;
   export let isPublished: boolean;
   export let isOfficial: boolean;
@@ -34,29 +34,33 @@
 </script>
 
 <!-- (ユーザには非表示) 作者 -->
-<InputFieldWrapper inputFieldType="hidden" inputFieldName="userId" inputValue={authorId} />
+<InputFieldWrapper inputFieldType="hidden" inputFieldName="userId" bind:inputValue={authorId} />
 
 <!-- タイトル -->
-<InputFieldWrapper labelName="タイトル" inputFieldName="title" inputValue={title} />
+<InputFieldWrapper labelName="タイトル" inputFieldName="title" bind:inputValue={workBookTitle} />
 
 <!-- 説明 -->
-<InputFieldWrapper labelName="説明" inputFieldName="description" inputValue={description} />
+<InputFieldWrapper labelName="説明" inputFieldName="description" bind:inputValue={description} />
 
 <!-- 一般公開の有無 -->
 <SelectWrapper
   labelName="公開状況"
   innerName="isPublished"
   items={isPublishedOptions}
-  inputValue={isPublished}
+  bind:inputValue={isPublished}
 />
 
 <!-- (ユーザには非表示) 管理者 / 一般ユーザ -->
-<InputFieldWrapper inputFieldType="hidden" inputFieldName="isOfficial" inputValue={isOfficial} />
+<InputFieldWrapper
+  inputFieldType="hidden"
+  inputFieldName="isOfficial"
+  bind:inputValue={isOfficial}
+/>
 
 <!-- 管理者のみ: 問題集の区分を指定-->
 <SelectWrapper
   labelName="問題集の区分"
   innerName="workBookType"
   items={workBookTypeOptions(isOfficial)}
-  inputValue={workBookType}
+  bind:inputValue={workBookType}
 />

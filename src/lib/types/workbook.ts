@@ -7,6 +7,7 @@ export type WorkBook = {
   isPublished: boolean;
   isOfficial: boolean;
   workBookType: WorkBookType;
+  workBookTasks: WorkBookTaskBase[];
 };
 
 export type WorkBooks = WorkBook[];
@@ -28,3 +29,19 @@ export const WorkBookType: { [key in WorkBookTypeOrigin]: key } = {
 
 // Re-exporting the original type with the original name.
 export type WorkBookType = WorkBookTypeOrigin;
+
+export type WorkBookTaskBase = {
+  taskId: string;
+  priority: number;
+};
+
+export interface WorkBookTask extends WorkBookTaskBase {
+  workBookId: number;
+}
+
+export type WorkBookTasks = WorkBookTask[];
+
+export interface WorkBookTaskCreate extends WorkBookTaskBase {
+  contestId: string;
+  title: string;
+}
