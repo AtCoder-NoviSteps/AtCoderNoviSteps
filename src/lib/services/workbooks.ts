@@ -17,6 +17,8 @@ export async function getWorkBook(workBookId: number) {
   return workBook;
 }
 
+// See:
+// https://www.prisma.io/docs/orm/prisma-schema/data-model/relations#create-a-record-and-nested-records
 export async function createWorkBook(workBook: WorkBook) {
   const newWorkBookTasks = await Promise.all(
     workBook.workBookTasks.map(async (task) => {
