@@ -170,8 +170,8 @@ devDependencies:
     specifier: 0.34.6
     version: 0.34.6(@vitest/ui@0.34.7)(jsdom@24.0.0)(playwright@1.43.1)
   zod:
-    specifier: 3.23.5
-    version: 3.23.5
+    specifier: 3.23.6
+    version: 3.23.6
 
 packages:
 
@@ -5945,8 +5945,8 @@ packages:
       superstruct: 1.0.4
       valibot: 0.30.0
       yup: 1.4.0
-      zod: 3.23.5
-      zod-to-json-schema: 3.23.0(zod@3.23.5)
+      zod: 3.23.6
+      zod-to-json-schema: 3.23.0(zod@3.23.6)
     transitivePeerDependencies:
       - '@types/json-schema'
       - esbuild
@@ -6911,16 +6911,16 @@ packages:
     dev: true
     optional: true
 
-  /zod-to-json-schema@3.23.0(zod@3.23.5):
+  /zod-to-json-schema@3.23.0(zod@3.23.6):
     resolution: {integrity: sha512-az0uJ243PxsRIa2x1WmNE/pnuA05gUq/JB8Lwe1EDCCL/Fz9MgjYQ0fPlyc2Tcv6aF2ZA7WM5TWaRZVEFaAIag==}
     requiresBuild: true
     peerDependencies:
       zod: ^3.23.3
     dependencies:
-      zod: 3.23.5
+      zod: 3.23.6
     dev: true
     optional: true
 
-  /zod@3.23.5:
-    resolution: {integrity: sha512-fkwiq0VIQTksNNA131rDOsVJcns0pfVUjHzLrNBiF/O/Xxb5lQyEXkhZWcJ7npWsYlvs+h0jFWXXy4X46Em1JA==}
+  /zod@3.23.6:
+    resolution: {integrity: sha512-RTHJlZhsRbuA8Hmp/iNL7jnfc4nZishjsanDAfEY1QpDQZCahUp3xDzl+zfweE9BklxMUcgBgS1b7Lvie/ZVwA==}
     dev: true
