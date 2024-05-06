@@ -173,6 +173,7 @@ THEME THEME
     String id "🗝️"
     Int workBookId 
     String taskId 
+    Int priority 
     DateTime createdAt 
     DateTime updatedAt 
     }

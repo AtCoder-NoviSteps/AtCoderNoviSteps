@@ -37,7 +37,7 @@
     if (workBookTasks.length === 0) {
       newWorkBookTaskId = 1;
     } else {
-      newWorkBookTaskId = Math.max(...workBookTasks.map((task) => task.id)) + 1;
+      newWorkBookTaskId = Math.max(...workBookTasks.map((task) => task.priority)) + 1;
     }
   }
 
@@ -45,10 +45,10 @@
     workBookTasks = [
       ...workBookTasks,
       {
-        id: newWorkBookTaskId,
         contestId: getContestNameLabel(selectedTask.contest_id),
         taskId: selectedTask.task_id,
         title: selectedTask.title,
+        priority: newWorkBookTaskId, // 1に近いほど優先度が高い
       },
     ];
   }
@@ -56,7 +56,7 @@
 
 <Input
   type="search"
-  placeholder="問題の名称かURLを入力してください。"
+  placeholder="問題名かURLを入力してください。"
   bind:value={searchWordsOrURL}
   on:change={(e) => {
     if (e.target instanceof HTMLInputElement) {

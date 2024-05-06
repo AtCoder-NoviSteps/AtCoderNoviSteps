@@ -29,18 +29,18 @@ export const WorkBookType: { [key in WorkBookTypeOrigin]: key } = {
 // Re-exporting the original type with the original name.
 export type WorkBookType = WorkBookTypeOrigin;
 
-export type WorkBookTask = {
-  id: number;
-  workBookId: number;
-  contestId: string;
+export type WorkBookTaskBase = {
   taskId: string;
+  priority: number;
 };
+
+export interface WorkBookTask extends WorkBookTaskBase {
+  workBookId: number;
+}
 
 export type WorkBookTasks = WorkBookTask[];
 
-export type WorkBookTaskCreate = {
-  id: number;
+export interface WorkBookTaskCreate extends WorkBookTaskBase {
   contestId: string;
-  taskId: string;
   title: string;
-};
+}
