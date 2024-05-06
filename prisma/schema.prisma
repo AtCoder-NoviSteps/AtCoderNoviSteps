@@ -194,7 +194,7 @@ model WorkBookTask {
   updatedAt  DateTime @updatedAt
 
   workBook WorkBook @relation(references: [id], fields: [workBookId], onDelete: Cascade)
-  task     Task     @relation(references: [id], fields: [taskId])
+  task     Task     @relation(references: [task_id], fields: [taskId])
 
   @@map("workbooktask")
 }
