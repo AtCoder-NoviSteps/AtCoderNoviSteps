@@ -60,8 +60,8 @@ dependencies:
     specifier: 3.4.3
     version: 3.4.3
   tar:
-    specifier: 7.0.0
-    version: 7.0.0
+    specifier: 7.1.0
+    version: 7.1.0
   undici:
     specifier: 6.15.0
     version: 6.15.0
@@ -772,7 +772,7 @@ packages:
     resolution: {integrity: sha512-S00nN1Qt3z3dSP6Db45fj/mksrAq5XWNIJ/SWXGP8XPT2jrzEuYRCSEx08JpJwBcG2F1xgiOtBMGDU0AZHmxew==}
     engines: {node: '>=18.0.0'}
     dependencies:
-      minipass: 7.0.4
+      minipass: 7.1.0
     dev: false
 
   /@istanbuljs/schema@0.1.3:
@@ -3575,7 +3575,7 @@ packages:
       foreground-child: 3.1.1
       jackspeak: 2.3.6
       minimatch: 9.0.4
-      minipass: 7.0.4
+      minipass: 7.1.0
       path-scurry: 1.10.2
 
   /glob@7.2.3:
@@ -4464,8 +4464,8 @@ packages:
     resolution: {integrity: sha512-3FnjYuehv9k6ovOEbyOswadCDPX1piCfhV8ncmYtHOjuPwylVWsghTLo7rabjC3Rx5xD4HDx8Wm1xnMF7S5qFQ==}
     engines: {node: '>=8'}
 
-  /minipass@7.0.4:
-    resolution: {integrity: sha512-jYofLM5Dam9279rdkWzqHozUo4ybjdZmCsDHePy5V/PbBcVMiSZR97gmAy45aqi8CK1lG2ECd356FU86avfwUQ==}
+  /minipass@7.1.0:
+    resolution: {integrity: sha512-oGZRv2OT1lO2UF1zUcwdTb3wqUwI0kBGTgt/T7OdSj6M6N5m3o5uPf0AIW6lVxGGoiWUR7e2AwTE+xiwK8WQig==}
     engines: {node: '>=16 || 14 >=14.17'}
 
   /minizlib@1.3.3:
@@ -4485,7 +4485,7 @@ packages:
     resolution: {integrity: sha512-umcy022ILvb5/3Djuu8LWeqUa8D68JaBzlttKeMWen48SjabqS3iY5w/vzeMzMUNhLDifyhbOwKDSznB1vvrwg==}
     engines: {node: '>= 18'}
     dependencies:
-      minipass: 7.0.4
+      minipass: 7.1.0
       rimraf: 5.0.5
     dev: false
 
@@ -4819,7 +4819,7 @@ packages:
     engines: {node: '>=16 || 14 >=14.17'}
     dependencies:
       lru-cache: 10.2.0
-      minipass: 7.0.4
+      minipass: 7.1.0
 
   /path-to-regexp@1.8.0:
     resolution: {integrity: sha512-n43JRhlUKUAlibEJhPeir1ncUID16QnEjNpwzNdO3Lm4ywrBpBZ5oLD0I6br9evr1Y9JTqwRtAh7JLoOzAQdVA==}
@@ -6107,13 +6107,13 @@ packages:
       mkdirp: 1.0.4
       yallist: 4.0.0
 
-  /tar@7.0.0:
-    resolution: {integrity: sha512-spRiR+tDOVD01YeeWBUbNa6HoQErjztT2BXxZWmxJDgaCVgZMO1RAoeKpybiUbr8FxKsUm/svtiEyIRZeWYhAw==}
+  /tar@7.1.0:
+    resolution: {integrity: sha512-ENhg4W6BmjYxl8GTaE7/h99f0aXiSWv4kikRZ9n2/JRxypZniE84ILZqimAhxxX7Zb8Px6pFdheW3EeHfhnXQQ==}
     engines: {node: '>=18'}
     dependencies:
       '@isaacs/fs-minipass': 4.0.0
       chownr: 3.0.0
-      minipass: 5.0.0
+      minipass: 7.1.0
       minizlib: 3.0.1
       mkdirp: 3.0.1
       yallist: 5.0.0
