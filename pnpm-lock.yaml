@@ -42,8 +42,8 @@ dependencies:
     specifier: 1.43.1
     version: 1.43.1
   pnpm:
-    specifier: 9.0.6
-    version: 9.0.6
+    specifier: 9.1.0
+    version: 9.1.0
   prisma-erd-generator:
     specifier: 1.11.2
     version: 1.11.2(@prisma/client@5.13.0)(typescript@5.4.5)
@@ -4898,8 +4898,8 @@ packages:
     optionalDependencies:
       fsevents: 2.3.2
 
-  /pnpm@9.0.6:
-    resolution: {integrity: sha512-9thjEwlzIHy3ozbWtDmiQqJqyAaAd99TDWqGBpQZhT3B/+ZAKexZSpxQWjpBDRlkPIcKumd2Mw9c/dzxCpwWFw==}
+  /pnpm@9.1.0:
+    resolution: {integrity: sha512-Z/WHmRapKT5c8FnCOFPVcb6vT3U8cH9AyyK+1fsVeMaq07bEEHzLO6CzW+AD62IaFkcayDbIe+tT+dVLtGEnJA==}
     engines: {node: '>=18.12'}
     hasBin: true
     dev: false
