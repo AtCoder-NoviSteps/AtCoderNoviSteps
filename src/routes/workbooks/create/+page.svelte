@@ -13,16 +13,16 @@
   } from 'flowbite-svelte';
 
   import type { Tasks } from '$lib/types/task.js';
-  import HeadingOne from '$lib/components/HeadingOne.svelte';
-  import WorkBookInputFields from '$lib/components/WorkBooks/WorkBookInputFields.svelte';
-  import TaskSearchBox from '$lib/components/TaskSearchBox.svelte';
-  import InputFieldWrapper from '$lib/components/InputFieldWrapper.svelte';
-  import SubmissionButton from '$lib/components/SubmissionButton.svelte';
   import {
     WorkBookType,
     type WorkBookTaskBase,
     type WorkBookTaskCreate,
   } from '$lib/types/workbook';
+  import HeadingOne from '$lib/components/HeadingOne.svelte';
+  import WorkBookInputFields from '$lib/components/WorkBooks/WorkBookInputFields.svelte';
+  import TaskSearchBox from '$lib/components/TaskSearchBox.svelte';
+  import InputFieldWrapper from '$lib/components/InputFieldWrapper.svelte';
+  import SubmissionButton from '$lib/components/SubmissionButton.svelte';
 
   export let data;
 
@@ -43,6 +43,15 @@
   const tasks: Tasks = data.tasks;
 
   $: workBookTasksForTable = [] as WorkBookTaskCreate[];
+
+  function removeWorkBookTask(task: WorkBookTaskCreate) {
+    $form.workBookTasks = $form.workBookTasks.filter(
+      (workBookTask) => workBookTask.taskId !== task.taskId,
+    );
+    workBookTasksForTable = workBookTasksForTable.filter(
+      (workBookTask) => workBookTask.taskId !== task.taskId,
+    );
+  }
 </script>
 
 <!-- TODO: パンくずリストを用意 -->
@@ -88,7 +97,7 @@
             <TableBodyRow>
               <TableBodyCell>{task.contestId}</TableBodyCell>
               <TableBodyCell>{task.title}</TableBodyCell>
-              <TableBodyCell>編集 / 削除</TableBodyCell>
+              <TableBodyCell on:click={() => removeWorkBookTask(task)}>削除</TableBodyCell>
             </TableBodyRow>
           {/each}
         </TableBody>
