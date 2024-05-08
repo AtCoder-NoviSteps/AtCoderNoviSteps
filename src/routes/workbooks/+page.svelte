@@ -3,7 +3,7 @@
 
   export let data;
 
-  const workbooks = data.workbooks;
+  $: workbooks = data.workbooks;
 
   import HeadingOne from '$lib/components/HeadingOne.svelte';
   import TabItemWrapper from '$lib/components/TabItemWrapper.svelte';
@@ -56,7 +56,7 @@
   <br />
   TODO: 問題集の作成者のみ、「非公開」の問題集を表示できるようにする <br />
   TODO: 問題集の作成者のみ編集 / 削除ができるようにする <br />
-  TODO: 問題や回答状況を実際のデータに置き換える <br />
+  TODO: 回答状況を実際のデータに置き換える <br />
   TODO: ページネーションを追加する <br />
   <Tabs tabStyle="underline" contentClass="bg-white">
     {#each workBookTabs as workBookTab}

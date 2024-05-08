@@ -2,7 +2,14 @@ import { default as db } from '$lib/server/database';
 import type { WorkBook, WorkBookType } from '$lib/types/workbook';
 
 export async function getWorkBooks() {
-  const workbooks = await db.workBook.findMany({ orderBy: { id: 'asc' } });
+  const workbooks = await db.workBook.findMany({
+    orderBy: {
+      id: 'asc',
+    },
+    include: {
+      workBookTasks: true,
+    },
+  });
 
   return workbooks;
 }
@@ -54,4 +61,10 @@ export async function createWorkBook(workBook: WorkBook) {
 
 // TODO: updateWorkBook(workBookId)
 
-// TODO: deleteWorkBook(workBookId)
+export async function deleteWorkBook(workBookId: number) {
+  await db.workBook.delete({
+    where: {
+      id: workBookId,
+    },
+  });
+}
