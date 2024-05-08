@@ -1,5 +1,6 @@
 import * as workBooksCrud from '$lib/services/workbooks';
 import * as userCrud from '$lib/services/users';
+import { BAD_REQUEST } from '$lib/constants/http-response-status-codes';
 
 // See:
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map
@@ -21,3 +22,16 @@ export async function load() {
 
   return { workbooks: workbooksWithAuthors };
 }
+
+export const actions = {
+  delete: async ({ url }) => {
+    console.log('form -> actions -> delete');
+    const slug = Number(url.searchParams.get('slug'));
+
+    try {
+      await workBooksCrud.deleteWorkBook(slug);
+    } catch (error) {
+      fail(BAD_REQUEST);
+    }
+  },
+};

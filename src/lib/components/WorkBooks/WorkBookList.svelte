@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { enhance } from '$app/forms';
   import {
     Table,
     TableBody,
@@ -55,41 +56,47 @@
   };
 </script>
 
-<Table shadow class="text-md">
-  <TableHead class="text-sm bg-gray-100">
-    <TableHeadCell class="w-1/12">作者</TableHeadCell>
-    <TableHeadCell class="w-1/4">タイトル</TableHeadCell>
-    <TableHeadCell class="w-7/12">回答状況</TableHeadCell>
-    <TableHeadCell class="w-1/12">
-      <span class="sr-only">編集</span>
-    </TableHeadCell>
-  </TableHead>
+{#if workbooks.length >= 1}
+  <Table shadow class="text-md">
+    <TableHead class="text-sm bg-gray-100">
+      <TableHeadCell class="w-1/12">作者</TableHeadCell>
+      <TableHeadCell class="w-1/4">タイトル</TableHeadCell>
+      <TableHeadCell class="w-7/12">回答状況</TableHeadCell>
+      <TableHeadCell class="w-2/12"></TableHeadCell>
+    </TableHead>
 
-  <TableBody tableBodyClass="divide-y">
-    {#each workbooks as workbook}
-      <TableBodyRow>
-        <TableBodyCell>{workbook.author}</TableBodyCell>
-        <TableBodyCell>
-          <div>
-            <span class="p-1 rounded-lg {getPublicationStatusColor(workbook.isPublished)}">
-              {getPublicationStatusLabel(workbook.isPublished)}
-            </span>
-            <a
-              href="/workbooks/{workbook.id}"
-              class="font-medium text-primary-600 hover:underline dark:text-primary-500"
-            >
-              {workbook.title}
-            </a>
-          </div>
-        </TableBodyCell>
-        <TableBodyCell>
-          <ThermometerProgressBar
-            submissionRatios={dummySubmissionRatios(80, 5, 5)}
-            width="w-full"
-          />
-        </TableBodyCell>
-        <TableBodyCell>{'編集 / 削除'}</TableBodyCell>
-      </TableBodyRow>
-    {/each}
-  </TableBody>
-</Table>
+    <TableBody tableBodyClass="divide-y">
+      {#each workbooks as workbook}
+        <TableBodyRow>
+          <TableBodyCell>{workbook.author}</TableBodyCell>
+          <TableBodyCell>
+            <div>
+              <span class="p-1 rounded-lg {getPublicationStatusColor(workbook.isPublished)}">
+                {getPublicationStatusLabel(workbook.isPublished)}
+              </span>
+              <a
+                href="/workbooks/{workbook.id}"
+                class="font-medium text-primary-600 hover:underline dark:text-primary-500"
+              >
+                {workbook.title}
+              </a>
+            </div>
+          </TableBodyCell>
+          <TableBodyCell>
+            <ThermometerProgressBar
+              submissionRatios={dummySubmissionRatios(80, 5, 5)}
+              width="w-full"
+            />
+          </TableBodyCell>
+          <TableBodyCell>
+            <form method="POST" action="?/delete&slug={workbook.id}" use:enhance>
+              <button>削除</button>
+            </form>
+          </TableBodyCell>
+        </TableBodyRow>
+      {/each}
+    </TableBody>
+  </Table>
+{:else}
+  該当する問題集が見つかりませんでした。「新規作成」ボタンを押して、問題集を作成してください。
+{/if}
