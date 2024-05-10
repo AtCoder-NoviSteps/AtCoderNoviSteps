@@ -60,11 +60,11 @@
 
       <form
         method="post"
-        action="../logout?/logout"
+        action="../../logout?/logout"
         use:enhance
         class="py-2 pe-4 ps-3 md:p-0 rounded text-gray-700 hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-primary-700"
       >
-        <button name="logout" value="Log out" type="submit"> ログアウト </button>
+        <button name="logout" value="Log out" type="submit" class="w-full">ログアウト</button>
       </form>
     {/if}
 

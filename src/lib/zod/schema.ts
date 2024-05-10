@@ -28,7 +28,10 @@ const workBookTaskSchema = z.object({
 
 export const workBookSchema = z.object({
   userId: z.string(),
-  title: z.string().min(3, { message: '3文字以上入力してください' }), // TODO: 文字数の上限を設ける。
+  title: z
+    .string()
+    .min(3, { message: '3文字以上入力してください' })
+    .max(200, { message: '200文字になるまで削除してください' }),
   description: z
     .string()
     .min(0, { message: '' })

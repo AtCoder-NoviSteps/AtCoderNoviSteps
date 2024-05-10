@@ -45,3 +45,5 @@ export interface WorkBookTaskCreate extends WorkBookTaskBase {
   contestId: string;
   title: string;
 }
+
+export interface WorkBookTaskEdit extends WorkBookTaskCreate {}

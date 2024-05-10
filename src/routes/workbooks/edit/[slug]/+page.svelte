@@ -2,13 +2,8 @@
   import { superForm } from 'sveltekit-superforms/client';
   import { Breadcrumb, BreadcrumbItem } from 'flowbite-svelte';
 
-  import {
-    WorkBookType,
-    type WorkBookTaskBase,
-    type WorkBookTaskCreate,
-  } from '$lib/types/workbook';
-  import type { Tasks } from '$lib/types/task';
-
+  import type { WorkBookTaskBase, WorkBookTaskEdit } from '$lib/types/workbook';
+  import type { Task, Tasks } from '$lib/types/task.js';
   import HeadingOne from '$lib/components/HeadingOne.svelte';
   import WorkBookInputFields from '$lib/components/WorkBooks/WorkBookInputFields.svelte';
   import WorkBookTasksTable from '$lib/components/WorkBookTasks/WorkBookTasksTable.svelte';
@@ -18,32 +13,49 @@
 
   export let data;
 
+  let workBook = data.workbook;
+
   // See:
   // https://superforms.rocks/concepts/nested-data
   const initialData = {
     ...data.form,
-    workBookTasks: [] as WorkBookTaskBase[],
+    workBookTasks: workBook.workBookTasks as WorkBookTaskBase[],
   };
   const { form, enhance } = superForm(initialData, {
     dataType: 'json',
   });
 
-  $form.userId = data.author.id;
-  $form.isOfficial = data.isAdmin;
-  $form.workBookType = $form.isOfficial ? WorkBookType.TEXTBOOK : WorkBookType.CREATED_BY_USER;
-
-  $: workBookTasksForTable = [] as WorkBookTaskCreate[];
-
   const tasks: Tasks = data.tasks;
+
+  // データベースに基づいて、問題集の編集用データを作成
+  const tasksMapByIds: Map<string, Task> = data.tasksMapByIds;
+
+  $: workBookTasksForTable = $form.workBookTasks.map((workBookTask) => {
+    const task = tasksMapByIds.get(workBookTask.taskId);
+
+    if (task) {
+      return {
+        contestId: task.contest_id,
+        title: task.title,
+        taskId: workBookTask.taskId,
+        priority: workBookTask.priority,
+      };
+    }
+  }) as WorkBookTaskEdit[];
+
+  $: console.log('workBookTasks', $form.workBookTasks);
+  $: console.log('workBookTasksForTable', workBookTasksForTable);
 </script>
 
-<!-- TODO: 問題集の編集ページのコンポーネントとほぼ共通しているのでリファクタリング -->
+<!-- TODO: 問題集の作成ページのコンポーネントとほぼ共通しているのでリファクタリング -->
 <div class="container mx-auto w-5/6">
   <form method="post" use:enhance>
-    <HeadingOne title="問題集を作成" />
+    <HeadingOne title="問題集を編集" />
 
+    <!-- TODO: コンポーネントとして切り出す -->
     <Breadcrumb aria-label="">
       <BreadcrumbItem href="/workbooks" home>問題集一覧</BreadcrumbItem>
+      <BreadcrumbItem>{workBook.title}</BreadcrumbItem>
     </Breadcrumb>
 
     <WorkBookInputFields
@@ -55,7 +67,7 @@
       bind:workBookType={$form.workBookType}
     />
 
-    <!-- 問題一覧 -->
+    <!-- データベースに保存されている問題 + 検索で追加した問題を表示 -->
     <WorkBookTasksTable bind:workBookTasks={$form.workBookTasks} bind:workBookTasksForTable />
 
     <!-- 問題を検索 -->
@@ -67,9 +79,9 @@
       inputValue={$form.workBookTasks}
     />
 
-    <!-- 作成ボタンを追加 -->
+    <!-- 更新ボタン -->
     <div class="flex flex-wrap md:justify-center md:items-center">
-      <SubmissionButton width="w-full md:max-w-md " labelName="作成" />
+      <SubmissionButton width="w-full md:max-w-md " labelName="更新" />
     </div>
   </form>
 </div>

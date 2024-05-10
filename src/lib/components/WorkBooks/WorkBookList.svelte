@@ -89,9 +89,13 @@
             />
           </TableBodyCell>
           <TableBodyCell>
-            <form method="POST" action="?/delete&slug={workbook.id}" use:enhance>
-              <button>削除</button>
-            </form>
+            <div class="flex space-x-3">
+              <a href="/workbooks/edit/{workbook.id}">編集</a>
+
+              <form method="POST" action="?/delete&slug={workbook.id}" use:enhance>
+                <button>削除</button>
+              </form>
+            </div>
           </TableBodyCell>
         </TableBodyRow>
       {/each}
