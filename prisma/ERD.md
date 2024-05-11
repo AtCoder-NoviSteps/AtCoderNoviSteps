@@ -158,7 +158,7 @@ THEME THEME
 
   "workbook" {
     Int id "🗝️"
-    String userId 
+    String authorId 
     String title 
     String description 
     Boolean isPublished 

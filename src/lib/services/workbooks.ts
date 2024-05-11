@@ -34,7 +34,7 @@ export async function createWorkBook(workBook: WorkBook) {
   const newWorkBookTasks: WorkBookTaskBase[] = await getWorkBookTasks(workBook);
   const newWorkBook = await db.workBook.create({
     data: {
-      userId: workBook.userId,
+      authorId: workBook.authorId,
       title: workBook.title,
       description: workBook.description,
       isPublished: workBook.isPublished,

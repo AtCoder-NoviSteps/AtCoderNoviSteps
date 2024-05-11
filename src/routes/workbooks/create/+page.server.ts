@@ -18,11 +18,11 @@ export const load = async ({ locals }) => {
   }
 
   const form = await superValidate(null, zod(workBookSchema));
-  const user = locals.user;
-  const isAdmin = user.role === Roles.ADMIN;
+  const author = locals.user;
+  const isAdmin = author.role === Roles.ADMIN;
   const tasks = await tasksCrud.getTasks();
 
-  return { form: form, author: user, isAdmin: isAdmin, tasks: tasks };
+  return { form: form, author: author, isAdmin: isAdmin, tasks: tasks };
 };
 
 export const actions = {
@@ -31,7 +31,9 @@ export const actions = {
     const form = await superValidate(request, zod(workBookSchema));
 
     if (!form.valid) {
-      return fail(BAD_REQUEST, { form: { ...form, message: 'TODO: エラーメッセージを記述' } });
+      return fail(BAD_REQUEST, {
+        form: { ...form, message: '問題集の入力項目に不正な値があります。' },
+      });
     }
 
     const workBook: WorkBook = form.data;
@@ -39,10 +41,7 @@ export const actions = {
     try {
       await workBooksCrud.createWorkBook(workBook);
     } catch (error) {
-      // TODO: クライアント側のエラー
-      return fail(BAD_REQUEST, { form: { ...form, message: 'TODO: エラーメッセージを記述' } });
-
-      // TODO: サーバー側のエラー
+      return fail(BAD_REQUEST, { form: { ...form, message: '問題集の作成に失敗しました。' } });
     }
 
     // TODO: リダイレクトのときもメッセージを表示することはできるか調べる

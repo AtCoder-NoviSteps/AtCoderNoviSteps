@@ -9,13 +9,13 @@ export async function load() {
 
   const workbooksWithAuthors = await Promise.all(
     workbooks.map(async (workbook) => {
-      const workbookAuthor = await userCrud.getUserById(workbook.userId);
+      const workbookAuthor = await userCrud.getUserById(workbook.authorId);
 
       if (workbookAuthor) {
-        return { ...workbook, author: workbookAuthor.username };
+        return { ...workbook, authorName: workbookAuthor.username };
       } else {
         // ユーザが問題集を作成したあとに、アカウントを削除した場合
-        return { ...workbook, author: 'unknown' };
+        return { ...workbook, authorName: 'unknown' };
       }
     }),
   );

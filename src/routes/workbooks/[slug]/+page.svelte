@@ -18,9 +18,8 @@
 
   export let data;
 
-  let workBook = data.workbook;
+  let workBook = data.workBook;
   let workBookTasks = workBook.workBookTasks;
-  let authorId = data.authorId;
   let tasks = data.tasks; // workBookTasksのtaskIdから問題情報を取得
 
   const getTask = (taskId: string): Task | undefined => {
@@ -46,7 +45,7 @@
   </Breadcrumb>
 
   <WorkBookInputFields
-    {authorId}
+    authorId={workBook.authorId}
     workBookTitle={workBook.title}
     description={workBook.description}
     isPublished={workBook.isPublished}

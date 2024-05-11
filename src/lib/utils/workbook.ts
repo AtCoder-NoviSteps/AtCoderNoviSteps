@@ -10,7 +10,7 @@ import { BAD_REQUEST, NOT_FOUND } from '$lib/constants/http-response-status-code
 // https://developer.mozilla.org/ja/docs/Web/JavaScript/Reference/Global_Objects/Number/isNaN
 export async function getWorkbookWithAuthor(
   slug: string,
-): Promise<{ workbook: WorkBook; authorId: string }> {
+): Promise<{ workBook: WorkBook; isExistingAuthor: boolean }> {
   const id = parseInt(slug);
 
   if (Number.isNaN(id)) {
@@ -24,11 +24,10 @@ export async function getWorkbookWithAuthor(
   }
 
   // ユーザが問題集を作成したあとに、アカウントが削除されていないかを確認
-  const workbookAuthor = await userCrud.getUserById(workBook.userId);
-  // HACK: 以下の処理の代わりに、isExistingAuthorを追加した方がいいはず。
-  const authorId = workbookAuthor ? workbookAuthor.id : 'unknown';
+  const workbookAuthor = await userCrud.getUserById(workBook.authorId);
+  const isExistingAuthor = workbookAuthor ? true : false;
 
-  return { workbook: workBook, authorId: authorId };
+  return { workBook: workBook, isExistingAuthor: isExistingAuthor };
 }
 
 export function validateWorkBookId(workBookId: number) {

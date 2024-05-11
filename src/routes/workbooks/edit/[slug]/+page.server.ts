@@ -20,7 +20,7 @@ export async function load({ locals, params }) {
 
   const workBookWithAuthor = await getWorkbookWithAuthor(params.slug);
   const form = await superValidate(null, zod(workBookSchema));
-  form.data = { ...form.data, ...workBookWithAuthor.workbook };
+  form.data = { ...form.data, ...workBookWithAuthor.workBook };
   const tasks = await tasksCrud.getTasks();
   const tasksMapByIds = await tasksCrud.getTasksByTaskId();
 

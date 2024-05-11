@@ -13,7 +13,7 @@
 
   export let data;
 
-  let workBook = data.workbook;
+  let workBook = data.workBook;
 
   // See:
   // https://superforms.rocks/concepts/nested-data
@@ -42,9 +42,6 @@
       };
     }
   }) as WorkBookTaskEdit[];
-
-  $: console.log('workBookTasks', $form.workBookTasks);
-  $: console.log('workBookTasksForTable', workBookTasksForTable);
 </script>
 
 <!-- TODO: 問題集の作成ページのコンポーネントとほぼ共通しているのでリファクタリング -->
@@ -59,7 +56,7 @@
     </Breadcrumb>
 
     <WorkBookInputFields
-      bind:authorId={$form.userId}
+      bind:authorId={$form.authorId}
       bind:workBookTitle={$form.title}
       bind:description={$form.description}
       bind:isPublished={$form.isPublished}

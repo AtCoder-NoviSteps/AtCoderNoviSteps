@@ -8,11 +8,15 @@
   import HeadingOne from '$lib/components/HeadingOne.svelte';
   import TabItemWrapper from '$lib/components/TabItemWrapper.svelte';
   import WorkBookList from '$lib/components/WorkBooks/WorkBookList.svelte';
-  import { type WorkbooksWithAuthors, type WorkBook, WorkBookType } from '$lib/types/workbook';
+  import {
+    type WorkbooksWithAuthorNames,
+    type WorkbookWithAuthorName,
+    WorkBookType,
+  } from '$lib/types/workbook';
 
-  const getWorkBooksByType = (workbooks: WorkbooksWithAuthors, workBookType: WorkBookType) => {
+  const getWorkBooksByType = (workbooks: WorkbooksWithAuthorNames, workBookType: WorkBookType) => {
     const filteredWorkbooks = workbooks.filter(
-      (workbook: WorkBook) => workbook.workBookType === workBookType,
+      (workbook: WorkbookWithAuthorName) => workbook.workBookType === workBookType,
     );
     return filteredWorkbooks;
   };
