@@ -169,8 +169,7 @@ model SubmissionStatus {
 
 model WorkBook {
   id           Int          @id @default(autoincrement())
-  userId       String
-  authorId     String?
+  authorId     String
   title        String
   description  String       @default("")
   isPublished  Boolean      @default(false)
@@ -179,7 +178,7 @@ model WorkBook {
   createdAt    DateTime     @default(now())
   updatedAt    DateTime     @updatedAt
 
-  user User @relation(references: [id], fields: [userId])
+  user User @relation(references: [id], fields: [authorId])
 
   workBookTasks WorkBookTask[]
 

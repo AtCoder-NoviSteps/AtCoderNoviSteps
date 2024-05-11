@@ -68,7 +68,7 @@
     <TableBody tableBodyClass="divide-y">
       {#each workbooks as workbook}
         <TableBodyRow>
-          <TableBodyCell>{workbook.author}</TableBodyCell>
+          <TableBodyCell>{workbook.authorName}</TableBodyCell>
           <TableBodyCell>
             <div>
               <span class="p-1 rounded-lg {getPublicationStatusColor(workbook.isPublished)}">

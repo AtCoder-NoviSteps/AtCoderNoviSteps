@@ -28,7 +28,7 @@
     dataType: 'json',
   });
 
-  $form.userId = data.author.id;
+  $form.authorId = data.author.id;
   $form.isOfficial = data.isAdmin;
   $form.workBookType = $form.isOfficial ? WorkBookType.TEXTBOOK : WorkBookType.CREATED_BY_USER;
 
@@ -47,7 +47,7 @@
     </Breadcrumb>
 
     <WorkBookInputFields
-      bind:authorId={$form.userId}
+      bind:authorId={$form.authorId}
       bind:workBookTitle={$form.title}
       bind:description={$form.description}
       bind:isPublished={$form.isPublished}

@@ -27,7 +27,7 @@ const workBookTaskSchema = z.object({
 });
 
 export const workBookSchema = z.object({
-  userId: z.string(),
+  authorId: z.string(),
   title: z
     .string()
     .min(3, { message: '3文字以上入力してください' })
