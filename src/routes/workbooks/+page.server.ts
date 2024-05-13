@@ -20,6 +20,8 @@ export async function load() {
     }),
   );
 
+  // TODO: ログインしているuserを取得
+
   return { workbooks: workbooksWithAuthors };
 }
 

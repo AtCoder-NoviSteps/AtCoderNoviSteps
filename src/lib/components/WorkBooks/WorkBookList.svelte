@@ -9,9 +9,14 @@
     TableHeadCell,
   } from 'flowbite-svelte';
 
+  import { canRead, canEdit, canDelete } from '$lib/utils/author';
+  import { Roles } from '$lib/types/user';
   import ThermometerProgressBar from '$lib/components/ThermometerProgressBar.svelte';
 
   export let workbooks;
+  // TODO: ユーザ情報を取得
+  let userId = '1'; // workbooks[0].authorId;
+  let role: Roles = Roles.ADMIN;
 
   const getPublicationStatusLabel = (isPublished: boolean) => {
     if (isPublished) {
@@ -67,37 +72,43 @@
 
     <TableBody tableBodyClass="divide-y">
       {#each workbooks as workbook}
-        <TableBodyRow>
-          <TableBodyCell>{workbook.authorName}</TableBodyCell>
-          <TableBodyCell>
-            <div>
-              <span class="p-1 rounded-lg {getPublicationStatusColor(workbook.isPublished)}">
-                {getPublicationStatusLabel(workbook.isPublished)}
-              </span>
-              <a
-                href="/workbooks/{workbook.id}"
-                class="font-medium text-primary-600 hover:underline dark:text-primary-500"
-              >
-                {workbook.title}
-              </a>
-            </div>
-          </TableBodyCell>
-          <TableBodyCell>
-            <ThermometerProgressBar
-              submissionRatios={dummySubmissionRatios(80, 5, 5)}
-              width="w-full"
-            />
-          </TableBodyCell>
-          <TableBodyCell>
-            <div class="flex space-x-3">
-              <a href="/workbooks/edit/{workbook.id}">編集</a>
+        {#if canRead(workbook.isPublished, userId, workbook.authorId)}
+          <TableBodyRow>
+            <TableBodyCell>{workbook.authorName}</TableBodyCell>
+            <TableBodyCell>
+              <div>
+                <span class="p-1 rounded-lg {getPublicationStatusColor(workbook.isPublished)}">
+                  {getPublicationStatusLabel(workbook.isPublished)}
+                </span>
+                <a
+                  href="/workbooks/{workbook.id}"
+                  class="font-medium text-primary-600 hover:underline dark:text-primary-500"
+                >
+                  {workbook.title}
+                </a>
+              </div>
+            </TableBodyCell>
+            <TableBodyCell>
+              <ThermometerProgressBar
+                submissionRatios={dummySubmissionRatios(80, 5, 5)}
+                width="w-full"
+              />
+            </TableBodyCell>
+            <TableBodyCell>
+              <div class="flex space-x-3">
+                {#if canEdit(userId, workbook.authorId, role, workbook.isPublished)}
+                  <a href="/workbooks/edit/{workbook.id}">編集</a>
+                {/if}
 
-              <form method="POST" action="?/delete&slug={workbook.id}" use:enhance>
-                <button>削除</button>
-              </form>
-            </div>
-          </TableBodyCell>
-        </TableBodyRow>
+                {#if canDelete(userId, workbook.authorId)}
+                  <form method="POST" action="?/delete&slug={workbook.id}" use:enhance>
+                    <button>削除</button>
+                  </form>
+                {/if}
+              </div>
+            </TableBodyCell>
+          </TableBodyRow>
+        {/if}
       {/each}
     </TableBody>
   </Table>
