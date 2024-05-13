@@ -11,7 +11,7 @@ const userId2 = '3';
 // https://vitest.dev/api/#test-each
 describe('Logged-in user id', () => {
   describe('has authority', () => {
-    describe('when userId and authorId are the same', () => {
+    describe('return true when userId and authorId are the same', () => {
       const testCases = [
         { userId: adminId, authorId: adminId },
         { userId: userId1, authorId: userId1 },
@@ -21,7 +21,7 @@ describe('Logged-in user id', () => {
       });
     });
 
-    describe('when userId and authorId are not same ', () => {
+    describe('return false when userId and authorId are not same ', () => {
       const testCases = [
         { userId: adminId, authorId: userId1 },
         { userId: userId1, authorId: adminId },
@@ -32,10 +32,7 @@ describe('Logged-in user id', () => {
     });
 
     function runTests(testName, testCases, testFunction) {
-      test.each(testCases)(
-        `${testName}(userId: $userId, authorId: $authorId) -> $expected`,
-        testFunction,
-      );
+      test.each(testCases)(`${testName}(userId: $userId, authorId: $authorId)`, testFunction);
     }
   });
 
@@ -88,6 +85,8 @@ describe('Logged-in user id', () => {
         },
       );
     });
+
+    // TODO: runTest()を用意してDRYに
   });
 
   describe('can edit', () => {
@@ -237,6 +236,8 @@ describe('Logged-in user id', () => {
         },
       );
     });
+
+    // TODO: runTest()を用意してDRYに
   });
 
   // TODO: canDeleteのテストを追加
