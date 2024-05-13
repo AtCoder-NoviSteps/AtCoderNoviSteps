@@ -11,13 +11,6 @@ const userId2 = '3';
 // https://vitest.dev/api/#test-each
 describe('Logged-in user id', () => {
   describe('has authority', () => {
-    function runTests(testName, testCases, testFunction) {
-      test.each(testCases)(
-        `${testName}(userId: $userId, authorId: $authorId) -> $expected`,
-        testFunction,
-      );
-    }
-
     describe('when userId and authorId are the same', () => {
       const testCases = [
         { userId: adminId, authorId: adminId },
@@ -37,6 +30,13 @@ describe('Logged-in user id', () => {
         expect(hasAuthority(userId, authorId)).toBeFalsy();
       });
     });
+
+    function runTests(testName, testCases, testFunction) {
+      test.each(testCases)(
+        `${testName}(userId: $userId, authorId: $authorId) -> $expected`,
+        testFunction,
+      );
+    }
   });
 
   describe('can read', () => {
