@@ -1,5 +1,5 @@
 import { expect, test } from 'vitest';
-import { hasAuthority, canRead, canEdit } from '$lib/utils/author';
+import { hasAuthority, canRead, canEdit, canDelete } from '$lib/utils/author';
 import { Roles } from '$lib/types/user';
 
 const adminId = '1';
@@ -11,7 +11,7 @@ const userId2 = '3';
 // https://vitest.dev/api/#test-each
 describe('Logged-in user id', () => {
   describe('has authority', () => {
-    describe('return true when userId and authorId are the same', () => {
+    describe('when userId and authorId are the same', () => {
       const testCases = [
         { userId: adminId, authorId: adminId },
         { userId: userId1, authorId: userId1 },
@@ -21,7 +21,7 @@ describe('Logged-in user id', () => {
       });
     });
 
-    describe('return false when userId and authorId are not same ', () => {
+    describe('when userId and authorId are not same ', () => {
       const testCases = [
         { userId: adminId, authorId: userId1 },
         { userId: userId1, authorId: adminId },
@@ -37,7 +37,7 @@ describe('Logged-in user id', () => {
   });
 
   describe('can read', () => {
-    describe('return true because published workbooks can be viewed', () => {
+    describe('when the workbook is published', () => {
       const testCases = [
         { isPublished: true, userId: adminId, authorId: adminId },
         { isPublished: true, userId: userId1, authorId: adminId },
@@ -52,7 +52,7 @@ describe('Logged-in user id', () => {
       });
     });
 
-    describe('return true because unpublished workbook created by oneself can be viewed', () => {
+    describe('when the workbook is unpublished but created by oneself', () => {
       const testCases = [
         { isPublished: false, userId: adminId, authorId: adminId },
         { isPublished: false, userId: userId1, authorId: userId1 },
@@ -63,7 +63,7 @@ describe('Logged-in user id', () => {
       });
     });
 
-    describe('return false because unpublished workbook created by others cannot be viewed', () => {
+    describe('when the workbook is unpublished and created by others', () => {
       const testCases = [
         { isPublished: false, userId: userId1, authorId: adminId },
         { isPublished: false, userId: userId2, authorId: adminId },
@@ -86,7 +86,7 @@ describe('Logged-in user id', () => {
   });
 
   describe('can edit', () => {
-    describe('return true because workbooks created by oneself can be edited', () => {
+    describe('when the workbook is created by oneself', () => {
       const testCases = [
         { userId: adminId, authorId: adminId, role: Roles.ADMIN, isPublished: true },
         { userId: adminId, authorId: adminId, role: Roles.ADMIN, isPublished: false },
@@ -100,7 +100,7 @@ describe('Logged-in user id', () => {
       });
     });
 
-    describe('return true because admin can edit workbooks created by users (special case) ', () => {
+    describe('(special case) admin can edit workbooks created by users', () => {
       const testCases = [
         { userId: adminId, authorId: userId1, role: Roles.ADMIN, isPublished: true },
         { userId: adminId, authorId: userId2, role: Roles.ADMIN, isPublished: true },
@@ -110,7 +110,7 @@ describe('Logged-in user id', () => {
       });
     });
 
-    describe('return false because workbooks created by others cannot be edited', () => {
+    describe('when the workbook is created by others', () => {
       const testCases = [
         { userId: userId1, authorId: adminId, role: Roles.USER, isPublished: true },
         { userId: userId1, authorId: adminId, role: Roles.USER, isPublished: false },
@@ -130,11 +130,40 @@ describe('Logged-in user id', () => {
 
     function runTests(testName, testCases, testFunction) {
       test.each(testCases)(
-        `${testName}(userId: $userId, authorId: $authorId, role: $role, isPublished: $isPublished) -> $expected`,
+        `${testName}(userId: $userId, authorId: $authorId, role: $role, isPublished: $isPublished)`,
         testFunction,
       );
     }
   });
 
-  // TODO: canDeleteのテストを追加
+  describe('can delete', () => {
+    describe('when the workbook is created by oneself', () => {
+      const testCases = [
+        { userId: adminId, authorId: adminId },
+        { userId: userId1, authorId: userId1 },
+        { userId: userId2, authorId: userId2 },
+      ];
+      runTests('canDelete', testCases, ({ userId, authorId }) => {
+        expect(canDelete(userId, authorId)).toBeTruthy();
+      });
+    });
+
+    describe('when the workbook is created by others', () => {
+      const testCases = [
+        { userId: adminId, authorId: userId1 },
+        { userId: adminId, authorId: userId2 },
+        { userId: userId1, authorId: adminId },
+        { userId: userId2, authorId: adminId },
+        { userId: userId1, authorId: userId2 },
+        { userId: userId2, authorId: userId1 },
+      ];
+      runTests('canDelete', testCases, ({ userId, authorId }) => {
+        expect(canDelete(userId, authorId)).toBeFalsy();
+      });
+    });
+
+    function runTests(testName, testCases, testFunction) {
+      test.each(testCases)(`${testName}(userId: $userId, authorId: $authorId)`, testFunction);
+    }
+  });
 });
