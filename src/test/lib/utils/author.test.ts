@@ -37,207 +37,103 @@ describe('Logged-in user id', () => {
   });
 
   describe('can read', () => {
-    describe('true: published workbooks can be viewed', () => {
+    describe('return true because published workbooks can be viewed', () => {
       const testCases = [
-        { isPublished: true, userId: adminId, authorId: adminId, expected: true },
-        { isPublished: true, userId: userId1, authorId: adminId, expected: true },
-        { isPublished: true, userId: userId1, authorId: userId1, expected: true },
-        { isPublished: true, userId: userId2, authorId: userId1, expected: true },
-        { isPublished: true, userId: userId1, authorId: userId2, expected: true },
-        { isPublished: true, userId: adminId, authorId: userId1, expected: true },
-        { isPublished: true, userId: adminId, authorId: userId2, expected: true },
+        { isPublished: true, userId: adminId, authorId: adminId },
+        { isPublished: true, userId: userId1, authorId: adminId },
+        { isPublished: true, userId: userId1, authorId: userId1 },
+        { isPublished: true, userId: userId2, authorId: userId1 },
+        { isPublished: true, userId: userId1, authorId: userId2 },
+        { isPublished: true, userId: adminId, authorId: userId1 },
+        { isPublished: true, userId: adminId, authorId: userId2 },
       ];
-      test.each(testCases)(
-        'canRead(isPublished: $isPublished, userId: $userId, authorId: $authorId) -> $expected',
-        ({ isPublished, userId, authorId, expected }) => {
-          expect(canRead(isPublished, userId, authorId)).toBe(expected);
-        },
-      );
+      runTests('canRead', testCases, ({ isPublished, userId, authorId }) => {
+        expect(canRead(isPublished, userId, authorId)).toBeTruthy();
+      });
     });
 
-    describe('true: unpublished workbook created by oneself can be viewed', () => {
+    describe('return true because unpublished workbook created by oneself can be viewed', () => {
       const testCases = [
-        { isPublished: false, userId: adminId, authorId: adminId, expected: true },
-        { isPublished: false, userId: userId1, authorId: userId1, expected: true },
-        { isPublished: false, userId: userId2, authorId: userId2, expected: true },
+        { isPublished: false, userId: adminId, authorId: adminId },
+        { isPublished: false, userId: userId1, authorId: userId1 },
+        { isPublished: false, userId: userId2, authorId: userId2 },
       ];
-      test.each(testCases)(
-        'canRead(isPublished: $isPublished, userId: $userId, authorId: $authorId) -> $expected',
-        ({ isPublished, userId, authorId, expected }) => {
-          expect(canRead(isPublished, userId, authorId)).toBe(expected);
-        },
-      );
+      runTests('canRead', testCases, ({ isPublished, userId, authorId }) => {
+        expect(canRead(isPublished, userId, authorId)).toBeTruthy();
+      });
     });
 
-    describe('false: unpublished workbook created by others cannot be viewed', () => {
+    describe('return false because unpublished workbook created by others cannot be viewed', () => {
       const testCases = [
-        { isPublished: false, userId: userId1, authorId: adminId, expected: false },
-        { isPublished: false, userId: userId2, authorId: adminId, expected: false },
-        { isPublished: false, userId: adminId, authorId: userId1, expected: false },
-        { isPublished: false, userId: adminId, authorId: userId2, expected: false },
-        { isPublished: false, userId: userId1, authorId: userId2, expected: false },
-        { isPublished: false, userId: userId2, authorId: userId1, expected: false },
+        { isPublished: false, userId: userId1, authorId: adminId },
+        { isPublished: false, userId: userId2, authorId: adminId },
+        { isPublished: false, userId: adminId, authorId: userId1 },
+        { isPublished: false, userId: adminId, authorId: userId2 },
+        { isPublished: false, userId: userId1, authorId: userId2 },
+        { isPublished: false, userId: userId2, authorId: userId1 },
       ];
-      test.each(testCases)(
-        'canRead(isPublished: $isPublished, userId: $userId, authorId: $authorId) -> $expected',
-        ({ isPublished, userId, authorId, expected }) => {
-          expect(canRead(isPublished, userId, authorId)).toBe(expected);
-        },
-      );
+      runTests('canRead', testCases, ({ isPublished, userId, authorId }) => {
+        expect(canRead(isPublished, userId, authorId)).toBeFalsy();
+      });
     });
 
-    // TODO: runTest()を用意してDRYに
+    function runTests(testName, testCases, testFunction) {
+      test.each(testCases)(
+        `${testName}(isPublished: $isPublished, userId: $userId, authorId: $authorId)`,
+        testFunction,
+      );
+    }
   });
 
   describe('can edit', () => {
-    describe('true: workbooks created by oneself can be edited', () => {
+    describe('return true because workbooks created by oneself can be edited', () => {
       const testCases = [
-        {
-          userId: adminId,
-          authorId: adminId,
-          role: Roles.ADMIN,
-          isPublished: true,
-          expected: true,
-        },
-        {
-          userId: adminId,
-          authorId: adminId,
-          role: Roles.ADMIN,
-          isPublished: false,
-          expected: true,
-        },
-        { userId: userId1, authorId: userId1, role: Roles.USER, isPublished: true, expected: true },
-        {
-          userId: userId1,
-          authorId: userId1,
-          role: Roles.USER,
-          isPublished: false,
-          expected: true,
-        },
-        { userId: userId2, authorId: userId2, role: Roles.USER, isPublished: true, expected: true },
-        {
-          userId: userId2,
-          authorId: userId2,
-          role: Roles.USER,
-          isPublished: false,
-          expected: true,
-        },
+        { userId: adminId, authorId: adminId, role: Roles.ADMIN, isPublished: true },
+        { userId: adminId, authorId: adminId, role: Roles.ADMIN, isPublished: false },
+        { userId: userId1, authorId: userId1, role: Roles.USER, isPublished: true },
+        { userId: userId1, authorId: userId1, role: Roles.USER, isPublished: false },
+        { userId: userId2, authorId: userId2, role: Roles.USER, isPublished: true },
+        { userId: userId2, authorId: userId2, role: Roles.USER, isPublished: false },
       ];
-      test.each(testCases)(
-        'canEdit(userId: $userId, authorId: $authorId, role: $role, isPublished: $isPublished) -> $expected',
-        ({ userId, authorId, role, isPublished, expected }) => {
-          expect(canEdit(userId, authorId, role, isPublished)).toBe(expected);
-        },
-      );
+      runTests('canEdit', testCases, ({ userId, authorId, role, isPublished }) => {
+        expect(canEdit(userId, authorId, role, isPublished)).toBeTruthy();
+      });
     });
 
-    describe('true: (special case) admin can edit workbooks created by users', () => {
+    describe('return true because admin can edit workbooks created by users (special case) ', () => {
       const testCases = [
-        {
-          userId: adminId,
-          authorId: userId1,
-          role: Roles.ADMIN,
-          isPublished: true,
-          expected: true,
-        },
-        {
-          userId: adminId,
-          authorId: userId2,
-          role: Roles.ADMIN,
-          isPublished: true,
-          expected: true,
-        },
+        { userId: adminId, authorId: userId1, role: Roles.ADMIN, isPublished: true },
+        { userId: adminId, authorId: userId2, role: Roles.ADMIN, isPublished: true },
       ];
-      test.each(testCases)(
-        'canEdit(userId: $userId, authorId: $authorId, role: $role, isPublished: $isPublished) -> $expected',
-        ({ userId, authorId, role, isPublished, expected }) => {
-          expect(canEdit(userId, authorId, role, isPublished)).toBe(expected);
-        },
-      );
+      runTests('canEdit', testCases, ({ userId, authorId, role, isPublished }) => {
+        expect(canEdit(userId, authorId, role, isPublished)).toBeTruthy();
+      });
     });
 
-    describe('false: workbooks created by others cannot be edited', () => {
+    describe('return false because workbooks created by others cannot be edited', () => {
       const testCases = [
-        {
-          userId: userId1,
-          authorId: adminId,
-          role: Roles.USER,
-          isPublished: true,
-          expected: false,
-        },
-        {
-          userId: userId1,
-          authorId: adminId,
-          role: Roles.USER,
-          isPublished: false,
-          expected: false,
-        },
-        {
-          userId: userId2,
-          authorId: adminId,
-          role: Roles.USER,
-          isPublished: true,
-          expected: false,
-        },
-        {
-          userId: userId2,
-          authorId: adminId,
-          role: Roles.USER,
-          isPublished: false,
-          expected: false,
-        },
-        {
-          userId: adminId,
-          authorId: userId1,
-          role: Roles.ADMIN,
-          isPublished: false,
-          expected: false,
-        },
-        {
-          userId: adminId,
-          authorId: userId2,
-          role: Roles.ADMIN,
-          isPublished: false,
-          expected: false,
-        },
-        {
-          userId: userId1,
-          authorId: userId2,
-          role: Roles.USER,
-          isPublished: true,
-          expected: false,
-        },
-        {
-          userId: userId1,
-          authorId: userId2,
-          role: Roles.USER,
-          isPublished: false,
-          expected: false,
-        },
-        {
-          userId: userId2,
-          authorId: userId1,
-          role: Roles.USER,
-          isPublished: true,
-          expected: false,
-        },
-        {
-          userId: userId2,
-          authorId: userId1,
-          role: Roles.USER,
-          isPublished: false,
-          expected: false,
-        },
+        { userId: userId1, authorId: adminId, role: Roles.USER, isPublished: true },
+        { userId: userId1, authorId: adminId, role: Roles.USER, isPublished: false },
+        { userId: userId2, authorId: adminId, role: Roles.USER, isPublished: true },
+        { userId: userId2, authorId: adminId, role: Roles.USER, isPublished: false },
+        { userId: adminId, authorId: userId1, role: Roles.ADMIN, isPublished: false },
+        { userId: adminId, authorId: userId2, role: Roles.ADMIN, isPublished: false },
+        { userId: userId1, authorId: userId2, role: Roles.USER, isPublished: true },
+        { userId: userId1, authorId: userId2, role: Roles.USER, isPublished: false },
+        { userId: userId2, authorId: userId1, role: Roles.USER, isPublished: true },
+        { userId: userId2, authorId: userId1, role: Roles.USER, isPublished: false },
       ];
-      test.each(testCases)(
-        'canEdit(userId: $userId, authorId: $authorId, role: $role, isPublished: $isPublished) -> $expected',
-        ({ userId, authorId, role, isPublished, expected }) => {
-          expect(canEdit(userId, authorId, role, isPublished)).toBe(expected);
-        },
-      );
+      runTests('canEdit', testCases, ({ userId, authorId, role, isPublished }) => {
+        expect(canEdit(userId, authorId, role, isPublished)).toBeFalsy();
+      });
     });
 
-    // TODO: runTest()を用意してDRYに
+    function runTests(testName, testCases, testFunction) {
+      test.each(testCases)(
+        `${testName}(userId: $userId, authorId: $authorId, role: $role, isPublished: $isPublished) -> $expected`,
+        testFunction,
+      );
+    }
   });
 
   // TODO: canDeleteのテストを追加
