@@ -1,10 +1,13 @@
 import * as workBooksCrud from '$lib/services/workbooks';
 import * as userCrud from '$lib/services/users';
+import { getLoggedInUser } from '$lib/utils/authorship';
 import { BAD_REQUEST } from '$lib/constants/http-response-status-codes';
 
 // See:
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map
-export async function load() {
+export async function load({ locals }) {
+  const loggedInUser = await getLoggedInUser(locals);
+
   const workbooks = await workBooksCrud.getWorkBooks();
 
   const workbooksWithAuthors = await Promise.all(
@@ -20,9 +23,7 @@ export async function load() {
     }),
   );
 
-  // TODO: ログインしているuserを取得
-
-  return { workbooks: workbooksWithAuthors };
+  return { workbooks: workbooksWithAuthors, loggedInUser: loggedInUser };
 }
 
 export const actions = {

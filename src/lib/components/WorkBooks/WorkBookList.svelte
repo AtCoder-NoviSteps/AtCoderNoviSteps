@@ -10,13 +10,14 @@
   } from 'flowbite-svelte';
 
   import { canRead, canEdit, canDelete } from '$lib/utils/authorship';
-  import { Roles } from '$lib/types/user';
+  import type { Roles } from '$lib/types/user';
   import ThermometerProgressBar from '$lib/components/ThermometerProgressBar.svelte';
 
   export let workbooks;
-  // TODO: ユーザ情報を取得
-  let userId = '1'; // workbooks[0].authorId;
-  let role: Roles = Roles.ADMIN;
+  export let loggedInUser;
+
+  let userId = loggedInUser.id;
+  let role: Roles = loggedInUser.role;
 
   const getPublicationStatusLabel = (isPublished: boolean) => {
     if (isPublished) {

@@ -1,4 +1,22 @@
+import { redirect } from '@sveltejs/kit';
+
+import { TEMPORARY_REDIRECT } from '$lib/constants/http-response-status-codes';
 import { Roles } from '$lib/types/user';
+
+export const ensureSessionOrRedirect = async (locals: App.Locals): Promise<void> => {
+  const session = await locals.auth.validate();
+
+  if (!session) {
+    throw redirect(TEMPORARY_REDIRECT, '/login');
+  }
+};
+
+export const getLoggedInUser = async (locals: App.Locals): Promise<App.Locals['user'] | null> => {
+  await ensureSessionOrRedirect(locals);
+  const loggedInUser = locals.user;
+
+  return loggedInUser;
+};
 
 export const isAdmin = (role: Roles): boolean => {
   return role === Roles.ADMIN;

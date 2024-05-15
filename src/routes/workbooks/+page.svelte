@@ -4,6 +4,7 @@
   export let data;
 
   $: workbooks = data.workbooks;
+  let loggedInUser = data.loggedInUser;
 
   import HeadingOne from '$lib/components/HeadingOne.svelte';
   import TabItemWrapper from '$lib/components/TabItemWrapper.svelte';
@@ -66,7 +67,10 @@
     {#each workBookTabs as workBookTab}
       <TabItemWrapper isOpen={workBookTab.isOpen} title={workBookTab.title}>
         <div class="mt-6">
-          <WorkBookList workbooks={getWorkBooksByType(workbooks, workBookTab.workBookType)} />
+          <WorkBookList
+            workbooks={getWorkBooksByType(workbooks, workBookTab.workBookType)}
+            {loggedInUser}
+          />
         </div>
       </TabItemWrapper>
     {/each}
