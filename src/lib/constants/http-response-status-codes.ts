@@ -7,6 +7,7 @@ export const TEMPORARY_REDIRECT = 307;
 
 // Client error responses
 export const BAD_REQUEST: number = 400;
+export const FORBIDDEN: number = 403;
 export const NOT_FOUND: number = 404;
 
 // Server error responses

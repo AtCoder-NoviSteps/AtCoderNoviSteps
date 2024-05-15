@@ -10,8 +10,11 @@
   import TaskSearchBox from '$lib/components/TaskSearchBox.svelte';
   import InputFieldWrapper from '$lib/components/InputFieldWrapper.svelte';
   import SubmissionButton from '$lib/components/SubmissionButton.svelte';
+  import { FORBIDDEN } from '$lib/constants/http-response-status-codes.js';
 
   export let data;
+
+  $: canView = data.status === FORBIDDEN ? false : true;
 
   let workBook = data.workBook;
 
@@ -44,41 +47,47 @@
   }) as WorkBookTaskEdit[];
 </script>
 
-<!-- TODO: 問題集の作成ページのコンポーネントとほぼ共通しているのでリファクタリング -->
-<div class="container mx-auto w-5/6">
-  <form method="post" use:enhance>
-    <HeadingOne title="問題集を編集" />
+{#if canView}
+  <!-- TODO: 問題集の作成ページのコンポーネントとほぼ共通しているのでリファクタリング -->
+  <div class="container mx-auto w-5/6">
+    <form method="post" use:enhance>
+      <HeadingOne title="問題集を編集" />
 
-    <!-- TODO: コンポーネントとして切り出す -->
-    <Breadcrumb aria-label="">
-      <BreadcrumbItem href="/workbooks" home>問題集一覧</BreadcrumbItem>
-      <BreadcrumbItem>{workBook.title}</BreadcrumbItem>
-    </Breadcrumb>
+      <!-- TODO: コンポーネントとして切り出す -->
+      <Breadcrumb aria-label="">
+        <BreadcrumbItem href="/workbooks" home>問題集一覧</BreadcrumbItem>
+        <BreadcrumbItem>{workBook.title}</BreadcrumbItem>
+      </Breadcrumb>
 
-    <WorkBookInputFields
-      bind:authorId={$form.authorId}
-      bind:workBookTitle={$form.title}
-      bind:description={$form.description}
-      bind:isPublished={$form.isPublished}
-      bind:isOfficial={$form.isOfficial}
-      bind:workBookType={$form.workBookType}
-    />
+      <WorkBookInputFields
+        bind:authorId={$form.authorId}
+        bind:workBookTitle={$form.title}
+        bind:description={$form.description}
+        bind:isPublished={$form.isPublished}
+        bind:isOfficial={$form.isOfficial}
+        bind:workBookType={$form.workBookType}
+      />
 
-    <!-- データベースに保存されている問題 + 検索で追加した問題を表示 -->
-    <WorkBookTasksTable bind:workBookTasks={$form.workBookTasks} bind:workBookTasksForTable />
+      <!-- データベースに保存されている問題 + 検索で追加した問題を表示 -->
+      <WorkBookTasksTable bind:workBookTasks={$form.workBookTasks} bind:workBookTasksForTable />
 
-    <!-- 問題を検索 -->
-    <!-- HACK: 属性が微妙に異なるため、やむなくデータベースへの保存用と問題集作成・編集用で分けている。 -->
-    <TaskSearchBox {tasks} bind:workBookTasks={$form.workBookTasks} bind:workBookTasksForTable />
-    <InputFieldWrapper
-      inputFieldType="hidden"
-      inputFieldName="workBookTasks"
-      inputValue={$form.workBookTasks}
-    />
+      <!-- 問題を検索 -->
+      <!-- HACK: 属性が微妙に異なるため、やむなくデータベースへの保存用と問題集作成・編集用で分けている。 -->
+      <TaskSearchBox {tasks} bind:workBookTasks={$form.workBookTasks} bind:workBookTasksForTable />
+      <InputFieldWrapper
+        inputFieldType="hidden"
+        inputFieldName="workBookTasks"
+        inputValue={$form.workBookTasks}
+      />
 
-    <!-- 更新ボタン -->
-    <div class="flex flex-wrap md:justify-center md:items-center">
-      <SubmissionButton width="w-full md:max-w-md " labelName="更新" />
-    </div>
-  </form>
-</div>
+      <!-- 更新ボタン -->
+      <div class="flex flex-wrap md:justify-center md:items-center">
+        <SubmissionButton width="w-full md:max-w-md " labelName="更新" />
+      </div>
+    </form>
+  </div>
+{:else}
+  <!-- TODO: コンポーネントとして抽出 -->
+  <h1>{data.status}</h1>
+  <p>{data.message}</p>
+{/if}

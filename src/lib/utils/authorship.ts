@@ -15,6 +15,10 @@ export const getLoggedInUser = async (locals: App.Locals): Promise<App.Locals['u
   await ensureSessionOrRedirect(locals);
   const loggedInUser = locals.user;
 
+  if (!loggedInUser) {
+    throw redirect(TEMPORARY_REDIRECT, '/login');
+  }
+
   return loggedInUser;
 };
 

@@ -1,28 +1,40 @@
-import { redirect } from '@sveltejs/kit';
+import { redirect, fail } from '@sveltejs/kit';
 import { superValidate } from 'sveltekit-superforms/server';
 import { zod } from 'sveltekit-superforms/adapters';
 
-import { BAD_REQUEST, TEMPORARY_REDIRECT } from '$lib/constants/http-response-status-codes';
+import { getLoggedInUser, hasAuthority } from '$lib/utils/authorship';
+import {
+  BAD_REQUEST,
+  FORBIDDEN,
+  TEMPORARY_REDIRECT,
+} from '$lib/constants/http-response-status-codes';
 import { getWorkbookWithAuthor, validateWorkBookId } from '$lib/utils/workbook';
 import { workBookSchema } from '$lib/zod/schema';
 import * as tasksCrud from '$lib/services/tasks';
 import * as workBooksCrud from '$lib/services/workbooks';
 
-// TODO: 一般公開するまでは、管理者のみアクセスできるようにする
 export async function load({ locals, params }) {
-  // FIXME: ログインしているかどうかの判定が他のページと共通しているので、メソッドとして切り出す
-  // ログインしていない場合は、ログイン画面へ遷移させる
-  const session = await locals.auth.validate();
-
-  if (!session) {
-    throw redirect(TEMPORARY_REDIRECT, '/login');
-  }
-
+  const loggedInUser = await getLoggedInUser(locals);
   const workBookWithAuthor = await getWorkbookWithAuthor(params.slug);
+
   const form = await superValidate(null, zod(workBookSchema));
   form.data = { ...form.data, ...workBookWithAuthor.workBook };
   const tasks = await tasksCrud.getTasks();
   const tasksMapByIds = await tasksCrud.getTasksByTaskId();
+
+  // ユーザidと問題集の作成者idが一致しない場合、ページへのアクセス権限がないことを表示する
+  // HACK: load関数内でfailを使うと、プレーンオブジェクトを返していないというエラーが解決できず
+  // やむを得ず、return文で直接オブジェクトを返しているが、もっとシンプルに記述できるはず
+  if (loggedInUser && !hasAuthority(loggedInUser.id, workBookWithAuthor.workBook.authorId)) {
+    return {
+      status: FORBIDDEN,
+      message: `問題集id: ${params.slug}にアクセスする権限がありません。`,
+      form,
+      ...workBookWithAuthor,
+      tasks,
+      tasksMapByIds,
+    };
+  }
 
   return { form: form, ...workBookWithAuthor, tasks: tasks, tasksMapByIds: tasksMapByIds };
 }
