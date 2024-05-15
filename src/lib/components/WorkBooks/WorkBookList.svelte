@@ -9,7 +9,7 @@
     TableHeadCell,
   } from 'flowbite-svelte';
 
-  import { canRead, canEdit, canDelete } from '$lib/utils/author';
+  import { canRead, canEdit, canDelete } from '$lib/utils/authorship';
   import { Roles } from '$lib/types/user';
   import ThermometerProgressBar from '$lib/components/ThermometerProgressBar.svelte';
 

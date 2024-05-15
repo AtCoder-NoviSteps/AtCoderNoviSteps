@@ -1,5 +1,11 @@
 import { expect, test } from 'vitest';
-import { hasAuthority, canRead, canEdit, canDelete } from '$lib/utils/author';
+import { hasAuthority, canRead, canEdit, canDelete } from '$lib/utils/authorship';
+import type {
+  Authorship,
+  AuthorshipForRead,
+  AuthorshipForEdit,
+  AuthorshipForDelete,
+} from '$lib/types/authorship';
 import { Roles } from '$lib/types/user';
 
 const adminId = '1';
@@ -16,7 +22,7 @@ describe('Logged-in user id', () => {
         { userId: adminId, authorId: adminId },
         { userId: userId1, authorId: userId1 },
       ];
-      runTests('hasAuthority', testCases, ({ userId, authorId }) => {
+      runTests('hasAuthority', testCases, ({ userId, authorId }: Authorship) => {
         expect(hasAuthority(userId, authorId)).toBeTruthy();
       });
     });
@@ -26,12 +32,16 @@ describe('Logged-in user id', () => {
         { userId: adminId, authorId: userId1 },
         { userId: userId1, authorId: adminId },
       ];
-      runTests('hasAuthority', testCases, ({ userId, authorId }) => {
+      runTests('hasAuthority', testCases, ({ userId, authorId }: Authorship) => {
         expect(hasAuthority(userId, authorId)).toBeFalsy();
       });
     });
 
-    function runTests(testName, testCases, testFunction) {
+    function runTests(
+      testName: string,
+      testCases: Authorship[],
+      testFunction: (testCase: Authorship) => void,
+    ) {
       test.each(testCases)(`${testName}(userId: $userId, authorId: $authorId)`, testFunction);
     }
   });
@@ -47,7 +57,7 @@ describe('Logged-in user id', () => {
         { isPublished: true, userId: adminId, authorId: userId1 },
         { isPublished: true, userId: adminId, authorId: userId2 },
       ];
-      runTests('canRead', testCases, ({ isPublished, userId, authorId }) => {
+      runTests('canRead', testCases, ({ isPublished, userId, authorId }: AuthorshipForRead) => {
         expect(canRead(isPublished, userId, authorId)).toBeTruthy();
       });
     });
@@ -58,7 +68,7 @@ describe('Logged-in user id', () => {
         { isPublished: false, userId: userId1, authorId: userId1 },
         { isPublished: false, userId: userId2, authorId: userId2 },
       ];
-      runTests('canRead', testCases, ({ isPublished, userId, authorId }) => {
+      runTests('canRead', testCases, ({ isPublished, userId, authorId }: AuthorshipForRead) => {
         expect(canRead(isPublished, userId, authorId)).toBeTruthy();
       });
     });
@@ -72,12 +82,16 @@ describe('Logged-in user id', () => {
         { isPublished: false, userId: userId1, authorId: userId2 },
         { isPublished: false, userId: userId2, authorId: userId1 },
       ];
-      runTests('canRead', testCases, ({ isPublished, userId, authorId }) => {
+      runTests('canRead', testCases, ({ isPublished, userId, authorId }: AuthorshipForRead) => {
         expect(canRead(isPublished, userId, authorId)).toBeFalsy();
       });
     });
 
-    function runTests(testName, testCases, testFunction) {
+    function runTests(
+      testName: string,
+      testCases: AuthorshipForRead[],
+      testFunction: (testCase: AuthorshipForRead) => void,
+    ) {
       test.each(testCases)(
         `${testName}(isPublished: $isPublished, userId: $userId, authorId: $authorId)`,
         testFunction,
@@ -95,9 +109,13 @@ describe('Logged-in user id', () => {
         { userId: userId2, authorId: userId2, role: Roles.USER, isPublished: true },
         { userId: userId2, authorId: userId2, role: Roles.USER, isPublished: false },
       ];
-      runTests('canEdit', testCases, ({ userId, authorId, role, isPublished }) => {
-        expect(canEdit(userId, authorId, role, isPublished)).toBeTruthy();
-      });
+      runTests(
+        'canEdit',
+        testCases,
+        ({ userId, authorId, role, isPublished }: AuthorshipForEdit) => {
+          expect(canEdit(userId, authorId, role, isPublished)).toBeTruthy();
+        },
+      );
     });
 
     describe('(special case) admin can edit workbooks created by users', () => {
@@ -105,9 +123,13 @@ describe('Logged-in user id', () => {
         { userId: adminId, authorId: userId1, role: Roles.ADMIN, isPublished: true },
         { userId: adminId, authorId: userId2, role: Roles.ADMIN, isPublished: true },
       ];
-      runTests('canEdit', testCases, ({ userId, authorId, role, isPublished }) => {
-        expect(canEdit(userId, authorId, role, isPublished)).toBeTruthy();
-      });
+      runTests(
+        'canEdit',
+        testCases,
+        ({ userId, authorId, role, isPublished }: AuthorshipForEdit) => {
+          expect(canEdit(userId, authorId, role, isPublished)).toBeTruthy();
+        },
+      );
     });
 
     describe('when the workbook is created by others', () => {
@@ -123,12 +145,20 @@ describe('Logged-in user id', () => {
         { userId: userId2, authorId: userId1, role: Roles.USER, isPublished: true },
         { userId: userId2, authorId: userId1, role: Roles.USER, isPublished: false },
       ];
-      runTests('canEdit', testCases, ({ userId, authorId, role, isPublished }) => {
-        expect(canEdit(userId, authorId, role, isPublished)).toBeFalsy();
-      });
+      runTests(
+        'canEdit',
+        testCases,
+        ({ userId, authorId, role, isPublished }: AuthorshipForEdit) => {
+          expect(canEdit(userId, authorId, role, isPublished)).toBeFalsy();
+        },
+      );
     });
 
-    function runTests(testName, testCases, testFunction) {
+    function runTests(
+      testName: string,
+      testCases: AuthorshipForEdit[],
+      testFunction: (testCase: AuthorshipForEdit) => void,
+    ) {
       test.each(testCases)(
         `${testName}(userId: $userId, authorId: $authorId, role: $role, isPublished: $isPublished)`,
         testFunction,
@@ -143,7 +173,7 @@ describe('Logged-in user id', () => {
         { userId: userId1, authorId: userId1 },
         { userId: userId2, authorId: userId2 },
       ];
-      runTests('canDelete', testCases, ({ userId, authorId }) => {
+      runTests('canDelete', testCases, ({ userId, authorId }: AuthorshipForDelete) => {
         expect(canDelete(userId, authorId)).toBeTruthy();
       });
     });
@@ -157,12 +187,16 @@ describe('Logged-in user id', () => {
         { userId: userId1, authorId: userId2 },
         { userId: userId2, authorId: userId1 },
       ];
-      runTests('canDelete', testCases, ({ userId, authorId }) => {
+      runTests('canDelete', testCases, ({ userId, authorId }: AuthorshipForDelete) => {
         expect(canDelete(userId, authorId)).toBeFalsy();
       });
     });
 
-    function runTests(testName, testCases, testFunction) {
+    function runTests(
+      testName: string,
+      testCases: AuthorshipForDelete[],
+      testFunction: (testCase: AuthorshipForDelete) => void,
+    ) {
       test.each(testCases)(`${testName}(userId: $userId, authorId: $authorId)`, testFunction);
     }
   });
