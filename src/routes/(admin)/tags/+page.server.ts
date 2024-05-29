@@ -12,12 +12,12 @@ import { Roles } from '$lib/types/user';
 export async function load({ locals }) {
   const session = await locals.auth.validate();
   if (!session) {
-    throw redirect(302, '/login');
+    redirect(302, '/login');
   }
 
   const user = await userService.getUser(session?.user.username as string);
   if (user?.role !== Roles.ADMIN) {
-    throw redirect(302, '/login');
+    redirect(302, '/login');
   }
 
   const tags = await tagService.getTags();
@@ -75,6 +75,6 @@ export const actions: Actions = {
       };
     }
 
-    throw redirect(301, '/tags/');
+    redirect(301, '/tags/');
   },
 };

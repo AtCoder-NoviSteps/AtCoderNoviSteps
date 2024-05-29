@@ -6,7 +6,7 @@ import { fail, redirect } from '@sveltejs/kit';
 import type { Actions } from './$types';
 
 export const load = () => {
-  throw redirect(303, '/');
+  redirect(303, '/');
 };
 
 // TODO: ステータスコードを定数で書き換え
@@ -21,6 +21,6 @@ export const actions: Actions = {
     await auth.invalidateSession(session.sessionId); // invalidate session
     locals.auth.setSession(null); // remove cookie
 
-    throw redirect(303, '/');
+    redirect(303, '/');
   },
 };

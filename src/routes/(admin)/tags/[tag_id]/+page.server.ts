@@ -11,12 +11,12 @@ import { Roles } from '$lib/types/user';
 export async function load({ locals, params }) {
   const session = await locals.auth.validate();
   if (!session) {
-    throw redirect(302, '/login');
+    redirect(302, '/login');
   }
 
   const user = await userService.getUser(session?.user.username as string);
   if (user?.role !== Roles.ADMIN) {
-    throw redirect(302, '/login');
+    redirect(302, '/login');
   }
   const tags: Tag[] = await tagService.getTag(params.tag_id as string);
   const tasks: Task[] = await taskTagService.getTasks(params.tag_id as string);

@@ -97,7 +97,7 @@ export async function getTaskResult(slug: string, userId: string) {
   const task = await getTask(slug);
 
   if (!task || task.length == 0) {
-    throw error(NOT_FOUND, `問題 ${slug} は見つかりませんでした。`);
+    error(NOT_FOUND, `問題 ${slug} は見つかりませんでした。`);
   }
 
   const taskResult = createDefaultTaskResult(userId, task[0]);

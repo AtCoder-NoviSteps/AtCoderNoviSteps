@@ -15,7 +15,7 @@ export async function load({ locals, params }) {
   const session = await locals.auth.validate();
 
   if (!session) {
-    throw redirect(TEMPORARY_REDIRECT, '/login');
+    redirect(TEMPORARY_REDIRECT, '/login');
   }
 
   const workBookWithAuthor = await getWorkbookWithAuthor(params.slug);
@@ -44,6 +44,6 @@ export const actions = {
       return fail(BAD_REQUEST);
     }
 
-    throw redirect(TEMPORARY_REDIRECT, '/workbooks');
+    redirect(TEMPORARY_REDIRECT, '/workbooks');
   },
 };

@@ -14,13 +14,13 @@ export async function getWorkbookWithAuthor(
   const id = parseInt(slug);
 
   if (Number.isNaN(id)) {
-    throw error(BAD_REQUEST, `不正な問題集idです。`);
+    error(BAD_REQUEST, '不正な問題集idです。');
   }
 
   const workBook = await workBookCrud.getWorkBook(id);
 
   if (!workBook) {
-    throw error(NOT_FOUND, `問題集id: ${id} は見つかりませんでした。`);
+    error(NOT_FOUND, `問題集id: ${id} は見つかりませんでした。`);
   }
 
   // ユーザが問題集を作成したあとに、アカウントが削除されていないかを確認

@@ -1,5 +1,6 @@
+import { resolve } from 'path';
 import adapter from '@sveltejs/adapter-vercel';
-import { vitePreprocess } from '@sveltejs/kit/vite';
+import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
@@ -15,6 +16,13 @@ const config = {
       // See: https://vercel.com/docs/edge-network/regions
       regions: ['hnd1'], // Tokyo, Japan.
     }),
+    // See:
+    // https://kit.svelte.dev/docs/configuration#alias
+    alias: {
+      '@': resolve('./src'),
+      $lib: resolve('./src/lib'),
+      '$lib/*': resolve('./src/lib/*'),
+    },
   },
 };
 
