@@ -14,7 +14,7 @@ export const load = async ({ locals }) => {
   const session = await locals.auth.validate();
 
   if (!session) {
-    throw redirect(TEMPORARY_REDIRECT, '/login');
+    redirect(TEMPORARY_REDIRECT, '/login');
   }
 
   const form = await superValidate(null, zod(workBookSchema));
@@ -45,6 +45,6 @@ export const actions = {
     }
 
     // TODO: リダイレクトのときもメッセージを表示することはできるか調べる
-    throw redirect(TEMPORARY_REDIRECT, '/workbooks');
+    redirect(TEMPORARY_REDIRECT, '/workbooks');
   },
 };

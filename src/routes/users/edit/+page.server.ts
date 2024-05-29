@@ -10,7 +10,7 @@ import { redirect } from '@sveltejs/kit';
 export async function load({ locals }) {
   const session = await locals.auth.validate();
   if (!session) {
-    throw redirect(302, '/login');
+    redirect(302, '/login');
   }
 
   try {
@@ -29,7 +29,7 @@ export async function load({ locals }) {
     };
   } catch (e) {
     console.log("Can't find username:", session?.user.username);
-    throw redirect(302, '/login');
+    redirect(302, '/login');
   }
 }
 

@@ -10,7 +10,7 @@ const buttons = await getButtons();
 export async function load({ locals, params }) {
   const session = await locals.auth.validate();
   if (!session) {
-    throw redirect(302, '/login');
+    redirect(302, '/login');
   }
 
   const taskResult = await crud.getTaskResult(params.slug as string, session?.user.userId);
@@ -35,6 +35,6 @@ export const actions = {
     }
 
     // HACK: 回答状況をクリックした後に問題一覧ページに戻るのをユーザが望んでいるか?
-    throw redirect(TEMPORARY_REDIRECT, '/problems');
+    redirect(TEMPORARY_REDIRECT, '/problems');
   },
 } satisfies Actions;

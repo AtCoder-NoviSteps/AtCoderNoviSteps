@@ -3,20 +3,12 @@
   "compilerOptions": {
     "allowJs": true,
     "checkJs": true,
-    "baseUrl": ".",
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "incremental": true,
-    "importsNotUsedAsValues": "error",
     "isolatedModules": true,
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "outDir": "build",
-
-    "paths": {
-      "@/*": ["src/*"],
-      "$lib": ["src/lib"],
-      "$lib/*": ["src/lib/*"]
-    },
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "sourceMap": true,

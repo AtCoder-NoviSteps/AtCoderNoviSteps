@@ -14,12 +14,12 @@ import * as taskTagsService from '$lib/services/task_tags';
 export async function load({ locals, params }) {
   const session = await locals.auth.validate();
   if (!session) {
-    throw redirect(302, '/login');
+    redirect(302, '/login');
   }
 
   const user = await userService.getUser(session?.user.username as string);
   if (user?.role !== Roles.ADMIN) {
-    throw redirect(302, '/login');
+    redirect(302, '/login');
   }
   const task: Task[] = await taskService.getTask(params.task_id as string);
 
