@@ -76,8 +76,8 @@ importers:
         specifier: 3.2.1
         version: 3.2.1(@sveltejs/kit@2.5.10(@sveltejs/vite-plugin-svelte@3.0.0(svelte@4.2.17)(vite@5.2.12(@types/node@16.18.11)))(svelte@4.2.17)(vite@5.2.12(@types/node@16.18.11)))
       '@sveltejs/adapter-vercel':
-        specifier: 5.3.0
-        version: 5.3.0(@sveltejs/kit@2.5.10(@sveltejs/vite-plugin-svelte@3.0.0(svelte@4.2.17)(vite@5.2.12(@types/node@16.18.11)))(svelte@4.2.17)(vite@5.2.12(@types/node@16.18.11)))
+        specifier: 5.3.1
+        version: 5.3.1(@sveltejs/kit@2.5.10(@sveltejs/vite-plugin-svelte@3.0.0(svelte@4.2.17)(vite@5.2.12(@types/node@16.18.11)))(svelte@4.2.17)(vite@5.2.12(@types/node@16.18.11)))
       '@sveltejs/kit':
         specifier: 2.5.10
         version: 2.5.10(@sveltejs/vite-plugin-svelte@3.0.0(svelte@4.2.17)(vite@5.2.12(@types/node@16.18.11)))(svelte@4.2.17)(vite@5.2.12(@types/node@16.18.11))
@@ -839,8 +839,8 @@ packages:
     peerDependencies:
       '@sveltejs/kit': ^2.0.0
 
-  '@sveltejs/adapter-vercel@5.3.0':
-    resolution: {integrity: sha512-JzTJVmAWmbyNe3pQU2l0M1ggt4FjIVnKHEQOrqW4XVxYtNGdq3znuMqFSdzsR+5LaIEFqZaLIpm82XZsZroBoQ==}
+  '@sveltejs/adapter-vercel@5.3.1':
+    resolution: {integrity: sha512-0iz+Y2ZWM1royXNkNS4TGNYFsMazRckYN+GrJsRq1utzss1Xfoax7C5eafzrsQLPitoLeXBgE31K5abrJ7UgxA==}
     peerDependencies:
       '@sveltejs/kit': ^2.4.0
 
@@ -1112,13 +1112,13 @@ packages:
   '@vercel/next@4.2.14':
     resolution: {integrity: sha512-CBeaXIGS7mOgFSH429HRjIOxJBbtiQW6gf1mz/rIQoNcZjSxhfe+nMAxfkDlXAzCsGQVFbzVR9omnijTFbC79w==}
 
-  '@vercel/nft@0.26.5':
-    resolution: {integrity: sha512-NHxohEqad6Ra/r4lGknO52uc/GrWILXAMs1BB4401GTqww0fw1bAqzpG1XHuDO+dprg4GvsD9ZLLSsdo78p9hQ==}
+  '@vercel/nft@0.27.0':
+    resolution: {integrity: sha512-W5pValyhToK9hbgEUAM6sLRUIl1I++RsFnXKHXtND50P1+vZ+OYPCzq1OOz0Ok6ghK6aOwae8G/rEAXkLedC+w==}
     engines: {node: '>=16'}
     hasBin: true
 
-  '@vercel/nft@0.27.0':
-    resolution: {integrity: sha512-W5pValyhToK9hbgEUAM6sLRUIl1I++RsFnXKHXtND50P1+vZ+OYPCzq1OOz0Ok6ghK6aOwae8G/rEAXkLedC+w==}
+  '@vercel/nft@0.27.1':
+    resolution: {integrity: sha512-K6upzYHCV1cq2gP83r1o8uNV1vwvAlozvMqp7CEjYWxo0CMI8/4jKcDkVjlypVhrfZ54SXwh9QbH0ZIk/vQCsw==}
     engines: {node: '>=16'}
     hasBin: true
 
@@ -4975,10 +4975,10 @@ snapshots:
       '@sveltejs/kit': 2.5.10(@sveltejs/vite-plugin-svelte@3.0.0(svelte@4.2.17)(vite@5.2.12(@types/node@16.18.11)))(svelte@4.2.17)(vite@5.2.12(@types/node@16.18.11))
       import-meta-resolve: 4.1.0
 
-  '@sveltejs/adapter-vercel@5.3.0(@sveltejs/kit@2.5.10(@sveltejs/vite-plugin-svelte@3.0.0(svelte@4.2.17)(vite@5.2.12(@types/node@16.18.11)))(svelte@4.2.17)(vite@5.2.12(@types/node@16.18.11)))':
+  '@sveltejs/adapter-vercel@5.3.1(@sveltejs/kit@2.5.10(@sveltejs/vite-plugin-svelte@3.0.0(svelte@4.2.17)(vite@5.2.12(@types/node@16.18.11)))(svelte@4.2.17)(vite@5.2.12(@types/node@16.18.11)))':
     dependencies:
       '@sveltejs/kit': 2.5.10(@sveltejs/vite-plugin-svelte@3.0.0(svelte@4.2.17)(vite@5.2.12(@types/node@16.18.11)))(svelte@4.2.17)(vite@5.2.12(@types/node@16.18.11))
-      '@vercel/nft': 0.26.5
+      '@vercel/nft': 0.27.1
       esbuild: 0.20.2
     transitivePeerDependencies:
       - encoding
@@ -5323,7 +5323,7 @@ snapshots:
       - encoding
       - supports-color
 
-  '@vercel/nft@0.26.5':
+  '@vercel/nft@0.27.0':
     dependencies:
       '@mapbox/node-pre-gyp': 1.0.11
       '@rollup/pluginutils': 4.2.1
@@ -5341,7 +5341,7 @@ snapshots:
       - encoding
       - supports-color
 
-  '@vercel/nft@0.27.0':
+  '@vercel/nft@0.27.1':
     dependencies:
       '@mapbox/node-pre-gyp': 1.0.11
       '@rollup/pluginutils': 4.2.1
