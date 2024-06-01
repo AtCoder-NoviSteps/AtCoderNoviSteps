@@ -21,6 +21,7 @@
 
   const { form, message, errors, submitting, enhance } = formProperties;
 
+  const UNFOCUSABLE = -1;
   let showPassword = false;
 </script>
 
@@ -42,13 +43,14 @@
       {/if}
 
       <!-- User name -->
-      <Label class="space-y-2">
-        <span>
+      <div class="space-y-2">
+        <Label for="username-in-auth-form">
           <p>ユーザ名</p>
           <p>（変更不可。3〜24文字で、半角英数字と_のみ）</p>
-        </span>
+        </Label>
 
         <Input
+          id="username-in-auth-form"
           name="username"
           placeholder="chokudai"
           aria-invalid={$errors.username ? 'true' : undefined}
@@ -56,7 +58,7 @@
           disabled={$submitting}
           required
         >
-          <UserOutlineSolid slot="left" class="w-5 h-5" />
+          <UserOutlineSolid slot="left" class="w-5 h-5" tabindex="-1" />
         </Input>
 
         <!-- エラーメッセージがあれば表示 -->
@@ -65,17 +67,18 @@
             <span class="font-medium">{$errors.username}</span>
           </Helper>
         {/if}
-      </Label>
+      </div>
 
       <!-- Password -->
-      <Label class="space-y-2">
+      <div class="space-y-2">
         <!-- HACK: 注意書きはTooltipで表示させる? -->
-        <span>
+        <Label for="password-in-auth-form">
           <p>パスワード</p>
           <p>（8文字以上で、半角英文字(小・大)と数字を各1文字以上）</p>
-        </span>
+        </Label>
 
         <Input
+          id="password-in-auth-form"
           type={showPassword ? 'text' : 'password'}
           name="password"
           placeholder="•••••••"
@@ -86,14 +89,16 @@
         >
           <!-- Show / hide password -->
           <button
+            type="button"
+            tabindex={UNFOCUSABLE}
             slot="left"
             on:click={() => (showPassword = !showPassword)}
             class="pointer-events-auto"
           >
             {#if showPassword}
-              <EyeOutline class="w-5 h-5" />
+              <EyeOutline class="w-5 h-5" tabindex={UNFOCUSABLE} />
             {:else}
-              <EyeSlashOutline class="w-5 h-5" />
+              <EyeSlashOutline class="w-5 h-5" tabindex={UNFOCUSABLE} />
             {/if}
           </button>
         </Input>
@@ -104,7 +109,7 @@
             <span class="font-medium">{$errors.password}</span>
           </Helper>
         {/if}
-      </Label>
+      </div>
 
       <!-- TODO: ログイン画面で、パスワードの記録・忘れた場合のリセット機能を追加 -->
       <!-- <div class="flex items-start">
