@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Card, Button, Label, Input, Helper } from 'flowbite-svelte';
+  import { Card, Button, Label, Input } from 'flowbite-svelte';
 
   // 必要なコンポーネントだけを読み込んで、コンパイルを時間を短縮
   // モジュールは読み込めているのに以下のエラーが発生するため、やむなく@ts-ignoreを使用
