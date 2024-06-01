@@ -11,6 +11,8 @@
   // @ts-ignore
   import EyeSlashOutline from 'flowbite-svelte-icons/EyeSlashOutline.svelte';
 
+  import MessageHelperWrapper from '$lib/components/MessageHelperWrapper.svelte';
+
   // FIXME: 構造体に相当するものを利用した方が拡張・修正がしやすくなるかもしれせまん
   export let formProperties;
   export let title: string;
@@ -36,11 +38,7 @@
     <form method="post" use:enhance class="flex flex-col space-y-6">
       <h3 class="text-xl font-medium text-gray-900 dark:text-white">{title}</h3>
 
-      {#if $message}
-        <Helper class="mt-2" color="red">
-          <span class="font-medium">{$message}</span>
-        </Helper>
-      {/if}
+      <MessageHelperWrapper message={$message} />
 
       <!-- User name -->
       <div class="space-y-2">
@@ -62,11 +60,7 @@
         </Input>
 
         <!-- エラーメッセージがあれば表示 -->
-        {#if $errors.username}
-          <Helper class="mt-2" color="red">
-            <span class="font-medium">{$errors.username}</span>
-          </Helper>
-        {/if}
+        <MessageHelperWrapper message={$errors.username} />
       </div>
 
       <!-- Password -->
@@ -104,11 +98,7 @@
         </Input>
 
         <!-- エラーメッセージがあれば表示 -->
-        {#if $errors.password}
-          <Helper class="mt-2" color="red">
-            <span class="font-medium">{$errors.password}</span>
-          </Helper>
-        {/if}
+        <MessageHelperWrapper message={$errors.password} />
       </div>
 
       <!-- TODO: ログイン画面で、パスワードの記録・忘れた場合のリセット機能を追加 -->
