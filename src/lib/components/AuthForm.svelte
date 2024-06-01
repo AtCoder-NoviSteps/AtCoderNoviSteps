@@ -56,7 +56,7 @@
           disabled={$submitting}
           required
         >
-          <UserOutlineSolid slot="left" class="w-5 h-5" tabindex="-1" />
+          <UserOutlineSolid slot="left" class="w-5 h-5" tabindex={UNFOCUSABLE} />
         </Input>
 
         <!-- エラーメッセージがあれば表示 -->
