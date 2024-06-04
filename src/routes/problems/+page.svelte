@@ -9,7 +9,8 @@
 
   export let data;
 
-  let taskResults: TaskResults = data.taskResults.sort(compareByContestIdAndTaskId);
+  let taskResults: TaskResults;
+  $: taskResults = data.taskResults.sort(compareByContestIdAndTaskId);
   let isAdmin: boolean = data.isAdmin;
 
   // See:

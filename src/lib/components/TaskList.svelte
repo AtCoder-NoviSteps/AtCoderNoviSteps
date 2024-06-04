@@ -1,8 +1,13 @@
 <script lang="ts">
+  import { enhance } from '$app/forms';
+
   import {
     AccordionItem,
     Accordion,
+    Button,
     Img,
+    Modal,
+    Select,
     Table,
     TableBody,
     TableBodyCell,
@@ -13,11 +18,12 @@
 
   import ThermometerProgressBar from '$lib/components/ThermometerProgressBar.svelte';
   import { getBackgroundColorFrom, submission_statuses } from '$lib/services/submission_status';
-  import type { TaskResults } from '$lib/types/task';
+  import type { TaskResult, TaskResults } from '$lib/types/task';
   import type { SubmissionRatios } from '$lib/types/submission';
   import { ATCODER_BASE_CONTEST_URL } from '$lib/constants/urls';
   import { getContestNameLabel } from '$lib/utils/contest';
   import { taskUrl, toWhiteTextIfNeeds } from '$lib/utils/task';
+  import InputFieldWrapper from '$lib/components/InputFieldWrapper.svelte';
 
   export let grade: string;
   export let gradeColor: string;
@@ -26,8 +32,9 @@
 
   // TODO: ユーザの設定に応じて、ACかどうかの判定を変更できるようにする
   // TODO: 別ファイルに切り出す
-  let acceptedCount = taskResults.filter((taskResult) => taskResult.is_ac).length;
-  let acceptedRatioPercent = (acceptedCount / taskResults.length) * 100;
+  let acceptedCount: number;
+  let acceptedRatioPercent: number;
+  let submissionRatios: SubmissionRatios;
 
   const getRatioPercent = (taskResults: TaskResults, statusName: string) => {
     const count = taskResults.filter((taskResult) => taskResult.status_name === statusName).length;
@@ -36,18 +43,67 @@
     return ratioPercent;
   };
 
-  const submissionRatios: SubmissionRatios = submission_statuses
-    .filter((status) => status.status_name !== 'ns')
-    .map((status) => {
-      const name = status.status_name;
-      const results = {
-        name: name,
-        ratioPercent: getRatioPercent(taskResults, name),
-        color: status.background_color,
-      };
+  $: {
+    acceptedCount = taskResults.filter((taskResult: TaskResult) => taskResult.is_ac).length;
+    acceptedRatioPercent = (acceptedCount / taskResults.length) * 100;
 
-      return results;
-    });
+    submissionRatios = submission_statuses
+      .filter((status) => status.status_name !== 'ns')
+      .map((status) => {
+        const name = status.status_name;
+        const results = {
+          name: name,
+          ratioPercent: getRatioPercent(taskResults, name),
+          color: status.background_color,
+        };
+
+        return results;
+      });
+  }
+
+  // TODO: コンポーネントとして切り出す
+  let defaultModal = false;
+  let selectedTaskResult: TaskResult;
+  let selectedSubmissionStatus: string;
+
+  function openModal(taskResult: TaskResult) {
+    defaultModal = true;
+    selectedTaskResult = taskResult;
+    selectedSubmissionStatus = taskResult.status_name;
+  }
+
+  function closeModal() {
+    defaultModal = false;
+  }
+
+  const submissionStatusOptions = submission_statuses.map((status) => {
+    const option = {
+      value: status.status_name,
+      name: status.label_name,
+    };
+    return option;
+  });
+
+  // TODO: エラー処理を追加
+  async function handleSubmit(event: Event) {
+    event.preventDefault();
+
+    try {
+      const response = await fetch('?/update', {
+        method: 'POST',
+        body: new FormData(event.target as HTMLFormElement),
+      });
+
+      if (!response.ok) {
+        console.error('Failed to update the submission status');
+        return;
+      }
+
+      closeModal();
+    } catch (error) {
+      console.error('Failed to update the submission status', error);
+    }
+  }
 </script>
 
 <Accordion flush class="mt-4 mb-2">
@@ -86,7 +142,7 @@
       <TableBody tableBodyClass="divide-y">
         {#each taskResults as taskResult}
           <TableBodyRow class={getBackgroundColorFrom(taskResult.status_name)}>
-            <TableBodyCell class="p-3">
+            <TableBodyCell class="p-3" on:click={() => openModal(taskResult)}>
               <Img
                 src="../../{taskResult.submission_status_image_path}"
                 alt={taskResult.submission_status_label_name}
@@ -122,12 +178,7 @@
                   編集
                 </a>
               {:else}
-                <a
-                  href="/problems/{taskResult.task_id}"
-                  class="font-medium text-primary-600 hover:underline dark:text-primary-500"
-                >
-                  回答を更新
-                </a>
+                <!-- TODO: 解説を閲覧できるようにする -->
               {/if}
             </TableBodyCell>
           </TableBodyRow>
@@ -136,3 +187,41 @@
     </Table>
   </AccordionItem>
 </Accordion>
+
+<!-- TODO: コンポーネントとして切り出す -->
+<!-- FIXME: ログインしているときだけ表示 -->
+{#if selectedTaskResult}
+  <Modal
+    title="{getContestNameLabel(selectedTaskResult.contest_id)} - {selectedTaskResult.title}"
+    size="sm"
+    outsideclose
+    bind:open={defaultModal}
+    on:close={closeModal}
+  >
+    <form
+      method="POST"
+      action="?/update"
+      class="w-full max-w-md"
+      on:submit={handleSubmit}
+      use:enhance
+    >
+      <!-- 問題名-->
+      <InputFieldWrapper
+        inputFieldType="hidden"
+        inputFieldName="taskId"
+        bind:inputValue={selectedTaskResult.task_id}
+      />
+
+      <!-- 指定した問題の回答状況の候補 -->
+      <Select
+        placeholder=""
+        name="submissionStatus"
+        items={submissionStatusOptions}
+        class="mb-4"
+        bind:value={selectedSubmissionStatus}
+      />
+
+      <Button type="submit" class="w-full">回答を更新</Button>
+    </form>
+  </Modal>
+{/if}
