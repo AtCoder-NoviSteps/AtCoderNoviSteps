@@ -6,6 +6,7 @@
 
   export let taskResults: TaskResults;
   export let isAdmin: boolean;
+  export let isLoggedIn: boolean;
 
   // TODO: 共通する内容はutilsに移動させる。
   let taskResultsForEachGrade = new Map();
@@ -46,6 +47,7 @@
       gradeColor={getTaskGradeColor(taskGrade)}
       taskResults={taskResultsForEachGrade.get(taskGrade)}
       {isAdmin}
+      {isLoggedIn}
     />
   {/if}
 {/each}

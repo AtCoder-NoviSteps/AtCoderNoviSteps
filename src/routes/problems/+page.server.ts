@@ -9,19 +9,24 @@ import { BAD_REQUEST } from '$lib/constants/http-response-status-codes';
 export async function load({ locals, url }) {
   const session = await locals.auth.validate();
   const params = await url.searchParams;
+  console.log(session);
 
   const tagIds: string | null = params.get('tagIds');
   const isAdmin: boolean = session?.user.role === Roles.ADMIN;
+  // TODO: utilに移動させる
+  const isLoggedIn: boolean = session !== null;
 
   if (tagIds != null) {
     return {
       taskResults: (await crud.getTasksWithTagIds(tagIds, session?.user.userId)) as TaskResults,
       isAdmin: isAdmin,
+      isLoggedIn: isLoggedIn,
     };
   } else {
     return {
       taskResults: (await crud.getTaskResults(session?.user.userId)) as TaskResults,
       isAdmin: isAdmin,
+      isLoggedIn: isLoggedIn,
     };
   }
 }

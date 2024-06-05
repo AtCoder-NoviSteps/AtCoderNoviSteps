@@ -12,6 +12,7 @@
   let taskResults: TaskResults;
   $: taskResults = data.taskResults.sort(compareByContestIdAndTaskId);
   let isAdmin: boolean = data.isAdmin;
+  let isLoggedIn: boolean = data.isLoggedIn;
 
   // See:
   // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort
@@ -38,7 +39,7 @@
   <Tabs tabStyle="underline" contentClass="bg-white">
     <!-- Grades -->
     <TabItemWrapper isOpen={true} title="グレード">
-      <TaskGradeList {taskResults} {isAdmin}></TaskGradeList>
+      <TaskGradeList {taskResults} {isAdmin} {isLoggedIn}></TaskGradeList>
     </TabItemWrapper>
 
     <!-- HACK: 以下、各テーブルを実装するまで非表示 -->

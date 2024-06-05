@@ -28,7 +28,8 @@
   export let grade: string;
   export let gradeColor: string;
   export let taskResults: TaskResults;
-  export let isAdmin: boolean; // Admin権限がある場合は、編集リンクを表示する
+  export let isAdmin: boolean;
+  export let isLoggedIn: boolean;
 
   // TODO: ユーザの設定に応じて、ACかどうかの判定を変更できるようにする
   // TODO: 別ファイルに切り出す
@@ -189,8 +190,7 @@
 </Accordion>
 
 <!-- TODO: コンポーネントとして切り出す -->
-<!-- FIXME: ログインしているときだけ表示 -->
-{#if selectedTaskResult}
+{#if isLoggedIn && selectedTaskResult}
   <Modal
     title="{getContestNameLabel(selectedTaskResult.contest_id)} - {selectedTaskResult.title}"
     size="sm"
@@ -198,13 +198,7 @@
     bind:open={defaultModal}
     on:close={closeModal}
   >
-    <form
-      method="POST"
-      action="?/update"
-      class="w-full max-w-md"
-      on:submit={handleSubmit}
-      use:enhance
-    >
+    <form method="POST" action="?/update" on:submit={handleSubmit} use:enhance>
       <!-- 問題名-->
       <InputFieldWrapper
         inputFieldType="hidden"
