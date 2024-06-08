@@ -11,10 +11,12 @@
     TableHeadCell,
   } from 'flowbite-svelte';
 
-  import ThermometerProgressBar from '$lib/components/ThermometerProgressBar.svelte';
-  import { getBackgroundColorFrom, submission_statuses } from '$lib/services/submission_status';
-  import type { TaskResults } from '$lib/types/task';
+  import type { TaskResult, TaskResults } from '$lib/types/task';
   import type { SubmissionRatios } from '$lib/types/submission';
+
+  import ThermometerProgressBar from '$lib/components/ThermometerProgressBar.svelte';
+  import UpdatingModal from '$lib/components/SubmissionStatus/UpdatingModal.svelte';
+  import { getBackgroundColorFrom, submission_statuses } from '$lib/services/submission_status';
   import { ATCODER_BASE_CONTEST_URL } from '$lib/constants/urls';
   import { getContestNameLabel } from '$lib/utils/contest';
   import { taskUrl, toWhiteTextIfNeeds } from '$lib/utils/task';
@@ -22,12 +24,14 @@
   export let grade: string;
   export let gradeColor: string;
   export let taskResults: TaskResults;
-  export let isAdmin: boolean; // Admin権限がある場合は、編集リンクを表示する
+  export let isAdmin: boolean;
+  export let isLoggedIn: boolean;
 
   // TODO: ユーザの設定に応じて、ACかどうかの判定を変更できるようにする
   // TODO: 別ファイルに切り出す
-  let acceptedCount = taskResults.filter((taskResult) => taskResult.is_ac).length;
-  let acceptedRatioPercent = (acceptedCount / taskResults.length) * 100;
+  let acceptedCount: number;
+  let acceptedRatioPercent: number;
+  let submissionRatios: SubmissionRatios;
 
   const getRatioPercent = (taskResults: TaskResults, statusName: string) => {
     const count = taskResults.filter((taskResult) => taskResult.status_name === statusName).length;
@@ -36,18 +40,25 @@
     return ratioPercent;
   };
 
-  const submissionRatios: SubmissionRatios = submission_statuses
-    .filter((status) => status.status_name !== 'ns')
-    .map((status) => {
-      const name = status.status_name;
-      const results = {
-        name: name,
-        ratioPercent: getRatioPercent(taskResults, name),
-        color: status.background_color,
-      };
+  $: {
+    acceptedCount = taskResults.filter((taskResult: TaskResult) => taskResult.is_ac).length;
+    acceptedRatioPercent = (acceptedCount / taskResults.length) * 100;
 
-      return results;
-    });
+    submissionRatios = submission_statuses
+      .filter((status) => status.status_name !== 'ns')
+      .map((status) => {
+        const name = status.status_name;
+        const results = {
+          name: name,
+          ratioPercent: getRatioPercent(taskResults, name),
+          color: status.background_color,
+        };
+
+        return results;
+      });
+  }
+
+  let updatingModal: UpdatingModal;
 </script>
 
 <Accordion flush class="mt-4 mb-2">
@@ -86,7 +97,7 @@
       <TableBody tableBodyClass="divide-y">
         {#each taskResults as taskResult}
           <TableBodyRow class={getBackgroundColorFrom(taskResult.status_name)}>
-            <TableBodyCell class="p-3">
+            <TableBodyCell class="p-3" on:click={() => updatingModal.openModal(taskResult)}>
               <Img
                 src="../../{taskResult.submission_status_image_path}"
                 alt={taskResult.submission_status_label_name}
@@ -122,12 +133,7 @@
                   編集
                 </a>
               {:else}
-                <a
-                  href="/problems/{taskResult.task_id}"
-                  class="font-medium text-primary-600 hover:underline dark:text-primary-500"
-                >
-                  回答を更新
-                </a>
+                <!-- TODO: 解説を閲覧できるようにする -->
               {/if}
             </TableBodyCell>
           </TableBodyRow>
@@ -136,3 +142,5 @@
     </Table>
   </AccordionItem>
 </Accordion>
+
+<UpdatingModal bind:this={updatingModal} {isLoggedIn} />
