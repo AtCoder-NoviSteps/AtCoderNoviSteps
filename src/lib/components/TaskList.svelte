@@ -1,13 +1,8 @@
 <script lang="ts">
-  import { enhance } from '$app/forms';
-
   import {
     AccordionItem,
     Accordion,
-    Button,
     Img,
-    Modal,
-    Select,
     Table,
     TableBody,
     TableBodyCell,
@@ -16,15 +11,15 @@
     TableHeadCell,
   } from 'flowbite-svelte';
 
-  import { errorMessageStore } from '$lib/stores/error_message';
-  import ThermometerProgressBar from '$lib/components/ThermometerProgressBar.svelte';
-  import { getBackgroundColorFrom, submission_statuses } from '$lib/services/submission_status';
   import type { TaskResult, TaskResults } from '$lib/types/task';
   import type { SubmissionRatios } from '$lib/types/submission';
+
+  import ThermometerProgressBar from '$lib/components/ThermometerProgressBar.svelte';
+  import UpdatingModal from '$lib/components/SubmissionStatus/UpdatingModal.svelte';
+  import { getBackgroundColorFrom, submission_statuses } from '$lib/services/submission_status';
   import { ATCODER_BASE_CONTEST_URL } from '$lib/constants/urls';
   import { getContestNameLabel } from '$lib/utils/contest';
   import { taskUrl, toWhiteTextIfNeeds } from '$lib/utils/task';
-  import InputFieldWrapper from '$lib/components/InputFieldWrapper.svelte';
 
   export let grade: string;
   export let gradeColor: string;
@@ -63,52 +58,7 @@
       });
   }
 
-  // TODO: コンポーネントとして切り出す
-  let defaultModal = false;
-  let selectedTaskResult: TaskResult;
-  let selectedSubmissionStatus: string;
-
-  function openModal(taskResult: TaskResult) {
-    defaultModal = true;
-    selectedTaskResult = taskResult;
-    selectedSubmissionStatus = taskResult.status_name;
-  }
-
-  function closeModal() {
-    defaultModal = false;
-  }
-
-  const submissionStatusOptions = submission_statuses.map((status) => {
-    const option = {
-      value: status.status_name,
-      name: status.label_name,
-    };
-    return option;
-  });
-
-  const FAILED_TO_UPDATE_SUBMISSION_STATUS =
-    '回答状況の更新に失敗しました。もう一度試してください。';
-
-  async function handleSubmit(event: Event) {
-    event.preventDefault();
-
-    try {
-      const response = await fetch('?/update', {
-        method: 'POST',
-        body: new FormData(event.target as HTMLFormElement),
-      });
-
-      if (!response.ok) {
-        errorMessageStore.setAndClearAfterTimeout(FAILED_TO_UPDATE_SUBMISSION_STATUS, 10000);
-        return;
-      }
-
-      errorMessageStore.setAndClearAfterTimeout(null);
-      closeModal();
-    } catch (error) {
-      errorMessageStore.setAndClearAfterTimeout(FAILED_TO_UPDATE_SUBMISSION_STATUS, 10000);
-    }
-  }
+  let updatingModal: UpdatingModal;
 </script>
 
 <Accordion flush class="mt-4 mb-2">
@@ -147,7 +97,7 @@
       <TableBody tableBodyClass="divide-y">
         {#each taskResults as taskResult}
           <TableBodyRow class={getBackgroundColorFrom(taskResult.status_name)}>
-            <TableBodyCell class="p-3" on:click={() => openModal(taskResult)}>
+            <TableBodyCell class="p-3" on:click={() => updatingModal.openModal(taskResult)}>
               <Img
                 src="../../{taskResult.submission_status_image_path}"
                 alt={taskResult.submission_status_label_name}
@@ -193,33 +143,4 @@
   </AccordionItem>
 </Accordion>
 
-<!-- TODO: コンポーネントとして切り出す -->
-{#if isLoggedIn && selectedTaskResult}
-  <Modal
-    title="{getContestNameLabel(selectedTaskResult.contest_id)} - {selectedTaskResult.title}"
-    size="sm"
-    outsideclose
-    bind:open={defaultModal}
-    on:close={closeModal}
-  >
-    <form method="POST" action="?/update" on:submit={handleSubmit} use:enhance>
-      <!-- 問題名-->
-      <InputFieldWrapper
-        inputFieldType="hidden"
-        inputFieldName="taskId"
-        bind:inputValue={selectedTaskResult.task_id}
-      />
-
-      <!-- 指定した問題の回答状況の候補 -->
-      <Select
-        placeholder=""
-        name="submissionStatus"
-        items={submissionStatusOptions}
-        class="mb-4"
-        bind:value={selectedSubmissionStatus}
-      />
-
-      <Button type="submit" class="w-full">回答を更新</Button>
-    </form>
-  </Modal>
-{/if}
+<UpdatingModal bind:this={updatingModal} {isLoggedIn} />
