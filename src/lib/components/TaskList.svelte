@@ -16,6 +16,7 @@
     TableHeadCell,
   } from 'flowbite-svelte';
 
+  import { errorMessageStore } from '$lib/stores/error_message';
   import ThermometerProgressBar from '$lib/components/ThermometerProgressBar.svelte';
   import { getBackgroundColorFrom, submission_statuses } from '$lib/services/submission_status';
   import type { TaskResult, TaskResults } from '$lib/types/task';
@@ -85,7 +86,9 @@
     return option;
   });
 
-  // TODO: エラー処理を追加
+  const FAILED_TO_UPDATE_SUBMISSION_STATUS =
+    '回答状況の更新に失敗しました。もう一度試してください。';
+
   async function handleSubmit(event: Event) {
     event.preventDefault();
 
@@ -96,13 +99,14 @@
       });
 
       if (!response.ok) {
-        console.error('Failed to update the submission status');
+        errorMessageStore.setAndClearAfterTimeout(FAILED_TO_UPDATE_SUBMISSION_STATUS, 10000);
         return;
       }
 
+      errorMessageStore.setAndClearAfterTimeout(null);
       closeModal();
     } catch (error) {
-      console.error('Failed to update the submission status', error);
+      errorMessageStore.setAndClearAfterTimeout(FAILED_TO_UPDATE_SUBMISSION_STATUS, 10000);
     }
   }
 </script>

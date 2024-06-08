@@ -3,13 +3,12 @@ import { fail, type Actions } from '@sveltejs/kit';
 import * as crud from '$lib/services/task_results';
 import type { TaskResults } from '$lib/types/task';
 import { Roles } from '$lib/types/user';
-import { BAD_REQUEST } from '$lib/constants/http-response-status-codes';
+import { BAD_REQUEST, UNAUTHORIZED } from '$lib/constants/http-response-status-codes';
 
 // 問題一覧ページは、ログインしていなくても閲覧できるようにする
 export async function load({ locals, url }) {
   const session = await locals.auth.validate();
   const params = await url.searchParams;
-  console.log(session);
 
   const tagIds: string | null = params.get('tagIds');
   const isAdmin: boolean = session?.user.role === Roles.ADMIN;
@@ -36,11 +35,15 @@ export const actions = {
   update: async ({ request, locals }) => {
     console.log('problems -> actions -> update');
     const response = await request.formData();
-
     const session = await locals.auth.validate();
-    // TODO: ログインしていなければ、エラー処理
 
-    const userId = session?.user.userId;
+    if (!session || !session.user || !session.user.userId) {
+      return fail(UNAUTHORIZED, {
+        message: 'ログインしていないか、もしくは、ログイン情報が不正です。',
+      });
+    }
+
+    const userId = session.user.userId;
 
     try {
       const taskId = response.get('taskId') as string;
