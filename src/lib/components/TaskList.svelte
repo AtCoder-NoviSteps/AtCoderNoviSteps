@@ -10,6 +10,8 @@
     TableHead,
     TableHeadCell,
   } from 'flowbite-svelte';
+  // @ts-ignore
+  import ChevronDownOutline from 'flowbite-svelte-icons/ChevronDownOutline.svelte';
 
   import type { TaskResult, TaskResults } from '$lib/types/task';
   import type { SubmissionRatios } from '$lib/types/submission';
@@ -87,7 +89,7 @@
     <!-- TODO: 回答状況に応じて、フィルタリングできるようにする -->
     <Table shadow class="text-md">
       <TableHead class="text-sm bg-gray-100">
-        <TableHeadCell class="w-1/6">提出状況</TableHeadCell>
+        <TableHeadCell class="w-1/6">回答</TableHeadCell>
         <TableHeadCell class="w-1/6">コンテスト名</TableHeadCell>
         <TableHeadCell class="w-1/2">問題名</TableHeadCell>
         <TableHeadCell class="w-1/6">
@@ -97,12 +99,21 @@
       <TableBody tableBodyClass="divide-y">
         {#each taskResults as taskResult}
           <TableBodyRow class={getBackgroundColorFrom(taskResult.status_name)}>
-            <TableBodyCell class="p-3" on:click={() => updatingModal.openModal(taskResult)}>
+            <TableBodyCell
+              class="p-3 pl-3 md:pl-6 flex items-center"
+              on:click={() => updatingModal.openModal(taskResult)}
+            >
               <Img
                 src="../../{taskResult.submission_status_image_path}"
                 alt={taskResult.submission_status_label_name}
                 class="h-8 w-8"
               />
+              <div class="flex flex-col items-center ml-2 md:ml-4 text-xs">
+                <div class="mb-1">
+                  {'更新'}
+                </div>
+                <ChevronDownOutline class="w-3 h-3 text-primary-600 dark:text-white inline" />
+              </div>
             </TableBodyCell>
             <TableBodyCell>
               <a
