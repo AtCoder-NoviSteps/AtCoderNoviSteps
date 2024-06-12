@@ -63,8 +63,8 @@ importers:
         specifier: 3.4.4
         version: 3.4.4(ts-node@10.9.1(@types/node@16.18.11)(typescript@5.4.5))
       vercel:
-        specifier: 34.2.6
-        version: 34.2.6
+        specifier: 34.2.7
+        version: 34.2.7
     devDependencies:
       '@playwright/test':
         specifier: 1.44.1
@@ -1121,8 +1121,8 @@ packages:
   '@vercel/hydrogen@1.0.2':
     resolution: {integrity: sha512-/Q2MKk1GfOuZAnkE9jQexjtUQqanbY65R+xtJWd9yKIgwcfRI1hxiNH3uXyVM5AvLoY+fxxULkSuxDtUKpkJpQ==}
 
-  '@vercel/next@4.2.16':
-    resolution: {integrity: sha512-rQW9FgTInwLTlfGU0jLMPD0w2+/tzQyIMkRq+yu3LFeWoceJjUj9vTyu7d5GoRjWg59RBDB6JmHFTye7JeiP0Q==}
+  '@vercel/next@4.2.17':
+    resolution: {integrity: sha512-b1ZwH/3sL4+CrrIjncZLAqjd+ts0KyVGL0HEOWU340OI3hXmQQAN+2k0MWlqm8Vu8rFGfk9VEQ9yJG/pmPx6mg==}
 
   '@vercel/nft@0.27.1':
     resolution: {integrity: sha512-K6upzYHCV1cq2gP83r1o8uNV1vwvAlozvMqp7CEjYWxo0CMI8/4jKcDkVjlypVhrfZ54SXwh9QbH0ZIk/vQCsw==}
@@ -3510,7 +3510,7 @@ packages:
 
   puppeteer@19.11.1:
     resolution: {integrity: sha512-39olGaX2djYUdhaQQHDZ0T0GwEp+5f9UB9HmEP0qHfdQHIq0xGQZuAZ5TLnJIc/88SrPLpEflPC+xUqOTv3c5g==}
-    deprecated: < 22.5.0 is no longer supported
+    deprecated: < 22.6.4 is no longer supported
 
   querystringify@2.2.0:
     resolution: {integrity: sha512-FIqgj2EUvTa7R50u0rGsyTftzjYmv/a3hO345bZNrqabNqjtgiDMgmo4mkUjd+nzU5oF3dClKqFIPUKybUyqoQ==}
@@ -4214,8 +4214,8 @@ packages:
     resolution: {integrity: sha512-c1Q0mCiPlgdTVVVIJIrBuxNicYE+t/7oKeI9MWLj3fh/uq2Pxh/3eeWbVZ4OcGW1TUf53At0njHw5SMdA3tmMg==}
     engines: {node: '>= 0.10'}
 
-  vercel@34.2.6:
-    resolution: {integrity: sha512-fXI4z3GFkHOMm3d61Bqf5mIVoXVKfpPMg14jGYZeEP+Uw5D33DsHbkSh6lrgI6iEc7sX6A/Y4wpSfbUmnF8KSw==}
+  vercel@34.2.7:
+    resolution: {integrity: sha512-cc6NmaPeLhg7UJuuI6jKu92xppVYbuZRtQib/hDEaEPFSZgiUNw0sbtRfbzvXUZjxzJeLNeSGKLwazBbpXOvkQ==}
     engines: {node: '>= 16'}
     hasBin: true
 
@@ -5359,7 +5359,7 @@ snapshots:
       '@vercel/static-config': 3.0.0
       ts-morph: 12.0.0
 
-  '@vercel/next@4.2.16':
+  '@vercel/next@4.2.17':
     dependencies:
       '@vercel/nft': 0.27.2
     transitivePeerDependencies:
@@ -8769,13 +8769,13 @@ snapshots:
   validator@13.12.0:
     optional: true
 
-  vercel@34.2.6:
+  vercel@34.2.7:
     dependencies:
       '@vercel/build-utils': 8.2.2
       '@vercel/fun': 1.1.0
       '@vercel/go': 3.1.1
       '@vercel/hydrogen': 1.0.2
-      '@vercel/next': 4.2.16
+      '@vercel/next': 4.2.17
       '@vercel/node': 3.1.7
       '@vercel/python': 4.3.0
       '@vercel/redwood': 2.0.10
