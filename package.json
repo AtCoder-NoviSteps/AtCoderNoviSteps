@@ -50,7 +50,7 @@
     "flowbite-svelte-icons": "0.4.4",
     "husky": "9.0.11",
     "jsdom": "24.1.0",
-    "lint-staged": "15.2.6",
+    "lint-staged": "15.2.7",
     "prettier": "3.3.2",
     "prettier-plugin-svelte": "3.2.4",
     "prettier-plugin-tailwindcss": "0.6.3",
