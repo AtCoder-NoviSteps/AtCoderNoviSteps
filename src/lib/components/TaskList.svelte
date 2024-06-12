@@ -108,12 +108,14 @@
                 alt={taskResult.submission_status_label_name}
                 class="h-8 w-8"
               />
-              <div class="flex flex-col items-center ml-2 md:ml-4 text-xs">
-                <div class="mb-1">
-                  {'更新'}
+              {#if isLoggedIn}
+                <div class="flex flex-col items-center ml-2 md:ml-4 text-xs">
+                  <div class="mb-1">
+                    {'更新'}
+                  </div>
+                  <ChevronDownOutline class="w-3 h-3 text-primary-600 dark:text-white inline" />
                 </div>
-                <ChevronDownOutline class="w-3 h-3 text-primary-600 dark:text-white inline" />
-              </div>
+              {/if}
             </TableBodyCell>
             <TableBodyCell>
               <a
