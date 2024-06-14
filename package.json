@@ -62,7 +62,7 @@
     "sveltekit-superforms": "2.15.1",
     "tslib": "2.6.3",
     "typescript": "5.4.5",
-    "vite": "5.2.13",
+    "vite": "5.3.0",
     "vitest": "1.6.0",
     "zod": "3.23.8"
   },
