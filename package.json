@@ -53,7 +53,7 @@
     "lint-staged": "15.2.7",
     "prettier": "3.3.2",
     "prettier-plugin-svelte": "3.2.4",
-    "prettier-plugin-tailwindcss": "0.6.3",
+    "prettier-plugin-tailwindcss": "0.6.4",
     "prisma": "5.15.0",
     "stwui": "0.21.2-next",
     "svelte": "4.2.18",
