@@ -73,8 +73,8 @@ importers:
         specifier: 2.1.3
         version: 2.1.3(@prisma/client@5.15.0(prisma@5.15.0))(typescript@5.4.5)
       '@sveltejs/adapter-auto':
-        specifier: 3.2.1
-        version: 3.2.1(@sveltejs/kit@2.5.11(@sveltejs/vite-plugin-svelte@3.1.1(svelte@4.2.18)(vite@5.2.13(@types/node@16.18.11)))(svelte@4.2.18)(vite@5.2.13(@types/node@16.18.11)))
+        specifier: 3.2.2
+        version: 3.2.2(@sveltejs/kit@2.5.11(@sveltejs/vite-plugin-svelte@3.1.1(svelte@4.2.18)(vite@5.2.13(@types/node@16.18.11)))(svelte@4.2.18)(vite@5.2.13(@types/node@16.18.11)))
       '@sveltejs/adapter-vercel':
         specifier: 5.3.1
         version: 5.3.1(@sveltejs/kit@2.5.11(@sveltejs/vite-plugin-svelte@3.1.1(svelte@4.2.18)(vite@5.2.13(@types/node@16.18.11)))(svelte@4.2.18)(vite@5.2.13(@types/node@16.18.11)))
@@ -846,8 +846,8 @@ packages:
   '@sodaru/yup-to-json-schema@2.0.1':
     resolution: {integrity: sha512-lWb0Wiz8KZ9ip/dY1eUqt7fhTPmL24p6Hmv5Fd9pzlzAdw/YNcWZr+tiCT4oZ4Zyxzi9+1X4zv82o7jYvcFxYA==}
 
-  '@sveltejs/adapter-auto@3.2.1':
-    resolution: {integrity: sha512-/3xx8ZFCD5UBc/7AbyXkFF3HNCzWAp2xncH8HA4doGjoGQEN7PmwiRx4Y9nOzi4mqDqYYUic0gaIAE2khWWU4Q==}
+  '@sveltejs/adapter-auto@3.2.2':
+    resolution: {integrity: sha512-Mso5xPCA8zgcKrv+QioVlqMZkyUQ5MjDJiEPuG/Z7cV/5tmwV7LmcVWk5tZ+H0NCOV1x12AsoSpt/CwFwuVXMA==}
     peerDependencies:
       '@sveltejs/kit': ^2.0.0
 
@@ -5013,7 +5013,7 @@ snapshots:
   '@sodaru/yup-to-json-schema@2.0.1':
     optional: true
 
-  '@sveltejs/adapter-auto@3.2.1(@sveltejs/kit@2.5.11(@sveltejs/vite-plugin-svelte@3.1.1(svelte@4.2.18)(vite@5.2.13(@types/node@16.18.11)))(svelte@4.2.18)(vite@5.2.13(@types/node@16.18.11)))':
+  '@sveltejs/adapter-auto@3.2.2(@sveltejs/kit@2.5.11(@sveltejs/vite-plugin-svelte@3.1.1(svelte@4.2.18)(vite@5.2.13(@types/node@16.18.11)))(svelte@4.2.18)(vite@5.2.13(@types/node@16.18.11)))':
     dependencies:
       '@sveltejs/kit': 2.5.11(@sveltejs/vite-plugin-svelte@3.1.1(svelte@4.2.18)(vite@5.2.13(@types/node@16.18.11)))(svelte@4.2.18)(vite@5.2.13(@types/node@16.18.11))
       import-meta-resolve: 4.1.0
