@@ -3,8 +3,11 @@
   import { enhance } from '$app/forms';
 
   import {
+    Button,
     Dropdown,
     DropdownItem,
+    DropdownDivider,
+    Modal,
     Navbar,
     NavBrand,
     NavLi,
@@ -17,9 +20,20 @@
   import { PRODUCT_NAME } from '$lib/constants/product-info';
   import { navbarDashboardLinks, navbarLinks } from '$lib/constants/navbar-links';
   import { externalLinks } from '$lib/constants/external-links';
+
+  $: user = $page.data.user;
+
+  let showLogoutModal = false;
+
+  const openLogoutModal = () => {
+    showLogoutModal = true;
+  };
+
+  const closeLogoutModal = () => {
+    showLogoutModal = false;
+  };
 </script>
 
-<!-- TODO: Add logo. -->
 <Navbar let:hidden let:toggle>
   <NavBrand href="/">
     <img src="../../../favicon.png" class="mr-3 h-6 sm:h-9" alt="{PRODUCT_NAME} Logo" />
@@ -50,22 +64,26 @@
       <NavLi href={navbarLink.path}>{navbarLink.title}</NavLi>
     {/each}
 
-    {#if !$page.data.user}
+    {#if !user}
       <NavLi href="/login">ログイン</NavLi>
       <NavLi href="/signup">アカウント作成</NavLi>
     {:else}
-      <!-- TODO: アカウントページを表示 -->
-      <!-- HACK: 相対パスを使っているため、3階層以上のパスがあるときに動作しない可能性が高い -->
-      <NavLi href="/users/edit">ユーザ設定</NavLi>
-
-      <form
-        method="post"
-        action="../../logout?/logout"
-        use:enhance
-        class="py-2 pe-4 ps-3 md:p-0 rounded text-gray-700 hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-primary-700"
-      >
-        <button name="logout" value="Log out" type="submit" class="w-full">ログアウト</button>
-      </form>
+      <NavLi id="nav-user-page" class="cursor-pointer">
+        {user.name}
+        <ChevronDownOutline class="w-3 h-3 ml-2 text-primary-800 dark:text-white inline" />
+      </NavLi>
+      <Dropdown triggeredBy="#nav-user-page" class="w-48 z-20">
+        <!-- TODO: アカウントページを表示 -->
+        <DropdownItem href="/users/edit">基本設定</DropdownItem>
+        <DropdownDivider />
+        <button
+          name="logout_helper"
+          on:click={openLogoutModal}
+          class="font-medium py-2 px-4 text-sm text-left w-full rounded text-gray-700 hover:bg-gray-100"
+        >
+          ログアウト
+        </button>
+      </Dropdown>
     {/if}
 
     <!-- External Links -->
@@ -82,3 +100,11 @@
     </Dropdown>
   </NavUl>
 </Navbar>
+
+<Modal size="xs" bind:open={showLogoutModal} outsideclose>
+  <p class="font-medium text-lg text-center">ログアウトしますか?</p>
+
+  <form method="post" action="../../logout?/logout" use:enhance on:submit={closeLogoutModal}>
+    <Button name="logout" value="Log out" type="submit" class="w-full">ログアウト</Button>
+  </form>
+</Modal>
