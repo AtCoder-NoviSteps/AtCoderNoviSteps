@@ -115,8 +115,8 @@ importers:
         specifier: 2.40.0
         version: 2.40.0(eslint@8.57.0)(svelte@4.2.18)(ts-node@10.9.1(@types/node@16.18.11)(typescript@5.4.5))
       flowbite-svelte:
-        specifier: 0.46.1
-        version: 0.46.1(svelte@4.2.18)
+        specifier: 0.46.2
+        version: 0.46.2(svelte@4.2.18)
       flowbite-svelte-icons:
         specifier: 0.4.4
         version: 0.4.4(svelte@4.2.18)(tailwind-merge@1.14.0)(tailwindcss@3.4.4(ts-node@10.9.1(@types/node@16.18.11)(typescript@5.4.5)))
@@ -2247,8 +2247,8 @@ packages:
       tailwind-merge: ^1.13.2
       tailwindcss: ^3.3.2
 
-  flowbite-svelte@0.46.1:
-    resolution: {integrity: sha512-GMQP4Fxn4mYu12XTNRbOHMYMklbP29sKFZUZYekryxhWak2zbSlI1ozhBtnrD2WDbFBPqZ64IcyButOkYpz+WQ==}
+  flowbite-svelte@0.46.2:
+    resolution: {integrity: sha512-nOPJ4xBq3T/s3yiow+YyabupWiPqj1TQ7Fv12gLYTHFsjwBOcelWPEFbe1G/yO8a6gm243QE9KG9m+ag/N7KyA==}
     engines: {node: '>=18.0.0', pnpm: '>=8.0.0'}
     peerDependencies:
       svelte: ^3.55.1 || ^4.0.0
@@ -6668,7 +6668,7 @@ snapshots:
       tailwind-merge: 1.14.0
       tailwindcss: 3.4.4(ts-node@10.9.1(@types/node@16.18.11)(typescript@5.4.5))
 
-  flowbite-svelte@0.46.1(svelte@4.2.18):
+  flowbite-svelte@0.46.2(svelte@4.2.18):
     dependencies:
       '@floating-ui/dom': 1.6.5
       apexcharts: 3.49.1
