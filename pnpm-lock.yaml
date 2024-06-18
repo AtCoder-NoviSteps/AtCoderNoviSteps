@@ -54,8 +54,8 @@ importers:
         specifier: 2023.9.17-0.0
         version: 2023.9.17-0.0
       svelte-eslint-parser:
-        specifier: ^0.37.0
-        version: 0.37.0(svelte@4.2.18)
+        specifier: ^0.39.1
+        version: 0.39.1(svelte@4.2.18)
       tailwind-merge:
         specifier: 1.14.0
         version: 1.14.0
@@ -3852,15 +3852,6 @@ packages:
     hasBin: true
     peerDependencies:
       svelte: ^3.55.0 || ^4.0.0-next.0 || ^4.0.0 || ^5.0.0-next.0
-
-  svelte-eslint-parser@0.37.0:
-    resolution: {integrity: sha512-AXd5ar7dcOK+H86JomxcSaWevhs2J7o/xOwg+kDQu98uuATpm+tE5Twp7u8UQCdbWKB34Idu/CZyHmTOxfSQMw==}
-    engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
-    peerDependencies:
-      svelte: ^3.37.0 || ^4.0.0 || ^5.0.0-next.115
-    peerDependenciesMeta:
-      svelte:
-        optional: true
 
   svelte-eslint-parser@0.39.1:
     resolution: {integrity: sha512-0VR9gq2TOdSrJW94Qf2F3XrzXRQomXQtRZGFS3FEUr3G4J8DcpqXfBF1HJyOa3dACyGsKiBbOPF56pBgYaqXBA==}
@@ -8365,16 +8356,6 @@ snapshots:
       - sass
       - stylus
       - sugarss
-
-  svelte-eslint-parser@0.37.0(svelte@4.2.18):
-    dependencies:
-      eslint-scope: 7.2.2
-      eslint-visitor-keys: 3.4.3
-      espree: 9.6.1
-      postcss: 8.4.38
-      postcss-scss: 4.0.9(postcss@8.4.38)
-    optionalDependencies:
-      svelte: 4.2.18
 
   svelte-eslint-parser@0.39.1(svelte@4.2.18):
     dependencies:
