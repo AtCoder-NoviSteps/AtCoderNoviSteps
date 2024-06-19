@@ -54,15 +54,12 @@
 <div class="container mx-auto w-5/6">
   <HeadingOne title="(準備中) 問題集" />
 
-  <!-- 新規作成ボタンから、createページへ -->
   <Button href="/workbooks/create" type="submit">新規作成</Button>
 
+  <!-- TODO: 問題集の作成者のみ、「非公開」の問題集を表示できるようにする <br /> -->
+  <!-- TODO: 問題集の作成者のみ編集 / 削除ができるようにする <br /> -->
+  <!-- TODO: 回答状況を実際のデータに置き換える <br /> -->
   <!-- TODO: ページネーションを追加 -->
-  <br />
-  TODO: 問題集の作成者のみ、「非公開」の問題集を表示できるようにする <br />
-  TODO: 問題集の作成者のみ編集 / 削除ができるようにする <br />
-  TODO: 回答状況を実際のデータに置き換える <br />
-  TODO: ページネーションを追加する <br />
   <Tabs tabStyle="underline" contentClass="bg-white">
     {#each workBookTabs as workBookTab}
       <TabItemWrapper isOpen={workBookTab.isOpen} title={workBookTab.title}>
