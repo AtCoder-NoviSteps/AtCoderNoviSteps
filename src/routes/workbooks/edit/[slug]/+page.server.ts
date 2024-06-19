@@ -2,7 +2,8 @@ import { redirect, fail } from '@sveltejs/kit';
 import { superValidate } from 'sveltekit-superforms/server';
 import { zod } from 'sveltekit-superforms/adapters';
 
-import { getLoggedInUser, hasAuthority } from '$lib/utils/authorship';
+import { getLoggedInUser, canEdit, isAdmin } from '$lib/utils/authorship';
+import { Roles } from '$lib/types/user';
 import {
   BAD_REQUEST,
   FORBIDDEN,
@@ -15,6 +16,7 @@ import * as workBooksCrud from '$lib/services/workbooks';
 
 export async function load({ locals, params }) {
   const loggedInUser = await getLoggedInUser(locals);
+  const loggedInAsAdmin = isAdmin(loggedInUser?.role as Roles);
   const workBookWithAuthor = await getWorkbookWithAuthor(params.slug);
 
   const form = await superValidate(null, zod(workBookSchema));
@@ -23,20 +25,36 @@ export async function load({ locals, params }) {
   const tasksMapByIds = await tasksCrud.getTasksByTaskId();
 
   // ユーザidと問題集の作成者idが一致しない場合、ページへのアクセス権限がないことを表示する
+  // 例外として、管理者はユーザの問題集を編集できる
   // HACK: load関数内でfailを使うと、プレーンオブジェクトを返していないというエラーが解決できず
   // やむを得ず、return文で直接オブジェクトを返しているが、もっとシンプルに記述できるはず
-  if (loggedInUser && !hasAuthority(loggedInUser.id, workBookWithAuthor.workBook.authorId)) {
+  if (
+    loggedInUser &&
+    !canEdit(
+      loggedInUser.id,
+      workBookWithAuthor.workBook.authorId,
+      loggedInUser.role as Roles,
+      workBookWithAuthor.workBook.isPublished,
+    )
+  ) {
     return {
       status: FORBIDDEN,
       message: `問題集id: ${params.slug}にアクセスする権限がありません。`,
       form,
+      loggedInAsAdmin: loggedInAsAdmin,
       ...workBookWithAuthor,
       tasks,
       tasksMapByIds,
     };
   }
 
-  return { form: form, ...workBookWithAuthor, tasks: tasks, tasksMapByIds: tasksMapByIds };
+  return {
+    form: form,
+    loggedInAsAdmin: loggedInAsAdmin,
+    ...workBookWithAuthor,
+    tasks: tasks,
+    tasksMapByIds: tasksMapByIds,
+  };
 }
 
 export const actions = {

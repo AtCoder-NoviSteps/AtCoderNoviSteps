@@ -9,26 +9,30 @@
   export let isPublished: boolean;
   export let isOfficial: boolean;
   export let workBookType: WorkBookType;
+  export let isAdmin: boolean;
 
   let isPublishedOptions = [
     { value: false, name: '非公開' },
     { value: true, name: '公開' },
   ];
 
-  const workBookTypeOptions = (isOfficial: boolean) => {
+  const workBookTypeOptions = (isOfficial: boolean, isAdmin: boolean = false) => {
+    const allWorkBookTypes = [
+      { value: WorkBookType.TEXTBOOK, name: '教科書' },
+      { value: WorkBookType.SOLUTION, name: '解法別' },
+      { value: WorkBookType.GENRE, name: 'ジャンル別' },
+      { value: WorkBookType.THEME, name: 'テーマ別' },
+      { value: WorkBookType.CREATED_BY_USER, name: 'ユーザ作成' },
+    ];
+
     if (isOfficial) {
-      const types = [
-        { value: WorkBookType.TEXTBOOK, name: '教科書' },
-        { value: WorkBookType.SOLUTION, name: '解法別' },
-        { value: WorkBookType.GENRE, name: 'ジャンル別' },
-        { value: WorkBookType.THEME, name: 'テーマ別' },
-      ];
+      return allWorkBookTypes.filter((type) => type.value !== WorkBookType.CREATED_BY_USER);
+    }
 
-      return types;
+    if (isAdmin) {
+      return allWorkBookTypes;
     } else {
-      const types = [{ value: WorkBookType.CREATED_BY_USER, name: 'ユーザ作成' }];
-
-      return types;
+      return allWorkBookTypes.filter((type) => type.value === WorkBookType.CREATED_BY_USER);
     }
   };
 </script>
@@ -61,6 +65,6 @@
 <SelectWrapper
   labelName="問題集の区分"
   innerName="workBookType"
-  items={workBookTypeOptions(isOfficial)}
+  items={workBookTypeOptions(isOfficial, isAdmin)}
   bind:inputValue={workBookType}
 />

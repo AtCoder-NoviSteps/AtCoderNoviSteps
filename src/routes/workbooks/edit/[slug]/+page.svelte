@@ -66,6 +66,7 @@
         bind:isPublished={$form.isPublished}
         bind:isOfficial={$form.isOfficial}
         bind:workBookType={$form.workBookType}
+        isAdmin={data.loggedInAsAdmin}
       />
 
       <!-- データベースに保存されている問題 + 検索で追加した問題を表示 -->
