@@ -56,6 +56,6 @@ export const actions = {
       return fail(BAD_REQUEST);
     }
 
-    throw redirect(TEMPORARY_REDIRECT, '/workbooks');
+    redirect(TEMPORARY_REDIRECT, '/workbooks');
   },
 };

@@ -20,8 +20,9 @@ generator erd {
 // See:
 // https://github.com/Quramy/prisma-fabbrica
 generator fabbrica {
-  provider = "prisma-fabbrica"
-  output   = ".fabbrica"
+  provider    = "prisma-fabbrica"
+  output      = ".fabbrica"
+  noTranspile = true // 2024年5月末時点の最新版(v2.3.1)でトランスパイルエラーが発生するため、やむを得ず指定
 }
 
 datasource db {

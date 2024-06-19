@@ -6,16 +6,20 @@
 
   export let taskResults: TaskResults;
   export let isAdmin: boolean;
+  export let isLoggedIn: boolean;
 
   // TODO: 共通する内容はutilsに移動させる。
   let taskResultsForEachGrade = new Map();
 
-  taskGradeValues.map((grade) => {
-    taskResultsForEachGrade.set(
-      grade,
-      taskResults.filter((taskResult: TaskResult) => taskResult.grade === grade),
-    );
-  });
+  $: {
+    taskResultsForEachGrade = new Map();
+    taskGradeValues.map((grade) => {
+      taskResultsForEachGrade.set(
+        grade,
+        taskResults.filter((taskResult: TaskResult) => taskResult.grade === grade),
+      );
+    });
+  }
 
   const countTasks = (taskGrade: TaskGrade) => {
     return taskResultsForEachGrade.get(taskGrade).length;
@@ -43,6 +47,7 @@
       gradeColor={getTaskGradeColor(taskGrade)}
       taskResults={taskResultsForEachGrade.get(taskGrade)}
       {isAdmin}
+      {isLoggedIn}
     />
   {/if}
 {/each}

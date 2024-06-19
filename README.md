@@ -36,7 +36,7 @@
 <div align="center">
   <video
     width="720"
-    src="https://github.com/AtCoder-NoviSteps/AtCoderNoviSteps/assets/13990347/2363f257-df03-4dfd-b8af-d28e9d1ec8f0"
+    src="https://github.com/AtCoder-NoviSteps/AtCoderNoviSteps/assets/13990347/2f52354b-fa08-42ad-87c4-da97a49aa320"
     autoplay
     muted
     controls
@@ -69,8 +69,8 @@
 
 1. (初回のみ) ユーザ名とパスワードを入力して、アカウントを作成します。
 2. ログインします。お試し用のアカウント (ユーザ名: guest、パスワード: HelloGuest) を利用することもできます。
-3. グレード (難易度) および問題を選び、「回答状況を更新」ボタンを押します。
-4. 4種類のボタン (デフォルトは、「未挑戦」) のうち、該当する回答状況を押します。
+3. グレードおよび問題を選び、回答欄の「更新」をクリックもしくはタップします。
+4. 該当する回答状況 (デフォルトは「未挑戦」)を選択し、「回答を更新」ボタンを押します。
 
 ## 本サービスのスポンサー(敬称略・順不同)
 
