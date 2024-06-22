@@ -1,4 +1,4 @@
-import { redirect, fail } from '@sveltejs/kit';
+import { redirect, error } from '@sveltejs/kit';
 import { superValidate } from 'sveltekit-superforms/server';
 import { zod } from 'sveltekit-superforms/adapters';
 
@@ -8,8 +8,9 @@ import {
   BAD_REQUEST,
   FORBIDDEN,
   TEMPORARY_REDIRECT,
+  INTERNAL_SERVER_ERROR,
 } from '$lib/constants/http-response-status-codes';
-import { getWorkbookWithAuthor, validateWorkBookId } from '$lib/utils/workbook';
+import { getWorkbookWithAuthor, parseWorkBookId } from '$lib/utils/workbook';
 import { workBookSchema } from '$lib/zod/schema';
 import * as tasksCrud from '$lib/services/tasks';
 import * as workBooksCrud from '$lib/services/workbooks';
@@ -63,15 +64,17 @@ export const actions = {
     const form = await superValidate(request, zod(workBookSchema));
 
     const workBook = form.data;
-    const workBookId = parseInt(params.slug);
+    const workBookId = parseWorkBookId(params.slug);
 
-    validateWorkBookId(workBookId);
+    if (workBookId === null) {
+      error(BAD_REQUEST, '不正な問題集idです。');
+    }
 
     try {
       await workBooksCrud.updateWorkBook(workBookId, workBook);
-    } catch (error) {
-      console.error(`Failed to update WorkBook with id ${workBookId}:`, error);
-      return fail(BAD_REQUEST);
+    } catch (e) {
+      console.error(`Failed to update WorkBook with id ${workBookId}:`, e);
+      error(INTERNAL_SERVER_ERROR, `問題集id: ${workBookId} の更新に失敗しました。`);
     }
 
     redirect(TEMPORARY_REDIRECT, '/workbooks');

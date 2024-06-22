@@ -2,6 +2,7 @@ import { fail, redirect } from '@sveltejs/kit';
 import { superValidate } from 'sveltekit-superforms/server';
 import { zod } from 'sveltekit-superforms/adapters';
 
+import { getLoggedInUser } from '$lib/utils/authorship';
 import { workBookSchema } from '$lib/zod/schema';
 import * as workBooksCrud from '$lib/services/workbooks';
 import { Roles } from '$lib/types/user';
@@ -26,13 +27,19 @@ export const load = async ({ locals }) => {
 };
 
 export const actions = {
-  default: async ({ request }) => {
+  // TODO: エラーメッセージをformに表示させる
+  default: async ({ locals, request }) => {
     console.log('form -> actions -> create');
+    await getLoggedInUser(locals);
     const form = await superValidate(request, zod(workBookSchema));
+    console.log(form);
 
     if (!form.valid) {
       return fail(BAD_REQUEST, {
-        form: { ...form, message: '問題集の入力項目に不正な値があります。' },
+        form: {
+          ...form,
+          message: '問題集の入力項目に不正な値があります。修正して、もう一度作成を試みてください',
+        },
       });
     }
 
@@ -40,11 +47,12 @@ export const actions = {
 
     try {
       await workBooksCrud.createWorkBook(workBook);
-    } catch (error) {
+    } catch (e) {
+      console.error('Failed to create a workbook', e);
       return fail(BAD_REQUEST, { form: { ...form, message: '問題集の作成に失敗しました。' } });
     }
 
     // TODO: リダイレクトのときもメッセージを表示することはできるか調べる
-    redirect(TEMPORARY_REDIRECT, '/workbooks');
+    return redirect(TEMPORARY_REDIRECT, '/workbooks');
   },
 };

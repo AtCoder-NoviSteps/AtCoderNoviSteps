@@ -30,10 +30,12 @@ export async function getWorkbookWithAuthor(
   return { workBook: workBook, isExistingAuthor: isExistingAuthor };
 }
 
-export function validateWorkBookId(workBookId: number) {
-  if (Number.isNaN(workBookId)) {
-    console.error(`Invalid workbook id: ${workBookId}`);
+export function parseWorkBookId(slug: string) {
+  const id = Number(slug);
 
-    return fail(BAD_REQUEST);
+  if (isNaN(id) || id <= 0) {
+    return null;
   }
+
+  return id;
 }
