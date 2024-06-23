@@ -30,10 +30,13 @@ export async function getWorkbookWithAuthor(
   return { workBook: workBook, isExistingAuthor: isExistingAuthor };
 }
 
-export function parseWorkBookId(slug: string) {
+export function parseWorkBookId(slug: string): number | null {
+  const isOnlyDigits = (id: string) => /^\d+$/.test(id);
   const id = Number(slug);
+  const isInteger = id % 1 === 0;
+  const isValidInteger = Number.isSafeInteger(id);
 
-  if (isNaN(id) || id <= 0) {
+  if (!isOnlyDigits(slug) || isNaN(id) || !isInteger || id <= 0 || !isValidInteger) {
     return null;
   }
 
