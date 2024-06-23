@@ -74,7 +74,10 @@ export const actions = {
       await workBooksCrud.updateWorkBook(workBookId, workBook);
     } catch (e) {
       console.error(`Failed to update WorkBook with id ${workBookId}:`, e);
-      error(INTERNAL_SERVER_ERROR, `問題集id: ${workBookId} の更新に失敗しました。`);
+      error(
+        INTERNAL_SERVER_ERROR,
+        `問題集id: ${workBookId} の更新に失敗しました。しばらくしてから、もう一度試してください。`,
+      );
     }
 
     redirect(TEMPORARY_REDIRECT, '/workbooks');

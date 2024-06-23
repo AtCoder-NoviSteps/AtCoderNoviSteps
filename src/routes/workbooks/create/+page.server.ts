@@ -49,7 +49,12 @@ export const actions = {
       await workBooksCrud.createWorkBook(workBook);
     } catch (e) {
       console.error('Failed to create a workbook', e);
-      return fail(BAD_REQUEST, { form: { ...form, message: '問題集の作成に失敗しました。' } });
+      return fail(BAD_REQUEST, {
+        form: {
+          ...form,
+          message: '問題集の作成に失敗しました。しばらくしてから、もう一度試してください。',
+        },
+      });
     }
 
     // TODO: リダイレクトのときもメッセージを表示することはできるか調べる
