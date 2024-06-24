@@ -1,30 +1,61 @@
-import { redirect } from '@sveltejs/kit';
+import { redirect, error } from '@sveltejs/kit';
 import { superValidate } from 'sveltekit-superforms/server';
 import { zod } from 'sveltekit-superforms/adapters';
 
-import { BAD_REQUEST, TEMPORARY_REDIRECT } from '$lib/constants/http-response-status-codes';
-import { getWorkbookWithAuthor, validateWorkBookId } from '$lib/utils/workbook';
+import { getLoggedInUser, canEdit, isAdmin } from '$lib/utils/authorship';
+import { Roles } from '$lib/types/user';
+import {
+  BAD_REQUEST,
+  FORBIDDEN,
+  TEMPORARY_REDIRECT,
+  INTERNAL_SERVER_ERROR,
+} from '$lib/constants/http-response-status-codes';
+import { getWorkbookWithAuthor, parseWorkBookId } from '$lib/utils/workbook';
 import { workBookSchema } from '$lib/zod/schema';
 import * as tasksCrud from '$lib/services/tasks';
 import * as workBooksCrud from '$lib/services/workbooks';
 
-// TODO: 一般公開するまでは、管理者のみアクセスできるようにする
 export async function load({ locals, params }) {
-  // FIXME: ログインしているかどうかの判定が他のページと共通しているので、メソッドとして切り出す
-  // ログインしていない場合は、ログイン画面へ遷移させる
-  const session = await locals.auth.validate();
-
-  if (!session) {
-    redirect(TEMPORARY_REDIRECT, '/login');
-  }
-
+  const loggedInUser = await getLoggedInUser(locals);
+  const loggedInAsAdmin = isAdmin(loggedInUser?.role as Roles);
   const workBookWithAuthor = await getWorkbookWithAuthor(params.slug);
+
   const form = await superValidate(null, zod(workBookSchema));
   form.data = { ...form.data, ...workBookWithAuthor.workBook };
   const tasks = await tasksCrud.getTasks();
   const tasksMapByIds = await tasksCrud.getTasksByTaskId();
 
-  return { form: form, ...workBookWithAuthor, tasks: tasks, tasksMapByIds: tasksMapByIds };
+  // ユーザidと問題集の作成者idが一致しない場合、ページへのアクセス権限がないことを表示する
+  // 例外として、管理者はユーザの問題集を編集できる
+  // HACK: load関数内でfailを使うと、プレーンオブジェクトを返していないというエラーが解決できず
+  // やむを得ず、return文で直接オブジェクトを返しているが、もっとシンプルに記述できるはず
+  if (
+    loggedInUser &&
+    !canEdit(
+      loggedInUser.id,
+      workBookWithAuthor.workBook.authorId,
+      loggedInUser.role as Roles,
+      workBookWithAuthor.workBook.isPublished,
+    )
+  ) {
+    return {
+      status: FORBIDDEN,
+      message: `問題集id: ${params.slug}にアクセスする権限がありません。`,
+      form,
+      loggedInAsAdmin: loggedInAsAdmin,
+      ...workBookWithAuthor,
+      tasks,
+      tasksMapByIds,
+    };
+  }
+
+  return {
+    form: form,
+    loggedInAsAdmin: loggedInAsAdmin,
+    ...workBookWithAuthor,
+    tasks: tasks,
+    tasksMapByIds: tasksMapByIds,
+  };
 }
 
 export const actions = {
@@ -33,15 +64,20 @@ export const actions = {
     const form = await superValidate(request, zod(workBookSchema));
 
     const workBook = form.data;
-    const workBookId = parseInt(params.slug);
+    const workBookId = parseWorkBookId(params.slug);
 
-    validateWorkBookId(workBookId);
+    if (workBookId === null) {
+      error(BAD_REQUEST, '不正な問題集idです。');
+    }
 
     try {
       await workBooksCrud.updateWorkBook(workBookId, workBook);
-    } catch (error) {
-      console.error(`Failed to update WorkBook with id ${workBookId}:`, error);
-      return fail(BAD_REQUEST);
+    } catch (e) {
+      console.error(`Failed to update WorkBook with id ${workBookId}:`, e);
+      error(
+        INTERNAL_SERVER_ERROR,
+        `問題集id: ${workBookId} の更新に失敗しました。しばらくしてから、もう一度試してください。`,
+      );
     }
 
     redirect(TEMPORARY_REDIRECT, '/workbooks');

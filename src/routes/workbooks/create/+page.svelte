@@ -53,6 +53,7 @@
       bind:isPublished={$form.isPublished}
       bind:isOfficial={$form.isOfficial}
       bind:workBookType={$form.workBookType}
+      isAdmin={data.isAdmin}
     />
 
     <!-- 問題一覧 -->

@@ -1,10 +1,21 @@
+import { error } from '@sveltejs/kit';
+
 import * as workBooksCrud from '$lib/services/workbooks';
 import * as userCrud from '$lib/services/users';
-import { BAD_REQUEST } from '$lib/constants/http-response-status-codes';
+import { getLoggedInUser, canDelete } from '$lib/utils/authorship';
+import { parseWorkBookId } from '$lib/utils/workbook';
+import {
+  BAD_REQUEST,
+  FORBIDDEN,
+  NOT_FOUND,
+  INTERNAL_SERVER_ERROR,
+} from '$lib/constants/http-response-status-codes';
 
 // See:
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map
-export async function load() {
+export async function load({ locals }) {
+  const loggedInUser = await getLoggedInUser(locals);
+
   const workbooks = await workBooksCrud.getWorkBooks();
 
   const workbooksWithAuthors = await Promise.all(
@@ -20,18 +31,39 @@ export async function load() {
     }),
   );
 
-  return { workbooks: workbooksWithAuthors };
+  return { workbooks: workbooksWithAuthors, loggedInUser: loggedInUser };
 }
 
 export const actions = {
-  delete: async ({ url }) => {
+  delete: async ({ locals, request }) => {
     console.log('form -> actions -> delete');
-    const slug = Number(url.searchParams.get('slug'));
+    const loggedInUser = await getLoggedInUser(locals);
+
+    const url = new URL(request.url);
+    const slug = url.searchParams.get('slug');
+    const workBookId = parseWorkBookId(slug as string);
+
+    if (workBookId === null) {
+      error(BAD_REQUEST, '不正な問題集idです。');
+    }
+
+    const workBook = await workBooksCrud.getWorkBook(workBookId);
+
+    if (!workBook) {
+      error(NOT_FOUND, `問題集id: ${workBookId} は見つかりませんでした。`);
+    }
+    if (loggedInUser && !canDelete(loggedInUser.id, workBook.authorId)) {
+      error(FORBIDDEN, `問題集id: ${workBookId} にアクセスする権限がありません。`);
+    }
 
     try {
-      await workBooksCrud.deleteWorkBook(slug);
-    } catch (error) {
-      fail(BAD_REQUEST);
+      await workBooksCrud.deleteWorkBook(workBookId);
+    } catch (e) {
+      console.error(`Failed to delete WorkBook with id ${workBookId}:`, e);
+      error(
+        INTERNAL_SERVER_ERROR,
+        `問題集id: ${workBookId} の削除に失敗しました。しばらくしてから、もう一度試してください。`,
+      );
     }
   },
 };
