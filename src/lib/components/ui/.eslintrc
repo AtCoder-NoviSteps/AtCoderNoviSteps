@@ -1,0 +1,13 @@
+// See:
+// https://www.shadcn-svelte.com/docs/installation#eslint-configuration
+{
+  "rules": {
+    "@typescript-eslint/no-unused-vars": [
+      "warn",
+      {
+        "argsIgnorePattern": "^_",
+        "varsIgnorePattern": "^\\$\\$(Props|Events|Slots|Generic)$"
+      }
+    ]
+  }
+}

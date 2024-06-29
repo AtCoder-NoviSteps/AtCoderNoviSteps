@@ -79,6 +79,7 @@
         "formulahendry.auto-rename-tag",
         "ms-playwright.playwright",
         "Prisma.prisma",
+        "Selemondev.vscode-shadcn-svelte",
         "streetsidesoftware.code-spell-checker",
         "svelte.svelte-vscode",
         "vscode-icons-team.vscode-icons"
