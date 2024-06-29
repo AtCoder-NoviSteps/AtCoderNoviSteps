@@ -70,8 +70,8 @@ importers:
         specifier: 1.45.0
         version: 1.45.0
       '@quramy/prisma-fabbrica':
-        specifier: 2.1.5
-        version: 2.1.5(@prisma/client@5.16.1(prisma@5.16.1))(typescript@5.5.2)
+        specifier: 2.2.0
+        version: 2.2.0(@prisma/client@5.16.1(prisma@5.16.1))(typescript@5.5.2)
       '@sveltejs/adapter-auto':
         specifier: 3.2.2
         version: 3.2.2(@sveltejs/kit@2.5.17(@sveltejs/vite-plugin-svelte@3.1.1(svelte@4.2.18)(vite@5.3.2(@types/node@16.18.11)))(svelte@4.2.18)(vite@5.3.2(@types/node@16.18.11)))
@@ -740,8 +740,8 @@ packages:
       typescript:
         optional: true
 
-  '@quramy/prisma-fabbrica@2.1.5':
-    resolution: {integrity: sha512-iMm5qiyqtnpmkYV7+7FXNx0CnBgSixFv5rlvM4m35SpMyBLSsj38jbmGsFUFlzvsbQ987ljI2JvZfyEf+UxkfA==}
+  '@quramy/prisma-fabbrica@2.2.0':
+    resolution: {integrity: sha512-PxMlcd72wJzBwcXRe4Y0BY6qQQsBBBfHh9YdcqQxS1qH/Jms+HfGYrGX/6YusZq6HZZ4QNOWZATgSgoOnWR8hA==}
     hasBin: true
     peerDependencies:
       '@prisma/client': ^5.0.0
@@ -4801,7 +4801,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@quramy/prisma-fabbrica@2.1.5(@prisma/client@5.16.1(prisma@5.16.1))(typescript@5.5.2)':
+  '@quramy/prisma-fabbrica@2.2.0(@prisma/client@5.16.1(prisma@5.16.1))(typescript@5.5.2)':
     dependencies:
       '@prisma/client': 5.16.1(prisma@5.16.1)
       '@prisma/generator-helper': 5.14.0
