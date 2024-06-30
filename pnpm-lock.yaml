@@ -898,10 +898,12 @@ packages:
 
   '@svelte-add/bootstrap@1.0.17':
     resolution: {integrity: sha512-xcu3Y8eDr8LBx0HlvuV/ufmzudvLha89ADty/G3pecnCbxIzwHAyyimo1Q3DcHovFPl0BsWV5zc/LPByWcHSsQ==}
+    deprecated: Package no longer supported. Please use npx svelte-add bootstrap
     hasBin: true
 
   '@svelte-add/bulma@1.0.17':
     resolution: {integrity: sha512-vyUdGwPXqEUeXQWmUMP9UwI75ZAZxmyREAidFs7CtzYleJEPn2hgJtfCSORmpL7MoPEBR9UBtLzKtQq5HkXFTw==}
+    deprecated: Package no longer supported. Please use npx svelte-add bulma
     hasBin: true
 
   '@svelte-add/config@1.1.0':
@@ -915,22 +917,27 @@ packages:
 
   '@svelte-add/drizzle@1.0.8':
     resolution: {integrity: sha512-tocB4IEov8KvnRnBpRa5bRK4ZdJ8A83h9IVN8XnlxnaS1XGqRkUw4ilGuocrAyiizFpQ2F2NtEiEchP/rDnQTg==}
+    deprecated: Package no longer supported. Please use npx svelte-add drizzle
     hasBin: true
 
   '@svelte-add/mdsvex@1.0.17':
     resolution: {integrity: sha512-mUd22mbFuoZ13NT44TJ0vcDt5AzLlP7Nn/os3rObIMYB90AYTBI2os3xo6Uo82jRqNrh9s8OBqCi3rbX5lKfvg==}
+    deprecated: Package no longer supported. Please use npx svelte-add mdsvex
     hasBin: true
 
   '@svelte-add/routify@1.0.17':
     resolution: {integrity: sha512-ayu29u8XP/nN2LbR8iP0QbroTWnhLw3ysQRorJLgziqjE9iaLtzzyGcF4/DuoKN0i7keEuARMIf9uowXt9p1uQ==}
+    deprecated: Package no longer supported. Please use npx svelte-add routify
     hasBin: true
 
   '@svelte-add/storybook@1.0.17':
     resolution: {integrity: sha512-sSCkmIjppCZzbg8uQQfMdEiv4fVELXLc6MoUXan539nkREPPgRY3m3yJT0Md4hsLzX0Jju9aaCudaPWbB2ecHg==}
+    deprecated: Package no longer supported. Please use npx svelte-add storybook
     hasBin: true
 
   '@svelte-add/tailwindcss@1.0.17':
     resolution: {integrity: sha512-0MnNekTiKRJGpBc1ATpqsO/r4gWDD/fM8hsAXxIpjrmVa29CNeQX+S7Y1fwqxgCclzejbLL2hB/dsLagwNCIdg==}
+    deprecated: Package no longer supported. Please use npx svelte-add tailwindcss
     hasBin: true
 
   '@sveltejs/adapter-auto@3.2.2':

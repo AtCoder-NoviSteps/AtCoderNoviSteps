@@ -22,21 +22,25 @@
     return filteredWorkbooks;
   };
 
+  // FIXME: 各問題集の説明文を推敲
   const workBookTabs = [
     {
       title: '教科書',
       workBookType: WorkBookType.TEXTBOOK,
       isOpen: true,
+      tooltipContent: '特定のグレードの問題を挑戦するのに必要な基礎知識が学べます',
     },
     {
       title: '解法別',
       workBookType: WorkBookType.SOLUTION,
       isOpen: false,
+      tooltipContent: '特定の解法を応用する力が身につけられます',
     },
     {
       title: 'ジャンル別',
       workBookType: WorkBookType.GENRE,
       isOpen: false,
+      tooltipContent: '特定のジャンル (グラフ理論・文字列など) を重点的に練習できます',
     },
     {
       // TODO: その他に書き換え
@@ -63,7 +67,11 @@
   <!-- TODO: ページネーションを追加 -->
   <Tabs tabStyle="underline" contentClass="bg-white">
     {#each workBookTabs as workBookTab}
-      <TabItemWrapper isOpen={workBookTab.isOpen} title={workBookTab.title}>
+      <TabItemWrapper
+        isOpen={workBookTab.isOpen}
+        title={workBookTab.title}
+        tooltipContent={workBookTab.tooltipContent}
+      >
         <div class="mt-6">
           <WorkBookList
             workbooks={getWorkBooksByType(workbooks, workBookTab.workBookType)}
