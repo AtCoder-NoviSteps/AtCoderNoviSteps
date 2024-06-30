@@ -44,8 +44,8 @@
   };
 </script>
 
-<div class="container mx-auto w-5/6">
-  <HeadingOne title="(準備中) 問題集の詳細" />
+<div class="container mx-auto w-5/6 space-y-4">
+  <HeadingOne title="問題集の詳細" />
 
   <Breadcrumb aria-label="">
     <BreadcrumbItem href="/workbooks" home>問題集一覧</BreadcrumbItem>
@@ -59,6 +59,8 @@
     isPublished={workBook.isPublished}
     isOfficial={workBook.isOfficial}
     workBookType={workBook.workBookType}
+    isAdmin={data.loggedInAsAdmin}
+    isEditable={false}
   />
 
   <!-- 問題一覧 -->

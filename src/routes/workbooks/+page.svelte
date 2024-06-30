@@ -39,6 +39,7 @@
       isOpen: false,
     },
     {
+      // TODO: その他に書き換え
       title: 'テーマ別',
       workBookType: WorkBookType.THEME,
       isOpen: false,
@@ -52,13 +53,13 @@
 </script>
 
 <div class="container mx-auto w-5/6">
-  <HeadingOne title="(準備中) 問題集" />
+  <HeadingOne title="問題集一覧" />
 
-  <Button href="/workbooks/create" type="submit">新規作成</Button>
+  <Button href="/workbooks/create" type="submit" class="mt-4 mb-4">新規作成</Button>
 
-  <!-- TODO: 問題集の作成者のみ、「非公開」の問題集を表示できるようにする <br /> -->
-  <!-- TODO: 問題集の作成者のみ編集 / 削除ができるようにする <br /> -->
-  <!-- TODO: 回答状況を実際のデータに置き換える <br /> -->
+  <!-- TODO: 教科書のみグレード単位で表示 -->
+  <!-- TODO: 回答状況を実際のデータに置き換える -->
+  <!-- TODO: タブに各問題集の説明をtooltipsの形で追加 -->
   <!-- TODO: ページネーションを追加 -->
   <Tabs tabStyle="underline" contentClass="bg-white">
     {#each workBookTabs as workBookTab}

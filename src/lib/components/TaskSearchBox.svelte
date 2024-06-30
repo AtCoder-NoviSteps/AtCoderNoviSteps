@@ -90,32 +90,35 @@
   }}
 />
 
-<Listgroup>
-  {#each filteredTasks as task, index}
-    <ListgroupItem
-      active={index === focusingId}
-      key={task.task_id}
-      focusClass="bg-primary-500 text-white"
-    >
-      <!-- HACK: <button>を設定すると、以下のバグや不具合が発生する。 -->
-      <!-- 問題を検索してEnterキーを押すと、選択した問題だけでなく最初の問題まで問題集に追加されてしまう -->
-      <!-- タイトルが中央揃え?になり、レイアウトが崩れる -->
-      <a
-        type="button"
-        href={null}
-        on:click={() => {
-          addWorkBookTask(task);
-          searchWordsOrURL = '';
-          focusingId = PENDING;
-        }}
+<!-- HACK: 該当する問題が存在しない場合に、リストの外枠?だけが表示されるのを回避するため -->
+{#if filteredTasks.length >= 1}
+  <Listgroup>
+    {#each filteredTasks as task, index}
+      <ListgroupItem
+        active={index === focusingId}
+        key={task.task_id}
+        focusClass="bg-primary-500 text-white"
       >
-        <h3>
-          {task.title}
-        </h3>
-        <div>
-          {taskUrl(task.contest_id, task.task_id)}
-        </div>
-      </a>
-    </ListgroupItem>
-  {/each}
-</Listgroup>
+        <!-- HACK: <button>を設定すると、以下のバグや不具合が発生する。 -->
+        <!-- 問題を検索してEnterキーを押すと、選択した問題だけでなく最初の問題まで問題集に追加されてしまう -->
+        <!-- タイトルが中央揃え?になり、レイアウトが崩れる -->
+        <a
+          type="button"
+          href={null}
+          on:click={() => {
+            addWorkBookTask(task);
+            searchWordsOrURL = '';
+            focusingId = PENDING;
+          }}
+        >
+          <h3 class="truncate">
+            {task.title}
+          </h3>
+          <div class="truncate">
+            {taskUrl(task.contest_id, task.task_id)}
+          </div>
+        </a>
+      </ListgroupItem>
+    {/each}
+  </Listgroup>
+{/if}
