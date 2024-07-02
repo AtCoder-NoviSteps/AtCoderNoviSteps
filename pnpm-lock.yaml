@@ -115,8 +115,8 @@ importers:
         specifier: 2.41.0
         version: 2.41.0(eslint@8.57.0)(svelte@4.2.18)(ts-node@10.9.1(@types/node@16.18.11)(typescript@5.5.3))
       flowbite-svelte:
-        specifier: 0.46.6
-        version: 0.46.6(rollup@4.18.0)(svelte@4.2.18)
+        specifier: 0.46.13
+        version: 0.46.13(rollup@4.18.0)(svelte@4.2.18)
       flowbite-svelte-icons:
         specifier: 0.4.4
         version: 0.4.4(svelte@4.2.18)(tailwind-merge@1.14.0)(tailwindcss@3.4.4(ts-node@10.9.1(@types/node@16.18.11)(typescript@5.5.3)))
@@ -557,14 +557,14 @@ packages:
   '@floating-ui/dom@1.6.5':
     resolution: {integrity: sha512-Nsdud2X65Dz+1RHjAIP0t8z5e2ff/IRbei6BqFrl1urT8sDVzM1HMQ+R0XcU5ceRfyO3I6ayeqIfh+6Wb8LGTw==}
 
-  '@floating-ui/dom@1.6.6':
-    resolution: {integrity: sha512-qiTYajAnh3P+38kECeffMSQgbvXty2VB6rS+42iWR4FPIlZjLK84E9qtLnMTLIpPz2znD/TaFqaiavMUrS+Hcw==}
+  '@floating-ui/dom@1.6.7':
+    resolution: {integrity: sha512-wmVfPG5o2xnKDU4jx/m4w5qva9FWHcnZ8BvzEe90D/RpwsJaTAVYPEPdQ8sbr/N8zZTAHlZUTQdqg8ZUbzHmng==}
 
   '@floating-ui/utils@0.2.2':
     resolution: {integrity: sha512-J4yDIIthosAsRZ5CPYP/jQvUAQtlZTTD/4suA08/FEnlxqW3sKS9iAhgsa9VYLZ6vDHn/ixJgIqRQPotoBjxIw==}
 
-  '@floating-ui/utils@0.2.3':
-    resolution: {integrity: sha512-XGndio0l5/Gvd6CLIABvsav9HHezgDFFhDfHk1bvLfr9ni8dojqLSvBbotJEjmIwNHL7vK4QzBJTdBRoB+c1ww==}
+  '@floating-ui/utils@0.2.4':
+    resolution: {integrity: sha512-dWO2pw8hhi+WrXq1YJy2yCuWoL20PddgGaqTgVe4cOS9Q6qklXCiA1tJEqX6BEwRNSCP84/afac9hd4MS+zEUA==}
 
   '@gcornut/valibot-json-schema@0.31.0':
     resolution: {integrity: sha512-3xGptCurm23e7nuPQkdrE5rEs1FeTPHhAUsBuwwqG4/YeZLwJOoYZv+fmsppUEfo5y9lzUwNQrNqLS/q7HMc7g==}
@@ -2243,8 +2243,8 @@ packages:
       tailwind-merge: ^1.13.2
       tailwindcss: ^3.3.2
 
-  flowbite-svelte@0.46.6:
-    resolution: {integrity: sha512-SUK+JpjVM/EeZ+bsfhEPFCzNpH2vgR8eHiRE02VmSkgKfucHcZEV16kSWaZMlDYR89N+J+/oBGyiuZ/KZ/xzXA==}
+  flowbite-svelte@0.46.13:
+    resolution: {integrity: sha512-j2hDyjEj3vlTrfLtYZbuVEBdkcRifrggryUFxEp1s8eJiv2PlRd4J1YW0UtUEBBe7kvF4ryUUPTna8JKcNiLgQ==}
     engines: {node: '>=18.0.0', pnpm: '>=8.0.0'}
     peerDependencies:
       svelte: ^3.55.1 || ^4.0.0
@@ -4561,21 +4561,21 @@ snapshots:
 
   '@floating-ui/core@1.6.2':
     dependencies:
-      '@floating-ui/utils': 0.2.3
+      '@floating-ui/utils': 0.2.4
 
   '@floating-ui/dom@1.6.5':
     dependencies:
       '@floating-ui/core': 1.6.2
       '@floating-ui/utils': 0.2.2
 
-  '@floating-ui/dom@1.6.6':
+  '@floating-ui/dom@1.6.7':
     dependencies:
       '@floating-ui/core': 1.6.2
-      '@floating-ui/utils': 0.2.3
+      '@floating-ui/utils': 0.2.4
 
   '@floating-ui/utils@0.2.2': {}
 
-  '@floating-ui/utils@0.2.3': {}
+  '@floating-ui/utils@0.2.4': {}
 
   '@gcornut/valibot-json-schema@0.31.0':
     dependencies:
@@ -6502,9 +6502,9 @@ snapshots:
       tailwind-merge: 1.14.0
       tailwindcss: 3.4.4(ts-node@10.9.1(@types/node@16.18.11)(typescript@5.5.3))
 
-  flowbite-svelte@0.46.6(rollup@4.18.0)(svelte@4.2.18):
+  flowbite-svelte@0.46.13(rollup@4.18.0)(svelte@4.2.18):
     dependencies:
-      '@floating-ui/dom': 1.6.6
+      '@floating-ui/dom': 1.6.7
       apexcharts: 3.49.2
       flowbite: 2.4.1(rollup@4.18.0)
       svelte: 4.2.18
