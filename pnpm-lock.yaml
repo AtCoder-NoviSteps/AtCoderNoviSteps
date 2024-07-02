@@ -70,8 +70,8 @@ importers:
         specifier: 1.45.1
         version: 1.45.1
       '@quramy/prisma-fabbrica':
-        specifier: 2.2.0
-        version: 2.2.0(@prisma/client@5.16.1(prisma@5.16.1))(typescript@5.5.3)
+        specifier: 2.2.1
+        version: 2.2.1(@prisma/client@5.16.1(prisma@5.16.1))(typescript@5.5.3)
       '@sveltejs/adapter-auto':
         specifier: 3.2.2
         version: 3.2.2(@sveltejs/kit@2.5.18(@sveltejs/vite-plugin-svelte@3.1.1(svelte@4.2.18)(vite@5.3.2(@types/node@16.18.11)))(svelte@4.2.18)(vite@5.3.2(@types/node@16.18.11)))
@@ -740,8 +740,8 @@ packages:
       typescript:
         optional: true
 
-  '@quramy/prisma-fabbrica@2.2.0':
-    resolution: {integrity: sha512-PxMlcd72wJzBwcXRe4Y0BY6qQQsBBBfHh9YdcqQxS1qH/Jms+HfGYrGX/6YusZq6HZZ4QNOWZATgSgoOnWR8hA==}
+  '@quramy/prisma-fabbrica@2.2.1':
+    resolution: {integrity: sha512-bWIgCO9seOJMmubT8tSQdoncxO9jo5yVzEv9Co/t6FHPixd8sZCmgAJgvCuQ/wj0IL8dCL5nMXdhOlJ5NBlU1g==}
     hasBin: true
     peerDependencies:
       '@prisma/client': ^5.0.0
@@ -3172,18 +3172,8 @@ packages:
   pkg-types@1.1.1:
     resolution: {integrity: sha512-ko14TjmDuQJ14zsotODv7dBlwxKhUKQEhuhmbqo1uCi9BB0Z2alo/wAXg6q1dTR5TyuqYyWhjtfe/Tsh+X28jQ==}
 
-  playwright-core@1.45.0:
-    resolution: {integrity: sha512-lZmHlFQ0VYSpAs43dRq1/nJ9G/6SiTI7VPqidld9TDefL9tX87bTKExWZZUF5PeRyqtXqd8fQi2qmfIedkwsNQ==}
-    engines: {node: '>=18'}
-    hasBin: true
-
   playwright-core@1.45.1:
     resolution: {integrity: sha512-LF4CUUtrUu2TCpDw4mcrAIuYrEjVDfT1cHbJMfwnE2+1b8PZcFzPNgvZCvq2JfQ4aTjRCCHw5EJ2tmr2NSzdPg==}
-    engines: {node: '>=18'}
-    hasBin: true
-
-  playwright@1.45.0:
-    resolution: {integrity: sha512-4z3ac3plDfYzGB6r0Q3LF8POPR20Z8D0aXcxbJvmfMgSSq1hkcgvFRXJk9rUq5H/MJ0Ktal869hhOdI/zUTeLA==}
     engines: {node: '>=18'}
     hasBin: true
 
@@ -4801,7 +4791,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@quramy/prisma-fabbrica@2.2.0(@prisma/client@5.16.1(prisma@5.16.1))(typescript@5.5.3)':
+  '@quramy/prisma-fabbrica@2.2.1(@prisma/client@5.16.1(prisma@5.16.1))(typescript@5.5.3)':
     dependencies:
       '@prisma/client': 5.16.1(prisma@5.16.1)
       '@prisma/generator-helper': 5.14.0
@@ -7512,15 +7502,7 @@ snapshots:
       mlly: 1.7.0
       pathe: 1.1.2
 
-  playwright-core@1.45.0: {}
-
   playwright-core@1.45.1: {}
-
-  playwright@1.45.0:
-    dependencies:
-      playwright-core: 1.45.0
-    optionalDependencies:
-      fsevents: 2.3.2
 
   playwright@1.45.1:
     dependencies:
