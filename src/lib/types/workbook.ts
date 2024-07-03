@@ -21,13 +21,13 @@ export interface WorkbookWithAuthorName extends WorkBookBase {
 
 export type WorkbooksWithAuthorNames = WorkbookWithAuthorName[];
 
-export interface WorkBookList extends WorkBookBase {
+export interface WorkbookList extends WorkBookBase {
   id: number;
   authorId: string;
   authorName: string;
 }
 
-export type WorkBooksList = WorkBookList[];
+export type WorkbooksList = WorkbookList[];
 
 // HACK: enumを使うときは毎回書いているので、もっと簡略化できないか?
 export const WorkBookType: { [key in WorkBookTypeOrigin]: key } = {

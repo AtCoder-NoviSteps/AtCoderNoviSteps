@@ -6,11 +6,12 @@
   import * as Table from '$lib/components/ui/table';
   import ThermometerProgressBar from '$lib/components/ThermometerProgressBar.svelte';
 
-  import type { WorkBooksList } from '$lib/types/workbook';
+  import type { WorkbooksList } from '$lib/types/workbook';
   import type { Roles } from '$lib/types/user';
   import { canRead, canEdit, canDelete } from '$lib/utils/authorship';
 
-  export let workbooks: WorkBooksList;
+  // HACK: リアクティブ変数を受け取っているはずだが、削除のときだけテーブルに反映されていない
+  export let workbooks: WorkbooksList;
   export let loggedInUser;
 
   let userId = loggedInUser.id;
@@ -149,6 +150,8 @@
                             <a href="/workbooks/edit/{getWorkBook(row.id).id}">編集</a>
                           {/if}
 
+                          <!-- HACK: Flowbite-Svelteで作成したテーブルでは削除した行がリアクティブに反映されたが、shadcn-svelteのテーブルだと画面上のみ残ったまま -->
+                          <!-- HACK: タブを切り替えると反映される -->
                           {#if canDelete(loggedInUser.id, getWorkBook(row.id).authorId)}
                             <form
                               method="POST"
