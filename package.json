@@ -86,7 +86,7 @@
     "svelte-eslint-parser": "^0.39.2",
     "tailwind-merge": "1.14.0",
     "tailwindcss": "3.4.4",
-    "vercel": "34.2.8"
+    "vercel": "34.3.0"
   },
   "packageManager": "pnpm@9.1.0"
 }
