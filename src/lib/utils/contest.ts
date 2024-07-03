@@ -1,4 +1,6 @@
+import { getTask } from '$lib/utils/task';
 import { ContestType } from '$lib/types/contest';
+import type { Task } from '$lib/types/task';
 import { ATCODER_BASE_CONTEST_URL } from '$lib/constants/urls';
 
 // See:
@@ -78,6 +80,14 @@ export function getContestPriority(contestId: string): number {
     return contestTypePriorities.get(contestType) as number;
   }
 }
+export const getContestIdFrom = (tasks: Map<string, Task>, taskId: string): string => {
+  return getTask(tasks, taskId)?.contest_id as string;
+};
+
+export const getContestNameFrom = (tasks: Map<string, Task>, taskId: string): string => {
+  const contestId = getContestIdFrom(tasks, taskId);
+  return getContestNameLabel(contestId);
+};
 
 export const getContestUrl = (contestId: string): string => {
   return `${ATCODER_BASE_CONTEST_URL}/${contestId}`;

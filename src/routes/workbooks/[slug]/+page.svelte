@@ -8,34 +8,15 @@
   import WorkBookInputFields from '$lib/components/WorkBooks/WorkBookInputFields.svelte';
   import ExternalLinkWrapper from '$lib/components/ExternalLinkWrapper.svelte';
 
-  import { getContestUrl, getContestNameLabel } from '$lib/utils/contest';
-  import { taskUrl } from '$lib/utils/task';
+  import { getContestUrl, getContestIdFrom, getContestNameFrom } from '$lib/utils/contest';
+  import { taskUrl, getTaskName } from '$lib/utils/task';
   import type { WorkBookTaskBase } from '$lib/types/workbook';
-  import type { Task } from '$lib/types/task';
 
   export let data;
 
   let workBook = data.workBook;
   let workBookTasks: WorkBookTaskBase[] = workBook.workBookTasks;
   let tasks = data.tasks; // workBookTasksのtaskIdから問題情報を取得
-
-  // TODO: 関数をutilへ移動させる
-  const getTask = (taskId: string): Task | undefined => {
-    return tasks.get(taskId);
-  };
-
-  const getContestIdFrom = (taskId: string): string => {
-    return getTask(taskId)?.contest_id as string;
-  };
-
-  const getContestNameFrom = (taskId: string): string => {
-    const contestId = getContestIdFrom(taskId);
-    return getContestNameLabel(contestId);
-  };
-
-  const getTaskName = (taskId: string): string => {
-    return getTask(taskId)?.title as string;
-  };
 
   const getTaskId = (rowId: string) => {
     return workBookTasks[Number(rowId)].taskId;
@@ -51,12 +32,12 @@
       id: 'submissionStatus',
     }),
     table.column({
-      accessor: (row) => getContestNameFrom(row.taskId), // コンテスト名は、taskIdが一意であることを利用して取得
+      accessor: (row) => getContestNameFrom(tasks, row.taskId), // コンテスト名は、taskIdが一意であることを利用して取得
       header: 'コンテスト名',
       id: 'contestName',
     }),
     table.column({
-      accessor: (row) => getTaskName(row.taskId),
+      accessor: (row) => getTaskName(tasks, row.taskId),
       header: '問題名',
       id: 'taskName',
     }),
@@ -127,8 +108,8 @@
                     {:else if cell.id === 'contestName'}
                       <Table.Cell {...attrs} class="min-w-[120px] max-w-[150px] truncate">
                         <ExternalLinkWrapper
-                          url={getContestUrl(getContestIdFrom(getTaskId(row.id)))}
-                          description={getContestNameFrom(getTaskId(row.id))}
+                          url={getContestUrl(getContestIdFrom(tasks, getTaskId(row.id)))}
+                          description={getContestNameFrom(tasks, getTaskId(row.id))}
                         >
                           <div class="truncate">
                             <Render of={cell.render()} />
@@ -138,8 +119,11 @@
                     {:else if cell.id === 'taskName'}
                       <Table.Cell {...attrs} class="min-w-[240px] truncate">
                         <ExternalLinkWrapper
-                          url={taskUrl(getContestIdFrom(getTaskId(row.id)), getTaskId(row.id))}
-                          description={getTaskName(getTaskId(row.id))}
+                          url={taskUrl(
+                            getContestIdFrom(tasks, getTaskId(row.id)),
+                            getTaskId(row.id),
+                          )}
+                          description={getTaskName(tasks, getTaskId(row.id))}
                         >
                           <div class="truncate">
                             <Render of={cell.render()} />

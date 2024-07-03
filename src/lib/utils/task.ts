@@ -1,9 +1,17 @@
-import { TaskGrade } from '$lib/types/task';
+import { TaskGrade, type Task } from '$lib/types/task';
 import { ATCODER_BASE_CONTEST_URL } from '$lib/constants/urls';
 
 // TODO: 複数のコンテストサイトに対応できるようにする
 export const taskUrl = (contestId: string, taskId: string) => {
   return `${ATCODER_BASE_CONTEST_URL}/${contestId}/tasks/${taskId}`;
+};
+
+export const getTask = (tasks: Map<string, Task>, taskId: string): Task | undefined => {
+  return tasks.get(taskId);
+};
+
+export const getTaskName = (tasks: Map<string, Task>, taskId: string): string => {
+  return getTask(tasks, taskId)?.title as string;
 };
 
 // https://tailwindcss.com/docs/customizing-colors
