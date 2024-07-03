@@ -1,28 +1,22 @@
 <script lang="ts">
-  import {
-    Breadcrumb,
-    BreadcrumbItem,
-    Label,
-    Table,
-    TableHead,
-    TableHeadCell,
-    TableBody,
-    TableBodyCell,
-    TableBodyRow,
-  } from 'flowbite-svelte';
+  import { writable } from 'svelte/store';
+  import { createTable, Render, Subscribe } from 'svelte-headless-table';
+  import { Breadcrumb, BreadcrumbItem, Label } from 'flowbite-svelte';
 
+  import * as Table from '$lib/components/ui/table';
   import HeadingOne from '$lib/components/HeadingOne.svelte';
   import WorkBookInputFields from '$lib/components/WorkBooks/WorkBookInputFields.svelte';
   import ExternalLinkWrapper from '$lib/components/ExternalLinkWrapper.svelte';
-  import { getContestUrl } from '$lib/utils/contest';
+
+  import { getContestUrl, getContestNameLabel } from '$lib/utils/contest';
   import { taskUrl } from '$lib/utils/task';
+  import type { WorkBookTaskBase } from '$lib/types/workbook';
   import type { Task } from '$lib/types/task';
-  import { getContestNameLabel } from '$lib/utils/contest';
 
   export let data;
 
   let workBook = data.workBook;
-  let workBookTasks = workBook.workBookTasks;
+  let workBookTasks: WorkBookTaskBase[] = workBook.workBookTasks;
   let tasks = data.tasks; // workBookTasksのtaskIdから問題情報を取得
 
   // TODO: 関数をutilへ移動させる
@@ -42,6 +36,32 @@
   const getTaskName = (taskId: string): string => {
     return getTask(taskId)?.title as string;
   };
+
+  const getTaskId = (rowId: string) => {
+    return workBookTasks[Number(rowId)].taskId;
+  };
+
+  const table = createTable(writable(workBookTasks));
+  // See:
+  // https://svelte-headless-table.bryanmylee.com/docs/api/create-columns
+  const columns = table.createColumns([
+    table.column({
+      accessor: (id) => id, // TODO: 回答状況をリアクティブに更新できるようにする
+      header: '回答',
+      id: 'submissionStatus',
+    }),
+    table.column({
+      accessor: (row) => getContestNameFrom(row.taskId), // コンテスト名は、taskIdが一意であることを利用して取得
+      header: 'コンテスト名',
+      id: 'contestName',
+    }),
+    table.column({
+      accessor: (row) => getTaskName(row.taskId),
+      header: '問題名',
+      id: 'taskName',
+    }),
+  ]);
+  const { headerRows, pageRows, tableAttrs, tableBodyAttrs } = table.createViewModel(columns);
 </script>
 
 <div class="container mx-auto w-5/6 space-y-4">
@@ -49,7 +69,11 @@
 
   <Breadcrumb aria-label="">
     <BreadcrumbItem href="/workbooks" home>問題集一覧</BreadcrumbItem>
-    <BreadcrumbItem>{workBook.title}</BreadcrumbItem>
+    <BreadcrumbItem>
+      <div class="min-w-[96px] max-w-[120px] truncate">
+        {workBook.title}
+      </div>
+    </BreadcrumbItem>
   </Breadcrumb>
 
   <WorkBookInputFields
@@ -71,37 +95,66 @@
   </Label>
 
   <!-- TODO: 回答状況を更新できるようにする -->
+  <!-- FIXME: 列の幅は暫定値なので、微調整が必要 -->
   {#if workBookTasks.length >= 1}
-    <Table shadow class="text-md">
-      <TableHead class="text-sm bg-gray-100">
-        <TableHeadCell class="w-1/6">提出状況</TableHeadCell>
-        <TableHeadCell class="w-1/6">コンテスト名</TableHeadCell>
-        <TableHeadCell class="w-7/12">問題名</TableHeadCell>
-        <TableHeadCell class="w-1/12">
-          <span class="sr-only">編集</span>
-        </TableHeadCell>
-      </TableHead>
-      <TableBody tableBodyClass="divide-y">
-        {#each workBookTasks as workBookTask}
-          <TableBodyRow>
-            <TableBodyCell>{'準備中'}</TableBodyCell>
-            <TableBodyCell>
-              <ExternalLinkWrapper
-                url={getContestUrl(getContestIdFrom(workBookTask.taskId))}
-                description={getContestNameFrom(workBookTask.taskId)}
-              ></ExternalLinkWrapper>
-            </TableBodyCell>
-            <TableBodyCell>
-              <ExternalLinkWrapper
-                url={taskUrl(getContestIdFrom(workBookTask.taskId), workBookTask.taskId)}
-                description={getTaskName(workBookTask.taskId)}
-              ></ExternalLinkWrapper>
-            </TableBodyCell>
-            <TableBodyCell></TableBodyCell>
-          </TableBodyRow>
-        {/each}
-      </TableBody>
-    </Table>
+    <div class="overflow-auto rounded-md border">
+      <Table.Root {...$tableAttrs}>
+        <Table.Header>
+          {#each $headerRows as headerRow}
+            <Subscribe rowAttrs={headerRow.attrs()}>
+              <Table.Row>
+                {#each headerRow.cells as cell (cell.id)}
+                  <Subscribe attrs={cell.attrs()} let:attrs props={cell.props()}>
+                    <Table.Head {...attrs}>
+                      <Render of={cell.render()} />
+                    </Table.Head>
+                  </Subscribe>
+                {/each}
+              </Table.Row>
+            </Subscribe>
+          {/each}
+        </Table.Header>
+        <Table.Body {...$tableBodyAttrs}>
+          {#each $pageRows as row (row.id)}
+            <Subscribe rowAttrs={row.attrs()} let:rowAttrs>
+              <Table.Row {...rowAttrs}>
+                {#each row.cells as cell (cell.id)}
+                  <Subscribe attrs={cell.attrs()} let:attrs>
+                    {#if cell.id === 'submissionStatus'}
+                      <Table.Cell {...attrs} class="min-w-[96px] max-w-[120px]">
+                        {'準備中'}
+                      </Table.Cell>
+                    {:else if cell.id === 'contestName'}
+                      <Table.Cell {...attrs} class="min-w-[120px] max-w-[150px] truncate">
+                        <ExternalLinkWrapper
+                          url={getContestUrl(getContestIdFrom(getTaskId(row.id)))}
+                          description={getContestNameFrom(getTaskId(row.id))}
+                        >
+                          <div class="truncate">
+                            <Render of={cell.render()} />
+                          </div>
+                        </ExternalLinkWrapper>
+                      </Table.Cell>
+                    {:else if cell.id === 'taskName'}
+                      <Table.Cell {...attrs} class="min-w-[240px] truncate">
+                        <ExternalLinkWrapper
+                          url={taskUrl(getContestIdFrom(getTaskId(row.id)), getTaskId(row.id))}
+                          description={getTaskName(getTaskId(row.id))}
+                        >
+                          <div class="truncate">
+                            <Render of={cell.render()} />
+                          </div>
+                        </ExternalLinkWrapper>
+                      </Table.Cell>
+                    {/if}
+                  </Subscribe>
+                {/each}
+              </Table.Row>
+            </Subscribe>
+          {/each}
+        </Table.Body>
+      </Table.Root>
+    </div>
   {:else}
     {'問題を1問以上登録してください。'}
   {/if}
