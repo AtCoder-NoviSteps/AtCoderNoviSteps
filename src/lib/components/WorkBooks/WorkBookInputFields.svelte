@@ -22,7 +22,7 @@
       { value: WorkBookType.TEXTBOOK, name: '教科書' },
       { value: WorkBookType.SOLUTION, name: '解法別' },
       { value: WorkBookType.GENRE, name: 'ジャンル別' },
-      { value: WorkBookType.THEME, name: 'テーマ別' },
+      { value: WorkBookType.OTHERS, name: 'その他' },
       { value: WorkBookType.CREATED_BY_USER, name: 'ユーザ作成' },
     ];
 

@@ -40,7 +40,7 @@
     },
     {
       title: 'その他',
-      workBookType: WorkBookType.THEME,
+      workBookType: WorkBookType.OTHERS,
       isOpen: false,
     },
     {
