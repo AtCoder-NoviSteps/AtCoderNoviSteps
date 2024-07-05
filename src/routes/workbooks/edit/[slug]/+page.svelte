@@ -50,13 +50,17 @@
 {#if canView}
   <!-- TODO: 問題集の作成ページのコンポーネントとほぼ共通しているのでリファクタリング -->
   <div class="container mx-auto w-5/6">
-    <form method="post" use:enhance>
+    <form method="post" use:enhance class="space-y-4">
       <HeadingOne title="問題集を編集" />
 
       <!-- TODO: コンポーネントとして切り出す -->
       <Breadcrumb aria-label="">
         <BreadcrumbItem href="/workbooks" home>問題集一覧</BreadcrumbItem>
-        <BreadcrumbItem>{workBook.title}</BreadcrumbItem>
+        <BreadcrumbItem>
+          <div class="min-w-[96px] max-w-[120px] truncate">
+            {workBook.title}
+          </div>
+        </BreadcrumbItem>
       </Breadcrumb>
 
       <WorkBookInputFields
@@ -83,7 +87,7 @@
 
       <!-- 更新ボタン -->
       <div class="flex flex-wrap md:justify-center md:items-center">
-        <SubmissionButton width="w-full md:max-w-md " labelName="更新" />
+        <SubmissionButton width="w-full md:max-w-md mt-4" labelName="更新" />
       </div>
     </form>
   </div>

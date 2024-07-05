@@ -10,6 +10,7 @@
   export let isOfficial: boolean;
   export let workBookType: WorkBookType;
   export let isAdmin: boolean;
+  export let isEditable: boolean = true;
 
   let isPublishedOptions = [
     { value: false, name: '非公開' },
@@ -38,13 +39,28 @@
 </script>
 
 <!-- (ユーザには非表示) 作者 -->
-<InputFieldWrapper inputFieldType="hidden" inputFieldName="userId" bind:inputValue={authorId} />
+<InputFieldWrapper
+  inputFieldType="hidden"
+  inputFieldName="userId"
+  bind:inputValue={authorId}
+  isEditable={false}
+/>
 
 <!-- タイトル -->
-<InputFieldWrapper labelName="タイトル" inputFieldName="title" bind:inputValue={workBookTitle} />
+<InputFieldWrapper
+  labelName="タイトル"
+  inputFieldName="title"
+  bind:inputValue={workBookTitle}
+  {isEditable}
+/>
 
 <!-- 説明 -->
-<InputFieldWrapper labelName="説明" inputFieldName="description" bind:inputValue={description} />
+<InputFieldWrapper
+  labelName="説明"
+  inputFieldName="description"
+  bind:inputValue={description}
+  {isEditable}
+/>
 
 <!-- 一般公開の有無 -->
 <SelectWrapper
@@ -52,6 +68,7 @@
   innerName="isPublished"
   items={isPublishedOptions}
   bind:inputValue={isPublished}
+  {isEditable}
 />
 
 <!-- (ユーザには非表示) 管理者 / 一般ユーザ -->
@@ -59,6 +76,7 @@
   inputFieldType="hidden"
   inputFieldName="isOfficial"
   bind:inputValue={isOfficial}
+  isEditable={false}
 />
 
 <!-- 管理者のみ: 問題集の区分を指定-->
@@ -67,4 +85,5 @@
   innerName="workBookType"
   items={workBookTypeOptions(isOfficial, isAdmin)}
   bind:inputValue={workBookType}
+  isEditable={isAdmin && isEditable}
 />

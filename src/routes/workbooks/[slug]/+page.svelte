@@ -16,13 +16,14 @@
   import ExternalLinkWrapper from '$lib/components/ExternalLinkWrapper.svelte';
   import { getContestUrl } from '$lib/utils/contest';
   import { taskUrl } from '$lib/utils/task';
-  import type { Task } from '$lib/types/task';
   import { getContestNameLabel } from '$lib/utils/contest';
+  import type { WorkBookTaskBase } from '$lib/types/workbook';
+  import type { Task } from '$lib/types/task';
 
   export let data;
 
   let workBook = data.workBook;
-  let workBookTasks = workBook.workBookTasks;
+  let workBookTasks: WorkBookTaskBase[] = workBook.workBookTasks;
   let tasks = data.tasks; // workBookTasksのtaskIdから問題情報を取得
 
   // TODO: 関数をutilへ移動させる
@@ -44,12 +45,16 @@
   };
 </script>
 
-<div class="container mx-auto w-5/6">
-  <HeadingOne title="(準備中) 問題集の詳細" />
+<div class="container mx-auto w-5/6 space-y-4">
+  <HeadingOne title="問題集の詳細" />
 
   <Breadcrumb aria-label="">
     <BreadcrumbItem href="/workbooks" home>問題集一覧</BreadcrumbItem>
-    <BreadcrumbItem>{workBook.title}</BreadcrumbItem>
+    <BreadcrumbItem>
+      <div class="min-w-[96px] max-w-[120px] truncate">
+        {workBook.title}
+      </div>
+    </BreadcrumbItem>
   </Breadcrumb>
 
   <WorkBookInputFields
@@ -59,6 +64,8 @@
     isPublished={workBook.isPublished}
     isOfficial={workBook.isOfficial}
     workBookType={workBook.workBookType}
+    isAdmin={data.loggedInAsAdmin}
+    isEditable={false}
   />
 
   <!-- 問題一覧 -->
@@ -70,36 +77,38 @@
 
   <!-- TODO: 回答状況を更新できるようにする -->
   {#if workBookTasks.length >= 1}
-    <Table shadow class="text-md">
-      <TableHead class="text-sm bg-gray-100">
-        <TableHeadCell class="w-1/6">提出状況</TableHeadCell>
-        <TableHeadCell class="w-1/6">コンテスト名</TableHeadCell>
-        <TableHeadCell class="w-7/12">問題名</TableHeadCell>
-        <TableHeadCell class="w-1/12">
-          <span class="sr-only">編集</span>
-        </TableHeadCell>
-      </TableHead>
-      <TableBody tableBodyClass="divide-y">
-        {#each workBookTasks as workBookTask}
-          <TableBodyRow>
-            <TableBodyCell>{'準備中'}</TableBodyCell>
-            <TableBodyCell>
-              <ExternalLinkWrapper
-                url={getContestUrl(getContestIdFrom(workBookTask.taskId))}
-                description={getContestNameFrom(workBookTask.taskId)}
-              ></ExternalLinkWrapper>
-            </TableBodyCell>
-            <TableBodyCell>
-              <ExternalLinkWrapper
-                url={taskUrl(getContestIdFrom(workBookTask.taskId), workBookTask.taskId)}
-                description={getTaskName(workBookTask.taskId)}
-              ></ExternalLinkWrapper>
-            </TableBodyCell>
-            <TableBodyCell></TableBodyCell>
-          </TableBodyRow>
-        {/each}
-      </TableBody>
-    </Table>
+    <div class="overflow-auto rounded-md border">
+      <Table shadow class="text-md">
+        <TableHead class="text-sm bg-gray-100">
+          <TableHeadCell class="min-w-[96px] max-w-[120px]">回答</TableHeadCell>
+          <TableHeadCell class="min-w-[120px] max-w-[150px] truncate">コンテスト名</TableHeadCell>
+          <TableHeadCell class="min-w-[240px] truncate">問題名</TableHeadCell>
+        </TableHead>
+        <TableBody tableBodyClass="divide-y">
+          {#each workBookTasks as workBookTask}
+            <TableBodyRow>
+              <TableBodyCell>{'準備中'}</TableBodyCell>
+              <TableBodyCell>
+                <div class="truncate">
+                  <ExternalLinkWrapper
+                    url={getContestUrl(getContestIdFrom(workBookTask.taskId))}
+                    description={getContestNameFrom(workBookTask.taskId)}
+                  />
+                </div>
+              </TableBodyCell>
+              <TableBodyCell>
+                <div class="truncate">
+                  <ExternalLinkWrapper
+                    url={taskUrl(getContestIdFrom(workBookTask.taskId), workBookTask.taskId)}
+                    description={getTaskName(workBookTask.taskId)}
+                  />
+                </div>
+              </TableBodyCell>
+            </TableBodyRow>
+          {/each}
+        </TableBody>
+      </Table>
+    </div>
   {:else}
     {'問題を1問以上登録してください。'}
   {/if}

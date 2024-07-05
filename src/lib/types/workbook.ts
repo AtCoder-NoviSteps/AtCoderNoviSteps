@@ -21,6 +21,14 @@ export interface WorkbookWithAuthorName extends WorkBookBase {
 
 export type WorkbooksWithAuthorNames = WorkbookWithAuthorName[];
 
+export interface WorkbookList extends WorkBookBase {
+  id: number;
+  authorId: string;
+  authorName: string;
+}
+
+export type WorkbooksList = WorkbookList[];
+
 // HACK: enumを使うときは毎回書いているので、もっと簡略化できないか?
 export const WorkBookType: { [key in WorkBookTypeOrigin]: key } = {
   CREATED_BY_USER: 'CREATED_BY_USER', // (デフォルト) ユーザ作成: サービスの利用者がさまざまなコンセプトで作成

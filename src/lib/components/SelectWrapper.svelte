@@ -5,9 +5,10 @@
   export let innerName: string;
   export let items;
   export let inputValue: unknown;
+  export let isEditable: boolean = true;
 </script>
 
 <Label class="space-y-2">
   <span>{labelName}</span>
-  <Select class="" name={innerName} {items} bind:value={inputValue} />
+  <Select class="" name={innerName} {items} bind:value={inputValue} disabled={!isEditable} />
 </Label>

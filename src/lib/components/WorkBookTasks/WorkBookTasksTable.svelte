@@ -9,6 +9,9 @@
     TableHeadCell,
   } from 'flowbite-svelte';
 
+  import ExternalLinkWrapper from '$lib/components/ExternalLinkWrapper.svelte';
+  import { getContestUrl, getContestNameLabel } from '$lib/utils/contest';
+  import { taskUrl } from '$lib/utils/task';
   import type { WorkBookTaskBase, WorkBookTaskCreate, WorkBookTaskEdit } from '$lib/types/workbook';
 
   export let workBookTasks = [] as WorkBookTaskBase[];
@@ -29,9 +32,9 @@
 {#if workBookTasksForTable.length > 0}
   <Table shadow class="text-md">
     <TableHead class="text-sm bg-gray-100">
-      <TableHeadCell class="w-1/6">コンテスト名</TableHeadCell>
-      <TableHeadCell class="w-7/12">問題名</TableHeadCell>
-      <TableHeadCell class="w-1/12">
+      <TableHeadCell class="min-w-[120px] max-w-[150px] truncate">コンテスト名</TableHeadCell>
+      <TableHeadCell class="min-w-[240px] truncate">問題名</TableHeadCell>
+      <TableHeadCell class="min-w-[72px]">
         <span class="sr-only">編集</span>
       </TableHeadCell>
     </TableHead>
@@ -41,8 +44,18 @@
       <!-- TODO: 削除にゴミ箱マークを付ける -->
       {#each workBookTasksForTable as task}
         <TableBodyRow>
-          <TableBodyCell>{task.contestId}</TableBodyCell>
-          <TableBodyCell>{task.title}</TableBodyCell>
+          <TableBodyCell>
+            <ExternalLinkWrapper
+              url={getContestUrl(task.contestId)}
+              description={getContestNameLabel(task.contestId)}
+            />
+          </TableBodyCell>
+          <TableBodyCell>
+            <ExternalLinkWrapper
+              url={taskUrl(task.contestId, task.taskId)}
+              description={task.title}
+            />
+          </TableBodyCell>
           <TableBodyCell on:click={() => removeWorkBookTask(task)}>削除</TableBodyCell>
         </TableBodyRow>
       {/each}
