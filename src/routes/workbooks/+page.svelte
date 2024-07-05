@@ -39,8 +39,7 @@
       tooltipContent: '特定のジャンル (グラフ理論・文字列など) を重点的に練習できます',
     },
     {
-      // TODO: その他に書き換え
-      title: 'テーマ別',
+      title: 'その他',
       workBookType: WorkBookType.THEME,
       isOpen: false,
     },
@@ -59,11 +58,14 @@
 
   <!-- TODO: 教科書のみグレード単位で表示 -->
   <!-- TODO: 回答状況を実際のデータに置き換える -->
-  <!-- TODO: タブに各問題集の説明をtooltipsの形で追加 -->
   <!-- TODO: ページネーションを追加 -->
   <Tabs tabStyle="underline" contentClass="bg-white">
     {#each workBookTabs as workBookTab}
-      <TabItemWrapper isOpen={workBookTab.isOpen} title={workBookTab.title}>
+      <TabItemWrapper
+        isOpen={workBookTab.isOpen}
+        title={workBookTab.title}
+        tooltipContent={workBookTab.tooltipContent}
+      >
         <div class="mt-6">
           <WorkBookList
             workbooks={getWorkBooksByType(workbooks, workBookTab.workBookType)}
