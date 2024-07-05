@@ -1,6 +1,7 @@
 // See:
 // https://typescript-eslint.io/rules/ban-ts-comment/
 // https://qiita.com/KokiSakano/items/ff8dde69d7f4296e2480
+// https://gist.github.com/huntabyte/b73073a93a7a664f3cbad7c50376c9c9
 module.exports = {
   root: true,
   extends: [
@@ -13,7 +14,7 @@ module.exports = {
   plugins: ['@typescript-eslint'],
   parserOptions: {
     sourceType: 'module',
-    ecmaVersion: 2020,
+    ecmaVersion: 'latest',
     extraFileExtensions: ['.svelte'],
   },
   rules: {
@@ -27,7 +28,7 @@ module.exports = {
   },
   env: {
     browser: true,
-    es2017: true,
+    es2024: true,
     node: true,
   },
   overrides: [

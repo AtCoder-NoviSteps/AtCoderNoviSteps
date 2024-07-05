@@ -21,15 +21,28 @@
 
 ### フロントエンド
 
-- [Node.js](https://nodejs.org): JavaScriptのランタイム
-- [TypeScript](https://www.typescriptlang.org/): 開発言語
-- [SvelteKit](https://kit.svelte.dev/): 汎用フレームワーク
-- [Flowbite Svelte](https://flowbite-svelte.com/)、[STWUI](https://stwui.vercel.app/): UIライブラリ
-- [Prisma](https://www.prisma.io/): ORM
-- [Lucia](https://lucia-auth.com/): 認証ライブラリ
-- [Superforms](https://superforms.rocks/)、[Zod](https://zod.dev/): バリデーション
-- [pnpm](https://pnpm.io/ja/): パッケージマネージャ
-- [ESLint](https://eslint.org/)、[Prettier](https://prettier.io/): 文法およびフォーマットチェッカー
+- 開発言語
+  - [TypeScript](https://www.typescriptlang.org/)
+- JavaScriptのランタイム
+  - [Node.js](https://nodejs.org)
+- 汎用フレームワーク
+  - [SvelteKit](https://kit.svelte.dev/)
+- UIライブラリ
+  - [shadcn-svelte](https://www.shadcn-svelte.com/): 主にData Tableを使用予定。将来的には、以下のライブラリを使って実装している部分を置き換える。
+  - [Flowbite Svelte](https://flowbite-svelte.com/)
+  - [STWUI](https://stwui.vercel.app/)
+- 認証ライブラリ
+  - [Lucia](https://lucia-auth.com/)
+- ORM
+  - [Prisma](https://www.prisma.io/)
+- バリデーション
+  - [Superforms](https://superforms.rocks/)
+  - [Zod](https://zod.dev/)
+- パッケージマネージャ
+  - [pnpm](https://pnpm.io/ja/)
+- 文法およびフォーマットチェッカー
+  - [ESLint](https://eslint.org/)
+  - [Prettier](https://prettier.io/)
 
 ### インフラ
 
@@ -167,7 +180,7 @@
 
 `staging` : 開発・運営チームの検証用環境です(デフォルトブランチ)。
 
-`main`: 一般公開用の環境です。バグの修正のような緊急性の高い作業とき飲み指定します。
+`main`: 一般公開用の環境です。バグの修正のような緊急性の高い作業ときのみ指定します。
 
 #### 本レポジトリの最新の状態を反映させる方法
 

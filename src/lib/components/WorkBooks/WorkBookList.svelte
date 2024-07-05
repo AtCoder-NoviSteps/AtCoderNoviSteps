@@ -10,10 +10,11 @@
   } from 'flowbite-svelte';
 
   import { canRead, canEdit, canDelete } from '$lib/utils/authorship';
+  import type { WorkbooksList } from '$lib/types/workbook';
   import type { Roles } from '$lib/types/user';
   import ThermometerProgressBar from '$lib/components/ThermometerProgressBar.svelte';
 
-  export let workbooks;
+  export let workbooks: WorkbooksList;
   export let loggedInUser;
 
   let userId = loggedInUser.id;
@@ -63,56 +64,64 @@
 </script>
 
 {#if workbooks.length >= 1}
-  <Table shadow class="text-md">
-    <TableHead class="text-sm bg-gray-100">
-      <TableHeadCell class="w-1/12">作者</TableHeadCell>
-      <TableHeadCell class="w-1/4">タイトル</TableHeadCell>
-      <TableHeadCell class="w-7/12">回答状況</TableHeadCell>
-      <TableHeadCell class="w-2/12"></TableHeadCell>
-    </TableHead>
+  <div class="overflow-auto rounded-md border">
+    <Table shadow class="text-md">
+      <TableHead class="text-sm bg-gray-100">
+        <TableHeadCell>作者</TableHeadCell>
+        <TableHeadCell>タイトル</TableHeadCell>
+        <TableHeadCell>回答状況</TableHeadCell>
+        <TableHeadCell></TableHeadCell>
+      </TableHead>
 
-    <TableBody tableBodyClass="divide-y">
-      {#each workbooks as workbook}
-        {#if canRead(workbook.isPublished, userId, workbook.authorId)}
-          <TableBodyRow>
-            <TableBodyCell>{workbook.authorName}</TableBodyCell>
-            <TableBodyCell>
-              <div>
-                <span class="p-1 rounded-lg {getPublicationStatusColor(workbook.isPublished)}">
-                  {getPublicationStatusLabel(workbook.isPublished)}
-                </span>
-                <a
-                  href="/workbooks/{workbook.id}"
-                  class="font-medium text-primary-600 hover:underline dark:text-primary-500"
-                >
-                  {workbook.title}
-                </a>
-              </div>
-            </TableBodyCell>
-            <TableBodyCell>
-              <ThermometerProgressBar
-                submissionRatios={dummySubmissionRatios(80, 5, 5)}
-                width="w-full"
-              />
-            </TableBodyCell>
-            <TableBodyCell>
-              <div class="flex space-x-3">
-                {#if canEdit(userId, workbook.authorId, role, workbook.isPublished)}
-                  <a href="/workbooks/edit/{workbook.id}">編集</a>
-                {/if}
+      <TableBody tableBodyClass="divide-y">
+        {#each workbooks as workbook}
+          {#if canRead(workbook.isPublished, userId, workbook.authorId)}
+            <TableBodyRow>
+              <TableBodyCell>
+                <div class="truncate min-w-[96px] max-w-[120px]">
+                  {workbook.authorName}
+                </div>
+              </TableBodyCell>
+              <TableBodyCell>
+                <div class="flex items-center space-x-2 truncate min-w-[120px] max-w-[180px]">
+                  <span class="p-1 rounded-lg {getPublicationStatusColor(workbook.isPublished)}">
+                    {getPublicationStatusLabel(workbook.isPublished)}
+                  </span>
+                  <a
+                    href="/workbooks/{workbook.id}"
+                    class="font-medium text-primary-600 hover:underline dark:text-primary-500 truncate"
+                  >
+                    {workbook.title}
+                  </a>
+                </div>
+              </TableBodyCell>
+              <TableBodyCell>
+                <div class="min-w-[240px]">
+                  <ThermometerProgressBar
+                    submissionRatios={dummySubmissionRatios(80, 5, 5)}
+                    width="w-full"
+                  />
+                </div>
+              </TableBodyCell>
+              <TableBodyCell>
+                <div class="flex justify-center items-center space-x-3 min-w-[96px] max-w-[120px]">
+                  {#if canEdit(userId, workbook.authorId, role, workbook.isPublished)}
+                    <a href="/workbooks/edit/{workbook.id}">編集</a>
+                  {/if}
 
-                {#if canDelete(userId, workbook.authorId)}
-                  <form method="POST" action="?/delete&slug={workbook.id}" use:enhance>
-                    <button>削除</button>
-                  </form>
-                {/if}
-              </div>
-            </TableBodyCell>
-          </TableBodyRow>
-        {/if}
-      {/each}
-    </TableBody>
-  </Table>
+                  {#if canDelete(userId, workbook.authorId)}
+                    <form method="POST" action="?/delete&slug={workbook.id}" use:enhance>
+                      <button>削除</button>
+                    </form>
+                  {/if}
+                </div>
+              </TableBodyCell>
+            </TableBodyRow>
+          {/if}
+        {/each}
+      </TableBody>
+    </Table>
+  </div>
 {:else}
   該当する問題集が見つかりませんでした。「新規作成」ボタンを押して、問題集を作成してください。
 {/if}

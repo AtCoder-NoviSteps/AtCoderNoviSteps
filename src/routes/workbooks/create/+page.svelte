@@ -39,11 +39,14 @@
 
 <!-- TODO: 問題集の編集ページのコンポーネントとほぼ共通しているのでリファクタリング -->
 <div class="container mx-auto w-5/6">
-  <form method="post" use:enhance>
+  <form method="post" use:enhance class="space-y-4">
     <HeadingOne title="問題集を作成" />
 
     <Breadcrumb aria-label="">
       <BreadcrumbItem href="/workbooks" home>問題集一覧</BreadcrumbItem>
+      <BreadcrumbItem>
+        <div class="min-w-[96px] max-w-[120px] truncate">問題集を作成</div>
+      </BreadcrumbItem>
     </Breadcrumb>
 
     <WorkBookInputFields
@@ -70,7 +73,7 @@
 
     <!-- 作成ボタンを追加 -->
     <div class="flex flex-wrap md:justify-center md:items-center">
-      <SubmissionButton width="w-full md:max-w-md " labelName="作成" />
+      <SubmissionButton width="w-full md:max-w-md mt-4" labelName="作成" />
     </div>
   </form>
 </div>
