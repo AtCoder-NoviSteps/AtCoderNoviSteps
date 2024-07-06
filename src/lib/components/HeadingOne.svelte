@@ -8,7 +8,7 @@
   export let fontWeight: string = 'font-normal';
 </script>
 
-<h1 class={`${textSize} ${fontWeight}`}>
+<h1 class={`${textSize} ${fontWeight} truncate`}>
   {title}
   <slot />
 </h1>

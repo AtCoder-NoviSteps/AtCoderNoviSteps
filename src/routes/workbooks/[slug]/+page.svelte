@@ -2,7 +2,6 @@
   import {
     Breadcrumb,
     BreadcrumbItem,
-    Label,
     Table,
     TableHead,
     TableHeadCell,
@@ -12,7 +11,6 @@
   } from 'flowbite-svelte';
 
   import HeadingOne from '$lib/components/HeadingOne.svelte';
-  import WorkBookInputFields from '$lib/components/WorkBooks/WorkBookInputFields.svelte';
   import ExternalLinkWrapper from '$lib/components/ExternalLinkWrapper.svelte';
   import { getContestUrl } from '$lib/utils/contest';
   import { taskUrl } from '$lib/utils/task';
@@ -46,7 +44,9 @@
 </script>
 
 <div class="container mx-auto w-5/6 space-y-4">
-  <HeadingOne title="問題集の詳細" />
+  <div class="min-w-[240px] max-w-[1440px] truncate">
+    <HeadingOne title={workBook.title} />
+  </div>
 
   <Breadcrumb aria-label="">
     <BreadcrumbItem href="/workbooks" home>問題集一覧</BreadcrumbItem>
@@ -57,24 +57,17 @@
     </BreadcrumbItem>
   </Breadcrumb>
 
-  <WorkBookInputFields
-    authorId={workBook.authorId}
-    workBookTitle={workBook.title}
-    description={workBook.description}
-    isPublished={workBook.isPublished}
-    isOfficial={workBook.isOfficial}
-    workBookType={workBook.workBookType}
-    isAdmin={data.loggedInAsAdmin}
-    isEditable={false}
-  />
+  {#if workBook.description !== ''}
+    <div>
+      <div>説明</div>
+      <div class="min-w-[240px] max-w-[1440px] truncate">
+        {workBook.description}
+      </div>
+    </div>
+  {/if}
 
   <!-- 問題一覧 -->
-  <!-- TODO: コンポーネントとして切り出す -->
   <!-- TODO: 問題一覧ページのコンポーネントを再利用する -->
-  <Label class="space-y-2">
-    <span>問題一覧</span>
-  </Label>
-
   <!-- TODO: 回答状況を更新できるようにする -->
   {#if workBookTasks.length >= 1}
     <div class="overflow-auto rounded-md border">
