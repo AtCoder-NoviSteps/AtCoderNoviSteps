@@ -10,7 +10,7 @@
   } from 'flowbite-svelte';
 
   import { canRead, canEdit, canDelete } from '$lib/utils/authorship';
-  import type { WorkBookType, WorkbooksList } from '$lib/types/workbook';
+  import { WorkBookType, type WorkbooksList } from '$lib/types/workbook';
   import { TaskGrade, type TaskGradeRange } from '$lib/types/task';
   import type { Roles } from '$lib/types/user';
   import GradeLabel from '$lib/components/GradeLabel.svelte';
@@ -83,7 +83,7 @@
   <div class="overflow-auto rounded-md border">
     <Table shadow class="text-md">
       <TableHead class="text-sm bg-gray-100">
-        {#if workbookType === 'CREATED_BY_USER'}
+        {#if workbookType === WorkBookType.CREATED_BY_USER}
           <TableHeadCell>作者</TableHeadCell>
         {:else}
           <TableHeadCell>
@@ -104,7 +104,7 @@
         {#each workbooks as workbook}
           {#if canRead(workbook.isPublished, userId, workbook.authorId)}
             <TableBodyRow>
-              {#if workbookType === 'CREATED_BY_USER'}
+              {#if workbookType === WorkBookType.CREATED_BY_USER}
                 <TableBodyCell>
                   <div class="truncate min-w-[96px] max-w-[120px]">
                     {workbook.authorName}
