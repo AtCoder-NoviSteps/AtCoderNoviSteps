@@ -1,4 +1,4 @@
-import { fail, redirect } from '@sveltejs/kit';
+import { error, fail, redirect } from '@sveltejs/kit';
 import { superValidate } from 'sveltekit-superforms/server';
 import { zod } from 'sveltekit-superforms/adapters';
 
@@ -7,7 +7,11 @@ import { workBookSchema } from '$lib/zod/schema';
 import * as workBooksCrud from '$lib/services/workbooks';
 import { Roles } from '$lib/types/user';
 import type { WorkBook } from '$lib/types/workbook';
-import { BAD_REQUEST, TEMPORARY_REDIRECT } from '$lib/constants/http-response-status-codes';
+import {
+  BAD_REQUEST,
+  FORBIDDEN,
+  TEMPORARY_REDIRECT,
+} from '$lib/constants/http-response-status-codes';
 import * as tasksCrud from '$lib/services/tasks';
 
 export const load = async ({ locals }) => {
@@ -21,6 +25,12 @@ export const load = async ({ locals }) => {
   const form = await superValidate(null, zod(workBookSchema));
   const author = locals.user;
   const isAdmin = author.role === Roles.ADMIN;
+
+  // FIXME: 一般ユーザが問題集を作成できるようになったら削除する
+  if (!isAdmin) {
+    error(FORBIDDEN, `アクセス権限がありません。`);
+  }
+
   const tasks = await tasksCrud.getTasks();
 
   return { form: form, author: author, isAdmin: isAdmin, tasks: tasks };
