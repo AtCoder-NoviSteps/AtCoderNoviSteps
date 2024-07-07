@@ -17,6 +17,7 @@
     type WorkBookTaskBase,
     WorkBookType,
   } from '$lib/types/workbook';
+  import { Roles } from '$lib/types/user';
 
   const getWorkBooksByType = (workbooks: WorkbooksList, workBookType: WorkBookType) => {
     const filteredWorkbooks = workbooks.filter(
@@ -31,19 +32,21 @@
       title: '教科書',
       workBookType: WorkBookType.TEXTBOOK,
       isOpen: true,
-      tooltipContent: '特定のグレードの問題を挑戦するのに必要な基礎知識が学べます',
+      tooltipContent: '特定のグレードの問題を挑戦するのに必要な基礎知識が学べます。',
     },
     {
       title: '解法別',
       workBookType: WorkBookType.SOLUTION,
       isOpen: false,
-      tooltipContent: '特定の解法を応用する力が身につけられます',
+      tooltipContent:
+        '特定のアルゴリズム・データ構造を応用する力や競技プログラミング特有の考え方を身につけられます。',
     },
     {
       title: 'ジャンル別',
       workBookType: WorkBookType.GENRE,
       isOpen: false,
-      tooltipContent: '特定のジャンル (グラフ理論・文字列など) を重点的に練習できます',
+      tooltipContent:
+        '特定のジャンル (グラフ理論・文字列など) を重点的に練習できます。解法に直接言及するようなネタバレはありません。',
     },
     {
       title: 'その他',
@@ -117,27 +120,32 @@
 <div class="container mx-auto w-5/6">
   <HeadingOne title="問題集" />
 
-  <Button href="/workbooks/create" type="submit" class="mt-4 mb-4">新規作成</Button>
+  <!-- TODO: フィルタリング機能などが実装できたら、一般ユーザも問題集を作成できるようにする -->
+  {#if loggedInUser?.role === Roles.ADMIN}
+    <Button href="/workbooks/create" type="submit" class="mt-4 mb-4">新規作成</Button>
+  {/if}
 
-  <!-- TODO: 教科書のみグレード単位で表示 -->
+  <!-- TODO: adminが作成私した問題集は、下限グレードで選択できるように -->
   <!-- TODO: 回答状況を実際のデータに置き換える -->
   <!-- TODO: ページネーションを追加 -->
-  <Tabs tabStyle="underline" contentClass="bg-white">
-    {#each workBookTabs as workBookTab}
-      <TabItemWrapper
-        isOpen={workBookTab.isOpen}
-        title={workBookTab.title}
-        tooltipContent={workBookTab.tooltipContent}
-      >
-        <div class="mt-6">
-          <WorkBookList
-            workbookType={workBookTab.workBookType}
-            workbooks={getWorkBooksByType(workbooks, workBookTab.workBookType)}
-            {workbookGradeRanges}
-            {loggedInUser}
-          />
-        </div>
-      </TabItemWrapper>
-    {/each}
-  </Tabs>
+  <div>
+    <Tabs tabStyle="underline" contentClass="bg-white">
+      {#each workBookTabs as workBookTab}
+        <TabItemWrapper
+          isOpen={workBookTab.isOpen}
+          title={workBookTab.title}
+          tooltipContent={workBookTab.tooltipContent}
+        >
+          <div class="mt-6">
+            <WorkBookList
+              workbookType={workBookTab.workBookType}
+              workbooks={getWorkBooksByType(workbooks, workBookTab.workBookType)}
+              {workbookGradeRanges}
+              {loggedInUser}
+            />
+          </div>
+        </TabItemWrapper>
+      {/each}
+    </Tabs>
+  </div>
 </div>

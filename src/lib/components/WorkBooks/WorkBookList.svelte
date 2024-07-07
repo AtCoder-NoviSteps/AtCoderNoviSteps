@@ -25,16 +25,12 @@
   let role: Roles = loggedInUser.role;
 
   const getPublicationStatusLabel = (isPublished: boolean) => {
-    if (isPublished) {
-      return '公開';
-    } else {
+    if (!isPublished) {
       return '非公開';
     }
   };
   const getPublicationStatusColor = (isPublished: boolean) => {
-    if (isPublished) {
-      return 'bg-primary-200';
-    } else {
+    if (!isPublished) {
       return 'bg-red-200';
     }
   };
@@ -124,9 +120,11 @@
               {/if}
               <TableBodyCell>
                 <div class="flex items-center space-x-2 truncate min-w-[120px] max-w-[180px]">
-                  <span class="p-1 rounded-lg {getPublicationStatusColor(workbook.isPublished)}">
-                    {getPublicationStatusLabel(workbook.isPublished)}
-                  </span>
+                  {#if !workbook.isPublished}
+                    <span class="p-1 rounded-lg {getPublicationStatusColor(workbook.isPublished)}">
+                      {getPublicationStatusLabel(workbook.isPublished)}
+                    </span>
+                  {/if}
                   <a
                     href="/workbooks/{workbook.id}"
                     class="font-medium text-primary-600 hover:underline dark:text-primary-500 truncate"
