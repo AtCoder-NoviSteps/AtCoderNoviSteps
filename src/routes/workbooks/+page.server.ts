@@ -1,6 +1,7 @@
 import { error } from '@sveltejs/kit';
 
 import * as workBooksCrud from '$lib/services/workbooks';
+import * as taskCrud from '$lib/services/tasks';
 import * as userCrud from '$lib/services/users';
 import { getLoggedInUser, canDelete } from '$lib/utils/authorship';
 import { parseWorkBookId } from '$lib/utils/workbook';
@@ -17,7 +18,6 @@ export async function load({ locals }) {
   const loggedInUser = await getLoggedInUser(locals);
 
   const workbooks = await workBooksCrud.getWorkBooks();
-
   const workbooksWithAuthors = await Promise.all(
     workbooks.map(async (workbook) => {
       const workbookAuthor = await userCrud.getUserById(workbook.authorId);
@@ -31,7 +31,13 @@ export async function load({ locals }) {
     }),
   );
 
-  return { workbooks: workbooksWithAuthors, loggedInUser: loggedInUser };
+  const tasksByTaskId = await taskCrud.getTasksByTaskId();
+
+  return {
+    workbooks: workbooksWithAuthors,
+    tasksByTaskId: tasksByTaskId,
+    loggedInUser: loggedInUser,
+  };
 }
 
 export const actions = {

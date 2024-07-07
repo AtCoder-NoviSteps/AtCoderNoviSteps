@@ -6,6 +6,28 @@ export const taskUrl = (contestId: string, taskId: string) => {
   return `${ATCODER_BASE_CONTEST_URL}/${contestId}/tasks/${taskId}`;
 };
 
+// order: 1 (first) - 17 (last)、9999: Infinity
+export const getTaskGradeOrder: Map<TaskGrade, number> = new Map([
+  [TaskGrade.Q11, 1],
+  [TaskGrade.Q10, 2],
+  [TaskGrade.Q9, 3],
+  [TaskGrade.Q8, 4],
+  [TaskGrade.Q7, 5],
+  [TaskGrade.Q6, 6],
+  [TaskGrade.Q5, 7],
+  [TaskGrade.Q4, 8],
+  [TaskGrade.Q3, 9],
+  [TaskGrade.Q2, 10],
+  [TaskGrade.Q1, 11],
+  [TaskGrade.D1, 12],
+  [TaskGrade.D2, 13],
+  [TaskGrade.D3, 14],
+  [TaskGrade.D4, 15],
+  [TaskGrade.D5, 16],
+  [TaskGrade.D6, 17],
+  [TaskGrade.PENDING, 9999],
+]);
+
 // https://tailwindcss.com/docs/customizing-colors
 // https://tailwindcss.com/docs/content-configuration#dynamic-class-names
 export const getTaskGradeColor = (grade: string) => {

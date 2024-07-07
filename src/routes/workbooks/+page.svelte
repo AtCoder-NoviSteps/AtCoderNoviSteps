@@ -9,7 +9,14 @@
   import HeadingOne from '$lib/components/HeadingOne.svelte';
   import TabItemWrapper from '$lib/components/TabItemWrapper.svelte';
   import WorkBookList from '$lib/components/WorkBooks/WorkBookList.svelte';
-  import { type WorkbookList, type WorkbooksList, WorkBookType } from '$lib/types/workbook';
+  import { getTaskGradeOrder } from '$lib/utils/task';
+  import { type Task, TaskGrade, type TaskGrades, type TaskGradeRange } from '$lib/types/task';
+  import {
+    type WorkbookList,
+    type WorkbooksList,
+    type WorkBookTaskBase,
+    WorkBookType,
+  } from '$lib/types/workbook';
 
   const getWorkBooksByType = (workbooks: WorkbooksList, workBookType: WorkBookType) => {
     const filteredWorkbooks = workbooks.filter(
@@ -49,6 +56,62 @@
       isOpen: false,
     },
   ];
+
+  const tasksByTaskId: Map<string, Task> = data.tasksByTaskId;
+
+  // 計算量: 問題集の数をN、各問題集の問題の数をMとすると、O(N * M)
+  const getWorkBookGradeRanges = (workbooks: WorkbooksList): Map<number, TaskGradeRange> => {
+    const gradeRanges: Map<number, TaskGradeRange> = new Map();
+
+    workbooks.forEach((workbook: WorkbookList) => {
+      const taskGrades = workbook.workBookTasks.reduce(
+        (results: TaskGrades, workBookTask: WorkBookTaskBase) => {
+          const task = tasksByTaskId.get(workBookTask.taskId);
+
+          if (task && task.grade !== TaskGrade.PENDING) {
+            results.push(task.grade as TaskGrade);
+          }
+          return results;
+        },
+        [],
+      );
+
+      const { lower, upper } = calcGradeMinAndMax(taskGrades as TaskGrades);
+      gradeRanges.set(workbook.id, { lower, upper });
+    });
+
+    return gradeRanges;
+  };
+
+  function calcGradeMinAndMax(taskGrades: TaskGrades): TaskGradeRange {
+    if (taskGrades.length === 0) {
+      return { lower: TaskGrade.PENDING, upper: TaskGrade.PENDING };
+    }
+
+    const gradeOrders = taskGrades.map(getGradeOrder).filter((order) => order !== undefined);
+
+    if (gradeOrders.length === 0) {
+      return { lower: TaskGrade.PENDING, upper: TaskGrade.PENDING };
+    }
+
+    const minOrder = Math.min(...gradeOrders);
+    const maxOrder = Math.max(...gradeOrders);
+
+    const gradeMin = taskGrades.find(
+      (grade: TaskGrade) => getGradeOrder(grade) === minOrder,
+    ) as TaskGrade;
+    const gradeMax = taskGrades.find(
+      (grade: TaskGrade) => getGradeOrder(grade) === maxOrder,
+    ) as TaskGrade;
+
+    return { lower: gradeMin, upper: gradeMax };
+  }
+
+  function getGradeOrder(grade: TaskGrade) {
+    return getTaskGradeOrder.get(grade);
+  }
+
+  const workbookGradeRanges = getWorkBookGradeRanges(data.workbooks);
 </script>
 
 <div class="container mx-auto w-5/6">
@@ -68,7 +131,9 @@
       >
         <div class="mt-6">
           <WorkBookList
+            workbookType={workBookTab.workBookType}
             workbooks={getWorkBooksByType(workbooks, workBookTab.workBookType)}
+            {workbookGradeRanges}
             {loggedInUser}
           />
         </div>

@@ -10,11 +10,15 @@
   } from 'flowbite-svelte';
 
   import { canRead, canEdit, canDelete } from '$lib/utils/authorship';
-  import type { WorkbooksList } from '$lib/types/workbook';
+  import type { WorkBookType, WorkbooksList } from '$lib/types/workbook';
+  import { TaskGrade, type TaskGradeRange } from '$lib/types/task';
   import type { Roles } from '$lib/types/user';
+  import GradeLabel from '$lib/components/GradeLabel.svelte';
   import ThermometerProgressBar from '$lib/components/ThermometerProgressBar.svelte';
 
+  export let workbookType: WorkBookType;
   export let workbooks: WorkbooksList;
+  export let workbookGradeRanges: Map<number, TaskGradeRange>;
   export let loggedInUser;
 
   let userId = loggedInUser.id;
@@ -61,13 +65,36 @@
 
     return ratios;
   };
+
+  function getGradeLower(workbookId: number): TaskGrade {
+    const workbookGradeRange = workbookGradeRanges.get(workbookId);
+
+    return workbookGradeRange?.lower ?? TaskGrade.PENDING;
+  }
+
+  function getGradeUpper(workbookId: number): TaskGrade {
+    const workbookGradeRange = workbookGradeRanges.get(workbookId);
+
+    return workbookGradeRange?.upper ?? TaskGrade.PENDING;
+  }
 </script>
 
 {#if workbooks.length >= 1}
   <div class="overflow-auto rounded-md border">
     <Table shadow class="text-md">
       <TableHead class="text-sm bg-gray-100">
-        <TableHeadCell>作者</TableHeadCell>
+        {#if workbookType === 'CREATED_BY_USER'}
+          <TableHeadCell>作者</TableHeadCell>
+        {:else}
+          <TableHeadCell>
+            <div>グレード</div>
+            <div>（下限）</div>
+          </TableHeadCell>
+          <TableHeadCell>
+            <div>グレード</div>
+            <div>（上限）</div>
+          </TableHeadCell>
+        {/if}
         <TableHeadCell>タイトル</TableHeadCell>
         <TableHeadCell>回答状況</TableHeadCell>
         <TableHeadCell></TableHeadCell>
@@ -77,11 +104,24 @@
         {#each workbooks as workbook}
           {#if canRead(workbook.isPublished, userId, workbook.authorId)}
             <TableBodyRow>
-              <TableBodyCell>
-                <div class="truncate min-w-[96px] max-w-[120px]">
-                  {workbook.authorName}
-                </div>
-              </TableBodyCell>
+              {#if workbookType === 'CREATED_BY_USER'}
+                <TableBodyCell>
+                  <div class="truncate min-w-[96px] max-w-[120px]">
+                    {workbook.authorName}
+                  </div>
+                </TableBodyCell>
+              {:else}
+                <TableBodyCell>
+                  <div class="flex items-center justify-center min-w-[54px] max-w-[54px]">
+                    <GradeLabel taskGrade={getGradeLower(workbook.id)} />
+                  </div>
+                </TableBodyCell>
+                <TableBodyCell>
+                  <div class="flex items-center justify-center min-w-[54px] max-w-[54px]">
+                    <GradeLabel taskGrade={getGradeUpper(workbook.id)} />
+                  </div>
+                </TableBodyCell>
+              {/if}
               <TableBodyCell>
                 <div class="flex items-center space-x-2 truncate min-w-[120px] max-w-[180px]">
                   <span class="p-1 rounded-lg {getPublicationStatusColor(workbook.isPublished)}">
