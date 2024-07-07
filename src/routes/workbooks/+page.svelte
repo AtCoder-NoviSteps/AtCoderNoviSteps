@@ -76,14 +76,14 @@
         [],
       );
 
-      const { lower, upper } = calcGradeMinAndMax(taskGrades as TaskGrades);
+      const { lower, upper } = calcGradeLowerAndUpper(taskGrades as TaskGrades);
       gradeRanges.set(workbook.id, { lower, upper });
     });
 
     return gradeRanges;
   };
 
-  function calcGradeMinAndMax(taskGrades: TaskGrades): TaskGradeRange {
+  function calcGradeLowerAndUpper(taskGrades: TaskGrades): TaskGradeRange {
     if (taskGrades.length === 0) {
       return { lower: TaskGrade.PENDING, upper: TaskGrade.PENDING };
     }
@@ -94,17 +94,17 @@
       return { lower: TaskGrade.PENDING, upper: TaskGrade.PENDING };
     }
 
-    const minOrder = Math.min(...gradeOrders);
-    const maxOrder = Math.max(...gradeOrders);
+    const lowerOrder = Math.min(...gradeOrders);
+    const upperOrder = Math.max(...gradeOrders);
 
-    const gradeMin = taskGrades.find(
-      (grade: TaskGrade) => getGradeOrder(grade) === minOrder,
+    const gradeLower = taskGrades.find(
+      (grade: TaskGrade) => getGradeOrder(grade) === lowerOrder,
     ) as TaskGrade;
-    const gradeMax = taskGrades.find(
-      (grade: TaskGrade) => getGradeOrder(grade) === maxOrder,
+    const gradeUpper = taskGrades.find(
+      (grade: TaskGrade) => getGradeOrder(grade) === upperOrder,
     ) as TaskGrade;
 
-    return { lower: gradeMin, upper: gradeMax };
+    return { lower: gradeLower, upper: gradeUpper };
   }
 
   function getGradeOrder(grade: TaskGrade) {
