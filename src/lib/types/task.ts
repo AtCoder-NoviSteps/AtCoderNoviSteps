@@ -61,7 +61,14 @@ export function getTaskGrade(taskGrade: string): TaskGradeOrigin | undefined {
 // Re-exporting the original type with the original name.
 export type TaskGrade = TaskGradeOrigin;
 
+export type TaskGrades = TaskGrade[];
+
 export const taskGradeValues = Object.values(TaskGrade);
+
+export type TaskGradeRange = {
+  lower: TaskGrade;
+  upper: TaskGrade;
+};
 
 export interface TaskResult extends Task {
   user_id: string;
