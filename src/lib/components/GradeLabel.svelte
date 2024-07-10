@@ -4,8 +4,8 @@
 
   export let taskGrade: TaskGrade;
 
-  const grade = getTaskGradeLabel(taskGrade);
-  const gradeColor = getTaskGradeColor(taskGrade);
+  $: grade = getTaskGradeLabel(taskGrade);
+  $: gradeColor = getTaskGradeColor(taskGrade);
 </script>
 
 <div class="p-1 w-10 text-center rounded-lg {toWhiteTextIfNeeds(grade)} {gradeColor}">

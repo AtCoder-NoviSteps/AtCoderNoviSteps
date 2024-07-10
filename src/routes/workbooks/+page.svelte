@@ -118,11 +118,13 @@
 </script>
 
 <div class="container mx-auto w-5/6">
-  <HeadingOne title="問題集" />
+  <HeadingOne title="問題集一覧" />
 
   <!-- TODO: フィルタリング機能などが実装できたら、一般ユーザも問題集を作成できるようにする -->
   {#if loggedInUser?.role === Roles.ADMIN}
-    <Button href="/workbooks/create" type="submit" class="mt-4 mb-4">新規作成</Button>
+    <div class="ml-2">
+      <Button href="/workbooks/create" type="submit" class="mt-4 mb-4">新規作成</Button>
+    </div>
   {/if}
 
   <!-- TODO: adminが作成私した問題集は、下限グレードで選択できるように -->
