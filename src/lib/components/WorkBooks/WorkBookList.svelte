@@ -1,6 +1,8 @@
 <script lang="ts">
   import { enhance } from '$app/forms';
   import {
+    ButtonGroup,
+    Button,
     Table,
     TableBody,
     TableBodyCell,
@@ -10,9 +12,11 @@
   } from 'flowbite-svelte';
 
   import { canRead, canEdit, canDelete } from '$lib/utils/authorship';
-  import { WorkBookType, type WorkbooksList } from '$lib/types/workbook';
+  import { WorkBookType, type WorkbookList, type WorkbooksList } from '$lib/types/workbook';
+  import { getTaskGradeLabel } from '$lib/utils/task';
   import { TaskGrade, type TaskGradeRange } from '$lib/types/task';
   import type { Roles } from '$lib/types/user';
+  import TooltipWrapper from '$lib/components/TooltipWrapper.svelte';
   import GradeLabel from '$lib/components/GradeLabel.svelte';
   import ThermometerProgressBar from '$lib/components/ThermometerProgressBar.svelte';
 
@@ -23,6 +27,25 @@
 
   let userId = loggedInUser.id;
   let role: Roles = loggedInUser.role;
+
+  let selectedGrade: TaskGrade = TaskGrade.Q10;
+  let filteredWorkbooks: WorkbooksList;
+
+  $: filteredWorkbooks =
+    workbookType === WorkBookType.CREATED_BY_USER
+      ? workbooks
+      : workbooks.filter((workbook: WorkbookList) => {
+          const lower = getGradeLower(workbook.id);
+          return lower === selectedGrade;
+        });
+  $: readableWorkbooksCount = filteredWorkbooks.reduce((count, workbook: WorkbookList) => {
+    const hasReadPermission = canRead(workbook.isPublished, userId, workbook.authorId);
+    return count + (hasReadPermission ? 1 : 0);
+  }, 0);
+
+  function filterByGradeLower(grade: TaskGrade) {
+    selectedGrade = grade;
+  }
 
   const getPublicationStatusLabel = (isPublished: boolean) => {
     if (!isPublished) {
@@ -75,7 +98,26 @@
   }
 </script>
 
-{#if workbooks.length >= 1}
+<!-- TODO: 6Q〜1Q?にも対応 -->
+<!-- TODO: スタイルを整える -->
+<!-- TODO: 「ユーザ作成」の問題集には、検索機能を追加 -->
+{#if workbookType !== WorkBookType.CREATED_BY_USER}
+  <div class="mb-6">
+    <div class="flex items-center space-x-4">
+      <ButtonGroup>
+        {#each [TaskGrade.Q10, TaskGrade.Q9, TaskGrade.Q8, TaskGrade.Q7] as grade}
+          <Button on:click={() => filterByGradeLower(grade)}>
+            {getTaskGradeLabel(grade)}
+          </Button>
+        {/each}
+      </ButtonGroup>
+
+      <TooltipWrapper tooltipContent="問題集のグレード（下限）を指定します" />
+    </div>
+  </div>
+{/if}
+
+{#if readableWorkbooksCount >= 1}
   <div class="overflow-auto rounded-md border">
     <Table shadow class="text-md">
       <TableHead class="text-sm bg-gray-100">
@@ -97,7 +139,7 @@
       </TableHead>
 
       <TableBody tableBodyClass="divide-y">
-        {#each workbooks as workbook}
+        {#each filteredWorkbooks as workbook}
           {#if canRead(workbook.isPublished, userId, workbook.authorId)}
             <TableBodyRow>
               {#if workbookType === WorkBookType.CREATED_BY_USER}
@@ -161,5 +203,6 @@
     </Table>
   </div>
 {:else}
-  該当する問題集が見つかりませんでした。「新規作成」ボタンを押して、問題集を作成してください。
+  <div>該当する問題集は見つかりませんでした。</div>
+  <div>新しい問題集が追加されるまで、しばらくお待ちください。</div>
 {/if}
