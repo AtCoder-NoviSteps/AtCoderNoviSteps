@@ -3,6 +3,7 @@ import { getTasks, getTask } from '$lib/services/tasks';
 import * as answer_crud from './answers';
 import type { TaskResult, TaskResults, Tasks } from '$lib/types/task';
 import type { Task } from '$lib/types/task';
+import type { WorkBookTaskBase } from '$lib/types/workbook';
 import { NOT_FOUND } from '$lib/constants/http-response-status-codes';
 import { default as db } from '$lib/server/database';
 import { getSubmissionStatusMapWithId, getSubmissionStatusMapWithName } from './submission_status';
@@ -75,6 +76,44 @@ export async function getTaskResultsOnlyResultExists(userId: string): Promise<Ta
   return Array.from(taskResultsMap.get(userId).values());
 }
 
+export async function getTaskResultsByTaskId(
+  workBookTasks: WorkBookTaskBase[],
+  userId: string,
+): Promise<Map<string, TaskResult>> {
+  const taskResultsWithTaskId = workBookTasks.map((workBookTask: WorkBookTaskBase) =>
+    getTaskResultWithErrorHandling(workBookTask.taskId, userId).then((taskResult: TaskResult) => ({
+      taskId: workBookTask.taskId,
+      taskResult: taskResult,
+    })),
+  );
+
+  const taskResultsMap = (await Promise.all(taskResultsWithTaskId)).reduce(
+    (map, { taskId, taskResult }: { taskId: string; taskResult: TaskResult }) =>
+      map.set(taskId, taskResult),
+    new Map<string, TaskResult>(),
+  );
+
+  return taskResultsMap;
+}
+
+async function getTaskResultWithErrorHandling(taskId: string, userId: string): Promise<TaskResult> {
+  try {
+    return await getTaskResult(taskId, userId);
+  } catch (error) {
+    return await handleTaskResultError(taskId, userId);
+  }
+}
+
+async function handleTaskResultError(taskId: string, userId: string): Promise<TaskResult> {
+  try {
+    const task: Tasks = await getTask(taskId);
+    return await createDefaultTaskResult(userId, task[0]);
+  } catch (innerError) {
+    console.error(`Failed to create a default task result for taskId ${taskId}:`, innerError);
+    throw new Error(`問題id: ${taskId} の作成に失敗しました。`);
+  }
+}
+
 export function createDefaultTaskResult(userId: string, task: Task): TaskResult {
   const taskResult: TaskResult = {
     contest_id: task.contest_id,
@@ -93,6 +132,7 @@ export function createDefaultTaskResult(userId: string, task: Task): TaskResult 
 
   return taskResult;
 }
+
 export async function getTaskResult(slug: string, userId: string) {
   const task = await getTask(slug);
 
