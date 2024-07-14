@@ -1,16 +1,18 @@
 <script lang="ts">
+  import type { WorkBookTaskBase } from '$lib/types/workbook';
   import type { TaskResult, TaskResults } from '$lib/types/task';
 
+  export let workBookTasks: WorkBookTaskBase[] = [];
   export let taskResults: TaskResults;
 
   let acceptedCount: number;
-  let taskResultsCount: number;
+  let allTaskCount: number;
   let acceptedRatioPercent: number;
 
   $: {
     acceptedCount = taskResults.filter((taskResult: TaskResult) => taskResult.is_ac).length;
-    taskResultsCount = taskResults.length;
-    acceptedRatioPercent = (acceptedCount / taskResults.length) * 100;
+    allTaskCount = workBookTasks.length >= 1 ? workBookTasks.length : taskResults.length;
+    acceptedRatioPercent = allTaskCount >= 1 ? (acceptedCount / allTaskCount) * 100 : 0;
   }
 </script>
 
@@ -19,7 +21,7 @@
 <!-- https://developer.mozilla.org/ja/docs/Web/JavaScript/Reference/Global_Objects/Number/toFixed -->
 <div class="text-sm w-max-[72px] w-max-[96px] text-center">
   <div>
-    {acceptedCount} / {taskResultsCount}
+    {acceptedCount} / {allTaskCount}
   </div>
   <div>
     {`(${acceptedRatioPercent.toFixed(1)}%)`}

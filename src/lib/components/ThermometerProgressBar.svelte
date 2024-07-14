@@ -1,22 +1,15 @@
 <script lang="ts">
+  import type { WorkBookTaskBase } from '$lib/types/workbook';
   import type { TaskResult, TaskResults } from '$lib/types/task';
   import type { SubmissionRatios } from '$lib/types/submission';
   import { submission_statuses } from '$lib/services/submission_status';
 
+  export let workBookTasks: WorkBookTaskBase[] = [];
   export let taskResults: TaskResults;
   // FIXME: 小さい画面でも横スクロールで見えるようにする
   export let width: string = 'w-7/12 md:w-8/12 lg:w-9/12';
 
   let submissionRatios: SubmissionRatios;
-
-  const getRatioPercent = (taskResults: TaskResults, statusName: string) => {
-    const count = taskResults.filter(
-      (taskResult: TaskResult) => taskResult.status_name === statusName,
-    ).length;
-    const ratioPercent = (count / taskResults.length) * 100;
-
-    return ratioPercent;
-  };
 
   // TODO: ユーザの設定に応じて、ACかどうかの判定を変更できるようにする
   $: {
@@ -33,6 +26,26 @@
         return results;
       });
   }
+
+  const getRatioPercent = (taskResults: TaskResults, statusName: string) => {
+    const filteredTaskCount = taskResults.filter(
+      (taskResult: TaskResult) => taskResult.status_name === statusName,
+    ).length;
+    const allTaskCount = getAllTaskCount();
+    const ratioPercent = allTaskCount >= 1 ? (filteredTaskCount / allTaskCount) * 100 : 0;
+
+    return ratioPercent;
+  };
+
+  const getAllTaskCount = () => {
+    if (workBookTasks.length >= 1) {
+      return workBookTasks.length;
+    } else if (taskResults.length >= 1) {
+      return taskResults.length;
+    }
+
+    return 0;
+  };
 
   const baseAttributes =
     'shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center';
