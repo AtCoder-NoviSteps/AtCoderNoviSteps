@@ -148,7 +148,7 @@ export async function getTaskResult(slug: string, userId: string) {
   }
 
   const status = statusById.get(taskanswer.status_id);
-  taskResult.status_id = status.status_id;
+  taskResult.status_id = status.id;
   taskResult.status_name = status.status_name;
   taskResult.submission_status_image_path = status.image_path;
   taskResult.submission_status_label_name = status.label_name;
