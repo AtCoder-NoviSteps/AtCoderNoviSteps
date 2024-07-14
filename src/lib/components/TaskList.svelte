@@ -82,6 +82,7 @@
       </div>
     </span>
 
+    <!-- FIXME: clickを1回実行するとactionsが2回実行されてしまう。原因と修正方法が分かっていない。 -->
     <!-- TODO: 「編集」ボタンを押したときに問題情報を更新できるようにする -->
     <!-- TODO: 問題が多くなってきたら、ページネーションを導入する -->
     <!-- TODO: 回答状況に応じて、フィルタリングできるようにする -->
@@ -96,7 +97,10 @@
       </TableHead>
       <TableBody tableBodyClass="divide-y">
         {#each taskResults as taskResult}
-          <TableBodyRow class={getBackgroundColorFrom(taskResult.status_name)}>
+          <TableBodyRow
+            key={taskResult.contest_id + taskResult.task_id}
+            class={getBackgroundColorFrom(taskResult.status_name)}
+          >
             <TableBodyCell
               class="p-3 pl-3 md:pl-6 flex items-center"
               on:click={() => updatingModal.openModal(taskResult)}
