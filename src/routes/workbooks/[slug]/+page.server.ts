@@ -1,10 +1,12 @@
-import { error } from '@sveltejs/kit';
+import { error, type Actions } from '@sveltejs/kit';
 
 import { getLoggedInUser, isAdmin, canRead } from '$lib/utils/authorship';
 import { Roles } from '$lib/types/user';
 import { getWorkbookWithAuthor, parseWorkBookId } from '$lib/utils/workbook';
-import * as taskCrud from '$lib/services/tasks';
+import * as taskResultsCrud from '$lib/services/task_results';
+import type { TaskResult } from '$lib/types/task';
 import { BAD_REQUEST, FORBIDDEN } from '$lib/constants/http-response-status-codes';
+import * as action from '$lib/actions/update_task_result';
 
 export async function load({ locals, params }) {
   const loggedInUser = await getLoggedInUser(locals);
@@ -24,8 +26,22 @@ export async function load({ locals, params }) {
     error(FORBIDDEN, `問題集id: ${params.slug} にアクセスする権限がありません。`);
   }
 
-  // FIXME: ユーザの回答状況を反映させるため、taskResultsに置き換え
-  const tasks = await taskCrud.getTasksByTaskId();
+  const taskResults: Map<string, TaskResult> = await taskResultsCrud.getTaskResultsByTaskId(
+    workBook.workBookTasks,
+    loggedInUser?.id as string,
+  );
 
-  return { loggedInAsAdmin: loggedInAsAdmin, ...workbookWithAuthor, tasks: tasks };
+  return {
+    isLoggedIn: loggedInUser !== null,
+    loggedInAsAdmin: loggedInAsAdmin,
+    ...workbookWithAuthor,
+    taskResults: taskResults,
+  };
 }
+
+export const actions = {
+  update: async ({ request, locals }) => {
+    const operationLog = 'workbook -> actions -> update';
+    return await action.updateTaskResult({ request, locals }, operationLog);
+  },
+} satisfies Actions;

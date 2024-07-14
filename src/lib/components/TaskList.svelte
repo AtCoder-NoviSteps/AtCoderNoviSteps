@@ -2,7 +2,6 @@
   import {
     AccordionItem,
     Accordion,
-    Img,
     Table,
     TableBody,
     TableBodyCell,
@@ -10,14 +9,13 @@
     TableHead,
     TableHeadCell,
   } from 'flowbite-svelte';
-  // @ts-ignore
-  import ChevronDownOutline from 'flowbite-svelte-icons/ChevronDownOutline.svelte';
 
   import type { TaskResult, TaskResults } from '$lib/types/task';
   import type { SubmissionRatios } from '$lib/types/submission';
 
   import ThermometerProgressBar from '$lib/components/ThermometerProgressBar.svelte';
   import UpdatingModal from '$lib/components/SubmissionStatus/UpdatingModal.svelte';
+  import SubmissionStatusImage from '$lib/components/SubmissionStatus/SubmissionStatusImage.svelte';
   import { getBackgroundColorFrom, submission_statuses } from '$lib/services/submission_status';
   import { ATCODER_BASE_CONTEST_URL } from '$lib/constants/urls';
   import { getContestNameLabel } from '$lib/utils/contest';
@@ -84,6 +82,7 @@
       </div>
     </span>
 
+    <!-- FIXME: clickを1回実行するとactionsが2回実行されてしまう。原因と修正方法が分かっていない。 -->
     <!-- TODO: 「編集」ボタンを押したときに問題情報を更新できるようにする -->
     <!-- TODO: 問題が多くなってきたら、ページネーションを導入する -->
     <!-- TODO: 回答状況に応じて、フィルタリングできるようにする -->
@@ -98,24 +97,15 @@
       </TableHead>
       <TableBody tableBodyClass="divide-y">
         {#each taskResults as taskResult}
-          <TableBodyRow class={getBackgroundColorFrom(taskResult.status_name)}>
+          <TableBodyRow
+            key={taskResult.contest_id + taskResult.task_id}
+            class={getBackgroundColorFrom(taskResult.status_name)}
+          >
             <TableBodyCell
               class="p-3 pl-3 md:pl-6 flex items-center"
               on:click={() => updatingModal.openModal(taskResult)}
             >
-              <Img
-                src="../../{taskResult.submission_status_image_path}"
-                alt={taskResult.submission_status_label_name}
-                class="h-8 w-8"
-              />
-              {#if isLoggedIn}
-                <div class="flex flex-col items-center ml-2 md:ml-4 text-xs">
-                  <div class="mb-1">
-                    {'更新'}
-                  </div>
-                  <ChevronDownOutline class="w-3 h-3 text-primary-600 dark:text-white inline" />
-                </div>
-              {/if}
+              <SubmissionStatusImage {taskResult} {isLoggedIn} />
             </TableBodyCell>
             <TableBodyCell>
               <a
