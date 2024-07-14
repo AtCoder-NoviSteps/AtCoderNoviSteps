@@ -1,8 +1,38 @@
 <script lang="ts">
+  import type { TaskResult, TaskResults } from '$lib/types/task';
   import type { SubmissionRatios } from '$lib/types/submission';
+  import { submission_statuses } from '$lib/services/submission_status';
 
-  export let submissionRatios: SubmissionRatios;
+  export let taskResults: TaskResults;
+  // FIXME: 小さい画面でも横スクロールで見えるようにする
   export let width: string = 'w-7/12 md:w-8/12 lg:w-9/12';
+
+  let submissionRatios: SubmissionRatios;
+
+  const getRatioPercent = (taskResults: TaskResults, statusName: string) => {
+    const count = taskResults.filter(
+      (taskResult: TaskResult) => taskResult.status_name === statusName,
+    ).length;
+    const ratioPercent = (count / taskResults.length) * 100;
+
+    return ratioPercent;
+  };
+
+  // TODO: ユーザの設定に応じて、ACかどうかの判定を変更できるようにする
+  $: {
+    submissionRatios = submission_statuses
+      .filter((status) => status.status_name !== 'ns')
+      .map((status) => {
+        const name = status.status_name;
+        const results = {
+          name: name,
+          ratioPercent: getRatioPercent(taskResults, name),
+          color: status.background_color,
+        };
+
+        return results;
+      });
+  }
 
   const baseAttributes =
     'shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center';
