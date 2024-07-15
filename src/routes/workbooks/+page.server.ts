@@ -2,6 +2,7 @@ import { error } from '@sveltejs/kit';
 
 import * as workBooksCrud from '$lib/services/workbooks';
 import * as taskCrud from '$lib/services/tasks';
+import * as taskResultsCrud from '$lib/services/task_results';
 import * as userCrud from '$lib/services/users';
 import { getLoggedInUser, canDelete } from '$lib/utils/authorship';
 import { parseWorkBookId } from '$lib/utils/workbook';
@@ -31,11 +32,18 @@ export async function load({ locals }) {
     }),
   );
 
+  // 問題集を構成する問題のグレードの上下限を取得するために使用
   const tasksByTaskId = await taskCrud.getTasksByTaskId();
+  // ユーザの回答状況を表示するために使用
+  const taskResultsByTaskId = await taskResultsCrud.getTaskResultsOnlyResultExists(
+    loggedInUser?.id as string,
+    true,
+  );
 
   return {
     workbooks: workbooksWithAuthors,
     tasksByTaskId: tasksByTaskId,
+    taskResultsByTaskId: taskResultsByTaskId,
     loggedInUser: loggedInUser,
   };
 }

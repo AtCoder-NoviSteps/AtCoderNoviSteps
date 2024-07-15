@@ -14,15 +14,17 @@
   import { canRead, canEdit, canDelete } from '$lib/utils/authorship';
   import { WorkBookType, type WorkbookList, type WorkbooksList } from '$lib/types/workbook';
   import { getTaskGradeLabel } from '$lib/utils/task';
-  import { TaskGrade, type TaskGradeRange } from '$lib/types/task';
+  import { TaskGrade, type TaskGradeRange, type TaskResults } from '$lib/types/task';
   import type { Roles } from '$lib/types/user';
   import TooltipWrapper from '$lib/components/TooltipWrapper.svelte';
   import GradeLabel from '$lib/components/GradeLabel.svelte';
   import ThermometerProgressBar from '$lib/components/ThermometerProgressBar.svelte';
+  import AcceptedCounter from '$lib/components/SubmissionStatus/AcceptedCounter.svelte';
 
   export let workbookType: WorkBookType;
   export let workbooks: WorkbooksList;
   export let workbookGradeRanges: Map<number, TaskGradeRange>;
+  export let taskResultsWithWorkBookId: Map<number, TaskResults>;
   export let loggedInUser;
 
   let userId = loggedInUser.id;
@@ -58,33 +60,6 @@
     }
   };
 
-  // FIXME: 実際のデータに置き換え
-  const dummySubmissionRatios = (
-    acRatio: number,
-    acWithEditorialRatio: number,
-    waRatio: number,
-  ) => {
-    const ratios = [
-      {
-        name: 'ac',
-        ratioPercent: acRatio,
-        color: 'bg-atcoder-ac-background',
-      },
-      {
-        name: 'ac_with_editorial',
-        ratioPercent: acWithEditorialRatio,
-        color: 'bg-atcoder-ac-with_editorial-background',
-      },
-      {
-        name: 'wa',
-        ratioPercent: waRatio,
-        color: 'bg-atcoder-wa-background',
-      },
-    ];
-
-    return ratios;
-  };
-
   function getGradeLower(workbookId: number): TaskGrade {
     const workbookGradeRange = workbookGradeRanges.get(workbookId);
 
@@ -95,6 +70,10 @@
     const workbookGradeRange = workbookGradeRanges.get(workbookId);
 
     return workbookGradeRange?.upper ?? TaskGrade.PENDING;
+  }
+
+  function getTaskResult(workbookId: number) {
+    return taskResultsWithWorkBookId?.get(workbookId) ?? [];
   }
 </script>
 
@@ -117,6 +96,7 @@
   </div>
 {/if}
 
+<!-- FIXME: 横幅などのスタイルを微調整する -->
 {#if readableWorkbooksCount >= 1}
   <div class="overflow-auto rounded-md border">
     <Table shadow class="text-md">
@@ -135,6 +115,7 @@
         {/if}
         <TableHeadCell>タイトル</TableHeadCell>
         <TableHeadCell>回答状況</TableHeadCell>
+        <TableHeadCell></TableHeadCell>
         <TableHeadCell></TableHeadCell>
       </TableHead>
 
@@ -175,11 +156,18 @@
                   </a>
                 </div>
               </TableBodyCell>
+              <TableBodyCell class="min-w-[240px] max-w-[1440px]">
+                <ThermometerProgressBar
+                  workBookTasks={workbook.workBookTasks}
+                  taskResults={getTaskResult(workbook.id)}
+                  width="w-full"
+                />
+              </TableBodyCell>
               <TableBodyCell>
-                <div class="min-w-[240px]">
-                  <ThermometerProgressBar
-                    submissionRatios={dummySubmissionRatios(80, 5, 5)}
-                    width="w-full"
+                <div class="min-w-[48px] max-w-[96px]">
+                  <AcceptedCounter
+                    workBookTasks={workbook.workBookTasks}
+                    taskResults={getTaskResult(workbook.id)}
                   />
                 </div>
               </TableBodyCell>
