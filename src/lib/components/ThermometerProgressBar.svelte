@@ -38,13 +38,7 @@
   };
 
   const getAllTaskCount = () => {
-    if (workBookTasks.length >= 1) {
-      return workBookTasks.length;
-    } else if (taskResults.length >= 1) {
-      return taskResults.length;
-    }
-
-    return 0;
+    return workBookTasks.length || taskResults.length || 0;
   };
 
   const baseAttributes =
