@@ -32,7 +32,7 @@
       (taskResult: TaskResult) => taskResult.status_name === statusName,
     ).length;
     const allTaskCount = getAllTaskCount();
-    const ratioPercent = allTaskCount >= 1 ? (filteredTaskCount / allTaskCount) * 100 : 0;
+    const ratioPercent = allTaskCount ? (filteredTaskCount / allTaskCount) * 100 : 0;
 
     return ratioPercent;
   };
