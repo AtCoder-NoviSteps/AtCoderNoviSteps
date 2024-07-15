@@ -13,18 +13,18 @@
 
   // TODO: ユーザの設定に応じて、ACかどうかの判定を変更できるようにする
   $: {
-    submissionRatios = submission_statuses
-      .filter((status) => status.status_name !== 'ns')
-      .map((status) => {
-        const name = status.status_name;
-        const results = {
-          name: name,
-          ratioPercent: getRatioPercent(taskResults, name),
-          color: status.background_color,
-        };
+    const filteredStatuses = submission_statuses.filter((status) => status.status_name !== 'ns');
 
-        return results;
-      });
+    submissionRatios = filteredStatuses.map((status) => {
+      const name = status.status_name;
+      const ratioPercent = getRatioPercent(taskResults, name);
+
+      return {
+        name: name,
+        ratioPercent: ratioPercent,
+        color: status.background_color,
+      };
+    });
   }
 
   const getRatioPercent = (taskResults: TaskResults, statusName: string) => {
