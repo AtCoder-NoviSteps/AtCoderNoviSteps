@@ -10,9 +10,10 @@
   let acceptedRatioPercent: number;
 
   $: {
-    acceptedCount = taskResults.filter((taskResult: TaskResult) => taskResult.is_ac).length;
-    allTaskCount = workBookTasks.length >= 1 ? workBookTasks.length : taskResults.length;
-    acceptedRatioPercent = allTaskCount >= 1 ? (acceptedCount / allTaskCount) * 100 : 0;
+    const acceptedResults = taskResults.filter((taskResult: TaskResult) => taskResult.is_ac);
+    acceptedCount = acceptedResults.length;
+    allTaskCount = workBookTasks.length || taskResults.length;
+    acceptedRatioPercent = allTaskCount ? (acceptedCount / allTaskCount) * 100 : 0;
   }
 </script>
 
