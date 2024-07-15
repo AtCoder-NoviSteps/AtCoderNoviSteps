@@ -96,6 +96,7 @@
   </div>
 {/if}
 
+<!-- TODO: serverから回答が付与されているworkBook IdをキーとするTaskResultsを取得 -->
 <!-- FIXME: 横幅などのスタイルを微調整する -->
 {#if readableWorkbooksCount >= 1}
   <div class="overflow-auto rounded-md border">
@@ -104,17 +105,17 @@
         {#if workbookType === WorkBookType.CREATED_BY_USER}
           <TableHeadCell>作者</TableHeadCell>
         {:else}
-          <TableHeadCell>
+          <TableHeadCell class="text-center px-0">
             <div>グレード</div>
             <div>（下限）</div>
           </TableHeadCell>
-          <TableHeadCell>
+          <TableHeadCell class="text-center px-0">
             <div>グレード</div>
             <div>（上限）</div>
           </TableHeadCell>
         {/if}
         <TableHeadCell>タイトル</TableHeadCell>
-        <TableHeadCell>回答状況</TableHeadCell>
+        <TableHeadCell class="text-left px-0">回答状況</TableHeadCell>
         <TableHeadCell></TableHeadCell>
         <TableHeadCell></TableHeadCell>
       </TableHead>
@@ -130,19 +131,19 @@
                   </div>
                 </TableBodyCell>
               {:else}
-                <TableBodyCell>
+                <TableBodyCell class="justify-center w-14 px-2">
                   <div class="flex items-center justify-center min-w-[54px] max-w-[54px]">
                     <GradeLabel taskGrade={getGradeLower(workbook.id)} />
                   </div>
                 </TableBodyCell>
-                <TableBodyCell>
+                <TableBodyCell tdClass="justify-center w-14 px-0">
                   <div class="flex items-center justify-center min-w-[54px] max-w-[54px]">
                     <GradeLabel taskGrade={getGradeUpper(workbook.id)} />
                   </div>
                 </TableBodyCell>
               {/if}
-              <TableBodyCell>
-                <div class="flex items-center space-x-2 truncate min-w-[120px] max-w-[180px]">
+              <TableBodyCell class="w-2/5 pl-6 pr-4">
+                <div class="flex items-center space-x-2 truncate min-w-[240px] max-w-[480px]">
                   {#if !workbook.isPublished}
                     <span class="p-1 rounded-lg {getPublicationStatusColor(workbook.isPublished)}">
                       {getPublicationStatusLabel(workbook.isPublished)}
@@ -156,14 +157,14 @@
                   </a>
                 </div>
               </TableBodyCell>
-              <TableBodyCell class="min-w-[240px] max-w-[1440px]">
+              <TableBodyCell class="min-w-[240px] max-w-[1440px] px-0">
                 <ThermometerProgressBar
                   workBookTasks={workbook.workBookTasks}
                   taskResults={getTaskResult(workbook.id)}
                   width="w-full"
                 />
               </TableBodyCell>
-              <TableBodyCell>
+              <TableBodyCell class="justify-center w-24 px-2">
                 <div class="min-w-[48px] max-w-[96px]">
                   <AcceptedCounter
                     workBookTasks={workbook.workBookTasks}
@@ -171,7 +172,7 @@
                   />
                 </div>
               </TableBodyCell>
-              <TableBodyCell>
+              <TableBodyCell class="justify-center w-24 px-0">
                 <div class="flex justify-center items-center space-x-3 min-w-[96px] max-w-[120px]">
                   {#if canEdit(userId, workbook.authorId, role, workbook.isPublished)}
                     <a href="/workbooks/edit/{workbook.id}">編集</a>
