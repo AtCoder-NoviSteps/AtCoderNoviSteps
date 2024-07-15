@@ -11,6 +11,7 @@
   import WorkBookList from '$lib/components/WorkBooks/WorkBookList.svelte';
   import { getTaskGradeOrder } from '$lib/utils/task';
   import { type Task, TaskGrade, type TaskGrades, type TaskGradeRange } from '$lib/types/task';
+  import type { TaskResult, TaskResults } from '$lib/types/task';
   import {
     type WorkbookList,
     type WorkbooksList,
@@ -61,6 +62,7 @@
   ];
 
   const tasksByTaskId: Map<string, Task> = data.tasksByTaskId;
+  let taskResultsByTaskId = data.taskResultsByTaskId as Map<string, TaskResult>;
 
   // 計算量: 問題集の数をN、各問題集の問題の数をMとすると、O(N * M)
   const getWorkBookGradeRanges = (workbooks: WorkbooksList): Map<number, TaskGradeRange> => {
@@ -115,6 +117,33 @@
   }
 
   const workbookGradeRanges = getWorkBookGradeRanges(data.workbooks);
+
+  // 計算量: 問題集の数をN、各問題集の問題の数をMとすると、O(N * M)
+  function fetchTaskResultsWithWorkBookId(workbooks: WorkbooksList, workBookType: WorkBookType) {
+    const workbooksByType = getWorkBooksByType(workbooks, workBookType);
+    const taskResultsWithWorkBookId = new Map();
+
+    workbooksByType.forEach((workbook: WorkbookList) => {
+      const taskResults: TaskResults = workbook.workBookTasks.reduce(
+        (array: TaskResults, workBookTask: WorkBookTaskBase) => {
+          const taskResult = taskResultsByTaskId.get(workBookTask.taskId);
+
+          if (taskResult !== undefined) {
+            array.push(taskResult);
+          }
+
+          return array;
+        },
+        [],
+      );
+
+      if (taskResults.length > 0) {
+        taskResultsWithWorkBookId.set(workbook.id, taskResults);
+      }
+    });
+
+    return taskResultsWithWorkBookId;
+  }
 </script>
 
 <div class="container mx-auto w-5/6">
@@ -127,8 +156,6 @@
     </div>
   {/if}
 
-  <!-- TODO: adminが作成私した問題集は、下限グレードで選択できるように -->
-  <!-- TODO: 回答状況を実際のデータに置き換える -->
   <!-- TODO: ページネーションを追加 -->
   <div>
     <Tabs tabStyle="underline" contentClass="bg-white">
@@ -143,6 +170,10 @@
               workbookType={workBookTab.workBookType}
               workbooks={getWorkBooksByType(workbooks, workBookTab.workBookType)}
               {workbookGradeRanges}
+              taskResultsWithWorkBookId={fetchTaskResultsWithWorkBookId(
+                workbooks,
+                workBookTab.workBookType,
+              )}
               {loggedInUser}
             />
           </div>

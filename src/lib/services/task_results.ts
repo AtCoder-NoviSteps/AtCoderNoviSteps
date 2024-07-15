@@ -48,14 +48,20 @@ async function relateTasksAndAnswers(
   return taskResults;
 }
 
-export async function getTaskResultsOnlyResultExists(userId: string): Promise<TaskResults> {
-  const taskResultsMap = new Map();
+// Note: 問題集の一覧（ユーザの回答を含む）を参照するときに使用する。
+//       with_mapをtrueにすると、taskIdを使って各TaskResultにO(1)でアクセスできる。
+// Why : データ総量を抑えるため。
+export async function getTaskResultsOnlyResultExists(
+  userId: string,
+  with_map: boolean = false,
+): Promise<TaskResults | Map<string, TaskResult>> {
+  const taskResultsMap: Map<string, TaskResult> = new Map();
 
   // TODO: answerの降順にしたい
   const tasks = await getTasks();
   const answers = await answer_crud.getAnswers(userId);
   const tasksHasAnswer = tasks.filter((task) => answers.has(task.task_id));
-  const sampleTaskResults = tasksHasAnswer.map((task: Task) => {
+  const taskResultsWithAnswer = tasksHasAnswer.map((task: Task) => {
     const taskResult = createDefaultTaskResult(userId, task);
 
     const answer = answers.get(task.task_id);
@@ -66,16 +72,21 @@ export async function getTaskResultsOnlyResultExists(userId: string): Promise<Ta
     taskResult.is_ac = status.is_ac;
     taskResult.updated_at = answer.updated_at;
 
+    // Note: 上記の高速化のための前処理で必要
+    taskResultsMap.set(task.task_id, taskResult);
+
     return taskResult;
   });
 
-  if (!taskResultsMap.has(userId)) {
-    taskResultsMap.set(userId, sampleTaskResults);
+  if (with_map) {
+    return taskResultsMap;
+  } else {
+    return taskResultsWithAnswer;
   }
-
-  return Array.from(taskResultsMap.get(userId).values());
 }
 
+// Note: 個別の問題集を参照するときのみ使用する。
+// Why : 未回答の問題も含めて取得するため、データ総量を抑えるためにも問題集の一覧（ユーザの回答を含む）を参照するときは上記のメソッドを使用する。
 export async function getTaskResultsByTaskId(
   workBookTasks: WorkBookTaskBase[],
   userId: string,
