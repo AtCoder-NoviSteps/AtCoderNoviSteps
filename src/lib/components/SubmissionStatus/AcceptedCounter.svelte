@@ -5,9 +5,9 @@
   export let workBookTasks: WorkBookTaskBase[] = [];
   export let taskResults: TaskResults;
 
-  let acceptedCount: number;
-  let allTaskCount: number;
-  let acceptedRatioPercent: number;
+  let acceptedCount: number = 0;
+  let allTaskCount: number = 0;
+  let acceptedRatioPercent: number = 0;
 
   $: {
     const acceptedResults = taskResults.filter((taskResult: TaskResult) => taskResult.is_ac);
