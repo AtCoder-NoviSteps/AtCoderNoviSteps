@@ -10,6 +10,7 @@
     TableBodyRow,
   } from 'flowbite-svelte';
 
+  import PublicationStatusLabel from '$lib/components/WorkBooks/PublicationStatusLabel.svelte';
   import HeadingOne from '$lib/components/HeadingOne.svelte';
   import ThermometerProgressBar from '$lib/components/ThermometerProgressBar.svelte';
   import AcceptedCounter from '$lib/components/SubmissionStatus/AcceptedCounter.svelte';
@@ -71,9 +72,13 @@
 </script>
 
 <div class="container mx-auto w-5/6 space-y-4">
-  <!-- TODO: 非公開の場合は先頭にアイコンをつける -->
-  <div class="min-w-[240px] max-w-[1440px] truncate">
-    <HeadingOne title={workBook.title} />
+  <div class="flex items-center space-x-1 sm:space-x-3">
+    <div class="min-w-[56px] max-w-[56px] px-0">
+      <PublicationStatusLabel isPublished={workBook.isPublished} />
+    </div>
+    <div class="min-w-[240px] max-w-[1440px] truncate">
+      <HeadingOne title={workBook.title} />
+    </div>
   </div>
 
   <Breadcrumb aria-label="">

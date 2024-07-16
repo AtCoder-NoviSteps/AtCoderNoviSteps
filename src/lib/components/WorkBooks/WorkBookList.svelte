@@ -18,6 +18,7 @@
   import type { Roles } from '$lib/types/user';
   import TooltipWrapper from '$lib/components/TooltipWrapper.svelte';
   import GradeLabel from '$lib/components/GradeLabel.svelte';
+  import PublicationStatusLabel from '$lib/components/WorkBooks/PublicationStatusLabel.svelte';
   import ThermometerProgressBar from '$lib/components/ThermometerProgressBar.svelte';
   import AcceptedCounter from '$lib/components/SubmissionStatus/AcceptedCounter.svelte';
 
@@ -144,11 +145,7 @@
               {/if}
               <TableBodyCell class="w-2/5 pl-6 pr-4">
                 <div class="flex items-center space-x-2 truncate min-w-[240px] max-w-[480px]">
-                  {#if !workbook.isPublished}
-                    <span class="p-1 rounded-lg {getPublicationStatusColor(workbook.isPublished)}">
-                      {getPublicationStatusLabel(workbook.isPublished)}
-                    </span>
-                  {/if}
+                  <PublicationStatusLabel isPublished={workbook.isPublished} />
                   <a
                     href="/workbooks/{workbook.id}"
                     class="font-medium text-primary-600 hover:underline dark:text-primary-500 truncate"
