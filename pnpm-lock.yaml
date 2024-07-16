@@ -10,7 +10,7 @@ importers:
     dependencies:
       '@lucia-auth/adapter-prisma':
         specifier: 3.0.2
-        version: 3.0.2(@prisma/client@5.16.2(prisma@5.16.2))(lucia@2.7.7)
+        version: 3.0.2(@prisma/client@5.17.0(prisma@5.17.0))(lucia@2.7.7)
       '@mermaid-js/mermaid-cli':
         specifier: 10.9.1
         version: 10.9.1(typescript@5.5.3)
@@ -18,11 +18,11 @@ importers:
         specifier: 2.11.8
         version: 2.11.8
       '@prisma/client':
-        specifier: 5.16.2
-        version: 5.16.2(prisma@5.16.2)
+        specifier: 5.17.0
+        version: 5.17.0(prisma@5.17.0)
       '@testing-library/svelte':
         specifier: 5.2.0
-        version: 5.2.0(svelte@4.2.18)(vite@5.3.3(@types/node@16.18.11))(vitest@2.0.3(@edge-runtime/vm@3.2.0)(@types/node@16.18.11)(@vitest/ui@2.0.3)(jsdom@24.1.0))
+        version: 5.2.0(svelte@4.2.18)(vite@5.3.4(@types/node@16.18.11))(vitest@2.0.3(@edge-runtime/vm@3.2.0)(@types/node@16.18.11)(@vitest/ui@2.0.3)(jsdom@24.1.0))
       '@types/jest':
         specifier: 29.5.12
         version: 29.5.12
@@ -49,7 +49,7 @@ importers:
         version: 9.5.0
       prisma-erd-generator:
         specifier: 1.11.2
-        version: 1.11.2(@prisma/client@5.16.2(prisma@5.16.2))(typescript@5.5.3)
+        version: 1.11.2(@prisma/client@5.17.0(prisma@5.17.0))(typescript@5.5.3)
       svelte-add:
         specifier: 2023.9.17-0.0
         version: 2023.9.17-0.0
@@ -60,8 +60,8 @@ importers:
         specifier: 1.14.0
         version: 1.14.0
       tailwindcss:
-        specifier: 3.4.5
-        version: 3.4.5(ts-node@10.9.1(@types/node@16.18.11)(typescript@5.5.3))
+        specifier: 3.4.6
+        version: 3.4.6(ts-node@10.9.1(@types/node@16.18.11)(typescript@5.5.3))
       vercel:
         specifier: 34.4.0
         version: 34.4.0
@@ -71,22 +71,22 @@ importers:
         version: 1.45.1
       '@quramy/prisma-fabbrica':
         specifier: 2.2.1
-        version: 2.2.1(@prisma/client@5.16.2(prisma@5.16.2))(typescript@5.5.3)
+        version: 2.2.1(@prisma/client@5.17.0(prisma@5.17.0))(typescript@5.5.3)
       '@sveltejs/adapter-auto':
         specifier: 3.2.2
-        version: 3.2.2(@sveltejs/kit@2.5.18(@sveltejs/vite-plugin-svelte@3.1.1(svelte@4.2.18)(vite@5.3.3(@types/node@16.18.11)))(svelte@4.2.18)(vite@5.3.3(@types/node@16.18.11)))
+        version: 3.2.2(@sveltejs/kit@2.5.18(@sveltejs/vite-plugin-svelte@3.1.1(svelte@4.2.18)(vite@5.3.4(@types/node@16.18.11)))(svelte@4.2.18)(vite@5.3.4(@types/node@16.18.11)))
       '@sveltejs/adapter-vercel':
         specifier: 5.4.1
-        version: 5.4.1(@sveltejs/kit@2.5.18(@sveltejs/vite-plugin-svelte@3.1.1(svelte@4.2.18)(vite@5.3.3(@types/node@16.18.11)))(svelte@4.2.18)(vite@5.3.3(@types/node@16.18.11)))
+        version: 5.4.1(@sveltejs/kit@2.5.18(@sveltejs/vite-plugin-svelte@3.1.1(svelte@4.2.18)(vite@5.3.4(@types/node@16.18.11)))(svelte@4.2.18)(vite@5.3.4(@types/node@16.18.11)))
       '@sveltejs/kit':
         specifier: 2.5.18
-        version: 2.5.18(@sveltejs/vite-plugin-svelte@3.1.1(svelte@4.2.18)(vite@5.3.3(@types/node@16.18.11)))(svelte@4.2.18)(vite@5.3.3(@types/node@16.18.11))
+        version: 2.5.18(@sveltejs/vite-plugin-svelte@3.1.1(svelte@4.2.18)(vite@5.3.4(@types/node@16.18.11)))(svelte@4.2.18)(vite@5.3.4(@types/node@16.18.11))
       '@sveltejs/vite-plugin-svelte':
         specifier: 3.1.1
-        version: 3.1.1(svelte@4.2.18)(vite@5.3.3(@types/node@16.18.11))
+        version: 3.1.1(svelte@4.2.18)(vite@5.3.4(@types/node@16.18.11))
       '@tailwindcss/forms':
         specifier: 0.5.7
-        version: 0.5.7(tailwindcss@3.4.5(ts-node@10.9.1(@types/node@16.18.11)(typescript@5.5.3)))
+        version: 0.5.7(tailwindcss@3.4.6(ts-node@10.9.1(@types/node@16.18.11)(typescript@5.5.3)))
       '@testing-library/jest-dom':
         specifier: 6.4.6
         version: 6.4.6(@types/jest@29.5.12)(vitest@2.0.3(@edge-runtime/vm@3.2.0)(@types/node@16.18.11)(@vitest/ui@2.0.3)(jsdom@24.1.0))
@@ -119,7 +119,7 @@ importers:
         version: 0.46.6(rollup@4.18.0)(svelte@4.2.18)
       flowbite-svelte-icons:
         specifier: 0.4.4
-        version: 0.4.4(svelte@4.2.18)(tailwind-merge@1.14.0)(tailwindcss@3.4.5(ts-node@10.9.1(@types/node@16.18.11)(typescript@5.5.3)))
+        version: 0.4.4(svelte@4.2.18)(tailwind-merge@1.14.0)(tailwindcss@3.4.6(ts-node@10.9.1(@types/node@16.18.11)(typescript@5.5.3)))
       husky:
         specifier: 9.0.11
         version: 9.0.11
@@ -139,11 +139,11 @@ importers:
         specifier: 0.6.5
         version: 0.6.5(prettier-plugin-svelte@3.2.5(prettier@3.3.3)(svelte@4.2.18))(prettier@3.3.3)
       prisma:
-        specifier: 5.16.2
-        version: 5.16.2
+        specifier: 5.17.0
+        version: 5.17.0
       stwui:
         specifier: 0.21.2-next
-        version: 0.21.2-next(@sveltejs/kit@2.5.18(@sveltejs/vite-plugin-svelte@3.1.1(svelte@4.2.18)(vite@5.3.3(@types/node@16.18.11)))(svelte@4.2.18)(vite@5.3.3(@types/node@16.18.11)))(svelte@4.2.18)
+        version: 0.21.2-next(@sveltejs/kit@2.5.18(@sveltejs/vite-plugin-svelte@3.1.1(svelte@4.2.18)(vite@5.3.4(@types/node@16.18.11)))(svelte@4.2.18)(vite@5.3.4(@types/node@16.18.11)))(svelte@4.2.18)
       svelte:
         specifier: 4.2.18
         version: 4.2.18
@@ -155,7 +155,7 @@ importers:
         version: 3.1.2(svelte@4.2.18)(typescript@5.5.3)
       sveltekit-superforms:
         specifier: 2.16.0
-        version: 2.16.0(@sveltejs/kit@2.5.18(@sveltejs/vite-plugin-svelte@3.1.1(svelte@4.2.18)(vite@5.3.3(@types/node@16.18.11)))(svelte@4.2.18)(vite@5.3.3(@types/node@16.18.11)))(svelte@4.2.18)
+        version: 2.16.0(@sveltejs/kit@2.5.18(@sveltejs/vite-plugin-svelte@3.1.1(svelte@4.2.18)(vite@5.3.4(@types/node@16.18.11)))(svelte@4.2.18)(vite@5.3.4(@types/node@16.18.11)))(svelte@4.2.18)
       tslib:
         specifier: 2.6.3
         version: 2.6.3
@@ -163,8 +163,8 @@ importers:
         specifier: 5.5.3
         version: 5.5.3
       vite:
-        specifier: 5.3.3
-        version: 5.3.3(@types/node@16.18.11)
+        specifier: 5.3.4
+        version: 5.3.4(@types/node@16.18.11)
       vitest:
         specifier: 2.0.3
         version: 2.0.3(@edge-runtime/vm@3.2.0)(@types/node@16.18.11)(@vitest/ui@2.0.3)(jsdom@24.1.0)
@@ -538,8 +538,8 @@ packages:
     resolution: {integrity: sha512-xhhEcEvhQC8mP5oOr5hbE4CmUgmw/IPV1jhpGg2xSkzoFrt9i8YVqBQt9744EFesi5F7pBheWozg63RUBM/5JA==}
     engines: {node: '>=18.16.0'}
 
-  '@prisma/client@5.16.2':
-    resolution: {integrity: sha512-+1lmkhR9gHWcTC5oghm2ZKpWljyWdzfazCVlLKUWXVmwHSf52g81aZ8qb6Km5Bs025yBi7puLp3qSLEvktoUtw==}
+  '@prisma/client@5.17.0':
+    resolution: {integrity: sha512-N2tnyKayT0Zf7mHjwEyE8iG7FwTmXDHFZ1GnNhQp0pJUObsuel4ZZ1XwfuAYkq5mRIiC/Kot0kt0tGCfLJ70Jw==}
     engines: {node: '>=16.13'}
     peerDependencies:
       prisma: '*'
@@ -550,26 +550,26 @@ packages:
   '@prisma/debug@5.14.0':
     resolution: {integrity: sha512-iq56qBZuFfX3fCxoxT8gBX33lQzomBU0qIUaEj1RebsKVz1ob/BVH1XSBwwwvRVtZEV1b7Fxx2eVu34Ge/mg3w==}
 
-  '@prisma/debug@5.16.2':
-    resolution: {integrity: sha512-ItzB4nR4O8eLzuJiuP3WwUJfoIvewMHqpGCad+64gvThcKEVOtaUza9AEJo2DPqAOa/AWkFyK54oM4WwHeew+A==}
+  '@prisma/debug@5.17.0':
+    resolution: {integrity: sha512-l7+AteR3P8FXiYyo496zkuoiJ5r9jLQEdUuxIxNCN1ud8rdbH3GTxm+f+dCyaSv9l9WY+29L9czaVRXz9mULfg==}
 
   '@prisma/engines-version@5.14.0-25.e9771e62de70f79a5e1c604a2d7c8e2a0a874b48':
     resolution: {integrity: sha512-ip6pNkRo1UxWv+6toxNcYvItNYaqQjXdFNGJ+Nuk2eYtRoEdoF13wxo7/jsClJFFenMPVNVqXQDV0oveXnR1cA==}
 
-  '@prisma/engines-version@5.16.0-24.34ace0eb2704183d2c05b60b52fba5c43c13f303':
-    resolution: {integrity: sha512-HkT2WbfmFZ9WUPyuJHhkiADxazHg8Y4gByrTSVeb3OikP6tjQ7txtSUGu9OBOBH0C13dPKN2qqH12xKtHu/Hiw==}
+  '@prisma/engines-version@5.17.0-31.393aa359c9ad4a4bb28630fb5613f9c281cde053':
+    resolution: {integrity: sha512-tUuxZZysZDcrk5oaNOdrBnnkoTtmNQPkzINFDjz7eG6vcs9AVDmA/F6K5Plsb2aQc/l5M2EnFqn3htng9FA4hg==}
 
   '@prisma/engines@5.14.0':
     resolution: {integrity: sha512-lgxkKZ6IEygVcw6IZZUlPIfLQ9hjSYAtHjZ5r64sCLDgVzsPFCi2XBBJgzPMkOQ5RHzUD4E/dVdpn9+ez8tk1A==}
 
-  '@prisma/engines@5.16.2':
-    resolution: {integrity: sha512-qUxwMtrwoG3byd4PbX6T7EjHJ8AUhzTuwniOGkh/hIznBfcE2QQnGakyEq4VnwNuttMqvh/GgPFapHQ3lCuRHg==}
+  '@prisma/engines@5.17.0':
+    resolution: {integrity: sha512-+r+Nf+JP210Jur+/X8SIPLtz+uW9YA4QO5IXA+KcSOBe/shT47bCcRMTYCbOESw3FFYFTwe7vU6KTWHKPiwvtg==}
 
   '@prisma/fetch-engine@5.14.0':
     resolution: {integrity: sha512-VrheA9y9DMURK5vu8OJoOgQpxOhas3qF0IBHJ8G/0X44k82kc8E0w98HCn2nhnbOOMwbWsJWXfLC2/F8n5u0gQ==}
 
-  '@prisma/fetch-engine@5.16.2':
-    resolution: {integrity: sha512-sq51lfHKfH2jjYSjBtMjP+AznFqOJzXpqmq6B9auWrlTJrMgZ7lPyhWUW7VU7LsQU48/TJ+DZeIz8s9bMYvcHg==}
+  '@prisma/fetch-engine@5.17.0':
+    resolution: {integrity: sha512-ESxiOaHuC488ilLPnrv/tM2KrPhQB5TRris/IeIV4ZvUuKeaicCl4Xj/JCQeG9IlxqOgf1cCg5h5vAzlewN91Q==}
 
   '@prisma/generator-helper@5.14.0':
     resolution: {integrity: sha512-xVc71cmTnPZ0lnSs4FAY6Ta72vFJ3webrQwKMQ2ujr6hDG1VPIEf820T1TOS3ZZQd/OKigNKXnq3co8biz9/qw==}
@@ -577,8 +577,8 @@ packages:
   '@prisma/get-platform@5.14.0':
     resolution: {integrity: sha512-/yAyBvcEjRv41ynZrhdrPtHgk47xLRRq/o5eWGcUpBJ1YrUZTYB8EoPiopnP7iQrMATK8stXQdPOoVlrzuTQZw==}
 
-  '@prisma/get-platform@5.16.2':
-    resolution: {integrity: sha512-cXiHPgNLNyj22vLouPVNegklpRL/iX2jxTeap5GRO3DmCoVyIHmJAV1CgUMUJhHlcol9yYy7EHvsnXTDJ/PKEA==}
+  '@prisma/get-platform@5.17.0':
+    resolution: {integrity: sha512-UlDgbRozCP1rfJ5Tlkf3Cnftb6srGrEQ4Nm3og+1Se2gWmCZ0hmPIi+tQikGDUVLlvOWx3Gyi9LzgRP+HTXV9w==}
 
   '@prisma/internals@5.14.0':
     resolution: {integrity: sha512-s0JRNDmR2bvcyy0toz89jy7SbbjANAs4e9KCReNvSm5czctIaZzDf68tcOXdtH0G7m9mKhVhNPdS9lMky0DhWA==}
@@ -3199,8 +3199,8 @@ packages:
     peerDependencies:
       '@prisma/client': ^4.0.0 || ^5.0.0
 
-  prisma@5.16.2:
-    resolution: {integrity: sha512-rFV/xoBR2hBGGlu4LPLQd4U8WVA+tSAmYyFWGPRVfj+xg7N4kiZV4lSk38htSpF+/IuHKzlrbh4SFk8Z18cI8A==}
+  prisma@5.17.0:
+    resolution: {integrity: sha512-m4UWkN5lBE6yevqeOxEvmepnL5cNPEjzMw2IqDB59AcEV6w7D8vGljDLd1gPFH+W6gUxw9x7/RmN5dCS/WTPxA==}
     engines: {node: '>=16.13'}
     hasBin: true
 
@@ -3677,8 +3677,8 @@ packages:
   tailwind-merge@2.3.0:
     resolution: {integrity: sha512-vkYrLpIP+lgR0tQCG6AP7zZXCTLc1Lnv/CCRT3BqJ9CZ3ui2++GPaGb1x/ILsINIMSYqqvrpqjUFsMNLlW99EA==}
 
-  tailwindcss@3.4.5:
-    resolution: {integrity: sha512-DlTxttYcogpDfx3tf/8jfnma1nfAYi2cBUYV2YNoPPecwmO3YGiFlOX9D8tGAu+EDF38ryBzvrDKU/BLMsUwbw==}
+  tailwindcss@3.4.6:
+    resolution: {integrity: sha512-1uRHzPB+Vzu57ocybfZ4jh5Q3SdlH7XW23J5sQoM9LhE9eIOlzxer/3XPSsycvih3rboRsvt0QCmzSrqyOYUIA==}
     engines: {node: '>=14.0.0'}
     hasBin: true
 
@@ -3936,8 +3936,8 @@ packages:
     engines: {node: ^18.0.0 || >=20.0.0}
     hasBin: true
 
-  vite@5.3.3:
-    resolution: {integrity: sha512-NPQdeCU0Dv2z5fu+ULotpuq5yfCS1BzKUIPhNbP3YBfAMGJXbt2nS+sbTFu+qchaqWTD+H3JK++nRwr6XIcp6A==}
+  vite@5.3.4:
+    resolution: {integrity: sha512-Cw+7zL3ZG9/NZBB8C+8QbQZmR54GwqIz+WMI4b3JgdYJvX+ny9AjJXqkGQlDXSXRP9rP0B4tbciRMOVEKulVOA==}
     engines: {node: ^18.0.0 || >=20.0.0}
     hasBin: true
     peerDependencies:
@@ -4420,9 +4420,9 @@ snapshots:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.4.15
 
-  '@lucia-auth/adapter-prisma@3.0.2(@prisma/client@5.16.2(prisma@5.16.2))(lucia@2.7.7)':
+  '@lucia-auth/adapter-prisma@3.0.2(@prisma/client@5.17.0(prisma@5.17.0))(lucia@2.7.7)':
     dependencies:
-      '@prisma/client': 5.16.2(prisma@5.16.2)
+      '@prisma/client': 5.17.0(prisma@5.17.0)
       lucia: 2.7.7
 
   '@mapbox/node-pre-gyp@1.0.11':
@@ -4479,17 +4479,17 @@ snapshots:
   '@poppinss/macroable@1.0.2':
     optional: true
 
-  '@prisma/client@5.16.2(prisma@5.16.2)':
+  '@prisma/client@5.17.0(prisma@5.17.0)':
     optionalDependencies:
-      prisma: 5.16.2
+      prisma: 5.17.0
 
   '@prisma/debug@5.14.0': {}
 
-  '@prisma/debug@5.16.2': {}
+  '@prisma/debug@5.17.0': {}
 
   '@prisma/engines-version@5.14.0-25.e9771e62de70f79a5e1c604a2d7c8e2a0a874b48': {}
 
-  '@prisma/engines-version@5.16.0-24.34ace0eb2704183d2c05b60b52fba5c43c13f303': {}
+  '@prisma/engines-version@5.17.0-31.393aa359c9ad4a4bb28630fb5613f9c281cde053': {}
 
   '@prisma/engines@5.14.0':
     dependencies:
@@ -4498,12 +4498,12 @@ snapshots:
       '@prisma/fetch-engine': 5.14.0
       '@prisma/get-platform': 5.14.0
 
-  '@prisma/engines@5.16.2':
+  '@prisma/engines@5.17.0':
     dependencies:
-      '@prisma/debug': 5.16.2
-      '@prisma/engines-version': 5.16.0-24.34ace0eb2704183d2c05b60b52fba5c43c13f303
-      '@prisma/fetch-engine': 5.16.2
-      '@prisma/get-platform': 5.16.2
+      '@prisma/debug': 5.17.0
+      '@prisma/engines-version': 5.17.0-31.393aa359c9ad4a4bb28630fb5613f9c281cde053
+      '@prisma/fetch-engine': 5.17.0
+      '@prisma/get-platform': 5.17.0
 
   '@prisma/fetch-engine@5.14.0':
     dependencies:
@@ -4511,11 +4511,11 @@ snapshots:
       '@prisma/engines-version': 5.14.0-25.e9771e62de70f79a5e1c604a2d7c8e2a0a874b48
       '@prisma/get-platform': 5.14.0
 
-  '@prisma/fetch-engine@5.16.2':
+  '@prisma/fetch-engine@5.17.0':
     dependencies:
-      '@prisma/debug': 5.16.2
-      '@prisma/engines-version': 5.16.0-24.34ace0eb2704183d2c05b60b52fba5c43c13f303
-      '@prisma/get-platform': 5.16.2
+      '@prisma/debug': 5.17.0
+      '@prisma/engines-version': 5.17.0-31.393aa359c9ad4a4bb28630fb5613f9c281cde053
+      '@prisma/get-platform': 5.17.0
 
   '@prisma/generator-helper@5.14.0':
     dependencies:
@@ -4525,9 +4525,9 @@ snapshots:
     dependencies:
       '@prisma/debug': 5.14.0
 
-  '@prisma/get-platform@5.16.2':
+  '@prisma/get-platform@5.17.0':
     dependencies:
-      '@prisma/debug': 5.16.2
+      '@prisma/debug': 5.17.0
 
   '@prisma/internals@5.14.0':
     dependencies:
@@ -4565,9 +4565,9 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@quramy/prisma-fabbrica@2.2.1(@prisma/client@5.16.2(prisma@5.16.2))(typescript@5.5.3)':
+  '@quramy/prisma-fabbrica@2.2.1(@prisma/client@5.17.0(prisma@5.17.0))(typescript@5.5.3)':
     dependencies:
-      '@prisma/client': 5.16.2(prisma@5.16.2)
+      '@prisma/client': 5.17.0(prisma@5.17.0)
       '@prisma/generator-helper': 5.14.0
       '@prisma/internals': 5.14.0
       short-uuid: 5.2.0
@@ -4667,23 +4667,23 @@ snapshots:
   '@sodaru/yup-to-json-schema@2.0.1':
     optional: true
 
-  '@sveltejs/adapter-auto@3.2.2(@sveltejs/kit@2.5.18(@sveltejs/vite-plugin-svelte@3.1.1(svelte@4.2.18)(vite@5.3.3(@types/node@16.18.11)))(svelte@4.2.18)(vite@5.3.3(@types/node@16.18.11)))':
+  '@sveltejs/adapter-auto@3.2.2(@sveltejs/kit@2.5.18(@sveltejs/vite-plugin-svelte@3.1.1(svelte@4.2.18)(vite@5.3.4(@types/node@16.18.11)))(svelte@4.2.18)(vite@5.3.4(@types/node@16.18.11)))':
     dependencies:
-      '@sveltejs/kit': 2.5.18(@sveltejs/vite-plugin-svelte@3.1.1(svelte@4.2.18)(vite@5.3.3(@types/node@16.18.11)))(svelte@4.2.18)(vite@5.3.3(@types/node@16.18.11))
+      '@sveltejs/kit': 2.5.18(@sveltejs/vite-plugin-svelte@3.1.1(svelte@4.2.18)(vite@5.3.4(@types/node@16.18.11)))(svelte@4.2.18)(vite@5.3.4(@types/node@16.18.11))
       import-meta-resolve: 4.1.0
 
-  '@sveltejs/adapter-vercel@5.4.1(@sveltejs/kit@2.5.18(@sveltejs/vite-plugin-svelte@3.1.1(svelte@4.2.18)(vite@5.3.3(@types/node@16.18.11)))(svelte@4.2.18)(vite@5.3.3(@types/node@16.18.11)))':
+  '@sveltejs/adapter-vercel@5.4.1(@sveltejs/kit@2.5.18(@sveltejs/vite-plugin-svelte@3.1.1(svelte@4.2.18)(vite@5.3.4(@types/node@16.18.11)))(svelte@4.2.18)(vite@5.3.4(@types/node@16.18.11)))':
     dependencies:
-      '@sveltejs/kit': 2.5.18(@sveltejs/vite-plugin-svelte@3.1.1(svelte@4.2.18)(vite@5.3.3(@types/node@16.18.11)))(svelte@4.2.18)(vite@5.3.3(@types/node@16.18.11))
+      '@sveltejs/kit': 2.5.18(@sveltejs/vite-plugin-svelte@3.1.1(svelte@4.2.18)(vite@5.3.4(@types/node@16.18.11)))(svelte@4.2.18)(vite@5.3.4(@types/node@16.18.11))
       '@vercel/nft': 0.27.2
       esbuild: 0.21.5
     transitivePeerDependencies:
       - encoding
       - supports-color
 
-  '@sveltejs/kit@2.5.18(@sveltejs/vite-plugin-svelte@3.1.1(svelte@4.2.18)(vite@5.3.3(@types/node@16.18.11)))(svelte@4.2.18)(vite@5.3.3(@types/node@16.18.11))':
+  '@sveltejs/kit@2.5.18(@sveltejs/vite-plugin-svelte@3.1.1(svelte@4.2.18)(vite@5.3.4(@types/node@16.18.11)))(svelte@4.2.18)(vite@5.3.4(@types/node@16.18.11))':
     dependencies:
-      '@sveltejs/vite-plugin-svelte': 3.1.1(svelte@4.2.18)(vite@5.3.3(@types/node@16.18.11))
+      '@sveltejs/vite-plugin-svelte': 3.1.1(svelte@4.2.18)(vite@5.3.4(@types/node@16.18.11))
       '@types/cookie': 0.6.0
       cookie: 0.6.0
       devalue: 5.0.0
@@ -4697,35 +4697,35 @@ snapshots:
       sirv: 2.0.4
       svelte: 4.2.18
       tiny-glob: 0.2.9
-      vite: 5.3.3(@types/node@16.18.11)
+      vite: 5.3.4(@types/node@16.18.11)
 
-  '@sveltejs/vite-plugin-svelte-inspector@2.1.0(@sveltejs/vite-plugin-svelte@3.1.1(svelte@4.2.18)(vite@5.3.3(@types/node@16.18.11)))(svelte@4.2.18)(vite@5.3.3(@types/node@16.18.11))':
+  '@sveltejs/vite-plugin-svelte-inspector@2.1.0(@sveltejs/vite-plugin-svelte@3.1.1(svelte@4.2.18)(vite@5.3.4(@types/node@16.18.11)))(svelte@4.2.18)(vite@5.3.4(@types/node@16.18.11))':
     dependencies:
-      '@sveltejs/vite-plugin-svelte': 3.1.1(svelte@4.2.18)(vite@5.3.3(@types/node@16.18.11))
+      '@sveltejs/vite-plugin-svelte': 3.1.1(svelte@4.2.18)(vite@5.3.4(@types/node@16.18.11))
       debug: 4.3.5
       svelte: 4.2.18
-      vite: 5.3.3(@types/node@16.18.11)
+      vite: 5.3.4(@types/node@16.18.11)
     transitivePeerDependencies:
       - supports-color
 
-  '@sveltejs/vite-plugin-svelte@3.1.1(svelte@4.2.18)(vite@5.3.3(@types/node@16.18.11))':
+  '@sveltejs/vite-plugin-svelte@3.1.1(svelte@4.2.18)(vite@5.3.4(@types/node@16.18.11))':
     dependencies:
-      '@sveltejs/vite-plugin-svelte-inspector': 2.1.0(@sveltejs/vite-plugin-svelte@3.1.1(svelte@4.2.18)(vite@5.3.3(@types/node@16.18.11)))(svelte@4.2.18)(vite@5.3.3(@types/node@16.18.11))
+      '@sveltejs/vite-plugin-svelte-inspector': 2.1.0(@sveltejs/vite-plugin-svelte@3.1.1(svelte@4.2.18)(vite@5.3.4(@types/node@16.18.11)))(svelte@4.2.18)(vite@5.3.4(@types/node@16.18.11))
       debug: 4.3.5
       deepmerge: 4.3.1
       kleur: 4.1.5
       magic-string: 0.30.10
       svelte: 4.2.18
       svelte-hmr: 0.16.0(svelte@4.2.18)
-      vite: 5.3.3(@types/node@16.18.11)
-      vitefu: 0.2.5(vite@5.3.3(@types/node@16.18.11))
+      vite: 5.3.4(@types/node@16.18.11)
+      vitefu: 0.2.5(vite@5.3.4(@types/node@16.18.11))
     transitivePeerDependencies:
       - supports-color
 
-  '@tailwindcss/forms@0.5.7(tailwindcss@3.4.5(ts-node@10.9.1(@types/node@16.18.11)(typescript@5.5.3)))':
+  '@tailwindcss/forms@0.5.7(tailwindcss@3.4.6(ts-node@10.9.1(@types/node@16.18.11)(typescript@5.5.3)))':
     dependencies:
       mini-svg-data-uri: 1.4.4
-      tailwindcss: 3.4.5(ts-node@10.9.1(@types/node@16.18.11)(typescript@5.5.3))
+      tailwindcss: 3.4.6(ts-node@10.9.1(@types/node@16.18.11)(typescript@5.5.3))
 
   '@testing-library/dom@10.2.0':
     dependencies:
@@ -4752,12 +4752,12 @@ snapshots:
       '@types/jest': 29.5.12
       vitest: 2.0.3(@edge-runtime/vm@3.2.0)(@types/node@16.18.11)(@vitest/ui@2.0.3)(jsdom@24.1.0)
 
-  '@testing-library/svelte@5.2.0(svelte@4.2.18)(vite@5.3.3(@types/node@16.18.11))(vitest@2.0.3(@edge-runtime/vm@3.2.0)(@types/node@16.18.11)(@vitest/ui@2.0.3)(jsdom@24.1.0))':
+  '@testing-library/svelte@5.2.0(svelte@4.2.18)(vite@5.3.4(@types/node@16.18.11))(vitest@2.0.3(@edge-runtime/vm@3.2.0)(@types/node@16.18.11)(@vitest/ui@2.0.3)(jsdom@24.1.0))':
     dependencies:
       '@testing-library/dom': 10.2.0
       svelte: 4.2.18
     optionalDependencies:
-      vite: 5.3.3(@types/node@16.18.11)
+      vite: 5.3.4(@types/node@16.18.11)
       vitest: 2.0.3(@edge-runtime/vm@3.2.0)(@types/node@16.18.11)(@vitest/ui@2.0.3)(jsdom@24.1.0)
 
   '@tootallnate/once@2.0.0': {}
@@ -6232,11 +6232,11 @@ snapshots:
     transitivePeerDependencies:
       - rollup
 
-  flowbite-svelte-icons@0.4.4(svelte@4.2.18)(tailwind-merge@1.14.0)(tailwindcss@3.4.5(ts-node@10.9.1(@types/node@16.18.11)(typescript@5.5.3))):
+  flowbite-svelte-icons@0.4.4(svelte@4.2.18)(tailwind-merge@1.14.0)(tailwindcss@3.4.6(ts-node@10.9.1(@types/node@16.18.11)(typescript@5.5.3))):
     dependencies:
       svelte: 4.2.18
       tailwind-merge: 1.14.0
-      tailwindcss: 3.4.5(ts-node@10.9.1(@types/node@16.18.11)(typescript@5.5.3))
+      tailwindcss: 3.4.6(ts-node@10.9.1(@types/node@16.18.11)(typescript@5.5.3))
 
   flowbite-svelte@0.46.6(rollup@4.18.0)(svelte@4.2.18):
     dependencies:
@@ -7334,10 +7334,10 @@ snapshots:
     dependencies:
       parse-ms: 2.1.0
 
-  prisma-erd-generator@1.11.2(@prisma/client@5.16.2(prisma@5.16.2))(typescript@5.5.3):
+  prisma-erd-generator@1.11.2(@prisma/client@5.17.0(prisma@5.17.0))(typescript@5.5.3):
     dependencies:
       '@mermaid-js/mermaid-cli': 10.9.1(typescript@5.5.3)
-      '@prisma/client': 5.16.2(prisma@5.16.2)
+      '@prisma/client': 5.17.0(prisma@5.17.0)
       '@prisma/generator-helper': 5.14.0
       dotenv: 16.4.5
     transitivePeerDependencies:
@@ -7347,9 +7347,9 @@ snapshots:
       - typescript
       - utf-8-validate
 
-  prisma@5.16.2:
+  prisma@5.17.0:
     dependencies:
-      '@prisma/engines': 5.16.2
+      '@prisma/engines': 5.17.0
 
   progress@2.0.3: {}
 
@@ -7692,10 +7692,10 @@ snapshots:
     dependencies:
       js-tokens: 9.0.0
 
-  stwui@0.21.2-next(@sveltejs/kit@2.5.18(@sveltejs/vite-plugin-svelte@3.1.1(svelte@4.2.18)(vite@5.3.3(@types/node@16.18.11)))(svelte@4.2.18)(vite@5.3.3(@types/node@16.18.11)))(svelte@4.2.18):
+  stwui@0.21.2-next(@sveltejs/kit@2.5.18(@sveltejs/vite-plugin-svelte@3.1.1(svelte@4.2.18)(vite@5.3.4(@types/node@16.18.11)))(svelte@4.2.18)(vite@5.3.4(@types/node@16.18.11)))(svelte@4.2.18):
     dependencies:
       '@floating-ui/dom': 1.6.5
-      '@sveltejs/kit': 2.5.18(@sveltejs/vite-plugin-svelte@3.1.1(svelte@4.2.18)(vite@5.3.3(@types/node@16.18.11)))(svelte@4.2.18)(vite@5.3.3(@types/node@16.18.11))
+      '@sveltejs/kit': 2.5.18(@sveltejs/vite-plugin-svelte@3.1.1(svelte@4.2.18)(vite@5.3.4(@types/node@16.18.11)))(svelte@4.2.18)(vite@5.3.4(@types/node@16.18.11))
       color: 4.2.3
       dayjs: 1.11.11
       esm-env: 1.0.0
@@ -7822,9 +7822,9 @@ snapshots:
       magic-string: 0.30.10
       periscopic: 3.1.0
 
-  sveltekit-superforms@2.16.0(@sveltejs/kit@2.5.18(@sveltejs/vite-plugin-svelte@3.1.1(svelte@4.2.18)(vite@5.3.3(@types/node@16.18.11)))(svelte@4.2.18)(vite@5.3.3(@types/node@16.18.11)))(svelte@4.2.18):
+  sveltekit-superforms@2.16.0(@sveltejs/kit@2.5.18(@sveltejs/vite-plugin-svelte@3.1.1(svelte@4.2.18)(vite@5.3.4(@types/node@16.18.11)))(svelte@4.2.18)(vite@5.3.4(@types/node@16.18.11)))(svelte@4.2.18):
     dependencies:
-      '@sveltejs/kit': 2.5.18(@sveltejs/vite-plugin-svelte@3.1.1(svelte@4.2.18)(vite@5.3.3(@types/node@16.18.11)))(svelte@4.2.18)(vite@5.3.3(@types/node@16.18.11))
+      '@sveltejs/kit': 2.5.18(@sveltejs/vite-plugin-svelte@3.1.1(svelte@4.2.18)(vite@5.3.4(@types/node@16.18.11)))(svelte@4.2.18)(vite@5.3.4(@types/node@16.18.11))
       devalue: 5.0.0
       just-clone: 6.2.0
       memoize-weak: 1.0.2
@@ -7884,7 +7884,7 @@ snapshots:
     dependencies:
       '@babel/runtime': 7.24.6
 
-  tailwindcss@3.4.5(ts-node@10.9.1(@types/node@16.18.11)(typescript@5.5.3)):
+  tailwindcss@3.4.6(ts-node@10.9.1(@types/node@16.18.11)(typescript@5.5.3)):
     dependencies:
       '@alloc/quick-lru': 5.2.0
       arg: 5.0.2
@@ -8186,7 +8186,7 @@ snapshots:
       debug: 4.3.5
       pathe: 1.1.2
       tinyrainbow: 1.2.0
-      vite: 5.3.3(@types/node@16.18.11)
+      vite: 5.3.4(@types/node@16.18.11)
     transitivePeerDependencies:
       - '@types/node'
       - less
@@ -8197,7 +8197,7 @@ snapshots:
       - supports-color
       - terser
 
-  vite@5.3.3(@types/node@16.18.11):
+  vite@5.3.4(@types/node@16.18.11):
     dependencies:
       esbuild: 0.21.5
       postcss: 8.4.39
@@ -8206,9 +8206,9 @@ snapshots:
       '@types/node': 16.18.11
       fsevents: 2.3.3
 
-  vitefu@0.2.5(vite@5.3.3(@types/node@16.18.11)):
+  vitefu@0.2.5(vite@5.3.4(@types/node@16.18.11)):
     optionalDependencies:
-      vite: 5.3.3(@types/node@16.18.11)
+      vite: 5.3.4(@types/node@16.18.11)
 
   vitest@2.0.3(@edge-runtime/vm@3.2.0)(@types/node@16.18.11)(@vitest/ui@2.0.3)(jsdom@24.1.0):
     dependencies:
@@ -8228,7 +8228,7 @@ snapshots:
       tinybench: 2.8.0
       tinypool: 1.0.0
       tinyrainbow: 1.2.0
-      vite: 5.3.3(@types/node@16.18.11)
+      vite: 5.3.4(@types/node@16.18.11)
       vite-node: 2.0.3(@types/node@16.18.11)
       why-is-node-running: 2.2.2
     optionalDependencies:
