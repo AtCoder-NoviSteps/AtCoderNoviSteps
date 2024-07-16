@@ -11,15 +11,18 @@
   } from 'flowbite-svelte';
 
   import HeadingOne from '$lib/components/HeadingOne.svelte';
+  import ThermometerProgressBar from '$lib/components/ThermometerProgressBar.svelte';
+  import AcceptedCounter from '$lib/components/SubmissionStatus/AcceptedCounter.svelte';
   import UpdatingModal from '$lib/components/SubmissionStatus/UpdatingModal.svelte';
   import SubmissionStatusImage from '$lib/components/SubmissionStatus/SubmissionStatusImage.svelte';
+  import GradeLabel from '$lib/components/GradeLabel.svelte';
   import ExternalLinkWrapper from '$lib/components/ExternalLinkWrapper.svelte';
   import { getBackgroundColorFrom } from '$lib/services/submission_status';
   import { getContestUrl } from '$lib/utils/contest';
   import { taskUrl } from '$lib/utils/task';
   import { getContestNameLabel } from '$lib/utils/contest';
   import type { WorkBookTaskBase } from '$lib/types/workbook';
-  import type { TaskResult } from '$lib/types/task';
+  import type { TaskResult, TaskResults, TaskGrade } from '$lib/types/task';
 
   export let data;
 
@@ -32,6 +35,10 @@
   // TODO: 関数をutilへ移動させる
   const getTaskResult = (taskId: string): TaskResult => {
     return taskResults.get(taskId)!;
+  };
+
+  const getTaskGrade = (taskId: string): TaskGrade => {
+    return getTaskResult(taskId)?.grade as TaskGrade;
   };
 
   const getContestIdFrom = (taskId: string): string => {
@@ -64,6 +71,7 @@
 </script>
 
 <div class="container mx-auto w-5/6 space-y-4">
+  <!-- TODO: 非公開の場合は先頭にアイコンをつける -->
   <div class="min-w-[240px] max-w-[1440px] truncate">
     <HeadingOne title={workBook.title} />
   </div>
@@ -87,13 +95,32 @@
   {/if}
 
   <!-- 問題一覧 -->
-  <!-- TODO: 問題一覧ページのコンポーネントを再利用する -->
-  <!-- TODO: 回答状況を更新できるようにする -->
-  {#if workBookTasks.length >= 1}
+  {#if workBookTasks.length}
+    <!-- FIXME: MapからArrayに変換するヘルパー関数を用意 -->
+    <div class="flex flex-col pt-4">
+      <div>回答状況</div>
+      <div class="flex items-center space-x-2 sm:space-x-6 sm:mr-6">
+        <ThermometerProgressBar
+          {workBookTasks}
+          taskResults={Array.from(taskResults.values())}
+          width="w-full"
+        />
+        <AcceptedCounter {workBookTasks} taskResults={Array.from(taskResults.values())} />
+      </div>
+    </div>
+
+    <div class="pt-1 pb-2">
+      <!-- TODO: コンポーネントとして抽出 -->
+      <!-- See: -->
+      <!-- https://tw-elements.com/docs/standard/content-styles/dividers/# -->
+      <hr class="my-1 h-0.5 border-t-0 bg-gray-100 dark:bg-white/10" />
+    </div>
+
     <div class="overflow-auto rounded-md border">
       <Table shadow class="text-md">
         <TableHead class="text-sm bg-gray-100">
           <TableHeadCell class="min-w-[96px] max-w-[120px]">回答</TableHeadCell>
+          <TableHeadCell>グレード</TableHeadCell>
           <TableHeadCell class="min-w-[120px] max-w-[150px] truncate">コンテスト名</TableHeadCell>
           <TableHeadCell class="min-w-[240px] truncate">問題名</TableHeadCell>
         </TableHead>
@@ -103,6 +130,7 @@
               key={getContestIdFrom(workBookTask.taskId) + workBookTask.taskId}
               class={getBackgroundColorFrom(getTaskResult(workBookTask.taskId).status_name)}
             >
+              <!-- TODO: 横幅をやや狭く -->
               <TableBodyCell
                 class="p-3 pl-3 md:pl-6 flex items-center"
                 on:click={() => handleClick(workBookTask.taskId)}
@@ -111,6 +139,11 @@
                   taskResult={getTaskResult(workBookTask.taskId)}
                   {isLoggedIn}
                 />
+              </TableBodyCell>
+              <!-- TODO: 横幅をやや狭く -->
+              <!-- TODO: 他のセルと比べて上下のズレがあるので修正 -->
+              <TableBodyCell>
+                <GradeLabel taskGrade={getTaskGrade(workBookTask.taskId)} />
               </TableBodyCell>
               <TableBodyCell>
                 <div class="truncate">
