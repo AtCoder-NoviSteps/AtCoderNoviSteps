@@ -4,6 +4,8 @@
 
   import type { WorkBookTaskBase, WorkBookTaskEdit } from '$lib/types/workbook';
   import type { Task, Tasks } from '$lib/types/task.js';
+
+  import { preventEnterKey } from '$lib/actions/prevent_enter_key';
   import HeadingOne from '$lib/components/HeadingOne.svelte';
   import WorkBookInputFields from '$lib/components/WorkBooks/WorkBookInputFields.svelte';
   import WorkBookTasksTable from '$lib/components/WorkBookTasks/WorkBookTasksTable.svelte';
@@ -50,7 +52,7 @@
 {#if canView}
   <!-- TODO: 問題集の作成ページのコンポーネントとほぼ共通しているのでリファクタリング -->
   <div class="container mx-auto w-5/6">
-    <form method="post" use:enhance class="space-y-4">
+    <form method="post" use:enhance use:preventEnterKey class="space-y-4">
       <HeadingOne title="問題集を編集" />
 
       <!-- TODO: コンポーネントとして切り出す -->

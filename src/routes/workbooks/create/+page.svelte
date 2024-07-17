@@ -9,6 +9,7 @@
   } from '$lib/types/workbook';
   import type { Tasks } from '$lib/types/task';
 
+  import { preventEnterKey } from '$lib/actions/prevent_enter_key';
   import HeadingOne from '$lib/components/HeadingOne.svelte';
   import WorkBookInputFields from '$lib/components/WorkBooks/WorkBookInputFields.svelte';
   import WorkBookTasksTable from '$lib/components/WorkBookTasks/WorkBookTasksTable.svelte';
@@ -39,7 +40,7 @@
 
 <!-- TODO: 問題集の編集ページのコンポーネントとほぼ共通しているのでリファクタリング -->
 <div class="container mx-auto w-5/6">
-  <form method="post" use:enhance class="space-y-4">
+  <form method="post" use:enhance use:preventEnterKey class="space-y-4">
     <HeadingOne title="問題集を作成" />
 
     <Breadcrumb aria-label="">
