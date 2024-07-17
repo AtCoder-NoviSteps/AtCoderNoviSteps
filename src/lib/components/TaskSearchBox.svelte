@@ -90,7 +90,7 @@
   }}
 />
 
-{#if filteredTasks.length >= 1}
+{#if filteredTasks.length}
   <Listgroup>
     {#each filteredTasks as task, index}
       <ListgroupItem
@@ -98,25 +98,21 @@
         key={task.task_id}
         focusClass="bg-primary-500 text-white"
       >
-        <!-- HACK: <button>を設定すると、以下のバグや不具合が発生する。 -->
-        <!-- 問題を検索してEnterキーを押すと、選択した問題だけでなく最初の問題まで問題集に追加されてしまう -->
-        <!-- タイトルが中央揃え?になり、レイアウトが崩れる -->
-        <a
+        <button
           type="button"
-          href={null}
           on:click={() => {
             addWorkBookTask(task);
             searchWordsOrURL = '';
             focusingId = PENDING;
           }}
         >
-          <h3>
+          <h3 class="text-left">
             {task.title}
           </h3>
           <div>
             {taskUrl(task.contest_id, task.task_id)}
           </div>
-        </a>
+        </button>
       </ListgroupItem>
     {/each}
   </Listgroup>
