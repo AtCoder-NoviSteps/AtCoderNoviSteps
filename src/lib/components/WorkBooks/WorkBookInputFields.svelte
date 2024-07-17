@@ -1,4 +1,5 @@
 <script lang="ts">
+  import MessageHelperWrapper from '$lib/components/MessageHelperWrapper.svelte';
   import InputFieldWrapper from '$lib/components/InputFieldWrapper.svelte';
   import SelectWrapper from '$lib/components/SelectWrapper.svelte';
   import { WorkBookType } from '$lib/types/workbook';
@@ -11,6 +12,8 @@
   export let workBookType: WorkBookType;
   export let isAdmin: boolean;
   export let isEditable: boolean = true;
+  export let message: string = '';
+  export let errors: Record<string, unknown> = {};
 
   let isPublishedOptions = [
     { value: false, name: '非公開' },
@@ -38,6 +41,8 @@
   };
 </script>
 
+<MessageHelperWrapper {message} />
+
 <!-- (ユーザには非表示) 作者 -->
 <InputFieldWrapper
   inputFieldType="hidden"
@@ -52,6 +57,7 @@
   inputFieldName="title"
   bind:inputValue={workBookTitle}
   {isEditable}
+  message={errors.title}
 />
 
 <!-- 説明 -->
@@ -60,6 +66,7 @@
   inputFieldName="description"
   bind:inputValue={description}
   {isEditable}
+  message={errors.description}
 />
 
 <!-- 一般公開の有無 -->

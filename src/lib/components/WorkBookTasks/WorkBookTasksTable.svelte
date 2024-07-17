@@ -29,7 +29,7 @@
   <span>問題一覧</span>
 </Label>
 
-{#if workBookTasksForTable.length > 0}
+{#if workBookTasksForTable.length}
   <Table shadow class="text-md">
     <TableHead class="text-sm bg-gray-100">
       <TableHeadCell class="min-w-[120px] max-w-[150px] truncate">コンテスト名</TableHeadCell>
@@ -61,6 +61,4 @@
       {/each}
     </TableBody>
   </Table>
-{:else}
-  問題を1問以上登録してください。
 {/if}

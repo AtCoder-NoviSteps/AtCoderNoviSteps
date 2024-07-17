@@ -42,13 +42,13 @@ export const actions = {
     console.log('form -> actions -> create');
     await getLoggedInUser(locals);
     const form = await superValidate(request, zod(workBookSchema));
-    console.log(form);
 
     if (!form.valid) {
       return fail(BAD_REQUEST, {
         form: {
           ...form,
-          message: '問題集の入力項目に不正な値があります。修正して、もう一度作成を試みてください',
+          message:
+            '問題集の入力項目に不正な値があります。修正してから「作成」ボタンを押してください。',
         },
       });
     }
