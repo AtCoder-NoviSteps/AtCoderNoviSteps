@@ -63,6 +63,16 @@ export const actions = {
     console.log('form -> actions -> update');
     const form = await superValidate(request, zod(workBookSchema));
 
+    if (!form.valid) {
+      return {
+        form: {
+          ...form,
+          message:
+            '問題集の入力項目に不正な値があります。修正してから、「更新」ボタンを押してください。',
+        },
+      };
+    }
+
     const workBook = form.data;
     const workBookId = parseWorkBookId(params.slug);
 

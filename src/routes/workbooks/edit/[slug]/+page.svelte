@@ -26,7 +26,7 @@
     ...data.form,
     workBookTasks: workBook.workBookTasks as WorkBookTaskBase[],
   };
-  const { form, enhance } = superForm(initialData, {
+  const { form, message, errors, enhance } = superForm(initialData, {
     dataType: 'json',
   });
 
@@ -73,6 +73,8 @@
         bind:isOfficial={$form.isOfficial}
         bind:workBookType={$form.workBookType}
         isAdmin={data.loggedInAsAdmin}
+        message={$message}
+        errors={$errors}
       />
 
       <!-- データベースに保存されている問題 + 検索で追加した問題を表示 -->
@@ -85,6 +87,7 @@
         inputFieldType="hidden"
         inputFieldName="workBookTasks"
         inputValue={$form.workBookTasks}
+        message={$errors.workBookTasks?._errors}
       />
 
       <!-- 更新ボタン -->

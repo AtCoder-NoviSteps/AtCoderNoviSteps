@@ -39,5 +39,8 @@ export const workBookSchema = z.object({
   isPublished: z.boolean(),
   isOfficial: z.boolean(),
   workBookType: z.nativeEnum(WorkBookType),
-  workBookTasks: z.array(workBookTaskSchema).min(1).max(200),
+  workBookTasks: z
+    .array(workBookTaskSchema)
+    .min(1, { message: '1問以上登録してください' })
+    .max(200, { message: '200問以下になるまで削除してください' }),
 });
