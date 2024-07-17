@@ -23,7 +23,7 @@
   import { taskUrl } from '$lib/utils/task';
   import { getContestNameLabel } from '$lib/utils/contest';
   import type { WorkBookTaskBase } from '$lib/types/workbook';
-  import type { TaskResult, TaskResults, TaskGrade } from '$lib/types/task';
+  import type { TaskResult, TaskGrade } from '$lib/types/task';
 
   export let data;
 
@@ -73,9 +73,11 @@
 
 <div class="container mx-auto w-5/6 space-y-4">
   <div class="flex items-center space-x-1 sm:space-x-3">
-    <div class="min-w-[56px] max-w-[56px] px-0">
-      <PublicationStatusLabel isPublished={workBook.isPublished} />
-    </div>
+    {#if !workBook.isPublished}
+      <div class="min-w-[56px] max-w-[56px] px-0">
+        <PublicationStatusLabel isPublished={workBook.isPublished} />
+      </div>
+    {/if}
     <div class="min-w-[240px] max-w-[1440px] truncate">
       <HeadingOne title={workBook.title} />
     </div>
@@ -125,7 +127,7 @@
       <Table shadow class="text-md">
         <TableHead class="text-sm bg-gray-100">
           <TableHeadCell class="min-w-[96px] max-w-[120px]">回答</TableHeadCell>
-          <TableHeadCell>グレード</TableHeadCell>
+          <TableHeadCell class="text-center px-0">グレード</TableHeadCell>
           <TableHeadCell class="min-w-[120px] max-w-[150px] truncate">コンテスト名</TableHeadCell>
           <TableHeadCell class="min-w-[240px] truncate">問題名</TableHeadCell>
         </TableHead>
@@ -135,20 +137,21 @@
               key={getContestIdFrom(workBookTask.taskId) + workBookTask.taskId}
               class={getBackgroundColorFrom(getTaskResult(workBookTask.taskId).status_name)}
             >
-              <!-- TODO: 横幅をやや狭く -->
               <TableBodyCell
-                class="p-3 pl-3 md:pl-6 flex items-center"
+                class="justify-center w-20 px-0.5 sm:px-3"
                 on:click={() => handleClick(workBookTask.taskId)}
               >
-                <SubmissionStatusImage
-                  taskResult={getTaskResult(workBookTask.taskId)}
-                  {isLoggedIn}
-                />
+                <div class="flex items-center justify-center min-w-[80px] max-w-[80px]">
+                  <SubmissionStatusImage
+                    taskResult={getTaskResult(workBookTask.taskId)}
+                    {isLoggedIn}
+                  />
+                </div>
               </TableBodyCell>
-              <!-- TODO: 横幅をやや狭く -->
-              <!-- TODO: 他のセルと比べて上下のズレがあるので修正 -->
-              <TableBodyCell>
-                <GradeLabel taskGrade={getTaskGrade(workBookTask.taskId)} />
+              <TableBodyCell class="justify-center w-14 px-0">
+                <div class="flex items-center justify-center min-w-[54px] max-w-[54px]">
+                  <GradeLabel taskGrade={getTaskGrade(workBookTask.taskId)} />
+                </div>
               </TableBodyCell>
               <TableBodyCell>
                 <div class="truncate">

@@ -6,7 +6,6 @@
 
   export let workBookTasks: WorkBookTaskBase[] = [];
   export let taskResults: TaskResults;
-  // FIXME: 小さい画面でも横スクロールで見えるようにする
   export let width: string = 'w-7/12 md:w-8/12 lg:w-9/12';
 
   let submissionRatios: SubmissionRatios = [];

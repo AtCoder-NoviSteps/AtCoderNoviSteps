@@ -50,17 +50,6 @@
     selectedGrade = grade;
   }
 
-  const getPublicationStatusLabel = (isPublished: boolean) => {
-    if (!isPublished) {
-      return '非公開';
-    }
-  };
-  const getPublicationStatusColor = (isPublished: boolean) => {
-    if (!isPublished) {
-      return 'bg-red-200';
-    }
-  };
-
   function getGradeLower(workbookId: number): TaskGrade {
     const workbookGradeRange = workbookGradeRanges.get(workbookId);
 
@@ -79,7 +68,6 @@
 </script>
 
 <!-- TODO: 6Q〜1Q?にも対応 -->
-<!-- TODO: スタイルを整える -->
 <!-- TODO: 「ユーザ作成」の問題集には、検索機能を追加 -->
 {#if workbookType !== WorkBookType.CREATED_BY_USER}
   <div class="mb-6">
@@ -97,9 +85,7 @@
   </div>
 {/if}
 
-<!-- TODO: serverから回答が付与されているworkBook IdをキーとするTaskResultsを取得 -->
-<!-- FIXME: 横幅などのスタイルを微調整する -->
-{#if readableWorkbooksCount >= 1}
+{#if readableWorkbooksCount}
   <div class="overflow-auto rounded-md border">
     <Table shadow class="text-md">
       <TableHead class="text-sm bg-gray-100">
