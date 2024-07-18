@@ -48,7 +48,7 @@
     "eslint-plugin-svelte": "2.42.0",
     "flowbite-svelte": "0.46.6",
     "flowbite-svelte-icons": "0.4.4",
-    "husky": "9.1.0",
+    "husky": "9.1.1",
     "jsdom": "24.1.0",
     "lint-staged": "15.2.7",
     "prettier": "3.3.3",
