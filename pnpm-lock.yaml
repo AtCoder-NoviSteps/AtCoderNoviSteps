@@ -154,8 +154,8 @@ importers:
         specifier: 3.1.2
         version: 3.1.2(svelte@4.2.18)(typescript@5.5.3)
       sveltekit-superforms:
-        specifier: 2.16.0
-        version: 2.16.0(@sveltejs/kit@2.5.18(@sveltejs/vite-plugin-svelte@3.1.1(svelte@4.2.18)(vite@5.3.4(@types/node@16.18.11)))(svelte@4.2.18)(vite@5.3.4(@types/node@16.18.11)))(svelte@4.2.18)
+        specifier: 2.16.1
+        version: 2.16.1(@sveltejs/kit@2.5.18(@sveltejs/vite-plugin-svelte@3.1.1(svelte@4.2.18)(vite@5.3.4(@types/node@16.18.11)))(svelte@4.2.18)(vite@5.3.4(@types/node@16.18.11)))(svelte@4.2.18)
       tslib:
         specifier: 2.6.3
         version: 2.6.3
@@ -185,11 +185,11 @@ packages:
     resolution: {integrity: sha512-30iZtAPgz+LTIYoeivqYo853f02jBYSd5uGnGpkFV0M3xOt9aN73erkgYAmZU43x4VfqcnLxW9Kpg3R5LC4YYw==}
     engines: {node: '>=6.0.0'}
 
-  '@arktype/schema@0.1.13':
-    resolution: {integrity: sha512-qZjtCAKrnhsixDWsEGJtosWfi4bLpAg4OnnICVYTer/6v5hwlhsdYpYobTSJUc5eiBoI5Ai/kcNfYaQISshY2g==}
+  '@ark/schema@0.2.0':
+    resolution: {integrity: sha512-IkNWCSHdjaoemMXpps4uFHEAQzwJPbTAS8K2vcQpk90sa+eNBuPSVyB/81/Qyl1VYW0iX3ceGC5NL/OznQv1jg==}
 
-  '@arktype/util@0.0.48':
-    resolution: {integrity: sha512-U5FO5EUAJ4LoYtLSyAMmTf6CEVgslObfSQuua2zoK5Tv2FB3aESVQ3rdLfhuz+coRhlzlynbkmimyoQWwQT+aQ==}
+  '@ark/util@0.1.0':
+    resolution: {integrity: sha512-qCLYICQoCy3kEKDVwirQp8qvxhY7NJd8BhhoHaj1l3wCFAk9NUbcDsxAkPStZEMdPI/d7NcbGJe8SWZuRG2twQ==}
 
   '@babel/code-frame@7.24.6':
     resolution: {integrity: sha512-ZJhac6FkEd1yhG2AHOmfcXG4ceoLltoCVJjN5XsWN9BifBQr+cHJbWi0h68HZuSORq+3WtJ2z0hwF2NG1b5kcA==}
@@ -1186,8 +1186,8 @@ packages:
   aria-query@5.3.0:
     resolution: {integrity: sha512-b0P0sZPKtyu8HkeRAfCq0IfURZK+SuwMjY1UXGBU27wpAiTwQAIlq56IbIO+ytk/JjS1fMR14ee5WBBfKi5J6A==}
 
-  arktype@2.0.0-dev.21:
-    resolution: {integrity: sha512-dgHCjb3FK4BGvG2LuXqgdWXstbFmiYowSy0jiKnyk4KVcMT5DyIJ9d1nbQM3ztiAL3hIPmPdkmpfxUqR+BoOBQ==}
+  arktype@2.0.0-beta.0:
+    resolution: {integrity: sha512-fE3ssMiXjr/bLqFPzlDhRlXngdyHQreu7p7i8+dtcY1CA+f8WrVUcue6JxywhnqEJXPG4HOcIwQcC+q4VfeUMQ==}
 
   array-union@2.1.0:
     resolution: {integrity: sha512-HGyxoOTYUyCM6stUe6EJgnd4EoewAI7zMdfqO+kGjnlZmBDz/cR5pf8r/cR4Wq60sL/p0IkcjUEEPwS3GFrIyw==}
@@ -3636,8 +3636,8 @@ packages:
     resolution: {integrity: sha512-d0FdzYIiAePqRJEb90WlJDkjUEx42xhivxN8muUBmfZnP+tzUgz12DJ2hRJi8sIHCME7jeK1PTMgKPSfTd8JrA==}
     engines: {node: '>=16'}
 
-  sveltekit-superforms@2.16.0:
-    resolution: {integrity: sha512-t5aZyMCXyahgvn7VAJ7l9S+wAv9YyMAZHYQ6gcGVZ6ecr4/DMMD2r3ajGCj1h1dWaMQ3w5zVw+SqHSAkbHsWVQ==}
+  sveltekit-superforms@2.16.1:
+    resolution: {integrity: sha512-RNBdN43xge/ADmc3s7+pfdnRGuZ9gZiqpX6VKAQCnCI+ICc5rrPv5idYbx4iuY1Ia0lRMAq1hP0x2oHaPjB+Kg==}
     peerDependencies:
       '@sveltejs/kit': 1.x || 2.x
       svelte: 3.x || 4.x || >=5.0.0-next.51
@@ -4173,12 +4173,12 @@ snapshots:
       '@jridgewell/gen-mapping': 0.3.5
       '@jridgewell/trace-mapping': 0.3.25
 
-  '@arktype/schema@0.1.13':
+  '@ark/schema@0.2.0':
     dependencies:
-      '@arktype/util': 0.0.48
+      '@ark/util': 0.1.0
     optional: true
 
-  '@arktype/util@0.0.48':
+  '@ark/util@0.1.0':
     optional: true
 
   '@babel/code-frame@7.24.6':
@@ -5311,10 +5311,10 @@ snapshots:
     dependencies:
       dequal: 2.0.3
 
-  arktype@2.0.0-dev.21:
+  arktype@2.0.0-beta.0:
     dependencies:
-      '@arktype/schema': 0.1.13
-      '@arktype/util': 0.0.48
+      '@ark/schema': 0.2.0
+      '@ark/util': 0.1.0
     optional: true
 
   array-union@2.1.0: {}
@@ -7845,7 +7845,7 @@ snapshots:
       magic-string: 0.30.10
       periscopic: 3.1.0
 
-  sveltekit-superforms@2.16.0(@sveltejs/kit@2.5.18(@sveltejs/vite-plugin-svelte@3.1.1(svelte@4.2.18)(vite@5.3.4(@types/node@16.18.11)))(svelte@4.2.18)(vite@5.3.4(@types/node@16.18.11)))(svelte@4.2.18):
+  sveltekit-superforms@2.16.1(@sveltejs/kit@2.5.18(@sveltejs/vite-plugin-svelte@3.1.1(svelte@4.2.18)(vite@5.3.4(@types/node@16.18.11)))(svelte@4.2.18)(vite@5.3.4(@types/node@16.18.11)))(svelte@4.2.18):
     dependencies:
       '@sveltejs/kit': 2.5.18(@sveltejs/vite-plugin-svelte@3.1.1(svelte@4.2.18)(vite@5.3.4(@types/node@16.18.11)))(svelte@4.2.18)(vite@5.3.4(@types/node@16.18.11))
       devalue: 5.0.0
@@ -7859,7 +7859,7 @@ snapshots:
       '@sinclair/typebox': 0.32.34
       '@sodaru/yup-to-json-schema': 2.0.1
       '@vinejs/vine': 1.8.0
-      arktype: 2.0.0-dev.21
+      arktype: 2.0.0-beta.0
       joi: 17.13.3
       json-schema-to-ts: 3.1.0
       superstruct: 2.0.2
