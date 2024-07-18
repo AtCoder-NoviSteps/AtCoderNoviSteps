@@ -79,7 +79,7 @@
     "flowbite": "2.4.1",
     "just-extend": "6.2.0",
     "lucia": "2.7.7",
-    "playwright": "1.45.1",
+    "playwright": "1.45.2",
     "pnpm": "9.5.0",
     "prisma-erd-generator": "1.11.2",
     "svelte-add": "2023.9.17-0.0",
