@@ -3,6 +3,7 @@
   import {
     ButtonGroup,
     Button,
+    Img,
     Table,
     TableBody,
     TableBodyCell,
@@ -24,6 +25,7 @@
   import TooltipWrapper from '$lib/components/TooltipWrapper.svelte';
   import GradeLabel from '$lib/components/GradeLabel.svelte';
   import PublicationStatusLabel from '$lib/components/WorkBooks/PublicationStatusLabel.svelte';
+  import CompletedTasks from '$lib/components/Trophies/CompletedTasks.svelte';
   import ThermometerProgressBar from '$lib/components/ThermometerProgressBar.svelte';
   import AcceptedCounter from '$lib/components/SubmissionStatus/AcceptedCounter.svelte';
 
@@ -148,6 +150,10 @@
               <TableBodyCell class="w-2/5 pl-6 pr-4">
                 <div class="flex items-center space-x-2 truncate min-w-[240px] max-w-[480px]">
                   <PublicationStatusLabel isPublished={workbook.isPublished} />
+                  <CompletedTasks
+                    taskResults={getTaskResult(workbook.id)}
+                    allTasks={workbook.workBookTasks}
+                  />
                   <a
                     href="/workbooks/{workbook.id}"
                     class="font-medium text-primary-600 hover:underline dark:text-primary-500 truncate"
