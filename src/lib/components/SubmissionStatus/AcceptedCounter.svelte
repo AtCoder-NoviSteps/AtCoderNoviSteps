@@ -1,6 +1,7 @@
 <script lang="ts">
   import type { WorkBookTaskBase } from '$lib/types/workbook';
-  import type { TaskResult, TaskResults } from '$lib/types/task';
+  import type { TaskResults } from '$lib/types/task';
+  import { countAcceptedTasks, countAllTasks } from '$lib/utils/task';
 
   export let workBookTasks: WorkBookTaskBase[] = [];
   export let taskResults: TaskResults;
@@ -10,9 +11,8 @@
   let acceptedRatioPercent: number = 0;
 
   $: {
-    const acceptedResults = taskResults.filter((taskResult: TaskResult) => taskResult.is_ac);
-    acceptedCount = acceptedResults.length;
-    allTaskCount = workBookTasks.length || taskResults.length;
+    acceptedCount = countAcceptedTasks(taskResults);
+    allTaskCount = countAllTasks(workBookTasks) || countAllTasks(taskResults);
     acceptedRatioPercent = allTaskCount ? (acceptedCount / allTaskCount) * 100 : 0;
   }
 </script>

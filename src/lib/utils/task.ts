@@ -1,9 +1,30 @@
-import { TaskGrade } from '$lib/types/task';
+import { type TaskResult, type TaskResults, TaskGrade } from '$lib/types/task';
+import { type WorkBookTaskBase } from '$lib/types/workbook';
 import { ATCODER_BASE_CONTEST_URL } from '$lib/constants/urls';
 
 // TODO: 複数のコンテストサイトに対応できるようにする
 export const taskUrl = (contestId: string, taskId: string) => {
   return `${ATCODER_BASE_CONTEST_URL}/${contestId}/tasks/${taskId}`;
+};
+
+export const countAcceptedTasks = (taskResults: TaskResults) => {
+  const acceptedResults = taskResults.filter((taskResult: TaskResult) => taskResult.is_ac);
+
+  return acceptedResults.length;
+};
+
+export const countAllTasks = (tasks: TaskResults | WorkBookTaskBase[]) => {
+  return tasks.length;
+};
+
+export const areAllTasksAccepted = (
+  acceptedTasks: TaskResults,
+  allTasks: TaskResults | WorkBookTaskBase[],
+) => {
+  const allTaskCount = countAllTasks(allTasks);
+  const acceptedTaskCount = countAcceptedTasks(acceptedTasks);
+
+  return allTaskCount > 0 && acceptedTaskCount === allTaskCount;
 };
 
 // order: 1 (first) - 17 (last)、9999: Infinity
