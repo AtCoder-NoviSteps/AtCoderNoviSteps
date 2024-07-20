@@ -11,6 +11,7 @@
   } from 'flowbite-svelte';
 
   import PublicationStatusLabel from '$lib/components/WorkBooks/PublicationStatusLabel.svelte';
+  import CompletedTasks from '$lib/components/Trophies/CompletedTasks.svelte';
   import HeadingOne from '$lib/components/HeadingOne.svelte';
   import ThermometerProgressBar from '$lib/components/ThermometerProgressBar.svelte';
   import AcceptedCounter from '$lib/components/SubmissionStatus/AcceptedCounter.svelte';
@@ -78,6 +79,10 @@
         <PublicationStatusLabel isPublished={workBook.isPublished} />
       </div>
     {/if}
+    <CompletedTasks
+      taskResults={Array.from(taskResults.values())}
+      allTasks={workBook.workBookTasks}
+    />
     <div class="min-w-[240px] max-w-[1440px] truncate">
       <HeadingOne title={workBook.title} />
     </div>

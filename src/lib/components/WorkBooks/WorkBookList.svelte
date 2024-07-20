@@ -12,13 +12,19 @@
   } from 'flowbite-svelte';
 
   import { canRead, canEdit, canDelete } from '$lib/utils/authorship';
-  import { WorkBookType, type WorkbookList, type WorkbooksList } from '$lib/types/workbook';
-  import { getTaskGradeLabel } from '$lib/utils/task';
+  import {
+    WorkBookType,
+    type WorkbookList,
+    type WorkbooksList,
+    type WorkBookTaskBase,
+  } from '$lib/types/workbook';
+  import { areAllTasksAccepted, getTaskGradeLabel } from '$lib/utils/task';
   import { TaskGrade, type TaskGradeRange, type TaskResults } from '$lib/types/task';
   import type { Roles } from '$lib/types/user';
   import TooltipWrapper from '$lib/components/TooltipWrapper.svelte';
   import GradeLabel from '$lib/components/GradeLabel.svelte';
   import PublicationStatusLabel from '$lib/components/WorkBooks/PublicationStatusLabel.svelte';
+  import CompletedTasks from '$lib/components/Trophies/CompletedTasks.svelte';
   import ThermometerProgressBar from '$lib/components/ThermometerProgressBar.svelte';
   import AcceptedCounter from '$lib/components/SubmissionStatus/AcceptedCounter.svelte';
 
@@ -62,8 +68,17 @@
     return workbookGradeRange?.upper ?? TaskGrade.PENDING;
   }
 
-  function getTaskResult(workbookId: number) {
+  function getTaskResult(workbookId: number): TaskResults {
     return taskResultsWithWorkBookId?.get(workbookId) ?? [];
+  }
+
+  // HACK: 配色は暫定なので修正
+  function fillInBackgroundIfNeeds(
+    taskResults: TaskResults,
+    allTasks: TaskResults | WorkBookTaskBase[],
+  ): string {
+    const isCompleted = areAllTasksAccepted(taskResults, allTasks);
+    return isCompleted ? 'bg-primary-100' : 'bg-white';
   }
 </script>
 
@@ -110,7 +125,9 @@
       <TableBody tableBodyClass="divide-y">
         {#each filteredWorkbooks as workbook}
           {#if canRead(workbook.isPublished, userId, workbook.authorId)}
-            <TableBodyRow>
+            <TableBodyRow
+              class={fillInBackgroundIfNeeds(getTaskResult(workbook.id), workbook.workBookTasks)}
+            >
               {#if workbookType === WorkBookType.CREATED_BY_USER}
                 <TableBodyCell>
                   <div class="truncate min-w-[96px] max-w-[120px]">
@@ -132,6 +149,10 @@
               <TableBodyCell class="w-2/5 pl-6 pr-4">
                 <div class="flex items-center space-x-2 truncate min-w-[240px] max-w-[480px]">
                   <PublicationStatusLabel isPublished={workbook.isPublished} />
+                  <CompletedTasks
+                    taskResults={getTaskResult(workbook.id)}
+                    allTasks={workbook.workBookTasks}
+                  />
                   <a
                     href="/workbooks/{workbook.id}"
                     class="font-medium text-primary-600 hover:underline dark:text-primary-500 truncate"
