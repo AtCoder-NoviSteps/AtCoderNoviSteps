@@ -3,7 +3,6 @@
   import {
     ButtonGroup,
     Button,
-    Img,
     Table,
     TableBody,
     TableBodyCell,
