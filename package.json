@@ -45,7 +45,7 @@
     "@vitest/ui": "2.0.3",
     "eslint": "8.57.0",
     "eslint-config-prettier": "9.1.0",
-    "eslint-plugin-svelte": "2.42.0",
+    "eslint-plugin-svelte": "2.43.0",
     "flowbite-svelte": "0.46.6",
     "flowbite-svelte-icons": "0.4.4",
     "husky": "9.1.1",
@@ -83,10 +83,10 @@
     "pnpm": "9.5.0",
     "prisma-erd-generator": "1.11.2",
     "svelte-add": "2023.9.17-0.0",
-    "svelte-eslint-parser": "^0.40.0",
+    "svelte-eslint-parser": "^0.41.0",
     "tailwind-merge": "1.14.0",
     "tailwindcss": "3.4.6",
-    "vercel": "35.0.3"
+    "vercel": "35.1.0"
   },
   "packageManager": "pnpm@9.1.0"
 }
