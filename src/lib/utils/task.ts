@@ -1,6 +1,7 @@
 import { type TaskResult, type TaskResults, TaskGrade } from '$lib/types/task';
 import { type WorkBookTaskBase } from '$lib/types/workbook';
 import { ATCODER_BASE_CONTEST_URL } from '$lib/constants/urls';
+import { getContestPriority } from '$lib/utils/contest';
 
 // TODO: 複数のコンテストサイトに対応できるようにする
 export const taskUrl = (contestId: string, taskId: string) => {
@@ -26,6 +27,31 @@ export const areAllTasksAccepted = (
 
   return allTaskCount > 0 && acceptedTaskCount === allTaskCount;
 };
+
+// See:
+// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort
+export function compareByContestIdAndTaskId(first: TaskResult, second: TaskResult): number {
+  const firstContestPriority = getContestPriority(first.contest_id);
+  const secondContestPriority = getContestPriority(second.contest_id);
+
+  // 1. コンテスト種類別の優先度(昇順)
+  //
+  // See:
+  // contestTypePriorities in src/lib/utils/contest.ts
+  if (firstContestPriority !== secondContestPriority) {
+    return firstContestPriority - secondContestPriority;
+  }
+
+  // 2. コンテストID(降順)
+  const sortByContestIdInDescendingOrder = second.contest_id.localeCompare(first.contest_id);
+
+  if (sortByContestIdInDescendingOrder !== 0) {
+    return sortByContestIdInDescendingOrder;
+  }
+
+  // 3. 問題ID(昇順)
+  return first.task_table_index.localeCompare(second.task_table_index);
+}
 
 // order: 1 (first) - 17 (last)、9999: Infinity
 export const getTaskGradeOrder: Map<TaskGrade, number> = new Map([

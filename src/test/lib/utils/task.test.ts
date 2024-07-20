@@ -1,8 +1,22 @@
 import { expect, test } from 'vitest';
 
-import { countAcceptedTasks, countAllTasks, areAllTasksAccepted } from '$lib/utils/task';
+import {
+  countAcceptedTasks,
+  countAllTasks,
+  areAllTasksAccepted,
+  compareByContestIdAndTaskId,
+} from '$lib/utils/task';
 import type { WorkBookTaskBase } from '$lib/types/workbook';
-import type { TaskResults } from '$lib/types/task';
+import type { TaskResult, TaskResults } from '$lib/types/task';
+
+import {
+  taskResultsForUserId2,
+  taskResultsForUserId3,
+  taskResultsForUserId4,
+  taskResultsForUserId5,
+  threeWorkBookTasks,
+  tasksForVerificationOfOrder,
+} from './test_cases/task_results';
 
 type TestCaseForTaskResults = {
   taskResults: TaskResults;
@@ -19,223 +33,13 @@ type TestCaseForWorkBookTasks = {
 
 type TestCasesForWorkBookTasks = TestCaseForWorkBookTasks[];
 
-const userId2 = '2';
-const userId3 = '3';
-const userId4 = '4';
-const userId5 = '5';
+type TestCaseForSortingTaskResults = {
+  first: TaskResult;
+  second: TaskResult;
+  expected: number;
+};
 
-// 0 out of 3 is accepted
-const taskResultsForUserId2 = [
-  {
-    is_ac: false,
-    user_id: userId2,
-    status_name: 'wa',
-    status_id: '3',
-    submission_status_image_path: 'wa.png',
-    submission_status_label_name: '挑戦中',
-    contest_id: 'abc999',
-    task_table_index: 'A',
-    task_id: 'abc999_a',
-    title: 'A. hoge hoge',
-    grade: 'Q7',
-    updated_at: new Date(),
-  },
-  {
-    is_ac: false,
-    user_id: userId2,
-    status_name: 'ns',
-    status_id: '4',
-    submission_status_image_path: 'ns.png',
-    submission_status_label_name: '未挑戦',
-    contest_id: 'abc999',
-    task_table_index: 'B',
-    task_id: 'abc999_b',
-    title: 'B. Foo',
-    grade: '6Q',
-    updated_at: new Date(),
-  },
-  {
-    is_ac: false,
-    user_id: userId2,
-    status_name: 'ns',
-    status_id: '4',
-    submission_status_image_path: 'ns.png',
-    submission_status_label_name: '未挑戦',
-    contest_id: 'abc999',
-    task_table_index: 'C',
-    task_id: 'abc999_c',
-    title: 'C. Bar',
-    grade: '4Q',
-    updated_at: new Date(),
-  },
-];
-
-// 2 out of 3 are accepted
-const taskResultsForUserId3 = [
-  {
-    is_ac: true,
-    user_id: userId3,
-    status_name: 'ac',
-    status_id: '1',
-    submission_status_image_path: 'ac.png',
-    submission_status_label_name: 'AC',
-    contest_id: 'abc999',
-    task_table_index: 'A',
-    task_id: 'abc999_a',
-    title: 'A. hoge hoge',
-    grade: 'Q7',
-    updated_at: new Date(),
-  },
-  {
-    is_ac: true,
-    user_id: userId3,
-    status_name: 'ac',
-    status_id: '1',
-    submission_status_image_path: 'ac.png',
-    submission_status_label_name: 'AC',
-    contest_id: 'abc999',
-    task_table_index: 'B',
-    task_id: 'abc999_b',
-    title: 'B. Foo',
-    grade: '6Q',
-    updated_at: new Date(),
-  },
-  {
-    is_ac: false,
-    user_id: userId3,
-    status_name: 'wa',
-    status_id: '3',
-    submission_status_image_path: 'wa.png',
-    submission_status_label_name: '挑戦中',
-    contest_id: 'abc999',
-    task_table_index: 'C',
-    task_id: 'abc999_c',
-    title: 'C. Bar',
-    grade: '4Q',
-    updated_at: new Date(),
-  },
-];
-
-// 3 out of 3 are accepted
-const taskResultsForUserId4 = [
-  {
-    is_ac: true,
-    user_id: userId4,
-    status_name: 'ac',
-    status_id: '1',
-    submission_status_image_path: 'ac.png',
-    submission_status_label_name: 'AC',
-    contest_id: 'abc999',
-    task_table_index: 'A',
-    task_id: 'abc999_a',
-    title: 'A. hoge hoge',
-    grade: 'Q7',
-    updated_at: new Date(),
-  },
-  {
-    is_ac: true,
-    user_id: userId4,
-    status_name: 'ac',
-    status_id: '1',
-    submission_status_image_path: 'ac.png',
-    submission_status_label_name: 'AC',
-    contest_id: 'abc999',
-    task_table_index: 'B',
-    task_id: 'abc999_b',
-    title: 'B. Foo',
-    grade: '6Q',
-    updated_at: new Date(),
-  },
-  {
-    is_ac: true,
-    user_id: userId4,
-    status_name: 'ac',
-    status_id: '1',
-    submission_status_image_path: 'ac.png',
-    submission_status_label_name: 'AC',
-    contest_id: 'abc999',
-    task_table_index: 'C',
-    task_id: 'abc999_c',
-    title: 'C. Bar',
-    grade: '4Q',
-    updated_at: new Date(),
-  },
-];
-
-// 4 out of 4 are accepted
-const taskResultsForUserId5 = [
-  {
-    is_ac: true,
-    user_id: userId5,
-    status_name: 'ac',
-    status_id: '1',
-    submission_status_image_path: 'ac.png',
-    submission_status_label_name: 'AC',
-    contest_id: 'abc999',
-    task_table_index: 'A',
-    task_id: 'abc999_a',
-    title: 'A. hoge hoge',
-    grade: 'Q7',
-    updated_at: new Date(),
-  },
-  {
-    is_ac: true,
-    user_id: userId5,
-    status_name: 'ac',
-    status_id: '1',
-    submission_status_image_path: 'ac.png',
-    submission_status_label_name: 'AC',
-    contest_id: 'abc999',
-    task_table_index: 'B',
-    task_id: 'abc999_b',
-    title: 'B. Foo',
-    grade: '6Q',
-    updated_at: new Date(),
-  },
-  {
-    is_ac: true,
-    user_id: userId5,
-    status_name: 'ac',
-    status_id: '1',
-    submission_status_image_path: 'ac.png',
-    submission_status_label_name: 'AC',
-    contest_id: 'abc999',
-    task_table_index: 'C',
-    task_id: 'abc999_c',
-    title: 'C. Bar',
-    grade: '4Q',
-    updated_at: new Date(),
-  },
-  {
-    is_ac: true,
-    user_id: userId5,
-    status_name: 'ac',
-    status_id: '1',
-    submission_status_image_path: 'ac.png',
-    submission_status_label_name: 'AC',
-    contest_id: 'abc999',
-    task_table_index: 'D',
-    task_id: 'abc999_d',
-    title: 'D. Fizz',
-    grade: '1Q',
-    updated_at: new Date(),
-  },
-];
-
-const threeWorkBookTasks = [
-  {
-    taskId: 'abc999_a',
-    priority: 1,
-  },
-  {
-    taskId: 'abc999_b',
-    priority: 2,
-  },
-  {
-    taskId: 'abc999_c',
-    priority: 3,
-  },
-];
+type TestCasesForSortingTaskResults = TestCaseForSortingTaskResults[];
 
 describe('Task', () => {
   describe('count accepted tasks', () => {
@@ -510,6 +314,144 @@ describe('Task', () => {
       testFunction: (testCase: TestCaseForWorkBookTasks) => void,
     ) {
       test.each(testCases)(`${testName}(workBookTasks: $workBookTasks)`, testFunction);
+    }
+  });
+
+  describe('compare by contest type, contest id and task id', () => {
+    describe('when the different contest type tasks are given', () => {
+      // Note: Due to the large number of ABC tasks, test cases are prioritized.
+      const testCases: TestCasesForSortingTaskResults = [
+        {
+          first: tasksForVerificationOfOrder.ABS_1,
+          second: tasksForVerificationOfOrder.abc999_a,
+          expected: -1, // order: ABS_1, abc999_a
+        },
+        {
+          first: tasksForVerificationOfOrder.abc999_a,
+          second: tasksForVerificationOfOrder.APG4b_ct,
+          expected: -1, // order: abc999_a, APG4b_ct
+        },
+        {
+          first: tasksForVerificationOfOrder.abc999_a,
+          second: tasksForVerificationOfOrder.typical90_a,
+          expected: -2, // order: abc999_a, typical90_a
+        },
+        {
+          first: tasksForVerificationOfOrder.abc999_a,
+          second: tasksForVerificationOfOrder.dp_b,
+          expected: -3, // order: abc999_a, dp_b
+        },
+        {
+          first: tasksForVerificationOfOrder.abc999_a,
+          second: tasksForVerificationOfOrder.tdpc_contest,
+          expected: -4, // order: abc999_a, tpdc_contest
+        },
+        {
+          first: tasksForVerificationOfOrder.abc999_a,
+          second: tasksForVerificationOfOrder.past202309_a,
+          expected: -5, // order: abc999_a, past202309_a
+        },
+        {
+          first: tasksForVerificationOfOrder.abc999_a,
+          second: tasksForVerificationOfOrder.acl_a,
+          expected: -6, // order: abc999_a, acl_a
+        },
+        {
+          first: tasksForVerificationOfOrder.abc999_a,
+          second: tasksForVerificationOfOrder.joi2023_yo1c,
+          expected: -7, // order: abc999_a, joi2023_yo1c
+        },
+        {
+          first: tasksForVerificationOfOrder.abc999_a,
+          second: tasksForVerificationOfOrder.tessoku_book_a,
+          expected: -8, // order: abc999_a, tessoku_book_a
+        },
+        {
+          first: tasksForVerificationOfOrder.abc999_a,
+          second: tasksForVerificationOfOrder.math_and_algorithm_a,
+          expected: -9, // order: abc999_a, math_and_algorithm_a
+        },
+      ];
+
+      runTests(
+        'compareByContestIdAndTaskId',
+        testCases,
+        ({ first, second, expected }: TestCaseForSortingTaskResults) => {
+          expect(compareByContestIdAndTaskId(first, second)).toBe(expected);
+        },
+      );
+    });
+
+    describe('when different contests are given for the same contest type', () => {
+      const testCases: TestCasesForSortingTaskResults = [
+        {
+          first: tasksForVerificationOfOrder.abc052_c,
+          second: tasksForVerificationOfOrder.abc078_c,
+          expected: 1, // order: abc078_c, abc052_c
+        },
+        {
+          first: tasksForVerificationOfOrder.abc052_c,
+          second: tasksForVerificationOfOrder.abc361_a,
+          expected: 1, // order: abc361_a, abc052_c
+        },
+        {
+          first: tasksForVerificationOfOrder.abc078_c,
+          second: tasksForVerificationOfOrder.abc361_a,
+          expected: 1, // order: abc361_a, abc078_c
+        },
+        {
+          first: tasksForVerificationOfOrder.abc361_a,
+          second: tasksForVerificationOfOrder.abc362_a,
+          expected: 1, // order: abc362_a, abc361_a
+        },
+      ];
+
+      runTests(
+        'compareByContestIdAndTaskId',
+        testCases,
+        ({ first, second, expected }: TestCaseForSortingTaskResults) => {
+          expect(compareByContestIdAndTaskId(first, second)).toBe(expected);
+        },
+      );
+    });
+
+    describe('when different contests are given for the same contest type', () => {
+      const testCases: TestCasesForSortingTaskResults = [
+        {
+          first: tasksForVerificationOfOrder.abc347_c,
+          second: tasksForVerificationOfOrder.abc347_d,
+          expected: -1, // order: abc347_c, abc347_d
+        },
+        {
+          first: tasksForVerificationOfOrder.abc347_d,
+          second: tasksForVerificationOfOrder.abc347_e,
+          expected: -1, // order: abc347_d, abc347_e
+        },
+        {
+          first: tasksForVerificationOfOrder.abc347_c,
+          second: tasksForVerificationOfOrder.abc347_e,
+          expected: -1, // order: abc347_c, abc347_e
+        },
+      ];
+
+      runTests(
+        'compareByContestIdAndTaskId',
+        testCases,
+        ({ first, second, expected }: TestCaseForSortingTaskResults) => {
+          expect(compareByContestIdAndTaskId(first, second)).toBe(expected);
+        },
+      );
+    });
+
+    function runTests(
+      testName: string,
+      testCases: TestCasesForSortingTaskResults,
+      testFunction: (testCase: TestCaseForSortingTaskResults) => void,
+    ) {
+      test.each(testCases)(
+        `${testName}(first: $first.task_id, second: $second.task_id)`,
+        testFunction,
+      );
     }
   });
 });
