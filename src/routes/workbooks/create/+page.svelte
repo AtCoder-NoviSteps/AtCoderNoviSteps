@@ -1,6 +1,6 @@
 <script lang="ts">
   import { superForm } from 'sveltekit-superforms/client';
-  import { Breadcrumb, BreadcrumbItem } from 'flowbite-svelte';
+  import { Breadcrumb, BreadcrumbItem, Label } from 'flowbite-svelte';
 
   import {
     WorkBookType,
@@ -62,18 +62,23 @@
       errors={$errors}
     />
 
-    <!-- 問題一覧 -->
-    <WorkBookTasksTable bind:workBookTasks={$form.workBookTasks} bind:workBookTasksForTable />
-
     <!-- 問題を検索 -->
     <!-- HACK: 属性が微妙に異なるため、やむなくデータベースへの保存用と問題集作成・編集用で分けている。 -->
-    <TaskSearchBox {tasks} bind:workBookTasks={$form.workBookTasks} bind:workBookTasksForTable />
-    <InputFieldWrapper
-      inputFieldType="hidden"
-      inputFieldName="workBookTasks"
-      inputValue={$form.workBookTasks}
-      message={$errors.workBookTasks?._errors}
-    />
+    <div class="space-y-2">
+      <Label>
+        <span>問題を検索</span>
+      </Label>
+      <TaskSearchBox {tasks} bind:workBookTasks={$form.workBookTasks} bind:workBookTasksForTable />
+      <InputFieldWrapper
+        inputFieldType="hidden"
+        inputFieldName="workBookTasks"
+        inputValue={$form.workBookTasks}
+        message={$errors.workBookTasks?._errors}
+      />
+    </div>
+
+    <!-- 問題一覧 -->
+    <WorkBookTasksTable bind:workBookTasks={$form.workBookTasks} bind:workBookTasksForTable />
 
     <!-- 作成ボタンを追加 -->
     <div class="flex flex-wrap md:justify-center md:items-center">
