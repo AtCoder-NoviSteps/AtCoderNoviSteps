@@ -53,7 +53,7 @@
 
 <!-- タイトル -->
 <InputFieldWrapper
-  labelName="タイトル"
+  labelName="タイトル（3〜200文字）"
   inputFieldName="title"
   bind:inputValue={workBookTitle}
   {isEditable}
@@ -62,7 +62,7 @@
 
 <!-- 説明 -->
 <InputFieldWrapper
-  labelName="説明"
+  labelName="説明（300文字以下）"
   inputFieldName="description"
   bind:inputValue={description}
   {isEditable}
