@@ -6,7 +6,7 @@
   import type { WorkBookTaskBase, WorkBookTaskCreate } from '$lib/types/workbook';
   import type { Task, Tasks } from '$lib/types/task';
   import { getContestNameLabel } from '$lib/utils/contest';
-  import { taskUrl } from '$lib/utils/task';
+  import { taskUrl, compareByContestIdAndTaskId } from '$lib/utils/task';
 
   export let tasks: Tasks = [];
   // HACK: やむなくデータベースへの保存用と問題集作成・編集用で分けている。
@@ -28,7 +28,12 @@
   };
 
   $: searchWordsOrURL = '';
-  $: filteredTasks = tasks.filter((task: Task) => isMatched(task, searchWordsOrURL)).slice(0, 20);
+  $: filteredTasks = tasks
+    .filter((task: Task) => isMatched(task, searchWordsOrURL))
+    .slice(0, 30)
+    .sort((firstTask: Task, secondTask: Task) =>
+      firstTask.task_table_index.localeCompare(secondTask.task_table_index),
+    );
 
   const PENDING = -1;
   let focusingId = PENDING;
