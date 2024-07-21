@@ -60,9 +60,9 @@
   message={errors.title}
 />
 
-<!-- 説明 -->
+<!-- 問題集の概要 -->
 <InputFieldWrapper
-  labelName="説明（300文字以下）"
+  labelName="概要（300文字以下）"
   inputFieldName="description"
   bind:inputValue={description}
   {isEditable}

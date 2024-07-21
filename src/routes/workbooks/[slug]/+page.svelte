@@ -99,7 +99,7 @@
 
   {#if workBook.description !== ''}
     <div>
-      <div>説明</div>
+      <div>概要</div>
       <div class="min-w-[240px] max-w-[1440px] truncate">
         {workBook.description}
       </div>
