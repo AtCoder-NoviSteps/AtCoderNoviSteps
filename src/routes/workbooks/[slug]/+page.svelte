@@ -13,8 +13,6 @@
   import PublicationStatusLabel from '$lib/components/WorkBooks/PublicationStatusLabel.svelte';
   import CompletedTasks from '$lib/components/Trophies/CompletedTasks.svelte';
   import HeadingOne from '$lib/components/HeadingOne.svelte';
-  import ThermometerProgressBar from '$lib/components/ThermometerProgressBar.svelte';
-  import AcceptedCounter from '$lib/components/SubmissionStatus/AcceptedCounter.svelte';
   import UpdatingModal from '$lib/components/SubmissionStatus/UpdatingModal.svelte';
   import SubmissionStatusImage from '$lib/components/SubmissionStatus/SubmissionStatusImage.svelte';
   import GradeLabel from '$lib/components/GradeLabel.svelte';
@@ -99,7 +97,7 @@
 
   {#if workBook.description !== ''}
     <div>
-      <div>概要</div>
+      <div class="text-lg">概要</div>
       <div class="min-w-[240px] max-w-[1440px] truncate">
         {workBook.description}
       </div>
@@ -110,22 +108,7 @@
   {#if workBookTasks.length}
     <!-- FIXME: MapからArrayに変換するヘルパー関数を用意 -->
     <div class="flex flex-col pt-4">
-      <div>回答状況</div>
-      <div class="flex items-center space-x-2 sm:space-x-6 sm:mr-6">
-        <ThermometerProgressBar
-          {workBookTasks}
-          taskResults={Array.from(taskResults.values())}
-          width="w-full"
-        />
-        <AcceptedCounter {workBookTasks} taskResults={Array.from(taskResults.values())} />
-      </div>
-    </div>
-
-    <div class="pt-1 pb-2">
-      <!-- TODO: コンポーネントとして抽出 -->
-      <!-- See: -->
-      <!-- https://tw-elements.com/docs/standard/content-styles/dividers/# -->
-      <hr class="my-1 h-0.5 border-t-0 bg-gray-100 dark:bg-white/10" />
+      <div class="text-lg">回答状況</div>
     </div>
 
     <div class="overflow-auto rounded-md border">
