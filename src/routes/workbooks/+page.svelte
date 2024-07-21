@@ -147,7 +147,7 @@
 </script>
 
 <div class="container mx-auto w-5/6">
-  <HeadingOne title="問題集一覧" />
+  <HeadingOne title="問題集" />
 
   <!-- TODO: フィルタリング機能などが実装できたら、一般ユーザも問題集を作成できるようにする -->
   {#if loggedInUser?.role === Roles.ADMIN}

@@ -44,7 +44,7 @@
     <HeadingOne title="問題集を作成" />
 
     <Breadcrumb aria-label="">
-      <BreadcrumbItem href="/workbooks" home>問題集一覧</BreadcrumbItem>
+      <BreadcrumbItem href="/workbooks" home>問題集</BreadcrumbItem>
       <BreadcrumbItem>
         <div class="min-w-[96px] max-w-[120px] truncate">問題集を作成</div>
       </BreadcrumbItem>
