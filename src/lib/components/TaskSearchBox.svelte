@@ -28,7 +28,12 @@
   };
 
   $: searchWordsOrURL = '';
-  $: filteredTasks = tasks.filter((task: Task) => isMatched(task, searchWordsOrURL)).slice(0, 20);
+  $: filteredTasks = tasks
+    .filter((task: Task) => isMatched(task, searchWordsOrURL))
+    .slice(0, 30)
+    .sort((firstTask: Task, secondTask: Task) =>
+      firstTask.task_table_index.localeCompare(secondTask.task_table_index),
+    );
 
   const PENDING = -1;
   let focusingId = PENDING;

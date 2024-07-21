@@ -25,11 +25,11 @@
   }
 </script>
 
-<Label class="space-y-2">
-  <span>問題一覧</span>
-</Label>
-
 {#if workBookTasksForTable.length}
+  <Label class="space-y-2">
+    <span>問題一覧</span>
+  </Label>
+
   <Table shadow class="text-md">
     <TableHead class="text-sm bg-gray-100">
       <TableHeadCell class="min-w-[120px] max-w-[150px] truncate">コンテスト名</TableHeadCell>

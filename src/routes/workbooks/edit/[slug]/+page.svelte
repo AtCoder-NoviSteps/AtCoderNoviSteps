@@ -1,6 +1,6 @@
 <script lang="ts">
   import { superForm } from 'sveltekit-superforms/client';
-  import { Breadcrumb, BreadcrumbItem } from 'flowbite-svelte';
+  import { Breadcrumb, BreadcrumbItem, Label } from 'flowbite-svelte';
 
   import type { WorkBookTaskBase, WorkBookTaskEdit } from '$lib/types/workbook';
   import type { Task, Tasks } from '$lib/types/task.js';
@@ -57,7 +57,7 @@
 
       <!-- TODO: コンポーネントとして切り出す -->
       <Breadcrumb aria-label="">
-        <BreadcrumbItem href="/workbooks" home>問題集一覧</BreadcrumbItem>
+        <BreadcrumbItem href="/workbooks" home>問題集</BreadcrumbItem>
         <BreadcrumbItem>
           <div class="min-w-[96px] max-w-[120px] truncate">
             {workBook.title}
@@ -77,18 +77,27 @@
         errors={$errors}
       />
 
-      <!-- データベースに保存されている問題 + 検索で追加した問題を表示 -->
-      <WorkBookTasksTable bind:workBookTasks={$form.workBookTasks} bind:workBookTasksForTable />
-
       <!-- 問題を検索 -->
       <!-- HACK: 属性が微妙に異なるため、やむなくデータベースへの保存用と問題集作成・編集用で分けている。 -->
-      <TaskSearchBox {tasks} bind:workBookTasks={$form.workBookTasks} bind:workBookTasksForTable />
-      <InputFieldWrapper
-        inputFieldType="hidden"
-        inputFieldName="workBookTasks"
-        inputValue={$form.workBookTasks}
-        message={$errors.workBookTasks?._errors}
-      />
+      <div class="space-y-2">
+        <Label>
+          <span>問題を検索</span>
+        </Label>
+        <TaskSearchBox
+          {tasks}
+          bind:workBookTasks={$form.workBookTasks}
+          bind:workBookTasksForTable
+        />
+        <InputFieldWrapper
+          inputFieldType="hidden"
+          inputFieldName="workBookTasks"
+          inputValue={$form.workBookTasks}
+          message={$errors.workBookTasks?._errors}
+        />
+      </div>
+
+      <!-- データベースに保存されている問題 + 検索で追加した問題を表示 -->
+      <WorkBookTasksTable bind:workBookTasks={$form.workBookTasks} bind:workBookTasksForTable />
 
       <!-- 更新ボタン -->
       <div class="flex flex-wrap md:justify-center md:items-center">

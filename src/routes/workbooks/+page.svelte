@@ -19,6 +19,7 @@
     WorkBookType,
   } from '$lib/types/workbook';
   import { Roles } from '$lib/types/user';
+  import { canViewWorkBook } from '$lib/utils/workbooks';
 
   const getWorkBooksByType = (workbooks: WorkbooksList, workBookType: WorkBookType) => {
     const filteredWorkbooks = workbooks.filter(
@@ -34,6 +35,7 @@
       workBookType: WorkBookType.TEXTBOOK,
       isOpen: true,
       tooltipContent: '特定のグレードの問題を挑戦するのに必要な基礎知識が学べます。',
+      canUsersView: true,
     },
     {
       title: '解法別',
@@ -41,6 +43,7 @@
       isOpen: false,
       tooltipContent:
         '特定のアルゴリズム・データ構造を応用する力や競技プログラミング特有の考え方を身につけられます。',
+      canUsersView: false,
     },
     {
       title: 'ジャンル別',
@@ -48,18 +51,25 @@
       isOpen: false,
       tooltipContent:
         '特定のジャンル (グラフ理論・文字列など) を重点的に練習できます。解法に直接言及するようなネタバレはありません。',
+      canUsersView: false,
     },
     {
       title: 'その他',
       workBookType: WorkBookType.OTHERS,
       isOpen: false,
+      canUsersView: false,
     },
     {
       title: 'ユーザ作成',
       workBookType: WorkBookType.CREATED_BY_USER,
       isOpen: false,
+      canUsersView: false,
     },
   ];
+
+  // function canViewWorkBook(role: Roles, canUsersView: boolean) {
+  //   return isAdmin(role) || canUsersView;
+  // }
 
   const tasksByTaskId: Map<string, Task> = data.tasksByTaskId;
   let taskResultsByTaskId = data.taskResultsByTaskId as Map<string, TaskResult>;
@@ -147,7 +157,7 @@
 </script>
 
 <div class="container mx-auto w-5/6">
-  <HeadingOne title="問題集一覧" />
+  <HeadingOne title="問題集" />
 
   <!-- TODO: フィルタリング機能などが実装できたら、一般ユーザも問題集を作成できるようにする -->
   {#if loggedInUser?.role === Roles.ADMIN}
@@ -160,24 +170,26 @@
   <div>
     <Tabs tabStyle="underline" contentClass="bg-white">
       {#each workBookTabs as workBookTab}
-        <TabItemWrapper
-          isOpen={workBookTab.isOpen}
-          title={workBookTab.title}
-          tooltipContent={workBookTab.tooltipContent}
-        >
-          <div class="mt-6">
-            <WorkBookList
-              workbookType={workBookTab.workBookType}
-              workbooks={getWorkBooksByType(workbooks, workBookTab.workBookType)}
-              {workbookGradeRanges}
-              taskResultsWithWorkBookId={fetchTaskResultsWithWorkBookId(
-                workbooks,
-                workBookTab.workBookType,
-              )}
-              {loggedInUser}
-            />
-          </div>
-        </TabItemWrapper>
+        {#if loggedInUser && canViewWorkBook(loggedInUser?.role, workBookTab.canUsersView)}
+          <TabItemWrapper
+            isOpen={workBookTab.isOpen}
+            title={workBookTab.title}
+            tooltipContent={workBookTab.tooltipContent}
+          >
+            <div class="mt-6">
+              <WorkBookList
+                workbookType={workBookTab.workBookType}
+                workbooks={getWorkBooksByType(workbooks, workBookTab.workBookType)}
+                {workbookGradeRanges}
+                taskResultsWithWorkBookId={fetchTaskResultsWithWorkBookId(
+                  workbooks,
+                  workBookTab.workBookType,
+                )}
+                {loggedInUser}
+              />
+            </div>
+          </TabItemWrapper>
+        {/if}
       {/each}
     </Tabs>
   </div>
