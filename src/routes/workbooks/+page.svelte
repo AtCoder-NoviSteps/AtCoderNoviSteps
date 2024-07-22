@@ -5,6 +5,8 @@
 
   $: workbooks = data.workbooks;
   let loggedInUser = data.loggedInUser;
+  // loggedInUser.roleで比較すると、@prisma/clientと型が異なるため、やむを得ずasでキャスト
+  let role = loggedInUser?.role as Roles;
 
   import HeadingOne from '$lib/components/HeadingOne.svelte';
   import TabItemWrapper from '$lib/components/TabItemWrapper.svelte';
@@ -66,10 +68,6 @@
       canUsersView: false,
     },
   ];
-
-  // function canViewWorkBook(role: Roles, canUsersView: boolean) {
-  //   return isAdmin(role) || canUsersView;
-  // }
 
   const tasksByTaskId: Map<string, Task> = data.tasksByTaskId;
   let taskResultsByTaskId = data.taskResultsByTaskId as Map<string, TaskResult>;
@@ -160,7 +158,7 @@
   <HeadingOne title="問題集" />
 
   <!-- TODO: フィルタリング機能などが実装できたら、一般ユーザも問題集を作成できるようにする -->
-  {#if loggedInUser?.role === Roles.ADMIN}
+  {#if role === Roles.ADMIN}
     <div class="ml-2">
       <Button href="/workbooks/create" type="submit" class="mt-4 mb-4">新規作成</Button>
     </div>
@@ -170,7 +168,7 @@
   <div>
     <Tabs tabStyle="underline" contentClass="bg-white">
       {#each workBookTabs as workBookTab}
-        {#if loggedInUser && canViewWorkBook(loggedInUser?.role, workBookTab.canUsersView)}
+        {#if loggedInUser && canViewWorkBook(role, workBookTab.canUsersView)}
           <TabItemWrapper
             isOpen={workBookTab.isOpen}
             title={workBookTab.title}

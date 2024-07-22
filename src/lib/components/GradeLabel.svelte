@@ -2,7 +2,7 @@
   import { getTaskGradeColor, getTaskGradeLabel, toWhiteTextIfNeeds } from '$lib/utils/task';
   import { TaskGrade } from '$lib/types/task';
 
-  export let taskGrade: TaskGrade;
+  export let taskGrade: TaskGrade | string;
 
   $: grade = getTaskGradeLabel(taskGrade);
   $: gradeColor = getTaskGradeColor(taskGrade);
