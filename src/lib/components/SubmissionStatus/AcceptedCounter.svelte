@@ -4,7 +4,7 @@
   import { countAcceptedTasks, countAllTasks } from '$lib/utils/task';
 
   export let workBookTasks: WorkBookTaskBase[] = [];
-  export let taskResults: TaskResults;
+  export let taskResults: TaskResults | [];
 
   let acceptedCount: number = 0;
   let allTaskCount: number = 0;

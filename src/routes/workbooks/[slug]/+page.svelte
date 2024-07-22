@@ -34,7 +34,7 @@
 
   // TODO: 関数をutilへ移動させる
   const getTaskResult = (taskId: string): TaskResult => {
-    return taskResults.get(taskId)!;
+    return taskResults?.get(taskId) as TaskResult;
   };
 
   const getTaskGrade = (taskId: string): TaskGrade => {
@@ -96,8 +96,8 @@
   </Breadcrumb>
 
   {#if workBook.description !== ''}
-    <div>
-      <div class="text-lg">概要</div>
+    <div class="pt-3 pb-6">
+      <div class="text-2xl font-bold">概要</div>
       <div class="min-w-[240px] max-w-[1440px] truncate">
         {workBook.description}
       </div>
@@ -106,11 +106,6 @@
 
   <!-- 問題一覧 -->
   {#if workBookTasks.length}
-    <!-- FIXME: MapからArrayに変換するヘルパー関数を用意 -->
-    <div class="flex flex-col pt-4">
-      <div class="text-lg">回答状況</div>
-    </div>
-
     <div class="overflow-auto rounded-md border">
       <Table shadow class="text-md">
         <TableHead class="text-sm bg-gray-100">
