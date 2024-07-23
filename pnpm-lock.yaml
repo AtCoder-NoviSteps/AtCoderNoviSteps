@@ -88,8 +88,8 @@ importers:
         specifier: 0.5.7
         version: 0.5.7(tailwindcss@3.4.6(ts-node@10.9.1(@types/node@16.18.11)(typescript@5.5.3)))
       '@testing-library/jest-dom':
-        specifier: 6.4.6
-        version: 6.4.6(@types/jest@29.5.12)(vitest@2.0.4(@edge-runtime/vm@3.2.0)(@types/node@16.18.11)(@vitest/ui@2.0.4)(jsdom@24.1.1))
+        specifier: 6.4.8
+        version: 6.4.8
       '@types/gtag.js':
         specifier: 0.0.20
         version: 0.0.20
@@ -775,26 +775,9 @@ packages:
     resolution: {integrity: sha512-CytIvb6tVOADRngTHGWNxH8LPgO/3hi/BdCEHOf7Qd2GvZVClhVP0Wo/QHzWhpki49Bk0b4VT6xpt3fx8HTSIw==}
     engines: {node: '>=18'}
 
-  '@testing-library/jest-dom@6.4.6':
-    resolution: {integrity: sha512-8qpnGVincVDLEcQXWaHOf6zmlbwTKc6Us6PPu4CRnPXCzo2OGBS5cwgMMOWdxDpEz1mkbvXHpEy99M5Yvt682w==}
+  '@testing-library/jest-dom@6.4.8':
+    resolution: {integrity: sha512-JD0G+Zc38f5MBHA4NgxQMR5XtO5Jx9g86jqturNTt2WUfRmLDIY7iKkWHDCCTiDuFMre6nxAD5wHw9W5kI4rGw==}
     engines: {node: '>=14', npm: '>=6', yarn: '>=1'}
-    peerDependencies:
-      '@jest/globals': '>= 28'
-      '@types/bun': latest
-      '@types/jest': '>= 28'
-      jest: '>= 28'
-      vitest: '>= 0.32'
-    peerDependenciesMeta:
-      '@jest/globals':
-        optional: true
-      '@types/bun':
-        optional: true
-      '@types/jest':
-        optional: true
-      jest:
-        optional: true
-      vitest:
-        optional: true
 
   '@testing-library/svelte@5.2.0':
     resolution: {integrity: sha512-oMIFfxMcaPOXp+BQTRVgkeKzfAx7ee9fMrWaiKbMN36tN61kLl4Uj5ZZ/y1w9aL3a0BuBEoErV5iorYwCHqVUA==}
@@ -4747,7 +4730,7 @@ snapshots:
       lz-string: 1.5.0
       pretty-format: 27.5.1
 
-  '@testing-library/jest-dom@6.4.6(@types/jest@29.5.12)(vitest@2.0.4(@edge-runtime/vm@3.2.0)(@types/node@16.18.11)(@vitest/ui@2.0.4)(jsdom@24.1.1))':
+  '@testing-library/jest-dom@6.4.8':
     dependencies:
       '@adobe/css-tools': 4.4.0
       '@babel/runtime': 7.24.6
@@ -4757,9 +4740,6 @@ snapshots:
       dom-accessibility-api: 0.6.3
       lodash: 4.17.21
       redent: 3.0.0
-    optionalDependencies:
-      '@types/jest': 29.5.12
-      vitest: 2.0.4(@edge-runtime/vm@3.2.0)(@types/node@16.18.11)(@vitest/ui@2.0.4)(jsdom@24.1.1)
 
   '@testing-library/svelte@5.2.0(svelte@4.2.18)(vite@5.3.4(@types/node@16.18.11))(vitest@2.0.4(@edge-runtime/vm@3.2.0)(@types/node@16.18.11)(@vitest/ui@2.0.4)(jsdom@24.1.1))':
     dependencies:
