@@ -11,6 +11,8 @@
     TableHeadCell,
   } from 'flowbite-svelte';
 
+  import { taskGradesByWorkBookTypeStore } from '$lib/stores/task_grades_by_workbook_type';
+  // console.log(initialValues);
   import { canRead, canEdit, canDelete } from '$lib/utils/authorship';
   import {
     WorkBookType,
@@ -37,7 +39,8 @@
   let userId = loggedInUser.id;
   let role: Roles = loggedInUser.role;
 
-  let selectedGrade: TaskGrade = TaskGrade.Q10;
+  let selectedGrade: TaskGrade =
+    taskGradesByWorkBookTypeStore.getTaskGrade(workbookType) || TaskGrade.Q10;
   let filteredWorkbooks: WorkbooksList;
 
   $: filteredWorkbooks =
@@ -54,6 +57,7 @@
 
   function filterByGradeLower(grade: TaskGrade) {
     selectedGrade = grade;
+    taskGradesByWorkBookTypeStore.updateTaskGrade(workbookType, grade);
   }
 
   function getGradeLower(workbookId: number): TaskGrade {
