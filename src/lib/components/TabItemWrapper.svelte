@@ -1,8 +1,12 @@
 <script lang="ts">
+  import { onMount } from 'svelte';
   import { TabItem, Tooltip } from 'flowbite-svelte';
   import QuestionCircleOutline from 'flowbite-svelte-icons/QuestionCircleOutline.svelte';
-  import { onMount } from 'svelte';
 
+  import { WorkBookType } from '$lib/types/workbook';
+  import { activeWorkbookTabStore } from '$lib/stores/active_workbook_tab';
+
+  export let workbookType: WorkBookType;
   export let isOpen: boolean = false;
   export let title: string;
   export let tooltipContent: string = '';
@@ -12,6 +16,10 @@
   onMount(() => {
     titleId = `title-${Math.floor(Math.random() * 10000)}`;
   });
+
+  function handleClick(workBookType: WorkBookType) {
+    activeWorkbookTabStore.setActiveWorkbookTab(workBookType);
+  }
 </script>
 
 <!-- See: -->
@@ -24,7 +32,7 @@
   {/if}
 </div>
 
-<TabItem open={isOpen}>
+<TabItem open={isOpen} on:click={() => handleClick(workbookType)}>
   <span slot="title" class="text-lg" id={titleId}>
     <div class="flex items-center space-x-2">
       <span>

@@ -1,6 +1,4 @@
 <script lang="ts">
-  import { Button, Tabs } from 'flowbite-svelte';
-
   export let data;
 
   $: workbooks = data.workbooks;
@@ -8,8 +6,12 @@
   // loggedInUser.roleで比較すると、@prisma/clientと型が異なるため、やむを得ずasでキャスト
   let role = loggedInUser?.role as Roles;
 
+  import { get } from 'svelte/store';
+  import { Button, Tabs } from 'flowbite-svelte';
+
   import HeadingOne from '$lib/components/HeadingOne.svelte';
   import TabItemWrapper from '$lib/components/TabItemWrapper.svelte';
+  import { activeWorkbookTabStore } from '$lib/stores/active_workbook_tab';
   import WorkBookList from '$lib/components/WorkBooks/WorkBookList.svelte';
   import { getTaskGradeOrder } from '$lib/utils/task';
   import { type Task, TaskGrade, type TaskGrades, type TaskGradeRange } from '$lib/types/task';
@@ -35,14 +37,12 @@
     {
       title: '教科書',
       workBookType: WorkBookType.TEXTBOOK,
-      isOpen: true,
       tooltipContent: '特定のグレードの問題を挑戦するのに必要な基礎知識が学べます。',
       canUsersView: true,
     },
     {
       title: '解法別',
       workBookType: WorkBookType.SOLUTION,
-      isOpen: false,
       tooltipContent:
         '特定のアルゴリズム・データ構造を応用する力や競技プログラミング特有の考え方を身につけられます。',
       canUsersView: false,
@@ -50,7 +50,6 @@
     {
       title: 'ジャンル別',
       workBookType: WorkBookType.GENRE,
-      isOpen: false,
       tooltipContent:
         '特定のジャンル (グラフ理論・文字列など) を重点的に練習できます。解法に直接言及するようなネタバレはありません。',
       canUsersView: false,
@@ -58,16 +57,18 @@
     {
       title: 'その他',
       workBookType: WorkBookType.OTHERS,
-      isOpen: false,
       canUsersView: false,
     },
     {
       title: 'ユーザ作成',
       workBookType: WorkBookType.CREATED_BY_USER,
-      isOpen: false,
       canUsersView: false,
     },
   ];
+
+  const getActiveWorkBookTab = (workBookType: WorkBookType) => {
+    return get(activeWorkbookTabStore).get(workBookType);
+  };
 
   const tasksByTaskId: Map<string, Task> = data.tasksByTaskId;
   let taskResultsByTaskId = data.taskResultsByTaskId as Map<string, TaskResult>;
@@ -170,7 +171,8 @@
       {#each workBookTabs as workBookTab}
         {#if loggedInUser && canViewWorkBook(role, workBookTab.canUsersView)}
           <TabItemWrapper
-            isOpen={workBookTab.isOpen}
+            workbookType={workBookTab.workBookType}
+            isOpen={getActiveWorkBookTab(workBookTab.workBookType)}
             title={workBookTab.title}
             tooltipContent={workBookTab.tooltipContent}
           >
