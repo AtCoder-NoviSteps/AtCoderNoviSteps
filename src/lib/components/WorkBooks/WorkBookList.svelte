@@ -1,5 +1,7 @@
 <script lang="ts">
   import { enhance } from '$app/forms';
+  import { get } from 'svelte/store';
+
   import {
     ButtonGroup,
     Button,
@@ -12,7 +14,6 @@
   } from 'flowbite-svelte';
 
   import { taskGradesByWorkBookTypeStore } from '$lib/stores/task_grades_by_workbook_type';
-  // console.log(initialValues);
   import { canRead, canEdit, canDelete } from '$lib/utils/authorship';
   import {
     WorkBookType,
@@ -40,7 +41,7 @@
   let role: Roles = loggedInUser.role;
 
   let selectedGrade: TaskGrade =
-    taskGradesByWorkBookTypeStore.getTaskGrade(workbookType) || TaskGrade.Q10;
+    get(taskGradesByWorkBookTypeStore).get(workbookType) || TaskGrade.Q10;
   let filteredWorkbooks: WorkbooksList;
 
   $: filteredWorkbooks =

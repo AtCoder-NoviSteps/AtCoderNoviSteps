@@ -16,7 +16,7 @@ function createTaskGradesByWorkBookTypeStore() {
     updateTaskGrade: (workBookType: WorkBookType, grade: TaskGrade) =>
       update((originalTaskGrades) => new Map(originalTaskGrades.set(workBookType, grade))),
     getTaskGrade: (workBookType: WorkBookType) => {
-      const taskGrades = get({ subscribe });
+      const taskGrades = get(taskGradesByWorkBookTypeStore);
       return taskGrades.get(workBookType);
     },
   };
