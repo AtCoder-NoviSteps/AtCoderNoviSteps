@@ -4,7 +4,7 @@ import { WorkBookType } from '$lib/types/workbook';
 
 const workBookTypes = Object.values(WorkBookType) as Array<WorkBookType>;
 // Map<WorkBookType, IsActiveWorkBookTab>
-export const initialValues = new Map<WorkBookType, boolean>(
+const initialValues = new Map<WorkBookType, boolean>(
   workBookTypes.map((workBookType: WorkBookType) => [workBookType, false]),
 );
 initialValues.set(WorkBookType.TEXTBOOK, true);
