@@ -63,8 +63,8 @@ importers:
         specifier: 3.4.6
         version: 3.4.6(ts-node@10.9.1(@types/node@16.18.11)(typescript@5.5.4))
       vercel:
-        specifier: 35.1.0
-        version: 35.1.0
+        specifier: 35.2.0
+        version: 35.2.0
     devDependencies:
       '@playwright/test':
         specifier: 1.45.3
@@ -3227,7 +3227,7 @@ packages:
 
   puppeteer@19.11.1:
     resolution: {integrity: sha512-39olGaX2djYUdhaQQHDZ0T0GwEp+5f9UB9HmEP0qHfdQHIq0xGQZuAZ5TLnJIc/88SrPLpEflPC+xUqOTv3c5g==}
-    deprecated: < 22.6.4 is no longer supported
+    deprecated: < 22.8.2 is no longer supported
 
   querystringify@2.2.0:
     resolution: {integrity: sha512-FIqgj2EUvTa7R50u0rGsyTftzjYmv/a3hO345bZNrqabNqjtgiDMgmo4mkUjd+nzU5oF3dClKqFIPUKybUyqoQ==}
@@ -3908,8 +3908,8 @@ packages:
     resolution: {integrity: sha512-c1Q0mCiPlgdTVVVIJIrBuxNicYE+t/7oKeI9MWLj3fh/uq2Pxh/3eeWbVZ4OcGW1TUf53At0njHw5SMdA3tmMg==}
     engines: {node: '>= 0.10'}
 
-  vercel@35.1.0:
-    resolution: {integrity: sha512-q9vHaeMGQaOPPOEtzABuvN7qO2+hwKnDIzV7GprPECXpcvP3J2Ge8yJls1erESa0uvjcKU55T8fI4RS3rWzXgA==}
+  vercel@35.2.0:
+    resolution: {integrity: sha512-ZEdRDfw3kIhcryMOZvVMrFSSS5fkK2qpYr1QNOswW3sHtowuQglpVcvvyqNHrNLAbtETiO/svjNnFKEF22/fhg==}
     engines: {node: '>= 16'}
     hasBin: true
 
@@ -8150,7 +8150,7 @@ snapshots:
   validator@13.12.0:
     optional: true
 
-  vercel@35.1.0:
+  vercel@35.2.0:
     dependencies:
       '@vercel/build-utils': 8.3.5
       '@vercel/fun': 1.1.0
