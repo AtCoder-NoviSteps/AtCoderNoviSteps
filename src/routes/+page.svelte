@@ -7,7 +7,7 @@
 
   import { PRODUCT_CATCH_PHRASE } from '$lib/constants/product-info';
 
-  const images = [
+  const taskImages = [
     {
       alt: 'Problem Grades from 11Q to 4Q',
       src: '../../grade_11Q_4Q.png',
@@ -22,6 +22,24 @@
       alt: 'Problems of Grade 5Q',
       src: '../../grade_5Q_details.png',
       title: 'Problems-of-Grade-5Q',
+    },
+  ];
+
+  const workBookImages = [
+    {
+      alt: 'List of workbooks',
+      src: '../../workbooks.png',
+      title: 'List-of-workbooks',
+    },
+    {
+      alt: 'Sample of workbooks with 9Q',
+      src: '../../workbook_9Q_details.png',
+      title: 'Sample-of-workbooks-with-9Q',
+    },
+    {
+      alt: 'Sample of workbooks with 9Q final',
+      src: '../../workbook_9Q_details_final.png',
+      title: 'Sample-of-workbooks-with-9Q-final',
     },
   ];
 </script>
@@ -77,7 +95,25 @@
   <div class="m-4">
     <Carousel
       duration={3000}
-      {images}
+      images={taskImages}
+      imgClass="object-contain h-full w-fit"
+      let:Controls
+      class="min-h-[540px]"
+    >
+      <Controls class="items-center text-primary-700 pt-4" />
+    </Carousel>
+  </div>
+
+  <!-- FIXME: キャッチコピーを改善 -->
+  <Heading tag="h2" class="mt-6 mb-3" customSize="text-xl font-medium  md:text-2xl lg:text-3xl">
+    問題集で得意を伸ばす・苦手を克服
+  </Heading>
+  <p>例題・類題を通して、各トピックの基礎から応用的な方法まで身につけられます</p>
+
+  <div class="m-4">
+    <Carousel
+      duration={3000}
+      images={workBookImages}
       imgClass="object-contain h-full w-fit"
       let:Controls
       class="min-h-[540px]"

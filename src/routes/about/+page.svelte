@@ -6,22 +6,26 @@
   const features = [
     {
       description:
-        '回答を自分で記録：各問題の回答状況について、「AC」「解説AC」「挑戦中」「未挑戦」から選んで記録できます。',
+        '問題の回答状況を自分で記録できる: 「AC」「解説AC」「挑戦中」「未挑戦」から選べます。',
     },
     {
       description:
-        '難易度の細分化：17段階で難易度付けされており、現在の実力より一歩先の問題に挑戦できます。',
+        '一歩先の問題に挑戦: 17段階で難易度付けされており、自分の実力に合った問題が探せます。',
+    },
+    {
+      description:
+        '問題集で得意を伸ばす・苦手を克服: 例題・類題を通して、各トピックの基礎から応用的な方法まで身につけられます。',
     },
   ];
 
   const members = [
-    { name: '@けんちょん', account: 'https://twitter.com/drken1215' },
-    { name: '@hiro', account: 'https://twitter.com/k_hiro1818' },
-    { name: '@ウルズニャー', account: 'https://twitter.com/uruzunyaa' },
-    { name: '@nonon', account: 'https://twitter.com/nonon_math' },
-    { name: '@あべみ', account: 'https://twitter.com/cats0830v' },
-    { name: '@わさせき', account: 'https://twitter.com/wasaseki' },
-    { name: '@toshi201', account: 'https://twitter.com/toshicon201' },
+    { name: '@けんちょん', account: 'https://x.com/drken1215' },
+    { name: '@hiro', account: 'https://x.com/k_hiro1818' },
+    { name: '@ウルズニャー', account: 'https://x.com/uruzunyaa' },
+    { name: '@nonon', account: 'https://x.com/nonon_math' },
+    { name: '@あべみ', account: 'https://x.com/cats0830v' },
+    { name: '@わさせき', account: 'https://x.com/wasaseki' },
+    { name: '@toshi201', account: 'https://x.com/toshicon201' },
   ];
 </script>
 
@@ -85,7 +89,10 @@
         ログインします。お試し用のアカウント (ユーザ名: guest、パスワード: HelloGuest)
         を利用することもできます。
       </Li>
-      <Li>グレードおよび問題を選び、回答欄の「更新」をクリックもしくはタップします。</Li>
+      <Li>
+        問題一覧や問題集 (アルファ版)
+        で、グレードおよび問題を選び、回答欄の「更新」をクリックもしくはタップします。
+      </Li>
       <Li>該当する回答状況 (デフォルトは「未挑戦」)を選択し、「回答を更新」ボタンを押します。</Li>
     </List>
   </div>
