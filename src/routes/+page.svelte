@@ -32,14 +32,14 @@
       title: 'List-of-workbooks',
     },
     {
-      alt: 'Sample of workbooks with 9Q',
+      alt: 'Sample of workbook with 9Q',
       src: '../../workbook_9Q_details.png',
-      title: 'Sample-of-workbooks-with-9Q',
+      title: 'Sample-of-workbook-with-9Q',
     },
     {
-      alt: 'Sample of workbooks with 9Q final',
+      alt: 'Sample of workbook with 9Q final',
       src: '../../workbook_9Q_details_final.png',
-      title: 'Sample-of-workbooks-with-9Q-final',
+      title: 'Sample-of-workbook-with-9Q-final',
     },
   ];
 </script>
