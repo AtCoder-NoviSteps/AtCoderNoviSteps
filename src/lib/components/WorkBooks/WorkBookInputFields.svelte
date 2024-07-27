@@ -21,8 +21,9 @@
   ];
 
   const workBookTypeOptions = (isOfficial: boolean, isAdmin: boolean = false) => {
+    // Note: カリキュラムは、旧 教科書。スキーマの属性を変更していないのは、名称の変更の可能性があるため。
     const allWorkBookTypes = [
-      { value: WorkBookType.TEXTBOOK, name: '教科書' },
+      { value: WorkBookType.TEXTBOOK, name: 'カリキュラム' },
       { value: WorkBookType.SOLUTION, name: '解法別' },
       { value: WorkBookType.GENRE, name: 'ジャンル別' },
       { value: WorkBookType.CREATED_BY_USER, name: 'ユーザ作成' },
