@@ -156,7 +156,7 @@
 </script>
 
 <div class="container mx-auto w-5/6">
-  <HeadingOne title="問題集" />
+  <HeadingOne title="問題集（アルファ版）" />
 
   <!-- TODO: フィルタリング機能などが実装できたら、一般ユーザも問題集を作成できるようにする -->
   {#if role === Roles.ADMIN}

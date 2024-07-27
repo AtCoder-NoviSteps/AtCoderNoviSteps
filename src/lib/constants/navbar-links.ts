@@ -1,6 +1,7 @@
 export const navbarLinks = [
   { title: `ホーム`, path: `/` },
   { title: `問題一覧`, path: `/problems` },
+  { title: `問題集（アルファ版）`, path: `/workbooks` },
   { title: `サービスの説明`, path: `/about` },
 ];
 
