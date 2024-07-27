@@ -18,7 +18,6 @@
   import GradeLabel from '$lib/components/GradeLabel.svelte';
   import ExternalLinkWrapper from '$lib/components/ExternalLinkWrapper.svelte';
   import { getBackgroundColorFrom } from '$lib/services/submission_status';
-  import { getContestUrl } from '$lib/utils/contest';
   import { taskUrl } from '$lib/utils/task';
   import { getContestNameLabel } from '$lib/utils/contest';
   import type { WorkBookTaskBase } from '$lib/types/workbook';
@@ -56,7 +55,7 @@
 
   let updatingModal: UpdatingModal;
 
-  // FIXME: clickを1回実行するとactionsが2回実行されてしまう。原因と修正方法が分かっていない。
+  // HACK: clickを1回実行するとactionsが2回実行されてしまう。原因と修正方法が分かっていない。
   function handleClick(taskId: string) {
     updatingModal.openModal(getTaskResult(taskId));
   }
@@ -111,8 +110,8 @@
         <TableHead class="text-sm bg-gray-100">
           <TableHeadCell class="min-w-[96px] max-w-[120px]">回答</TableHeadCell>
           <TableHeadCell class="text-center px-0">グレード</TableHeadCell>
-          <TableHeadCell class="min-w-[120px] max-w-[150px] truncate">コンテスト名</TableHeadCell>
           <TableHeadCell class="min-w-[240px] truncate">問題名</TableHeadCell>
+          <TableHeadCell class="min-w-[120px] max-w-[150px] truncate">出典</TableHeadCell>
         </TableHead>
         <TableBody tableBodyClass="divide-y">
           {#each workBookTasks as workBookTask}
@@ -139,17 +138,14 @@
               <TableBodyCell>
                 <div class="truncate">
                   <ExternalLinkWrapper
-                    url={getContestUrl(getContestIdFrom(workBookTask.taskId))}
-                    description={getContestNameFrom(workBookTask.taskId)}
+                    url={taskUrl(getContestIdFrom(workBookTask.taskId), workBookTask.taskId)}
+                    description={getTaskName(workBookTask.taskId)}
                   />
                 </div>
               </TableBodyCell>
               <TableBodyCell>
                 <div class="truncate">
-                  <ExternalLinkWrapper
-                    url={taskUrl(getContestIdFrom(workBookTask.taskId), workBookTask.taskId)}
-                    description={getTaskName(workBookTask.taskId)}
-                  />
+                  {getContestNameFrom(workBookTask.taskId)}
                 </div>
               </TableBodyCell>
             </TableBodyRow>
