@@ -30,7 +30,6 @@ describe('Active workbook tab store', () => {
     const testCases = [
       { workBookType: WorkBookType.SOLUTION },
       { workBookType: WorkBookType.GENRE },
-      { workBookType: WorkBookType.OTHERS },
       { workBookType: WorkBookType.CREATED_BY_USER },
     ];
     runTests('getActiveWorkbookTab', testCases, ({ workBookType }: InitialState) => {
@@ -50,7 +49,6 @@ describe('Active workbook tab store', () => {
     const testCases = [
       { workBookType: WorkBookType.TEXTBOOK },
       { workBookType: WorkBookType.GENRE },
-      { workBookType: WorkBookType.OTHERS },
       { workBookType: WorkBookType.CREATED_BY_USER },
     ];
     runTests('updateActiveWorkBookTabOnce', testCases, ({ workBookType }: UpdateOnce) => {
@@ -91,10 +89,6 @@ describe('Active workbook tab store', () => {
       },
       {
         firstTimeUpdated: WorkBookType.TEXTBOOK,
-        secondTimeUpdated: WorkBookType.OTHERS,
-      },
-      {
-        firstTimeUpdated: WorkBookType.TEXTBOOK,
         secondTimeUpdated: WorkBookType.CREATED_BY_USER,
       },
       {
@@ -108,10 +102,6 @@ describe('Active workbook tab store', () => {
       {
         firstTimeUpdated: WorkBookType.SOLUTION,
         secondTimeUpdated: WorkBookType.GENRE,
-      },
-      {
-        firstTimeUpdated: WorkBookType.SOLUTION,
-        secondTimeUpdated: WorkBookType.OTHERS,
       },
       {
         firstTimeUpdated: WorkBookType.SOLUTION,
@@ -131,30 +121,6 @@ describe('Active workbook tab store', () => {
       },
       {
         firstTimeUpdated: WorkBookType.GENRE,
-        secondTimeUpdated: WorkBookType.OTHERS,
-      },
-      {
-        firstTimeUpdated: WorkBookType.GENRE,
-        secondTimeUpdated: WorkBookType.CREATED_BY_USER,
-      },
-      {
-        firstTimeUpdated: WorkBookType.OTHERS,
-        secondTimeUpdated: WorkBookType.TEXTBOOK,
-      },
-      {
-        firstTimeUpdated: WorkBookType.OTHERS,
-        secondTimeUpdated: WorkBookType.SOLUTION,
-      },
-      {
-        firstTimeUpdated: WorkBookType.OTHERS,
-        secondTimeUpdated: WorkBookType.GENRE,
-      },
-      {
-        firstTimeUpdated: WorkBookType.OTHERS,
-        secondTimeUpdated: WorkBookType.OTHERS,
-      },
-      {
-        firstTimeUpdated: WorkBookType.OTHERS,
         secondTimeUpdated: WorkBookType.CREATED_BY_USER,
       },
       {
@@ -168,10 +134,6 @@ describe('Active workbook tab store', () => {
       {
         firstTimeUpdated: WorkBookType.CREATED_BY_USER,
         secondTimeUpdated: WorkBookType.GENRE,
-      },
-      {
-        firstTimeUpdated: WorkBookType.CREATED_BY_USER,
-        secondTimeUpdated: WorkBookType.OTHERS,
       },
       {
         firstTimeUpdated: WorkBookType.CREATED_BY_USER,

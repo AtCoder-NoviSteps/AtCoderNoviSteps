@@ -55,11 +55,6 @@
       canUsersView: false,
     },
     {
-      title: 'その他',
-      workBookType: WorkBookType.OTHERS,
-      canUsersView: false,
-    },
-    {
       title: 'ユーザ作成',
       workBookType: WorkBookType.CREATED_BY_USER,
       canUsersView: false,
