@@ -32,19 +32,19 @@
     return filteredWorkbooks;
   };
 
-  // FIXME: 各問題集の説明文を推敲
   const workBookTabs = [
+    // Note: カリキュラムは、旧 教科書。スキーマの属性を変更していないのは、名称の変更の可能性があるため。
     {
-      title: '教科書',
+      title: 'カリキュラム',
       workBookType: WorkBookType.TEXTBOOK,
-      tooltipContent: '特定のグレードの問題を挑戦するのに必要な基礎知識が学べます。',
+      tooltipContent:
+        '問題を解くのに必要な知識を一つずつ学ぶことができます。問題集を順番に取り組むことも、興味があるトピックを優先することもできます。',
       canUsersView: true,
     },
     {
       title: '解法別',
       workBookType: WorkBookType.SOLUTION,
-      tooltipContent:
-        '特定のアルゴリズム・データ構造を応用する力や競技プログラミング特有の考え方を身につけられます。',
+      tooltipContent: '特定のアルゴリズム・データ構造の習熟度を確認できます。',
       canUsersView: false,
     },
     {
@@ -52,11 +52,6 @@
       workBookType: WorkBookType.GENRE,
       tooltipContent:
         '特定のジャンル (グラフ理論・文字列など) を重点的に練習できます。解法に直接言及するようなネタバレはありません。',
-      canUsersView: false,
-    },
-    {
-      title: 'その他',
-      workBookType: WorkBookType.OTHERS,
       canUsersView: false,
     },
     {

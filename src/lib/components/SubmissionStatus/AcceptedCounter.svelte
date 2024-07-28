@@ -20,7 +20,7 @@
 <!-- FIXME: 横幅を微調整する -->
 <!-- See: -->
 <!-- https://developer.mozilla.org/ja/docs/Web/JavaScript/Reference/Global_Objects/Number/toFixed -->
-<div class="text-sm w-max-[72px] w-max-[96px] text-center">
+<div class="text-xs xs:text-sm w-max-[72px] w-max-[96px] text-center">
   <div>
     {acceptedCount} / {allTaskCount}
   </div>

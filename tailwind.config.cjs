@@ -73,6 +73,9 @@ const config = {
           },
         },
       },
+      screens: {
+        xs: '420px',
+      },
     },
   },
 };

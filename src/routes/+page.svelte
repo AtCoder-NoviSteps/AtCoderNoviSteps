@@ -7,24 +7,6 @@
 
   import { PRODUCT_CATCH_PHRASE } from '$lib/constants/product-info';
 
-  const taskImages = [
-    {
-      alt: 'Problem Grades from 11Q to 4Q',
-      src: '../../grade_11Q_4Q.png',
-      title: 'Problem-Grades-from-11Q-to-4Q',
-    },
-    {
-      alt: 'Problem Grades from 3Q to 6D',
-      src: '../../grade_3Q_6D.png',
-      title: 'Problem-Grades-from-3Q-to-6D',
-    },
-    {
-      alt: 'Problems of Grade 5Q',
-      src: '../../grade_5Q_details.png',
-      title: 'Problems-of-Grade-5Q',
-    },
-  ];
-
   const workBookImages = [
     {
       alt: 'List of workbooks',
@@ -71,12 +53,13 @@
 
   <!-- 主要な機能 + スクリーンショット -->
   <!-- FIXME: 重複部分をコンポーネント化 -->
-  <Heading tag="h2" class="mt-12 mb-3" customSize="text-xl font-medium  md:text-2xl lg:text-3xl">
+  <Heading tag="h2" class="mt-20 mb-3" customSize="text-xl font-medium  md:text-2xl lg:text-3xl">
     問題の回答状況を自分で記録できる
   </Heading>
-  <p>「AC」「解説AC」「挑戦中」「未挑戦」から選べます</p>
+  <p class="mb-2">問題は17段階で難易度付けされており、自分の実力に合ったものを探せます。</p>
+  <p class="mb-16">回答状況は、「AC」「解説AC」「挑戦中」「未挑戦」から選べます。</p>
 
-  <div class="flex flex-wrap justify-center items-center">
+  <div class="flex flex-wrap justify-center items-center mb-20">
     <video
       width="720"
       src="https://github.com/AtCoder-NoviSteps/AtCoderNoviSteps/assets/13990347/2f52354b-fa08-42ad-87c4-da97a49aa320"
@@ -87,28 +70,11 @@
     ></video>
   </div>
 
-  <Heading tag="h2" class="mt-6 mb-3" customSize="text-xl font-medium  md:text-2xl lg:text-3xl">
-    一歩先の問題に挑戦
-  </Heading>
-  <p>17段階で難易度付けされており、自分の実力に合った問題が探せます</p>
-
-  <div class="m-4">
-    <Carousel
-      duration={3000}
-      images={taskImages}
-      imgClass="object-contain h-full w-fit"
-      let:Controls
-      class="min-h-[540px]"
-    >
-      <Controls class="items-center text-primary-700 pt-4" />
-    </Carousel>
-  </div>
-
   <!-- FIXME: キャッチコピーを改善 -->
-  <Heading tag="h2" class="mt-6 mb-3" customSize="text-xl font-medium  md:text-2xl lg:text-3xl">
+  <Heading tag="h2" class="mt-36 mb-3" customSize="text-xl font-medium  md:text-2xl lg:text-3xl">
     問題集で得意を伸ばす・苦手を克服
   </Heading>
-  <p>例題・類題を通して、各トピックの基礎から応用的な方法まで身につけられます</p>
+  <p class="xs:mb-16">例題・類題を通して、各トピックの基礎から応用的な方法まで身につけられます。</p>
 
   <div class="m-4">
     <Carousel
@@ -121,4 +87,6 @@
       <Controls class="items-center text-primary-700 pt-4" />
     </Carousel>
   </div>
+
+  <p class="xs:mb-16"></p>
 </div>

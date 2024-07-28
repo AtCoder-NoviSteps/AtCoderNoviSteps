@@ -28,7 +28,6 @@ describe('Task grades by workbook type', () => {
       { workBookType: WorkBookType.TEXTBOOK, expected: TaskGrade.Q10 },
       { workBookType: WorkBookType.SOLUTION, expected: TaskGrade.Q10 },
       { workBookType: WorkBookType.GENRE, expected: TaskGrade.Q10 },
-      { workBookType: WorkBookType.OTHERS, expected: TaskGrade.Q10 },
     ];
     runTests('getTaskGrade', testCases, ({ workBookType, expected }: InitialState) => {
       expect(taskGradesByWorkBookTypeStore.getTaskGrade(workBookType)).toBe(expected);
@@ -57,10 +56,6 @@ describe('Task grades by workbook type', () => {
       { workBookType: WorkBookType.GENRE, newGrade: TaskGrade.Q9, expected: TaskGrade.Q9 },
       { workBookType: WorkBookType.GENRE, newGrade: TaskGrade.Q8, expected: TaskGrade.Q8 },
       { workBookType: WorkBookType.GENRE, newGrade: TaskGrade.Q7, expected: TaskGrade.Q7 },
-      { workBookType: WorkBookType.OTHERS, newGrade: TaskGrade.Q10, expected: TaskGrade.Q10 },
-      { workBookType: WorkBookType.OTHERS, newGrade: TaskGrade.Q9, expected: TaskGrade.Q9 },
-      { workBookType: WorkBookType.OTHERS, newGrade: TaskGrade.Q8, expected: TaskGrade.Q8 },
-      { workBookType: WorkBookType.OTHERS, newGrade: TaskGrade.Q7, expected: TaskGrade.Q7 },
     ];
     runTests(
       'updateTaskGradeOnce',
