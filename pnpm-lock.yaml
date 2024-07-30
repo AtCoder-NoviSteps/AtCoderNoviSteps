@@ -148,8 +148,8 @@ importers:
         specifier: 4.2.18
         version: 4.2.18
       svelte-check:
-        specifier: 3.8.4
-        version: 3.8.4(postcss-load-config@4.0.2(postcss@8.4.39)(ts-node@10.9.1(@types/node@16.18.11)(typescript@5.5.4)))(postcss@8.4.39)(svelte@4.2.18)
+        specifier: 3.8.5
+        version: 3.8.5(postcss-load-config@4.0.2(postcss@8.4.39)(ts-node@10.9.1(@types/node@16.18.11)(typescript@5.5.4)))(postcss@8.4.39)(svelte@4.2.18)
       svelte-meta-tags:
         specifier: 3.1.2
         version: 3.1.2(svelte@4.2.18)(typescript@5.5.4)
@@ -3546,8 +3546,8 @@ packages:
     resolution: {integrity: sha512-8Dyfzqmo622orHICexeboIuAeNG3oiukjAAwVwVbuVIAxglpr2SEBrofy2NpjHjouBu7QsK5X5rs48FoTf0uQA==}
     hasBin: true
 
-  svelte-check@3.8.4:
-    resolution: {integrity: sha512-61aHMkdinWyH8BkkTX9jPLYxYzaAAz/FK/VQqdr2FiCQQ/q04WCwDlpGbHff1GdrMYTmW8chlTFvRWL9k0A8vg==}
+  svelte-check@3.8.5:
+    resolution: {integrity: sha512-3OGGgr9+bJ/+1nbPgsvulkLC48xBsqsgtc8Wam281H4G9F5v3mYGa2bHRsPuwHC5brKl4AxJH95QF73kmfihGQ==}
     hasBin: true
     peerDependencies:
       svelte: ^3.55.0 || ^4.0.0-next.0 || ^4.0.0 || ^5.0.0-next.0
@@ -7741,7 +7741,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  svelte-check@3.8.4(postcss-load-config@4.0.2(postcss@8.4.39)(ts-node@10.9.1(@types/node@16.18.11)(typescript@5.5.4)))(postcss@8.4.39)(svelte@4.2.18):
+  svelte-check@3.8.5(postcss-load-config@4.0.2(postcss@8.4.39)(ts-node@10.9.1(@types/node@16.18.11)(typescript@5.5.4)))(postcss@8.4.39)(svelte@4.2.18):
     dependencies:
       '@jridgewell/trace-mapping': 0.3.25
       chokidar: 3.6.0
