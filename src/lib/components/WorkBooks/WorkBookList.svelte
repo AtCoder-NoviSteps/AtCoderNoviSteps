@@ -92,14 +92,18 @@
         {#if workbookType === WorkBookType.CREATED_BY_USER}
           <TableHeadCell>作者</TableHeadCell>
         {:else}
-          <TableHeadCell class="text-center px-0">修了</TableHeadCell>
+          <TableHeadCell class="text-center px-0">
+            <div>グレード</div>
+          </TableHeadCell>
         {/if}
-        <TableHeadCell class="text-left px-1">タイトル</TableHeadCell>
-        <TableHeadCell class="text-left px-0">回答状況</TableHeadCell>
-        <TableHeadCell></TableHeadCell>
-        <TableHeadCell class="text-center px-0">
-          <div>グレード</div>
+        <TableHeadCell
+          class="text-left min-w-[240px] max-w-[240px] lg:max-w-[280px] xl:max-w-[360px] 2xl:max-w-[480px] px-1 xs:px-3"
+        >
+          タイトル
         </TableHeadCell>
+        <TableHeadCell class="ext-left min-w-[240px] max-w-[1440px] px-0">回答状況</TableHeadCell>
+        <TableHeadCell></TableHeadCell>
+        <TableHeadCell class="text-center px-0">修了</TableHeadCell>
         <TableHeadCell></TableHeadCell>
       </TableHead>
 
@@ -114,21 +118,20 @@
                   </div>
                 </TableBodyCell>
               {:else}
-                <TableBodyCell tdClass="justify-center pl-2 pr-0">
-                  <div class="flex justify-center items-center flex-shrink-0 w-12">
-                    <CompletedTasks
-                      taskResults={getTaskResult(workbook.id)}
-                      allTasks={workbook.workBookTasks}
-                    />
+                <TableBodyCell class="justify-center w-14 px-2">
+                  <div class="flex items-center justify-center min-w-[54px] max-w-[54px]">
+                    <GradeLabel taskGrade={getGradeLower(workbook.id)} />
                   </div>
                 </TableBodyCell>
               {/if}
-              <TableBodyCell class="w-2/5 pl-2 pr-4">
-                <div class="flex items-center space-x-2 truncate min-w-[240px] max-w-[480px]">
+              <TableBodyCell class="w-2/5 pl-2 xs:pl-4 pr-4">
+                <div
+                  class="flex items-center space-x-2 truncate min-w-[240px] max-w-[240px] lg:max-w-[300px] xl:max-w-[380px] 2xl:max-w-[480px]"
+                >
                   <PublicationStatusLabel isPublished={workbook.isPublished} />
                   <a
                     href="/workbooks/{workbook.id}"
-                    class="font-medium text-primary-600 hover:underline dark:text-primary-500 truncate"
+                    class="flex-1 font-medium xs:text-lg text-primary-600 hover:underline dark:text-primary-500 truncate"
                   >
                     {workbook.title}
                   </a>
@@ -149,13 +152,18 @@
                   />
                 </div>
               </TableBodyCell>
-              <TableBodyCell class="justify-center w-14 px-2">
-                <div class="flex items-center justify-center min-w-[54px] max-w-[54px]">
-                  <GradeLabel taskGrade={getGradeLower(workbook.id)} />
+              <TableBodyCell tdClass="justify-center items-center min-w-[54px] max-w-[54px]">
+                <div class="flex justify-center items-center">
+                  <CompletedTasks
+                    taskResults={getTaskResult(workbook.id)}
+                    allTasks={workbook.workBookTasks}
+                  />
                 </div>
               </TableBodyCell>
               <TableBodyCell class="justify-center w-24 px-0">
-                <div class="flex justify-center items-center space-x-3 min-w-[96px] max-w-[120px]">
+                <div
+                  class="flex justify-center items-center space-x-3 min-w-[96px] max-w-[120px] text-gray-700 dark:text-gray-300"
+                >
                   {#if canEdit(userId, workbook.authorId, role, workbook.isPublished)}
                     <a href="/workbooks/edit/{workbook.id}">編集</a>
                   {/if}

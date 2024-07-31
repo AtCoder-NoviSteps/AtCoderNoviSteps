@@ -44,13 +44,13 @@
       <!-- TODO: 削除にゴミ箱マークを付ける -->
       {#each workBookTasksForTable as task}
         <TableBodyRow>
-          <TableBodyCell class="truncate">
+          <TableBodyCell class="xs:text-lg truncate">
             <ExternalLinkWrapper
               url={taskUrl(task.contestId, task.taskId)}
               description={task.title}
             />
           </TableBodyCell>
-          <TableBodyCell class="truncate">
+          <TableBodyCell class="xs:text-lg text-gray-700 dark:text-gray-300 truncate">
             {getContestNameLabel(task.contestId)}
           </TableBodyCell>
           <TableBodyCell class="px-0" on:click={() => removeWorkBookTask(task)}>

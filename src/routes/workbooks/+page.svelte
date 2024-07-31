@@ -48,13 +48,6 @@
       canUsersView: false,
     },
     {
-      title: 'ジャンル別',
-      workBookType: WorkBookType.GENRE,
-      tooltipContent:
-        '特定のジャンル (グラフ理論・文字列など) を重点的に練習できます。解法に直接言及するようなネタバレはありません。',
-      canUsersView: false,
-    },
-    {
       title: 'ユーザ作成',
       workBookType: WorkBookType.CREATED_BY_USER,
       canUsersView: false,

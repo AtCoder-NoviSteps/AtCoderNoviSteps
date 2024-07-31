@@ -52,10 +52,12 @@
     <!-- TODO: 問題が多くなってきたら、ページネーションを導入する -->
     <!-- TODO: 回答状況に応じて、フィルタリングできるようにする -->
     <div class="overflow-auto rounded-md border">
-      <Table shadow class="text-md">
+      <Table shadow id={grade} class="text-md">
         <TableHead class="text-sm bg-gray-100">
           <TableHeadCell class="min-w-[96px] max-w-[120px]">回答</TableHeadCell>
-          <TableHeadCell class="min-w-[240px] text-left pl-0 truncate">問題名</TableHeadCell>
+          <TableHeadCell class="min-w-[240px] max-w-2/3 text-left pl-0 sm:pl-6 truncate">
+            問題名
+          </TableHeadCell>
           <TableHeadCell class="min-w-[120px] max-w-[150px] text-left pl-0 truncate"
             >出典</TableHeadCell
           >
@@ -66,7 +68,7 @@
         <TableBody tableBodyClass="divide-y">
           {#each taskResults as taskResult}
             <TableBodyRow
-              key={taskResult.contest_id + taskResult.task_id}
+              key={taskResult.contest_id + '-' + taskResult.task_id}
               class={getBackgroundColorFrom(taskResult.status_name)}
             >
               <TableBodyCell
@@ -77,17 +79,17 @@
                   <SubmissionStatusImage {taskResult} {isLoggedIn} />
                 </div>
               </TableBodyCell>
-              <TableBodyCell class="pl-0">
+              <TableBodyCell class="pl-0 sm:pl-6 w-2/3">
                 <a
                   href={taskUrl(taskResult.contest_id, taskResult.task_id)}
                   target="_blank"
                   rel="noreferrer"
-                  class="font-medium text-primary-600 hover:underline dark:text-primary-500"
+                  class="font-medium xs:text-lg text-primary-600 hover:underline dark:text-primary-500"
                 >
                   {taskResult.title}
                 </a>
               </TableBodyCell>
-              <TableBodyCell class="pl-0">
+              <TableBodyCell class="pl-0 xs:text-lg text-gray-700 dark:text-gray-300">
                 {getContestNameLabel(taskResult.contest_id)}
               </TableBodyCell>
               <TableBodyCell class="px-0">
