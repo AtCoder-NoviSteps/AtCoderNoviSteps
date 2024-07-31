@@ -25,7 +25,6 @@
     const allWorkBookTypes = [
       { value: WorkBookType.TEXTBOOK, name: 'カリキュラム' },
       { value: WorkBookType.SOLUTION, name: '解法別' },
-      { value: WorkBookType.GENRE, name: 'ジャンル別' },
       { value: WorkBookType.CREATED_BY_USER, name: 'ユーザ作成' },
     ];
 

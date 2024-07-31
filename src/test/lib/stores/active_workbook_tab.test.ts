@@ -29,7 +29,6 @@ describe('Active workbook tab store', () => {
   describe('initial value is false except for TEXTBOOK', () => {
     const testCases = [
       { workBookType: WorkBookType.SOLUTION },
-      { workBookType: WorkBookType.GENRE },
       { workBookType: WorkBookType.CREATED_BY_USER },
     ];
     runTests('getActiveWorkbookTab', testCases, ({ workBookType }: InitialState) => {
@@ -48,7 +47,6 @@ describe('Active workbook tab store', () => {
   describe('update active workbook tab once', () => {
     const testCases = [
       { workBookType: WorkBookType.TEXTBOOK },
-      { workBookType: WorkBookType.GENRE },
       { workBookType: WorkBookType.CREATED_BY_USER },
     ];
     runTests('updateActiveWorkBookTabOnce', testCases, ({ workBookType }: UpdateOnce) => {
@@ -85,10 +83,6 @@ describe('Active workbook tab store', () => {
       },
       {
         firstTimeUpdated: WorkBookType.TEXTBOOK,
-        secondTimeUpdated: WorkBookType.GENRE,
-      },
-      {
-        firstTimeUpdated: WorkBookType.TEXTBOOK,
         secondTimeUpdated: WorkBookType.CREATED_BY_USER,
       },
       {
@@ -101,26 +95,6 @@ describe('Active workbook tab store', () => {
       },
       {
         firstTimeUpdated: WorkBookType.SOLUTION,
-        secondTimeUpdated: WorkBookType.GENRE,
-      },
-      {
-        firstTimeUpdated: WorkBookType.SOLUTION,
-        secondTimeUpdated: WorkBookType.CREATED_BY_USER,
-      },
-      {
-        firstTimeUpdated: WorkBookType.GENRE,
-        secondTimeUpdated: WorkBookType.TEXTBOOK,
-      },
-      {
-        firstTimeUpdated: WorkBookType.GENRE,
-        secondTimeUpdated: WorkBookType.SOLUTION,
-      },
-      {
-        firstTimeUpdated: WorkBookType.GENRE,
-        secondTimeUpdated: WorkBookType.GENRE,
-      },
-      {
-        firstTimeUpdated: WorkBookType.GENRE,
         secondTimeUpdated: WorkBookType.CREATED_BY_USER,
       },
       {
@@ -130,10 +104,6 @@ describe('Active workbook tab store', () => {
       {
         firstTimeUpdated: WorkBookType.CREATED_BY_USER,
         secondTimeUpdated: WorkBookType.SOLUTION,
-      },
-      {
-        firstTimeUpdated: WorkBookType.CREATED_BY_USER,
-        secondTimeUpdated: WorkBookType.GENRE,
       },
       {
         firstTimeUpdated: WorkBookType.CREATED_BY_USER,
