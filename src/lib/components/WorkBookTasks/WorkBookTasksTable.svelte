@@ -50,7 +50,7 @@
               description={task.title}
             />
           </TableBodyCell>
-          <TableBodyCell class="xs:text-lg truncate">
+          <TableBodyCell class="xs:text-lg text-gray-700 dark:text-gray-300 truncate">
             {getContestNameLabel(task.contestId)}
           </TableBodyCell>
           <TableBodyCell class="px-0" on:click={() => removeWorkBookTask(task)}>

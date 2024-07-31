@@ -56,8 +56,11 @@
   <Heading tag="h2" class="mt-20 mb-3" customSize="text-xl font-medium  md:text-2xl lg:text-3xl">
     問題の回答状況を自分で記録できる
   </Heading>
-  <p class="mb-2">問題は17段階で難易度付けされており、自分の実力に合ったものを探せます。</p>
-  <p class="mb-16">回答状況は、「AC」「解説AC」「挑戦中」「未挑戦」から選べます。</p>
+
+  <div class="text-lg text-gray-800 dark:text-gray-300">
+    <p class="mb-2">問題は17段階で難易度付けされており、自分の実力に合ったものを探せます。</p>
+    <p class="mb-16">回答状況は、「AC」「解説AC」「挑戦中」「未挑戦」から選べます。</p>
+  </div>
 
   <div class="flex flex-wrap justify-center items-center mb-20">
     <video
@@ -74,7 +77,12 @@
   <Heading tag="h2" class="mt-36 mb-3" customSize="text-xl font-medium  md:text-2xl lg:text-3xl">
     問題集で得意を伸ばす・苦手を克服
   </Heading>
-  <p class="xs:mb-16">例題・類題を通して、各トピックの基礎から応用的な方法まで身につけられます。</p>
+
+  <div class="text-lg text-gray-800 dark:text-gray-300">
+    <p class="xs:mb-16">
+      例題・類題を通して、各トピックの基礎から応用的な方法まで身につけられます。
+    </p>
+  </div>
 
   <div class="m-4">
     <Carousel

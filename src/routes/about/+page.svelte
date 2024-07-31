@@ -34,7 +34,7 @@
 
   <div class="mt-5 mb-5">
     <Heading tag="h2" class="text-xl mb-2 text-gray-900 dark:text-white">特長</Heading>
-    <List tag="ul" class="ml-6 space-y-1">
+    <List tag="ul" class="text-gray-800 dark:text-gray-300 ml-6 space-y-1">
       {#each features as feature}
         <Li>{feature.description}</Li>
       {/each}
@@ -43,7 +43,7 @@
 
   <div class="mt-5 mb-5">
     <Heading tag="h2" class="text-xl mb-2 text-gray-900 dark:text-white">予備知識</Heading>
-    <List tag="ul" class="ml-6 space-y-1">
+    <List tag="ul" class="text-gray-800 dark:text-gray-300 ml-6 space-y-1">
       <Li>
         <ExternalLinkWrapper
           url="https://atcoder.jp/contests/APG4b"
@@ -61,7 +61,7 @@
 
   <div class="mt-5 mb-5">
     <Heading tag="h2" class="text-xl mb-2 text-gray-900 dark:text-white">対象ユーザ</Heading>
-    <List tag="ul" class="ml-6 space-y-1">
+    <List tag="ul" class="text-gray-800 dark:text-gray-300 ml-6 space-y-1">
       <Li>
         記事
         <ExternalLinkWrapper
@@ -83,7 +83,7 @@
   <!-- Usage -->
   <div class="mt-5 mb-5">
     <Heading tag="h2" class="text-xl mb-2 text-gray-900 dark:text-white">使い方</Heading>
-    <List tag="ol" class="ml-6 space-y-1">
+    <List tag="ol" class="text-gray-800 dark:text-gray-300 ml-6 space-y-1">
       <Li>(初回のみ) ユーザ名とパスワードを入力して、アカウントを作成します。</Li>
       <Li>
         ログインします。お試し用のアカウント (ユーザ名: guest、パスワード: HelloGuest)
@@ -107,7 +107,7 @@
     <Heading tag="h3" customSize="text-md" class="ml-6">グレード (難易度)</Heading>
     <!-- FIXME: もう少しビジュアルを整えましょう -->
     <!-- 注: 難易度の基準は非公開 -->
-    <List tag="ul" class="ml-12 space-y-1">
+    <List tag="ul" class="text-gray-800 dark:text-gray-300 ml-12 space-y-1">
       <Li>
         (易しい) 11Q、10Q、9Q、8Q、7Q、6Q、5Q、4Q、3Q、2Q、1Q、1D、2D、3D、4D、5D、6D (難しい)
       </Li>
@@ -116,7 +116,7 @@
 
     <!-- Submission status -->
     <Heading tag="h3" customSize="text-md" class="ml-6 mt-3">回答状況の例</Heading>
-    <List tag="ul" class="ml-12 space-y-1">
+    <List tag="ul" class="text-gray-800 dark:text-gray-300 ml-12 space-y-1">
       <Li>AC：正解した</Li>
       <Li>解説AC：公式もしくは有志の解説を読んで正解した</Li>
       <Li>挑戦中：不正解もしくは考察中</Li>
@@ -129,7 +129,7 @@
     <Heading tag="h2" class="mb-2 text-xl text-gray-900 dark:text-white">
       プライバシーポリシー
     </Heading>
-    <div class="ml-6">
+    <div class="text-gray-800 dark:text-gray-300 ml-6">
       <p>
         本サイトでは、アクセス解析ツール
         <ExternalLinkWrapper

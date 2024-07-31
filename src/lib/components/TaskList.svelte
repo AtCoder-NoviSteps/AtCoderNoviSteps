@@ -89,7 +89,7 @@
                   {taskResult.title}
                 </a>
               </TableBodyCell>
-              <TableBodyCell class="pl-0 xs:text-lg">
+              <TableBodyCell class="pl-0 xs:text-lg text-gray-700 dark:text-gray-300">
                 {getContestNameLabel(taskResult.contest_id)}
               </TableBodyCell>
               <TableBodyCell class="px-0">

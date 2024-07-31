@@ -161,7 +161,9 @@
                 </div>
               </TableBodyCell>
               <TableBodyCell class="justify-center w-24 px-0">
-                <div class="flex justify-center items-center space-x-3 min-w-[96px] max-w-[120px]">
+                <div
+                  class="flex justify-center items-center space-x-3 min-w-[96px] max-w-[120px] text-gray-700 dark:text-gray-300"
+                >
                   {#if canEdit(userId, workbook.authorId, role, workbook.isPublished)}
                     <a href="/workbooks/edit/{workbook.id}">編集</a>
                   {/if}

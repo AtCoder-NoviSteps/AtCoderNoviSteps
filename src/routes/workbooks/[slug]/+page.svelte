@@ -144,7 +144,7 @@
                 </div>
               </TableBodyCell>
               <TableBodyCell>
-                <div class="xs:text-lg truncate">
+                <div class="xs:text-lg text-gray-700 dark:text-gray-300 truncate">
                   {getContestNameFrom(workBookTask.taskId)}
                 </div>
               </TableBodyCell>
