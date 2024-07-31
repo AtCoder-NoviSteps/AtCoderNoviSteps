@@ -110,13 +110,13 @@
         <TableHead class="text-sm bg-gray-100">
           <TableHeadCell class="min-w-[96px] max-w-[120px]">回答</TableHeadCell>
           <TableHeadCell class="text-center px-0">グレード</TableHeadCell>
-          <TableHeadCell class="min-w-[240px] truncate">問題名</TableHeadCell>
+          <TableHeadCell class="min-w-[240px] max-w-2/3 truncate">問題名</TableHeadCell>
           <TableHeadCell class="min-w-[120px] max-w-[150px] truncate">出典</TableHeadCell>
         </TableHead>
         <TableBody tableBodyClass="divide-y">
           {#each workBookTasks as workBookTask}
             <TableBodyRow
-              key={getContestIdFrom(workBookTask.taskId) + workBookTask.taskId}
+              key={getContestIdFrom(workBookTask.taskId) + '-' + workBookTask.taskId}
               class={getBackgroundColorFrom(getTaskResult(workBookTask.taskId).status_name)}
             >
               <TableBodyCell
@@ -136,7 +136,7 @@
                 </div>
               </TableBodyCell>
               <TableBodyCell>
-                <div class="truncate">
+                <div class="xs:text-lg truncate">
                   <ExternalLinkWrapper
                     url={taskUrl(getContestIdFrom(workBookTask.taskId), workBookTask.taskId)}
                     description={getTaskName(workBookTask.taskId)}
@@ -144,7 +144,7 @@
                 </div>
               </TableBodyCell>
               <TableBodyCell>
-                <div class="truncate">
+                <div class="xs:text-lg truncate">
                   {getContestNameFrom(workBookTask.taskId)}
                 </div>
               </TableBodyCell>

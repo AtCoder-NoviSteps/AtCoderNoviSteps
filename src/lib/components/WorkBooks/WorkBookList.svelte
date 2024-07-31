@@ -131,7 +131,7 @@
                   <PublicationStatusLabel isPublished={workbook.isPublished} />
                   <a
                     href="/workbooks/{workbook.id}"
-                    class="flex-1 font-medium text-primary-600 hover:underline dark:text-primary-500 truncate"
+                    class="flex-1 font-medium xs:text-lg text-primary-600 hover:underline dark:text-primary-500 truncate"
                   >
                     {workbook.title}
                   </a>
