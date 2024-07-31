@@ -35,8 +35,18 @@
   let userId = loggedInUser.id;
   let role: Roles = loggedInUser.role;
 
-  let selectedGrade: TaskGrade =
-    get(taskGradesByWorkBookTypeStore).get(workbookType) || TaskGrade.Q10;
+  let selectedGrade: TaskGrade;
+  // FIXME: Svelte 5では、derived storeを使う。
+  $: selectedGrade = get(taskGradesByWorkBookTypeStore).get(workbookType) || TaskGrade.Q10;
+
+  $: {
+    const grade = get(taskGradesByWorkBookTypeStore).get(workbookType) || TaskGrade.Q10;
+
+    if (grade) {
+      selectedGrade = grade;
+    }
+  }
+
   let filteredWorkbooks: WorkbooksList;
 
   $: filteredWorkbooks =
@@ -74,7 +84,11 @@
     <div class="flex items-center space-x-4">
       <ButtonGroup>
         {#each [TaskGrade.Q10, TaskGrade.Q9, TaskGrade.Q8, TaskGrade.Q7] as grade}
-          <Button on:click={() => filterByGradeLower(grade)}>
+          <!-- HACK: 本来であれば、別ページからグレードを復元したときも、ボタンを選択状態にしたいが、うまく設定できていない -->
+          <Button
+            on:click={() => filterByGradeLower(grade)}
+            class={selectedGrade === grade ? 'text-primary-700' : 'text-gray-900'}
+          >
             {getTaskGradeLabel(grade)}
           </Button>
         {/each}
