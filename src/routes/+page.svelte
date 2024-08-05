@@ -65,7 +65,7 @@
   <div class="flex flex-wrap justify-center items-center mb-20">
     <video
       width="720"
-      src="https://github.com/AtCoder-NoviSteps/AtCoderNoviSteps/assets/13990347/2f52354b-fa08-42ad-87c4-da97a49aa320"
+      src="https://github.com/user-attachments/assets/4d0782c0-257e-46f3-a444-77ddd8b73e0f"
       autoplay
       muted
       controls
@@ -75,13 +75,12 @@
 
   <!-- FIXME: キャッチコピーを改善 -->
   <Heading tag="h2" class="mt-36 mb-3" customSize="text-xl font-medium  md:text-2xl lg:text-3xl">
-    問題集で得意を伸ばす・苦手を克服
+    (開発中) 問題集で得意を伸ばす・苦手を克服
   </Heading>
 
   <div class="text-lg text-gray-800 dark:text-gray-300">
-    <p class="xs:mb-16">
-      例題・類題を通して、各トピックの基礎から応用的な方法まで身につけられます。
-    </p>
+    <p class="mb-2">例題・類題を通して、各トピックの基礎から応用的な方法まで身につけられます。</p>
+    <p class="xs:mb-16">注: 予告なく変更される場合があります。ご了承ください。</p>
   </div>
 
   <div class="m-4">

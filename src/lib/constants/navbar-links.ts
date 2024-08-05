@@ -1,7 +1,8 @@
 export const navbarLinks = [
   { title: `ホーム`, path: `/` },
   { title: `問題一覧`, path: `/problems` },
-  { title: `問題集（アルファ版）`, path: `/workbooks` },
+  // FIXME: 問題集機能を一般公開するときにコメントを外す。
+  // { title: `問題集（アルファ版）`, path: `/workbooks` },
   { title: `サービスの説明`, path: `/about` },
 ];
 
