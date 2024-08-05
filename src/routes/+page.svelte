@@ -80,7 +80,6 @@
       />
     </div>
 
-    <!-- FIXME: キャッチコピーを改善 -->
     <Heading tag="h2" class="mt-36 mb-3" customSize="text-xl font-medium  md:text-2xl lg:text-3xl">
       (開発中) 問題集で得意を伸ばす・苦手を克服
     </Heading>
