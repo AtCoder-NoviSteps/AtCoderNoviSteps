@@ -40,6 +40,8 @@
   }
 </script>
 
+<!-- HACK: 2024年8月時点では「ユーザ作成」の問題集のみ大きく仕様が異なるので、暫定的に条件分岐で対処 -->
+<!-- HACK: 「解説別」と含めて仕様が大幅に変更される可能性が高いので、保留にしている -->
 <div class="overflow-auto rounded-md border">
   <Table shadow class="text-md">
     <TableHead class="text-sm bg-gray-100">
