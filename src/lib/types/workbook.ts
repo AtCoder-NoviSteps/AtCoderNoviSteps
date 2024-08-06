@@ -5,6 +5,7 @@ export type WorkBookBase = {
   description: string;
   isPublished: boolean;
   isOfficial: boolean;
+  isReplenished: boolean; // カリキュラムの【補充】を識別するために使用
   workBookType: WorkBookType;
   workBookTasks: WorkBookTaskBase[];
 };

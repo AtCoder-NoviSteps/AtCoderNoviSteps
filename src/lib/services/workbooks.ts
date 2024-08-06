@@ -1,8 +1,8 @@
 import { default as db } from '$lib/server/database';
-import type { WorkBook, WorkBookTaskBase, WorkBookType } from '$lib/types/workbook';
+import type { WorkBook, WorkBooks, WorkBookTaskBase, WorkBookType } from '$lib/types/workbook';
 import { getWorkBookTasks, validateRequiredFields } from '$lib/services/workbook_tasks';
 
-export async function getWorkBooks() {
+export async function getWorkBooks(): Promise<WorkBooks> {
   const workbooks = await db.workBook.findMany({
     orderBy: {
       id: 'asc',
@@ -15,7 +15,7 @@ export async function getWorkBooks() {
   return workbooks;
 }
 
-export async function getWorkBook(workBookId: number) {
+export async function getWorkBook(workBookId: number): Promise<WorkBook | null> {
   const workBook = await db.workBook.findUnique({
     where: {
       id: workBookId,
@@ -30,7 +30,7 @@ export async function getWorkBook(workBookId: number) {
 
 // See:
 // https://www.prisma.io/docs/orm/prisma-schema/data-model/relations#create-a-record-and-nested-records
-export async function createWorkBook(workBook: WorkBook) {
+export async function createWorkBook(workBook: WorkBook): Promise<void> {
   const newWorkBookTasks: WorkBookTaskBase[] = await getWorkBookTasks(workBook);
   const newWorkBook = await db.workBook.create({
     data: {
@@ -39,6 +39,7 @@ export async function createWorkBook(workBook: WorkBook) {
       description: workBook.description,
       isPublished: workBook.isPublished,
       isOfficial: workBook.isOfficial,
+      isReplenished: workBook.isReplenished,
       workBookType: workBook.workBookType as WorkBookType,
       workBookTasks: {
         create: newWorkBookTasks,
@@ -52,7 +53,7 @@ export async function createWorkBook(workBook: WorkBook) {
   console.log(newWorkBook);
 }
 
-async function isExistingWorkBook(workBookId: number) {
+async function isExistingWorkBook(workBookId: number): Promise<boolean> {
   const workBook = await getWorkBook(workBookId);
 
   if (workBook) {
@@ -62,7 +63,7 @@ async function isExistingWorkBook(workBookId: number) {
   }
 }
 
-export async function updateWorkBook(workBookId: number, workBook: WorkBook) {
+export async function updateWorkBook(workBookId: number, workBook: WorkBook): Promise<void> {
   if (!(await isExistingWorkBook(workBookId))) {
     throw new Error(`Not found WorkBook with id ${workBookId}.`);
   }
@@ -95,7 +96,7 @@ export async function updateWorkBook(workBookId: number, workBook: WorkBook) {
   }
 }
 
-export async function deleteWorkBook(workBookId: number) {
+export async function deleteWorkBook(workBookId: number): Promise<void> {
   if (!(await isExistingWorkBook(workBookId))) {
     throw new Error(`Not found WorkBook with id ${workBookId}.`);
   }

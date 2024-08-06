@@ -164,6 +164,7 @@ OTHERS OTHERS
     String description 
     Boolean isPublished 
     Boolean isOfficial 
+    Boolean isReplenished 
     WorkBookType workBookType 
     DateTime createdAt 
     DateTime updatedAt 

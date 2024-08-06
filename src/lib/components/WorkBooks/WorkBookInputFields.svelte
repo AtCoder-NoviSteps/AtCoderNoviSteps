@@ -4,11 +4,13 @@
   import SelectWrapper from '$lib/components/SelectWrapper.svelte';
   import { WorkBookType } from '$lib/types/workbook';
 
+  // FIXME: 引数がとても多いので、コンポーネントに渡す引数を減らす方法を調べて実装。
   export let authorId: string;
   export let workBookTitle: string;
   export let description: string;
   export let isPublished: boolean;
   export let isOfficial: boolean;
+  export let isReplenished: boolean;
   export let workBookType: WorkBookType;
   export let isAdmin: boolean;
   export let isEditable: boolean = true;
@@ -18,6 +20,11 @@
   let isPublishedOptions = [
     { value: false, name: '非公開' },
     { value: true, name: '公開' },
+  ];
+
+  let isReplenishedOptions = [
+    { value: false, name: '本編' },
+    { value: true, name: '補充' },
   ];
 
   const workBookTypeOptions = (isOfficial: boolean, isAdmin: boolean = false) => {
@@ -38,6 +45,8 @@
       return allWorkBookTypes.filter((type) => type.value === WorkBookType.CREATED_BY_USER);
     }
   };
+
+  $: isCurriculum = workBookType === WorkBookType.TEXTBOOK;
 </script>
 
 <MessageHelperWrapper {message} />
@@ -85,11 +94,21 @@
   isEditable={false}
 />
 
-<!-- 管理者のみ: 問題集の区分を指定-->
+<!-- 管理者のみ: 問題集の種類を指定-->
 <SelectWrapper
-  labelName="問題集の区分"
+  labelName="問題集の種類"
   innerName="workBookType"
   items={workBookTypeOptions(isOfficial, isAdmin)}
   bind:inputValue={workBookType}
   isEditable={isAdmin && isEditable}
+/>
+
+<!-- HACK: 表記については修正の余地がある -->
+<!-- 管理者のみ: 問題集が本編 / 補充か -->
+<SelectWrapper
+  labelName="問題集の位置付け"
+  innerName="isReplenished"
+  items={isReplenishedOptions}
+  bind:inputValue={isReplenished}
+  isEditable={isAdmin && isEditable && isCurriculum}
 />

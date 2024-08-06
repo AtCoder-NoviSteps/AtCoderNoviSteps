@@ -38,6 +38,7 @@ export const workBookSchema = z.object({
     .max(300, { message: '300文字になるまで削除してください' }),
   isPublished: z.boolean(),
   isOfficial: z.boolean(),
+  isReplenished: z.boolean(), // カリキュラムの【補充】を識別するために使用
   workBookType: z.nativeEnum(WorkBookType),
   workBookTasks: z
     .array(workBookTaskSchema)

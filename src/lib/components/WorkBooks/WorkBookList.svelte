@@ -1,30 +1,16 @@
 <script lang="ts">
-  import { enhance } from '$app/forms';
   import { get } from 'svelte/store';
 
-  import {
-    ButtonGroup,
-    Button,
-    Table,
-    TableBody,
-    TableBodyCell,
-    TableBodyRow,
-    TableHead,
-    TableHeadCell,
-  } from 'flowbite-svelte';
+  import { ButtonGroup, Button } from 'flowbite-svelte';
 
   import { taskGradesByWorkBookTypeStore } from '$lib/stores/task_grades_by_workbook_type';
-  import { canRead, canEdit, canDelete } from '$lib/utils/authorship';
+  import { canRead } from '$lib/utils/authorship';
   import { WorkBookType, type WorkbookList, type WorkbooksList } from '$lib/types/workbook';
   import { getTaskGradeLabel } from '$lib/utils/task';
   import { TaskGrade, type TaskGradeRange, type TaskResults } from '$lib/types/task';
   import type { Roles } from '$lib/types/user';
   import TooltipWrapper from '$lib/components/TooltipWrapper.svelte';
-  import GradeLabel from '$lib/components/GradeLabel.svelte';
-  import PublicationStatusLabel from '$lib/components/WorkBooks/PublicationStatusLabel.svelte';
-  import CompletedTasks from '$lib/components/Trophies/CompletedTasks.svelte';
-  import ThermometerProgressBar from '$lib/components/ThermometerProgressBar.svelte';
-  import AcceptedCounter from '$lib/components/SubmissionStatus/AcceptedCounter.svelte';
+  import WorkBookBaseTable from '$lib/components/WorkBooks/WorkBookBaseTable.svelte';
 
   export let workbookType: WorkBookType;
   export let workbooks: WorkbooksList;
@@ -47,23 +33,32 @@
     }
   }
 
-  let filteredWorkbooks: WorkbooksList;
+  let mainWorkbooks: WorkbooksList;
 
-  $: filteredWorkbooks =
+  $: mainWorkbooks =
     workbookType === WorkBookType.CREATED_BY_USER
       ? workbooks
       : workbooks.filter((workbook: WorkbookList) => {
           const lower = getGradeLower(workbook.id);
-          return lower === selectedGrade;
+          return lower === selectedGrade && !workbook.isReplenished;
         });
-  $: readableWorkbooksCount = filteredWorkbooks.reduce((count, workbook: WorkbookList) => {
-    const hasReadPermission = canRead(workbook.isPublished, userId, workbook.authorId);
-    return count + (hasReadPermission ? 1 : 0);
-  }, 0);
+  $: readableMainWorkbooksCount = () => countReadableWorkbooks(mainWorkbooks);
 
-  function filterByGradeLower(grade: TaskGrade) {
-    selectedGrade = grade;
-    taskGradesByWorkBookTypeStore.updateTaskGrade(workbookType, grade);
+  let replenishedWorkbooks: WorkbooksList;
+
+  $: replenishedWorkbooks = workbooks.filter((workbook: WorkbookList) => {
+    const lower = getGradeLower(workbook.id);
+    return lower === selectedGrade && workbook.isReplenished;
+  });
+  $: readableReplenishedWorkbooksCount = () => countReadableWorkbooks(replenishedWorkbooks);
+
+  function countReadableWorkbooks(workbooks: WorkbooksList): number {
+    const results = workbooks.reduce((count, workbook: WorkbookList) => {
+      const hasReadPermission = canRead(workbook.isPublished, userId, workbook.authorId);
+      return count + (hasReadPermission ? 1 : 0);
+    }, 0);
+
+    return results;
   }
 
   function getGradeLower(workbookId: number): TaskGrade {
@@ -72,8 +67,9 @@
     return workbookGradeRange?.lower ?? TaskGrade.PENDING;
   }
 
-  function getTaskResult(workbookId: number): TaskResults {
-    return taskResultsWithWorkBookId?.get(workbookId) ?? [];
+  function filterByGradeLower(grade: TaskGrade) {
+    selectedGrade = grade;
+    taskGradesByWorkBookTypeStore.updateTaskGrade(workbookType, grade);
   }
 </script>
 
@@ -99,102 +95,40 @@
   </div>
 {/if}
 
-{#if readableWorkbooksCount}
-  <div class="overflow-auto rounded-md border">
-    <Table shadow class="text-md">
-      <TableHead class="text-sm bg-gray-100">
-        {#if workbookType === WorkBookType.CREATED_BY_USER}
-          <TableHeadCell>作者</TableHeadCell>
-        {:else}
-          <TableHeadCell class="text-center px-0">
-            <div>グレード</div>
-          </TableHeadCell>
-        {/if}
-        <TableHeadCell
-          class="text-left min-w-[240px] max-w-[240px] lg:max-w-[280px] xl:max-w-[360px] 2xl:max-w-[480px] px-1 xs:px-3"
-        >
-          タイトル
-        </TableHeadCell>
-        <TableHeadCell class="ext-left min-w-[240px] max-w-[1440px] px-0">回答状況</TableHeadCell>
-        <TableHeadCell></TableHeadCell>
-        <TableHeadCell class="text-center px-0">修了</TableHeadCell>
-        <TableHeadCell></TableHeadCell>
-      </TableHead>
+{#if readableMainWorkbooksCount()}
+  <div>
+    {#if workbookType === WorkBookType.TEXTBOOK}
+      <div class="text-2xl pb-4">本編</div>
+    {/if}
 
-      <TableBody tableBodyClass="divide-y">
-        {#each filteredWorkbooks as workbook}
-          {#if canRead(workbook.isPublished, userId, workbook.authorId)}
-            <TableBodyRow>
-              {#if workbookType === WorkBookType.CREATED_BY_USER}
-                <TableBodyCell>
-                  <div class="truncate min-w-[96px] max-w-[120px]">
-                    {workbook.authorName}
-                  </div>
-                </TableBodyCell>
-              {:else}
-                <TableBodyCell class="justify-center w-14 px-2">
-                  <div class="flex items-center justify-center min-w-[54px] max-w-[54px]">
-                    <GradeLabel taskGrade={getGradeLower(workbook.id)} />
-                  </div>
-                </TableBodyCell>
-              {/if}
-              <TableBodyCell class="w-2/5 pl-2 xs:pl-4 pr-4">
-                <div
-                  class="flex items-center space-x-2 truncate min-w-[240px] max-w-[240px] lg:max-w-[300px] xl:max-w-[380px] 2xl:max-w-[480px]"
-                >
-                  <PublicationStatusLabel isPublished={workbook.isPublished} />
-                  <a
-                    href="/workbooks/{workbook.id}"
-                    class="flex-1 font-medium xs:text-lg text-primary-600 hover:underline dark:text-primary-500 truncate"
-                  >
-                    {workbook.title}
-                  </a>
-                </div>
-              </TableBodyCell>
-              <TableBodyCell class="min-w-[240px] max-w-[1440px] px-0">
-                <ThermometerProgressBar
-                  workBookTasks={workbook.workBookTasks}
-                  taskResults={getTaskResult(workbook.id)}
-                  width="w-full"
-                />
-              </TableBodyCell>
-              <TableBodyCell class="justify-center w-24 px-1">
-                <div class="min-w-[48px] max-w-[96px]">
-                  <AcceptedCounter
-                    workBookTasks={workbook.workBookTasks}
-                    taskResults={getTaskResult(workbook.id)}
-                  />
-                </div>
-              </TableBodyCell>
-              <TableBodyCell tdClass="justify-center items-center min-w-[54px] max-w-[54px]">
-                <div class="flex justify-center items-center">
-                  <CompletedTasks
-                    taskResults={getTaskResult(workbook.id)}
-                    allTasks={workbook.workBookTasks}
-                  />
-                </div>
-              </TableBodyCell>
-              <TableBodyCell class="justify-center w-24 px-0">
-                <div
-                  class="flex justify-center items-center space-x-3 min-w-[96px] max-w-[120px] text-gray-700 dark:text-gray-300"
-                >
-                  {#if canEdit(userId, workbook.authorId, role, workbook.isPublished)}
-                    <a href="/workbooks/edit/{workbook.id}">編集</a>
-                  {/if}
-
-                  {#if canDelete(userId, workbook.authorId)}
-                    <form method="POST" action="?/delete&slug={workbook.id}" use:enhance>
-                      <button>削除</button>
-                    </form>
-                  {/if}
-                </div>
-              </TableBodyCell>
-            </TableBodyRow>
-          {/if}
-        {/each}
-      </TableBody>
-    </Table>
+    <WorkBookBaseTable
+      {workbookType}
+      workbooks={mainWorkbooks}
+      {workbookGradeRanges}
+      {userId}
+      {role}
+      taskResults={taskResultsWithWorkBookId}
+    />
   </div>
+
+  <!-- カリキュラムの場合、かつ、公開されている【補充】問題集があるときだけ表示 -->
+  {#if workbookType === WorkBookType.TEXTBOOK && readableReplenishedWorkbooksCount()}
+    <div class="mt-12">
+      <div class="flex items-center space-x-3 pb-4">
+        <div class="text-2xl">補充</div>
+        <TooltipWrapper tooltipContent="準備中" />
+      </div>
+
+      <WorkBookBaseTable
+        {workbookType}
+        workbooks={replenishedWorkbooks}
+        {workbookGradeRanges}
+        {userId}
+        {role}
+        taskResults={taskResultsWithWorkBookId}
+      />
+    </div>
+  {/if}
 {:else}
   <div>該当する問題集は見つかりませんでした。</div>
   <div>新しい問題集が追加されるまで、しばらくお待ちください。</div>
