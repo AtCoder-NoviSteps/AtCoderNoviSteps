@@ -33,29 +33,43 @@
     }
   }
 
-  let filteredWorkbooks: WorkbooksList;
+  let mainWorkbooks: WorkbooksList;
 
-  $: filteredWorkbooks =
+  $: mainWorkbooks =
     workbookType === WorkBookType.CREATED_BY_USER
       ? workbooks
       : workbooks.filter((workbook: WorkbookList) => {
           const lower = getGradeLower(workbook.id);
-          return lower === selectedGrade;
+          return lower === selectedGrade && !workbook.isReplenished;
         });
-  $: readableWorkbooksCount = filteredWorkbooks.reduce((count, workbook: WorkbookList) => {
-    const hasReadPermission = canRead(workbook.isPublished, userId, workbook.authorId);
-    return count + (hasReadPermission ? 1 : 0);
-  }, 0);
+  $: readableMainWorkbooksCount = () => countReadableWorkbooks(mainWorkbooks);
 
-  function filterByGradeLower(grade: TaskGrade) {
-    selectedGrade = grade;
-    taskGradesByWorkBookTypeStore.updateTaskGrade(workbookType, grade);
+  let replenishedWorkbooks: WorkbooksList;
+
+  $: replenishedWorkbooks = workbooks.filter((workbook: WorkbookList) => {
+    const lower = getGradeLower(workbook.id);
+    return lower === selectedGrade && workbook.isReplenished;
+  });
+  $: readableReplenishedWorkbooksCount = () => countReadableWorkbooks(replenishedWorkbooks);
+
+  function countReadableWorkbooks(workbooks: WorkbooksList): number {
+    const results = workbooks.reduce((count, workbook: WorkbookList) => {
+      const hasReadPermission = canRead(workbook.isPublished, userId, workbook.authorId);
+      return count + (hasReadPermission ? 1 : 0);
+    }, 0);
+
+    return results;
   }
 
   function getGradeLower(workbookId: number): TaskGrade {
     const workbookGradeRange = workbookGradeRanges.get(workbookId);
 
     return workbookGradeRange?.lower ?? TaskGrade.PENDING;
+  }
+
+  function filterByGradeLower(grade: TaskGrade) {
+    selectedGrade = grade;
+    taskGradesByWorkBookTypeStore.updateTaskGrade(workbookType, grade);
   }
 </script>
 
@@ -81,15 +95,40 @@
   </div>
 {/if}
 
-{#if readableWorkbooksCount}
-  <WorkBookBaseTable
-    {workbookType}
-    workbooks={filteredWorkbooks}
-    {workbookGradeRanges}
-    {userId}
-    {role}
-    taskResults={taskResultsWithWorkBookId}
-  />
+{#if readableMainWorkbooksCount()}
+  <div>
+    {#if workbookType === WorkBookType.TEXTBOOK}
+      <div class="text-2xl pb-4">本編</div>
+    {/if}
+
+    <WorkBookBaseTable
+      {workbookType}
+      workbooks={mainWorkbooks}
+      {workbookGradeRanges}
+      {userId}
+      {role}
+      taskResults={taskResultsWithWorkBookId}
+    />
+  </div>
+
+  <!-- カリキュラムの場合、かつ、公開されている【補充】問題集があるときだけ表示 -->
+  {#if workbookType === WorkBookType.TEXTBOOK && readableReplenishedWorkbooksCount()}
+    <div class="mt-12">
+      <div class="flex items-center space-x-3 pb-4">
+        <div class="text-2xl">補充</div>
+        <TooltipWrapper tooltipContent="準備中" />
+      </div>
+
+      <WorkBookBaseTable
+        {workbookType}
+        workbooks={replenishedWorkbooks}
+        {workbookGradeRanges}
+        {userId}
+        {role}
+        taskResults={taskResultsWithWorkBookId}
+      />
+    </div>
+  {/if}
 {:else}
   <div>該当する問題集は見つかりませんでした。</div>
   <div>新しい問題集が追加されるまで、しばらくお待ちください。</div>
