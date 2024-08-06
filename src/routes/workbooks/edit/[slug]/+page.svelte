@@ -72,6 +72,7 @@
         bind:description={$form.description}
         bind:isPublished={$form.isPublished}
         bind:isOfficial={$form.isOfficial}
+        bind:isReplenished={$form.isReplenished}
         bind:workBookType={$form.workBookType}
         isAdmin={data.loggedInAsAdmin}
         message={$message}
