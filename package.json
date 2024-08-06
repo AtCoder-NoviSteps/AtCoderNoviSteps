@@ -30,7 +30,7 @@
     "coverage": "vitest run --coverage"
   },
   "devDependencies": {
-    "@playwright/test": "1.45.3",
+    "@playwright/test": "1.46.0",
     "@quramy/prisma-fabbrica": "2.2.1",
     "@sveltejs/adapter-auto": "3.2.2",
     "@sveltejs/adapter-vercel": "5.4.1",
