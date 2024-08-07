@@ -6,10 +6,19 @@ export const submissionStatusLabels: Record<string, string> = {
   ac: 'AC',
 } as const;
 
-export type SubmissionRatio = {
+type SubmissionBase = {
   name: string;
   ratioPercent: number;
-  color: string;
 };
 
+export interface SubmissionRatio extends SubmissionBase {
+  color: string;
+}
+
 export type SubmissionRatios = SubmissionRatio[];
+
+export interface SubmissionCount extends SubmissionBase {
+  count: number;
+}
+
+export type SubmissionCounts = SubmissionCount[];
