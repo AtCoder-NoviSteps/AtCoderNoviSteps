@@ -60,8 +60,8 @@ importers:
         specifier: 1.14.0
         version: 1.14.0
       tailwindcss:
-        specifier: 3.4.7
-        version: 3.4.7(ts-node@10.9.1(@types/node@16.18.11)(typescript@5.5.4))
+        specifier: 3.4.8
+        version: 3.4.8(ts-node@10.9.1(@types/node@16.18.11)(typescript@5.5.4))
       vercel:
         specifier: 35.2.3
         version: 35.2.3
@@ -86,7 +86,7 @@ importers:
         version: 3.1.1(svelte@4.2.18)(vite@5.4.0(@types/node@16.18.11))
       '@tailwindcss/forms':
         specifier: 0.5.7
-        version: 0.5.7(tailwindcss@3.4.7(ts-node@10.9.1(@types/node@16.18.11)(typescript@5.5.4)))
+        version: 0.5.7(tailwindcss@3.4.8(ts-node@10.9.1(@types/node@16.18.11)(typescript@5.5.4)))
       '@testing-library/jest-dom':
         specifier: 6.4.8
         version: 6.4.8
@@ -119,7 +119,7 @@ importers:
         version: 0.46.6(rollup@4.18.0)(svelte@4.2.18)
       flowbite-svelte-icons:
         specifier: 0.4.4
-        version: 0.4.4(svelte@4.2.18)(tailwind-merge@1.14.0)(tailwindcss@3.4.7(ts-node@10.9.1(@types/node@16.18.11)(typescript@5.5.4)))
+        version: 0.4.4(svelte@4.2.18)(tailwind-merge@1.14.0)(tailwindcss@3.4.8(ts-node@10.9.1(@types/node@16.18.11)(typescript@5.5.4)))
       husky:
         specifier: 9.1.4
         version: 9.1.4
@@ -2533,10 +2533,6 @@ packages:
     resolution: {integrity: sha512-utWOt/GHzuUxnLKxB6dk81RoOeoNeHgbrXiuGk4yyF5qlRz+iIVWu56E2fqGHFrXz0QNUhLB/8nKqvRH66JKGQ==}
     engines: {node: '>=10'}
 
-  lilconfig@3.1.1:
-    resolution: {integrity: sha512-O18pf7nyvHTckunPWCV1XUNXU1piu01y2b7ATJ0ppkUkk8ocqVWBrYjJBCwHDjD/ZWcfyrA0P4gKhzWGi5EINQ==}
-    engines: {node: '>=14'}
-
   lilconfig@3.1.2:
     resolution: {integrity: sha512-eop+wDAvpItUys0FWkHIKeC9ybYrTGbU41U5K7+bttZZeohvnY7M9dZ5kB21GNWiFT2q1OoPTvncPCgSOVO5ow==}
     engines: {node: '>=14'}
@@ -3679,8 +3675,8 @@ packages:
   tailwind-merge@2.3.0:
     resolution: {integrity: sha512-vkYrLpIP+lgR0tQCG6AP7zZXCTLc1Lnv/CCRT3BqJ9CZ3ui2++GPaGb1x/ILsINIMSYqqvrpqjUFsMNLlW99EA==}
 
-  tailwindcss@3.4.7:
-    resolution: {integrity: sha512-rxWZbe87YJb4OcSopb7up2Ba4U82BoiSGUdoDr3Ydrg9ckxFS/YWsvhN323GMcddgU65QRy7JndC7ahhInhvlQ==}
+  tailwindcss@3.4.8:
+    resolution: {integrity: sha512-GkP17r9GQkxgZ9FKHJQEnjJuKBcbFhMFzKu5slmN6NjlCuFnYJMQ8N4AZ6VrUyiRXlDtPKHkesuQ/MS913Nvdg==}
     engines: {node: '>=14.0.0'}
     hasBin: true
 
@@ -4118,11 +4114,6 @@ packages:
   yaml@1.10.2:
     resolution: {integrity: sha512-r3vXyErRCYJ7wg28yvBY5VSoAF8ZvlcW9/BwUzEtUsjvX/DKs24dIkuwjtuprwJJHsbyUbLApepYTR1BN4uHrg==}
     engines: {node: '>= 6'}
-
-  yaml@2.4.2:
-    resolution: {integrity: sha512-B3VqDZ+JAg1nZpaEmWtTXUlBneoGx6CPM9b0TENK6aoSu5t73dItudwdgmi6tHlIZZId4dZ9skcAQ2UbcyAeVA==}
-    engines: {node: '>= 14'}
-    hasBin: true
 
   yaml@2.5.0:
     resolution: {integrity: sha512-2wWLbGbYDiSqqIKoPjar3MPgB94ErzCtrNE1FdqGuaO0pi2JGjmE8aW8TDZwzU7vuxcGRdL/4gPQwQ7hD5AMSw==}
@@ -4732,10 +4723,10 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@tailwindcss/forms@0.5.7(tailwindcss@3.4.7(ts-node@10.9.1(@types/node@16.18.11)(typescript@5.5.4)))':
+  '@tailwindcss/forms@0.5.7(tailwindcss@3.4.8(ts-node@10.9.1(@types/node@16.18.11)(typescript@5.5.4)))':
     dependencies:
       mini-svg-data-uri: 1.4.4
-      tailwindcss: 3.4.7(ts-node@10.9.1(@types/node@16.18.11)(typescript@5.5.4))
+      tailwindcss: 3.4.8(ts-node@10.9.1(@types/node@16.18.11)(typescript@5.5.4))
 
   '@testing-library/dom@10.2.0':
     dependencies:
@@ -6260,11 +6251,11 @@ snapshots:
     transitivePeerDependencies:
       - rollup
 
-  flowbite-svelte-icons@0.4.4(svelte@4.2.18)(tailwind-merge@1.14.0)(tailwindcss@3.4.7(ts-node@10.9.1(@types/node@16.18.11)(typescript@5.5.4))):
+  flowbite-svelte-icons@0.4.4(svelte@4.2.18)(tailwind-merge@1.14.0)(tailwindcss@3.4.8(ts-node@10.9.1(@types/node@16.18.11)(typescript@5.5.4))):
     dependencies:
       svelte: 4.2.18
       tailwind-merge: 1.14.0
-      tailwindcss: 3.4.7(ts-node@10.9.1(@types/node@16.18.11)(typescript@5.5.4))
+      tailwindcss: 3.4.8(ts-node@10.9.1(@types/node@16.18.11)(typescript@5.5.4))
 
   flowbite-svelte@0.46.6(rollup@4.18.0)(svelte@4.2.18):
     dependencies:
@@ -6731,8 +6722,6 @@ snapshots:
       type-check: 0.4.0
 
   lilconfig@2.1.0: {}
-
-  lilconfig@3.1.1: {}
 
   lilconfig@3.1.2: {}
 
@@ -7292,8 +7281,8 @@ snapshots:
 
   postcss-load-config@4.0.2(postcss@8.4.39)(ts-node@10.9.1(@types/node@16.18.11)(typescript@5.5.4)):
     dependencies:
-      lilconfig: 3.1.1
-      yaml: 2.4.2
+      lilconfig: 3.1.2
+      yaml: 2.5.0
     optionalDependencies:
       postcss: 8.4.39
       ts-node: 10.9.1(@types/node@16.18.11)(typescript@5.5.4)
@@ -7920,7 +7909,7 @@ snapshots:
     dependencies:
       '@babel/runtime': 7.24.6
 
-  tailwindcss@3.4.7(ts-node@10.9.1(@types/node@16.18.11)(typescript@5.5.4)):
+  tailwindcss@3.4.8(ts-node@10.9.1(@types/node@16.18.11)(typescript@5.5.4)):
     dependencies:
       '@alloc/quick-lru': 5.2.0
       arg: 5.0.2
@@ -8369,8 +8358,6 @@ snapshots:
   yallist@4.0.0: {}
 
   yaml@1.10.2: {}
-
-  yaml@2.4.2: {}
 
   yaml@2.5.0: {}
 
