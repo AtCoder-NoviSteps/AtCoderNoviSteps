@@ -1,7 +1,7 @@
 <script lang="ts">
   import { get } from 'svelte/store';
 
-  import { ButtonGroup, Button } from 'flowbite-svelte';
+  import { ButtonGroup, Button, Toggle } from 'flowbite-svelte';
 
   import { taskGradesByWorkBookTypeStore } from '$lib/stores/task_grades_by_workbook_type';
   import { canRead } from '$lib/utils/authorship';
@@ -33,6 +33,7 @@
     }
   }
 
+  // 本編
   let mainWorkbooks: WorkbooksList;
 
   $: mainWorkbooks =
@@ -44,6 +45,7 @@
         });
   $: readableMainWorkbooksCount = () => countReadableWorkbooks(mainWorkbooks);
 
+  // 補充
   let replenishedWorkbooks: WorkbooksList;
 
   $: replenishedWorkbooks = workbooks.filter((workbook: WorkbookList) => {
@@ -51,6 +53,8 @@
     return lower === selectedGrade && workbook.isReplenished;
   });
   $: readableReplenishedWorkbooksCount = () => countReadableWorkbooks(replenishedWorkbooks);
+
+  let isShowReplenishment: boolean = true;
 
   function countReadableWorkbooks(workbooks: WorkbooksList): number {
     const results = workbooks.reduce((count, workbook: WorkbookList) => {
@@ -77,20 +81,28 @@
 <!-- TODO: 「ユーザ作成」の問題集には、検索機能を追加 -->
 {#if workbookType !== WorkBookType.CREATED_BY_USER}
   <div class="mb-6">
-    <div class="flex items-center space-x-4">
-      <ButtonGroup>
-        {#each [TaskGrade.Q10, TaskGrade.Q9, TaskGrade.Q8, TaskGrade.Q7] as grade}
-          <!-- HACK: 本来であれば、別ページからグレードを復元したときも、ボタンを選択状態にしたいが、うまく設定できていない -->
-          <Button
-            on:click={() => filterByGradeLower(grade)}
-            class={selectedGrade === grade ? 'text-primary-700' : 'text-gray-900'}
-          >
-            {getTaskGradeLabel(grade)}
-          </Button>
-        {/each}
-      </ButtonGroup>
+    <div class="flex flex-col md:flex-row items-start md:items-center justify-between">
+      <div class="flex items-center space-x-4">
+        <ButtonGroup>
+          {#each [TaskGrade.Q10, TaskGrade.Q9, TaskGrade.Q8, TaskGrade.Q7] as grade}
+            <!-- HACK: 本来であれば、別ページからグレードを復元したときも、ボタンを選択状態にしたいが、うまく設定できていない -->
+            <Button
+              on:click={() => filterByGradeLower(grade)}
+              class={selectedGrade === grade ? 'text-primary-700' : 'text-gray-900'}
+            >
+              {getTaskGradeLabel(grade)}
+            </Button>
+          {/each}
+        </ButtonGroup>
 
-      <TooltipWrapper tooltipContent="問題集のグレード（下限）を指定します" />
+        <TooltipWrapper tooltipContent="問題集のグレード（下限）を指定します" />
+      </div>
+
+      {#if readableReplenishedWorkbooksCount()}
+        <div class="mt-4 md:mt-0">
+          <Toggle bind:checked={isShowReplenishment}>「補充」を表示</Toggle>
+        </div>
+      {/if}
     </div>
   </div>
 {/if}
@@ -112,7 +124,7 @@
   </div>
 
   <!-- カリキュラムの場合、かつ、公開されている【補充】問題集があるときだけ表示 -->
-  {#if workbookType === WorkBookType.TEXTBOOK && readableReplenishedWorkbooksCount()}
+  {#if workbookType === WorkBookType.TEXTBOOK && readableReplenishedWorkbooksCount() && isShowReplenishment}
     <div class="mt-12">
       <div class="flex items-center space-x-3 pb-4">
         <div class="text-2xl">補充</div>
