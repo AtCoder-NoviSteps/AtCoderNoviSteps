@@ -1,11 +1,6 @@
 <script lang="ts">
   export let data;
 
-  $: workbooks = data.workbooks;
-  let loggedInUser = data.loggedInUser;
-  // loggedInUser.roleで比較すると、@prisma/clientと型が異なるため、やむを得ずasでキャスト
-  let role = loggedInUser?.role as Roles;
-
   import { get } from 'svelte/store';
   import { Button, Tabs } from 'flowbite-svelte';
 
@@ -24,6 +19,11 @@
   } from '$lib/types/workbook';
   import { Roles } from '$lib/types/user';
   import { canViewWorkBook } from '$lib/utils/workbooks';
+
+  $: workbooks = data.workbooks as WorkbooksList;
+  let loggedInUser = data.loggedInUser;
+  // loggedInUser.roleで比較すると、@prisma/clientと型が異なるため、やむを得ずasでキャスト
+  let role = loggedInUser?.role as Roles;
 
   const getWorkBooksByType = (workbooks: WorkbooksList, workBookType: WorkBookType) => {
     const filteredWorkbooks = workbooks.filter(
@@ -113,7 +113,7 @@
     return getTaskGradeOrder.get(grade);
   }
 
-  const workbookGradeRanges = getWorkBookGradeRanges(data.workbooks);
+  const workbookGradeRanges = getWorkBookGradeRanges(data.workbooks as WorkbooksList);
 
   // 計算量: 問題集の数をN、各問題集の問題の数をMとすると、O(N * M)
   function fetchTaskResultsWithWorkBookId(workbooks: WorkbooksList, workBookType: WorkBookType) {
