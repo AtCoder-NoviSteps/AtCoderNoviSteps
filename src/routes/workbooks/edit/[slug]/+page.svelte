@@ -70,6 +70,7 @@
         bind:authorId={$form.authorId}
         bind:workBookTitle={$form.title}
         bind:description={$form.description}
+        bind:editorialUrl={$form.editorialUrl}
         bind:isPublished={$form.isPublished}
         bind:isOfficial={$form.isOfficial}
         bind:isReplenished={$form.isReplenished}

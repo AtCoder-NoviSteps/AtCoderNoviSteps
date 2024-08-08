@@ -94,12 +94,25 @@
     </BreadcrumbItem>
   </Breadcrumb>
 
-  {#if workBook.description !== ''}
-    <div class="pt-3 pb-6">
-      <div class="text-2xl font-bold">概要</div>
-      <div class="min-w-[240px] max-w-[1440px] truncate">
-        {workBook.description}
-      </div>
+  {#if workBook.description !== '' || workBook.editorialUrl !== ''}
+    <div class="pt-3 pb-6 space-y-4">
+      {#if workBook.description !== ''}
+        <div>
+          <div class="text-2xl font-bold">概要</div>
+          <div class="min-w-[240px] max-w-[1440px] truncate">
+            {workBook.description}
+          </div>
+        </div>
+      {/if}
+
+      {#if workBook.editorialUrl !== ''}
+        <div>
+          <div class="text-2xl font-bold">トピックの解説</div>
+          <div class="min-w-[240px] max-w-[1440px] truncate">
+            <ExternalLinkWrapper url={workBook.editorialUrl} description="外部リンク" />
+          </div>
+        </div>
+      {/if}
     </div>
   {/if}
 

@@ -1,6 +1,7 @@
 import { default as db } from '$lib/server/database';
 import type { WorkBook, WorkBooks, WorkBookTaskBase, WorkBookType } from '$lib/types/workbook';
 import { getWorkBookTasks, validateRequiredFields } from '$lib/services/workbook_tasks';
+import { sanitizeUrl } from '$lib/utils/url';
 
 export async function getWorkBooks(): Promise<WorkBooks> {
   const workbooks = await db.workBook.findMany({
@@ -31,12 +32,15 @@ export async function getWorkBook(workBookId: number): Promise<WorkBook | null> 
 // See:
 // https://www.prisma.io/docs/orm/prisma-schema/data-model/relations#create-a-record-and-nested-records
 export async function createWorkBook(workBook: WorkBook): Promise<void> {
+  const sanitizedUrl = sanitizeUrl(workBook.editorialUrl);
   const newWorkBookTasks: WorkBookTaskBase[] = await getWorkBookTasks(workBook);
+
   const newWorkBook = await db.workBook.create({
     data: {
       authorId: workBook.authorId,
       title: workBook.title,
       description: workBook.description,
+      editorialUrl: sanitizedUrl,
       isPublished: workBook.isPublished,
       isOfficial: workBook.isOfficial,
       isReplenished: workBook.isReplenished,
