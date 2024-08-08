@@ -8,6 +8,7 @@
   export let authorId: string;
   export let workBookTitle: string;
   export let description: string;
+  export let editorialUrl: string;
   export let isPublished: boolean;
   export let isOfficial: boolean;
   export let isReplenished: boolean;
@@ -75,6 +76,16 @@
   bind:inputValue={description}
   {isEditable}
   message={errors.description}
+/>
+
+<!-- カリキュラムのトピック解説用のURL -->
+<!-- HACK: 「ユーザ作成」の場合も利用できるようにするかは要検討。 -->
+<InputFieldWrapper
+  labelName="トピックの解説URL（300文字以下）"
+  inputFieldName="editorialUrl"
+  bind:inputValue={editorialUrl}
+  {isEditable}
+  message={errors.editorialUrl}
 />
 
 <!-- 一般公開の有無 -->

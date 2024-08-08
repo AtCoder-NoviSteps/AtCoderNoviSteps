@@ -162,6 +162,7 @@ OTHERS OTHERS
     String authorId 
     String title 
     String description 
+    String editorialUrl 
     Boolean isPublished 
     Boolean isOfficial 
     Boolean isReplenished 
