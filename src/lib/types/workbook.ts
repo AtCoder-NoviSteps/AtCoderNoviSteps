@@ -3,6 +3,7 @@ import type { WorkBookType as WorkBookTypeOrigin } from '@prisma/client';
 export type WorkBookBase = {
   title: string;
   description: string;
+  editorialUrl: string; // カリキュラムのトピック解説用のURL。HACK: 「ユーザ作成」の場合も利用できるようにするかは要検討。
   isPublished: boolean;
   isOfficial: boolean;
   isReplenished: boolean; // カリキュラムの【補充】を識別するために使用

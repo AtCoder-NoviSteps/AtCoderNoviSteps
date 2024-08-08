@@ -4,6 +4,7 @@
 // https://qiita.com/mpyw/items/886218e7b418dfed254b
 import { z } from 'zod';
 import { WorkBookType } from '$lib/types/workbook';
+import { isValidUrl } from '$lib/utils/url';
 
 export const authSchema = z.object({
   username: z
@@ -36,6 +37,11 @@ export const workBookSchema = z.object({
     .string()
     .min(0, { message: '' })
     .max(300, { message: '300文字になるまで削除してください' }),
+  editorialUrl: z
+    .string()
+    .min(0, { message: '' })
+    .max(300, { message: '300文字になるまで削除してください' })
+    .refine(isValidUrl, { message: 'URLを再入力してください' }), // カリキュラムのトピック解説用のURL。HACK: 「ユーザ作成」の場合も利用できるようにするかは要検討。
   isPublished: z.boolean(),
   isOfficial: z.boolean(),
   isReplenished: z.boolean(), // カリキュラムの【補充】を識別するために使用

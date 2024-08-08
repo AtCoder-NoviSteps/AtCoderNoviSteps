@@ -173,6 +173,7 @@ model WorkBook {
   authorId      String
   title         String
   description   String       @default("")
+  editorialUrl  String       @default("") // カリキュラムのトピック解説用のURL。HACK: 「ユーザ作成」の場合も利用できるようにするかは要検討。
   isPublished   Boolean      @default(false)
   isOfficial    Boolean      @default(false)
   isReplenished Boolean      @default(false) // カリキュラムの【補充】を識別するために使用
