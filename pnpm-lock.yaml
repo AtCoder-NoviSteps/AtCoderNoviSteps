@@ -60,8 +60,8 @@ importers:
         specifier: 1.14.0
         version: 1.14.0
       tailwindcss:
-        specifier: 3.4.8
-        version: 3.4.8(ts-node@10.9.1(@types/node@16.18.11)(typescript@5.5.4))
+        specifier: 3.4.9
+        version: 3.4.9(ts-node@10.9.1(@types/node@16.18.11)(typescript@5.5.4))
       vercel:
         specifier: 35.2.3
         version: 35.2.3
@@ -89,7 +89,7 @@ importers:
         version: 3.1.1(svelte@4.2.18)(vite@5.4.0(@types/node@16.18.11))
       '@tailwindcss/forms':
         specifier: 0.5.7
-        version: 0.5.7(tailwindcss@3.4.8(ts-node@10.9.1(@types/node@16.18.11)(typescript@5.5.4)))
+        version: 0.5.7(tailwindcss@3.4.9(ts-node@10.9.1(@types/node@16.18.11)(typescript@5.5.4)))
       '@testing-library/jest-dom':
         specifier: 6.4.8
         version: 6.4.8
@@ -122,7 +122,7 @@ importers:
         version: 0.46.6(rollup@4.18.0)(svelte@4.2.18)
       flowbite-svelte-icons:
         specifier: 0.4.4
-        version: 0.4.4(svelte@4.2.18)(tailwind-merge@1.14.0)(tailwindcss@3.4.8(ts-node@10.9.1(@types/node@16.18.11)(typescript@5.5.4)))
+        version: 0.4.4(svelte@4.2.18)(tailwind-merge@1.14.0)(tailwindcss@3.4.9(ts-node@10.9.1(@types/node@16.18.11)(typescript@5.5.4)))
       husky:
         specifier: 9.1.4
         version: 9.1.4
@@ -3684,8 +3684,8 @@ packages:
   tailwind-merge@2.3.0:
     resolution: {integrity: sha512-vkYrLpIP+lgR0tQCG6AP7zZXCTLc1Lnv/CCRT3BqJ9CZ3ui2++GPaGb1x/ILsINIMSYqqvrpqjUFsMNLlW99EA==}
 
-  tailwindcss@3.4.8:
-    resolution: {integrity: sha512-GkP17r9GQkxgZ9FKHJQEnjJuKBcbFhMFzKu5slmN6NjlCuFnYJMQ8N4AZ6VrUyiRXlDtPKHkesuQ/MS913Nvdg==}
+  tailwindcss@3.4.9:
+    resolution: {integrity: sha512-1SEOvRr6sSdV5IDf9iC+NU4dhwdqzF4zKKq3sAbasUWHEM6lsMhX+eNN5gkPx1BvLFEnZQEUFbXnGj8Qlp83Pg==}
     engines: {node: '>=14.0.0'}
     hasBin: true
 
@@ -4737,10 +4737,10 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@tailwindcss/forms@0.5.7(tailwindcss@3.4.8(ts-node@10.9.1(@types/node@16.18.11)(typescript@5.5.4)))':
+  '@tailwindcss/forms@0.5.7(tailwindcss@3.4.9(ts-node@10.9.1(@types/node@16.18.11)(typescript@5.5.4)))':
     dependencies:
       mini-svg-data-uri: 1.4.4
-      tailwindcss: 3.4.8(ts-node@10.9.1(@types/node@16.18.11)(typescript@5.5.4))
+      tailwindcss: 3.4.9(ts-node@10.9.1(@types/node@16.18.11)(typescript@5.5.4))
 
   '@testing-library/dom@10.2.0':
     dependencies:
@@ -6269,11 +6269,11 @@ snapshots:
     transitivePeerDependencies:
       - rollup
 
-  flowbite-svelte-icons@0.4.4(svelte@4.2.18)(tailwind-merge@1.14.0)(tailwindcss@3.4.8(ts-node@10.9.1(@types/node@16.18.11)(typescript@5.5.4))):
+  flowbite-svelte-icons@0.4.4(svelte@4.2.18)(tailwind-merge@1.14.0)(tailwindcss@3.4.9(ts-node@10.9.1(@types/node@16.18.11)(typescript@5.5.4))):
     dependencies:
       svelte: 4.2.18
       tailwind-merge: 1.14.0
-      tailwindcss: 3.4.8(ts-node@10.9.1(@types/node@16.18.11)(typescript@5.5.4))
+      tailwindcss: 3.4.9(ts-node@10.9.1(@types/node@16.18.11)(typescript@5.5.4))
 
   flowbite-svelte@0.46.6(rollup@4.18.0)(svelte@4.2.18):
     dependencies:
@@ -7277,17 +7277,17 @@ snapshots:
 
   pnpm@9.7.0: {}
 
-  postcss-import@15.1.0(postcss@8.4.39):
+  postcss-import@15.1.0(postcss@8.4.41):
     dependencies:
-      postcss: 8.4.39
+      postcss: 8.4.41
       postcss-value-parser: 4.2.0
       read-cache: 1.0.0
       resolve: 1.22.8
 
-  postcss-js@4.0.1(postcss@8.4.39):
+  postcss-js@4.0.1(postcss@8.4.41):
     dependencies:
       camelcase-css: 2.0.1
-      postcss: 8.4.39
+      postcss: 8.4.41
 
   postcss-load-config@3.1.4(postcss@8.4.39)(ts-node@10.9.1(@types/node@16.18.11)(typescript@5.5.4)):
     dependencies:
@@ -7304,10 +7304,19 @@ snapshots:
     optionalDependencies:
       postcss: 8.4.39
       ts-node: 10.9.1(@types/node@16.18.11)(typescript@5.5.4)
+    optional: true
 
-  postcss-nested@6.0.1(postcss@8.4.39):
+  postcss-load-config@4.0.2(postcss@8.4.41)(ts-node@10.9.1(@types/node@16.18.11)(typescript@5.5.4)):
     dependencies:
-      postcss: 8.4.39
+      lilconfig: 3.1.2
+      yaml: 2.5.0
+    optionalDependencies:
+      postcss: 8.4.41
+      ts-node: 10.9.1(@types/node@16.18.11)(typescript@5.5.4)
+
+  postcss-nested@6.0.1(postcss@8.4.41):
+    dependencies:
+      postcss: 8.4.41
       postcss-selector-parser: 6.1.0
 
   postcss-safe-parser@6.0.0(postcss@8.4.39):
@@ -7927,7 +7936,7 @@ snapshots:
     dependencies:
       '@babel/runtime': 7.24.6
 
-  tailwindcss@3.4.8(ts-node@10.9.1(@types/node@16.18.11)(typescript@5.5.4)):
+  tailwindcss@3.4.9(ts-node@10.9.1(@types/node@16.18.11)(typescript@5.5.4)):
     dependencies:
       '@alloc/quick-lru': 5.2.0
       arg: 5.0.2
@@ -7943,11 +7952,11 @@ snapshots:
       normalize-path: 3.0.0
       object-hash: 3.0.0
       picocolors: 1.0.1
-      postcss: 8.4.39
-      postcss-import: 15.1.0(postcss@8.4.39)
-      postcss-js: 4.0.1(postcss@8.4.39)
-      postcss-load-config: 4.0.2(postcss@8.4.39)(ts-node@10.9.1(@types/node@16.18.11)(typescript@5.5.4))
-      postcss-nested: 6.0.1(postcss@8.4.39)
+      postcss: 8.4.41
+      postcss-import: 15.1.0(postcss@8.4.41)
+      postcss-js: 4.0.1(postcss@8.4.41)
+      postcss-load-config: 4.0.2(postcss@8.4.41)(ts-node@10.9.1(@types/node@16.18.11)(typescript@5.5.4))
+      postcss-nested: 6.0.1(postcss@8.4.41)
       postcss-selector-parser: 6.1.0
       resolve: 1.22.8
       sucrase: 3.35.0
