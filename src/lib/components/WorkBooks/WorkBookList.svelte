@@ -98,9 +98,9 @@
         <TooltipWrapper tooltipContent="問題集のグレード（下限）を指定します" />
       </div>
 
-      {#if readableReplenishedWorkbooksCount()}
+      {#if workbookType === WorkBookType.TEXTBOOK}
         <div class="mt-4 md:mt-0">
-          <Toggle bind:checked={isShowReplenishment}>「補充」を表示</Toggle>
+          <Toggle bind:checked={isShowReplenishment}>「補充」があれば表示</Toggle>
         </div>
       {/if}
     </div>
