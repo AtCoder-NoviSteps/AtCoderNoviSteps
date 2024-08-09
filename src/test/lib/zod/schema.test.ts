@@ -1,17 +1,17 @@
 import { expect, test } from 'vitest';
+import { ZodSchema } from 'zod';
+
 import { authSchema } from '$lib/zod/schema';
 
 describe('Schema', () => {
   describe('auth schema', () => {
     describe('a correct user is given', () => {
       test('when an admin is given', () => {
-        const user = {
+        const admin = {
           username: 'admin',
           password: 'Ch0kuda1',
         };
-        const result = authSchema.safeParse(user);
-
-        expect(result.success).toBeTruthy();
+        validateAuthSchema(authSchema, admin);
       });
 
       test('when a guest is given', () => {
@@ -19,30 +19,30 @@ describe('Schema', () => {
           username: 'guest',
           password: 'Hell0Guest',
         };
-        const result = authSchema.safeParse(guest);
-
-        expect(result.success).toBeTruthy();
+        validateAuthSchema(authSchema, guest);
       });
 
       test('when a general user is given', () => {
-        const guest = {
+        const user = {
           username: 'hoge',
           password: 'Hell0Hoge',
         };
-        const result = authSchema.safeParse(guest);
-
-        expect(result.success).toBeTruthy();
+        validateAuthSchema(authSchema, user);
       });
 
       test('when a user containing underscores is given', () => {
-        const guest = {
+        const user = {
           username: 'hoge_hoge',
           password: 'Hell0Hoge',
         };
-        const result = authSchema.safeParse(guest);
+        validateAuthSchema(authSchema, user);
+      });
+
+      function validateAuthSchema(schema: ZodSchema<unknown>, data: unknown) {
+        const result = schema.safeParse(data);
 
         expect(result.success).toBeTruthy();
-      });
+      }
     });
 
     describe('a incorrect user is given', () => {
@@ -51,10 +51,7 @@ describe('Schema', () => {
           username: 'ab',
           password: 'Hell0AbaB',
         };
-
-        const result = authSchema.safeParse(tooShortNameUser);
-
-        expect(result.success).toBeFalsy();
+        validateAuthSchema(authSchema, tooShortNameUser);
       });
 
       test('when a user with a 25-letter name is given', () => {
@@ -62,10 +59,7 @@ describe('Schema', () => {
           username: 'a'.repeat(25),
           password: 'Hell0AbaB',
         };
-
-        const result = authSchema.safeParse(tooLongNameUser);
-
-        expect(result.success).toBeFalsy();
+        validateAuthSchema(authSchema, tooLongNameUser);
       });
 
       test('When a user name containing characters other than single-byte alphanumeric characters and underscore is given', () => {
@@ -73,10 +67,7 @@ describe('Schema', () => {
           username: 'foo@bar',
           password: 'Hell0foobar',
         };
-
-        const result = authSchema.safeParse(invalidNameUser);
-
-        expect(result.success).toBeFalsy();
+        validateAuthSchema(authSchema, invalidNameUser);
       });
 
       test('When a user name containing double-byte characters is given', () => {
@@ -84,10 +75,7 @@ describe('Schema', () => {
           username: 'fooＢar',
           password: 'Hell0fooB',
         };
-
-        const result = authSchema.safeParse(invalidNameUser);
-
-        expect(result.success).toBeFalsy();
+        validateAuthSchema(authSchema, invalidNameUser);
       });
 
       test('When seven-characters password is given', () => {
@@ -95,9 +83,7 @@ describe('Schema', () => {
           username: 'foo',
           password: 'Hell0fo',
         };
-        const result = authSchema.safeParse(tooShortPasswordUser);
-
-        expect(result.success).toBeFalsy();
+        validateAuthSchema(authSchema, tooShortPasswordUser);
       });
 
       test('When 129-characters password is given', () => {
@@ -105,9 +91,7 @@ describe('Schema', () => {
           username: 'foo',
           password: 'Fo0'.repeat(43),
         };
-        const result = authSchema.safeParse(tooLongPasswordUser);
-
-        expect(result.success).toBeFalsy();
+        validateAuthSchema(authSchema, tooLongPasswordUser);
       });
 
       test("When a password that doesn't contain a lowercase letter is given", () => {
@@ -115,9 +99,7 @@ describe('Schema', () => {
           username: 'foo',
           password: 'HELLO123',
         };
-        const result = authSchema.safeParse(noLowercasePasswordUser);
-
-        expect(result.success).toBeFalsy();
+        validateAuthSchema(authSchema, noLowercasePasswordUser);
       });
 
       test("When a password that doesn't contain an uppercase letter is given", () => {
@@ -125,9 +107,7 @@ describe('Schema', () => {
           username: 'foo',
           password: 'hello123',
         };
-        const result = authSchema.safeParse(noUppercasePasswordUser);
-
-        expect(result.success).toBeFalsy();
+        validateAuthSchema(authSchema, noUppercasePasswordUser);
       });
 
       test("When a password that doesn't contain a number is given", () => {
@@ -135,10 +115,14 @@ describe('Schema', () => {
           username: 'foo',
           password: 'HelloWorld',
         };
-        const result = authSchema.safeParse(noNumberPasswordUser);
+        validateAuthSchema(authSchema, noNumberPasswordUser);
+      });
+
+      function validateAuthSchema(schema: ZodSchema<unknown>, data: unknown) {
+        const result = schema.safeParse(data);
 
         expect(result.success).toBeFalsy();
-      });
+      }
     });
   });
 });
