@@ -12,7 +12,7 @@ export const submission_statuses = [
     text_color: 'text-white', // TODO: Add column and value to schema.
     button_color: 'bg-atcoder-ac-default', // TODO: Update values in prod DB.
     button_color_on_hover: 'hover:bg-atcoder-ac-hover', // TODO: Add column and value to schema.
-    background_color: 'bg-atcoder-ac-background', // TODO: Add column and value to schema.
+    background_color: 'bg-atcoder-ac-background dark:bg-atcoder-ac-background_dark', // TODO: Add column and value to schema.
   },
   {
     id: '2',
@@ -23,7 +23,8 @@ export const submission_statuses = [
     text_color: 'text-white', // TODO: Add column and value to schema.
     button_color: 'bg-atcoder-ac-with_editorial-default', // TODO: Update values in prod DB.
     button_color_on_hover: 'hover:bg-atcoder-ac-with_editorial-hover', // TODO: Add column and value to schema.
-    background_color: 'bg-atcoder-ac-with_editorial-background', // TODO: Add column and value to schema.
+    background_color:
+      'bg-atcoder-ac-with_editorial-background dark:bg-atcoder-ac-with_editorial-background_dark', // TODO: Add column and value to schema.
   },
   {
     id: '3',
@@ -34,7 +35,7 @@ export const submission_statuses = [
     text_color: 'text-white', // TODO: Add column and value to schema.
     button_color: 'bg-atcoder-wa-default', // TODO: Update values in prod DB.
     button_color_on_hover: 'hover:bg-atcoder-wa-hover', // TODO: Add column and value to schema.
-    background_color: 'bg-atcoder-wa-background', // TODO: Add column and value to schema.
+    background_color: 'bg-atcoder-wa-background dark:bg-atcoder-wa-background_dark', // TODO: Add column and value to schema.
   },
   {
     id: '4',

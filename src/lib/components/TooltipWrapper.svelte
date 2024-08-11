@@ -21,6 +21,6 @@
   </Tooltip>
 
   <span id={titleId}>
-    <QuestionCircleOutline />
+    <QuestionCircleOutline class="dark:text-white" />
   </span>
 {/if}

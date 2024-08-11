@@ -33,7 +33,7 @@
 <!-- See: -->
 <!-- https://flowbite-svelte.com/docs/components/card#Card_with_form_inputs -->
 <!-- https://github.com/themesberg/flowbite-svelte-icons/tree/main/src/lib -->
-<div class="container mx-auto w-5/6 flex flex-col items-center">
+<div class="container mx-auto py-8 w-5/6 flex flex-col items-center">
   <Card class="w-full max-w-md">
     <form method="post" use:enhance class="flex flex-col space-y-6">
       <h3 class="text-xl font-medium text-gray-900 dark:text-white">{title}</h3>

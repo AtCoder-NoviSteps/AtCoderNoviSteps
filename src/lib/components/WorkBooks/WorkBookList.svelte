@@ -85,7 +85,6 @@
       <div class="flex items-center space-x-4">
         <ButtonGroup>
           {#each [TaskGrade.Q10, TaskGrade.Q9, TaskGrade.Q8, TaskGrade.Q7] as grade}
-            <!-- HACK: 本来であれば、別ページからグレードを復元したときも、ボタンを選択状態にしたいが、うまく設定できていない -->
             <Button
               on:click={() => filterByGradeLower(grade)}
               class={selectedGrade === grade ? 'text-primary-700' : 'text-gray-900'}
@@ -110,7 +109,7 @@
 {#if readableMainWorkbooksCount()}
   <div>
     {#if workbookType === WorkBookType.TEXTBOOK}
-      <div class="text-2xl pb-4">本編</div>
+      <div class="text-2xl pb-4 dark:text-white">本編</div>
     {/if}
 
     <WorkBookBaseTable
@@ -127,7 +126,7 @@
   {#if workbookType === WorkBookType.TEXTBOOK && readableReplenishedWorkbooksCount() && isShowReplenishment}
     <div class="mt-12">
       <div class="flex items-center space-x-3 pb-4">
-        <div class="text-2xl">補充</div>
+        <div class="text-2xl dark:text-white">補充</div>
         <TooltipWrapper tooltipContent="準備中" />
       </div>
 
@@ -142,6 +141,8 @@
     </div>
   {/if}
 {:else}
-  <div>該当する問題集は見つかりませんでした。</div>
-  <div>新しい問題集が追加されるまで、しばらくお待ちください。</div>
+  <div class="dark:text-gray-300">
+    <div>該当する問題集は見つかりませんでした。</div>
+    <div>新しい問題集が追加されるまで、しばらくお待ちください。</div>
+  </div>
 {/if}

@@ -28,7 +28,7 @@
 
 <!-- TODO: かっこいいロゴを入れる -->
 <div class="container mx-auto text-center">
-  <div class="mx-auto w-5/6 lg:w-2/3">
+  <div class="mx-auto py-8 w-5/6 lg:w-2/3">
     <Heading
       tag="h1"
       class="mb-4"
@@ -36,7 +36,7 @@
     >
       {PRODUCT_CATCH_PHRASE}
     </Heading>
-    <P class="mb-6 text-lg lg:text-xl sm:px-16 xl:px-48 dark:text-gray-400">
+    <P class="mb-6 text-lg lg:text-xl sm:px-16 xl:px-48 dark:text-gray-300">
       【非公式】
       <a
         href="https://atcoder.jp/"

@@ -98,8 +98,8 @@
     <div class="pt-3 pb-6 space-y-4">
       {#if workBook.description !== ''}
         <div>
-          <div class="text-2xl font-bold">概要</div>
-          <div class="min-w-[240px] max-w-[1440px] truncate">
+          <div class="text-2xl font-bold dark:text-white">概要</div>
+          <div class="min-w-[240px] max-w-[1440px] truncate dark:text-gray-300">
             {workBook.description}
           </div>
         </div>
@@ -107,8 +107,8 @@
 
       {#if workBook.editorialUrl !== ''}
         <div>
-          <div class="text-2xl font-bold">トピックの解説</div>
-          <div class="min-w-[240px] max-w-[1440px] truncate">
+          <div class="text-2xl font-bold dark:text-white">トピックの解説</div>
+          <div class="min-w-[240px] max-w-[1440px] truncate dark:text-white">
             <ExternalLinkWrapper url={workBook.editorialUrl} description="外部リンク" />
           </div>
         </div>

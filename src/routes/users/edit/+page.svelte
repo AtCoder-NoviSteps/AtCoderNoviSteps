@@ -46,7 +46,7 @@
 {/if}
 
 <div class="container mx-auto w-5/6 lg:w-3/4">
-  <Tabs tabStyle="underline" contentClass="bg-white">
+  <Tabs tabStyle="underline" contentClass="bg-white dark:bg-gray-800">
     <!-- 基本情報 -->
     <TabItem open>
       <span slot="title" class="text-lg">基本情報</span>

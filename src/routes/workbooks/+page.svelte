@@ -155,7 +155,7 @@
 
   <!-- TODO: ページネーションを追加 -->
   <div>
-    <Tabs tabStyle="underline" contentClass="bg-white">
+    <Tabs tabStyle="underline" contentClass="bg-white dark:bg-gray-800">
       {#each workBookTabs as workBookTab}
         {#if loggedInUser && canViewWorkBook(role, workBookTab.canUsersView)}
           <TabItemWrapper
