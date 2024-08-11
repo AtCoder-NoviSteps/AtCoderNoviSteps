@@ -1,4 +1,4 @@
-import { type TaskResult, type TaskResults, TaskGrade } from '$lib/types/task';
+import { type TaskResult, type TaskResults, TaskGrade, type TaskGrades } from '$lib/types/task';
 import { type WorkBookTaskBase } from '$lib/types/workbook';
 import { ATCODER_BASE_CONTEST_URL } from '$lib/constants/urls';
 import { getContestPriority } from '$lib/utils/contest';
@@ -76,6 +76,60 @@ export const getTaskGradeOrder: Map<TaskGrade, number> = new Map([
   [TaskGrade.D6, 17],
   [TaskGrade.PENDING, taskGradeOrderInfinity],
 ]);
+
+export function getGradeOrder(grade: TaskGrade): number {
+  const order = getTaskGradeOrder.get(grade);
+  return order !== undefined ? order : taskGradeOrderInfinity;
+}
+
+// 問題数が最頻値となるグレードを取得。ただし、2つ以上ある場合は、最も低いグレードとする。
+//
+// 例:
+//    ・9Q: 5問、8Q: 1問         => 9Q
+//    ・9Q: 1問、8Q: 2問         => 8Q
+//    ・8Q: 2問、7Q: 5問、6Q: 5問 => 7Q
+export function calcGradeMode(taskGrades: TaskGrades): TaskGrade {
+  if (taskGrades.length === 0) {
+    return TaskGrade.PENDING;
+  }
+
+  // 各グレードの問題数をカウント
+  const gradeFrequencies = new Map<TaskGrade, number>();
+
+  taskGrades.forEach((grade: TaskGrade) => {
+    if (grade === TaskGrade.PENDING) {
+      return;
+    }
+
+    const count = gradeFrequencies.get(grade) ?? 0;
+    gradeFrequencies.set(grade, count + 1);
+  });
+
+  if (gradeFrequencies.size === 0) {
+    return TaskGrade.PENDING;
+  }
+
+  // 最頻値のグレードを取得
+  // Note: Mapを直接ソートできないので、一旦Arrayに変換
+  const gradeFrequencyArray = Array.from(gradeFrequencies.entries());
+
+  gradeFrequencyArray.sort(([firstGrade, firstCount], [secondGrade, secondCount]) => {
+    const firstGradeOrder = getGradeOrder(firstGrade);
+    const secondGradeOrder = getGradeOrder(secondGrade);
+
+    // 1. 問題数が多い順
+    if (firstCount !== secondCount) {
+      return secondCount - firstCount;
+    }
+
+    // 2. 同数の場合は、TaskGradeの換算値の昇順
+    return firstGradeOrder - secondGradeOrder;
+  });
+
+  const gradeMode = gradeFrequencyArray[0][0];
+
+  return gradeMode;
+}
 
 // https://tailwindcss.com/docs/customizing-colors
 // https://tailwindcss.com/docs/content-configuration#dynamic-class-names
