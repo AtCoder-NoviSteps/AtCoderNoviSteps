@@ -53,6 +53,8 @@ export function compareByContestIdAndTaskId(first: TaskResult, second: TaskResul
   return first.task_table_index.localeCompare(second.task_table_index);
 }
 
+export const taskGradeOrderInfinity = 9999;
+
 // order: 1 (first) - 17 (last)、9999: Infinity
 export const getTaskGradeOrder: Map<TaskGrade, number> = new Map([
   [TaskGrade.Q11, 1],
@@ -72,7 +74,7 @@ export const getTaskGradeOrder: Map<TaskGrade, number> = new Map([
   [TaskGrade.D4, 15],
   [TaskGrade.D5, 16],
   [TaskGrade.D6, 17],
-  [TaskGrade.PENDING, 9999],
+  [TaskGrade.PENDING, taskGradeOrderInfinity],
 ]);
 
 // https://tailwindcss.com/docs/customizing-colors

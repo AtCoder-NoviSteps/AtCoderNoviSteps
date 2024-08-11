@@ -65,11 +65,6 @@ export type TaskGrades = TaskGrade[];
 
 export const taskGradeValues = Object.values(TaskGrade);
 
-export type TaskGradeRange = {
-  lower: TaskGrade;
-  upper: TaskGrade;
-};
-
 export interface TaskResult extends Task {
   user_id: string;
   status_name: string;
