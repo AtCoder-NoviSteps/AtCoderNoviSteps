@@ -6,7 +6,7 @@
   import { WorkBookType } from '$lib/types/workbook';
   import { activeWorkbookTabStore } from '$lib/stores/active_workbook_tab';
 
-  export let workbookType: WorkBookType;
+  export let workbookType: WorkBookType | null;
   export let isOpen: boolean = false;
   export let title: string;
   export let tooltipContent: string = '';
@@ -17,7 +17,9 @@
     titleId = `title-${Math.floor(Math.random() * 10000)}`;
   });
 
-  function handleClick(workBookType: WorkBookType) {
+  function handleClick(workBookType: WorkBookType | null) {
+    if (workBookType === null) return;
+
     activeWorkbookTabStore.setActiveWorkbookTab(workBookType);
   }
 </script>
