@@ -36,7 +36,7 @@
 <div align="center">
   <video
     width="720"
-    src="https://github.com/user-attachments/assets/4d0782c0-257e-46f3-a444-77ddd8b73e0f"
+    src="https://github.com/user-attachments/assets/db7ad90f-00dd-4310-be8b-92bdf4c1a73e"
     autoplay
     muted
     controls
