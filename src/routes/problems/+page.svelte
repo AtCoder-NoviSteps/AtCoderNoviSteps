@@ -21,9 +21,9 @@
 
   <!-- See: -->
   <!-- https://flowbite-svelte.com/docs/components/tabs -->
-  <Tabs tabStyle="underline" contentClass="bg-white">
+  <Tabs tabStyle="underline" contentClass="bg-white dark:bg-gray-800">
     <!-- Grades -->
-    <TabItemWrapper isOpen={true} title="グレード">
+    <TabItemWrapper workbookType={null} isOpen={true} title="グレード">
       <TaskGradeList {taskResults} {isAdmin} {isLoggedIn}></TaskGradeList>
     </TabItemWrapper>
 

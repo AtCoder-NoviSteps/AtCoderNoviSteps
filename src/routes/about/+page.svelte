@@ -161,7 +161,7 @@
     <Heading tag="h2" class="mb-2 text-xl text-gray-900 dark:text-white">
       開発・運営メンバー
     </Heading>
-    <List tag="ul" class="ml-6 space-y-1">
+    <List tag="ul" class="text-gray-800 dark:text-gray-300 ml-6 space-y-1">
       {#each members as member}
         <Li>
           <ExternalLinkWrapper url={member.account} description={member.name} />
