@@ -4,6 +4,7 @@
 
   import {
     Button,
+    DarkMode,
     Dropdown,
     DropdownItem,
     DropdownDivider,
@@ -43,12 +44,12 @@
   </NavBrand>
   <NavHamburger on:click={toggle} />
 
-  <NavUl {hidden}>
+  <NavUl {hidden} class="bg-white dark:bg-gray-900">
     <!-- Dashboard (Admin only) -->
     {#if $page.data.isAdmin}
-      <NavLi id="nav-dashboard" class="cursor-pointer">
+      <NavLi id="nav-dashboard" class="flex items-center cursor-pointer">
         管理画面
-        <ChevronDownOutline class="w-3 h-3 ml-2 text-primary-800 dark:text-white inline" />
+        <ChevronDownOutline class="w-3 h-3 ml-2 text-primary-800 dark:text-white align-middle" />
       </NavLi>
       <Dropdown triggeredBy="#nav-dashboard" class="w-44 z-20">
         {#each navbarDashboardLinks as navbarDashboardLink}
@@ -61,16 +62,16 @@
 
     <!-- Internal Links -->
     {#each navbarLinks as navbarLink}
-      <NavLi href={navbarLink.path}>{navbarLink.title}</NavLi>
+      <NavLi href={navbarLink.path} class="flex items-center">{navbarLink.title}</NavLi>
     {/each}
 
     {#if !user}
-      <NavLi href="/login">ログイン</NavLi>
-      <NavLi href="/signup">アカウント作成</NavLi>
+      <NavLi href="/login" class="flex items-center">ログイン</NavLi>
+      <NavLi href="/signup" class="flex items-center">アカウント作成</NavLi>
     {:else}
-      <NavLi id="nav-user-page" class="cursor-pointer">
+      <NavLi id="nav-user-page" class="flex items-center cursor-pointer">
         {user.name}
-        <ChevronDownOutline class="w-3 h-3 ml-2 text-primary-800 dark:text-white inline" />
+        <ChevronDownOutline class="w-3 h-3 ml-2 text-primary-800 dark:text-white align-middle" />
       </NavLi>
       <Dropdown triggeredBy="#nav-user-page" class="w-48 z-20">
         <!-- TODO: アカウントページを表示 -->
@@ -79,7 +80,7 @@
         <button
           name="logout_helper"
           on:click={openLogoutModal}
-          class="font-medium py-2 px-4 text-sm text-left w-full rounded text-gray-700 hover:bg-gray-100"
+          class="font-medium py-2 px-4 text-sm text-left w-full rounded text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600"
         >
           ログアウト
         </button>
@@ -87,9 +88,9 @@
     {/if}
 
     <!-- External Links -->
-    <NavLi id="nav-external-links" class="cursor-pointer">
+    <NavLi id="nav-external-links" class="flex items-center cursor-pointer">
       外部リンク
-      <ChevronDownOutline class="w-3 h-3 ml-2 text-primary-800 dark:text-white inline" />
+      <ChevronDownOutline class="w-3 h-3 ml-2 text-primary-800 dark:text-white align-middle" />
     </NavLi>
     <Dropdown triggeredBy="#nav-external-links" class="w-48 z-20">
       {#each externalLinks as externalLink}
@@ -98,6 +99,9 @@
         </DropdownItem>
       {/each}
     </Dropdown>
+
+    <!-- Note: デフォルトのpaddingを使うと、他のナビゲーションの文字の縦位置がずれてしまうため -->
+    <DarkMode class="flex items-center" btnClass="p-2.5 md:p-0" />
   </NavUl>
 </Navbar>
 
