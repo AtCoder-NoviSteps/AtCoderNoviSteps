@@ -60,15 +60,18 @@ const config = {
             default: '#f0ad4e',
             hover: '#d97706',
             background: '#ffeeba',
+            background_dark: '#5d3e00',
           },
           ac: {
             default: '#5cb85c',
             hover: '#449d44',
             background: '#c3e6cb',
+            background_dark: '#015c07',
             with_editorial: {
               default: '#00aeef',
               hover: '#21a0db',
               background: '#d7dcf5',
+              background_dark: '#0056b3',
             },
           },
         },

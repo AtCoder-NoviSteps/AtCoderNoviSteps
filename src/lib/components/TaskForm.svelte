@@ -22,9 +22,11 @@
   });
 </script>
 
-<a href="/tasks"> タスク一覧へもどる（パンくずリストにしたい） </a>
+<a href="/tasks" class="dark:text-gray-300"> タスク一覧へもどる（パンくずリストにしたい） </a>
 <br />
-Edit Task
+
+<div class="dark:text-gray-300">Edit Task</div>
+
 <form method="POST" action="/tasks?/update">
   <Table shadow hoverable={true} class="text-md">
     <TableBody tableBodyClass="divide-y">
@@ -60,4 +62,5 @@ Edit Task
   <Button type="submit">Update</Button>
   <input type="hidden" name="task_id" value={task.task_id} />
 </form>
-以下に、タグ（taskTag）を追加/編集するUIを作る予定
+
+<div class="dark:text-gray-300">以下に、タグ（taskTag）を追加/編集するUIを作る予定</div>
