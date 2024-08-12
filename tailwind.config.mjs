@@ -1,3 +1,7 @@
+import forms from '@tailwindcss/forms';
+import flowbitePlugin from 'flowbite/plugin';
+import stwuiPlugin from 'stwui/plugin';
+
 const config = {
   content: [
     './src/**/*.{html,js,svelte,ts}',
@@ -6,7 +10,7 @@ const config = {
     './node_modules/stwui/**/*.{svelte,js,ts,html}',
   ],
 
-  plugins: [require('@tailwindcss/forms'), require('flowbite/plugin'), require('stwui/plugin')],
+  plugins: [forms, flowbitePlugin, stwuiPlugin],
 
   darkMode: 'class',
 
@@ -83,4 +87,4 @@ const config = {
   },
 };
 
-module.exports = config;
+export default config;
