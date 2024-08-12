@@ -62,7 +62,7 @@
   const tasksByTaskId: Map<string, Task> = data.tasksByTaskId;
   let taskResultsByTaskId = data.taskResultsByTaskId as Map<string, TaskResult>;
 
-  // 計算量: 問題集の数をN、各問題集の問題の平均値をMとすると、O(N * M)
+  // 計算量: 問題集の数をN、各問題集の問題の平均値をMとすると、O(N * M * log(M))
   const getWorkBookGradeModes = (workbooks: WorkbooksList): Map<number, TaskGrade> => {
     const gradeModes: Map<number, TaskGrade> = new Map();
 
