@@ -17,6 +17,8 @@
   } from 'flowbite-svelte';
   // @ts-ignore
   import ChevronDownOutline from 'flowbite-svelte-icons/ChevronDownOutline.svelte';
+  import MoonOutline from 'flowbite-svelte-icons/MoonOutline.svelte';
+  import SunOutline from 'flowbite-svelte-icons/SunOutline.svelte';
 
   import { PRODUCT_NAME } from '$lib/constants/product-info';
   import { navbarDashboardLinks, navbarLinks } from '$lib/constants/navbar-links';
@@ -101,7 +103,11 @@
     </Dropdown>
 
     <!-- Note: デフォルトのpaddingを使うと、他のナビゲーションの文字の縦位置がずれてしまうため -->
-    <DarkMode class="flex items-center" btnClass="p-2.5 md:p-0" />
+    <!-- Note: モードとアイコンの対応関係が一般的なUIライブラリと逆になっているので、アイコンのみ差し替え -->
+    <DarkMode class="flex items-center" btnClass="p-2.5 md:p-0">
+      <SunOutline slot="darkIcon" />
+      <MoonOutline slot="lightIcon" />
+    </DarkMode>
   </NavUl>
 </Navbar>
 
