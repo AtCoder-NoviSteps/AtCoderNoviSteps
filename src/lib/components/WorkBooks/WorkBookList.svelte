@@ -92,7 +92,9 @@
           {/each}
         </ButtonGroup>
 
-        <TooltipWrapper tooltipContent="問題集のグレード（最頻値）を指定します" />
+        <TooltipWrapper
+          tooltipContent="問題集のグレードを指定します（基本的には、該当する問題数が最多となるグレード。2つ以上ある場合は、最も易しいグレードに掲載）"
+        />
       </div>
 
       {#if workbookType === WorkBookType.TEXTBOOK}
