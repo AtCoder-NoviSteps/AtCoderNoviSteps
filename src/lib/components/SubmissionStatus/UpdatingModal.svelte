@@ -54,6 +54,7 @@
       errorMessageStore.setAndClearAfterTimeout(null);
       closeModal();
     } catch (error) {
+      console.error('Failed to update submission status: ', error);
       errorMessageStore.setAndClearAfterTimeout(FAILED_TO_UPDATE_SUBMISSION_STATUS, 10000);
     }
   }

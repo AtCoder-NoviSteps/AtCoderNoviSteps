@@ -111,6 +111,7 @@ async function getTaskResultWithErrorHandling(taskId: string, userId: string): P
   try {
     return await getTaskResult(taskId, userId);
   } catch (error) {
+    console.error(`Failed to get task result for taskId ${taskId}:`, error);
     return await handleTaskResultError(taskId, userId);
   }
 }

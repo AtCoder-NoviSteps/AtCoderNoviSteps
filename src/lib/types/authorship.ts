@@ -14,4 +14,4 @@ export interface AuthorshipForEdit extends Authorship {
   role: Roles;
 }
 
-export interface AuthorshipForDelete extends Authorship {}
+export type AuthorshipForDelete = Authorship;
