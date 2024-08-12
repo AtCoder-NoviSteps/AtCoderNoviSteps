@@ -8,8 +8,8 @@
   import TabItemWrapper from '$lib/components/TabItemWrapper.svelte';
   import { activeWorkbookTabStore } from '$lib/stores/active_workbook_tab';
   import WorkBookList from '$lib/components/WorkBooks/WorkBookList.svelte';
-  import { getTaskGradeOrder } from '$lib/utils/task';
-  import { type Task, TaskGrade, type TaskGrades, type TaskGradeRange } from '$lib/types/task';
+  import { calcGradeMode } from '$lib/utils/task';
+  import { type Task, TaskGrade, type TaskGrades } from '$lib/types/task';
   import type { TaskResult, TaskResults } from '$lib/types/task';
   import {
     type WorkbookList,
@@ -25,6 +25,7 @@
   // loggedInUser.roleで比較すると、@prisma/clientと型が異なるため、やむを得ずasでキャスト
   let role = loggedInUser?.role as Roles;
 
+  // TODO: 単体テストをしやすくするため、utilsに移動させる + インポート
   const getWorkBooksByType = (workbooks: WorkbooksList, workBookType: WorkBookType) => {
     const filteredWorkbooks = workbooks.filter(
       (workbook: WorkbookList) => workbook.workBookType === workBookType,
@@ -61,9 +62,9 @@
   const tasksByTaskId: Map<string, Task> = data.tasksByTaskId;
   let taskResultsByTaskId = data.taskResultsByTaskId as Map<string, TaskResult>;
 
-  // 計算量: 問題集の数をN、各問題集の問題の数をMとすると、O(N * M)
-  const getWorkBookGradeRanges = (workbooks: WorkbooksList): Map<number, TaskGradeRange> => {
-    const gradeRanges: Map<number, TaskGradeRange> = new Map();
+  // 計算量: 問題集の数をN、各問題集の問題の平均値をMとすると、O(N * M * log(M))
+  const getWorkBookGradeModes = (workbooks: WorkbooksList): Map<number, TaskGrade> => {
+    const gradeModes: Map<number, TaskGrade> = new Map();
 
     workbooks.forEach((workbook: WorkbookList) => {
       const taskGrades = workbook.workBookTasks.reduce(
@@ -78,44 +79,16 @@
         [],
       );
 
-      const { lower, upper } = calcGradeLowerAndUpper(taskGrades as TaskGrades);
-      gradeRanges.set(workbook.id, { lower, upper });
+      const gradeMode = calcGradeMode(taskGrades as TaskGrades);
+      gradeModes.set(workbook.id, gradeMode);
     });
 
-    return gradeRanges;
+    return gradeModes;
   };
 
-  function calcGradeLowerAndUpper(taskGrades: TaskGrades): TaskGradeRange {
-    if (taskGrades.length === 0) {
-      return { lower: TaskGrade.PENDING, upper: TaskGrade.PENDING };
-    }
+  const workbookGradeModes = getWorkBookGradeModes(data.workbooks as WorkbooksList);
 
-    const gradeOrders = taskGrades.map(getGradeOrder).filter((order) => order !== undefined);
-
-    if (gradeOrders.length === 0) {
-      return { lower: TaskGrade.PENDING, upper: TaskGrade.PENDING };
-    }
-
-    const lowerOrder = Math.min(...gradeOrders);
-    const upperOrder = Math.max(...gradeOrders);
-
-    const gradeLower = taskGrades.find(
-      (grade: TaskGrade) => getGradeOrder(grade) === lowerOrder,
-    ) as TaskGrade;
-    const gradeUpper = taskGrades.find(
-      (grade: TaskGrade) => getGradeOrder(grade) === upperOrder,
-    ) as TaskGrade;
-
-    return { lower: gradeLower, upper: gradeUpper };
-  }
-
-  function getGradeOrder(grade: TaskGrade) {
-    return getTaskGradeOrder.get(grade);
-  }
-
-  const workbookGradeRanges = getWorkBookGradeRanges(data.workbooks as WorkbooksList);
-
-  // 計算量: 問題集の数をN、各問題集の問題の数をMとすると、O(N * M)
+  // 計算量: 問題集の数をN、各問題集の問題の平均値をMとすると、O(N * M)
   function fetchTaskResultsWithWorkBookId(workbooks: WorkbooksList, workBookType: WorkBookType) {
     const workbooksByType = getWorkBooksByType(workbooks, workBookType);
     const taskResultsWithWorkBookId = new Map();
@@ -168,7 +141,7 @@
               <WorkBookList
                 workbookType={workBookTab.workBookType}
                 workbooks={getWorkBooksByType(workbooks, workBookTab.workBookType)}
-                {workbookGradeRanges}
+                {workbookGradeModes}
                 taskResultsWithWorkBookId={fetchTaskResultsWithWorkBookId(
                   workbooks,
                   workBookTab.workBookType,

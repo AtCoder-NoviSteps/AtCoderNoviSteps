@@ -7,14 +7,14 @@
   import { canRead } from '$lib/utils/authorship';
   import { WorkBookType, type WorkbookList, type WorkbooksList } from '$lib/types/workbook';
   import { getTaskGradeLabel } from '$lib/utils/task';
-  import { TaskGrade, type TaskGradeRange, type TaskResults } from '$lib/types/task';
+  import { TaskGrade, type TaskResults } from '$lib/types/task';
   import type { Roles } from '$lib/types/user';
   import TooltipWrapper from '$lib/components/TooltipWrapper.svelte';
   import WorkBookBaseTable from '$lib/components/WorkBooks/WorkBookBaseTable.svelte';
 
   export let workbookType: WorkBookType;
   export let workbooks: WorkbooksList;
-  export let workbookGradeRanges: Map<number, TaskGradeRange>;
+  export let workbookGradeModes: Map<number, TaskGrade>;
   export let taskResultsWithWorkBookId: Map<number, TaskResults>;
   export let loggedInUser;
 
@@ -40,8 +40,8 @@
     workbookType === WorkBookType.CREATED_BY_USER
       ? workbooks
       : workbooks.filter((workbook: WorkbookList) => {
-          const lower = getGradeLower(workbook.id);
-          return lower === selectedGrade && !workbook.isReplenished;
+          const gradeMode = getGradeMode(workbook.id);
+          return gradeMode === selectedGrade && !workbook.isReplenished;
         });
   $: readableMainWorkbooksCount = () => countReadableWorkbooks(mainWorkbooks);
 
@@ -49,8 +49,8 @@
   let replenishedWorkbooks: WorkbooksList;
 
   $: replenishedWorkbooks = workbooks.filter((workbook: WorkbookList) => {
-    const lower = getGradeLower(workbook.id);
-    return lower === selectedGrade && workbook.isReplenished;
+    const gradeMode = getGradeMode(workbook.id);
+    return gradeMode === selectedGrade && workbook.isReplenished;
   });
   $: readableReplenishedWorkbooksCount = () => countReadableWorkbooks(replenishedWorkbooks);
 
@@ -65,10 +65,8 @@
     return results;
   }
 
-  function getGradeLower(workbookId: number): TaskGrade {
-    const workbookGradeRange = workbookGradeRanges.get(workbookId);
-
-    return workbookGradeRange?.lower ?? TaskGrade.PENDING;
+  function getGradeMode(workbookId: number): TaskGrade {
+    return workbookGradeModes.get(workbookId) ?? TaskGrade.PENDING;
   }
 
   function filterByGradeLower(grade: TaskGrade) {
@@ -94,7 +92,9 @@
           {/each}
         </ButtonGroup>
 
-        <TooltipWrapper tooltipContent="問題集のグレード（下限）を指定します" />
+        <TooltipWrapper
+          tooltipContent="問題集のグレードを指定します（最頻値。2つ以上ある場合は、最も易しいグレードに掲載）"
+        />
       </div>
 
       {#if workbookType === WorkBookType.TEXTBOOK}
@@ -115,7 +115,7 @@
     <WorkBookBaseTable
       {workbookType}
       workbooks={mainWorkbooks}
-      {workbookGradeRanges}
+      {workbookGradeModes}
       {userId}
       {role}
       taskResults={taskResultsWithWorkBookId}
@@ -133,7 +133,7 @@
       <WorkBookBaseTable
         {workbookType}
         workbooks={replenishedWorkbooks}
-        {workbookGradeRanges}
+        {workbookGradeModes}
         {userId}
         {role}
         taskResults={taskResultsWithWorkBookId}

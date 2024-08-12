@@ -11,7 +11,7 @@
   } from 'flowbite-svelte';
 
   import { WorkBookType, type WorkbooksList } from '$lib/types/workbook';
-  import { TaskGrade, type TaskGradeRange, type TaskResults } from '$lib/types/task';
+  import { TaskGrade, type TaskResults } from '$lib/types/task';
   import type { Roles } from '$lib/types/user';
 
   import GradeLabel from '$lib/components/GradeLabel.svelte';
@@ -24,15 +24,13 @@
 
   export let workbookType: WorkBookType;
   export let workbooks: WorkbooksList;
-  export let workbookGradeRanges: Map<number, TaskGradeRange>;
+  export let workbookGradeModes: Map<number, TaskGrade>;
   export let userId: string;
   export let role: Roles;
   export let taskResults: Map<number, TaskResults>;
 
-  function getGradeLower(workbookId: number): TaskGrade {
-    const workbookGradeRange = workbookGradeRanges.get(workbookId);
-
-    return workbookGradeRange?.lower ?? TaskGrade.PENDING;
+  function getGradeMode(workbookId: number): TaskGrade {
+    return workbookGradeModes.get(workbookId) ?? TaskGrade.PENDING;
   }
 
   function getTaskResult(workbookId: number): TaskResults {
@@ -76,7 +74,7 @@
             {:else}
               <TableBodyCell class="justify-center w-14 px-2">
                 <div class="flex items-center justify-center min-w-[54px] max-w-[54px]">
-                  <GradeLabel taskGrade={getGradeLower(workbook.id)} />
+                  <GradeLabel taskGrade={getGradeMode(workbook.id)} />
                 </div>
               </TableBodyCell>
             {/if}

@@ -6,10 +6,9 @@ import {
   countAllTasks,
   areAllTasksAccepted,
   compareByContestIdAndTaskId,
-  getTaskGradeLabel,
 } from '$lib/utils/task';
 import type { WorkBookTaskBase } from '$lib/types/workbook';
-import { type TaskResult, type TaskResults, TaskGrade } from '$lib/types/task';
+import { type TaskResult, type TaskResults } from '$lib/types/task';
 
 import {
   taskResultsForUserId2,
@@ -50,13 +49,6 @@ type TestCaseForSortingTaskResults = {
 };
 
 type TestCasesForSortingTaskResults = TestCaseForSortingTaskResults[];
-
-type TestCaseForTaskGradeLabel = {
-  taskGrade: TaskGrade | string;
-  expected: TaskGrade | string;
-};
-
-type TestCasesForTaskGradeLabel = TestCaseForTaskGradeLabel[];
 
 describe('Task', () => {
   describe('task url', () => {
@@ -573,65 +565,6 @@ describe('Task', () => {
         `${testName}(first: $first.task_id, second: $second.task_id)`,
         testFunction,
       );
-    }
-  });
-
-  describe('get task grade label', () => {
-    describe('when task grades are given', () => {
-      const testCases: TestCasesForTaskGradeLabel = [
-        {
-          taskGrade: TaskGrade.Q11,
-          expected: '11Q',
-        },
-        {
-          taskGrade: TaskGrade.Q10,
-          expected: '10Q',
-        },
-        {
-          taskGrade: TaskGrade.Q9,
-          expected: '9Q',
-        },
-        {
-          taskGrade: TaskGrade.Q2,
-          expected: '2Q',
-        },
-        {
-          taskGrade: TaskGrade.Q1,
-          expected: '1Q',
-        },
-        {
-          taskGrade: TaskGrade.D1,
-          expected: '1D',
-        },
-        {
-          taskGrade: TaskGrade.D2,
-          expected: '2D',
-        },
-        {
-          taskGrade: TaskGrade.D6,
-          expected: '6D',
-        },
-      ];
-
-      runTests(
-        'getTaskGradeLabel',
-        testCases,
-        ({ taskGrade, expected }: TestCaseForTaskGradeLabel) => {
-          expect(getTaskGradeLabel(taskGrade)).toEqual(expected);
-        },
-      );
-    });
-
-    test('when pending is given', () => {
-      expect(getTaskGradeLabel(TaskGrade.PENDING)).toEqual(TaskGrade.PENDING);
-    });
-
-    function runTests(
-      testName: string,
-      testCases: TestCasesForTaskGradeLabel,
-      testFunction: (testCase: TestCaseForTaskGradeLabel) => void,
-    ) {
-      test.each(testCases)(`${testName}(taskGrade: $taskGrade)`, testFunction);
     }
   });
 });
