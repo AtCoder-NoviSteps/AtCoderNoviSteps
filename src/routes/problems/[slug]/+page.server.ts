@@ -28,9 +28,9 @@ export const actions = {
 
     try {
       const submissionStatus = response.get('submissionStatus') as string;
-      //console.log('update:', slug, userId, submissionStatus);
       await crud.updateTaskResult(slug, submissionStatus, userId);
     } catch (error) {
+      console.log('Failed to update task result: ', error);
       return fail(BAD_REQUEST, { slug });
     }
 

@@ -9,4 +9,4 @@ export type User = {
   role: Roles;
 };
 
-export interface AuthUser extends User {}
+export type AuthUser = User;

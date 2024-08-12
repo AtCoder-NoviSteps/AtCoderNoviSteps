@@ -39,8 +39,8 @@ export async function generate(username: string, atcoder_username: string) {
       },
     });
     return user.atcoder_validation_code;
-  } catch (e) {
-    console.log('Cant generate token');
+  } catch (error) {
+    throw new Error(`Failed to generate token: ${error}`);
   }
 }
 
@@ -71,8 +71,8 @@ export async function validate(username: string) {
     } else {
       return false;
     }
-  } catch (e) {
-    console.log('Cant validate user');
+  } catch (error) {
+    throw new Error(`Failed to validate user ${username}: ${error}`);
   }
 }
 
@@ -89,7 +89,7 @@ export async function reset(username: string) {
       },
     });
     return true;
-  } catch (e) {
-    console.log('Cant update user');
+  } catch (error) {
+    throw new Error(`Failed to reset validation ${username}: ${error}`);
   }
 }

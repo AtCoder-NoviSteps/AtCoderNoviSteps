@@ -27,8 +27,8 @@ export async function load({ locals }) {
       message_type: '',
       message: '',
     };
-  } catch (e) {
-    console.log("Can't find username:", session?.user.username);
+  } catch (error) {
+    console.error('Not found username: ', session?.user.username, error);
     redirect(302, '/login');
   }
 }
