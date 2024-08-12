@@ -41,7 +41,7 @@
     "@tailwindcss/forms": "0.5.7",
     "@testing-library/jest-dom": "6.4.8",
     "@types/gtag.js": "0.0.20",
-    "@typescript-eslint/eslint-plugin": "8.0.1",
+    "@typescript-eslint/eslint-plugin": "8.1.0",
     "@typescript-eslint/parser": "8.1.0",
     "@vitest/coverage-v8": "2.0.5",
     "@vitest/ui": "2.0.5",
