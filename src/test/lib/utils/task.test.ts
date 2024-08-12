@@ -593,7 +593,7 @@ describe('Task', () => {
     }
   });
 
-  describe('get grade order', () => {
+  describe('get task grade order', () => {
     describe('when task grades are given', () => {
       const testCases: TestCasesForTaskGradeOrder = [
         { taskGrade: TaskGrade.Q11, expected: 1 },
@@ -621,7 +621,7 @@ describe('Task', () => {
     }
   });
 
-  describe('calc grade mode', () => {
+  describe('calc task grade mode', () => {
     test('when no task grade is given', () => {
       expect(calcGradeMode([])).toEqual(TaskGrade.PENDING);
     });
@@ -758,6 +758,10 @@ describe('Task', () => {
           taskGrades: [TaskGrade.D2, TaskGrade.D1],
           expected: TaskGrade.D1,
         },
+        {
+          taskGrades: [TaskGrade.D2, TaskGrade.D3],
+          expected: TaskGrade.D2,
+        },
       ];
 
       runTests('calcGradeMode', testCases, ({ taskGrades, expected }: TestCaseForTaskGradeMode) => {
@@ -765,9 +769,12 @@ describe('Task', () => {
       });
     });
 
-    describe('when multiple task grades are given', () => {
-      // TODO: Add test cases.
+    describe('when multiple task grades without pending are given', () => {
       const testCases: TestCasesForTaskGradeMode = [
+        {
+          taskGrades: [TaskGrade.Q10, TaskGrade.Q10, TaskGrade.Q10],
+          expected: TaskGrade.Q10,
+        },
         {
           taskGrades: [TaskGrade.Q10, TaskGrade.Q10, TaskGrade.Q9],
           expected: TaskGrade.Q10,
@@ -775,6 +782,171 @@ describe('Task', () => {
         {
           taskGrades: [TaskGrade.Q9, TaskGrade.Q10, TaskGrade.Q9],
           expected: TaskGrade.Q9,
+        },
+        {
+          taskGrades: [
+            TaskGrade.Q9,
+            TaskGrade.Q8,
+            TaskGrade.Q8,
+            TaskGrade.Q8,
+            TaskGrade.Q7,
+            TaskGrade.Q7,
+            TaskGrade.Q7,
+          ],
+          expected: TaskGrade.Q8,
+        },
+        {
+          taskGrades: [TaskGrade.Q5, TaskGrade.Q5, TaskGrade.Q5, TaskGrade.Q5],
+          expected: TaskGrade.Q5,
+        },
+        {
+          taskGrades: [
+            TaskGrade.Q4,
+            TaskGrade.Q4,
+            TaskGrade.Q4,
+            TaskGrade.Q4,
+            TaskGrade.Q5,
+            TaskGrade.Q5,
+            TaskGrade.Q5,
+          ],
+          expected: TaskGrade.Q4,
+        },
+        {
+          taskGrades: [
+            TaskGrade.Q4,
+            TaskGrade.Q3,
+            TaskGrade.Q3,
+            TaskGrade.Q1,
+            TaskGrade.Q1,
+            TaskGrade.Q1,
+          ],
+          expected: TaskGrade.Q1,
+        },
+        {
+          taskGrades: [
+            TaskGrade.Q6,
+            TaskGrade.Q5,
+            TaskGrade.Q3,
+            TaskGrade.Q2,
+            TaskGrade.Q1,
+            TaskGrade.Q1,
+            TaskGrade.Q1,
+            TaskGrade.Q1,
+            TaskGrade.Q1,
+            TaskGrade.D1,
+            TaskGrade.D1,
+            TaskGrade.D1,
+            TaskGrade.D1,
+            TaskGrade.D1,
+            TaskGrade.D1,
+          ],
+          expected: TaskGrade.D1,
+        },
+        {
+          taskGrades: [
+            TaskGrade.D1,
+            TaskGrade.D1,
+            TaskGrade.D1,
+            TaskGrade.D1,
+            TaskGrade.D1,
+            TaskGrade.D1,
+            TaskGrade.D1,
+            TaskGrade.D1,
+            TaskGrade.D1,
+            TaskGrade.D1,
+          ],
+          expected: TaskGrade.D1,
+        },
+      ];
+
+      runTests('calcGradeMode', testCases, ({ taskGrades, expected }: TestCaseForTaskGradeMode) => {
+        expect(calcGradeMode(taskGrades)).toEqual(expected);
+      });
+    });
+
+    describe('when multiple task grades with pending are given', () => {
+      const testCases: TestCasesForTaskGradeMode = [
+        {
+          taskGrades: [
+            TaskGrade.PENDING,
+            TaskGrade.PENDING,
+            TaskGrade.PENDING,
+            TaskGrade.PENDING,
+            TaskGrade.PENDING,
+          ],
+          expected: TaskGrade.PENDING,
+        },
+        {
+          taskGrades: [
+            TaskGrade.Q7,
+            TaskGrade.PENDING,
+            TaskGrade.PENDING,
+            TaskGrade.PENDING,
+            TaskGrade.PENDING,
+            TaskGrade.PENDING,
+          ],
+          expected: TaskGrade.Q7,
+        },
+        {
+          taskGrades: [
+            TaskGrade.Q9,
+            TaskGrade.Q8,
+            TaskGrade.Q8,
+            TaskGrade.Q8,
+            TaskGrade.Q7,
+            TaskGrade.Q7,
+            TaskGrade.Q7,
+            TaskGrade.PENDING,
+            TaskGrade.PENDING,
+            TaskGrade.PENDING,
+            TaskGrade.PENDING,
+          ],
+          expected: TaskGrade.Q8,
+        },
+        {
+          taskGrades: [
+            TaskGrade.Q6,
+            TaskGrade.Q5,
+            TaskGrade.Q3,
+            TaskGrade.Q2,
+            TaskGrade.Q1,
+            TaskGrade.Q1,
+            TaskGrade.Q1,
+            TaskGrade.Q1,
+            TaskGrade.Q1,
+            TaskGrade.D1,
+            TaskGrade.D1,
+            TaskGrade.D1,
+            TaskGrade.D1,
+            TaskGrade.D1,
+            TaskGrade.D1,
+            TaskGrade.PENDING,
+            TaskGrade.PENDING,
+            TaskGrade.PENDING,
+            TaskGrade.PENDING,
+            TaskGrade.PENDING,
+            TaskGrade.PENDING,
+            TaskGrade.PENDING,
+          ],
+          expected: TaskGrade.D1,
+        },
+        {
+          taskGrades: [
+            TaskGrade.D1,
+            TaskGrade.D1,
+            TaskGrade.D1,
+            TaskGrade.D1,
+            TaskGrade.D1,
+            TaskGrade.D1,
+            TaskGrade.PENDING,
+            TaskGrade.PENDING,
+            TaskGrade.PENDING,
+            TaskGrade.PENDING,
+            TaskGrade.PENDING,
+            TaskGrade.PENDING,
+            TaskGrade.PENDING,
+          ],
+          expected: TaskGrade.D1,
         },
       ];
 
