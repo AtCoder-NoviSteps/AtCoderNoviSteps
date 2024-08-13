@@ -40,6 +40,10 @@
     };
   });
 
+  $: validRatioCount = submissionRatios.filter(
+    (submissionRatio) => submissionRatio.ratioPercent > 0,
+  ).length;
+
   const getRatioPercent = (taskResults: TaskResults, statusName: string) => {
     const filteredTaskCount = getTaskCount(taskResults, statusName);
     const allTaskCount = getAllTaskCount();
@@ -71,11 +75,11 @@
 <div class="{width} rounded-full border border-gray-200 p-1">
   <div class="rounded-full h-6">
     <span id={progressBarId}>
-      <div class="overflow-hidden h-6 flex rounded-full bg-white">
-        {#each submissionRatios as submissionRatio}
+      <div class="overflow-hidden h-6 flex rounded-full bg-white dark:bg-gray-800">
+        {#each submissionRatios as submissionRatio, index}
           <div
             style="width: {submissionRatio.ratioPercent}%"
-            class={`${baseAttributes} ${submissionRatio.color}`}
+            class={`${baseAttributes} ${submissionRatio.color} ${submissionRatio.ratioPercent > 0 ? 'dark:border-r dark:border-white' : ''} ${index >= validRatioCount - 1 ? 'dark:border-r-0' : ''}`}
           ></div>
         {/each}
       </div>
