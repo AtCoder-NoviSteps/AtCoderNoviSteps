@@ -40,6 +40,10 @@
     };
   });
 
+  $: validRatioCount = submissionRatios.filter(
+    (submissionRatio) => submissionRatio.ratioPercent > 0,
+  ).length;
+
   const getRatioPercent = (taskResults: TaskResults, statusName: string) => {
     const filteredTaskCount = getTaskCount(taskResults, statusName);
     const allTaskCount = getAllTaskCount();
@@ -59,6 +63,17 @@
 
   const baseAttributes =
     'shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center';
+
+  // ダークモードの処理
+  // 1. 白色の縦線を間に入れる
+  const addWhiteLineAtRightIfNeeds = (ratioPercent: number) => {
+    return ratioPercent > 0 ? 'dark:border-r dark:border-white' : '';
+  };
+
+  // 2. 有効な回答状況のうち、最も右側の白線を非表示にする
+  const hideWhiteLineIfNeeds = (index: number) => {
+    return index >= validRatioCount - 1 ? 'dark:border-r-0' : '';
+  };
 </script>
 
 <!-- HACK: 本来であれば、Flowbite SvelteにあるProgressbarのcolor属性で色を指定したいが、同属性の拡張方法が分からないのでFlowbiteのコンポーネントをやむなく利用 -->
@@ -71,11 +86,12 @@
 <div class="{width} rounded-full border border-gray-200 p-1">
   <div class="rounded-full h-6">
     <span id={progressBarId}>
-      <div class="overflow-hidden h-6 flex rounded-full bg-white">
-        {#each submissionRatios as submissionRatio}
+      <div class="overflow-hidden h-6 flex rounded-full bg-white dark:bg-gray-800">
+        {#each submissionRatios as submissionRatio, index}
+          <!-- Note: ダークモードでは、識別しやすくするため、白色の縦線を間に入れている（回答状況の種類が2種類以上） -->
           <div
             style="width: {submissionRatio.ratioPercent}%"
-            class={`${baseAttributes} ${submissionRatio.color}`}
+            class={`${baseAttributes} ${submissionRatio.color} ${addWhiteLineAtRightIfNeeds(submissionRatio.ratioPercent)} ${hideWhiteLineIfNeeds(index)}`}
           ></div>
         {/each}
       </div>
