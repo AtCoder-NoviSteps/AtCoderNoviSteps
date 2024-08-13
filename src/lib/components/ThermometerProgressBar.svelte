@@ -67,7 +67,7 @@
   // ダークモードの処理
   // 1. 白色の縦線を間に入れる
   const addWhiteLineAtRightIfNeeds = (ratioPercent: number) => {
-    return ratioPercent > 0 ? 'dark:border-r dark:border-white' : '';
+    return ratioPercent > 0 ? 'dark:border-r dark:border-gray-800' : '';
   };
 
   // 2. 有効な回答状況のうち、最も右側の白線を非表示にする
