@@ -5,7 +5,7 @@
 </script>
 
 {#if message}
-  <Helper class="mt-2" color="red">
+  <Helper class="mt-2 dark:text-red-500" color="red">
     <span class="font-medium">{message}</span>
   </Helper>
 {/if}

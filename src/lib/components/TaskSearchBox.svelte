@@ -40,6 +40,9 @@
 
   let newWorkBookTaskId = 0;
 
+  // Note: 初期値として、便宜的に割り当てている。随時、変更可能。
+  const NO_COMMENT = '';
+
   $: {
     if (workBookTasks.length === 0) {
       newWorkBookTaskId = 1;
@@ -54,6 +57,7 @@
       {
         taskId: selectedTask.task_id,
         priority: newWorkBookTaskId, // 1に近いほど優先度が高い
+        comment: NO_COMMENT,
       },
     ];
     workBookTasksForTable = [
@@ -63,6 +67,7 @@
         taskId: selectedTask.task_id,
         title: selectedTask.title,
         priority: newWorkBookTaskId,
+        comment: NO_COMMENT,
       },
     ];
   }

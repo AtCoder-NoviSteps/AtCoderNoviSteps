@@ -45,6 +45,7 @@
         title: task.title,
         taskId: workBookTask.taskId,
         priority: workBookTask.priority,
+        comment: workBookTask.comment,
       };
     }
   }) as WorkBookTaskEdit[];
