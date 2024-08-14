@@ -37,7 +37,6 @@ export const load = async ({ locals }) => {
 };
 
 export const actions = {
-  // TODO: エラーメッセージをformに表示させる
   default: async ({ locals, request }) => {
     console.log('form -> actions -> create');
     await getLoggedInUser(locals);
