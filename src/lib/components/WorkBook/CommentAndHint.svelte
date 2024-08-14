@@ -7,8 +7,8 @@
 </script>
 
 {#if uniqueId !== '' && commentAndHint !== ''}
-  <Tooltip type="auto" triggeredBy={`#${uniqueId}`} class="">
-    <div class="whitespace-normal min-w-[150px] max-w-[200px]">
+  <Tooltip type="auto" triggeredBy={`#${uniqueId}`}>
+    <div class="whitespace-normal break-words min-w-[150px] max-w-[200px]">
       {commentAndHint}
     </div>
   </Tooltip>
