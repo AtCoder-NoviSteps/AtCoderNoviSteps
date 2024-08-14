@@ -47,7 +47,10 @@ export type WorkBookType = WorkBookTypeOrigin;
 export type WorkBookTaskBase = {
   taskId: string;
   priority: number;
+  comment: string;
 };
+
+export type WorkBookTasksBase = WorkBookTaskBase[];
 
 export interface WorkBookTask extends WorkBookTaskBase {
   workBookId: number;

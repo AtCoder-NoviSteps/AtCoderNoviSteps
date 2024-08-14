@@ -177,6 +177,7 @@ OTHERS OTHERS
     Int workBookId 
     String taskId 
     Int priority 
+    String comment 
     DateTime createdAt 
     DateTime updatedAt 
     }
