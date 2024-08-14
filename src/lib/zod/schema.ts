@@ -25,6 +25,10 @@ const workBookTaskSchema = z.object({
   workBookId: z.number().nonnegative().optional(),
   taskId: z.string(),
   priority: z.number().positive(),
+  comment: z
+    .string()
+    .min(0, { message: '' })
+    .max(50, { message: '50文字になるまで削除してください' }), // FIXME: 上限は暫定値。
 });
 
 export const workBookSchema = z.object({

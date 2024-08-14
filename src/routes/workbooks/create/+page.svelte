@@ -4,7 +4,7 @@
 
   import {
     WorkBookType,
-    type WorkBookTaskBase,
+    type WorkBookTasksBase,
     type WorkBookTaskCreate,
   } from '$lib/types/workbook';
   import type { Tasks } from '$lib/types/task';
@@ -24,7 +24,7 @@
   // https://superforms.rocks/concepts/nested-data
   const initialData = {
     ...data.form,
-    workBookTasks: [] as WorkBookTaskBase[],
+    workBookTasks: [] as WorkBookTasksBase,
   };
   const { form, message, errors, enhance } = superForm(initialData, {
     dataType: 'json',

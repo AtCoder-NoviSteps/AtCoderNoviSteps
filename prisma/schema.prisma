@@ -193,6 +193,7 @@ model WorkBookTask {
   workBookId Int
   taskId     String
   priority   Int // 1以上。1に近いほど優先度が高い
+  comment    String   @default("") // 問題を解く上での注意点・ヒントなどを記載
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
 

@@ -33,7 +33,7 @@ export async function load({ locals }) {
   );
 
   try {
-    // 問題集を構成する問題のグレードの上下限を取得するために使用
+    // 問題集を構成する問題のグレードの最頻値を取得するために使用
     const tasksByTaskId = await taskCrud.getTasksByTaskId();
     // ユーザの回答状況を表示するために使用
     const taskResultsByTaskId = await taskResultsCrud.getTaskResultsOnlyResultExists(

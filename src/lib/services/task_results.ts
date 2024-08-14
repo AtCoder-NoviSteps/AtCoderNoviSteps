@@ -3,7 +3,7 @@ import { getTasks, getTask } from '$lib/services/tasks';
 import * as answer_crud from './answers';
 import type { TaskResult, TaskResults, Tasks } from '$lib/types/task';
 import type { Task } from '$lib/types/task';
-import type { WorkBookTaskBase } from '$lib/types/workbook';
+import type { WorkBookTaskBase, WorkBookTasksBase } from '$lib/types/workbook';
 import { NOT_FOUND } from '$lib/constants/http-response-status-codes';
 import { default as db } from '$lib/server/database';
 import { getSubmissionStatusMapWithId, getSubmissionStatusMapWithName } from './submission_status';
@@ -88,7 +88,7 @@ export async function getTaskResultsOnlyResultExists(
 // Note: 個別の問題集を参照するときのみ使用する。
 // Why : 未回答の問題も含めて取得するため、データ総量を抑えるためにも問題集の一覧（ユーザの回答を含む）を参照するときは上記のメソッドを使用する。
 export async function getTaskResultsByTaskId(
-  workBookTasks: WorkBookTaskBase[],
+  workBookTasks: WorkBookTasksBase,
   userId: string,
 ): Promise<Map<string, TaskResult>> {
   const taskResultsWithTaskId = workBookTasks.map((workBookTask: WorkBookTaskBase) =>
