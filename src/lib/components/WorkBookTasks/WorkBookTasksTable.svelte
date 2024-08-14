@@ -9,7 +9,6 @@
     TableHeadCell,
   } from 'flowbite-svelte';
 
-  import MessageHelperWrapper from '../MessageHelperWrapper.svelte';
   import ExternalLinkWrapper from '$lib/components/ExternalLinkWrapper.svelte';
   import { getContestNameLabel } from '$lib/utils/contest';
   import { taskUrl } from '$lib/utils/task';
@@ -17,15 +16,25 @@
 
   export let workBookTasks = [] as WorkBookTaskBase[];
   export let workBookTasksForTable = [] as WorkBookTaskCreate[] | WorkBookTaskEdit[];
-  // TODO: errorからcommentに関する部分だけを取り出せるようにする。
-  export let errors: string[] = [];
 
+  // HACK: $errorsからcommentに関する内容が安定的に取り出せない。
+  //       (Zodのスキーマで入れ子になっている場合に、子要素のエラーの取り出し方が調べても分からないため)
+  //
+  // 1. コメントに関するものは問題のインデックス?であるのに対して、なぜか問題数に関するものは_errorsとなっている。
+  // 2. 存在するインデックスを参照しても、なぜかundefineになっている場合がある。
   function updateComment(index: number, event: Event) {
-    if (event.target instanceof HTMLElement) {
-      const newComment = event.target.innerText;
+    const target = event.target as HTMLElement;
 
-      workBookTasks[index].comment = newComment;
-      workBookTasksForTable[index].comment = newComment;
+    if (target && target instanceof HTMLElement) {
+      const newComment = target.innerText as string;
+
+      // HACK: 代替手段として、50文字以下の場合のみ更新
+      if (newComment.length <= 50) {
+        workBookTasks[index].comment = newComment;
+        workBookTasksForTable[index].comment = newComment;
+      } else {
+        target.innerText = workBookTasks[index].comment;
+      }
     }
   }
 
@@ -41,8 +50,6 @@
   <Label class="space-y-2">
     <span>問題一覧</span>
   </Label>
-
-  <MessageHelperWrapper message={errors} />
 
   <Table shadow class="text-md">
     <TableHead class="text-sm bg-gray-100">
