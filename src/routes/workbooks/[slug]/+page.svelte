@@ -8,6 +8,7 @@
     TableBody,
     TableBodyCell,
     TableBodyRow,
+    Toggle,
   } from 'flowbite-svelte';
 
   import PublicationStatusLabel from '$lib/components/WorkBooks/PublicationStatusLabel.svelte';
@@ -17,9 +18,13 @@
   import SubmissionStatusImage from '$lib/components/SubmissionStatus/SubmissionStatusImage.svelte';
   import GradeLabel from '$lib/components/GradeLabel.svelte';
   import ExternalLinkWrapper from '$lib/components/ExternalLinkWrapper.svelte';
+  import CommentAndHint from '$lib/components/WorkBook/CommentAndHint.svelte';
+
   import { getBackgroundColorFrom } from '$lib/services/submission_status';
+
   import { taskUrl } from '$lib/utils/task';
   import { getContestNameLabel } from '$lib/utils/contest';
+
   import type { WorkBookTaskBase } from '$lib/types/workbook';
   import type { TaskResult, TaskGrade } from '$lib/types/task';
 
@@ -53,6 +58,12 @@
     return getTaskResult(taskId)?.title as string;
   };
 
+  const getUniqueIdUsing = (taskId: string): string => {
+    return getContestIdFrom(taskId) + '-' + taskId;
+  };
+
+  let isShowComment = false;
+
   let updatingModal: UpdatingModal;
 
   // HACK: clickを1回実行するとactionsが2回実行されてしまう。原因と修正方法が分かっていない。
@@ -69,6 +80,7 @@
   }
 </script>
 
+<!-- TODO: コンポーネントが肥大化しつつあるので分割 -->
 <div class="container mx-auto w-5/6 space-y-4">
   <div class="flex items-center space-x-1 sm:space-x-3">
     {#if !workBook.isPublished}
@@ -116,6 +128,12 @@
     </div>
   {/if}
 
+  <div class="flex flex-col md:flex-row items-start md:items-center justify-end">
+    <div class="mt-2 mb-4 md:mt-0">
+      <Toggle bind:checked={isShowComment}>コメント欄を表示</Toggle>
+    </div>
+  </div>
+
   <!-- 問題一覧 -->
   {#if workBookTasks.length}
     <div class="overflow-auto rounded-md border">
@@ -124,14 +142,18 @@
           <TableHeadCell class="min-w-[96px] max-w-[120px]">回答</TableHeadCell>
           <TableHeadCell class="text-center px-0">グレード</TableHeadCell>
           <TableHeadCell class="min-w-[240px] max-w-2/3 truncate">問題名</TableHeadCell>
+          {#if isShowComment}
+            <TableHeadCell class="text-center px-0">コメント</TableHeadCell>
+          {/if}
           <TableHeadCell class="min-w-[120px] max-w-[150px] truncate">出典</TableHeadCell>
         </TableHead>
         <TableBody tableBodyClass="divide-y">
           {#each workBookTasks as workBookTask}
             <TableBodyRow
-              key={getContestIdFrom(workBookTask.taskId) + '-' + workBookTask.taskId}
+              key={getUniqueIdUsing(workBookTask.taskId)}
               class={getBackgroundColorFrom(getTaskResult(workBookTask.taskId).status_name)}
             >
+              <!-- 回答状況の更新 -->
               <TableBodyCell
                 class="justify-center w-20 px-0.5 sm:px-3"
                 on:click={() => handleClick(workBookTask.taskId)}
@@ -143,11 +165,15 @@
                   />
                 </div>
               </TableBodyCell>
+
+              <!-- 問題のグレード -->
               <TableBodyCell class="justify-center w-14 px-0">
                 <div class="flex items-center justify-center min-w-[54px] max-w-[54px]">
                   <GradeLabel taskGrade={getTaskGrade(workBookTask.taskId)} />
                 </div>
               </TableBodyCell>
+
+              <!-- 問題のリンク -->
               <TableBodyCell>
                 <div class="xs:text-lg truncate">
                   <ExternalLinkWrapper
@@ -156,6 +182,20 @@
                   />
                 </div>
               </TableBodyCell>
+
+              <!-- コメント・ヒント -->
+              {#if isShowComment}
+                <TableBodyCell class="justify-center w-14 px-0">
+                  <div class="flex items-center justify-center min-w-[54px] max-w-[54px]">
+                    <CommentAndHint
+                      uniqueId={getUniqueIdUsing(workBookTask.taskId)}
+                      commentAndHint={workBookTask.comment}
+                    />
+                  </div>
+                </TableBodyCell>
+              {/if}
+
+              <!-- 出典 -->
               <TableBodyCell>
                 <div class="xs:text-lg text-gray-700 dark:text-gray-300 truncate">
                   {getContestNameFrom(workBookTask.taskId)}
