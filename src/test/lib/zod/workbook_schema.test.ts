@@ -74,6 +74,98 @@ describe('workbook schema', () => {
       validateWorkBookSchema(workBookSchema, workbook);
     });
 
+    test('when a title is given 200 characters', () => {
+      const workbook: WorkBook = {
+        authorId: '3',
+        title: 'a'.repeat(200),
+        description: '',
+        editorialUrl: '',
+        isPublished: true,
+        isOfficial: false,
+        isReplenished: false,
+        workBookType: WorkBookType.CREATED_BY_USER,
+        workBookTasks: [
+          {
+            workBookId: 1,
+            taskId: 'abc322_d',
+            priority: 1,
+            comment: '',
+          },
+        ],
+      };
+      validateWorkBookSchema(workBookSchema, workbook);
+    });
+
+    test('when a description is given 300 characters', () => {
+      const workbook: WorkBook = {
+        authorId: '3',
+        title: '実装力を鍛える問題集',
+        description: 'a'.repeat(300),
+        editorialUrl: '',
+        isPublished: true,
+        isOfficial: false,
+        isReplenished: false,
+        workBookType: WorkBookType.CREATED_BY_USER,
+        workBookTasks: [
+          {
+            workBookId: 1,
+            taskId: 'abc322_d',
+            priority: 1,
+            comment: '',
+          },
+        ],
+      };
+      validateWorkBookSchema(workBookSchema, workbook);
+    });
+
+    test('when an editorial url is given 300 characters', () => {
+      const workbook: WorkBook = {
+        authorId: '3',
+        title: '実装力を鍛える問題集',
+        description: '',
+        editorialUrl: 'https://atcoder.jp/' + 'a'.repeat(300 - 'https://atcoder.jp/'.length),
+        isPublished: true,
+        isOfficial: false,
+        isReplenished: false,
+        workBookType: WorkBookType.CREATED_BY_USER,
+        workBookTasks: [
+          {
+            workBookId: 1,
+            taskId: 'abc322_d',
+            priority: 1,
+            comment: '',
+          },
+        ],
+      };
+      validateWorkBookSchema(workBookSchema, workbook);
+    });
+
+    test('when workbook tasks are given 200 tasks', () => {
+      const workBookTasks = [];
+
+      for (let index = 1; index <= 200; index++) {
+        workBookTasks.push({
+          workBookId: index,
+          taskId: generateRandomTaskId(),
+          priority: index,
+          comment: '',
+        });
+      }
+
+      const workbook: WorkBook = {
+        authorId: '3',
+        title: '実装力を鍛える問題集',
+        description: '',
+        editorialUrl: '',
+        isPublished: false,
+        isOfficial: false,
+        isReplenished: false,
+        workBookType: WorkBookType.CREATED_BY_USER,
+        workBookTasks: workBookTasks,
+      };
+      validateWorkBookSchema(workBookSchema, workbook);
+    });
+
     test('when a curriculum is given by admin', () => {
       const workbook: WorkBook = {
         authorId: '1',
@@ -301,7 +393,7 @@ describe('workbook schema', () => {
       validateWorkBookSchema(workBookSchema, workbook);
     });
 
-    test('when a editorial url is given more than 300 characters', () => {
+    test('when an editorial url is given more than 300 characters', () => {
       const workbook: WorkBook = {
         authorId: '3',
         title: '実装力を鍛える問題集',
@@ -382,6 +474,72 @@ describe('workbook schema', () => {
         isReplenished: false,
         workBookType: WorkBookType.CREATED_BY_USER,
         workBookTasks: workBookTasks,
+      };
+      validateWorkBookSchema(workBookSchema, workbook);
+    });
+
+    test('when a negative value is given as the workbook id', () => {
+      const workbook: WorkBook = {
+        authorId: '3',
+        title: '実装力を鍛える問題集',
+        description: '',
+        editorialUrl: '',
+        isPublished: false,
+        isOfficial: false,
+        isReplenished: false,
+        workBookType: WorkBookType.CREATED_BY_USER,
+        workBookTasks: [
+          {
+            workBookId: -1,
+            taskId: 'abc322_d',
+            priority: 1,
+            comment: '',
+          },
+        ],
+      };
+      validateWorkBookSchema(workBookSchema, workbook);
+    });
+
+    test('when a negative value is given as the priority', () => {
+      const workbook: WorkBook = {
+        authorId: '3',
+        title: '実装力を鍛える問題集',
+        description: '',
+        editorialUrl: '',
+        isPublished: false,
+        isOfficial: false,
+        isReplenished: false,
+        workBookType: WorkBookType.CREATED_BY_USER,
+        workBookTasks: [
+          {
+            workBookId: 1,
+            taskId: 'abc322_d',
+            priority: -1,
+            comment: '',
+          },
+        ],
+      };
+      validateWorkBookSchema(workBookSchema, workbook);
+    });
+
+    test('when zero is given as the priority', () => {
+      const workbook: WorkBook = {
+        authorId: '3',
+        title: '実装力を鍛える問題集',
+        description: '',
+        editorialUrl: '',
+        isPublished: false,
+        isOfficial: false,
+        isReplenished: false,
+        workBookType: WorkBookType.CREATED_BY_USER,
+        workBookTasks: [
+          {
+            workBookId: 1,
+            taskId: 'abc322_d',
+            priority: 0,
+            comment: '',
+          },
+        ],
       };
       validateWorkBookSchema(workBookSchema, workbook);
     });
@@ -481,16 +639,16 @@ describe('workbook schema', () => {
 
       expect(result.success).toBeFalsy();
     }
-
-    // abcXXX_Y
-    function generateRandomTaskId(): string {
-      // Note: A random 3-digit number, prefixed with 0 if it is less than or equal to 2 digits.
-      const randomNumber = String(Math.floor(Math.random() * 500)).padStart(3, '0');
-
-      const letters = 'abcdefg';
-      const randomIndex = Math.floor(Math.random() * letters.length);
-
-      return 'abc' + randomNumber + '_' + letters[randomIndex];
-    }
   });
+
+  // abcXXX_Y
+  function generateRandomTaskId(): string {
+    // Note: A random 3-digit number, prefixed with 0 if it is less than or equal to 2 digits.
+    const randomNumber = String(Math.floor(Math.random() * 500)).padStart(3, '0');
+
+    const letters = 'abcdefg';
+    const randomIndex = Math.floor(Math.random() * letters.length);
+
+    return 'abc' + randomNumber + '_' + letters[randomIndex];
+  }
 });
