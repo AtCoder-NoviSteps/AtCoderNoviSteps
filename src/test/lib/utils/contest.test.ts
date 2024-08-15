@@ -1,6 +1,11 @@
 import { expect, test } from 'vitest';
 
-import { classifyContest, getContestPriority, contestTypePriorities } from '$lib/utils/contest';
+import {
+  classifyContest,
+  getContestPriority,
+  contestTypePriorities,
+  getContestUrl,
+} from '$lib/utils/contest';
 import { ContestType } from '$lib/types/contest';
 
 type TestCaseForContestType = {
@@ -224,5 +229,14 @@ describe('Contest', () => {
     ) {
       test.each(testCases)(`${testName}(contestId: $contestId)`, testFunction);
     }
+  });
+
+  describe('get contest url', () => {
+    test('when contest_id is ABC365', () => {
+      const contestId = 'abc365';
+      const expected = 'https://atcoder.jp/contests/abc365';
+
+      expect(getContestUrl(contestId)).toEqual(expected);
+    });
   });
 });
