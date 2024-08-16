@@ -15,6 +15,7 @@
   import ThermometerProgressBar from '$lib/components/ThermometerProgressBar.svelte';
   import UpdatingModal from '$lib/components/SubmissionStatus/UpdatingModal.svelte';
   import SubmissionStatusImage from '$lib/components/SubmissionStatus/SubmissionStatusImage.svelte';
+  import ExternalLinkWrapper from '$lib/components/ExternalLinkWrapper.svelte';
   import AcceptedCounter from '$lib/components/SubmissionStatus/AcceptedCounter.svelte';
   import { getBackgroundColorFrom } from '$lib/services/submission_status';
   import { getContestNameLabel } from '$lib/utils/contest';
@@ -58,9 +59,9 @@
           <TableHeadCell class="min-w-[240px] max-w-2/3 text-left pl-0 sm:pl-6 truncate">
             問題名
           </TableHeadCell>
-          <TableHeadCell class="min-w-[120px] max-w-[150px] text-left pl-0 truncate"
-            >出典</TableHeadCell
-          >
+          <TableHeadCell class="min-w-[120px] max-w-[150px] text-left pl-0 truncate">
+            出典
+          </TableHeadCell>
           <TableHeadCell class="min-w-[24px] text-center">
             <span class="sr-only">編集</span>
           </TableHeadCell>
@@ -80,14 +81,10 @@
                 </div>
               </TableBodyCell>
               <TableBodyCell class="pl-0 sm:pl-6 w-2/3">
-                <a
-                  href={taskUrl(taskResult.contest_id, taskResult.task_id)}
-                  target="_blank"
-                  rel="noreferrer"
-                  class="font-medium xs:text-lg text-primary-600 hover:underline dark:text-primary-500"
-                >
-                  {taskResult.title}
-                </a>
+                <ExternalLinkWrapper
+                  url={taskUrl(taskResult.contest_id, taskResult.task_id)}
+                  description={taskResult.title}
+                />
               </TableBodyCell>
               <TableBodyCell class="pl-0 xs:text-lg text-gray-700 dark:text-gray-300">
                 {getContestNameLabel(taskResult.contest_id)}

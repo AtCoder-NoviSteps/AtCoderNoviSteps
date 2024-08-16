@@ -5,7 +5,7 @@
 
 <a
   href={url}
-  class="font-medium text-primary-600 hover:underline dark:text-primary-500"
+  class="font-medium xs:text-lg text-primary-600 hover:underline dark:text-gray-300"
   target="_blank"
   rel="noreferrer"
 >
