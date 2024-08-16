@@ -20,9 +20,9 @@
 <Img src={imagePath} alt={imageAlt} class="h-8 w-8" />
 {#if isLoggedIn}
   <div class="flex flex-col items-center ml-2 md:ml-4 text-xs">
-    <div class="mb-1">
+    <div class="mb-1 dark:text-gray-300">
       {'更新'}
     </div>
-    <ChevronDownOutline class="w-3 h-3 text-primary-600 dark:text-white inline" />
+    <ChevronDownOutline class="w-3 h-3 text-primary-600 dark:text-gray-300 inline" />
   </div>
 {/if}

@@ -179,6 +179,8 @@
                   <ExternalLinkWrapper
                     url={taskUrl(getContestIdFrom(workBookTask.taskId), workBookTask.taskId)}
                     description={getTaskName(workBookTask.taskId)}
+                    textSize="xs:text-lg"
+                    textColorInDarkMode="dark:text-gray-300"
                   />
                 </div>
               </TableBodyCell>
