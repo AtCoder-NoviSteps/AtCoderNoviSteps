@@ -1,8 +1,7 @@
 <script lang="ts">
-  //Taskを修正するためのフォームを用意する
-  // task_id、contest_idを変えることは多分ない
-  // 主に、gradeと、tasktagsを変えることになると思う
   import {
+    Breadcrumb,
+    BreadcrumbItem,
     Table,
     TableBody,
     TableBodyCell,
@@ -23,34 +22,32 @@
   });
 </script>
 
-<a href="/tasks" class="dark:text-gray-300"> タスク一覧へもどる（パンくずリストにしたい） </a>
-<br />
+<form method="POST" action="/tasks?/update" class="space-y-4">
+  <Breadcrumb aria-label="">
+    <BreadcrumbItem href="/tasks" home>問題一覧</BreadcrumbItem>
+    <BreadcrumbItem>
+      <div class="min-w-[96px] max-w-[120px] sm:max-w-[300px] truncate">{task.title}</div>
+    </BreadcrumbItem>
+  </Breadcrumb>
 
-<div class="dark:text-gray-300">Edit Task</div>
-
-<form method="POST" action="/tasks?/update">
+  <!-- task_id、contest_idを変える可能性は低い -->
+  <!-- 主に、gradeと、tasktagsを変えることになると思う -->
   <Table shadow hoverable={true} class="text-md">
     <TableBody tableBodyClass="divide-y">
       <TableBodyRow>
-        <TableBodyCell>taskId</TableBodyCell>
-        <TableBodyCell>
-          {task.task_id}
-        </TableBodyCell>
-      </TableBodyRow>
-      <TableBodyRow>
-        <TableBodyCell>taskTitle</TableBodyCell>
+        <TableBodyCell>タイトル</TableBodyCell>
         <TableBodyCell>
           {task.title}
         </TableBodyCell>
       </TableBodyRow>
       <TableBodyRow>
-        <TableBodyCell>contestId</TableBodyCell>
+        <TableBodyCell>出典</TableBodyCell>
         <TableBodyCell>
           {task.contest_id}
         </TableBodyCell>
       </TableBodyRow>
       <TableBodyRow>
-        <TableBodyCell>grade</TableBodyCell>
+        <TableBodyCell>グレード</TableBodyCell>
         <TableBodyCell>
           <Label>
             <Select name="task_grade" class="mt-2" items={grades} bind:value={task.grade} />
@@ -59,8 +56,12 @@
       </TableBodyRow>
     </TableBody>
   </Table>
-  <Button type="submit">Update</Button>
+
+  <div class="flex justify-center">
+    <Button type="submit" class="w-full sm:w-5/6 m-4">更新</Button>
+  </div>
+
   <input type="hidden" name="task_id" value={task.task_id} />
 </form>
 
-<div class="dark:text-gray-300">以下に、タグ（taskTag）を追加/編集するUIを作る予定</div>
+<div class="dark:text-gray-300">TODO: 以下に、タグ（taskTag）を追加/編集するUIを作る予定</div>
