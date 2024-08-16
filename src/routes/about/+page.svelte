@@ -29,7 +29,7 @@
   ];
 </script>
 
-<div class="container mx-auto w-2/3">
+<div class="container mx-auto w-5/6 lg:w-2/3">
   <HeadingOne title="サービスの説明" />
 
   <div class="mt-5 mb-5">
