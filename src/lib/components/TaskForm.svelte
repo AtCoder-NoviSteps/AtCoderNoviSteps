@@ -24,7 +24,7 @@
 
 <form method="POST" action="/tasks?/update" class="space-y-4">
   <Breadcrumb aria-label="">
-    <BreadcrumbItem href="/tasks" home>問題一覧</BreadcrumbItem>
+    <BreadcrumbItem href="/problems" home>問題一覧</BreadcrumbItem>
     <BreadcrumbItem>
       <div class="min-w-[96px] max-w-[120px] sm:max-w-[300px] truncate">{task.title}</div>
     </BreadcrumbItem>
