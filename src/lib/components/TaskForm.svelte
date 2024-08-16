@@ -13,12 +13,13 @@
   } from 'flowbite-svelte';
 
   import { taskGradeValues, type Task } from '$lib/types/task';
+  import { getTaskGradeLabel } from '$lib/utils/task';
+
   export let task: Task;
   //export const isAdmin: boolean; // Admin権限がある場合は、編集リンクを表示する
 
-  //TODO
   let grades = taskGradeValues.map((taskGradeValue) => {
-    return { value: taskGradeValue, name: taskGradeValue };
+    return { value: taskGradeValue, name: getTaskGradeLabel(taskGradeValue) };
   });
 </script>
 
@@ -52,7 +53,6 @@
         <TableBodyCell>grade</TableBodyCell>
         <TableBodyCell>
           <Label>
-            Grade
             <Select name="task_grade" class="mt-2" items={grades} bind:value={task.grade} />
           </Label>
         </TableBodyCell>
