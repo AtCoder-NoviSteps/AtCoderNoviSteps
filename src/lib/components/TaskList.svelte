@@ -84,6 +84,8 @@
                 <ExternalLinkWrapper
                   url={taskUrl(taskResult.contest_id, taskResult.task_id)}
                   description={taskResult.title}
+                  textSize="xs:text-lg"
+                  textColorInDarkMode="dark:text-gray-300"
                 />
               </TableBodyCell>
               <TableBodyCell class="pl-0 xs:text-lg text-gray-700 dark:text-gray-300">
