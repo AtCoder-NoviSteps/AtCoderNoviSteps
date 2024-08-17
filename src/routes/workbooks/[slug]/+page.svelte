@@ -108,7 +108,9 @@
       {#if workBook.description !== ''}
         <div>
           <div class="text-2xl font-bold dark:text-white">概要</div>
-          <div class="min-w-[240px] max-w-[1440px] truncate dark:text-gray-300">
+          <div
+            class="min-w-[240px] max-w-[1440px] break-words whitespace-normal dark:text-gray-300"
+          >
             {workBook.description}
           </div>
         </div>
