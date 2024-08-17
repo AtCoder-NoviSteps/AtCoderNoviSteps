@@ -8,7 +8,6 @@
     TableBody,
     TableBodyCell,
     TableBodyRow,
-    Toggle,
   } from 'flowbite-svelte';
 
   import PublicationStatusLabel from '$lib/components/WorkBooks/PublicationStatusLabel.svelte';
@@ -61,8 +60,6 @@
   const getUniqueIdUsing = (taskId: string): string => {
     return getContestIdFrom(taskId) + '-' + taskId;
   };
-
-  let isShowComment = false;
 
   let updatingModal: UpdatingModal;
 
@@ -128,12 +125,6 @@
     </div>
   {/if}
 
-  <div class="flex flex-col md:flex-row items-start md:items-center justify-end">
-    <div class="mt-2 mb-4 md:mt-0">
-      <Toggle bind:checked={isShowComment}>コメント欄を表示</Toggle>
-    </div>
-  </div>
-
   <!-- 問題一覧 -->
   {#if workBookTasks.length}
     <div class="overflow-auto rounded-md border">
@@ -142,9 +133,7 @@
           <TableHeadCell class="min-w-[96px] max-w-[120px]">回答</TableHeadCell>
           <TableHeadCell class="text-center px-0">グレード</TableHeadCell>
           <TableHeadCell class="min-w-[240px] max-w-2/3 truncate">問題名</TableHeadCell>
-          {#if isShowComment}
-            <TableHeadCell class="text-center px-0">コメント</TableHeadCell>
-          {/if}
+          <TableHeadCell class="text-center px-0">コメント</TableHeadCell>
           <TableHeadCell class="min-w-[120px] max-w-[150px] truncate">出典</TableHeadCell>
         </TableHead>
         <TableBody tableBodyClass="divide-y">
@@ -185,17 +174,15 @@
                 </div>
               </TableBodyCell>
 
-              <!-- コメント・ヒント -->
-              {#if isShowComment}
-                <TableBodyCell class="justify-center w-14 px-0">
-                  <div class="flex items-center justify-center min-w-[54px] max-w-[54px]">
-                    <CommentAndHint
-                      uniqueId={getUniqueIdUsing(workBookTask.taskId)}
-                      commentAndHint={workBookTask.comment}
-                    />
-                  </div>
-                </TableBodyCell>
-              {/if}
+              <!-- 一言（コメント・ヒント） -->
+              <TableBodyCell class="justify-center w-14 px-0">
+                <div class="flex items-center justify-center min-w-[54px] max-w-[54px]">
+                  <CommentAndHint
+                    uniqueId={getUniqueIdUsing(workBookTask.taskId)}
+                    commentAndHint={workBookTask.comment}
+                  />
+                </div>
+              </TableBodyCell>
 
               <!-- 出典 -->
               <TableBodyCell>
