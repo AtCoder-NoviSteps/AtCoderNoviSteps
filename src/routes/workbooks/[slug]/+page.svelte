@@ -116,7 +116,7 @@
 
       {#if workBook.editorialUrl !== ''}
         <div>
-          <div class="text-2xl font-bold dark:text-white">トピックの解説</div>
+          <div class="text-2xl font-bold dark:text-white">本問題集のトピックの解説</div>
           <div class="min-w-[240px] max-w-[1440px] truncate dark:text-white">
             <ExternalLinkWrapper url={workBook.editorialUrl} description="外部リンク" />
           </div>
