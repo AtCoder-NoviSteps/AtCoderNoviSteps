@@ -9,7 +9,11 @@ export async function getWorkBooks(): Promise<WorkBooks> {
       id: 'asc',
     },
     include: {
-      workBookTasks: true,
+      workBookTasks: {
+        orderBy: {
+          priority: 'asc',
+        },
+      },
     },
   });
 
@@ -58,7 +62,7 @@ export async function createWorkBook(workBook: WorkBook): Promise<void> {
     },
   });
 
-  console.log(newWorkBook);
+  console.log(`Created workbook with title: ${newWorkBook.title}`);
 }
 
 async function isExistingWorkBook(workBookId: number): Promise<boolean> {
@@ -99,7 +103,10 @@ export async function updateWorkBook(workBookId: number, workBook: WorkBook): Pr
 
     console.log(await getWorkBook(workBookId));
   } catch (error) {
-    console.error(`Failed to update WorkBook with id ${workBookId}:`, error);
+    console.error(
+      `Failed to update WorkBook with id ${workBookId} and title ${workBook.title}:`,
+      error,
+    );
     throw error;
   }
 }
