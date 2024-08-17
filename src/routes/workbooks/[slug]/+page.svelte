@@ -104,10 +104,10 @@
   </Breadcrumb>
 
   {#if workBook.description !== '' || workBook.editorialUrl !== ''}
-    <div class="pt-3 pb-6 space-y-4">
+    <div class="pt-3 pb-6 space-y-8">
       {#if workBook.description !== ''}
         <div>
-          <div class="text-2xl font-bold dark:text-white">概要</div>
+          <div class="text-2xl font-bold dark:text-white mb-2">概要</div>
           <div
             class="min-w-[240px] max-w-[1440px] break-words whitespace-normal dark:text-gray-300"
           >
@@ -118,7 +118,7 @@
 
       {#if workBook.editorialUrl !== ''}
         <div>
-          <div class="text-2xl font-bold dark:text-white">本問題集のトピックの解説</div>
+          <div class="text-2xl font-bold dark:text-white mb-2">本問題集のトピックの解説</div>
           <div class="min-w-[240px] max-w-[1440px] truncate dark:text-white">
             <ExternalLinkWrapper url={workBook.editorialUrl} description="外部リンク" />
           </div>
