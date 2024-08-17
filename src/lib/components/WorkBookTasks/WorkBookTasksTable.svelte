@@ -20,7 +20,7 @@
   // HACK: $errorsからcommentに関する内容が安定的に取り出せない。
   //       (Zodのスキーマで入れ子になっている場合に、子要素のエラーの取り出し方が調べても分からないため)
   //
-  // 1. コメントに関するものは問題のインデックス?であるのに対して、なぜか問題数に関するものは_errorsとなっている。
+  // 1. 一言（コメント）に関するものは問題のインデックス?であるのに対して、なぜか問題数に関するものは_errorsとなっている。
   // 2. 存在するインデックスを参照しても、なぜかundefineになっている場合がある。
   function updateComment(index: number, event: Event) {
     const target = event.target as HTMLElement;
@@ -54,10 +54,10 @@
   <Table shadow class="text-md">
     <TableHead class="text-sm bg-gray-100">
       <TableHeadCell class="min-w-[240px] truncate">問題名</TableHeadCell>
-      <TableHeadCell class="min-w-[120px] max-w-[150px] px-0 truncate">
-        コメント（50文字以下）
-      </TableHeadCell>
       <TableHeadCell class="min-w-[120px] max-w-[150px] truncate">出典</TableHeadCell>
+      <TableHeadCell class="min-w-[120px] max-w-[150px] px-0 truncate">
+        一言（50文字以下）
+      </TableHeadCell>
       <TableHeadCell class="min-w-[24px] px-0 text-center">
         <span class="sr-only">編集</span>
       </TableHeadCell>
@@ -76,7 +76,12 @@
             />
           </TableBodyCell>
 
-          <!-- コメント・ヒント -->
+          <!-- 出典 -->
+          <TableBodyCell class="xs:text-lg text-gray-700 dark:text-gray-300 truncate">
+            {getContestNameLabel(task.contestId)}
+          </TableBodyCell>
+
+          <!-- 一言（コメント・ヒント） -->
           <!-- Note: <TableBodyCell>コンポーネントだとon:inputが動作しない -->
           <td
             contenteditable={true}
@@ -85,11 +90,6 @@
           >
             {task.comment}
           </td>
-
-          <!-- 出典 -->
-          <TableBodyCell class="xs:text-lg text-gray-700 dark:text-gray-300 truncate">
-            {getContestNameLabel(task.contestId)}
-          </TableBodyCell>
 
           <!-- 削除 -->
           <TableBodyCell class="px-0" on:click={() => removeWorkBookTask(task)}>
