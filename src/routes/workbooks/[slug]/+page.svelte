@@ -8,7 +8,6 @@
     TableBody,
     TableBodyCell,
     TableBodyRow,
-    Toggle,
   } from 'flowbite-svelte';
 
   import PublicationStatusLabel from '$lib/components/WorkBooks/PublicationStatusLabel.svelte';
@@ -61,8 +60,6 @@
   const getUniqueIdUsing = (taskId: string): string => {
     return getContestIdFrom(taskId) + '-' + taskId;
   };
-
-  let isShowComment = false;
 
   let updatingModal: UpdatingModal;
 
@@ -119,7 +116,7 @@
 
       {#if workBook.editorialUrl !== ''}
         <div>
-          <div class="text-2xl font-bold dark:text-white">トピックの解説</div>
+          <div class="text-2xl font-bold dark:text-white">本問題集のトピックの解説</div>
           <div class="min-w-[240px] max-w-[1440px] truncate dark:text-white">
             <ExternalLinkWrapper url={workBook.editorialUrl} description="外部リンク" />
           </div>
@@ -127,12 +124,6 @@
       {/if}
     </div>
   {/if}
-
-  <div class="flex flex-col md:flex-row items-start md:items-center justify-end">
-    <div class="mt-2 mb-4 md:mt-0">
-      <Toggle bind:checked={isShowComment}>コメント欄を表示</Toggle>
-    </div>
-  </div>
 
   <!-- 問題一覧 -->
   {#if workBookTasks.length}
@@ -142,10 +133,8 @@
           <TableHeadCell class="min-w-[96px] max-w-[120px]">回答</TableHeadCell>
           <TableHeadCell class="text-center px-0">グレード</TableHeadCell>
           <TableHeadCell class="min-w-[240px] max-w-2/3 truncate">問題名</TableHeadCell>
-          {#if isShowComment}
-            <TableHeadCell class="text-center px-0">コメント</TableHeadCell>
-          {/if}
           <TableHeadCell class="min-w-[120px] max-w-[150px] truncate">出典</TableHeadCell>
+          <TableHeadCell class="text-center px-0">一言</TableHeadCell>
         </TableHead>
         <TableBody tableBodyClass="divide-y">
           {#each workBookTasks as workBookTask}
@@ -185,22 +174,20 @@
                 </div>
               </TableBodyCell>
 
-              <!-- コメント・ヒント -->
-              {#if isShowComment}
-                <TableBodyCell class="justify-center w-14 px-0">
-                  <div class="flex items-center justify-center min-w-[54px] max-w-[54px]">
-                    <CommentAndHint
-                      uniqueId={getUniqueIdUsing(workBookTask.taskId)}
-                      commentAndHint={workBookTask.comment}
-                    />
-                  </div>
-                </TableBodyCell>
-              {/if}
-
               <!-- 出典 -->
               <TableBodyCell>
                 <div class="xs:text-lg text-gray-700 dark:text-gray-300 truncate">
                   {getContestNameFrom(workBookTask.taskId)}
+                </div>
+              </TableBodyCell>
+
+              <!-- 一言（コメント・ヒント） -->
+              <TableBodyCell class="justify-center w-14 px-0.5 sm:px-3">
+                <div class="flex items-center justify-center min-w-[54px] max-w-[54px]">
+                  <CommentAndHint
+                    uniqueId={getUniqueIdUsing(workBookTask.taskId)}
+                    commentAndHint={workBookTask.comment}
+                  />
                 </div>
               </TableBodyCell>
             </TableBodyRow>
