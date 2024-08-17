@@ -22,7 +22,11 @@ export async function getWorkBook(workBookId: number): Promise<WorkBook | null> 
       id: workBookId,
     },
     include: {
-      workBookTasks: true,
+      workBookTasks: {
+        orderBy: {
+          priority: 'asc',
+        },
+      },
     },
   });
 
