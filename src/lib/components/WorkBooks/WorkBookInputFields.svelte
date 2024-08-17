@@ -81,7 +81,7 @@
 <!-- カリキュラムのトピック解説用のURL -->
 <!-- HACK: 「ユーザ作成」の場合も利用できるようにするかは要検討。 -->
 <InputFieldWrapper
-  labelName="トピックの解説URL（300文字以下）"
+  labelName="本問題集におけるトピックの解説URL（300文字以下）"
   inputFieldName="editorialUrl"
   bind:inputValue={editorialUrl}
   {isEditable}
