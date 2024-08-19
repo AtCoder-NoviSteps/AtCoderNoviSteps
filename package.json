@@ -36,7 +36,7 @@
     "@quramy/prisma-fabbrica": "2.2.1",
     "@sveltejs/adapter-auto": "3.2.4",
     "@sveltejs/adapter-vercel": "5.4.3",
-    "@sveltejs/kit": "2.5.22",
+    "@sveltejs/kit": "2.5.24",
     "@sveltejs/vite-plugin-svelte": "3.1.1",
     "@tailwindcss/forms": "0.5.7",
     "@testing-library/jest-dom": "6.4.8",
