@@ -42,8 +42,8 @@ importers:
         specifier: 2.7.7
         version: 2.7.7
       playwright:
-        specifier: 1.46.0
-        version: 1.46.0
+        specifier: 1.46.1
+        version: 1.46.1
       pnpm:
         specifier: 9.7.1
         version: 9.7.1
