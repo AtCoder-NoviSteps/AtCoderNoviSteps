@@ -70,7 +70,7 @@ const config = {
             default: '#5cb85c',
             hover: '#449d44',
             background: '#c3e6cb',
-            background_dark: '#41c97d',
+            background_dark: '#09c12f',
             with_editorial: {
               default: '#00aeef',
               hover: '#21a0db',

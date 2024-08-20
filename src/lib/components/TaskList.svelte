@@ -96,7 +96,7 @@
                   <div class="flex justify-center items-center px-0">
                     <a
                       href="/tasks/{taskResult.task_id}"
-                      class="font-medium text-primary-600 hover:underline dark:text-primary-500"
+                      class="font-medium text-primary-600 hover:underline dark:text-gray-300"
                     >
                       編集
                     </a>
