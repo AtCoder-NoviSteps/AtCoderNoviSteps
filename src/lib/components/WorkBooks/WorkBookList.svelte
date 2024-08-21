@@ -33,7 +33,7 @@
     }
   }
 
-  // 本編
+  // 手引き
   let mainWorkbooks: WorkbooksList;
 
   $: mainWorkbooks =
@@ -109,7 +109,7 @@
 {#if readableMainWorkbooksCount()}
   <div>
     {#if workbookType === WorkBookType.TEXTBOOK}
-      <div class="text-2xl pb-4 dark:text-white">本編</div>
+      <div class="text-2xl pb-4 dark:text-white">手引き</div>
     {/if}
 
     <WorkBookBaseTable

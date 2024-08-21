@@ -24,7 +24,7 @@
   ];
 
   let isReplenishedOptions = [
-    { value: false, name: '本編' },
+    { value: false, name: '手引き' },
     { value: true, name: '補充' },
   ];
 
@@ -114,8 +114,7 @@
   isEditable={isAdmin && isEditable}
 />
 
-<!-- HACK: 表記については修正の余地がある -->
-<!-- 管理者のみ: 問題集が本編 / 補充か -->
+<!-- 管理者のみ: 問題集が手引き / 補充か -->
 <SelectWrapper
   labelName="問題集の位置付け"
   innerName="isReplenished"
