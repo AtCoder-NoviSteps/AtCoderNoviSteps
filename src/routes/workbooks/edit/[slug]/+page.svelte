@@ -61,7 +61,7 @@
       <Breadcrumb aria-label="">
         <BreadcrumbItem href="/workbooks" home>問題集</BreadcrumbItem>
         <BreadcrumbItem>
-          <div class="min-w-[96px] max-w-[120px] truncate">
+          <div class="min-w-[96px] max-w-[120px] sm:max-w-[300px] lg:max-w-[600px] truncate">
             {workBook.title}
           </div>
         </BreadcrumbItem>
