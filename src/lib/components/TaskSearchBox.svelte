@@ -3,7 +3,14 @@
 <script lang="ts">
   import { Input, Listgroup, ListgroupItem } from 'flowbite-svelte';
 
-  import type { WorkBookTasksBase, WorkBookTasksCreate } from '$lib/types/workbook';
+  import type {
+    WorkBookTaskBase,
+    WorkBookTasksBase,
+    WorkBookTaskCreate,
+    WorkBookTasksCreate,
+    WorkBookTaskEdit,
+    WorkBookTasksEdit,
+  } from '$lib/types/workbook';
   import type { Task, Tasks } from '$lib/types/task';
   import { getContestNameLabel } from '$lib/utils/contest';
   import { taskUrl } from '$lib/utils/task';
@@ -11,7 +18,7 @@
   export let tasks: Tasks = [];
   // HACK: やむなくデータベースへの保存用と問題集作成・編集用で分けている。
   export let workBookTasks: WorkBookTasksBase = [];
-  export let workBookTasksForTable: WorkBookTasksCreate = [];
+  export let workBookTasksForTable: WorkBookTasksCreate | WorkBookTasksEdit = [];
 
   const isMatched = (task: Task, searchWords: string): boolean => {
     if (searchWords === undefined || searchWords.length === 0) {
@@ -38,45 +45,123 @@
   const PENDING = -1;
   let focusingId = PENDING;
 
-  let newWorkBookTaskId = 0;
-
   // Note: 初期値として、便宜的に割り当てている。随時、変更可能。
   const NO_COMMENT = '';
-
-  $: {
-    if (workBookTasks.length === 0) {
-      newWorkBookTaskId = 1;
-    } else {
-      newWorkBookTaskId = Math.max(...workBookTasks.map((task) => task.priority)) + 1;
-    }
-  }
 
   // TODO: utilsとして切り出し、テストを追加
   function addWorkBookTask(
     selectedTask: Task,
     workBookTasks: WorkBookTasksBase,
-    workBookTasksForTable: WorkBookTasksCreate,
+    workBookTasksForTable: WorkBookTasksCreate | WorkBookTasksEdit,
+    selectedIndex: number = 2,
   ) {
+    // TODO: ユーザが追加する位置を指定できるように修正
+    // TODO: 範囲外を指定された場合のエラーハンドリングを追加
+    // 負の値: 先頭に追加
+    // 元の配列よりも大きな値: 末尾に追加
+    // let selectedIndex = 2;
+
+    // データベース用
+    const updatedWorkBookTasks = updateWorkBookTasks(workBookTasks, selectedIndex, selectedTask);
+
+    // アプリの表示用
+    const updatedWorkBookTasksForTable: WorkBookTasksCreate | WorkBookTasksEdit =
+      updateWorkBookTaskForTable(workBookTasksForTable, selectedIndex, selectedTask);
+
+    return { updatedWorkBookTasks, updatedWorkBookTasksForTable };
+  }
+
+  function updateWorkBookTasks(
+    workBookTasks: WorkBookTasksBase,
+    selectedIndex: number,
+    selectedTask: Task,
+  ): WorkBookTasksBase {
+    const newWorkBookTask: WorkBookTaskBase = {
+      taskId: selectedTask.task_id,
+      priority: PENDING, // 1に近いほど優先度が高い
+      comment: NO_COMMENT,
+    };
+    let updatedWorkBookTasks: WorkBookTasksBase = insertWorkBookTask(
+      workBookTasks,
+      selectedIndex,
+      newWorkBookTask,
+    );
+    updatedWorkBookTasks = reCalcTaskPriority(updatedWorkBookTasks);
+
+    return updatedWorkBookTasks;
+  }
+
+  function updateWorkBookTaskForTable(
+    workBookTasksForTable: WorkBookTasksCreate | WorkBookTasksEdit,
+    selectedIndex: number,
+    selectedTask: Task,
+  ): WorkBookTasksCreate | WorkBookTasksEdit {
+    const newWorkBookTaskForTable: WorkBookTaskCreate | WorkBookTaskEdit = {
+      contestId: getContestNameLabel(selectedTask.contest_id),
+      taskId: selectedTask.task_id,
+      title: selectedTask.title,
+      priority: PENDING,
+      comment: NO_COMMENT,
+    };
+    // HACK: オーバーロードを定義しているにもかかわらず戻り値の型がWorkBookTasksBaseになってしまうため、やむを得ずキャスト
+    let updatedWorkBookTasksForTable: WorkBookTasksCreate | WorkBookTasksEdit = insertWorkBookTask(
+      workBookTasksForTable,
+      selectedIndex,
+      newWorkBookTaskForTable,
+    ) as WorkBookTasksCreate | WorkBookTasksEdit;
+    updatedWorkBookTasksForTable = reCalcTaskPriority(updatedWorkBookTasksForTable) as
+      | WorkBookTasksCreate
+      | WorkBookTasksEdit;
+
+    return updatedWorkBookTasksForTable;
+  }
+
+  $: console.log('workBookTasks: ', workBookTasks);
+  $: console.log('workBookTasksForTable: ', workBookTasksForTable);
+
+  // 関数のオーバーロードを定義
+  function insertWorkBookTask(
+    workBookTasks: WorkBookTasksBase,
+    selectedIndex: number,
+    newWorkBookTask: WorkBookTaskBase,
+  ): WorkBookTasksBase;
+  function insertWorkBookTask(
+    workBookTasks: WorkBookTasksCreate,
+    selectedIndex: number,
+    newWorkBookTask: WorkBookTaskCreate,
+  ): WorkBookTasksCreate;
+  function insertWorkBookTask(
+    workBookTasks: WorkBookTasksEdit,
+    selectedIndex: number,
+    newWorkBookTask: WorkBookTaskEdit,
+  ): WorkBookTasksEdit;
+  function insertWorkBookTask(
+    workBookTasks: WorkBookTasksBase | WorkBookTasksCreate | WorkBookTasksEdit,
+    selectedIndex: number,
+    newWorkBookTask: WorkBookTaskBase | WorkBookTaskCreate | WorkBookTaskEdit,
+  ): WorkBookTasksBase | WorkBookTasksCreate | WorkBookTasksEdit {
     const newWorkBookTasks = [
-      ...workBookTasks,
-      {
-        taskId: selectedTask.task_id,
-        priority: newWorkBookTaskId, // 1に近いほど優先度が高い
-        comment: NO_COMMENT,
-      },
-    ];
-    const newWorkBookTasksForTable = [
-      ...workBookTasksForTable,
-      {
-        contestId: getContestNameLabel(selectedTask.contest_id),
-        taskId: selectedTask.task_id,
-        title: selectedTask.title,
-        priority: newWorkBookTaskId,
-        comment: NO_COMMENT,
-      },
+      // TODO: 範囲外のインデックスを指定された場合への対処
+      ...workBookTasks.slice(0, selectedIndex),
+      newWorkBookTask,
+      ...workBookTasks.slice(selectedIndex),
     ];
 
-    return { newWorkBookTasks, newWorkBookTasksForTable };
+    return newWorkBookTasks;
+  }
+
+  function reCalcTaskPriority(workBookTasks: WorkBookTasksBase): WorkBookTasksBase;
+  function reCalcTaskPriority(workBookTasks: WorkBookTasksCreate): WorkBookTasksCreate;
+  function reCalcTaskPriority(workBookTasks: WorkBookTasksEdit): WorkBookTasksEdit;
+  function reCalcTaskPriority(
+    workBookTasks: WorkBookTasksBase | WorkBookTasksCreate | WorkBookTasksEdit,
+  ): WorkBookTasksBase | WorkBookTasksCreate | WorkBookTasksEdit {
+    const newWorkBookTasks = workBookTasks.map((task, index) => ({
+      ...task,
+      priority: index + 1,
+    }));
+
+    return newWorkBookTasks;
   }
 </script>
 
@@ -97,8 +182,8 @@
 
       if (selectedTask) {
         const results = addWorkBookTask(selectedTask, workBookTasks, workBookTasksForTable);
-        workBookTasks = results.newWorkBookTasks;
-        workBookTasksForTable = results.newWorkBookTasksForTable;
+        workBookTasks = results.updatedWorkBookTasks;
+        workBookTasksForTable = results.updatedWorkBookTasksForTable;
 
         searchWordsOrURL = '';
         focusingId = PENDING;
@@ -123,8 +208,8 @@
           type="button"
           on:click={() => {
             const results = addWorkBookTask(task, workBookTasks, workBookTasksForTable);
-            workBookTasks = results.newWorkBookTasks;
-            workBookTasksForTable = results.newWorkBookTasksForTable;
+            workBookTasks = results.updatedWorkBookTasks;
+            workBookTasksForTable = results.updatedWorkBookTasksForTable;
 
             searchWordsOrURL = '';
             focusingId = PENDING;
