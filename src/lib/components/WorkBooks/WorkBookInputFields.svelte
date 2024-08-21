@@ -114,7 +114,6 @@
   isEditable={isAdmin && isEditable}
 />
 
-<!-- HACK: 表記については修正の余地がある -->
 <!-- 管理者のみ: 問題集が手引き / 補充か -->
 <SelectWrapper
   labelName="問題集の位置付け"
