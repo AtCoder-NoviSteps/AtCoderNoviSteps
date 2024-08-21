@@ -63,4 +63,6 @@ export interface WorkBookTaskCreate extends WorkBookTaskBase {
   title: string;
 }
 
+export type WorkBookTasksCreate = WorkBookTaskCreate[];
+
 export type WorkBookTaskEdit = WorkBookTaskCreate;

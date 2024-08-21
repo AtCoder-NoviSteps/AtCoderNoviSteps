@@ -3,15 +3,15 @@
 <script lang="ts">
   import { Input, Listgroup, ListgroupItem } from 'flowbite-svelte';
 
-  import type { WorkBookTaskBase, WorkBookTaskCreate } from '$lib/types/workbook';
+  import type { WorkBookTasksBase, WorkBookTasksCreate } from '$lib/types/workbook';
   import type { Task, Tasks } from '$lib/types/task';
   import { getContestNameLabel } from '$lib/utils/contest';
   import { taskUrl } from '$lib/utils/task';
 
   export let tasks: Tasks = [];
   // HACK: やむなくデータベースへの保存用と問題集作成・編集用で分けている。
-  export let workBookTasks: WorkBookTaskBase[] = [];
-  export let workBookTasksForTable: WorkBookTaskCreate[] = [];
+  export let workBookTasks: WorkBookTasksBase = [];
+  export let workBookTasksForTable: WorkBookTasksCreate = [];
 
   const isMatched = (task: Task, searchWords: string): boolean => {
     if (searchWords === undefined || searchWords.length === 0) {
@@ -51,8 +51,13 @@
     }
   }
 
-  function addWorkBookTask(selectedTask: Task) {
-    workBookTasks = [
+  // TODO: utilsとして切り出し、テストを追加
+  function addWorkBookTask(
+    selectedTask: Task,
+    workBookTasks: WorkBookTasksBase,
+    workBookTasksForTable: WorkBookTasksCreate,
+  ) {
+    const newWorkBookTasks = [
       ...workBookTasks,
       {
         taskId: selectedTask.task_id,
@@ -60,7 +65,7 @@
         comment: NO_COMMENT,
       },
     ];
-    workBookTasksForTable = [
+    const newWorkBookTasksForTable = [
       ...workBookTasksForTable,
       {
         contestId: getContestNameLabel(selectedTask.contest_id),
@@ -70,6 +75,8 @@
         comment: NO_COMMENT,
       },
     ];
+
+    return { newWorkBookTasks, newWorkBookTasksForTable };
   }
 </script>
 
@@ -85,10 +92,14 @@
   }}
   on:keydown={(e) => {
     if (e.key === 'Enter') {
-      const task = filteredTasks.length > focusingId ? filteredTasks[focusingId] : undefined;
+      const selectedTask =
+        filteredTasks.length > focusingId ? filteredTasks[focusingId] : undefined;
 
-      if (task) {
-        addWorkBookTask(task);
+      if (selectedTask) {
+        const results = addWorkBookTask(selectedTask, workBookTasks, workBookTasksForTable);
+        workBookTasks = results.newWorkBookTasks;
+        workBookTasksForTable = results.newWorkBookTasksForTable;
+
         searchWordsOrURL = '';
         focusingId = PENDING;
       }
@@ -111,7 +122,10 @@
         <button
           type="button"
           on:click={() => {
-            addWorkBookTask(task);
+            const results = addWorkBookTask(task, workBookTasks, workBookTasksForTable);
+            workBookTasks = results.newWorkBookTasks;
+            workBookTasksForTable = results.newWorkBookTasksForTable;
+
             searchWordsOrURL = '';
             focusingId = PENDING;
           }}
