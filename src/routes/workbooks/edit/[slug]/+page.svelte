@@ -2,7 +2,7 @@
   import { superForm } from 'sveltekit-superforms/client';
   import { Breadcrumb, BreadcrumbItem } from 'flowbite-svelte';
 
-  import type { WorkBookTaskBase, WorkBookTaskEdit } from '$lib/types/workbook';
+  import type { WorkBookTasksBase, WorkBookTasksEdit } from '$lib/types/workbook';
   import type { Task, Tasks } from '$lib/types/task.js';
 
   import { preventEnterKey } from '$lib/actions/prevent_enter_key';
@@ -25,7 +25,7 @@
   // https://superforms.rocks/concepts/nested-data
   const initialData = {
     ...data.form,
-    workBookTasks: workBook.workBookTasks as WorkBookTaskBase[],
+    workBookTasks: workBook.workBookTasks as WorkBookTasksBase,
   };
   const { form, message, errors, enhance } = superForm(initialData, {
     dataType: 'json',
@@ -48,7 +48,7 @@
         comment: workBookTask.comment,
       };
     }
-  }) as WorkBookTaskEdit[];
+  }) as WorkBookTasksEdit;
 </script>
 
 {#if canView}
