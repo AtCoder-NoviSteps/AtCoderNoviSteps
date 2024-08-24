@@ -51,13 +51,12 @@
   const NO_COMMENT = '';
 
   // TODO: utilsとして切り出し、テストを追加
-  function addWorkBookTask(
+  function addTaskToWorkBook(
     selectedTask: Task,
     workBookTasks: WorkBookTasksBase,
     workBookTasksForTable: WorkBookTasksCreate | WorkBookTasksEdit,
     newWorkBookTaskIndex: number,
   ) {
-    // TODO: ユーザが追加する位置を指定できるように修正
     // TODO: 範囲外を指定された場合のエラーハンドリングを追加
     // 負の値: 先頭に追加
     // 元の配列よりも大きな値: 末尾に追加
@@ -86,7 +85,7 @@
       priority: PENDING, // 1に近いほど優先度が高い
       comment: NO_COMMENT,
     };
-    let updatedWorkBookTasks: WorkBookTasksBase = insertWorkBookTask(
+    let updatedWorkBookTasks: WorkBookTasksBase = insertTaskToWorkBook(
       workBookTasks,
       selectedIndex,
       newWorkBookTask,
@@ -109,11 +108,10 @@
       comment: NO_COMMENT,
     };
     // HACK: オーバーロードを定義しているにもかかわらず戻り値の型がWorkBookTasksBaseになってしまうため、やむを得ずキャスト
-    let updatedWorkBookTasksForTable: WorkBookTasksCreate | WorkBookTasksEdit = insertWorkBookTask(
-      workBookTasksForTable,
-      selectedIndex,
-      newWorkBookTaskForTable,
-    ) as WorkBookTasksCreate | WorkBookTasksEdit;
+    let updatedWorkBookTasksForTable: WorkBookTasksCreate | WorkBookTasksEdit =
+      insertTaskToWorkBook(workBookTasksForTable, selectedIndex, newWorkBookTaskForTable) as
+        | WorkBookTasksCreate
+        | WorkBookTasksEdit;
     updatedWorkBookTasksForTable = reCalcTaskPriority(updatedWorkBookTasksForTable) as
       | WorkBookTasksCreate
       | WorkBookTasksEdit;
@@ -122,22 +120,22 @@
   }
 
   // 関数のオーバーロードを定義
-  function insertWorkBookTask(
+  function insertTaskToWorkBook(
     workBookTasks: WorkBookTasksBase,
     selectedIndex: number,
     newWorkBookTask: WorkBookTaskBase,
   ): WorkBookTasksBase;
-  function insertWorkBookTask(
+  function insertTaskToWorkBook(
     workBookTasks: WorkBookTasksCreate,
     selectedIndex: number,
     newWorkBookTask: WorkBookTaskCreate,
   ): WorkBookTasksCreate;
-  function insertWorkBookTask(
+  function insertTaskToWorkBook(
     workBookTasks: WorkBookTasksEdit,
     selectedIndex: number,
     newWorkBookTask: WorkBookTaskEdit,
   ): WorkBookTasksEdit;
-  function insertWorkBookTask(
+  function insertTaskToWorkBook(
     workBookTasks: WorkBookTasksBase | WorkBookTasksCreate | WorkBookTasksEdit,
     selectedIndex: number,
     newWorkBookTask: WorkBookTaskBase | WorkBookTaskCreate | WorkBookTaskEdit,
@@ -217,7 +215,7 @@
         filteredTasks.length > focusingId ? filteredTasks[focusingId] : undefined;
 
       if (selectedTask) {
-        const results = addWorkBookTask(
+        const results = addTaskToWorkBook(
           selectedTask,
           workBookTasks,
           workBookTasksForTable,
@@ -260,7 +258,7 @@
         <button
           type="button"
           on:click={() => {
-            const results = addWorkBookTask(
+            const results = addTaskToWorkBook(
               task,
               workBookTasks,
               workBookTasksForTable,
