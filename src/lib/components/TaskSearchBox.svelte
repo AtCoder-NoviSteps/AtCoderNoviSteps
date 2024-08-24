@@ -3,6 +3,8 @@
 <script lang="ts">
   import { Input, Listgroup, ListgroupItem } from 'flowbite-svelte';
 
+  import SelectWrapper from '$lib/components/SelectWrapper.svelte';
+
   import type {
     WorkBookTaskBase,
     WorkBookTasksBase,
@@ -53,20 +55,23 @@
     selectedTask: Task,
     workBookTasks: WorkBookTasksBase,
     workBookTasksForTable: WorkBookTasksCreate | WorkBookTasksEdit,
-    selectedIndex: number = 2,
+    newWorkBookTaskIndex: number,
   ) {
     // TODO: ユーザが追加する位置を指定できるように修正
     // TODO: 範囲外を指定された場合のエラーハンドリングを追加
     // 負の値: 先頭に追加
     // 元の配列よりも大きな値: 末尾に追加
-    // let selectedIndex = 2;
 
     // データベース用
-    const updatedWorkBookTasks = updateWorkBookTasks(workBookTasks, selectedIndex, selectedTask);
+    const updatedWorkBookTasks = updateWorkBookTasks(
+      workBookTasks,
+      newWorkBookTaskIndex,
+      selectedTask,
+    );
 
     // アプリの表示用
     const updatedWorkBookTasksForTable: WorkBookTasksCreate | WorkBookTasksEdit =
-      updateWorkBookTaskForTable(workBookTasksForTable, selectedIndex, selectedTask);
+      updateWorkBookTaskForTable(workBookTasksForTable, newWorkBookTaskIndex, selectedTask);
 
     return { updatedWorkBookTasks, updatedWorkBookTasksForTable };
   }
@@ -116,9 +121,6 @@
     return updatedWorkBookTasksForTable;
   }
 
-  $: console.log('workBookTasks: ', workBookTasks);
-  $: console.log('workBookTasksForTable: ', workBookTasksForTable);
-
   // 関数のオーバーロードを定義
   function insertWorkBookTask(
     workBookTasks: WorkBookTasksBase,
@@ -163,6 +165,40 @@
 
     return newWorkBookTasks;
   }
+
+  // Note: 問題を末尾に追加するのをデフォルトとする
+  let selectedIndex: number = workBookTasksForTable.length;
+  let workBookTaskMaxForTable = workBookTasksForTable.length;
+
+  // Note: アプリの表示上では1-indexedとしているが、内部処理では0-indexedの方が扱いやすいため
+  function generateWorkBookTaskOrders(workBookTaskCount: number) {
+    return Array.from({ length: workBookTaskCount + 1 }, (_, index) => ({
+      name: index + 1,
+      value: index,
+    }));
+  }
+
+  $: workBookTaskOrders = generateWorkBookTaskOrders(workBookTasksForTable.length);
+
+  function handleSelectClick(event: Event) {
+    if (event.target instanceof HTMLSelectElement) {
+      selectedIndex = Number(event.target.value);
+    }
+  }
+
+  // HACK: 問題を追加する順番の指定と、問題の追加 / 削除に伴う順番の動的な更新を両立させるための苦肉の策
+  //       1. 問題を追加 / 削除したときだけ、次の問題を末尾に追加する状態に（デフォルトと同じ、変更も可能）
+  //       2. 問題を追加する順番を選択しているときは「問題数が増減しない」ことから、デフォルトの設定に更新しないようにする
+  $: {
+    // HACK: 問題の削除を別のコンポーネントで行っており、確実に同期させるため
+    // （以下の2行がないと、削除してから別の問題を追加するまで、問題を追加する順番を指定できなくなる）
+    workBookTaskMaxForTable = workBookTasksForTable.length;
+    selectedIndex = Math.min(selectedIndex, workBookTaskMaxForTable);
+
+    if (workBookTasksForTable.length !== workBookTaskMaxForTable) {
+      selectedIndex = workBookTasksForTable.length;
+    }
+  }
 </script>
 
 <Input
@@ -181,9 +217,16 @@
         filteredTasks.length > focusingId ? filteredTasks[focusingId] : undefined;
 
       if (selectedTask) {
-        const results = addWorkBookTask(selectedTask, workBookTasks, workBookTasksForTable);
+        const results = addWorkBookTask(
+          selectedTask,
+          workBookTasks,
+          workBookTasksForTable,
+          selectedIndex,
+        );
         workBookTasks = results.updatedWorkBookTasks;
         workBookTasksForTable = results.updatedWorkBookTasksForTable;
+        workBookTaskMaxForTable = results.updatedWorkBookTasksForTable.length;
+        selectedIndex = results.updatedWorkBookTasksForTable.length;
 
         searchWordsOrURL = '';
         focusingId = PENDING;
@@ -194,6 +237,16 @@
       focusingId = Math.max(focusingId - 1, PENDING);
     }
   }}
+/>
+
+<!-- 問題を問題集に追加する順番 -->
+<SelectWrapper
+  labelName="問題を問題集に追加する順番"
+  innerName="selectedIndex"
+  items={workBookTaskOrders}
+  bind:inputValue={selectedIndex}
+  isEditable={true}
+  onClick={handleSelectClick}
 />
 
 {#if filteredTasks.length}
@@ -207,9 +260,16 @@
         <button
           type="button"
           on:click={() => {
-            const results = addWorkBookTask(task, workBookTasks, workBookTasksForTable);
+            const results = addWorkBookTask(
+              task,
+              workBookTasks,
+              workBookTasksForTable,
+              selectedIndex,
+            );
             workBookTasks = results.updatedWorkBookTasks;
             workBookTasksForTable = results.updatedWorkBookTasksForTable;
+            workBookTaskMaxForTable = results.updatedWorkBookTasksForTable.length;
+            selectedIndex = results.updatedWorkBookTasksForTable.length;
 
             searchWordsOrURL = '';
             focusingId = PENDING;
