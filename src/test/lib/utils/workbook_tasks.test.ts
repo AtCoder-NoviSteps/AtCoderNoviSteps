@@ -1,12 +1,16 @@
 import { expect, test } from 'vitest';
 
-import type { WorkBookTasksBase } from '$lib/types/workbook';
+import type {
+  WorkBookTasksBase,
+  WorkBookTasksCreate,
+  WorkBookTasksEdit,
+} from '$lib/types/workbook';
 import type { Tasks } from '$lib/types/task';
 import { TaskGrade } from '$lib/types/task';
 
-import { updateWorkBookTasks } from '$lib/utils/workbook_tasks';
+import { updateWorkBookTasks, updateWorkBookTaskForTable } from '$lib/utils/workbook_tasks';
 
-// Note: 1つオブジェクトで、1つ以上の問題のテストができるように、selectedIndexとselectedTaskは配列にしている
+// Note: The selectedIndex and selectedTask are arrays so that one or more tasks can be tested with one object.
 type TestCaseForWorkBookTasks = {
   workBookTasks: WorkBookTasksBase;
   selectedIndexes: number[];
@@ -16,11 +20,26 @@ type TestCaseForWorkBookTasks = {
 
 type TestCasesForWorkBookTasks = TestCaseForWorkBookTasks[];
 
+type TestCaseForWorkBookTasksForTable = {
+  workBookTasks: WorkBookTasksCreate | WorkBookTasksEdit;
+  selectedIndexes: number[];
+  selectedTasks: Tasks;
+  expected: WorkBookTasksCreate | WorkBookTasksEdit;
+};
+
+type TestCasesForWorkBookTasksForTable = TestCaseForWorkBookTasksForTable[];
+
 // Note: Existing workbook tasks and new selected tasks to be added.
 const baseWorkBookTasks = [
   { taskId: 'abc307_c', priority: 1, comment: '' },
   { taskId: 'abc319_c', priority: 2, comment: '' },
   { taskId: 'abc322_d', priority: 3, comment: '' },
+];
+
+const baseWorkBookTasksForTable = [
+  { taskId: 'abc307_c', priority: 1, comment: '', contestId: 'abc307', title: 'C. Ideal Sheet' },
+  { taskId: 'abc319_c', priority: 2, comment: '', contestId: 'abc319', title: 'C. False Hope' },
+  { taskId: 'abc322_d', priority: 3, comment: '', contestId: 'abc322', title: 'D. Polyomino' },
 ];
 
 const newSelectedTasks = [
@@ -670,6 +689,318 @@ describe('Workbook tasks', () => {
       testName: string,
       testCases: TestCasesForWorkBookTasks,
       testFunction: (testCase: TestCaseForWorkBookTasks) => void,
+    ) {
+      test.each(testCases)(
+        `${testName}(workBookTasks: $workBookTasks, selectedIndexes: $selectedIndexes, selectedTasks: $selectedTasks)`,
+        testFunction,
+      );
+    }
+  });
+
+  // Note: It is basically almost the same as the updateWorkBookTasks() method, so only minimal differences are tested.
+  describe('create / update workbook tasks for table', () => {
+    describe('when adding multiple tasks to an empty workbook task at the top', () => {
+      const testCases: TestCasesForWorkBookTasksForTable = [
+        {
+          workBookTasks: [],
+          selectedIndexes: [0, 0, 0, 0], // 0-indexed
+          selectedTasks: newSelectedTasks,
+          expected: [
+            {
+              taskId: 'abc271_c',
+              priority: 1,
+              comment: '',
+              contestId: 'abc271',
+              title: 'C. Manga',
+            },
+            {
+              taskId: 'abc334_c',
+              priority: 2,
+              comment: '',
+              contestId: 'abc334',
+              title: 'C. Socks 2',
+            },
+            {
+              taskId: 'abc359_c',
+              priority: 3,
+              comment: '',
+              contestId: 'abc359',
+              title: 'C. Tile Distance 2',
+            },
+            {
+              taskId: 'abc347_c',
+              priority: 4,
+              comment: '',
+              contestId: 'abc347',
+              title: 'C. Ideal Holidays',
+            },
+          ],
+        },
+      ];
+
+      runTests(
+        'updateWorkBookTaskForTable',
+        testCases,
+        ({
+          workBookTasks,
+          selectedIndexes: selectedIndex,
+          selectedTasks: selectedTask,
+          expected,
+        }: TestCaseForWorkBookTasksForTable) => {
+          const newWorkBookTasks = selectedIndex.reduce(
+            (workBookTasks, currentSelectedIndex, index) => {
+              const currentSelectedTask = selectedTask[index];
+              return updateWorkBookTaskForTable(
+                workBookTasks,
+                currentSelectedIndex,
+                currentSelectedTask,
+              );
+            },
+            workBookTasks,
+          );
+          expect(newWorkBookTasks).toStrictEqual(expected);
+        },
+      );
+    });
+
+    describe('when adding multiple tasks to an empty workbook task at the end', () => {
+      const testCases: TestCasesForWorkBookTasksForTable = [
+        {
+          workBookTasks: [],
+          selectedIndexes: [3, 4, 5, 6], // 0-indexed
+          selectedTasks: newSelectedTasks,
+          expected: [
+            {
+              taskId: 'abc347_c',
+              priority: 1,
+              comment: '',
+              contestId: 'abc347',
+              title: 'C. Ideal Holidays',
+            },
+            {
+              taskId: 'abc359_c',
+              priority: 2,
+              comment: '',
+              contestId: 'abc359',
+              title: 'C. Tile Distance 2',
+            },
+            {
+              taskId: 'abc334_c',
+              priority: 3,
+              comment: '',
+              contestId: 'abc334',
+              title: 'C. Socks 2',
+            },
+            {
+              taskId: 'abc271_c',
+              priority: 4,
+              comment: '',
+              contestId: 'abc271',
+              title: 'C. Manga',
+            },
+          ],
+        },
+      ];
+
+      runTests(
+        'updateWorkBookTaskForTable',
+        testCases,
+        ({
+          workBookTasks,
+          selectedIndexes: selectedIndex,
+          selectedTasks: selectedTask,
+          expected,
+        }: TestCaseForWorkBookTasksForTable) => {
+          const newWorkBookTasks = selectedIndex.reduce(
+            (workBookTasks, currentSelectedIndex, index) => {
+              const currentSelectedTask = selectedTask[index];
+              return updateWorkBookTaskForTable(
+                workBookTasks,
+                currentSelectedIndex,
+                currentSelectedTask,
+              );
+            },
+            workBookTasks,
+          );
+          expect(newWorkBookTasks).toStrictEqual(expected);
+        },
+      );
+    });
+
+    describe('when adding multiple tasks to existing workbook tasks at the top', () => {
+      const testCases: TestCasesForWorkBookTasksForTable = [
+        {
+          workBookTasks: baseWorkBookTasksForTable,
+          selectedIndexes: [0, 0, 0, 0], // 0-indexed
+          selectedTasks: newSelectedTasks,
+          expected: [
+            {
+              taskId: 'abc271_c',
+              priority: 1,
+              comment: '',
+              contestId: 'abc271',
+              title: 'C. Manga',
+            },
+            {
+              taskId: 'abc334_c',
+              priority: 2,
+              comment: '',
+              contestId: 'abc334',
+              title: 'C. Socks 2',
+            },
+            {
+              taskId: 'abc359_c',
+              priority: 3,
+              comment: '',
+              contestId: 'abc359',
+              title: 'C. Tile Distance 2',
+            },
+            {
+              taskId: 'abc347_c',
+              priority: 4,
+              comment: '',
+              contestId: 'abc347',
+              title: 'C. Ideal Holidays',
+            },
+            {
+              taskId: 'abc307_c',
+              priority: 5,
+              comment: '',
+              contestId: 'abc307',
+              title: 'C. Ideal Sheet',
+            },
+            {
+              taskId: 'abc319_c',
+              priority: 6,
+              comment: '',
+              contestId: 'abc319',
+              title: 'C. False Hope',
+            },
+            {
+              taskId: 'abc322_d',
+              priority: 7,
+              comment: '',
+              contestId: 'abc322',
+              title: 'D. Polyomino',
+            },
+          ],
+        },
+      ];
+
+      runTests(
+        'updateWorkBookTaskForTable',
+        testCases,
+        ({
+          workBookTasks,
+          selectedIndexes: selectedIndex,
+          selectedTasks: selectedTask,
+          expected,
+        }: TestCaseForWorkBookTasksForTable) => {
+          const newWorkBookTasks = selectedIndex.reduce(
+            (workBookTasks, currentSelectedIndex, index) => {
+              const currentSelectedTask = selectedTask[index];
+              return updateWorkBookTaskForTable(
+                workBookTasks,
+                currentSelectedIndex,
+                currentSelectedTask,
+              );
+            },
+            workBookTasks,
+          );
+          expect(newWorkBookTasks).toStrictEqual(expected);
+        },
+      );
+    });
+
+    describe('when adding multiple tasks to existing workbook tasks at the end', () => {
+      const testCases: TestCasesForWorkBookTasksForTable = [
+        {
+          workBookTasks: baseWorkBookTasksForTable,
+          selectedIndexes: [3, 4, 5, 6], // 0-indexed
+          selectedTasks: newSelectedTasks,
+          expected: [
+            {
+              taskId: 'abc307_c',
+              priority: 1,
+              comment: '',
+              contestId: 'abc307',
+              title: 'C. Ideal Sheet',
+            },
+            {
+              taskId: 'abc319_c',
+              priority: 2,
+              comment: '',
+              contestId: 'abc319',
+              title: 'C. False Hope',
+            },
+            {
+              taskId: 'abc322_d',
+              priority: 3,
+              comment: '',
+              contestId: 'abc322',
+              title: 'D. Polyomino',
+            },
+            {
+              taskId: 'abc347_c',
+              priority: 4,
+              comment: '',
+              contestId: 'abc347',
+              title: 'C. Ideal Holidays',
+            },
+            {
+              taskId: 'abc359_c',
+              priority: 5,
+              comment: '',
+              contestId: 'abc359',
+              title: 'C. Tile Distance 2',
+            },
+            {
+              taskId: 'abc334_c',
+              priority: 6,
+              comment: '',
+              contestId: 'abc334',
+              title: 'C. Socks 2',
+            },
+            {
+              taskId: 'abc271_c',
+              priority: 7,
+              comment: '',
+              contestId: 'abc271',
+              title: 'C. Manga',
+            },
+          ],
+        },
+      ];
+
+      runTests(
+        'updateWorkBookTaskForTable',
+        testCases,
+        ({
+          workBookTasks,
+          selectedIndexes: selectedIndex,
+          selectedTasks: selectedTask,
+          expected,
+        }: TestCaseForWorkBookTasksForTable) => {
+          const newWorkBookTasks = selectedIndex.reduce(
+            (workBookTasks, currentSelectedIndex, index) => {
+              const currentSelectedTask = selectedTask[index];
+              return updateWorkBookTaskForTable(
+                workBookTasks,
+                currentSelectedIndex,
+                currentSelectedTask,
+              );
+            },
+            workBookTasks,
+          );
+          expect(newWorkBookTasks).toStrictEqual(expected);
+        },
+      );
+    });
+
+    function runTests(
+      testName: string,
+      testCases: TestCasesForWorkBookTasksForTable,
+      testFunction: (testCase: TestCaseForWorkBookTasksForTable) => void,
     ) {
       test.each(testCases)(
         `${testName}(workBookTasks: $workBookTasks, selectedIndexes: $selectedIndexes, selectedTasks: $selectedTasks)`,
