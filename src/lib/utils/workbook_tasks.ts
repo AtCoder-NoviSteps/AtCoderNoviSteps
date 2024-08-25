@@ -19,10 +19,6 @@ export function addTaskToWorkBook(
   workBookTasksForTable: WorkBookTasksCreate | WorkBookTasksEdit,
   newWorkBookTaskIndex: number,
 ) {
-  // TODO: 範囲外を指定された場合のエラーハンドリングを追加
-  // 負の値: 先頭に追加
-  // 元の配列よりも大きな値: 末尾に追加
-
   // データベース用
   const updatedWorkBookTasks = updateWorkBookTasks(
     workBookTasks,
@@ -103,8 +99,16 @@ function insertTaskToWorkBook(
   selectedIndex: number,
   newWorkBookTask: WorkBookTaskBase | WorkBookTaskCreate | WorkBookTaskEdit,
 ): WorkBookTasksBase | WorkBookTasksCreate | WorkBookTasksEdit {
+  // 範囲外のインデックスを指定された場合の仕様
+  // 負の値: 先頭に追加
+  // 元の配列よりも大きな値: 末尾に追加
+  if (selectedIndex < 0) {
+    selectedIndex = 0;
+  } else if (selectedIndex > workBookTasks.length) {
+    selectedIndex = workBookTasks.length;
+  }
+
   const newWorkBookTasks = [
-    // TODO: 範囲外のインデックスを指定された場合への対処
     ...workBookTasks.slice(0, selectedIndex),
     newWorkBookTask,
     ...workBookTasks.slice(selectedIndex),

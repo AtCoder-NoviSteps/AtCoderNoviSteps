@@ -748,6 +748,150 @@ describe('Workbook tasks', () => {
       );
     });
 
+    describe('when the selected index is given a negative value to existing workbook tasks', () => {
+      const testCases: TestCasesForWorkBookTasks = [
+        {
+          workBookTasks: [
+            { taskId: 'abc307_c', priority: 1, comment: '' },
+            { taskId: 'abc319_c', priority: 2, comment: '' },
+            { taskId: 'abc322_d', priority: 3, comment: '' },
+          ],
+          selectedIndexes: [-1, -2, 0, 0], // 0-indexed
+          selectedTasks: [
+            {
+              contest_id: 'abc347',
+              task_table_index: 'C',
+              task_id: 'abc347_c',
+              title: 'C. Ideal Holidays',
+              grade: TaskGrade.Q1,
+            },
+            {
+              contest_id: 'abc359',
+              task_table_index: 'C',
+              task_id: 'abc359_c',
+              title: 'C. Tile Distance 2',
+              grade: TaskGrade.Q1,
+            },
+            {
+              contest_id: 'abc334',
+              task_table_index: 'C',
+              task_id: 'abc334_c',
+              title: 'C. Socks 2',
+              grade: TaskGrade.Q1,
+            },
+            {
+              contest_id: 'abc271',
+              task_table_index: 'C',
+              task_id: 'abc271_c',
+              title: 'C. Manga',
+              grade: TaskGrade.PENDING,
+            },
+          ],
+          expected: [
+            { taskId: 'abc271_c', priority: 1, comment: '' },
+            { taskId: 'abc334_c', priority: 2, comment: '' },
+            { taskId: 'abc359_c', priority: 3, comment: '' },
+            { taskId: 'abc347_c', priority: 4, comment: '' },
+            { taskId: 'abc307_c', priority: 5, comment: '' },
+            { taskId: 'abc319_c', priority: 6, comment: '' },
+            { taskId: 'abc322_d', priority: 7, comment: '' },
+          ],
+        },
+      ];
+
+      runTests(
+        'updateWorkBookTasks',
+        testCases,
+        ({
+          workBookTasks,
+          selectedIndexes: selectedIndex,
+          selectedTasks: selectedTask,
+          expected,
+        }: TestCaseForWorkBookTasks) => {
+          const newWorkBookTasks = selectedIndex.reduce(
+            (workBookTasks, currentSelectedIndex, index) => {
+              const currentSelectedTask = selectedTask[index];
+              return updateWorkBookTasks(workBookTasks, currentSelectedIndex, currentSelectedTask);
+            },
+            workBookTasks,
+          );
+          expect(newWorkBookTasks).toStrictEqual(expected);
+        },
+      );
+    });
+
+    describe('when the selected index is given a value greater than the number of workBookTasks to existing workbook tasks', () => {
+      const testCases: TestCasesForWorkBookTasks = [
+        {
+          workBookTasks: [
+            { taskId: 'abc307_c', priority: 1, comment: '' },
+            { taskId: 'abc319_c', priority: 2, comment: '' },
+            { taskId: 'abc322_d', priority: 3, comment: '' },
+          ],
+          selectedIndexes: [4, 200, 0, 0], // 0-indexed
+          selectedTasks: [
+            {
+              contest_id: 'abc347',
+              task_table_index: 'C',
+              task_id: 'abc347_c',
+              title: 'C. Ideal Holidays',
+              grade: TaskGrade.Q1,
+            },
+            {
+              contest_id: 'abc359',
+              task_table_index: 'C',
+              task_id: 'abc359_c',
+              title: 'C. Tile Distance 2',
+              grade: TaskGrade.Q1,
+            },
+            {
+              contest_id: 'abc334',
+              task_table_index: 'C',
+              task_id: 'abc334_c',
+              title: 'C. Socks 2',
+              grade: TaskGrade.Q1,
+            },
+            {
+              contest_id: 'abc271',
+              task_table_index: 'C',
+              task_id: 'abc271_c',
+              title: 'C. Manga',
+              grade: TaskGrade.PENDING,
+            },
+          ],
+          expected: [
+            { taskId: 'abc271_c', priority: 1, comment: '' },
+            { taskId: 'abc334_c', priority: 2, comment: '' },
+            { taskId: 'abc307_c', priority: 3, comment: '' },
+            { taskId: 'abc319_c', priority: 4, comment: '' },
+            { taskId: 'abc322_d', priority: 5, comment: '' },
+            { taskId: 'abc347_c', priority: 6, comment: '' },
+            { taskId: 'abc359_c', priority: 7, comment: '' },
+          ],
+        },
+      ];
+
+      runTests(
+        'updateWorkBookTasks',
+        testCases,
+        ({
+          workBookTasks,
+          selectedIndexes: selectedIndex,
+          selectedTasks: selectedTask,
+          expected,
+        }: TestCaseForWorkBookTasks) => {
+          const newWorkBookTasks = selectedIndex.reduce(
+            (workBookTasks, currentSelectedIndex, index) => {
+              const currentSelectedTask = selectedTask[index];
+              return updateWorkBookTasks(workBookTasks, currentSelectedIndex, currentSelectedTask);
+            },
+            workBookTasks,
+          );
+          expect(newWorkBookTasks).toStrictEqual(expected);
+        },
+      );
+    });
+
     function runTests(
       testName: string,
       testCases: TestCasesForWorkBookTasks,
