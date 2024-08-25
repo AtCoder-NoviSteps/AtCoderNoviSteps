@@ -16,6 +16,44 @@ type TestCaseForWorkBookTasks = {
 
 type TestCasesForWorkBookTasks = TestCaseForWorkBookTasks[];
 
+// Note: Existing workbook tasks and new selected tasks to be added.
+const baseWorkBookTasks = [
+  { taskId: 'abc307_c', priority: 1, comment: '' },
+  { taskId: 'abc319_c', priority: 2, comment: '' },
+  { taskId: 'abc322_d', priority: 3, comment: '' },
+];
+
+const newSelectedTasks = [
+  {
+    contest_id: 'abc347',
+    task_table_index: 'C',
+    task_id: 'abc347_c',
+    title: 'C. Ideal Holidays',
+    grade: TaskGrade.Q1,
+  },
+  {
+    contest_id: 'abc359',
+    task_table_index: 'C',
+    task_id: 'abc359_c',
+    title: 'C. Tile Distance 2',
+    grade: TaskGrade.Q1,
+  },
+  {
+    contest_id: 'abc334',
+    task_table_index: 'C',
+    task_id: 'abc334_c',
+    title: 'C. Socks 2',
+    grade: TaskGrade.Q1,
+  },
+  {
+    contest_id: 'abc271',
+    task_table_index: 'C',
+    task_id: 'abc271_c',
+    title: 'C. Manga',
+    grade: TaskGrade.PENDING,
+  },
+];
+
 describe('Workbook tasks', () => {
   describe('create / update workbook tasks for db', () => {
     describe('when adding a task to an empty workbook task', () => {
@@ -394,42 +432,9 @@ describe('Workbook tasks', () => {
     describe('when adding multiple tasks to existing workbook tasks at the top', () => {
       const testCases: TestCasesForWorkBookTasks = [
         {
-          workBookTasks: [
-            { taskId: 'abc307_c', priority: 1, comment: '' },
-            { taskId: 'abc319_c', priority: 2, comment: '' },
-            { taskId: 'abc322_d', priority: 3, comment: '' },
-          ],
+          workBookTasks: baseWorkBookTasks,
           selectedIndexes: [0, 0, 0, 0], // 0-indexed
-          selectedTasks: [
-            {
-              contest_id: 'abc347',
-              task_table_index: 'C',
-              task_id: 'abc347_c',
-              title: 'C. Ideal Holidays',
-              grade: TaskGrade.Q1,
-            },
-            {
-              contest_id: 'abc359',
-              task_table_index: 'C',
-              task_id: 'abc359_c',
-              title: 'C. Tile Distance 2',
-              grade: TaskGrade.Q1,
-            },
-            {
-              contest_id: 'abc334',
-              task_table_index: 'C',
-              task_id: 'abc334_c',
-              title: 'C. Socks 2',
-              grade: TaskGrade.Q1,
-            },
-            {
-              contest_id: 'abc271',
-              task_table_index: 'C',
-              task_id: 'abc271_c',
-              title: 'C. Manga',
-              grade: TaskGrade.PENDING,
-            },
-          ],
+          selectedTasks: newSelectedTasks,
           expected: [
             { taskId: 'abc271_c', priority: 1, comment: '' },
             { taskId: 'abc334_c', priority: 2, comment: '' },
@@ -466,42 +471,9 @@ describe('Workbook tasks', () => {
     describe('when adding multiple tasks to existing workbook tasks at the end', () => {
       const testCases: TestCasesForWorkBookTasks = [
         {
-          workBookTasks: [
-            { taskId: 'abc307_c', priority: 1, comment: '' },
-            { taskId: 'abc319_c', priority: 2, comment: '' },
-            { taskId: 'abc322_d', priority: 3, comment: '' },
-          ],
+          workBookTasks: baseWorkBookTasks,
           selectedIndexes: [3, 4, 5, 6], // 0-indexed
-          selectedTasks: [
-            {
-              contest_id: 'abc347',
-              task_table_index: 'C',
-              task_id: 'abc347_c',
-              title: 'C. Ideal Holidays',
-              grade: TaskGrade.Q1,
-            },
-            {
-              contest_id: 'abc359',
-              task_table_index: 'C',
-              task_id: 'abc359_c',
-              title: 'C. Tile Distance 2',
-              grade: TaskGrade.Q1,
-            },
-            {
-              contest_id: 'abc334',
-              task_table_index: 'C',
-              task_id: 'abc334_c',
-              title: 'C. Socks 2',
-              grade: TaskGrade.Q1,
-            },
-            {
-              contest_id: 'abc271',
-              task_table_index: 'C',
-              task_id: 'abc271_c',
-              title: 'C. Manga',
-              grade: TaskGrade.PENDING,
-            },
-          ],
+          selectedTasks: newSelectedTasks,
           expected: [
             { taskId: 'abc307_c', priority: 1, comment: '' },
             { taskId: 'abc319_c', priority: 2, comment: '' },
@@ -538,42 +510,9 @@ describe('Workbook tasks', () => {
     describe('when adding multiple tasks to existing workbook tasks in any order', () => {
       const testCases: TestCasesForWorkBookTasks = [
         {
-          workBookTasks: [
-            { taskId: 'abc307_c', priority: 1, comment: '' },
-            { taskId: 'abc319_c', priority: 2, comment: '' },
-            { taskId: 'abc322_d', priority: 3, comment: '' },
-          ],
+          workBookTasks: baseWorkBookTasks,
           selectedIndexes: [1, 1, 1, 1], // 0-indexed
-          selectedTasks: [
-            {
-              contest_id: 'abc347',
-              task_table_index: 'C',
-              task_id: 'abc347_c',
-              title: 'C. Ideal Holidays',
-              grade: TaskGrade.Q1,
-            },
-            {
-              contest_id: 'abc359',
-              task_table_index: 'C',
-              task_id: 'abc359_c',
-              title: 'C. Tile Distance 2',
-              grade: TaskGrade.Q1,
-            },
-            {
-              contest_id: 'abc334',
-              task_table_index: 'C',
-              task_id: 'abc334_c',
-              title: 'C. Socks 2',
-              grade: TaskGrade.Q1,
-            },
-            {
-              contest_id: 'abc271',
-              task_table_index: 'C',
-              task_id: 'abc271_c',
-              title: 'C. Manga',
-              grade: TaskGrade.PENDING,
-            },
-          ],
+          selectedTasks: newSelectedTasks,
           expected: [
             { taskId: 'abc307_c', priority: 1, comment: '' },
             { taskId: 'abc271_c', priority: 2, comment: '' },
@@ -585,42 +524,9 @@ describe('Workbook tasks', () => {
           ],
         },
         {
-          workBookTasks: [
-            { taskId: 'abc307_c', priority: 1, comment: '' },
-            { taskId: 'abc319_c', priority: 2, comment: '' },
-            { taskId: 'abc322_d', priority: 3, comment: '' },
-          ],
+          workBookTasks: baseWorkBookTasks,
           selectedIndexes: [0, 1, 2, 3], // 0-indexed
-          selectedTasks: [
-            {
-              contest_id: 'abc347',
-              task_table_index: 'C',
-              task_id: 'abc347_c',
-              title: 'C. Ideal Holidays',
-              grade: TaskGrade.Q1,
-            },
-            {
-              contest_id: 'abc359',
-              task_table_index: 'C',
-              task_id: 'abc359_c',
-              title: 'C. Tile Distance 2',
-              grade: TaskGrade.Q1,
-            },
-            {
-              contest_id: 'abc334',
-              task_table_index: 'C',
-              task_id: 'abc334_c',
-              title: 'C. Socks 2',
-              grade: TaskGrade.Q1,
-            },
-            {
-              contest_id: 'abc271',
-              task_table_index: 'C',
-              task_id: 'abc271_c',
-              title: 'C. Manga',
-              grade: TaskGrade.PENDING,
-            },
-          ],
+          selectedTasks: newSelectedTasks,
           expected: [
             { taskId: 'abc347_c', priority: 1, comment: '' },
             { taskId: 'abc359_c', priority: 2, comment: '' },
@@ -632,42 +538,9 @@ describe('Workbook tasks', () => {
           ],
         },
         {
-          workBookTasks: [
-            { taskId: 'abc307_c', priority: 1, comment: '' },
-            { taskId: 'abc319_c', priority: 2, comment: '' },
-            { taskId: 'abc322_d', priority: 3, comment: '' },
-          ],
+          workBookTasks: baseWorkBookTasks,
           selectedIndexes: [3, 4, 0, 0], // 0-indexed
-          selectedTasks: [
-            {
-              contest_id: 'abc347',
-              task_table_index: 'C',
-              task_id: 'abc347_c',
-              title: 'C. Ideal Holidays',
-              grade: TaskGrade.Q1,
-            },
-            {
-              contest_id: 'abc359',
-              task_table_index: 'C',
-              task_id: 'abc359_c',
-              title: 'C. Tile Distance 2',
-              grade: TaskGrade.Q1,
-            },
-            {
-              contest_id: 'abc334',
-              task_table_index: 'C',
-              task_id: 'abc334_c',
-              title: 'C. Socks 2',
-              grade: TaskGrade.Q1,
-            },
-            {
-              contest_id: 'abc271',
-              task_table_index: 'C',
-              task_id: 'abc271_c',
-              title: 'C. Manga',
-              grade: TaskGrade.PENDING,
-            },
-          ],
+          selectedTasks: newSelectedTasks,
           expected: [
             { taskId: 'abc271_c', priority: 1, comment: '' },
             { taskId: 'abc334_c', priority: 2, comment: '' },
@@ -679,42 +552,9 @@ describe('Workbook tasks', () => {
           ],
         },
         {
-          workBookTasks: [
-            { taskId: 'abc307_c', priority: 1, comment: '' },
-            { taskId: 'abc319_c', priority: 2, comment: '' },
-            { taskId: 'abc322_d', priority: 3, comment: '' },
-          ],
+          workBookTasks: baseWorkBookTasks,
           selectedIndexes: [2, 0, 4, 5], // 0-indexed
-          selectedTasks: [
-            {
-              contest_id: 'abc347',
-              task_table_index: 'C',
-              task_id: 'abc347_c',
-              title: 'C. Ideal Holidays',
-              grade: TaskGrade.Q1,
-            },
-            {
-              contest_id: 'abc359',
-              task_table_index: 'C',
-              task_id: 'abc359_c',
-              title: 'C. Tile Distance 2',
-              grade: TaskGrade.Q1,
-            },
-            {
-              contest_id: 'abc334',
-              task_table_index: 'C',
-              task_id: 'abc334_c',
-              title: 'C. Socks 2',
-              grade: TaskGrade.Q1,
-            },
-            {
-              contest_id: 'abc271',
-              task_table_index: 'C',
-              task_id: 'abc271_c',
-              title: 'C. Manga',
-              grade: TaskGrade.PENDING,
-            },
-          ],
+          selectedTasks: newSelectedTasks,
           expected: [
             { taskId: 'abc359_c', priority: 1, comment: '' },
             { taskId: 'abc307_c', priority: 2, comment: '' },
@@ -751,42 +591,9 @@ describe('Workbook tasks', () => {
     describe('when the selected index is given a negative value to existing workbook tasks', () => {
       const testCases: TestCasesForWorkBookTasks = [
         {
-          workBookTasks: [
-            { taskId: 'abc307_c', priority: 1, comment: '' },
-            { taskId: 'abc319_c', priority: 2, comment: '' },
-            { taskId: 'abc322_d', priority: 3, comment: '' },
-          ],
+          workBookTasks: baseWorkBookTasks,
           selectedIndexes: [-1, -2, 0, 0], // 0-indexed
-          selectedTasks: [
-            {
-              contest_id: 'abc347',
-              task_table_index: 'C',
-              task_id: 'abc347_c',
-              title: 'C. Ideal Holidays',
-              grade: TaskGrade.Q1,
-            },
-            {
-              contest_id: 'abc359',
-              task_table_index: 'C',
-              task_id: 'abc359_c',
-              title: 'C. Tile Distance 2',
-              grade: TaskGrade.Q1,
-            },
-            {
-              contest_id: 'abc334',
-              task_table_index: 'C',
-              task_id: 'abc334_c',
-              title: 'C. Socks 2',
-              grade: TaskGrade.Q1,
-            },
-            {
-              contest_id: 'abc271',
-              task_table_index: 'C',
-              task_id: 'abc271_c',
-              title: 'C. Manga',
-              grade: TaskGrade.PENDING,
-            },
-          ],
+          selectedTasks: newSelectedTasks,
           expected: [
             { taskId: 'abc271_c', priority: 1, comment: '' },
             { taskId: 'abc334_c', priority: 2, comment: '' },
@@ -823,42 +630,9 @@ describe('Workbook tasks', () => {
     describe('when the selected index is given a value greater than the number of workBookTasks to existing workbook tasks', () => {
       const testCases: TestCasesForWorkBookTasks = [
         {
-          workBookTasks: [
-            { taskId: 'abc307_c', priority: 1, comment: '' },
-            { taskId: 'abc319_c', priority: 2, comment: '' },
-            { taskId: 'abc322_d', priority: 3, comment: '' },
-          ],
+          workBookTasks: baseWorkBookTasks,
           selectedIndexes: [4, 200, 0, 0], // 0-indexed
-          selectedTasks: [
-            {
-              contest_id: 'abc347',
-              task_table_index: 'C',
-              task_id: 'abc347_c',
-              title: 'C. Ideal Holidays',
-              grade: TaskGrade.Q1,
-            },
-            {
-              contest_id: 'abc359',
-              task_table_index: 'C',
-              task_id: 'abc359_c',
-              title: 'C. Tile Distance 2',
-              grade: TaskGrade.Q1,
-            },
-            {
-              contest_id: 'abc334',
-              task_table_index: 'C',
-              task_id: 'abc334_c',
-              title: 'C. Socks 2',
-              grade: TaskGrade.Q1,
-            },
-            {
-              contest_id: 'abc271',
-              task_table_index: 'C',
-              task_id: 'abc271_c',
-              title: 'C. Manga',
-              grade: TaskGrade.PENDING,
-            },
-          ],
+          selectedTasks: newSelectedTasks,
           expected: [
             { taskId: 'abc271_c', priority: 1, comment: '' },
             { taskId: 'abc334_c', priority: 2, comment: '' },
