@@ -97,8 +97,8 @@ importers:
         specifier: 0.5.7
         version: 0.5.7(tailwindcss@3.4.10(ts-node@10.9.1(@types/node@16.18.11)(typescript@5.5.4)))
       '@testing-library/jest-dom':
-        specifier: 6.4.8
-        version: 6.4.8
+        specifier: 6.5.0
+        version: 6.5.0
       '@types/gtag.js':
         specifier: 0.0.20
         version: 0.0.20
@@ -790,8 +790,8 @@ packages:
     resolution: {integrity: sha512-CytIvb6tVOADRngTHGWNxH8LPgO/3hi/BdCEHOf7Qd2GvZVClhVP0Wo/QHzWhpki49Bk0b4VT6xpt3fx8HTSIw==}
     engines: {node: '>=18'}
 
-  '@testing-library/jest-dom@6.4.8':
-    resolution: {integrity: sha512-JD0G+Zc38f5MBHA4NgxQMR5XtO5Jx9g86jqturNTt2WUfRmLDIY7iKkWHDCCTiDuFMre6nxAD5wHw9W5kI4rGw==}
+  '@testing-library/jest-dom@6.5.0':
+    resolution: {integrity: sha512-xGGHpBXYSHUUr6XsKBfs85TWlYKpTc37cSBBVrXcib2MkHLboWlkClhWF37JKlDb9KEq3dHs+f2xR7XJEWGBxA==}
     engines: {node: '>=14', npm: '>=6', yarn: '>=1'}
 
   '@testing-library/svelte@5.2.1':
@@ -4764,10 +4764,9 @@ snapshots:
       lz-string: 1.5.0
       pretty-format: 27.5.1
 
-  '@testing-library/jest-dom@6.4.8':
+  '@testing-library/jest-dom@6.5.0':
     dependencies:
       '@adobe/css-tools': 4.4.0
-      '@babel/runtime': 7.24.6
       aria-query: 5.3.0
       chalk: 3.0.0
       css.escape: 1.5.1
