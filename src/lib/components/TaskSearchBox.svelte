@@ -117,9 +117,9 @@
   }}
 />
 
-<!-- 問題を問題集に追加する順番 -->
+<!-- 問題を一覧に追加する順番 -->
 <SelectWrapper
-  labelName="問題を問題集に追加する順番"
+  labelName="問題を一覧に追加する順番"
   innerName="selectedIndex"
   items={workBookTaskOrders}
   bind:inputValue={selectedIndex}
