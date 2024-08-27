@@ -3,15 +3,27 @@
 <script lang="ts">
   import { Input, Listgroup, ListgroupItem } from 'flowbite-svelte';
 
-  import type { WorkBookTaskBase, WorkBookTaskCreate } from '$lib/types/workbook';
+  import SelectWrapper from '$lib/components/SelectWrapper.svelte';
+  import LabelWithTooltips from '$lib/components/LabelWithTooltips.svelte';
+
+  import type {
+    WorkBookTasksBase,
+    WorkBookTasksCreate,
+    WorkBookTasksEdit,
+  } from '$lib/types/workbook';
   import type { Task, Tasks } from '$lib/types/task';
-  import { getContestNameLabel } from '$lib/utils/contest';
+
+  import {
+    generateWorkBookTaskOrders,
+    addTaskToWorkBook,
+    PENDING,
+  } from '$lib/utils/workbook_tasks';
   import { taskUrl } from '$lib/utils/task';
 
   export let tasks: Tasks = [];
   // HACK: やむなくデータベースへの保存用と問題集作成・編集用で分けている。
-  export let workBookTasks: WorkBookTaskBase[] = [];
-  export let workBookTasksForTable: WorkBookTaskCreate[] = [];
+  export let workBookTasks: WorkBookTasksBase = [];
+  export let workBookTasksForTable: WorkBookTasksCreate | WorkBookTasksEdit = [];
 
   const isMatched = (task: Task, searchWords: string): boolean => {
     if (searchWords === undefined || searchWords.length === 0) {
@@ -35,41 +47,32 @@
       firstTask.task_table_index.localeCompare(secondTask.task_table_index),
     );
 
-  const PENDING = -1;
   let focusingId = PENDING;
 
-  let newWorkBookTaskId = 0;
+  // Note: 問題を末尾に追加するのをデフォルトとする
+  let selectedIndex: number = workBookTasksForTable.length;
+  let workBookTaskMaxForTable = workBookTasksForTable.length;
 
-  // Note: 初期値として、便宜的に割り当てている。随時、変更可能。
-  const NO_COMMENT = '';
+  $: workBookTaskOrders = generateWorkBookTaskOrders(workBookTasksForTable.length);
 
-  $: {
-    if (workBookTasks.length === 0) {
-      newWorkBookTaskId = 1;
-    } else {
-      newWorkBookTaskId = Math.max(...workBookTasks.map((task) => task.priority)) + 1;
+  function handleSelectClick(event: Event) {
+    if (event.target instanceof HTMLSelectElement) {
+      selectedIndex = Number(event.target.value);
     }
   }
 
-  function addWorkBookTask(selectedTask: Task) {
-    workBookTasks = [
-      ...workBookTasks,
-      {
-        taskId: selectedTask.task_id,
-        priority: newWorkBookTaskId, // 1に近いほど優先度が高い
-        comment: NO_COMMENT,
-      },
-    ];
-    workBookTasksForTable = [
-      ...workBookTasksForTable,
-      {
-        contestId: getContestNameLabel(selectedTask.contest_id),
-        taskId: selectedTask.task_id,
-        title: selectedTask.title,
-        priority: newWorkBookTaskId,
-        comment: NO_COMMENT,
-      },
-    ];
+  // HACK: 問題を追加する順番の指定と、問題の追加 / 削除に伴う順番の動的な更新を両立させるための苦肉の策
+  //       1. 問題を追加 / 削除したときだけ、次の問題を末尾に追加する状態に（デフォルトと同じ、変更も可能）
+  //       2. 問題を追加する順番を選択しているときは「問題数が増減しない」ことから、デフォルトの設定に更新しないようにする
+  $: {
+    // HACK: 問題の削除を別のコンポーネントで行っており、確実に同期させるため
+    // （以下の2行がないと、削除してから別の問題を追加するまで、問題を追加する順番を指定できなくなる）
+    workBookTaskMaxForTable = workBookTasksForTable.length;
+    selectedIndex = Math.min(selectedIndex, workBookTaskMaxForTable);
+
+    if (workBookTasksForTable.length !== workBookTaskMaxForTable) {
+      selectedIndex = workBookTasksForTable.length;
+    }
   }
 </script>
 
@@ -85,10 +88,21 @@
   }}
   on:keydown={(e) => {
     if (e.key === 'Enter') {
-      const task = filteredTasks.length > focusingId ? filteredTasks[focusingId] : undefined;
+      const selectedTask =
+        filteredTasks.length > focusingId ? filteredTasks[focusingId] : undefined;
 
-      if (task) {
-        addWorkBookTask(task);
+      if (selectedTask) {
+        const results = addTaskToWorkBook(
+          selectedTask,
+          workBookTasks,
+          workBookTasksForTable,
+          selectedIndex,
+        );
+        workBookTasks = results.updatedWorkBookTasks;
+        workBookTasksForTable = results.updatedWorkBookTasksForTable;
+        workBookTaskMaxForTable = results.updatedWorkBookTasksForTable.length;
+        selectedIndex = results.updatedWorkBookTasksForTable.length;
+
         searchWordsOrURL = '';
         focusingId = PENDING;
       }
@@ -98,6 +112,24 @@
       focusingId = Math.max(focusingId - 1, PENDING);
     }
   }}
+/>
+
+<!-- 問題を一覧に追加する順番 -->
+<LabelWithTooltips
+  labelName="問題を一覧に追加する順番"
+  tooltipId="tooltip-for-select-task-order"
+  tooltipContents={[
+    '・指定しない場合は、末尾に追加されます',
+    '・先頭から末尾まで選択できます (1 〜 一覧の問題数 + 1)',
+  ]}
+/>
+<SelectWrapper
+  labelName=""
+  innerName="selectedIndex"
+  items={workBookTaskOrders}
+  bind:inputValue={selectedIndex}
+  isEditable={true}
+  onClick={handleSelectClick}
 />
 
 {#if filteredTasks.length}
@@ -111,7 +143,17 @@
         <button
           type="button"
           on:click={() => {
-            addWorkBookTask(task);
+            const results = addTaskToWorkBook(
+              task,
+              workBookTasks,
+              workBookTasksForTable,
+              selectedIndex,
+            );
+            workBookTasks = results.updatedWorkBookTasks;
+            workBookTasksForTable = results.updatedWorkBookTasksForTable;
+            workBookTaskMaxForTable = results.updatedWorkBookTasksForTable.length;
+            selectedIndex = results.updatedWorkBookTasksForTable.length;
+
             searchWordsOrURL = '';
             focusingId = PENDING;
           }}
