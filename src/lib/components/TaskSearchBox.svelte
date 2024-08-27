@@ -120,7 +120,7 @@
   tooltipId="tooltip-for-select-task-order"
   tooltipContents={[
     '・指定しない場合は、末尾に追加されます',
-    '・先頭から末尾まで選択できます (1 〜 問題数 + 1)',
+    '・先頭から末尾まで選択できます (1 〜 一覧の問題数 + 1)',
   ]}
 />
 <SelectWrapper
