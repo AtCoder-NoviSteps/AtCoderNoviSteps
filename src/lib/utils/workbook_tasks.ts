@@ -8,6 +8,14 @@ import type {
 } from '$lib/types/workbook';
 import type { Task } from '$lib/types/task';
 
+// Note: アプリの表示上では1-indexedとしているが、内部処理では0-indexedの方が扱いやすいため
+export function generateWorkBookTaskOrders(workBookTaskCount: number) {
+  return Array.from({ length: workBookTaskCount + 1 }, (_, index) => ({
+    name: index + 1,
+    value: index,
+  }));
+}
+
 export const PENDING = -1;
 
 // Note: 初期値として、便宜的に割り当てている。随時、変更可能。

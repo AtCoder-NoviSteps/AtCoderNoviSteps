@@ -9,10 +9,19 @@ import type { Task, Tasks } from '$lib/types/task';
 import { TaskGrade } from '$lib/types/task';
 
 import {
+  generateWorkBookTaskOrders,
+  addTaskToWorkBook,
   updateWorkBookTasks,
   updateWorkBookTaskForTable,
-  addTaskToWorkBook,
 } from '$lib/utils/workbook_tasks';
+
+type TestCaseForWorkBookTaskOrders = {
+  workBookTaskCount: number;
+  // Note: name is 1-indexed and value is 0-indexed.
+  expected: { name: number; value: number }[];
+};
+
+type TestCasesForWorkBookTaskOrders = TestCaseForWorkBookTaskOrders[];
 
 // Note: The selectedIndex and selectedTask are arrays so that one or more tasks can be tested with one object.
 type TestCaseForWorkBookTasks = {
@@ -93,6 +102,65 @@ const newSelectedTasks = [
 ];
 
 describe('Workbook tasks', () => {
+  describe('generate workbook task orders', () => {
+    describe('when an empty workbook task is given', () => {
+      const testCases = [{ workBookTaskCount: 0, expected: [{ name: 1, value: 0 }] }];
+
+      runTests(
+        'generateWorkBookTaskOrders',
+        testCases,
+        ({ workBookTaskCount, expected }: TestCaseForWorkBookTaskOrders) => {
+          expect(generateWorkBookTaskOrders(workBookTaskCount)).toEqual(expected);
+        },
+      );
+    });
+
+    describe('when one or more tasks are given in an existing workbook tasks', () => {
+      const testCases = [
+        {
+          workBookTaskCount: 1,
+          expected: [
+            { name: 1, value: 0 },
+            { name: 2, value: 1 },
+          ],
+        },
+        {
+          workBookTaskCount: 2,
+          expected: [
+            { name: 1, value: 0 },
+            { name: 2, value: 1 },
+            { name: 3, value: 2 },
+          ],
+        },
+        {
+          workBookTaskCount: 3,
+          expected: [
+            { name: 1, value: 0 },
+            { name: 2, value: 1 },
+            { name: 3, value: 2 },
+            { name: 4, value: 3 },
+          ],
+        },
+      ];
+
+      runTests(
+        'generateWorkBookTaskOrders',
+        testCases,
+        ({ workBookTaskCount, expected }: TestCaseForWorkBookTaskOrders) => {
+          expect(generateWorkBookTaskOrders(workBookTaskCount)).toEqual(expected);
+        },
+      );
+    });
+
+    function runTests(
+      testName: string,
+      testCases: TestCasesForWorkBookTaskOrders,
+      testFunction: (testCase: TestCaseForWorkBookTaskOrders) => void,
+    ) {
+      test.each(testCases)(`${testName}(workBookTaskCount: $workBookTaskCount)`, testFunction);
+    }
+  });
+
   describe('create / update workbook tasks for db', () => {
     describe('when adding a task to an empty workbook task', () => {
       const testCases: TestCasesForWorkBookTasks = [

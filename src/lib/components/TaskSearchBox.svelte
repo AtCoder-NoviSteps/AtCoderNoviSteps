@@ -12,7 +12,11 @@
   } from '$lib/types/workbook';
   import type { Task, Tasks } from '$lib/types/task';
 
-  import { addTaskToWorkBook, PENDING } from '$lib/utils/workbook_tasks';
+  import {
+    generateWorkBookTaskOrders,
+    addTaskToWorkBook,
+    PENDING,
+  } from '$lib/utils/workbook_tasks';
   import { taskUrl } from '$lib/utils/task';
 
   export let tasks: Tasks = [];
@@ -47,14 +51,6 @@
   // Note: 問題を末尾に追加するのをデフォルトとする
   let selectedIndex: number = workBookTasksForTable.length;
   let workBookTaskMaxForTable = workBookTasksForTable.length;
-
-  // Note: アプリの表示上では1-indexedとしているが、内部処理では0-indexedの方が扱いやすいため
-  function generateWorkBookTaskOrders(workBookTaskCount: number) {
-    return Array.from({ length: workBookTaskCount + 1 }, (_, index) => ({
-      name: index + 1,
-      value: index,
-    }));
-  }
 
   $: workBookTaskOrders = generateWorkBookTaskOrders(workBookTasksForTable.length);
 
