@@ -4,6 +4,7 @@
   import { Input, Listgroup, ListgroupItem } from 'flowbite-svelte';
 
   import SelectWrapper from '$lib/components/SelectWrapper.svelte';
+  import LabelWithTooltips from '$lib/components/LabelWithTooltips.svelte';
 
   import type {
     WorkBookTasksBase,
@@ -114,8 +115,16 @@
 />
 
 <!-- 問題を一覧に追加する順番 -->
-<SelectWrapper
+<LabelWithTooltips
   labelName="問題を一覧に追加する順番"
+  tooltipId="tooltip-for-select-task-order"
+  tooltipContents={[
+    '・指定しない場合は、末尾に追加されます',
+    '・先頭から末尾まで選択できます (1 〜 問題数 + 1)',
+  ]}
+/>
+<SelectWrapper
+  labelName=""
   innerName="selectedIndex"
   items={workBookTaskOrders}
   bind:inputValue={selectedIndex}
