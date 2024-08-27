@@ -68,13 +68,7 @@ const newSelectedTask = {
 };
 
 const newSelectedTasks = [
-  {
-    contest_id: 'abc347',
-    task_table_index: 'C',
-    task_id: 'abc347_c',
-    title: 'C. Ideal Holidays',
-    grade: TaskGrade.Q1,
-  },
+  newSelectedTask,
   {
     contest_id: 'abc359',
     task_table_index: 'C',
@@ -127,14 +121,7 @@ describe('Workbook tasks', () => {
           selectedTasks: selectedTask,
           expected,
         }: TestCaseForWorkBookTasks) => {
-          const newWorkBookTasks = selectedIndex.reduce(
-            (workBookTasks, currentSelectedIndex, index) => {
-              const currentSelectedTask = selectedTask[index];
-              return updateWorkBookTasks(workBookTasks, currentSelectedIndex, currentSelectedTask);
-            },
-            workBookTasks,
-          );
-          expect(newWorkBookTasks).toStrictEqual(expected);
+          validateNewWorkBookTasks(workBookTasks, selectedIndex, selectedTask, expected);
         },
       );
     });
@@ -177,14 +164,7 @@ describe('Workbook tasks', () => {
           selectedTasks: selectedTask,
           expected,
         }: TestCaseForWorkBookTasks) => {
-          const newWorkBookTasks = selectedIndex.reduce(
-            (workBookTasks, currentSelectedIndex, index) => {
-              const currentSelectedTask = selectedTask[index];
-              return updateWorkBookTasks(workBookTasks, currentSelectedIndex, currentSelectedTask);
-            },
-            workBookTasks,
-          );
-          expect(newWorkBookTasks).toStrictEqual(expected);
+          validateNewWorkBookTasks(workBookTasks, selectedIndex, selectedTask, expected);
         },
       );
     });
@@ -226,14 +206,7 @@ describe('Workbook tasks', () => {
           selectedTasks: selectedTask,
           expected,
         }: TestCaseForWorkBookTasks) => {
-          const newWorkBookTasks = selectedIndex.reduce(
-            (workBookTasks, currentSelectedIndex, index) => {
-              const currentSelectedTask = selectedTask[index];
-              return updateWorkBookTasks(workBookTasks, currentSelectedIndex, currentSelectedTask);
-            },
-            workBookTasks,
-          );
-          expect(newWorkBookTasks).toStrictEqual(expected);
+          validateNewWorkBookTasks(workBookTasks, selectedIndex, selectedTask, expected);
         },
       );
     });
@@ -283,14 +256,7 @@ describe('Workbook tasks', () => {
           selectedTasks: selectedTask,
           expected,
         }: TestCaseForWorkBookTasks) => {
-          const newWorkBookTasks = selectedIndex.reduce(
-            (workBookTasks, currentSelectedIndex, index) => {
-              const currentSelectedTask = selectedTask[index];
-              return updateWorkBookTasks(workBookTasks, currentSelectedIndex, currentSelectedTask);
-            },
-            workBookTasks,
-          );
-          expect(newWorkBookTasks).toStrictEqual(expected);
+          validateNewWorkBookTasks(workBookTasks, selectedIndex, selectedTask, expected);
         },
       );
     });
@@ -340,14 +306,7 @@ describe('Workbook tasks', () => {
           selectedTasks: selectedTask,
           expected,
         }: TestCaseForWorkBookTasks) => {
-          const newWorkBookTasks = selectedIndex.reduce(
-            (workBookTasks, currentSelectedIndex, index) => {
-              const currentSelectedTask = selectedTask[index];
-              return updateWorkBookTasks(workBookTasks, currentSelectedIndex, currentSelectedTask);
-            },
-            workBookTasks,
-          );
-          expect(newWorkBookTasks).toStrictEqual(expected);
+          validateNewWorkBookTasks(workBookTasks, selectedIndex, selectedTask, expected);
         },
       );
     });
@@ -461,14 +420,7 @@ describe('Workbook tasks', () => {
           selectedTasks: selectedTask,
           expected,
         }: TestCaseForWorkBookTasks) => {
-          const newWorkBookTasks = selectedIndex.reduce(
-            (workBookTasks, currentSelectedIndex, index) => {
-              const currentSelectedTask = selectedTask[index];
-              return updateWorkBookTasks(workBookTasks, currentSelectedIndex, currentSelectedTask);
-            },
-            workBookTasks,
-          );
-          expect(newWorkBookTasks).toStrictEqual(expected);
+          validateNewWorkBookTasks(workBookTasks, selectedIndex, selectedTask, expected);
         },
       );
     });
@@ -500,14 +452,7 @@ describe('Workbook tasks', () => {
           selectedTasks: selectedTask,
           expected,
         }: TestCaseForWorkBookTasks) => {
-          const newWorkBookTasks = selectedIndex.reduce(
-            (workBookTasks, currentSelectedIndex, index) => {
-              const currentSelectedTask = selectedTask[index];
-              return updateWorkBookTasks(workBookTasks, currentSelectedIndex, currentSelectedTask);
-            },
-            workBookTasks,
-          );
-          expect(newWorkBookTasks).toStrictEqual(expected);
+          validateNewWorkBookTasks(workBookTasks, selectedIndex, selectedTask, expected);
         },
       );
     });
@@ -539,14 +484,7 @@ describe('Workbook tasks', () => {
           selectedTasks: selectedTask,
           expected,
         }: TestCaseForWorkBookTasks) => {
-          const newWorkBookTasks = selectedIndex.reduce(
-            (workBookTasks, currentSelectedIndex, index) => {
-              const currentSelectedTask = selectedTask[index];
-              return updateWorkBookTasks(workBookTasks, currentSelectedIndex, currentSelectedTask);
-            },
-            workBookTasks,
-          );
-          expect(newWorkBookTasks).toStrictEqual(expected);
+          validateNewWorkBookTasks(workBookTasks, selectedIndex, selectedTask, expected);
         },
       );
     });
@@ -620,14 +558,7 @@ describe('Workbook tasks', () => {
           selectedTasks: selectedTask,
           expected,
         }: TestCaseForWorkBookTasks) => {
-          const newWorkBookTasks = selectedIndex.reduce(
-            (workBookTasks, currentSelectedIndex, index) => {
-              const currentSelectedTask = selectedTask[index];
-              return updateWorkBookTasks(workBookTasks, currentSelectedIndex, currentSelectedTask);
-            },
-            workBookTasks,
-          );
-          expect(newWorkBookTasks).toStrictEqual(expected);
+          validateNewWorkBookTasks(workBookTasks, selectedIndex, selectedTask, expected);
         },
       );
     });
@@ -659,14 +590,7 @@ describe('Workbook tasks', () => {
           selectedTasks: selectedTask,
           expected,
         }: TestCaseForWorkBookTasks) => {
-          const newWorkBookTasks = selectedIndex.reduce(
-            (workBookTasks, currentSelectedIndex, index) => {
-              const currentSelectedTask = selectedTask[index];
-              return updateWorkBookTasks(workBookTasks, currentSelectedIndex, currentSelectedTask);
-            },
-            workBookTasks,
-          );
-          expect(newWorkBookTasks).toStrictEqual(expected);
+          validateNewWorkBookTasks(workBookTasks, selectedIndex, selectedTask, expected);
         },
       );
     });
@@ -698,17 +622,27 @@ describe('Workbook tasks', () => {
           selectedTasks: selectedTask,
           expected,
         }: TestCaseForWorkBookTasks) => {
-          const newWorkBookTasks = selectedIndex.reduce(
-            (workBookTasks, currentSelectedIndex, index) => {
-              const currentSelectedTask = selectedTask[index];
-              return updateWorkBookTasks(workBookTasks, currentSelectedIndex, currentSelectedTask);
-            },
-            workBookTasks,
-          );
-          expect(newWorkBookTasks).toStrictEqual(expected);
+          validateNewWorkBookTasks(workBookTasks, selectedIndex, selectedTask, expected);
         },
       );
     });
+
+    function validateNewWorkBookTasks(
+      workBookTasks: WorkBookTasksBase,
+      selectedIndexes: number[],
+      selectedTasks: Tasks,
+      expected: WorkBookTasksBase,
+    ) {
+      const newWorkBookTasks = selectedIndexes.reduce(
+        (workBookTasks, currentSelectedIndex, index) => {
+          const currentSelectedTask = selectedTasks[index];
+          return updateWorkBookTasks(workBookTasks, currentSelectedIndex, currentSelectedTask);
+        },
+        workBookTasks,
+      );
+
+      expect(newWorkBookTasks).toStrictEqual(expected);
+    }
 
     function runTests(
       testName: string,
