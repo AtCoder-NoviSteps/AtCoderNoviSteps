@@ -76,6 +76,33 @@
   }
 </script>
 
+<!-- 問題を一覧に追加する順番 -->
+<LabelWithTooltips
+  labelName="問題を問題一覧に追加する順番"
+  tooltipId="tooltip-for-select-task-order"
+  tooltipContents={[
+    '・指定しない場合は、末尾に追加されます',
+    '・先頭から末尾まで選択できます (1 〜 一覧の問題数 + 1)',
+  ]}
+/>
+<SelectWrapper
+  labelName=""
+  innerName="selectedIndex"
+  items={workBookTaskOrders}
+  bind:inputValue={selectedIndex}
+  isEditable={true}
+  onClick={handleSelectClick}
+/>
+
+<LabelWithTooltips
+  labelName="問題を検索・追加"
+  tooltipId="tooltip-for-search-and-add-tasks"
+  tooltipContents={[
+    '検索結果から問題一覧への追加方法',
+    '・問題を直接クリック',
+    '・問題を↑か↓で選択し、Enterキーを押す',
+  ]}
+/>
 <Input
   type="search"
   placeholder="問題名かURLを入力してください。"
@@ -112,24 +139,6 @@
       focusingId = Math.max(focusingId - 1, PENDING);
     }
   }}
-/>
-
-<!-- 問題を一覧に追加する順番 -->
-<LabelWithTooltips
-  labelName="問題を一覧に追加する順番"
-  tooltipId="tooltip-for-select-task-order"
-  tooltipContents={[
-    '・指定しない場合は、末尾に追加されます',
-    '・先頭から末尾まで選択できます (1 〜 一覧の問題数 + 1)',
-  ]}
-/>
-<SelectWrapper
-  labelName=""
-  innerName="selectedIndex"
-  items={workBookTaskOrders}
-  bind:inputValue={selectedIndex}
-  isEditable={true}
-  onClick={handleSelectClick}
 />
 
 {#if filteredTasks.length}
