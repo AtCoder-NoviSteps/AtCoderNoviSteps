@@ -76,70 +76,84 @@
   }
 </script>
 
-<!-- 問題を一覧に追加する順番 -->
-<LabelWithTooltips
-  labelName="問題を問題一覧に追加する順番"
-  tooltipId="tooltip-for-select-task-order"
-  tooltipContents={[
-    '・指定しない場合は、末尾に追加されます',
-    '・先頭から末尾まで選択できます (1 〜 一覧の問題数 + 1)',
-  ]}
-/>
-<SelectWrapper
-  labelName=""
-  innerName="selectedIndex"
-  items={workBookTaskOrders}
-  bind:inputValue={selectedIndex}
-  isEditable={true}
-  onClick={handleSelectClick}
-/>
+<div class="flex flex-col md:flex-row items-start md:items-center justify-between md:space-x-4">
+  <!-- 問題を検索・追加 -->
+  <div class="w-full md:w-5/6 space-y-2 mb-2 md:mb-0">
+    <LabelWithTooltips
+      labelName="問題を検索・追加"
+      tooltipId="tooltip-for-search-and-add-tasks"
+      tooltipContents={[
+        '検索結果から問題一覧への追加方法',
+        '・問題を直接クリック',
+        '・問題を↑か↓で選択し、Enterキーを押す',
+      ]}
+    />
 
-<LabelWithTooltips
-  labelName="問題を検索・追加"
-  tooltipId="tooltip-for-search-and-add-tasks"
-  tooltipContents={[
-    '検索結果から問題一覧への追加方法',
-    '・問題を直接クリック',
-    '・問題を↑か↓で選択し、Enterキーを押す',
-  ]}
-/>
-<Input
-  type="search"
-  placeholder="問題名かURLを入力してください。"
-  bind:value={searchWordsOrURL}
-  on:change={(e) => {
-    if (e.target instanceof HTMLInputElement) {
-      searchWordsOrURL = e.target.value;
-      focusingId = PENDING;
-    }
-  }}
-  on:keydown={(e) => {
-    if (e.key === 'Enter') {
-      const selectedTask =
-        filteredTasks.length > focusingId ? filteredTasks[focusingId] : undefined;
+    <div class="flex items-center w-full">
+      <Input
+        type="search"
+        placeholder="問題名かURLを入力してください。"
+        class="flex-grow space-y-2"
+        bind:value={searchWordsOrURL}
+        on:change={(e) => {
+          if (e.target instanceof HTMLInputElement) {
+            searchWordsOrURL = e.target.value;
+            focusingId = PENDING;
+          }
+        }}
+        on:keydown={(e) => {
+          if (e.key === 'Enter') {
+            const selectedTask =
+              filteredTasks.length > focusingId ? filteredTasks[focusingId] : undefined;
 
-      if (selectedTask) {
-        const results = addTaskToWorkBook(
-          selectedTask,
-          workBookTasks,
-          workBookTasksForTable,
-          selectedIndex,
-        );
-        workBookTasks = results.updatedWorkBookTasks;
-        workBookTasksForTable = results.updatedWorkBookTasksForTable;
-        workBookTaskMaxForTable = results.updatedWorkBookTasksForTable.length;
-        selectedIndex = results.updatedWorkBookTasksForTable.length;
+            if (selectedTask) {
+              const results = addTaskToWorkBook(
+                selectedTask,
+                workBookTasks,
+                workBookTasksForTable,
+                selectedIndex,
+              );
+              workBookTasks = results.updatedWorkBookTasks;
+              workBookTasksForTable = results.updatedWorkBookTasksForTable;
+              workBookTaskMaxForTable = results.updatedWorkBookTasksForTable.length;
+              selectedIndex = results.updatedWorkBookTasksForTable.length;
 
-        searchWordsOrURL = '';
-        focusingId = PENDING;
-      }
-    } else if (e.key === 'ArrowDown') {
-      focusingId = Math.min(focusingId + 1, filteredTasks.length - 1); // 0-indexed
-    } else if (e.key === 'ArrowUp') {
-      focusingId = Math.max(focusingId - 1, PENDING);
-    }
-  }}
-/>
+              searchWordsOrURL = '';
+              focusingId = PENDING;
+            }
+          } else if (e.key === 'ArrowDown') {
+            focusingId = Math.min(focusingId + 1, filteredTasks.length - 1); // 0-indexed
+          } else if (e.key === 'ArrowUp') {
+            focusingId = Math.max(focusingId - 1, PENDING);
+          }
+        }}
+      />
+    </div>
+  </div>
+
+  <!-- 問題を問題一覧に追加する順番 -->
+  <div class="w-full md:w-1/6 space-y-2">
+    <LabelWithTooltips
+      labelName="問題の順番"
+      tooltipId="tooltip-for-select-task-order"
+      tooltipContents={[
+        '（任意）問題一覧に問題を追加する順番を指定',
+        '・指定しない場合は、末尾に追加',
+        '・先頭〜末尾まで選択可能 (1 〜 一覧の問題数 + 1)',
+      ]}
+    />
+
+    <SelectWrapper
+      labelClass=""
+      labelName=""
+      innerName="selectedIndex"
+      items={workBookTaskOrders}
+      bind:inputValue={selectedIndex}
+      isEditable={true}
+      onClick={handleSelectClick}
+    />
+  </div>
+</div>
 
 {#if filteredTasks.length}
   <Listgroup>
