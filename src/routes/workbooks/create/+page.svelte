@@ -13,7 +13,6 @@
   import HeadingOne from '$lib/components/HeadingOne.svelte';
   import WorkBookInputFields from '$lib/components/WorkBooks/WorkBookInputFields.svelte';
   import WorkBookTasksTable from '$lib/components/WorkBookTasks/WorkBookTasksTable.svelte';
-  import LabelWithTooltips from '$lib/components/LabelWithTooltips.svelte';
   import TaskSearchBox from '$lib/components/TaskSearchBox.svelte';
   import InputFieldWrapper from '$lib/components/InputFieldWrapper.svelte';
   import SubmissionButton from '$lib/components/SubmissionButton.svelte';
@@ -68,15 +67,6 @@
     <!-- 問題を検索 -->
     <!-- HACK: 属性が微妙に異なるため、やむなくデータベースへの保存用と問題集作成・編集用で分けている。 -->
     <div class="space-y-2">
-      <LabelWithTooltips
-        labelName="問題を検索・追加"
-        tooltipId="tooltip-for-search-and-add-tasks"
-        tooltipContents={[
-          '検索結果から問題一覧への追加方法',
-          '・問題を直接クリック',
-          '・問題を↑か↓で選択し、Enterキーを押す',
-        ]}
-      />
       <TaskSearchBox {tasks} bind:workBookTasks={$form.workBookTasks} bind:workBookTasksForTable />
       <InputFieldWrapper
         inputFieldType="hidden"
