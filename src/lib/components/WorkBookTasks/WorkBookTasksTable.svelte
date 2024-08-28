@@ -68,7 +68,7 @@
 
 {#if workBookTasksForTable.length}
   <Label class="space-y-2">
-    <span>問題一覧</span>
+    <span>問題一覧（{workBookTasksForTable.length} 問）</span>
   </Label>
 
   <Table shadow class="text-md">
