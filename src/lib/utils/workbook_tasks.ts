@@ -8,10 +8,10 @@ import type {
 } from '$lib/types/workbook';
 import type { Task } from '$lib/types/task';
 
-// Note: アプリの表示上では1-indexedとしているが、内部処理では0-indexedの方が扱いやすいため
+// Note: アプリの表示上、内部処理とも0-indexed
 export function generateWorkBookTaskOrders(workBookTaskCount: number) {
   return Array.from({ length: workBookTaskCount + 1 }, (_, index) => ({
-    name: index + 1,
+    name: index,
     value: index,
   }));
 }
