@@ -105,20 +105,26 @@
   isEditable={false}
 />
 
-<!-- 管理者のみ: 問題集の種類を指定-->
-<SelectWrapper
-  labelName="問題集の種類"
-  innerName="workBookType"
-  items={workBookTypeOptions(isOfficial, isAdmin)}
-  bind:inputValue={workBookType}
-  isEditable={isAdmin && isEditable}
-/>
+<div class="flex flex-col md:flex-row items-start md:items-center justify-between md:space-x-4">
+  <!-- 管理者のみ: 問題集の種類を指定-->
+  <div class="w-full md:w-1/2 mb-2 md:mb-0">
+    <SelectWrapper
+      labelName="問題集の種類"
+      innerName="workBookType"
+      items={workBookTypeOptions(isOfficial, isAdmin)}
+      bind:inputValue={workBookType}
+      isEditable={isAdmin && isEditable}
+    />
+  </div>
 
-<!-- 管理者のみ: 問題集が手引き / 補充か -->
-<SelectWrapper
-  labelName="問題集の位置付け"
-  innerName="isReplenished"
-  items={isReplenishedOptions}
-  bind:inputValue={isReplenished}
-  isEditable={isAdmin && isEditable && isCurriculum}
-/>
+  <!-- 管理者のみ: 問題集が手引き / 補充か -->
+  <div class="w-full md:w-1/2">
+    <SelectWrapper
+      labelName="問題集の位置付け"
+      innerName="isReplenished"
+      items={isReplenishedOptions}
+      bind:inputValue={isReplenished}
+      isEditable={isAdmin && isEditable && isCurriculum}
+    />
+  </div>
+</div>
