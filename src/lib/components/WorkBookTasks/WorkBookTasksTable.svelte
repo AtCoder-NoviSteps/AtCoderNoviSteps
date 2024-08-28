@@ -48,6 +48,10 @@
   let placeholderForComment = 'ヒント・注意点などを入力してください。';
 
   function handleFocus(event: Event) {
+    if (!event.target) {
+      return;
+    }
+
     const target = event.target as HTMLElement;
 
     if (target && target instanceof HTMLElement && target.innerText === placeholderForComment) {
@@ -57,6 +61,10 @@
   }
 
   function handleBlur(event: Event) {
+    if (!event.target) {
+      return;
+    }
+
     const target = event.target as HTMLElement;
 
     if (target && target instanceof HTMLElement && target.innerText.trim() === '') {
