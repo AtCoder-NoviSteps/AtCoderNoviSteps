@@ -17,7 +17,7 @@ import {
 
 type TestCaseForWorkBookTaskOrders = {
   workBookTaskCount: number;
-  // Note: name is 1-indexed and value is 0-indexed.
+  // Note: name and value is 0-indexed.
   expected: { name: number; value: number }[];
 };
 
@@ -104,7 +104,7 @@ const newSelectedTasks = [
 describe('Workbook tasks', () => {
   describe('generate workbook task orders', () => {
     describe('when an empty workbook task is given', () => {
-      const testCases = [{ workBookTaskCount: 0, expected: [{ name: 1, value: 0 }] }];
+      const testCases = [{ workBookTaskCount: 0, expected: [{ name: 0, value: 0 }] }];
 
       runTests(
         'generateWorkBookTaskOrders',
@@ -120,25 +120,25 @@ describe('Workbook tasks', () => {
         {
           workBookTaskCount: 1,
           expected: [
-            { name: 1, value: 0 },
-            { name: 2, value: 1 },
+            { name: 0, value: 0 },
+            { name: 1, value: 1 },
           ],
         },
         {
           workBookTaskCount: 2,
           expected: [
-            { name: 1, value: 0 },
-            { name: 2, value: 1 },
-            { name: 3, value: 2 },
+            { name: 0, value: 0 },
+            { name: 1, value: 1 },
+            { name: 2, value: 2 },
           ],
         },
         {
           workBookTaskCount: 3,
           expected: [
-            { name: 1, value: 0 },
-            { name: 2, value: 1 },
-            { name: 3, value: 2 },
-            { name: 4, value: 3 },
+            { name: 0, value: 0 },
+            { name: 1, value: 1 },
+            { name: 2, value: 2 },
+            { name: 3, value: 3 },
           ],
         },
       ];

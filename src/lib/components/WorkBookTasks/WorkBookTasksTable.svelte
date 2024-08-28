@@ -44,15 +44,44 @@
       (workBookTask) => workBookTask.taskId !== task.taskId,
     );
   }
+
+  let placeholderForComment = 'ヒント・注意点などを入力してください。';
+
+  function handleFocus(event: Event) {
+    if (!event.target) {
+      return;
+    }
+
+    const target = event.target as HTMLElement;
+
+    if (target && target instanceof HTMLElement && target.innerText === placeholderForComment) {
+      (event.target as HTMLElement).innerText = '';
+      (event.target as HTMLElement).classList.remove('placeholder');
+    }
+  }
+
+  function handleBlur(event: Event) {
+    if (!event.target) {
+      return;
+    }
+
+    const target = event.target as HTMLElement;
+
+    if (target && target instanceof HTMLElement && target.innerText.trim() === '') {
+      (event.target as HTMLElement).innerText = placeholderForComment;
+      (event.target as HTMLElement).classList.add('placeholder');
+    }
+  }
 </script>
 
 {#if workBookTasksForTable.length}
   <Label class="space-y-2">
-    <span>問題一覧</span>
+    <span>問題一覧（{workBookTasksForTable.length} 問）</span>
   </Label>
 
   <Table shadow class="text-md">
     <TableHead class="text-sm bg-gray-100">
+      <TableHeadCell class="min-w-[18px] pl-2 md:pl-4 pr-0 text-center">#</TableHeadCell>
       <TableHeadCell class="min-w-[240px] truncate">問題名</TableHeadCell>
       <TableHeadCell class="min-w-[120px] max-w-[150px] truncate">出典</TableHeadCell>
       <TableHeadCell class="min-w-[120px] max-w-[150px] px-0 truncate">
@@ -68,7 +97,16 @@
       <!-- TODO: 削除にゴミ箱マークを付ける -->
       {#each workBookTasksForTable as task, index}
         <TableBodyRow>
-          <!-- 問題 -->
+          <TableBodyCell
+            class="xs:text-lg text-gray-700 dark:text-gray-300 truncate pl-2 md:pl-4 pr-0"
+          >
+            <div class="flex justify-center items-center">
+              <!-- HACK: 1-indexedにしているが、0-indexedで揃えた方がいい? -->
+              {index + 1}
+            </div>
+          </TableBodyCell>
+
+          <!-- 問題名 -->
           <TableBodyCell class="xs:text-lg truncate">
             <ExternalLinkWrapper
               url={taskUrl(task.contestId, task.taskId)}
@@ -87,8 +125,11 @@
             contenteditable={true}
             class="xs:text-lg text-gray-700 dark:text-gray-300 truncate"
             on:input={(event) => updateComment(index, event)}
+            on:focus={handleFocus}
+            on:blur={handleBlur}
+            class:placeholder={task.comment === ''}
           >
-            {task.comment}
+            {task.comment || placeholderForComment}
           </td>
 
           <!-- 削除 -->
@@ -100,3 +141,9 @@
     </TableBody>
   </Table>
 {/if}
+
+<style>
+  .placeholder {
+    font-size: 0.875rem; /* Tailwind CSSのtext-smに相当 */
+  }
+</style>
