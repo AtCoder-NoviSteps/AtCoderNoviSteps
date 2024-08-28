@@ -44,6 +44,26 @@
       (workBookTask) => workBookTask.taskId !== task.taskId,
     );
   }
+
+  let placeholderForComment = 'ヒント・注意点などを入力してください。';
+
+  function handleFocus(event: Event) {
+    const target = event.target as HTMLElement;
+
+    if (target && target instanceof HTMLElement && target.innerText === placeholderForComment) {
+      (event.target as HTMLElement).innerText = '';
+      (event.target as HTMLElement).classList.remove('placeholder');
+    }
+  }
+
+  function handleBlur(event: Event) {
+    const target = event.target as HTMLElement;
+
+    if (target && target instanceof HTMLElement && target.innerText.trim() === '') {
+      (event.target as HTMLElement).innerText = placeholderForComment;
+      (event.target as HTMLElement).classList.add('placeholder');
+    }
+  }
 </script>
 
 {#if workBookTasksForTable.length}
@@ -97,8 +117,11 @@
             contenteditable={true}
             class="xs:text-lg text-gray-700 dark:text-gray-300 truncate"
             on:input={(event) => updateComment(index, event)}
+            on:focus={handleFocus}
+            on:blur={handleBlur}
+            class:placeholder={task.comment === ''}
           >
-            {task.comment}
+            {task.comment || placeholderForComment}
           </td>
 
           <!-- 削除 -->
@@ -110,3 +133,9 @@
     </TableBody>
   </Table>
 {/if}
+
+<style>
+  .placeholder {
+    font-size: 0.875rem; /* Tailwind CSSのtext-smに相当 */
+  }
+</style>
