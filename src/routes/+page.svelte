@@ -80,7 +80,11 @@
       />
     </div>
 
-    <Heading tag="h2" class="mt-36 mb-3" customSize="text-xl font-medium  md:text-2xl lg:text-3xl">
+    <div class="flex flex-wrap justify-center items-center">
+      <Button href="/problems" class="w-full sm:w-5/6 md:w-1/3 m-2">問題一覧へ</Button>
+    </div>
+
+    <Heading tag="h2" class="mt-36 mb-3" customSize="text-xl font-medium md:text-2xl lg:text-3xl">
       (開発中) 問題集で得意を伸ばす・苦手を克服
     </Heading>
 
