@@ -1,6 +1,10 @@
+<script lang="ts">
+  export let size = 'w-6 h-6';
+</script>
+
 <!-- See: https://flowbite.com/icons/ -->
 <svg
-  class="w-6 h-6 text-gray-800 dark:text-white"
+  class="{size} text-primary-600 dark:text-gray-300"
   aria-hidden="true"
   xmlns="http://www.w3.org/2000/svg"
   fill="none"
