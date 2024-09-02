@@ -74,7 +74,7 @@
     "@lucia-auth/adapter-prisma": "3.0.2",
     "@mermaid-js/mermaid-cli": "10.9.1",
     "@popperjs/core": "2.11.8",
-    "@prisma/client": "5.19.0",
+    "@prisma/client": "5.19.1",
     "@testing-library/svelte": "5.2.1",
     "@types/jest": "29.5.12",
     "autoprefixer": "10.4.20",
