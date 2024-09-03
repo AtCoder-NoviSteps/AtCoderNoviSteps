@@ -26,7 +26,7 @@ export const updateTaskResult = async (
 
     await crud.updateTaskResult(taskId, submissionStatus, userId);
   } catch (error) {
-    console.log('Failed to update task result: ', error);
+    console.error('Failed to update task result: ', error);
     return fail(BAD_REQUEST);
   }
 };

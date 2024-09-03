@@ -1,13 +1,16 @@
 import { error } from '@sveltejs/kit';
-import { getTasks, getTask } from '$lib/services/tasks';
-import * as answer_crud from './answers';
-import type { TaskResult, TaskResults, Tasks } from '$lib/types/task';
-import type { Task } from '$lib/types/task';
-import type { WorkBookTaskBase, WorkBookTasksBase } from '$lib/types/workbook';
-import { NOT_FOUND } from '$lib/constants/http-response-status-codes';
+
 import { default as db } from '$lib/server/database';
+import { getTasks, getTask } from '$lib/services/tasks';
+import * as answer_crud from '$lib/services/answers';
+
+import type { TaskAnswer } from '$lib/types/answer';
+import type { Task } from '$lib/types/task';
+import type { TaskResult, TaskResults, Tasks } from '$lib/types/task';
+import type { WorkBookTaskBase, WorkBookTasksBase } from '$lib/types/workbook';
+
+import { NOT_FOUND } from '$lib/constants/http-response-status-codes';
 import { getSubmissionStatusMapWithId, getSubmissionStatusMapWithName } from './submission_status';
-import type { TaskAnswer } from '../types/answer';
 
 // DBから取得した問題一覧とログインしているユーザの回答を紐付けしたデータ保持
 const statusById = await getSubmissionStatusMapWithId();
@@ -170,29 +173,19 @@ export async function getTaskResult(slug: string, userId: string) {
   return taskResult;
 }
 
-export async function updateTaskResult(slug: string, submissionStatus: string, userId: string) {
-  const taskResult: TaskResult | null = await getTaskResult(slug, userId);
+export async function updateTaskResult(taskId: string, submissionStatus: string, userId: string) {
+  const taskResult: TaskResult | null = await getTaskResult(taskId, userId);
 
-  if (taskResult) {
-    const status_id = statusByName.get(submissionStatus).id;
-
-    const registeredTaskAnswer = await db.taskAnswer.findMany({
-      where: { task_id: slug, user_id: userId },
-    });
-
-    if (registeredTaskAnswer.length == 0) {
-      await answer_crud.createAnswer(slug, userId, status_id);
-    }
-
-    await db.taskAnswer.update({
-      where: {
-        task_id_user_id: { task_id: slug, user_id: userId },
-      },
-      data: {
-        status_id: status_id,
-      },
-    });
+  if (!taskResult) {
+    console.error(`Failed to get task result for taskId ${taskId} and userId ${userId}`);
+    return;
   }
+
+  const statusId = statusByName.get(submissionStatus).id;
+
+  await db.$transaction(async () => {
+    await answer_crud.upsertAnswer(taskId, userId, statusId);
+  });
 }
 
 export async function getTasksWithTagIds(

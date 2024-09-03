@@ -69,5 +69,35 @@ export async function createAnswer(task_id: string, user_id: string, status_id: 
   return taskAnswer;
 }
 
+export async function upsertAnswer(taskId: string, userId: string, statusId: string) {
+  try {
+    const id = await sha256(taskId + userId);
+    const newAnswer = {
+      id: id,
+      task_id: taskId,
+      user_id: userId,
+      status_id: statusId,
+      created_at: new Date(),
+      updated_at: new Date(),
+    };
+
+    await prisma.taskAnswer.upsert({
+      where: {
+        task_id_user_id: { task_id: taskId, user_id: userId },
+      },
+      update: {
+        status_id: statusId,
+      },
+      create: newAnswer, // await createAnswer(taskId, userId, statusId)とすると、一意制約違反(P2002)が発生するため
+    });
+  } catch (error) {
+    console.error(
+      `Failed to update answer with taskId ${taskId}, userId ${userId}, statusId: ${statusId}:`,
+      error,
+    );
+    throw error;
+  }
+}
+
 // TODO: updateAnswer()
 // TODO: deleteAnswer()
