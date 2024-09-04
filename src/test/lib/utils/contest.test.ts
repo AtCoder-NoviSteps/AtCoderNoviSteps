@@ -113,6 +113,17 @@ describe('Contest', () => {
       expect(classifyContest('math-and-algorithm')).toEqual(ContestType.MATH_AND_ALGORITHM);
     });
 
+    describe('when contest_id contains chokudai_S', () => {
+      const testCases = [
+        { contestId: 'chokudai_S001', expected: ContestType.OTHERS },
+        { contestId: 'chokudai_S002', expected: ContestType.OTHERS },
+      ];
+
+      runTests('classifyContest', testCases, ({ contestId, expected }: TestCaseForContestType) => {
+        expect(classifyContest(contestId)).toEqual(expected);
+      });
+    });
+
     function runTests(
       testName: string,
       testCases: TestCasesForContestType,
@@ -227,6 +238,21 @@ describe('Contest', () => {
     test('when contest_id is math-and-algorithm', () => {
       expect(getContestPriority('math-and-algorithm')).toEqual(
         contestTypePriorities.get(ContestType.MATH_AND_ALGORITHM),
+      );
+    });
+
+    describe('when contest_id contains chokudai_S', () => {
+      const testCases = [
+        { contestId: 'chokudai_S001', expected: ContestType.OTHERS },
+        { contestId: 'chokudai_S002', expected: ContestType.OTHERS },
+      ];
+
+      runTests(
+        'getContestPriority',
+        testCases,
+        ({ contestId, expected }: TestCaseForContestType) => {
+          expect(getContestPriority(contestId)).toEqual(contestTypePriorities.get(expected));
+        },
       );
     });
 
@@ -355,6 +381,21 @@ describe('Contest', () => {
 
     test('when contest_id is math-and-algorithm', () => {
       expect(getContestNameLabel('math-and-algorithm')).toEqual('アルゴリズムと数学');
+    });
+
+    describe('when contest_id contains chokudai_S', () => {
+      const testCases = [
+        { contestId: 'chokudai_S001', expected: 'Chokudai SpeedRun 001' },
+        { contestId: 'chokudai_S002', expected: 'Chokudai SpeedRun 002' },
+      ];
+
+      runTests(
+        'getContestNameLabel',
+        testCases,
+        ({ contestId, expected }: TestCaseForContestNameLabel) => {
+          expect(getContestNameLabel(contestId)).toEqual(expected);
+        },
+      );
     });
 
     function runTests(

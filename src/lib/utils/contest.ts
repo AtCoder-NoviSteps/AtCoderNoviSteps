@@ -48,10 +48,16 @@ export const classifyContest = (contest_id: string) => {
     return ContestType.MATH_AND_ALGORITHM;
   }
 
+  // HACK: 2024年9月上旬時点では、「Chokudai SpeedRun 001」と「Chokudai SpeedRun 002」のみ該当。
+  // 対象コンテストが増えた場合は、判定条件を見直す必要がある。
+  if (contest_id.startsWith('chokudai_S')) {
+    return ContestType.OTHERS;
+  }
+
   return null;
 };
 
-// priority: 0 (High) - 10 (Low)
+// priority: 0 (High) - 11 (Low)
 // See:
 // https://jsprimer.net/basic/map-and-set/
 export const contestTypePriorities: Map<ContestType, number> = new Map([
@@ -66,6 +72,7 @@ export const contestTypePriorities: Map<ContestType, number> = new Map([
   [ContestType.JOI, 8],
   [ContestType.TESSOKU_BOOK, 9],
   [ContestType.MATH_AND_ALGORITHM, 10],
+  [ContestType.OTHERS, 11],
 ]);
 
 export function getContestPriority(contestId: string): number {
@@ -110,6 +117,10 @@ export const getContestNameLabel = (contest_id: string) => {
 
   if (contest_id === 'math-and-algorithm') {
     return 'アルゴリズムと数学';
+  }
+
+  if (contest_id.startsWith('chokudai_S')) {
+    return contest_id.replace('chokudai_S', 'Chokudai SpeedRun ');
   }
 
   return contest_id.toUpperCase();
