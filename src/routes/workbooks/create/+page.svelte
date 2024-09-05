@@ -31,7 +31,7 @@
 
   $form.authorId = data.author.id;
   $form.isOfficial = data.isAdmin;
-  $form.workBookType = $form.isOfficial ? WorkBookType.TEXTBOOK : WorkBookType.CREATED_BY_USER;
+  $form.workBookType = $form.isOfficial ? WorkBookType.CURRICULUM : WorkBookType.CREATED_BY_USER;
 
   $: workBookTasksForTable = [] as WorkBookTaskCreate[];
 
