@@ -1,0 +1,2 @@
+-- AlterEnum
+ALTER TYPE "WorkBookType" ADD VALUE 'CURRICULUM';

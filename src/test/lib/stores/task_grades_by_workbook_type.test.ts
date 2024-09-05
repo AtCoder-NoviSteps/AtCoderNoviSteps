@@ -25,6 +25,7 @@ interface UpdateTwice extends InitialState {
 describe('Task grades by workbook type', () => {
   describe('initial values is 10Q in each workbook type', () => {
     const testCases = [
+      { workBookType: WorkBookType.CURRICULUM, expected: TaskGrade.Q10 },
       { workBookType: WorkBookType.TEXTBOOK, expected: TaskGrade.Q10 },
       { workBookType: WorkBookType.SOLUTION, expected: TaskGrade.Q10 },
     ];
@@ -43,6 +44,10 @@ describe('Task grades by workbook type', () => {
 
   describe('update task grade once', () => {
     const testCases = [
+      { workBookType: WorkBookType.CURRICULUM, newGrade: TaskGrade.Q10, expected: TaskGrade.Q10 },
+      { workBookType: WorkBookType.CURRICULUM, newGrade: TaskGrade.Q9, expected: TaskGrade.Q9 },
+      { workBookType: WorkBookType.CURRICULUM, newGrade: TaskGrade.Q8, expected: TaskGrade.Q8 },
+      { workBookType: WorkBookType.CURRICULUM, newGrade: TaskGrade.Q7, expected: TaskGrade.Q7 },
       { workBookType: WorkBookType.TEXTBOOK, newGrade: TaskGrade.Q10, expected: TaskGrade.Q10 },
       { workBookType: WorkBookType.TEXTBOOK, newGrade: TaskGrade.Q9, expected: TaskGrade.Q9 },
       { workBookType: WorkBookType.TEXTBOOK, newGrade: TaskGrade.Q8, expected: TaskGrade.Q8 },
@@ -76,31 +81,31 @@ describe('Task grades by workbook type', () => {
   describe('update task grade twice', () => {
     const testCases = [
       {
-        workBookType: WorkBookType.TEXTBOOK,
+        workBookType: WorkBookType.CURRICULUM,
         firstTimeGradeUpdated: TaskGrade.Q10,
         secondTimeGradeUpdated: TaskGrade.Q10,
         expected: TaskGrade.Q10,
       },
       {
-        workBookType: WorkBookType.TEXTBOOK,
+        workBookType: WorkBookType.CURRICULUM,
         firstTimeGradeUpdated: TaskGrade.Q9,
         secondTimeGradeUpdated: TaskGrade.Q10,
         expected: TaskGrade.Q10,
       },
       {
-        workBookType: WorkBookType.TEXTBOOK,
+        workBookType: WorkBookType.CURRICULUM,
         firstTimeGradeUpdated: TaskGrade.Q9,
         secondTimeGradeUpdated: TaskGrade.Q9,
         expected: TaskGrade.Q9,
       },
       {
-        workBookType: WorkBookType.TEXTBOOK,
+        workBookType: WorkBookType.CURRICULUM,
         firstTimeGradeUpdated: TaskGrade.Q9,
         secondTimeGradeUpdated: TaskGrade.Q8,
         expected: TaskGrade.Q8,
       },
       {
-        workBookType: WorkBookType.TEXTBOOK,
+        workBookType: WorkBookType.CURRICULUM,
         firstTimeGradeUpdated: TaskGrade.Q6,
         secondTimeGradeUpdated: TaskGrade.Q7,
         expected: TaskGrade.Q7,

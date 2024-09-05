@@ -20,14 +20,15 @@ type UpdateTwice = {
 };
 
 describe('Active workbook tab store', () => {
-  describe('initial values is true only for TEXTBOOK', () => {
-    test('getActiveWorkbookTab(workBookType: TEXTBOOK)', () => {
-      expect(get(activeWorkbookTabStore).get(WorkBookType.TEXTBOOK)).toBeTruthy();
+  describe('initial values is true only for CURRICULUM', () => {
+    test('getActiveWorkbookTab(workBookType: CURRICULUM)', () => {
+      expect(get(activeWorkbookTabStore).get(WorkBookType.CURRICULUM)).toBeTruthy();
     });
   });
 
-  describe('initial value is false except for TEXTBOOK', () => {
+  describe('initial value is false except for CURRICULUM', () => {
     const testCases = [
+      { workBookType: WorkBookType.TEXTBOOK },
       { workBookType: WorkBookType.SOLUTION },
       { workBookType: WorkBookType.CREATED_BY_USER },
     ];
@@ -46,7 +47,9 @@ describe('Active workbook tab store', () => {
 
   describe('update active workbook tab once', () => {
     const testCases = [
+      { workBookType: WorkBookType.CURRICULUM },
       { workBookType: WorkBookType.TEXTBOOK },
+      { workBookType: WorkBookType.SOLUTION },
       { workBookType: WorkBookType.CREATED_BY_USER },
     ];
     runTests('updateActiveWorkBookTabOnce', testCases, ({ workBookType }: UpdateOnce) => {
@@ -74,6 +77,26 @@ describe('Active workbook tab store', () => {
   describe('update active workbook tab twice', () => {
     const testCases = [
       {
+        firstTimeUpdated: WorkBookType.CURRICULUM,
+        secondTimeUpdated: WorkBookType.CURRICULUM,
+      },
+      {
+        firstTimeUpdated: WorkBookType.CURRICULUM,
+        secondTimeUpdated: WorkBookType.TEXTBOOK,
+      },
+      {
+        firstTimeUpdated: WorkBookType.CURRICULUM,
+        secondTimeUpdated: WorkBookType.SOLUTION,
+      },
+      {
+        firstTimeUpdated: WorkBookType.CURRICULUM,
+        secondTimeUpdated: WorkBookType.CREATED_BY_USER,
+      },
+      {
+        firstTimeUpdated: WorkBookType.TEXTBOOK,
+        secondTimeUpdated: WorkBookType.CURRICULUM,
+      },
+      {
         firstTimeUpdated: WorkBookType.TEXTBOOK,
         secondTimeUpdated: WorkBookType.TEXTBOOK,
       },
@@ -87,6 +110,10 @@ describe('Active workbook tab store', () => {
       },
       {
         firstTimeUpdated: WorkBookType.SOLUTION,
+        secondTimeUpdated: WorkBookType.CURRICULUM,
+      },
+      {
+        firstTimeUpdated: WorkBookType.SOLUTION,
         secondTimeUpdated: WorkBookType.TEXTBOOK,
       },
       {
@@ -96,6 +123,10 @@ describe('Active workbook tab store', () => {
       {
         firstTimeUpdated: WorkBookType.SOLUTION,
         secondTimeUpdated: WorkBookType.CREATED_BY_USER,
+      },
+      {
+        firstTimeUpdated: WorkBookType.CREATED_BY_USER,
+        secondTimeUpdated: WorkBookType.CURRICULUM,
       },
       {
         firstTimeUpdated: WorkBookType.CREATED_BY_USER,

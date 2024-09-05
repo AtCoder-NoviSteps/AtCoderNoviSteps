@@ -7,7 +7,7 @@ const workBookTypes = Object.values(WorkBookType) as Array<WorkBookType>;
 const initialValues = new Map<WorkBookType, boolean>(
   workBookTypes.map((workBookType: WorkBookType) => [workBookType, false]),
 );
-initialValues.set(WorkBookType.TEXTBOOK, true);
+initialValues.set(WorkBookType.CURRICULUM, true);
 
 function createActiveWorkbookTabStore() {
   const { subscribe, update } = writable(initialValues);

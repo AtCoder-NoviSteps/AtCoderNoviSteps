@@ -176,7 +176,7 @@ describe('workbook schema', () => {
         isPublished: true,
         isOfficial: true,
         isReplenished: false,
-        workBookType: WorkBookType.TEXTBOOK,
+        workBookType: WorkBookType.CURRICULUM,
         workBookTasks: [
           {
             workBookId: 1,
@@ -229,7 +229,7 @@ describe('workbook schema', () => {
         isPublished: true,
         isOfficial: true,
         isReplenished: true,
-        workBookType: WorkBookType.TEXTBOOK,
+        workBookType: WorkBookType.CURRICULUM,
         workBookTasks: [
           {
             workBookId: 1,
