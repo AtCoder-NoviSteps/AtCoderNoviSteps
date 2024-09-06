@@ -34,18 +34,11 @@
   };
 
   const workBookTabs = [
-    // HACK: 本番環境で「教科書」から「カリキュラム」に移行するまでの暫定的的な対応
     {
       title: 'カリキュラム',
       workBookType: WorkBookType.CURRICULUM,
       tooltipContent:
         '問題を解くのに必要な知識を一つずつ学ぶことができます。問題集を順番に取り組むことも、興味があるトピックを優先することもできます。',
-      canUsersView: true,
-    },
-    {
-      title: '教科書',
-      workBookType: WorkBookType.TEXTBOOK,
-      tooltipContent: '名称の変更に伴い、問題集「カリキュラム」に移行中です。',
       canUsersView: true,
     },
     {

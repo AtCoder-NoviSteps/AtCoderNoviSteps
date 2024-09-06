@@ -97,8 +97,7 @@
         />
       </div>
 
-      <!-- HACK: 本番環境で「教科書」から「カリキュラム」に移行するまでの暫定的的な対応 -->
-      {#if workbookType === WorkBookType.CURRICULUM || workbookType === WorkBookType.TEXTBOOK}
+      {#if workbookType === WorkBookType.CURRICULUM}
         <div class="mt-4 md:mt-0">
           <Toggle bind:checked={isShowReplenishment}>「補充」があれば表示</Toggle>
         </div>
@@ -109,8 +108,7 @@
 
 {#if readableMainWorkbooksCount()}
   <div>
-    <!-- HACK: 本番環境で「教科書」から「カリキュラム」に移行するまでの暫定的的な対応 -->
-    {#if workbookType === WorkBookType.CURRICULUM || workbookType === WorkBookType.TEXTBOOK}
+    {#if workbookType === WorkBookType.CURRICULUM}
       <div class="text-2xl pb-4 dark:text-white">手引き</div>
     {/if}
 
@@ -124,9 +122,8 @@
     />
   </div>
 
-  <!-- HACK: 本番環境で「教科書」から「カリキュラム」に移行するまでの暫定的的な対応 -->
   <!-- カリキュラムの場合、かつ、公開されている【補充】問題集があるときだけ表示 -->
-  {#if (workbookType === WorkBookType.CURRICULUM || workbookType === WorkBookType.TEXTBOOK) && readableReplenishedWorkbooksCount() && isShowReplenishment}
+  {#if workbookType === WorkBookType.CURRICULUM && readableReplenishedWorkbooksCount() && isShowReplenishment}
     <div class="mt-12">
       <div class="flex items-center space-x-3 pb-4">
         <div class="text-2xl dark:text-white">補充</div>
