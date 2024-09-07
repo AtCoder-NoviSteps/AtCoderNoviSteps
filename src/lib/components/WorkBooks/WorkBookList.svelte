@@ -135,7 +135,7 @@
           labelName=""
           tooltipId="tooltip-for-replenished-workbooks"
           tooltipContents={[
-            '(任意) 一つでも当てはまる場合は挑戦してみましょう',
+            '（任意） 一つでも当てはまる場合は挑戦してみましょう',
             '・言語特有の機能を学びたい',
             '・コンテストで特定の内容が解けず悔しい思いをした',
             '・苦手を克服したい',
