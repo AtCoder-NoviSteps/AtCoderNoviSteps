@@ -7,9 +7,12 @@
   import { canRead } from '$lib/utils/authorship';
   import { WorkBookType, type WorkbookList, type WorkbooksList } from '$lib/types/workbook';
   import { getTaskGradeLabel } from '$lib/utils/task';
+
   import { TaskGrade, type TaskResults } from '$lib/types/task';
   import type { Roles } from '$lib/types/user';
+
   import TooltipWrapper from '$lib/components/TooltipWrapper.svelte';
+  import LabelWithTooltips from '$lib/components/LabelWithTooltips.svelte';
   import WorkBookBaseTable from '$lib/components/WorkBooks/WorkBookBaseTable.svelte';
 
   export let workbookType: WorkBookType;
@@ -127,7 +130,17 @@
     <div class="mt-12">
       <div class="flex items-center space-x-3 pb-4">
         <div class="text-2xl dark:text-white">補充</div>
-        <TooltipWrapper tooltipContent="準備中" />
+
+        <LabelWithTooltips
+          labelName=""
+          tooltipId="tooltip-for-replenished-workbooks"
+          tooltipContents={[
+            '(任意) 一つでも当てはまる場合は挑戦してみましょう',
+            '・言語特有の機能を学びたい',
+            '・コンテストで特定の内容が解けず悔しい思いをした',
+            '・苦手を克服したい',
+          ]}
+        />
       </div>
 
       <WorkBookBaseTable
