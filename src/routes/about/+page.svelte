@@ -87,7 +87,7 @@
     <List tag="ol" class="text-gray-800 dark:text-gray-300 ml-6 space-y-1">
       <Li>(初回のみ) ユーザ名とパスワードを入力して、アカウントを作成します。</Li>
       <Li>
-        ログインします。お試し用のアカウント (ユーザ名: guest、パスワード: HelloGuest)
+        ログインします。お試し用のアカウント (ユーザ名: guest、パスワード: Hell0Guest)
         を利用することもできます。
       </Li>
       <Li>
