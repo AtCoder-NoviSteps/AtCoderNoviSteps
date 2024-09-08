@@ -2,16 +2,19 @@
   import { Card, Button, Label, Input } from 'flowbite-svelte';
 
   // 必要なコンポーネントだけを読み込んで、コンパイルを時間を短縮
-  // モジュールは読み込めているのに以下のエラーが発生するため、やむなく@ts-ignoreを使用
-  // Cannot find module 'flowbite-svelte-icons/xxx.svelte' or its corresponding type declarations.ts(2307)
-  // @ts-ignore
+  import Checkbox from 'flowbite-svelte/Checkbox.svelte';
   import UserOutlineSolid from 'flowbite-svelte-icons/UserCircleSolid.svelte';
-  // @ts-ignore
   import EyeOutline from 'flowbite-svelte-icons/EyeOutline.svelte';
-  // @ts-ignore
   import EyeSlashOutline from 'flowbite-svelte-icons/EyeSlashOutline.svelte';
 
   import MessageHelperWrapper from '$lib/components/MessageHelperWrapper.svelte';
+
+  import {
+    GUEST_USER_NAME,
+    GUEST_USER_PASSWORD,
+    // GUEST_USER_PASSWORD_FOR_LOCAL,
+    LOGIN_LABEL,
+  } from '$lib/constants/forms';
 
   // FIXME: 構造体に相当するものを利用した方が拡張・修正がしやすくなるかもしれせまん
   export let formProperties;
@@ -23,11 +26,26 @@
 
   const { form, message, errors, submitting, enhance } = formProperties;
 
+  let isGuest: boolean = false;
+
+  $: if (isGuest) {
+    $form.username = GUEST_USER_NAME;
+
+    // HACK: ローカル環境のパスワードは一時的に書き換えて対応している
+    //
+    // See:
+    // src/lib/constants/forms.ts
+    // $form.password = GUEST_USER_PASSWORD_FOR_LOCAL;
+    $form.password = GUEST_USER_PASSWORD;
+  } else {
+    $form.username = '';
+    $form.password = '';
+  }
+
   const UNFOCUSABLE = -1;
   let showPassword = false;
 </script>
 
-<!-- TODO: ゲストユーザ(お試し用)としてログインできるようにする -->
 <!-- FIXME: コンポーネントが巨大になってきたと思われるので、分割しましょう -->
 <!-- TODO: containerのデフォルト値を設定できないか? -->
 <!-- See: -->
@@ -39,6 +57,10 @@
       <h3 class="text-xl font-medium text-gray-900 dark:text-white">{title}</h3>
 
       <MessageHelperWrapper message={$message} />
+
+      {#if title === LOGIN_LABEL}
+        <Checkbox bind:checked={isGuest}>お試し用のアカウントを使う</Checkbox>
+      {/if}
 
       <!-- User name -->
       <div class="space-y-2">
