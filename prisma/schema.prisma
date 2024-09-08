@@ -215,6 +215,7 @@ enum ContestType {
   TYPICAL90 // 競プロ典型 90 問
   TESSOKU_BOOK // 競技プログラミングの鉄則
   MATH_AND_ALGORITHM // アルゴリズムと数学
+  ARC // AtCoder Regular Contest
   OTHERS // その他
 }
 
