@@ -13,6 +13,7 @@ export const ContestType: { [key in ContestTypeOrigin]: key } = {
   TYPICAL90: 'TYPICAL90', // 競プロ典型 90 問
   TESSOKU_BOOK: 'TESSOKU_BOOK', // 競技プログラミングの鉄則
   MATH_AND_ALGORITHM: 'MATH_AND_ALGORITHM', // アルゴリズムと数学
+  ARC: 'ARC', // AtCoder Regular Contest
   OTHERS: 'OTHERS',
 } as const;
 
