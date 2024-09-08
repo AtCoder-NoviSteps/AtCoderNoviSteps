@@ -113,6 +113,27 @@ describe('Contest', () => {
       expect(classifyContest('math-and-algorithm')).toEqual(ContestType.MATH_AND_ALGORITHM);
     });
 
+    describe('when contest_id contains arc', () => {
+      const testCases = [
+        { contestId: 'arc001', expected: ContestType.ARC },
+        { contestId: 'arc002', expected: ContestType.ARC },
+        { contestId: 'arc057', expected: ContestType.ARC },
+        { contestId: 'arc058', expected: ContestType.ARC },
+        { contestId: 'arc099', expected: ContestType.ARC },
+        { contestId: 'arc100', expected: ContestType.ARC },
+        { contestId: 'arc101', expected: ContestType.ARC },
+        { contestId: 'arc103', expected: ContestType.ARC },
+        { contestId: 'arc104', expected: ContestType.ARC },
+        { contestId: 'arc105', expected: ContestType.ARC },
+        { contestId: 'arc182', expected: ContestType.ARC },
+        { contestId: 'arc183', expected: ContestType.ARC },
+      ];
+
+      runTests('classifyContest', testCases, ({ contestId, expected }: TestCaseForContestType) => {
+        expect(classifyContest(contestId)).toEqual(expected);
+      });
+    });
+
     describe('when contest_id contains chokudai_S', () => {
       const testCases = [
         { contestId: 'chokudai_S001', expected: ContestType.OTHERS },
@@ -241,6 +262,31 @@ describe('Contest', () => {
       );
     });
 
+    describe('when contest_id contains arc', () => {
+      const testCases = [
+        { contestId: 'arc001', expected: ContestType.ARC },
+        { contestId: 'arc002', expected: ContestType.ARC },
+        { contestId: 'arc057', expected: ContestType.ARC },
+        { contestId: 'arc058', expected: ContestType.ARC },
+        { contestId: 'arc099', expected: ContestType.ARC },
+        { contestId: 'arc100', expected: ContestType.ARC },
+        { contestId: 'arc101', expected: ContestType.ARC },
+        { contestId: 'arc103', expected: ContestType.ARC },
+        { contestId: 'arc104', expected: ContestType.ARC },
+        { contestId: 'arc105', expected: ContestType.ARC },
+        { contestId: 'arc182', expected: ContestType.ARC },
+        { contestId: 'arc183', expected: ContestType.ARC },
+      ];
+
+      runTests(
+        'getContestPriority',
+        testCases,
+        ({ contestId, expected }: TestCaseForContestType) => {
+          expect(getContestPriority(contestId)).toEqual(contestTypePriorities.get(expected));
+        },
+      );
+    });
+
     describe('when contest_id contains chokudai_S', () => {
       const testCases = [
         { contestId: 'chokudai_S001', expected: ContestType.OTHERS },
@@ -269,6 +315,13 @@ describe('Contest', () => {
     test('when contest_id is ABC365', () => {
       const contestId = 'abc365';
       const expected = 'https://atcoder.jp/contests/abc365';
+
+      expect(getContestUrl(contestId)).toEqual(expected);
+    });
+
+    test('when contest_id is ARC183', () => {
+      const contestId = 'arc183';
+      const expected = 'https://atcoder.jp/contests/arc183';
 
       expect(getContestUrl(contestId)).toEqual(expected);
     });
@@ -381,6 +434,31 @@ describe('Contest', () => {
 
     test('when contest_id is math-and-algorithm', () => {
       expect(getContestNameLabel('math-and-algorithm')).toEqual('アルゴリズムと数学');
+    });
+
+    describe('when contest_id contains arc', () => {
+      const testCases = [
+        { contestId: 'arc001', expected: 'ARC001' },
+        { contestId: 'arc002', expected: 'ARC002' },
+        { contestId: 'arc057', expected: 'ARC057' },
+        { contestId: 'arc058', expected: 'ARC058' },
+        { contestId: 'arc099', expected: 'ARC099' },
+        { contestId: 'arc100', expected: 'ARC100' },
+        { contestId: 'arc101', expected: 'ARC101' },
+        { contestId: 'arc103', expected: 'ARC103' },
+        { contestId: 'arc104', expected: 'ARC104' },
+        { contestId: 'arc105', expected: 'ARC105' },
+        { contestId: 'arc182', expected: 'ARC182' },
+        { contestId: 'arc183', expected: 'ARC183' },
+      ];
+
+      runTests(
+        'getContestNameLabel',
+        testCases,
+        ({ contestId, expected }: TestCaseForContestNameLabel) => {
+          expect(getContestNameLabel(contestId)).toEqual(expected);
+        },
+      );
     });
 
     describe('when contest_id contains chokudai_S', () => {
