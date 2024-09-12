@@ -24,11 +24,11 @@ importers:
         specifier: 5.2.1
         version: 5.2.1(svelte@4.2.19)(vite@5.4.4(@types/node@16.18.11))(vitest@2.0.5(@edge-runtime/vm@3.2.0)(@types/node@16.18.11)(@vitest/ui@2.0.5)(jsdom@25.0.0))
       '@types/jest':
-        specifier: 29.5.12
-        version: 29.5.12
+        specifier: 29.5.13
+        version: 29.5.13
       autoprefixer:
         specifier: 10.4.20
-        version: 10.4.20(postcss@8.4.39)
+        version: 10.4.20(postcss@8.4.44)
       debug:
         specifier: 4.3.7
         version: 4.3.7
@@ -863,8 +863,8 @@ packages:
   '@types/istanbul-reports@3.0.4':
     resolution: {integrity: sha512-pk2B1NWalF9toCRu6gjBzR69syFjP4Od8WRAX+0mmf9lAjCRicLOWc+ZrxZHx/0XRjotgkF9t6iaMJ+aXcOdZQ==}
 
-  '@types/jest@29.5.12':
-    resolution: {integrity: sha512-eDC8bTvT/QhYdxJAulQikueigY5AsdBRH2yDKW3yveW7svY3+DzN84/2NUgkw10RTiJbWqZrTtoGVdYlvFJdLw==}
+  '@types/jest@29.5.13':
+    resolution: {integrity: sha512-wd+MVEZCHt23V0/L642O5APvspWply/rGY5BcW4SUETo2UzPU3Z26qr8jC2qxpimI2jjx9h7+2cj2FwIr01bXg==}
 
   '@types/json-schema@7.0.15':
     resolution: {integrity: sha512-5+fP8P8MFNC+AyZCDxrB2pkZFPGzqQWUzpSeuuVLvm8VMcorNYavBqoFcxK8bQz4Qsbn4oUEEem4wDLfcysGHA==}
@@ -4795,7 +4795,7 @@ snapshots:
     dependencies:
       '@types/istanbul-lib-report': 3.0.3
 
-  '@types/jest@29.5.12':
+  '@types/jest@29.5.13':
     dependencies:
       expect: 29.7.0
       pretty-format: 29.7.0
@@ -5285,14 +5285,14 @@ snapshots:
 
   asynckit@0.4.0: {}
 
-  autoprefixer@10.4.20(postcss@8.4.39):
+  autoprefixer@10.4.20(postcss@8.4.44):
     dependencies:
       browserslist: 4.23.3
       caniuse-lite: 1.0.30001649
       fraction.js: 4.3.7
       normalize-range: 0.1.2
       picocolors: 1.0.1
-      postcss: 8.4.39
+      postcss: 8.4.44
       postcss-value-parser: 4.2.0
 
   axobject-query@4.0.0:
