@@ -28,7 +28,7 @@ importers:
         version: 29.5.12
       autoprefixer:
         specifier: 10.4.20
-        version: 10.4.20(postcss@8.4.39)
+        version: 10.4.20(postcss@8.4.44)
       debug:
         specifier: 4.3.7
         version: 4.3.7
@@ -160,8 +160,8 @@ importers:
         specifier: 4.2.19
         version: 4.2.19
       svelte-check:
-        specifier: 4.0.1
-        version: 4.0.1(svelte@4.2.19)(typescript@5.6.2)
+        specifier: 4.0.2
+        version: 4.0.2(svelte@4.2.19)(typescript@5.6.2)
       svelte-meta-tags:
         specifier: 3.1.4
         version: 3.1.4(svelte@4.2.19)(typescript@5.6.2)
@@ -3584,8 +3584,8 @@ packages:
     resolution: {integrity: sha512-8Dyfzqmo622orHICexeboIuAeNG3oiukjAAwVwVbuVIAxglpr2SEBrofy2NpjHjouBu7QsK5X5rs48FoTf0uQA==}
     hasBin: true
 
-  svelte-check@4.0.1:
-    resolution: {integrity: sha512-AuWnCZdREoOzMhoptHPUUPYUxLNdXSkoZnPnlv19SZJJimRzLmjjZLKsOiRB4AnhgX+56/WSEdvkWXI/q2BSsA==}
+  svelte-check@4.0.2:
+    resolution: {integrity: sha512-w2yqcG9ELJe2RJCnAvB7v0OgkHhL3czzz/tVoxGFfO6y4mOrF6QHCDhXijeXzsU7LVKEwWS3Qd9tza4JBuDxqA==}
     engines: {node: '>= 18.0.0'}
     hasBin: true
     peerDependencies:
@@ -5285,14 +5285,14 @@ snapshots:
 
   asynckit@0.4.0: {}
 
-  autoprefixer@10.4.20(postcss@8.4.39):
+  autoprefixer@10.4.20(postcss@8.4.44):
     dependencies:
       browserslist: 4.23.3
       caniuse-lite: 1.0.30001649
       fraction.js: 4.3.7
       normalize-range: 0.1.2
       picocolors: 1.0.1
-      postcss: 8.4.39
+      postcss: 8.4.44
       postcss-value-parser: 4.2.0
 
   axobject-query@4.0.0:
@@ -7731,7 +7731,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  svelte-check@4.0.1(svelte@4.2.19)(typescript@5.6.2):
+  svelte-check@4.0.2(svelte@4.2.19)(typescript@5.6.2):
     dependencies:
       '@jridgewell/trace-mapping': 0.3.25
       chokidar: 3.6.0
