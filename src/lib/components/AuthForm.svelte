@@ -12,8 +12,8 @@
 
   import {
     GUEST_USER_NAME,
-    // GUEST_USER_PASSWORD,
-    GUEST_USER_PASSWORD_FOR_LOCAL,
+    GUEST_USER_PASSWORD,
+    // GUEST_USER_PASSWORD_FOR_LOCAL,
     LOGIN_LABEL,
   } from '$lib/constants/forms';
 
@@ -43,8 +43,8 @@
     //
     // See:
     // src/lib/constants/forms.ts
-    $form.password = GUEST_USER_PASSWORD_FOR_LOCAL;
-    // $form.password = GUEST_USER_PASSWORD;
+    // $form.password = GUEST_USER_PASSWORD_FOR_LOCAL;
+    $form.password = GUEST_USER_PASSWORD;
 
     // $formの更新後にフォームを送信
     await tick();
