@@ -1,8 +1,9 @@
 <script lang="ts">
-  import { Card, Button, Label, Input } from 'flowbite-svelte';
+  import { tick } from 'svelte';
+  import { writable } from 'svelte/store';
+  import { Card, Button, Label, Input, Hr } from 'flowbite-svelte';
 
   // 必要なコンポーネントだけを読み込んで、コンパイルを時間を短縮
-  import Checkbox from 'flowbite-svelte/Checkbox.svelte';
   import UserOutlineSolid from 'flowbite-svelte-icons/UserCircleSolid.svelte';
   import EyeOutline from 'flowbite-svelte-icons/EyeOutline.svelte';
   import EyeSlashOutline from 'flowbite-svelte-icons/EyeSlashOutline.svelte';
@@ -11,8 +12,8 @@
 
   import {
     GUEST_USER_NAME,
-    GUEST_USER_PASSWORD,
-    // GUEST_USER_PASSWORD_FOR_LOCAL,
+    // GUEST_USER_PASSWORD,
+    GUEST_USER_PASSWORD_FOR_LOCAL,
     LOGIN_LABEL,
   } from '$lib/constants/forms';
 
@@ -25,21 +26,37 @@
   export let alternativePageLink: string;
 
   const { form, message, errors, submitting, enhance } = formProperties;
+  let isSubmitting = writable(false);
 
-  let isGuest: boolean = false;
+  async function handleLoginAsGuest(event: Event) {
+    if (!event || (event instanceof KeyboardEvent && event.key !== 'Enter')) {
+      event.preventDefault();
+      return;
+    }
 
-  $: if (isGuest) {
+    event.preventDefault();
+    $isSubmitting = true;
+
     $form.username = GUEST_USER_NAME;
 
     // HACK: ローカル環境のパスワードは一時的に書き換えて対応している
     //
     // See:
     // src/lib/constants/forms.ts
-    // $form.password = GUEST_USER_PASSWORD_FOR_LOCAL;
-    $form.password = GUEST_USER_PASSWORD;
-  } else {
-    $form.username = '';
-    $form.password = '';
+    $form.password = GUEST_USER_PASSWORD_FOR_LOCAL;
+    // $form.password = GUEST_USER_PASSWORD;
+
+    // $formの更新後にフォームを送信
+    await tick();
+    const authForm = document.getElementById('auth-form') as HTMLFormElement;
+
+    if (authForm instanceof HTMLFormElement) {
+      authForm.submit();
+    } else {
+      console.error('Failed to submit the form');
+    }
+
+    $isSubmitting = false;
   }
 
   const UNFOCUSABLE = -1;
@@ -53,14 +70,26 @@
 <!-- https://github.com/themesberg/flowbite-svelte-icons/tree/main/src/lib -->
 <div class="container mx-auto py-8 w-5/6 flex flex-col items-center">
   <Card class="w-full max-w-md">
-    <form method="post" use:enhance class="flex flex-col space-y-6">
+    <form id="auth-form" method="post" use:enhance class="flex flex-col space-y-6">
       <h3 class="text-xl font-medium text-gray-900 dark:text-white">{title}</h3>
 
       <MessageHelperWrapper message={$message} />
 
       {#if title === LOGIN_LABEL}
-        <Checkbox bind:checked={isGuest}>お試し用のアカウントを使う</Checkbox>
+        <Button
+          type="button"
+          class="w-full"
+          on:click={handleLoginAsGuest}
+          on:keydown={handleLoginAsGuest}
+          disabled={$submitting || $isSubmitting}
+        >
+          <div class="text-md">お試し用のアカウントでログイン</div>
+        </Button>
       {/if}
+
+      <div>
+        <Hr classHr="my-2 h-0.5 bg-gray-400 dark:bg-gray-200" />
+      </div>
 
       <!-- User name -->
       <div class="space-y-2">
