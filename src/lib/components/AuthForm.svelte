@@ -85,11 +85,11 @@
         >
           <div class="text-md">お試し用のアカウントでログイン</div>
         </Button>
-      {/if}
 
-      <div>
-        <Hr classHr="my-2 h-0.5 bg-gray-400 dark:bg-gray-200" />
-      </div>
+        <div>
+          <Hr classHr="my-2 h-0.5 bg-gray-400 dark:bg-gray-200" />
+        </div>
+      {/if}
 
       <!-- User name -->
       <div class="space-y-2">
