@@ -8,19 +8,19 @@
 </p>
 
 <p align="center">
-    <a href="https://github.com/KATO-Hiro/AtCoderNovisteps/stargazers">
-        <img src="https://img.shields.io/github/stars/KATO-Hiro/AtCoderNovisteps?style=plastic" alt="GitHub Repo stars">
+    <a href="https://github.com/AtCoder-Novisteps/AtCoderNovisteps/stargazers">
+        <img src="https://img.shields.io/github/stars/AtCoder-Novisteps/AtCoderNovisteps?style=plastic" alt="GitHub Repo stars">
     </a>
-    <a href="https://github.com/KATO-Hiro/AtCoderNovisteps/actions/workflows/ci.yml" target="_blank">
-        <img src="https://img.shields.io/github/actions/workflow/status/KATO-Hiro/AtCoderNovisteps/ci.yml?branch=main&label=deployment&style=plastic" alt="GitHub Workflow Status (with event)">
+    <a href="https://github.com/AtCoder-Novisteps/AtCoderNovisteps/actions/workflows/ci.yml" target="_blank">
+        <img src="https://img.shields.io/github/actions/workflow/status/AtCoder-Novisteps/AtCoderNovisteps/ci.yml?branch=main&label=deployment&style=plastic" alt="GitHub Workflow Status (with event)">
     </a>
-    <a href="https://github.com/KATO-Hiro/AtCoderNovisteps/issues">
-        <img alt="GitHub Repo Issues" src="https://img.shields.io/github/issues/KATO-Hiro/AtCoderNovisteps?&style=plastic"/>
+    <a href="https://github.com/AtCoder-Novisteps/AtCoderNovisteps/issues">
+        <img alt="GitHub Repo Issues" src="https://img.shields.io/github/issues/AtCoder-Novisteps/AtCoderNovisteps?&style=plastic"/>
     </a>
-    <a href="https://github.com/KATO-Hiro/AtCoderNovisteps/blob/main/LICENSE">
+    <a href="https://github.com/AtCoder-Novisteps/AtCoderNovisteps/blob/main/LICENSE">
         <img src="https://img.shields.io/badge/license-MIT-brightgreen.svg?style=plastic" alt="License: MIT" />
     </a>
-    <a href="https://twitter.com/acnovisteps">
+    <a href="https://x.com/acnovisteps">
         <img src="https://img.shields.io/twitter/follow/acnovisteps?style=social&logo=twitter" alt="Follow @acnovisteps on Twitter" />
     </a>
 </p>
