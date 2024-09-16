@@ -1,6 +1,6 @@
 <script lang="ts">
   import { tick } from 'svelte';
-  import { writable } from 'svelte/store';
+  import { goto } from '$app/navigation';
   import { Card, Button, Label, Input, Hr } from 'flowbite-svelte';
 
   // 必要なコンポーネントだけを読み込んで、コンパイルを時間を短縮
@@ -26,7 +26,8 @@
   export let alternativePageLink: string;
 
   const { form, message, errors, submitting, enhance } = formProperties;
-  let isSubmitting = writable(false);
+
+  $: isSubmitting = false;
 
   async function handleLoginAsGuest(event: Event) {
     if (!event || (event instanceof KeyboardEvent && event.key !== 'Enter')) {
@@ -35,28 +36,41 @@
     }
 
     event.preventDefault();
-    $isSubmitting = true;
-
-    $form.username = GUEST_USER_NAME;
 
     // HACK: ローカル環境のパスワードは一時的に書き換えて対応している
     //
     // See:
     // src/lib/constants/forms.ts
+    $form.username = GUEST_USER_NAME;
     // $form.password = GUEST_USER_PASSWORD_FOR_LOCAL;
     $form.password = GUEST_USER_PASSWORD;
 
-    // $formの更新後にフォームを送信
-    await tick();
-    const authForm = document.getElementById('auth-form') as HTMLFormElement;
+    try {
+      // $formの更新後にフォームを送信
+      await tick();
+      isSubmitting = true;
+      const formElement = event.target instanceof Element ? event.target.closest('form') : null;
 
-    if (authForm instanceof HTMLFormElement) {
-      authForm.submit();
-    } else {
-      console.error('Failed to submit the form');
+      if (!formElement || !(formElement instanceof HTMLFormElement)) {
+        throw new Error('Not found form element or HTMLFormElement');
+      }
+
+      const response = await fetch('/login', {
+        method: 'POST',
+        body: new FormData(formElement),
+      });
+
+      if (!response.ok) {
+        console.error('Failed to login as a guest: ', response);
+        return;
+      }
+
+      await goto('/');
+    } catch (error) {
+      console.error('Failed to login as a guest: ', error);
+    } finally {
+      isSubmitting = false;
     }
-
-    $isSubmitting = false;
   }
 
   const UNFOCUSABLE = -1;
@@ -72,7 +86,6 @@
   <Card class="w-full max-w-md">
     <form id="auth-form" method="post" use:enhance class="flex flex-col space-y-6">
       <h3 class="text-xl font-medium text-gray-900 dark:text-white">{title}</h3>
-
       <MessageHelperWrapper message={$message} />
 
       {#if title === LOGIN_LABEL}
@@ -81,7 +94,7 @@
           class="w-full"
           on:click={handleLoginAsGuest}
           on:keydown={handleLoginAsGuest}
-          disabled={$submitting || $isSubmitting}
+          disabled={isSubmitting || $submitting}
         >
           <div class="text-md">お試し用のアカウントでログイン</div>
         </Button>
@@ -104,7 +117,7 @@
           placeholder="chokudai"
           aria-invalid={$errors.username ? 'true' : undefined}
           bind:value={$form.username}
-          disabled={$submitting}
+          disabled={$submitting || isSubmitting}
           required
         >
           <UserOutlineSolid slot="left" class="w-5 h-5" tabindex={UNFOCUSABLE} />
@@ -129,7 +142,7 @@
           placeholder="•••••••"
           aria-invalid={$errors.password ? 'true' : undefined}
           bind:value={$form.password}
-          disabled={$submitting}
+          disabled={$submitting || isSubmitting}
           required
         >
           <!-- Show / hide password -->
@@ -160,7 +173,7 @@
       </a>
     </div> -->
 
-      <Button type="submit" class="w-full" disabled={$submitting}>
+      <Button type="submit" class="w-full" disabled={$submitting || isSubmitting}>
         {submitButtonLabel}
       </Button>
 
