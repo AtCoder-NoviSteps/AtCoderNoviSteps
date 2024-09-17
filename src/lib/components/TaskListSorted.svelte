@@ -10,18 +10,19 @@
   } from 'flowbite-svelte';
 
   import type { TaskResults } from '$lib/types/task';
-  import { ATCODER_BASE_CONTEST_URL } from '$lib/constants/urls';
-  import { getContestNameLabel } from '$lib/utils/contest';
+
+  import { addContestNameToTaskIndex } from '$lib/utils/contest';
+  import { removeTaskIndexFromTitle } from '$lib/utils/task';
 
   export let taskResults: TaskResults;
 </script>
 
 <Table shadow hoverable={true} class="text-md">
   <TableHead class="text-md bg-gray-100">
-    <TableHeadCell class="w-1/6">提出状況</TableHeadCell>
-    <TableHeadCell class="w-1/6">コンテスト名</TableHeadCell>
+    <TableHeadCell class="w-1/6">回答</TableHeadCell>
     <TableHeadCell class="w-1/2">問題名</TableHeadCell>
-    <TableHeadCell class="w-1/6">更新時間</TableHeadCell>
+    <TableHeadCell class="w-1/6">出典</TableHeadCell>
+    <TableHeadCell class="w-1/6">更新日時</TableHeadCell>
   </TableHead>
   <TableBody tableBodyClass="divide-y">
     {#each taskResults as taskResult}
@@ -35,21 +36,14 @@
         </TableBodyCell>
         <TableBodyCell>
           <a
-            href="{ATCODER_BASE_CONTEST_URL}/{taskResult.contest_id}"
-            class="font-medium text-primary-600 hover:underline dark:text-primary-500"
-            target="_blank"
-            rel="noreferrer"
-          >
-            {getContestNameLabel(taskResult.contest_id)}
-          </a>
-        </TableBodyCell>
-        <TableBodyCell>
-          <a
             href="/problems/{taskResult.task_id}"
             class="font-medium text-primary-600 hover:underline dark:text-primary-500"
           >
-            {taskResult.title}
+            {removeTaskIndexFromTitle(taskResult.title, taskResult.task_table_index)}
           </a>
+        </TableBodyCell>
+        <TableBodyCell>
+          {addContestNameToTaskIndex(taskResult.contest_id, taskResult.task_table_index)}
         </TableBodyCell>
         <TableBodyCell>{taskResult.updated_at.toLocaleString()}</TableBodyCell>
       </TableBodyRow>

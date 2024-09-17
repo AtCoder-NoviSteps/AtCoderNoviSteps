@@ -11,8 +11,9 @@
     Button,
   } from 'flowbite-svelte';
 
+  import { addContestNameToTaskIndex } from '$lib/utils/contest';
   import { taskGradeValues, type Task } from '$lib/types/task';
-  import { getTaskGradeLabel } from '$lib/utils/task';
+  import { getTaskGradeLabel, removeTaskIndexFromTitle } from '$lib/utils/task';
 
   export let task: Task;
   //export const isAdmin: boolean; // Admin権限がある場合は、編集リンクを表示する
@@ -37,13 +38,13 @@
       <TableBodyRow>
         <TableBodyCell>タイトル</TableBodyCell>
         <TableBodyCell>
-          {task.title}
+          {removeTaskIndexFromTitle(task.title, task.task_table_index)}
         </TableBodyCell>
       </TableBodyRow>
       <TableBodyRow>
         <TableBodyCell>出典</TableBodyCell>
         <TableBodyCell>
-          {task.contest_id}
+          {addContestNameToTaskIndex(task.contest_id, task.task_table_index)}
         </TableBodyCell>
       </TableBodyRow>
       <TableBodyRow>

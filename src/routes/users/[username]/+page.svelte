@@ -4,6 +4,7 @@
   import TaskListSorted from '$lib/components/TaskListSorted.svelte';
 
   export let data;
+
   let username = data.username;
   let atcoder_username = data.atcoder_username;
   let isLoggedIn = data.isLoggedIn;

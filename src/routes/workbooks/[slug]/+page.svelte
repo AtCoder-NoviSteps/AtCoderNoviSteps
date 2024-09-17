@@ -21,8 +21,8 @@
 
   import { getBackgroundColorFrom } from '$lib/services/submission_status';
 
-  import { taskUrl } from '$lib/utils/task';
-  import { getContestNameLabel } from '$lib/utils/contest';
+  import { taskUrl, removeTaskIndexFromTitle } from '$lib/utils/task';
+  import { addContestNameToTaskIndex } from '$lib/utils/contest';
 
   import type { WorkBookTaskBase } from '$lib/types/workbook';
   import type { TaskResult, TaskGrade } from '$lib/types/task';
@@ -50,11 +50,21 @@
 
   const getContestNameFrom = (taskId: string): string => {
     const contestId = getContestIdFrom(taskId);
-    return getContestNameLabel(contestId);
+    const taskTableIndex = getTaskTableIndex(taskId);
+
+    return addContestNameToTaskIndex(contestId, taskTableIndex);
   };
 
   const getTaskName = (taskId: string): string => {
-    return getTaskResult(taskId)?.title as string;
+    const title = getTaskResult(taskId)?.title as string;
+    const taskTableIndex = getTaskTableIndex(taskId);
+
+    return removeTaskIndexFromTitle(title, taskTableIndex);
+  };
+
+  const getTaskTableIndex = (taskId: string): string => {
+    const taskTableIndex = getTaskResult(taskId)?.task_table_index as string;
+    return taskTableIndex ? taskTableIndex : '';
   };
 
   const getUniqueIdUsing = (taskId: string): string => {

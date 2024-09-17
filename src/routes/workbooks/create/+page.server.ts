@@ -31,9 +31,9 @@ export const load = async ({ locals }) => {
     error(FORBIDDEN, `アクセス権限がありません。`);
   }
 
-  const tasks = await tasksCrud.getTasks();
+  const tasksMapByIds = await tasksCrud.getTasksByTaskId();
 
-  return { form: form, author: author, isAdmin: isAdmin, tasks: tasks };
+  return { form: form, author: author, isAdmin: isAdmin, tasksMapByIds: tasksMapByIds };
 };
 
 export const actions = {

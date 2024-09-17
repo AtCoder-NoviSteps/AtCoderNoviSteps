@@ -7,7 +7,7 @@
     type WorkBookTasksBase,
     type WorkBookTaskCreate,
   } from '$lib/types/workbook';
-  import type { Tasks } from '$lib/types/task';
+  import type { Task } from '$lib/types/task';
 
   import { preventEnterKey } from '$lib/actions/prevent_enter_key';
   import HeadingOne from '$lib/components/HeadingOne.svelte';
@@ -35,7 +35,7 @@
 
   $: workBookTasksForTable = [] as WorkBookTaskCreate[];
 
-  const tasks: Tasks = data.tasks;
+  const tasksMapByIds: Map<string, Task> = data.tasksMapByIds;
 </script>
 
 <!-- TODO: 問題集の編集ページのコンポーネントとほぼ共通しているのでリファクタリング -->
@@ -67,7 +67,11 @@
     <!-- 問題を検索 -->
     <!-- HACK: 属性が微妙に異なるため、やむなくデータベースへの保存用と問題集作成・編集用で分けている。 -->
     <div class="space-y-2">
-      <TaskSearchBox {tasks} bind:workBookTasks={$form.workBookTasks} bind:workBookTasksForTable />
+      <TaskSearchBox
+        tasks={Array.from(tasksMapByIds.values())}
+        bind:workBookTasks={$form.workBookTasks}
+        bind:workBookTasksForTable
+      />
       <InputFieldWrapper
         inputFieldType="hidden"
         inputFieldName="workBookTasks"
@@ -77,7 +81,11 @@
     </div>
 
     <!-- 問題一覧 -->
-    <WorkBookTasksTable bind:workBookTasks={$form.workBookTasks} bind:workBookTasksForTable />
+    <WorkBookTasksTable
+      {tasksMapByIds}
+      bind:workBookTasks={$form.workBookTasks}
+      bind:workBookTasksForTable
+    />
 
     <!-- 作成ボタンを追加 -->
     <div class="flex flex-wrap md:justify-center md:items-center">
