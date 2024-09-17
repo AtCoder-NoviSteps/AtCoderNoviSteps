@@ -6,6 +6,7 @@ import {
   countAllTasks,
   areAllTasksAccepted,
   compareByContestIdAndTaskId,
+  removeTaskIndexFromTitle,
 } from '$lib/utils/task';
 import type { WorkBookTaskBase } from '$lib/types/workbook';
 import { type TaskResult, type TaskResults } from '$lib/types/task';
@@ -49,6 +50,14 @@ type TestCaseForSortingTaskResults = {
 };
 
 type TestCasesForSortingTaskResults = TestCaseForSortingTaskResults[];
+
+type TestCaseForNewTitle = {
+  title: string;
+  taskTableIndex: string;
+  expected: string;
+};
+
+type TestCasesForNewTitle = TestCaseForNewTitle[];
 
 describe('Task', () => {
   describe('task url', () => {
@@ -563,6 +572,114 @@ describe('Task', () => {
     ) {
       test.each(testCases)(
         `${testName}(first: $first.task_id, second: $second.task_id)`,
+        testFunction,
+      );
+    }
+  });
+
+  describe('remove task index from title', () => {
+    describe('when ABC371 is given', () => {
+      const testCases: TestCasesForNewTitle = [
+        {
+          title: 'A. Jiro',
+          taskTableIndex: 'A',
+          expected: 'Jiro',
+        },
+        {
+          title: 'B. Taro',
+          taskTableIndex: 'B',
+          expected: 'Taro',
+        },
+        {
+          title: 'C. Make Isomorphic',
+          taskTableIndex: 'C',
+          expected: 'Make Isomorphic',
+        },
+        {
+          title: 'D. 1D Country',
+          taskTableIndex: 'D',
+          expected: '1D Country',
+        },
+        {
+          title: 'E. I Hate Sigma Problems',
+          taskTableIndex: 'E',
+          expected: 'I Hate Sigma Problems',
+        },
+        {
+          title: 'F. Takahashi in Narrow Road',
+          taskTableIndex: 'F',
+          expected: 'Takahashi in Narrow Road',
+        },
+        {
+          title: 'G. Lexicographically Smallest Permutation',
+          taskTableIndex: 'G',
+          expected: 'Lexicographically Smallest Permutation',
+        },
+      ];
+
+      runTests(
+        'removeTaskIndexFromTitle',
+        testCases,
+        ({ title, taskTableIndex, expected }: TestCaseForNewTitle) => {
+          expect(removeTaskIndexFromTitle(title, taskTableIndex)).toBe(expected);
+        },
+      );
+    });
+
+    describe('when APG4b is given', () => {
+      const testCases: TestCasesForNewTitle = [
+        {
+          title: 'EX1. 1.01',
+          taskTableIndex: 'EX1',
+          expected: '1.01',
+        },
+        {
+          title: 'EX2. 1.02',
+          taskTableIndex: 'EX2',
+          expected: '1.02',
+        },
+        {
+          title: 'EX9. 1.09',
+          taskTableIndex: 'EX9',
+          expected: '1.09',
+        },
+        {
+          title: 'EX10. 1.10',
+          taskTableIndex: 'EX10',
+          expected: '1.10',
+        },
+        {
+          title: 'EX16. 2.01',
+          taskTableIndex: 'EX16',
+          expected: '2.01',
+        },
+        {
+          title: 'EX21. 2.06',
+          taskTableIndex: 'EX21',
+          expected: '2.06',
+        },
+        {
+          title: 'EX26. 3.06',
+          taskTableIndex: 'EX26',
+          expected: '3.06',
+        },
+      ];
+      runTests(
+        'removeTaskIndexFromTitle',
+        testCases,
+        ({ title, taskTableIndex, expected }: TestCaseForNewTitle) => {
+          expect(removeTaskIndexFromTitle(title, taskTableIndex)).toBe(expected);
+        },
+      );
+    });
+
+    function runTests(
+      testName: string,
+      testCases: TestCasesForNewTitle,
+      testFunction: (testCase: TestCaseForNewTitle) => void,
+    ) {
+      test.each(testCases)(
+        `${testName}(title: $title, taskTableIndex: $taskTableIndex)`,
         testFunction,
       );
     }
