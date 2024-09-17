@@ -11,7 +11,7 @@
 
   import type { TaskResults } from '$lib/types/task';
 
-  import { getContestNameLabel } from '$lib/utils/contest';
+  import { addContestNameToTaskIndex } from '$lib/utils/contest';
   import { removeTaskIndexFromTitle } from '$lib/utils/task';
 
   export let taskResults: TaskResults;
@@ -43,7 +43,7 @@
           </a>
         </TableBodyCell>
         <TableBodyCell>
-          {getContestNameLabel(taskResult.contest_id)}
+          {addContestNameToTaskIndex(taskResult.contest_id, taskResult.task_table_index)}
         </TableBodyCell>
         <TableBodyCell>{taskResult.updated_at.toLocaleString()}</TableBodyCell>
       </TableBodyRow>

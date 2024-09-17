@@ -132,3 +132,9 @@ export const getContestNameLabel = (contest_id: string) => {
 
   return contest_id.toUpperCase();
 };
+
+export const addContestNameToTaskIndex = (contestId: string, taskTableIndex: string): string => {
+  const contestName = getContestNameLabel(contestId);
+
+  return `${contestName} - ${taskTableIndex}`;
+};

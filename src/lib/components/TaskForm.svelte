@@ -11,6 +11,7 @@
     Button,
   } from 'flowbite-svelte';
 
+  import { addContestNameToTaskIndex } from '$lib/utils/contest';
   import { taskGradeValues, type Task } from '$lib/types/task';
   import { getTaskGradeLabel, removeTaskIndexFromTitle } from '$lib/utils/task';
 
@@ -43,7 +44,7 @@
       <TableBodyRow>
         <TableBodyCell>出典</TableBodyCell>
         <TableBodyCell>
-          {task.contest_id}
+          {addContestNameToTaskIndex(task.contest_id, task.task_table_index)}
         </TableBodyCell>
       </TableBodyRow>
       <TableBodyRow>

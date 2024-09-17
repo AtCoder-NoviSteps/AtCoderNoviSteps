@@ -10,7 +10,7 @@
   } from 'flowbite-svelte';
 
   import ExternalLinkWrapper from '$lib/components/ExternalLinkWrapper.svelte';
-  import { getContestNameLabel } from '$lib/utils/contest';
+  import { addContestNameToTaskIndex } from '$lib/utils/contest';
   import { taskUrl, removeTaskIndexFromTitle } from '$lib/utils/task';
 
   import type { WorkBookTaskBase, WorkBookTaskCreate, WorkBookTaskEdit } from '$lib/types/workbook';
@@ -128,7 +128,10 @@
 
           <!-- 出典 -->
           <TableBodyCell class="xs:text-lg text-gray-700 dark:text-gray-300 truncate">
-            {getContestNameLabel(task.contestId)}
+            {addContestNameToTaskIndex(
+              task.contestId,
+              getTaskTableIndex(tasksMapByIds, task.taskId),
+            )}
           </TableBodyCell>
 
           <!-- 一言（コメント・ヒント） -->
