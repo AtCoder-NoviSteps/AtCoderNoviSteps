@@ -1,21 +1,23 @@
 //See https://tech-blog.rakus.co.jp/entry/20230209/sveltekit#%E3%82%B9%E3%83%AC%E3%83%83%E3%83%89%E6%8A%95%E7%A8%BF%E7%94%BB%E9%9D%A2
 
-import type { Roles } from '$lib/types/user';
-import type { TaskResult } from '$lib/types/task';
+import { redirect } from '@sveltejs/kit';
+
 import * as userService from '$lib/services/users';
 import * as taskResultService from '$lib/services/task_results';
 
-import { redirect } from '@sveltejs/kit';
+import type { Roles } from '$lib/types/user';
+import type { TaskResult } from '$lib/types/task';
+
+import { TEMPORARY_REDIRECT } from '$lib/constants/http-response-status-codes';
 
 export async function load({ locals, params }) {
   const session = await locals.auth.validate();
   if (!session) {
-    redirect(302, '/login');
+    redirect(TEMPORARY_REDIRECT, '/login');
   }
 
   try {
     const user = await userService.getUser(params.username as string);
-    console.log(user?.id);
 
     if (!user) {
       return {
@@ -28,11 +30,13 @@ export async function load({ locals, params }) {
       };
     }
 
-    const taskResults = await taskResultService.getTaskResultsOnlyResultExists(user?.id as string);
-    taskResults.sort((firstObject: TaskResult, secondObject: TaskResult) =>
-      firstObject.updated_at > secondObject.updated_at ? -1 : 1,
+    const taskResultsMap = await taskResultService.getTaskResultsOnlyResultExists(
+      user?.id as string,
     );
-    console.log('taskResults:', taskResults);
+    const taskResults = Array.from(taskResultsMap.values()).sort(
+      (firstTaskResult: TaskResult, secondTaskResult: TaskResult) =>
+        firstTaskResult.updated_at > secondTaskResult.updated_at ? -1 : 1,
+    );
 
     return {
       userId: user?.id as string,
@@ -43,8 +47,8 @@ export async function load({ locals, params }) {
       taskResults: taskResults,
     };
   } catch (e) {
-    console.log('fail to load user or taskResults:', session?.user.username);
-    console.log(e);
+    console.error('Failed to load user or taskResults: ', session?.user.username);
+    console.error(e);
     //500を投げたい
     //throw redirect(302, '/login');
   }

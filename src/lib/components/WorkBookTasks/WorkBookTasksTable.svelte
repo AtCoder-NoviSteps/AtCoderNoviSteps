@@ -11,9 +11,12 @@
 
   import ExternalLinkWrapper from '$lib/components/ExternalLinkWrapper.svelte';
   import { getContestNameLabel } from '$lib/utils/contest';
-  import { taskUrl } from '$lib/utils/task';
-  import type { WorkBookTaskBase, WorkBookTaskCreate, WorkBookTaskEdit } from '$lib/types/workbook';
+  import { taskUrl, removeTaskIndexFromTitle } from '$lib/utils/task';
 
+  import type { WorkBookTaskBase, WorkBookTaskCreate, WorkBookTaskEdit } from '$lib/types/workbook';
+  import type { Task } from '$lib/types/task';
+
+  export let tasksMapByIds: Map<string, Task>;
   export let workBookTasks = [] as WorkBookTaskBase[];
   export let workBookTasksForTable = [] as WorkBookTaskCreate[] | WorkBookTaskEdit[];
 
@@ -72,6 +75,12 @@
       (event.target as HTMLElement).classList.add('placeholder');
     }
   }
+
+  function getTaskTableIndex(tasksMapByIds: Map<string, Task>, taskId: string) {
+    const task = tasksMapByIds.get(taskId);
+
+    return task?.task_table_index !== undefined ? task.task_table_index : '';
+  }
 </script>
 
 {#if workBookTasksForTable.length}
@@ -110,7 +119,10 @@
           <TableBodyCell class="xs:text-lg truncate">
             <ExternalLinkWrapper
               url={taskUrl(task.contestId, task.taskId)}
-              description={task.title}
+              description={removeTaskIndexFromTitle(
+                task.title,
+                getTaskTableIndex(tasksMapByIds, task.taskId),
+              )}
             />
           </TableBodyCell>
 

@@ -19,7 +19,7 @@
   import AcceptedCounter from '$lib/components/SubmissionStatus/AcceptedCounter.svelte';
   import { getBackgroundColorFrom } from '$lib/services/submission_status';
   import { getContestNameLabel } from '$lib/utils/contest';
-  import { taskUrl, toWhiteTextIfNeeds } from '$lib/utils/task';
+  import { toWhiteTextIfNeeds, taskUrl, removeTaskIndexFromTitle } from '$lib/utils/task';
 
   export let grade: string;
   export let gradeColor: string;
@@ -83,7 +83,10 @@
               <TableBodyCell class="pl-0 sm:pl-6 w-2/3">
                 <ExternalLinkWrapper
                   url={taskUrl(taskResult.contest_id, taskResult.task_id)}
-                  description={taskResult.title}
+                  description={removeTaskIndexFromTitle(
+                    taskResult.title,
+                    taskResult.task_table_index,
+                  )}
                   textSize="xs:text-lg"
                   textColorInDarkMode="dark:text-gray-300"
                 />

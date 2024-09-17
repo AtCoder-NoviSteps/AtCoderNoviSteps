@@ -53,6 +53,13 @@ export function compareByContestIdAndTaskId(first: TaskResult, second: TaskResul
   return first.task_table_index.localeCompare(second.task_table_index);
 }
 
+// 問題一覧や問題集の詳細ページでは、AtCoder ProblemsのAPIから取得したタイトルからプレフィックス（A., B., ..., G. など）を非表示にする
+// 理由: 問題を解くときに、プレフィックスからの先入観を受けないようにするため
+// その他: プレフィックスは、同じテーブルの出典に記載する
+export const removeTaskIndexFromTitle = (title: string, taskTableIndex: string = '') => {
+  return title.replace(`${taskTableIndex}. `, '');
+};
+
 export const taskGradeOrderInfinity = 9999;
 
 // order: 1 (first) - 17 (last)、9999: Infinity

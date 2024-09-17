@@ -12,7 +12,7 @@
   } from 'flowbite-svelte';
 
   import { taskGradeValues, type Task } from '$lib/types/task';
-  import { getTaskGradeLabel } from '$lib/utils/task';
+  import { getTaskGradeLabel, removeTaskIndexFromTitle } from '$lib/utils/task';
 
   export let task: Task;
   //export const isAdmin: boolean; // Admin権限がある場合は、編集リンクを表示する
@@ -37,7 +37,7 @@
       <TableBodyRow>
         <TableBodyCell>タイトル</TableBodyCell>
         <TableBodyCell>
-          {task.title}
+          {removeTaskIndexFromTitle(task.title, task.task_table_index)}
         </TableBodyCell>
       </TableBodyRow>
       <TableBodyRow>

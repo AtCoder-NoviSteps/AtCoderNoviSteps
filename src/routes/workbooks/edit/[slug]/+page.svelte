@@ -97,7 +97,11 @@
       </div>
 
       <!-- データベースに保存されている問題 + 検索で追加した問題を表示 -->
-      <WorkBookTasksTable bind:workBookTasks={$form.workBookTasks} bind:workBookTasksForTable />
+      <WorkBookTasksTable
+        {tasksMapByIds}
+        bind:workBookTasks={$form.workBookTasks}
+        bind:workBookTasksForTable
+      />
 
       <!-- 更新ボタン -->
       <div class="flex flex-wrap md:justify-center md:items-center">
