@@ -19,10 +19,10 @@ async function login(page, username, password) {
   // await page.locator('input[name="username"]').fill('guest_user');
   await page.locator('input[name="username"]').fill(username);
   await page.locator('input[name="password"]').fill(password);
-  await page.getByRole('button', { name: 'ログイン' }).click();
+  await page.getByRole('button', { name: 'ログイン' }).nth(1).click();
 
-  // ログインに成功すると、問題一覧ページが表示される。
-  await expect(page).toHaveURL('/problems', { timeout: UP_TO_ONE_MINUTE });
+  // ログインに成功すると、ホームページが表示される。
+  await expect(page).toHaveURL('/', { timeout: UP_TO_ONE_MINUTE });
 }
 
 async function logout(page, username) {
