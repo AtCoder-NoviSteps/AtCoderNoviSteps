@@ -11,9 +11,10 @@ import { auth } from '$lib/server/auth';
 
 import {
   BAD_REQUEST,
-  FOUND,
+  SEE_OTHER,
   INTERNAL_SERVER_ERROR,
 } from '$lib/constants/http-response-status-codes';
+import { HOME_PAGE } from '$lib/constants/navbar-links';
 
 import type { Actions, PageServerLoad } from './$types';
 
@@ -21,7 +22,7 @@ export const load: PageServerLoad = async ({ locals }) => {
   const session = await locals.auth.validate();
 
   if (session) {
-    redirect(FOUND, '/');
+    redirect(SEE_OTHER, HOME_PAGE);
   }
 
   const form = await superValidate(null, zod(authSchema));
@@ -82,6 +83,6 @@ export const actions: Actions = {
 
     // redirect to
     // make sure you don't throw inside a try/catch block!
-    redirect(FOUND, '/problems');
+    redirect(SEE_OTHER, HOME_PAGE);
   },
 };
