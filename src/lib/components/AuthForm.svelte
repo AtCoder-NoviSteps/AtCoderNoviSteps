@@ -14,8 +14,8 @@
     GUEST_USER_NAME,
     GUEST_USER_PASSWORD,
     // GUEST_USER_PASSWORD_FOR_LOCAL,
-    LOGIN_LABEL,
   } from '$lib/constants/forms';
+  import { HOME_PAGE, LOGIN_PAGE } from '$lib/constants/navbar-links';
 
   // FIXME: 構造体に相当するものを利用した方が拡張・修正がしやすくなるかもしれせまん
   export let formProperties;
@@ -55,7 +55,7 @@
         throw new Error('Not found form element or HTMLFormElement');
       }
 
-      const response = await fetch('/login', {
+      const response = await fetch(LOGIN_PAGE, {
         method: 'POST',
         body: new FormData(formElement),
       });
@@ -65,7 +65,7 @@
         return;
       }
 
-      await goto('/');
+      await goto(HOME_PAGE);
     } catch (error) {
       console.error('Failed to login as a guest: ', error);
     } finally {
@@ -88,21 +88,20 @@
       <h3 class="text-xl font-medium text-gray-900 dark:text-white">{title}</h3>
       <MessageHelperWrapper message={$message} />
 
-      {#if title === LOGIN_LABEL}
-        <Button
-          type="button"
-          class="w-full"
-          on:click={handleLoginAsGuest}
-          on:keydown={handleLoginAsGuest}
-          disabled={isSubmitting || $submitting}
-        >
-          <div class="text-md">お試し用のアカウントでログイン</div>
-        </Button>
+      <!-- Login as guest -->
+      <Button
+        type="button"
+        class="w-full"
+        on:click={handleLoginAsGuest}
+        on:keydown={handleLoginAsGuest}
+        disabled={isSubmitting || $submitting}
+      >
+        <div class="text-md">お試し用のアカウントでログイン</div>
+      </Button>
 
-        <div>
-          <Hr classHr="my-2 h-0.5 bg-gray-400 dark:bg-gray-200" />
-        </div>
-      {/if}
+      <div>
+        <Hr classHr="my-2 h-0.5 bg-gray-400 dark:bg-gray-200" />
+      </div>
 
       <!-- User name -->
       <div class="space-y-2">
