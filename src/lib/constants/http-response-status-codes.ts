@@ -3,6 +3,7 @@
 
 // Redirection messages
 export const FOUND = 302;
+export const SEE_OTHER = 303;
 export const TEMPORARY_REDIRECT = 307;
 
 // Client error responses

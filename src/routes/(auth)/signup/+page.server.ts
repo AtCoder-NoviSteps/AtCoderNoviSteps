@@ -10,13 +10,20 @@ import { LuciaError } from 'lucia';
 import { authSchema } from '$lib/zod/schema';
 import { auth } from '$lib/server/auth';
 
+import {
+  SEE_OTHER,
+  BAD_REQUEST,
+  INTERNAL_SERVER_ERROR,
+} from '$lib/constants/http-response-status-codes';
+import { HOME_PAGE } from '$lib/constants/navbar-links';
+
 import type { Actions, PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ locals }) => {
   const session = await locals.auth.validate();
 
   if (session) {
-    redirect(302, '/');
+    redirect(SEE_OTHER, HOME_PAGE);
   }
 
   const form = await superValidate(null, zod(authSchema));
@@ -30,7 +37,7 @@ export const actions: Actions = {
     const form = await superValidate(request, zod(authSchema));
 
     if (!form.valid) {
-      return fail(400, {
+      return fail(BAD_REQUEST, {
         form: {
           ...form,
           message:
@@ -68,7 +75,7 @@ export const actions: Actions = {
         (e instanceof PrismaClientKnownRequestError && e.code === 'P2002') ||
         (e instanceof LuciaError && e.message === 'AUTH_DUPLICATE_KEY_ID')
       ) {
-        return fail(400, {
+        return fail(BAD_REQUEST, {
           form: {
             ...form,
             message:
@@ -77,7 +84,7 @@ export const actions: Actions = {
         });
       }
 
-      return fail(500, {
+      return fail(INTERNAL_SERVER_ERROR, {
         form: {
           ...form,
           message: 'サーバでエラーが発生しました。本サービスの開発・運営チームに連絡してください。',
@@ -87,6 +94,6 @@ export const actions: Actions = {
 
     // redirect to
     // make sure you don't throw inside a try/catch block!
-    redirect(302, '/');
+    redirect(SEE_OTHER, HOME_PAGE);
   },
 };
