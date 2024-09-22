@@ -14,6 +14,7 @@ export const ContestType: { [key in ContestTypeOrigin]: key } = {
   TESSOKU_BOOK: 'TESSOKU_BOOK', // 競技プログラミングの鉄則
   MATH_AND_ALGORITHM: 'MATH_AND_ALGORITHM', // アルゴリズムと数学
   ARC: 'ARC', // AtCoder Regular Contest
+  AGC: 'AGC', // AtCoder Grand Contest
   OTHERS: 'OTHERS',
 } as const;
 
