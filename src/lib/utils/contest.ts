@@ -12,6 +12,10 @@ export const classifyContest = (contest_id: string) => {
     return ContestType.ARC;
   }
 
+  if (/^agc\d{3}$/.exec(contest_id)) {
+    return ContestType.AGC;
+  }
+
   if (contest_id.startsWith('APG4b')) {
     return ContestType.APG4B;
   }
@@ -61,8 +65,8 @@ export const classifyContest = (contest_id: string) => {
   return null;
 };
 
-// priority: 0 (High) - 12 (Low)
-// HACK: ARCの優先順位は暫定版
+// priority: 0 (High) - 13 (Low)
+// HACK: ARC、AGCの優先順位は暫定版
 //
 // See:
 // https://jsprimer.net/basic/map-and-set/
@@ -79,7 +83,8 @@ export const contestTypePriorities: Map<ContestType, number> = new Map([
   [ContestType.TESSOKU_BOOK, 9],
   [ContestType.MATH_AND_ALGORITHM, 10],
   [ContestType.ARC, 11],
-  [ContestType.OTHERS, 12],
+  [ContestType.AGC, 12],
+  [ContestType.OTHERS, 13],
 ]);
 
 export function getContestPriority(contestId: string): number {

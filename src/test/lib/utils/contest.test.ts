@@ -143,6 +143,21 @@ describe('Contest', () => {
       });
     });
 
+    describe('when contest_id contains agc', () => {
+      const testCases = [
+        { contestId: 'agc001', expected: ContestType.AGC },
+        { contestId: 'agc002', expected: ContestType.AGC },
+        { contestId: 'agc009', expected: ContestType.AGC },
+        { contestId: 'agc010', expected: ContestType.AGC },
+        { contestId: 'agc011', expected: ContestType.AGC },
+        { contestId: 'agc066', expected: ContestType.AGC },
+        { contestId: 'agc067', expected: ContestType.AGC },
+      ];
+
+      runTests('classifyContest', testCases, ({ contestId, expected }: TestCaseForContestType) => {
+        expect(classifyContest(contestId)).toEqual(expected);
+      });
+    });
     describe('when contest_id contains chokudai_S', () => {
       const testCases = [
         { contestId: 'chokudai_S001', expected: ContestType.OTHERS },
@@ -285,6 +300,26 @@ describe('Contest', () => {
         { contestId: 'arc105', expected: ContestType.ARC },
         { contestId: 'arc182', expected: ContestType.ARC },
         { contestId: 'arc183', expected: ContestType.ARC },
+      ];
+
+      runTests(
+        'getContestPriority',
+        testCases,
+        ({ contestId, expected }: TestCaseForContestType) => {
+          expect(getContestPriority(contestId)).toEqual(contestTypePriorities.get(expected));
+        },
+      );
+    });
+
+    describe('when contest_id contains agc', () => {
+      const testCases = [
+        { contestId: 'agc001', expected: ContestType.AGC },
+        { contestId: 'agc002', expected: ContestType.AGC },
+        { contestId: 'agc009', expected: ContestType.AGC },
+        { contestId: 'agc010', expected: ContestType.AGC },
+        { contestId: 'agc011', expected: ContestType.AGC },
+        { contestId: 'agc066', expected: ContestType.AGC },
+        { contestId: 'agc067', expected: ContestType.AGC },
       ];
 
       runTests(
@@ -459,6 +494,26 @@ describe('Contest', () => {
         { contestId: 'arc105', expected: 'ARC105' },
         { contestId: 'arc182', expected: 'ARC182' },
         { contestId: 'arc183', expected: 'ARC183' },
+      ];
+
+      runTests(
+        'getContestNameLabel',
+        testCases,
+        ({ contestId, expected }: TestCaseForContestNameLabel) => {
+          expect(getContestNameLabel(contestId)).toEqual(expected);
+        },
+      );
+    });
+
+    describe('when contest_id contains agc', () => {
+      const testCases = [
+        { contestId: 'agc001', expected: 'AGC001' },
+        { contestId: 'agc002', expected: 'AGC002' },
+        { contestId: 'agc009', expected: 'AGC009' },
+        { contestId: 'agc010', expected: 'AGC010' },
+        { contestId: 'agc011', expected: 'AGC011' },
+        { contestId: 'agc066', expected: 'AGC066' },
+        { contestId: 'agc067', expected: 'AGC067' },
       ];
 
       runTests(
@@ -669,6 +724,26 @@ describe('Contest', () => {
         { contestId: 'arc105', taskTableIndex: 'B', expected: 'ARC105 - B' },
         { contestId: 'arc182', taskTableIndex: 'C', expected: 'ARC182 - C' },
         { contestId: 'arc183', taskTableIndex: 'D', expected: 'ARC183 - D' },
+      ];
+
+      runTests(
+        'addContestNameToTaskIndex',
+        testCases,
+        ({ contestId, taskTableIndex, expected }: TestCaseForContestNameAndTaskIndex) => {
+          expect(addContestNameToTaskIndex(contestId, taskTableIndex)).toEqual(expected);
+        },
+      );
+    });
+
+    describe('when contest_id contains agc', () => {
+      const testCases = [
+        { contestId: 'agc001', taskTableIndex: 'A', expected: 'AGC001 - A' },
+        { contestId: 'agc002', taskTableIndex: 'B', expected: 'AGC002 - B' },
+        { contestId: 'agc009', taskTableIndex: 'C', expected: 'AGC009 - C' },
+        { contestId: 'agc010', taskTableIndex: 'D', expected: 'AGC010 - D' },
+        { contestId: 'agc011', taskTableIndex: 'E', expected: 'AGC011 - E' },
+        { contestId: 'agc066', taskTableIndex: 'F', expected: 'AGC066 - F' },
+        { contestId: 'agc067', taskTableIndex: 'E', expected: 'AGC067 - E' },
       ];
 
       runTests(
