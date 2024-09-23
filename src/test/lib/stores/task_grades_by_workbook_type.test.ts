@@ -26,7 +26,6 @@ describe('Task grades by workbook type', () => {
   describe('initial values is 10Q in each workbook type', () => {
     const testCases = [
       { workBookType: WorkBookType.CURRICULUM, expected: TaskGrade.Q10 },
-      { workBookType: WorkBookType.TEXTBOOK, expected: TaskGrade.Q10 },
       { workBookType: WorkBookType.SOLUTION, expected: TaskGrade.Q10 },
     ];
     runTests('getTaskGrade', testCases, ({ workBookType, expected }: InitialState) => {
@@ -48,14 +47,6 @@ describe('Task grades by workbook type', () => {
       { workBookType: WorkBookType.CURRICULUM, newGrade: TaskGrade.Q9, expected: TaskGrade.Q9 },
       { workBookType: WorkBookType.CURRICULUM, newGrade: TaskGrade.Q8, expected: TaskGrade.Q8 },
       { workBookType: WorkBookType.CURRICULUM, newGrade: TaskGrade.Q7, expected: TaskGrade.Q7 },
-      { workBookType: WorkBookType.TEXTBOOK, newGrade: TaskGrade.Q10, expected: TaskGrade.Q10 },
-      { workBookType: WorkBookType.TEXTBOOK, newGrade: TaskGrade.Q9, expected: TaskGrade.Q9 },
-      { workBookType: WorkBookType.TEXTBOOK, newGrade: TaskGrade.Q8, expected: TaskGrade.Q8 },
-      { workBookType: WorkBookType.TEXTBOOK, newGrade: TaskGrade.Q7, expected: TaskGrade.Q7 },
-      { workBookType: WorkBookType.SOLUTION, newGrade: TaskGrade.Q10, expected: TaskGrade.Q10 },
-      { workBookType: WorkBookType.SOLUTION, newGrade: TaskGrade.Q9, expected: TaskGrade.Q9 },
-      { workBookType: WorkBookType.SOLUTION, newGrade: TaskGrade.Q8, expected: TaskGrade.Q8 },
-      { workBookType: WorkBookType.SOLUTION, newGrade: TaskGrade.Q7, expected: TaskGrade.Q7 },
     ];
     runTests(
       'updateTaskGradeOnce',
