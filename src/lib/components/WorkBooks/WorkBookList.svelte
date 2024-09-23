@@ -36,19 +36,19 @@
     }
   }
 
-  // 手引き
+  // カリキュラム（手引き）、解法別、ユーザ作成
   let mainWorkbooks: WorkbooksList;
 
   $: mainWorkbooks =
-    workbookType === WorkBookType.CREATED_BY_USER
-      ? workbooks
-      : workbooks.filter((workbook: WorkbookList) => {
+    workbookType === WorkBookType.CURRICULUM
+      ? workbooks.filter((workbook: WorkbookList) => {
           const gradeMode = getGradeMode(workbook.id);
           return gradeMode === selectedGrade && !workbook.isReplenished;
-        });
+        })
+      : workbooks;
   $: readableMainWorkbooksCount = () => countReadableWorkbooks(mainWorkbooks);
 
-  // 補充
+  // カリキュラム（補充）
   let replenishedWorkbooks: WorkbooksList;
 
   $: replenishedWorkbooks = workbooks.filter((workbook: WorkbookList) => {
@@ -72,7 +72,7 @@
     return workbookGradeModes.get(workbookId) ?? TaskGrade.PENDING;
   }
 
-  function filterByGradeLower(grade: TaskGrade) {
+  function filterByGradeMode(grade: TaskGrade) {
     selectedGrade = grade;
     taskGradesByWorkBookTypeStore.updateTaskGrade(workbookType, grade);
   }
@@ -80,14 +80,14 @@
 
 <!-- TODO: 6Q〜1Q?にも対応 -->
 <!-- TODO: 「ユーザ作成」の問題集には、検索機能を追加 -->
-{#if workbookType !== WorkBookType.CREATED_BY_USER}
+{#if workbookType === WorkBookType.CURRICULUM}
   <div class="mb-6">
     <div class="flex flex-col md:flex-row items-start md:items-center justify-between">
       <div class="flex items-center space-x-4">
         <ButtonGroup>
           {#each [TaskGrade.Q10, TaskGrade.Q9, TaskGrade.Q8, TaskGrade.Q7] as grade}
             <Button
-              on:click={() => filterByGradeLower(grade)}
+              on:click={() => filterByGradeMode(grade)}
               class={selectedGrade === grade ? 'text-primary-700' : 'text-gray-900'}
             >
               {getTaskGradeLabel(grade)}
@@ -100,11 +100,9 @@
         />
       </div>
 
-      {#if workbookType === WorkBookType.CURRICULUM}
-        <div class="mt-4 md:mt-0">
-          <Toggle bind:checked={isShowReplenishment}>「補充」があれば表示</Toggle>
-        </div>
-      {/if}
+      <div class="mt-4 md:mt-0">
+        <Toggle bind:checked={isShowReplenishment}>「補充」があれば表示</Toggle>
+      </div>
     </div>
   </div>
 {/if}
