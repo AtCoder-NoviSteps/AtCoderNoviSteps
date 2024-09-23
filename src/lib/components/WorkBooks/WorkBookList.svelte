@@ -72,7 +72,7 @@
     return workbookGradeModes.get(workbookId) ?? TaskGrade.PENDING;
   }
 
-  function filterByGradeLower(grade: TaskGrade) {
+  function filterByGradeMode(grade: TaskGrade) {
     selectedGrade = grade;
     taskGradesByWorkBookTypeStore.updateTaskGrade(workbookType, grade);
   }
@@ -87,7 +87,7 @@
         <ButtonGroup>
           {#each [TaskGrade.Q10, TaskGrade.Q9, TaskGrade.Q8, TaskGrade.Q7] as grade}
             <Button
-              on:click={() => filterByGradeLower(grade)}
+              on:click={() => filterByGradeMode(grade)}
               class={selectedGrade === grade ? 'text-primary-700' : 'text-gray-900'}
             >
               {getTaskGradeLabel(grade)}
