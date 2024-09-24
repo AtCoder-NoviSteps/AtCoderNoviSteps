@@ -158,10 +158,24 @@ describe('Contest', () => {
         expect(classifyContest(contestId)).toEqual(expected);
       });
     });
+
     describe('when contest_id contains chokudai_S', () => {
       const testCases = [
         { contestId: 'chokudai_S001', expected: ContestType.OTHERS },
         { contestId: 'chokudai_S002', expected: ContestType.OTHERS },
+      ];
+
+      runTests('classifyContest', testCases, ({ contestId, expected }: TestCaseForContestType) => {
+        expect(classifyContest(contestId)).toEqual(expected);
+      });
+    });
+
+    describe('when contest_id contains donuts or colopl', () => {
+      const testCases = [
+        { contestId: 'donuts-live2014', expected: ContestType.OTHERS },
+        { contestId: 'donuts-2015', expected: ContestType.OTHERS },
+        { contestId: 'colopl2018-qual', expected: ContestType.OTHERS },
+        { contestId: 'colopl2018-final', expected: ContestType.OTHERS },
       ];
 
       runTests('classifyContest', testCases, ({ contestId, expected }: TestCaseForContestType) => {
@@ -335,6 +349,23 @@ describe('Contest', () => {
       const testCases = [
         { contestId: 'chokudai_S001', expected: ContestType.OTHERS },
         { contestId: 'chokudai_S002', expected: ContestType.OTHERS },
+      ];
+
+      runTests(
+        'getContestPriority',
+        testCases,
+        ({ contestId, expected }: TestCaseForContestType) => {
+          expect(getContestPriority(contestId)).toEqual(contestTypePriorities.get(expected));
+        },
+      );
+    });
+
+    describe('when contest_id contains donuts or colopl', () => {
+      const testCases = [
+        { contestId: 'donuts-live2014', expected: ContestType.OTHERS },
+        { contestId: 'donuts-2015', expected: ContestType.OTHERS },
+        { contestId: 'colopl2018-qual', expected: ContestType.OTHERS },
+        { contestId: 'colopl2018-final', expected: ContestType.OTHERS },
       ];
 
       runTests(
