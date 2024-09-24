@@ -16,6 +16,7 @@
     <a
       href="/workbooks/{workbook.id}"
       class="flex-1 font-medium xs:text-lg text-primary-600 hover:underline dark:text-primary-500 truncate"
+      aria-labelledby="View details for workbook: {workbook.title}"
     >
       {workbook.title}
     </a>
