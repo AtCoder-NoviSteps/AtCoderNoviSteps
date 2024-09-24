@@ -56,9 +56,13 @@ export const classifyContest = (contest_id: string) => {
     return ContestType.MATH_AND_ALGORITHM;
   }
 
-  // HACK: 2024年9月上旬時点では、「Chokudai SpeedRun 001」と「Chokudai SpeedRun 002」のみ該当。
+  // HACK: 2024年9月下旬時点では、「Chokudai SpeedRun」と「Donutsプロコンチャレンジ」「COLOCON」のみ該当。
   // 対象コンテストが増えた場合は、判定条件を見直す必要がある。
-  if (contest_id.startsWith('chokudai_S')) {
+  if (
+    contest_id.startsWith('chokudai_S') ||
+    contest_id.startsWith('donuts') ||
+    contest_id.startsWith('colopl')
+  ) {
     return ContestType.OTHERS;
   }
 
