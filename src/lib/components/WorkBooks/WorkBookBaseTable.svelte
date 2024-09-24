@@ -14,8 +14,9 @@
   import { TaskGrade, type TaskResults } from '$lib/types/task';
   import type { Roles } from '$lib/types/user';
 
+  import TitleTableHeadCell from '$lib/components/WorkBooks/TitleTableHeadCell.svelte';
+  import TitleTableBodyCell from '$lib/components/WorkBooks/TitleTableBodyCell.svelte';
   import GradeLabel from '$lib/components/GradeLabel.svelte';
-  import PublicationStatusLabel from '$lib/components/WorkBooks/PublicationStatusLabel.svelte';
   import CompletedTasks from '$lib/components/Trophies/CompletedTasks.svelte';
   import ThermometerProgressBar from '$lib/components/ThermometerProgressBar.svelte';
   import AcceptedCounter from '$lib/components/SubmissionStatus/AcceptedCounter.svelte';
@@ -38,23 +39,22 @@
   }
 </script>
 
-<!-- HACK: 2024年8月時点では「ユーザ作成」の問題集のみ大きく仕様が異なるので、暫定的に条件分岐で対処 -->
-<!-- HACK: 「解説別」と含めて仕様が大幅に変更される可能性が高いので、保留にしている -->
+<!-- HACK: (2024年9月時点) 問題集の仕様が大きく異なるので、暫定的に条件分岐で対処 -->
 <div class="overflow-auto rounded-md border">
   <Table shadow class="text-md">
     <TableHead class="text-sm bg-gray-100">
-      {#if workbookType === WorkBookType.CREATED_BY_USER}
-        <TableHeadCell>作者</TableHeadCell>
-      {:else}
+      {#if workbookType === WorkBookType.CURRICULUM}
         <TableHeadCell class="text-center px-0">
           <div>グレード</div>
         </TableHeadCell>
+        <TitleTableHeadCell />
+      {:else if workbookType === WorkBookType.SOLUTION}
+        <TitleTableHeadCell paddingX="px-4" />
+      {:else if workbookType === WorkBookType.CREATED_BY_USER}
+        <TableHeadCell>作者</TableHeadCell>
+        <TitleTableHeadCell />
       {/if}
-      <TableHeadCell
-        class="text-left min-w-[240px] max-w-[240px] lg:max-w-[280px] xl:max-w-[360px] 2xl:max-w-[480px] px-1 xs:px-3"
-      >
-        タイトル
-      </TableHeadCell>
+
       <TableHeadCell class="ext-left min-w-[240px] max-w-[1440px] px-0">回答状況</TableHeadCell>
       <TableHeadCell></TableHeadCell>
       <TableHeadCell class="text-center px-0">修了</TableHeadCell>
@@ -65,32 +65,31 @@
       {#each workbooks as workbook}
         {#if canRead(workbook.isPublished, userId, workbook.authorId)}
           <TableBodyRow>
-            {#if workbookType === WorkBookType.CREATED_BY_USER}
+            {#if workbookType === WorkBookType.CURRICULUM}
+              <!-- グレード -->
+              <TableBodyCell class="justify-center w-14 px-4">
+                <div class="flex items-center justify-center min-w-[54px] max-w-[54px]">
+                  <GradeLabel taskGrade={getGradeMode(workbook.id)} />
+                </div>
+              </TableBodyCell>
+
+              <!-- タイトル -->
+              <TitleTableBodyCell {workbook} />
+            {:else if workbookType === WorkBookType.SOLUTION}
+              <!-- タイトル -->
+              <TitleTableBodyCell paddingLeft="pl-4" {workbook} />
+            {:else if workbookType === WorkBookType.CREATED_BY_USER}
+              <!-- 作者名 -->
               <TableBodyCell>
                 <div class="truncate min-w-[96px] max-w-[120px]">
                   {workbook.authorName}
                 </div>
               </TableBodyCell>
-            {:else}
-              <TableBodyCell class="justify-center w-14 px-2">
-                <div class="flex items-center justify-center min-w-[54px] max-w-[54px]">
-                  <GradeLabel taskGrade={getGradeMode(workbook.id)} />
-                </div>
-              </TableBodyCell>
+
+              <!-- タイトル -->
+              <TitleTableBodyCell {workbook} />
             {/if}
-            <TableBodyCell class="w-2/5 pl-2 xs:pl-4 pr-4">
-              <div
-                class="flex items-center space-x-2 truncate min-w-[240px] max-w-[240px] lg:max-w-[300px] xl:max-w-[380px] 2xl:max-w-[480px]"
-              >
-                <PublicationStatusLabel isPublished={workbook.isPublished} />
-                <a
-                  href="/workbooks/{workbook.id}"
-                  class="flex-1 font-medium xs:text-lg text-primary-600 hover:underline dark:text-primary-500 truncate"
-                >
-                  {workbook.title}
-                </a>
-              </div>
-            </TableBodyCell>
+
             <TableBodyCell class="min-w-[240px] max-w-[1440px] px-0">
               <ThermometerProgressBar
                 workBookTasks={workbook.workBookTasks}
