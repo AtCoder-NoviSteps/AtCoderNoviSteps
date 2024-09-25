@@ -44,8 +44,8 @@
     {
       title: '解法別',
       workBookType: WorkBookType.SOLUTION,
-      tooltipContent: '特定のアルゴリズム・データ構造の習熟度を確認できます。',
-      canUsersView: false,
+      tooltipContent: '特定のアルゴリズム・データ構造の基礎から応用問題まで挑戦できます。',
+      canUsersView: true,
     },
     {
       title: 'ユーザ作成',
