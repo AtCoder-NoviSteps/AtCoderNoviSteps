@@ -71,7 +71,7 @@
     <div class="flex flex-wrap justify-center items-center mb-8 xs:mb-12">
       <video
         width="720"
-        src="https://github.com/user-attachments/assets/5d714055-e2fa-47e7-aa50-6e34a977fa58"
+        src="https://github.com/user-attachments/assets/690bae58-f653-4b0d-9342-5f6813dcc7e8"
         autoplay
         muted
         controls
