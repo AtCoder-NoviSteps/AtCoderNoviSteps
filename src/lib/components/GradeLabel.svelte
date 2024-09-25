@@ -9,7 +9,11 @@
 </script>
 
 <div class="rounded-lg border-2 border-white">
-  <div class="p-1 w-10 text-center rounded-md {toWhiteTextIfNeeds(grade)} {gradeColor}">
+  <div
+    class="p-1 w-8 xs:w-10 text-sm xs:text-md text-center rounded-md {toWhiteTextIfNeeds(
+      grade,
+    )} {gradeColor}"
+  >
     {#if taskGrade !== TaskGrade.PENDING}
       {grade}
     {:else}

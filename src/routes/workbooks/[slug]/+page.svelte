@@ -141,10 +141,11 @@
   {#if workBookTasks.length}
     <div class="overflow-auto rounded-md border">
       <Table shadow class="text-md">
-        <TableHead class="text-sm bg-gray-100">
-          <TableHeadCell class="min-w-[96px] max-w-[120px]">回答</TableHeadCell>
-          <TableHeadCell class="text-center px-0">グレード</TableHeadCell>
-          <TableHeadCell class="min-w-[240px] max-w-2/3 truncate">問題名</TableHeadCell>
+        <TableHead class="text-xs xs:text-sm bg-gray-100">
+          <TableHeadCell class="text-center w-14 px-0.5 xs:px-0">グレード</TableHeadCell>
+          <TableHeadCell class="text-center min-w-[96px] max-w-[120px]">回答</TableHeadCell>
+          <TableHeadCell class="min-w-[240px] max-w-2/3 truncate px-0 sm:px-6">問題名</TableHeadCell
+          >
           <TableHeadCell class="min-w-[120px] max-w-[150px] truncate">出典</TableHeadCell>
           <TableHeadCell class="text-center px-0">一言</TableHeadCell>
         </TableHead>
@@ -154,9 +155,16 @@
               key={getUniqueIdUsing(workBookTask.taskId)}
               class={getBackgroundColorFrom(getTaskResult(workBookTask.taskId).status_name)}
             >
+              <!-- 問題のグレード -->
+              <TableBodyCell class="justify-center w-14 px-3">
+                <div class="flex items-center justify-center min-w-[54px] max-w-[54px]">
+                  <GradeLabel taskGrade={getTaskGrade(workBookTask.taskId)} />
+                </div>
+              </TableBodyCell>
+
               <!-- 回答状況の更新 -->
               <TableBodyCell
-                class="justify-center w-20 px-0.5 sm:px-3"
+                class="justify-center w-20 px-0"
                 on:click={() => handleClick(workBookTask.taskId)}
               >
                 <div class="flex items-center justify-center min-w-[80px] max-w-[80px]">
@@ -167,15 +175,8 @@
                 </div>
               </TableBodyCell>
 
-              <!-- 問題のグレード -->
-              <TableBodyCell class="justify-center w-14 px-0">
-                <div class="flex items-center justify-center min-w-[54px] max-w-[54px]">
-                  <GradeLabel taskGrade={getTaskGrade(workBookTask.taskId)} />
-                </div>
-              </TableBodyCell>
-
               <!-- 問題のリンク -->
-              <TableBodyCell>
+              <TableBodyCell class="px-0 sm:px-6">
                 <div class="xs:text-lg truncate">
                   <ExternalLinkWrapper
                     url={taskUrl(getContestIdFrom(workBookTask.taskId), workBookTask.taskId)}
