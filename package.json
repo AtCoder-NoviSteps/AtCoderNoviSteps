@@ -55,7 +55,7 @@
     "jsdom": "25.0.1",
     "lint-staged": "15.2.10",
     "prettier": "3.3.3",
-    "prettier-plugin-svelte": "3.2.6",
+    "prettier-plugin-svelte": "3.2.7",
     "prettier-plugin-tailwindcss": "0.6.8",
     "prisma": "5.20.0",
     "stwui": "0.21.2-next",
