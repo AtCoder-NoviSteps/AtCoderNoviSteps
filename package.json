@@ -79,7 +79,7 @@
     "@types/jest": "29.5.13",
     "autoprefixer": "10.4.20",
     "debug": "4.3.7",
-    "flowbite": "2.5.1",
+    "flowbite": "2.5.2",
     "just-extend": "6.2.0",
     "lucia": "2.7.7",
     "playwright": "1.47.2",
