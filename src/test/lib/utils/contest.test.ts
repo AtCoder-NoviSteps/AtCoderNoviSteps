@@ -170,12 +170,13 @@ describe('Contest', () => {
       });
     });
 
-    describe('when contest_id contains donuts or colopl', () => {
+    describe('when contest_id contains donuts, colopl and gigacode', () => {
       const testCases = [
         { contestId: 'donuts-live2014', expected: ContestType.OTHERS },
         { contestId: 'donuts-2015', expected: ContestType.OTHERS },
         { contestId: 'colopl2018-qual', expected: ContestType.OTHERS },
         { contestId: 'colopl2018-final', expected: ContestType.OTHERS },
+        { contestId: 'gigacode-2019', expected: ContestType.OTHERS },
       ];
 
       runTests('classifyContest', testCases, ({ contestId, expected }: TestCaseForContestType) => {
@@ -360,12 +361,13 @@ describe('Contest', () => {
       );
     });
 
-    describe('when contest_id contains donuts or colopl', () => {
+    describe('when contest_id contains donuts, colopl, gigacode', () => {
       const testCases = [
         { contestId: 'donuts-live2014', expected: ContestType.OTHERS },
         { contestId: 'donuts-2015', expected: ContestType.OTHERS },
         { contestId: 'colopl2018-qual', expected: ContestType.OTHERS },
         { contestId: 'colopl2018-final', expected: ContestType.OTHERS },
+        { contestId: 'gigacode-2019', expected: ContestType.OTHERS },
       ];
 
       runTests(
