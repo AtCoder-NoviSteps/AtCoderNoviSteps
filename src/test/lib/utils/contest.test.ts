@@ -361,7 +361,7 @@ describe('Contest', () => {
       );
     });
 
-    describe('when contest_id contains donuts, colopl, gigacode', () => {
+    describe('when contest_id contains donuts, colopl and gigacode', () => {
       const testCases = [
         { contestId: 'donuts-live2014', expected: ContestType.OTHERS },
         { contestId: 'donuts-2015', expected: ContestType.OTHERS },
