@@ -56,9 +56,22 @@ export const classifyContest = (contest_id: string) => {
     return ContestType.MATH_AND_ALGORITHM;
   }
 
-  // HACK: 2024年9月下旬時点では、「Chokudai SpeedRun」と「Donutsプロコンチャレンジ」「COLOCON」「GigaCode」のみ該当。
-  // 対象コンテストが増えた場合は、判定条件を見直す必要がある。
-  const prefixes = ['chokudai_S', 'donuts', 'colopl', 'gigacode'];
+  // HACK: 2024年10月上旬時点では、以下のコンテストが該当。
+  // Note: 対象コンテストが増えた場合は、判定条件を見直す必要がある。
+  if (contest_id === 'tenka1-2018') {
+    return ContestType.ARC_LIKE;
+  }
+
+  if (contest_id.startsWith('code-festival-2017-qual')) {
+    return ContestType.AGC_LIKE;
+  }
+
+  // ・Chokudai SpeedRun
+  // ・CODE FESTIVAL 2014 決勝
+  // ・Donutsプロコンチャレンジ
+  // ・COLOCON
+  // ・GigaCode
+  const prefixes = ['chokudai_S', 'code-festival-2014-final', 'donuts', 'colopl', 'gigacode'];
 
   if (prefixes.some((prefix) => contest_id.startsWith(prefix))) {
     return ContestType.OTHERS;
@@ -67,7 +80,7 @@ export const classifyContest = (contest_id: string) => {
   return null;
 };
 
-// priority: 0 (High) - 13 (Low)
+// priority: 0 (High) - 16 (Low)
 // HACK: ARC、AGCの優先順位は暫定版
 //
 // See:
@@ -86,7 +99,10 @@ export const contestTypePriorities: Map<ContestType, number> = new Map([
   [ContestType.MATH_AND_ALGORITHM, 10],
   [ContestType.ARC, 11],
   [ContestType.AGC, 12],
-  [ContestType.OTHERS, 13],
+  [ContestType.ABC_LIKE, 13],
+  [ContestType.ARC_LIKE, 14],
+  [ContestType.AGC_LIKE, 15],
+  [ContestType.OTHERS, 16],
 ]);
 
 export function getContestPriority(contestId: string): number {

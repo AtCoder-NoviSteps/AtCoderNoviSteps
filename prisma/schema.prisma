@@ -217,6 +217,9 @@ enum ContestType {
   MATH_AND_ALGORITHM // アルゴリズムと数学
   ARC // AtCoder Regular Contest
   AGC // AtCoder Grand Contest
+  ABC_LIKE // AtCoder Beginner Contest (ABC) 相当のコンテスト
+  ARC_LIKE // AtCoder Regular Contest (ARC) 相当のコンテスト
+  AGC_LIKE // AtCoder Grand Contest (AGC) 相当のコンテスト
   OTHERS // その他
 }
 
