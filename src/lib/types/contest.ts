@@ -15,6 +15,9 @@ export const ContestType: { [key in ContestTypeOrigin]: key } = {
   MATH_AND_ALGORITHM: 'MATH_AND_ALGORITHM', // アルゴリズムと数学
   ARC: 'ARC', // AtCoder Regular Contest
   AGC: 'AGC', // AtCoder Grand Contest
+  ABC_LIKE: 'ABC_LIKE', // AtCoder Beginner Contest (ABC) 相当のコンテスト
+  ARC_LIKE: 'ARC_LIKE', // AtCoder Regular Contest (ARC) 相当のコンテスト
+  AGC_LIKE: 'AGC_LIKE', // AtCoder Grand Contest (AGC) 相当のコンテスト
   OTHERS: 'OTHERS',
 } as const;
 
