@@ -62,18 +62,30 @@ export const classifyContest = (contest_id: string) => {
     return ContestType.ARC_LIKE;
   }
 
-  if (contest_id.startsWith('code-festival-2017-qual')) {
+  // ・CODE FESTIVAL 2017 qual
+  // ・CODE FESTIVAL 2017 Final
+  const prefixForAgcLike = ['code-festival-2017-qual', 'cf17-final'];
+
+  if (prefixForAgcLike.some((prefix) => contest_id.startsWith(prefix))) {
     return ContestType.AGC_LIKE;
   }
 
   // ・Chokudai SpeedRun
   // ・CODE FESTIVAL 2014 決勝
   // ・Donutsプロコンチャレンジ
+  // ・MUJIN Programming Challenge 2016
   // ・COLOCON
   // ・GigaCode
-  const prefixes = ['chokudai_S', 'code-festival-2014-final', 'donuts', 'colopl', 'gigacode'];
+  const prefixForOthers = [
+    'chokudai_S',
+    'code-festival-2014-final',
+    'donuts',
+    'mujin-pc-2016',
+    'colopl',
+    'gigacode',
+  ];
 
-  if (prefixes.some((prefix) => contest_id.startsWith(prefix))) {
+  if (prefixForOthers.some((prefix) => contest_id.startsWith(prefix))) {
     return ContestType.OTHERS;
   }
 

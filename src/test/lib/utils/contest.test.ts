@@ -172,6 +172,7 @@ describe('Contest', () => {
         { contestId: 'code-festival-2017-quala', expected: ContestType.AGC_LIKE },
         { contestId: 'code-festival-2017-qualb', expected: ContestType.AGC_LIKE },
         { contestId: 'code-festival-2017-qualc', expected: ContestType.AGC_LIKE },
+        { contestId: 'cf17-final', expected: ContestType.AGC_LIKE },
       ];
 
       runTests('classifyContest', testCases, ({ contestId, expected }: TestCaseForContestType) => {
@@ -179,22 +180,14 @@ describe('Contest', () => {
       });
     });
 
-    describe('when contest_id contains chokudai_S', () => {
+    describe('when contest_id means others', () => {
       const testCases = [
         { contestId: 'chokudai_S001', expected: ContestType.OTHERS },
         { contestId: 'chokudai_S002', expected: ContestType.OTHERS },
-      ];
-
-      runTests('classifyContest', testCases, ({ contestId, expected }: TestCaseForContestType) => {
-        expect(classifyContest(contestId)).toEqual(expected);
-      });
-    });
-
-    describe('when contest_id contains code-festival-2014-final, donuts, colopl and gigacode', () => {
-      const testCases = [
         { contestId: 'code-festival-2014-final', expected: ContestType.OTHERS },
         { contestId: 'donuts-live2014', expected: ContestType.OTHERS },
         { contestId: 'donuts-2015', expected: ContestType.OTHERS },
+        { contestId: 'mujin-pc-2016', expected: ContestType.OTHERS },
         { contestId: 'colopl2018-qual', expected: ContestType.OTHERS },
         { contestId: 'colopl2018-final', expected: ContestType.OTHERS },
         { contestId: 'gigacode-2019', expected: ContestType.OTHERS },
@@ -395,26 +388,14 @@ describe('Contest', () => {
       );
     });
 
-    describe('when contest_id contains chokudai_S', () => {
+    describe('when contest_id means others', () => {
       const testCases = [
         { contestId: 'chokudai_S001', expected: ContestType.OTHERS },
         { contestId: 'chokudai_S002', expected: ContestType.OTHERS },
-      ];
-
-      runTests(
-        'getContestPriority',
-        testCases,
-        ({ contestId, expected }: TestCaseForContestType) => {
-          expect(getContestPriority(contestId)).toEqual(contestTypePriorities.get(expected));
-        },
-      );
-    });
-
-    describe('when contest_id contains code-festival-2014-final, donuts, colopl and gigacode', () => {
-      const testCases = [
         { contestId: 'code-festival-2014-final', expected: ContestType.OTHERS },
         { contestId: 'donuts-live2014', expected: ContestType.OTHERS },
         { contestId: 'donuts-2015', expected: ContestType.OTHERS },
+        { contestId: 'mujin-pc-2016', expected: ContestType.OTHERS },
         { contestId: 'colopl2018-qual', expected: ContestType.OTHERS },
         { contestId: 'colopl2018-final', expected: ContestType.OTHERS },
         { contestId: 'gigacode-2019', expected: ContestType.OTHERS },
