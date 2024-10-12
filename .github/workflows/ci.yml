@@ -96,18 +96,18 @@ jobs:
           DATABASE_URL: ${{ secrets.PREVIEW_DATABASE_URL }}
 
       - name: Pull Vercel Environment Information
-        run: vercel pull --yes --environment=preview --token=${{ secrets.VERCEL_TOKEN }}
+        run: pnpm vercel pull --yes --environment=preview --token=${{ secrets.VERCEL_TOKEN }}
 
       - name: Build Project Artifacts
-        run: vercel build --token=${{ secrets.VERCEL_TOKEN }}
+        run: pnpm vercel build --token=${{ secrets.VERCEL_TOKEN }}
 
       - name: Deploy Project Artifacts to Vercel
         id: deploy
-        run: echo "url=$(vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }})" >> $GITHUB_OUTPUT
+        run: echo "url=\"$(pnpm vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }})\"" >> $GITHUB_OUTPUT
 
       - name: Assign staging domain to deployment (if staging branch)
         if: ${{ github.ref != 'refs/heads/main' }}
-        run: vercel alias set ${{ steps.deploy.outputs.url }} ${{ secrets.STAGING_DOMAIN }} --scope=${{ secrets.VERCEL_SCOPE }} --token=${{ secrets.VERCEL_TOKEN }}
+        run: pnpm vercel alias set ${{ steps.deploy.outputs.url }} ${{ secrets.STAGING_DOMAIN }} --scope=${{ secrets.VERCEL_SCOPE }} --token=${{ secrets.VERCEL_TOKEN }}
 
   production:
     if: ${{ github.ref == 'refs/heads/main' }}
@@ -142,10 +142,10 @@ jobs:
           DATABASE_URL: ${{ secrets.PRODUCTION_DATABASE_URL }}
 
       - name: Pull Vercel Environment Information
-        run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
+        run: pnpm vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
 
       - name: Build Project Artifacts
-        run: vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
+        run: pnpm vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
 
       - name: Deploy Project Artifacts to Vercel
-        run: vercel deploy --prod --prebuilt --token=${{ secrets.VERCEL_TOKEN }}
+        run: pnpm vercel deploy --prod --prebuilt --token=${{ secrets.VERCEL_TOKEN }}
