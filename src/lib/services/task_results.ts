@@ -2,12 +2,14 @@ import { error } from '@sveltejs/kit';
 
 import { default as db } from '$lib/server/database';
 import { getTasks, getTask } from '$lib/services/tasks';
+import { getUser } from '$lib/services/users';
 import * as answer_crud from '$lib/services/answers';
 
 import type { TaskAnswer } from '$lib/types/answer';
 import type { Task } from '$lib/types/task';
 import type { TaskResult, TaskResults, Tasks } from '$lib/types/task';
 import type { WorkBookTaskBase, WorkBookTasksBase } from '$lib/types/workbook';
+import type { Check } from '$lib/type/check';
 
 import { NOT_FOUND } from '$lib/constants/http-response-status-codes';
 import { getSubmissionStatusMapWithId, getSubmissionStatusMapWithName } from './submission_status';
@@ -23,6 +25,70 @@ export async function getTaskResults(userId: string): Promise<TaskResults> {
   const answers = await answer_crud.getAnswers(userId);
 
   return await relateTasksAndAnswers(userId, tasks, answers);
+}
+
+export async function cpoyTaskResults(
+  sourceUserName: string,
+  destinationUserName: string,
+): Promise<Check[]> {
+  const checks = [];
+  const failureMessage = { label: 'コピーが失敗しました。', status: false };
+  const sourceUser = await getUser(sourceUserName);
+  const destinationUser = await getUser(destinationUserName);
+  if (sourceUser == null) {
+    checks.push({ label: 'Source UserName が存在しません。コピーを中止します。', status: false });
+    checks.push(failureMessage);
+    return checks;
+  } else {
+    checks.push({ label: 'Source UserName が存在することを確認しました', status: true });
+  }
+
+  if (destinationUser == null) {
+    checks.push({ label: 'Target UserName が存在しません。コピーを中止します。', status: false });
+    checks.push(failureMessage);
+    return checks;
+  } else {
+    checks.push({ label: 'Target UserName が存在することを確認しました。', status: true });
+  }
+
+  const sourceAnswers = await answer_crud.getAnswers(sourceUser.id);
+  const destinationAnswers = await answer_crud.getAnswers(destinationUser.id);
+
+  if (sourceAnswers.size == 0) {
+    checks.push({
+      label: 'Source UserName にコピー対象のデータがありません。コピーを中止します。',
+      status: false,
+    });
+    checks.push(failureMessage);
+    return checks;
+  }
+  if (destinationAnswers.size > 0) {
+    checks.push({
+      label: 'Target UserName にすでにデータがあります。コピーを中止します。',
+      status: false,
+    });
+    checks.push(failureMessage);
+    return checks;
+  }
+
+  //const sourceTaskResults = await relateTasksAndAnswers(sourceUserId, tasks, sourceAnswers);
+
+  try {
+    await db.$transaction(async () => {
+      sourceAnswers.forEach(async (taskResult: TaskResult) => {
+        await answer_crud.upsertAnswer(
+          taskResult.task_id,
+          destinationUser.id,
+          taskResult.status_id,
+        );
+      });
+    });
+  } catch {
+    checks.push({ label: 'コピー中に何らかのエラーが発生しました。', status: false });
+    return checks;
+  }
+  checks.push({ label: 'コピーが正常に完了しました。', status: true });
+  return checks;
 }
 
 async function relateTasksAndAnswers(

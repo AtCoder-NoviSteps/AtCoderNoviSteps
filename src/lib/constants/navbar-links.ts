@@ -8,6 +8,7 @@ export const PROBLEMS_PAGE = `/problems`;
 // For Admin
 export const IMPORTING_PROBLEMS_PAGE = `/tasks`;
 export const TAGS_PAGE = `/tags`;
+export const DATA_COPY_PAGE = `/copy`;
 
 export const navbarLinks = [
   { title: `ホーム`, path: HOME_PAGE },
@@ -21,4 +22,5 @@ export const navbarDashboardLinks = [
   { title: `問題一覧`, path: PROBLEMS_PAGE },
   { title: `問題集`, path: WORKBOOKS_PAGE },
   { title: `タグ一覧`, path: TAGS_PAGE },
+  { title: `ユーザーデータコピー`, path: DATA_COPY_PAGE },
 ];
