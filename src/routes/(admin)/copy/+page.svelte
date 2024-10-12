@@ -15,10 +15,10 @@
   let destination_username = '';
   export let data;
   let checks = data.results;
-  // 5秒後にメッセージを空にする
+  // 10秒後にメッセージを空にする
   setTimeout(() => {
     checks = []; // メッセージを消す
-  }, 10000); // 5000ミリ秒（5秒）後に実行
+  }, 10000); // 10000ミリ秒（5秒）後に実行
 </script>
 
 <HeadingOne title="回答コピー" />
