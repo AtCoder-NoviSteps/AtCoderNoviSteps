@@ -103,7 +103,7 @@ jobs:
 
       - name: Deploy Project Artifacts to Vercel
         id: deploy
-        run: echo "url=$(pnpm vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }})" >> $GITHUB_OUTPUT
+        run: echo "url=\"$(pnpm vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }})\"" >> $GITHUB_OUTPUT
 
       - name: Assign staging domain to deployment (if staging branch)
         if: ${{ github.ref != 'refs/heads/main' }}
