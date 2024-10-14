@@ -14,12 +14,12 @@ let checkResults: Check[] = [];
 export async function load({ locals }) {
   const session = await locals.auth.validate();
   if (!session) {
-    redirect(302, '/login');
+    throw redirect(302, '/login');
   }
 
   const user = await userService.getUser(session?.user.username as string);
   if (user?.role !== Roles.ADMIN) {
-    redirect(302, '/login');
+    throw redirect(302, '/login');
   }
 
   return {
