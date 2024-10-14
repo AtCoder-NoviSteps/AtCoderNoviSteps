@@ -9,7 +9,7 @@ import type { TaskAnswer } from '$lib/types/answer';
 import type { Task } from '$lib/types/task';
 import type { TaskResult, TaskResults, Tasks } from '$lib/types/task';
 import type { WorkBookTaskBase, WorkBookTasksBase } from '$lib/types/workbook';
-import type { Check } from '$lib/type/check';
+import type { Check } from '$lib/types/check';
 
 import { NOT_FOUND } from '$lib/constants/http-response-status-codes';
 import { getSubmissionStatusMapWithId, getSubmissionStatusMapWithName } from './submission_status';
@@ -27,7 +27,7 @@ export async function getTaskResults(userId: string): Promise<TaskResults> {
   return await relateTasksAndAnswers(userId, tasks, answers);
 }
 
-export async function cpoyTaskResults(
+export async function copyTaskResults(
   sourceUserName: string,
   destinationUserName: string,
 ): Promise<Check[]> {
@@ -75,13 +75,13 @@ export async function cpoyTaskResults(
 
   try {
     await db.$transaction(async () => {
-      sourceAnswers.forEach(async (taskResult: TaskResult) => {
+      for (const taskResult of sourceAnswers.values()) {
         await answer_crud.upsertAnswer(
           taskResult.task_id,
           destinationUser.id,
           taskResult.status_id,
         );
-      });
+      }
     });
   } catch {
     checks.push({ label: 'コピー中に何らかのエラーが発生しました。', status: false });

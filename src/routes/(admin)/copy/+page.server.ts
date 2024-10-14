@@ -9,8 +9,7 @@ import type { Check } from '$lib/types/check';
 
 import { Roles } from '$lib/types/user';
 
-let checkResults = Promise<Check[]>;
-checkResults = [];
+let checkResults: Check[] = [];
 
 export async function load({ locals }) {
   const session = await locals.auth.validate();
@@ -44,7 +43,7 @@ export const actions: Actions = {
           checkResults: [],
         };
       } else {
-        checkResults = await taskResultService.cpoyTaskResults(
+        checkResults = await taskResultService.copyTaskResults(
           source_username,
           destination_username,
         );

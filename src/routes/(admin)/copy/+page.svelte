@@ -16,9 +16,11 @@
   export let data;
   let checks = data.results;
   // 10秒後にメッセージを空にする
-  setTimeout(() => {
-    checks = []; // メッセージを消す
-  }, 10000); // 10000ミリ秒（5秒）後に実行
+  if (checks.length > 0) {
+    setTimeout(() => {
+      checks = []; // メッセージを消す
+    }, 10000); // 10000ミリ秒（10秒）後に実行
+  }
 </script>
 
 <HeadingOne title="回答コピー" />
