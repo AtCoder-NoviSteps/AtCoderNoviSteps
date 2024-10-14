@@ -1,15 +1,24 @@
 import { redirect, type Actions } from '@sveltejs/kit';
 
-import { type Contest, type Task, type ImportTask, TaskGrade, getTaskGrade } from '$lib/types/task';
+import type { ImportContest } from '$lib/types/contest';
+import {
+  type Contests,
+  type Task,
+  type ImportTask,
+  TaskGrade,
+  getTaskGrade,
+} from '$lib/types/task';
 import * as taskService from '$lib/services/tasks';
 import * as userService from '$lib/services/users';
-import * as problemApiService from '$lib/services/problemsApiService';
+import * as atCoderProblemApi from '$lib/clients/atcoder_problems';
 
 import { sha256 } from '$lib/utils/hash';
 import { classifyContest } from '$lib/utils/contest';
 
 import { Roles } from '$lib/types/user';
 
+// TODO: メソッドが肥大化してきているので分割する。
+// Hint: コメントが書かれている単位でメソッドを分割するとよさそう。
 export async function load({ locals }) {
   const session = await locals.auth.validate();
   if (!session) {
@@ -21,8 +30,9 @@ export async function load({ locals }) {
     redirect(302, '/login');
   }
 
-  const importContestsJson = await problemApiService.getContests();
-  const importTasksJson = await problemApiService.getTasks();
+  // TODO: 他のコンテストのデータとまとめてから取得できるようにする。
+  const importContestsJson = await atCoderProblemApi.getContests();
+  const importTasksJson = await atCoderProblemApi.getTasks();
   const tasks = await taskService.getTasks();
 
   //dbから取得した、contest_id-Task, task_id-Taskのマップ
@@ -54,7 +64,7 @@ export async function load({ locals }) {
     );
   }
 
-  const importContests = importContestsJson.map((importContestJson: Contest) => {
+  const importContests: Contests = importContestsJson.map((importContestJson: ImportContest) => {
     return {
       id: importContestJson.id,
       title: importContestJson.title,
@@ -76,7 +86,7 @@ export const actions: Actions = {
       const formData = await request.formData();
       const contest_id = formData.get('contest_id')?.toString() as string;
 
-      const tasks = await problemApiService.getTasks();
+      const tasks = await atCoderProblemApi.getTasks();
       const tasksByContestId = tasks.filter((task: ImportTask) => task.contest_id === contest_id);
 
       tasksByContestId.map(async (task: ImportTask) => {
@@ -124,7 +134,7 @@ export const actions: Actions = {
       await taskService.updateTask(task_id, task_grade);
       const contest_id = formData.get('contest_id')?.toString() as string;
 
-      const tasks = await problemApiService.getTasks();
+      const tasks = await atCoderProblemApi.getTasks();
 
       const tasksByContestId = tasks.filter((task: ImportTask) => task.contest_id === contest_id);
 

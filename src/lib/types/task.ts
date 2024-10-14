@@ -19,6 +19,10 @@ export interface ImportTask {
 
 export type Tasks = Task[];
 
+export type ImportTasks = ImportTask[];
+
+// TODO: contest.tsに移動させる + 参照しているファイルを修正
+// 理由: コンテストに関する型にまとめた方がいいと思われるため。
 export interface Contest {
   id: string;
   start_epoch_second: string;
@@ -26,6 +30,8 @@ export interface Contest {
   title: string;
   tasks: ImportTask[];
 }
+
+export type Contests = Contest[];
 
 // See:
 // https://github.com/prisma/prisma/issues/12504#issuecomment-1147356141

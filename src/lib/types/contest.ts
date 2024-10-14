@@ -1,3 +1,15 @@
+// HACK: 名称をより明確なものにリネームする。
+// 理由: これからインポートするというニュアンスだが、インポート済みと勘違いしやすいため。
+export interface ImportContest {
+  id: string;
+  start_epoch_second: string;
+  duration_second: string;
+  title: string;
+  rate_change: string;
+}
+
+export type ImportContests = ImportContest[];
+
 // Import original enum as type.
 import type { ContestType as ContestTypeOrigin } from '@prisma/client';
 
