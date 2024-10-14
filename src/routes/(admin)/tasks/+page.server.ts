@@ -10,7 +10,7 @@ import {
 } from '$lib/types/task';
 import * as taskService from '$lib/services/tasks';
 import * as userService from '$lib/services/users';
-import * as atCoderProblemApi from '$lib/clients/atcoder_problems';
+import * as apiClient from '$lib/clients';
 
 import { sha256 } from '$lib/utils/hash';
 import { classifyContest } from '$lib/utils/contest';
@@ -31,8 +31,8 @@ export async function load({ locals }) {
   }
 
   // TODO: 他のコンテストのデータとまとめてから取得できるようにする。
-  const importContestsJson = await atCoderProblemApi.getContests();
-  const importTasksJson = await atCoderProblemApi.getTasks();
+  const importContestsJson = await apiClient.getContests();
+  const importTasksJson = await apiClient.getTasks();
   const tasks = await taskService.getTasks();
 
   //dbから取得した、contest_id-Task, task_id-Taskのマップ
@@ -86,7 +86,7 @@ export const actions: Actions = {
       const formData = await request.formData();
       const contest_id = formData.get('contest_id')?.toString() as string;
 
-      const tasks = await atCoderProblemApi.getTasks();
+      const tasks = await apiClient.getTasks();
       const tasksByContestId = tasks.filter((task: ImportTask) => task.contest_id === contest_id);
 
       tasksByContestId.map(async (task: ImportTask) => {
@@ -134,7 +134,7 @@ export const actions: Actions = {
       await taskService.updateTask(task_id, task_grade);
       const contest_id = formData.get('contest_id')?.toString() as string;
 
-      const tasks = await atCoderProblemApi.getTasks();
+      const tasks = await apiClient.getTasks();
 
       const tasksByContestId = tasks.filter((task: ImportTask) => task.contest_id === contest_id);
 
