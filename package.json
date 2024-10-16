@@ -48,7 +48,7 @@
     "eslint": "9.12.0",
     "eslint-config-prettier": "9.1.0",
     "eslint-plugin-svelte": "2.45.1",
-    "flowbite-svelte": "0.46.6",
+    "flowbite-svelte": "0.47.0",
     "flowbite-svelte-icons": "1.6.2",
     "globals": "15.11.0",
     "husky": "9.1.6",
