@@ -39,7 +39,7 @@
     "@sveltejs/kit": "2.7.1",
     "@sveltejs/vite-plugin-svelte": "3.1.2",
     "@tailwindcss/forms": "0.5.9",
-    "@testing-library/jest-dom": "6.5.0",
+    "@testing-library/jest-dom": "6.6.1",
     "@types/gtag.js": "0.0.20",
     "@typescript-eslint/eslint-plugin": "8.9.0",
     "@typescript-eslint/parser": "8.9.0",
