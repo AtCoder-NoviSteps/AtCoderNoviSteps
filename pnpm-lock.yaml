@@ -166,8 +166,8 @@ importers:
         specifier: 3.1.4
         version: 3.1.4(svelte@4.2.19)(typescript@5.6.3)
       sveltekit-superforms:
-        specifier: 2.19.1
-        version: 2.19.1(@sveltejs/kit@2.7.1(@sveltejs/vite-plugin-svelte@3.1.2(svelte@4.2.19)(vite@5.4.9(@types/node@16.18.11)))(svelte@4.2.19)(vite@5.4.9(@types/node@16.18.11)))(@types/json-schema@7.0.15)(svelte@4.2.19)
+        specifier: 2.20.0
+        version: 2.20.0(@sveltejs/kit@2.7.1(@sveltejs/vite-plugin-svelte@3.1.2(svelte@4.2.19)(vite@5.4.9(@types/node@16.18.11)))(svelte@4.2.19)(vite@5.4.9(@types/node@16.18.11)))(@types/json-schema@7.0.15)(svelte@4.2.19)(typescript@5.6.3)
       tslib:
         specifier: 2.8.0
         version: 2.8.0
@@ -261,6 +261,11 @@ packages:
   '@edge-runtime/vm@3.2.0':
     resolution: {integrity: sha512-0dEVyRLM/lG4gp1R/Ik5bfPl/1wX00xFwd5KcNH602tzBa09oF7pbTKETEhR1GjZ75K6OJnYFu8II2dyMhONMw==}
     engines: {node: '>=16'}
+
+  '@effect/schema@0.75.5':
+    resolution: {integrity: sha512-TQInulTVCuF+9EIbJpyLP6dvxbQJMphrnRqgexm/Ze39rSjfhJuufF7XvU3SxTgg3HnL7B/kpORTJbHhlE6thw==}
+    peerDependencies:
+      effect: ^3.9.2
 
   '@esbuild/aix-ppc64@0.21.5':
     resolution: {integrity: sha512-1SDgH6ZSPTlggy1yI6+Dbkiz8xzpHJEVAlF/AM1tHPLsf5STom9rwtjE4hKAF20FfXXNTFqEYXyJNWh1GiZedQ==}
@@ -914,8 +919,8 @@ packages:
   '@types/yauzl@2.10.3':
     resolution: {integrity: sha512-oJoftv0LSuaDZE3Le4DbKX+KS9G36NzOeSap90UIK0yMA/NhKJhqlSGtNDORNRaIbQfzjXDrQa0ytJ6mNRGz/Q==}
 
-  '@typeschema/class-validator@0.2.0':
-    resolution: {integrity: sha512-zq0qeflVu1Z6D0ttkqAWZMtxJeNEQ70yo/025sV0jujiOOgQx38JXrky77nSWWPp2E1KIMtgkToQbkzkXyW5yg==}
+  '@typeschema/class-validator@0.3.0':
+    resolution: {integrity: sha512-OJSFeZDIQ8EK1HTljKLT5CItM2wsbgczLN8tMEfz3I1Lmhc5TBfkZ0eikFzUC16tI3d1Nag7um6TfCgp2I2Bww==}
     peerDependencies:
       class-validator: ^0.14.1
     peerDependenciesMeta:
@@ -1783,6 +1788,9 @@ packages:
     engines: {node: '>=16'}
     hasBin: true
 
+  effect@3.9.2:
+    resolution: {integrity: sha512-1sx/v1HTWHTodXfzWxAFg+SCF+ACgpJVruaAMIh/NmDVvrUsf0x9PzpXvkgJUbQ1fMdmKYK//FqxeHSQ+Zxv/Q==}
+
   electron-to-chromium@1.5.4:
     resolution: {integrity: sha512-orzA81VqLyIGUEA77YkVA1D+N+nNfl2isJVjjmOyrlxuooZ19ynb+dOlaDTqd/idKRS9lDCSBmtzM+kyCsMnkA==}
 
@@ -2094,6 +2102,10 @@ packages:
     resolution: {integrity: sha512-GDhU9ntwuKyGXdZBUgTIe+vXnWj0fppUEtMDL0+idd5Sta8TGpHssn/eusA9mrPr9qNDym6SxAYZjNvCn/9RBg==}
     engines: {node: '>= 10.17.0'}
     hasBin: true
+
+  fast-check@3.22.0:
+    resolution: {integrity: sha512-8HKz3qXqnHYp/VCNn2qfjHdAdcI8zcSqOyX64GOMukp7SL2bfzfeDKjSd+UyECtejccaZv3LcvZTm9YDD22iCQ==}
+    engines: {node: '>=8.0.0'}
 
   fast-deep-equal@3.1.3:
     resolution: {integrity: sha512-f3qQ9oQy9j2AhBe/H9VC91wLmKBCCU/gDOnKNAYG5hswO7BLKj09Hc5HYNz9cGI++xlpDCIgDaitVs03ATR84Q==}
@@ -3309,6 +3321,9 @@ packages:
     resolution: {integrity: sha512-39olGaX2djYUdhaQQHDZ0T0GwEp+5f9UB9HmEP0qHfdQHIq0xGQZuAZ5TLnJIc/88SrPLpEflPC+xUqOTv3c5g==}
     deprecated: < 22.8.2 is no longer supported
 
+  pure-rand@6.1.0:
+    resolution: {integrity: sha512-bVWawvoZoBYpp6yIoQtQXHZjmz35RSVHnUOTefl8Vcjr8snTPY1wnpSPMWekcFwbxI6gtmT7rSYPFvz71ldiOA==}
+
   queue-microtask@1.2.3:
     resolution: {integrity: sha512-NuaNSa6flKT5JaSYQzJok04JzTL1CA6aGhv5rfLW3PgqA+M2ChpZQnAC8h8i4ZFkBS8X5RqkDBHA7r4hej3K9A==}
 
@@ -3645,8 +3660,8 @@ packages:
     resolution: {integrity: sha512-IY1rnGr6izd10B0A8LqsBfmlT5OILVuZ7XsI0vdGPEvuonFV7NYEUK4dAkm9Zg2q0Um92kYjTpS1CAP3Nh/KWw==}
     engines: {node: '>=16'}
 
-  sveltekit-superforms@2.19.1:
-    resolution: {integrity: sha512-P3R3S8o+0UGHtVqmisb13aFVuIyTCsFdxh/2C/fvoR9/JKeBrhzJ/chI7GdByoXE5fr2DtanocGXmP3PRTcpvw==}
+  sveltekit-superforms@2.20.0:
+    resolution: {integrity: sha512-5HyA6THKFBHEmJinZ/klu2/0jYr9ElSaXMYc5EO9ptP3x1wQPWVXYl59sMcaSrIjWUlPpayGxVppCyu+x/o4WA==}
     peerDependencies:
       '@sveltejs/kit': 1.x || 2.x
       svelte: 3.x || 4.x || >=5.0.0-next.51
@@ -3926,8 +3941,13 @@ packages:
   valibot@0.31.1:
     resolution: {integrity: sha512-2YYIhPrnVSz/gfT2/iXVTrSj92HwchCt9Cga/6hX4B26iCz9zkIsGTS0HjDYTZfTi1Un0X6aRvhBi1cfqs/i0Q==}
 
-  valibot@0.35.0:
-    resolution: {integrity: sha512-+i2aCRkReTrd5KBN/dW2BrPOvFnU5LXTV2xjZnjnqUIO8YUx6P2+MgRrkwF2FhkexgyKq/NIZdPdknhHf5A/Ww==}
+  valibot@0.41.0:
+    resolution: {integrity: sha512-igDBb8CTYr8YTQlOKgaN9nSS0Be7z+WRuaeYqGf3Cjz3aKmSnqEmYnkfVjzIuumGqfHpa3fLIvMEAfhrpqN8ng==}
+    peerDependencies:
+      typescript: '>=5'
+    peerDependenciesMeta:
+      typescript:
+        optional: true
 
   validator@13.12.0:
     resolution: {integrity: sha512-c1Q0mCiPlgdTVVVIJIrBuxNicYE+t/7oKeI9MWLj3fh/uq2Pxh/3eeWbVZ4OcGW1TUf53At0njHw5SMdA3tmMg==}
@@ -4240,6 +4260,12 @@ snapshots:
   '@edge-runtime/vm@3.2.0':
     dependencies:
       '@edge-runtime/primitives': 4.1.0
+
+  '@effect/schema@0.75.5(effect@3.9.2)':
+    dependencies:
+      effect: 3.9.2
+      fast-check: 3.22.0
+    optional: true
 
   '@esbuild/aix-ppc64@0.21.5':
     optional: true
@@ -4871,7 +4897,7 @@ snapshots:
       '@types/node': 20.12.12
     optional: true
 
-  '@typeschema/class-validator@0.2.0(@types/json-schema@7.0.15)(class-validator@0.14.1)':
+  '@typeschema/class-validator@0.3.0(@types/json-schema@7.0.15)(class-validator@0.14.1)':
     dependencies:
       '@typeschema/core': 0.14.0(@types/json-schema@7.0.15)
     optionalDependencies:
@@ -5892,6 +5918,9 @@ snapshots:
       signal-exit: 4.0.2
       time-span: 4.0.0
 
+  effect@3.9.2:
+    optional: true
+
   electron-to-chromium@1.5.4: {}
 
   elkjs@0.9.3: {}
@@ -6230,6 +6259,11 @@ snapshots:
       '@types/yauzl': 2.10.3
     transitivePeerDependencies:
       - supports-color
+
+  fast-check@3.22.0:
+    dependencies:
+      pure-rand: 6.1.0
+    optional: true
 
   fast-deep-equal@3.1.3: {}
 
@@ -7471,6 +7505,9 @@ snapshots:
       - typescript
       - utf-8-validate
 
+  pure-rand@6.1.0:
+    optional: true
+
   queue-microtask@1.2.3: {}
 
   randomcolor@0.6.2: {}
@@ -7842,7 +7879,7 @@ snapshots:
       magic-string: 0.30.10
       periscopic: 3.1.0
 
-  sveltekit-superforms@2.19.1(@sveltejs/kit@2.7.1(@sveltejs/vite-plugin-svelte@3.1.2(svelte@4.2.19)(vite@5.4.9(@types/node@16.18.11)))(svelte@4.2.19)(vite@5.4.9(@types/node@16.18.11)))(@types/json-schema@7.0.15)(svelte@4.2.19):
+  sveltekit-superforms@2.20.0(@sveltejs/kit@2.7.1(@sveltejs/vite-plugin-svelte@3.1.2(svelte@4.2.19)(vite@5.4.9(@types/node@16.18.11)))(svelte@4.2.19)(vite@5.4.9(@types/node@16.18.11)))(@types/json-schema@7.0.15)(svelte@4.2.19)(typescript@5.6.3):
     dependencies:
       '@sveltejs/kit': 2.7.1(@sveltejs/vite-plugin-svelte@3.1.2(svelte@4.2.19)(vite@5.4.9(@types/node@16.18.11)))(svelte@4.2.19)(vite@5.4.9(@types/node@16.18.11))
       devalue: 5.1.1
@@ -7851,22 +7888,25 @@ snapshots:
       svelte: 4.2.19
       ts-deepmerge: 7.0.1
     optionalDependencies:
+      '@effect/schema': 0.75.5(effect@3.9.2)
       '@exodus/schemasafe': 1.3.0
       '@gcornut/valibot-json-schema': 0.31.0
       '@sinclair/typebox': 0.32.35
-      '@typeschema/class-validator': 0.2.0(@types/json-schema@7.0.15)(class-validator@0.14.1)
+      '@typeschema/class-validator': 0.3.0(@types/json-schema@7.0.15)(class-validator@0.14.1)
       '@vinejs/vine': 1.8.0
       arktype: 2.0.0-rc.8
       class-validator: 0.14.1
+      effect: 3.9.2
       joi: 17.13.3
       json-schema-to-ts: 3.1.1
       superstruct: 2.0.2
-      valibot: 0.35.0
+      valibot: 0.41.0(typescript@5.6.3)
       yup: 1.4.0
       zod: 3.23.8
       zod-to-json-schema: 3.23.3(zod@3.23.8)
     transitivePeerDependencies:
       - '@types/json-schema'
+      - typescript
 
   svg.draggable.js@2.2.2:
     dependencies:
@@ -8167,7 +8207,9 @@ snapshots:
   valibot@0.31.1:
     optional: true
 
-  valibot@0.35.0:
+  valibot@0.41.0(typescript@5.6.3):
+    optionalDependencies:
+      typescript: 5.6.3
     optional: true
 
   validator@13.12.0:
