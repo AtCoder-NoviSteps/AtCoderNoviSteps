@@ -3,13 +3,13 @@ import { redirect, type Actions } from '@sveltejs/kit';
 import * as userService from '$lib/services/users';
 import * as taskResultService from '$lib/services/task_results';
 
-import type { Check } from '$lib/types/check';
+import type { FloatingMessage } from '$lib/types/floating_message';
 
 //import { sha256 } from '$lib/utils/hash';
 
 import { Roles } from '$lib/types/user';
 
-let checkResults: Check[] = [];
+let accountTransferMessages: FloatingMessage[] = [];
 
 export async function load({ locals }) {
   const session = await locals.auth.validate();
@@ -24,7 +24,7 @@ export async function load({ locals }) {
   // see https://github.com/AtCoder-NoviSteps/AtCoderNoviSteps/pull/1371#discussion_r1798353593
   return {
     success: true,
-    results: checkResults,
+    results: accountTransferMessages,
   };
 }
 
@@ -39,23 +39,23 @@ export const actions: Actions = {
       if (source_username === '' || destination_username === '') {
         return {
           success: true,
-          checkResults: [],
+          accountTransferMessages: [],
         };
       } else {
-        checkResults = await taskResultService.copyTaskResults(
+        accountTransferMessages = await taskResultService.copyTaskResults(
           source_username,
           destination_username,
         );
 
         const message = {
           success: true,
-          results: checkResults,
+          results: accountTransferMessages,
         };
 
         return message;
       }
     } catch (e) {
-      console.log(e);
+      console.error(e);
       return {
         success: false,
       };
