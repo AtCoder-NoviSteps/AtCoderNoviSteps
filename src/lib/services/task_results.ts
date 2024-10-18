@@ -40,12 +40,12 @@ export async function copyTaskResults(
   const sourceUser: User | null = await getUser(sourceUserName);
   const destinationUser: User | null = await getUser(destinationUserName);
 
-  if (!(await isExistingUser(sourceUserName, sourceUser, accountTransferMessages))) {
+  if (!isExistingUser(sourceUserName, sourceUser, accountTransferMessages)) {
     accountTransferMessages.push(failureMessage);
     return accountTransferMessages;
   }
 
-  if (!(await isExistingUser(destinationUserName, destinationUser, accountTransferMessages))) {
+  if (!isExistingUser(destinationUserName, destinationUser, accountTransferMessages)) {
     accountTransferMessages.push(failureMessage);
     return accountTransferMessages;
   }
@@ -106,7 +106,7 @@ export async function copyTaskResults(
   }
 }
 
-async function isExistingUser(userName: string, user: User | null, messages: FloatingMessage[]) {
+function isExistingUser(userName: string, user: User | null, messages: FloatingMessage[]) {
   if (user === null) {
     messages.push({
       message: `${userName} が存在しません。コピーを中止します`,
