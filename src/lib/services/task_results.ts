@@ -4,6 +4,7 @@ import { default as db } from '$lib/server/database';
 import { getTasks, getTask } from '$lib/services/tasks';
 import { getUser } from '$lib/services/users';
 import * as answer_crud from '$lib/services/answers';
+import { isAdmin } from '$lib/utils/authorship';
 
 import type { TaskAnswer } from '$lib/types/answer';
 import type { Task } from '$lib/types/task';
@@ -14,6 +15,7 @@ import type { FloatingMessage } from '$lib/types/floating_message';
 import { NOT_FOUND } from '$lib/constants/http-response-status-codes';
 import { getSubmissionStatusMapWithId, getSubmissionStatusMapWithName } from './submission_status';
 import type { User } from '@prisma/client';
+import type { Roles } from '../types/user';
 
 // DBから取得した問題一覧とログインしているユーザの回答を紐付けしたデータ保持
 const statusById = await getSubmissionStatusMapWithId();
@@ -50,6 +52,14 @@ export async function copyTaskResults(
 
   let sourceAnswers: Map<unknown, TaskResult>;
   if (sourceUser) {
+    if (isAdmin(sourceUser.role as Roles)) {
+      accountTransferMessages.push({
+        message: `${sourceUserName} は管理者権限をもっているためコピーできません。コピーを中止します`,
+        status: false,
+      });
+      accountTransferMessages.push(failureMessage);
+      return accountTransferMessages;
+    }
     sourceAnswers = await answer_crud.getAnswers(sourceUser.id);
     if (sourceAnswers.size == 0) {
       accountTransferMessages.push({
