@@ -1,4 +1,4 @@
-export interface Check {
-  label: string;
+export interface FloatingMessage {
+  message: string;
   status: boolean;
 }
