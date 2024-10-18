@@ -2,15 +2,20 @@ import { error } from '@sveltejs/kit';
 
 import { default as db } from '$lib/server/database';
 import { getTasks, getTask } from '$lib/services/tasks';
+import { getUser } from '$lib/services/users';
 import * as answer_crud from '$lib/services/answers';
+import { isAdmin } from '$lib/utils/authorship';
 
 import type { TaskAnswer } from '$lib/types/answer';
 import type { Task } from '$lib/types/task';
 import type { TaskResult, TaskResults, Tasks } from '$lib/types/task';
 import type { WorkBookTaskBase, WorkBookTasksBase } from '$lib/types/workbook';
+import type { FloatingMessage } from '$lib/types/floating_message';
 
 import { NOT_FOUND } from '$lib/constants/http-response-status-codes';
 import { getSubmissionStatusMapWithId, getSubmissionStatusMapWithName } from './submission_status';
+import type { User } from '@prisma/client';
+import type { Roles } from '../types/user';
 
 // DBから取得した問題一覧とログインしているユーザの回答を紐付けしたデータ保持
 const statusById = await getSubmissionStatusMapWithId();
@@ -25,6 +30,106 @@ export async function getTaskResults(userId: string): Promise<TaskResults> {
   return await relateTasksAndAnswers(userId, tasks, answers);
 }
 
+export async function copyTaskResults(
+  sourceUserName: string,
+  destinationUserName: string,
+): Promise<FloatingMessage[]> {
+  const accountTransferMessages: FloatingMessage[] = [];
+  const failureMessage = { message: 'コピーが失敗しました', status: false };
+
+  const sourceUser: User | null = await getUser(sourceUserName);
+  const destinationUser: User | null = await getUser(destinationUserName);
+
+  if (!isExistingUser(sourceUserName, sourceUser, accountTransferMessages)) {
+    accountTransferMessages.push(failureMessage);
+    return accountTransferMessages;
+  }
+
+  if (!isExistingUser(destinationUserName, destinationUser, accountTransferMessages)) {
+    accountTransferMessages.push(failureMessage);
+    return accountTransferMessages;
+  }
+
+  let sourceAnswers: Map<unknown, TaskResult>;
+  if (sourceUser) {
+    if (isAdminUser(sourceUserName, sourceUser, accountTransferMessages)) {
+      accountTransferMessages.push(failureMessage);
+      return accountTransferMessages;
+    }
+    sourceAnswers = await answer_crud.getAnswers(sourceUser.id);
+    if (sourceAnswers.size === 0) {
+      accountTransferMessages.push({
+        message: `${sourceUserName} にコピー対象のデータがありません。コピーを中止します`,
+        status: false,
+      });
+      accountTransferMessages.push(failureMessage);
+      return accountTransferMessages;
+    }
+  }
+
+  let destinationAnswers: Map<unknown, TaskResult>;
+  if (destinationUser) {
+    if (isAdminUser(destinationUserName, destinationUser, accountTransferMessages)) {
+      accountTransferMessages.push(failureMessage);
+      return accountTransferMessages;
+    }
+    destinationAnswers = await answer_crud.getAnswers(destinationUser.id);
+    if (destinationAnswers.size > 0) {
+      accountTransferMessages.push({
+        message: `${destinationUserName} にすでにデータがあります。コピーを中止します`,
+        status: false,
+      });
+      accountTransferMessages.push(failureMessage);
+      return accountTransferMessages;
+    }
+  }
+  try {
+    if (destinationUser) {
+      await db.$transaction(async () => {
+        for (const taskResult of sourceAnswers.values()) {
+          await answer_crud.upsertAnswer(
+            taskResult.task_id,
+            destinationUser.id,
+            taskResult.status_id,
+          );
+        }
+      });
+    }
+    accountTransferMessages.push({ message: 'コピーが正常に完了しました', status: true });
+    return accountTransferMessages;
+  } catch {
+    accountTransferMessages.push({
+      message: 'コピー中に何らかのエラーが発生しました',
+      status: false,
+    });
+    return accountTransferMessages;
+  }
+}
+
+function isExistingUser(userName: string, user: User | null, messages: FloatingMessage[]) {
+  if (user === null) {
+    messages.push({
+      message: `${userName} が存在しません。コピーを中止します`,
+      status: false,
+    });
+    return false;
+  } else {
+    messages.push({ message: `${userName} が存在することを確認しました`, status: true });
+    return true;
+  }
+}
+
+function isAdminUser(userName: string, user: User | null, messages: FloatingMessage[]) {
+  if (user && isAdmin(user.role as Roles)) {
+    messages.push({
+      message: `${userName} は管理者権限をもっているためコピーできません。コピーを中止します`,
+      status: false,
+    });
+    return true;
+  } else {
+    return false;
+  }
+}
 async function relateTasksAndAnswers(
   userId: string,
   tasks: Tasks,
@@ -151,7 +256,7 @@ export function createDefaultTaskResult(userId: string, task: Task): TaskResult 
 export async function getTaskResult(slug: string, userId: string) {
   const task = await getTask(slug);
 
-  if (!task || task.length == 0) {
+  if (!task || task.length === 0) {
     error(NOT_FOUND, `問題 ${slug} は見つかりませんでした。`);
   }
 
