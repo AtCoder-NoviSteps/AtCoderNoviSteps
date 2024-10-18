@@ -52,11 +52,7 @@ export async function copyTaskResults(
 
   let sourceAnswers: Map<unknown, TaskResult>;
   if (sourceUser) {
-    if (isAdmin(sourceUser.role as Roles)) {
-      accountTransferMessages.push({
-        message: `${sourceUserName} は管理者権限をもっているためコピーできません。コピーを中止します`,
-        status: false,
-      });
+    if (isAdminUser(sourceUserName, sourceUser, accountTransferMessages)) {
       accountTransferMessages.push(failureMessage);
       return accountTransferMessages;
     }
@@ -73,6 +69,10 @@ export async function copyTaskResults(
 
   let destinationAnswers: Map<unknown, TaskResult>;
   if (destinationUser) {
+    if (isAdminUser(destinationUserName, destinationUser, accountTransferMessages)) {
+      accountTransferMessages.push(failureMessage);
+      return accountTransferMessages;
+    }
     destinationAnswers = await answer_crud.getAnswers(destinationUser.id);
     if (destinationAnswers.size > 0) {
       accountTransferMessages.push({
@@ -119,6 +119,17 @@ function isExistingUser(userName: string, user: User | null, messages: FloatingM
   }
 }
 
+function isAdminUser(userName: string, user: User | null, messages: FloatingMessage[]) {
+  if (user && isAdmin(user.role as Roles)) {
+    messages.push({
+      message: `${userName} は管理者権限をもっているためコピーできません。コピーを中止します`,
+      status: false,
+    });
+    return true;
+  } else {
+    return false;
+  }
+}
 async function relateTasksAndAnswers(
   userId: string,
   tasks: Tasks,
