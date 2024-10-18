@@ -21,7 +21,7 @@ export async function load({ locals }) {
   if (user?.role !== Roles.ADMIN) {
     throw redirect(302, '/login');
   }
-
+  // see https://github.com/AtCoder-NoviSteps/AtCoderNoviSteps/pull/1371#discussion_r1798353593
   return {
     success: true,
     results: checkResults,
