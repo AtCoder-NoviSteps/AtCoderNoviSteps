@@ -24,6 +24,24 @@ type Course = {
 
 type Courses = Course[];
 
+type ChallengeContestAPI = {
+  largeCl: object;
+  contests: ChallengeContests;
+};
+
+type ChallengeContest = {
+  abbr: string;
+  largeCl: string;
+  middleCl: string;
+  year: number;
+  progress: number;
+  numberOfProblems: number;
+  numberOfSolved: number;
+  days: { title: string; problems: AOJTaskAPI[] }[];
+};
+
+type ChallengeContests = ChallengeContest[];
+
 type AOJTaskAPI = {
   id: string;
   available: number;
@@ -43,13 +61,20 @@ type AOJTaskAPI = {
   userScore: number;
 };
 
+type AOJTaskAPIs = AOJTaskAPI[];
+
+const PRELIM = 'prelim';
+const FINAL = 'final';
+
 export async function getContests(): Promise<ImportContests> {
-  const coursesForContests = await fetchCoursesForContests();
+  const [courses, pckPrelims, pckFinals] = await Promise.all([
+    fetchCoursesForContests(),
+    fetchPckContests(PRELIM),
+    fetchPckContests(FINAL),
+  ]);
+  const contests = courses.concat(pckPrelims, pckFinals);
 
-  // TODO: fetch PCK (qual and final) contests.
-  // TODO: Merge courseForContests and PCK contests.
-
-  return coursesForContests;
+  return contests;
 }
 
 async function fetchCoursesForContests(): Promise<ImportContests> {
@@ -80,19 +105,56 @@ async function fetchCoursesForContests(): Promise<ImportContests> {
   }
 }
 
-export async function getTasks(): Promise<ImportTasks> {
-  const courseTasks: ImportTasks = await fetchCourseTasks();
-  // TODO: fetch PCK (qual and final) tasks.
-  // TODO: Merge courseTasks and PCK tasks.
+async function fetchPckContests(round: string): Promise<ImportContests> {
+  const allPckContestsUrl = `https://judgeapi.u-aizu.ac.jp/challenges/cl/pck/${round}`;
+  const allPckContests = await fetchAPI<ChallengeContestAPI>(
+    allPckContestsUrl,
+    `Failed to fetch PCK ${round} tasks from AIZU ONLINE JUDGE API`,
+  );
 
-  return courseTasks;
+  if ('contests' in allPckContests) {
+    const contests = allPckContests.contests.reduce(
+      (importContests: ImportContests, contest: ChallengeContest) => {
+        const titles = contest.days.map((day) => day.title);
+        titles.forEach((title: string) => {
+          importContests.push({
+            id: contest.abbr,
+            start_epoch_second: '', // 該当するデータがないため
+            duration_second: '', // 同上
+            title: title,
+            rate_change: '', // 同上
+          });
+        });
+        return importContests;
+      },
+      [] as ImportContests,
+    );
+
+    console.log(`Found PCK ${round}: ${contests.length} contests.`);
+
+    return contests;
+  } else {
+    console.error(`Not found PCK ${round} in the response.`);
+    return [];
+  }
+}
+
+export async function getTasks(): Promise<ImportTasks> {
+  const [courses, pckPrelims, pckFinals] = await Promise.all([
+    fetchCourseTasks(),
+    fetchPckTasks(PRELIM),
+    fetchPckTasks(FINAL),
+  ]);
+  const tasks = courses.concat(pckPrelims, pckFinals);
+
+  return tasks;
 }
 
 async function fetchCourseTasks(): Promise<ImportTasks> {
   const size = 10 ** 4;
-  const allProblemsUrl = `https://judgeapi.u-aizu.ac.jp/problems?size=${size}`;
-  const allTasks = await fetchAPI<AOJTaskAPI>(
-    allProblemsUrl,
+  const allTasksUrl = `https://judgeapi.u-aizu.ac.jp/problems?size=${size}`;
+  const allTasks = await fetchAPI<AOJTaskAPIs>(
+    allTasksUrl,
     'Failed to fetch course tasks from AIZU ONLINE JUDGE API',
   );
 
@@ -127,3 +189,35 @@ export const getCourseName = (taskId: string) => {
     return '';
   }
 };
+
+async function fetchPckTasks(round: string): Promise<ImportTasks> {
+  const allPckContestsUrl = `https://judgeapi.u-aizu.ac.jp/challenges/cl/pck/${round}`;
+  const allPckContests = await fetchAPI<ChallengeContestAPI>(
+    allPckContestsUrl,
+    `Failed to fetch PCK ${round} tasks from AIZU ONLINE JUDGE API`,
+  );
+
+  if ('contests' in allPckContests) {
+    const tasks: ImportTasks = allPckContests.contests.flatMap((contest: ChallengeContest) =>
+      contest.days.flatMap((day) =>
+        day.problems.map((problem) => {
+          const taskId = problem.id;
+
+          return {
+            id: taskId,
+            contest_id: contest.abbr,
+            problem_index: taskId, // problem_index 相当の値がないため problem.id で代用。AtCoder Problems APIにおいても、JOIの古い問題で同様の処理が行われている。
+            task_id: taskId, // 同上
+            title: problem.name,
+          };
+        }),
+      ),
+    );
+    console.log(`Found PCK ${round}: ${tasks.length} tasks.`);
+
+    return tasks;
+  } else {
+    console.error(`Not found PCK ${round} in the response.`);
+    return [];
+  }
+}
