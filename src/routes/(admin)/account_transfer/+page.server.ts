@@ -37,7 +37,6 @@ export const actions: Actions = {
 
       //POSTされてこなかった場合は抜ける
       if (source_username === '' || destination_username === '') {
-        checkResults = [];
         return {
           success: true,
           checkResults: [],
