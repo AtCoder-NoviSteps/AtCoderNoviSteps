@@ -57,7 +57,7 @@ export async function copyTaskResults(
       return accountTransferMessages;
     }
     sourceAnswers = await answer_crud.getAnswers(sourceUser.id);
-    if (sourceAnswers.size == 0) {
+    if (sourceAnswers.size === 0) {
       accountTransferMessages.push({
         message: `${sourceUserName} にコピー対象のデータがありません。コピーを中止します`,
         status: false,
@@ -256,7 +256,7 @@ export function createDefaultTaskResult(userId: string, task: Task): TaskResult 
 export async function getTaskResult(slug: string, userId: string) {
   const task = await getTask(slug);
 
-  if (!task || task.length == 0) {
+  if (!task || task.length === 0) {
     error(NOT_FOUND, `問題 ${slug} は見つかりませんでした。`);
   }
 
