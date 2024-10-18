@@ -23,14 +23,15 @@
   }
 </script>
 
-<HeadingOne title="回答コピー" />
-<form method="POST" class="space-y-4" action="copy">
+<HeadingOne title="アカウント移行" />
+<form method="POST" class="space-y-4" action="account_transfer">
+  新しく作成された空のアカウントに、旧アカウントの回答データをコピーできます。
   <Table shadow hoverable={true} class="text-md">
     <TableBody tableBodyClass="divide-y">
       <TableBodyRow>
         <TableBodyCell>
           <Label>
-            <p>Source User ID:</p>
+            <p>旧アカウント名</p>
           </Label>
         </TableBodyCell>
         <TableBodyCell>
@@ -40,7 +41,7 @@
       <TableBodyRow>
         <TableBodyCell>
           <Label>
-            <p>Destination User ID:</p>
+            <p>新アカウント名</p>
           </Label>
         </TableBodyCell>
         <TableBodyCell>
