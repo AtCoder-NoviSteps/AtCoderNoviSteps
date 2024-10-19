@@ -34,57 +34,32 @@ export async function copyTaskResults(
   sourceUserName: string,
   destinationUserName: string,
 ): Promise<FloatingMessage[]> {
-  const accountTransferMessages: FloatingMessage[] = [];
+  const messages: FloatingMessage[] = [];
   const failureMessage = { message: 'コピーが失敗しました', status: false };
 
   const sourceUser: User | null = await getUser(sourceUserName);
+  const isValidatedSourceUser = await validateSourceUserAndAnswers(
+    sourceUserName,
+    sourceUser as User,
+    messages,
+  );
+
   const destinationUser: User | null = await getUser(destinationUserName);
+  const isValidatedDestinationUser = await validateDestinationUserAndAnswers(
+    destinationUserName,
+    destinationUser as User,
+    messages,
+  );
 
-  if (!isExistingUser(sourceUserName, sourceUser, accountTransferMessages)) {
-    accountTransferMessages.push(failureMessage);
-    return accountTransferMessages;
+  if (!isValidatedSourceUser || !isValidatedDestinationUser) {
+    messages.push(failureMessage);
+    return messages;
   }
 
-  if (!isExistingUser(destinationUserName, destinationUser, accountTransferMessages)) {
-    accountTransferMessages.push(failureMessage);
-    return accountTransferMessages;
-  }
-
-  let sourceAnswers: Map<unknown, TaskResult>;
-  if (sourceUser) {
-    if (isAdminUser(sourceUserName, sourceUser, accountTransferMessages)) {
-      accountTransferMessages.push(failureMessage);
-      return accountTransferMessages;
-    }
-    sourceAnswers = await answer_crud.getAnswers(sourceUser.id);
-    if (sourceAnswers.size === 0) {
-      accountTransferMessages.push({
-        message: `${sourceUserName} にコピー対象のデータがありません。コピーを中止します`,
-        status: false,
-      });
-      accountTransferMessages.push(failureMessage);
-      return accountTransferMessages;
-    }
-  }
-
-  let destinationAnswers: Map<unknown, TaskResult>;
-  if (destinationUser) {
-    if (isAdminUser(destinationUserName, destinationUser, accountTransferMessages)) {
-      accountTransferMessages.push(failureMessage);
-      return accountTransferMessages;
-    }
-    destinationAnswers = await answer_crud.getAnswers(destinationUser.id);
-    if (destinationAnswers.size > 0) {
-      accountTransferMessages.push({
-        message: `${destinationUserName} にすでにデータがあります。コピーを中止します`,
-        status: false,
-      });
-      accountTransferMessages.push(failureMessage);
-      return accountTransferMessages;
-    }
-  }
   try {
-    if (destinationUser) {
+    if (sourceUser && destinationUser) {
+      const sourceAnswers = await answer_crud.getAnswers(sourceUser.id);
+
       await db.$transaction(async () => {
         for (const taskResult of sourceAnswers.values()) {
           await answer_crud.upsertAnswer(
@@ -95,18 +70,58 @@ export async function copyTaskResults(
         }
       });
     }
-    accountTransferMessages.push({ message: 'コピーが正常に完了しました', status: true });
-    return accountTransferMessages;
+
+    messages.push({ message: 'コピーが正常に完了しました', status: true });
+    return messages;
   } catch {
-    accountTransferMessages.push({
+    messages.push({
       message: 'コピー中に何らかのエラーが発生しました',
       status: false,
     });
-    return accountTransferMessages;
+    return messages;
   }
 }
 
-function isExistingUser(userName: string, user: User | null, messages: FloatingMessage[]) {
+async function validateSourceUserAndAnswers(
+  sourceUserName: string,
+  sourceUser: User,
+  messages: FloatingMessage[],
+): Promise<boolean> {
+  if (!isExistingUser(sourceUserName, sourceUser, messages) || isAdminUser(sourceUser, messages)) {
+    return false;
+  }
+
+  const sourceAnswers = await answer_crud.getAnswers(sourceUser.id);
+
+  if (!haveAnswersForSourceUser(sourceUser, sourceAnswers, messages)) {
+    return false;
+  }
+
+  return true;
+}
+
+async function validateDestinationUserAndAnswers(
+  destinationUserName: string,
+  destinationUser: User,
+  messages: FloatingMessage[],
+): Promise<boolean> {
+  if (
+    !isExistingUser(destinationUserName, destinationUser, messages) ||
+    isAdminUser(destinationUser, messages)
+  ) {
+    return false;
+  }
+
+  const destinationAnswers = await answer_crud.getAnswers(destinationUser.id);
+
+  if (haveAnswersForDestinationUser(destinationUser, destinationAnswers, messages)) {
+    return false;
+  }
+
+  return true;
+}
+
+function isExistingUser(userName: string, user: User | null, messages: FloatingMessage[]): boolean {
   if (user === null) {
     messages.push({
       message: `${userName} が存在しません。コピーを中止します`,
@@ -119,10 +134,10 @@ function isExistingUser(userName: string, user: User | null, messages: FloatingM
   }
 }
 
-function isAdminUser(userName: string, user: User | null, messages: FloatingMessage[]) {
+function isAdminUser(user: User | null, messages: FloatingMessage[]): boolean {
   if (user && isAdmin(user.role as Roles)) {
     messages.push({
-      message: `${userName} は管理者権限をもっているためコピーできません。コピーを中止します`,
+      message: `${user.username} は管理者権限をもっているためコピーできません。コピーを中止します`,
       status: false,
     });
     return true;
@@ -130,6 +145,39 @@ function isAdminUser(userName: string, user: User | null, messages: FloatingMess
     return false;
   }
 }
+
+function haveAnswersForSourceUser(
+  sourceUser: User,
+  answers: Map<string, TaskResult>,
+  messages: FloatingMessage[],
+): boolean {
+  if (answers.size === 0) {
+    messages.push({
+      message: `${sourceUser.username} にコピー対象のデータがありません。コピーを中止します`,
+      status: false,
+    });
+    return false;
+  }
+
+  return true;
+}
+
+function haveAnswersForDestinationUser(
+  destinationUser: User,
+  answers: Map<string, TaskResult>,
+  messages: FloatingMessage[],
+): boolean {
+  if (answers.size > 0) {
+    messages.push({
+      message: `${destinationUser.username} にすでにデータがあります。コピーを中止します`,
+      status: false,
+    });
+    return true;
+  }
+
+  return false;
+}
+
 async function relateTasksAndAnswers(
   userId: string,
   tasks: Tasks,
