@@ -35,32 +35,34 @@ export async function copyTaskResults(
   destinationUserName: string,
 ): Promise<FloatingMessage[]> {
   const messages: FloatingMessage[] = [];
-  const failureMessage = { message: 'コピーが失敗しました', status: false };
-
-  const sourceUser: User | null = await getUser(sourceUserName);
-  const isValidatedSourceUser = await validateSourceUserAndAnswers(
-    sourceUserName,
-    sourceUser as User,
-    messages,
-  );
-
-  const destinationUser: User | null = await getUser(destinationUserName);
-  const isValidatedDestinationUser = await validateDestinationUserAndAnswers(
-    destinationUserName,
-    destinationUser as User,
-    messages,
-  );
-
-  if (!isValidatedSourceUser || !isValidatedDestinationUser) {
-    messages.push(failureMessage);
-    return messages;
-  }
 
   try {
-    if (sourceUser && destinationUser) {
-      const sourceAnswers = await answer_crud.getAnswers(sourceUser.id);
+    await db.$transaction(async () => {
+      const sourceUser: User | null = await getUser(sourceUserName);
+      const isValidatedSourceUser = await validateUserAndAnswers(
+        sourceUserName,
+        sourceUser as User,
+        true,
+        messages,
+      );
 
-      await db.$transaction(async () => {
+      const destinationUser: User | null = await getUser(destinationUserName);
+      const isValidatedDestinationUser = await validateUserAndAnswers(
+        destinationUserName,
+        destinationUser as User,
+        false,
+        messages,
+      );
+
+      if (!isValidatedSourceUser || !isValidatedDestinationUser) {
+        throw new Error(
+          `Failed to validate user(s) for ${sourceUserName}: ${isValidatedSourceUser} and/or ${destinationUserName}: ${isValidatedDestinationUser}`,
+        );
+      }
+
+      if (sourceUser && destinationUser) {
+        const sourceAnswers = await answer_crud.getAnswers(sourceUser.id);
+
         for (const taskResult of sourceAnswers.values()) {
           await answer_crud.upsertAnswer(
             taskResult.task_id,
@@ -68,60 +70,45 @@ export async function copyTaskResults(
             taskResult.status_id,
           );
         }
-      });
-    }
+      }
+    });
 
     messages.push({ message: 'コピーが正常に完了しました', status: true });
     return messages;
-  } catch {
-    messages.push({
-      message: 'コピー中に何らかのエラーが発生しました',
-      status: false,
-    });
+  } catch (error) {
+    console.error(`Failed to copy task results:`, error);
+
+    const failureMessage = { message: 'コピーが失敗しました', status: false };
+    messages.push(failureMessage);
+
     return messages;
   }
 }
 
-async function validateSourceUserAndAnswers(
-  sourceUserName: string,
-  sourceUser: User,
+export async function validateUserAndAnswers(
+  userName: string,
+  user: User,
+  expectedToHaveAnswers: boolean,
   messages: FloatingMessage[],
-): Promise<boolean> {
-  if (!isExistingUser(sourceUserName, sourceUser, messages) || isAdminUser(sourceUser, messages)) {
+) {
+  if (!isExistingUser(userName, user, messages) || (user && isAdminUser(user, messages))) {
     return false;
   }
 
-  const sourceAnswers = await answer_crud.getAnswers(sourceUser.id);
+  const answers = await answer_crud.getAnswers(user.id);
 
-  if (!haveAnswersForSourceUser(sourceUser, sourceAnswers, messages)) {
-    return false;
+  if (expectedToHaveAnswers) {
+    return existsUserAnswers(user, answers, true, messages);
+  } else {
+    return !existsUserAnswers(user, answers, false, messages);
   }
-
-  return true;
 }
 
-async function validateDestinationUserAndAnswers(
-  destinationUserName: string,
-  destinationUser: User,
+export function isExistingUser(
+  userName: string,
+  user: User | null,
   messages: FloatingMessage[],
-): Promise<boolean> {
-  if (
-    !isExistingUser(destinationUserName, destinationUser, messages) ||
-    isAdminUser(destinationUser, messages)
-  ) {
-    return false;
-  }
-
-  const destinationAnswers = await answer_crud.getAnswers(destinationUser.id);
-
-  if (haveAnswersForDestinationUser(destinationUser, destinationAnswers, messages)) {
-    return false;
-  }
-
-  return true;
-}
-
-function isExistingUser(userName: string, user: User | null, messages: FloatingMessage[]): boolean {
+): boolean {
   if (user === null) {
     messages.push({
       message: `${userName} が存在しません。コピーを中止します`,
@@ -134,48 +121,38 @@ function isExistingUser(userName: string, user: User | null, messages: FloatingM
   }
 }
 
-function isAdminUser(user: User | null, messages: FloatingMessage[]): boolean {
-  if (user && isAdmin(user.role as Roles)) {
+export function isAdminUser(user: User | null, messages: FloatingMessage[]): boolean {
+  if (user?.role && isAdmin(user.role as Roles)) {
     messages.push({
       message: `${user.username} は管理者権限をもっているためコピーできません。コピーを中止します`,
-      status: false,
-    });
-    return true;
-  } else {
-    return false;
-  }
-}
-
-function haveAnswersForSourceUser(
-  sourceUser: User,
-  answers: Map<string, TaskResult>,
-  messages: FloatingMessage[],
-): boolean {
-  if (answers.size === 0) {
-    messages.push({
-      message: `${sourceUser.username} にコピー対象のデータがありません。コピーを中止します`,
-      status: false,
-    });
-    return false;
-  }
-
-  return true;
-}
-
-function haveAnswersForDestinationUser(
-  destinationUser: User,
-  answers: Map<string, TaskResult>,
-  messages: FloatingMessage[],
-): boolean {
-  if (answers.size > 0) {
-    messages.push({
-      message: `${destinationUser.username} にすでにデータがあります。コピーを中止します`,
       status: false,
     });
     return true;
   }
 
   return false;
+}
+
+export function existsUserAnswers(
+  user: User,
+  answers: Map<string, TaskResult>,
+  expectedToHaveAnswers: boolean,
+  messages: FloatingMessage[],
+): boolean {
+  const hasAnswers = answers.size > 0;
+
+  if (hasAnswers !== expectedToHaveAnswers) {
+    messages.push({
+      message: expectedToHaveAnswers
+        ? `${user.username} にコピー対象のデータがありません。コピーを中止します`
+        : `${user.username} にすでにデータがあります。コピーを中止します`,
+      status: false,
+    });
+
+    return !expectedToHaveAnswers;
+  }
+
+  return expectedToHaveAnswers;
 }
 
 async function relateTasksAndAnswers(
