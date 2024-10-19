@@ -24,7 +24,7 @@ export async function load({ locals }) {
   // see https://github.com/AtCoder-NoviSteps/AtCoderNoviSteps/pull/1371#discussion_r1798353593
   return {
     success: true,
-    results: accountTransferMessages,
+    accountTransferMessages: accountTransferMessages,
   };
 }
 
@@ -60,6 +60,7 @@ export const actions: Actions = {
       console.error(e);
       return {
         success: false,
+        accountTransferMessages: [],
       };
     }
   },
