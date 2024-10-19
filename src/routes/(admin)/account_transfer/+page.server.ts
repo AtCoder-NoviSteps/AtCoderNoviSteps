@@ -32,8 +32,10 @@ export const actions: Actions = {
   default: async function POST({ request }: { request: Request }) {
     try {
       const formData = await request.formData();
-      const source_username: string = formData.get('source_username')?.toString() ?? '';
-      const destination_username: string = formData.get('destination_username')?.toString() ?? '';
+      const source_username: string =
+        formData.get('source_username')?.toString().toLocaleLowerCase() ?? '';
+      const destination_username: string =
+        formData.get('destination_username')?.toString().toLocaleLowerCase() ?? '';
 
       //POSTされてこなかった場合は抜ける
       if (source_username === '' || destination_username === '') {

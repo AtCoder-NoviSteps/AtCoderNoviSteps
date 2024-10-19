@@ -1,6 +1,6 @@
 <script lang="ts">
-  import HeadingOne from '$lib/components/HeadingOne.svelte';
-  import { BadgeCheckOutline, BanOutline } from 'flowbite-svelte-icons';
+  import { onDestroy } from 'svelte';
+
   import {
     Table,
     TableBody,
@@ -10,21 +10,36 @@
     Input,
     Button,
   } from 'flowbite-svelte';
-  //let importContests = data.importContests;
-  let source_username = '';
-  let destination_username = '';
-  export let data;
+  import { BadgeCheckOutline, BanOutline } from 'flowbite-svelte-icons';
+
+  import HeadingOne from '$lib/components/HeadingOne.svelte';
+
+  import type { FloatingMessages } from '$lib/types/floating_message';
+
+  export let formAction: string = 'account_transfer';
+  export let data: { results: FloatingMessages };
+
   let accountTransferMessages = data.results;
+  let clearMessagesTimeout: ReturnType<typeof setTimeout>;
+  let sourceUserName = '';
+  let destinationUserName = '';
+
   // 10秒後にメッセージを空にする
-  if (accountTransferMessages.length > 0) {
-    setTimeout(() => {
-      accountTransferMessages = []; // メッセージを消す
-    }, 10000); // 10000ミリ秒（10秒）後に実行
+  $: if (accountTransferMessages.length > 0) {
+    clearTimeout(clearMessagesTimeout);
+
+    clearMessagesTimeout = setTimeout(() => {
+      accountTransferMessages = [];
+    }, 10000);
   }
+
+  onDestroy(() => {
+    clearTimeout(clearMessagesTimeout);
+  });
 </script>
 
 <HeadingOne title="アカウント移行" />
-<form method="POST" class="space-y-4" action="account_transfer">
+<form method="POST" class="space-y-4" action={formAction}>
   新しく作成された空のアカウントに、旧アカウントの回答データをコピーできます。
   <Table shadow hoverable={true} class="text-md">
     <TableBody tableBodyClass="divide-y">
@@ -35,7 +50,7 @@
           </Label>
         </TableBodyCell>
         <TableBodyCell>
-          <Input id="source_user_name" name="source_username" bind:value={source_username}></Input>
+          <Input id="source_user_name" name="source_username" bind:value={sourceUserName}></Input>
         </TableBodyCell>
       </TableBodyRow>
       <TableBodyRow>
@@ -48,7 +63,7 @@
           <Input
             id="destination_user_name"
             name="destination_username"
-            bind:value={destination_username}
+            bind:value={destinationUserName}
           ></Input>
         </TableBodyCell>
       </TableBodyRow>
