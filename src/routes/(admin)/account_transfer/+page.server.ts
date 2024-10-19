@@ -51,7 +51,7 @@ export const actions: Actions = {
 
         const message = {
           success: true,
-          results: accountTransferMessages,
+          accountTransferMessages: accountTransferMessages,
         };
 
         return message;

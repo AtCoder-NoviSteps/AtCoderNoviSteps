@@ -17,9 +17,9 @@
   import type { FloatingMessages } from '$lib/types/floating_message';
 
   export let formAction: string = 'account_transfer';
-  export let data: { results: FloatingMessages };
+  export let data: { accountTransferMessages: FloatingMessages };
 
-  let accountTransferMessages = data.results;
+  let accountTransferMessages = data.accountTransferMessages;
   let clearMessagesTimeout: ReturnType<typeof setTimeout>;
   let sourceUserName = '';
   let destinationUserName = '';
