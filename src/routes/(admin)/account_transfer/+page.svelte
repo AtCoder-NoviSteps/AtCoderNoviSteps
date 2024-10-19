@@ -14,21 +14,24 @@
   let source_username = '';
   let destination_username = '';
   export let data;
-  let checks = data.results;
+  let accountTransferMessages = data.results;
   // 10秒後にメッセージを空にする
-  setTimeout(() => {
-    checks = []; // メッセージを消す
-  }, 10000); // 10000ミリ秒（5秒）後に実行
+  if (accountTransferMessages.length > 0) {
+    setTimeout(() => {
+      accountTransferMessages = []; // メッセージを消す
+    }, 10000); // 10000ミリ秒（10秒）後に実行
+  }
 </script>
 
-<HeadingOne title="回答コピー" />
-<form method="POST" class="space-y-4" action="copy">
+<HeadingOne title="アカウント移行" />
+<form method="POST" class="space-y-4" action="account_transfer">
+  新しく作成された空のアカウントに、旧アカウントの回答データをコピーできます。
   <Table shadow hoverable={true} class="text-md">
     <TableBody tableBodyClass="divide-y">
       <TableBodyRow>
         <TableBodyCell>
           <Label>
-            <p>Source User ID:</p>
+            <p>旧アカウント名</p>
           </Label>
         </TableBodyCell>
         <TableBodyCell>
@@ -38,7 +41,7 @@
       <TableBodyRow>
         <TableBodyCell>
           <Label>
-            <p>Destination User ID:</p>
+            <p>新アカウント名</p>
           </Label>
         </TableBodyCell>
         <TableBodyCell>
@@ -58,16 +61,16 @@
 
 <!-- ステータス表示 -->
 <div class="p-4 space-y-4">
-  {#each checks as check}
+  {#each accountTransferMessages as accountTransferMessage}
     <div class="flex items-center space-x-2">
-      {#if check.status}
+      {#if accountTransferMessage.status}
         <!-- 成功時のアイコン: BadgeCheckOutline -->
         <BadgeCheckOutline class="w-5 h-5 text-green-500"></BadgeCheckOutline>
       {:else}
         <!-- 失敗時のアイコン: BanOutline -->
         <BanOutline class="w-5 h-5 text-red-500"></BanOutline>
       {/if}
-      <span>{check.label}</span>
+      <span>{accountTransferMessage.message}</span>
     </div>
   {/each}
 </div>
