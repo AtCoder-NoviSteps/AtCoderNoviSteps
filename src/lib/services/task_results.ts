@@ -122,11 +122,16 @@ export function isExistingUser(
 }
 
 export function isAdminUser(user: User | null, messages: FloatingMessage[]): boolean {
-  if (user?.role && isAdmin(user.role as Roles)) {
+  if (user === null) {
+    return false;
+  }
+
+  if (user.role && isAdmin(user.role as Roles)) {
     messages.push({
       message: `${user.username} は管理者権限をもっているためコピーできません。コピーを中止します`,
       status: false,
     });
+
     return true;
   }
 
