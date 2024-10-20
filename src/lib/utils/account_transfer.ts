@@ -6,7 +6,7 @@ import type { FloatingMessages } from '$lib/types/floating_message';
 
 import { isAdmin } from '$lib/utils/authorship';
 
-export async function validateUserAndAnswers(
+export function validateUserAndAnswers(
   user: User,
   answers: Map<string, TaskResult>,
   expectedToHaveAnswers: boolean,
@@ -17,9 +17,9 @@ export async function validateUserAndAnswers(
   }
 
   if (expectedToHaveAnswers) {
-    return existsUserAnswers(user, answers, expectedToHaveAnswers, messages);
+    return validateUserAnswersExistence(user, answers, expectedToHaveAnswers, messages);
   } else {
-    return !existsUserAnswers(user, answers, expectedToHaveAnswers, messages);
+    return !validateUserAnswersExistence(user, answers, expectedToHaveAnswers, messages);
   }
 }
 
@@ -29,13 +29,10 @@ export function isExistingUser(
   messages: FloatingMessages,
 ): boolean {
   if (user === null) {
-    messages.push({
-      message: `${userName} が存在しません。コピーを中止します`,
-      status: false,
-    });
+    addMessage(messages, `${userName} が存在しません。コピーを中止します`, false);
     return false;
   } else {
-    messages.push({ message: `${userName} が存在することを確認しました`, status: true });
+    addMessage(messages, `${userName} が存在することを確認しました`, true);
     return true;
   }
 }
@@ -46,10 +43,11 @@ export function isAdminUser(user: User | null, messages: FloatingMessages): bool
   }
 
   if (user.role && isAdmin(user.role as Roles)) {
-    messages.push({
-      message: `${user.username} は管理者権限をもっているためコピーできません。コピーを中止します`,
-      status: false,
-    });
+    addMessage(
+      messages,
+      `${user.username} は管理者権限をもっているためコピーできません。コピーを中止します`,
+      false,
+    );
 
     return true;
   }
@@ -57,7 +55,7 @@ export function isAdminUser(user: User | null, messages: FloatingMessages): bool
   return false;
 }
 
-export function existsUserAnswers(
+export function validateUserAnswersExistence(
   user: User,
   answers: Map<string, TaskResult>,
   expectedToHaveAnswers: boolean,
@@ -66,15 +64,20 @@ export function existsUserAnswers(
   const hasAnswers = answers.size > 0;
 
   if (hasAnswers !== expectedToHaveAnswers) {
-    messages.push({
-      message: expectedToHaveAnswers
+    addMessage(
+      messages,
+      expectedToHaveAnswers
         ? `${user.username} にコピー対象のデータがありません。コピーを中止します`
         : `${user.username} にすでにデータがあります。コピーを中止します`,
-      status: false,
-    });
+      false,
+    );
 
     return !expectedToHaveAnswers;
   }
 
   return expectedToHaveAnswers;
+}
+
+export function addMessage(messages: FloatingMessages, message: string, status: boolean) {
+  messages.push({ message, status });
 }

@@ -72,7 +72,7 @@ async function transferAnswers(
 
   if (sourceUser && destinationUser) {
     const sourceUserAnswers: Map<string, TaskResult> = await answer_crud.getAnswers(sourceUser.id);
-    const isValidatedSourceUser = await validateUserAndAnswers(
+    const isValidatedSourceUser = validateUserAndAnswers(
       sourceUser,
       sourceUserAnswers,
       true,
@@ -82,7 +82,7 @@ async function transferAnswers(
     const destinationUserAnswers: Map<string, TaskResult> = await answer_crud.getAnswers(
       destinationUser.id,
     );
-    const isValidatedDestinationUser = await validateUserAndAnswers(
+    const isValidatedDestinationUser = validateUserAndAnswers(
       destinationUser,
       destinationUserAnswers,
       false,
