@@ -40,7 +40,9 @@
 
 <HeadingOne title="アカウント移行" />
 <form method="POST" class="space-y-4" action={formAction}>
-  新しく作成された空のアカウントに、旧アカウントの回答データをコピーできます。
+  <div class="dark:text-gray-300">
+    新しく作成された空のアカウントに、旧アカウントの回答データをコピーできます。
+  </div>
   <Table shadow hoverable={true} class="text-md">
     <TableBody tableBodyClass="divide-y">
       <TableBodyRow>
@@ -75,7 +77,7 @@
 </form>
 
 <!-- ステータス表示 -->
-<div class="p-4 space-y-4">
+<div class="p-4 space-y-4 dark:text-gray-300">
   {#each accountTransferMessages as accountTransferMessage}
     <div class="flex items-center space-x-2">
       {#if accountTransferMessage.status}
