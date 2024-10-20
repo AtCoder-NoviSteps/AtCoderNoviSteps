@@ -47,7 +47,6 @@ export const actions: Actions = {
   default: async ({ request }) => {
     try {
       const form = await superValidate(request, zod(accountTransferSchema));
-      console.log(form);
 
       if (!form.valid) {
         return {
