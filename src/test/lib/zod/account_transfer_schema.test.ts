@@ -21,6 +21,14 @@ describe('Account Transfer schema', () => {
       validateAccountTransferSchema(accountTransferSchema, testCase);
     });
 
+    test('when both usernames with maximum length are given', () => {
+      const testCase = {
+        sourceUserName: 'a'.repeat(24),
+        destinationUserName: 'b'.repeat(24),
+      };
+      validateAccountTransferSchema(accountTransferSchema, testCase);
+    });
+
     test('when a user containing underscores is given', () => {
       const testCase = {
         sourceUserName: 'a'.repeat(24),
@@ -128,6 +136,26 @@ describe('Account Transfer schema', () => {
         },
       ];
 
+      invalidNameUser.forEach((testCase) => {
+        validateAccountTransferSchema(accountTransferSchema, testCase);
+      });
+    });
+
+    test('When usernames with leading or trailing spaces are given', () => {
+      const invalidNameUser = [
+        {
+          sourceUserName: ' Alice',
+          destinationUserName: 'Bob',
+        },
+        {
+          sourceUserName: 'Alice',
+          destinationUserName: 'Bob ',
+        },
+        {
+          sourceUserName: ' Charlie ',
+          destinationUserName: ' David ',
+        },
+      ];
       invalidNameUser.forEach((testCase) => {
         validateAccountTransferSchema(accountTransferSchema, testCase);
       });
