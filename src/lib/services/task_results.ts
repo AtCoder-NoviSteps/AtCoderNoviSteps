@@ -91,7 +91,7 @@ export async function validateUserAndAnswers(
   expectedToHaveAnswers: boolean,
   messages: FloatingMessage[],
 ) {
-  if (user === null || !isExistingUser(userName, user, messages) || isAdminUser(user, messages)) {
+  if (!isExistingUser(userName, user, messages) || isAdminUser(user, messages)) {
     return false;
   }
 

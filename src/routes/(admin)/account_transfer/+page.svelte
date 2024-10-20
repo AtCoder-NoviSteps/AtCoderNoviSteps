@@ -1,5 +1,6 @@
 <script lang="ts">
-  import { onDestroy } from 'svelte';
+  import { onMount, onDestroy } from 'svelte';
+  import { superForm } from 'sveltekit-superforms';
 
   import {
     Table,
@@ -13,16 +14,16 @@
   import { BadgeCheckOutline, BanOutline } from 'flowbite-svelte-icons';
 
   import HeadingOne from '$lib/components/HeadingOne.svelte';
-
+  import MessageHelperWrapper from '@/lib/components/MessageHelperWrapper.svelte';
   import type { FloatingMessages } from '$lib/types/floating_message';
 
   export let formAction: string = 'account_transfer';
-  export let data: { accountTransferMessages: FloatingMessages };
+  export let data;
 
-  let accountTransferMessages = data.accountTransferMessages;
+  const { form, errors, message, submitting, enhance } = superForm(data.form);
+
+  $: accountTransferMessages = data.accountTransferMessages as FloatingMessages;
   let clearMessagesTimeout: ReturnType<typeof setTimeout>;
-  let sourceUserName = '';
-  let destinationUserName = '';
 
   // 10秒後にメッセージを空にする
   $: if (accountTransferMessages.length > 0) {
@@ -33,16 +34,25 @@
     }, 10000);
   }
 
+  // HACK: アカウントの移行後に、別のページから戻ってくると処理内容が残ったままとなることへの対応。
+  onMount(() => {
+    accountTransferMessages = [];
+  });
+
   onDestroy(() => {
     clearTimeout(clearMessagesTimeout);
   });
 </script>
 
 <HeadingOne title="アカウント移行" />
-<form method="POST" class="space-y-4" action={formAction}>
+
+<form method="POST" class="space-y-4" action={formAction} use:enhance>
   <div class="dark:text-gray-300">
     新しく作成された空のアカウントに、旧アカウントの回答データをコピーできます。
   </div>
+
+  <MessageHelperWrapper message={$message} />
+
   <Table shadow hoverable={true} class="text-md">
     <TableBody tableBodyClass="divide-y">
       <TableBodyRow>
@@ -52,7 +62,15 @@
           </Label>
         </TableBodyCell>
         <TableBodyCell>
-          <Input id="source_user_name" name="source_username" bind:value={sourceUserName}></Input>
+          <Input
+            id="source_user_name"
+            name="sourceUserName"
+            bind:value={$form.sourceUserName}
+            required
+          />
+
+          <!-- エラーメッセージがあれば表示 -->
+          <MessageHelperWrapper message={$errors.sourceUserName} />
         </TableBodyCell>
       </TableBodyRow>
       <TableBodyRow>
@@ -64,15 +82,21 @@
         <TableBodyCell>
           <Input
             id="destination_user_name"
-            name="destination_username"
-            bind:value={destinationUserName}
-          ></Input>
+            name="destinationUserName"
+            bind:value={$form.destinationUserName}
+            required
+          />
+
+          <!-- エラーメッセージがあれば表示 -->
+          <MessageHelperWrapper message={$errors.destinationUserName} />
         </TableBodyCell>
       </TableBodyRow>
     </TableBody>
   </Table>
   <div class="flex justify-center">
-    <Button type="submit" class="w-full sm:w-5/6 m-4">コピー</Button>
+    <Button type="submit" class="w-full sm:w-5/6 m-4" disabled={$submitting}>
+      {$submitting ? '回答をコピー中...' : '回答をコピー'}
+    </Button>
   </div>
 </form>
 
