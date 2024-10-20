@@ -14,7 +14,7 @@
   import { BadgeCheckOutline, BanOutline } from 'flowbite-svelte-icons';
 
   import HeadingOne from '$lib/components/HeadingOne.svelte';
-  import MessageHelperWrapper from '@/lib/components/MessageHelperWrapper.svelte';
+  import MessageHelperWrapper from '$lib/components/MessageHelperWrapper.svelte';
   import type { FloatingMessages } from '$lib/types/floating_message';
 
   export let formAction: string = 'account_transfer';
@@ -95,7 +95,7 @@
   </Table>
   <div class="flex justify-center">
     <Button type="submit" class="w-full sm:w-5/6 m-4" disabled={$submitting}>
-      {$submitting ? '回答をコピー中...' : '回答をコピー'}
+      {$submitting ? 'コピー中...' : 'コピー'}
     </Button>
   </div>
 </form>
