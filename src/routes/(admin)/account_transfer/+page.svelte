@@ -14,6 +14,7 @@
   import { BadgeCheckOutline, BanOutline } from 'flowbite-svelte-icons';
 
   import HeadingOne from '$lib/components/HeadingOne.svelte';
+  import ContainerWrapper from '$lib/components/ContainerWrapper.svelte';
   import MessageHelperWrapper from '$lib/components/MessageHelperWrapper.svelte';
   import type { FloatingMessages } from '$lib/types/floating_message';
 
@@ -46,72 +47,75 @@
 
 <HeadingOne title="アカウント移行" />
 
-<form method="POST" class="space-y-4" action={formAction} use:enhance>
-  <div class="dark:text-gray-300">
-    新しく作成された空のアカウントに、旧アカウントの回答データをコピーできます。
-  </div>
-
-  <MessageHelperWrapper message={$message} />
-
-  <Table shadow hoverable={true} class="text-md">
-    <TableBody tableBodyClass="divide-y">
-      <TableBodyRow>
-        <TableBodyCell>
-          <Label>
-            <p>旧アカウント名</p>
-          </Label>
-        </TableBodyCell>
-        <TableBodyCell>
-          <Input
-            id="source_user_name"
-            name="sourceUserName"
-            bind:value={$form.sourceUserName}
-            required
-          />
-
-          <!-- エラーメッセージがあれば表示 -->
-          <MessageHelperWrapper message={$errors.sourceUserName} />
-        </TableBodyCell>
-      </TableBodyRow>
-      <TableBodyRow>
-        <TableBodyCell>
-          <Label>
-            <p>新アカウント名</p>
-          </Label>
-        </TableBodyCell>
-        <TableBodyCell>
-          <Input
-            id="destination_user_name"
-            name="destinationUserName"
-            bind:value={$form.destinationUserName}
-            required
-          />
-
-          <!-- エラーメッセージがあれば表示 -->
-          <MessageHelperWrapper message={$errors.destinationUserName} />
-        </TableBodyCell>
-      </TableBodyRow>
-    </TableBody>
-  </Table>
-  <div class="flex justify-center">
-    <Button type="submit" class="w-full sm:w-5/6 m-4" disabled={$submitting}>
-      {$submitting ? 'コピー中...' : 'コピー'}
-    </Button>
-  </div>
-</form>
-
-<!-- ステータス表示 -->
-<div class="p-4 space-y-4 dark:text-gray-300">
-  {#each accountTransferMessages as accountTransferMessage}
-    <div class="flex items-center space-x-2">
-      {#if accountTransferMessage.status}
-        <!-- 成功時のアイコン: BadgeCheckOutline -->
-        <BadgeCheckOutline class="w-5 h-5 text-green-500"></BadgeCheckOutline>
-      {:else}
-        <!-- 失敗時のアイコン: BanOutline -->
-        <BanOutline class="w-5 h-5 text-red-500"></BanOutline>
-      {/if}
-      <span>{accountTransferMessage.message}</span>
+<ContainerWrapper>
+  <form method="POST" class="space-y-4" action={formAction} use:enhance>
+    <div class="dark:text-gray-300">
+      新しく作成された空のアカウントに、旧アカウントの回答データをコピーできます。
     </div>
-  {/each}
-</div>
+
+    <MessageHelperWrapper message={$message} />
+
+    <Table shadow hoverable={true} class="text-md">
+      <TableBody tableBodyClass="divide-y">
+        <TableBodyRow>
+          <TableBodyCell>
+            <Label>
+              <p>旧アカウント名</p>
+            </Label>
+          </TableBodyCell>
+          <TableBodyCell>
+            <Input
+              id="source_user_name"
+              name="sourceUserName"
+              bind:value={$form.sourceUserName}
+              required
+            />
+
+            <!-- エラーメッセージがあれば表示 -->
+            <MessageHelperWrapper message={$errors.sourceUserName} />
+          </TableBodyCell>
+        </TableBodyRow>
+        <TableBodyRow>
+          <TableBodyCell>
+            <Label>
+              <p>新アカウント名</p>
+            </Label>
+          </TableBodyCell>
+          <TableBodyCell>
+            <Input
+              id="destination_user_name"
+              name="destinationUserName"
+              bind:value={$form.destinationUserName}
+              required
+            />
+
+            <!-- エラーメッセージがあれば表示 -->
+            <MessageHelperWrapper message={$errors.destinationUserName} />
+          </TableBodyCell>
+        </TableBodyRow>
+      </TableBody>
+    </Table>
+
+    <div class="flex justify-center">
+      <Button type="submit" class="w-full sm:w-5/6 m-4" disabled={$submitting}>
+        {$submitting ? 'コピー中...' : 'コピー'}
+      </Button>
+    </div>
+  </form>
+
+  <!-- ステータス表示 -->
+  <div class="p-4 space-y-4 dark:text-gray-300">
+    {#each accountTransferMessages as accountTransferMessage}
+      <div class="flex items-center space-x-2">
+        {#if accountTransferMessage.status}
+          <!-- 成功時のアイコン: BadgeCheckOutline -->
+          <BadgeCheckOutline class="w-5 h-5 text-green-500"></BadgeCheckOutline>
+        {:else}
+          <!-- 失敗時のアイコン: BanOutline -->
+          <BanOutline class="w-5 h-5 text-red-500"></BanOutline>
+        {/if}
+        <span>{accountTransferMessage.message}</span>
+      </div>
+    {/each}
+  </div>
+</ContainerWrapper>
