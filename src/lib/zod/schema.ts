@@ -25,18 +25,16 @@ export const authSchema = z.object({
     }),
 });
 
+export const accountSchema = z
+  .string()
+  .min(3, { message: INPUT_AT_LEAST_3_CHARACTERS })
+  .max(24, { message: DELETE_UNTIL_24_CHARACTERS_ARE_LEFT })
+  .regex(/^[\w]*$/, { message: ONLY_SINGLE_BYTE_ALPHANUMERIC_CHARACTERS_AND_ });
+
 export const accountTransferSchema = z
   .object({
-    sourceUserName: z
-      .string()
-      .min(3, { message: INPUT_AT_LEAST_3_CHARACTERS })
-      .max(24, { message: DELETE_UNTIL_24_CHARACTERS_ARE_LEFT })
-      .regex(/^[\w]*$/, { message: ONLY_SINGLE_BYTE_ALPHANUMERIC_CHARACTERS_AND_ }),
-    destinationUserName: z
-      .string()
-      .min(3, { message: INPUT_AT_LEAST_3_CHARACTERS })
-      .max(24, { message: DELETE_UNTIL_24_CHARACTERS_ARE_LEFT })
-      .regex(/^[\w]*$/, { message: ONLY_SINGLE_BYTE_ALPHANUMERIC_CHARACTERS_AND_ }),
+    sourceUserName: accountSchema,
+    destinationUserName: accountSchema,
   })
   .refine((data) => data.sourceUserName !== data.destinationUserName, {
     message: '新アカウント名は、旧アカウント名とは異なるものを指定してください',
