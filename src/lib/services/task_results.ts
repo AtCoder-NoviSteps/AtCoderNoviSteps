@@ -6,16 +6,16 @@ import { getUser } from '$lib/services/users';
 import * as answer_crud from '$lib/services/answers';
 import { isAdmin } from '$lib/utils/authorship';
 
+import type { User } from '@prisma/client';
 import type { TaskAnswer } from '$lib/types/answer';
 import type { Task } from '$lib/types/task';
 import type { TaskResult, TaskResults, Tasks } from '$lib/types/task';
 import type { WorkBookTaskBase, WorkBookTasksBase } from '$lib/types/workbook';
-import type { FloatingMessage, FloatingMessages } from '$lib/types/floating_message';
+import type { FloatingMessages } from '$lib/types/floating_message';
+import type { Roles } from '$lib/types/user';
 
 import { NOT_FOUND } from '$lib/constants/http-response-status-codes';
 import { getSubmissionStatusMapWithId, getSubmissionStatusMapWithName } from './submission_status';
-import type { User } from '@prisma/client';
-import type { Roles } from '../types/user';
 
 // DBから取得した問題一覧とログインしているユーザの回答を紐付けしたデータ保持
 const statusById = await getSubmissionStatusMapWithId();
@@ -33,8 +33,8 @@ export async function getTaskResults(userId: string): Promise<TaskResults> {
 export async function copyTaskResults(
   sourceUserName: string,
   destinationUserName: string,
-): Promise<FloatingMessage[]> {
-  const messages: FloatingMessage[] = [];
+): Promise<FloatingMessages> {
+  const messages: FloatingMessages = [];
 
   try {
     await db.$transaction(async () => {
@@ -94,7 +94,7 @@ async function transferAnswers(
 export async function validateUserAndAnswers(
   user: User,
   expectedToHaveAnswers: boolean,
-  messages: FloatingMessage[],
+  messages: FloatingMessages,
 ) {
   if (isAdminUser(user, messages)) {
     return false;
@@ -112,7 +112,7 @@ export async function validateUserAndAnswers(
 export function isExistingUser(
   userName: string,
   user: User | null,
-  messages: FloatingMessage[],
+  messages: FloatingMessages,
 ): boolean {
   if (user === null) {
     messages.push({
@@ -126,7 +126,7 @@ export function isExistingUser(
   }
 }
 
-export function isAdminUser(user: User | null, messages: FloatingMessage[]): boolean {
+export function isAdminUser(user: User | null, messages: FloatingMessages): boolean {
   if (user === null) {
     return false;
   }
@@ -147,7 +147,7 @@ export function existsUserAnswers(
   user: User,
   answers: Map<string, TaskResult>,
   expectedToHaveAnswers: boolean,
-  messages: FloatingMessage[],
+  messages: FloatingMessages,
 ): boolean {
   const hasAnswers = answers.size > 0;
 
