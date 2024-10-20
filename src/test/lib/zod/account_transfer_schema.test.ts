@@ -47,6 +47,14 @@ describe('Account Transfer schema', () => {
           sourceUserName: 'a'.repeat(24),
           destinationUserName: '0703_Alice_and_Bob',
         },
+        {
+          sourceUserName: 'Alice_and_Bob_0703',
+          destinationUserName: 'a'.repeat(24),
+        },
+        {
+          sourceUserName: '0703_Alice_and_Bob',
+          destinationUserName: 'a'.repeat(24),
+        },
       ];
 
       testCases.forEach((testCase) => {
