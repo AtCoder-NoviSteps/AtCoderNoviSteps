@@ -1,10 +1,15 @@
 import { error } from '@sveltejs/kit';
 
 import { default as db } from '$lib/server/database';
+import {
+  getSubmissionStatusMapWithId,
+  getSubmissionStatusMapWithName,
+} from '$lib/services/submission_status';
 import { getTasks, getTask } from '$lib/services/tasks';
 import { getUser } from '$lib/services/users';
 import * as answer_crud from '$lib/services/answers';
-import { isAdmin } from '$lib/utils/authorship';
+
+import { validateUserAndAnswers, isExistingUser } from '$lib/utils/account_transfer';
 
 import type { User } from '@prisma/client';
 import type { TaskAnswer } from '$lib/types/answer';
@@ -12,10 +17,8 @@ import type { Task } from '$lib/types/task';
 import type { TaskResult, TaskResults, Tasks } from '$lib/types/task';
 import type { WorkBookTaskBase, WorkBookTasksBase } from '$lib/types/workbook';
 import type { FloatingMessages } from '$lib/types/floating_message';
-import type { Roles } from '$lib/types/user';
 
 import { NOT_FOUND } from '$lib/constants/http-response-status-codes';
-import { getSubmissionStatusMapWithId, getSubmissionStatusMapWithName } from './submission_status';
 
 // DBから取得した問題一覧とログインしているユーザの回答を紐付けしたデータ保持
 const statusById = await getSubmissionStatusMapWithId();
@@ -68,9 +71,20 @@ async function transferAnswers(
   }
 
   if (sourceUser && destinationUser) {
-    const isValidatedSourceUser = await validateUserAndAnswers(sourceUser, true, messages);
+    const sourceUserAnswers: Map<string, TaskResult> = await answer_crud.getAnswers(sourceUser.id);
+    const isValidatedSourceUser = await validateUserAndAnswers(
+      sourceUser,
+      sourceUserAnswers,
+      true,
+      messages,
+    );
+
+    const destinationUserAnswers: Map<string, TaskResult> = await answer_crud.getAnswers(
+      destinationUser.id,
+    );
     const isValidatedDestinationUser = await validateUserAndAnswers(
       destinationUser,
+      destinationUserAnswers,
       false,
       messages,
     );
@@ -89,80 +103,6 @@ async function transferAnswers(
 
     messages.push({ message: 'コピーが正常に完了しました', status: true });
   }
-}
-
-export async function validateUserAndAnswers(
-  user: User,
-  expectedToHaveAnswers: boolean,
-  messages: FloatingMessages,
-) {
-  if (isAdminUser(user, messages)) {
-    return false;
-  }
-
-  const answers = await answer_crud.getAnswers(user.id);
-
-  if (expectedToHaveAnswers) {
-    return existsUserAnswers(user, answers, expectedToHaveAnswers, messages);
-  } else {
-    return !existsUserAnswers(user, answers, expectedToHaveAnswers, messages);
-  }
-}
-
-export function isExistingUser(
-  userName: string,
-  user: User | null,
-  messages: FloatingMessages,
-): boolean {
-  if (user === null) {
-    messages.push({
-      message: `${userName} が存在しません。コピーを中止します`,
-      status: false,
-    });
-    return false;
-  } else {
-    messages.push({ message: `${userName} が存在することを確認しました`, status: true });
-    return true;
-  }
-}
-
-export function isAdminUser(user: User | null, messages: FloatingMessages): boolean {
-  if (user === null) {
-    return false;
-  }
-
-  if (user.role && isAdmin(user.role as Roles)) {
-    messages.push({
-      message: `${user.username} は管理者権限をもっているためコピーできません。コピーを中止します`,
-      status: false,
-    });
-
-    return true;
-  }
-
-  return false;
-}
-
-export function existsUserAnswers(
-  user: User,
-  answers: Map<string, TaskResult>,
-  expectedToHaveAnswers: boolean,
-  messages: FloatingMessages,
-): boolean {
-  const hasAnswers = answers.size > 0;
-
-  if (hasAnswers !== expectedToHaveAnswers) {
-    messages.push({
-      message: expectedToHaveAnswers
-        ? `${user.username} にコピー対象のデータがありません。コピーを中止します`
-        : `${user.username} にすでにデータがあります。コピーを中止します`,
-      status: false,
-    });
-
-    return !expectedToHaveAnswers;
-  }
-
-  return expectedToHaveAnswers;
 }
 
 async function relateTasksAndAnswers(
