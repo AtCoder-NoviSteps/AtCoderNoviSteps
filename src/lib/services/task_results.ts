@@ -39,16 +39,23 @@ export async function copyTaskResults(
   try {
     await db.$transaction(async () => {
       const sourceUser: User | null = await getUser(sourceUserName);
+      const destinationUser: User | null = await getUser(destinationUserName);
+
+      if (
+        !isExistingUser(sourceUserName, sourceUser, messages) ||
+        !isExistingUser(destinationUserName, destinationUser, messages)
+      ) {
+        throw new Error(
+          `Not found user(s) for ${sourceUserName}: ${sourceUser} and/or ${destinationUserName}: ${destinationUser}`,
+        );
+      }
+
       const isValidatedSourceUser = await validateUserAndAnswers(
-        sourceUserName,
         sourceUser as User,
         true,
         messages,
       );
-
-      const destinationUser: User | null = await getUser(destinationUserName);
       const isValidatedDestinationUser = await validateUserAndAnswers(
-        destinationUserName,
         destinationUser as User,
         false,
         messages,
@@ -86,12 +93,11 @@ export async function copyTaskResults(
 }
 
 export async function validateUserAndAnswers(
-  userName: string,
   user: User,
   expectedToHaveAnswers: boolean,
   messages: FloatingMessage[],
 ) {
-  if (!isExistingUser(userName, user, messages) || isAdminUser(user, messages)) {
+  if (isAdminUser(user, messages)) {
     return false;
   }
 
