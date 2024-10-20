@@ -10,7 +10,7 @@ import type { TaskAnswer } from '$lib/types/answer';
 import type { Task } from '$lib/types/task';
 import type { TaskResult, TaskResults, Tasks } from '$lib/types/task';
 import type { WorkBookTaskBase, WorkBookTasksBase } from '$lib/types/workbook';
-import type { FloatingMessage } from '$lib/types/floating_message';
+import type { FloatingMessage, FloatingMessages } from '$lib/types/floating_message';
 
 import { NOT_FOUND } from '$lib/constants/http-response-status-codes';
 import { getSubmissionStatusMapWithId, getSubmissionStatusMapWithName } from './submission_status';
@@ -38,49 +38,9 @@ export async function copyTaskResults(
 
   try {
     await db.$transaction(async () => {
-      const sourceUser: User | null = await getUser(sourceUserName);
-      const destinationUser: User | null = await getUser(destinationUserName);
-
-      if (
-        !isExistingUser(sourceUserName, sourceUser, messages) ||
-        !isExistingUser(destinationUserName, destinationUser, messages)
-      ) {
-        throw new Error(
-          `Not found user(s) for ${sourceUserName}: ${sourceUser} and/or ${destinationUserName}: ${destinationUser}`,
-        );
-      }
-
-      const isValidatedSourceUser = await validateUserAndAnswers(
-        sourceUser as User,
-        true,
-        messages,
-      );
-      const isValidatedDestinationUser = await validateUserAndAnswers(
-        destinationUser as User,
-        false,
-        messages,
-      );
-
-      if (!isValidatedSourceUser || !isValidatedDestinationUser) {
-        throw new Error(
-          `Failed to validate user(s) for ${sourceUserName}: ${isValidatedSourceUser} and/or ${destinationUserName}: ${isValidatedDestinationUser}`,
-        );
-      }
-
-      if (sourceUser && destinationUser) {
-        const sourceAnswers = await answer_crud.getAnswers(sourceUser.id);
-
-        for (const taskResult of sourceAnswers.values()) {
-          await answer_crud.upsertAnswer(
-            taskResult.task_id,
-            destinationUser.id,
-            taskResult.status_id,
-          );
-        }
-      }
+      await transferAnswers(sourceUserName, destinationUserName, messages);
     });
 
-    messages.push({ message: 'コピーが正常に完了しました', status: true });
     return messages;
   } catch (error) {
     console.error(`Failed to copy task results:`, error);
@@ -89,6 +49,45 @@ export async function copyTaskResults(
     messages.push(failureMessage);
 
     return messages;
+  }
+}
+
+async function transferAnswers(
+  sourceUserName: string,
+  destinationUserName: string,
+  messages: FloatingMessages,
+) {
+  const sourceUser: User | null = await getUser(sourceUserName);
+  const destinationUser: User | null = await getUser(destinationUserName);
+
+  if (
+    !isExistingUser(sourceUserName, sourceUser, messages) ||
+    !isExistingUser(destinationUserName, destinationUser, messages)
+  ) {
+    throw new Error(`Not found user(s) for ${sourceUserName} and/or ${destinationUserName}`);
+  }
+
+  if (sourceUser && destinationUser) {
+    const isValidatedSourceUser = await validateUserAndAnswers(sourceUser, true, messages);
+    const isValidatedDestinationUser = await validateUserAndAnswers(
+      destinationUser,
+      false,
+      messages,
+    );
+
+    if (!isValidatedSourceUser || !isValidatedDestinationUser) {
+      throw new Error(
+        `Failed to validate user(s) for ${sourceUserName}: ${isValidatedSourceUser} and/or ${destinationUserName}: ${isValidatedDestinationUser}`,
+      );
+    }
+
+    const sourceAnswers = await answer_crud.getAnswers(sourceUser.id);
+
+    for (const taskResult of sourceAnswers.values()) {
+      await answer_crud.upsertAnswer(taskResult.task_id, destinationUser.id, taskResult.status_id);
+    }
+
+    messages.push({ message: 'コピーが正常に完了しました', status: true });
   }
 }
 
@@ -104,9 +103,9 @@ export async function validateUserAndAnswers(
   const answers = await answer_crud.getAnswers(user.id);
 
   if (expectedToHaveAnswers) {
-    return existsUserAnswers(user, answers, true, messages);
+    return existsUserAnswers(user, answers, expectedToHaveAnswers, messages);
   } else {
-    return !existsUserAnswers(user, answers, false, messages);
+    return !existsUserAnswers(user, answers, expectedToHaveAnswers, messages);
   }
 }
 
