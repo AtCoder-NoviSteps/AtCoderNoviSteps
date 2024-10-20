@@ -24,7 +24,7 @@ describe('Account Transfer schema', () => {
     test('when a user containing underscores is given', () => {
       const testCase = {
         sourceUserName: 'a'.repeat(24),
-        destinationUserName: 'Bob',
+        destinationUserName: 'Bob_1215',
       };
       validateAccountTransferSchema(accountTransferSchema, testCase);
     });
