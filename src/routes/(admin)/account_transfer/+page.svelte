@@ -69,6 +69,7 @@
               name="sourceUserName"
               bind:value={$form.sourceUserName}
               required
+              aria-label="旧アカウント名"
             />
 
             <!-- エラーメッセージがあれば表示 -->
@@ -87,6 +88,7 @@
               name="destinationUserName"
               bind:value={$form.destinationUserName}
               required
+              aria-label="新アカウント名"
             />
 
             <!-- エラーメッセージがあれば表示 -->
@@ -109,10 +111,10 @@
       <div class="flex items-center space-x-2">
         {#if accountTransferMessage.status}
           <!-- 成功時のアイコン: BadgeCheckOutline -->
-          <BadgeCheckOutline class="w-5 h-5 text-green-500"></BadgeCheckOutline>
+          <BadgeCheckOutline class="w-5 h-5 text-green-500" aria-hidden="true" />
         {:else}
           <!-- 失敗時のアイコン: BanOutline -->
-          <BanOutline class="w-5 h-5 text-red-500"></BanOutline>
+          <BanOutline class="w-5 h-5 text-red-500" aria-hidden="true" />
         {/if}
         <span>{accountTransferMessage.message}</span>
       </div>
