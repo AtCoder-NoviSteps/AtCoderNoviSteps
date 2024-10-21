@@ -6,12 +6,16 @@ import { z } from 'zod';
 import { WorkBookType } from '$lib/types/workbook';
 import { isValidUrl } from '$lib/utils/url';
 
+const INPUT_AT_LEAST_3_CHARACTERS = '3文字以上入力してください';
+const DELETE_UNTIL_24_CHARACTERS_ARE_LEFT = '24文字になるまで削除してください';
+const ONLY_SINGLE_BYTE_ALPHANUMERIC_CHARACTERS_AND_ = '半角英数字と_のみを利用してください';
+
 export const authSchema = z.object({
   username: z
     .string()
-    .min(3, { message: '3文字以上入力してください' })
-    .max(24, { message: '24文字になるまで削除してください' })
-    .regex(/^[\w]*$/, { message: '半角英数字と_のみを利用してください' }),
+    .min(3, { message: INPUT_AT_LEAST_3_CHARACTERS })
+    .max(24, { message: DELETE_UNTIL_24_CHARACTERS_ARE_LEFT })
+    .regex(/^[\w]*$/, { message: ONLY_SINGLE_BYTE_ALPHANUMERIC_CHARACTERS_AND_ }),
   password: z
     .string()
     .min(8, { message: '8文字以上入力してください' })
@@ -20,6 +24,22 @@ export const authSchema = z.object({
       message: '半角英文字(小・大)・数字をそれぞれ1文字以上含めてください',
     }),
 });
+
+export const accountSchema = z
+  .string()
+  .min(3, { message: INPUT_AT_LEAST_3_CHARACTERS })
+  .max(24, { message: DELETE_UNTIL_24_CHARACTERS_ARE_LEFT })
+  .regex(/^[\w]*$/, { message: ONLY_SINGLE_BYTE_ALPHANUMERIC_CHARACTERS_AND_ });
+
+export const accountTransferSchema = z
+  .object({
+    sourceUserName: accountSchema,
+    destinationUserName: accountSchema,
+  })
+  .refine((data) => data.sourceUserName !== data.destinationUserName, {
+    message: '新アカウント名は、旧アカウント名とは異なるものを指定してください',
+    path: ['destinationUserName'],
+  });
 
 const workBookTaskSchema = z.object({
   workBookId: z.number().nonnegative().optional(),
