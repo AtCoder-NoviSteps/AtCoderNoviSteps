@@ -63,8 +63,8 @@ importers:
         specifier: 3.4.14
         version: 3.4.14(ts-node@10.9.1(@types/node@16.18.11)(typescript@5.6.3))
       vercel:
-        specifier: 37.11.0
-        version: 37.11.0
+        specifier: 37.12.0
+        version: 37.12.0
       xss:
         specifier: 1.0.15
         version: 1.0.15
@@ -1052,8 +1052,8 @@ packages:
   '@vercel/hydrogen@1.0.9':
     resolution: {integrity: sha512-IPAVaALuGAzt2apvTtBs5tB+8zZRzn/yG3AGp8dFyCsw/v5YOuk0Q5s8Z3fayLvJbFpjrKtqRNDZzVJBBU3MrQ==}
 
-  '@vercel/next@4.3.16':
-    resolution: {integrity: sha512-kSi4jYYW+szLaoNwsb3dzBOujuUSE1v8vvZ3gEjVXZLWWchEYzZHKGRmecBQjGe/7mqoMNJIrrDLVYS8oTMTQA==}
+  '@vercel/next@4.3.17':
+    resolution: {integrity: sha512-dMyAa4XMYMyzlemk1wH4Eo1eVkWfMDEokLqrIo2+haPUCesfQVovXSJOvHSulS7h7s6nBnEQvALhlGgFi1ig9g==}
 
   '@vercel/nft@0.27.3':
     resolution: {integrity: sha512-oySTdDSzUAFDXpsSLk9Q943o+/Yu/+TCFxnehpFQEf/3khi2stMpTHPVNwFdvZq/Z4Ky93lE+MGHpXCRpMkSCA==}
@@ -3975,8 +3975,8 @@ packages:
     resolution: {integrity: sha512-c1Q0mCiPlgdTVVVIJIrBuxNicYE+t/7oKeI9MWLj3fh/uq2Pxh/3eeWbVZ4OcGW1TUf53At0njHw5SMdA3tmMg==}
     engines: {node: '>= 0.10'}
 
-  vercel@37.11.0:
-    resolution: {integrity: sha512-LCTKg4zxfHFBYULLcIEEi9CxFnywd0y0cUd23wdajqBKSBcEqrR2z77v0uU1G5dzlvqmL7dpAHXYu55jNU1GeA==}
+  vercel@37.12.0:
+    resolution: {integrity: sha512-q4MxHfNHWeCijEMCcildxGWHDzAhrvdvQkXOqXhRsPJxK23x7AhptjKNHsz/MfGiDrhcjh6rJYhtAQZnfNEbzQ==}
     engines: {node: '>= 16'}
     hasBin: true
 
@@ -5113,7 +5113,7 @@ snapshots:
       '@vercel/static-config': 3.0.0
       ts-morph: 12.0.0
 
-  '@vercel/next@4.3.16':
+  '@vercel/next@4.3.17':
     dependencies:
       '@vercel/nft': 0.27.3
     transitivePeerDependencies:
@@ -8264,13 +8264,13 @@ snapshots:
   validator@13.12.0:
     optional: true
 
-  vercel@37.11.0:
+  vercel@37.12.0:
     dependencies:
       '@vercel/build-utils': 8.4.11
       '@vercel/fun': 1.1.0
       '@vercel/go': 3.2.0
       '@vercel/hydrogen': 1.0.9
-      '@vercel/next': 4.3.16
+      '@vercel/next': 4.3.17
       '@vercel/node': 3.2.23
       '@vercel/python': 4.3.1
       '@vercel/redwood': 2.1.8
