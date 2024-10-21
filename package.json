@@ -45,7 +45,7 @@
     "@typescript-eslint/parser": "8.10.0",
     "@vitest/coverage-v8": "2.0.5",
     "@vitest/ui": "2.0.5",
-    "eslint": "9.12.0",
+    "eslint": "9.13.0",
     "eslint-config-prettier": "9.1.0",
     "eslint-plugin-svelte": "2.45.1",
     "flowbite-svelte": "0.46.6",
