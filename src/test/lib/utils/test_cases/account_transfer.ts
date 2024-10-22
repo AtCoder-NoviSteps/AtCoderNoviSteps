@@ -2,7 +2,7 @@ import type { User } from '@prisma/client';
 import { Roles } from '$lib/types/user';
 import type { TaskResult } from '$lib/types/task';
 
-const fixedDate = new Date('2024-01-01T00:00:00Z');
+const TEST_TIMESTAMP = new Date('2024-01-01T00:00:00Z');
 
 const admin: User = {
   id: '1',
@@ -11,8 +11,8 @@ const admin: User = {
   atcoder_validation_code: '',
   atcoder_username: '',
   atcoder_validation_status: false,
-  created_at: fixedDate,
-  updated_at: fixedDate,
+  created_at: TEST_TIMESTAMP,
+  updated_at: TEST_TIMESTAMP,
 };
 const guest: User = {
   id: '2',
@@ -21,8 +21,8 @@ const guest: User = {
   atcoder_validation_code: '',
   atcoder_username: '',
   atcoder_validation_status: false,
-  created_at: fixedDate,
-  updated_at: fixedDate,
+  created_at: TEST_TIMESTAMP,
+  updated_at: TEST_TIMESTAMP,
 };
 const general: User = {
   id: '3',
@@ -31,8 +31,8 @@ const general: User = {
   atcoder_validation_code: '',
   atcoder_username: '',
   atcoder_validation_status: false,
-  created_at: fixedDate,
-  updated_at: fixedDate,
+  created_at: TEST_TIMESTAMP,
+  updated_at: TEST_TIMESTAMP,
 };
 
 const sampleTaskResult: TaskResult = {
@@ -47,7 +47,7 @@ const sampleTaskResult: TaskResult = {
   task_id: 'abc999_a',
   title: 'A. hoge hoge',
   grade: 'Q7',
-  updated_at: fixedDate,
+  updated_at: TEST_TIMESTAMP,
 };
 
 export const sampleAnswer: Map<string, TaskResult> = new Map([['abc999', sampleTaskResult]]);
