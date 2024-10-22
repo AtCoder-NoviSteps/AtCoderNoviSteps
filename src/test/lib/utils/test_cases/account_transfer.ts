@@ -2,6 +2,8 @@ import type { User } from '@prisma/client';
 import { Roles } from '$lib/types/user';
 import type { TaskResult } from '$lib/types/task';
 
+const fixedDate = new Date('2024-01-01T00:00:00Z');
+
 const admin: User = {
   id: '1',
   username: 'admin',
@@ -9,8 +11,8 @@ const admin: User = {
   atcoder_validation_code: '',
   atcoder_username: '',
   atcoder_validation_status: false,
-  created_at: new Date(),
-  updated_at: new Date(),
+  created_at: fixedDate,
+  updated_at: fixedDate,
 };
 const guest: User = {
   id: '2',
@@ -19,8 +21,8 @@ const guest: User = {
   atcoder_validation_code: '',
   atcoder_username: '',
   atcoder_validation_status: false,
-  created_at: new Date(),
-  updated_at: new Date(),
+  created_at: fixedDate,
+  updated_at: fixedDate,
 };
 const general: User = {
   id: '3',
@@ -29,8 +31,8 @@ const general: User = {
   atcoder_validation_code: '',
   atcoder_username: '',
   atcoder_validation_status: false,
-  created_at: new Date(),
-  updated_at: new Date(),
+  created_at: fixedDate,
+  updated_at: fixedDate,
 };
 
 const sampleTaskResult: TaskResult = {
@@ -45,11 +47,12 @@ const sampleTaskResult: TaskResult = {
   task_id: 'abc999_a',
   title: 'A. hoge hoge',
   grade: 'Q7',
-  updated_at: new Date(),
+  updated_at: fixedDate,
 };
 
 export const sampleAnswer: Map<string, TaskResult> = new Map([['abc999', sampleTaskResult]]);
 
+// Note: The messages array is intentionally left empty and will be populated during test execution.
 export const testCasesForAdminCanNotBeCopied = [
   { user: admin, answers: new Map(), expectedToHaveAnswers: false, messages: [] },
   { user: admin, answers: sampleAnswer, expectedToHaveAnswers: false, messages: [] },
