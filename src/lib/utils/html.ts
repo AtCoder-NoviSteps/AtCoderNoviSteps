@@ -19,12 +19,16 @@ const defaultXSS = new FilterXSS({
     if (tag === 'a' && name === 'href') {
       try {
         const url = new URL(value);
+        const allowedProtocols = ['http:', 'https:', 'mailto:'];
 
-        if (['http:', 'https:'].includes(url.protocol)) {
+        if (allowedProtocols.includes(url.protocol)) {
           return `${name}="${value}"`;
         }
       } catch {
-        console.error(`Found invalid URL`);
+        console.error(`Invalid URL format in href attribute`, {
+          tag,
+          sanitized: true,
+        });
       }
 
       return '';
@@ -70,7 +74,12 @@ export function sanitizeHTML(html: string, options?: SanitizeOptions): string {
 
     return customXSS.process(html);
   } catch (error) {
-    console.error('Failed to sanitize HTML:', error);
-    throw new Error('Failed to sanitize HTML content');
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+    console.error('Failed to sanitize HTML:', {
+      error: errorMessage,
+      cause: 'sanitizeHTML',
+    });
+
+    throw new Error(`HTML sanitization failed: ${errorMessage}`);
   }
 }
