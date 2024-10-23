@@ -63,6 +63,12 @@ async function transferAnswers(
   const sourceUser: User | null = await getUser(sourceUserName);
   const destinationUser: User | null = await getUser(destinationUserName);
 
+  if (!sourceUser || !destinationUser) {
+    throw new Error(
+      `Not found User(s): ${!sourceUser ? sourceUserName : ''} ${!destinationUser ? destinationUserName : ''}`,
+    );
+  }
+
   if (
     !isExistingUser(sourceUserName, sourceUser, messages) ||
     !isExistingUser(destinationUserName, destinationUser, messages)

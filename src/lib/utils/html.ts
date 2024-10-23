@@ -5,52 +5,72 @@ interface SanitizeOptions {
   allowedAttributes?: { [key: string]: string[] };
 }
 
+const DEFAULT_WHITE_LIST = {
+  a: ['href'] as string[],
+  b: [] as string[],
+  em: [] as string[],
+  i: [] as string[],
+  strong: [] as string[],
+};
+
 const defaultXSS = new FilterXSS({
-  whiteList: {
-    a: ['href'],
-    b: [],
-    em: [],
-    i: [],
-    strong: [],
+  whiteList: { ...DEFAULT_WHITE_LIST },
+  onTagAttr: function (tag, name, value) {
+    if (tag === 'a' && name === 'href') {
+      try {
+        const url = new URL(value);
+
+        if (['http:', 'https:'].includes(url.protocol)) {
+          return `${name}="${value}"`;
+        }
+      } catch {
+        console.error(`Found invalid URL: ${value}`);
+      }
+
+      return '';
+    }
   },
 });
 
 export function sanitizeHTML(html: string, options?: SanitizeOptions): string {
-  if (!options) {
-    return defaultXSS.process(html);
+  if (typeof html !== 'string') {
+    throw new TypeError('Input expects to be a string');
   }
 
-  const defaultOptions: IFilterXSSOptions = {
-    whiteList: {
-      a: ['href'],
-      b: [],
-      em: [],
-      i: [],
-      strong: [],
-    },
-  };
+  try {
+    if (!options) {
+      return defaultXSS.process(html);
+    }
 
-  if (options.allowedTags) {
-    defaultOptions.whiteList = options.allowedTags.reduce(
-      (array, tag) => {
-        array[tag] = (defaultOptions.whiteList && defaultOptions.whiteList[tag]) || [];
-        return array;
-      },
-      {} as { [key: string]: string[] },
-    );
+    const defaultOptions: IFilterXSSOptions = {
+      whiteList: { ...DEFAULT_WHITE_LIST },
+    };
+
+    if (options.allowedTags) {
+      defaultOptions.whiteList = options.allowedTags.reduce<Record<string, string[]>>(
+        (array, tag) => ({
+          ...array,
+          [tag]: defaultOptions.whiteList?.[tag] ?? [],
+        }),
+        {},
+      );
+    }
+
+    if (options.allowedAttributes) {
+      Object.keys(options.allowedAttributes).forEach((tag) => {
+        if (defaultOptions.whiteList) {
+          defaultOptions.whiteList[tag] = options.allowedAttributes
+            ? options.allowedAttributes[tag]
+            : [];
+        }
+      });
+    }
+
+    const customXSS = new FilterXSS(defaultOptions);
+
+    return customXSS.process(html);
+  } catch (error) {
+    console.error('Failed to sanitize HTML:', error);
+    throw new Error('Failed to sanitize HTML content');
   }
-
-  if (options.allowedAttributes) {
-    Object.keys(options.allowedAttributes).forEach((tag) => {
-      if (defaultOptions.whiteList) {
-        defaultOptions.whiteList[tag] = options.allowedAttributes
-          ? options.allowedAttributes[tag]
-          : [];
-      }
-    });
-  }
-
-  const customXSS = new FilterXSS(defaultOptions);
-
-  return customXSS.process(html);
 }
