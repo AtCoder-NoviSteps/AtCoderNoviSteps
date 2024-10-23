@@ -5,7 +5,21 @@ interface SanitizeOptions {
   allowedAttributes?: { [key: string]: string[] };
 }
 
+const defaultXSS = new FilterXSS({
+  whiteList: {
+    a: ['href'],
+    b: [],
+    em: [],
+    i: [],
+    strong: [],
+  },
+});
+
 export function sanitizeHTML(html: string, options?: SanitizeOptions): string {
+  if (!options) {
+    return defaultXSS.process(html);
+  }
+
   const defaultOptions: IFilterXSSOptions = {
     whiteList: {
       a: ['href'],
@@ -16,7 +30,7 @@ export function sanitizeHTML(html: string, options?: SanitizeOptions): string {
     },
   };
 
-  if (options?.allowedTags) {
+  if (options.allowedTags) {
     defaultOptions.whiteList = options.allowedTags.reduce(
       (array, tag) => {
         array[tag] = (defaultOptions.whiteList && defaultOptions.whiteList[tag]) || [];
@@ -26,10 +40,12 @@ export function sanitizeHTML(html: string, options?: SanitizeOptions): string {
     );
   }
 
-  if (options?.allowedAttributes) {
+  if (options.allowedAttributes) {
     Object.keys(options.allowedAttributes).forEach((tag) => {
-      if (defaultOptions.whiteList && options.allowedAttributes) {
-        defaultOptions.whiteList[tag] = options.allowedAttributes[tag];
+      if (defaultOptions.whiteList) {
+        defaultOptions.whiteList[tag] = options.allowedAttributes
+          ? options.allowedAttributes[tag]
+          : [];
       }
     });
   }

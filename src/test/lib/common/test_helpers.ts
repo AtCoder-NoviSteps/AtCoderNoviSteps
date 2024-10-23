@@ -2,7 +2,7 @@ import { test } from 'vitest';
 
 interface TestCase<T> {
   name: string;
-  T: T;
+  value: T;
 }
 
 /**
@@ -10,17 +10,17 @@ interface TestCase<T> {
  *
  * @template T - The type of the value to be included in the test case.
  * @param {string} name - The name of the test case.
- * @returns {(T: T) => { name: string; T: T }} - A function that takes a value of type T and returns an object containing the name and the value.
+ * @returns {(value: T) => { name: string; value: T }} - A function that takes a value of type T and returns an object containing the name and the value.
  * @example
  * const createNumberTest = createTestCase<number>('test case 1');
  * const testCase = createNumberTest(42);
- * // Result: { name: 'test case 1', T: 42 }
+ * // Result: { name: 'test case 1', value: 42 }
  */
 export const createTestCase =
   <T>(name: string) =>
   (value: T): TestCase<T> => ({
     name,
-    T: value,
+    value,
   });
 
 /**

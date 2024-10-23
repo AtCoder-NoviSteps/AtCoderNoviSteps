@@ -7,7 +7,7 @@ describe('createTestCase', () => {
     const value = 42;
     const testCase = createTestCase<number>(name)(value);
 
-    expect(testCase).toEqual({ name, T: value });
+    expect(testCase).toEqual({ name, value });
   });
 });
 

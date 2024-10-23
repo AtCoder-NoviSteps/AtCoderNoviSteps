@@ -9,7 +9,7 @@ import { getTasks, getTask } from '$lib/services/tasks';
 import { getUser } from '$lib/services/users';
 import * as answer_crud from '$lib/services/answers';
 
-import { validateUserAndAnswers, isExistingUser } from '$lib/utils/account_transfer';
+import { validateUserAnswersTransferability, isExistingUser } from '$lib/utils/account_transfer';
 
 import type { User } from '@prisma/client';
 import type { TaskAnswer } from '$lib/types/answer';
@@ -72,7 +72,7 @@ async function transferAnswers(
 
   if (sourceUser && destinationUser) {
     const sourceUserAnswers: Map<string, TaskResult> = await answer_crud.getAnswers(sourceUser.id);
-    const isValidatedSourceUser = validateUserAndAnswers(
+    const isValidatedSourceUser = validateUserAnswersTransferability(
       sourceUser,
       sourceUserAnswers,
       true,
@@ -82,7 +82,7 @@ async function transferAnswers(
     const destinationUserAnswers: Map<string, TaskResult> = await answer_crud.getAnswers(
       destinationUser.id,
     );
-    const isValidatedDestinationUser = validateUserAndAnswers(
+    const isValidatedDestinationUser = validateUserAnswersTransferability(
       destinationUser,
       destinationUserAnswers,
       false,

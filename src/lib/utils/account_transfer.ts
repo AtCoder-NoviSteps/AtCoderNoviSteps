@@ -7,12 +7,12 @@ import type { FloatingMessages } from '$lib/types/floating_message';
 import { sanitizeHTML } from '$lib/utils/html';
 import { isAdmin } from '$lib/utils/authorship';
 
-export function validateUserAndAnswers(
+export function validateUserAnswersTransferability(
   user: User,
   answers: Map<string, TaskResult>,
   expectedToHaveAnswers: boolean,
   messages: FloatingMessages,
-) {
+): boolean {
   if (isAdminUser(user, messages)) {
     return false;
   }
@@ -34,10 +34,10 @@ export function isExistingUser(
   if (user === null) {
     addMessage(messages, `${sanitizedUserName} が存在しません。コピーを中止します`, false);
     return false;
-  } else {
-    addMessage(messages, `${sanitizedUserName} が存在することを確認しました`, true);
-    return true;
   }
+
+  addMessage(messages, `${sanitizedUserName} が存在することを確認しました`, true);
+  return true;
 }
 
 export function isAdminUser(user: User | null, messages: FloatingMessages): boolean {
