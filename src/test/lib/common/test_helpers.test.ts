@@ -20,10 +20,24 @@ describe('runTests', () => {
       { input: 3, expected: 6 },
     ];
 
+    let executedTests = 0;
+
     runTests(testName, testCases, (testCase: { input: number; expected: number }) => {
-      describe(`${testName} - ${JSON.stringify(testCase)}`, () => {
-        expect(testCase.input * 2).toBe(testCase.expected);
-      });
+      expect(testCase.input * 2).toBe(testCase.expected);
+
+      executedTests++;
+
+      if (executedTests === testCases.length) {
+        expect(executedTests).toBe(testCases.length);
+      }
+    });
+  });
+
+  it('expects to be handled empty test cases array', () => {
+    const testName = 'empty test cases';
+
+    runTests(testName, [], () => {
+      throw new Error('Expect not to be called');
     });
   });
 });
