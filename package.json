@@ -76,7 +76,7 @@
     "@popperjs/core": "2.11.8",
     "@prisma/client": "5.21.1",
     "@testing-library/svelte": "5.2.4",
-    "@types/jest": "29.5.13",
+    "@types/jest": "29.5.14",
     "autoprefixer": "10.4.20",
     "debug": "4.3.7",
     "flowbite": "2.5.2",
