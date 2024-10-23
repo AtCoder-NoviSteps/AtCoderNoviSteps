@@ -68,21 +68,21 @@ export function validateUserAnswersExistence(
 ): boolean {
   const hasAnswers = answers.size > 0;
 
-  if (hasAnswers !== expectedToHaveAnswers) {
-    const sanitizedUserName = sanitizeHTML(user.username);
-
-    addMessage(
-      messages,
-      expectedToHaveAnswers
-        ? `${sanitizedUserName} にコピー対象のデータがありません。コピーを中止します`
-        : `${sanitizedUserName} にすでにデータがあります。コピーを中止します`,
-      false,
-    );
-
-    return !expectedToHaveAnswers;
+  if (hasAnswers === expectedToHaveAnswers) {
+    return expectedToHaveAnswers;
   }
 
-  return expectedToHaveAnswers;
+  const sanitizedUserName = sanitizeHTML(user.username);
+
+  addMessage(
+    messages,
+    expectedToHaveAnswers
+      ? `${sanitizedUserName} にコピー対象のデータがありません。コピーを中止します`
+      : `${sanitizedUserName} にすでにデータがあります。コピーを中止します`,
+    false,
+  );
+
+  return !expectedToHaveAnswers;
 }
 
 export function addMessage(messages: FloatingMessages, message: string, status: boolean) {
