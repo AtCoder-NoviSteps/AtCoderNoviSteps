@@ -24,7 +24,7 @@ const defaultXSS = new FilterXSS({
           return `${name}="${value}"`;
         }
       } catch {
-        console.error(`Found invalid URL: ${value}`);
+        console.error(`Found invalid URL`);
       }
 
       return '';
@@ -48,10 +48,10 @@ export function sanitizeHTML(html: string, options?: SanitizeOptions): string {
 
     if (options.allowedTags) {
       defaultOptions.whiteList = options.allowedTags.reduce<Record<string, string[]>>(
-        (array, tag) => ({
-          ...array,
-          [tag]: defaultOptions.whiteList?.[tag] ?? [],
-        }),
+        (array, tag) => {
+          array[tag] = defaultOptions.whiteList?.[tag] ?? [];
+          return array;
+        },
         {},
       );
     }
