@@ -8,7 +8,7 @@ import { sanitizeHTML } from '$lib/utils/html';
 import { isAdmin } from '$lib/utils/authorship';
 
 export function isSameUser(source: User, destination: User): boolean {
-  return source.username === destination.username;
+  return source.username.toLocaleLowerCase() === destination.username.toLocaleLowerCase();
 }
 
 export function validateUserAnswersTransferability(
@@ -70,9 +70,9 @@ export function validateUserAnswersExistence(
   expectedToHaveAnswers: boolean,
   messages: FloatingMessages,
 ): boolean {
-  const hasAnswers = answers.size > 0;
+  const userHasExistingAnswers = answers.size > 0;
 
-  if (hasAnswers === expectedToHaveAnswers) {
+  if (userHasExistingAnswers === expectedToHaveAnswers) {
     return expectedToHaveAnswers;
   }
 
@@ -89,6 +89,6 @@ export function validateUserAnswersExistence(
   return !expectedToHaveAnswers;
 }
 
-export function addMessage(messages: FloatingMessages, message: string, status: boolean) {
+export function addMessage(messages: FloatingMessages, message: string, status: boolean): void {
   messages.push({ message, status });
 }

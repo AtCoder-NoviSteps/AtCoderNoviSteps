@@ -29,7 +29,7 @@ export type TestCaseForAdminValidation = {
   messages: FloatingMessages;
 };
 
-const TEST_TIMESTAMP = new Date('2024-01-01T00:00:00Z');
+const SAMPLE_CREATION_TIMESTAMP = new Date('2024-01-01T00:00:00Z');
 
 const admin: User = {
   id: '1',
@@ -38,8 +38,8 @@ const admin: User = {
   atcoder_validation_code: '',
   atcoder_username: '',
   atcoder_validation_status: false,
-  created_at: TEST_TIMESTAMP,
-  updated_at: TEST_TIMESTAMP,
+  created_at: SAMPLE_CREATION_TIMESTAMP,
+  updated_at: SAMPLE_CREATION_TIMESTAMP,
 };
 const guest: User = {
   id: '2',
@@ -48,8 +48,8 @@ const guest: User = {
   atcoder_validation_code: '',
   atcoder_username: '',
   atcoder_validation_status: false,
-  created_at: TEST_TIMESTAMP,
-  updated_at: TEST_TIMESTAMP,
+  created_at: SAMPLE_CREATION_TIMESTAMP,
+  updated_at: SAMPLE_CREATION_TIMESTAMP,
 };
 const general: User = {
   id: '3',
@@ -58,8 +58,8 @@ const general: User = {
   atcoder_validation_code: '',
   atcoder_username: '',
   atcoder_validation_status: false,
-  created_at: TEST_TIMESTAMP,
-  updated_at: TEST_TIMESTAMP,
+  created_at: SAMPLE_CREATION_TIMESTAMP,
+  updated_at: SAMPLE_CREATION_TIMESTAMP,
 };
 
 const sampleTaskResult: TaskResult = {
@@ -74,7 +74,7 @@ const sampleTaskResult: TaskResult = {
   task_id: 'abc999_a',
   title: 'A. hoge hoge',
   grade: 'Q7',
-  updated_at: TEST_TIMESTAMP,
+  updated_at: SAMPLE_CREATION_TIMESTAMP,
 };
 
 export const sampleAnswer: Map<string, TaskResult> = new Map([['abc999', sampleTaskResult]]);
