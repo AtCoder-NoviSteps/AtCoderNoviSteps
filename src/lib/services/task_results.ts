@@ -1,16 +1,28 @@
 import { error } from '@sveltejs/kit';
 
 import { default as db } from '$lib/server/database';
+import {
+  getSubmissionStatusMapWithId,
+  getSubmissionStatusMapWithName,
+} from '$lib/services/submission_status';
 import { getTasks, getTask } from '$lib/services/tasks';
+import { getUser } from '$lib/services/users';
 import * as answer_crud from '$lib/services/answers';
 
+import {
+  validateUserAnswersTransferability,
+  isExistingUser,
+  isSameUser,
+} from '$lib/utils/account_transfer';
+
+import type { User } from '@prisma/client';
 import type { TaskAnswer } from '$lib/types/answer';
 import type { Task } from '$lib/types/task';
 import type { TaskResult, TaskResults, Tasks } from '$lib/types/task';
 import type { WorkBookTaskBase, WorkBookTasksBase } from '$lib/types/workbook';
+import type { FloatingMessages } from '$lib/types/floating_message';
 
 import { NOT_FOUND } from '$lib/constants/http-response-status-codes';
-import { getSubmissionStatusMapWithId, getSubmissionStatusMapWithName } from './submission_status';
 
 // DBから取得した問題一覧とログインしているユーザの回答を紐付けしたデータ保持
 const statusById = await getSubmissionStatusMapWithId();
@@ -23,6 +35,88 @@ export async function getTaskResults(userId: string): Promise<TaskResults> {
   const answers = await answer_crud.getAnswers(userId);
 
   return await relateTasksAndAnswers(userId, tasks, answers);
+}
+
+export async function copyTaskResults(
+  sourceUserName: string,
+  destinationUserName: string,
+): Promise<FloatingMessages> {
+  const messages: FloatingMessages = [];
+
+  try {
+    await db.$transaction(async () => {
+      await transferAnswers(sourceUserName, destinationUserName, messages);
+    });
+
+    return messages;
+  } catch (error) {
+    console.error(`Failed to copy task results:`, error);
+
+    const failureMessage = { message: 'コピーが失敗しました', status: false };
+    messages.push(failureMessage);
+
+    return messages;
+  }
+}
+
+async function transferAnswers(
+  sourceUserName: string,
+  destinationUserName: string,
+  messages: FloatingMessages,
+) {
+  const sourceUser: User | null = await getUser(sourceUserName);
+  const destinationUser: User | null = await getUser(destinationUserName);
+
+  if (!sourceUser || !destinationUser) {
+    throw new Error(
+      `Not found User(s): ${!sourceUser ? sourceUserName : ''} ${!destinationUser ? destinationUserName : ''}`,
+    );
+  }
+
+  if (isSameUser(sourceUser, destinationUser)) {
+    throw new Error("Can't copy answers to the same user: " + sourceUserName);
+  }
+
+  if (
+    !isExistingUser(sourceUserName, sourceUser, messages) ||
+    !isExistingUser(destinationUserName, destinationUser, messages)
+  ) {
+    throw new Error(`Not found user(s) for ${sourceUserName} and/or ${destinationUserName}`);
+  }
+
+  if (sourceUser && destinationUser) {
+    const sourceUserAnswers: Map<string, TaskResult> = await answer_crud.getAnswers(sourceUser.id);
+    const isValidatedSourceUser = validateUserAnswersTransferability(
+      sourceUser,
+      sourceUserAnswers,
+      true,
+      messages,
+    );
+
+    const destinationUserAnswers: Map<string, TaskResult> = await answer_crud.getAnswers(
+      destinationUser.id,
+    );
+    const isValidatedDestinationUser = validateUserAnswersTransferability(
+      destinationUser,
+      destinationUserAnswers,
+      false,
+      messages,
+    );
+
+    if (!isValidatedSourceUser || !isValidatedDestinationUser) {
+      throw new Error(
+        `Failed to validate user(s) for ${sourceUserName}: ${isValidatedSourceUser} and/or ${destinationUserName}: ${isValidatedDestinationUser}`,
+      );
+    }
+
+    const sourceAnswers = await answer_crud.getAnswers(sourceUser.id);
+
+    for (const taskResult of sourceAnswers.values()) {
+      await answer_crud.upsertAnswer(taskResult.task_id, destinationUser.id, taskResult.status_id);
+    }
+
+    messages.push({ message: 'コピーが正常に完了しました', status: true });
+  }
 }
 
 async function relateTasksAndAnswers(
@@ -151,7 +245,7 @@ export function createDefaultTaskResult(userId: string, task: Task): TaskResult 
 export async function getTaskResult(slug: string, userId: string) {
   const task = await getTask(slug);
 
-  if (!task || task.length == 0) {
+  if (!task || task.length === 0) {
     error(NOT_FOUND, `問題 ${slug} は見つかりませんでした。`);
   }
 
