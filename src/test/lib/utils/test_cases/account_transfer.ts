@@ -4,6 +4,12 @@ import type { TaskResult } from '$lib/types/task';
 import type { FloatingMessages } from '$lib/types/floating_message';
 
 import { createTestCase } from '../../common/test_helpers';
+import { taskResultsForUserId3 } from './task_results';
+
+export type TestCaseForTransferValidation = {
+  source: User;
+  destination: User;
+};
 
 export type TestCaseForUserAndAnswersValidation = {
   user: User;
@@ -73,6 +79,37 @@ const sampleTaskResult: TaskResult = {
 
 export const sampleAnswer: Map<string, TaskResult> = new Map([['abc999', sampleTaskResult]]);
 
+const sampleAnswers = new Map<string, TaskResult>();
+
+// 2 out of 3 are accepted
+taskResultsForUserId3.forEach((taskResult) => {
+  sampleAnswers.set(taskResult.task_id, taskResult);
+});
+
+const createTestCaseForTransferValidation = createTestCase<TestCaseForTransferValidation>;
+
+export const testCasesForSameUsers = [
+  createTestCaseForTransferValidation('source and destination are guest')({
+    source: guest,
+    destination: guest,
+  }),
+  createTestCaseForTransferValidation('source and destination are general')({
+    source: general,
+    destination: general,
+  }),
+];
+
+export const testCasesForNotSameUsers = [
+  createTestCaseForTransferValidation('source is guest and destination is general')({
+    source: guest,
+    destination: general,
+  }),
+  createTestCaseForTransferValidation('source is general and destination is guest')({
+    source: general,
+    destination: guest,
+  }),
+];
+
 const createTestCaseForUserAndAnswers = createTestCase<TestCaseForUserAndAnswersValidation>;
 
 // Note: The messages array is intentionally left empty and will be populated during test execution.
@@ -89,12 +126,24 @@ export const testCasesForAdminCanNotBeCopied = [
     expectedToHaveAnswers: false,
     messages: [],
   }),
+  createTestCaseForUserAndAnswers('an admin with answers')({
+    user: admin,
+    answers: sampleAnswers,
+    expectedToHaveAnswers: false,
+    messages: [],
+  }),
 ];
 
 export const testCasesForSourceUserWithAnswer = [
   createTestCaseForUserAndAnswers('a guest with an answer')({
     user: guest,
     answers: sampleAnswer,
+    expectedToHaveAnswers: true,
+    messages: [],
+  }),
+  createTestCaseForUserAndAnswers('a guest with answers')({
+    user: guest,
+    answers: sampleAnswers,
     expectedToHaveAnswers: true,
     messages: [],
   }),
@@ -146,6 +195,12 @@ export const testCasesForDestinationUserWithAnswer = [
   createTestCaseForUserAndAnswers('a general user with an answer')({
     user: general,
     answers: sampleAnswer,
+    expectedToHaveAnswers: false,
+    messages: [],
+  }),
+  createTestCaseForUserAndAnswers('a general user with answers')({
+    user: general,
+    answers: sampleAnswers,
     expectedToHaveAnswers: false,
     messages: [],
   }),

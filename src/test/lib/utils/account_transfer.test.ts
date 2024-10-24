@@ -2,6 +2,7 @@ import { expect } from 'vitest';
 
 import { runTests } from '../common/test_helpers';
 import {
+  isSameUser,
   validateUserAnswersTransferability,
   isExistingUser,
   isAdminUser,
@@ -10,9 +11,12 @@ import {
 import type { FloatingMessages } from '$lib/types/floating_message';
 
 import {
+  type TestCaseForTransferValidation,
   type TestCaseForUserAndAnswersValidation,
   type TestCaseForUserValidation,
   type TestCaseForAdminValidation,
+  testCasesForSameUsers,
+  testCasesForNotSameUsers,
   testCasesForAdminCanNotBeCopied,
   testCasesForSourceUserWithAnswer,
   testCasesForSourceUserWithoutAnswer,
@@ -26,6 +30,24 @@ import {
 } from './test_cases/account_transfer';
 
 describe('Account transfer', () => {
+  describe('is same user', () => {
+    describe('when the same user is given', () => {
+      testCasesForSameUsers.forEach(({ name, value }) => {
+        runTests(`${name}`, [value], ({ source, destination }: TestCaseForTransferValidation) => {
+          expect(isSameUser(source, destination)).toBeTruthy();
+        });
+      });
+    });
+
+    describe('when different users are given', () => {
+      testCasesForNotSameUsers.forEach(({ name, value }) => {
+        runTests(`${name}`, [value], ({ source, destination }: TestCaseForTransferValidation) => {
+          expect(isSameUser(source, destination)).toBeFalsy();
+        });
+      });
+    });
+  });
+
   describe('validate user and answers', () => {
     describe('when an admin is given', () => {
       testCasesForAdminCanNotBeCopied.forEach(({ name, value }) => {

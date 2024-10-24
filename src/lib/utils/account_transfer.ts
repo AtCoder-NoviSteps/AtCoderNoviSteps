@@ -7,6 +7,10 @@ import type { FloatingMessages } from '$lib/types/floating_message';
 import { sanitizeHTML } from '$lib/utils/html';
 import { isAdmin } from '$lib/utils/authorship';
 
+export function isSameUser(source: User, destination: User): boolean {
+  return source.username === destination.username;
+}
+
 export function validateUserAnswersTransferability(
   user: User,
   answers: Map<string, TaskResult>,

@@ -9,7 +9,11 @@ import { getTasks, getTask } from '$lib/services/tasks';
 import { getUser } from '$lib/services/users';
 import * as answer_crud from '$lib/services/answers';
 
-import { validateUserAnswersTransferability, isExistingUser } from '$lib/utils/account_transfer';
+import {
+  validateUserAnswersTransferability,
+  isExistingUser,
+  isSameUser,
+} from '$lib/utils/account_transfer';
 
 import type { User } from '@prisma/client';
 import type { TaskAnswer } from '$lib/types/answer';
@@ -67,6 +71,10 @@ async function transferAnswers(
     throw new Error(
       `Not found User(s): ${!sourceUser ? sourceUserName : ''} ${!destinationUser ? destinationUserName : ''}`,
     );
+  }
+
+  if (isSameUser(sourceUser, destinationUser)) {
+    throw new Error("Can't copy answers to the same user: " + sourceUserName);
   }
 
   if (
