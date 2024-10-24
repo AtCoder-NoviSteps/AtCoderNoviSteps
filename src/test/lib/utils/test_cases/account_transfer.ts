@@ -238,6 +238,26 @@ export const testCasesForNoExistingUser = [
     user: null,
     messages: [],
   }),
+  createTestCaseForUserValidation('Invalid username format')({
+    userName: 'user@name',
+    user: null,
+    messages: [],
+  }),
+  createTestCaseForUserValidation('Reserved username')({
+    userName: 'system',
+    user: null,
+    messages: [],
+  }),
+  createTestCaseForUserValidation('Minimum length username')({
+    userName: 'a'.repeat(2),
+    user: null,
+    messages: [],
+  }),
+  createTestCaseForUserValidation('Maximum length username')({
+    userName: 'a'.repeat(25),
+    user: null,
+    messages: [],
+  }),
 ];
 
 const createTestCaseForAdminValidation = createTestCase<TestCaseForAdminValidation>;
