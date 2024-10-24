@@ -192,6 +192,12 @@ export const testCasesForDestinationUserWithAnswer = [
     expectedToHaveAnswers: false,
     messages: [],
   }),
+  createTestCaseForUserAndAnswers('a guest with answers')({
+    user: guest,
+    answers: sampleAnswers,
+    expectedToHaveAnswers: false,
+    messages: [],
+  }),
   createTestCaseForUserAndAnswers('a general user with an answer')({
     user: general,
     answers: sampleAnswer,
