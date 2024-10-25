@@ -208,14 +208,17 @@ export const threeWorkBookTasks: WorkBookTaskBase[] = [
   {
     taskId: 'abc999_a',
     priority: 1,
+    comment: '',
   },
   {
     taskId: 'abc999_b',
     priority: 2,
+    comment: '',
   },
   {
     taskId: 'abc999_c',
     priority: 3,
+    comment: '',
   },
 ];
 
