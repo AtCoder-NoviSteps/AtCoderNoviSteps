@@ -62,18 +62,34 @@ const general: User = {
   updated_at: SAMPLE_CREATION_TIMESTAMP,
 };
 
+const TASK_RESULT_CONSTANTS = {
+  STATUS: {
+    WA: 'wa',
+    ID: '3',
+    IMAGE: 'wa.png',
+    LABEL: '挑戦中', // TODO: Add i18n support
+  },
+  CONTEST: {
+    ID: 'abc999',
+    TASK_INDEX: 'A',
+    TASK_ID: 'abc999_a',
+    TITLE: 'A. hoge hoge',
+  },
+  GRADE: 'Q7',
+} as const;
+
 const sampleTaskResult: TaskResult = {
   is_ac: false,
   user_id: '',
-  status_name: 'wa',
-  status_id: '3',
-  submission_status_image_path: 'wa.png',
-  submission_status_label_name: '挑戦中',
-  contest_id: 'abc999',
-  task_table_index: 'A',
-  task_id: 'abc999_a',
-  title: 'A. hoge hoge',
-  grade: 'Q7',
+  status_name: TASK_RESULT_CONSTANTS.STATUS.WA,
+  status_id: TASK_RESULT_CONSTANTS.STATUS.ID,
+  submission_status_image_path: TASK_RESULT_CONSTANTS.STATUS.IMAGE,
+  submission_status_label_name: TASK_RESULT_CONSTANTS.STATUS.LABEL,
+  contest_id: TASK_RESULT_CONSTANTS.CONTEST.ID,
+  task_table_index: TASK_RESULT_CONSTANTS.CONTEST.TASK_INDEX,
+  task_id: TASK_RESULT_CONSTANTS.CONTEST.TASK_ID,
+  title: TASK_RESULT_CONSTANTS.CONTEST.TITLE,
+  grade: TASK_RESULT_CONSTANTS.GRADE,
   updated_at: SAMPLE_CREATION_TIMESTAMP,
 };
 
@@ -185,6 +201,12 @@ export const testCasesForDestinationUserWithoutAnswer = [
   }),
 ];
 
+const createPartialTaskResult = (is_ac: boolean, updatedAt: Date): TaskResult => ({
+  ...sampleTaskResult,
+  is_ac,
+  updated_at: updatedAt,
+});
+
 export const testCasesForDestinationUserWithAnswer = [
   createTestCaseForUserAndAnswers('a guest with an answer')({
     user: guest,
@@ -207,6 +229,15 @@ export const testCasesForDestinationUserWithAnswer = [
   createTestCaseForUserAndAnswers('a general user with answers')({
     user: general,
     answers: sampleAnswers,
+    expectedToHaveAnswers: false,
+    messages: [],
+  }),
+  createTestCaseForUserAndAnswers('a general user with mixed completion status')({
+    user: general,
+    answers: new Map([
+      ['task1', createPartialTaskResult(true, new Date('2024-01-01'))],
+      ['task2', createPartialTaskResult(false, new Date('2024-01-02'))],
+    ]),
     expectedToHaveAnswers: false,
     messages: [],
   }),
