@@ -18,7 +18,7 @@
     addTaskToWorkBook,
     PENDING,
   } from '$lib/utils/workbook_tasks';
-  import { taskUrl } from '$lib/utils/task';
+  import { getTaskUrl } from '$lib/utils/task';
 
   export let tasks: Tasks = [];
   // HACK: やむなくデータベースへの保存用と問題集作成・編集用で分けている。
@@ -35,7 +35,7 @@
       .every(
         (word) =>
           (word.trim().length > 0 && task.title.toLowerCase().includes(word.toLowerCase())) ||
-          taskUrl(task.contest_id, task.task_id).toLowerCase().includes(word.toLowerCase()),
+          getTaskUrl(task.contest_id, task.task_id).toLowerCase().includes(word.toLowerCase()),
       );
   };
 
@@ -185,7 +185,7 @@
             {task.title}
           </h3>
           <div>
-            {taskUrl(task.contest_id, task.task_id)}
+            {getTaskUrl(task.contest_id, task.task_id)}
           </div>
         </button>
       </ListgroupItem>

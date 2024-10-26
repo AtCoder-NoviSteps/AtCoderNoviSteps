@@ -1,7 +1,7 @@
 import { expect, test } from 'vitest';
 
 import {
-  taskUrl,
+  getTaskUrl,
   countAcceptedTasks,
   countAllTasks,
   areAllTasksAccepted,
@@ -150,8 +150,8 @@ describe('Task', () => {
         },
       ];
 
-      runTests('taskUrl', testCases, ({ contestId, taskId, expected }: TestCaseForTaskUrl) => {
-        expect(taskUrl(contestId, taskId)).toBe(expected);
+      runTests('getTaskUrl', testCases, ({ contestId, taskId, expected }: TestCaseForTaskUrl) => {
+        expect(getTaskUrl(contestId, taskId)).toBe(expected);
       });
     });
 

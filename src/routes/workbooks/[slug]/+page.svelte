@@ -21,7 +21,7 @@
 
   import { getBackgroundColorFrom } from '$lib/services/submission_status';
 
-  import { taskUrl, removeTaskIndexFromTitle } from '$lib/utils/task';
+  import { getTaskUrl, removeTaskIndexFromTitle } from '$lib/utils/task';
   import { addContestNameToTaskIndex } from '$lib/utils/contest';
 
   import type { WorkBookTaskBase } from '$lib/types/workbook';
@@ -179,7 +179,7 @@
               <TableBodyCell class="px-0 sm:px-6">
                 <div class="xs:text-lg truncate">
                   <ExternalLinkWrapper
-                    url={taskUrl(getContestIdFrom(workBookTask.taskId), workBookTask.taskId)}
+                    url={getTaskUrl(getContestIdFrom(workBookTask.taskId), workBookTask.taskId)}
                     description={getTaskName(workBookTask.taskId)}
                     textSize="xs:text-lg"
                     textColorInDarkMode="dark:text-gray-300"

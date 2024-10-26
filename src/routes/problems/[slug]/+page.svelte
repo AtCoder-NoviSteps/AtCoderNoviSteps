@@ -5,7 +5,7 @@
   import SubmissionStatusButton from '$lib/components/SubmissionStatusButton.svelte';
   import ExternalLinkIcon from '$lib/components/ExternalLinkIcon.svelte';
   import { getBackgroundColorFrom } from '$lib/services/submission_status';
-  import { getTaskGradeLabel, taskUrl } from '$lib/utils/task';
+  import { getTaskGradeLabel, getTaskUrl } from '$lib/utils/task';
 
   export let data;
 
@@ -25,7 +25,7 @@
   <!-- 回答状況を表す画像のサイズ・余白などをカスタマイズするため、Flowbiteを利用している -->
   <!-- See: https://flowbite.com/docs/components/card/#card-with-image -->
   <a
-    href={taskUrl(taskResult.contest_id, taskResult.task_id)}
+    href={getTaskUrl(taskResult.contest_id, taskResult.task_id)}
     target="_blank"
     rel="noreferrer"
     class="flex flex-col items-center
