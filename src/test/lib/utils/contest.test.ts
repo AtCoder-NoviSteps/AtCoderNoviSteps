@@ -1,5 +1,6 @@
 import { expect, test } from 'vitest';
 
+import { runTests } from '../common/test_helpers';
 import {
   classifyContest,
   getContestPriority,
@@ -15,14 +16,10 @@ type TestCaseForContestType = {
   expected: ContestType;
 };
 
-type TestCasesForContestType = TestCaseForContestType[];
-
 type TestCaseForContestNameLabel = {
   contestId: string;
   expected: string;
 };
-
-type TestCasesForContestNameLabel = TestCaseForContestNameLabel[];
 
 type TestCaseForContestNameAndTaskIndex = {
   contestId: string;
@@ -197,14 +194,6 @@ describe('Contest', () => {
         expect(classifyContest(contestId)).toEqual(expected);
       });
     });
-
-    function runTests(
-      testName: string,
-      testCases: TestCasesForContestType,
-      testFunction: (testCase: TestCaseForContestType) => void,
-    ) {
-      test.each(testCases)(`${testName}(contestId: $contestId)`, testFunction);
-    }
   });
 
   describe('get contest priority', () => {
@@ -409,14 +398,6 @@ describe('Contest', () => {
         },
       );
     });
-
-    function runTests(
-      testName: string,
-      testCases: TestCasesForContestType,
-      testFunction: (testCase: TestCaseForContestType) => void,
-    ) {
-      test.each(testCases)(`${testName}(contestId: $contestId)`, testFunction);
-    }
   });
 
   describe('get contest url', () => {
@@ -603,14 +584,6 @@ describe('Contest', () => {
         },
       );
     });
-
-    function runTests(
-      testName: string,
-      testCases: TestCasesForContestNameLabel,
-      testFunction: (testCase: TestCaseForContestNameLabel) => void,
-    ) {
-      test.each(testCases)(`${testName}(contestId: $contestId)`, testFunction);
-    }
   });
 
   describe('add contest name to task index', () => {
@@ -818,16 +791,5 @@ describe('Contest', () => {
         },
       );
     });
-
-    function runTests(
-      testName: string,
-      testCases: TestCasesForContestNameAndTaskIndex,
-      testFunction: (testCase: TestCaseForContestNameAndTaskIndex) => void,
-    ) {
-      test.each(testCases)(
-        `${testName}(contestId: $contestId, taskTableIndex: $taskTableIndex)`,
-        testFunction,
-      );
-    }
   });
 });
