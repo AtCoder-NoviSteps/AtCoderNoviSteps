@@ -1,11 +1,21 @@
 import { type TaskResult, type TaskResults, TaskGrade, type TaskGrades } from '$lib/types/task';
 import { type WorkBookTaskBase } from '$lib/types/workbook';
-import { ATCODER_BASE_CONTEST_URL } from '$lib/constants/urls';
-import { getContestPriority } from '$lib/utils/contest';
+import { ATCODER_BASE_CONTEST_URL, AOJ_TASKS_URL } from '$lib/constants/urls';
+import { getPrefixForAojCourses, getContestPriority } from '$lib/utils/contest';
 
-// TODO: 複数のコンテストサイトに対応できるようにする
-export const taskUrl = (contestId: string, taskId: string) => {
-  return `${ATCODER_BASE_CONTEST_URL}/${contestId}/tasks/${taskId}`;
+// TODO: Codeforces、yukicoder、BOJなどに対応できるようにする
+export const getTaskUrl = (contestId: string, taskId: string) => {
+  // Default: AtCoder
+  let taskUrl = `${ATCODER_BASE_CONTEST_URL}/${contestId}/tasks/${taskId}`;
+
+  // AOJ Courses and PCK (prelim and final)
+  const prefixForAojCourses = getPrefixForAojCourses();
+
+  if (prefixForAojCourses.includes(contestId) || contestId.startsWith('PCK')) {
+    taskUrl = `${AOJ_TASKS_URL}/${taskId}`;
+  }
+
+  return taskUrl;
 };
 
 export const countAcceptedTasks = (taskResults: TaskResults) => {

@@ -89,11 +89,31 @@ export const classifyContest = (contest_id: string) => {
     return ContestType.OTHERS;
   }
 
+  const prefixForAojCourses = getPrefixForAojCourses();
+
+  if (prefixForAojCourses.some((prefix) => contest_id.startsWith(prefix))) {
+    return ContestType.AOJ_COURSES;
+  }
+
+  if (contest_id.startsWith('PCK')) {
+    return ContestType.AOJ_PCK;
+  }
+
   return null;
 };
 
-// priority: 0 (High) - 16 (Low)
-// HACK: ARC、AGCの優先順位は暫定版
+// AIZU ONLINE JUDGE AOJ Courses
+//
+// ・プログラミング入門: ITP1
+// ・アルゴリズムとデータ構造入門: ALDS1
+// ・プログラミング応用: ITP2
+// ・組み合わせ最適化: DPL
+export function getPrefixForAojCourses() {
+  return ['ITP1', 'ALDS1', 'ITP2', 'DPL'];
+}
+
+// priority: 0 (High) - 18 (Low)
+// HACK: ARC、AGC、AOJ_COURSES、AOJ_PCKの優先順位は暫定版
 //
 // See:
 // https://jsprimer.net/basic/map-and-set/
@@ -114,7 +134,9 @@ export const contestTypePriorities: Map<ContestType, number> = new Map([
   [ContestType.ABC_LIKE, 13],
   [ContestType.ARC_LIKE, 14],
   [ContestType.AGC_LIKE, 15],
-  [ContestType.OTHERS, 16],
+  [ContestType.OTHERS, 16], // AtCoder (その他)
+  [ContestType.AOJ_COURSES, 17],
+  [ContestType.AOJ_PCK, 18],
 ]);
 
 export function getContestPriority(contestId: string): number {
@@ -163,6 +185,19 @@ export const getContestNameLabel = (contest_id: string) => {
 
   if (contest_id.startsWith('chokudai_S')) {
     return contest_id.replace('chokudai_S', 'Chokudai SpeedRun ');
+  }
+
+  const prefixForAojCourses = getPrefixForAojCourses();
+
+  if (prefixForAojCourses.includes(contest_id)) {
+    return 'AOJ Courses';
+  }
+
+  if (contest_id.startsWith('PCK')) {
+    return (
+      'AOJ - ' +
+      contest_id.replace('PCK', 'パソコン甲子園').replace('Prelim', '予選').replace('Final', '本選')
+    );
   }
 
   return contest_id.toUpperCase();
