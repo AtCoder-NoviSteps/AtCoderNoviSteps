@@ -98,6 +98,8 @@ async function fetchCoursesForContests(): Promise<ImportContests> {
       return courseForContest;
     });
 
+    console.log(`Found AOJ course: ${courses.length} contests.`);
+
     return coursesForContest;
   } else {
     console.error('Not found Courses in the response.');
@@ -174,6 +176,8 @@ async function fetchCourseTasks(): Promise<ImportTasks> {
       return courseTask;
     });
 
+  console.log(`Found AOJ course: ${courseTasks.length} tasks.`);
+
   return courseTasks;
 }
 
@@ -181,13 +185,14 @@ async function fetchCourseTasks(): Promise<ImportTasks> {
 // ・courses   : courseNameAbbr_topicId_taskIndex (ex: ITP1_1_A, ..., INFO1_01_E, ...)
 // ・challenges: taskNumber (ex: 0001, ..., 0703, ..., 3000)
 export const getCourseName = (taskId: string) => {
+  let courseName = '';
   const splittedTaskId = taskId.split('_');
 
   if (splittedTaskId.length == 3) {
-    return splittedTaskId[0];
-  } else {
-    return '';
+    courseName = splittedTaskId[0];
   }
+
+  return courseName;
 };
 
 async function fetchPckTasks(round: string): Promise<ImportTasks> {
