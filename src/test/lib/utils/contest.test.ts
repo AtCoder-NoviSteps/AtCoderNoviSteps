@@ -16,7 +16,6 @@ import {
 } from '$lib/utils/contest';
 import { ContestType } from '$lib/types/contest';
 
-// TODO: Add AOJ.
 describe('Contest', () => {
   describe('classify contest', () => {
     test('when contest_id is ABS', () => {
@@ -109,6 +108,22 @@ describe('Contest', () => {
 
     describe('when contest_id means others', () => {
       TestCasesForContestType.atCoderOthers.forEach(({ name, value }) => {
+        runTests(`${name}`, [value], ({ contestId, expected }: TestCaseForContestType) => {
+          expect(classifyContest(contestId)).toEqual(expected);
+        });
+      });
+    });
+
+    describe('when contest_id means aoj courses', () => {
+      TestCasesForContestType.aojCourses.forEach(({ name, value }) => {
+        runTests(`${name}`, [value], ({ contestId, expected }: TestCaseForContestType) => {
+          expect(classifyContest(contestId)).toEqual(expected);
+        });
+      });
+    });
+
+    describe('when contest_id means aoj pck (prelim and final)', () => {
+      TestCasesForContestType.aojPck.forEach(({ name, value }) => {
         runTests(`${name}`, [value], ({ contestId, expected }: TestCaseForContestType) => {
           expect(classifyContest(contestId)).toEqual(expected);
         });
@@ -220,6 +235,22 @@ describe('Contest', () => {
         });
       });
     });
+
+    describe('when contest_id means aoj courses', () => {
+      TestCasesForContestType.aojCourses.forEach(({ name, value }) => {
+        runTests(`${name}`, [value], ({ contestId, expected }: TestCaseForContestType) => {
+          expect(getContestPriority(contestId)).toEqual(contestTypePriorities.get(expected));
+        });
+      });
+    });
+
+    describe('when contest_id means aoj pck (prelim and final)', () => {
+      TestCasesForContestType.aojPck.forEach(({ name, value }) => {
+        runTests(`${name}`, [value], ({ contestId, expected }: TestCaseForContestType) => {
+          expect(getContestPriority(contestId)).toEqual(contestTypePriorities.get(expected));
+        });
+      });
+    });
   });
 
   describe('get contest name label', () => {
@@ -304,10 +335,26 @@ describe('Contest', () => {
         });
       });
     });
+
+    describe('when contest_id means aoj courses', () => {
+      TestCasesForContestNameLabel.aojCourses.forEach(({ name, value }) => {
+        runTests(`${name}`, [value], ({ contestId, expected }: TestCaseForContestNameLabel) => {
+          expect(getContestNameLabel(contestId)).toEqual(expected);
+        });
+      });
+    });
+
+    describe('when contest_id means aoj pck (prelim and final)', () => {
+      TestCasesForContestNameLabel.aojPck.forEach(({ name, value }) => {
+        runTests(`${name}`, [value], ({ contestId, expected }: TestCaseForContestNameLabel) => {
+          expect(getContestNameLabel(contestId)).toEqual(expected);
+        });
+      });
+    });
   });
 
   describe('add contest name to task index', () => {
-    describe('when contest_id contains ABC', () => {
+    describe('when contest_id contains abc', () => {
       TestCasesForContestNameAndTaskIndex.abc.forEach(({ name, value }) => {
         runTests(
           `${name}`,
@@ -381,6 +428,30 @@ describe('Contest', () => {
 
     describe('when contest_id contains agc', () => {
       TestCasesForContestNameAndTaskIndex.agc.forEach(({ name, value }) => {
+        runTests(
+          `${name}`,
+          [value],
+          ({ contestId, taskTableIndex, expected }: TestCaseForContestNameAndTaskIndex) => {
+            expect(addContestNameToTaskIndex(contestId, taskTableIndex)).toEqual(expected);
+          },
+        );
+      });
+    });
+
+    describe('when contest_id means aoj courses', () => {
+      TestCasesForContestNameAndTaskIndex.aojCourses.forEach(({ name, value }) => {
+        runTests(
+          `${name}`,
+          [value],
+          ({ contestId, taskTableIndex, expected }: TestCaseForContestNameAndTaskIndex) => {
+            expect(addContestNameToTaskIndex(contestId, taskTableIndex)).toEqual(expected);
+          },
+        );
+      });
+    });
+
+    describe('when contest_id means aoj pck (prelim and final)', () => {
+      TestCasesForContestNameAndTaskIndex.aojPck.forEach(({ name, value }) => {
         runTests(
           `${name}`,
           [value],

@@ -275,3 +275,67 @@ export const atCoderOthers = [
     expected: ContestType.OTHERS,
   }),
 ];
+
+// See:
+// getPrefixForAojCourses() in src/lib/utils/contest.ts
+export const aojCourses = [
+  createTestCaseForContestType('AOJ Courses, ITP1')({
+    contestId: 'ITP1',
+    expected: ContestType.AOJ_COURSES,
+  }),
+  createTestCaseForContestType('AOJ Courses, ALDS1')({
+    contestId: 'ALDS1',
+    expected: ContestType.AOJ_COURSES,
+  }),
+  createTestCaseForContestType('AOJ Courses, ITP2')({
+    contestId: 'ITP2',
+    expected: ContestType.AOJ_COURSES,
+  }),
+  createTestCaseForContestType('AOJ Courses, DPL')({
+    contestId: 'DPL',
+    expected: ContestType.AOJ_COURSES,
+  }),
+];
+
+export const aojPck = [
+  createTestCaseForContestType('AOJ, PCK Prelim 2023')({
+    contestId: 'PCKPrelim2023',
+    expected: ContestType.AOJ_PCK,
+  }),
+  createTestCaseForContestType('AOJ, PCK Prelim 2022')({
+    contestId: 'PCKPrelim2022',
+    expected: ContestType.AOJ_PCK,
+  }),
+  createTestCaseForContestType('AOJ, PCK Prelim 2021')({
+    contestId: 'PCKPrelim2021',
+    expected: ContestType.AOJ_PCK,
+  }),
+  createTestCaseForContestType('AOJ, PCK Prelim 2005')({
+    contestId: 'PCKPrelim2005',
+    expected: ContestType.AOJ_PCK,
+  }),
+  createTestCaseForContestType('AOJ, PCK Prelim 2004')({
+    contestId: 'PCKPrelim2004',
+    expected: ContestType.AOJ_PCK,
+  }),
+  createTestCaseForContestType('AOJ, PCK Final 2023')({
+    contestId: 'PCKFinal2023',
+    expected: ContestType.AOJ_PCK,
+  }),
+  createTestCaseForContestType('AOJ, PCK Final 2022')({
+    contestId: 'PCKFinal2022',
+    expected: ContestType.AOJ_PCK,
+  }),
+  createTestCaseForContestType('AOJ, PCK Final 2021')({
+    contestId: 'PCKFinal2021',
+    expected: ContestType.AOJ_PCK,
+  }),
+  createTestCaseForContestType('AOJ, PCK Final 2004')({
+    contestId: 'PCKFinal2004',
+    expected: ContestType.AOJ_PCK,
+  }),
+  createTestCaseForContestType('AOJ, PCK Final 2003')({
+    contestId: 'PCKFinal2003',
+    expected: ContestType.AOJ_PCK,
+  }),
+];
