@@ -11,7 +11,6 @@ import {
   classifyContest,
   getContestPriority,
   contestTypePriorities,
-  getContestUrl,
   getContestNameLabel,
   addContestNameToTaskIndex,
 } from '$lib/utils/contest';
@@ -220,22 +219,6 @@ describe('Contest', () => {
           expect(getContestPriority(contestId)).toEqual(contestTypePriorities.get(expected));
         });
       });
-    });
-  });
-
-  describe('get contest url', () => {
-    test('when contest_id is ABC365', () => {
-      const contestId = 'abc365';
-      const expected = 'https://atcoder.jp/contests/abc365';
-
-      expect(getContestUrl(contestId)).toEqual(expected);
-    });
-
-    test('when contest_id is ARC183', () => {
-      const contestId = 'arc183';
-      const expected = 'https://atcoder.jp/contests/arc183';
-
-      expect(getContestUrl(contestId)).toEqual(expected);
     });
   });
 

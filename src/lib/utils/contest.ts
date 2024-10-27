@@ -1,5 +1,4 @@
 import { ContestType } from '$lib/types/contest';
-import { ATCODER_BASE_CONTEST_URL } from '$lib/constants/urls';
 
 // See:
 // https://github.com/kenkoooo/AtCoderProblems/blob/master/atcoder-problems-frontend/src/utils/ContestClassifier.ts
@@ -149,10 +148,6 @@ export function getContestPriority(contestId: string): number {
     return contestTypePriorities.get(contestType) as number;
   }
 }
-
-export const getContestUrl = (contestId: string): string => {
-  return `${ATCODER_BASE_CONTEST_URL}/${contestId}`;
-};
 
 export const getContestNameLabel = (contest_id: string) => {
   if (contest_id === 'APG4b' || contest_id === 'APG4bPython') {
