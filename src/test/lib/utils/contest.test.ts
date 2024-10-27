@@ -21,6 +21,12 @@ import {
   testCasesForAgcContestNameLabel,
   testCasesForOthersContestLabel,
   testCasesForAbcContestNameAndTaskIndex,
+  testCasesForApg4bContestNameAndTaskIndex,
+  testCasesForTypical90ContestNameAndTaskIndex,
+  testCasesForTessokuBookContestNameAndTaskIndex,
+  testCasesForMathAndAlgorithmContestNameAndTaskIndex,
+  testCasesForArcContestNameAndTaskIndex,
+  testCasesForAgcContestNameAndTaskIndex,
 } from './test_cases/contest';
 import {
   classifyContest,
@@ -352,183 +358,75 @@ describe('Contest', () => {
     });
 
     describe('when contest_id starts with APG4b', () => {
-      const testCases = [
-        { contestId: 'APG4b', taskTableIndex: 'EX1', expected: 'APG4b - EX1' },
-        { contestId: 'APG4b', taskTableIndex: 'EX2', expected: 'APG4b - EX2' },
-        { contestId: 'APG4b', taskTableIndex: 'EX10', expected: 'APG4b - EX10' },
-        { contestId: 'APG4bPython', taskTableIndex: 'EX1', expected: 'APG4bPython - EX1' },
-      ];
-
-      runTests(
-        'addContestNameToTaskIndex',
-        testCases,
-        ({ contestId, taskTableIndex, expected }: TestCaseForContestNameAndTaskIndex) => {
-          expect(addContestNameToTaskIndex(contestId, taskTableIndex)).toEqual(expected);
-        },
-      );
+      testCasesForApg4bContestNameAndTaskIndex.forEach(({ name, value }) => {
+        runTests(
+          `${name}`,
+          [value],
+          ({ contestId, taskTableIndex, expected }: TestCaseForContestNameAndTaskIndex) => {
+            expect(addContestNameToTaskIndex(contestId, taskTableIndex)).toEqual(expected);
+          },
+        );
+      });
     });
 
     describe('when contest_id is typical90', () => {
-      const testCases = [
-        { contestId: 'typical90', taskTableIndex: '001', expected: '競プロ典型 90 問 - 001' },
-        { contestId: 'typical90', taskTableIndex: '002', expected: '競プロ典型 90 問 - 002' },
-        { contestId: 'typical90', taskTableIndex: '010', expected: '競プロ典型 90 問 - 010' },
-        { contestId: 'typical90', taskTableIndex: '090', expected: '競プロ典型 90 問 - 090' },
-      ];
-
-      runTests(
-        'addContestNameToTaskIndex',
-        testCases,
-        ({ contestId, taskTableIndex, expected }: TestCaseForContestNameAndTaskIndex) => {
-          expect(addContestNameToTaskIndex(contestId, taskTableIndex)).toEqual(expected);
-        },
-      );
+      testCasesForTypical90ContestNameAndTaskIndex.forEach(({ name, value }) => {
+        runTests(
+          `${name}`,
+          [value],
+          ({ contestId, taskTableIndex, expected }: TestCaseForContestNameAndTaskIndex) => {
+            expect(addContestNameToTaskIndex(contestId, taskTableIndex)).toEqual(expected);
+          },
+        );
+      });
     });
 
     describe('when contest_id is tessoku-book', () => {
-      const testCases = [
-        {
-          contestId: 'tessoku-book',
-          taskTableIndex: 'A01',
-          expected: '競技プログラミングの鉄則 - A01',
-        },
-        {
-          contestId: 'tessoku-book',
-          taskTableIndex: 'A10',
-          expected: '競技プログラミングの鉄則 - A10',
-        },
-        {
-          contestId: 'tessoku-book',
-          taskTableIndex: 'A77',
-          expected: '競技プログラミングの鉄則 - A77',
-        },
-        {
-          contestId: 'tessoku-book',
-          taskTableIndex: 'B01',
-          expected: '競技プログラミングの鉄則 - B01',
-        },
-        {
-          contestId: 'tessoku-book',
-          taskTableIndex: 'B10',
-          expected: '競技プログラミングの鉄則 - B10',
-        },
-        {
-          contestId: 'tessoku-book',
-          taskTableIndex: 'B69',
-          expected: '競技プログラミングの鉄則 - B69',
-        },
-        {
-          contestId: 'tessoku-book',
-          taskTableIndex: 'C01',
-          expected: '競技プログラミングの鉄則 - C01',
-        },
-        {
-          contestId: 'tessoku-book',
-          taskTableIndex: 'C10',
-          expected: '競技プログラミングの鉄則 - C10',
-        },
-        {
-          contestId: 'tessoku-book',
-          taskTableIndex: 'C20',
-          expected: '競技プログラミングの鉄則 - C20',
-        },
-      ];
-
-      runTests(
-        'addContestNameToTaskIndex',
-        testCases,
-        ({ contestId, taskTableIndex, expected }: TestCaseForContestNameAndTaskIndex) => {
-          expect(addContestNameToTaskIndex(contestId, taskTableIndex)).toEqual(expected);
-        },
-      );
+      testCasesForTessokuBookContestNameAndTaskIndex.forEach(({ name, value }) => {
+        runTests(
+          `${name}`,
+          [value],
+          ({ contestId, taskTableIndex, expected }: TestCaseForContestNameAndTaskIndex) => {
+            expect(addContestNameToTaskIndex(contestId, taskTableIndex)).toEqual(expected);
+          },
+        );
+      });
     });
 
     describe('when contest_id is math-and-algorithm', () => {
-      const testCases = [
-        {
-          contestId: 'math-and-algorithm',
-          taskTableIndex: '001',
-          expected: 'アルゴリズムと数学 - 001',
-        },
-        {
-          contestId: 'math-and-algorithm',
-          taskTableIndex: '002',
-          expected: 'アルゴリズムと数学 - 002',
-        },
-        {
-          contestId: 'math-and-algorithm',
-          taskTableIndex: '010',
-          expected: 'アルゴリズムと数学 - 010',
-        },
-        {
-          contestId: 'math-and-algorithm',
-          taskTableIndex: '099',
-          expected: 'アルゴリズムと数学 - 099',
-        },
-        {
-          contestId: 'math-and-algorithm',
-          taskTableIndex: '100',
-          expected: 'アルゴリズムと数学 - 100',
-        },
-        {
-          contestId: 'math-and-algorithm',
-          taskTableIndex: '104',
-          expected: 'アルゴリズムと数学 - 104',
-        },
-      ];
-
-      runTests(
-        'addContestNameToTaskIndex',
-        testCases,
-        ({ contestId, taskTableIndex, expected }: TestCaseForContestNameAndTaskIndex) => {
-          expect(addContestNameToTaskIndex(contestId, taskTableIndex)).toEqual(expected);
-        },
-      );
+      testCasesForMathAndAlgorithmContestNameAndTaskIndex.forEach(({ name, value }) => {
+        runTests(
+          `${name}`,
+          [value],
+          ({ contestId, taskTableIndex, expected }: TestCaseForContestNameAndTaskIndex) => {
+            expect(addContestNameToTaskIndex(contestId, taskTableIndex)).toEqual(expected);
+          },
+        );
+      });
     });
 
     describe('when contest_id contains arc', () => {
-      const testCases = [
-        { contestId: 'arc001', taskTableIndex: 'A', expected: 'ARC001 - A' },
-        { contestId: 'arc002', taskTableIndex: 'B', expected: 'ARC002 - B' },
-        { contestId: 'arc057', taskTableIndex: 'C', expected: 'ARC057 - C' },
-        { contestId: 'arc058', taskTableIndex: 'D', expected: 'ARC058 - D' },
-        { contestId: 'arc099', taskTableIndex: 'E', expected: 'ARC099 - E' },
-        { contestId: 'arc100', taskTableIndex: 'F', expected: 'ARC100 - F' },
-        { contestId: 'arc101', taskTableIndex: 'C', expected: 'ARC101 - C' },
-        { contestId: 'arc103', taskTableIndex: 'D', expected: 'ARC103 - D' },
-        { contestId: 'arc104', taskTableIndex: 'A', expected: 'ARC104 - A' },
-        { contestId: 'arc105', taskTableIndex: 'B', expected: 'ARC105 - B' },
-        { contestId: 'arc182', taskTableIndex: 'C', expected: 'ARC182 - C' },
-        { contestId: 'arc183', taskTableIndex: 'D', expected: 'ARC183 - D' },
-      ];
-
-      runTests(
-        'addContestNameToTaskIndex',
-        testCases,
-        ({ contestId, taskTableIndex, expected }: TestCaseForContestNameAndTaskIndex) => {
-          expect(addContestNameToTaskIndex(contestId, taskTableIndex)).toEqual(expected);
-        },
-      );
+      testCasesForArcContestNameAndTaskIndex.forEach(({ name, value }) => {
+        runTests(
+          `${name}`,
+          [value],
+          ({ contestId, taskTableIndex, expected }: TestCaseForContestNameAndTaskIndex) => {
+            expect(addContestNameToTaskIndex(contestId, taskTableIndex)).toEqual(expected);
+          },
+        );
+      });
     });
 
     describe('when contest_id contains agc', () => {
-      const testCases = [
-        { contestId: 'agc001', taskTableIndex: 'A', expected: 'AGC001 - A' },
-        { contestId: 'agc002', taskTableIndex: 'B', expected: 'AGC002 - B' },
-        { contestId: 'agc009', taskTableIndex: 'C', expected: 'AGC009 - C' },
-        { contestId: 'agc010', taskTableIndex: 'D', expected: 'AGC010 - D' },
-        { contestId: 'agc011', taskTableIndex: 'E', expected: 'AGC011 - E' },
-        { contestId: 'agc066', taskTableIndex: 'F', expected: 'AGC066 - F' },
-        { contestId: 'agc067', taskTableIndex: 'E', expected: 'AGC067 - E' },
-      ];
-
-      runTests(
-        'addContestNameToTaskIndex',
-        testCases,
-        ({ contestId, taskTableIndex, expected }: TestCaseForContestNameAndTaskIndex) => {
-          expect(addContestNameToTaskIndex(contestId, taskTableIndex)).toEqual(expected);
-        },
-      );
+      testCasesForAgcContestNameAndTaskIndex.forEach(({ name, value }) => {
+        runTests(
+          `${name}`,
+          [value],
+          ({ contestId, taskTableIndex, expected }: TestCaseForContestNameAndTaskIndex) => {
+            expect(addContestNameToTaskIndex(contestId, taskTableIndex)).toEqual(expected);
+          },
+        );
+      });
     });
   });
 });
