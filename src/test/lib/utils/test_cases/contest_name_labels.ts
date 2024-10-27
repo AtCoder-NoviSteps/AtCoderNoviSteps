@@ -223,7 +223,7 @@ export const agc = [
   }),
 ];
 
-export const others = [
+export const atCoderOthers = [
   createTestCaseForContestNameLabel('Chokudai SpeedRun 001')({
     contestId: 'chokudai_S001',
     expected: 'Chokudai SpeedRun 001',

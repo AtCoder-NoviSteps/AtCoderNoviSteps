@@ -108,7 +108,7 @@ describe('Contest', () => {
     });
 
     describe('when contest_id means others', () => {
-      TestCasesForContestType.others.forEach(({ name, value }) => {
+      TestCasesForContestType.atCoderOthers.forEach(({ name, value }) => {
         runTests(`${name}`, [value], ({ contestId, expected }: TestCaseForContestType) => {
           expect(classifyContest(contestId)).toEqual(expected);
         });
@@ -214,7 +214,7 @@ describe('Contest', () => {
     });
 
     describe('when contest_id means others', () => {
-      TestCasesForContestType.others.forEach(({ name, value }) => {
+      TestCasesForContestType.atCoderOthers.forEach(({ name, value }) => {
         runTests(`${name}`, [value], ({ contestId, expected }: TestCaseForContestType) => {
           expect(getContestPriority(contestId)).toEqual(contestTypePriorities.get(expected));
         });
@@ -298,7 +298,7 @@ describe('Contest', () => {
     });
 
     describe('when contest_id contains chokudai_S', () => {
-      TestCasesForContestNameLabel.others.forEach(({ name, value }) => {
+      TestCasesForContestNameLabel.atCoderOthers.forEach(({ name, value }) => {
         runTests(`${name}`, [value], ({ contestId, expected }: TestCaseForContestNameLabel) => {
           expect(getContestNameLabel(contestId)).toEqual(expected);
         });

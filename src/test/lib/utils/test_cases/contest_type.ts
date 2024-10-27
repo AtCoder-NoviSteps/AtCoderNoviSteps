@@ -237,7 +237,7 @@ export const agcLike = [
   }),
 ];
 
-export const others = [
+export const atCoderOthers = [
   createTestCaseForContestType('Chokudai SpeedRun 001')({
     contestId: 'chokudai_S001',
     expected: ContestType.OTHERS,
