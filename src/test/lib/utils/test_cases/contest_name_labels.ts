@@ -7,7 +7,7 @@ export type TestCaseForContestNameLabel = {
 
 const createTestCaseForContestNameLabel = createTestCase<TestCaseForContestNameLabel>;
 
-export const testCasesForAbcContestNameLabel = [
+export const abc = [
   createTestCaseForContestNameLabel('ABC001')({
     contestId: 'abc001',
     expected: 'ABC001',
@@ -46,7 +46,7 @@ export const testCasesForAbcContestNameLabel = [
   }),
 ];
 
-export const testCasesForApg4bContestNameLabel = [
+export const apg4b = [
   createTestCaseForContestNameLabel('APG4b')({
     contestId: 'APG4b',
     expected: 'APG4b',
@@ -58,7 +58,7 @@ export const testCasesForApg4bContestNameLabel = [
 ];
 
 // Note: Not yet implemented, because notational distortion needs to be corrected for each contest.
-export const testCasesForPastContestNameLabel = [
+export const past = [
   createTestCaseForContestNameLabel('PAST 17th')({
     contestId: 'past17-open',
     expected: '',
@@ -94,7 +94,7 @@ export const testCasesForPastContestNameLabel = [
 ];
 
 // Note: Not yet implemented, because notational distortion needs to be corrected for each contest.
-export const testCasesForJoiContestNameLabel = [
+export const joi = [
   createTestCaseForContestNameLabel('JOIG 2024 open')({
     contestId: 'joig2024-open',
     expected: '',
@@ -141,7 +141,7 @@ export const testCasesForJoiContestNameLabel = [
   }),
 ];
 
-export const testCasesForArcContestNameLabel = [
+export const arc = [
   createTestCaseForContestNameLabel('ARC001')({
     contestId: 'arc001',
     expected: 'ARC001',
@@ -192,7 +192,7 @@ export const testCasesForArcContestNameLabel = [
   }),
 ];
 
-export const testCasesForAgcContestNameLabel = [
+export const agc = [
   createTestCaseForContestNameLabel('AGC001')({
     contestId: 'agc001',
     expected: 'AGC001',
@@ -223,7 +223,7 @@ export const testCasesForAgcContestNameLabel = [
   }),
 ];
 
-export const testCasesForOthersContestLabel = [
+export const others = [
   createTestCaseForContestNameLabel('Chokudai SpeedRun 001')({
     contestId: 'chokudai_S001',
     expected: 'Chokudai SpeedRun 001',

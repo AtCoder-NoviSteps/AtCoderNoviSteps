@@ -8,7 +8,7 @@ export type TestCaseForContestNameAndTaskIndex = {
 
 const createTestCaseForContestNameAndTaskIndex = createTestCase<TestCaseForContestNameAndTaskIndex>;
 
-export const testCasesForAbcContestNameAndTaskIndex = [
+export const abc = [
   createTestCaseForContestNameAndTaskIndex('ABC001, task A')({
     contestId: 'abc001',
     taskTableIndex: 'A',
@@ -71,7 +71,7 @@ export const testCasesForAbcContestNameAndTaskIndex = [
   }),
 ];
 
-export const testCasesForApg4bContestNameAndTaskIndex = [
+export const apg4b = [
   createTestCaseForContestNameAndTaskIndex('APG4b, task EX1')({
     contestId: 'APG4b',
     taskTableIndex: 'EX1',
@@ -94,7 +94,7 @@ export const testCasesForApg4bContestNameAndTaskIndex = [
   }),
 ];
 
-export const testCasesForTypical90ContestNameAndTaskIndex = [
+export const typical90 = [
   createTestCaseForContestNameAndTaskIndex('Typical90, task 001')({
     contestId: 'typical90',
     taskTableIndex: '001',
@@ -117,7 +117,7 @@ export const testCasesForTypical90ContestNameAndTaskIndex = [
   }),
 ];
 
-export const testCasesForTessokuBookContestNameAndTaskIndex = [
+export const tessokuBook = [
   createTestCaseForContestNameAndTaskIndex('Tessoku Book, Task A01')({
     contestId: 'tessoku-book',
     taskTableIndex: 'A01',
@@ -165,7 +165,7 @@ export const testCasesForTessokuBookContestNameAndTaskIndex = [
   }),
 ];
 
-export const testCasesForMathAndAlgorithmContestNameAndTaskIndex = [
+export const mathAndAlgorithm = [
   createTestCaseForContestNameAndTaskIndex('Math and algorithm, task 001')({
     contestId: 'math-and-algorithm',
     taskTableIndex: '001',
@@ -198,7 +198,7 @@ export const testCasesForMathAndAlgorithmContestNameAndTaskIndex = [
   }),
 ];
 
-export const testCasesForArcContestNameAndTaskIndex = [
+export const arc = [
   createTestCaseForContestNameAndTaskIndex('ARC001, task A')({
     contestId: 'arc001',
     taskTableIndex: 'A',
@@ -261,7 +261,7 @@ export const testCasesForArcContestNameAndTaskIndex = [
   }),
 ];
 
-export const testCasesForAgcContestNameAndTaskIndex = [
+export const agc = [
   createTestCaseForContestNameAndTaskIndex('AGC001, task A')({
     contestId: 'agc001',
     taskTableIndex: 'A',

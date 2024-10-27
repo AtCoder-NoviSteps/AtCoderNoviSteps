@@ -6,10 +6,9 @@ export type TestCaseForContestType = {
   expected: ContestType;
 };
 
-// Contest Types
 const createTestCaseForContestType = createTestCase<TestCaseForContestType>;
 
-export const testCasesForAbcContest = [
+export const abc = [
   createTestCaseForContestType('ABC001')({
     contestId: 'abc001',
     expected: ContestType.ABC,
@@ -48,7 +47,7 @@ export const testCasesForAbcContest = [
   }),
 ];
 
-export const testCasesForPastContest = [
+export const past = [
   createTestCaseForContestType('PAST 17th')({
     contestId: 'past17-open',
     expected: ContestType.PAST,
@@ -83,7 +82,7 @@ export const testCasesForPastContest = [
   }),
 ];
 
-export const testCasesForJoiContest = [
+export const joi = [
   createTestCaseForContestType('JOIG 2024 open')({
     contestId: 'joig2024-open',
     expected: ContestType.JOI,
@@ -130,7 +129,7 @@ export const testCasesForJoiContest = [
   }),
 ];
 
-export const testCasesForArcContest = [
+export const arc = [
   createTestCaseForContestType('ARC001')({
     contestId: 'arc001',
     expected: ContestType.ARC,
@@ -181,7 +180,7 @@ export const testCasesForArcContest = [
   }),
 ];
 
-export const testCasesForAgcContest = [
+export const agc = [
   createTestCaseForContestType('AGC001')({
     contestId: 'agc001',
     expected: ContestType.AGC,
@@ -212,14 +211,14 @@ export const testCasesForAgcContest = [
   }),
 ];
 
-export const testCasesForArcLikeContest = [
+export const arcLike = [
   createTestCaseForContestType('Tenka1 2018')({
     contestId: 'tenka1-2018',
     expected: ContestType.ARC_LIKE,
   }),
 ];
 
-export const testCasesForAgcLikeContest = [
+export const agcLike = [
   createTestCaseForContestType('CODE FESTIVAL 2017 qual A')({
     contestId: 'code-festival-2017-quala',
     expected: ContestType.AGC_LIKE,
@@ -238,7 +237,7 @@ export const testCasesForAgcLikeContest = [
   }),
 ];
 
-export const testCasesForOthersContest = [
+export const others = [
   createTestCaseForContestType('Chokudai SpeedRun 001')({
     contestId: 'chokudai_S001',
     expected: ContestType.OTHERS,

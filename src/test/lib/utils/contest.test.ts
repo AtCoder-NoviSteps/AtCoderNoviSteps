@@ -1,37 +1,12 @@
 import { expect, test } from 'vitest';
 
 import { runTests } from '../common/test_helpers';
-import {
-  type TestCaseForContestType,
-  testCasesForAbcContest,
-  testCasesForPastContest,
-  testCasesForJoiContest,
-  testCasesForArcContest,
-  testCasesForAgcContest,
-  testCasesForArcLikeContest,
-  testCasesForAgcLikeContest,
-  testCasesForOthersContest,
-} from './test_cases/contest';
-import {
-  type TestCaseForContestNameLabel,
-  testCasesForAbcContestNameLabel,
-  testCasesForApg4bContestNameLabel,
-  testCasesForPastContestNameLabel,
-  testCasesForJoiContestNameLabel,
-  testCasesForArcContestNameLabel,
-  testCasesForAgcContestNameLabel,
-  testCasesForOthersContestLabel,
-} from './test_cases/contest_name_labels';
-import {
-  type TestCaseForContestNameAndTaskIndex,
-  testCasesForAbcContestNameAndTaskIndex,
-  testCasesForApg4bContestNameAndTaskIndex,
-  testCasesForTypical90ContestNameAndTaskIndex,
-  testCasesForTessokuBookContestNameAndTaskIndex,
-  testCasesForMathAndAlgorithmContestNameAndTaskIndex,
-  testCasesForArcContestNameAndTaskIndex,
-  testCasesForAgcContestNameAndTaskIndex,
-} from './test_cases/contest_name_and_task_index';
+import * as TestCasesForContestType from './test_cases/contest_type';
+import { type TestCaseForContestType } from './test_cases/contest_type';
+import * as TestCasesForContestNameLabel from './test_cases/contest_name_labels';
+import { type TestCaseForContestNameLabel } from './test_cases/contest_name_labels';
+import * as TestCasesForContestNameAndTaskIndex from './test_cases/contest_name_and_task_index';
+import { type TestCaseForContestNameAndTaskIndex } from './test_cases/contest_name_and_task_index';
 import {
   classifyContest,
   getContestPriority,
@@ -50,7 +25,7 @@ describe('Contest', () => {
     });
 
     describe('when contest_id contains abc', () => {
-      testCasesForAbcContest.forEach(({ name, value }) => {
+      TestCasesForContestType.abc.forEach(({ name, value }) => {
         runTests(`${name}`, [value], ({ contestId, expected }: TestCaseForContestType) => {
           expect(classifyContest(contestId)).toEqual(expected);
         });
@@ -74,7 +49,7 @@ describe('Contest', () => {
     });
 
     describe('when contest_id contains past', () => {
-      testCasesForPastContest.forEach(({ name, value }) => {
+      TestCasesForContestType.past.forEach(({ name, value }) => {
         runTests(`${name}`, [value], ({ contestId, expected }: TestCaseForContestType) => {
           expect(classifyContest(contestId)).toEqual(expected);
         });
@@ -86,7 +61,7 @@ describe('Contest', () => {
     });
 
     describe('when contest_id contains joi', () => {
-      testCasesForJoiContest.forEach(({ name, value }) => {
+      TestCasesForContestType.joi.forEach(({ name, value }) => {
         runTests(`${name}`, [value], ({ contestId, expected }: TestCaseForContestType) => {
           expect(classifyContest(contestId)).toEqual(expected);
         });
@@ -102,7 +77,7 @@ describe('Contest', () => {
     });
 
     describe('when contest_id contains arc', () => {
-      testCasesForArcContest.forEach(({ name, value }) => {
+      TestCasesForContestType.arc.forEach(({ name, value }) => {
         runTests(`${name}`, [value], ({ contestId, expected }: TestCaseForContestType) => {
           expect(classifyContest(contestId)).toEqual(expected);
         });
@@ -110,7 +85,7 @@ describe('Contest', () => {
     });
 
     describe('when contest_id contains agc', () => {
-      testCasesForAgcContest.forEach(({ name, value }) => {
+      TestCasesForContestType.agc.forEach(({ name, value }) => {
         runTests(`${name}`, [value], ({ contestId, expected }: TestCaseForContestType) => {
           expect(classifyContest(contestId)).toEqual(expected);
         });
@@ -118,7 +93,7 @@ describe('Contest', () => {
     });
 
     describe('when contest_id means arc-like', () => {
-      testCasesForArcLikeContest.forEach(({ name, value }) => {
+      TestCasesForContestType.arcLike.forEach(({ name, value }) => {
         runTests(`${name}`, [value], ({ contestId, expected }: TestCaseForContestType) => {
           expect(classifyContest(contestId)).toEqual(expected);
         });
@@ -126,7 +101,7 @@ describe('Contest', () => {
     });
 
     describe('when contest_id means agc-like', () => {
-      testCasesForAgcLikeContest.forEach(({ name, value }) => {
+      TestCasesForContestType.agcLike.forEach(({ name, value }) => {
         runTests(`${name}`, [value], ({ contestId, expected }: TestCaseForContestType) => {
           expect(classifyContest(contestId)).toEqual(expected);
         });
@@ -134,7 +109,7 @@ describe('Contest', () => {
     });
 
     describe('when contest_id means others', () => {
-      testCasesForOthersContest.forEach(({ name, value }) => {
+      TestCasesForContestType.others.forEach(({ name, value }) => {
         runTests(`${name}`, [value], ({ contestId, expected }: TestCaseForContestType) => {
           expect(classifyContest(contestId)).toEqual(expected);
         });
@@ -148,7 +123,7 @@ describe('Contest', () => {
     });
 
     describe('when contest_id contains abc', () => {
-      testCasesForAbcContest.forEach(({ name, value }) => {
+      TestCasesForContestType.abc.forEach(({ name, value }) => {
         runTests(`${name}`, [value], ({ contestId, expected }: TestCaseForContestType) => {
           expect(getContestPriority(contestId)).toEqual(contestTypePriorities.get(expected));
         });
@@ -174,7 +149,7 @@ describe('Contest', () => {
     });
 
     describe('when contest_id contains past', () => {
-      testCasesForPastContest.forEach(({ name, value }) => {
+      TestCasesForContestType.past.forEach(({ name, value }) => {
         runTests(`${name}`, [value], ({ contestId, expected }: TestCaseForContestType) => {
           expect(getContestPriority(contestId)).toEqual(contestTypePriorities.get(expected));
         });
@@ -188,7 +163,7 @@ describe('Contest', () => {
     });
 
     describe('when contest_id contains joi', () => {
-      testCasesForJoiContest.forEach(({ name, value }) => {
+      TestCasesForContestType.joi.forEach(({ name, value }) => {
         runTests(`${name}`, [value], ({ contestId, expected }: TestCaseForContestType) => {
           expect(getContestPriority(contestId)).toEqual(contestTypePriorities.get(expected));
         });
@@ -208,7 +183,7 @@ describe('Contest', () => {
     });
 
     describe('when contest_id contains arc', () => {
-      testCasesForArcContest.forEach(({ name, value }) => {
+      TestCasesForContestType.arc.forEach(({ name, value }) => {
         runTests(`${name}`, [value], ({ contestId, expected }: TestCaseForContestType) => {
           expect(getContestPriority(contestId)).toEqual(contestTypePriorities.get(expected));
         });
@@ -216,7 +191,7 @@ describe('Contest', () => {
     });
 
     describe('when contest_id contains agc', () => {
-      testCasesForAgcContest.forEach(({ name, value }) => {
+      TestCasesForContestType.agc.forEach(({ name, value }) => {
         runTests(`${name}`, [value], ({ contestId, expected }: TestCaseForContestType) => {
           expect(getContestPriority(contestId)).toEqual(contestTypePriorities.get(expected));
         });
@@ -224,7 +199,7 @@ describe('Contest', () => {
     });
 
     describe('when contest_id means arc-like', () => {
-      testCasesForArcLikeContest.forEach(({ name, value }) => {
+      TestCasesForContestType.arcLike.forEach(({ name, value }) => {
         runTests(`${name}`, [value], ({ contestId, expected }: TestCaseForContestType) => {
           expect(getContestPriority(contestId)).toEqual(contestTypePriorities.get(expected));
         });
@@ -232,7 +207,7 @@ describe('Contest', () => {
     });
 
     describe('when contest_id means agc-like', () => {
-      testCasesForAgcLikeContest.forEach(({ name, value }) => {
+      TestCasesForContestType.agcLike.forEach(({ name, value }) => {
         runTests(`${name}`, [value], ({ contestId, expected }: TestCaseForContestType) => {
           expect(getContestPriority(contestId)).toEqual(contestTypePriorities.get(expected));
         });
@@ -240,7 +215,7 @@ describe('Contest', () => {
     });
 
     describe('when contest_id means others', () => {
-      testCasesForOthersContest.forEach(({ name, value }) => {
+      TestCasesForContestType.others.forEach(({ name, value }) => {
         runTests(`${name}`, [value], ({ contestId, expected }: TestCaseForContestType) => {
           expect(getContestPriority(contestId)).toEqual(contestTypePriorities.get(expected));
         });
@@ -266,7 +241,7 @@ describe('Contest', () => {
 
   describe('get contest name label', () => {
     describe('when contest_id contains abc', () => {
-      testCasesForAbcContestNameLabel.forEach(({ name, value }) => {
+      TestCasesForContestNameLabel.abc.forEach(({ name, value }) => {
         runTests(`${name}`, [value], ({ contestId, expected }: TestCaseForContestNameLabel) => {
           expect(getContestNameLabel(contestId)).toEqual(expected);
         });
@@ -274,7 +249,7 @@ describe('Contest', () => {
     });
 
     describe('when contest_id starts with APG4b', () => {
-      testCasesForApg4bContestNameLabel.forEach(({ name, value }) => {
+      TestCasesForContestNameLabel.apg4b.forEach(({ name, value }) => {
         runTests(`${name}`, [value], ({ contestId, expected }: TestCaseForContestNameLabel) => {
           expect(getContestNameLabel(contestId)).toEqual(expected);
         });
@@ -295,7 +270,7 @@ describe('Contest', () => {
 
     // Note: Not yet implemented, because notational distortion needs to be corrected for each contest.
     describe.skip('when contest_id contains past', () => {
-      testCasesForPastContestNameLabel.forEach(({ name, value }) => {
+      TestCasesForContestNameLabel.past.forEach(({ name, value }) => {
         runTests(`${name}`, [value], ({ contestId, expected }: TestCaseForContestNameLabel) => {
           expect(getContestNameLabel(contestId)).toEqual(expected);
         });
@@ -308,7 +283,7 @@ describe('Contest', () => {
 
     // Note: Not yet implemented, because notational distortion needs to be corrected for each contest.
     describe.skip('when contest_id contains joi', () => {
-      testCasesForJoiContestNameLabel.forEach(({ name, value }) => {
+      TestCasesForContestNameLabel.joi.forEach(({ name, value }) => {
         runTests(`${name}`, [value], ({ contestId, expected }: TestCaseForContestNameLabel) => {
           expect(getContestNameLabel(contestId)).toEqual(expected);
         });
@@ -324,7 +299,7 @@ describe('Contest', () => {
     });
 
     describe('when contest_id contains arc', () => {
-      testCasesForArcContestNameLabel.forEach(({ name, value }) => {
+      TestCasesForContestNameLabel.arc.forEach(({ name, value }) => {
         runTests(`${name}`, [value], ({ contestId, expected }: TestCaseForContestNameLabel) => {
           expect(getContestNameLabel(contestId)).toEqual(expected);
         });
@@ -332,7 +307,7 @@ describe('Contest', () => {
     });
 
     describe('when contest_id contains agc', () => {
-      testCasesForAgcContestNameLabel.forEach(({ name, value }) => {
+      TestCasesForContestNameLabel.agc.forEach(({ name, value }) => {
         runTests(`${name}`, [value], ({ contestId, expected }: TestCaseForContestNameLabel) => {
           expect(getContestNameLabel(contestId)).toEqual(expected);
         });
@@ -340,7 +315,7 @@ describe('Contest', () => {
     });
 
     describe('when contest_id contains chokudai_S', () => {
-      testCasesForOthersContestLabel.forEach(({ name, value }) => {
+      TestCasesForContestNameLabel.others.forEach(({ name, value }) => {
         runTests(`${name}`, [value], ({ contestId, expected }: TestCaseForContestNameLabel) => {
           expect(getContestNameLabel(contestId)).toEqual(expected);
         });
@@ -350,7 +325,7 @@ describe('Contest', () => {
 
   describe('add contest name to task index', () => {
     describe('when contest_id contains ABC', () => {
-      testCasesForAbcContestNameAndTaskIndex.forEach(({ name, value }) => {
+      TestCasesForContestNameAndTaskIndex.abc.forEach(({ name, value }) => {
         runTests(
           `${name}`,
           [value],
@@ -362,7 +337,7 @@ describe('Contest', () => {
     });
 
     describe('when contest_id starts with APG4b', () => {
-      testCasesForApg4bContestNameAndTaskIndex.forEach(({ name, value }) => {
+      TestCasesForContestNameAndTaskIndex.apg4b.forEach(({ name, value }) => {
         runTests(
           `${name}`,
           [value],
@@ -374,7 +349,7 @@ describe('Contest', () => {
     });
 
     describe('when contest_id is typical90', () => {
-      testCasesForTypical90ContestNameAndTaskIndex.forEach(({ name, value }) => {
+      TestCasesForContestNameAndTaskIndex.typical90.forEach(({ name, value }) => {
         runTests(
           `${name}`,
           [value],
@@ -386,7 +361,7 @@ describe('Contest', () => {
     });
 
     describe('when contest_id is tessoku-book', () => {
-      testCasesForTessokuBookContestNameAndTaskIndex.forEach(({ name, value }) => {
+      TestCasesForContestNameAndTaskIndex.tessokuBook.forEach(({ name, value }) => {
         runTests(
           `${name}`,
           [value],
@@ -398,7 +373,7 @@ describe('Contest', () => {
     });
 
     describe('when contest_id is math-and-algorithm', () => {
-      testCasesForMathAndAlgorithmContestNameAndTaskIndex.forEach(({ name, value }) => {
+      TestCasesForContestNameAndTaskIndex.mathAndAlgorithm.forEach(({ name, value }) => {
         runTests(
           `${name}`,
           [value],
@@ -410,7 +385,7 @@ describe('Contest', () => {
     });
 
     describe('when contest_id contains arc', () => {
-      testCasesForArcContestNameAndTaskIndex.forEach(({ name, value }) => {
+      TestCasesForContestNameAndTaskIndex.arc.forEach(({ name, value }) => {
         runTests(
           `${name}`,
           [value],
@@ -422,7 +397,7 @@ describe('Contest', () => {
     });
 
     describe('when contest_id contains agc', () => {
-      testCasesForAgcContestNameAndTaskIndex.forEach(({ name, value }) => {
+      TestCasesForContestNameAndTaskIndex.agc.forEach(({ name, value }) => {
         runTests(
           `${name}`,
           [value],
