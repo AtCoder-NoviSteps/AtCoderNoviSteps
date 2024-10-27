@@ -1,5 +1,6 @@
 import { expect, test } from 'vitest';
 
+import { runTests } from '../common/test_helpers';
 import {
   getTaskUrl,
   countAcceptedTasks,
@@ -154,14 +155,6 @@ describe('Task', () => {
         expect(getTaskUrl(contestId, taskId)).toBe(expected);
       });
     });
-
-    function runTests(
-      testName: string,
-      testCases: TestCasesForTaskUrl,
-      testFunction: (testCase: TestCaseForTaskUrl) => void,
-    ) {
-      test.each(testCases)(`${testName}(contestId: $contestId, taskId: $taskId)`, testFunction);
-    }
   });
 
   describe('count accepted tasks', () => {
@@ -219,14 +212,6 @@ describe('Task', () => {
         },
       );
     });
-
-    function runTests(
-      testName: string,
-      testCases: TestCasesForTaskResults,
-      testFunction: (testCase: TestCaseForTaskResults) => void,
-    ) {
-      test.each(testCases)(`${testName}(taskResults: $taskResults)`, testFunction);
-    }
   });
 
   describe('count all tasks using taskResults', () => {
@@ -246,14 +231,6 @@ describe('Task', () => {
         expect(countAllTasks(taskResults)).toBe(expected);
       });
     });
-
-    function runTests(
-      testName: string,
-      testCases: TestCasesForTaskResults,
-      testFunction: (testCase: TestCaseForTaskResults) => void,
-    ) {
-      test.each(testCases)(`${testName}(taskResults: $taskResults)`, testFunction);
-    }
   });
 
   describe('count all tasks using WorkBookTaskBase[]', () => {
@@ -277,14 +254,6 @@ describe('Task', () => {
         },
       );
     });
-
-    function runTests(
-      testName: string,
-      testCases: TestCasesForWorkBookTasks,
-      testFunction: (testCase: TestCaseForWorkBookTasks) => void,
-    ) {
-      test.each(testCases)(`${testName}(workBookTasks: $workBookTasks)`, testFunction);
-    }
   });
 
   describe('are all tasks accepted using taskResults', () => {
@@ -339,14 +308,6 @@ describe('Task', () => {
         expect(areAllTasksAccepted(taskResults, taskResults)).toBeTruthy();
       });
     });
-
-    function runTests(
-      testName: string,
-      testCases: TestCasesForTaskResults,
-      testFunction: (testCase: TestCaseForTaskResults) => void,
-    ) {
-      test.each(testCases)(`${testName}(taskResults: $taskResults)`, testFunction);
-    }
   });
 
   describe('are all tasks accepted using WorkBookTaskBase[]', () => {
@@ -429,14 +390,6 @@ describe('Task', () => {
         },
       );
     });
-
-    function runTests(
-      testName: string,
-      testCases: TestCasesForWorkBookTasks,
-      testFunction: (testCase: TestCaseForWorkBookTasks) => void,
-    ) {
-      test.each(testCases)(`${testName}(workBookTasks: $workBookTasks)`, testFunction);
-    }
   });
 
   describe('compare by contest type, contest id and task id', () => {
@@ -564,17 +517,6 @@ describe('Task', () => {
         },
       );
     });
-
-    function runTests(
-      testName: string,
-      testCases: TestCasesForSortingTaskResults,
-      testFunction: (testCase: TestCaseForSortingTaskResults) => void,
-    ) {
-      test.each(testCases)(
-        `${testName}(first: $first.task_id, second: $second.task_id)`,
-        testFunction,
-      );
-    }
   });
 
   describe('remove task index from title', () => {
@@ -672,16 +614,5 @@ describe('Task', () => {
         },
       );
     });
-
-    function runTests(
-      testName: string,
-      testCases: TestCasesForNewTitle,
-      testFunction: (testCase: TestCaseForNewTitle) => void,
-    ) {
-      test.each(testCases)(
-        `${testName}(title: $title, taskTableIndex: $taskTableIndex)`,
-        testFunction,
-      );
-    }
   });
 });
