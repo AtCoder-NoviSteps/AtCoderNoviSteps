@@ -1,6 +1,16 @@
 import { expect, test } from 'vitest';
 
 import { runTests } from '../common/test_helpers';
+import * as TestCasesForTaskUrl from './test_cases/task_url';
+import type { TestCaseForTaskUrl } from './test_cases/task_url';
+import {
+  taskResultsForUserId2,
+  taskResultsForUserId3,
+  taskResultsForUserId4,
+  taskResultsForUserId5,
+  threeWorkBookTasks,
+  tasksForVerificationOfOrder,
+} from './test_cases/task_results';
 import {
   getTaskUrl,
   countAcceptedTasks,
@@ -11,23 +21,6 @@ import {
 } from '$lib/utils/task';
 import type { WorkBookTaskBase } from '$lib/types/workbook';
 import { type TaskResult, type TaskResults } from '$lib/types/task';
-
-import {
-  taskResultsForUserId2,
-  taskResultsForUserId3,
-  taskResultsForUserId4,
-  taskResultsForUserId5,
-  threeWorkBookTasks,
-  tasksForVerificationOfOrder,
-} from './test_cases/task_results';
-
-type TestCaseForTaskUrl = {
-  contestId: string;
-  taskId: string;
-  expected: string;
-};
-
-type TestCasesForTaskUrl = TestCaseForTaskUrl[];
 
 type TestCaseForTaskResults = {
   taskResults: TaskResults;
@@ -63,96 +56,10 @@ type TestCasesForNewTitle = TestCaseForNewTitle[];
 describe('Task', () => {
   describe('task url', () => {
     describe('when contest ids and task ids in AtCoder are given', () => {
-      const testCases: TestCasesForTaskUrl = [
-        {
-          contestId: 'abs',
-          taskId: 'practice_1',
-          expected: 'https://atcoder.jp/contests/abs/tasks/practice_1',
-        },
-        {
-          contestId: 'abc365',
-          taskId: 'abc365_a',
-          expected: 'https://atcoder.jp/contests/abc365/tasks/abc365_a',
-        },
-        {
-          contestId: 'abc365',
-          taskId: 'abc365_b',
-          expected: 'https://atcoder.jp/contests/abc365/tasks/abc365_b',
-        },
-        {
-          contestId: 'abc365',
-          taskId: 'abc365_c',
-          expected: 'https://atcoder.jp/contests/abc365/tasks/abc365_c',
-        },
-        {
-          contestId: 'abc365',
-          taskId: 'abc365_d',
-          expected: 'https://atcoder.jp/contests/abc365/tasks/abc365_d',
-        },
-        {
-          contestId: 'abc365',
-          taskId: 'abc365_e',
-          expected: 'https://atcoder.jp/contests/abc365/tasks/abc365_e',
-        },
-        {
-          contestId: 'abc365',
-          taskId: 'abc365_f',
-          expected: 'https://atcoder.jp/contests/abc365/tasks/abc365_f',
-        },
-        {
-          contestId: 'abc365',
-          taskId: 'abc365_g',
-          expected: 'https://atcoder.jp/contests/abc365/tasks/abc365_g',
-        },
-        {
-          contestId: 'APG4b',
-          taskId: 'APG4b_a',
-          expected: 'https://atcoder.jp/contests/APG4b/tasks/APG4b_a',
-        },
-        {
-          contestId: 'typical90',
-          taskId: 'typical90_a',
-          expected: 'https://atcoder.jp/contests/typical90/tasks/typical90_a',
-        },
-        {
-          contestId: 'dp',
-          taskId: 'dp_b',
-          expected: 'https://atcoder.jp/contests/dp/tasks/dp_b',
-        },
-        {
-          contestId: 'tdpc',
-          taskId: 'tdpc_contest',
-          expected: 'https://atcoder.jp/contests/tdpc/tasks/tdpc_contest',
-        },
-        {
-          contestId: 'past16-open',
-          taskId: 'past202309_a',
-          expected: 'https://atcoder.jp/contests/past16-open/tasks/past202309_a',
-        },
-        {
-          contestId: 'practice2',
-          taskId: 'practice2_a',
-          expected: 'https://atcoder.jp/contests/practice2/tasks/practice2_a',
-        },
-        {
-          contestId: 'joi2023yo1c',
-          taskId: 'joi2023_yo1c_a',
-          expected: 'https://atcoder.jp/contests/joi2023yo1c/tasks/joi2023_yo1c_a',
-        },
-        {
-          contestId: 'tessoku-book',
-          taskId: 'tessoku_book_a',
-          expected: 'https://atcoder.jp/contests/tessoku-book/tasks/tessoku_book_a',
-        },
-        {
-          contestId: 'math-and-algorithm',
-          taskId: 'math_and_algorithm_a',
-          expected: 'https://atcoder.jp/contests/math-and-algorithm/tasks/math_and_algorithm_a',
-        },
-      ];
-
-      runTests('getTaskUrl', testCases, ({ contestId, taskId, expected }: TestCaseForTaskUrl) => {
-        expect(getTaskUrl(contestId, taskId)).toBe(expected);
+      TestCasesForTaskUrl.atCoderTasks.forEach(({ name, value }) => {
+        runTests(`${name}`, [value], ({ contestId, taskId, expected }: TestCaseForTaskUrl) => {
+          expect(getTaskUrl(contestId, taskId)).toBe(expected);
+        });
       });
     });
   });
