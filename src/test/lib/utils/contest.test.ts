@@ -3,8 +3,6 @@ import { expect, test } from 'vitest';
 import { runTests } from '../common/test_helpers';
 import {
   type TestCaseForContestType,
-  type TestCaseForContestNameLabel,
-  type TestCaseForContestNameAndTaskIndex,
   testCasesForAbcContest,
   testCasesForPastContest,
   testCasesForJoiContest,
@@ -13,6 +11,9 @@ import {
   testCasesForArcLikeContest,
   testCasesForAgcLikeContest,
   testCasesForOthersContest,
+} from './test_cases/contest';
+import {
+  type TestCaseForContestNameLabel,
   testCasesForAbcContestNameLabel,
   testCasesForApg4bContestNameLabel,
   testCasesForPastContestNameLabel,
@@ -20,6 +21,9 @@ import {
   testCasesForArcContestNameLabel,
   testCasesForAgcContestNameLabel,
   testCasesForOthersContestLabel,
+} from './test_cases/contest_name_labels';
+import {
+  type TestCaseForContestNameAndTaskIndex,
   testCasesForAbcContestNameAndTaskIndex,
   testCasesForApg4bContestNameAndTaskIndex,
   testCasesForTypical90ContestNameAndTaskIndex,
@@ -27,7 +31,7 @@ import {
   testCasesForMathAndAlgorithmContestNameAndTaskIndex,
   testCasesForArcContestNameAndTaskIndex,
   testCasesForAgcContestNameAndTaskIndex,
-} from './test_cases/contest';
+} from './test_cases/contest_name_and_task_index';
 import {
   classifyContest,
   getContestPriority,
