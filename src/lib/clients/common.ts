@@ -14,7 +14,9 @@ export async function fetchAPI<T>(url: string, error_messages: string): Promise<
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
+        Accept: 'application/json',
       },
+      signal: AbortSignal.timeout(5000), // 5 seconds
     });
 
     if (!response.ok) {
