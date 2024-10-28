@@ -94,7 +94,7 @@ export const classifyContest = (contest_id: string) => {
     return ContestType.AOJ_COURSES;
   }
 
-  if (contest_id.startsWith('PCK')) {
+  if (/^PCK(Prelim|Final)\d*$/.exec(contest_id)) {
     return ContestType.AOJ_PCK;
   }
 
