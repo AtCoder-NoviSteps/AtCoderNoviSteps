@@ -1,4 +1,4 @@
-import { createTestCase } from '../../common/test_helpers';
+import { createTestCase, zip } from '../../common/test_helpers';
 
 export type TestCaseForContestNameAndTaskIndex = {
   contestId: string;
@@ -8,68 +8,27 @@ export type TestCaseForContestNameAndTaskIndex = {
 
 const createTestCaseForContestNameAndTaskIndex = createTestCase<TestCaseForContestNameAndTaskIndex>;
 
-export const abc = [
-  createTestCaseForContestNameAndTaskIndex('ABC001, task A')({
-    contestId: 'abc001',
-    taskTableIndex: 'A',
-    expected: 'ABC001 - A',
-  }),
-  createTestCaseForContestNameAndTaskIndex('ABC001, task B')({
-    contestId: 'abc001',
-    taskTableIndex: 'B',
-    expected: 'ABC001 - B',
-  }),
-  createTestCaseForContestNameAndTaskIndex('ABC001, task C')({
-    contestId: 'abc001',
-    taskTableIndex: 'C',
-    expected: 'ABC001 - C',
-  }),
-  createTestCaseForContestNameAndTaskIndex('ABC001, task D')({
-    contestId: 'abc001',
-    taskTableIndex: 'D',
-    expected: 'ABC001 - D',
-  }),
-  createTestCaseForContestNameAndTaskIndex('ABC002, task A')({
-    contestId: 'abc002',
-    taskTableIndex: 'A',
-    expected: 'ABC002 - A',
-  }),
-  createTestCaseForContestNameAndTaskIndex('ABC099, task B')({
-    contestId: 'abc099',
-    taskTableIndex: 'B',
-    expected: 'ABC099 - B',
-  }),
-  createTestCaseForContestNameAndTaskIndex('ABC100, task C')({
-    contestId: 'abc100',
-    taskTableIndex: 'C',
-    expected: 'ABC100 - C',
-  }),
-  createTestCaseForContestNameAndTaskIndex('ABC101, task D')({
-    contestId: 'abc101',
-    taskTableIndex: 'D',
-    expected: 'ABC101 - D',
-  }),
-  createTestCaseForContestNameAndTaskIndex('ABC200, task E')({
-    contestId: 'abc200',
-    taskTableIndex: 'E',
-    expected: 'ABC200 - E',
-  }),
-  createTestCaseForContestNameAndTaskIndex('ABC201, task F')({
-    contestId: 'abc201',
-    taskTableIndex: 'F',
-    expected: 'ABC201 - F',
-  }),
-  createTestCaseForContestNameAndTaskIndex('ABC365, task G')({
-    contestId: 'abc365',
-    taskTableIndex: 'G',
-    expected: 'ABC365 - G',
-  }),
-  createTestCaseForContestNameAndTaskIndex('ABC999, task A')({
-    contestId: 'abc999',
-    taskTableIndex: 'A',
-    expected: 'ABC999 - A',
-  }),
-];
+const generateAbcTestCases = (
+  contestIds: string[],
+  taskIndices: string[],
+): { name: string; value: TestCaseForContestNameAndTaskIndex }[] => {
+  return zip(contestIds, taskIndices).map(([contestId, taskIndex]) => {
+    const testCase = createTestCaseForContestNameAndTaskIndex(`ABC${contestId}, task ${taskIndex}`)(
+      {
+        contestId: `abc${contestId}`,
+        taskTableIndex: taskIndex,
+        expected: `ABC${contestId} - ${taskIndex}`,
+      },
+    );
+
+    return testCase;
+  });
+};
+
+export const abc = generateAbcTestCases(
+  ['001', '001', '001', '001', '002', '099', '100', '101', '200', '201', '365', '999'],
+  ['A', 'B', 'C', 'D', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'A'],
+);
 
 export const apg4b = [
   createTestCaseForContestNameAndTaskIndex('APG4b, task EX1')({

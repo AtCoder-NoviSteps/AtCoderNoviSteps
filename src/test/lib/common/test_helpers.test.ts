@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { createTestCase, runTests } from './test_helpers';
+import { createTestCase, runTests, zip } from './test_helpers';
 
 describe('createTestCase', () => {
   it('expects to be created a test case object with the given name and value', () => {
@@ -39,5 +39,70 @@ describe('runTests', () => {
     runTests(testName, [], () => {
       throw new Error('Expect not to be called');
     });
+  });
+});
+
+describe('zip', () => {
+  it('expects to zip two arrays of equal length', () => {
+    const firstArray = [1, 2, 3];
+    const secondArray = ['a', 'b', 'c'];
+    const result = zip(firstArray, secondArray);
+
+    expect(result).toEqual([
+      [1, 'a'],
+      [2, 'b'],
+      [3, 'c'],
+    ]);
+  });
+
+  it('expects to zip two arrays of different lengths', () => {
+    const firstArray = [1, 2];
+    const secondArray = ['a', 'b', 'c'];
+    const result = zip(firstArray, secondArray);
+
+    expect(result).toEqual([
+      [1, 'a'],
+      [2, 'b'],
+    ]);
+  });
+
+  it('expects to zip two empty arrays', () => {
+    const firstArray: number[] = [];
+    const secondArray: string[] = [];
+    const result = zip(firstArray, secondArray);
+
+    expect(result).toEqual([]);
+  });
+
+  it('expects to zip when first array is longer', () => {
+    const firstArray = [1, 2, 3];
+    const secondArray = ['a'];
+    const result = zip(firstArray, secondArray);
+
+    expect(result).toEqual([[1, 'a']]);
+  });
+
+  it('expects to zip when first array is longer and second array is empty', () => {
+    const firstArray = [1, 2, 3];
+    const secondArray = [] as string[];
+    const result = zip(firstArray, secondArray);
+
+    expect(result).toEqual([]);
+  });
+
+  it('expects to zip when second array is longer', () => {
+    const firstArray = [1];
+    const secondArray = ['a', 'b', 'c'];
+    const result = zip(firstArray, secondArray);
+
+    expect(result).toEqual([[1, 'a']]);
+  });
+
+  it('expects to zip when second array is longer and first array is empty', () => {
+    const firstArray = [] as number[];
+    const secondArray = ['a', 'b', 'c'];
+    const result = zip(firstArray, secondArray);
+
+    expect(result).toEqual([]);
   });
 });

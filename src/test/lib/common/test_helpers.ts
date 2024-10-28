@@ -24,6 +24,21 @@ export const createTestCase =
   });
 
 /**
+ * Combines two arrays into an array of tuples. Each tuple contains one element from each of the input arrays.
+ * The resulting array will have a length equal to the shorter of the two input arrays.
+ *
+ * @template T - The type of elements in the first array.
+ * @template U - The type of elements in the second array.
+ * @param {T[]} firstArray - The first array to zip.
+ * @param {U[]} secondArray - The second array to zip.
+ * @returns {[T, U][]} An array of tuples, where each tuple contains one element from each of the input arrays.
+ */
+export function zip<T, U>(firstArray: T[], secondArray: U[]): [T, U][] {
+  const length = Math.min(firstArray.length, secondArray.length);
+  return Array.from({ length }, (_, i) => [firstArray[i], secondArray[i]]);
+}
+
+/**
  * Runs multiple test cases for a given test name using Vitest.
  * @template T The type of the test cases
  * @param {string} testName The base name for the tests
