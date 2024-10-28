@@ -6,6 +6,10 @@ export async function fetchAPI<T>(url: string, error_messages: string): Promise<
 export async function fetchAPI<T>(url: string, error_messages: string): Promise<T[]>;
 
 export async function fetchAPI<T>(url: string, error_messages: string): Promise<T | T[]> {
+  if (!url || !url.startsWith('http')) {
+    throw new Error('Invalid URL is given.');
+  }
+
   try {
     // 外部APIへの過剰なアクセスを防ぐため、1秒待機
     await delay(1000);
@@ -20,12 +24,21 @@ export async function fetchAPI<T>(url: string, error_messages: string): Promise<
     });
 
     if (!response.ok) {
-      throw new Error('Request has failed.');
+      throw new Error(`Request failed with status: ${response.status}`);
     }
 
-    return response.json();
+    const responseJson = response.json();
+
+    if (responseJson === null || responseJson === undefined) {
+      throw new Error('Failed to parse the response.');
+    }
+
+    return responseJson as T | T[];
   } catch (error) {
-    console.error(error_messages, error);
+    console.error(
+      error_messages,
+      error instanceof Error ? error.message : 'Unknown error occurred.',
+    );
     throw error;
   }
 }
