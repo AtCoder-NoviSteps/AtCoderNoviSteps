@@ -11,14 +11,14 @@
     Input,
   } from 'flowbite-svelte';
 
-  import type { Contest } from '$lib/types/task';
+  import type { Contests } from '$lib/types/contest';
   import { getContestNameLabel } from '$lib/utils/contest';
   import { newline } from '$lib/utils/newline';
 
   //gradeでソート済みのTaskのリストと、APIから取得したtasklistを表示する
   //export let tasks: Task[];
   //APIから取得したリストで、データベースに追加していないTaskのリストにする
-  export let importContests: Contest[];
+  export let importContests: Contests;
 </script>
 
 <!-- TODO: 問題が多くなってきたら、ページネーションを導入する -->

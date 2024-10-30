@@ -1,9 +1,21 @@
+import type { ImportTasks } from '$lib/types/task';
+
+export interface Contest {
+  id: string;
+  start_epoch_second: number;
+  duration_second: number;
+  title: string;
+  tasks: ImportTasks;
+}
+
+export type Contests = Contest[];
+
 // HACK: 名称をより明確なものにリネームする。
 // 理由: これからインポートするというニュアンスだが、インポート済みと勘違いしやすいため。
 export interface ImportContest {
   id: string;
-  start_epoch_second: string;
-  duration_second: string;
+  start_epoch_second: number;
+  duration_second: number;
   title: string;
   rate_change: string;
 }

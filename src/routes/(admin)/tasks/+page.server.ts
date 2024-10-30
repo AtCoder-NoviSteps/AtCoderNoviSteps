@@ -1,13 +1,7 @@
 import { redirect, type Actions } from '@sveltejs/kit';
 
-import type { ImportContest } from '$lib/types/contest';
-import {
-  type Contests,
-  type Task,
-  type ImportTask,
-  TaskGrade,
-  getTaskGrade,
-} from '$lib/types/task';
+import type { Contests, ImportContest } from '$lib/types/contest';
+import { type Task, type ImportTask, TaskGrade, getTaskGrade } from '$lib/types/task';
 import * as taskService from '$lib/services/tasks';
 import * as userService from '$lib/services/users';
 import * as apiClient from '$lib/clients';
@@ -30,7 +24,6 @@ export async function load({ locals }) {
     redirect(302, '/login');
   }
 
-  // TODO: 他のコンテストのデータとまとめてから取得できるようにする。
   const importContestsJson = await apiClient.getContests();
   const importTasksJson = await apiClient.getTasks();
   const tasks = await taskService.getTasks();

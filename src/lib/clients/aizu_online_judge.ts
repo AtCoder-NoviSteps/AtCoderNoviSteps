@@ -90,8 +90,8 @@ async function fetchCoursesForContests(): Promise<ImportContests> {
     const coursesForContest = courses.map((course: Course) => {
       const courseForContest = {
         id: course.shortName,
-        start_epoch_second: '', // 該当するデータがないため
-        duration_second: '', // 同上
+        start_epoch_second: -1, // 該当するデータがないため
+        duration_second: -1, // 同上
         title: course.name,
         rate_change: '', // 同上
       };
@@ -121,8 +121,8 @@ async function fetchPckContests(round: string): Promise<ImportContests> {
         titles.forEach((title: string) => {
           importContests.push({
             id: contest.abbr,
-            start_epoch_second: '', // 該当するデータがないため
-            duration_second: '', // 同上
+            start_epoch_second: -1, // 該当するデータがないため
+            duration_second: -1, // 同上
             title: title,
             rate_change: '', // 同上
           });
