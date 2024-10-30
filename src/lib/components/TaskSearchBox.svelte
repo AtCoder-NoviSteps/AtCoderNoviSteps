@@ -185,7 +185,9 @@
             {task.title}
           </h3>
           <div>
-            {getTaskUrl(task.contest_id, task.task_id)}
+            <span aria-label="Task URL: {getTaskUrl(task.contest_id, task.task_id)}">
+              {getTaskUrl(task.contest_id, task.task_id)}
+            </span>
           </div>
         </button>
       </ListgroupItem>
