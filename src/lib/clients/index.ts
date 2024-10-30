@@ -1,5 +1,5 @@
-import type { ImportContests, ImportContest } from '$lib/types/contest';
-import type { ImportTasks, ImportTask } from '$lib/types/task';
+import type { ContestsForImport, ContestForImport } from '$lib/types/contest';
+import type { TasksForImport, TaskForImport } from '$lib/types/task';
 
 import * as atCoderProblemsApiClient from '$lib/clients/atcoder_problems';
 import * as aojApiClient from '$lib/clients/aizu_online_judge';
@@ -15,7 +15,7 @@ import * as aojApiClient from '$lib/clients/aizu_online_judge';
 //   ・Challenges
 //     ・PCK (All-Japan High School Programming Contest)
 
-export async function getContests(): Promise<ImportContests> {
+export async function getContests(): Promise<ContestsForImport> {
   try {
     const [atcoder, aoj] = await Promise.all([
       atCoderProblemsApiClient.getContests().catch((error) => {
@@ -28,7 +28,7 @@ export async function getContests(): Promise<ImportContests> {
       }),
     ]);
 
-    const contestsMap = new Map<string, ImportContest>();
+    const contestsMap = new Map<string, ContestForImport>();
 
     [...atcoder, ...aoj].forEach((contest) => {
       contestsMap.set(contest.id, contest);
@@ -41,7 +41,7 @@ export async function getContests(): Promise<ImportContests> {
   }
 }
 
-export async function getTasks(): Promise<ImportTasks> {
+export async function getTasks(): Promise<TasksForImport> {
   try {
     const [atcoder, aoj] = await Promise.all([
       atCoderProblemsApiClient.getTasks().catch((error) => {
@@ -54,7 +54,7 @@ export async function getTasks(): Promise<ImportTasks> {
       }),
     ]);
 
-    const tasksMap = new Map<string, ImportTask>();
+    const tasksMap = new Map<string, TaskForImport>();
 
     [...atcoder, ...aoj].forEach((task) => {
       tasksMap.set(task.id, task);

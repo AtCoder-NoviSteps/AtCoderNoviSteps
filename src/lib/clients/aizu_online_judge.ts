@@ -1,6 +1,6 @@
 import { fetchAPI } from '$lib/clients/common';
-import type { ImportContests } from '$lib/types/contest';
-import type { ImportTasks } from '$lib/types/task';
+import type { ContestsForImport } from '$lib/types/contest';
+import type { TasksForImport } from '$lib/types/task';
 
 type AOJCourseAPI = {
   filter: string;
@@ -66,7 +66,7 @@ type AOJTaskAPIs = AOJTaskAPI[];
 const PRELIM = 'prelim';
 const FINAL = 'final';
 
-export async function getContests(): Promise<ImportContests> {
+export async function getContests(): Promise<ContestsForImport> {
   const [courses, pckPrelims, pckFinals] = await Promise.all([
     fetchCoursesForContests(),
     fetchPckContests(PRELIM),
@@ -77,7 +77,7 @@ export async function getContests(): Promise<ImportContests> {
   return contests;
 }
 
-async function fetchCoursesForContests(): Promise<ImportContests> {
+async function fetchCoursesForContests(): Promise<ContestsForImport> {
   const allCoursesUrl = `https://judgeapi.u-aizu.ac.jp/courses`;
   const allCourses = await fetchAPI<AOJCourseAPI>(
     allCoursesUrl,
@@ -107,7 +107,7 @@ async function fetchCoursesForContests(): Promise<ImportContests> {
   }
 }
 
-async function fetchPckContests(round: string): Promise<ImportContests> {
+async function fetchPckContests(round: string): Promise<ContestsForImport> {
   const allPckContestsUrl = `https://judgeapi.u-aizu.ac.jp/challenges/cl/pck/${round}`;
   const allPckContests = await fetchAPI<ChallengeContestAPI>(
     allPckContestsUrl,
@@ -116,7 +116,7 @@ async function fetchPckContests(round: string): Promise<ImportContests> {
 
   if ('contests' in allPckContests) {
     const contests = allPckContests.contests.reduce(
-      (importContests: ImportContests, contest: ChallengeContest) => {
+      (importContests: ContestsForImport, contest: ChallengeContest) => {
         const titles = contest.days.map((day) => day.title);
         titles.forEach((title: string) => {
           importContests.push({
@@ -129,7 +129,7 @@ async function fetchPckContests(round: string): Promise<ImportContests> {
         });
         return importContests;
       },
-      [] as ImportContests,
+      [] as ContestsForImport,
     );
 
     console.log(`Found PCK ${round}: ${contests.length} contests.`);
@@ -141,7 +141,7 @@ async function fetchPckContests(round: string): Promise<ImportContests> {
   }
 }
 
-export async function getTasks(): Promise<ImportTasks> {
+export async function getTasks(): Promise<TasksForImport> {
   const [courses, pckPrelims, pckFinals] = await Promise.all([
     fetchCourseTasks(),
     fetchPckTasks(PRELIM),
@@ -152,7 +152,7 @@ export async function getTasks(): Promise<ImportTasks> {
   return tasks;
 }
 
-async function fetchCourseTasks(): Promise<ImportTasks> {
+async function fetchCourseTasks(): Promise<TasksForImport> {
   const size = 10 ** 4;
   const allTasksUrl = `https://judgeapi.u-aizu.ac.jp/problems?size=${size}`;
   const allTasks = await fetchAPI<AOJTaskAPIs>(
@@ -160,7 +160,7 @@ async function fetchCourseTasks(): Promise<ImportTasks> {
     'Failed to fetch course tasks from AIZU ONLINE JUDGE API',
   );
 
-  const courseTasks: ImportTasks = allTasks
+  const courseTasks: TasksForImport = allTasks
     .filter((task: AOJTaskAPI) => getCourseName(task.id) !== '')
     .map((task: AOJTaskAPI) => {
       const taskId = task.id;
@@ -195,7 +195,7 @@ export const getCourseName = (taskId: string) => {
   return courseName;
 };
 
-async function fetchPckTasks(round: string): Promise<ImportTasks> {
+async function fetchPckTasks(round: string): Promise<TasksForImport> {
   const allPckContestsUrl = `https://judgeapi.u-aizu.ac.jp/challenges/cl/pck/${round}`;
   const allPckContests = await fetchAPI<ChallengeContestAPI>(
     allPckContestsUrl,
@@ -203,7 +203,7 @@ async function fetchPckTasks(round: string): Promise<ImportTasks> {
   );
 
   if ('contests' in allPckContests) {
-    const tasks: ImportTasks = allPckContests.contests.flatMap((contest: ChallengeContest) =>
+    const tasks: TasksForImport = allPckContests.contests.flatMap((contest: ChallengeContest) =>
       contest.days.flatMap((day) =>
         day.problems.map((problem) => {
           const taskId = problem.id;

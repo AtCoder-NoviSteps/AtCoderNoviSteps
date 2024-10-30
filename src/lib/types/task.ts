@@ -9,7 +9,9 @@ export interface Task {
   grade: string;
 }
 
-export interface ImportTask {
+export type Tasks = Task[];
+
+export interface TaskForImport {
   id: string;
   contest_id: string;
   problem_index: string;
@@ -17,9 +19,7 @@ export interface ImportTask {
   title: string;
 }
 
-export type Tasks = Task[];
-
-export type ImportTasks = ImportTask[];
+export type TasksForImport = TaskForImport[];
 
 // See:
 // https://github.com/prisma/prisma/issues/12504#issuecomment-1147356141

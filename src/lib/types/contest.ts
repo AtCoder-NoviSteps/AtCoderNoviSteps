@@ -1,18 +1,16 @@
-import type { ImportTasks } from '$lib/types/task';
+import type { TasksForImport } from '$lib/types/task';
 
 export interface Contest {
   id: string;
   start_epoch_second: number;
   duration_second: number;
   title: string;
-  tasks: ImportTasks;
+  tasks: TasksForImport;
 }
 
 export type Contests = Contest[];
 
-// HACK: 名称をより明確なものにリネームする。
-// 理由: これからインポートするというニュアンスだが、インポート済みと勘違いしやすいため。
-export interface ImportContest {
+export interface ContestForImport {
   id: string;
   start_epoch_second: number;
   duration_second: number;
@@ -20,7 +18,7 @@ export interface ImportContest {
   rate_change: string;
 }
 
-export type ImportContests = ImportContest[];
+export type ContestsForImport = ContestForImport[];
 
 // Import original enum as type.
 import type { ContestType as ContestTypeOrigin } from '@prisma/client';
