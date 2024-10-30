@@ -1,5 +1,5 @@
-import type { ImportContests } from '$lib/types/contest';
-import type { ImportTasks } from '$lib/types/task';
+import type { ImportContests, ImportContest } from '$lib/types/contest';
+import type { ImportTasks, ImportTask } from '$lib/types/task';
 
 import * as atCoderProblemsApiClient from '$lib/clients/atcoder_problems';
 import * as aojApiClient from '$lib/clients/aizu_online_judge';
@@ -16,21 +16,53 @@ import * as aojApiClient from '$lib/clients/aizu_online_judge';
 //     ・PCK (All-Japan High School Programming Contest)
 
 export async function getContests(): Promise<ImportContests> {
-  const [atcoder, aoj] = await Promise.all([
-    atCoderProblemsApiClient.getContests(),
-    aojApiClient.getContests(),
-  ]);
-  const contests = atcoder.concat(aoj);
+  try {
+    const [atcoder, aoj] = await Promise.all([
+      atCoderProblemsApiClient.getContests().catch((error) => {
+        console.error('Failed to fetch from AtCoder contests', error);
+        return [];
+      }),
+      aojApiClient.getContests().catch((error) => {
+        console.error('Failed to fetch from AOJ contests', error);
+        return [];
+      }),
+    ]);
 
-  return contests;
+    const contestsMap = new Map<string, ImportContest>();
+
+    [...atcoder, ...aoj].forEach((contest) => {
+      contestsMap.set(contest.id, contest);
+    });
+
+    return Array.from(contestsMap.values());
+  } catch (error) {
+    console.error('Failed to fetch contests', error);
+    throw error;
+  }
 }
 
 export async function getTasks(): Promise<ImportTasks> {
-  const [atcoder, aoj] = await Promise.all([
-    atCoderProblemsApiClient.getTasks(),
-    aojApiClient.getTasks(),
-  ]);
-  const tasks = atcoder.concat(aoj);
+  try {
+    const [atcoder, aoj] = await Promise.all([
+      atCoderProblemsApiClient.getTasks().catch((error) => {
+        console.error('Failed to fetch from AtCoder tasks', error);
+        return [];
+      }),
+      aojApiClient.getTasks().catch((error) => {
+        console.error('Failed to fetch from AOJ tasks', error);
+        return [];
+      }),
+    ]);
 
-  return tasks;
+    const tasksMap = new Map<string, ImportTask>();
+
+    [...atcoder, ...aoj].forEach((task) => {
+      tasksMap.set(task.id, task);
+    });
+
+    return Array.from(tasksMap.values());
+  } catch (error) {
+    console.error('Failed to fetch tasks', error);
+    throw error;
+  }
 }
