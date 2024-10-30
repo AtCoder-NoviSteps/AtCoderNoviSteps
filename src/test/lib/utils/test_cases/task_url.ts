@@ -221,6 +221,11 @@ export const aojCourses = [
   }),
 ];
 
+// PCK contests follow these patterns:
+// - Contest ID format: PCK(Prelim|Final)<YEAR>
+// - Task ID format:
+//   - Recent contests (2023+): 4xxx
+//   - Older contests: 0xxx
 export const aojPck = [
   createTestCaseForTaskUrl('AOJ, PCK Prelim 2023 - 4012')({
     contestId: 'PCKPrelim2023',

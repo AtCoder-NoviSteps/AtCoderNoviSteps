@@ -85,7 +85,7 @@ describe('Task', () => {
       expect(countAcceptedTasks([])).toBe(0);
     });
 
-    describe('when 0 out of 3 are is_ac = true are given', () => {
+    describe('when 0 task is accepted out of 3 total tasks', () => {
       const testCases: TestCasesForTaskResults = [
         {
           taskResults: taskResultsForUserId2,
@@ -102,7 +102,7 @@ describe('Task', () => {
       );
     });
 
-    describe('when 2 out of 3 are is_ac = true given', () => {
+    describe('when 2 tasks are accepted out of 3 total tasks', () => {
       const testCases: TestCasesForTaskResults = [
         {
           taskResults: taskResultsForUserId3,
@@ -119,7 +119,7 @@ describe('Task', () => {
       );
     });
 
-    describe('when 3 out of 3 are is_ac = true given', () => {
+    describe('when 3 tasks are accepted out of 3 total tasks', () => {
       const testCases: TestCasesForTaskResults = [
         {
           taskResults: taskResultsForUserId4,
@@ -184,7 +184,7 @@ describe('Task', () => {
       expect(areAllTasksAccepted([], [])).toBeFalsy();
     });
 
-    describe('when 0 out of 3 are is_ac = true given', () => {
+    describe('when 0 task is accepted out of 3 total tasks', () => {
       const testCases: TestCasesForTaskResults = [
         {
           taskResults: taskResultsForUserId2,
@@ -196,7 +196,7 @@ describe('Task', () => {
       });
     });
 
-    describe('when 2 out of 3 are is_ac = true given', () => {
+    describe('when 2 tasks are accepted out of 3 total tasks', () => {
       const testCases: TestCasesForTaskResults = [
         {
           taskResults: taskResultsForUserId3,
@@ -208,7 +208,7 @@ describe('Task', () => {
       });
     });
 
-    describe('when 3 out of 3 are is_ac = true given', () => {
+    describe('when 3 tasks are accepted out of 3 total tasks', () => {
       const testCases: TestCasesForTaskResults = [
         {
           taskResults: taskResultsForUserId4,
@@ -220,7 +220,7 @@ describe('Task', () => {
       });
     });
 
-    describe('when 4 out of 4 are is_ac = true given', () => {
+    describe('when 4 tasks are accepted out of 4 total tasks', () => {
       const testCases: TestCasesForTaskResults = [
         {
           taskResults: taskResultsForUserId5,
@@ -238,7 +238,7 @@ describe('Task', () => {
       expect(areAllTasksAccepted([], [])).toBeFalsy();
     });
 
-    describe('when 0 out of 3 is is_ac = true task results and 3 workbook tasks are given', () => {
+    describe('when 0 task is accepted out of 3 total task results and 3 workbook tasks are given', () => {
       const testCases: TestCasesForWorkBookTasks = [
         {
           taskResults: taskResultsForUserId2,
@@ -257,7 +257,7 @@ describe('Task', () => {
       );
     });
 
-    describe('when 2 out of 3 are is_ac = true task results and 3 workbook tasks are given', () => {
+    describe('when 2 tasks are accepted out of 3 total task results and 3 workbook tasks are given', () => {
       const testCases: TestCasesForWorkBookTasks = [
         {
           taskResults: taskResultsForUserId3,
@@ -276,7 +276,7 @@ describe('Task', () => {
       );
     });
 
-    describe('when 3 out of 3 are is_ac = true task results and 3 workbook tasks are given', () => {
+    describe('when 3 tasks are accepted out of 3 total task results and 3 workbook tasks are given', () => {
       const testCases: TestCasesForWorkBookTasks = [
         {
           taskResults: taskResultsForUserId4,
@@ -295,7 +295,7 @@ describe('Task', () => {
       );
     });
 
-    describe('when 4 out of 4 are is_ac = true task results and 3 workbook tasks are given', () => {
+    describe('when 4 tasks are accepted out of 4 total task results and 3 workbook tasks are given', () => {
       const testCases: TestCasesForWorkBookTasks = [
         {
           taskResults: taskResultsForUserId5,
