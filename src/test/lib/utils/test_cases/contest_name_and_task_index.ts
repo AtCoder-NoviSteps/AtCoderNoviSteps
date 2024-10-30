@@ -157,314 +157,176 @@ export const mathAndAlgorithm = [
   }),
 ];
 
-export const arc = [
-  createTestCaseForContestNameAndTaskIndex('ARC001, task A')({
-    contestId: 'arc001',
-    taskTableIndex: 'A',
-    expected: 'ARC001 - A',
-  }),
-  createTestCaseForContestNameAndTaskIndex('ARC002, task B')({
-    contestId: 'arc002',
-    taskTableIndex: 'B',
-    expected: 'ARC002 - B',
-  }),
-  createTestCaseForContestNameAndTaskIndex('ARC057, task C')({
-    contestId: 'arc057',
-    taskTableIndex: 'C',
-    expected: 'ARC057 - C',
-  }),
-  createTestCaseForContestNameAndTaskIndex('ARC058, task D')({
-    contestId: 'arc058',
-    taskTableIndex: 'D',
-    expected: 'ARC058 - D',
-  }),
-  createTestCaseForContestNameAndTaskIndex('ARC099, task E')({
-    contestId: 'arc099',
-    taskTableIndex: 'E',
-    expected: 'ARC099 - E',
-  }),
-  createTestCaseForContestNameAndTaskIndex('ARC100, task F')({
-    contestId: 'arc100',
-    taskTableIndex: 'F',
-    expected: 'ARC100 - F',
-  }),
-  createTestCaseForContestNameAndTaskIndex('ARC101, task C')({
-    contestId: 'arc101',
-    taskTableIndex: 'C',
-    expected: 'ARC101 - C',
-  }),
-  createTestCaseForContestNameAndTaskIndex('ARC103, task D')({
-    contestId: 'arc103',
-    taskTableIndex: 'D',
-    expected: 'ARC103 - D',
-  }),
-  createTestCaseForContestNameAndTaskIndex('ARC104, task A')({
-    contestId: 'arc104',
-    taskTableIndex: 'A',
-    expected: 'ARC104 - A',
-  }),
-  createTestCaseForContestNameAndTaskIndex('ARC105, task B')({
-    contestId: 'arc105',
-    taskTableIndex: 'B',
-    expected: 'ARC105 - B',
-  }),
-  createTestCaseForContestNameAndTaskIndex('ARC182, task C')({
-    contestId: 'arc182',
-    taskTableIndex: 'C',
-    expected: 'ARC182 - C',
-  }),
-  createTestCaseForContestNameAndTaskIndex('ARC183, task D')({
-    contestId: 'arc183',
-    taskTableIndex: 'D',
-    expected: 'ARC183 - D',
-  }),
-];
+const generateArcTestCases = (
+  contestIds: string[],
+  taskIndices: string[],
+): { name: string; value: TestCaseForContestNameAndTaskIndex }[] => {
+  return zip(contestIds, taskIndices).map(([contestId, taskIndex]) => {
+    const testCase = createTestCaseForContestNameAndTaskIndex(`ARC${contestId}, task ${taskIndex}`)(
+      {
+        contestId: `arc${contestId}`,
+        taskTableIndex: taskIndex,
+        expected: `ARC${contestId} - ${taskIndex}`,
+      },
+    );
 
-export const agc = [
-  createTestCaseForContestNameAndTaskIndex('AGC001, task A')({
-    contestId: 'agc001',
-    taskTableIndex: 'A',
-    expected: 'AGC001 - A',
-  }),
-  createTestCaseForContestNameAndTaskIndex('AGC002, task B')({
-    contestId: 'agc002',
-    taskTableIndex: 'B',
-    expected: 'AGC002 - B',
-  }),
-  createTestCaseForContestNameAndTaskIndex('AGC009, task C')({
-    contestId: 'agc009',
-    taskTableIndex: 'C',
-    expected: 'AGC009 - C',
-  }),
-  createTestCaseForContestNameAndTaskIndex('AGC010, task D')({
-    contestId: 'agc010',
-    taskTableIndex: 'D',
-    expected: 'AGC010 - D',
-  }),
-  createTestCaseForContestNameAndTaskIndex('AGC011, task E')({
-    contestId: 'agc011',
-    taskTableIndex: 'E',
-    expected: 'AGC011 - E',
-  }),
-  createTestCaseForContestNameAndTaskIndex('AGC066, task F')({
-    contestId: 'agc066',
-    taskTableIndex: 'F',
-    expected: 'AGC066 - F',
-  }),
-  createTestCaseForContestNameAndTaskIndex('AGC067, task E')({
-    contestId: 'agc067',
-    taskTableIndex: 'E',
-    expected: 'AGC067 - E',
-  }),
-];
+    return testCase;
+  });
+};
 
-export const aojCourses = [
-  createTestCaseForContestNameAndTaskIndex('AOJ Courses, ITP1 1_A')({
-    contestId: 'ITP1',
-    taskTableIndex: 'ITP1_1_A',
-    expected: 'AOJ Courses - ITP1_1_A',
-  }),
-  createTestCaseForContestNameAndTaskIndex('AOJ Courses, ITP1 1_B')({
-    contestId: 'ITP1',
-    taskTableIndex: 'ITP1_1_B',
-    expected: 'AOJ Courses - ITP1_1_B',
-  }),
-  createTestCaseForContestNameAndTaskIndex('AOJ Courses, ITP1 1_D')({
-    contestId: 'ITP1',
-    taskTableIndex: 'ITP1_1_D',
-    expected: 'AOJ Courses - ITP1_1_D',
-  }),
-  createTestCaseForContestNameAndTaskIndex('AOJ Courses, ITP1 2_A')({
-    contestId: 'ITP1',
-    taskTableIndex: 'ITP1_2_A',
-    expected: 'AOJ Courses - ITP1_2_A',
-  }),
-  createTestCaseForContestNameAndTaskIndex('AOJ Courses, ITP1 2_D')({
-    contestId: 'ITP1',
-    taskTableIndex: 'ITP1_2_D',
-    expected: 'AOJ Courses - ITP1_2_D',
-  }),
-  createTestCaseForContestNameAndTaskIndex('AOJ Courses, ITP1 9_A')({
-    contestId: 'ITP1',
-    taskTableIndex: 'ITP1_9_A',
-    expected: 'AOJ Courses - ITP1_9_A',
-  }),
-  createTestCaseForContestNameAndTaskIndex('AOJ Courses, ITP1 9_D')({
-    contestId: 'ITP1',
-    taskTableIndex: 'ITP1_9_D',
-    expected: 'AOJ Courses - ITP1_9_D',
-  }),
-  createTestCaseForContestNameAndTaskIndex('AOJ Courses, ITP1 10_A')({
-    contestId: 'ITP1',
-    taskTableIndex: 'ITP1_10_A',
-    expected: 'AOJ Courses - ITP1_10_A',
-  }),
-  createTestCaseForContestNameAndTaskIndex('AOJ Courses, ITP1 10_D')({
-    contestId: 'ITP1',
-    taskTableIndex: 'ITP1_10_D',
-    expected: 'AOJ Courses - ITP1_10_D',
-  }),
-  createTestCaseForContestNameAndTaskIndex('AOJ Courses, ITP1 11_A')({
-    contestId: 'ITP1',
-    taskTableIndex: 'ITP1_11_A',
-    expected: 'AOJ Courses - ITP1_11_A',
-  }),
-  createTestCaseForContestNameAndTaskIndex('AOJ Courses, ITP1 11_D')({
-    contestId: 'ITP1',
-    taskTableIndex: 'ITP1_11_D',
-    expected: 'AOJ Courses - ITP1_11_D',
-  }),
-  createTestCaseForContestNameAndTaskIndex('AOJ Courses, ALDS1 1_A')({
-    contestId: 'ALDS1',
-    taskTableIndex: 'ALDS1_1_A',
-    expected: 'AOJ Courses - ALDS1_1_A',
-  }),
-  createTestCaseForContestNameAndTaskIndex('AOJ Courses, ALDS1 1_B')({
-    contestId: 'ALDS1',
-    taskTableIndex: 'ALDS1_1_B',
-    expected: 'AOJ Courses - ALDS1_1_B',
-  }),
-  createTestCaseForContestNameAndTaskIndex('AOJ Courses, ALDS1 1_D')({
-    contestId: 'ALDS1',
-    taskTableIndex: 'ALDS1_1_D',
-    expected: 'AOJ Courses - ALDS1_1_D',
-  }),
-  createTestCaseForContestNameAndTaskIndex('AOJ Courses, ALDS1 15_A')({
-    contestId: 'ALDS1',
-    taskTableIndex: 'ALDS1_15_A',
-    expected: 'AOJ Courses - ALDS1_15_A',
-  }),
-  createTestCaseForContestNameAndTaskIndex('AOJ Courses, ALDS1 15_D')({
-    contestId: 'ALDS1',
-    taskTableIndex: 'ALDS1_15_D',
-    expected: 'AOJ Courses - ALDS1_15_D',
-  }),
-  createTestCaseForContestNameAndTaskIndex('AOJ Courses, ITP2 1_A')({
-    contestId: 'ITP2',
-    taskTableIndex: 'ITP2_1_A',
-    expected: 'AOJ Courses - ITP2_1_A',
-  }),
-  createTestCaseForContestNameAndTaskIndex('AOJ Courses, ITP2 1_D')({
-    contestId: 'ITP2',
-    taskTableIndex: 'ITP2_1_D',
-    expected: 'AOJ Courses - ITP2_1_D',
-  }),
-  createTestCaseForContestNameAndTaskIndex('AOJ Courses, ITP2 11_A')({
-    contestId: 'ITP2',
-    taskTableIndex: 'ITP2_11_A',
-    expected: 'AOJ Courses - ITP2_11_A',
-  }),
-  createTestCaseForContestNameAndTaskIndex('AOJ Courses, ITP2 11_D')({
-    contestId: 'ITP2',
-    taskTableIndex: 'ITP2_11_D',
-    expected: 'AOJ Courses - ITP2_11_D',
-  }),
-  createTestCaseForContestNameAndTaskIndex('AOJ Courses, DPL 1_A')({
-    contestId: 'DPL',
-    taskTableIndex: 'DPL_1_A',
-    expected: 'AOJ Courses - DPL_1_A',
-  }),
-  createTestCaseForContestNameAndTaskIndex('AOJ Courses, DPL 1_I')({
-    contestId: 'DPL',
-    taskTableIndex: 'DPL_1_I',
-    expected: 'AOJ Courses - DPL_1_I',
-  }),
-  createTestCaseForContestNameAndTaskIndex('AOJ Courses, DPL 5_A')({
-    contestId: 'DPL',
-    taskTableIndex: 'DPL_5_A',
-    expected: 'AOJ Courses - DPL_5_A',
-  }),
-  createTestCaseForContestNameAndTaskIndex('AOJ Courses, DPL 5_L')({
-    contestId: 'DPL',
-    taskTableIndex: 'DPL_5_L',
-    expected: 'AOJ Courses - DPL_5_L',
-  }),
-];
+export const arc = generateArcTestCases(
+  ['001', '002', '057', '058', '099', '100', '101', '103', '104', '105', '182', '183'],
+  ['A', 'B', 'C', 'D', 'E', 'F', 'C', 'D', 'A', 'B', 'C', 'D'],
+);
 
-export const aojPck = [
-  createTestCaseForContestNameAndTaskIndex('AOJ, PCK Prelim 2023 - 4012')({
-    contestId: 'PCKPrelim2023',
-    taskTableIndex: '4012',
-    expected: 'AOJ - パソコン甲子園予選2023 - 4012',
-  }),
-  createTestCaseForContestNameAndTaskIndex('AOJ, PCK Prelim 2023 - 4013')({
-    contestId: 'PCKPrelim2023',
-    taskTableIndex: '4013',
-    expected: 'AOJ - パソコン甲子園予選2023 - 4013',
-  }),
-  createTestCaseForContestNameAndTaskIndex('AOJ, PCK Prelim 2023 - 4022')({
-    contestId: 'PCKPrelim2023',
-    taskTableIndex: '4022',
-    expected: 'AOJ - パソコン甲子園予選2023 - 4022',
-  }),
-  createTestCaseForContestNameAndTaskIndex('AOJ, PCK Prelim 2022 - 0479')({
-    contestId: 'PCKPrelim2022',
-    taskTableIndex: '0479',
-    expected: 'AOJ - パソコン甲子園予選2022 - 0479',
-  }),
-  createTestCaseForContestNameAndTaskIndex('AOJ, PCK Prelim 2022 - 0489')({
-    contestId: 'PCKPrelim2022',
-    taskTableIndex: '0489',
-    expected: 'AOJ - パソコン甲子園予選2022 - 0489',
-  }),
-  createTestCaseForContestNameAndTaskIndex('AOJ, PCK Prelim 2005 - 0073')({
-    contestId: 'PCKPrelim2005',
-    taskTableIndex: '0073',
-    expected: 'AOJ - パソコン甲子園予選2005 - 0073',
-  }),
-  createTestCaseForContestNameAndTaskIndex('AOJ, PCK Prelim 2005 - 0092')({
-    contestId: 'PCKPrelim2005',
-    taskTableIndex: '0092',
-    expected: 'AOJ - パソコン甲子園予選2005 - 0092',
-  }),
-  createTestCaseForContestNameAndTaskIndex('AOJ, PCK Prelim 2004 - 0027')({
-    contestId: 'PCKPrelim2004',
-    taskTableIndex: '0027',
-    expected: 'AOJ - パソコン甲子園予選2004 - 0027',
-  }),
-  createTestCaseForContestNameAndTaskIndex('AOJ, PCK Prelim 2004 - 0043')({
-    contestId: 'PCKPrelim2004',
-    taskTableIndex: '0043',
-    expected: 'AOJ - パソコン甲子園予選2004 - 0043',
-  }),
-  createTestCaseForContestNameAndTaskIndex('AOJ, PCK Final 2023 - 4023')({
-    contestId: 'PCKFinal2023',
-    taskTableIndex: '4023',
-    expected: 'AOJ - パソコン甲子園本選2023 - 4023',
-  }),
-  createTestCaseForContestNameAndTaskIndex('AOJ, PCK Final 2023 - 4035')({
-    contestId: 'PCKFinal2023',
-    taskTableIndex: '4035',
-    expected: 'AOJ - パソコン甲子園本選2023 - 4035',
-  }),
-  createTestCaseForContestNameAndTaskIndex('AOJ, PCK Final 2022 - 4000')({
-    contestId: 'PCKFinal2022',
-    taskTableIndex: '4000',
-    expected: 'AOJ - パソコン甲子園本選2022 - 4000',
-  }),
-  createTestCaseForContestNameAndTaskIndex('AOJ, PCK Final 2022 - 4011')({
-    contestId: 'PCKFinal2022',
-    taskTableIndex: '4011',
-    expected: 'AOJ - パソコン甲子園本選2022 - 4011',
-  }),
-  createTestCaseForContestNameAndTaskIndex('AOJ, PCK Final 2004 - 0044')({
-    contestId: 'PCKFinal2004',
-    taskTableIndex: '0044',
-    expected: 'AOJ - パソコン甲子園本選2004 - 0044',
-  }),
-  createTestCaseForContestNameAndTaskIndex('AOJ, PCK Final 2004 - 0097')({
-    contestId: 'PCKFinal2004',
-    taskTableIndex: '0097',
-    expected: 'AOJ - パソコン甲子園本選2004 - 0097',
-  }),
-  createTestCaseForContestNameAndTaskIndex('AOJ, PCK Final 2003 - 0000')({
-    contestId: 'PCKFinal2003',
-    taskTableIndex: '0000',
-    expected: 'AOJ - パソコン甲子園本選2003 - 0000',
-  }),
-  createTestCaseForContestNameAndTaskIndex('AOJ, PCK Final 2003 - 0098')({
-    contestId: 'PCKFinal2003',
-    taskTableIndex: '0098',
-    expected: 'AOJ - パソコン甲子園本選2003 - 0098',
-  }),
-];
+const generateAgcTestCases = (
+  contestIds: string[],
+  taskIndices: string[],
+): { name: string; value: TestCaseForContestNameAndTaskIndex }[] => {
+  return zip(contestIds, taskIndices).map(([contestId, taskIndex]) => {
+    const testCase = createTestCaseForContestNameAndTaskIndex(`AGC${contestId}, task ${taskIndex}`)(
+      {
+        contestId: `agc${contestId}`,
+        taskTableIndex: taskIndex,
+        expected: `AGC${contestId} - ${taskIndex}`,
+      },
+    );
+
+    return testCase;
+  });
+};
+
+export const agc = generateAgcTestCases(
+  ['001', '002', '009', '010', '011', '066', '067'],
+  ['A', 'B', 'C', 'D', 'E', 'F', 'E'],
+);
+
+const generateAojCoursesTestCases = (
+  contestIds: string[],
+  taskIndices: string[],
+): { name: string; value: TestCaseForContestNameAndTaskIndex }[] => {
+  return zip(contestIds, taskIndices).map(([contestId, taskIndex]) => {
+    const testCase = createTestCaseForContestNameAndTaskIndex(
+      `AOJ Courses, ${contestId} ${taskIndex}`,
+    )({
+      contestId: `${contestId}`,
+      taskTableIndex: `${contestId}_${taskIndex}`,
+      expected: `AOJ Courses - ${contestId}_${taskIndex}`,
+    });
+
+    return testCase;
+  });
+};
+
+export const aojCourses = generateAojCoursesTestCases(
+  [
+    'ITP1',
+    'ITP1',
+    'ITP1',
+    'ITP1',
+    'ITP1',
+    'ITP1',
+    'ITP1',
+    'ITP1',
+    'ITP1',
+    'ITP1',
+    'ITP1',
+    'ALDS1',
+    'ALDS1',
+    'ALDS1',
+    'ALDS1',
+    'ALDS1',
+    'ITP2',
+    'ITP2',
+    'ITP2',
+    'ITP2',
+    'DPL',
+    'DPL',
+    'DPL',
+    'DPL',
+  ],
+  [
+    '1_A',
+    '1_B',
+    '1_D',
+    '2_A',
+    '2_D',
+    '9_A',
+    '9_D',
+    '10_A',
+    '10_D',
+    '11_A',
+    '11_D',
+    '1_A',
+    '1_B',
+    '1_D',
+    '15_A',
+    '15_B',
+    '1_A',
+    '1_D',
+    '11_A',
+    '11_D',
+    '1_A',
+    '1_I',
+    '5_A',
+    '5_L',
+  ],
+);
+
+const generateAojPckTestCases = (
+  contestIds: string[],
+  taskIndices: string[],
+): { name: string; value: TestCaseForContestNameAndTaskIndex }[] => {
+  return zip(contestIds, taskIndices).map(([contestId, taskIndex]) => {
+    const testCase = createTestCaseForContestNameAndTaskIndex(
+      `AOJ, PCK${contestId} - ${taskIndex}`,
+    )({
+      contestId: `PCK${contestId}`,
+      taskTableIndex: taskIndex,
+      expected: `AOJ - パソコン甲子園${contestId.replace('Prelim', '予選').replace('Final', '本選')} - ${taskIndex}`,
+    });
+
+    return testCase;
+  });
+};
+
+export const aojPck = generateAojPckTestCases(
+  [
+    'Prelim2023',
+    'Prelim2023',
+    'Prelim2023',
+    'Prelim2022',
+    'Prelim2022',
+    'Prelim2005',
+    'Prelim2005',
+    'Prelim2004',
+    'Prelim2004',
+    'Final2023',
+    'Final2023',
+    'Final2022',
+    'Final2022',
+    'Final2004',
+    'Final2004',
+    'Final2003',
+    'Final2003',
+  ],
+  [
+    '4012',
+    '4013',
+    '4022',
+    '0479',
+    '0489',
+    '0073',
+    '0092',
+    '0027',
+    '0043',
+    '4023',
+    '4035',
+    '4000',
+    '4011',
+    '0044',
+    '0097',
+    '0000',
+    '0098',
+  ],
+);
