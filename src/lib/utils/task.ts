@@ -1,22 +1,40 @@
+import type { UrlGenerator, UrlGenerators } from '$lib/types/url';
 import { type TaskResult, type TaskResults, TaskGrade, type TaskGrades } from '$lib/types/task';
 import { type WorkBookTaskBase } from '$lib/types/workbook';
 import { ATCODER_BASE_CONTEST_URL, AOJ_TASKS_URL } from '$lib/constants/urls';
 import { getPrefixForAojCourses, getContestPriority } from '$lib/utils/contest';
 
 // TODO: Codeforces、yukicoder、BOJなどに対応できるようにする
-export const getTaskUrl = (contestId: string, taskId: string) => {
-  // Default: AtCoder
-  let taskUrl = `${ATCODER_BASE_CONTEST_URL}/${contestId}/tasks/${taskId}`;
+export const getTaskUrl = (contestId: string, taskId: string): string => {
+  const generators = urlGenerators.find((generator) => generator.canHandle(contestId));
+  return generators?.generateUrl(contestId, taskId) ?? '';
+};
 
-  // AOJ Courses and PCK (prelim and final)
-  const prefixForAojCourses = getPrefixForAojCourses();
-
-  if (prefixForAojCourses.includes(contestId) || contestId.startsWith('PCK')) {
-    taskUrl = `${AOJ_TASKS_URL}/${taskId}`;
+// Default case
+class AtCoderGenerator implements UrlGenerator {
+  canHandle(contestId: string): boolean {
+    return contestId !== '' || contestId !== null;
   }
 
-  return taskUrl;
-};
+  generateUrl(contestId: string, taskId: string): string {
+    return `${ATCODER_BASE_CONTEST_URL}/${contestId}/tasks/${taskId}`;
+  }
+}
+
+class AojGenerator implements UrlGenerator {
+  canHandle(contestId: string): boolean {
+    return getPrefixForAojCourses().includes(contestId) || contestId.startsWith('PCK');
+  }
+
+  // Note: contestId is not used because it is not included in the URL.
+  generateUrl(_: string, taskId: string): string {
+    return `${AOJ_TASKS_URL}/${taskId}`;
+  }
+}
+
+// Note:
+// Default generator last
+const urlGenerators: UrlGenerators = [new AojGenerator(), new AtCoderGenerator()];
 
 export const countAcceptedTasks = (taskResults: TaskResults) => {
   const acceptedResults = taskResults.filter((taskResult: TaskResult) => taskResult.is_ac);
