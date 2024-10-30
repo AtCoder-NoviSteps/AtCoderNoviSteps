@@ -218,6 +218,13 @@ const generateAojCoursesTestCases = (
   });
 };
 
+/**
+ * Test cases for AOJ Courses
+ * - ITP1: Introduction to Programming I
+ * - ALDS1: Algorithms and Data Structures I
+ * - ITP2: Introduction to Programming II
+ * - DPL: Discrete Optimization Problems
+ */
 export const aojCourses = generateAojCoursesTestCases(
   [
     'ITP1',
@@ -290,6 +297,11 @@ const generateAojPckTestCases = (
   });
 };
 
+/**
+ * Test cases for AOJ PCK (パソコン甲子園) contests
+ * Includes both preliminary (予選) and final (本選) rounds
+ * Format: {round}{year} - {problemId}
+ */
 export const aojPck = generateAojPckTestCases(
   [
     'Prelim2023',

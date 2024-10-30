@@ -5,8 +5,11 @@ import * as atCoderProblemsApiClient from '$lib/clients/atcoder_problems';
 import * as aojApiClient from '$lib/clients/aizu_online_judge';
 
 // 各コンテストサイトのコンテスト情報・問題情報をAPIから取得・集約する
+// Fetch and aggregate contest and problem information from various contest sites via their APIs
 //
 // 対応コンテストサイト (2024年10月現在)
+// Supported Contest Sites (as of October 2024):
+//
 // ・AtCoder: AtCoder Problems API
 //   https://github.com/kenkoooo/AtCoderProblems/blob/master/doc/api.md
 //
