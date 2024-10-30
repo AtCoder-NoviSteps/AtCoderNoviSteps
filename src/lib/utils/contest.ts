@@ -189,14 +189,29 @@ export const getContestNameLabel = (contest_id: string) => {
   }
 
   if (contest_id.startsWith('PCK')) {
-    return (
-      'AOJ - ' +
-      contest_id.replace('PCK', 'パソコン甲子園').replace('Prelim', '予選').replace('Final', '本選')
-    );
+    const aojPckLabel = getAojPckLabel(contest_id);
+
+    return aojPckLabel;
   }
 
   return contest_id.toUpperCase();
 };
+
+function getAojPckLabel(contestId: string): string {
+  const PCK_TRANSLATIONS = {
+    PCK: 'パソコン甲子園',
+    Prelim: '予選',
+    Final: '本選',
+  };
+
+  const baseLabel = 'AOJ - ';
+
+  Object.entries(PCK_TRANSLATIONS).forEach(([abbrEnglish, japanese]) => {
+    contestId = contestId.replace(abbrEnglish, japanese);
+  });
+
+  return baseLabel + contestId;
+}
 
 export const addContestNameToTaskIndex = (contestId: string, taskTableIndex: string): string => {
   const contestName = getContestNameLabel(contestId);
