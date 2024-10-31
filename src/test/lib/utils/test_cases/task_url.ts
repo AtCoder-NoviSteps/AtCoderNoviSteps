@@ -63,8 +63,8 @@ export const atCoderTasks = [
   }),
   createTestCaseForTaskUrl('EDPC, task A')({
     contestId: 'dp',
-    taskId: 'dp_b',
-    expected: `${ATCODER_BASE_CONTEST_URL}/dp/tasks/dp_b`,
+    taskId: 'dp_a',
+    expected: `${ATCODER_BASE_CONTEST_URL}/dp/tasks/dp_a`,
   }),
   createTestCaseForTaskUrl('TDPC, task A')({
     contestId: 'tdpc',
