@@ -3,12 +3,33 @@ import { ATCODER_PROBLEMS_API_BASE_URL } from '$lib/constants/urls';
 import type { ContestsForImport } from '$lib/types/contest';
 import type { TasksForImport } from '$lib/types/task';
 
+type FetchAPIConfig<T> = {
+  endpoint: string;
+  errorMessage: string;
+  validateResponse?: (data: T) => boolean;
+};
+
+async function fetchAPIWithConfig<T>({
+  endpoint,
+  errorMessage,
+  validateResponse,
+}: FetchAPIConfig<T>): Promise<T> {
+  const url = `${ATCODER_PROBLEMS_API_BASE_URL}/${endpoint}`;
+  const data = await fetchAPI<T>(url, errorMessage);
+
+  if (validateResponse && !validateResponse(data)) {
+    throw new Error(`Invalid response from AtCoder Problems API: ${data}`);
+  }
+
+  return data;
+}
+
 export async function getContests(): Promise<ContestsForImport> {
-  const allContestsUrl = `${ATCODER_PROBLEMS_API_BASE_URL}/contests.json`;
-  const contests = await fetchAPI<ContestsForImport>(
-    allContestsUrl,
-    'Failed to fetch contests from AtCoder Problems API',
-  );
+  const contests = await fetchAPIWithConfig<ContestsForImport>({
+    endpoint: 'contests.json',
+    errorMessage: 'Failed to fetch contests from AtCoder Problems API',
+    validateResponse: (data) => Array.isArray(data) && data.length > 0,
+  });
 
   console.log(`Found AtCoder: ${contests.length} contests.`);
 
@@ -16,11 +37,11 @@ export async function getContests(): Promise<ContestsForImport> {
 }
 
 export async function getTasks(): Promise<TasksForImport> {
-  const allProblemsUrl = `${ATCODER_PROBLEMS_API_BASE_URL}/problems.json`;
-  const tasks = await fetchAPI<TasksForImport>(
-    allProblemsUrl,
-    'Failed to fetch tasks from AtCoder Problems API',
-  );
+  const tasks = await fetchAPIWithConfig<TasksForImport>({
+    endpoint: 'problems.json',
+    errorMessage: 'Failed to fetch tasks from AtCoder Problems API',
+    validateResponse: (data) => Array.isArray(data) && data.length > 0,
+  });
 
   console.log(`Found AtCoder: ${tasks.length} tasks.`);
 
