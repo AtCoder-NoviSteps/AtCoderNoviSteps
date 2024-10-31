@@ -28,7 +28,7 @@ export async function fetchAPI<T>(url: string, error_messages: string): Promise<
       throw new Error(`Request failed with status: ${response.status}`);
     }
 
-    const responseJson = response.json();
+    const responseJson = await response.json();
 
     if (responseJson === null || responseJson === undefined) {
       throw new Error('Failed to parse the response.');
