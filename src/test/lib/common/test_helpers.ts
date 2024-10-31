@@ -34,6 +34,10 @@ export const createTestCase =
  * @returns {[T, U][]} An array of tuples, where each tuple contains one element from each of the input arrays.
  */
 export function zip<T, U>(firstArray: T[], secondArray: U[]): [T, U][] {
+  if (!firstArray || !secondArray) {
+    throw new Error('Both arrays must be non-null');
+  }
+
   const length = Math.min(firstArray.length, secondArray.length);
   return Array.from({ length }, (_, i) => [firstArray[i], secondArray[i]]);
 }
