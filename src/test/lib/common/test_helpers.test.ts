@@ -105,4 +105,25 @@ describe('zip', () => {
 
     expect(result).toEqual([]);
   });
+
+  it('expects to throw an error when the first array is null', () => {
+    const firstArray = null as unknown as number[];
+    const secondArray = ['a', 'b', 'c'];
+
+    expect(() => zip(firstArray, secondArray)).toThrow('Both arrays must be non-null');
+  });
+
+  it('expects to throw an error when the second array is null', () => {
+    const firstArray = ['a', 'b', 'c'];
+    const secondArray = null as unknown as number[];
+
+    expect(() => zip(firstArray, secondArray)).toThrow('Both arrays must be non-null');
+  });
+
+  it('expects to throw an error when the first and second array are null', () => {
+    const firstArray = null as unknown as number[];
+    const secondArray = null as unknown as number[];
+
+    expect(() => zip(firstArray, secondArray)).toThrow('Both arrays must be non-null');
+  });
 });

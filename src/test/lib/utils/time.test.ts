@@ -11,15 +11,15 @@ describe('Delay', () => {
     expect(end - start).toBeGreaterThanOrEqual(milliseconds);
   });
 
-  it('expected to be thrown an error if the delay duration is negative', () => {
-    expect(() => delay(-100)).toThrow('Delay duration must be non-negative');
-  });
-
   it('expected to be resolved immediately if the delay duration is zero', async () => {
     const start = performance.now();
     await delay(0);
     const end = performance.now();
 
     expect(end - start).toBeLessThan(50); // Increased threshold for CI environment reliability.
+  });
+
+  it('expected to be thrown an error if the delay duration is negative', () => {
+    expect(() => delay(-100)).toThrow('Delay duration must be non-negative');
   });
 });
