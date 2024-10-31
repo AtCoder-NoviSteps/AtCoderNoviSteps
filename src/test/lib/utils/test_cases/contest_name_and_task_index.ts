@@ -201,6 +201,32 @@ export const agc = generateAgcTestCases(
   ['A', 'B', 'C', 'D', 'E', 'F', 'E'],
 );
 
+/**
+ * Test cases for AOJ Courses
+ * - ITP1: Introduction to Programming I
+ * - ALDS1: Algorithms and Data Structures I
+ * - ITP2: Introduction to Programming II
+ * - DPL: Discrete Optimization Problems
+ */
+const AOJ_COURSES_TEST_DATA = {
+  ITP1: {
+    contestId: 'ITP1',
+    tasks: ['1_A', '1_B', '1_D', '2_A', '2_D', '9_A', '9_D', '10_A', '10_D', '11_A', '11_D'],
+  },
+  ALDS1: {
+    contestId: 'ALDS1',
+    tasks: ['1_A', '1_B', '1_D', '15_A', '15_B'],
+  },
+  ITP2: {
+    contestId: 'ITP2',
+    tasks: ['1_A', '1_D', '11_A', '11_D'],
+  },
+  DPL: {
+    contestId: 'DPL',
+    tasks: ['1_A', '1_I', '5_A', '5_L'],
+  },
+};
+
 const generateAojCoursesTestCases = (
   contestIds: string[],
   taskIndices: string[],
@@ -218,67 +244,49 @@ const generateAojCoursesTestCases = (
   });
 };
 
-/**
- * Test cases for AOJ Courses
- * - ITP1: Introduction to Programming I
- * - ALDS1: Algorithms and Data Structures I
- * - ITP2: Introduction to Programming II
- * - DPL: Discrete Optimization Problems
- */
-export const aojCourses = generateAojCoursesTestCases(
-  [
-    'ITP1',
-    'ITP1',
-    'ITP1',
-    'ITP1',
-    'ITP1',
-    'ITP1',
-    'ITP1',
-    'ITP1',
-    'ITP1',
-    'ITP1',
-    'ITP1',
-    'ALDS1',
-    'ALDS1',
-    'ALDS1',
-    'ALDS1',
-    'ALDS1',
-    'ITP2',
-    'ITP2',
-    'ITP2',
-    'ITP2',
-    'DPL',
-    'DPL',
-    'DPL',
-    'DPL',
-  ],
-  [
-    '1_A',
-    '1_B',
-    '1_D',
-    '2_A',
-    '2_D',
-    '9_A',
-    '9_D',
-    '10_A',
-    '10_D',
-    '11_A',
-    '11_D',
-    '1_A',
-    '1_B',
-    '1_D',
-    '15_A',
-    '15_B',
-    '1_A',
-    '1_D',
-    '11_A',
-    '11_D',
-    '1_A',
-    '1_I',
-    '5_A',
-    '5_L',
-  ],
+export const aojCourses = Object.entries(AOJ_COURSES_TEST_DATA).flatMap(([contestId, tasks]) =>
+  generateAojCoursesTestCases(Array(tasks.tasks.length).fill(contestId), tasks.tasks),
 );
+
+/**
+ * Test cases for AOJ PCK (パソコン甲子園) contests
+ * Includes both preliminary (予選) and final (本選) rounds
+ * Format: {round}{year} - {problemId}
+ */
+const AOJ_PCK_TEST_DATA = {
+  Prelim2023: {
+    contestId: 'Prelim2023',
+    tasks: ['4012', '4013', '4022'],
+  },
+  Prelim2022: {
+    contestId: 'Prelim2022',
+    tasks: ['0479', '0489'],
+  },
+  Prelim2005: {
+    contestId: 'Prelim2005',
+    tasks: ['0073', '0092'],
+  },
+  Prelim2004: {
+    contestId: 'Prelim2004',
+    tasks: ['0027', '0043'],
+  },
+  Final2023: {
+    contestId: 'Final2023',
+    tasks: ['4023', '4035'],
+  },
+  Final2022: {
+    contestId: 'Final2022',
+    tasks: ['4000', '4011'],
+  },
+  Final2004: {
+    contestId: 'Final2004',
+    tasks: ['0044', '0097'],
+  },
+  Final2003: {
+    contestId: 'Final2003',
+    tasks: ['0000', '0098'],
+  },
+};
 
 type PckRound = 'Prelim' | 'Final';
 type PckYear = '2003' | '2004' | '2005' | '2022' | '2023';
@@ -302,48 +310,6 @@ const generateAojPckTestCases = (
   });
 };
 
-/**
- * Test cases for AOJ PCK (パソコン甲子園) contests
- * Includes both preliminary (予選) and final (本選) rounds
- * Format: {round}{year} - {problemId}
- */
-export const aojPck = generateAojPckTestCases(
-  [
-    'Prelim2023',
-    'Prelim2023',
-    'Prelim2023',
-    'Prelim2022',
-    'Prelim2022',
-    'Prelim2005',
-    'Prelim2005',
-    'Prelim2004',
-    'Prelim2004',
-    'Final2023',
-    'Final2023',
-    'Final2022',
-    'Final2022',
-    'Final2004',
-    'Final2004',
-    'Final2003',
-    'Final2003',
-  ],
-  [
-    '4012',
-    '4013',
-    '4022',
-    '0479',
-    '0489',
-    '0073',
-    '0092',
-    '0027',
-    '0043',
-    '4023',
-    '4035',
-    '4000',
-    '4011',
-    '0044',
-    '0097',
-    '0000',
-    '0098',
-  ],
+export const aojPck = Object.entries(AOJ_PCK_TEST_DATA).flatMap(([contestId, tasks]) =>
+  generateAojPckTestCases(Array(tasks.tasks.length).fill(contestId), tasks.tasks),
 );
