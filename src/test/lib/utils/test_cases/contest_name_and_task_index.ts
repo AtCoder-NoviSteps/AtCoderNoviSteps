@@ -280,8 +280,13 @@ export const aojCourses = generateAojCoursesTestCases(
   ],
 );
 
+type PckRound = 'Prelim' | 'Final';
+type PckYear = '2003' | '2004' | '2005' | '2022' | '2023';
+type PckContestId = `${PckRound}${PckYear}`;
+type PckContestIds = PckContestId[];
+
 const generateAojPckTestCases = (
-  contestIds: string[],
+  contestIds: PckContestIds,
   taskIndices: string[],
 ): { name: string; value: TestCaseForContestNameAndTaskIndex }[] => {
   return zip(contestIds, taskIndices).map(([contestId, taskIndex]) => {
