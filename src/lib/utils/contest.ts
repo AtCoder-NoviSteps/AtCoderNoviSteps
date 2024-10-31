@@ -102,13 +102,15 @@ export const classifyContest = (contest_id: string) => {
 };
 
 // AIZU ONLINE JUDGE AOJ Courses
-//
-// ・プログラミング入門: ITP1
-// ・アルゴリズムとデータ構造入門: ALDS1
-// ・プログラミング応用: ITP2
-// ・組み合わせ最適化: DPL
 export function getPrefixForAojCourses() {
-  return ['ITP1', 'ALDS1', 'ITP2', 'DPL'];
+  const AOJ_COURSES = {
+    ITP1: 'プログラミング入門',
+    ALDS1: 'アルゴリズムとデータ構造入門',
+    ITP2: 'プログラミング応用',
+    DPL: '組み合わせ最適化',
+  } as const;
+
+  return Object.keys(AOJ_COURSES);
 }
 
 // priority: 0 (High) - 18 (Low)
