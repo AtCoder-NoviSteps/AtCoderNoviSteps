@@ -13,7 +13,7 @@ export const getTaskUrl = (contestId: string, taskId: string): string => {
 // Default case
 class AtCoderGenerator implements UrlGenerator {
   canHandle(contestId: string): boolean {
-    return contestId !== '' || contestId !== null;
+    return contestId !== '' && contestId !== null;
   }
 
   generateUrl(contestId: string, taskId: string): string {
