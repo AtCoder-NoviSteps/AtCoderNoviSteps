@@ -88,9 +88,9 @@ export const classifyContest = (contest_id: string) => {
     return ContestType.OTHERS;
   }
 
-  const prefixForAojCourses = getPrefixForAojCourses();
+  const prefixForAojCourses = new Set(getPrefixForAojCourses()); // For O(1) lookups
 
-  if (prefixForAojCourses.some((prefix) => contest_id.startsWith(prefix))) {
+  if ([...prefixForAojCourses].some((prefix) => contest_id.startsWith(prefix))) {
     return ContestType.AOJ_COURSES;
   }
 
