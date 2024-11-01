@@ -101,15 +101,15 @@ export const classifyContest = (contest_id: string) => {
   return null;
 };
 
+export const AOJ_COURSES = {
+  ITP1: 'プログラミング入門',
+  ALDS1: 'アルゴリズムとデータ構造入門',
+  ITP2: 'プログラミング応用',
+  DPL: '組み合わせ最適化',
+} as const;
+
 // AIZU ONLINE JUDGE AOJ Courses
 export function getPrefixForAojCourses() {
-  const AOJ_COURSES = {
-    ITP1: 'プログラミング入門',
-    ALDS1: 'アルゴリズムとデータ構造入門',
-    ITP2: 'プログラミング応用',
-    DPL: '組み合わせ最適化',
-  } as const;
-
   return Object.keys(AOJ_COURSES);
 }
 
@@ -192,9 +192,7 @@ export const getContestNameLabel = (contest_id: string) => {
   }
 
   if (contest_id.startsWith('PCK')) {
-    const aojPckLabel = getAojPckLabel(contest_id);
-
-    return aojPckLabel;
+    return getAojPckLabel(contest_id);
   }
 
   return contest_id.toUpperCase();
