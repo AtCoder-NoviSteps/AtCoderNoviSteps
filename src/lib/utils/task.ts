@@ -5,6 +5,13 @@ import { ATCODER_BASE_CONTEST_URL, AOJ_TASKS_URL } from '$lib/constants/urls';
 import { getPrefixForAojCourses, getContestPriority } from '$lib/utils/contest';
 
 // TODO: Codeforces、yukicoder、BOJなどに対応できるようにする
+/**
+ * Generates a URL for a task based on the contest ID and task ID.
+ * Uses a chain of URL generators to handle different contest platforms.
+ * @param contestId - The ID of the contest
+ * @param taskId - The ID of the task
+ * @returns The generated URL or empty string if no suitable generator is found
+ */
 export const getTaskUrl = (contestId: string, taskId: string): string => {
   const generators = urlGenerators.find((generator) => generator.canHandle(contestId));
   return generators?.generateUrl(contestId, taskId) ?? '';

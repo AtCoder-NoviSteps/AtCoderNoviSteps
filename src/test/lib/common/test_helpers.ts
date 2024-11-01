@@ -32,6 +32,15 @@ export const createTestCase =
  * @param {T[]} firstArray - The first array to zip.
  * @param {U[]} secondArray - The second array to zip.
  * @returns {[T, U][]} An array of tuples, where each tuple contains one element from each of the input arrays.
+ * @example
+ * const numbers = [1, 2, 3];
+ * const letters = ['a', 'b', 'c'];
+ * const result = zip(numbers, letters); // [[1, 'a'], [2, 'b'], [3, 'c']]
+ *
+ * // With arrays of different lengths
+ * const short = [1, 2];
+ * const long = ['a', 'b', 'c'];
+ * const result = zip(short, long); // [[1, 'a'], [2, 'b']]
  */
 export function zip<T, U>(firstArray: T[], secondArray: U[]): [T, U][] {
   if (!firstArray || !secondArray) {
