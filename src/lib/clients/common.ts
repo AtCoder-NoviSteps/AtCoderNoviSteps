@@ -1,7 +1,6 @@
 import { delay } from '$lib/utils/time';
 
 // See:
-// https://developer.mozilla.org/ja/docs/Web/API/Fetch_API/Using_Fetch
 // https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
 export async function fetchAPI<T>(url: string, error_messages: string): Promise<T>;
 export async function fetchAPI<T>(url: string, error_messages: string): Promise<T[]>;
@@ -34,7 +33,11 @@ export async function fetchAPI<T>(url: string, error_messages: string): Promise<
       throw new Error('Failed to parse the response.');
     }
 
-    return responseJson as T | T[];
+    if (isArrayResponse<T>(responseJson)) {
+      return responseJson;
+    }
+
+    return responseJson as T;
   } catch (error) {
     console.error(
       error_messages,
@@ -42,4 +45,8 @@ export async function fetchAPI<T>(url: string, error_messages: string): Promise<
     );
     throw error;
   }
+}
+
+function isArrayResponse<T>(response: unknown): response is T[] {
+  return Array.isArray(response);
 }
