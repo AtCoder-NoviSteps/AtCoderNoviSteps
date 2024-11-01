@@ -10,12 +10,7 @@ export type TestCaseForTaskUrl = {
 
 const createTestCaseForTaskUrl = createTestCase<TestCaseForTaskUrl>;
 
-export const atCoderTasks = [
-  createTestCaseForTaskUrl('ABS, task A')({
-    contestId: 'abs',
-    taskId: 'practice_1',
-    expected: `${ATCODER_BASE_CONTEST_URL}/abs/tasks/practice_1`,
-  }),
+const abc365Tasks = [
   createTestCaseForTaskUrl('ABC365, task A')({
     contestId: 'abc365',
     taskId: 'abc365_a',
@@ -51,11 +46,27 @@ export const atCoderTasks = [
     taskId: 'abc365_g',
     expected: `${ATCODER_BASE_CONTEST_URL}/abc365/tasks/abc365_g`,
   }),
+];
+
+const beginnersTasks = [
+  createTestCaseForTaskUrl('ABS, task A')({
+    contestId: 'abs',
+    taskId: 'practice_1',
+    expected: `${ATCODER_BASE_CONTEST_URL}/abs/tasks/practice_1`,
+  }),
   createTestCaseForTaskUrl('APG4b, task A')({
     contestId: 'APG4b',
     taskId: 'APG4b_a',
     expected: `${ATCODER_BASE_CONTEST_URL}/APG4b/tasks/APG4b_a`,
   }),
+  createTestCaseForTaskUrl('JOI 2023 qual 1C, task A')({
+    contestId: 'joi2023yo1c',
+    taskId: 'joi2023_yo1c_a',
+    expected: `${ATCODER_BASE_CONTEST_URL}/joi2023yo1c/tasks/joi2023_yo1c_a`,
+  }),
+];
+
+const educationalTasks = [
   createTestCaseForTaskUrl('Typical90, task A')({
     contestId: 'typical90',
     taskId: 'typical90_a',
@@ -81,11 +92,6 @@ export const atCoderTasks = [
     taskId: 'practice2_a',
     expected: `${ATCODER_BASE_CONTEST_URL}/practice2/tasks/practice2_a`,
   }),
-  createTestCaseForTaskUrl('JOI 2023 qual 1C, task A')({
-    contestId: 'joi2023yo1c',
-    taskId: 'joi2023_yo1c_a',
-    expected: `${ATCODER_BASE_CONTEST_URL}/joi2023yo1c/tasks/joi2023_yo1c_a`,
-  }),
   createTestCaseForTaskUrl('Tessoku book, task A')({
     contestId: 'tessoku-book',
     taskId: 'tessoku_book_a',
@@ -97,6 +103,8 @@ export const atCoderTasks = [
     expected: `${ATCODER_BASE_CONTEST_URL}/math-and-algorithm/tasks/math_and_algorithm_a`,
   }),
 ];
+
+export const atCoderTasks = [...abc365Tasks, ...beginnersTasks, ...educationalTasks];
 
 export const aojCourses = [
   createTestCaseForTaskUrl('AOJ Courses, ITP1 1_A')({
