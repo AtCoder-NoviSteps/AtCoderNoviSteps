@@ -14,11 +14,11 @@ async function fetchAPIWithConfig<T>({
   errorMessage,
   validateResponse,
 }: FetchAPIConfig<T>): Promise<T> {
-  const url = `${ATCODER_PROBLEMS_API_BASE_URL}/${endpoint}`;
+  const url = new URL(endpoint, ATCODER_PROBLEMS_API_BASE_URL).toString();
   const data = await fetchAPI<T>(url, errorMessage);
 
   if (validateResponse && !validateResponse(data)) {
-    throw new Error(`Invalid response from AtCoder Problems API: ${data}`);
+    throw new Error(`${errorMessage}`);
   }
 
   return data;

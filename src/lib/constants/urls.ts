@@ -4,7 +4,7 @@ export const ATCODER_BASE_CONTEST_URL: string = `${ATCODER_BASE_URL}/contests`;
 
 export const ATCODER_PROBLEMS_URL: string = 'https://kenkoooo.com/atcoder/#/';
 
-export const ATCODER_PROBLEMS_API_BASE_URL: string = 'https://kenkoooo.com/atcoder/resources';
+export const ATCODER_PROBLEMS_API_BASE_URL: string = 'https://kenkoooo.com/atcoder/resources/';
 
 // 注:
 // AIZU ONLINE JUDGE (AOJ) では、v1.0, v2.0, v3.0のサイトが存在する。
