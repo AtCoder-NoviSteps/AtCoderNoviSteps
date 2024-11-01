@@ -1,6 +1,6 @@
 import { expect, test } from 'vitest';
 
-import { runTests } from '../common/test_helpers';
+import { runTestCases, runTests } from '../common/test_helpers';
 import * as TestCasesForContestType from './test_cases/contest_type';
 import { type TestCaseForContestType } from './test_cases/contest_type';
 import * as TestCasesForContestNameLabel from './test_cases/contest_name_labels';
@@ -15,18 +15,6 @@ import {
   addContestNameToTaskIndex,
 } from '$lib/utils/contest';
 import { ContestType } from '$lib/types/contest';
-
-function runTestCases<T>(
-  description: string,
-  testCases: Array<{ name: string; value: T }>,
-  testFunction: (testCase: T) => void,
-) {
-  describe(description, () => {
-    testCases.forEach(({ name, value }) => {
-      runTests(`${name}`, [value], testFunction);
-    });
-  });
-}
 
 describe('Contest', () => {
   describe('classify contest', () => {

@@ -43,6 +43,26 @@ export function zip<T, U>(firstArray: T[], secondArray: U[]): [T, U][] {
 }
 
 /**
+ * Runs a series of test cases using the provided test function.
+ *
+ * @template T - The type of the test case value.
+ * @param {string} description - A description for the test suite.
+ * @param {Array<{ name: string; value: T }>} testCases - An array of test cases, each containing a name and a value.
+ * @param {(testCase: T) => void} testFunction - The function to execute for each test case.
+ */
+export function runTestCases<T>(
+  description: string,
+  testCases: Array<{ name: string; value: T }>,
+  testFunction: (testCase: T) => void,
+) {
+  describe(description, () => {
+    testCases.forEach(({ name, value }) => {
+      runTests(`${name}`, [value], testFunction);
+    });
+  });
+}
+
+/**
  * Runs multiple test cases for a given test name using Vitest.
  * @template T The type of the test cases
  * @param {string} testName The base name for the tests
