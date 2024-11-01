@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { createTestCase, runTests, zip } from './test_helpers';
+import { createTestCase, runTestCases, runTests, zip } from './test_helpers';
 
 describe('createTestCase', () => {
   it('expects to be created a test case object with the given name and value', () => {
@@ -8,6 +8,54 @@ describe('createTestCase', () => {
     const testCase = createTestCase<number>(name)(value);
 
     expect(testCase).toEqual({ name, value });
+  });
+});
+
+describe('runTestCases', () => {
+  it('expects to run a series of test cases with the provided test function', () => {
+    const description = 'test cases for addition';
+    const testCases = [
+      { name: 'add 1 + 1', value: { a: 1, b: 1, expected: 2 } },
+      { name: 'add 2 + 2', value: { a: 2, b: 2, expected: 4 } },
+      { name: 'add 3 + 3', value: { a: 3, b: 3, expected: 6 } },
+    ];
+
+    runTestCases(description, testCases, (testCase: { a: number; b: number; expected: number }) => {
+      expect(testCase.a && testCase.b).toBe(testCase.expected);
+    });
+  });
+
+  it('expects to handle an empty array of test cases', () => {
+    const description = 'empty test cases';
+    const testCases: Array<{ name: string; value: { a: number; b: number; expected: number } }> =
+      [];
+
+    runTestCases(description, testCases, () => {
+      throw new Error('Expect not to be called');
+    });
+  });
+
+  it('expects to run test cases with different types of values', () => {
+    const description = 'test cases with different types';
+    const testCases = [
+      {
+        name: 'string concatenation',
+        value: { a: 'Hello, ', b: 'world!', expected: 'Hello, world!' },
+      },
+      { name: 'boolean AND operation', value: { a: true, b: false, expected: false } },
+    ];
+
+    runTestCases(
+      description,
+      testCases,
+      (testCase: { a: string | boolean; b: string | boolean; expected: string | boolean }) => {
+        if (typeof testCase.a === 'string' && typeof testCase.b === 'string') {
+          expect(testCase.a + testCase.b).toBe(testCase.expected);
+        } else if (typeof testCase.a === 'boolean' && typeof testCase.b === 'boolean') {
+          expect(testCase.a && testCase.b).toBe(testCase.expected);
+        }
+      },
+    );
   });
 });
 
