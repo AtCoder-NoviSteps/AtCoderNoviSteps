@@ -299,7 +299,7 @@ export class AojApiClient extends ContestSiteApiClient {
       const allPckContests = await this.fetchApiWithConfig<AOJChallengeContestAPI>({
         baseApiUrl: AOJ_API_BASE_URL,
         endpoint: `challenges/cl/pck/${round}`,
-        errorMessage: 'Failed to fetch PCK ${round} tasks from AOJ API',
+        errorMessage: `Failed to fetch PCK ${round} tasks from AOJ API`,
         validateResponse: (data) =>
           'contests' in data && Array.isArray(data.contests) && data.contests.length > 0,
       });
