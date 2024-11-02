@@ -1,5 +1,6 @@
 import { AtCoderProblemsApiClient } from '$lib/clients/atcoder_problems';
-import * as aojApiClient from '$lib/clients/aizu_online_judge';
+import { AojApiClient } from '$lib/clients/aizu_online_judge';
+// import * as aojApiClient from '$lib/clients/aizu_online_judge';
 
 import type { ContestForImport } from '$lib/types/contest';
 import type { TaskForImport } from '$lib/types/task';
@@ -19,18 +20,25 @@ import type { TaskForImport } from '$lib/types/task';
 //     ・PCK (All-Japan High School Programming Contest)
 
 const atCoderProblemsApiClient = new AtCoderProblemsApiClient();
+const aojApiClient = new AojApiClient();
 
-export const getContests = () =>
-  mergeDataFromAPIs<ContestForImport>([
+export const getContests = () => {
+  const contests = mergeDataFromAPIs<ContestForImport>([
     { source: () => atCoderProblemsApiClient.getContests(), name: 'AtCoder contests' },
     { source: () => aojApiClient.getContests(), name: 'AOJ contests' },
   ]);
 
-export const getTasks = () =>
-  mergeDataFromAPIs<TaskForImport>([
+  return contests;
+};
+
+export const getTasks = () => {
+  const tasks = mergeDataFromAPIs<TaskForImport>([
     { source: () => atCoderProblemsApiClient.getTasks(), name: 'AtCoder tasks' },
     { source: () => aojApiClient.getTasks(), name: 'AOJ tasks' },
   ]);
+
+  return tasks;
+};
 
 /**
  * Merges data from multiple API sources, ensuring unique entries based on the `id` property.
