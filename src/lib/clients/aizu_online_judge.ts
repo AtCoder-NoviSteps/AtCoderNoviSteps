@@ -124,10 +124,10 @@ export class AojApiClient extends ContestSiteApiClient {
       const coursesForContest = results.courses.map((course: Course) => {
         const courseForContest = {
           id: course.shortName,
-          start_epoch_second: PENDING, // 該当するデータがないため
-          duration_second: PENDING, // 同上
+          start_epoch_second: PENDING, // Data not available
+          duration_second: PENDING, // Same as above
           title: course.name,
-          rate_change: '', // 同上
+          rate_change: '', // Same as above
         };
 
         return courseForContest;
@@ -171,10 +171,10 @@ export class AojApiClient extends ContestSiteApiClient {
           titles.forEach((title: string) => {
             importContests.push({
               id: contest.abbr,
-              start_epoch_second: PENDING, // 該当するデータがないため
-              duration_second: PENDING, // 同上
+              start_epoch_second: PENDING, // Data not available
+              duration_second: PENDING, // Same as above
               title: title,
-              rate_change: '', // 同上
+              rate_change: '', // Same as above
             });
           });
 
