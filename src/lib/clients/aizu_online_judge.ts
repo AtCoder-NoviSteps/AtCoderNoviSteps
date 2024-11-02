@@ -112,29 +112,34 @@ export class AojApiClient extends ContestSiteApiClient {
    * console.log(contests);
    */
   private async fetchCourseContests(): Promise<ContestsForImport> {
-    const results = await this.fetchApiWithConfig<AOJCourseAPI>({
-      baseApiUrl: AOJ_API_BASE_URL,
-      endpoint: 'courses',
-      errorMessage: 'Failed to fetch course contests from AOJ API',
-      validateResponse: (data) =>
-        'courses' in data && Array.isArray(data.courses) && data.courses.length > 0,
-    });
+    try {
+      const results = await this.fetchApiWithConfig<AOJCourseAPI>({
+        baseApiUrl: AOJ_API_BASE_URL,
+        endpoint: 'courses',
+        errorMessage: 'Failed to fetch course contests from AOJ API',
+        validateResponse: (data) =>
+          'courses' in data && Array.isArray(data.courses) && data.courses.length > 0,
+      });
 
-    const coursesForContest = results.courses.map((course: Course) => {
-      const courseForContest = {
-        id: course.shortName,
-        start_epoch_second: PENDING, // 該当するデータがないため
-        duration_second: PENDING, // 同上
-        title: course.name,
-        rate_change: '', // 同上
-      };
+      const coursesForContest = results.courses.map((course: Course) => {
+        const courseForContest = {
+          id: course.shortName,
+          start_epoch_second: PENDING, // 該当するデータがないため
+          duration_second: PENDING, // 同上
+          title: course.name,
+          rate_change: '', // 同上
+        };
 
-      return courseForContest;
-    });
+        return courseForContest;
+      });
 
-    console.log(`Found AOJ course: ${coursesForContest.length} contests.`);
+      console.log(`Found AOJ course: ${coursesForContest.length} contests.`);
 
-    return coursesForContest;
+      return coursesForContest;
+    } catch (error) {
+      console.error(`Failed to fetch from AOJ course contests`, error);
+      return [];
+    }
   }
 
   /**
@@ -151,35 +156,40 @@ export class AojApiClient extends ContestSiteApiClient {
    * console.log(contests);
    */
   private async fetchPckContests(round: PckRound): Promise<ContestsForImport> {
-    const results = await this.fetchApiWithConfig<AOJChallengeContestAPI>({
-      baseApiUrl: AOJ_API_BASE_URL,
-      endpoint: `challenges/cl/pck/${round}`,
-      errorMessage: `Failed to fetch ${round} contests from AOJ API`,
-      validateResponse: (data) =>
-        'contests' in data && Array.isArray(data.contests) && data.contests.length > 0,
-    });
+    try {
+      const results = await this.fetchApiWithConfig<AOJChallengeContestAPI>({
+        baseApiUrl: AOJ_API_BASE_URL,
+        endpoint: `challenges/cl/pck/${round}`,
+        errorMessage: `Failed to fetch ${round} contests from AOJ API`,
+        validateResponse: (data) =>
+          'contests' in data && Array.isArray(data.contests) && data.contests.length > 0,
+      });
 
-    const contests = results.contests.reduce(
-      (importContests: ContestsForImport, contest: ChallengeContest) => {
-        const titles = contest.days.map((day) => day.title);
-        titles.forEach((title: string) => {
-          importContests.push({
-            id: contest.abbr,
-            start_epoch_second: PENDING, // 該当するデータがないため
-            duration_second: PENDING, // 同上
-            title: title,
-            rate_change: '', // 同上
+      const contests = results.contests.reduce(
+        (importContests: ContestsForImport, contest: ChallengeContest) => {
+          const titles = contest.days.map((day) => day.title);
+          titles.forEach((title: string) => {
+            importContests.push({
+              id: contest.abbr,
+              start_epoch_second: PENDING, // 該当するデータがないため
+              duration_second: PENDING, // 同上
+              title: title,
+              rate_change: '', // 同上
+            });
           });
-        });
 
-        return importContests;
-      },
-      [] as ContestsForImport,
-    );
+          return importContests;
+        },
+        [] as ContestsForImport,
+      );
 
-    console.log(`Found AOJ PCK ${round}: ${contests.length} contests.`);
+      console.log(`Found AOJ PCK ${round}: ${contests.length} contests.`);
 
-    return contests;
+      return contests;
+    } catch (error) {
+      console.error(`Failed to fetch from AOJ PCK ${round} contests`, error);
+      return [];
+    }
   }
 
   /**
@@ -217,33 +227,38 @@ export class AojApiClient extends ContestSiteApiClient {
    * @throws Will throw an error if the API request fails or if the response validation fails.
    */
   private async fetchCourseTasks(): Promise<TasksForImport> {
-    const size = 10 ** 4;
-    const allTasks = await this.fetchApiWithConfig<AOJTaskAPIs>({
-      baseApiUrl: AOJ_API_BASE_URL,
-      endpoint: `problems?size=${size}`,
-      errorMessage: 'Failed to fetch course tasks from AOJ API',
-      validateResponse: (data) => Array.isArray(data) && data.length > 0,
-    });
-
-    const courseTasks: TasksForImport = allTasks
-      .filter((task: AOJTaskAPI) => this.getCourseName(task.id) !== '')
-      .map((task: AOJTaskAPI) => {
-        const taskId = task.id;
-
-        const courseTask = {
-          id: taskId,
-          contest_id: this.getCourseName(taskId),
-          problem_index: taskId, // problem_index 相当の値がないため task.id で代用。AtCoder Problems APIにおいても、JOIの古い問題で同様の処理が行われている。
-          task_id: taskId, // 同上
-          title: task.name,
-        };
-
-        return courseTask;
+    try {
+      const size = 10 ** 4;
+      const allTasks = await this.fetchApiWithConfig<AOJTaskAPIs>({
+        baseApiUrl: AOJ_API_BASE_URL,
+        endpoint: `problems?size=${size}`,
+        errorMessage: 'Failed to fetch course tasks from AOJ API',
+        validateResponse: (data) => Array.isArray(data) && data.length > 0,
       });
 
-    console.log(`Found AOJ course: ${courseTasks.length} tasks.`);
+      const courseTasks: TasksForImport = allTasks
+        .filter((task: AOJTaskAPI) => this.getCourseName(task.id) !== '')
+        .map((task: AOJTaskAPI) => {
+          const taskId = task.id;
 
-    return courseTasks;
+          const courseTask = {
+            id: taskId,
+            contest_id: this.getCourseName(taskId),
+            problem_index: taskId, // problem_index 相当の値がないため task.id で代用。AtCoder Problems APIにおいても、JOIの古い問題で同様の処理が行われている。
+            task_id: taskId, // 同上
+            title: task.name,
+          };
+
+          return courseTask;
+        });
+
+      console.log(`Found AOJ course: ${courseTasks.length} tasks.`);
+
+      return courseTasks;
+    } catch (error) {
+      console.error(`Failed to fetch from AOJ course tasks`, error);
+      return [];
+    }
   }
 
   /**
@@ -280,31 +295,36 @@ export class AojApiClient extends ContestSiteApiClient {
    * 4. Logs the number of tasks found for the specified round.
    */
   private async fetchPckTasks(round: string): Promise<TasksForImport> {
-    const allPckContests = await this.fetchApiWithConfig<AOJChallengeContestAPI>({
-      baseApiUrl: AOJ_API_BASE_URL,
-      endpoint: `challenges/cl/pck/${round}`,
-      errorMessage: 'Failed to fetch PCK ${round} tasks from AOJ API',
-      validateResponse: (data) =>
-        'contests' in data && Array.isArray(data.contests) && data.contests.length > 0,
-    });
+    try {
+      const allPckContests = await this.fetchApiWithConfig<AOJChallengeContestAPI>({
+        baseApiUrl: AOJ_API_BASE_URL,
+        endpoint: `challenges/cl/pck/${round}`,
+        errorMessage: 'Failed to fetch PCK ${round} tasks from AOJ API',
+        validateResponse: (data) =>
+          'contests' in data && Array.isArray(data.contests) && data.contests.length > 0,
+      });
 
-    const tasks: TasksForImport = allPckContests.contests.flatMap((contest: ChallengeContest) =>
-      contest.days.flatMap((day) =>
-        day.problems.map((problem) => {
-          const taskId = problem.id;
+      const tasks: TasksForImport = allPckContests.contests.flatMap((contest: ChallengeContest) =>
+        contest.days.flatMap((day) =>
+          day.problems.map((problem) => {
+            const taskId = problem.id;
 
-          return {
-            id: taskId,
-            contest_id: contest.abbr,
-            problem_index: taskId, // problem_index 相当の値がないため problem.id で代用。AtCoder Problems APIにおいても、JOIの古い問題で同様の処理が行われている。
-            task_id: taskId, // 同上
-            title: problem.name,
-          };
-        }),
-      ),
-    );
-    console.log(`Found PCK ${round}: ${tasks.length} tasks.`);
+            return {
+              id: taskId,
+              contest_id: contest.abbr,
+              problem_index: taskId, // problem_index 相当の値がないため problem.id で代用。AtCoder Problems APIにおいても、JOIの古い問題で同様の処理が行われている。
+              task_id: taskId, // 同上
+              title: problem.name,
+            };
+          }),
+        ),
+      );
+      console.log(`Found PCK ${round}: ${tasks.length} tasks.`);
 
-    return tasks;
+      return tasks;
+    } catch (error) {
+      console.error(`Failed to fetch from PCK ${round} tasks`, error);
+      return [];
+    }
   }
 }
