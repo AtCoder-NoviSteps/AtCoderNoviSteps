@@ -1,4 +1,62 @@
+import type { ContestsForImport } from '$lib/types/contest';
+import type { TasksForImport } from '$lib/types/task';
 import { delay } from '$lib/utils/time';
+
+/**
+ * An abstract class representing a client for contest sites' APIs.
+ * This class provides methods to fetch contests and tasks, and a protected method to fetch data from an API endpoint with a given configuration.
+ *
+ * @abstract
+ */
+export abstract class ContestSiteAPIClient {
+  abstract getContests(): Promise<ContestsForImport>;
+  abstract getTasks(): Promise<TasksForImport>;
+
+  /**
+   * Fetches data from an API endpoint with the provided configuration.
+   *
+   * @template T - The expected response type.
+   * @param {FetchAPIConfig<T>} config - The configuration object for the API request.
+   * @param {string} config.baseApiUrl - The base URL of the API.
+   * @param {string} config.endpoint - The specific endpoint to fetch data from.
+   * @param {string} config.errorMessage - The error message to display if the fetch fails.
+   * @param {(data: T) => boolean} [config.validateResponse] - An optional function to validate the response data.
+   * @returns {Promise<T>} - A promise that resolves to the fetched data of type T.
+   * @throws {Error} - Throws an error if the response validation fails.
+   */
+  protected async fetchApiWithConfig<T>({
+    baseApiUrl,
+    endpoint,
+    errorMessage,
+    validateResponse,
+  }: FetchAPIConfig<T>): Promise<T> {
+    const url = new URL(endpoint, baseApiUrl).toString();
+    const data = await fetchAPI<T>(url, errorMessage);
+
+    if (validateResponse && !validateResponse(data)) {
+      throw new Error(`${errorMessage}`);
+    }
+
+    return data;
+  }
+}
+
+/**
+ * Configuration object for fetching data from an API.
+ *
+ * @template T - The type of the data expected from the API response.
+ *
+ * @property {string} baseApiUrl - The base URL of the API.
+ * @property {string} endpoint - The specific endpoint of the API to fetch data from.
+ * @property {string} errorMessage - The error message to display if the fetch operation fails.
+ * @property {(data: T) => boolean} [validateResponse] - Optional function to validate the API response data.
+ */
+export type FetchAPIConfig<T> = {
+  baseApiUrl: string;
+  endpoint: string;
+  errorMessage: string;
+  validateResponse?: (data: T) => boolean;
+};
 
 // See:
 // https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch

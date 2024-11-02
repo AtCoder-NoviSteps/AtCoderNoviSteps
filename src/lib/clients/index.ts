@@ -1,8 +1,8 @@
+import { AtCoderProblemsApiClient } from '$lib/clients/atcoder_problems';
+import * as aojApiClient from '$lib/clients/aizu_online_judge';
+
 import type { ContestForImport } from '$lib/types/contest';
 import type { TaskForImport } from '$lib/types/task';
-
-import * as atCoderProblemsApiClient from '$lib/clients/atcoder_problems';
-import * as aojApiClient from '$lib/clients/aizu_online_judge';
 
 // 各コンテストサイトのコンテスト情報・問題情報をAPIから取得・集約する
 // Fetch and aggregate contest and problem information from various contest sites via their APIs
@@ -17,6 +17,9 @@ import * as aojApiClient from '$lib/clients/aizu_online_judge';
 //   ・Courses
 //   ・Challenges
 //     ・PCK (All-Japan High School Programming Contest)
+
+const atCoderProblemsApiClient = new AtCoderProblemsApiClient();
+
 export const getContests = () =>
   mergeDataFromAPIs<ContestForImport>([
     { source: () => atCoderProblemsApiClient.getContests(), name: 'AtCoder contests' },
