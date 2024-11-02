@@ -8,6 +8,13 @@ export type TestCaseForContestType = {
 
 const createTestCaseForContestType = createTestCase<TestCaseForContestType>;
 
+export const abs = [
+  createTestCaseForContestType('ABS')({
+    contestId: 'abs',
+    expected: ContestType.ABS,
+  }),
+];
+
 export const abc = [
   createTestCaseForContestType('ABC001')({
     contestId: 'abc001',
@@ -47,6 +54,34 @@ export const abc = [
   }),
 ];
 
+export const apg4b = [
+  createTestCaseForContestType('APG4b')({
+    contestId: 'APG4b',
+    expected: ContestType.APG4B,
+  }),
+];
+
+export const typical90 = [
+  createTestCaseForContestType('Typical90')({
+    contestId: 'typical90',
+    expected: ContestType.TYPICAL90,
+  }),
+];
+
+export const edpc = [
+  createTestCaseForContestType('EDPC')({
+    contestId: 'dp',
+    expected: ContestType.EDPC,
+  }),
+];
+
+export const tdpc = [
+  createTestCaseForContestType('TDPC')({
+    contestId: 'tdpc',
+    expected: ContestType.TDPC,
+  }),
+];
+
 export const past = [
   createTestCaseForContestType('PAST 17th')({
     contestId: 'past17-open',
@@ -79,6 +114,13 @@ export const past = [
   createTestCaseForContestType('PAST 1st')({
     contestId: 'past201912-open',
     expected: ContestType.PAST,
+  }),
+];
+
+export const aclPractice = [
+  createTestCaseForContestType('ACL Practice')({
+    contestId: 'practice2',
+    expected: ContestType.ACL_PRACTICE,
   }),
 ];
 
@@ -126,6 +168,20 @@ export const joi = [
   createTestCaseForContestType('JOI 2018 qual')({
     contestId: 'joi2018yo',
     expected: ContestType.JOI,
+  }),
+];
+
+export const tessokuBook = [
+  createTestCaseForContestType('Tessoku Book')({
+    contestId: 'tessoku-book',
+    expected: ContestType.TESSOKU_BOOK,
+  }),
+];
+
+export const mathAndAlgorithm = [
+  createTestCaseForContestType('Math and Algorithm')({
+    contestId: 'math-and-algorithm',
+    expected: ContestType.MATH_AND_ALGORITHM,
   }),
 ];
 

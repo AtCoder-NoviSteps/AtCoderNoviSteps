@@ -57,6 +57,27 @@ export const apg4b = [
   }),
 ];
 
+export const typical90 = [
+  createTestCaseForContestNameLabel('Typical90')({
+    contestId: 'typical90',
+    expected: '競プロ典型 90 問',
+  }),
+];
+
+export const edpc = [
+  createTestCaseForContestNameLabel('DP')({
+    contestId: 'dp',
+    expected: 'EDPC',
+  }),
+];
+
+export const tdpc = [
+  createTestCaseForContestNameLabel('TDPC')({
+    contestId: 'tdpc',
+    expected: 'TDPC',
+  }),
+];
+
 // Note: Not yet implemented, because notational distortion needs to be corrected for each contest.
 export const past = [
   createTestCaseForContestNameLabel('PAST 17th')({
@@ -90,6 +111,13 @@ export const past = [
   createTestCaseForContestNameLabel('PAST 1st')({
     contestId: 'past201912-open',
     expected: '',
+  }),
+];
+
+export const aclPractice = [
+  createTestCaseForContestNameLabel('ACL Practice')({
+    contestId: 'practice2',
+    expected: 'ACL Practice',
   }),
 ];
 
@@ -138,6 +166,20 @@ export const joi = [
   createTestCaseForContestNameLabel('JOI 2018 qual')({
     contestId: 'joi2018yo',
     expected: '',
+  }),
+];
+
+export const tessokuBook = [
+  createTestCaseForContestNameLabel('Tessoku Book')({
+    contestId: 'tessoku-book',
+    expected: '競技プログラミングの鉄則',
+  }),
+];
+
+export const mathAndAlgorithm = [
+  createTestCaseForContestNameLabel('Math and Algorithm')({
+    contestId: 'math-and-algorithm',
+    expected: 'アルゴリズムと数学',
   }),
 ];
 
