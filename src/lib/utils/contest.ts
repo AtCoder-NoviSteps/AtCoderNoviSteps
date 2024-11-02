@@ -88,9 +88,7 @@ export const classifyContest = (contest_id: string) => {
     return ContestType.OTHERS;
   }
 
-  const prefixForAojCourses = new Set(getPrefixForAojCourses()); // For O(1) lookups
-
-  if ([...prefixForAojCourses].some((prefix) => contest_id.startsWith(prefix))) {
+  if (aojCoursePrefixes.has(contest_id)) {
     return ContestType.AOJ_COURSES;
   }
 
@@ -107,6 +105,8 @@ export const AOJ_COURSES = {
   ITP2: 'プログラミング応用',
   DPL: '組み合わせ最適化',
 } as const;
+
+const aojCoursePrefixes = new Set(getPrefixForAojCourses()); // For O(1) lookups
 
 // AIZU ONLINE JUDGE AOJ Courses
 export function getPrefixForAojCourses() {
@@ -184,9 +184,7 @@ export const getContestNameLabel = (contest_id: string) => {
     return contest_id.replace('chokudai_S', 'Chokudai SpeedRun ');
   }
 
-  const prefixForAojCourses = getPrefixForAojCourses();
-
-  if (prefixForAojCourses.includes(contest_id)) {
+  if (aojCoursePrefixes.has(contest_id)) {
     return 'AOJ Courses';
   }
 

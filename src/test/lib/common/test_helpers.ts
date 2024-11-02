@@ -47,8 +47,9 @@ export function zip<T, U>(firstArray: T[], secondArray: U[]): [T, U][] {
     throw new Error('Both arrays must be non-null');
   }
 
-  const length = Math.min(firstArray.length, secondArray.length);
-  return Array.from({ length }, (_, i) => [firstArray[i], secondArray[i]]);
+  return firstArray
+    .slice(0, Math.min(firstArray.length, secondArray.length))
+    .map((item, i) => [item, secondArray[i]]);
 }
 
 /**
