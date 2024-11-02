@@ -1,9 +1,9 @@
-import { ContestSiteAPIClient } from '$lib/clients/common';
+import { ContestSiteApiClient } from '$lib/clients/common';
 import { ATCODER_PROBLEMS_API_BASE_URL } from '$lib/constants/urls';
 import type { ContestsForImport } from '$lib/types/contest';
 import type { TasksForImport } from '$lib/types/task';
 
-export class AtCoderProblemsApiClient extends ContestSiteAPIClient {
+export class AtCoderProblemsApiClient extends ContestSiteApiClient {
   async getContests(): Promise<ContestsForImport> {
     const contests = await this.fetchApiWithConfig<ContestsForImport>({
       baseApiUrl: ATCODER_PROBLEMS_API_BASE_URL,

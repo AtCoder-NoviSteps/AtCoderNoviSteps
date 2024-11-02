@@ -8,7 +8,7 @@ import { delay } from '$lib/utils/time';
  *
  * @abstract
  */
-export abstract class ContestSiteAPIClient {
+export abstract class ContestSiteApiClient {
   abstract getContests(): Promise<ContestsForImport>;
   abstract getTasks(): Promise<TasksForImport>;
 
