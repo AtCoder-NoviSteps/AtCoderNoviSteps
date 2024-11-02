@@ -6,6 +6,8 @@ export const ATCODER_PROBLEMS_URL: string = 'https://kenkoooo.com/atcoder/#/';
 
 export const ATCODER_PROBLEMS_API_BASE_URL: string = 'https://kenkoooo.com/atcoder/resources/';
 
+export const AOJ_API_BASE_URL: string = 'https://judgeapi.u-aizu.ac.jp/';
+
 // 注:
 // AIZU ONLINE JUDGE (AOJ) では、v1.0, v2.0, v3.0のサイトが存在する。
 // 2024年10月下旬時点でメインサイトだと思われるv2.0を使用する。

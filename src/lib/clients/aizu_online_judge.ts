@@ -1,4 +1,5 @@
-import { fetchAPI } from '$lib/clients/common';
+import { ContestSiteApiClient } from '$lib/clients/common';
+import { AOJ_API_BASE_URL } from '$lib/constants/urls';
 import type { ContestsForImport } from '$lib/types/contest';
 import type { TasksForImport } from '$lib/types/task';
 
@@ -24,7 +25,7 @@ type Course = {
 
 type Courses = Course[];
 
-type ChallengeContestAPI = {
+type AOJChallengeContestAPI = {
   largeCl: object;
   contests: ChallengeContests;
 };
@@ -65,144 +66,228 @@ type AOJTaskAPIs = AOJTaskAPI[];
 
 const PRELIM = 'prelim';
 const FINAL = 'final';
+type PckRound = typeof PRELIM | typeof FINAL;
 
-export async function getContests(): Promise<ContestsForImport> {
-  const [courses, pckPrelims, pckFinals] = await Promise.all([
-    fetchCoursesForContests(),
-    fetchPckContests(PRELIM),
-    fetchPckContests(FINAL),
-  ]);
-  const contests = courses.concat(pckPrelims, pckFinals);
+const PENDING = -1;
 
-  return contests;
-}
+/**
+ * AojApiClient is a client for interacting with the Aizu Online Judge (AOJ) API.
+ * It extends the ContestSiteApiClient and provides methods to fetch contests and tasks
+ * from the AOJ platform.
+ *
+ * @class AojApiClient
+ * @extends {ContestSiteApiClient}
+ */
+export class AojApiClient extends ContestSiteApiClient {
+  /**
+   * Fetches and combines contests from different sources.
+   *
+   * This method concurrently fetches course contests, preliminary PCK contests,
+   * and final PCK contests, then combines them into a single array.
+   *
+   * @returns {Promise<ContestsForImport>} A promise that resolves to an array of contests.
+   */
+  async getContests(): Promise<ContestsForImport> {
+    const [courses, pckPrelims, pckFinals] = await Promise.all([
+      this.fetchCourseContests(),
+      this.fetchPckContests(PRELIM),
+      this.fetchPckContests(FINAL),
+    ]);
 
-async function fetchCoursesForContests(): Promise<ContestsForImport> {
-  const allCoursesUrl = `https://judgeapi.u-aizu.ac.jp/courses`;
-  const allCourses = await fetchAPI<AOJCourseAPI>(
-    allCoursesUrl,
-    'Failed to fetch courses from AIZU ONLINE JUDGE API',
-  );
+    const contests = courses.concat(pckPrelims, pckFinals);
+    console.log(`Found AOJ: ${contests.length} contests.`);
 
-  if ('courses' in allCourses) {
-    const courses = allCourses.courses as Courses;
+    return contests;
+  }
 
-    const coursesForContest = courses.map((course: Course) => {
+  /**
+   * Fetches course contests from the AOJ (Aizu Online Judge) API.
+   *
+   * @returns {Promise<ContestsForImport>} A promise that resolves to an array of contests for import.
+   *
+   * @throws Will throw an error if the API request fails or the response is invalid.
+   *
+   * @example
+   * const contests = await fetchCourseContests();
+   * console.log(contests);
+   */
+  private async fetchCourseContests(): Promise<ContestsForImport> {
+    const results = await this.fetchApiWithConfig<AOJCourseAPI>({
+      baseApiUrl: AOJ_API_BASE_URL,
+      endpoint: 'courses',
+      errorMessage: 'Failed to fetch course contests from AOJ API',
+      validateResponse: (data) =>
+        'courses' in data && Array.isArray(data.courses) && data.courses.length > 0,
+    });
+
+    const coursesForContest = results.courses.map((course: Course) => {
       const courseForContest = {
         id: course.shortName,
-        start_epoch_second: -1, // 該当するデータがないため
-        duration_second: -1, // 同上
+        start_epoch_second: PENDING, // 該当するデータがないため
+        duration_second: PENDING, // 同上
         title: course.name,
         rate_change: '', // 同上
       };
+
       return courseForContest;
     });
 
-    console.log(`Found AOJ course: ${courses.length} contests.`);
+    console.log(`Found AOJ course: ${coursesForContest.length} contests.`);
 
     return coursesForContest;
-  } else {
-    console.error('Not found Courses in the response.');
-    return [];
   }
-}
 
-async function fetchPckContests(round: string): Promise<ContestsForImport> {
-  const allPckContestsUrl = `https://judgeapi.u-aizu.ac.jp/challenges/cl/pck/${round}`;
-  const allPckContests = await fetchAPI<ChallengeContestAPI>(
-    allPckContestsUrl,
-    `Failed to fetch PCK ${round} tasks from AIZU ONLINE JUDGE API`,
-  );
+  /**
+   * Fetches PCK contests from the AOJ API for a given round.
+   *
+   * @param {PckRound} round - The round identifier for which to fetch contests.
+   * @returns {Promise<ContestsForImport>} A promise that resolves to an array of contests for import.
+   *
+   * @throws Will throw an error if the API request fails or the response validation fails.
+   *
+   * @example
+   * const round = 'PRELIM';
+   * const contests = await fetchPckContests(round);
+   * console.log(contests);
+   */
+  private async fetchPckContests(round: PckRound): Promise<ContestsForImport> {
+    const results = await this.fetchApiWithConfig<AOJChallengeContestAPI>({
+      baseApiUrl: AOJ_API_BASE_URL,
+      endpoint: `challenges/cl/pck/${round}`,
+      errorMessage: `Failed to fetch ${round} contests from AOJ API`,
+      validateResponse: (data) =>
+        'contests' in data && Array.isArray(data.contests) && data.contests.length > 0,
+    });
 
-  if ('contests' in allPckContests) {
-    const contests = allPckContests.contests.reduce(
+    const contests = results.contests.reduce(
       (importContests: ContestsForImport, contest: ChallengeContest) => {
         const titles = contest.days.map((day) => day.title);
         titles.forEach((title: string) => {
           importContests.push({
             id: contest.abbr,
-            start_epoch_second: -1, // 該当するデータがないため
-            duration_second: -1, // 同上
+            start_epoch_second: PENDING, // 該当するデータがないため
+            duration_second: PENDING, // 同上
             title: title,
             rate_change: '', // 同上
           });
         });
+
         return importContests;
       },
       [] as ContestsForImport,
     );
 
-    console.log(`Found PCK ${round}: ${contests.length} contests.`);
+    console.log(`Found AOJ PCK ${round}: ${contests.length} contests.`);
 
     return contests;
-  } else {
-    console.error(`Not found PCK ${round} in the response.`);
-    return [];
   }
-}
 
-export async function getTasks(): Promise<TasksForImport> {
-  const [courses, pckPrelims, pckFinals] = await Promise.all([
-    fetchCourseTasks(),
-    fetchPckTasks(PRELIM),
-    fetchPckTasks(FINAL),
-  ]);
-  const tasks = courses.concat(pckPrelims, pckFinals);
+  /**
+   * Fetches tasks from various sources and combines them into a single list.
+   *
+   * This method concurrently fetches tasks from three different sources:
+   * - Course tasks
+   * - PCK Prelim tasks
+   * - PCK Final tasks
+   *
+   * The fetched tasks are then concatenated into a single array and returned.
+   *
+   * @returns {Promise<TasksForImport>} A promise that resolves to an array of tasks.
+   */
+  async getTasks(): Promise<TasksForImport> {
+    const [courses, pckPrelims, pckFinals] = await Promise.all([
+      this.fetchCourseTasks(),
+      this.fetchPckTasks(PRELIM),
+      this.fetchPckTasks(FINAL),
+    ]);
+    const tasks = courses.concat(pckPrelims, pckFinals);
+    console.log(`Found AOJ: ${tasks.length} tasks.`);
 
-  return tasks;
-}
+    return tasks;
+  }
 
-async function fetchCourseTasks(): Promise<TasksForImport> {
-  const size = 10 ** 4;
-  const allTasksUrl = `https://judgeapi.u-aizu.ac.jp/problems?size=${size}`;
-  const allTasks = await fetchAPI<AOJTaskAPIs>(
-    allTasksUrl,
-    'Failed to fetch course tasks from AIZU ONLINE JUDGE API',
-  );
-
-  const courseTasks: TasksForImport = allTasks
-    .filter((task: AOJTaskAPI) => getCourseName(task.id) !== '')
-    .map((task: AOJTaskAPI) => {
-      const taskId = task.id;
-
-      const courseTask = {
-        id: taskId,
-        contest_id: getCourseName(taskId),
-        problem_index: taskId, // problem_index 相当の値がないため task.id で代用。AtCoder Problems APIにおいても、JOIの古い問題で同様の処理が行われている。
-        task_id: taskId, // 同上
-        title: task.name,
-      };
-
-      return courseTask;
+  /**
+   * Fetches course tasks from the AOJ (Aizu Online Judge) API.
+   *
+   * This method retrieves a list of tasks from the AOJ API, filters them based on the course name,
+   * and maps them to a format suitable for import. The course name is determined by the task ID.
+   *
+   * @returns {Promise<TasksForImport>} A promise that resolves to an array of tasks formatted for import.
+   *
+   * @throws Will throw an error if the API request fails or if the response validation fails.
+   */
+  private async fetchCourseTasks(): Promise<TasksForImport> {
+    const size = 10 ** 4;
+    const allTasks = await this.fetchApiWithConfig<AOJTaskAPIs>({
+      baseApiUrl: AOJ_API_BASE_URL,
+      endpoint: `problems?size=${size}`,
+      errorMessage: 'Failed to fetch course tasks from AOJ API',
+      validateResponse: (data) => Array.isArray(data) && data.length > 0,
     });
 
-  console.log(`Found AOJ course: ${courseTasks.length} tasks.`);
+    const courseTasks: TasksForImport = allTasks
+      .filter((task: AOJTaskAPI) => this.getCourseName(task.id) !== '')
+      .map((task: AOJTaskAPI) => {
+        const taskId = task.id;
 
-  return courseTasks;
-}
+        const courseTask = {
+          id: taskId,
+          contest_id: this.getCourseName(taskId),
+          problem_index: taskId, // problem_index 相当の値がないため task.id で代用。AtCoder Problems APIにおいても、JOIの古い問題で同様の処理が行われている。
+          task_id: taskId, // 同上
+          title: task.name,
+        };
 
-// taskId:
-// ・courses   : courseNameAbbr_topicId_taskIndex (ex: ITP1_1_A, ..., INFO1_01_E, ...)
-// ・challenges: taskNumber (ex: 0001, ..., 0703, ..., 3000)
-export const getCourseName = (taskId: string) => {
-  let courseName = '';
-  const splittedTaskId = taskId.split('_');
+        return courseTask;
+      });
 
-  if (splittedTaskId.length == 3) {
-    courseName = splittedTaskId[0];
+    console.log(`Found AOJ course: ${courseTasks.length} tasks.`);
+
+    return courseTasks;
   }
 
-  return courseName;
-};
+  /**
+   * Extracts the course name from a given task ID.
+   *
+   * The task ID is expected to be in the format of `courseName_taskId_otherInfo` in courses (ex: ITP1_1_A, ..., INFO1_01_E, ...) and `taskNumber` in challenges (ex: 0001, ..., 0703, ..., 3000).
+   * If the task ID does not follow this format, an empty string is returned.
+   *
+   * @param taskId - The task ID string from which to extract the course name.
+   * @returns The extracted course name or an empty string if the format is incorrect.
+   */
+  private getCourseName = (taskId: string) => {
+    let courseName = '';
+    const splittedTaskId = taskId.split('_');
 
-async function fetchPckTasks(round: string): Promise<TasksForImport> {
-  const allPckContestsUrl = `https://judgeapi.u-aizu.ac.jp/challenges/cl/pck/${round}`;
-  const allPckContests = await fetchAPI<ChallengeContestAPI>(
-    allPckContestsUrl,
-    `Failed to fetch PCK ${round} tasks from AIZU ONLINE JUDGE API`,
-  );
+    if (splittedTaskId.length == 3) {
+      courseName = splittedTaskId[0];
+    }
 
-  if ('contests' in allPckContests) {
+    return courseName;
+  };
+
+  /**
+   * Fetches tasks for a specified PCK round from the AOJ API.
+   *
+   * @param {string} round - The round identifier for which to fetch tasks.
+   * @returns {Promise<TasksForImport>} A promise that resolves to an object containing tasks for import.
+   * @throws Will throw an error if the API request fails or the response is invalid.
+   *
+   * The function performs the following steps:
+   * 1. Fetches contest data from the AOJ API for the specified PCK round.
+   * 2. Validates the response to ensure it contains contest data.
+   * 3. Maps the contest data to a list of tasks, extracting relevant information such as task ID, contest ID, and title.
+   * 4. Logs the number of tasks found for the specified round.
+   */
+  private async fetchPckTasks(round: string): Promise<TasksForImport> {
+    const allPckContests = await this.fetchApiWithConfig<AOJChallengeContestAPI>({
+      baseApiUrl: AOJ_API_BASE_URL,
+      endpoint: `challenges/cl/pck/${round}`,
+      errorMessage: 'Failed to fetch PCK ${round} tasks from AOJ API',
+      validateResponse: (data) =>
+        'contests' in data && Array.isArray(data.contests) && data.contests.length > 0,
+    });
+
     const tasks: TasksForImport = allPckContests.contests.flatMap((contest: ChallengeContest) =>
       contest.days.flatMap((day) =>
         day.problems.map((problem) => {
@@ -221,8 +306,5 @@ async function fetchPckTasks(round: string): Promise<TasksForImport> {
     console.log(`Found PCK ${round}: ${tasks.length} tasks.`);
 
     return tasks;
-  } else {
-    console.error(`Not found PCK ${round} in the response.`);
-    return [];
   }
 }
