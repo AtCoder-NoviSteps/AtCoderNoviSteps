@@ -154,6 +154,19 @@ describe('zip', () => {
     expect(result).toEqual([]);
   });
 
+  it('expects to handle large arrays efficiently', () => {
+    const size = 100000;
+    const firstArray = Array.from({ length: size }, (_, i) => i);
+    const secondArray = Array.from({ length: size }, (_, i) => `item${i}`);
+
+    const startTime = performance.now();
+    const result = zip(firstArray, secondArray);
+    const endTime = performance.now();
+
+    expect(result.length).toBe(size);
+    expect(endTime - startTime).toBeLessThan(100); // Should complete within 100ms
+  });
+
   it('expects to throw an error when the first array is null', () => {
     const firstArray = null as unknown as number[];
     const secondArray = ['a', 'b', 'c'];
