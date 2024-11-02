@@ -2,11 +2,12 @@ import { createTestCase } from '../../common/test_helpers';
 
 import { ATCODER_BASE_CONTEST_URL, AOJ_TASKS_URL } from '$lib/constants/urls';
 
-/**
- * Represents a test case for task URL generation.
- * @property {string} contestId - The identifier of the contest (e.g., 'abc365', 'ITP1').
- * @property {string} taskId - The identifier of the specific task within the contest.
- * @property {string} expected - The expected complete URL for the task.
+/** Represents a test case for task URL generation.
+ *
+ * @typedef {Object} TestCaseForTaskUrl
+ * @property {string} contestId - Identifier of the contest (e.g., 'abc365', 'ITP1').
+ * @property {string} taskId - Identifier of the specific task within the contest.
+ * @property {string} expected - Expected complete URL for the task.
  */
 export type TestCaseForTaskUrl = {
   contestId: string;

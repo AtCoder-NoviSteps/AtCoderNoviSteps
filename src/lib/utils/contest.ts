@@ -114,7 +114,6 @@ export function getPrefixForAojCourses() {
 }
 
 // priority: 0 (High) - 18 (Low)
-// HACK: ARC、AGC、AOJ_COURSES、AOJ_PCKの優先順位は暫定版
 // HACK: The priorities for ARC, AGC, AOJ_COURSES, and AOJ_PCK are temporary.
 //
 // See:

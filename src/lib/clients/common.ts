@@ -34,7 +34,7 @@ export abstract class ContestSiteApiClient {
     const data = await fetchAPI<T>(url, errorMessage);
 
     if (validateResponse && !validateResponse(data)) {
-      throw new Error(`${errorMessage}`);
+      throw new Error(`${errorMessage}. Response validation failed for ${endpoint}`);
     }
 
     return data;
