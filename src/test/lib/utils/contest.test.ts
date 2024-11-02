@@ -1,4 +1,4 @@
-import { expect, test } from 'vitest';
+import { expect } from 'vitest';
 
 import { runTestCases, runTests } from '../common/test_helpers';
 import * as TestCasesForContestType from './test_cases/contest_type';
@@ -14,14 +14,17 @@ import {
   getContestNameLabel,
   addContestNameToTaskIndex,
 } from '$lib/utils/contest';
-import { ContestType } from '$lib/types/contest';
 
 describe('Contest', () => {
   describe('classify contest', () => {
     describe('AtCoder', () => {
-      test('when contest_id is ABS', () => {
-        expect(classifyContest('abs')).toEqual(ContestType.ABS);
-      });
+      runTestCases(
+        'when contest_id is abs',
+        TestCasesForContestType.abs,
+        ({ contestId, expected }: TestCaseForContestType) => {
+          expect(classifyContest(contestId)).toEqual(expected);
+        },
+      );
 
       runTestCases(
         'when contest_id contains abc',
@@ -31,21 +34,37 @@ describe('Contest', () => {
         },
       );
 
-      test('when contest_id starts with APG4b', () => {
-        expect(classifyContest('APG4b')).toEqual(ContestType.APG4B);
-      });
+      runTestCases(
+        'when contest_id starts with APG4b',
+        TestCasesForContestType.apg4b,
+        ({ contestId, expected }: TestCaseForContestType) => {
+          expect(classifyContest(contestId)).toEqual(expected);
+        },
+      );
 
-      test('when contest_id is typical90', () => {
-        expect(classifyContest('typical90')).toEqual(ContestType.TYPICAL90);
-      });
+      runTestCases(
+        'when contest_id is typical90',
+        TestCasesForContestType.typical90,
+        ({ contestId, expected }: TestCaseForContestType) => {
+          expect(classifyContest(contestId)).toEqual(expected);
+        },
+      );
 
-      test('when contest_id is dp (EDPC)', () => {
-        expect(classifyContest('dp')).toEqual(ContestType.EDPC);
-      });
+      runTestCases(
+        'when contest_id is dp (EDPC)',
+        TestCasesForContestType.edpc,
+        ({ contestId, expected }: TestCaseForContestType) => {
+          expect(classifyContest(contestId)).toEqual(expected);
+        },
+      );
 
-      test('when contest_id is tdpc', () => {
-        expect(classifyContest('tdpc')).toEqual(ContestType.TDPC);
-      });
+      runTestCases(
+        'when contest_id is tdpc',
+        TestCasesForContestType.tdpc,
+        ({ contestId, expected }: TestCaseForContestType) => {
+          expect(classifyContest(contestId)).toEqual(expected);
+        },
+      );
 
       runTestCases(
         'when contest_id contains past',
@@ -55,9 +74,13 @@ describe('Contest', () => {
         },
       );
 
-      test('when contest_id is practice2 (ACL practice)', () => {
-        expect(classifyContest('practice2')).toEqual(ContestType.ACL_PRACTICE);
-      });
+      runTestCases(
+        'when contest_id is practice2 (ACL practice)',
+        TestCasesForContestType.aclPractice,
+        ({ contestId, expected }: TestCaseForContestType) => {
+          expect(classifyContest(contestId)).toEqual(expected);
+        },
+      );
 
       runTestCases(
         'when contest_id contains joi',
@@ -67,13 +90,21 @@ describe('Contest', () => {
         },
       );
 
-      test('when contest_id is tessoku-book', () => {
-        expect(classifyContest('tessoku-book')).toEqual(ContestType.TESSOKU_BOOK);
-      });
+      runTestCases(
+        'when contest_id is tessoku-book',
+        TestCasesForContestType.tessokuBook,
+        ({ contestId, expected }: TestCaseForContestType) => {
+          expect(classifyContest(contestId)).toEqual(expected);
+        },
+      );
 
-      test('when contest_id is math-and-algorithm', () => {
-        expect(classifyContest('math-and-algorithm')).toEqual(ContestType.MATH_AND_ALGORITHM);
-      });
+      runTestCases(
+        'when contest_id is math-and-algorithm',
+        TestCasesForContestType.mathAndAlgorithm,
+        ({ contestId, expected }: TestCaseForContestType) => {
+          expect(classifyContest(contestId)).toEqual(expected);
+        },
+      );
 
       runTestCases(
         'when contest_id contains arc',
@@ -137,9 +168,13 @@ describe('Contest', () => {
 
   describe('get contest priority', () => {
     describe('AtCoder', () => {
-      test('when contest_id is abs', () => {
-        expect(getContestPriority('abs')).toEqual(contestTypePriorities.get(ContestType.ABS));
-      });
+      runTestCases(
+        'when contest_id is abs',
+        TestCasesForContestType.abs,
+        ({ contestId, expected }: TestCaseForContestType) => {
+          expect(getContestPriority(contestId)).toEqual(contestTypePriorities.get(expected));
+        },
+      );
 
       runTestCases(
         'when contest_id contains abc',
@@ -149,23 +184,37 @@ describe('Contest', () => {
         },
       );
 
-      test('when contest_id starts with APG4b', () => {
-        expect(getContestPriority('APG4b')).toEqual(contestTypePriorities.get(ContestType.APG4B));
-      });
+      runTestCases(
+        'when contest_id starts with APG4b',
+        TestCasesForContestType.apg4b,
+        ({ contestId, expected }: TestCaseForContestType) => {
+          expect(getContestPriority(contestId)).toEqual(contestTypePriorities.get(expected));
+        },
+      );
 
-      test('when contest_id is typical90', () => {
-        expect(getContestPriority('typical90')).toEqual(
-          contestTypePriorities.get(ContestType.TYPICAL90),
-        );
-      });
+      runTestCases(
+        'when contest_id is typical90',
+        TestCasesForContestType.typical90,
+        ({ contestId, expected }: TestCaseForContestType) => {
+          expect(getContestPriority(contestId)).toEqual(contestTypePriorities.get(expected));
+        },
+      );
 
-      test('when contest_id is dp (EDPC)', () => {
-        expect(getContestPriority('dp')).toEqual(contestTypePriorities.get(ContestType.EDPC));
-      });
+      runTestCases(
+        'when contest_id is dp (EDPC)',
+        TestCasesForContestType.edpc,
+        ({ contestId, expected }: TestCaseForContestType) => {
+          expect(getContestPriority(contestId)).toEqual(contestTypePriorities.get(expected));
+        },
+      );
 
-      test('when contest_id is tdpc', () => {
-        expect(getContestPriority('tdpc')).toEqual(contestTypePriorities.get(ContestType.TDPC));
-      });
+      runTestCases(
+        'when contest_id is dp TDPC',
+        TestCasesForContestType.tdpc,
+        ({ contestId, expected }: TestCaseForContestType) => {
+          expect(getContestPriority(contestId)).toEqual(contestTypePriorities.get(expected));
+        },
+      );
 
       runTestCases(
         'when contest_id contains past',
@@ -175,11 +224,13 @@ describe('Contest', () => {
         },
       );
 
-      test('when contest_id is practice2 (ACL practice)', () => {
-        expect(getContestPriority('practice2')).toEqual(
-          contestTypePriorities.get(ContestType.ACL_PRACTICE),
-        );
-      });
+      runTestCases(
+        'when contest_id is practice2 (ACL practice)',
+        TestCasesForContestType.aclPractice,
+        ({ contestId, expected }: TestCaseForContestType) => {
+          expect(getContestPriority(contestId)).toEqual(contestTypePriorities.get(expected));
+        },
+      );
 
       runTestCases(
         'when contest_id contains joi',
@@ -189,17 +240,21 @@ describe('Contest', () => {
         },
       );
 
-      test('when contest_id is tessoku-book', () => {
-        expect(getContestPriority('tessoku-book')).toEqual(
-          contestTypePriorities.get(ContestType.TESSOKU_BOOK),
-        );
-      });
+      runTestCases(
+        'when contest_id is tessoku-book',
+        TestCasesForContestType.tessokuBook,
+        ({ contestId, expected }: TestCaseForContestType) => {
+          expect(getContestPriority(contestId)).toEqual(contestTypePriorities.get(expected));
+        },
+      );
 
-      test('when contest_id is math-and-algorithm', () => {
-        expect(getContestPriority('math-and-algorithm')).toEqual(
-          contestTypePriorities.get(ContestType.MATH_AND_ALGORITHM),
-        );
-      });
+      runTestCases(
+        'when contest_id is math-and-algorithm',
+        TestCasesForContestType.mathAndAlgorithm,
+        ({ contestId, expected }: TestCaseForContestType) => {
+          expect(getContestPriority(contestId)).toEqual(contestTypePriorities.get(expected));
+        },
+      );
 
       runTestCases(
         'when contest_id contains arc',
@@ -279,17 +334,29 @@ describe('Contest', () => {
         },
       );
 
-      test('when contest_id is typical90', () => {
-        expect(getContestNameLabel('typical90')).toEqual('競プロ典型 90 問');
-      });
+      runTestCases(
+        'when contest_id is typical90',
+        TestCasesForContestNameLabel.typical90,
+        ({ contestId, expected }: TestCaseForContestNameLabel) => {
+          expect(getContestNameLabel(contestId)).toEqual(expected);
+        },
+      );
 
-      test('when contest_id is dp (EDPC)', () => {
-        expect(getContestNameLabel('dp')).toEqual('EDPC');
-      });
+      runTestCases(
+        'when contest_id is dp (EDPC)',
+        TestCasesForContestNameLabel.edpc,
+        ({ contestId, expected }: TestCaseForContestNameLabel) => {
+          expect(getContestNameLabel(contestId)).toEqual(expected);
+        },
+      );
 
-      test('when contest_id is tdpc', () => {
-        expect(getContestNameLabel('tdpc')).toEqual('TDPC');
-      });
+      runTestCases(
+        'when contest_id is tdpc',
+        TestCasesForContestNameLabel.tdpc,
+        ({ contestId, expected }: TestCaseForContestNameLabel) => {
+          expect(getContestNameLabel(contestId)).toEqual(expected);
+        },
+      );
 
       // Note: Not yet implemented, because notational distortion needs to be corrected for each contest.
       describe.skip('when contest_id contains past', () => {
@@ -300,9 +367,13 @@ describe('Contest', () => {
         });
       });
 
-      test('when contest_id is practice2 (ACL practice)', () => {
-        expect(getContestNameLabel('practice2')).toEqual('ACL Practice');
-      });
+      runTestCases(
+        'when contest_id is practice2 (ACL practice)',
+        TestCasesForContestNameLabel.aclPractice,
+        ({ contestId, expected }: TestCaseForContestNameLabel) => {
+          expect(getContestNameLabel(contestId)).toEqual(expected);
+        },
+      );
 
       // Note: Not yet implemented, because notational distortion needs to be corrected for each contest.
       describe.skip('when contest_id contains joi', () => {
@@ -313,13 +384,21 @@ describe('Contest', () => {
         });
       });
 
-      test('when contest_id is tessoku-book', () => {
-        expect(getContestNameLabel('tessoku-book')).toEqual('競技プログラミングの鉄則');
-      });
+      runTestCases(
+        'when contest_id is tessoku-book',
+        TestCasesForContestNameLabel.tessokuBook,
+        ({ contestId, expected }: TestCaseForContestNameLabel) => {
+          expect(getContestNameLabel(contestId)).toEqual(expected);
+        },
+      );
 
-      test('when contest_id is math-and-algorithm', () => {
-        expect(getContestNameLabel('math-and-algorithm')).toEqual('アルゴリズムと数学');
-      });
+      runTestCases(
+        'when contest_id is math-and-algorithm',
+        TestCasesForContestNameLabel.mathAndAlgorithm,
+        ({ contestId, expected }: TestCaseForContestNameLabel) => {
+          expect(getContestNameLabel(contestId)).toEqual(expected);
+        },
+      );
 
       runTestCases(
         'when contest_id contains arc',
