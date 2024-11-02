@@ -21,7 +21,7 @@ describe('runTestCases', () => {
     ];
 
     runTestCases(description, testCases, (testCase: { a: number; b: number; expected: number }) => {
-      expect(testCase.a && testCase.b).toBe(testCase.expected);
+      expect(testCase.a + testCase.b).toBe(testCase.expected);
     });
   });
 
