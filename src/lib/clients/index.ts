@@ -1,5 +1,5 @@
-import type { ContestsForImport, ContestForImport } from '$lib/types/contest';
-import type { TasksForImport, TaskForImport } from '$lib/types/task';
+import type { ContestForImport } from '$lib/types/contest';
+import type { TaskForImport } from '$lib/types/task';
 
 import * as atCoderProblemsApiClient from '$lib/clients/atcoder_problems';
 import * as aojApiClient from '$lib/clients/aizu_online_judge';
@@ -17,55 +17,47 @@ import * as aojApiClient from '$lib/clients/aizu_online_judge';
 //   ・Courses
 //   ・Challenges
 //     ・PCK (All-Japan High School Programming Contest)
+export const getContests = () =>
+  mergeDataFromAPIs<ContestForImport>([
+    { source: () => atCoderProblemsApiClient.getContests(), name: 'AtCoder contests' },
+    { source: () => aojApiClient.getContests(), name: 'AOJ contests' },
+  ]);
 
-export async function getContests(): Promise<ContestsForImport> {
+export const getTasks = () =>
+  mergeDataFromAPIs<TaskForImport>([
+    { source: () => atCoderProblemsApiClient.getTasks(), name: 'AtCoder tasks' },
+    { source: () => aojApiClient.getTasks(), name: 'AOJ tasks' },
+  ]);
+
+/**
+ * Merges data from multiple API sources, ensuring unique entries based on the `id` property.
+ *
+ * @template T - The type of the data objects, which must include an `id` property of type `string`.
+ * @param {Array<{ source: () => Promise<T[]>; name: string }>} sources - An array of objects containing a `source` function that returns a promise resolving to an array of data objects, and a `name` string for identifying the source.
+ * @returns {Promise<T[]>} A promise that resolves to an array of unique data objects.
+ * @throws Will throw an error if the data fetching process fails.
+ */
+async function mergeDataFromAPIs<T extends { id: string }>(
+  sources: Array<{ source: () => Promise<T[]>; name: string }>,
+): Promise<T[]> {
   try {
-    const [atcoder, aoj] = await Promise.all([
-      atCoderProblemsApiClient.getContests().catch((error) => {
-        console.error('Failed to fetch from AtCoder contests', error);
-        return [];
-      }),
-      aojApiClient.getContests().catch((error) => {
-        console.error('Failed to fetch from AOJ contests', error);
-        return [];
-      }),
-    ]);
+    const rawData = await Promise.all(
+      sources.map(({ source, name }) =>
+        source().catch((error) => {
+          console.error(`Failed to fetch from ${name}`, error);
+          return [];
+        }),
+      ),
+    );
 
-    const contestsMap = new Map<string, ContestForImport>();
-
-    [...atcoder, ...aoj].forEach((contest) => {
-      contestsMap.set(contest.id, contest);
+    const uniqueDataMap = new Map<string, T>();
+    rawData.flat().forEach((data) => {
+      uniqueDataMap.set(data.id, data);
     });
 
-    return Array.from(contestsMap.values());
+    return Array.from(uniqueDataMap.values());
   } catch (error) {
-    console.error('Failed to fetch contests', error);
-    throw error;
-  }
-}
-
-export async function getTasks(): Promise<TasksForImport> {
-  try {
-    const [atcoder, aoj] = await Promise.all([
-      atCoderProblemsApiClient.getTasks().catch((error) => {
-        console.error('Failed to fetch from AtCoder tasks', error);
-        return [];
-      }),
-      aojApiClient.getTasks().catch((error) => {
-        console.error('Failed to fetch from AOJ tasks', error);
-        return [];
-      }),
-    ]);
-
-    const tasksMap = new Map<string, TaskForImport>();
-
-    [...atcoder, ...aoj].forEach((task) => {
-      tasksMap.set(task.id, task);
-    });
-
-    return Array.from(tasksMap.values());
-  } catch (error) {
-    console.error('Failed to fetch tasks', error);
+    console.error('Failed to fetch data from API(s)', error);
     throw error;
   }
 }
