@@ -50,6 +50,8 @@ export const getTasks = () => {
 async function mergeDataFromAPIs<T extends { id: string }>(
   sources: Array<{ source: () => Promise<T[]>; name: string }>,
 ): Promise<T[]> {
+  const startTime = performance.now();
+
   try {
     const rawData = await Promise.all(
       sources.map(({ source, name }) =>
@@ -60,10 +62,17 @@ async function mergeDataFromAPIs<T extends { id: string }>(
       ),
     );
 
+    const apiTime = performance.now() - startTime;
+
     const uniqueDataMap = new Map<string, T>();
     rawData.flat().forEach((data) => {
       uniqueDataMap.set(data.id, data);
     });
+
+    const totalTime = performance.now() - startTime;
+    console.info(
+      `API metrics: ${apiTime.toFixed(0)} ms (API), ${totalTime.toFixed(0)} ms (Total), ${uniqueDataMap.size} items`,
+    );
 
     return Array.from(uniqueDataMap.values());
   } catch (error) {
