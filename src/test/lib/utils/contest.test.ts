@@ -358,7 +358,10 @@ describe('Contest', () => {
         },
       );
 
-      // Note: Not yet implemented, because notational distortion needs to be corrected for each contest.
+      // TODO(#issue): Skipped until notational inconsistencies are resolved.
+      // Current issues:
+      // 1. Contest names use inconsistent formats (e.g., "past201912-open" vs "past17-open")
+      // 2. Need to standardize naming conventions across all contests
       describe.skip('when contest_id contains past', () => {
         TestCasesForContestNameLabel.past.forEach(({ name, value }) => {
           runTests(`${name}`, [value], ({ contestId, expected }: TestCaseForContestNameLabel) => {
@@ -375,7 +378,10 @@ describe('Contest', () => {
         },
       );
 
-      // Note: Not yet implemented, because notational distortion needs to be corrected for each contest.
+      // TODO(#issue): Skipped until notational inconsistencies are resolved.
+      // Current issues:
+      // 1. Contest names use inconsistent formats
+      // 2. Need to standardize naming conventions across all contests
       describe.skip('when contest_id contains joi', () => {
         TestCasesForContestNameLabel.joi.forEach(({ name, value }) => {
           runTests(`${name}`, [value], ({ contestId, expected }: TestCaseForContestNameLabel) => {
