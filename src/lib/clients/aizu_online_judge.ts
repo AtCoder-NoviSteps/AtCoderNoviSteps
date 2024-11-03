@@ -271,14 +271,9 @@ export class AojApiClient extends ContestSiteApiClient {
    * @returns The extracted course name or an empty string if the format is incorrect.
    */
   private getCourseName = (taskId: string) => {
-    let courseName = '';
     const splittedTaskId = taskId.split('_');
 
-    if (splittedTaskId.length == 3) {
-      courseName = splittedTaskId[0];
-    }
-
-    return courseName;
+    return splittedTaskId.length == 3 ? splittedTaskId[0] : '';
   };
 
   /**
