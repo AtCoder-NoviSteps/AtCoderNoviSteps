@@ -276,6 +276,10 @@ export class AojApiClient extends ContestSiteApiClient {
    * @returns The extracted course name or an empty string if the format is incorrect.
    */
   private getCourseName = (taskId: string) => {
+    if (!taskId || typeof taskId !== 'string') {
+      return '';
+    }
+
     const splittedTaskId = taskId.split('_');
 
     return splittedTaskId.length == 3 ? splittedTaskId[0] : '';
@@ -295,6 +299,11 @@ export class AojApiClient extends ContestSiteApiClient {
    * 4. Logs the number of tasks found for the specified round.
    */
   private async fetchPckTasks(round: string): Promise<TasksForImport> {
+    if (!Object.values(PckRound).includes(round as PckRound)) {
+      console.error(`Found invalid PCK round: ${round}`);
+      return [];
+    }
+
     try {
       const allPckContests = await this.fetchApiWithConfig<AOJChallengeContestAPI>({
         baseApiUrl: AOJ_API_BASE_URL,
