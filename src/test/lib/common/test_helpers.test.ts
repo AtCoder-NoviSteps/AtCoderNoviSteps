@@ -23,12 +23,6 @@ describe('runTestCases', () => {
     );
   });
 
-  it('expects to handle an empty array of test cases', () => {
-    runTestCases('empty test cases', TestCasesForRunTestCases.empty, () => {
-      throw new Error('Expect not to be called');
-    });
-  });
-
   it('expects to run test cases with different types of values', () => {
     runTestCases(
       'test cases with different types of values',
@@ -53,6 +47,28 @@ describe('runTestCases', () => {
         }
       },
     );
+  });
+
+  it('expects to throw an error if description is empty', () => {
+    expect(() => {
+      runTestCases('', [], () => {});
+    }).toThrow('Description must be a non-empty string');
+  });
+
+  it('expects to throw an error if test cases array is empty', () => {
+    expect(() => {
+      runTestCases('empty test cases', [], () => {});
+    }).toThrow('Test cases array must be non-empty');
+  });
+
+  it('expects to throw an error if test function is not provided', () => {
+    expect(() => {
+      runTestCases(
+        'missing test function',
+        [{ name: 'test', value: 1 }],
+        null as unknown as () => void,
+      );
+    }).toThrow('Test function must be provided');
   });
 });
 
@@ -201,13 +217,17 @@ describe('zip', () => {
     const firstArray = 'not an array' as unknown as string[];
     const secondArray = ['a', 'b', 'c'];
 
-    expect(() => zip(firstArray, secondArray)).toThrow('Both inputs must be arrays');
+    expect(() => zip(firstArray, secondArray)).toThrow(
+      'Both input arrays must be non-null and defined',
+    );
   });
 
   it('expects to throw an error when the second array is not an array', () => {
     const firstArray = [1, 2, 3];
     const secondArray = 'not an array' as unknown as string[];
 
-    expect(() => zip(firstArray, secondArray)).toThrow('Both inputs must be arrays');
+    expect(() => zip(firstArray, secondArray)).toThrow(
+      'Both input arrays must be non-null and defined',
+    );
   });
 });
