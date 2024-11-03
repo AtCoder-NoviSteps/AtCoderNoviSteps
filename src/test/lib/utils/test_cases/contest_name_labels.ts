@@ -96,7 +96,7 @@ export const past = [
     contestId: 'past202303-open',
     expected: '',
   }),
-  createTestCaseForContestNameLabel('PAST 13rd')({
+  createTestCaseForContestNameLabel('PAST 13th')({
     contestId: 'past202212-open',
     expected: '',
   }),

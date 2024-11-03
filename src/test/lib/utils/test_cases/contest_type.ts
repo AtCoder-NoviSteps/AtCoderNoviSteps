@@ -99,7 +99,7 @@ export const past = [
     contestId: 'past202303-open',
     expected: ContestType.PAST,
   }),
-  createTestCaseForContestType('PAST 13rd')({
+  createTestCaseForContestType('PAST 13th')({
     contestId: 'past202212-open',
     expected: ContestType.PAST,
   }),
