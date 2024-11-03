@@ -33,11 +33,23 @@ describe('runTestCases', () => {
     runTestCases(
       'test cases with different types of values',
       TestCasesForRunTestCases.differentTypes,
-      (testCase: { a: string | boolean; b: string | boolean; expected: string | boolean }) => {
-        if (typeof testCase.a === 'string' && typeof testCase.b === 'string') {
+      (testCase: {
+        a: string | boolean | number[] | object;
+        b: string | boolean | number[] | object;
+        expected: string | boolean | number[] | object;
+      }) => {
+        if (testCase.a == null || testCase.b == null) {
+          throw new Error('Test case values must be non-null and defined');
+        } else if (typeof testCase.a === 'string' && typeof testCase.b === 'string') {
           expect(testCase.a + testCase.b).toBe(testCase.expected);
         } else if (typeof testCase.a === 'boolean' && typeof testCase.b === 'boolean') {
           expect(testCase.a && testCase.b).toBe(testCase.expected);
+        } else if (Array.isArray(testCase.a) && Array.isArray(testCase.b)) {
+          expect([...testCase.a, ...testCase.b]).toEqual(testCase.expected);
+        } else if (typeof testCase.a === 'object' && typeof testCase.b === 'object') {
+          expect({ ...testCase.a, ...testCase.b }).toEqual(testCase.expected);
+        } else {
+          throw new Error('Unsupported test case types');
         }
       },
     );
@@ -144,32 +156,58 @@ describe('zip', () => {
     const firstArray = Array.from({ length: size }, (_, i) => i);
     const secondArray = Array.from({ length: size }, (_, i) => `item${i}`);
 
-    const startTime = performance.now();
-    const result = zip(firstArray, secondArray);
-    const endTime = performance.now();
+    // Warm-up run
+    zip(firstArray, secondArray);
 
-    expect(result.length).toBe(size);
-    expect(endTime - startTime).toBeLessThan(100); // Should complete within 100ms
+    // Multiple iterations for more reliable timing
+    const iterations = 10;
+    const times: number[] = [];
+
+    for (let i = 0; i < iterations; i++) {
+      const startTime = performance.now();
+      const result = zip(firstArray, secondArray);
+      const endTime = performance.now();
+      times.push(endTime - startTime);
+
+      expect(result.length).toBe(size);
+    }
+
+    const avgTime = times.reduce((a, b) => a + b) / times.length;
+    expect(avgTime).toBeLessThan(50); // Should complete within 50ms for CI
   });
 
   it('expects to throw an error when the first array is null', () => {
     const firstArray = null as unknown as number[];
     const secondArray = ['a', 'b', 'c'];
 
-    expect(() => zip(firstArray, secondArray)).toThrow('Both arrays must be non-null');
+    expect(() => zip(firstArray, secondArray)).toThrow('First array must be non-null and defined');
   });
 
   it('expects to throw an error when the second array is null', () => {
     const firstArray = ['a', 'b', 'c'];
     const secondArray = null as unknown as number[];
 
-    expect(() => zip(firstArray, secondArray)).toThrow('Both arrays must be non-null');
+    expect(() => zip(firstArray, secondArray)).toThrow('Second array must be non-null and defined');
   });
 
   it('expects to throw an error when the first and second array are null', () => {
     const firstArray = null as unknown as number[];
     const secondArray = null as unknown as number[];
 
-    expect(() => zip(firstArray, secondArray)).toThrow('Both arrays must be non-null');
+    expect(() => zip(firstArray, secondArray)).toThrow('First array must be non-null and defined');
+  });
+
+  it('expects to throw an error when the first array is not an array', () => {
+    const firstArray = 'not an array' as unknown as string[];
+    const secondArray = ['a', 'b', 'c'];
+
+    expect(() => zip(firstArray, secondArray)).toThrow('Both inputs must be arrays');
+  });
+
+  it('expects to throw an error when the second array is not an array', () => {
+    const firstArray = [1, 2, 3];
+    const secondArray = 'not an array' as unknown as string[];
+
+    expect(() => zip(firstArray, secondArray)).toThrow('Both inputs must be arrays');
   });
 });
