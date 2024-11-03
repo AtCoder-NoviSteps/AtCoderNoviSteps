@@ -15,44 +15,24 @@ export const abs = [
   }),
 ];
 
-export const abc = [
-  createTestCaseForContestType('ABC001')({
-    contestId: 'abc001',
-    expected: ContestType.ABC,
-  }),
-  createTestCaseForContestType('ABC002')({
-    contestId: 'abc002',
-    expected: ContestType.ABC,
-  }),
-  createTestCaseForContestType('ABC099')({
-    contestId: 'abc099',
-    expected: ContestType.ABC,
-  }),
-  createTestCaseForContestType('ABC100')({
-    contestId: 'abc100',
-    expected: ContestType.ABC,
-  }),
-  createTestCaseForContestType('ABC101')({
-    contestId: 'abc101',
-    expected: ContestType.ABC,
-  }),
-  createTestCaseForContestType('ABC200')({
-    contestId: 'abc200',
-    expected: ContestType.ABC,
-  }),
-  createTestCaseForContestType('ABC201')({
-    contestId: 'abc201',
-    expected: ContestType.ABC,
-  }),
-  createTestCaseForContestType('ABC365')({
-    contestId: 'abc365',
-    expected: ContestType.ABC,
-  }),
-  createTestCaseForContestType('ABC999')({
-    contestId: 'abc999',
-    expected: ContestType.ABC,
-  }),
+const abcContestIds = [
+  'abc001',
+  'abc002',
+  'abc099',
+  'abc100',
+  'abc101',
+  'abc200',
+  'abc201',
+  'abc365',
+  'abc999',
 ];
+
+export const abc = abcContestIds.map((contestId) =>
+  createTestCaseForContestType(contestId.toUpperCase())({
+    contestId,
+    expected: ContestType.ABC,
+  }),
+);
 
 export const apg4b = [
   createTestCaseForContestType('APG4b')({
