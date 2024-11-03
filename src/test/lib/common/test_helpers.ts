@@ -43,8 +43,14 @@ export const createTestCase =
  * const result = zip(short, long); // [[1, 'a'], [2, 'b']]
  */
 export function zip<T, U>(firstArray: T[], secondArray: U[]): [T, U][] {
-  if (!firstArray || !secondArray) {
-    throw new Error('Both arrays must be non-null');
+  if (!firstArray) {
+    throw new Error('First array must be non-null and defined');
+  }
+  if (!secondArray) {
+    throw new Error('Second array must be non-null and defined');
+  }
+  if (!Array.isArray(firstArray) || !Array.isArray(secondArray)) {
+    throw new Error('Both inputs must be arrays');
   }
 
   return firstArray
