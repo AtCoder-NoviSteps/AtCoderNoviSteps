@@ -7,44 +7,30 @@ export type TestCaseForContestNameLabel = {
 
 const createTestCaseForContestNameLabel = createTestCase<TestCaseForContestNameLabel>;
 
-export const abc = [
-  createTestCaseForContestNameLabel('ABC001')({
-    contestId: 'abc001',
-    expected: 'ABC001',
-  }),
-  createTestCaseForContestNameLabel('ABC002')({
-    contestId: 'abc002',
-    expected: 'ABC002',
-  }),
-  createTestCaseForContestNameLabel('ABC099')({
-    contestId: 'abc099',
-    expected: 'ABC099',
-  }),
-  createTestCaseForContestNameLabel('ABC100')({
-    contestId: 'abc100',
-    expected: 'ABC100',
-  }),
-  createTestCaseForContestNameLabel('ABC101')({
-    contestId: 'abc101',
-    expected: 'ABC101',
-  }),
-  createTestCaseForContestNameLabel('ABC200')({
-    contestId: 'abc200',
-    expected: 'ABC200',
-  }),
-  createTestCaseForContestNameLabel('ABC201')({
-    contestId: 'abc201',
-    expected: 'ABC201',
-  }),
-  createTestCaseForContestNameLabel('ABC365')({
-    contestId: 'abc365',
-    expected: 'ABC365',
-  }),
-  createTestCaseForContestNameLabel('ABC999')({
-    contestId: 'abc999',
-    expected: 'ABC999',
-  }),
-];
+const generateAbcTestCases = (
+  contestIds: string[],
+): { name: string; value: TestCaseForContestNameLabel }[] => {
+  return contestIds.map((contestId) => {
+    const testCase = createTestCaseForContestNameLabel(`ABC${contestId}`)({
+      contestId: `abc${contestId}`,
+      expected: `ABC${contestId}`,
+    });
+
+    return testCase;
+  });
+};
+
+export const abc = generateAbcTestCases([
+  '001',
+  '002',
+  '099',
+  '100',
+  '101',
+  '200',
+  '201',
+  '365',
+  '999',
+]);
 
 export const apg4b = [
   createTestCaseForContestNameLabel('APG4b')({

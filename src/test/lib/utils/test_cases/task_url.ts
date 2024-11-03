@@ -17,43 +17,13 @@ export type TestCaseForTaskUrl = {
 
 const createTestCaseForTaskUrl = createTestCase<TestCaseForTaskUrl>;
 
-const abc365Tasks = [
-  createTestCaseForTaskUrl('ABC365, task A')({
+const abc365Tasks = ['a', 'b', 'c', 'd', 'e', 'f', 'g'].map((suffixTaskId) => {
+  return createTestCaseForTaskUrl(`ABC365, task ${suffixTaskId.toUpperCase()}`)({
     contestId: 'abc365',
-    taskId: 'abc365_a',
-    expected: `${ATCODER_BASE_CONTEST_URL}/abc365/tasks/abc365_a`,
-  }),
-  createTestCaseForTaskUrl('ABC365, task B')({
-    contestId: 'abc365',
-    taskId: 'abc365_b',
-    expected: `${ATCODER_BASE_CONTEST_URL}/abc365/tasks/abc365_b`,
-  }),
-  createTestCaseForTaskUrl('ABC365, task C')({
-    contestId: 'abc365',
-    taskId: 'abc365_c',
-    expected: `${ATCODER_BASE_CONTEST_URL}/abc365/tasks/abc365_c`,
-  }),
-  createTestCaseForTaskUrl('ABC365, task D')({
-    contestId: 'abc365',
-    taskId: 'abc365_d',
-    expected: `${ATCODER_BASE_CONTEST_URL}/abc365/tasks/abc365_d`,
-  }),
-  createTestCaseForTaskUrl('ABC365, task E')({
-    contestId: 'abc365',
-    taskId: 'abc365_e',
-    expected: `${ATCODER_BASE_CONTEST_URL}/abc365/tasks/abc365_e`,
-  }),
-  createTestCaseForTaskUrl('ABC365, task F')({
-    contestId: 'abc365',
-    taskId: 'abc365_f',
-    expected: `${ATCODER_BASE_CONTEST_URL}/abc365/tasks/abc365_f`,
-  }),
-  createTestCaseForTaskUrl('ABC365, task G')({
-    contestId: 'abc365',
-    taskId: 'abc365_g',
-    expected: `${ATCODER_BASE_CONTEST_URL}/abc365/tasks/abc365_g`,
-  }),
-];
+    taskId: `abc365_${suffixTaskId}`,
+    expected: `${ATCODER_BASE_CONTEST_URL}/abc365/tasks/abc365_${suffixTaskId}`,
+  });
+});
 
 const beginnersTasks = [
   createTestCaseForTaskUrl('ABS, task A')({
@@ -113,218 +83,57 @@ const educationalTasks = [
 
 export const atCoderTasks = [...abc365Tasks, ...beginnersTasks, ...educationalTasks];
 
-export const aojCourses = [
-  createTestCaseForTaskUrl('AOJ Courses, ITP1 1_A')({
+const courses = [
+  {
     contestId: 'ITP1',
-    taskId: 'ITP1_1_A',
-    expected: `${AOJ_TASKS_URL}/ITP1_1_A`,
-  }),
-  createTestCaseForTaskUrl('AOJ Courses, ITP1 1_B')({
-    contestId: 'ITP1',
-    taskId: 'ITP1_1_B',
-    expected: `${AOJ_TASKS_URL}/ITP1_1_B`,
-  }),
-  createTestCaseForTaskUrl('AOJ Courses, ITP1 1_D')({
-    contestId: 'ITP1',
-    taskId: 'ITP1_1_D',
-    expected: `${AOJ_TASKS_URL}/ITP1_1_D`,
-  }),
-  createTestCaseForTaskUrl('AOJ Courses, ITP1 2_A')({
-    contestId: 'ITP1',
-    taskId: 'ITP1_2_A',
-    expected: `${AOJ_TASKS_URL}/ITP1_2_A`,
-  }),
-  createTestCaseForTaskUrl('AOJ Courses, ITP1 2_D')({
-    contestId: 'ITP1',
-    taskId: 'ITP1_2_D',
-    expected: `${AOJ_TASKS_URL}/ITP1_2_D`,
-  }),
-  createTestCaseForTaskUrl('AOJ Courses, ITP1 9_A')({
-    contestId: 'ITP1',
-    taskId: 'ITP1_9_A',
-    expected: `${AOJ_TASKS_URL}/ITP1_9_A`,
-  }),
-  createTestCaseForTaskUrl('AOJ Courses, ITP1 9_D')({
-    contestId: 'ITP1',
-    taskId: 'ITP1_9_D',
-    expected: `${AOJ_TASKS_URL}/ITP1_9_D`,
-  }),
-  createTestCaseForTaskUrl('AOJ Courses, ITP1 10_A')({
-    contestId: 'ITP1',
-    taskId: 'ITP1_10_A',
-    expected: `${AOJ_TASKS_URL}/ITP1_10_A`,
-  }),
-  createTestCaseForTaskUrl('AOJ Courses, ITP1 10_D')({
-    contestId: 'ITP1',
-    taskId: 'ITP1_10_D',
-    expected: `${AOJ_TASKS_URL}/ITP1_10_D`,
-  }),
-  createTestCaseForTaskUrl('AOJ Courses, ITP1 11_A')({
-    contestId: 'ITP1',
-    taskId: 'ITP1_11_A',
-    expected: `${AOJ_TASKS_URL}/ITP1_11_A`,
-  }),
-  createTestCaseForTaskUrl('AOJ Courses, ITP1 11_D')({
-    contestId: 'ITP1',
-    taskId: 'ITP1_11_D',
-    expected: `${AOJ_TASKS_URL}/ITP1_11_D`,
-  }),
-  createTestCaseForTaskUrl('AOJ Courses, ALDS1 1_A')({
+    tasks: ['1_A', '1_B', '1_D', '2_A', '2_D', '9_A', '9_D', '10_A', '10_D', '11_A', '11_D'],
+  },
+  {
     contestId: 'ALDS1',
-    taskId: 'ALDS1_1_A',
-    expected: `${AOJ_TASKS_URL}/ALDS1_1_A`,
-  }),
-  createTestCaseForTaskUrl('AOJ Courses, ALDS1 1_B')({
-    contestId: 'ALDS1',
-    taskId: 'ALDS1_1_B',
-    expected: `${AOJ_TASKS_URL}/ALDS1_1_B`,
-  }),
-  createTestCaseForTaskUrl('AOJ Courses, ALDS1 1_D')({
-    contestId: 'ALDS1',
-    taskId: 'ALDS1_1_D',
-    expected: `${AOJ_TASKS_URL}/ALDS1_1_D`,
-  }),
-  createTestCaseForTaskUrl('AOJ Courses, ALDS1 15_A')({
-    contestId: 'ALDS1',
-    taskId: 'ALDS1_15_A',
-    expected: `${AOJ_TASKS_URL}/ALDS1_15_A`,
-  }),
-  createTestCaseForTaskUrl('AOJ Courses, ALDS1 15_D')({
-    contestId: 'ALDS1',
-    taskId: 'ALDS1_15_D',
-    expected: `${AOJ_TASKS_URL}/ALDS1_15_D`,
-  }),
-  createTestCaseForTaskUrl('AOJ Courses, ITP2 1_A')({
+    tasks: ['1_A', '1_B', '1_D', '15_A', '15_D'],
+  },
+  {
     contestId: 'ITP2',
-    taskId: 'ITP2_1_A',
-    expected: `${AOJ_TASKS_URL}/ITP2_1_A`,
-  }),
-  createTestCaseForTaskUrl('AOJ Courses, ITP2 1_D')({
-    contestId: 'ITP2',
-    taskId: 'ITP2_1_D',
-    expected: `${AOJ_TASKS_URL}/ITP2_1_D`,
-  }),
-  createTestCaseForTaskUrl('AOJ Courses, ITP2 11_A')({
-    contestId: 'ITP2',
-    taskId: 'ITP2_11_A',
-    expected: `${AOJ_TASKS_URL}/ITP2_11_A`,
-  }),
-  createTestCaseForTaskUrl('AOJ Courses, ITP2 11_D')({
-    contestId: 'ITP2',
-    taskId: 'ITP2_11_D',
-    expected: `${AOJ_TASKS_URL}/ITP2_11_D`,
-  }),
-  createTestCaseForTaskUrl('AOJ Courses, DPL 1_A')({
+    tasks: ['1_A', '1_D', '11_A', '11_D'],
+  },
+  {
     contestId: 'DPL',
-    taskId: 'DPL_1_A',
-    expected: `${AOJ_TASKS_URL}/DPL_1_A`,
-  }),
-  createTestCaseForTaskUrl('AOJ Courses, DPL 1_I')({
-    contestId: 'DPL',
-    taskId: 'DPL_1_I',
-    expected: `${AOJ_TASKS_URL}/DPL_1_I`,
-  }),
-  createTestCaseForTaskUrl('AOJ Courses, DPL 5_A')({
-    contestId: 'DPL',
-    taskId: 'DPL_5_A',
-    expected: `${AOJ_TASKS_URL}/DPL_5_A`,
-  }),
-  createTestCaseForTaskUrl('AOJ Courses, DPL 5_L')({
-    contestId: 'DPL',
-    taskId: 'DPL_5_L',
-    expected: `${AOJ_TASKS_URL}/DPL_5_L`,
-  }),
+    tasks: ['1_A', '1_I', '5_A', '5_L'],
+  },
 ];
+
+export const aojCourses = courses.flatMap((course) =>
+  course.tasks.map((task) => {
+    return createTestCaseForTaskUrl(`AOJ Courses, ${course.contestId} ${task}`)({
+      contestId: course.contestId,
+      taskId: `${course.contestId}_${task}`,
+      expected: `${AOJ_TASKS_URL}/${course.contestId}_${task}`,
+    });
+  }),
+);
 
 // PCK contests follow these patterns:
 // - Contest ID format: PCK(Prelim|Final)<YEAR>
 // - Task ID format:
 //   - Recent contests (2023+): 4xxx
 //   - Older contests: 0xxx
-export const aojPck = [
-  createTestCaseForTaskUrl('AOJ, PCK Prelim 2023 - 4012')({
-    contestId: 'PCKPrelim2023',
-    taskId: '4012',
-    expected: `${AOJ_TASKS_URL}/4012`,
-  }),
-  createTestCaseForTaskUrl('AOJ, PCK Prelim 2023 - 4013')({
-    contestId: 'PCKPrelim2023',
-    taskId: '4013',
-    expected: `${AOJ_TASKS_URL}/4013`,
-  }),
-  createTestCaseForTaskUrl('AOJ, PCK Prelim 2023 - 4022')({
-    contestId: 'PCKPrelim2023',
-    taskId: '4022',
-    expected: `${AOJ_TASKS_URL}/4022`,
-  }),
-  createTestCaseForTaskUrl('AOJ, PCK Prelim 2022 - 0479')({
-    contestId: 'PCKPrelim2022',
-    taskId: '0479',
-    expected: `${AOJ_TASKS_URL}/0479`,
-  }),
-  createTestCaseForTaskUrl('AOJ, PCK Prelim 2022 - 0489')({
-    contestId: 'PCKPrelim2022',
-    taskId: '0489',
-    expected: `${AOJ_TASKS_URL}/0489`,
-  }),
-  createTestCaseForTaskUrl('AOJ, PCK Prelim 2005 - 0073')({
-    contestId: 'PCKPrelim2005',
-    taskId: '0073',
-    expected: `${AOJ_TASKS_URL}/0073`,
-  }),
-  createTestCaseForTaskUrl('AOJ, PCK Prelim 2005 - 0092')({
-    contestId: 'PCKPrelim2005',
-    taskId: '0092',
-    expected: `${AOJ_TASKS_URL}/0092`,
-  }),
-  createTestCaseForTaskUrl('AOJ, PCK Prelim 2004 - 0027')({
-    contestId: 'PCKPrelim2004',
-    taskId: '0027',
-    expected: `${AOJ_TASKS_URL}/0027`,
-  }),
-  createTestCaseForTaskUrl('AOJ, PCK Prelim 2004 - 0043')({
-    contestId: 'PCKPrelim2004',
-    taskId: '0043',
-    expected: `${AOJ_TASKS_URL}/0043`,
-  }),
-  createTestCaseForTaskUrl('AOJ, PCK Final 2023 - 4023')({
-    contestId: 'PCKFinal2023',
-    taskId: '4023',
-    expected: `${AOJ_TASKS_URL}/4023`,
-  }),
-  createTestCaseForTaskUrl('AOJ, PCK Final 2023 - 4035')({
-    contestId: 'PCKFinal2023',
-    taskId: '4035',
-    expected: `${AOJ_TASKS_URL}/4035`,
-  }),
-  createTestCaseForTaskUrl('AOJ, PCK Final 2022 - 4000')({
-    contestId: 'PCKFinal2022',
-    taskId: '4000',
-    expected: `${AOJ_TASKS_URL}/4000`,
-  }),
-  createTestCaseForTaskUrl('AOJ, PCK Final 2022 - 4011')({
-    contestId: 'PCKFinal2022',
-    taskId: '4011',
-    expected: `${AOJ_TASKS_URL}/4011`,
-  }),
-  createTestCaseForTaskUrl('AOJ, PCK Final 2004 - 0044')({
-    contestId: 'PCKFinal2004',
-    taskId: '0044',
-    expected: `${AOJ_TASKS_URL}/0044`,
-  }),
-  createTestCaseForTaskUrl('AOJ, PCK Final 2004 - 0097')({
-    contestId: 'PCKFinal2004',
-    taskId: '0097',
-    expected: `${AOJ_TASKS_URL}/0097`,
-  }),
-  createTestCaseForTaskUrl('AOJ, PCK Final 2003 - 0000')({
-    contestId: 'PCKFinal2003',
-    taskId: '0000',
-    expected: `${AOJ_TASKS_URL}/0000`,
-  }),
-  createTestCaseForTaskUrl('AOJ, PCK Final 2003 - 0098')({
-    contestId: 'PCKFinal2003',
-    taskId: '0098',
-    expected: `${AOJ_TASKS_URL}/0098`,
-  }),
+const pckContests = [
+  { contestId: 'PCKPrelim2023', tasks: ['4012', '4013', '4022'] },
+  { contestId: 'PCKPrelim2022', tasks: ['0479', '0489'] },
+  { contestId: 'PCKPrelim2005', tasks: ['0073', '0092'] },
+  { contestId: 'PCKPrelim2004', tasks: ['0027', '0043'] },
+  { contestId: 'PCKFinal2023', tasks: ['4023', '4035'] },
+  { contestId: 'PCKFinal2022', tasks: ['4000', '4011'] },
+  { contestId: 'PCKFinal2004', tasks: ['0044', '0097'] },
+  { contestId: 'PCKFinal2003', tasks: ['0000', '0098'] },
 ];
+
+export const aojPck = pckContests.flatMap((course) =>
+  course.tasks.map((task) => {
+    return createTestCaseForTaskUrl(`AOJ Courses, ${course.contestId} ${task}`)({
+      contestId: course.contestId,
+      taskId: task,
+      expected: `${AOJ_TASKS_URL}/${task}`,
+    });
+  }),
+);
