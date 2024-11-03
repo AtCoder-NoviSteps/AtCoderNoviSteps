@@ -12,51 +12,57 @@ type AOJCourseAPI = {
   courses: Courses;
 };
 
+/**
+ * Represents a course in the AOJ
+ */
 type Course = {
-  id: number;
-  serial: number;
-  shortName: string;
-  name: string;
-  type: string;
+  readonly id: number;
+  readonly serial: number;
+  readonly shortName: string;
+  readonly name: string;
+  readonly type: string;
 };
 
 type Courses = Course[];
 
 type AOJChallengeContestAPI = {
-  largeCl: object;
-  contests: ChallengeContests;
+  readonly largeCl: object;
+  readonly contests: ChallengeContests;
 };
 
+/**
+ * Represents a challenge contest in the AOJ
+ */
 type ChallengeContest = {
-  abbr: string;
-  largeCl: string;
-  middleCl: string;
-  year: number;
-  progress: number;
-  numberOfProblems: number;
-  numberOfSolved: number;
-  days: { title: string; problems: AOJTaskAPI[] }[];
+  readonly abbr: string;
+  readonly largeCl: string;
+  readonly middleCl: string;
+  readonly year: number;
+  readonly progress: number;
+  readonly numberOfProblems: number;
+  readonly numberOfSolved: number;
+  readonly days: { title: string; problems: AOJTaskAPI[] }[];
 };
 
 type ChallengeContests = ChallengeContest[];
 
 type AOJTaskAPI = {
-  id: string;
-  available: number;
-  doctype: number;
-  name: string;
-  problemTimeLimit: number;
-  problemMemoryLimit: number;
-  maxScore: number;
-  solvedUser: number;
-  submissions: number;
-  recommendations: number;
-  isSolved: boolean;
-  bookmark: boolean;
-  recommend: boolean;
-  successRate: number;
-  score: number;
-  userScore: number;
+  readonly id: string;
+  readonly available: number;
+  readonly doctype: number;
+  readonly name: string;
+  readonly problemTimeLimit: number;
+  readonly problemMemoryLimit: number;
+  readonly maxScore: number;
+  readonly solvedUser: number;
+  readonly submissions: number;
+  readonly recommendations: number;
+  readonly isSolved: boolean;
+  readonly bookmark: boolean;
+  readonly recommend: boolean;
+  readonly successRate: number;
+  readonly score: number;
+  readonly userScore: number;
 };
 
 type AOJTaskAPIs = AOJTaskAPI[];
