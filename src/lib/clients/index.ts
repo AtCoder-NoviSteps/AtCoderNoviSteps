@@ -1,27 +1,43 @@
 import { AtCoderProblemsApiClient } from '$lib/clients/atcoder_problems';
 import { AojApiClient } from '$lib/clients/aizu_online_judge';
 
-import type { ContestForImport } from '$lib/types/contest';
-import type { TaskForImport } from '$lib/types/task';
+import type { ContestForImport, ContestsForImport } from '$lib/types/contest';
+import type { TaskForImport, TasksForImport } from '$lib/types/task';
 
-// 各コンテストサイトのコンテスト情報・問題情報をAPIから取得・集約する
-// Fetch and aggregate contest and problem information from various contest sites via their APIs
+// Fetches and aggregates contest and problem information from various contest sites via their APIs.
 //
-// 対応コンテストサイト (2024年10月現在)
-// Supported Contest Sites (as of October 2024):
+// @remarks
+// Supported Contest Sites (as of 2024-11):
 //
-// ・AtCoder: AtCoder Problems API
-//   https://github.com/kenkoooo/AtCoderProblems/blob/master/doc/api.md
+// 1. AtCoder: AtCoder Problems API
+//   {@link https://github.com/kenkoooo/AtCoderProblems/blob/master/doc/api.md}
 //
-// ・AIZU ONLINE JUDGE (AOJ)
+// 2. AIZU ONLINE JUDGE (AOJ)
 //   ・Courses
 //   ・Challenges
 //     ・PCK (All-Japan High School Programming Contest)
 
-const atCoderProblemsApiClient = new AtCoderProblemsApiClient();
-const aojApiClient = new AojApiClient();
+/**
+ * Creates and returns an object containing instances of various API clients.
+ *
+ * @returns An object with the following properties:
+ * - `atCoder`: An instance of `AtCoderProblemsApiClient`.
+ * - `aoj`: An instance of `AojApiClient`.
+ */
+function createClients() {
+  return {
+    atCoder: new AtCoderProblemsApiClient(),
+    aoj: new AojApiClient(),
+  };
+}
 
-export const getContests = () => {
+const { atCoder: atCoderProblemsApiClient, aoj: aojApiClient } = createClients();
+
+/**
+ * Fetches and aggregates contest information from all supported platforms.
+ * @returns {Promise<ContestsForImport>} A promise that resolves to an array of unique contests.
+ */
+export const getContests = (): Promise<ContestsForImport> => {
   const contests = mergeDataFromAPIs<ContestForImport>([
     { source: () => atCoderProblemsApiClient.getContests(), name: 'AtCoder contests' },
     { source: () => aojApiClient.getContests(), name: 'AOJ contests' },
@@ -30,7 +46,11 @@ export const getContests = () => {
   return contests;
 };
 
-export const getTasks = () => {
+/**
+ * Fetches and aggregates task information from all supported platforms.
+ * @returns {Promise<TasksForImport>} A promise that resolves to an array of unique tasks.
+ */
+export const getTasks = (): Promise<TasksForImport> => {
   const tasks = mergeDataFromAPIs<TaskForImport>([
     { source: () => atCoderProblemsApiClient.getTasks(), name: 'AtCoder tasks' },
     { source: () => aojApiClient.getTasks(), name: 'AOJ tasks' },
@@ -50,33 +70,54 @@ export const getTasks = () => {
 async function mergeDataFromAPIs<T extends { id: string }>(
   sources: Array<{ source: () => Promise<T[]>; name: string }>,
 ): Promise<T[]> {
+  const metrics = {
+    apiTime: 0,
+    totalTime: 0,
+    itemCount: 0,
+    errors: [] as Array<{ source: string; error: Error }>,
+  };
   const startTime = performance.now();
 
   try {
     const rawData = await Promise.all(
       sources.map(({ source, name }) =>
         source().catch((error) => {
-          console.error(`Failed to fetch from ${name}`, error);
+          metrics.errors.push({ source: name, error });
           return [];
         }),
       ),
     );
 
-    const apiTime = performance.now() - startTime;
+    metrics.apiTime = performance.now() - startTime;
 
     const uniqueDataMap = new Map<string, T>();
     rawData.flat().forEach((data) => {
       uniqueDataMap.set(data.id, data);
     });
 
-    const totalTime = performance.now() - startTime;
-    console.info(
-      `API metrics: ${apiTime.toFixed(0)} ms (API), ${totalTime.toFixed(0)} ms (Total), ${uniqueDataMap.size} items`,
-    );
+    metrics.totalTime = performance.now() - startTime;
+    metrics.itemCount = uniqueDataMap.size;
+
+    console.info('API metrics:', {
+      ...metrics,
+      apiTime: `${metrics.apiTime.toFixed(0)}ms`,
+      totalTime: `${metrics.totalTime.toFixed(0)}ms`,
+      errorCount: metrics.errors.length,
+    });
+
+    if (metrics.errors.length >= 1) {
+      console.error('API errors:', metrics.errors);
+    }
 
     return Array.from(uniqueDataMap.values());
   } catch (error) {
-    console.error('Failed to fetch data from API(s)', error);
-    throw error;
+    const finalError = new Error('Failed to fetch data from API(s)', { cause: error });
+
+    console.error('Critical API error:', {
+      error: finalError,
+      metrics,
+    });
+
+    throw finalError;
   }
 }

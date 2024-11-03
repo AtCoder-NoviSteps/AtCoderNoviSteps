@@ -30,14 +30,18 @@ export abstract class ContestSiteApiClient {
     errorMessage,
     validateResponse,
   }: FetchAPIConfig<T>): Promise<T> {
-    const url = new URL(endpoint, baseApiUrl).toString();
-    const data = await fetchAPI<T>(url, errorMessage);
+    try {
+      const url = new URL(endpoint, baseApiUrl).toString();
+      const data = await fetchAPI<T>(url, errorMessage);
 
-    if (validateResponse && !validateResponse(data)) {
-      throw new Error(`${errorMessage}. Response validation failed for ${endpoint}`);
+      if (validateResponse && !validateResponse(data)) {
+        throw new Error(`${errorMessage}. Response validation failed for ${endpoint}`);
+      }
+
+      return data;
+    } catch (error) {
+      throw new Error(`Failed to fetch from ${endpoint}: ${error}`);
     }
-
-    return data;
   }
 }
 

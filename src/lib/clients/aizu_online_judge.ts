@@ -3,6 +3,10 @@ import { AOJ_API_BASE_URL } from '$lib/constants/urls';
 import type { ContestsForImport } from '$lib/types/contest';
 import type { TasksForImport } from '$lib/types/task';
 
+/**
+ * Represents the response structure from AOJ Course API
+ * @typedef {Object} AOJCourseAPI
+ */
 type AOJCourseAPI = {
   filter: string;
   courses: Courses;
@@ -14,13 +18,6 @@ type Course = {
   shortName: string;
   name: string;
   type: string;
-  userScore: number;
-  maxScore: number;
-  progress: number;
-  image: string;
-  numberOfTopics: number;
-  topics: string;
-  description: string;
 };
 
 type Courses = Course[];
@@ -64,10 +61,18 @@ type AOJTaskAPI = {
 
 type AOJTaskAPIs = AOJTaskAPI[];
 
-const PRELIM = 'prelim';
-const FINAL = 'final';
-type PckRound = typeof PRELIM | typeof FINAL;
+/**
+ * Enum representing PCK contest rounds
+ */
+enum PckRound {
+  PRELIM = 'prelim',
+  FINAL = 'final',
+}
 
+/**
+ * Constant used as a placeholder for missing timestamp data in AOJ contests
+ * Value: -1
+ */
 const PENDING = -1;
 
 /**
@@ -90,8 +95,8 @@ export class AojApiClient extends ContestSiteApiClient {
   async getContests(): Promise<ContestsForImport> {
     const [courses, pckPrelims, pckFinals] = await Promise.all([
       this.fetchCourseContests(),
-      this.fetchPckContests(PRELIM),
-      this.fetchPckContests(FINAL),
+      this.fetchPckContests(PckRound.PRELIM),
+      this.fetchPckContests(PckRound.FINAL),
     ]);
 
     const contests = courses.concat(pckPrelims, pckFinals);
@@ -207,8 +212,8 @@ export class AojApiClient extends ContestSiteApiClient {
   async getTasks(): Promise<TasksForImport> {
     const [courses, pckPrelims, pckFinals] = await Promise.all([
       this.fetchCourseTasks(),
-      this.fetchPckTasks(PRELIM),
-      this.fetchPckTasks(FINAL),
+      this.fetchPckTasks(PckRound.PRELIM),
+      this.fetchPckTasks(PckRound.FINAL),
     ]);
     const tasks = courses.concat(pckPrelims, pckFinals);
     console.log(`Found AOJ: ${tasks.length} tasks.`);
@@ -244,8 +249,8 @@ export class AojApiClient extends ContestSiteApiClient {
           const courseTask = {
             id: taskId,
             contest_id: this.getCourseName(taskId),
-            problem_index: taskId, // problem_index 相当の値がないため task.id で代用。AtCoder Problems APIにおいても、JOIの古い問題で同様の処理が行われている。
-            task_id: taskId, // 同上
+            problem_index: taskId, // Using task.id as a substitute since there's no equivalent to problem_index. Similar approach is used in AtCoder Problems API for old JOI problems.
+            task_id: taskId, // Same as above
             title: task.name,
           };
 
@@ -299,20 +304,23 @@ export class AojApiClient extends ContestSiteApiClient {
           'contests' in data && Array.isArray(data.contests) && data.contests.length > 0,
       });
 
-      const tasks: TasksForImport = allPckContests.contests.flatMap((contest: ChallengeContest) =>
-        contest.days.flatMap((day) =>
-          day.problems.map((problem) => {
-            const taskId = problem.id;
-
-            return {
-              id: taskId,
+      const tasks: TasksForImport = allPckContests.contests.reduce(
+        (tasksForImport: TasksForImport, contest) => {
+          contest.days.forEach((day) => {
+            const contestTasks = day.problems.map((problem) => ({
+              id: problem.id,
               contest_id: contest.abbr,
-              problem_index: taskId, // problem_index 相当の値がないため problem.id で代用。AtCoder Problems APIにおいても、JOIの古い問題で同様の処理が行われている。
-              task_id: taskId, // 同上
+              problem_index: problem.id, // Using problem.id as a substitute since there's no equivalent to problem_index. Similar approach is used in AtCoder Problems API for old JOI problems.
+              task_id: problem.id, // Same as above
               title: problem.name,
-            };
-          }),
-        ),
+            }));
+
+            tasksForImport.push(...contestTasks);
+          });
+
+          return tasksForImport;
+        },
+        [],
       );
       console.log(`Found PCK ${round}: ${tasks.length} tasks.`);
 
