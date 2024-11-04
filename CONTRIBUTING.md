@@ -32,9 +32,9 @@
   - [Flowbite Svelte](https://flowbite-svelte.com/)
   - [STWUI](https://stwui.vercel.app/)
 - テスティングフレームワーク
-  - [Vitest](https://vitest.dev/)
-  - [Playwright](https://playwright.dev/)
-  - [Nock](https://github.com/nock/nock)
+  - [Vitest](https://vitest.dev/) - 単体テスト (ユーティリティ、コンポーネント)
+  - [Playwright](https://playwright.dev/) - e2eテスト
+  - [Nock](https://github.com/nock/nock) - API 統合テスト用の HTTP モック
 - 認証ライブラリ
   - [Lucia](https://lucia-auth.com/)
 - ORM
