@@ -96,7 +96,7 @@ async function saveTasks(
   await toJson(filePath, selectedTasks);
 }
 
-function startRecordRequests() {
+function startRecordRequests(): void {
   nock.recorder.rec({
     output_objects: true,
     dont_print: true,

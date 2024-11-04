@@ -1,5 +1,6 @@
 import { describe, test, expect } from 'vitest';
-import fs from 'fs';
+
+import { loadMockData } from '../common/test_helpers';
 
 import { ContestSiteApiClient } from '$lib/clients/common';
 import { AojApiClient } from '$lib/clients/aizu_online_judge';
@@ -13,12 +14,17 @@ describe('AIZU ONLINE JUDGE API client', () => {
 
   beforeAll(() => {
     client = new AojApiClient();
-    contestsMock = JSON.parse(
-      fs.readFileSync('./src/test/lib/clients/test_data/aizu_online_judge/contests.json', 'utf8'),
-    );
-    tasksMock = JSON.parse(
-      fs.readFileSync('./src/test/lib/clients/test_data/aizu_online_judge/tasks.json', 'utf8'),
-    );
+
+    try {
+      contestsMock = loadMockData<ContestsForImport>(
+        './src/test/lib/clients/test_data/aizu_online_judge/contests.json',
+      );
+      tasksMock = loadMockData<TasksForImport>(
+        './src/test/lib/clients/test_data/aizu_online_judge/tasks.json',
+      );
+    } catch (error) {
+      throw new Error(`Failed to load mock data: ${error}`);
+    }
   });
 
   describe('getContests', () => {
@@ -38,6 +44,21 @@ describe('AIZU ONLINE JUDGE API client', () => {
         expect(contest.title).toBeDefined();
       });
     });
+
+    test('handles empty contests list', async () => {
+      client.getContests = async () => [];
+      const contests = await client.getContests();
+      expect(contests).toHaveLength(0);
+    });
+
+    test('validates contest properties format', async () => {
+      contestsMock.forEach((contest) => {
+        expect(typeof contest.id).toBe('string');
+        expect(contest.id).toMatch(/^[a-zA-Z0-9_-]+$/);
+        expect(typeof contest.title).toBe('string');
+        expect(contest.title.length).toBeGreaterThan(0);
+      });
+    });
   });
 
   describe('getTasks', () => {
@@ -55,6 +76,22 @@ describe('AIZU ONLINE JUDGE API client', () => {
         expect(task.contest_id).toBeDefined();
         expect(task.problem_index).toBeDefined();
         expect(task.title).toBeDefined();
+      });
+    });
+
+    test('handles empty tasks list', async () => {
+      client.getTasks = async () => [];
+      const tasks = await client.getTasks();
+      expect(tasks).toHaveLength(0);
+    });
+
+    test('validates task properties format', async () => {
+      tasksMock.forEach((task) => {
+        expect(typeof task.id).toBe('string');
+        expect(typeof task.contest_id).toBe('string');
+        expect(typeof task.problem_index).toBe('string');
+        expect(typeof task.title).toBe('string');
+        expect(task.title.length).toBeGreaterThan(0);
       });
     });
   });
