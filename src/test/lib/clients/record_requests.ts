@@ -1,3 +1,5 @@
+import path from 'path';
+
 // See:
 // https://github.com/nock/nock
 import nock from 'nock';
@@ -11,12 +13,21 @@ import { AojApiClient } from '$lib/clients/aizu_online_judge';
 // Usage:
 // pnpm dlx vite-node ./src/test/lib/clients/record_requests.ts
 async function main(): Promise<void> {
-  startRecordRequests();
+  try {
+    startRecordRequests();
 
-  clients.forEach(async (client) => {
-    await saveContests(client.source, client.name, 100);
-    await saveTasks(client.source, client.name, 100);
-  });
+    await Promise.all(
+      clients.map(async (client) => {
+        await saveContests(client.source, client.name, 100);
+        await saveTasks(client.source, client.name, 100);
+      }),
+    );
+  } catch (error) {
+    console.error('Failed to record requests: ', error);
+    throw error;
+  } finally {
+    stopRecordRequests();
+  }
 }
 
 /**
@@ -34,6 +45,12 @@ const clients = [
 
 export const TEST_DATA_BASE_DIR = 'src/test/lib/clients/test_data/';
 
+function ensureDirectoryExists(dirPath: string): void {
+  if (!fs.existsSync(dirPath)) {
+    fs.mkdirSync(dirPath, { recursive: true });
+  }
+}
+
 /**
  * Saves a specified number of contests from a contest site to a JSON file.
  *
@@ -47,11 +64,13 @@ async function saveContests(
   contestSite: string,
   count: number = 100,
 ): Promise<void> {
+  validateContestSiteApi(client, contestSite);
+
   const contests = await client.getContests();
   const selectedContests = getRandomElementsFromArray(contests, count);
 
-  stopRecordRequests();
-  toJson(TEST_DATA_BASE_DIR + contestSite + '/contests.json', selectedContests);
+  const filePath = path.join(TEST_DATA_BASE_DIR, contestSite, 'contests.json');
+  await toJson(filePath, selectedContests);
 }
 
 /**
@@ -68,11 +87,13 @@ async function saveTasks(
   contestSite: string,
   count: number = 100,
 ): Promise<void> {
+  validateContestSiteApi(client, contestSite);
+
   const tasks = await client.getTasks();
   const selectedTasks = getRandomElementsFromArray(tasks, count);
 
-  stopRecordRequests();
-  toJson(TEST_DATA_BASE_DIR + contestSite + '/tasks.json', selectedTasks);
+  const filePath = path.join(TEST_DATA_BASE_DIR, contestSite, 'tasks.json');
+  await toJson(filePath, selectedTasks);
 }
 
 function startRecordRequests() {
@@ -86,11 +107,24 @@ function stopRecordRequests(): void {
   nock.recorder.play();
 }
 
+function validateContestSiteApi(client: ContestSiteApiClient, contestSite: string): void {
+  if (!client) {
+    throw new Error('Client is required');
+  }
+  if (!contestSite || contestSite.trim() === '') {
+    throw new Error('Contest site identifier is required');
+  }
+}
+
 function getRandomElementsFromArray<T>(array: T[], count: number): T[] {
-  if (count > array.length) {
-    count = array.length;
+  if (!Array.isArray(array)) {
+    throw new Error('Input must be an array');
+  }
+  if (count < 0) {
+    throw new Error('Count must be non-negative');
   }
 
+  count = Math.min(count, array.length);
   const shuffled = array.slice(); // Copy the original array
 
   for (let i = array.length - 1; i > 0; i--) {
@@ -101,8 +135,10 @@ function getRandomElementsFromArray<T>(array: T[], count: number): T[] {
   return shuffled.slice(0, count);
 }
 
-function toJson<T>(filePath: string, data: T[]): void {
-  fs.writeFileSync(filePath, JSON.stringify(data, null, 2), 'utf-8');
+async function toJson<T>(filePath: string, data: T[]): Promise<void> {
+  ensureDirectoryExists(path.dirname(filePath));
+
+  fs.promises.writeFile(filePath, JSON.stringify(data, null, 2), 'utf-8');
   console.log(`Saved to ${filePath}`);
 }
 

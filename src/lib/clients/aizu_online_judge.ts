@@ -214,17 +214,24 @@ export class AojApiClient extends ContestSiteApiClient {
    * The fetched tasks are then concatenated into a single array and returned.
    *
    * @returns {Promise<TasksForImport>} A promise that resolves to an array of tasks.
+   *
+   * @throws Will throw an error if the API request fails or the response validation fails.
    */
   async getTasks(): Promise<TasksForImport> {
-    const [courses, pckPrelims, pckFinals] = await Promise.all([
-      this.fetchCourseTasks(),
-      this.fetchPckTasks(PckRound.PRELIM),
-      this.fetchPckTasks(PckRound.FINAL),
-    ]);
-    const tasks = courses.concat(pckPrelims, pckFinals);
-    console.log(`Found AOJ: ${tasks.length} tasks.`);
+    try {
+      const [courses, pckPrelims, pckFinals] = await Promise.all([
+        this.fetchCourseTasks(),
+        this.fetchPckTasks(PckRound.PRELIM),
+        this.fetchPckTasks(PckRound.FINAL),
+      ]);
+      const tasks = courses.concat(pckPrelims, pckFinals);
+      console.log(`Found AOJ: ${tasks.length} tasks.`);
 
-    return tasks;
+      return tasks;
+    } catch (error) {
+      console.error(`Failed to fetch tasks from AOJ API`, error);
+      return [];
+    }
   }
 
   /**
