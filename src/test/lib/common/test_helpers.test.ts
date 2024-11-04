@@ -1,4 +1,8 @@
+import path from 'path';
+import fs from 'fs';
 import { describe, it, expect } from 'vitest';
+
+import { loadMockData } from '../common/test_helpers';
 import { createTestCase, runTests, zip } from './test_helpers';
 
 describe('createTestCase', () => {
@@ -174,5 +178,37 @@ describe('zip', () => {
     expect(() => zip(firstArray, secondArray)).toThrow(
       'Both input arrays must be non-null and defined',
     );
+  });
+});
+
+describe('loadMockData', () => {
+  const mockFilePath = path.resolve(__dirname, 'mockData.json');
+  const mockData = { key: 'value' };
+
+  beforeAll(() => {
+    fs.writeFileSync(mockFilePath, JSON.stringify(mockData));
+  });
+
+  afterAll(() => {
+    fs.unlinkSync(mockFilePath);
+  });
+
+  it('expects to load and parse mock data from a file', () => {
+    const data = loadMockData<typeof mockData>(mockFilePath);
+    expect(data).toEqual(mockData);
+  });
+
+  it('expects to throw an error if the file does not exist', () => {
+    const invalidFilePath = path.resolve(__dirname, 'nonExistentFile.json');
+    expect(() => loadMockData<typeof mockData>(invalidFilePath)).toThrow();
+  });
+
+  it('expects to throw an error if the file content is not valid JSON', () => {
+    const invalidJsonFilePath = path.resolve(__dirname, 'invalidJson.json');
+    fs.writeFileSync(invalidJsonFilePath, 'invalid json');
+
+    expect(() => loadMockData<typeof mockData>(invalidJsonFilePath)).toThrow();
+
+    fs.unlinkSync(invalidJsonFilePath);
   });
 });

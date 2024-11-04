@@ -1,3 +1,6 @@
+import path from 'path';
+import fs from 'fs';
+
 import { test } from 'vitest';
 
 export interface TestCase<T> {
@@ -62,3 +65,15 @@ export function zip<T, U>(firstArray: T[], secondArray: U[]): [T, U][] {
 export function runTests<T>(testName: string, testCases: T[], testFunction: (testCase: T) => void) {
   test.each(testCases)(`${testName} - %o`, testFunction);
 }
+
+/**
+ * Loads mock data from a specified file path and parses it as JSON.
+ *
+ * @template T - The type to which the parsed JSON should be cast.
+ * @param {string} filePath - The path to the file containing the mock data.
+ * @returns {T} - The parsed mock data cast to the specified type.
+ */
+export const loadMockData = <T>(filePath: string): T => {
+  const testDataPath = path.resolve(filePath);
+  return JSON.parse(fs.readFileSync(testDataPath, 'utf8')) as T;
+};
