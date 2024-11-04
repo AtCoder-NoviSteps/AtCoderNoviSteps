@@ -165,87 +165,36 @@ export const mathAndAlgorithm = [
   }),
 ];
 
-export const arc = [
-  createTestCaseForContestType('ARC001')({
-    contestId: 'arc001',
-    expected: ContestType.ARC,
-  }),
-  createTestCaseForContestType('ARC002')({
-    contestId: 'arc002',
-    expected: ContestType.ARC,
-  }),
-  createTestCaseForContestType('ARC057')({
-    contestId: 'arc057',
-    expected: ContestType.ARC,
-  }),
-  createTestCaseForContestType('ARC058')({
-    contestId: 'arc058',
-    expected: ContestType.ARC,
-  }),
-  createTestCaseForContestType('ARC099')({
-    contestId: 'arc099',
-    expected: ContestType.ARC,
-  }),
-  createTestCaseForContestType('ARC100')({
-    contestId: 'arc100',
-    expected: ContestType.ARC,
-  }),
-  createTestCaseForContestType('ARC101')({
-    contestId: 'arc101',
-    expected: ContestType.ARC,
-  }),
-  createTestCaseForContestType('ARC103')({
-    contestId: 'arc103',
-    expected: ContestType.ARC,
-  }),
-  createTestCaseForContestType('ARC104')({
-    contestId: 'arc104',
-    expected: ContestType.ARC,
-  }),
-  createTestCaseForContestType('ARC105')({
-    contestId: 'arc105',
-    expected: ContestType.ARC,
-  }),
-  createTestCaseForContestType('ARC182')({
-    contestId: 'arc182',
-    expected: ContestType.ARC,
-  }),
-  createTestCaseForContestType('ARC183')({
-    contestId: 'arc183',
-    expected: ContestType.ARC,
-  }),
+const arcContestIds = [
+  'arc001',
+  'arc002',
+  'arc057',
+  'arc058',
+  'arc099',
+  'arc100',
+  'arc101',
+  'arc103',
+  'arc104',
+  'arc105',
+  'arc182',
+  'arc183',
 ];
 
-export const agc = [
-  createTestCaseForContestType('AGC001')({
-    contestId: 'agc001',
+export const arc = arcContestIds.map((contestId) =>
+  createTestCaseForContestType(contestId.toUpperCase())({
+    contestId,
+    expected: ContestType.ARC,
+  }),
+);
+
+const agcContestIds = ['agc001', 'agc002', 'agc009', 'agc010', 'agc011', 'agc066', 'agc067'];
+
+export const agc = agcContestIds.map((contestId) =>
+  createTestCaseForContestType(contestId.toUpperCase())({
+    contestId,
     expected: ContestType.AGC,
   }),
-  createTestCaseForContestType('AGC002')({
-    contestId: 'agc002',
-    expected: ContestType.AGC,
-  }),
-  createTestCaseForContestType('AGC009')({
-    contestId: 'agc009',
-    expected: ContestType.AGC,
-  }),
-  createTestCaseForContestType('AGC010')({
-    contestId: 'agc010',
-    expected: ContestType.AGC,
-  }),
-  createTestCaseForContestType('AGC011')({
-    contestId: 'agc011',
-    expected: ContestType.AGC,
-  }),
-  createTestCaseForContestType('AGC066')({
-    contestId: 'agc066',
-    expected: ContestType.AGC,
-  }),
-  createTestCaseForContestType('AGC067')({
-    contestId: 'agc067',
-    expected: ContestType.AGC,
-  }),
-];
+);
 
 export const arcLike = [
   createTestCaseForContestType('Tenka1 2018')({
