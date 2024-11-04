@@ -99,16 +99,21 @@ export class AojApiClient extends ContestSiteApiClient {
    * @returns {Promise<ContestsForImport>} A promise that resolves to an array of contests.
    */
   async getContests(): Promise<ContestsForImport> {
-    const [courses, pckPrelims, pckFinals] = await Promise.all([
-      this.fetchCourseContests(),
-      this.fetchPckContests(PckRound.PRELIM),
-      this.fetchPckContests(PckRound.FINAL),
-    ]);
+    try {
+      const [courses, pckPrelims, pckFinals] = await Promise.all([
+        this.fetchCourseContests(),
+        this.fetchPckContests(PckRound.PRELIM),
+        this.fetchPckContests(PckRound.FINAL),
+      ]);
 
-    const contests = courses.concat(pckPrelims, pckFinals);
-    console.log(`Found AOJ: ${contests.length} contests.`);
+      const contests = courses.concat(pckPrelims, pckFinals);
+      console.log(`Found AOJ: ${contests.length} contests.`);
 
-    return contests;
+      return contests;
+    } catch (error) {
+      console.error(`Failed to fetch contests from AOJ API`, error);
+      return [];
+    }
   }
 
   /**
