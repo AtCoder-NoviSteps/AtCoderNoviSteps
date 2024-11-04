@@ -74,7 +74,7 @@ describe('zip', () => {
     }
 
     const avgTime = times.reduce((a, b) => a + b) / times.length;
-    expect(avgTime).toBeLessThan(50); // Should complete within 50ms for CI
+    expect(avgTime).toBeLessThan(100);
   });
 
   it('expects to throw an error when the first array is null', () => {

@@ -62,7 +62,7 @@ export const testCasesForZip: TestCaseForZip<number, string>[] = [
   {
     name: 'first array is longer and second array is empty',
     first: [1, 2, 3],
-    second: [] as string[],
+    second: Array<string>(),
     expected: [],
   },
   {
@@ -73,7 +73,7 @@ export const testCasesForZip: TestCaseForZip<number, string>[] = [
   },
   {
     name: 'second array is longer and first array is empty',
-    first: [] as number[],
+    first: Array<number>(),
     second: ['a', 'b', 'c'],
     expected: [],
   },

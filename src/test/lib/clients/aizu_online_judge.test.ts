@@ -15,15 +15,20 @@ describe('AIZU ONLINE JUDGE API client', () => {
   beforeAll(() => {
     client = new AojApiClient();
 
+    const MOCK_DATA_PATHS = {
+      contests: './src/test/lib/clients/test_data/aizu_online_judge/contests.json',
+      tasks: './src/test/lib/clients/test_data/aizu_online_judge/tasks.json',
+    };
+
     try {
-      contestsMock = loadMockData<ContestsForImport>(
-        './src/test/lib/clients/test_data/aizu_online_judge/contests.json',
-      );
-      tasksMock = loadMockData<TasksForImport>(
-        './src/test/lib/clients/test_data/aizu_online_judge/tasks.json',
-      );
+      contestsMock = loadMockData<ContestsForImport>(MOCK_DATA_PATHS.contests);
+      tasksMock = loadMockData<TasksForImport>(MOCK_DATA_PATHS.tasks);
     } catch (error) {
-      throw new Error(`Failed to load mock data: ${error}`);
+      throw new Error(
+        `Failed to load mock data: ${error}\nFile: ${
+          error instanceof Error && 'fileName' in error ? error.fileName : 'unknown'
+        }`,
+      );
     }
   });
 

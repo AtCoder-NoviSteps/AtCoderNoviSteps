@@ -15,15 +15,20 @@ describe('AtCoder Problems API client', () => {
   beforeAll(() => {
     client = new AtCoderProblemsApiClient();
 
+    const MOCK_DATA_PATHS = {
+      contests: './src/test/lib/clients/test_data/atcoder_problems/contests.json',
+      tasks: './src/test/lib/clients/test_data/atcoder_problems/tasks.json',
+    };
+
     try {
-      contestsMock = loadMockData<ContestsForImport>(
-        './src/test/lib/clients/test_data/atcoder_problems/contests.json',
-      );
-      tasksMock = loadMockData<TasksForImport>(
-        './src/test/lib/clients/test_data/atcoder_problems/tasks.json',
-      );
+      contestsMock = loadMockData<ContestsForImport>(MOCK_DATA_PATHS.contests);
+      tasksMock = loadMockData<TasksForImport>(MOCK_DATA_PATHS.tasks);
     } catch (error) {
-      throw new Error(`Failed to load mock data: ${error}`);
+      throw new Error(
+        `Failed to load mock data: ${error}\nFile: ${
+          error instanceof Error && 'fileName' in error ? error.fileName : 'unknown'
+        }`,
+      );
     }
   });
 

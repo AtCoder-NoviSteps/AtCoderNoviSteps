@@ -62,40 +62,23 @@ export const tdpc = [
   }),
 ];
 
-export const past = [
-  createTestCaseForContestType('PAST 17th')({
-    contestId: 'past17-open',
-    expected: ContestType.PAST,
-  }),
-  createTestCaseForContestType('PAST 16th')({
-    contestId: 'past16-open',
-    expected: ContestType.PAST,
-  }),
-  createTestCaseForContestType('PAST 15th')({
-    contestId: 'past15-open',
-    expected: ContestType.PAST,
-  }),
-  createTestCaseForContestType('PAST 14th')({
-    contestId: 'past202303-open',
-    expected: ContestType.PAST,
-  }),
-  createTestCaseForContestType('PAST 13th')({
-    contestId: 'past202212-open',
-    expected: ContestType.PAST,
-  }),
-  createTestCaseForContestType('PAST 3rd')({
-    contestId: 'past202005-open',
-    expected: ContestType.PAST,
-  }),
-  createTestCaseForContestType('PAST 2nd')({
-    contestId: 'past202004-open',
-    expected: ContestType.PAST,
-  }),
-  createTestCaseForContestType('PAST 1st')({
-    contestId: 'past201912-open',
-    expected: ContestType.PAST,
-  }),
+const pastContestData = [
+  { name: 'PAST 17th', contestId: 'past17-open' },
+  { name: 'PAST 16th', contestId: 'past16-open' },
+  { name: 'PAST 15th', contestId: 'past15-open' },
+  { name: 'PAST 14th', contestId: 'past202303-open' },
+  { name: 'PAST 13th', contestId: 'past202212-open' },
+  { name: 'PAST 3rd', contestId: 'past202005-open' },
+  { name: 'PAST 2nd', contestId: 'past202004-open' },
+  { name: 'PAST 1st', contestId: 'past201912-open' },
 ];
+
+export const past = pastContestData.map(({ name, contestId }) =>
+  createTestCaseForContestType(name)({
+    contestId: contestId,
+    expected: ContestType.PAST,
+  }),
+);
 
 export const aclPractice = [
   createTestCaseForContestType('ACL Practice')({
@@ -104,52 +87,26 @@ export const aclPractice = [
   }),
 ];
 
-export const joi = [
-  createTestCaseForContestType('JOIG 2024 open')({
-    contestId: 'joig2024-open',
-    expected: ContestType.JOI,
-  }),
-  createTestCaseForContestType('JOIG 2023 open')({
-    contestId: 'joig2023-open',
-    expected: ContestType.JOI,
-  }),
-  createTestCaseForContestType('JOIG 2022 open')({
-    contestId: 'joig2022-open',
-    expected: ContestType.JOI,
-  }),
-  createTestCaseForContestType('JOIG 2021 open')({
-    contestId: 'joig2021-open',
-    expected: ContestType.JOI,
-  }),
-  createTestCaseForContestType('JOI 2024 qual 1A')({
-    contestId: 'joi2024yo1a',
-    expected: ContestType.JOI,
-  }),
-  createTestCaseForContestType('JOI 2024 qual 1B')({
-    contestId: 'joi2024yo1b',
-    expected: ContestType.JOI,
-  }),
-  createTestCaseForContestType('JOI 2024 qual 1C')({
-    contestId: 'joi2024yo1c',
-    expected: ContestType.JOI,
-  }),
-  createTestCaseForContestType('JOI 2023 qual 1A')({
-    contestId: 'joi2023yo1a',
-    expected: ContestType.JOI,
-  }),
-  createTestCaseForContestType('JOI 2023 qual 1B')({
-    contestId: 'joi2023yo1b',
-    expected: ContestType.JOI,
-  }),
-  createTestCaseForContestType('JOI 2023 qual 1C')({
-    contestId: 'joi2023yo1c',
-    expected: ContestType.JOI,
-  }),
-  createTestCaseForContestType('JOI 2018 qual')({
-    contestId: 'joi2018yo',
-    expected: ContestType.JOI,
-  }),
+const joiContestData = [
+  { name: 'JOIG 2024 open', contestId: 'joig2024-open' },
+  { name: 'JOIG 2023 open', contestId: 'joig2023-open' },
+  { name: 'JOIG 2022 open', contestId: 'joig2022-open' },
+  { name: 'JOIG 2021 open', contestId: 'joig2021-open' },
+  { name: 'JOI 2024 qual 1A', contestId: 'joi2024yo1a' },
+  { name: 'JOI 2024 qual 1B', contestId: 'joi2024yo1b' },
+  { name: 'JOI 2024 qual 1C', contestId: 'joi2024yo1c' },
+  { name: 'JOI 2023 qual 1A', contestId: 'joi2023yo1a' },
+  { name: 'JOI 2023 qual 1B', contestId: 'joi2023yo1b' },
+  { name: 'JOI 2023 qual 1C', contestId: 'joi2023yo1c' },
+  { name: 'JOI 2018 qual', contestId: 'joi2018yo' },
 ];
+
+export const joi = joiContestData.map(({ name, contestId }) =>
+  createTestCaseForContestType(name)({
+    contestId: contestId,
+    expected: ContestType.JOI,
+  }),
+);
 
 export const tessokuBook = [
   createTestCaseForContestType('Tessoku Book')({
@@ -263,64 +220,36 @@ export const atCoderOthers = [
 
 // See:
 // getPrefixForAojCourses() in src/lib/utils/contest.ts
-export const aojCourses = [
-  createTestCaseForContestType('AOJ Courses, ITP1')({
-    contestId: 'ITP1',
-    expected: ContestType.AOJ_COURSES,
-  }),
-  createTestCaseForContestType('AOJ Courses, ALDS1')({
-    contestId: 'ALDS1',
-    expected: ContestType.AOJ_COURSES,
-  }),
-  createTestCaseForContestType('AOJ Courses, ITP2')({
-    contestId: 'ITP2',
-    expected: ContestType.AOJ_COURSES,
-  }),
-  createTestCaseForContestType('AOJ Courses, DPL')({
-    contestId: 'DPL',
-    expected: ContestType.AOJ_COURSES,
-  }),
+const aojCoursesData = [
+  { name: 'AOJ Courses, ITP1', contestId: 'ITP1' },
+  { name: 'AOJ Courses, ALDS1', contestId: 'ALDS1' },
+  { name: 'AOJ Courses, ITP2', contestId: 'ITP2' },
+  { name: 'AOJ Courses, DPL', contestId: 'DPL' },
 ];
 
-export const aojPck = [
-  createTestCaseForContestType('AOJ, PCK Prelim 2023')({
-    contestId: 'PCKPrelim2023',
-    expected: ContestType.AOJ_PCK,
+export const aojCourses = aojCoursesData.map(({ name, contestId }) =>
+  createTestCaseForContestType(name)({
+    contestId: contestId,
+    expected: ContestType.AOJ_COURSES,
   }),
-  createTestCaseForContestType('AOJ, PCK Prelim 2022')({
-    contestId: 'PCKPrelim2022',
-    expected: ContestType.AOJ_PCK,
-  }),
-  createTestCaseForContestType('AOJ, PCK Prelim 2021')({
-    contestId: 'PCKPrelim2021',
-    expected: ContestType.AOJ_PCK,
-  }),
-  createTestCaseForContestType('AOJ, PCK Prelim 2005')({
-    contestId: 'PCKPrelim2005',
-    expected: ContestType.AOJ_PCK,
-  }),
-  createTestCaseForContestType('AOJ, PCK Prelim 2004')({
-    contestId: 'PCKPrelim2004',
-    expected: ContestType.AOJ_PCK,
-  }),
-  createTestCaseForContestType('AOJ, PCK Final 2023')({
-    contestId: 'PCKFinal2023',
-    expected: ContestType.AOJ_PCK,
-  }),
-  createTestCaseForContestType('AOJ, PCK Final 2022')({
-    contestId: 'PCKFinal2022',
-    expected: ContestType.AOJ_PCK,
-  }),
-  createTestCaseForContestType('AOJ, PCK Final 2021')({
-    contestId: 'PCKFinal2021',
-    expected: ContestType.AOJ_PCK,
-  }),
-  createTestCaseForContestType('AOJ, PCK Final 2004')({
-    contestId: 'PCKFinal2004',
-    expected: ContestType.AOJ_PCK,
-  }),
-  createTestCaseForContestType('AOJ, PCK Final 2003')({
-    contestId: 'PCKFinal2003',
-    expected: ContestType.AOJ_PCK,
-  }),
+);
+
+const aojPckContestData = [
+  { name: 'AOJ, PCK Prelim 2023', contestId: 'PCKPrelim2023' },
+  { name: 'AOJ, PCK Prelim 2022', contestId: 'PCKPrelim2022' },
+  { name: 'AOJ, PCK Prelim 2021', contestId: 'PCKPrelim2021' },
+  { name: 'AOJ, PCK Prelim 2005', contestId: 'PCKPrelim2005' },
+  { name: 'AOJ, PCK Prelim 2004', contestId: 'PCKPrelim2004' },
+  { name: 'AOJ, PCK Final 2023', contestId: 'PCKFinal2023' },
+  { name: 'AOJ, PCK Final 2022', contestId: 'PCKFinal2022' },
+  { name: 'AOJ, PCK Final 2021', contestId: 'PCKFinal2021' },
+  { name: 'AOJ, PCK Final 2004', contestId: 'PCKFinal2004' },
+  { name: 'AOJ, PCK Final 2003', contestId: 'PCKFinal2003' },
 ];
+
+export const aojPck = aojPckContestData.map(({ name, contestId }) =>
+  createTestCaseForContestType(name)({
+    contestId: contestId,
+    expected: ContestType.AOJ_PCK,
+  }),
+);
