@@ -1,0 +1,702 @@
+[
+  {
+    "id": "ITP1_4_B",
+    "contest_id": "ITP1",
+    "problem_index": "ITP1_4_B",
+    "task_id": "ITP1_4_B",
+    "title": "Circle"
+  },
+  {
+    "id": "CGL_5_A",
+    "contest_id": "CGL",
+    "problem_index": "CGL_5_A",
+    "task_id": "CGL_5_A",
+    "title": "Closest Pair"
+  },
+  {
+    "id": "INFO1_13_G",
+    "contest_id": "INFO1",
+    "problem_index": "INFO1_13_G",
+    "task_id": "INFO1_13_G",
+    "title": "Function Creating an Array from Arrays"
+  },
+  {
+    "id": "4029",
+    "contest_id": "PCKFinal2023",
+    "problem_index": "4029",
+    "task_id": "4029",
+    "title": "Predicting Rankings"
+  },
+  {
+    "id": "0065",
+    "contest_id": "PCKFinal2004",
+    "problem_index": "0065",
+    "task_id": "0065",
+    "title": "Trading"
+  },
+  {
+    "id": "0053",
+    "contest_id": "PCKFinal2004",
+    "problem_index": "0053",
+    "task_id": "0053",
+    "title": "Sum of Prime Numbers"
+  },
+  {
+    "id": "0139",
+    "contest_id": "PCKFinal2006",
+    "problem_index": "0139",
+    "task_id": "0139",
+    "title": "Snakes"
+  },
+  {
+    "id": "0010",
+    "contest_id": "PCKFinal2003",
+    "problem_index": "0010",
+    "task_id": "0010",
+    "title": "Circumscribed Circle of a Triangle"
+  },
+  {
+    "id": "0404",
+    "contest_id": "PCKPrelim2019",
+    "problem_index": "0404",
+    "task_id": "0404",
+    "title": "Shiba Inu"
+  },
+  {
+    "id": "0218",
+    "contest_id": "PCKPrelim2010",
+    "problem_index": "0218",
+    "task_id": "0218",
+    "title": "Dividing Students"
+  },
+  {
+    "id": "0153",
+    "contest_id": "PCKPrelim2007",
+    "problem_index": "0153",
+    "task_id": "0153",
+    "title": "Triangle and Circle"
+  },
+  {
+    "id": "0475",
+    "contest_id": "PCKFinal2021",
+    "problem_index": "0475",
+    "task_id": "0475",
+    "title": "School Road"
+  },
+  {
+    "id": "0320",
+    "contest_id": "PCKPrelim2015",
+    "problem_index": "0320",
+    "task_id": "0320",
+    "title": "Quality Management"
+  },
+  {
+    "id": "0461",
+    "contest_id": "PCKPrelim2021",
+    "problem_index": "0461",
+    "task_id": "0461",
+    "title": "Odd and Even Spirit"
+  },
+  {
+    "id": "ALDS1_1_A",
+    "contest_id": "ALDS1",
+    "problem_index": "ALDS1_1_A",
+    "task_id": "ALDS1_1_A",
+    "title": "Insertion Sort"
+  },
+  {
+    "id": "0054",
+    "contest_id": "PCKFinal2004",
+    "problem_index": "0054",
+    "task_id": "0054",
+    "title": "Sum of Nth decimal places"
+  },
+  {
+    "id": "ITP1_1_C",
+    "contest_id": "ITP1",
+    "problem_index": "ITP1_1_C",
+    "task_id": "ITP1_1_C",
+    "title": "Rectangle"
+  },
+  {
+    "id": "ITP1_3_A",
+    "contest_id": "ITP1",
+    "problem_index": "ITP1_3_A",
+    "task_id": "ITP1_3_A",
+    "title": "Print Many Hello World"
+  },
+  {
+    "id": "0359",
+    "contest_id": "PCKPrelim2017",
+    "problem_index": "0359",
+    "task_id": "0359",
+    "title": "Day of Week"
+  },
+  {
+    "id": "DSL_2_B",
+    "contest_id": "DSL",
+    "problem_index": "DSL_2_B",
+    "task_id": "DSL_2_B",
+    "title": "Range Sum Query (RSQ)"
+  },
+  {
+    "id": "0314",
+    "contest_id": "PCKFinal2014",
+    "problem_index": "0314",
+    "task_id": "0314",
+    "title": "The Kingdom of Akabeko"
+  },
+  {
+    "id": "0204",
+    "contest_id": "PCKPrelim2009",
+    "problem_index": "0204",
+    "task_id": "0204",
+    "title": "UFO Shooting Down Operation"
+  },
+  {
+    "id": "ALDS1_7_C",
+    "contest_id": "ALDS1",
+    "problem_index": "ALDS1_7_C",
+    "task_id": "ALDS1_7_C",
+    "title": "Tree Walk"
+  },
+  {
+    "id": "ITP1_5_B",
+    "contest_id": "ITP1",
+    "problem_index": "ITP1_5_B",
+    "task_id": "ITP1_5_B",
+    "title": "Print a Frame"
+  },
+  {
+    "id": "INFO1_13_D",
+    "contest_id": "INFO1",
+    "problem_index": "INFO1_13_D",
+    "task_id": "INFO1_13_D",
+    "title": "Array Argument and Procedure"
+  },
+  {
+    "id": "DPL_5_H",
+    "contest_id": "DPL",
+    "problem_index": "DPL_5_H",
+    "task_id": "DPL_5_H",
+    "title": "Balls and Boxes 8"
+  },
+  {
+    "id": "ALDS1_12_C",
+    "contest_id": "ALDS1",
+    "problem_index": "ALDS1_12_C",
+    "task_id": "ALDS1_12_C",
+    "title": "Single Source Shortest Path II"
+  },
+  {
+    "id": "INFO1_07_A",
+    "contest_id": "INFO1",
+    "problem_index": "INFO1_07_A",
+    "task_id": "INFO1_07_A",
+    "title": "Branch 1"
+  },
+  {
+    "id": "0177",
+    "contest_id": "PCKPrelim2008",
+    "problem_index": "0177",
+    "task_id": "0177",
+    "title": "Distance Between Two Cities"
+  },
+  {
+    "id": "0122",
+    "contest_id": "PCKFinal2005",
+    "problem_index": "0122",
+    "task_id": "0122",
+    "title": "Summer of Pyonkichi"
+  },
+  {
+    "id": "0007",
+    "contest_id": "PCKFinal2003",
+    "problem_index": "0007",
+    "task_id": "0007",
+    "title": "Debt Hell"
+  },
+  {
+    "id": "0428",
+    "contest_id": "PCKPrelim2020",
+    "problem_index": "0428",
+    "task_id": "0428",
+    "title": "Longitude and Latitude"
+  },
+  {
+    "id": "TRC_1_A",
+    "contest_id": "TRC",
+    "problem_index": "TRC_1_A",
+    "task_id": "TRC_1_A",
+    "title": "A"
+  },
+  {
+    "id": "0423",
+    "contest_id": "PCKFinal2019",
+    "problem_index": "0423",
+    "task_id": "0423",
+    "title": "Gym with Many Rules"
+  },
+  {
+    "id": "CGL_2_C",
+    "contest_id": "CGL",
+    "problem_index": "CGL_2_C",
+    "task_id": "CGL_2_C",
+    "title": "Cross Point"
+  },
+  {
+    "id": "INFO1_05_E",
+    "contest_id": "INFO1",
+    "problem_index": "INFO1_05_E",
+    "task_id": "INFO1_05_E",
+    "title": "Evaluation 1"
+  },
+  {
+    "id": "DPL_2_B",
+    "contest_id": "DPL",
+    "problem_index": "DPL_2_B",
+    "task_id": "DPL_2_B",
+    "title": "Chinese Postman Problem"
+  },
+  {
+    "id": "0238",
+    "contest_id": "PCKPrelim2011",
+    "problem_index": "0238",
+    "task_id": "0238",
+    "title": "Time to Study"
+  },
+  {
+    "id": "4023",
+    "contest_id": "PCKFinal2023",
+    "problem_index": "4023",
+    "task_id": "4023",
+    "title": "Waffle with Holes"
+  },
+  {
+    "id": "ITP2_1_A",
+    "contest_id": "ITP2",
+    "problem_index": "ITP2_1_A",
+    "task_id": "ITP2_1_A",
+    "title": "Vector"
+  },
+  {
+    "id": "0405",
+    "contest_id": "PCKPrelim2019",
+    "problem_index": "0405",
+    "task_id": "0405",
+    "title": "ASCII Characters"
+  },
+  {
+    "id": "GRL_5_D",
+    "contest_id": "GRL",
+    "problem_index": "GRL_5_D",
+    "task_id": "GRL_5_D",
+    "title": "Range Query on a Tree"
+  },
+  {
+    "id": "0425",
+    "contest_id": "PCKFinal2019",
+    "problem_index": "0425",
+    "task_id": "0425",
+    "title": "Chemical Substance Alpha"
+  },
+  {
+    "id": "ALDS1_1_C",
+    "contest_id": "ALDS1",
+    "problem_index": "ALDS1_1_C",
+    "task_id": "ALDS1_1_C",
+    "title": "Prime Numbers"
+  },
+  {
+    "id": "ALDS1_13_B",
+    "contest_id": "ALDS1",
+    "problem_index": "ALDS1_13_B",
+    "task_id": "ALDS1_13_B",
+    "title": "8 Puzzle"
+  },
+  {
+    "id": "0247",
+    "contest_id": "PCKPrelim2011",
+    "problem_index": "0247",
+    "task_id": "0247",
+    "title": "Ice Maze"
+  },
+  {
+    "id": "4033",
+    "contest_id": "PCKFinal2023",
+    "problem_index": "4033",
+    "task_id": "4033",
+    "title": "Skewered Dumplings"
+  },
+  {
+    "id": "0079",
+    "contest_id": "PCKPrelim2005",
+    "problem_index": "0079",
+    "task_id": "0079",
+    "title": "Area of Polygon"
+  },
+  {
+    "id": "0279",
+    "contest_id": "PCKPrelim2013",
+    "problem_index": "0279",
+    "task_id": "0279",
+    "title": "A Pair of Prizes"
+  },
+  {
+    "id": "4018",
+    "contest_id": "PCKPrelim2023",
+    "problem_index": "4018",
+    "task_id": "4018",
+    "title": "Sorting Balls"
+  },
+  {
+    "id": "GRL_5_E",
+    "contest_id": "GRL",
+    "problem_index": "GRL_5_E",
+    "task_id": "GRL_5_E",
+    "title": "Range Query on a Tree II"
+  },
+  {
+    "id": "0161",
+    "contest_id": "PCKFinal2007",
+    "problem_index": "0161",
+    "task_id": "0161",
+    "title": "Sport Meet"
+  },
+  {
+    "id": "0438",
+    "contest_id": "PCKPrelim2020",
+    "problem_index": "0438",
+    "task_id": "0438",
+    "title": "Passport"
+  },
+  {
+    "id": "0223",
+    "contest_id": "PCKPrelim2010",
+    "problem_index": "0223",
+    "task_id": "0223",
+    "title": "Stray Twins"
+  },
+  {
+    "id": "ITP2_3_D",
+    "contest_id": "ITP2",
+    "problem_index": "ITP2_3_D",
+    "task_id": "ITP2_3_D",
+    "title": "Lexicographical Comparison"
+  },
+  {
+    "id": "0351",
+    "contest_id": "PCKFinal2016",
+    "problem_index": "0351",
+    "task_id": "0351",
+    "title": "Quiet Town"
+  },
+  {
+    "id": "0385",
+    "contest_id": "PCKPrelim2018",
+    "problem_index": "0385",
+    "task_id": "0385",
+    "title": "Bozo Sort"
+  },
+  {
+    "id": "0334",
+    "contest_id": "PCKFinal2015",
+    "problem_index": "0334",
+    "task_id": "0334",
+    "title": "Amidakuji"
+  },
+  {
+    "id": "ALDS1_3_A",
+    "contest_id": "ALDS1",
+    "problem_index": "ALDS1_3_A",
+    "task_id": "ALDS1_3_A",
+    "title": "Stack"
+  },
+  {
+    "id": "0001",
+    "contest_id": "PCKFinal2003",
+    "problem_index": "0001",
+    "task_id": "0001",
+    "title": "List of Top 3 Hills"
+  },
+  {
+    "id": "ALDS1_13_C",
+    "contest_id": "ALDS1",
+    "problem_index": "ALDS1_13_C",
+    "task_id": "ALDS1_13_C",
+    "title": "15 Puzzle"
+  },
+  {
+    "id": "INFO1_02_C",
+    "contest_id": "INFO1",
+    "problem_index": "INFO1_02_C",
+    "task_id": "INFO1_02_C",
+    "title": "Two Variables"
+  },
+  {
+    "id": "CGL_7_G",
+    "contest_id": "CGL",
+    "problem_index": "CGL_7_G",
+    "task_id": "CGL_7_G",
+    "title": "Common Tangent"
+  },
+  {
+    "id": "ALDS1_3_B",
+    "contest_id": "ALDS1",
+    "problem_index": "ALDS1_3_B",
+    "task_id": "ALDS1_3_B",
+    "title": "Queue"
+  },
+  {
+    "id": "0263",
+    "contest_id": "PCKPrelim2012",
+    "problem_index": "0263",
+    "task_id": "0263",
+    "title": "Beat Panel"
+  },
+  {
+    "id": "0402",
+    "contest_id": "PCKFinal2018",
+    "problem_index": "0402",
+    "task_id": "0402",
+    "title": "Kth XOR"
+  },
+  {
+    "id": "INFO1_05_A",
+    "contest_id": "INFO1",
+    "problem_index": "INFO1_05_A",
+    "task_id": "INFO1_05_A",
+    "title": "Equivalence"
+  },
+  {
+    "id": "0261",
+    "contest_id": "PCKPrelim2012",
+    "problem_index": "0261",
+    "task_id": "0261",
+    "title": "Mayan Crucial Prediction"
+  },
+  {
+    "id": "ITP1_10_B",
+    "contest_id": "ITP1",
+    "problem_index": "ITP1_10_B",
+    "task_id": "ITP1_10_B",
+    "title": "Triangle"
+  },
+  {
+    "id": "0427",
+    "contest_id": "PCKFinal2019",
+    "problem_index": "0427",
+    "task_id": "0427",
+    "title": "Resource of the Planet Yanaizu"
+  },
+  {
+    "id": "ALDS1_6_C",
+    "contest_id": "ALDS1",
+    "problem_index": "ALDS1_6_C",
+    "task_id": "ALDS1_6_C",
+    "title": "Quick Sort"
+  },
+  {
+    "id": "0236",
+    "contest_id": "PCKFinal2010",
+    "problem_index": "0236",
+    "task_id": "0236",
+    "title": "Alien Messages"
+  },
+  {
+    "id": "0094",
+    "contest_id": "PCKFinal2005",
+    "problem_index": "0094",
+    "task_id": "0094",
+    "title": "Calculation of Area"
+  },
+  {
+    "id": "INFO1_12_E",
+    "contest_id": "INFO1",
+    "problem_index": "INFO1_12_E",
+    "task_id": "INFO1_12_E",
+    "title": "3D Array"
+  },
+  {
+    "id": "0206",
+    "contest_id": "PCKFinal2009",
+    "problem_index": "0206",
+    "task_id": "0206",
+    "title": "Next Trip"
+  },
+  {
+    "id": "0230",
+    "contest_id": "PCKFinal2010",
+    "problem_index": "0230",
+    "task_id": "0230",
+    "title": "Ninja Climbing"
+  },
+  {
+    "id": "0224",
+    "contest_id": "PCKPrelim2010",
+    "problem_index": "0224",
+    "task_id": "0224",
+    "title": "Bicycle Diet"
+  },
+  {
+    "id": "0103",
+    "contest_id": "PCKFinal2005",
+    "problem_index": "0103",
+    "task_id": "0103",
+    "title": "Baseball Simulation"
+  },
+  {
+    "id": "CGL_3_C",
+    "contest_id": "CGL",
+    "problem_index": "CGL_3_C",
+    "task_id": "CGL_3_C",
+    "title": "Polygon-Point Containment"
+  },
+  {
+    "id": "ALDS1_12_A",
+    "contest_id": "ALDS1",
+    "problem_index": "ALDS1_12_A",
+    "task_id": "ALDS1_12_A",
+    "title": "Minimum Spanning Tree"
+  },
+  {
+    "id": "DPL_5_J",
+    "contest_id": "DPL",
+    "problem_index": "DPL_5_J",
+    "task_id": "DPL_5_J",
+    "title": "Balls and Boxes 10"
+  },
+  {
+    "id": "0278",
+    "contest_id": "PCKPrelim2013",
+    "problem_index": "0278",
+    "task_id": "0278",
+    "title": "Admission Fee"
+  },
+  {
+    "id": "CGL_6_A",
+    "contest_id": "CGL",
+    "problem_index": "CGL_6_A",
+    "task_id": "CGL_6_A",
+    "title": "Segment Intersections: Manhattan Geometry"
+  },
+  {
+    "id": "0120",
+    "contest_id": "PCKFinal2005",
+    "problem_index": "0120",
+    "task_id": "0120",
+    "title": "Patisserie"
+  },
+  {
+    "id": "0393",
+    "contest_id": "PCKFinal2018",
+    "problem_index": "0393",
+    "task_id": "0393",
+    "title": "Design of a Mansion"
+  },
+  {
+    "id": "4020",
+    "contest_id": "PCKPrelim2023",
+    "problem_index": "4020",
+    "task_id": "4020",
+    "title": "Colored Pencils and Caps"
+  },
+  {
+    "id": "4019",
+    "contest_id": "PCKPrelim2023",
+    "problem_index": "4019",
+    "task_id": "4019",
+    "title": "Collecting Balls"
+  },
+  {
+    "id": "0421",
+    "contest_id": "PCKFinal2019",
+    "problem_index": "0421",
+    "task_id": "0421",
+    "title": "Two Polygons"
+  },
+  {
+    "id": "0377",
+    "contest_id": "PCKFinal2017",
+    "problem_index": "0377",
+    "task_id": "0377",
+    "title": "Party"
+  },
+  {
+    "id": "0287",
+    "contest_id": "PCKFinal2013",
+    "problem_index": "0287",
+    "task_id": "0287",
+    "title": "Jinkoki"
+  },
+  {
+    "id": "ALDS1_11_D",
+    "contest_id": "ALDS1",
+    "problem_index": "ALDS1_11_D",
+    "task_id": "ALDS1_11_D",
+    "title": "Connected Components"
+  },
+  {
+    "id": "ITP1_2_A",
+    "contest_id": "ITP1",
+    "problem_index": "ITP1_2_A",
+    "task_id": "ITP1_2_A",
+    "title": "Small, Large, or Equal"
+  },
+  {
+    "id": "ITP2_5_D",
+    "contest_id": "ITP2",
+    "problem_index": "ITP2_5_D",
+    "task_id": "ITP2_5_D",
+    "title": "Permutation Enumeration"
+  },
+  {
+    "id": "0192",
+    "contest_id": "PCKFinal2008",
+    "problem_index": "0192",
+    "task_id": "0192",
+    "title": "Multistory Parking Lot"
+  },
+  {
+    "id": "ALDS1_8_B",
+    "contest_id": "ALDS1",
+    "problem_index": "ALDS1_8_B",
+    "task_id": "ALDS1_8_B",
+    "title": "Binary Search Tree II"
+  },
+  {
+    "id": "0068",
+    "contest_id": "PCKFinal2004",
+    "problem_index": "0068",
+    "task_id": "0068",
+    "title": "Enclose Pins with a Rubber Band"
+  },
+  {
+    "id": "0102",
+    "contest_id": "PCKFinal2005",
+    "problem_index": "0102",
+    "task_id": "0102",
+    "title": "Matrix-like Computation"
+  },
+  {
+    "id": "0173",
+    "contest_id": "PCKPrelim2008",
+    "problem_index": "0173",
+    "task_id": "0173",
+    "title": "Haunted House"
+  },
+  {
+    "id": "0057",
+    "contest_id": "PCKFinal2004",
+    "problem_index": "0057",
+    "task_id": "0057",
+    "title": "The Number of Area"
+  },
+  {
+    "id": "4026",
+    "contest_id": "PCKFinal2023",
+    "problem_index": "4026",
+    "task_id": "4026",
+    "title": "Roll Cake"
+  }
+]
