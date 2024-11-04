@@ -75,5 +75,19 @@ export function runTests<T>(testName: string, testCases: T[], testFunction: (tes
  */
 export const loadMockData = <T>(filePath: string): T => {
   const testDataPath = path.resolve(filePath);
-  return JSON.parse(fs.readFileSync(testDataPath, 'utf8')) as T;
+
+  try {
+    return JSON.parse(fs.readFileSync(testDataPath, 'utf8')) as T;
+  } catch (error) {
+    if (error instanceof Error) {
+      if ((error as NodeJS.ErrnoException).code === 'ENOENT') {
+        throw new Error(`Mock data file not found: ${filePath}`);
+      }
+      if (error instanceof SyntaxError) {
+        throw new Error(`Invalid JSON in mock data file: ${filePath}`);
+      }
+    }
+
+    throw error;
+  }
 };
