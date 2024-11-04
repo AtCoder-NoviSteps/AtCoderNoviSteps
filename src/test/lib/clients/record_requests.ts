@@ -43,7 +43,7 @@ const clients = [
   { name: 'aizu_online_judge', source: new AojApiClient() },
 ];
 
-export const TEST_DATA_BASE_DIR = 'src/test/lib/clients/test_data/';
+export const TEST_DATA_BASE_DIR = path.join('src', 'test', 'lib', 'clients', 'test_data');
 
 function ensureDirectoryExists(dirPath: string): void {
   if (!fs.existsSync(dirPath)) {
@@ -127,7 +127,7 @@ function getRandomElementsFromArray<T>(array: T[], count: number): T[] {
   count = Math.min(count, array.length);
   const shuffled = array.slice(); // Copy the original array
 
-  for (let i = array.length - 1; i > 0; i--) {
+  for (let i = shuffled.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]]; // Swap elements
   }
@@ -136,6 +136,13 @@ function getRandomElementsFromArray<T>(array: T[], count: number): T[] {
 }
 
 async function toJson<T>(filePath: string, data: T[]): Promise<void> {
+  if (!filePath || filePath.trim() === '') {
+    throw new Error('File path is required');
+  }
+  if (!Array.isArray(data)) {
+    throw new Error('Data must be an array');
+  }
+
   ensureDirectoryExists(path.dirname(filePath));
 
   await fs.promises.writeFile(filePath, JSON.stringify(data, null, 2), 'utf-8');
