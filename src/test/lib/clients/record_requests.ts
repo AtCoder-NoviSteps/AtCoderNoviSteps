@@ -34,7 +34,7 @@ async function main(): Promise<void> {
  * An array of client objects, each containing a name and an instance of an API client.
  *
  * @constant
- * @type {Array<{ name: string, client: object }>}
+ * @type {Array<{ name: string, source: ContestSiteApiClient }>}
  * @property {string} name - The name of the client.
  * @property {ContestSiteApiClient} source - An instance of the API client.
  */
@@ -138,7 +138,7 @@ function getRandomElementsFromArray<T>(array: T[], count: number): T[] {
 async function toJson<T>(filePath: string, data: T[]): Promise<void> {
   ensureDirectoryExists(path.dirname(filePath));
 
-  fs.promises.writeFile(filePath, JSON.stringify(data, null, 2), 'utf-8');
+  await fs.promises.writeFile(filePath, JSON.stringify(data, null, 2), 'utf-8');
   console.log(`Saved to ${filePath}`);
 }
 
