@@ -31,6 +31,10 @@
   - [shadcn-svelte](https://www.shadcn-svelte.com/): 主にData Tableを使用予定。将来的には、以下のライブラリを使って実装している部分を置き換える。
   - [Flowbite Svelte](https://flowbite-svelte.com/)
   - [STWUI](https://stwui.vercel.app/)
+- テスティングフレームワーク
+  - [Vitest](https://vitest.dev/)
+  - [Playwright](https://playwright.dev/)
+  - [Nock](https://github.com/nock/nock)
 - 認証ライブラリ
   - [Lucia](https://lucia-auth.com/)
 - ORM
