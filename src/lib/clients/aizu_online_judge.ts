@@ -46,6 +46,11 @@ type ChallengeContest = {
 
 type ChallengeContests = ChallengeContest[];
 
+/**
+ * Represents a task in the AOJ API response
+ * @property {string} id - Unique identifier for the task
+ * @property {string} name - Task name
+ */
 type AOJTaskAPI = {
   readonly id: string;
   readonly available: number;
@@ -111,7 +116,7 @@ export class AojApiClient extends ContestSiteApiClient {
 
       return contests;
     } catch (error) {
-      console.error(`Failed to fetch contests from AOJ API`, error);
+      console.error(`Failed to fetch contests from AOJ API:`, error);
       return [];
     }
   }
@@ -153,7 +158,7 @@ export class AojApiClient extends ContestSiteApiClient {
 
       return coursesForContest;
     } catch (error) {
-      console.error(`Failed to fetch from AOJ course contests`, error);
+      console.error(`Failed to fetch from AOJ course contests:`, error);
       return [];
     }
   }
@@ -203,7 +208,7 @@ export class AojApiClient extends ContestSiteApiClient {
 
       return contests;
     } catch (error) {
-      console.error(`Failed to fetch from AOJ PCK ${round} contests`, error);
+      console.error(`Failed to fetch from AOJ PCK ${round} contests:`, error);
       return [];
     }
   }
@@ -234,7 +239,7 @@ export class AojApiClient extends ContestSiteApiClient {
 
       return tasks;
     } catch (error) {
-      console.error(`Failed to fetch tasks from AOJ API`, error);
+      console.error(`Failed to fetch tasks from AOJ API:`, error);
       return [];
     }
   }
@@ -262,24 +267,14 @@ export class AojApiClient extends ContestSiteApiClient {
       const courseTasks: TasksForImport = allTasks
         .filter((task: AOJTaskAPI) => this.getCourseName(task.id) !== '')
         .map((task: AOJTaskAPI) => {
-          const taskId = task.id;
-
-          const courseTask = {
-            id: taskId,
-            contest_id: this.getCourseName(taskId),
-            problem_index: taskId, // Using task.id as a substitute since there's no equivalent to problem_index. Similar approach is used in AtCoder Problems API for old JOI problems.
-            task_id: taskId, // Same as above
-            title: task.name,
-          };
-
-          return courseTask;
+          return this.mapToTask(task, this.getCourseName(task.id));
         });
 
       console.log(`Found AOJ course: ${courseTasks.length} tasks.`);
 
       return courseTasks;
     } catch (error) {
-      console.error(`Failed to fetch from AOJ course tasks`, error);
+      console.error(`Failed to fetch from AOJ course tasks:`, error);
       return [];
     }
   }
@@ -334,13 +329,9 @@ export class AojApiClient extends ContestSiteApiClient {
       const tasks: TasksForImport = allPckContests.contests.reduce(
         (tasksForImport: TasksForImport, contest) => {
           contest.days.forEach((day) => {
-            const contestTasks = day.problems.map((problem) => ({
-              id: problem.id,
-              contest_id: contest.abbr,
-              problem_index: problem.id, // Using problem.id as a substitute since there's no equivalent to problem_index. Similar approach is used in AtCoder Problems API for old JOI problems.
-              task_id: problem.id, // Same as above
-              title: problem.name,
-            }));
+            const contestTasks = day.problems.map((problem) =>
+              this.mapToTask(problem, contest.abbr),
+            );
 
             tasksForImport.push(...contestTasks);
           });
@@ -353,8 +344,25 @@ export class AojApiClient extends ContestSiteApiClient {
 
       return tasks;
     } catch (error) {
-      console.error(`Failed to fetch from PCK ${round} tasks`, error);
+      console.error(`Failed to fetch from PCK ${round} tasks:`, error);
       return [];
     }
+  }
+
+  /**
+   * Maps the AOJTaskAPI problem object to a task object.
+   *
+   * @param problem - The problem object from AOJTaskAPI.
+   * @param contestId - The ID of the contest.
+   * @returns An object representing the task with properties id, contest_id, problem_index, task_id, and title.
+   */
+  private mapToTask(problem: AOJTaskAPI, contestId: string) {
+    return {
+      id: problem.id,
+      contest_id: contestId,
+      problem_index: problem.id, // Using task.id as a substitute since there's no equivalent to problem_index. Similar approach is used in AtCoder Problems API for old JOI problems.
+      task_id: problem.id, // Same as above
+      title: problem.name,
+    };
   }
 }
