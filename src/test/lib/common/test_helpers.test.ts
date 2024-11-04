@@ -135,21 +135,27 @@ describe('zip', () => {
     const firstArray = null as unknown as number[];
     const secondArray = ['a', 'b', 'c'];
 
-    expect(() => zip(firstArray, secondArray)).toThrow('First array must be non-null and defined');
+    expect(() => zip(firstArray, secondArray)).toThrow(
+      'Both input arrays must be non-null and defined',
+    );
   });
 
   it('expects to throw an error when the second array is null', () => {
     const firstArray = ['a', 'b', 'c'];
     const secondArray = null as unknown as number[];
 
-    expect(() => zip(firstArray, secondArray)).toThrow('Second array must be non-null and defined');
+    expect(() => zip(firstArray, secondArray)).toThrow(
+      'Both input arrays must be non-null and defined',
+    );
   });
 
   it('expects to throw an error when the first and second array are null', () => {
     const firstArray = null as unknown as number[];
     const secondArray = null as unknown as number[];
 
-    expect(() => zip(firstArray, secondArray)).toThrow('First array must be non-null and defined');
+    expect(() => zip(firstArray, secondArray)).toThrow(
+      'Both input arrays must be non-null and defined',
+    );
   });
 
   it('expects to throw an error when the first array is not an array', () => {
