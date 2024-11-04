@@ -1,6 +1,6 @@
 import { test } from 'vitest';
 
-interface TestCase<T> {
+export interface TestCase<T> {
   name: string;
   value: T;
 }
@@ -56,49 +56,6 @@ export function zip<T, U>(firstArray: T[], secondArray: U[]): [T, U][] {
   return firstArray
     .slice(0, Math.min(firstArray.length, secondArray.length))
     .map((item, i) => [item, secondArray[i]]);
-}
-
-/**
- * Runs a series of test cases using the provided test function.
- *
- * @template T - The type of the test case value.
- * @param {string} description - A description for the test suite.
- * @param {Array<{ name: string; value: T }>} testCases - An array of test cases, each containing a name and a value.
- * @param {(testCase: T) => void} testFunction - The function to execute for each test case.
- * @example
- * // Basic usage
- * const testCases = [
- *   { name: 'positive number', value: 42 },
- *   { name: 'negative number', value: -1 }
- * ];
- * runTestCases('number tests', testCases, (value) => {
- *   expect(typeof value).toBe('number');
- * });
- * @remarks
- * This function is a higher-level wrapper around `runTests` that provides a more
- * structured way to organize test cases. While `runTests` operates on raw values,
- * this function expects named test cases for better test organization.
- */
-export function runTestCases<T>(
-  description: string,
-  testCases: Array<{ name: string; value: T }>,
-  testFunction: (testCase: T) => void,
-) {
-  if (!description?.trim()) {
-    throw new Error('Description must be a non-empty string');
-  }
-  if (!Array.isArray(testCases) || testCases.length === 0) {
-    throw new Error('Test cases array must be non-empty');
-  }
-  if (typeof testFunction !== 'function') {
-    throw new Error('Test function must be provided');
-  }
-
-  describe(description, () => {
-    testCases.forEach(({ name, value }) => {
-      runTests(`${name}`, [value], testFunction);
-    });
-  });
 }
 
 /**

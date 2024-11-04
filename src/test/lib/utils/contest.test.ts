@@ -1,6 +1,6 @@
 import { expect } from 'vitest';
 
-import { runTestCases, runTests } from '../common/test_helpers';
+import { runTests } from '../common/test_helpers';
 import * as TestCasesForContestType from './test_cases/contest_type';
 import { type TestCaseForContestType } from './test_cases/contest_type';
 import * as TestCasesForContestNameLabel from './test_cases/contest_name_labels';
@@ -18,345 +18,345 @@ import {
 describe('Contest', () => {
   describe('classify contest', () => {
     describe('AtCoder', () => {
-      runTestCases(
-        'when contest_id is abs',
-        TestCasesForContestType.abs,
-        ({ contestId, expected }: TestCaseForContestType) => {
-          expect(classifyContest(contestId)).toEqual(expected);
-        },
-      );
+      describe('when contest_id is abs', () => {
+        TestCasesForContestType.abs.forEach(({ name, value }) => {
+          runTests(`${name}`, [value], ({ contestId, expected }: TestCaseForContestType) => {
+            expect(classifyContest(contestId)).toEqual(expected);
+          });
+        });
+      });
 
-      runTestCases(
-        'when contest_id contains abc',
-        TestCasesForContestType.abc,
-        ({ contestId, expected }: TestCaseForContestType) => {
-          expect(classifyContest(contestId)).toEqual(expected);
-        },
-      );
+      describe('when contest_id contains abc', () => {
+        TestCasesForContestType.abc.forEach(({ name, value }) => {
+          runTests(`${name}`, [value], ({ contestId, expected }: TestCaseForContestType) => {
+            expect(classifyContest(contestId)).toEqual(expected);
+          });
+        });
+      });
 
-      runTestCases(
-        'when contest_id starts with APG4b',
-        TestCasesForContestType.apg4b,
-        ({ contestId, expected }: TestCaseForContestType) => {
-          expect(classifyContest(contestId)).toEqual(expected);
-        },
-      );
+      describe('when contest_id starts with APG4b', () => {
+        TestCasesForContestType.apg4b.forEach(({ name, value }) => {
+          runTests(`${name}`, [value], ({ contestId, expected }: TestCaseForContestType) => {
+            expect(classifyContest(contestId)).toEqual(expected);
+          });
+        });
+      });
 
-      runTestCases(
-        'when contest_id is typical90',
-        TestCasesForContestType.typical90,
-        ({ contestId, expected }: TestCaseForContestType) => {
-          expect(classifyContest(contestId)).toEqual(expected);
-        },
-      );
+      describe('when contest_id is typical90', () => {
+        TestCasesForContestType.typical90.forEach(({ name, value }) => {
+          runTests(`${name}`, [value], ({ contestId, expected }: TestCaseForContestType) => {
+            expect(classifyContest(contestId)).toEqual(expected);
+          });
+        });
+      });
 
-      runTestCases(
-        'when contest_id is dp (EDPC)',
-        TestCasesForContestType.edpc,
-        ({ contestId, expected }: TestCaseForContestType) => {
-          expect(classifyContest(contestId)).toEqual(expected);
-        },
-      );
+      describe('when contest_id is dp (EDPC)', () => {
+        TestCasesForContestType.edpc.forEach(({ name, value }) => {
+          runTests(`${name}`, [value], ({ contestId, expected }: TestCaseForContestType) => {
+            expect(classifyContest(contestId)).toEqual(expected);
+          });
+        });
+      });
 
-      runTestCases(
-        'when contest_id is tdpc',
-        TestCasesForContestType.tdpc,
-        ({ contestId, expected }: TestCaseForContestType) => {
-          expect(classifyContest(contestId)).toEqual(expected);
-        },
-      );
+      describe('when contest_id is tdpc', () => {
+        TestCasesForContestType.tdpc.forEach(({ name, value }) => {
+          runTests(`${name}`, [value], ({ contestId, expected }: TestCaseForContestType) => {
+            expect(classifyContest(contestId)).toEqual(expected);
+          });
+        });
+      });
 
-      runTestCases(
-        'when contest_id contains past',
-        TestCasesForContestType.past,
-        ({ contestId, expected }: TestCaseForContestType) => {
-          expect(classifyContest(contestId)).toEqual(expected);
-        },
-      );
+      describe('when contest_id contains past', () => {
+        TestCasesForContestType.past.forEach(({ name, value }) => {
+          runTests(`${name}`, [value], ({ contestId, expected }: TestCaseForContestType) => {
+            expect(classifyContest(contestId)).toEqual(expected);
+          });
+        });
+      });
 
-      runTestCases(
-        'when contest_id is practice2 (ACL practice)',
-        TestCasesForContestType.aclPractice,
-        ({ contestId, expected }: TestCaseForContestType) => {
-          expect(classifyContest(contestId)).toEqual(expected);
-        },
-      );
+      describe('when contest_id is practice2 (ACL practice)', () => {
+        TestCasesForContestType.aclPractice.forEach(({ name, value }) => {
+          runTests(`${name}`, [value], ({ contestId, expected }: TestCaseForContestType) => {
+            expect(classifyContest(contestId)).toEqual(expected);
+          });
+        });
+      });
 
-      runTestCases(
-        'when contest_id contains joi',
-        TestCasesForContestType.joi,
-        ({ contestId, expected }: TestCaseForContestType) => {
-          expect(classifyContest(contestId)).toEqual(expected);
-        },
-      );
+      describe('when contest_id contains joi', () => {
+        TestCasesForContestType.joi.forEach(({ name, value }) => {
+          runTests(`${name}`, [value], ({ contestId, expected }: TestCaseForContestType) => {
+            expect(classifyContest(contestId)).toEqual(expected);
+          });
+        });
+      });
 
-      runTestCases(
-        'when contest_id is tessoku-book',
-        TestCasesForContestType.tessokuBook,
-        ({ contestId, expected }: TestCaseForContestType) => {
-          expect(classifyContest(contestId)).toEqual(expected);
-        },
-      );
+      describe('when contest_id is tessoku-book', () => {
+        TestCasesForContestType.tessokuBook.forEach(({ name, value }) => {
+          runTests(`${name}`, [value], ({ contestId, expected }: TestCaseForContestType) => {
+            expect(classifyContest(contestId)).toEqual(expected);
+          });
+        });
+      });
 
-      runTestCases(
-        'when contest_id is math-and-algorithm',
-        TestCasesForContestType.mathAndAlgorithm,
-        ({ contestId, expected }: TestCaseForContestType) => {
-          expect(classifyContest(contestId)).toEqual(expected);
-        },
-      );
+      describe('when contest_id is math_and_algorithm', () => {
+        TestCasesForContestType.mathAndAlgorithm.forEach(({ name, value }) => {
+          runTests(`${name}`, [value], ({ contestId, expected }: TestCaseForContestType) => {
+            expect(classifyContest(contestId)).toEqual(expected);
+          });
+        });
+      });
 
-      runTestCases(
-        'when contest_id contains arc',
-        TestCasesForContestType.arc,
-        ({ contestId, expected }: TestCaseForContestType) => {
-          expect(classifyContest(contestId)).toEqual(expected);
-        },
-      );
+      describe('when contest_id contains arc', () => {
+        TestCasesForContestType.arc.forEach(({ name, value }) => {
+          runTests(`${name}`, [value], ({ contestId, expected }: TestCaseForContestType) => {
+            expect(classifyContest(contestId)).toEqual(expected);
+          });
+        });
+      });
 
-      runTestCases(
-        'when contest_id contains agc',
-        TestCasesForContestType.agc,
-        ({ contestId, expected }: TestCaseForContestType) => {
-          expect(classifyContest(contestId)).toEqual(expected);
-        },
-      );
+      describe('when contest_id contains agc', () => {
+        TestCasesForContestType.agc.forEach(({ name, value }) => {
+          runTests(`${name}`, [value], ({ contestId, expected }: TestCaseForContestType) => {
+            expect(classifyContest(contestId)).toEqual(expected);
+          });
+        });
+      });
 
-      runTestCases(
-        'when contest_id means arc-like',
-        TestCasesForContestType.arcLike,
-        ({ contestId, expected }: TestCaseForContestType) => {
-          expect(classifyContest(contestId)).toEqual(expected);
-        },
-      );
+      describe('when contest_id mean arc-like', () => {
+        TestCasesForContestType.arcLike.forEach(({ name, value }) => {
+          runTests(`${name}`, [value], ({ contestId, expected }: TestCaseForContestType) => {
+            expect(classifyContest(contestId)).toEqual(expected);
+          });
+        });
+      });
 
-      runTestCases(
-        'when contest_id means agc-like',
-        TestCasesForContestType.agcLike,
-        ({ contestId, expected }: TestCaseForContestType) => {
-          expect(classifyContest(contestId)).toEqual(expected);
-        },
-      );
+      describe('when contest_id mean agc-like', () => {
+        TestCasesForContestType.agcLike.forEach(({ name, value }) => {
+          runTests(`${name}`, [value], ({ contestId, expected }: TestCaseForContestType) => {
+            expect(classifyContest(contestId)).toEqual(expected);
+          });
+        });
+      });
 
-      runTestCases(
-        'when contest_id means others',
-        TestCasesForContestType.atCoderOthers,
-        ({ contestId, expected }: TestCaseForContestType) => {
-          expect(classifyContest(contestId)).toEqual(expected);
-        },
-      );
+      describe('when contest_id mean AtCoder others', () => {
+        TestCasesForContestType.atCoderOthers.forEach(({ name, value }) => {
+          runTests(`${name}`, [value], ({ contestId, expected }: TestCaseForContestType) => {
+            expect(classifyContest(contestId)).toEqual(expected);
+          });
+        });
+      });
     });
 
     describe('AOJ', () => {
-      runTestCases(
-        'when contest_id means aoj courses',
-        TestCasesForContestType.aojCourses,
-        ({ contestId, expected }: TestCaseForContestType) => {
-          expect(classifyContest(contestId)).toEqual(expected);
-        },
-      );
+      describe('when contest_id mean AOJ courses', () => {
+        TestCasesForContestType.aojCourses.forEach(({ name, value }) => {
+          runTests(`${name}`, [value], ({ contestId, expected }: TestCaseForContestType) => {
+            expect(classifyContest(contestId)).toEqual(expected);
+          });
+        });
+      });
 
-      runTestCases(
-        'when contest_id means aoj pck (prelim and final)',
-        TestCasesForContestType.aojPck,
-        ({ contestId, expected }: TestCaseForContestType) => {
-          expect(classifyContest(contestId)).toEqual(expected);
-        },
-      );
+      describe('when contest_id mean AOJ PCK (prelim and final) ', () => {
+        TestCasesForContestType.aojPck.forEach(({ name, value }) => {
+          runTests(`${name}`, [value], ({ contestId, expected }: TestCaseForContestType) => {
+            expect(classifyContest(contestId)).toEqual(expected);
+          });
+        });
+      });
     });
   });
 
   describe('get contest priority', () => {
     describe('AtCoder', () => {
-      runTestCases(
-        'when contest_id is abs',
-        TestCasesForContestType.abs,
-        ({ contestId, expected }: TestCaseForContestType) => {
-          expect(getContestPriority(contestId)).toEqual(contestTypePriorities.get(expected));
-        },
-      );
+      describe('when contest_id is abs', () => {
+        TestCasesForContestType.abs.forEach(({ name, value }) => {
+          runTests(`${name}`, [value], ({ contestId, expected }: TestCaseForContestType) => {
+            expect(getContestPriority(contestId)).toEqual(contestTypePriorities.get(expected));
+          });
+        });
+      });
 
-      runTestCases(
-        'when contest_id contains abc',
-        TestCasesForContestType.abc,
-        ({ contestId, expected }: TestCaseForContestType) => {
-          expect(getContestPriority(contestId)).toEqual(contestTypePriorities.get(expected));
-        },
-      );
+      describe('when contest_id contains abc', () => {
+        TestCasesForContestType.abc.forEach(({ name, value }) => {
+          runTests(`${name}`, [value], ({ contestId, expected }: TestCaseForContestType) => {
+            expect(getContestPriority(contestId)).toEqual(contestTypePriorities.get(expected));
+          });
+        });
+      });
 
-      runTestCases(
-        'when contest_id starts with APG4b',
-        TestCasesForContestType.apg4b,
-        ({ contestId, expected }: TestCaseForContestType) => {
-          expect(getContestPriority(contestId)).toEqual(contestTypePriorities.get(expected));
-        },
-      );
+      describe('when contest_id starts with APG4b', () => {
+        TestCasesForContestType.apg4b.forEach(({ name, value }) => {
+          runTests(`${name}`, [value], ({ contestId, expected }: TestCaseForContestType) => {
+            expect(getContestPriority(contestId)).toEqual(contestTypePriorities.get(expected));
+          });
+        });
+      });
 
-      runTestCases(
-        'when contest_id is typical90',
-        TestCasesForContestType.typical90,
-        ({ contestId, expected }: TestCaseForContestType) => {
-          expect(getContestPriority(contestId)).toEqual(contestTypePriorities.get(expected));
-        },
-      );
+      describe('when contest_id is typical90', () => {
+        TestCasesForContestType.typical90.forEach(({ name, value }) => {
+          runTests(`${name}`, [value], ({ contestId, expected }: TestCaseForContestType) => {
+            expect(getContestPriority(contestId)).toEqual(contestTypePriorities.get(expected));
+          });
+        });
+      });
 
-      runTestCases(
-        'when contest_id is dp (EDPC)',
-        TestCasesForContestType.edpc,
-        ({ contestId, expected }: TestCaseForContestType) => {
-          expect(getContestPriority(contestId)).toEqual(contestTypePriorities.get(expected));
-        },
-      );
+      describe('when contest_id is dp (EDPC)', () => {
+        TestCasesForContestType.edpc.forEach(({ name, value }) => {
+          runTests(`${name}`, [value], ({ contestId, expected }: TestCaseForContestType) => {
+            expect(getContestPriority(contestId)).toEqual(contestTypePriorities.get(expected));
+          });
+        });
+      });
 
-      runTestCases(
-        'when contest_id is dp TDPC',
-        TestCasesForContestType.tdpc,
-        ({ contestId, expected }: TestCaseForContestType) => {
-          expect(getContestPriority(contestId)).toEqual(contestTypePriorities.get(expected));
-        },
-      );
+      describe('when contest_id is tdpc', () => {
+        TestCasesForContestType.tdpc.forEach(({ name, value }) => {
+          runTests(`${name}`, [value], ({ contestId, expected }: TestCaseForContestType) => {
+            expect(getContestPriority(contestId)).toEqual(contestTypePriorities.get(expected));
+          });
+        });
+      });
 
-      runTestCases(
-        'when contest_id contains past',
-        TestCasesForContestType.past,
-        ({ contestId, expected }: TestCaseForContestType) => {
-          expect(getContestPriority(contestId)).toEqual(contestTypePriorities.get(expected));
-        },
-      );
+      describe('when contest_id contains past', () => {
+        TestCasesForContestType.past.forEach(({ name, value }) => {
+          runTests(`${name}`, [value], ({ contestId, expected }: TestCaseForContestType) => {
+            expect(getContestPriority(contestId)).toEqual(contestTypePriorities.get(expected));
+          });
+        });
+      });
 
-      runTestCases(
-        'when contest_id is practice2 (ACL practice)',
-        TestCasesForContestType.aclPractice,
-        ({ contestId, expected }: TestCaseForContestType) => {
-          expect(getContestPriority(contestId)).toEqual(contestTypePriorities.get(expected));
-        },
-      );
+      describe('when contest_id is practice2 (ACL practice)', () => {
+        TestCasesForContestType.aclPractice.forEach(({ name, value }) => {
+          runTests(`${name}`, [value], ({ contestId, expected }: TestCaseForContestType) => {
+            expect(getContestPriority(contestId)).toEqual(contestTypePriorities.get(expected));
+          });
+        });
+      });
 
-      runTestCases(
-        'when contest_id contains joi',
-        TestCasesForContestType.joi,
-        ({ contestId, expected }: TestCaseForContestType) => {
-          expect(getContestPriority(contestId)).toEqual(contestTypePriorities.get(expected));
-        },
-      );
+      describe('when contest_id contains joi', () => {
+        TestCasesForContestType.joi.forEach(({ name, value }) => {
+          runTests(`${name}`, [value], ({ contestId, expected }: TestCaseForContestType) => {
+            expect(getContestPriority(contestId)).toEqual(contestTypePriorities.get(expected));
+          });
+        });
+      });
 
-      runTestCases(
-        'when contest_id is tessoku-book',
-        TestCasesForContestType.tessokuBook,
-        ({ contestId, expected }: TestCaseForContestType) => {
-          expect(getContestPriority(contestId)).toEqual(contestTypePriorities.get(expected));
-        },
-      );
+      describe('when contest_id is tessoku-book', () => {
+        TestCasesForContestType.tessokuBook.forEach(({ name, value }) => {
+          runTests(`${name}`, [value], ({ contestId, expected }: TestCaseForContestType) => {
+            expect(getContestPriority(contestId)).toEqual(contestTypePriorities.get(expected));
+          });
+        });
+      });
 
-      runTestCases(
-        'when contest_id is math-and-algorithm',
-        TestCasesForContestType.mathAndAlgorithm,
-        ({ contestId, expected }: TestCaseForContestType) => {
-          expect(getContestPriority(contestId)).toEqual(contestTypePriorities.get(expected));
-        },
-      );
+      describe('when contest_id is math-and-algorithm', () => {
+        TestCasesForContestType.mathAndAlgorithm.forEach(({ name, value }) => {
+          runTests(`${name}`, [value], ({ contestId, expected }: TestCaseForContestType) => {
+            expect(getContestPriority(contestId)).toEqual(contestTypePriorities.get(expected));
+          });
+        });
+      });
 
-      runTestCases(
-        'when contest_id contains arc',
-        TestCasesForContestType.arc,
-        ({ contestId, expected }: TestCaseForContestType) => {
-          expect(getContestPriority(contestId)).toEqual(contestTypePriorities.get(expected));
-        },
-      );
+      describe('when contest_id contains arc', () => {
+        TestCasesForContestType.arc.forEach(({ name, value }) => {
+          runTests(`${name}`, [value], ({ contestId, expected }: TestCaseForContestType) => {
+            expect(getContestPriority(contestId)).toEqual(contestTypePriorities.get(expected));
+          });
+        });
+      });
 
-      runTestCases(
-        'when contest_id contains agc',
-        TestCasesForContestType.agc,
-        ({ contestId, expected }: TestCaseForContestType) => {
-          expect(getContestPriority(contestId)).toEqual(contestTypePriorities.get(expected));
-        },
-      );
+      describe('when contest_id contains agc', () => {
+        TestCasesForContestType.agc.forEach(({ name, value }) => {
+          runTests(`${name}`, [value], ({ contestId, expected }: TestCaseForContestType) => {
+            expect(getContestPriority(contestId)).toEqual(contestTypePriorities.get(expected));
+          });
+        });
+      });
 
-      runTestCases(
-        'when contest_id means arc-like',
-        TestCasesForContestType.arcLike,
-        ({ contestId, expected }: TestCaseForContestType) => {
-          expect(getContestPriority(contestId)).toEqual(contestTypePriorities.get(expected));
-        },
-      );
+      describe('when contest_id means arc-like', () => {
+        TestCasesForContestType.arcLike.forEach(({ name, value }) => {
+          runTests(`${name}`, [value], ({ contestId, expected }: TestCaseForContestType) => {
+            expect(getContestPriority(contestId)).toEqual(contestTypePriorities.get(expected));
+          });
+        });
+      });
 
-      runTestCases(
-        'when contest_id means agc-like',
-        TestCasesForContestType.agcLike,
-        ({ contestId, expected }: TestCaseForContestType) => {
-          expect(getContestPriority(contestId)).toEqual(contestTypePriorities.get(expected));
-        },
-      );
+      describe('when contest_id means agc-like', () => {
+        TestCasesForContestType.agcLike.forEach(({ name, value }) => {
+          runTests(`${name}`, [value], ({ contestId, expected }: TestCaseForContestType) => {
+            expect(getContestPriority(contestId)).toEqual(contestTypePriorities.get(expected));
+          });
+        });
+      });
 
-      runTestCases(
-        'when contest_id means others',
-        TestCasesForContestType.atCoderOthers,
-        ({ contestId, expected }: TestCaseForContestType) => {
-          expect(getContestPriority(contestId)).toEqual(contestTypePriorities.get(expected));
-        },
-      );
+      describe('when contest_id means AtCoder others', () => {
+        TestCasesForContestType.atCoderOthers.forEach(({ name, value }) => {
+          runTests(`${name}`, [value], ({ contestId, expected }: TestCaseForContestType) => {
+            expect(getContestPriority(contestId)).toEqual(contestTypePriorities.get(expected));
+          });
+        });
+      });
     });
 
     describe('AOJ', () => {
-      runTestCases(
-        'when contest_id means aoj courses',
-        TestCasesForContestType.aojCourses,
-        ({ contestId, expected }: TestCaseForContestType) => {
-          expect(getContestPriority(contestId)).toEqual(contestTypePriorities.get(expected));
-        },
-      );
+      describe('when contest_id means AOJ courses', () => {
+        TestCasesForContestType.aojCourses.forEach(({ name, value }) => {
+          runTests(`${name}`, [value], ({ contestId, expected }: TestCaseForContestType) => {
+            expect(getContestPriority(contestId)).toEqual(contestTypePriorities.get(expected));
+          });
+        });
+      });
 
-      runTestCases(
-        'when contest_id means aoj pck (prelim and final)',
-        TestCasesForContestType.aojPck,
-        ({ contestId, expected }: TestCaseForContestType) => {
-          expect(getContestPriority(contestId)).toEqual(contestTypePriorities.get(expected));
-        },
-      );
+      describe('when contest_id means AOJ PCK (prelim and final)', () => {
+        TestCasesForContestType.aojPck.forEach(({ name, value }) => {
+          runTests(`${name}`, [value], ({ contestId, expected }: TestCaseForContestType) => {
+            expect(getContestPriority(contestId)).toEqual(contestTypePriorities.get(expected));
+          });
+        });
+      });
     });
   });
 
   describe('get contest name label', () => {
     describe('AtCoder', () => {
-      runTestCases(
-        'when contest_id contains abc',
-        TestCasesForContestNameLabel.abc,
-        ({ contestId, expected }: TestCaseForContestNameLabel) => {
-          expect(getContestNameLabel(contestId)).toEqual(expected);
-        },
-      );
+      describe('when contest_id contains abc', () => {
+        TestCasesForContestNameLabel.abc.forEach(({ name, value }) => {
+          runTests(`${name}`, [value], ({ contestId, expected }: TestCaseForContestNameLabel) => {
+            expect(getContestNameLabel(contestId)).toEqual(expected);
+          });
+        });
+      });
 
-      runTestCases(
-        'when contest_id starts with APG4b',
-        TestCasesForContestNameLabel.apg4b,
-        ({ contestId, expected }: TestCaseForContestNameLabel) => {
-          expect(getContestNameLabel(contestId)).toEqual(expected);
-        },
-      );
+      describe('when contest_id starts with APG4b', () => {
+        TestCasesForContestNameLabel.apg4b.forEach(({ name, value }) => {
+          runTests(`${name}`, [value], ({ contestId, expected }: TestCaseForContestNameLabel) => {
+            expect(getContestNameLabel(contestId)).toEqual(expected);
+          });
+        });
+      });
 
-      runTestCases(
-        'when contest_id is typical90',
-        TestCasesForContestNameLabel.typical90,
-        ({ contestId, expected }: TestCaseForContestNameLabel) => {
-          expect(getContestNameLabel(contestId)).toEqual(expected);
-        },
-      );
+      describe('when contest_id is typical90', () => {
+        TestCasesForContestNameLabel.typical90.forEach(({ name, value }) => {
+          runTests(`${name}`, [value], ({ contestId, expected }: TestCaseForContestNameLabel) => {
+            expect(getContestNameLabel(contestId)).toEqual(expected);
+          });
+        });
+      });
 
-      runTestCases(
-        'when contest_id is dp (EDPC)',
-        TestCasesForContestNameLabel.edpc,
-        ({ contestId, expected }: TestCaseForContestNameLabel) => {
-          expect(getContestNameLabel(contestId)).toEqual(expected);
-        },
-      );
+      describe('when contest_id is dp (EDPC)', () => {
+        TestCasesForContestNameLabel.edpc.forEach(({ name, value }) => {
+          runTests(`${name}`, [value], ({ contestId, expected }: TestCaseForContestNameLabel) => {
+            expect(getContestNameLabel(contestId)).toEqual(expected);
+          });
+        });
+      });
 
-      runTestCases(
-        'when contest_id is tdpc',
-        TestCasesForContestNameLabel.tdpc,
-        ({ contestId, expected }: TestCaseForContestNameLabel) => {
-          expect(getContestNameLabel(contestId)).toEqual(expected);
-        },
-      );
+      describe('when contest_id is tdpc', () => {
+        TestCasesForContestNameLabel.tdpc.forEach(({ name, value }) => {
+          runTests(`${name}`, [value], ({ contestId, expected }: TestCaseForContestNameLabel) => {
+            expect(getContestNameLabel(contestId)).toEqual(expected);
+          });
+        });
+      });
 
       // TODO(#issue): Skipped until notational inconsistencies are resolved.
       // Current issues:
@@ -370,13 +370,13 @@ describe('Contest', () => {
         });
       });
 
-      runTestCases(
-        'when contest_id is practice2 (ACL practice)',
-        TestCasesForContestNameLabel.aclPractice,
-        ({ contestId, expected }: TestCaseForContestNameLabel) => {
-          expect(getContestNameLabel(contestId)).toEqual(expected);
-        },
-      );
+      describe('when contest_id is practice2 (ACL practice)', () => {
+        TestCasesForContestNameLabel.aclPractice.forEach(({ name, value }) => {
+          runTests(`${name}`, [value], ({ contestId, expected }: TestCaseForContestNameLabel) => {
+            expect(getContestNameLabel(contestId)).toEqual(expected);
+          });
+        });
+      });
 
       // TODO(#issue): Skipped until notational inconsistencies are resolved.
       // Current issues:
@@ -390,141 +390,177 @@ describe('Contest', () => {
         });
       });
 
-      runTestCases(
-        'when contest_id is tessoku-book',
-        TestCasesForContestNameLabel.tessokuBook,
-        ({ contestId, expected }: TestCaseForContestNameLabel) => {
-          expect(getContestNameLabel(contestId)).toEqual(expected);
-        },
-      );
+      describe('when contest_id is tessoku-book', () => {
+        TestCasesForContestNameLabel.tessokuBook.forEach(({ name, value }) => {
+          runTests(`${name}`, [value], ({ contestId, expected }: TestCaseForContestNameLabel) => {
+            expect(getContestNameLabel(contestId)).toEqual(expected);
+          });
+        });
+      });
 
-      runTestCases(
-        'when contest_id is math-and-algorithm',
-        TestCasesForContestNameLabel.mathAndAlgorithm,
-        ({ contestId, expected }: TestCaseForContestNameLabel) => {
-          expect(getContestNameLabel(contestId)).toEqual(expected);
-        },
-      );
+      describe('when contest_id is math-and-algorithm', () => {
+        TestCasesForContestNameLabel.mathAndAlgorithm.forEach(({ name, value }) => {
+          runTests(`${name}`, [value], ({ contestId, expected }: TestCaseForContestNameLabel) => {
+            expect(getContestNameLabel(contestId)).toEqual(expected);
+          });
+        });
+      });
 
-      runTestCases(
-        'when contest_id contains arc',
-        TestCasesForContestNameLabel.arc,
-        ({ contestId, expected }: TestCaseForContestNameLabel) => {
-          expect(getContestNameLabel(contestId)).toEqual(expected);
-        },
-      );
+      describe('when contest_id contains arc', () => {
+        TestCasesForContestNameLabel.arc.forEach(({ name, value }) => {
+          runTests(`${name}`, [value], ({ contestId, expected }: TestCaseForContestNameLabel) => {
+            expect(getContestNameLabel(contestId)).toEqual(expected);
+          });
+        });
+      });
 
-      runTestCases(
-        'when contest_id contains agc',
-        TestCasesForContestNameLabel.agc,
-        ({ contestId, expected }: TestCaseForContestNameLabel) => {
-          expect(getContestNameLabel(contestId)).toEqual(expected);
-        },
-      );
+      describe('when contest_id contains agc', () => {
+        TestCasesForContestNameLabel.agc.forEach(({ name, value }) => {
+          runTests(`${name}`, [value], ({ contestId, expected }: TestCaseForContestNameLabel) => {
+            expect(getContestNameLabel(contestId)).toEqual(expected);
+          });
+        });
+      });
 
-      runTestCases(
-        'when contest_id contains chokudai_S',
-        TestCasesForContestNameLabel.atCoderOthers,
-        ({ contestId, expected }: TestCaseForContestNameLabel) => {
-          expect(getContestNameLabel(contestId)).toEqual(expected);
-        },
-      );
+      describe('when contest_id contains chokudai_S', () => {
+        TestCasesForContestNameLabel.atCoderOthers.forEach(({ name, value }) => {
+          runTests(`${name}`, [value], ({ contestId, expected }: TestCaseForContestNameLabel) => {
+            expect(getContestNameLabel(contestId)).toEqual(expected);
+          });
+        });
+      });
     });
 
     describe('AOJ', () => {
-      runTestCases(
-        'when contest_id means aoj courses',
-        TestCasesForContestNameLabel.aojCourses,
-        ({ contestId, expected }: TestCaseForContestNameLabel) => {
-          expect(getContestNameLabel(contestId)).toEqual(expected);
-        },
-      );
+      describe('when contest_id means AOJ courses', () => {
+        TestCasesForContestNameLabel.aojCourses.forEach(({ name, value }) => {
+          runTests(`${name}`, [value], ({ contestId, expected }: TestCaseForContestNameLabel) => {
+            expect(getContestNameLabel(contestId)).toEqual(expected);
+          });
+        });
+      });
 
-      runTestCases(
-        'when contest_id means aoj pck (prelim and final)',
-        TestCasesForContestNameLabel.aojPck,
-        ({ contestId, expected }: TestCaseForContestNameLabel) => {
-          expect(getContestNameLabel(contestId)).toEqual(expected);
-        },
-      );
+      describe('when contest_id means AOJ PCK (prelim and final)', () => {
+        TestCasesForContestNameLabel.aojPck.forEach(({ name, value }) => {
+          runTests(`${name}`, [value], ({ contestId, expected }: TestCaseForContestNameLabel) => {
+            expect(getContestNameLabel(contestId)).toEqual(expected);
+          });
+        });
+      });
     });
   });
 
   describe('add contest name to task index', () => {
     describe('AtCoder', () => {
-      runTestCases(
-        'when contest_id contains abc',
-        TestCasesForContestNameAndTaskIndex.abc,
-        ({ contestId, taskTableIndex, expected }: TestCaseForContestNameAndTaskIndex) => {
-          expect(addContestNameToTaskIndex(contestId, taskTableIndex)).toEqual(expected);
-        },
-      );
+      describe('when contest_id contains abc', () => {
+        TestCasesForContestNameAndTaskIndex.abc.forEach(({ name, value }) => {
+          runTests(
+            `${name}`,
+            [value],
+            ({ contestId, taskTableIndex, expected }: TestCaseForContestNameAndTaskIndex) => {
+              expect(addContestNameToTaskIndex(contestId, taskTableIndex)).toEqual(expected);
+            },
+          );
+        });
+      });
 
-      runTestCases(
-        'when contest_id starts with APG4b',
-        TestCasesForContestNameAndTaskIndex.apg4b,
-        ({ contestId, taskTableIndex, expected }: TestCaseForContestNameAndTaskIndex) => {
-          expect(addContestNameToTaskIndex(contestId, taskTableIndex)).toEqual(expected);
-        },
-      );
+      describe('when contest_id starts with APG4b', () => {
+        TestCasesForContestNameAndTaskIndex.apg4b.forEach(({ name, value }) => {
+          runTests(
+            `${name}`,
+            [value],
+            ({ contestId, taskTableIndex, expected }: TestCaseForContestNameAndTaskIndex) => {
+              expect(addContestNameToTaskIndex(contestId, taskTableIndex)).toEqual(expected);
+            },
+          );
+        });
+      });
 
-      runTestCases(
-        'when contest_id is typical90',
-        TestCasesForContestNameAndTaskIndex.typical90,
-        ({ contestId, taskTableIndex, expected }: TestCaseForContestNameAndTaskIndex) => {
-          expect(addContestNameToTaskIndex(contestId, taskTableIndex)).toEqual(expected);
-        },
-      );
+      describe('when contest_id is typical90', () => {
+        TestCasesForContestNameAndTaskIndex.typical90.forEach(({ name, value }) => {
+          runTests(
+            `${name}`,
+            [value],
+            ({ contestId, taskTableIndex, expected }: TestCaseForContestNameAndTaskIndex) => {
+              expect(addContestNameToTaskIndex(contestId, taskTableIndex)).toEqual(expected);
+            },
+          );
+        });
+      });
 
-      runTestCases(
-        'when contest_id is tessoku-book',
-        TestCasesForContestNameAndTaskIndex.tessokuBook,
-        ({ contestId, taskTableIndex, expected }: TestCaseForContestNameAndTaskIndex) => {
-          expect(addContestNameToTaskIndex(contestId, taskTableIndex)).toEqual(expected);
-        },
-      );
+      describe('when contest_id is tessoku-book', () => {
+        TestCasesForContestNameAndTaskIndex.tessokuBook.forEach(({ name, value }) => {
+          runTests(
+            `${name}`,
+            [value],
+            ({ contestId, taskTableIndex, expected }: TestCaseForContestNameAndTaskIndex) => {
+              expect(addContestNameToTaskIndex(contestId, taskTableIndex)).toEqual(expected);
+            },
+          );
+        });
+      });
 
-      runTestCases(
-        'when contest_id is math-and-algorithm',
-        TestCasesForContestNameAndTaskIndex.mathAndAlgorithm,
-        ({ contestId, taskTableIndex, expected }: TestCaseForContestNameAndTaskIndex) => {
-          expect(addContestNameToTaskIndex(contestId, taskTableIndex)).toEqual(expected);
-        },
-      );
+      describe('when contest_id is math-and-algorithm', () => {
+        TestCasesForContestNameAndTaskIndex.mathAndAlgorithm.forEach(({ name, value }) => {
+          runTests(
+            `${name}`,
+            [value],
+            ({ contestId, taskTableIndex, expected }: TestCaseForContestNameAndTaskIndex) => {
+              expect(addContestNameToTaskIndex(contestId, taskTableIndex)).toEqual(expected);
+            },
+          );
+        });
+      });
 
-      runTestCases(
-        'when contest_id contains arc',
-        TestCasesForContestNameAndTaskIndex.arc,
-        ({ contestId, taskTableIndex, expected }: TestCaseForContestNameAndTaskIndex) => {
-          expect(addContestNameToTaskIndex(contestId, taskTableIndex)).toEqual(expected);
-        },
-      );
+      describe('when contest_id contains arc', () => {
+        TestCasesForContestNameAndTaskIndex.arc.forEach(({ name, value }) => {
+          runTests(
+            `${name}`,
+            [value],
+            ({ contestId, taskTableIndex, expected }: TestCaseForContestNameAndTaskIndex) => {
+              expect(addContestNameToTaskIndex(contestId, taskTableIndex)).toEqual(expected);
+            },
+          );
+        });
+      });
 
-      runTestCases(
-        'when contest_id contains agc',
-        TestCasesForContestNameAndTaskIndex.agc,
-        ({ contestId, taskTableIndex, expected }: TestCaseForContestNameAndTaskIndex) => {
-          expect(addContestNameToTaskIndex(contestId, taskTableIndex)).toEqual(expected);
-        },
-      );
+      describe('when contest_id contains agc', () => {
+        TestCasesForContestNameAndTaskIndex.agc.forEach(({ name, value }) => {
+          runTests(
+            `${name}`,
+            [value],
+            ({ contestId, taskTableIndex, expected }: TestCaseForContestNameAndTaskIndex) => {
+              expect(addContestNameToTaskIndex(contestId, taskTableIndex)).toEqual(expected);
+            },
+          );
+        });
+      });
     });
 
     describe('AOJ', () => {
-      runTestCases(
-        'when contest_id means aoj courses',
-        TestCasesForContestNameAndTaskIndex.aojCourses,
-        ({ contestId, taskTableIndex, expected }: TestCaseForContestNameAndTaskIndex) => {
-          expect(addContestNameToTaskIndex(contestId, taskTableIndex)).toEqual(expected);
-        },
-      );
+      describe('when contest_id means AOJ courses', () => {
+        TestCasesForContestNameAndTaskIndex.aojCourses.forEach(({ name, value }) => {
+          runTests(
+            `${name}`,
+            [value],
+            ({ contestId, taskTableIndex, expected }: TestCaseForContestNameAndTaskIndex) => {
+              expect(addContestNameToTaskIndex(contestId, taskTableIndex)).toEqual(expected);
+            },
+          );
+        });
+      });
 
-      runTestCases(
-        'when contest_id means aoj pck (prelim and final)',
-        TestCasesForContestNameAndTaskIndex.aojPck,
-        ({ contestId, taskTableIndex, expected }: TestCaseForContestNameAndTaskIndex) => {
-          expect(addContestNameToTaskIndex(contestId, taskTableIndex)).toEqual(expected);
-        },
-      );
+      describe('when contest_id means AOJ PCK (prelim and final)', () => {
+        TestCasesForContestNameAndTaskIndex.aojPck.forEach(({ name, value }) => {
+          runTests(
+            `${name}`,
+            [value],
+            ({ contestId, taskTableIndex, expected }: TestCaseForContestNameAndTaskIndex) => {
+              expect(addContestNameToTaskIndex(contestId, taskTableIndex)).toEqual(expected);
+            },
+          );
+        });
+      });
     });
   });
 });

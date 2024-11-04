@@ -1,6 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { createTestCase, runTestCases, runTests, zip } from './test_helpers';
-import * as TestCasesForRunTestCases from './test_cases/test_helpers';
+import { createTestCase, runTests, zip } from './test_helpers';
 
 describe('createTestCase', () => {
   it('expects to be created a test case object with the given name and value', () => {
@@ -9,66 +8,6 @@ describe('createTestCase', () => {
     const testCase = createTestCase<number>(name)(value);
 
     expect(testCase).toEqual({ name, value });
-  });
-});
-
-describe('runTestCases', () => {
-  it('expects to run a series of test cases with the provided test function', () => {
-    runTestCases(
-      'test cases for addition',
-      TestCasesForRunTestCases.numerics,
-      (testCase: { a: number; b: number; expected: number }) => {
-        expect(testCase.a + testCase.b).toBe(testCase.expected);
-      },
-    );
-  });
-
-  it('expects to run test cases with different types of values', () => {
-    runTestCases(
-      'test cases with different types of values',
-      TestCasesForRunTestCases.differentTypes,
-      (testCase: {
-        a: string | boolean | number[] | object;
-        b: string | boolean | number[] | object;
-        expected: string | boolean | number[] | object;
-      }) => {
-        if (testCase.a == null || testCase.b == null) {
-          throw new Error('Test case values must be non-null and defined');
-        } else if (typeof testCase.a === 'string' && typeof testCase.b === 'string') {
-          expect(testCase.a + testCase.b).toBe(testCase.expected);
-        } else if (typeof testCase.a === 'boolean' && typeof testCase.b === 'boolean') {
-          expect(testCase.a && testCase.b).toBe(testCase.expected);
-        } else if (Array.isArray(testCase.a) && Array.isArray(testCase.b)) {
-          expect([...testCase.a, ...testCase.b]).toEqual(testCase.expected);
-        } else if (typeof testCase.a === 'object' && typeof testCase.b === 'object') {
-          expect({ ...testCase.a, ...testCase.b }).toEqual(testCase.expected);
-        } else {
-          throw new Error('Unsupported test case types');
-        }
-      },
-    );
-  });
-
-  it('expects to throw an error if description is empty', () => {
-    expect(() => {
-      runTestCases('', [], () => {});
-    }).toThrow('Description must be a non-empty string');
-  });
-
-  it('expects to throw an error if test cases array is empty', () => {
-    expect(() => {
-      runTestCases('empty test cases', [], () => {});
-    }).toThrow('Test cases array must be non-empty');
-  });
-
-  it('expects to throw an error if test function is not provided', () => {
-    expect(() => {
-      runTestCases(
-        'missing test function',
-        [{ name: 'test', value: 1 }],
-        null as unknown as () => void,
-      );
-    }).toThrow('Test function must be provided');
   });
 });
 
