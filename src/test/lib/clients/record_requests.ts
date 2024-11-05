@@ -18,8 +18,12 @@ async function main(): Promise<void> {
 
     await Promise.all(
       clients.map(async (client) => {
-        await saveContests(client.source, client.name, 100);
-        await saveTasks(client.source, client.name, 100);
+        try {
+          await saveContests(client.source, client.name, 100);
+          await saveTasks(client.source, client.name, 100);
+        } catch (error) {
+          console.error(`Failed to save data for ${client.name}: `, error);
+        }
       }),
     );
   } catch (error) {

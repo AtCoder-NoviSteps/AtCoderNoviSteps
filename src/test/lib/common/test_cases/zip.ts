@@ -49,8 +49,8 @@ export const testCasesForZip: TestCaseForZip<number, string>[] = [
   },
   {
     name: 'two empty arrays',
-    first: [],
-    second: [],
+    first: Array<number>(),
+    second: Array<string>(),
     expected: [],
   },
   {
@@ -84,8 +84,9 @@ export const testCasesForZip: TestCaseForZip<number, string>[] = [
  *
  * @interface ErrorTestCaseForZip
  * @property {string} name - The name of the test case.
- * @property {unknown} first - The first input value for the zip function.
- * @property {unknown} second - The second input value for the zip function.
+ * @property {unknown} first - The first input value for the zip function (expected to throw if not an array).
+ * @property {unknown} second - The second input value for the zip function (expected to throw if not an array).
+ * @throws {TypeError} When inputs are not arrays
  */
 interface ErrorTestCaseForZip {
   name: string;
