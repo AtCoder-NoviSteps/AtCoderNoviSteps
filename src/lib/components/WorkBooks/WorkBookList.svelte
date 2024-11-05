@@ -68,6 +68,14 @@
     return results;
   }
 
+  const AVAILABLE_GRADES = [
+    TaskGrade.Q10,
+    TaskGrade.Q9,
+    TaskGrade.Q8,
+    TaskGrade.Q7,
+    TaskGrade.Q6,
+  ] as const;
+
   function getGradeMode(workbookId: number): TaskGrade {
     return workbookGradeModes.get(workbookId) ?? TaskGrade.PENDING;
   }
@@ -78,14 +86,14 @@
   }
 </script>
 
-<!-- TODO: 6Q〜1Q?にも対応 -->
+<!-- TODO: 5Q〜1Qにも対応 -->
 <!-- TODO: 「ユーザ作成」の問題集には、検索機能を追加 -->
 {#if workbookType === WorkBookType.CURRICULUM}
   <div class="mb-6">
     <div class="flex flex-col md:flex-row items-start md:items-center justify-between">
       <div class="flex items-center space-x-4">
         <ButtonGroup>
-          {#each [TaskGrade.Q10, TaskGrade.Q9, TaskGrade.Q8, TaskGrade.Q7] as grade}
+          {#each AVAILABLE_GRADES as grade}
             <Button
               on:click={() => filterByGradeMode(grade)}
               class={selectedGrade === grade ? 'text-primary-700' : 'text-gray-900'}
