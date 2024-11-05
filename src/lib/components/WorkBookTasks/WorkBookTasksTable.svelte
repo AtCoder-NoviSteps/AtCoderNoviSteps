@@ -11,7 +11,7 @@
 
   import ExternalLinkWrapper from '$lib/components/ExternalLinkWrapper.svelte';
   import { addContestNameToTaskIndex } from '$lib/utils/contest';
-  import { taskUrl, removeTaskIndexFromTitle } from '$lib/utils/task';
+  import { getTaskUrl, removeTaskIndexFromTitle } from '$lib/utils/task';
 
   import type { WorkBookTaskBase, WorkBookTaskCreate, WorkBookTaskEdit } from '$lib/types/workbook';
   import type { Task } from '$lib/types/task';
@@ -118,7 +118,7 @@
           <!-- 問題名 -->
           <TableBodyCell class="xs:text-lg truncate">
             <ExternalLinkWrapper
-              url={taskUrl(task.contestId, task.taskId)}
+              url={getTaskUrl(task.contestId, task.taskId)}
               description={removeTaskIndexFromTitle(
                 task.title,
                 getTaskTableIndex(tasksMapByIds, task.taskId),

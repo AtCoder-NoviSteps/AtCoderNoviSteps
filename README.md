@@ -17,7 +17,7 @@
     <a href="https://github.com/AtCoder-Novisteps/AtCoderNovisteps/issues">
         <img alt="GitHub Repo Issues" src="https://img.shields.io/github/issues/AtCoder-Novisteps/AtCoderNovisteps?&style=plastic"/>
     </a>
-    <a href="https://github.com/AtCoder-Novisteps/AtCoderNovisteps/blob/main/LICENSE">
+    <a href="https://github.com/AtCoder-Novisteps/AtCoderNovisteps/blob/staging/LICENSE">
         <img src="https://img.shields.io/badge/license-MIT-brightgreen.svg?style=plastic" alt="License: MIT" />
     </a>
     <a href="https://x.com/acnovisteps">
@@ -104,7 +104,7 @@
 
 - [連絡先](https://x.com/acnovisteps)
 
-- [本プロジェクトへの参加方法](https://github.com/KATO-Hiro/AtCoderNovisteps/blob/main/CONTRIBUTING.md)
+- [本プロジェクトへの参加方法](https://github.com/KATO-Hiro/AtCoderNovisteps/blob/staging/CONTRIBUTING.md)
 
 ## 関連プロジェクト・参考資料
 
@@ -137,4 +137,4 @@
 
 ## ライセンス
 
-[MIT](https://github.com/KATO-Hiro/AtCoderNovisteps/blob/main/LICENSE)
+[MIT](https://github.com/KATO-Hiro/AtCoderNovisteps/blob/staging/LICENSE)

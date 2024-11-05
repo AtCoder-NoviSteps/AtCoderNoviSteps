@@ -2,6 +2,8 @@
   // See:
   // https://github.com/oekazuma/svelte-meta-tags
   import { page } from '$app/stores';
+  import { navigating } from '$app/stores';
+
   import { MetaTags } from 'svelte-meta-tags';
   import extend from 'just-extend';
 
@@ -10,6 +12,7 @@
   import Header from '$lib/components/Header.svelte';
   import GoogleAnalytics from '$lib/components/GoogleAnalytics.svelte';
   import ErrorMessageToast from '$lib/components/ToastWrapper/ErrorMessageToast.svelte';
+  import SpinnerWrapper from '$lib/components/SpinnerWrapper.svelte';
   import Footer from '$lib/components/Footer.svelte';
 
   import { errorMessageStore } from '$lib/stores/error_message';
@@ -26,6 +29,12 @@
 
 <ErrorMessageToast errorMessage={$errorMessageStore} />
 
-<slot />
+<!-- See: -->
+<!-- https://svelte.dev/docs/kit/$app-stores#navigating -->
+{#if $navigating}
+  <SpinnerWrapper />
+{:else}
+  <slot />
+{/if}
 
 <Footer />

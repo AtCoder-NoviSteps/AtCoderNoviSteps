@@ -1,12 +1,47 @@
+import type { UrlGenerator, UrlGenerators } from '$lib/types/url';
 import { type TaskResult, type TaskResults, TaskGrade, type TaskGrades } from '$lib/types/task';
 import { type WorkBookTaskBase } from '$lib/types/workbook';
-import { ATCODER_BASE_CONTEST_URL } from '$lib/constants/urls';
-import { getContestPriority } from '$lib/utils/contest';
+import { ATCODER_BASE_CONTEST_URL, AOJ_TASKS_URL } from '$lib/constants/urls';
+import { getPrefixForAojCourses, getContestPriority } from '$lib/utils/contest';
 
-// TODO: 複数のコンテストサイトに対応できるようにする
-export const taskUrl = (contestId: string, taskId: string) => {
-  return `${ATCODER_BASE_CONTEST_URL}/${contestId}/tasks/${taskId}`;
+// TODO: Codeforces、yukicoder、BOJなどに対応できるようにする
+/**
+ * Generates a URL for a task based on the contest ID and task ID.
+ * Uses a chain of URL generators to handle different contest platforms.
+ * @param contestId - The ID of the contest
+ * @param taskId - The ID of the task
+ * @returns The generated URL or empty string if no suitable generator is found
+ */
+export const getTaskUrl = (contestId: string, taskId: string): string => {
+  const generators = urlGenerators.find((generator) => generator.canHandle(contestId));
+  return generators?.generateUrl(contestId, taskId) ?? '';
 };
+
+// Default case
+class AtCoderGenerator implements UrlGenerator {
+  canHandle(contestId: string): boolean {
+    return contestId !== '' && contestId !== null;
+  }
+
+  generateUrl(contestId: string, taskId: string): string {
+    return `${ATCODER_BASE_CONTEST_URL}/${contestId}/tasks/${taskId}`;
+  }
+}
+
+class AojGenerator implements UrlGenerator {
+  canHandle(contestId: string): boolean {
+    return getPrefixForAojCourses().includes(contestId) || contestId.startsWith('PCK');
+  }
+
+  // Note: contestId is not used because it is not included in the URL.
+  generateUrl(_: string, taskId: string): string {
+    return `${AOJ_TASKS_URL}/${taskId}`;
+  }
+}
+
+// Note:
+// Default generator last
+const urlGenerators: UrlGenerators = [new AojGenerator(), new AtCoderGenerator()];
 
 export const countAcceptedTasks = (taskResults: TaskResults) => {
   const acceptedResults = taskResults.filter((taskResult: TaskResult) => taskResult.is_ac);

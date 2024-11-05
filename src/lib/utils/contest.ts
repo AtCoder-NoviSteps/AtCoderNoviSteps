@@ -1,5 +1,4 @@
 import { ContestType } from '$lib/types/contest';
-import { ATCODER_BASE_CONTEST_URL } from '$lib/constants/urls';
 
 // See:
 // https://github.com/kenkoooo/AtCoderProblems/blob/master/atcoder-problems-frontend/src/utils/ContestClassifier.ts
@@ -89,11 +88,33 @@ export const classifyContest = (contest_id: string) => {
     return ContestType.OTHERS;
   }
 
+  if (aojCoursePrefixes.has(contest_id)) {
+    return ContestType.AOJ_COURSES;
+  }
+
+  if (/^PCK(Prelim|Final)\d*$/.exec(contest_id)) {
+    return ContestType.AOJ_PCK;
+  }
+
   return null;
 };
 
-// priority: 0 (High) - 16 (Low)
-// HACK: ARC、AGCの優先順位は暫定版
+export const AOJ_COURSES = {
+  ITP1: 'プログラミング入門',
+  ALDS1: 'アルゴリズムとデータ構造入門',
+  ITP2: 'プログラミング応用',
+  DPL: '組み合わせ最適化',
+} as const;
+
+const aojCoursePrefixes = new Set(getPrefixForAojCourses()); // For O(1) lookups
+
+// AIZU ONLINE JUDGE AOJ Courses
+export function getPrefixForAojCourses() {
+  return Object.keys(AOJ_COURSES);
+}
+
+// priority: 0 (High) - 18 (Low)
+// HACK: The priorities for ARC, AGC, AOJ_COURSES, and AOJ_PCK are temporary.
 //
 // See:
 // https://jsprimer.net/basic/map-and-set/
@@ -114,7 +135,9 @@ export const contestTypePriorities: Map<ContestType, number> = new Map([
   [ContestType.ABC_LIKE, 13],
   [ContestType.ARC_LIKE, 14],
   [ContestType.AGC_LIKE, 15],
-  [ContestType.OTHERS, 16],
+  [ContestType.OTHERS, 16], // AtCoder (その他)
+  [ContestType.AOJ_COURSES, 17],
+  [ContestType.AOJ_PCK, 18],
 ]);
 
 export function getContestPriority(contestId: string): number {
@@ -127,10 +150,6 @@ export function getContestPriority(contestId: string): number {
     return contestTypePriorities.get(contestType) as number;
   }
 }
-
-export const getContestUrl = (contestId: string): string => {
-  return `${ATCODER_BASE_CONTEST_URL}/${contestId}`;
-};
 
 export const getContestNameLabel = (contest_id: string) => {
   if (contest_id === 'APG4b' || contest_id === 'APG4bPython') {
@@ -165,8 +184,32 @@ export const getContestNameLabel = (contest_id: string) => {
     return contest_id.replace('chokudai_S', 'Chokudai SpeedRun ');
   }
 
+  if (aojCoursePrefixes.has(contest_id)) {
+    return 'AOJ Courses';
+  }
+
+  if (contest_id.startsWith('PCK')) {
+    return getAojPckLabel(contest_id);
+  }
+
   return contest_id.toUpperCase();
 };
+
+function getAojPckLabel(contestId: string): string {
+  const PCK_TRANSLATIONS = {
+    PCK: 'パソコン甲子園',
+    Prelim: '予選',
+    Final: '本選',
+  };
+
+  const baseLabel = 'AOJ - ';
+
+  Object.entries(PCK_TRANSLATIONS).forEach(([abbrEnglish, japanese]) => {
+    contestId = contestId.replace(abbrEnglish, japanese);
+  });
+
+  return baseLabel + contestId;
+}
 
 export const addContestNameToTaskIndex = (contestId: string, taskTableIndex: string): string => {
   const contestName = getContestNameLabel(contestId);

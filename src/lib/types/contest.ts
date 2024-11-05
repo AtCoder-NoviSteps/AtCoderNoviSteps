@@ -1,3 +1,25 @@
+import type { TasksForImport } from '$lib/types/task';
+
+export interface Contest {
+  id: string;
+  start_epoch_second: number;
+  duration_second: number;
+  title: string;
+  tasks: TasksForImport;
+}
+
+export type Contests = Contest[];
+
+export interface ContestForImport {
+  id: string;
+  start_epoch_second: number;
+  duration_second: number;
+  title: string;
+  rate_change: string;
+}
+
+export type ContestsForImport = ContestForImport[];
+
 // Import original enum as type.
 import type { ContestType as ContestTypeOrigin } from '@prisma/client';
 
@@ -18,7 +40,9 @@ export const ContestType: { [key in ContestTypeOrigin]: key } = {
   ABC_LIKE: 'ABC_LIKE', // AtCoder Beginner Contest (ABC) 相当のコンテスト
   ARC_LIKE: 'ARC_LIKE', // AtCoder Regular Contest (ARC) 相当のコンテスト
   AGC_LIKE: 'AGC_LIKE', // AtCoder Grand Contest (AGC) 相当のコンテスト
-  OTHERS: 'OTHERS',
+  OTHERS: 'OTHERS', // AtCoder (その他)
+  AOJ_COURSES: 'AOJ_COURSES', // AIZU ONLINE JUDGE Courses
+  AOJ_PCK: 'AOJ_PCK', // All-Japan High School Programming Contest (PCK)
 } as const;
 
 // Re-exporting the original type with the original name.

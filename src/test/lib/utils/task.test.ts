@@ -1,16 +1,8 @@
 import { expect, test } from 'vitest';
 
-import {
-  taskUrl,
-  countAcceptedTasks,
-  countAllTasks,
-  areAllTasksAccepted,
-  compareByContestIdAndTaskId,
-  removeTaskIndexFromTitle,
-} from '$lib/utils/task';
-import type { WorkBookTaskBase } from '$lib/types/workbook';
-import { type TaskResult, type TaskResults } from '$lib/types/task';
-
+import { runTests } from '../common/test_helpers';
+import * as TestCasesForTaskUrl from './test_cases/task_url';
+import type { TestCaseForTaskUrl } from './test_cases/task_url';
 import {
   taskResultsForUserId2,
   taskResultsForUserId3,
@@ -19,14 +11,16 @@ import {
   threeWorkBookTasks,
   tasksForVerificationOfOrder,
 } from './test_cases/task_results';
-
-type TestCaseForTaskUrl = {
-  contestId: string;
-  taskId: string;
-  expected: string;
-};
-
-type TestCasesForTaskUrl = TestCaseForTaskUrl[];
+import {
+  getTaskUrl,
+  countAcceptedTasks,
+  countAllTasks,
+  areAllTasksAccepted,
+  compareByContestIdAndTaskId,
+  removeTaskIndexFromTitle,
+} from '$lib/utils/task';
+import type { WorkBookTaskBase } from '$lib/types/workbook';
+import { type TaskResult, type TaskResults } from '$lib/types/task';
 
 type TestCaseForTaskResults = {
   taskResults: TaskResults;
@@ -61,107 +55,29 @@ type TestCasesForNewTitle = TestCaseForNewTitle[];
 
 describe('Task', () => {
   describe('task url', () => {
-    describe('when contest ids and task ids in AtCoder are given', () => {
-      const testCases: TestCasesForTaskUrl = [
-        {
-          contestId: 'abs',
-          taskId: 'practice_1',
-          expected: 'https://atcoder.jp/contests/abs/tasks/practice_1',
-        },
-        {
-          contestId: 'abc365',
-          taskId: 'abc365_a',
-          expected: 'https://atcoder.jp/contests/abc365/tasks/abc365_a',
-        },
-        {
-          contestId: 'abc365',
-          taskId: 'abc365_b',
-          expected: 'https://atcoder.jp/contests/abc365/tasks/abc365_b',
-        },
-        {
-          contestId: 'abc365',
-          taskId: 'abc365_c',
-          expected: 'https://atcoder.jp/contests/abc365/tasks/abc365_c',
-        },
-        {
-          contestId: 'abc365',
-          taskId: 'abc365_d',
-          expected: 'https://atcoder.jp/contests/abc365/tasks/abc365_d',
-        },
-        {
-          contestId: 'abc365',
-          taskId: 'abc365_e',
-          expected: 'https://atcoder.jp/contests/abc365/tasks/abc365_e',
-        },
-        {
-          contestId: 'abc365',
-          taskId: 'abc365_f',
-          expected: 'https://atcoder.jp/contests/abc365/tasks/abc365_f',
-        },
-        {
-          contestId: 'abc365',
-          taskId: 'abc365_g',
-          expected: 'https://atcoder.jp/contests/abc365/tasks/abc365_g',
-        },
-        {
-          contestId: 'APG4b',
-          taskId: 'APG4b_a',
-          expected: 'https://atcoder.jp/contests/APG4b/tasks/APG4b_a',
-        },
-        {
-          contestId: 'typical90',
-          taskId: 'typical90_a',
-          expected: 'https://atcoder.jp/contests/typical90/tasks/typical90_a',
-        },
-        {
-          contestId: 'dp',
-          taskId: 'dp_b',
-          expected: 'https://atcoder.jp/contests/dp/tasks/dp_b',
-        },
-        {
-          contestId: 'tdpc',
-          taskId: 'tdpc_contest',
-          expected: 'https://atcoder.jp/contests/tdpc/tasks/tdpc_contest',
-        },
-        {
-          contestId: 'past16-open',
-          taskId: 'past202309_a',
-          expected: 'https://atcoder.jp/contests/past16-open/tasks/past202309_a',
-        },
-        {
-          contestId: 'practice2',
-          taskId: 'practice2_a',
-          expected: 'https://atcoder.jp/contests/practice2/tasks/practice2_a',
-        },
-        {
-          contestId: 'joi2023yo1c',
-          taskId: 'joi2023_yo1c_a',
-          expected: 'https://atcoder.jp/contests/joi2023yo1c/tasks/joi2023_yo1c_a',
-        },
-        {
-          contestId: 'tessoku-book',
-          taskId: 'tessoku_book_a',
-          expected: 'https://atcoder.jp/contests/tessoku-book/tasks/tessoku_book_a',
-        },
-        {
-          contestId: 'math-and-algorithm',
-          taskId: 'math_and_algorithm_a',
-          expected: 'https://atcoder.jp/contests/math-and-algorithm/tasks/math_and_algorithm_a',
-        },
-      ];
-
-      runTests('taskUrl', testCases, ({ contestId, taskId, expected }: TestCaseForTaskUrl) => {
-        expect(taskUrl(contestId, taskId)).toBe(expected);
+    describe('when contest ids and task ids for AtCoder are given', () => {
+      TestCasesForTaskUrl.atCoderTasks.forEach(({ name, value }) => {
+        runTests(`${name}`, [value], ({ contestId, taskId, expected }: TestCaseForTaskUrl) => {
+          expect(getTaskUrl(contestId, taskId)).toBe(expected);
+        });
       });
     });
 
-    function runTests(
-      testName: string,
-      testCases: TestCasesForTaskUrl,
-      testFunction: (testCase: TestCaseForTaskUrl) => void,
-    ) {
-      test.each(testCases)(`${testName}(contestId: $contestId, taskId: $taskId)`, testFunction);
-    }
+    describe('when contest ids and task ids for AOJ courses are given', () => {
+      TestCasesForTaskUrl.aojCourses.forEach(({ name, value }) => {
+        runTests(`${name}`, [value], ({ contestId, taskId, expected }: TestCaseForTaskUrl) => {
+          expect(getTaskUrl(contestId, taskId)).toBe(expected);
+        });
+      });
+    });
+
+    describe('when contest ids and task ids for AOJ PCK (Prelim and Final) are given', () => {
+      TestCasesForTaskUrl.aojPck.forEach(({ name, value }) => {
+        runTests(`${name}`, [value], ({ contestId, taskId, expected }: TestCaseForTaskUrl) => {
+          expect(getTaskUrl(contestId, taskId)).toBe(expected);
+        });
+      });
+    });
   });
 
   describe('count accepted tasks', () => {
@@ -169,7 +85,7 @@ describe('Task', () => {
       expect(countAcceptedTasks([])).toBe(0);
     });
 
-    describe('when 0 out of 3 are is_ac = true are given', () => {
+    describe('when 0 task is accepted out of 3 total tasks', () => {
       const testCases: TestCasesForTaskResults = [
         {
           taskResults: taskResultsForUserId2,
@@ -186,7 +102,7 @@ describe('Task', () => {
       );
     });
 
-    describe('when 2 out of 3 are is_ac = true given', () => {
+    describe('when 2 tasks are accepted out of 3 total tasks', () => {
       const testCases: TestCasesForTaskResults = [
         {
           taskResults: taskResultsForUserId3,
@@ -203,7 +119,7 @@ describe('Task', () => {
       );
     });
 
-    describe('when 3 out of 3 are is_ac = true given', () => {
+    describe('when 3 tasks are accepted out of 3 total tasks', () => {
       const testCases: TestCasesForTaskResults = [
         {
           taskResults: taskResultsForUserId4,
@@ -219,14 +135,6 @@ describe('Task', () => {
         },
       );
     });
-
-    function runTests(
-      testName: string,
-      testCases: TestCasesForTaskResults,
-      testFunction: (testCase: TestCaseForTaskResults) => void,
-    ) {
-      test.each(testCases)(`${testName}(taskResults: $taskResults)`, testFunction);
-    }
   });
 
   describe('count all tasks using taskResults', () => {
@@ -246,14 +154,6 @@ describe('Task', () => {
         expect(countAllTasks(taskResults)).toBe(expected);
       });
     });
-
-    function runTests(
-      testName: string,
-      testCases: TestCasesForTaskResults,
-      testFunction: (testCase: TestCaseForTaskResults) => void,
-    ) {
-      test.each(testCases)(`${testName}(taskResults: $taskResults)`, testFunction);
-    }
   });
 
   describe('count all tasks using WorkBookTaskBase[]', () => {
@@ -277,14 +177,6 @@ describe('Task', () => {
         },
       );
     });
-
-    function runTests(
-      testName: string,
-      testCases: TestCasesForWorkBookTasks,
-      testFunction: (testCase: TestCaseForWorkBookTasks) => void,
-    ) {
-      test.each(testCases)(`${testName}(workBookTasks: $workBookTasks)`, testFunction);
-    }
   });
 
   describe('are all tasks accepted using taskResults', () => {
@@ -292,7 +184,7 @@ describe('Task', () => {
       expect(areAllTasksAccepted([], [])).toBeFalsy();
     });
 
-    describe('when 0 out of 3 are is_ac = true given', () => {
+    describe('when 0 task is accepted out of 3 total tasks', () => {
       const testCases: TestCasesForTaskResults = [
         {
           taskResults: taskResultsForUserId2,
@@ -304,7 +196,7 @@ describe('Task', () => {
       });
     });
 
-    describe('when 2 out of 3 are is_ac = true given', () => {
+    describe('when 2 tasks are accepted out of 3 total tasks', () => {
       const testCases: TestCasesForTaskResults = [
         {
           taskResults: taskResultsForUserId3,
@@ -316,7 +208,7 @@ describe('Task', () => {
       });
     });
 
-    describe('when 3 out of 3 are is_ac = true given', () => {
+    describe('when 3 tasks are accepted out of 3 total tasks', () => {
       const testCases: TestCasesForTaskResults = [
         {
           taskResults: taskResultsForUserId4,
@@ -328,7 +220,7 @@ describe('Task', () => {
       });
     });
 
-    describe('when 4 out of 4 are is_ac = true given', () => {
+    describe('when 4 tasks are accepted out of 4 total tasks', () => {
       const testCases: TestCasesForTaskResults = [
         {
           taskResults: taskResultsForUserId5,
@@ -339,14 +231,6 @@ describe('Task', () => {
         expect(areAllTasksAccepted(taskResults, taskResults)).toBeTruthy();
       });
     });
-
-    function runTests(
-      testName: string,
-      testCases: TestCasesForTaskResults,
-      testFunction: (testCase: TestCaseForTaskResults) => void,
-    ) {
-      test.each(testCases)(`${testName}(taskResults: $taskResults)`, testFunction);
-    }
   });
 
   describe('are all tasks accepted using WorkBookTaskBase[]', () => {
@@ -354,7 +238,7 @@ describe('Task', () => {
       expect(areAllTasksAccepted([], [])).toBeFalsy();
     });
 
-    describe('when 0 out of 3 is is_ac = true task results and 3 workbook tasks are given', () => {
+    describe('when 0 task is accepted out of 3 total task results and 3 workbook tasks are given', () => {
       const testCases: TestCasesForWorkBookTasks = [
         {
           taskResults: taskResultsForUserId2,
@@ -373,7 +257,7 @@ describe('Task', () => {
       );
     });
 
-    describe('when 2 out of 3 are is_ac = true task results and 3 workbook tasks are given', () => {
+    describe('when 2 tasks are accepted out of 3 total task results and 3 workbook tasks are given', () => {
       const testCases: TestCasesForWorkBookTasks = [
         {
           taskResults: taskResultsForUserId3,
@@ -392,7 +276,7 @@ describe('Task', () => {
       );
     });
 
-    describe('when 3 out of 3 are is_ac = true task results and 3 workbook tasks are given', () => {
+    describe('when 3 tasks are accepted out of 3 total task results and 3 workbook tasks are given', () => {
       const testCases: TestCasesForWorkBookTasks = [
         {
           taskResults: taskResultsForUserId4,
@@ -411,7 +295,7 @@ describe('Task', () => {
       );
     });
 
-    describe('when 4 out of 4 are is_ac = true task results and 3 workbook tasks are given', () => {
+    describe('when 4 tasks are accepted out of 4 total task results and 3 workbook tasks are given', () => {
       const testCases: TestCasesForWorkBookTasks = [
         {
           taskResults: taskResultsForUserId5,
@@ -429,14 +313,6 @@ describe('Task', () => {
         },
       );
     });
-
-    function runTests(
-      testName: string,
-      testCases: TestCasesForWorkBookTasks,
-      testFunction: (testCase: TestCaseForWorkBookTasks) => void,
-    ) {
-      test.each(testCases)(`${testName}(workBookTasks: $workBookTasks)`, testFunction);
-    }
   });
 
   describe('compare by contest type, contest id and task id', () => {
@@ -564,17 +440,6 @@ describe('Task', () => {
         },
       );
     });
-
-    function runTests(
-      testName: string,
-      testCases: TestCasesForSortingTaskResults,
-      testFunction: (testCase: TestCaseForSortingTaskResults) => void,
-    ) {
-      test.each(testCases)(
-        `${testName}(first: $first.task_id, second: $second.task_id)`,
-        testFunction,
-      );
-    }
   });
 
   describe('remove task index from title', () => {
@@ -672,16 +537,5 @@ describe('Task', () => {
         },
       );
     });
-
-    function runTests(
-      testName: string,
-      testCases: TestCasesForNewTitle,
-      testFunction: (testCase: TestCaseForNewTitle) => void,
-    ) {
-      test.each(testCases)(
-        `${testName}(title: $title, taskTableIndex: $taskTableIndex)`,
-        testFunction,
-      );
-    }
   });
 });

@@ -1,0 +1,702 @@
+[
+  {
+    "id": "abc296_a",
+    "contest_id": "abc296",
+    "problem_index": "A",
+    "name": "Alternately",
+    "title": "A. Alternately"
+  },
+  {
+    "id": "tdpc_target",
+    "contest_id": "tdpc",
+    "problem_index": "K",
+    "name": "ターゲット",
+    "title": "K. ターゲット"
+  },
+  {
+    "id": "abc122_b",
+    "contest_id": "abc122",
+    "problem_index": "B",
+    "name": "ATCoder",
+    "title": "B. ATCoder"
+  },
+  {
+    "id": "abc133_d",
+    "contest_id": "abc133",
+    "problem_index": "D",
+    "name": "Rain Flows into Dams",
+    "title": "D. Rain Flows into Dams"
+  },
+  {
+    "id": "arc131_d",
+    "contest_id": "arc131",
+    "problem_index": "D",
+    "name": "AtArcher",
+    "title": "D. AtArcher"
+  },
+  {
+    "id": "icpc2013summer_day3_g",
+    "contest_id": "jag2013summer-day3",
+    "problem_index": "G",
+    "name": "Unordered Operators",
+    "title": "G. Unordered Operators"
+  },
+  {
+    "id": "abc026_a",
+    "contest_id": "abc026",
+    "problem_index": "A",
+    "name": "掛け算の最大値",
+    "title": "A. 掛け算の最大値"
+  },
+  {
+    "id": "abc324_a",
+    "contest_id": "abc324",
+    "problem_index": "A",
+    "name": "Same",
+    "title": "A. Same"
+  },
+  {
+    "id": "ahc008_a",
+    "contest_id": "ahc008",
+    "problem_index": "A",
+    "name": "Territory",
+    "title": "A. Territory"
+  },
+  {
+    "id": "abc243_h",
+    "contest_id": "abc243",
+    "problem_index": "Ex",
+    "name": "Builder Takahashi (Enhanced version)",
+    "title": "Ex. Builder Takahashi (Enhanced version)"
+  },
+  {
+    "id": "arc021_1",
+    "contest_id": "arc021",
+    "problem_index": "A",
+    "name": "DEAD END",
+    "title": "A. DEAD END"
+  },
+  {
+    "id": "xmascon17_h",
+    "contest_id": "xmascon17",
+    "problem_index": "H",
+    "name": "Ango",
+    "title": "H. Ango"
+  },
+  {
+    "id": "bitflyer2018_qual_e",
+    "contest_id": "bitflyer2018-qual",
+    "problem_index": "E",
+    "name": "祝日",
+    "title": "E. 祝日"
+  },
+  {
+    "id": "pakencamp_2021_day3_c",
+    "contest_id": "pakencamp-2021-day3",
+    "problem_index": "C",
+    "name": "Sum of Digit Sum",
+    "title": "C. Sum of Digit Sum"
+  },
+  {
+    "id": "typical90_j",
+    "contest_id": "typical90",
+    "problem_index": "010",
+    "name": "Score Sum Queries（★2）",
+    "title": "010. Score Sum Queries（★2）"
+  },
+  {
+    "id": "arc089_a",
+    "contest_id": "abc086",
+    "problem_index": "C",
+    "name": "Traveling",
+    "title": "C. Traveling"
+  },
+  {
+    "id": "njpc2017_e",
+    "contest_id": "njpc2017",
+    "problem_index": "E",
+    "name": "限界集落",
+    "title": "E. 限界集落"
+  },
+  {
+    "id": "panasonic2020_e",
+    "contest_id": "panasonic2020",
+    "problem_index": "E",
+    "name": "Three Substrings",
+    "title": "E. Three Substrings"
+  },
+  {
+    "id": "yahoo_procon2019_qual_b",
+    "contest_id": "yahoo-procon2019-qual",
+    "problem_index": "B",
+    "name": "Path",
+    "title": "B. Path"
+  },
+  {
+    "id": "abc157_c",
+    "contest_id": "abc157",
+    "problem_index": "C",
+    "name": "Guess The Number",
+    "title": "C. Guess The Number"
+  },
+  {
+    "id": "tenka1_2013_qualB_b",
+    "contest_id": "tenka1-2013-qualb",
+    "problem_index": "B",
+    "name": "天下一後入れ先出しデータ構造",
+    "title": "B. 天下一後入れ先出しデータ構造"
+  },
+  {
+    "id": "future_contest_2018_qual_a",
+    "contest_id": "future-contest-2018-qual",
+    "problem_index": "A",
+    "name": "山型足し算",
+    "title": "A. 山型足し算"
+  },
+  {
+    "id": "agc068_c",
+    "contest_id": "agc068",
+    "problem_index": "C",
+    "name": "Ball Redistribution",
+    "title": "C. Ball Redistribution"
+  },
+  {
+    "id": "arc157_c",
+    "contest_id": "arc157",
+    "problem_index": "C",
+    "name": "YY Square",
+    "title": "C. YY Square"
+  },
+  {
+    "id": "agc022_d",
+    "contest_id": "agc022",
+    "problem_index": "D",
+    "name": "Shopping",
+    "title": "D. Shopping"
+  },
+  {
+    "id": "agc043_d",
+    "contest_id": "agc043",
+    "problem_index": "D",
+    "name": "Merge Triplets",
+    "title": "D. Merge Triplets"
+  },
+  {
+    "id": "abc308_b",
+    "contest_id": "abc308",
+    "problem_index": "B",
+    "name": "Default Price",
+    "title": "B. Default Price"
+  },
+  {
+    "id": "math_and_algorithm_e",
+    "contest_id": "math-and-algorithm",
+    "problem_index": "005",
+    "name": "Modulo 100",
+    "title": "005. Modulo 100"
+  },
+  {
+    "id": "abc351_d",
+    "contest_id": "abc351",
+    "problem_index": "D",
+    "name": "Grid and Magnet",
+    "title": "D. Grid and Magnet"
+  },
+  {
+    "id": "codefestival_2016_final_a",
+    "contest_id": "cf16-final",
+    "problem_index": "A",
+    "name": "Where's Snuke?",
+    "title": "A. Where's Snuke?"
+  },
+  {
+    "id": "joigsp2023_d",
+    "contest_id": "joigsp2023",
+    "problem_index": "D",
+    "name": "ベルトコンベア (Belt Conveyor)",
+    "title": "D. ベルトコンベア (Belt Conveyor)"
+  },
+  {
+    "id": "joi2020_yo2_a",
+    "contest_id": "joi2020yo2",
+    "problem_index": "A",
+    "name": "ポスター (Poster)",
+    "title": "A. ポスター (Poster)"
+  },
+  {
+    "id": "test001_a",
+    "contest_id": "language-test-ver1",
+    "problem_index": "A",
+    "name": "センター採点",
+    "title": "A. センター採点"
+  },
+  {
+    "id": "arc174_c",
+    "contest_id": "arc174",
+    "problem_index": "C",
+    "name": "Catastrophic Roulette",
+    "title": "C. Catastrophic Roulette"
+  },
+  {
+    "id": "icpc2012autumn_f",
+    "contest_id": "jag2012autumn",
+    "problem_index": "F",
+    "name": "Counting 1's",
+    "title": "F. Counting 1's"
+  },
+  {
+    "id": "abc242_f",
+    "contest_id": "abc242",
+    "problem_index": "F",
+    "name": "Black and White Rooks",
+    "title": "F. Black and White Rooks"
+  },
+  {
+    "id": "abc182_a",
+    "contest_id": "abc182",
+    "problem_index": "A",
+    "name": "twiblr",
+    "title": "A. twiblr"
+  },
+  {
+    "id": "icpc2013summer_day4_g",
+    "contest_id": "jag2013summer-day4",
+    "problem_index": "G",
+    "name": "Spotlight Movement",
+    "title": "G. Spotlight Movement"
+  },
+  {
+    "id": "abc012_3",
+    "contest_id": "abc012",
+    "problem_index": "C",
+    "name": "九九足し算",
+    "title": "C. 九九足し算"
+  },
+  {
+    "id": "abc345_f",
+    "contest_id": "abc345",
+    "problem_index": "F",
+    "name": "Many Lamps",
+    "title": "F. Many Lamps"
+  },
+  {
+    "id": "utpc2013_04",
+    "contest_id": "utpc2013",
+    "problem_index": "D",
+    "name": "壊れかけのヒープ",
+    "title": "D. 壊れかけのヒープ"
+  },
+  {
+    "id": "typical90_by",
+    "contest_id": "typical90",
+    "problem_index": "077",
+    "name": "Planes on a 2D Plane（★7）",
+    "title": "077. Planes on a 2D Plane（★7）"
+  },
+  {
+    "id": "arc009_3",
+    "contest_id": "arc009",
+    "problem_index": "C",
+    "name": "高橋君、24歳",
+    "title": "C. 高橋君、24歳"
+  },
+  {
+    "id": "utpc2021_j",
+    "contest_id": "utpc2021",
+    "problem_index": "J",
+    "name": "Do you like Interval Scheduling Problems?",
+    "title": "J. Do you like Interval Scheduling Problems?"
+  },
+  {
+    "id": "ijpc2015_e",
+    "contest_id": "ijpc2015-2",
+    "problem_index": "B",
+    "name": "カードゲーム",
+    "title": "B. カードゲーム"
+  },
+  {
+    "id": "joisc2020_c",
+    "contest_id": "joisc2020",
+    "problem_index": "C",
+    "name": "掃除 (Sweeping)",
+    "title": "C. 掃除 (Sweeping)"
+  },
+  {
+    "id": "abc080_b",
+    "contest_id": "abc080",
+    "problem_index": "B",
+    "name": "Harshad Number",
+    "title": "B. Harshad Number"
+  },
+  {
+    "id": "codefestival_2015_qualB_a",
+    "contest_id": "code-festival-2015-qualb",
+    "problem_index": "A",
+    "name": "Double String",
+    "title": "A. Double String"
+  },
+  {
+    "id": "abc289_c",
+    "contest_id": "abc289",
+    "problem_index": "C",
+    "name": "Coverage",
+    "title": "C. Coverage"
+  },
+  {
+    "id": "joisc2011_banner",
+    "contest_id": "joisc2011",
+    "problem_index": "banner",
+    "name": "横断幕 (Banner)",
+    "title": "banner. 横断幕 (Banner)"
+  },
+  {
+    "id": "utpc2012_03",
+    "contest_id": "utpc2012",
+    "problem_index": "C",
+    "name": "森ですか？",
+    "title": "C. 森ですか？"
+  },
+  {
+    "id": "icpc2015autumn_e",
+    "contest_id": "jag2015autumn",
+    "problem_index": "E",
+    "name": "Shifting a Matrix",
+    "title": "E. Shifting a Matrix"
+  },
+  {
+    "id": "jag2017summer_day1_i",
+    "contest_id": "jag2017summer-day1",
+    "problem_index": "I",
+    "name": "ルーク",
+    "title": "I. ルーク"
+  },
+  {
+    "id": "abc248_c",
+    "contest_id": "abc248",
+    "problem_index": "C",
+    "name": "Dice Sum",
+    "title": "C. Dice Sum"
+  },
+  {
+    "id": "iroha2019_day3_l",
+    "contest_id": "iroha2019-day3",
+    "problem_index": "L",
+    "name": "デクレッシェンド",
+    "title": "L. デクレッシェンド"
+  },
+  {
+    "id": "practice2_d",
+    "contest_id": "practice2",
+    "problem_index": "D",
+    "name": "Maxflow",
+    "title": "D. Maxflow"
+  },
+  {
+    "id": "arc134_d",
+    "contest_id": "arc134",
+    "problem_index": "D",
+    "name": "Concatenate Subsequences",
+    "title": "D. Concatenate Subsequences"
+  },
+  {
+    "id": "code_festival_2018_final_d",
+    "contest_id": "code-festival-2018-final-open",
+    "problem_index": "D",
+    "name": "Three Letters",
+    "title": "D. Three Letters"
+  },
+  {
+    "id": "abc134_e",
+    "contest_id": "abc134",
+    "problem_index": "E",
+    "name": "Sequence Decomposing",
+    "title": "E. Sequence Decomposing"
+  },
+  {
+    "id": "abc368_b",
+    "contest_id": "abc368",
+    "problem_index": "B",
+    "name": "Decrease 2 max elements",
+    "title": "B. Decrease 2 max elements"
+  },
+  {
+    "id": "tessoku_book_ey",
+    "contest_id": "tessoku-book",
+    "problem_index": "C01",
+    "name": "Tax Rate",
+    "title": "C01. Tax Rate"
+  },
+  {
+    "id": "joi2014yo_d",
+    "contest_id": "joi2014yo",
+    "problem_index": "D",
+    "name": "部活のスケジュール表 (Schedule)",
+    "title": "D. 部活のスケジュール表 (Schedule)"
+  },
+  {
+    "id": "joi2023_yo1b_c",
+    "contest_id": "joi2023yo1b",
+    "problem_index": "C",
+    "name": "繰り返し文字列 (Repeating String)",
+    "title": "C. 繰り返し文字列 (Repeating String)"
+  },
+  {
+    "id": "icpc2015summer_day3_g",
+    "contest_id": "jag2015summer-day3",
+    "problem_index": "G",
+    "name": "Gowk's Errand for Master",
+    "title": "G. Gowk's Errand for Master"
+  },
+  {
+    "id": "yuha_c83_03",
+    "contest_id": "yuha-c83",
+    "problem_index": "C",
+    "name": "Dendrogram - 樹形図",
+    "title": "C. Dendrogram - 樹形図"
+  },
+  {
+    "id": "icpc2014autumn_d",
+    "contest_id": "jag2014autumn",
+    "problem_index": "D",
+    "name": "Flowers",
+    "title": "D. Flowers"
+  },
+  {
+    "id": "icpc2012autumn_e",
+    "contest_id": "jag2012autumn",
+    "problem_index": "E",
+    "name": "Stack Maze",
+    "title": "E. Stack Maze"
+  },
+  {
+    "id": "abc029_c",
+    "contest_id": "abc029",
+    "problem_index": "C",
+    "name": "Brute-force Attack",
+    "title": "C. Brute-force Attack"
+  },
+  {
+    "id": "abc355_a",
+    "contest_id": "abc355",
+    "problem_index": "A",
+    "name": "Who Ate the Cake?",
+    "title": "A. Who Ate the Cake?"
+  },
+  {
+    "id": "relay_e",
+    "contest_id": "cf16-relay-open",
+    "problem_index": "E",
+    "name": "Segment on Grid Paper",
+    "title": "E. Segment on Grid Paper"
+  },
+  {
+    "id": "abc069_b",
+    "contest_id": "abc069",
+    "problem_index": "B",
+    "name": "i18n",
+    "title": "B. i18n"
+  },
+  {
+    "id": "tessoku_book_ck",
+    "contest_id": "tessoku-book",
+    "problem_index": "B12",
+    "name": "Equation",
+    "title": "B12. Equation"
+  },
+  {
+    "id": "abc084_a",
+    "contest_id": "abc084",
+    "problem_index": "A",
+    "name": "New Year",
+    "title": "A. New Year"
+  },
+  {
+    "id": "joi2006ho_e",
+    "contest_id": "joi2006ho",
+    "problem_index": "E",
+    "name": "JOI 2006 本選 問題5",
+    "title": "E. JOI 2006 本選 問題5"
+  },
+  {
+    "id": "abc096_b",
+    "contest_id": "abc096",
+    "problem_index": "B",
+    "name": "Maximum Sum",
+    "title": "B. Maximum Sum"
+  },
+  {
+    "id": "abc079_b",
+    "contest_id": "abc079",
+    "problem_index": "B",
+    "name": "Lucas Number",
+    "title": "B. Lucas Number"
+  },
+  {
+    "id": "masters2024_final_c",
+    "contest_id": "masters2024-final-open",
+    "problem_index": "C",
+    "name": "Windy Drone Control (C)",
+    "title": "C. Windy Drone Control (C)"
+  },
+  {
+    "id": "abc343_b",
+    "contest_id": "abc343",
+    "problem_index": "B",
+    "name": "Adjacency Matrix",
+    "title": "B. Adjacency Matrix"
+  },
+  {
+    "id": "code_festival_2018_quala_b",
+    "contest_id": "code-festival-2018-quala",
+    "problem_index": "B",
+    "name": "みかん",
+    "title": "B. みかん"
+  },
+  {
+    "id": "abc235_d",
+    "contest_id": "abc235",
+    "problem_index": "D",
+    "name": "Multiply and Rotate",
+    "title": "D. Multiply and Rotate"
+  },
+  {
+    "id": "codefestival_2016_qualC_b",
+    "contest_id": "code-festival-2016-qualc",
+    "problem_index": "B",
+    "name": "K Cakes",
+    "title": "B. K Cakes"
+  },
+  {
+    "id": "math_and_algorithm_u",
+    "contest_id": "math-and-algorithm",
+    "problem_index": "021",
+    "name": "Combination Easy",
+    "title": "021. Combination Easy"
+  },
+  {
+    "id": "arc179_a",
+    "contest_id": "arc179",
+    "problem_index": "A",
+    "name": "Partition",
+    "title": "A. Partition"
+  },
+  {
+    "id": "npcapc_2024_n",
+    "contest_id": "npcapc_2024",
+    "problem_index": "N",
+    "name": "Product Matrix",
+    "title": "N. Product Matrix"
+  },
+  {
+    "id": "arc098_d",
+    "contest_id": "arc098",
+    "problem_index": "F",
+    "name": "Donation",
+    "title": "F. Donation"
+  },
+  {
+    "id": "arc012_4",
+    "contest_id": "arc012",
+    "problem_index": "D",
+    "name": "Don't worry. Be Together",
+    "title": "D. Don't worry. Be Together"
+  },
+  {
+    "id": "abc315_f",
+    "contest_id": "abc315",
+    "problem_index": "F",
+    "name": "Shortcuts",
+    "title": "F. Shortcuts"
+  },
+  {
+    "id": "arc081_a",
+    "contest_id": "abc071",
+    "problem_index": "C",
+    "name": "Make a Rectangle",
+    "title": "C. Make a Rectangle"
+  },
+  {
+    "id": "abc117_a",
+    "contest_id": "abc117",
+    "problem_index": "A",
+    "name": "Entrance Examination",
+    "title": "A. Entrance Examination"
+  },
+  {
+    "id": "agc012_c",
+    "contest_id": "agc012",
+    "problem_index": "C",
+    "name": "Tautonym Puzzle",
+    "title": "C. Tautonym Puzzle"
+  },
+  {
+    "id": "cpsco2019_s2_d",
+    "contest_id": "cpsco2019-s2",
+    "problem_index": "D",
+    "name": "Two Piles",
+    "title": "D. Two Piles"
+  },
+  {
+    "id": "s8pc_2_c",
+    "contest_id": "s8pc-2",
+    "problem_index": "C",
+    "name": "何通りの分割方法がある？",
+    "title": "C. 何通りの分割方法がある？"
+  },
+  {
+    "id": "abc365_f",
+    "contest_id": "abc365",
+    "problem_index": "F",
+    "name": "Takahashi on Grid",
+    "title": "F. Takahashi on Grid"
+  },
+  {
+    "id": "joisc2014_m",
+    "contest_id": "joisc2014",
+    "problem_index": "M",
+    "name": "ストラップ",
+    "title": "M. ストラップ"
+  },
+  {
+    "id": "abc335_c",
+    "contest_id": "abc335",
+    "problem_index": "C",
+    "name": "Loong Tracking",
+    "title": "C. Loong Tracking"
+  },
+  {
+    "id": "past202303_b",
+    "contest_id": "past202303-open",
+    "problem_index": "B",
+    "name": "小数点第 D 位",
+    "title": "B. 小数点第 D 位"
+  },
+  {
+    "id": "abc173_d",
+    "contest_id": "abc173",
+    "problem_index": "D",
+    "name": "Chat in a Circle",
+    "title": "D. Chat in a Circle"
+  },
+  {
+    "id": "agc061_d",
+    "contest_id": "agc061",
+    "problem_index": "D",
+    "name": "Almost Multiplication Table",
+    "title": "D. Almost Multiplication Table"
+  },
+  {
+    "id": "kupc2012_1",
+    "contest_id": "kupc2012",
+    "problem_index": "A",
+    "name": "アルデンテ",
+    "title": "A. アルデンテ"
+  },
+  {
+    "id": "joisp2024_j",
+    "contest_id": "joisp2024",
+    "problem_index": "J",
+    "name": "逃走経路 2 (Escape Route 2)",
+    "title": "J. 逃走経路 2 (Escape Route 2)"
+  }
+]
