@@ -125,14 +125,21 @@ function getRandomElementsFromArray<T>(array: T[], count: number): T[] {
   }
 
   count = Math.min(count, array.length);
-  const shuffled = array.slice(); // Copy the original array
+  const results = [];
+  const selectedIndices = new Set<number>();
 
-  for (let i = shuffled.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]]; // Swap elements
+  while (results.length < count) {
+    const index = Math.floor(Math.random() * array.length);
+
+    if (selectedIndices.has(index)) {
+      continue;
+    }
+
+    selectedIndices.add(index);
+    results.push(array[index]);
   }
 
-  return shuffled.slice(0, count);
+  return results;
 }
 
 async function toJson<T>(filePath: string, data: T[]): Promise<void> {

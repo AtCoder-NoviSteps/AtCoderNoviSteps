@@ -1,6 +1,6 @@
 import { ContestSiteApiClient } from '$lib/clients/common';
 import { AOJ_API_BASE_URL } from '$lib/constants/urls';
-import type { ContestsForImport } from '$lib/types/contest';
+import type { ContestForImport, ContestsForImport } from '$lib/types/contest';
 import type { TasksForImport } from '$lib/types/task';
 
 /**
@@ -26,7 +26,7 @@ type Course = {
 type Courses = Course[];
 
 type AOJChallengeContestAPI = {
-  readonly largeCl: object;
+  readonly largeCl: Record<string, unknown>;
   readonly contests: ChallengeContests;
 };
 
@@ -143,13 +143,7 @@ export class AojApiClient extends ContestSiteApiClient {
       });
 
       const coursesForContest = results.courses.map((course: Course) => {
-        const courseForContest = {
-          id: course.shortName,
-          start_epoch_second: PENDING, // Data not available
-          duration_second: PENDING, // Same as above
-          title: course.name,
-          rate_change: '', // Same as above
-        };
+        const courseForContest: ContestForImport = this.mapToContest(course.shortName, course.name);
 
         return courseForContest;
       });
@@ -190,13 +184,7 @@ export class AojApiClient extends ContestSiteApiClient {
         (importContests: ContestsForImport, contest: ChallengeContest) => {
           const titles = contest.days.map((day) => day.title);
           titles.forEach((title: string) => {
-            importContests.push({
-              id: contest.abbr,
-              start_epoch_second: PENDING, // Data not available
-              duration_second: PENDING, // Same as above
-              title: title,
-              rate_change: '', // Same as above
-            });
+            importContests.push(this.mapToContest(contest.abbr, title));
           });
 
           return importContests;
@@ -211,6 +199,28 @@ export class AojApiClient extends ContestSiteApiClient {
       console.error(`Failed to fetch from AOJ PCK ${round} contests:`, error);
       return [];
     }
+  }
+
+  /**
+   * Maps the given contest details to a `ContestForImport` object.
+   *
+   * @param contestId - The unique identifier for the contest.
+   * @param title - The title of the contest.
+   * @returns A `ContestForImport` object with the provided contest details.
+   *
+   * @remarks
+   * The `start_epoch_second` and `duration_second` fields are currently set to `PENDING`
+   * as the data is not available. The `rate_change` field is also set to an empty string
+   * for the same reason.
+   */
+  private mapToContest(contestId: string, title: string): ContestForImport {
+    return {
+      id: contestId,
+      start_epoch_second: PENDING, // Data not available
+      duration_second: PENDING, // Same as above
+      title: title,
+      rate_change: '', // Same as above
+    };
   }
 
   /**

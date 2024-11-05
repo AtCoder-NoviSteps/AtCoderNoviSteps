@@ -63,14 +63,14 @@ export const tdpc = [
 ];
 
 const pastContestData = [
-  { name: 'PAST 17th', contestId: 'past17-open' },
-  { name: 'PAST 16th', contestId: 'past16-open' },
-  { name: 'PAST 15th', contestId: 'past15-open' },
-  { name: 'PAST 14th', contestId: 'past202303-open' },
-  { name: 'PAST 13th', contestId: 'past202212-open' },
-  { name: 'PAST 3rd', contestId: 'past202005-open' },
-  { name: 'PAST 2nd', contestId: 'past202004-open' },
   { name: 'PAST 1st', contestId: 'past201912-open' },
+  { name: 'PAST 2nd', contestId: 'past202004-open' },
+  { name: 'PAST 3rd', contestId: 'past202005-open' },
+  { name: 'PAST 13th', contestId: 'past202212-open' },
+  { name: 'PAST 14th', contestId: 'past202303-open' },
+  { name: 'PAST 15th', contestId: 'past15-open' },
+  { name: 'PAST 16th', contestId: 'past16-open' },
+  { name: 'PAST 17th', contestId: 'past17-open' },
 ];
 
 export const past = pastContestData.map(({ name, contestId }) =>
@@ -235,16 +235,24 @@ export const aojCourses = aojCoursesData.map(({ name, contestId }) =>
 );
 
 const aojPckContestData = [
-  { name: 'AOJ, PCK Prelim 2023', contestId: 'PCKPrelim2023' },
-  { name: 'AOJ, PCK Prelim 2022', contestId: 'PCKPrelim2022' },
-  { name: 'AOJ, PCK Prelim 2021', contestId: 'PCKPrelim2021' },
-  { name: 'AOJ, PCK Prelim 2005', contestId: 'PCKPrelim2005' },
   { name: 'AOJ, PCK Prelim 2004', contestId: 'PCKPrelim2004' },
-  { name: 'AOJ, PCK Final 2023', contestId: 'PCKFinal2023' },
-  { name: 'AOJ, PCK Final 2022', contestId: 'PCKFinal2022' },
-  { name: 'AOJ, PCK Final 2021', contestId: 'PCKFinal2021' },
-  { name: 'AOJ, PCK Final 2004', contestId: 'PCKFinal2004' },
+  { name: 'AOJ, PCK Prelim 2005', contestId: 'PCKPrelim2005' },
+  { name: 'AOJ, PCK Prelim 2009', contestId: 'PCKPrelim2009' },
+  { name: 'AOJ, PCK Prelim 2010', contestId: 'PCKPrelim2010' },
+  { name: 'AOJ, PCK Prelim 2011', contestId: 'PCKPrelim2011' },
+  { name: 'AOJ, PCK Prelim 2020', contestId: 'PCKPrelim2020' },
+  { name: 'AOJ, PCK Prelim 2021', contestId: 'PCKPrelim2021' },
+  { name: 'AOJ, PCK Prelim 2022', contestId: 'PCKPrelim2022' },
+  { name: 'AOJ, PCK Prelim 2023', contestId: 'PCKPrelim2023' },
   { name: 'AOJ, PCK Final 2003', contestId: 'PCKFinal2003' },
+  { name: 'AOJ, PCK Final 2004', contestId: 'PCKFinal2004' },
+  { name: 'AOJ, PCK Final 2009', contestId: 'PCKFinal2009' },
+  { name: 'AOJ, PCK Final 2010', contestId: 'PCKFinal2010' },
+  { name: 'AOJ, PCK Final 2011', contestId: 'PCKFinal2011' },
+  { name: 'AOJ, PCK Final 2020', contestId: 'PCKFinal2020' },
+  { name: 'AOJ, PCK Final 2021', contestId: 'PCKFinal2021' },
+  { name: 'AOJ, PCK Final 2022', contestId: 'PCKFinal2022' },
+  { name: 'AOJ, PCK Final 2023', contestId: 'PCKFinal2023' },
 ];
 
 export const aojPck = aojPckContestData.map(({ name, contestId }) =>

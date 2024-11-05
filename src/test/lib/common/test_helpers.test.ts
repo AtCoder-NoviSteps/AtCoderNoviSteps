@@ -4,7 +4,7 @@ import { describe, it, expect } from 'vitest';
 
 import { loadMockData } from '../common/test_helpers';
 import { createTestCase, runTests, zip } from './test_helpers';
-import { testCasesForZip } from './test_cases/zip';
+import { testCasesForZip, errorTestCases } from './test_cases/zip';
 
 describe('createTestCase', () => {
   it('expects to be created a test case object with the given name and value', () => {
@@ -77,54 +77,18 @@ describe('zip', () => {
     expect(avgTime).toBeLessThan(100);
   });
 
-  it('expects to throw an error when the first array is null', () => {
-    const firstArray = null as unknown as number[];
-    const secondArray = ['a', 'b', 'c'];
-
-    expect(() => zip(firstArray, secondArray)).toThrow(
-      'Both input arrays must be non-null and defined',
-    );
-  });
-
-  it('expects to throw an error when the second array is null', () => {
-    const firstArray = ['a', 'b', 'c'];
-    const secondArray = null as unknown as number[];
-
-    expect(() => zip(firstArray, secondArray)).toThrow(
-      'Both input arrays must be non-null and defined',
-    );
-  });
-
-  it('expects to throw an error when the first and second array are null', () => {
-    const firstArray = null as unknown as number[];
-    const secondArray = null as unknown as number[];
-
-    expect(() => zip(firstArray, secondArray)).toThrow(
-      'Both input arrays must be non-null and defined',
-    );
-  });
-
-  it('expects to throw an error when the first array is not an array', () => {
-    const firstArray = 'not an array' as unknown as string[];
-    const secondArray = ['a', 'b', 'c'];
-
-    expect(() => zip(firstArray, secondArray)).toThrow(
-      'Both input arrays must be non-null and defined',
-    );
-  });
-
-  it('expects to throw an error when the second array is not an array', () => {
-    const firstArray = [1, 2, 3];
-    const secondArray = 'not an array' as unknown as string[];
-
-    expect(() => zip(firstArray, secondArray)).toThrow(
-      'Both input arrays must be non-null and defined',
-    );
+  describe('expects to throw an error when', () => {
+    test.each(errorTestCases)('$name', ({ first, second }) => {
+      expect(() => zip(first as number[], second as string[])).toThrow(
+        'Both input arrays must be non-null and defined',
+      );
+    });
   });
 });
 
 describe('loadMockData', () => {
-  const mockFilePath = path.resolve(__dirname, 'mockData.json');
+  const testDir = __dirname;
+  const mockFilePath = path.join(testDir, 'mockData.json');
   const mockData = { key: 'value' };
 
   beforeAll(() => {
@@ -132,7 +96,16 @@ describe('loadMockData', () => {
   });
 
   afterAll(() => {
-    fs.unlinkSync(mockFilePath);
+    // Cleanup any test files that might remain
+    const testFiles = ['mockData.json', 'invalidJson.json'];
+
+    testFiles.forEach((file) => {
+      const filePath = path.join(testDir, file);
+
+      if (fs.existsSync(filePath)) {
+        fs.unlinkSync(filePath);
+      }
+    });
   });
 
   it('expects to load and parse mock data from a file', () => {
@@ -149,8 +122,13 @@ describe('loadMockData', () => {
     const invalidJsonFilePath = path.resolve(__dirname, 'invalidJson.json');
     fs.writeFileSync(invalidJsonFilePath, 'invalid json');
 
-    expect(() => loadMockData<typeof mockData>(invalidJsonFilePath)).toThrow();
-
-    fs.unlinkSync(invalidJsonFilePath);
+    try {
+      fs.writeFileSync(invalidJsonFilePath, 'invalid json');
+      expect(() => loadMockData<typeof mockData>(invalidJsonFilePath)).toThrow();
+    } finally {
+      if (fs.existsSync(invalidJsonFilePath)) {
+        fs.unlinkSync(invalidJsonFilePath);
+      }
+    }
   });
 });
