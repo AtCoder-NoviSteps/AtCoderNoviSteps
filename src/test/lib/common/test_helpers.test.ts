@@ -123,7 +123,6 @@ describe('loadMockData', () => {
     fs.writeFileSync(invalidJsonFilePath, 'invalid json');
 
     try {
-      fs.writeFileSync(invalidJsonFilePath, 'invalid json');
       expect(() => loadMockData<typeof mockData>(invalidJsonFilePath)).toThrow();
     } finally {
       if (fs.existsSync(invalidJsonFilePath)) {
