@@ -55,36 +55,15 @@ export const classifyContest = (contest_id: string) => {
     return ContestType.MATH_AND_ALGORITHM;
   }
 
-  // HACK: 2024年10月上旬時点では、以下のコンテストが該当。
-  // Note: 対象コンテストが増えた場合は、判定条件を見直す必要がある。
-  if (contest_id === 'tenka1-2018') {
+  if (arcLikePrefixes.has(contest_id)) {
     return ContestType.ARC_LIKE;
   }
 
-  // ・CODE FESTIVAL 2017 qual
-  // ・CODE FESTIVAL 2017 Final
-  const prefixForAgcLike = ['code-festival-2017-qual', 'cf17-final'];
-
-  if (prefixForAgcLike.some((prefix) => contest_id.startsWith(prefix))) {
+  if (agcLikePrefixes.some((prefix) => contest_id.startsWith(prefix))) {
     return ContestType.AGC_LIKE;
   }
 
-  // ・Chokudai SpeedRun
-  // ・CODE FESTIVAL 2014 決勝
-  // ・Donutsプロコンチャレンジ
-  // ・MUJIN Programming Challenge 2016
-  // ・COLOCON
-  // ・GigaCode
-  const prefixForOthers = [
-    'chokudai_S',
-    'code-festival-2014-final',
-    'donuts',
-    'mujin-pc-2016',
-    'colopl',
-    'gigacode',
-  ];
-
-  if (prefixForOthers.some((prefix) => contest_id.startsWith(prefix))) {
+  if (atCoderOthersPrefixes.some((prefix) => contest_id.startsWith(prefix))) {
     return ContestType.OTHERS;
   }
 
@@ -99,6 +78,32 @@ export const classifyContest = (contest_id: string) => {
   return null;
 };
 
+// HACK: 2024年11月上旬時点では、以下のコンテストが該当。
+// Note: 対象コンテストが増えた場合は、判定条件を見直す必要がある。
+const ARC_LIKE = {
+  'tenka1-2018': 'Tenka1 Programmer Contest 2018',
+} as const;
+const arcLikePrefixes = new Set(getContestPrefixes(ARC_LIKE));
+
+const AGC_LIKE = {
+  'code-festival-2016-qual': 'CODE FESTIVAL 2016 qual',
+  'code-festival-2017-qual': 'CODE FESTIVAL 2017 qual',
+  'cf17-final': 'CODE FESTIVAL 2017 final',
+} as const;
+const agcLikePrefixes = getContestPrefixes(AGC_LIKE);
+
+const ATCODER_OTHERS = {
+  chokudai_S: 'Chokudai SpeedRun',
+  'code-festival-2014-final': 'Code Festival 2014 決勝',
+  donuts: 'Donutsプロコンチャレンジ',
+  'mujin-pc-2016': 'Mujin Programming Challenge 2016',
+  'tenka1-2016-final': '天下一プログラマーコンテスト2016本戦',
+  colopl: 'COLOCON',
+  gigacode: 'GigaCode',
+} as const;
+const atCoderOthersPrefixes = getContestPrefixes(ATCODER_OTHERS);
+
+// AIZU ONLINE JUDGE AOJ Courses
 export const AOJ_COURSES = {
   ITP1: 'プログラミング入門',
   ALDS1: 'アルゴリズムとデータ構造入門',
@@ -106,11 +111,14 @@ export const AOJ_COURSES = {
   DPL: '組み合わせ最適化',
 } as const;
 
+export function getPrefixForAojCourses() {
+  return getContestPrefixes(AOJ_COURSES);
+}
+
 const aojCoursePrefixes = new Set(getPrefixForAojCourses()); // For O(1) lookups
 
-// AIZU ONLINE JUDGE AOJ Courses
-export function getPrefixForAojCourses() {
-  return Object.keys(AOJ_COURSES);
+export function getContestPrefixes(contestPrefixes: Record<string, string>) {
+  return Object.keys(contestPrefixes);
 }
 
 // priority: 0 (High) - 18 (Low)
