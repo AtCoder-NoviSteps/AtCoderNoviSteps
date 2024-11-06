@@ -161,6 +161,10 @@ export const arcLike = [
 ];
 
 export const agcLike = [
+  createTestCaseForContestType('CODE FESTIVAL 2016 qual B')({
+    contestId: 'code-festival-2016-qualb',
+    expected: ContestType.AGC_LIKE,
+  }),
   createTestCaseForContestType('CODE FESTIVAL 2017 qual A')({
     contestId: 'code-festival-2017-quala',
     expected: ContestType.AGC_LIKE,
@@ -202,6 +206,10 @@ export const atCoderOthers = [
   }),
   createTestCaseForContestType('MUJIN Programming Challenge 2016')({
     contestId: 'mujin-pc-2016',
+    expected: ContestType.OTHERS,
+  }),
+  createTestCaseForContestType('天下一プログラマーコンテスト2016本戦')({
+    contestId: 'tenka1-2016-final',
     expected: ContestType.OTHERS,
   }),
   createTestCaseForContestType('COLOCON 2018 qual')({
