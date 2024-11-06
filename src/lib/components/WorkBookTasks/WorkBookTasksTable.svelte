@@ -91,6 +91,10 @@
   }
 
   function getTask(tasksMapByIds: Map<string, Task>, taskId: string) {
+    if (!taskId) {
+      return undefined;
+    }
+
     return tasksMapByIds.get(taskId);
   }
 </script>
@@ -130,7 +134,7 @@
 
           <!-- グレード -->
           <TableBodyCell>
-            <div class="flex items-center justify-center min-w-[54px] max-w-[54px]">
+            <div class="flex items-center justify-center min-w-[54px] max-w-fit">
               <GradeLabel taskGrade={getTaskGrade(tasksMapByIds, task.taskId)} />
             </div>
           </TableBodyCell>
