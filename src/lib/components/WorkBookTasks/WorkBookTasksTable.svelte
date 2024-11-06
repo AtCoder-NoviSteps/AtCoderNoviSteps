@@ -78,19 +78,19 @@
     }
   }
 
-  function getTaskTableIndex(tasksMapByIds: Map<string, Task>, taskId: string) {
+  function getTaskTableIndex(tasksMapByIds: Map<string, Task>, taskId: string): string {
     const task = getTask(tasksMapByIds, taskId);
 
     return task?.task_table_index !== undefined ? task.task_table_index : '';
   }
 
-  function getTaskGrade(tasksMapByIds: Map<string, Task>, taskId: string) {
+  function getTaskGrade(tasksMapByIds: Map<string, Task>, taskId: string): string {
     const task = getTask(tasksMapByIds, taskId);
 
     return task?.grade !== undefined ? task.grade : '';
   }
 
-  function getTask(tasksMapByIds: Map<string, Task>, taskId: string) {
+  function getTask(tasksMapByIds: Map<string, Task>, taskId: string): Task | undefined {
     if (!taskId) {
       return undefined;
     }
