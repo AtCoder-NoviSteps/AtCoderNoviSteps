@@ -47,3 +47,14 @@ export const ContestType: { [key in ContestTypeOrigin]: key } = {
 
 // Re-exporting the original type with the original name.
 export type ContestType = ContestTypeOrigin;
+
+/**
+ * Represents a mapping of contest IDs to contest names.
+ *
+ * @interface ContestPrefix
+ * @property {string} [key] - The contest ID.
+ * @property {string} [key: string] - The contest name associated with the contest ID.
+ */
+export interface ContestPrefix {
+  [key: string]: string;
+}

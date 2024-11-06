@@ -1,4 +1,4 @@
-import { ContestType } from '$lib/types/contest';
+import { ContestType, type ContestPrefix } from '$lib/types/contest';
 
 // See:
 // https://github.com/kenkoooo/AtCoderProblems/blob/master/atcoder-problems-frontend/src/utils/ContestClassifier.ts
@@ -78,21 +78,21 @@ export const classifyContest = (contest_id: string) => {
   return null;
 };
 
-// HACK: 2024年11月上旬時点では、以下のコンテストが該当。
-// Note: 対象コンテストが増えた場合は、判定条件を見直す必要がある。
-const ARC_LIKE = {
+// HACK: As of early November 2024, the following contests are applicable.
+// Note: The classification logic may need to be revised when new contests are added.
+const ARC_LIKE: ContestPrefix = {
   'tenka1-2018': 'Tenka1 Programmer Contest 2018',
 } as const;
 const arcLikePrefixes = new Set(getContestPrefixes(ARC_LIKE));
 
-const AGC_LIKE = {
+const AGC_LIKE: ContestPrefix = {
   'code-festival-2016-qual': 'CODE FESTIVAL 2016 qual',
   'code-festival-2017-qual': 'CODE FESTIVAL 2017 qual',
   'cf17-final': 'CODE FESTIVAL 2017 final',
 } as const;
 const agcLikePrefixes = getContestPrefixes(AGC_LIKE);
 
-const ATCODER_OTHERS = {
+const ATCODER_OTHERS: ContestPrefix = {
   chokudai_S: 'Chokudai SpeedRun',
   'code-festival-2014-final': 'Code Festival 2014 決勝',
   donuts: 'Donutsプロコンチャレンジ',
@@ -104,7 +104,7 @@ const ATCODER_OTHERS = {
 const atCoderOthersPrefixes = getContestPrefixes(ATCODER_OTHERS);
 
 // AIZU ONLINE JUDGE AOJ Courses
-export const AOJ_COURSES = {
+export const AOJ_COURSES: ContestPrefix = {
   ITP1: 'プログラミング入門',
   ALDS1: 'アルゴリズムとデータ構造入門',
   ITP2: 'プログラミング応用',
@@ -117,6 +117,11 @@ export function getPrefixForAojCourses() {
 
 const aojCoursePrefixes = new Set(getPrefixForAojCourses()); // For O(1) lookups
 
+/**
+ * Extracts contest prefixes (keys) from a contest prefix object.
+ * @param contestPrefixes - Object mapping contest IDs to their display names
+ * @returns Array of contest prefix strings
+ */
 export function getContestPrefixes(contestPrefixes: Record<string, string>) {
   return Object.keys(contestPrefixes);
 }
