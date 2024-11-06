@@ -185,12 +185,12 @@
         >
           <!-- Task name and grade -->
           <div class="flex items-start justify-start space-x-3 mb-1">
-            <div class="min-w-[44x] max-w-[44px]">
+            <div class="max-w-fit shrink-0">
               <GradeLabel taskGrade={task.grade} />
             </div>
-            <div class="text-lg xs:text-xl">
+            <h3 class="text-lg xs:text-xl">
               {task.title}
-            </div>
+            </h3>
           </div>
 
           <!-- Task url -->
