@@ -92,10 +92,17 @@
 
   function getTask(tasksMapByIds: Map<string, Task>, taskId: string): Task | undefined {
     if (!taskId) {
+      console.debug('Not found taskId:', taskId);
       return undefined;
     }
 
-    return tasksMapByIds.get(taskId);
+    const task = tasksMapByIds.get(taskId);
+
+    if (!task) {
+      console.debug('Not found task:', taskId);
+    }
+
+    return task;
   }
 </script>
 
