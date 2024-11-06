@@ -107,7 +107,7 @@
   <Table shadow class="text-md">
     <TableHead class="text-sm bg-gray-100">
       <TableHeadCell class="min-w-[18px] pl-2 md:pl-4 pr-0 text-center">#</TableHeadCell>
-      <TableHeadCell class="text-center px-0">グレード</TableHeadCell>
+      <TableHeadCell class="text-center px-0" aria-label="Task grade">グレード</TableHeadCell>
       <TableHeadCell class="min-w-[240px] pl-0 truncate">問題名</TableHeadCell>
       <TableHeadCell class="min-w-[120px] max-w-[150px] truncate">出典</TableHeadCell>
       <TableHeadCell class="min-w-[120px] max-w-[150px] px-0 truncate">
