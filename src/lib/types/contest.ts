@@ -54,6 +54,11 @@ export type ContestType = ContestTypeOrigin;
  * @interface ContestPrefix
  * @property {string} [key] - The contest ID.
  * @property {string} [key: string] - The contest name associated with the contest ID.
+ * @example
+ * {
+ *   "abc001": "AtCoder Beginner Contest 001",
+ *   "arc123": "AtCoder Regular Contest 123"
+ * }
  */
 export interface ContestPrefix {
   [key: string]: string;
