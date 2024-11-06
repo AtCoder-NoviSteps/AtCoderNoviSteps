@@ -11,7 +11,8 @@
     Input,
     Button,
   } from 'flowbite-svelte';
-  import { BadgeCheckOutline, BanOutline } from 'flowbite-svelte-icons';
+  import BadgeCheckOutline from 'flowbite-svelte-icons/BadgeCheckOutline.svelte';
+  import BanOutline from 'flowbite-svelte-icons/BanOutline.svelte';
 
   import HeadingOne from '$lib/components/HeadingOne.svelte';
   import ContainerWrapper from '$lib/components/ContainerWrapper.svelte';
