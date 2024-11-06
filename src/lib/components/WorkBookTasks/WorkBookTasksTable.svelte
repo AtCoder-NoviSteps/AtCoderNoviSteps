@@ -9,7 +9,9 @@
     TableHeadCell,
   } from 'flowbite-svelte';
 
+  import GradeLabel from '$lib/components/GradeLabel.svelte';
   import ExternalLinkWrapper from '$lib/components/ExternalLinkWrapper.svelte';
+
   import { addContestNameToTaskIndex } from '$lib/utils/contest';
   import { getTaskUrl, removeTaskIndexFromTitle } from '$lib/utils/task';
 
@@ -76,10 +78,31 @@
     }
   }
 
-  function getTaskTableIndex(tasksMapByIds: Map<string, Task>, taskId: string) {
-    const task = tasksMapByIds.get(taskId);
+  function getTaskTableIndex(tasksMapByIds: Map<string, Task>, taskId: string): string {
+    const task = getTask(tasksMapByIds, taskId);
 
     return task?.task_table_index !== undefined ? task.task_table_index : '';
+  }
+
+  function getTaskGrade(tasksMapByIds: Map<string, Task>, taskId: string): string {
+    const task = getTask(tasksMapByIds, taskId);
+
+    return task?.grade !== undefined ? task.grade : '';
+  }
+
+  function getTask(tasksMapByIds: Map<string, Task>, taskId: string): Task | undefined {
+    if (!taskId) {
+      console.debug('Not found taskId:', taskId);
+      return undefined;
+    }
+
+    const task = tasksMapByIds.get(taskId);
+
+    if (!task) {
+      console.debug('Not found task:', taskId);
+    }
+
+    return task;
   }
 </script>
 
@@ -91,7 +114,8 @@
   <Table shadow class="text-md">
     <TableHead class="text-sm bg-gray-100">
       <TableHeadCell class="min-w-[18px] pl-2 md:pl-4 pr-0 text-center">#</TableHeadCell>
-      <TableHeadCell class="min-w-[240px] truncate">問題名</TableHeadCell>
+      <TableHeadCell class="text-center px-0" aria-label="Task grade">グレード</TableHeadCell>
+      <TableHeadCell class="min-w-[240px] pl-0 truncate">問題名</TableHeadCell>
       <TableHeadCell class="min-w-[120px] max-w-[150px] truncate">出典</TableHeadCell>
       <TableHeadCell class="min-w-[120px] max-w-[150px] px-0 truncate">
         一言（50文字以下）
@@ -115,8 +139,15 @@
             </div>
           </TableBodyCell>
 
+          <!-- グレード -->
+          <TableBodyCell>
+            <div class="flex items-center justify-center min-w-[54px] max-w-fit">
+              <GradeLabel taskGrade={getTaskGrade(tasksMapByIds, task.taskId)} />
+            </div>
+          </TableBodyCell>
+
           <!-- 問題名 -->
-          <TableBodyCell class="xs:text-lg truncate">
+          <TableBodyCell class="xs:text-lg pl-0 truncate">
             <ExternalLinkWrapper
               url={getTaskUrl(task.contestId, task.taskId)}
               description={removeTaskIndexFromTitle(
