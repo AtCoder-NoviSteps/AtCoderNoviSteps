@@ -25,8 +25,6 @@ const getBaseMetaTags = (url: URL) => {
         {
           url: imageUrl,
           alt: imageAlt,
-          width: 600,
-          height: 300,
           secureUrl: imageUrl,
           type: 'image/jpeg',
         },
