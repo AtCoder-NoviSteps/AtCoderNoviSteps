@@ -7,7 +7,7 @@ import { Roles } from '$lib/types/user';
 const getBaseMetaTags = (url: URL) => {
   const title: string = PRODUCT_NAME;
   const description: string = PRODUCT_DESCRIPTION;
-  const imageUrl: string = '../../favicon.png';
+  const imageUrl: string = new URL('/favicon.png', url.origin).href;
   const imageAlt: string = PRODUCT_NAME;
 
   const baseMetaTags = Object.freeze({
