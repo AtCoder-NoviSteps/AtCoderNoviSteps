@@ -1,4 +1,8 @@
-import { PRODUCT_DESCRIPTION, PRODUCT_NAME, X_HANDLE_NAME } from '$lib/constants/product-info';
+import {
+  PRODUCT_DESCRIPTION,
+  PRODUCT_NAME,
+  TWITTER_HANDLE_NAME,
+} from '$lib/constants/product-info';
 
 // See:
 // https://lucia-auth.com/guidebook/sign-in-with-username-and-password/sveltekit/
@@ -31,8 +35,8 @@ const getBaseMetaTags = (url: URL) => {
       ],
     },
     twitter: {
-      creator: X_HANDLE_NAME,
-      site: X_HANDLE_NAME,
+      creator: TWITTER_HANDLE_NAME,
+      site: TWITTER_HANDLE_NAME,
       cardType: 'summary',
       title: title,
       description: description,
