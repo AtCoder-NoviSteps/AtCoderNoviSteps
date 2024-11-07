@@ -1,4 +1,3 @@
-import type { MetaTagsProps } from 'svelte-meta-tags';
 import { PRODUCT_DESCRIPTION, PRODUCT_NAME } from '$lib/constants/product-info';
 
 // See:
@@ -33,7 +32,16 @@ const getBaseMetaTags = (url: URL) => {
         },
       ],
     },
-  }) satisfies MetaTagsProps;
+    twitter: {
+      creator: '@acnovisteps',
+      site: '@acnovisteps',
+      cardType: 'summary',
+      title: title,
+      description: description,
+      image: imageUrl,
+      imageAlt: imageAlt,
+    },
+  });
 
   return baseMetaTags;
 };
