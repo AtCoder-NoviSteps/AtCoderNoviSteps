@@ -35,7 +35,7 @@ const getBaseMetaTags = (url: URL) => {
     twitter: {
       creator: X_HANDLE_NAME,
       site: X_HANDLE_NAME,
-      cardType: 'summary_large_image',
+      cardType: 'summary',
       title: title,
       description: description,
       image: imageUrl,
