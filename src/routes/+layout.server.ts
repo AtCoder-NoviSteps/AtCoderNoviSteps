@@ -1,5 +1,8 @@
-import type { MetaTagsProps } from 'svelte-meta-tags';
-import { PRODUCT_DESCRIPTION, PRODUCT_NAME } from '$lib/constants/product-info';
+import {
+  PRODUCT_DESCRIPTION,
+  PRODUCT_NAME,
+  TWITTER_HANDLE_NAME,
+} from '$lib/constants/product-info';
 
 // See:
 // https://lucia-auth.com/guidebook/sign-in-with-username-and-password/sveltekit/
@@ -8,7 +11,7 @@ import { Roles } from '$lib/types/user';
 const getBaseMetaTags = (url: URL) => {
   const title: string = PRODUCT_NAME;
   const description: string = PRODUCT_DESCRIPTION;
-  const imageUrl: string = '../../favicon.png';
+  const imageUrl: string = new URL('/favicon.png', url.origin).href;
   const imageAlt: string = PRODUCT_NAME;
 
   const baseMetaTags = Object.freeze({
@@ -26,14 +29,21 @@ const getBaseMetaTags = (url: URL) => {
         {
           url: imageUrl,
           alt: imageAlt,
-          width: 800,
-          height: 600,
           secureUrl: imageUrl,
           type: 'image/jpeg',
         },
       ],
     },
-  }) satisfies MetaTagsProps;
+    twitter: {
+      creator: TWITTER_HANDLE_NAME,
+      site: TWITTER_HANDLE_NAME,
+      cardType: 'summary',
+      title: title,
+      description: description,
+      image: imageUrl,
+      imageAlt: imageAlt,
+    },
+  });
 
   return baseMetaTags;
 };
