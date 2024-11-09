@@ -183,6 +183,25 @@ export const agcLike = [
   }),
 ];
 
+// Note: The 2015-2019 UTPC has not been held at least in AtCoder.
+const universityContestIds = [
+  'utpc2011',
+  'utpc2012',
+  'utpc2013',
+  'utpc2014',
+  'utpc2020',
+  'utpc2021',
+  'utpc2022',
+  'utpc2023',
+];
+
+export const universities = universityContestIds.map((contestId) =>
+  createTestCaseForContestType(contestId.toUpperCase())({
+    contestId,
+    expected: ContestType.UNIVERSITY,
+  }),
+);
+
 export const atCoderOthers = [
   createTestCaseForContestType('Chokudai SpeedRun 001')({
     contestId: 'chokudai_S001',

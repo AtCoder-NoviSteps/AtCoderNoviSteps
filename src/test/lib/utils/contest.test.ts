@@ -138,6 +138,14 @@ describe('Contest', () => {
         });
       });
 
+      describe('when contest_id mean contests held by university students', () => {
+        TestCasesForContestType.universities.forEach(({ name, value }) => {
+          runTests(`${name}`, [value], ({ contestId, expected }: TestCaseForContestType) => {
+            expect(classifyContest(contestId)).toEqual(expected);
+          });
+        });
+      });
+
       describe('when contest_id mean AtCoder others', () => {
         TestCasesForContestType.atCoderOthers.forEach(({ name, value }) => {
           runTests(`${name}`, [value], ({ contestId, expected }: TestCaseForContestType) => {
@@ -282,6 +290,14 @@ describe('Contest', () => {
 
       describe('when contest_id means agc-like', () => {
         TestCasesForContestType.agcLike.forEach(({ name, value }) => {
+          runTests(`${name}`, [value], ({ contestId, expected }: TestCaseForContestType) => {
+            expect(getContestPriority(contestId)).toEqual(contestTypePriorities.get(expected));
+          });
+        });
+      });
+
+      describe('when contest_id mean contests held by university students', () => {
+        TestCasesForContestType.universities.forEach(({ name, value }) => {
           runTests(`${name}`, [value], ({ contestId, expected }: TestCaseForContestType) => {
             expect(getContestPriority(contestId)).toEqual(contestTypePriorities.get(expected));
           });

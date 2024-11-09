@@ -220,6 +220,7 @@ enum ContestType {
   ABC_LIKE // AtCoder Beginner Contest (ABC) 相当のコンテスト
   ARC_LIKE // AtCoder Regular Contest (ARC) 相当のコンテスト
   AGC_LIKE // AtCoder Grand Contest (AGC) 相当のコンテスト
+  UNIVERSITY // AtCoder 各大学の有志コンテスト
   OTHERS // AtCoder (その他)
   AOJ_COURSES // AIZU ONLINE JUDGE Courses
   AOJ_PCK // All-Japan High School Programming Contest (PCK)

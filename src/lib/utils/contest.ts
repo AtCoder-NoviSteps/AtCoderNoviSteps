@@ -3,6 +3,7 @@ import { ContestType, type ContestPrefix } from '$lib/types/contest';
 // See:
 // https://github.com/kenkoooo/AtCoderProblems/blob/master/atcoder-problems-frontend/src/utils/ContestClassifier.ts
 export const classifyContest = (contest_id: string) => {
+  // AtCoder
   if (/^abc\d{3}$/.exec(contest_id)) {
     return ContestType.ABC;
   }
@@ -63,10 +64,15 @@ export const classifyContest = (contest_id: string) => {
     return ContestType.AGC_LIKE;
   }
 
+  if (atCoderUniversityPrefixes.some((prefix) => contest_id.startsWith(prefix))) {
+    return ContestType.UNIVERSITY;
+  }
+
   if (atCoderOthersPrefixes.some((prefix) => contest_id.startsWith(prefix))) {
     return ContestType.OTHERS;
   }
 
+  // AIZU ONLINE JUDGE
   if (aojCoursePrefixes.has(contest_id)) {
     return ContestType.AOJ_COURSES;
   }
@@ -91,6 +97,12 @@ const AGC_LIKE: ContestPrefix = {
   'cf17-final': 'CODE FESTIVAL 2017 final',
 } as const;
 const agcLikePrefixes = getContestPrefixes(AGC_LIKE);
+
+const ATCODER_UNIVERSITIES: ContestPrefix = {
+  utpc: 'UTPC',
+} as const;
+
+const atCoderUniversityPrefixes = getContestPrefixes(ATCODER_UNIVERSITIES);
 
 const ATCODER_OTHERS: ContestPrefix = {
   chokudai_S: 'Chokudai SpeedRun',
@@ -126,8 +138,8 @@ export function getContestPrefixes(contestPrefixes: Record<string, string>) {
   return Object.keys(contestPrefixes);
 }
 
-// priority: 0 (High) - 18 (Low)
-// HACK: The priorities for ARC, AGC, AOJ_COURSES, and AOJ_PCK are temporary.
+// priority: 0 (High) - 19 (Low)
+// HACK: The priorities for ARC, AGC, UNIVERSITY, AOJ_COURSES, and AOJ_PCK are temporary.
 //
 // See:
 // https://jsprimer.net/basic/map-and-set/
@@ -148,9 +160,10 @@ export const contestTypePriorities: Map<ContestType, number> = new Map([
   [ContestType.ABC_LIKE, 13],
   [ContestType.ARC_LIKE, 14],
   [ContestType.AGC_LIKE, 15],
-  [ContestType.OTHERS, 16], // AtCoder (その他)
-  [ContestType.AOJ_COURSES, 17],
-  [ContestType.AOJ_PCK, 18],
+  [ContestType.UNIVERSITY, 16],
+  [ContestType.OTHERS, 17], // AtCoder (その他)
+  [ContestType.AOJ_COURSES, 18],
+  [ContestType.AOJ_PCK, 19],
 ]);
 
 export function getContestPriority(contestId: string): number {
