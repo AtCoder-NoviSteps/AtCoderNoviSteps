@@ -112,7 +112,7 @@ const agcLikePrefixes = getContestPrefixes(AGC_LIKE);
  * @example
  * {
  *   utpc: 'UTPC' // University of Tokyo Programming Contest
- *   tupc: 'UTPC' // Tohoku University Programming Contest
+ *   tupc: 'TUPC' // Tohoku University Programming Contest
  * }
  *
  * @remarks
