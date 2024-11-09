@@ -265,7 +265,7 @@ const TUPC_TEST_DATA: UniversityContestsTestData = Object.fromEntries(
   Array.from({ length: 2 }, (_, i) => 2022 + i).map((year) => [
     `tupc${year}`,
     {
-      contestId: `utpc${year}`,
+      contestId: `tupc${year}`,
       tasks: TUPC_TASK_PATTERNS[year.toString() as keyof TupcTaskPatterns],
     },
   ]),
