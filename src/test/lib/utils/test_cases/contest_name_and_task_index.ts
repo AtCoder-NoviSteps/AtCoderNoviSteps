@@ -251,9 +251,9 @@ const UTPC_TEST_DATA: UniversityContestsTestData = Object.fromEntries(
     ]),
 ) as UniversityContestsTestData;
 
+type TupcYear = '2022' | '2023';
 type TupcTaskPatterns = {
-  '2022': string[];
-  '2023': string[];
+  [K in TupcYear]: string[];
 };
 
 const TUPC_TASK_PATTERNS: TupcTaskPatterns = {
