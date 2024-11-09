@@ -214,6 +214,9 @@ export const agcLike = [
 // Note:
 // UTPC contests on AtCoder: 2011-2014 and 2020-2023 (not held during 2015-2019)
 // TUPC contests on AtCoder: 2022-
+//
+// See:
+// https://kenkoooo.com/atcoder/resources/contests.json
 const universityContestIds = [
   'utpc2011',
   'utpc2012',
@@ -285,18 +288,12 @@ export const atCoderOthers = [
     contestId: 'cpsco2019-s1',
     expected: ContestType.OTHERS,
   }),
-  createTestCaseForContestType('CPSCO2019 Session2')({
-    contestId: 'cpsco2019-s2',
-    expected: ContestType.OTHERS,
-  }),
-  createTestCaseForContestType('CPSCO2019 Session3')({
-    contestId: 'cpsco2019-s3',
-    expected: ContestType.OTHERS,
-  }),
-  createTestCaseForContestType('CPSCO2019 Session4')({
-    contestId: 'cpsco2019-s4',
-    expected: ContestType.OTHERS,
-  }),
+  ...[1, 2, 3, 4].map((session) =>
+    createTestCaseForContestType(`CPSCO2019 Session${session}`)({
+      contestId: `cpsco2019-s${session}`,
+      expected: ContestType.OTHERS,
+    }),
+  ),
 ];
 
 // See:

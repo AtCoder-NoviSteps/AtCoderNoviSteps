@@ -134,6 +134,7 @@ const ATCODER_OTHERS: ContestPrefix = {
   donuts: 'Donutsプロコンチャレンジ',
   'mujin-pc-2016': 'Mujin Programming Challenge 2016',
   'tenka1-2016-final': '天下一プログラマーコンテスト2016本戦',
+  // Discovery Channel contest featuring algorithm problems
   discovery2016: 'DISCO presents ディスカバリーチャンネル プログラミングコンテスト2016',
   colopl: 'COLOCON',
   gigacode: 'GigaCode',
