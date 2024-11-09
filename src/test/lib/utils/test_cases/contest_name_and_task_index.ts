@@ -196,6 +196,65 @@ const generateAgcTestCases = (
   });
 };
 
+// HACK: As of early November 2024, only UTPC is included.
+// More university contests may be added in the future.
+const UNIVERSITY_CONTESTS_TEST_DATA = {
+  utpc2011: {
+    contestId: 'utpc2011',
+    tasks: ['A', 'B', 'C', 'J', 'K', 'L'],
+  },
+  utpc2012: {
+    contestId: 'utpc2012',
+    tasks: ['A', 'B', 'C', 'J', 'K', 'L'],
+  },
+  utpc2013: {
+    contestId: 'utpc2013',
+    tasks: ['A', 'B', 'C', 'J', 'K', 'L'],
+  },
+  utpc2014: {
+    contestId: 'utpc2014',
+    tasks: ['A', 'B', 'C', 'J', 'K', 'L'],
+  },
+  utpc2020: {
+    contestId: 'utpc2020',
+    tasks: ['A', 'B', 'C', 'K', 'L', 'M'],
+  },
+  utpc2021: {
+    contestId: 'utpc2021',
+    tasks: ['A', 'B', 'C', 'L', 'M', 'N'],
+  },
+  utpc2022: {
+    contestId: 'utpc2022',
+    tasks: ['A', 'B', 'C', 'M', 'N', 'O'],
+  },
+  utpc2023: {
+    contestId: 'utpc2023',
+    tasks: ['A', 'B', 'C', 'O', 'P', 'Q'],
+  },
+};
+
+const generateUniversityTestCases = (
+  contestIds: string[],
+  taskIndices: string[],
+): { name: string; value: TestCaseForContestNameAndTaskIndex }[] => {
+  return zip(contestIds, taskIndices).map(([contestId, taskIndex]) => {
+    const testCase = createTestCaseForContestNameAndTaskIndex(
+      `${contestId.toUpperCase()} ${taskIndex}`,
+    )({
+      contestId: `${contestId}`,
+      taskTableIndex: taskIndex,
+      expected: `${contestId.toUpperCase()} - ${taskIndex}`,
+    });
+
+    return testCase;
+  });
+};
+
+export const universities = Object.entries(UNIVERSITY_CONTESTS_TEST_DATA).flatMap(
+  ([contestId, tasks]) =>
+    generateUniversityTestCases(Array(tasks.tasks.length).fill(contestId), tasks.tasks),
+);
+
 export const agc = generateAgcTestCases(
   ['001', '002', '009', '010', '011', '066', '067'],
   ['A', 'B', 'C', 'D', 'E', 'F', 'E'],
