@@ -196,6 +196,86 @@ const generateAgcTestCases = (
   });
 };
 
+// HACK: Currently limited to UTPC contests as a pilot implementation.
+// TODO: Extend support for other university contests (e.g., ICPC regional contests)
+// after validating the current implementation.
+/**
+ * Represents the test data for a university contest.
+ *
+ * @interface UniversityContestTestData
+ * @property {string} contestId - The unique identifier for the contest.
+ * @property {string[]} tasks - An array of task identifiers associated with the contest.
+ */
+interface UniversityContestTestData {
+  contestId: string;
+  tasks: string[];
+}
+
+/**
+ * Represents a collection of university contest test data.
+ * Each key is a string representing the contest name or identifier,
+ * and the value is an object containing the test data for that specific contest.
+ */
+interface UniversityContestsTestData {
+  [key: string]: UniversityContestTestData;
+}
+
+type UtpcTaskPatterns = {
+  '2011-2014': string[];
+  '2020': string[];
+  '2021': string[];
+  '2022': string[];
+  '2023': string[];
+};
+
+const UTPC_TASK_PATTERNS: UtpcTaskPatterns = {
+  '2011-2014': ['A', 'B', 'C', 'J', 'K', 'L'],
+  '2020': ['A', 'B', 'C', 'K', 'L', 'M'],
+  '2021': ['A', 'B', 'C', 'L', 'M', 'N'],
+  '2022': ['A', 'B', 'C', 'M', 'N', 'O'],
+  '2023': ['A', 'B', 'C', 'O', 'P', 'Q'],
+};
+
+const UNIVERSITY_CONTESTS_TEST_DATA: UniversityContestsTestData = Object.fromEntries(
+  Array.from({ length: 13 }, (_, i) => 2011 + i)
+    .filter((year) => year <= 2014 || year >= 2020)
+    .map((year) => [
+      `utpc${year}`,
+      {
+        contestId: `utpc${year}`,
+        tasks:
+          UTPC_TASK_PATTERNS[
+            year >= 2020 ? (year.toString() as keyof UtpcTaskPatterns) : '2011-2014'
+          ],
+      },
+    ]),
+) as UniversityContestsTestData;
+
+const generateUniversityTestCases = (
+  contestIds: string[],
+  taskIndices: string[],
+): { name: string; value: TestCaseForContestNameAndTaskIndex }[] => {
+  return zip(contestIds, taskIndices).map(([contestId, taskIndex]) => {
+    const testCase = createTestCaseForContestNameAndTaskIndex(
+      `${contestId.toUpperCase()} ${taskIndex}`,
+    )({
+      contestId: `${contestId}`,
+      taskTableIndex: taskIndex,
+      expected: `${contestId.toUpperCase()} - ${taskIndex}`,
+    });
+
+    return testCase;
+  });
+};
+
+export const universities = Object.entries(UNIVERSITY_CONTESTS_TEST_DATA).flatMap(
+  ([contestId, tasks]) =>
+    generateUniversityTestCases(
+      tasks.tasks.map(() => contestId),
+      tasks.tasks,
+    ),
+);
+
 export const agc = generateAgcTestCases(
   ['001', '002', '009', '010', '011', '066', '067'],
   ['A', 'B', 'C', 'D', 'E', 'F', 'E'],

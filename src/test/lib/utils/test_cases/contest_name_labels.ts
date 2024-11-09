@@ -251,6 +251,24 @@ export const agc = [
   }),
 ];
 
+const generateUtpcTestCases = (
+  years: number[],
+): { name: string; value: TestCaseForContestNameLabel }[] => {
+  return years.map((year) => {
+    const testCase = createTestCaseForContestNameLabel(`UTPC ${year}`)({
+      contestId: `utpc${year}`,
+      expected: `UTPC${year}`,
+    });
+
+    return testCase;
+  });
+};
+
+// Note: UTPC contests on AtCoder: 2011-2014 and 2020-2023 (not held during 2015-2019)
+export const universities = [
+  ...generateUtpcTestCases([2011, 2012, 2013, 2014, 2020, 2021, 2022, 2023]),
+];
+
 export const atCoderOthers = [
   createTestCaseForContestNameLabel('Chokudai SpeedRun 001')({
     contestId: 'chokudai_S001',

@@ -138,6 +138,14 @@ describe('Contest', () => {
         });
       });
 
+      describe('when contest_id matches contests held by university students', () => {
+        TestCasesForContestType.universities.forEach(({ name, value }) => {
+          runTests(`${name}`, [value], ({ contestId, expected }: TestCaseForContestType) => {
+            expect(classifyContest(contestId)).toEqual(expected);
+          });
+        });
+      });
+
       describe('when contest_id mean AtCoder others', () => {
         TestCasesForContestType.atCoderOthers.forEach(({ name, value }) => {
           runTests(`${name}`, [value], ({ contestId, expected }: TestCaseForContestType) => {
@@ -288,6 +296,14 @@ describe('Contest', () => {
         });
       });
 
+      describe('when contest_id matches contests held by university students', () => {
+        TestCasesForContestType.universities.forEach(({ name, value }) => {
+          runTests(`${name}`, [value], ({ contestId, expected }: TestCaseForContestType) => {
+            expect(getContestPriority(contestId)).toEqual(contestTypePriorities.get(expected));
+          });
+        });
+      });
+
       describe('when contest_id means AtCoder others', () => {
         TestCasesForContestType.atCoderOthers.forEach(({ name, value }) => {
           runTests(`${name}`, [value], ({ contestId, expected }: TestCaseForContestType) => {
@@ -422,6 +438,14 @@ describe('Contest', () => {
         });
       });
 
+      describe('when contest_id matches contests held by university students', () => {
+        TestCasesForContestNameLabel.universities.forEach(({ name, value }) => {
+          runTests(`${name}`, [value], ({ contestId, expected }: TestCaseForContestNameLabel) => {
+            expect(getContestNameLabel(contestId)).toEqual(expected);
+          });
+        });
+      });
+
       describe('when contest_id contains chokudai_S', () => {
         TestCasesForContestNameLabel.atCoderOthers.forEach(({ name, value }) => {
           runTests(`${name}`, [value], ({ contestId, expected }: TestCaseForContestNameLabel) => {
@@ -526,6 +550,18 @@ describe('Contest', () => {
 
       describe('when contest_id contains agc', () => {
         TestCasesForContestNameAndTaskIndex.agc.forEach(({ name, value }) => {
+          runTests(
+            `${name}`,
+            [value],
+            ({ contestId, taskTableIndex, expected }: TestCaseForContestNameAndTaskIndex) => {
+              expect(addContestNameToTaskIndex(contestId, taskTableIndex)).toEqual(expected);
+            },
+          );
+        });
+      });
+
+      describe('when contest_id matches contests held by university students', () => {
+        TestCasesForContestNameAndTaskIndex.universities.forEach(({ name, value }) => {
           runTests(
             `${name}`,
             [value],

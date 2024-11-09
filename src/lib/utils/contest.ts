@@ -3,6 +3,7 @@ import { ContestType, type ContestPrefix } from '$lib/types/contest';
 // See:
 // https://github.com/kenkoooo/AtCoderProblems/blob/master/atcoder-problems-frontend/src/utils/ContestClassifier.ts
 export const classifyContest = (contest_id: string) => {
+  // AtCoder
   if (/^abc\d{3}$/.exec(contest_id)) {
     return ContestType.ABC;
   }
@@ -63,10 +64,15 @@ export const classifyContest = (contest_id: string) => {
     return ContestType.AGC_LIKE;
   }
 
+  if (atCoderUniversityPrefixes.some((prefix) => contest_id.startsWith(prefix))) {
+    return ContestType.UNIVERSITY;
+  }
+
   if (atCoderOthersPrefixes.some((prefix) => contest_id.startsWith(prefix))) {
     return ContestType.OTHERS;
   }
 
+  // AIZU ONLINE JUDGE
   if (aojCoursePrefixes.has(contest_id)) {
     return ContestType.AOJ_COURSES;
   }
@@ -91,6 +97,28 @@ const AGC_LIKE: ContestPrefix = {
   'cf17-final': 'CODE FESTIVAL 2017 final',
 } as const;
 const agcLikePrefixes = getContestPrefixes(AGC_LIKE);
+
+// HACK: As of early November 2024, only UTPC is included.
+// More university contests may be added in the future.
+/**
+ * Maps university contest ID prefixes to their display names.
+ *
+ * @example
+ * {
+ *   utpc: 'UTPC' // University of Tokyo Programming Contest
+ * }
+ *
+ * @remarks
+ * When adding new university contests:
+ * 1. Use lowercase prefix as key
+ * 2. Use official contest name as value
+ * 3. Ensure prefix doesn't conflict with existing contest types
+ */
+const ATCODER_UNIVERSITIES: ContestPrefix = {
+  utpc: 'UTPC',
+} as const;
+
+const atCoderUniversityPrefixes = getContestPrefixes(ATCODER_UNIVERSITIES);
 
 const ATCODER_OTHERS: ContestPrefix = {
   chokudai_S: 'Chokudai SpeedRun',
@@ -126,11 +154,22 @@ export function getContestPrefixes(contestPrefixes: Record<string, string>) {
   return Object.keys(contestPrefixes);
 }
 
-// priority: 0 (High) - 18 (Low)
-// HACK: The priorities for ARC, AGC, AOJ_COURSES, and AOJ_PCK are temporary.
-//
-// See:
-// https://jsprimer.net/basic/map-and-set/
+/**
+ * Contest type priorities (0 = Highest, 19 = Lowest)
+ *
+ * Priority assignment rationale:
+ * - Educational contests (0-10): ABS, ABC, APG4B, etc.
+ * - Contests for genius (11-15): ARC, AGC, and their variants
+ * - Special contests (16-17): UNIVERSITY, OTHERS
+ * - External platforms (18-19): AOJ_COURSES, AOJ_PCK
+ *
+ * @remarks
+ * HACK: The priorities for ARC, AGC, UNIVERSITY, AOJ_COURSES, and AOJ_PCK are temporary
+ * and may be adjusted based on future requirements.
+ *
+ * See:
+ * https://jsprimer.net/basic/map-and-set/
+ */
 export const contestTypePriorities: Map<ContestType, number> = new Map([
   [ContestType.ABS, 0],
   [ContestType.ABC, 1],
@@ -148,9 +187,10 @@ export const contestTypePriorities: Map<ContestType, number> = new Map([
   [ContestType.ABC_LIKE, 13],
   [ContestType.ARC_LIKE, 14],
   [ContestType.AGC_LIKE, 15],
-  [ContestType.OTHERS, 16], // AtCoder (その他)
-  [ContestType.AOJ_COURSES, 17],
-  [ContestType.AOJ_PCK, 18],
+  [ContestType.UNIVERSITY, 16],
+  [ContestType.OTHERS, 17], // AtCoder (その他)
+  [ContestType.AOJ_COURSES, 18],
+  [ContestType.AOJ_PCK, 19],
 ]);
 
 export function getContestPriority(contestId: string): number {

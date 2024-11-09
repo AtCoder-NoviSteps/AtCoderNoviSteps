@@ -40,6 +40,7 @@ export const ContestType: { [key in ContestTypeOrigin]: key } = {
   ABC_LIKE: 'ABC_LIKE', // AtCoder Beginner Contest (ABC) 相当のコンテスト
   ARC_LIKE: 'ARC_LIKE', // AtCoder Regular Contest (ARC) 相当のコンテスト
   AGC_LIKE: 'AGC_LIKE', // AtCoder Grand Contest (AGC) 相当のコンテスト
+  UNIVERSITY: 'UNIVERSITY', // University Programming Contests in AtCoder (e.g., UTPC)
   OTHERS: 'OTHERS', // AtCoder (その他)
   AOJ_COURSES: 'AOJ_COURSES', // AIZU ONLINE JUDGE Courses
   AOJ_PCK: 'AOJ_PCK', // All-Japan High School Programming Contest (PCK)
@@ -57,7 +58,8 @@ export type ContestType = ContestTypeOrigin;
  * @example
  * {
  *   "abc001": "AtCoder Beginner Contest 001",
- *   "arc123": "AtCoder Regular Contest 123"
+ *   "arc123": "AtCoder Regular Contest 123",
+ *   "utpc2023": "University of Tokyo Programming Contest 2023"
  * }
  */
 export interface ContestPrefix {
