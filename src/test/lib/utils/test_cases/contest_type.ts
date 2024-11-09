@@ -158,9 +158,37 @@ export const arcLike = [
     contestId: 'tenka1-2018',
     expected: ContestType.ARC_LIKE,
   }),
+  createTestCaseForContestType('DWACON 5TH PRELIMS')({
+    contestId: 'dwacon5th-prelims',
+    expected: ContestType.ARC_LIKE,
+  }),
+  createTestCaseForContestType('DWACON 6TH PRELIMS')({
+    contestId: 'dwacon6th-prelims',
+    expected: ContestType.ARC_LIKE,
+  }),
+  createTestCaseForContestType('KEYENCE2019')({
+    contestId: 'keyence2019',
+    expected: ContestType.ARC_LIKE,
+  }),
+  createTestCaseForContestType('KEYENCE2020')({
+    contestId: 'keyence2020',
+    expected: ContestType.ARC_LIKE,
+  }),
+  createTestCaseForContestType('KEYENCE2021')({
+    contestId: 'keyence2021',
+    expected: ContestType.ARC_LIKE,
+  }),
+  createTestCaseForContestType('JSC2019 QUAL')({
+    contestId: 'jsc2019-qual',
+    expected: ContestType.ARC_LIKE,
+  }),
 ];
 
 export const agcLike = [
+  createTestCaseForContestType('CODE FESTIVAL 2016 qual A')({
+    contestId: 'code-festival-2016-quala',
+    expected: ContestType.AGC_LIKE,
+  }),
   createTestCaseForContestType('CODE FESTIVAL 2016 qual B')({
     contestId: 'code-festival-2016-qualb',
     expected: ContestType.AGC_LIKE,
@@ -183,7 +211,9 @@ export const agcLike = [
   }),
 ];
 
-// Note: UTPC contests on AtCoder: 2011-2014 and 2020-2023 (not held during 2015-2019)
+// Note:
+// UTPC contests on AtCoder: 2011-2014 and 2020-2023 (not held during 2015-2019)
+// TUPC contests on AtCoder: 2022-
 const universityContestIds = [
   'utpc2011',
   'utpc2012',
@@ -193,6 +223,8 @@ const universityContestIds = [
   'utpc2021',
   'utpc2022',
   'utpc2023',
+  'tupc2022',
+  'tupc2023',
 ];
 
 export const universities = universityContestIds.map((contestId) =>
@@ -231,6 +263,12 @@ export const atCoderOthers = [
     contestId: 'tenka1-2016-final',
     expected: ContestType.OTHERS,
   }),
+  createTestCaseForContestType(
+    'DISCO presents ディスカバリーチャンネル プログラミングコンテスト2016',
+  )({
+    contestId: 'discovery2016',
+    expected: ContestType.OTHERS,
+  }),
   createTestCaseForContestType('COLOCON 2018 qual')({
     contestId: 'colopl2018-qual',
     expected: ContestType.OTHERS,
@@ -241,6 +279,22 @@ export const atCoderOthers = [
   }),
   createTestCaseForContestType('Gigacode 2019')({
     contestId: 'gigacode-2019',
+    expected: ContestType.OTHERS,
+  }),
+  createTestCaseForContestType('CPSCO2019 Session1')({
+    contestId: 'cpsco2019-s1',
+    expected: ContestType.OTHERS,
+  }),
+  createTestCaseForContestType('CPSCO2019 Session2')({
+    contestId: 'cpsco2019-s2',
+    expected: ContestType.OTHERS,
+  }),
+  createTestCaseForContestType('CPSCO2019 Session3')({
+    contestId: 'cpsco2019-s3',
+    expected: ContestType.OTHERS,
+  }),
+  createTestCaseForContestType('CPSCO2019 Session4')({
+    contestId: 'cpsco2019-s4',
     expected: ContestType.OTHERS,
   }),
 ];

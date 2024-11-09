@@ -236,7 +236,7 @@ const UTPC_TASK_PATTERNS: UtpcTaskPatterns = {
   '2023': ['A', 'B', 'C', 'O', 'P', 'Q'],
 };
 
-const UNIVERSITY_CONTESTS_TEST_DATA: UniversityContestsTestData = Object.fromEntries(
+const UTPC_TEST_DATA: UniversityContestsTestData = Object.fromEntries(
   Array.from({ length: 13 }, (_, i) => 2011 + i)
     .filter((year) => year <= 2014 || year >= 2020)
     .map((year) => [
@@ -249,6 +249,26 @@ const UNIVERSITY_CONTESTS_TEST_DATA: UniversityContestsTestData = Object.fromEnt
           ],
       },
     ]),
+) as UniversityContestsTestData;
+
+type TupcTaskPatterns = {
+  '2022': string[];
+  '2023': string[];
+};
+
+const TUPC_TASK_PATTERNS: TupcTaskPatterns = {
+  '2022': ['A', 'B', 'C', 'M', 'N', 'O'],
+  '2023': ['A', 'B', 'C', 'N', 'O', 'P'],
+};
+
+const TUPC_TEST_DATA: UniversityContestsTestData = Object.fromEntries(
+  Array.from({ length: 2 }, (_, i) => 2022 + i).map((year) => [
+    `tupc${year}`,
+    {
+      contestId: `utpc${year}`,
+      tasks: TUPC_TASK_PATTERNS[year.toString() as keyof TupcTaskPatterns],
+    },
+  ]),
 ) as UniversityContestsTestData;
 
 const generateUniversityTestCases = (
@@ -268,12 +288,16 @@ const generateUniversityTestCases = (
   });
 };
 
-export const universities = Object.entries(UNIVERSITY_CONTESTS_TEST_DATA).flatMap(
-  ([contestId, tasks]) =>
-    generateUniversityTestCases(
-      tasks.tasks.map(() => contestId),
-      tasks.tasks,
-    ),
+const ALL_UNIVERSITY_TEST_DATA: UniversityContestsTestData = {
+  ...UTPC_TEST_DATA,
+  ...TUPC_TEST_DATA,
+};
+
+export const universities = Object.entries(ALL_UNIVERSITY_TEST_DATA).flatMap(([contestId, tasks]) =>
+  generateUniversityTestCases(
+    tasks.tasks.map(() => contestId),
+    tasks.tasks,
+  ),
 );
 
 export const agc = generateAgcTestCases(

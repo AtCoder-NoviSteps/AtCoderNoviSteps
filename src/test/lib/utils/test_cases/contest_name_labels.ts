@@ -263,10 +263,25 @@ const generateUtpcTestCases = (
     return testCase;
   });
 };
+const generateTupcTestCases = (
+  years: number[],
+): { name: string; value: TestCaseForContestNameLabel }[] => {
+  return years.map((year) => {
+    const testCase = createTestCaseForContestNameLabel(`TUPC ${year}`)({
+      contestId: `tupc${year}`,
+      expected: `TUPC${year}`,
+    });
 
-// Note: UTPC contests on AtCoder: 2011-2014 and 2020-2023 (not held during 2015-2019)
+    return testCase;
+  });
+};
+
+// Note:
+// UTPC contests on AtCoder: 2011-2014 and 2020-2023 (not held during 2015-2019)
+// TUPC contests on AtCoder: 2022-
 export const universities = [
   ...generateUtpcTestCases([2011, 2012, 2013, 2014, 2020, 2021, 2022, 2023]),
+  ...generateTupcTestCases([2022, 2023]),
 ];
 
 export const atCoderOthers = [

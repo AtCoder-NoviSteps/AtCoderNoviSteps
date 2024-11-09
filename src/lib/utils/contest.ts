@@ -88,6 +88,12 @@ export const classifyContest = (contest_id: string) => {
 // Note: The classification logic may need to be revised when new contests are added.
 const ARC_LIKE: ContestPrefix = {
   'tenka1-2018': 'Tenka1 Programmer Contest 2018',
+  'dwacon5th-prelims': '第5回 ドワンゴからの挑戦状 予選',
+  'dwacon6th-prelims': '第6回 ドワンゴからの挑戦状 予選',
+  keyence2019: 'キーエンス プログラミング コンテスト 2019',
+  keyence2020: 'キーエンス プログラミング コンテスト 2020',
+  keyence2021: 'キーエンス プログラミング コンテスト 2021',
+  'jsc2019-qual': '第一回日本最強プログラマー学生選手権-予選-',
 } as const;
 const arcLikePrefixes = new Set(getContestPrefixes(ARC_LIKE));
 
@@ -106,6 +112,7 @@ const agcLikePrefixes = getContestPrefixes(AGC_LIKE);
  * @example
  * {
  *   utpc: 'UTPC' // University of Tokyo Programming Contest
+ *   tupc: 'UTPC' // Tohoku University Programming Contest
  * }
  *
  * @remarks
@@ -116,6 +123,7 @@ const agcLikePrefixes = getContestPrefixes(AGC_LIKE);
  */
 const ATCODER_UNIVERSITIES: ContestPrefix = {
   utpc: 'UTPC',
+  tupc: 'TUPC',
 } as const;
 
 const atCoderUniversityPrefixes = getContestPrefixes(ATCODER_UNIVERSITIES);
@@ -126,8 +134,10 @@ const ATCODER_OTHERS: ContestPrefix = {
   donuts: 'Donutsプロコンチャレンジ',
   'mujin-pc-2016': 'Mujin Programming Challenge 2016',
   'tenka1-2016-final': '天下一プログラマーコンテスト2016本戦',
+  discovery2016: 'DISCO presents ディスカバリーチャンネル プログラミングコンテスト2016',
   colopl: 'COLOCON',
   gigacode: 'GigaCode',
+  cpsco2019: 'CPSCO 2019',
 } as const;
 const atCoderOthersPrefixes = getContestPrefixes(ATCODER_OTHERS);
 
