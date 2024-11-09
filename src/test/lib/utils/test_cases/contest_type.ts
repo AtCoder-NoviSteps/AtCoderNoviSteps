@@ -183,7 +183,7 @@ export const agcLike = [
   }),
 ];
 
-// Note: The 2015-2019 UTPC has not been held at least in AtCoder.
+// Note: UTPC contests on AtCoder: 2011-2014 and 2020-2023 (not held during 2015-2019)
 const universityContestIds = [
   'utpc2011',
   'utpc2012',

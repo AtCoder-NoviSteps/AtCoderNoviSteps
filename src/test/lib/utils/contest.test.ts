@@ -138,7 +138,7 @@ describe('Contest', () => {
         });
       });
 
-      describe('when contest_id mean contests held by university students', () => {
+      describe('when contest_id matches contests held by university students', () => {
         TestCasesForContestType.universities.forEach(({ name, value }) => {
           runTests(`${name}`, [value], ({ contestId, expected }: TestCaseForContestType) => {
             expect(classifyContest(contestId)).toEqual(expected);
@@ -296,7 +296,7 @@ describe('Contest', () => {
         });
       });
 
-      describe('when contest_id mean contests held by university students', () => {
+      describe('when contest_id matches contests held by university students', () => {
         TestCasesForContestType.universities.forEach(({ name, value }) => {
           runTests(`${name}`, [value], ({ contestId, expected }: TestCaseForContestType) => {
             expect(getContestPriority(contestId)).toEqual(contestTypePriorities.get(expected));

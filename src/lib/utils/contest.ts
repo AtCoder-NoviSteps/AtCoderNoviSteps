@@ -98,6 +98,8 @@ const AGC_LIKE: ContestPrefix = {
 } as const;
 const agcLikePrefixes = getContestPrefixes(AGC_LIKE);
 
+// HACK: As of early November 2024, only UTPC is included.
+// More university contests may be added in the future.
 const ATCODER_UNIVERSITIES: ContestPrefix = {
   utpc: 'UTPC',
 } as const;
