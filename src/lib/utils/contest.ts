@@ -100,6 +100,7 @@ const agcLikePrefixes = getContestPrefixes(AGC_LIKE);
 
 // HACK: As of early November 2024, only UTPC is included.
 // More university contests may be added in the future.
+// Maps university contest ID prefixes to their display names
 const ATCODER_UNIVERSITIES: ContestPrefix = {
   utpc: 'UTPC',
 } as const;
