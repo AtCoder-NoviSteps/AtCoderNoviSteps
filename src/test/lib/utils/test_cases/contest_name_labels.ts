@@ -251,40 +251,22 @@ export const agc = [
   }),
 ];
 
+const generateUtpcTestCases = (
+  years: number[],
+): { name: string; value: TestCaseForContestNameLabel }[] => {
+  return years.map((year) => {
+    const testCase = createTestCaseForContestNameLabel(`UTPC ${year}`)({
+      contestId: `utpc${year}`,
+      expected: `UTPC${year}`,
+    });
+
+    return testCase;
+  });
+};
+
 // Note: UTPC contests on AtCoder: 2011-2014 and 2020-2023 (not held during 2015-2019)
 export const universities = [
-  createTestCaseForContestNameLabel('UTPC 2011')({
-    contestId: 'utpc2011',
-    expected: 'UTPC2011',
-  }),
-  createTestCaseForContestNameLabel('UTPC 2012')({
-    contestId: 'utpc2012',
-    expected: 'UTPC2012',
-  }),
-  createTestCaseForContestNameLabel('UTPC 2013')({
-    contestId: 'utpc2013',
-    expected: 'UTPC2013',
-  }),
-  createTestCaseForContestNameLabel('UTPC 2014')({
-    contestId: 'utpc2014',
-    expected: 'UTPC2014',
-  }),
-  createTestCaseForContestNameLabel('UTPC 2020')({
-    contestId: 'utpc2020',
-    expected: 'UTPC2020',
-  }),
-  createTestCaseForContestNameLabel('UTPC 2021')({
-    contestId: 'utpc2021',
-    expected: 'UTPC2021',
-  }),
-  createTestCaseForContestNameLabel('UTPC 2022')({
-    contestId: 'utpc2022',
-    expected: 'UTPC2022',
-  }),
-  createTestCaseForContestNameLabel('UTPC 2023')({
-    contestId: 'utpc2023',
-    expected: 'UTPC2023',
-  }),
+  ...generateUtpcTestCases([2011, 2012, 2013, 2014, 2020, 2021, 2022, 2023]),
 ];
 
 export const atCoderOthers = [
