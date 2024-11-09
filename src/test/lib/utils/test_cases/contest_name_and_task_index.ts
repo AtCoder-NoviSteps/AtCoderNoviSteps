@@ -196,9 +196,19 @@ const generateAgcTestCases = (
   });
 };
 
-// HACK: As of early November 2024, only UTPC is included.
-// More university contests may be added in the future.
-const UNIVERSITY_CONTESTS_TEST_DATA = {
+// HACK: Currently limited to UTPC contests as a pilot implementation.
+// TODO: Extend support for other university contests (e.g., ICPC regional contests)
+// after validating the current implementation.
+interface UniversityContestTestData {
+  contestId: string;
+  tasks: string[];
+}
+
+interface UniversityContestsTestData {
+  [key: string]: UniversityContestTestData;
+}
+
+const UNIVERSITY_CONTESTS_TEST_DATA: UniversityContestsTestData = {
   utpc2011: {
     contestId: 'utpc2011',
     tasks: ['A', 'B', 'C', 'J', 'K', 'L'],
