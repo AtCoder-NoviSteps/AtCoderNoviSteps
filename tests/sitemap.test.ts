@@ -54,8 +54,10 @@ test('/sitemap.xml is valid', async ({ page }) => {
     }
 
     const parsedUrl = new URL(url.loc);
-    expect(url.loc.length).toBeLessThanOrEqual(MAX_URL_LENGTH);
+
     expect(parsedUrl.protocol).toBe('https:');
+    expect(url.loc.length).toBeLessThanOrEqual(MAX_URL_LENGTH);
+    expect(url.loc).toBe(parsedUrl.href); // Ensure URL is absolute and properly formatted
 
     // Validate URL structure
     expect(parsedUrl.hostname).toBeTruthy();
