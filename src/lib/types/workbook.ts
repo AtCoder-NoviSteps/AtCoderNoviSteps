@@ -12,6 +12,7 @@ export type WorkBookBase = {
 };
 
 export interface WorkBook extends WorkBookBase {
+  id: number;
   authorId: string;
 }
 

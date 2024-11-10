@@ -1,0 +1,11 @@
+# See:
+# https://developers.google.com/search/docs/crawling-indexing/robots/intro
+# https://developers.google.com/search/docs/crawling-indexing/robots/create-robots-txt
+# https://developer.mozilla.org/en-US/docs/Glossary/Robots.txt
+# https://www.robotstxt.org/robotstxt.html
+# https://github.com/fourwhitesocks/solo-challenge/blob/748072d70e6ded5769b0fcc854e4ae46e0cb9186/static/robots.txt
+
+User-agent: *
+Allow: /
+
+Sitemap: https://atcoder-novisteps.vercel.app/sitemap.xml
