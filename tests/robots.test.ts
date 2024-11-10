@@ -1,6 +1,10 @@
 import { expect, test } from '@playwright/test';
 
-import { NOT_FOUND, INTERNAL_SERVER_ERROR } from '../src/lib/constants/http-response-status-codes';
+import {
+  NOT_FOUND,
+  FORBIDDEN,
+  INTERNAL_SERVER_ERROR,
+} from '../src/lib/constants/http-response-status-codes';
 
 test('robots.txt is accessible and valid', async ({ page }) => {
   const response = await page.goto('/robots.txt', { timeout: 30000 });
@@ -35,11 +39,27 @@ test('handles internal server errors gracefully', async ({ page }) => {
   });
 });
 
+test('handles forbidden errors gracefully', async ({ page }) => {
+  await handleErrors({ page, statusCode: FORBIDDEN, bodyText: 'Not Found' });
+});
+
 test('handles not found errors gracefully', async ({ page }) => {
   await handleErrors({ page, statusCode: NOT_FOUND, bodyText: 'Not Found' });
 });
 
-async function handleErrors({ page, statusCode, bodyText }) {
+/**
+ * Handles errors by mocking the response for the `/robots.txt` route and verifying the response.
+ *
+ * @param {Object} params - The parameters for handling errors.
+ * @param {import('playwright').Page} params.page - The Playwright page object.
+ * @param {number} params.statusCode - The HTTP status code to mock.
+ * @param {string} params.bodyText - The body text to mock in the response.
+ *
+ * @throws Will throw an error if no response is received from `/robots.txt`.
+ *
+ * @returns {Promise<void>} A promise that resolves when the error handling is complete.
+ */
+async function handleErrors({ page, statusCode, bodyText }): Promise<void> {
   // Mock error response
   await page.route('/robots.txt', (route) =>
     route.fulfill({
