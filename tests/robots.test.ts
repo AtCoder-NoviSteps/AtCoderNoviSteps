@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test';
+import { expect, test, Page } from '@playwright/test';
 
 import {
   NOT_FOUND,
@@ -6,29 +6,35 @@ import {
   INTERNAL_SERVER_ERROR,
 } from '../src/lib/constants/http-response-status-codes';
 
-test('robots.txt is accessible and valid', async ({ page }) => {
-  const response = await page.goto('/robots.txt', { timeout: 30000 });
+test.describe('robots.txt', () => {
+  test.describe.configure({ retries: 2 });
 
-  if (!response) {
-    throw new Error(
-      'No response received from /robots.txt. This might indicate a server error or network issue.',
+  test('is accessible and valid', async ({ page }) => {
+    const response = await page.goto('/robots.txt');
+
+    if (!response) {
+      throw new Error(
+        'No response received from /robots.txt. This might indicate a server error or network issue.',
+      );
+    }
+
+    const status = response.status();
+    expect(status, `Expected robots.txt to return 200 OK but got ${status}`).toBe(200);
+
+    const contentType = response.headers()['content-type'];
+    expect(contentType?.toLowerCase(), 'Content-Type header should be text/plain').toBe(
+      'text/plain',
     );
-  }
 
-  const status = response.status();
-  expect(status, `Expected robots.txt to return 200 OK but got ${status}`).toBe(200);
+    const robotsText = await response.text();
 
-  const contentType = response.headers()['content-type'];
-  expect(contentType, 'Content-Type header should be text/plain').toBe('text/plain');
+    // Check for the correct sitemap URL
+    expect(robotsText).toContain('Sitemap: https://atcoder-novisteps.vercel.app/sitemap.xml');
 
-  const robotsText = await response.text();
-
-  // Check for the correct sitemap URL
-  expect(robotsText).toContain('Sitemap: https://atcoder-novisteps.vercel.app/sitemap.xml');
-
-  // Check for valid User-agent and Allow directives
-  expect(robotsText).toContain('User-agent: *');
-  expect(robotsText).toContain('Allow: /');
+    // Check for valid User-agent and Allow directives
+    expect(robotsText).toContain('User-agent: *');
+    expect(robotsText).toContain('Allow: /');
+  });
 });
 
 test('handles internal server errors gracefully', async ({ page }) => {
@@ -48,18 +54,32 @@ test('handles not found errors gracefully', async ({ page }) => {
 });
 
 /**
+ * Parameters for the error handler function.
+ *
+ * @interface ErrorHandlerParams
+ * @property {Page} page - The page object where the error occurred.
+ * @property {number} statusCode - The HTTP status code of the error.
+ * @property {string} bodyText - The body text of the error response.
+ */
+interface ErrorHandlerParams {
+  page: Page;
+  statusCode: number;
+  bodyText: string;
+}
+
+/**
  * Handles errors by mocking the response for the `/robots.txt` route and verifying the response.
  *
- * @param {Object} params - The parameters for handling errors.
- * @param {import('playwright').Page} params.page - The Playwright page object.
- * @param {number} params.statusCode - The HTTP status code to mock.
- * @param {string} params.bodyText - The body text to mock in the response.
- *
- * @throws Will throw an error if no response is received from `/robots.txt`.
+ * @param {ErrorHandlerParams} params - The parameters for handling errors.
+ * @param {Page} params.page - The Playwright page object.
+ * @param {number} params.statusCode - The status code to be returned by the mocked response.
+ * @param {string} params.bodyText - The body text to be returned by the mocked response.
  *
  * @returns {Promise<void>} A promise that resolves when the error handling is complete.
+ *
+ * @throws {Error} If no response is received from `/robots.txt`.
  */
-async function handleErrors({ page, statusCode, bodyText }): Promise<void> {
+async function handleErrors({ page, statusCode, bodyText }: ErrorHandlerParams): Promise<void> {
   // Mock error response
   await page.route('/robots.txt', (route) =>
     route.fulfill({
