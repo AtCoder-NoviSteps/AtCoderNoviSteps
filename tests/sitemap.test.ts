@@ -10,6 +10,7 @@ interface SitemapUrl {
 }
 
 const MIN_EXPECTED_URLS = 5;
+const MAX_URL_LENGTH = 2048; // Common browser limit
 const EXPECTED_CHANGE_FREQ = 'daily';
 const EXPECTED_PRIORITY = '0.8';
 
@@ -17,7 +18,9 @@ test('/sitemap.xml is valid', async ({ page }) => {
   const response = await page.goto('/sitemap.xml');
 
   if (!response) {
-    throw new Error('No response received from /sitemap.xml');
+    throw new Error(
+      'No response received from /sitemap.xml. This might indicate a server error or network issue.',
+    );
   }
 
   const status = response.status();
@@ -51,6 +54,7 @@ test('/sitemap.xml is valid', async ({ page }) => {
     }
 
     const parsedUrl = new URL(url.loc);
+    expect(url.loc.length).toBeLessThanOrEqual(MAX_URL_LENGTH);
     expect(parsedUrl.protocol).toBe('https:');
 
     // Validate URL structure
