@@ -80,8 +80,10 @@ interface ErrorHandlerParams {
  * @throws {Error} If no response is received from `/robots.txt`.
  */
 async function handleErrors({ page, statusCode, bodyText }: ErrorHandlerParams): Promise<void> {
+  const robotsPath = '/robots.txt';
+
   // Mock error response
-  await page.route('/robots.txt', (route) =>
+  await page.route(robotsPath, (route) =>
     route.fulfill({
       status: statusCode,
       contentType: 'text/plain',
@@ -89,11 +91,11 @@ async function handleErrors({ page, statusCode, bodyText }: ErrorHandlerParams):
     }),
   );
 
-  const response = await page.goto('/robots.txt');
+  const response = await page.goto(robotsPath, { timeout: 5000 });
 
   if (!response) {
     throw new Error(
-      'No response received from /robots.txt. This might indicate a server error or network issue.',
+      `No response received from ${robotsPath}. This might indicate a server error or network issue.`,
     );
   }
 
@@ -101,4 +103,7 @@ async function handleErrors({ page, statusCode, bodyText }: ErrorHandlerParams):
 
   const responseBody = await response.text();
   expect(responseBody).toContain(bodyText);
+
+  // Clean up route mock
+  await page.unroute(robotsPath);
 }
