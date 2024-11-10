@@ -47,6 +47,9 @@
 - 文法およびフォーマットチェッカー
   - [ESLint](https://eslint.org/)
   - [Prettier](https://prettier.io/)
+- Search Engine Optimization (SEO) 対策
+  - [Svelte Meta Tags](https://github.com/oekazuma/svelte-meta-tags) - メタタグ、Open Graph などの設定
+  - [super-sitemap](https://github.com/jasongitmail/super-sitemap) - SvelteKit 専用の sitemap ジェネレータ
 
 ### インフラ
 
