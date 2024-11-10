@@ -40,7 +40,7 @@ test('handles internal server errors gracefully', async ({ page }) => {
 });
 
 test('handles forbidden errors gracefully', async ({ page }) => {
-  await handleErrors({ page, statusCode: FORBIDDEN, bodyText: 'Not Found' });
+  await handleErrors({ page, statusCode: FORBIDDEN, bodyText: 'Forbidden' });
 });
 
 test('handles not found errors gracefully', async ({ page }) => {
