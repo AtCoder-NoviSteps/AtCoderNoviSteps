@@ -28,7 +28,7 @@ test('/sitemap.xml is valid', async ({ page }) => {
 
   const contentType = response.headers()['content-type'];
   expect(contentType).toBeDefined();
-  expect(contentType).toContain('application/xml');
+  expect(contentType).toMatch(/^application\/xml(;\s*charset=([^;]+))?$/i);
 
   // Ensure XML is valid. Playwright parses the XML here and will error if it
   // cannot be parsed.
