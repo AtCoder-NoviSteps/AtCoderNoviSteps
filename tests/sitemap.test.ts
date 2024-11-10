@@ -1,5 +1,6 @@
 // See:
-// https://github.com/jasongitmail/super-sitemap?tab=readme-ov-file#playwright-test
+// Reference: https://github.com/jasongitmail/super-sitemap?tab=readme-ov-file#playwright-test
+// This test follows the recommended approach for validating sitemap.xml using Playwright
 import { expect, test } from '@playwright/test';
 
 interface SitemapUrl {
@@ -14,8 +15,17 @@ const EXPECTED_PRIORITY = '0.8';
 
 test('/sitemap.xml is valid', async ({ page }) => {
   const response = await page.goto('/sitemap.xml');
-  expect(response?.status()).toBe(200);
-  expect(response?.headers()['content-type']).toContain('application/xml');
+
+  if (!response) {
+    throw new Error('No response received from /sitemap.xml');
+  }
+
+  const status = response.status();
+  expect(status).toBe(200);
+
+  const contentType = response.headers()['content-type'];
+  expect(contentType).toBeDefined();
+  expect(contentType).toContain('application/xml');
 
   // Ensure XML is valid. Playwright parses the XML here and will error if it
   // cannot be parsed.
@@ -42,6 +52,15 @@ test('/sitemap.xml is valid', async ({ page }) => {
 
     const parsedUrl = new URL(url.loc);
     expect(parsedUrl.protocol).toBe('https:');
+
+    // Validate URL structure
+    expect(parsedUrl.hostname).toBeTruthy();
+    expect(parsedUrl.pathname).toBeTruthy();
+
+    // Ensure no URL parameters or fragments
+    expect(parsedUrl.search).toBe('');
+    expect(parsedUrl.hash).toBe('');
+
     expect(url.changefreq).toBe(EXPECTED_CHANGE_FREQ);
     expect(url.priority).toBe(EXPECTED_PRIORITY);
   }
