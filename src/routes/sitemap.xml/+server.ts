@@ -1,3 +1,9 @@
+/**
+ * Generates a dynamic sitemap.xml for the application
+ * @description Provides search engines with a map of all publishable pages
+ * @returns XML sitemap following the sitemaps.org protocol
+ */
+
 // See:
 // https://github.com/jasongitmail/super-sitemap
 import { error } from '@sveltejs/kit';
@@ -7,6 +13,16 @@ import * as sitemap from 'super-sitemap';
 import * as workBooksCrud from '$lib/services/workbooks';
 import { INTERNAL_SERVER_ERROR } from '$lib/constants/http-response-status-codes';
 
+/**
+ * Handles the GET request to generate a sitemap.
+ *
+ * This function retrieves the list of workbooks, filters out the unpublished ones,
+ * and generates a sitemap response with the specified parameters.
+ *
+ * @returns {Promise<Response>} The sitemap response.
+ *
+ * @throws {Error} If there is an error while fetching the workbooks or generating the sitemap.
+ */
 export const GET: RequestHandler = async () => {
   let publishedWorkBookIds: string[] = [];
 
@@ -15,10 +31,10 @@ export const GET: RequestHandler = async () => {
     publishedWorkBookIds = workbooks
       .filter((workbook) => workbook.isPublished)
       .map((workbook) => String(workbook.id));
-
-    console.log('Published workbook ids: ', publishedWorkBookIds);
   } catch (e) {
-    console.error(e);
+    const errorMessage = e instanceof Error ? e.message : 'Unknown error';
+    console.error(`Failed to generate sitemap: ${errorMessage}`);
+
     throw error(INTERNAL_SERVER_ERROR, 'Failed to load data for param values.');
   }
 
