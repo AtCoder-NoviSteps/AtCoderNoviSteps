@@ -128,6 +128,22 @@ const ATCODER_UNIVERSITIES: ContestPrefix = {
 
 const atCoderUniversityPrefixes = getContestPrefixes(ATCODER_UNIVERSITIES);
 
+/**
+ * Maps other AtCoder contest ID prefixes to their display names.
+ * Includes special, corporate, and promotional contests that don't fit other categories.
+ *
+ * @example
+ * {
+ *   'mujin-pc-2018': 'Mujin Programming Challenge 2018',
+ *   'discovery2016': 'DISCO presents ディスカバリーチャンネル プログラミングコンテスト2016'
+ * }
+ *
+ * @remarks
+ * When adding new contests:
+ * 1. Use kebab-case for contest ID prefix as key
+ * 2. Use official contest name in English or Japanese as value
+ * 3. Ensure the contest doesn't belong to other specific categories
+ */
 const ATCODER_OTHERS: ContestPrefix = {
   chokudai_S: 'Chokudai SpeedRun',
   'code-festival-2014-final': 'Code Festival 2014 決勝',
