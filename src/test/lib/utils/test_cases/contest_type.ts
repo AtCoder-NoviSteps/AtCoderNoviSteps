@@ -288,16 +288,16 @@ export const atCoderOthers = [
     contestId: 'gigacode-2019',
     expected: ContestType.OTHERS,
   }),
-  createTestCaseForContestType('CPSCO2019 Session1')({
-    contestId: 'cpsco2019-s1',
-    expected: ContestType.OTHERS,
-  }),
   ...[1, 2, 3, 4].map((session) =>
     createTestCaseForContestType(`CPSCO2019 Session${session}`)({
       contestId: `cpsco2019-s${session}`,
       expected: ContestType.OTHERS,
     }),
   ),
+  createTestCaseForContestType('DEGwer さんの D 論応援コンテスト')({
+    contestId: 'DEGwer2023',
+    expected: ContestType.OTHERS,
+  }),
 ];
 
 // See:
