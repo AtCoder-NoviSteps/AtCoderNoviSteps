@@ -45,8 +45,8 @@ importers:
         specifier: 1.48.2
         version: 1.48.2
       pnpm:
-        specifier: 9.12.3
-        version: 9.12.3
+        specifier: 9.13.0
+        version: 9.13.0
       prisma-erd-generator:
         specifier: 1.11.2
         version: 1.11.2(@prisma/client@5.22.0(prisma@5.22.0))(typescript@5.6.3)
@@ -3163,8 +3163,8 @@ packages:
     engines: {node: '>=18'}
     hasBin: true
 
-  pnpm@9.12.3:
-    resolution: {integrity: sha512-zOD53pxafJW++UQWnMXf6HQav7FFB4wNUIuGgFaEiofIHmJiRstglny9f9KabAYu9z/4QNlrPIbECsks9KgT7g==}
+  pnpm@9.13.0:
+    resolution: {integrity: sha512-vrniqAPbM2wQya9oK1itcYHKD70NQRnysz1fJYLpbWwNk8hbI4aSlbdlFw+9qpKJDA2mraRXQVA5dp7fPJWe/g==}
     engines: {node: '>=18.12'}
     hasBin: true
 
@@ -7473,7 +7473,7 @@ snapshots:
     optionalDependencies:
       fsevents: 2.3.2
 
-  pnpm@9.12.3: {}
+  pnpm@9.13.0: {}
 
   postcss-import@15.1.0(postcss@8.4.44):
     dependencies:
