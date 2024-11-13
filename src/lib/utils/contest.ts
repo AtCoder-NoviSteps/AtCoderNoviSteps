@@ -156,6 +156,7 @@ const ATCODER_OTHERS: ContestPrefix = {
   colopl: 'COLOCON',
   gigacode: 'GigaCode',
   cpsco2019: 'CPSCO 2019',
+  DEGwer2023: 'DEGwer さんの D 論応援コンテスト',
 } as const;
 const atCoderOthersPrefixes = getContestPrefixes(ATCODER_OTHERS);
 
