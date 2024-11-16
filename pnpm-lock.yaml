@@ -28,7 +28,7 @@ importers:
         version: 29.5.14
       autoprefixer:
         specifier: 10.4.20
-        version: 10.4.20(postcss@8.4.44)
+        version: 10.4.20(postcss@8.4.49)
       debug:
         specifier: 4.3.7
         version: 4.3.7
@@ -5472,14 +5472,14 @@ snapshots:
 
   asynckit@0.4.0: {}
 
-  autoprefixer@10.4.20(postcss@8.4.44):
+  autoprefixer@10.4.20(postcss@8.4.49):
     dependencies:
       browserslist: 4.23.3
       caniuse-lite: 1.0.30001649
       fraction.js: 4.3.7
       normalize-range: 0.1.2
       picocolors: 1.0.1
-      postcss: 8.4.44
+      postcss: 8.4.49
       postcss-value-parser: 4.2.0
 
   axobject-query@4.0.0:
