@@ -4,7 +4,7 @@ ARG NODE_VERSION=20
 FROM mcr.microsoft.com/devcontainers/javascript-node:${NODE_VERSION}
 
 WORKDIR /usr/src/app
-ADD . /usr/src/app
+COPY . /usr/src/app
 
 ADD package.json /package.json
 ADD pnpm-lock.yaml /pnpm-lock.yaml
