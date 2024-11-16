@@ -6,9 +6,6 @@ FROM mcr.microsoft.com/devcontainers/javascript-node:${NODE_VERSION}
 WORKDIR /usr/src/app
 COPY . /usr/src/app
 
-ADD package.json /package.json
-ADD pnpm-lock.yaml /pnpm-lock.yaml
-
 RUN apt-get update \
     && apt-get -y install --no-install-recommends fish
 
