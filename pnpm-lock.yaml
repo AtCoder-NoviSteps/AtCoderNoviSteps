@@ -63,8 +63,8 @@ importers:
         specifier: 3.4.15
         version: 3.4.15(ts-node@10.9.1(@types/node@16.18.11)(typescript@5.6.3))
       vercel:
-        specifier: 39.0.1
-        version: 39.0.1
+        specifier: 39.0.2
+        version: 39.0.2
       xss:
         specifier: 1.0.15
         version: 1.0.15
@@ -4093,8 +4093,8 @@ packages:
     resolution: {integrity: sha512-c1Q0mCiPlgdTVVVIJIrBuxNicYE+t/7oKeI9MWLj3fh/uq2Pxh/3eeWbVZ4OcGW1TUf53At0njHw5SMdA3tmMg==}
     engines: {node: '>= 0.10'}
 
-  vercel@39.0.1:
-    resolution: {integrity: sha512-SBNiyl/ngaEOlKEkaNFTHSGRYFWYqCavK6TQx+XdbMfLDXG6U7GJodxFBa+j15senEzhGN27NPdKqRYpDFzqyQ==}
+  vercel@39.0.2:
+    resolution: {integrity: sha512-nXDg7sZtP9rYhCNnoOoD7QtX7Cvt5Ez67z4G2ThF82QZFzBdJgJiDKDjH3Nj6jyOOi0Ek0TF5AA7XsmirOIXLQ==}
     engines: {node: '>= 16'}
     hasBin: true
 
@@ -4371,7 +4371,7 @@ snapshots:
       '@babel/helper-validator-identifier': 7.24.6
       chalk: 2.4.2
       js-tokens: 4.0.0
-      picocolors: 1.0.1
+      picocolors: 1.1.1
 
   '@babel/parser@7.26.2':
     dependencies:
@@ -8469,7 +8469,7 @@ snapshots:
   validator@13.12.0:
     optional: true
 
-  vercel@39.0.1:
+  vercel@39.0.2:
     dependencies:
       '@vercel/build-utils': 8.4.12
       '@vercel/fun': 1.1.0
