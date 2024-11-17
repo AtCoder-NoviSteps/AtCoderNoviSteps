@@ -166,8 +166,8 @@ importers:
         specifier: 4.2.19
         version: 4.2.19
       svelte-check:
-        specifier: 4.0.7
-        version: 4.0.7(picomatch@4.0.2)(svelte@4.2.19)(typescript@5.6.3)
+        specifier: 4.0.9
+        version: 4.0.9(picomatch@4.0.2)(svelte@4.2.19)(typescript@5.6.3)
       svelte-meta-tags:
         specifier: 3.1.4
         version: 3.1.4(svelte@4.2.19)(typescript@5.6.3)
@@ -2191,14 +2191,6 @@ packages:
   fd-slicer@1.1.0:
     resolution: {integrity: sha512-cE1qsB/VwyQozZ+q1dGxR8LBYNZeofhEdUNGSMbQD3Gw2lAzX9Zb3uIU6Ebc/Fmyjo9AWWfnn0AUCHqtevs/8g==}
 
-  fdir@6.3.0:
-    resolution: {integrity: sha512-QOnuT+BOtivR77wYvCWHfGt9s4Pz1VIMbD463vegT5MLqNXy8rYFT/lPVEqf/bhYeT6qmqrNHhsX+rWwe3rOCQ==}
-    peerDependencies:
-      picomatch: ^3 || ^4
-    peerDependenciesMeta:
-      picomatch:
-        optional: true
-
   fdir@6.4.2:
     resolution: {integrity: sha512-KnhMXsKSPZlAhp7+IjUkRZKPb4fUyccpDrdFXbi4QL1qkmFh9kVY09Yox+n4MaOb3lHZ1Tv829C3oaaXoMYPDQ==}
     peerDependencies:
@@ -3753,8 +3745,8 @@ packages:
     deprecated: svelte-add has be merged together with create-svelte to become the Svelte CLI sv. The work continues in the sv repo over at https://github.com/sveltejs/cli
     hasBin: true
 
-  svelte-check@4.0.7:
-    resolution: {integrity: sha512-24hwo+D5L35HOXsh3Z2sU4WhdDLavlHquYaJhrEqAt+mV1xOVzoMVYThW80n99osDJxyuH+vxjNFkNRL4EvwTg==}
+  svelte-check@4.0.9:
+    resolution: {integrity: sha512-SVNCz2L+9ZELGli7G0n3B3QE5kdf0u27RtKr2ZivWQhcWIXatZxwM4VrQ6AiA2k9zKp2mk5AxkEhdjbpjv7rEw==}
     engines: {node: '>= 18.0.0'}
     hasBin: true
     peerDependencies:
@@ -4358,7 +4350,7 @@ snapshots:
   '@babel/code-frame@7.24.6':
     dependencies:
       '@babel/highlight': 7.24.6
-      picocolors: 1.0.1
+      picocolors: 1.1.1
 
   '@babel/helper-string-parser@7.25.9': {}
 
@@ -4371,7 +4363,7 @@ snapshots:
       '@babel/helper-validator-identifier': 7.24.6
       chalk: 2.4.2
       js-tokens: 4.0.0
-      picocolors: 1.0.1
+      picocolors: 1.1.1
 
   '@babel/parser@7.26.2':
     dependencies:
@@ -4618,7 +4610,7 @@ snapshots:
   '@jridgewell/trace-mapping@0.3.25':
     dependencies:
       '@jridgewell/resolve-uri': 3.1.2
-      '@jridgewell/sourcemap-codec': 1.4.15
+      '@jridgewell/sourcemap-codec': 1.5.0
 
   '@jridgewell/trace-mapping@0.3.9':
     dependencies:
@@ -6474,10 +6466,6 @@ snapshots:
     dependencies:
       pend: 1.2.0
 
-  fdir@6.3.0(picomatch@4.0.2):
-    optionalDependencies:
-      picomatch: 4.0.2
-
   fdir@6.4.2(picomatch@4.0.2):
     optionalDependencies:
       picomatch: 4.0.2
@@ -7606,13 +7594,13 @@ snapshots:
   postcss@8.4.38:
     dependencies:
       nanoid: 3.3.7
-      picocolors: 1.0.1
+      picocolors: 1.1.1
       source-map-js: 1.2.1
 
   postcss@8.4.44:
     dependencies:
       nanoid: 3.3.7
-      picocolors: 1.0.1
+      picocolors: 1.1.1
       source-map-js: 1.2.0
 
   postcss@8.4.49:
@@ -8067,12 +8055,12 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  svelte-check@4.0.7(picomatch@4.0.2)(svelte@4.2.19)(typescript@5.6.3):
+  svelte-check@4.0.9(picomatch@4.0.2)(svelte@4.2.19)(typescript@5.6.3):
     dependencies:
       '@jridgewell/trace-mapping': 0.3.25
       chokidar: 4.0.1
-      fdir: 6.3.0(picomatch@4.0.2)
-      picocolors: 1.0.1
+      fdir: 6.4.2(picomatch@4.0.2)
+      picocolors: 1.1.1
       sade: 1.8.1
       svelte: 4.2.19
       typescript: 5.6.3
@@ -8437,7 +8425,7 @@ snapshots:
     dependencies:
       browserslist: 4.23.3
       escalade: 3.1.2
-      picocolors: 1.0.1
+      picocolors: 1.1.1
 
   uri-js@4.4.1:
     dependencies:
