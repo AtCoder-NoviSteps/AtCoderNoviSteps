@@ -85,12 +85,12 @@
     "just-extend": "6.2.0",
     "lucia": "2.7.7",
     "playwright": "1.49.0",
-    "pnpm": "9.13.2",
+    "pnpm": "9.14.2",
     "prisma-erd-generator": "1.11.2",
     "svelte-eslint-parser": "0.43.0",
     "tailwind-merge": "2.5.4",
     "tailwindcss": "3.4.15",
-    "vercel": "39.0.5",
+    "vercel": "39.1.0",
     "xss": "1.0.15"
   },
   "packageManager": "pnpm@9.13.2"
