@@ -3,7 +3,7 @@ import {
   ATCODER_PROBLEMS_URL,
   AOJ_ATCODER_JOI_URL,
   AOJ_PCK_URL,
-  AOJ_ICPC_URL,
+  ICPC_JAPAN_PROBLEMS_URL,
   GITHUB_URL,
 } from './urls';
 
@@ -12,6 +12,6 @@ export const externalLinks = [
   { title: `AtCoder Problems`, path: ATCODER_PROBLEMS_URL },
   { title: `AOJ / AtCoder-JOI`, path: AOJ_ATCODER_JOI_URL },
   { title: `AOJ-PCK`, path: AOJ_PCK_URL },
-  { title: `AOJ-ICPC`, path: AOJ_ICPC_URL },
+  { title: `ICPC Japan Problems`, path: ICPC_JAPAN_PROBLEMS_URL },
   { title: `GitHub`, path: GITHUB_URL },
 ];
