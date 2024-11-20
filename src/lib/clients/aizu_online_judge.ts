@@ -31,6 +31,14 @@ type AOJChallengeContestAPI = {
 };
 
 /**
+ * Enum representing the types of challenge contests available.
+ */
+enum ChallengeContestType {
+  PCK = 'pck',
+  JAG = 'jag',
+}
+
+/**
  * Represents a challenge contest in the AOJ
  */
 type ChallengeContest = {
@@ -81,6 +89,14 @@ enum PckRound {
 }
 
 /**
+ * Enum representing JAG contest rounds
+ */
+enum JagRound {
+  PRELIM = 'prelim',
+  REGIONAL = 'regional',
+}
+
+/**
  * Constant used as a placeholder for missing timestamp data in AOJ contests
  * Value: -1
  */
@@ -98,20 +114,22 @@ export class AojApiClient extends ContestSiteApiClient {
   /**
    * Fetches and combines contests from different sources.
    *
-   * This method concurrently fetches course contests, preliminary PCK contests,
-   * and final PCK contests, then combines them into a single array.
+   * This method concurrently fetches course contests, preliminary and final PCK contests,
+   * and prelim and regional JAG contests, then combines them into a single array.
    *
    * @returns {Promise<ContestsForImport>} A promise that resolves to an array of contests.
    */
   async getContests(): Promise<ContestsForImport> {
     try {
-      const [courses, pckPrelims, pckFinals] = await Promise.all([
+      const [courses, pckPrelims, pckFinals, jagPrelims, jagRegionals] = await Promise.all([
         this.fetchCourseContests(),
-        this.fetchPckContests(PckRound.PRELIM),
-        this.fetchPckContests(PckRound.FINAL),
+        this.fetchChallengeContests(ChallengeContestType.PCK, PckRound.PRELIM),
+        this.fetchChallengeContests(ChallengeContestType.PCK, PckRound.FINAL),
+        this.fetchChallengeContests(ChallengeContestType.JAG, JagRound.PRELIM),
+        this.fetchChallengeContests(ChallengeContestType.JAG, JagRound.REGIONAL),
       ]);
 
-      const contests = courses.concat(pckPrelims, pckFinals);
+      const contests = courses.concat(pckPrelims, pckFinals, jagPrelims, jagRegionals);
       console.log(`Found AOJ: ${contests.length} contests.`);
 
       return contests;
@@ -158,24 +176,31 @@ export class AojApiClient extends ContestSiteApiClient {
   }
 
   /**
-   * Fetches PCK contests from the AOJ API for a given round.
+   * Fetches challenge contests from the AOJ API for a given round.
    *
-   * @param {PckRound} round - The round identifier for which to fetch contests.
+   * @param {ChallengeContestType} contestType - The type of challenge contest for which to fetch contests.
+   * @param {PckRound | JagRound} round - The round identifier for which to fetch contests.
    * @returns {Promise<ContestsForImport>} A promise that resolves to an array of contests for import.
    *
    * @throws Will throw an error if the API request fails or the response validation fails.
    *
    * @example
+   * const contestType = ChallengeContestType.PCK;
    * const round = 'PRELIM';
-   * const contests = await fetchPckContests(round);
+   * const contests = await fetchChallengeContests(contestType, round);
    * console.log(contests);
    */
-  private async fetchPckContests(round: PckRound): Promise<ContestsForImport> {
+  private async fetchChallengeContests(
+    contestType: ChallengeContestType,
+    round: PckRound | JagRound,
+  ): Promise<ContestsForImport> {
+    const contestTypeLabel = contestType.toLocaleUpperCase();
+
     try {
       const results = await this.fetchApiWithConfig<AOJChallengeContestAPI>({
         baseApiUrl: AOJ_API_BASE_URL,
-        endpoint: `challenges/cl/pck/${round}`,
-        errorMessage: `Failed to fetch ${round} contests from AOJ API`,
+        endpoint: `challenges/cl/${contestType}/${round}`,
+        errorMessage: `Failed to fetch ${contestTypeLabel} ${round} contests from AOJ API`,
         validateResponse: (data) =>
           'contests' in data && Array.isArray(data.contests) && data.contests.length > 0,
       });
@@ -192,11 +217,11 @@ export class AojApiClient extends ContestSiteApiClient {
         [] as ContestsForImport,
       );
 
-      console.log(`Found AOJ PCK ${round}: ${contests.length} contests.`);
+      console.log(`Found AOJ ${contestTypeLabel} ${round}: ${contests.length} contests.`);
 
       return contests;
     } catch (error) {
-      console.error(`Failed to fetch from AOJ PCK ${round} contests:`, error);
+      console.error(`Failed to fetch from AOJ ${contestTypeLabel} ${round} contests:`, error);
       return [];
     }
   }
@@ -226,10 +251,12 @@ export class AojApiClient extends ContestSiteApiClient {
   /**
    * Fetches tasks from various sources and combines them into a single list.
    *
-   * This method concurrently fetches tasks from three different sources:
+   * This method concurrently fetches tasks from five different sources:
    * - Course tasks
    * - PCK Prelim tasks
    * - PCK Final tasks
+   * - JAG Prelim tasks
+   * - JAG Regional tasks
    *
    * The fetched tasks are then concatenated into a single array and returned.
    *
@@ -239,12 +266,14 @@ export class AojApiClient extends ContestSiteApiClient {
    */
   async getTasks(): Promise<TasksForImport> {
     try {
-      const [courses, pckPrelims, pckFinals] = await Promise.all([
+      const [courses, pckPrelims, pckFinals, jagPrelims, jagRegionals] = await Promise.all([
         this.fetchCourseTasks(),
-        this.fetchPckTasks(PckRound.PRELIM),
-        this.fetchPckTasks(PckRound.FINAL),
+        this.fetchChallengeTasks(ChallengeContestType.PCK, PckRound.PRELIM),
+        this.fetchChallengeTasks(ChallengeContestType.PCK, PckRound.FINAL),
+        this.fetchChallengeTasks(ChallengeContestType.JAG, JagRound.PRELIM),
+        this.fetchChallengeTasks(ChallengeContestType.JAG, JagRound.REGIONAL),
       ]);
-      const tasks = courses.concat(pckPrelims, pckFinals);
+      const tasks = courses.concat(pckPrelims, pckFinals, jagPrelims, jagRegionals);
       console.log(`Found AOJ: ${tasks.length} tasks.`);
 
       return tasks;
@@ -309,9 +338,10 @@ export class AojApiClient extends ContestSiteApiClient {
   };
 
   /**
-   * Fetches tasks for a specified PCK round from the AOJ API.
+   * Fetches tasks for a specified challenge contest round from the AOJ API.
    *
-   * @param {string} round - The round identifier for which to fetch tasks.
+   * @param {ChallengeContestType} contestType - The type of challenge contest for which to fetch tasks.
+   * @param {PckRound | JagRound} round - The round identifier for which to fetch tasks.
    * @returns {Promise<TasksForImport>} A promise that resolves to an object containing tasks for import.
    * @throws Will throw an error if the API request fails or the response is invalid.
    *
@@ -321,17 +351,17 @@ export class AojApiClient extends ContestSiteApiClient {
    * 3. Maps the contest data to a list of tasks, extracting relevant information such as task ID, contest ID, and title.
    * 4. Logs the number of tasks found for the specified round.
    */
-  private async fetchPckTasks(round: string): Promise<TasksForImport> {
-    if (!Object.values(PckRound).includes(round as PckRound)) {
-      console.error(`Found invalid PCK round: ${round}`);
-      return [];
-    }
+  private async fetchChallengeTasks(
+    contestType: ChallengeContestType,
+    round: PckRound | JagRound,
+  ): Promise<TasksForImport> {
+    const contestTypeLabel = contestType.toLocaleUpperCase();
 
     try {
       const allPckContests = await this.fetchApiWithConfig<AOJChallengeContestAPI>({
         baseApiUrl: AOJ_API_BASE_URL,
-        endpoint: `challenges/cl/pck/${round}`,
-        errorMessage: `Failed to fetch PCK ${round} tasks from AOJ API`,
+        endpoint: `challenges/cl/${contestType}/${round}`,
+        errorMessage: `Failed to fetch ${contestTypeLabel} ${round} tasks from AOJ API`,
         validateResponse: (data) =>
           'contests' in data && Array.isArray(data.contests) && data.contests.length > 0,
       });
@@ -350,11 +380,11 @@ export class AojApiClient extends ContestSiteApiClient {
         },
         [],
       );
-      console.log(`Found PCK ${round}: ${tasks.length} tasks.`);
+      console.log(`Found ${contestTypeLabel} ${round}: ${tasks.length} tasks.`);
 
       return tasks;
     } catch (error) {
-      console.error(`Failed to fetch from PCK ${round} tasks:`, error);
+      console.error(`Failed to fetch from ${contestTypeLabel} ${round} tasks:`, error);
       return [];
     }
   }
