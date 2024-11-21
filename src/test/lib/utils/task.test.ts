@@ -78,6 +78,14 @@ describe('Task', () => {
         });
       });
     });
+
+    describe('when contest ids and task ids for AOJ JAG (Prelim and Regional) are given', () => {
+      TestCasesForTaskUrl.aojJag.forEach(({ name, value }) => {
+        runTests(`${name}`, [value], ({ contestId, taskId, expected }: TestCaseForTaskUrl) => {
+          expect(getTaskUrl(contestId, taskId)).toBe(expected);
+        });
+      });
+    });
   });
 
   describe('count accepted tasks', () => {
