@@ -133,24 +133,6 @@ type CacheEntry<T> = {
 };
 
 /**
- * A cache to store contests for import, keyed by contest ID.
- * This cache is used to avoid redundant API calls to the Aizu Online Judge.
- *
- * @type {Map<string, CacheEntry<ContestsForImport>>}
- */
-const contestCache: Map<string, CacheEntry<ContestsForImport>> = new Map();
-
-/**
- * A cache to store tasks for import, keyed by a string identifier.
- *
- * This cache is implemented as a Map where the key is a string and the value is of type `TasksForImport`.
- * It is used to temporarily hold tasks to avoid redundant imports and improve performance.
- *
- * @type {Map<string, CacheEntry<TasksForImport>>}
- */
-const taskCache: Map<string, CacheEntry<TasksForImport>> = new Map();
-
-/**
  * Retrieves a cache entry from the provided cache map.
  *
  * @template T - The type of the data stored in the cache entry.
@@ -194,6 +176,24 @@ function setCacheEntry<T>(cache: Map<string, CacheEntry<T>>, key: string, data: 
  * @extends {ContestSiteApiClient}
  */
 export class AojApiClient extends ContestSiteApiClient {
+  /**
+   * A cache to store contests for import, keyed by contest ID.
+   * This cache is used to avoid redundant API calls to the Aizu Online Judge.
+   *
+   * @type {Map<string, CacheEntry<ContestsForImport>>}
+   */
+  private readonly contestCache: Map<string, CacheEntry<ContestsForImport>> = new Map();
+
+  /**
+   * A cache to store tasks for import, keyed by a string identifier.
+   *
+   * This cache is implemented as a Map where the key is a string and the value is of type `TasksForImport`.
+   * It is used to temporarily hold tasks to avoid redundant imports and improve performance.
+   *
+   * @type {Map<string, CacheEntry<TasksForImport>>}
+   */
+  private readonly taskCache: Map<string, CacheEntry<TasksForImport>> = new Map();
+
   /**
    * Fetches and combines contests from different sources.
    *
@@ -282,7 +282,7 @@ export class AojApiClient extends ContestSiteApiClient {
     round: ChallengeRoundMap[T],
   ): Promise<ContestsForImport> {
     const cacheKey = `${contestType}_${round}`;
-    const cachedContests = getCacheEntry(contestCache, cacheKey);
+    const cachedContests = getCacheEntry(this.contestCache, cacheKey);
 
     if (cachedContests) {
       console.log('Using cached contests for', cacheKey);
@@ -314,7 +314,7 @@ export class AojApiClient extends ContestSiteApiClient {
 
       console.log(`Found AOJ ${contestTypeLabel} ${round}: ${contests.length} contests.`);
 
-      setCacheEntry(contestCache, cacheKey, contests);
+      setCacheEntry(this.contestCache, cacheKey, contests);
 
       return contests;
     } catch (error) {
@@ -330,6 +330,10 @@ export class AojApiClient extends ContestSiteApiClient {
    * @returns The constructed endpoint URL as a string.
    */
   private buildEndpoint(segments: string[]): string {
+    if (!segments?.length) {
+      throw new Error('Endpoint segments array cannot be empty');
+    }
+
     return segments.map((segment) => encodeURIComponent(segment)).join('/');
   }
 
@@ -467,7 +471,7 @@ export class AojApiClient extends ContestSiteApiClient {
     round: ChallengeRoundMap[T],
   ): Promise<TasksForImport> {
     const cacheKey = `${contestType}_${round}`;
-    const cachedTasks = getCacheEntry(taskCache, cacheKey);
+    const cachedTasks = getCacheEntry(this.taskCache, cacheKey);
 
     if (cachedTasks) {
       console.log('Using cached tasks for', cacheKey);
@@ -501,7 +505,7 @@ export class AojApiClient extends ContestSiteApiClient {
       );
       console.log(`Found ${contestTypeLabel} ${round}: ${tasks.length} tasks.`);
 
-      setCacheEntry(taskCache, cacheKey, tasks);
+      setCacheEntry(this.taskCache, cacheKey, tasks);
 
       return tasks;
     } catch (error) {
