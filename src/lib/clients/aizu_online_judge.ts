@@ -115,6 +115,21 @@ type ChallengeRoundMap = {
 const PENDING = -1;
 
 /**
+ * A cache to store contests for import, keyed by contest ID.
+ * This cache is used to avoid redundant API calls to the Aizu Online Judge.
+ *
+ * @type {Map<string, ContestsForImport>}
+ */
+const contestCache: Map<string, ContestsForImport> = new Map();
+/**
+ * A cache to store tasks for import, keyed by a string identifier.
+ *
+ * This cache is implemented as a Map where the key is a string and the value is of type `TasksForImport`.
+ * It is used to temporarily hold tasks to avoid redundant imports and improve performance.
+ */
+const taskCache: Map<string, TasksForImport> = new Map();
+
+/**
  * AojApiClient is a client for interacting with the Aizu Online Judge (AOJ) API.
  * It extends the ContestSiteApiClient and provides methods to fetch contests and tasks
  * from the AOJ platform.
@@ -142,7 +157,11 @@ export class AojApiClient extends ContestSiteApiClient {
       ]);
 
       const contests = courses.concat(pckPrelims, pckFinals, jagPrelims, jagRegionals);
-      console.log(`Found AOJ: ${contests.length} contests.`);
+      console.log(
+        `Found AOJ contests - Total: ${contests.length} ` +
+          `(Courses: ${courses.length}, PCK: ${pckPrelims.length + pckFinals.length}, ` +
+          `JAG: ${jagPrelims.length + jagRegionals.length})`,
+      );
 
       return contests;
     } catch (error) {
@@ -206,6 +225,13 @@ export class AojApiClient extends ContestSiteApiClient {
     contestType: T,
     round: ChallengeRoundMap[T],
   ): Promise<ContestsForImport> {
+    const cacheKey = `${contestType}_${round}`;
+
+    if (contestCache.has(cacheKey)) {
+      console.log('Using cached contest data for', cacheKey);
+      return contestCache.get(cacheKey)!;
+    }
+
     const contestTypeLabel = contestType.toUpperCase();
 
     try {
@@ -230,6 +256,8 @@ export class AojApiClient extends ContestSiteApiClient {
       );
 
       console.log(`Found AOJ ${contestTypeLabel} ${round}: ${contests.length} contests.`);
+
+      contestCache.set(cacheKey, contests);
 
       return contests;
     } catch (error) {
@@ -286,7 +314,11 @@ export class AojApiClient extends ContestSiteApiClient {
         this.fetchChallengeTasks(ChallengeContestType.JAG, JagRound.REGIONAL),
       ]);
       const tasks = courses.concat(pckPrelims, pckFinals, jagPrelims, jagRegionals);
-      console.log(`Found AOJ: ${tasks.length} tasks.`);
+      console.log(
+        `Found AOJ tasks - Total: ${tasks.length} ` +
+          `(Courses: ${courses.length}, PCK: ${pckPrelims.length + pckFinals.length}, ` +
+          `JAG: ${jagPrelims.length + jagRegionals.length})`,
+      );
 
       return tasks;
     } catch (error) {
@@ -367,6 +399,13 @@ export class AojApiClient extends ContestSiteApiClient {
     contestType: T,
     round: ChallengeRoundMap[T],
   ): Promise<TasksForImport> {
+    const cacheKey = `${contestType}_${round}`;
+
+    if (taskCache.has(cacheKey)) {
+      console.log('Using cached tasks for', cacheKey);
+      return taskCache.get(cacheKey)!;
+    }
+
     const contestTypeLabel = contestType.toUpperCase();
 
     try {
@@ -393,6 +432,8 @@ export class AojApiClient extends ContestSiteApiClient {
         [],
       );
       console.log(`Found ${contestTypeLabel} ${round}: ${tasks.length} tasks.`);
+
+      taskCache.set(cacheKey, tasks);
 
       return tasks;
     } catch (error) {
