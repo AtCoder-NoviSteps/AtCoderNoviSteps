@@ -422,6 +422,9 @@ export const aojPck = Object.entries(AOJ_PCK_TEST_DATA).flatMap(([contestId, tas
  * Test cases for AOJ JAG contests
  * Includes both preliminary (模擬国内予選) and regional (模擬アジア地区予選) rounds
  * Format: {round}{year} - {problemId}
+ *  - Task ID format:
+ *  - Recent contests (2021+): 33xx-33xx
+ *  - Older contests (2005-2006): 20xx-20xx
  */
 const AOJ_JAG_TEST_DATA = {
   Prelim2005: {
@@ -466,6 +469,9 @@ const AOJ_JAG_TEST_DATA = {
   },
 };
 
+// Note: Test cases cover years when JAG contests were actually held
+// Prelims: 2005-2006, 2009-2011, 2020-2024
+// Regionals: 2005-2006, 2009-2011, 2016-2017, 2020-2022
 type JagRound = 'Prelim' | 'Regional';
 type JagYear =
   | '2005'
@@ -482,22 +488,29 @@ type JagYear =
 type JagContestId = `${JagRound}${JagYear}`;
 type JagContestIds = JagContestId[];
 
-const generateAojJagTestCases = (
-  contestIds: JagContestIds,
+const generateContestTestCases = <T extends string>(
+  contestIds: T[],
   taskIndices: string[],
+  formattedName: (contestId: T, taskIndex: string) => string,
+  expectedFormat: (contestId: T, taskIndex: string) => string,
 ): { name: string; value: TestCaseForContestNameAndTaskIndex }[] => {
   return zip(contestIds, taskIndices).map(([contestId, taskIndex]) => {
-    const testCase = createTestCaseForContestNameAndTaskIndex(
-      `AOJ, JAG${contestId} - ${taskIndex}`,
-    )({
+    return createTestCaseForContestNameAndTaskIndex(formattedName(contestId, taskIndex))({
       contestId: `JAG${contestId}`,
       taskTableIndex: taskIndex,
-      expected: `AOJ - JAG${contestId.replace('Prelim', '模擬国内予選').replace('Regional', '模擬アジア地区予選')} - ${taskIndex}`,
+      expected: expectedFormat(contestId, taskIndex),
     });
-
-    return testCase;
   });
 };
+
+const generateAojJagTestCases = (contestIds: JagContestIds, taskIndices: string[]) =>
+  generateContestTestCases(
+    contestIds,
+    taskIndices,
+    (contestId, taskIndex) => `AOJ, JAG${contestId} - ${taskIndex}`,
+    (contestId, taskIndex) =>
+      `AOJ - JAG${contestId.replace('Prelim', '模擬国内予選').replace('Regional', '模擬アジア地区予選')} - ${taskIndex}`,
+  );
 
 export const aojJag = Object.entries(AOJ_JAG_TEST_DATA).flatMap(([contestId, tasks]) =>
   generateAojJagTestCases(Array(tasks.tasks.length).fill(contestId), tasks.tasks),

@@ -97,6 +97,18 @@ enum JagRound {
 }
 
 /**
+ * A map that associates each type of challenge contest with its corresponding round type.
+ *
+ * @typedef {Object} ChallengeRoundMap
+ * @property {PckRound} ChallengeContestType.PCK - The round type for PCK contests.
+ * @property {JagRound} ChallengeContestType.JAG - The round type for JAG contests.
+ */
+type ChallengeRoundMap = {
+  [ChallengeContestType.PCK]: PckRound;
+  [ChallengeContestType.JAG]: JagRound;
+};
+
+/**
  * Constant used as a placeholder for missing timestamp data in AOJ contests
  * Value: -1
  */
@@ -190,11 +202,11 @@ export class AojApiClient extends ContestSiteApiClient {
    * const contests = await fetchChallengeContests(contestType, round);
    * console.log(contests);
    */
-  private async fetchChallengeContests(
-    contestType: ChallengeContestType,
-    round: PckRound | JagRound,
+  private async fetchChallengeContests<T extends ChallengeContestType>(
+    contestType: T,
+    round: ChallengeRoundMap[T],
   ): Promise<ContestsForImport> {
-    const contestTypeLabel = contestType.toLocaleUpperCase();
+    const contestTypeLabel = contestType.toUpperCase();
 
     try {
       const results = await this.fetchApiWithConfig<AOJChallengeContestAPI>({
@@ -351,11 +363,11 @@ export class AojApiClient extends ContestSiteApiClient {
    * 3. Maps the contest data to a list of tasks, extracting relevant information such as task ID, contest ID, and title.
    * 4. Logs the number of tasks found for the specified round.
    */
-  private async fetchChallengeTasks(
-    contestType: ChallengeContestType,
-    round: PckRound | JagRound,
+  private async fetchChallengeTasks<T extends ChallengeContestType>(
+    contestType: T,
+    round: ChallengeRoundMap[T],
   ): Promise<TasksForImport> {
-    const contestTypeLabel = contestType.toLocaleUpperCase();
+    const contestTypeLabel = contestType.toUpperCase();
 
     try {
       const allPckContests = await this.fetchApiWithConfig<AOJChallengeContestAPI>({

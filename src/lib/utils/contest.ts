@@ -299,12 +299,13 @@ const JAG_TRANSLATIONS = {
 
 function getAojChallengeLabel(translations: ContestLabelTranslations, contestId: string): string {
   const baseLabel = 'AOJ - ';
+  let label = contestId;
 
   Object.entries(translations).forEach(([abbrEnglish, japanese]) => {
-    contestId = contestId.replace(abbrEnglish, japanese);
+    label = label.replace(abbrEnglish, japanese);
   });
 
-  return baseLabel + contestId;
+  return baseLabel + label;
 }
 
 export const addContestNameToTaskIndex = (contestId: string, taskTableIndex: string): string => {

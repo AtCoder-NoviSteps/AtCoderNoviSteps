@@ -389,10 +389,6 @@ export const aojJag = [
     contestId: 'JAGPrelim2022',
     expected: 'AOJ - JAG模擬国内予選2022',
   }),
-  createTestCaseForContestNameLabel('AOJ, JAG Prelim 2022')({
-    contestId: 'JAGPrelim2022',
-    expected: 'AOJ - JAG模擬国内予選2022',
-  }),
   createTestCaseForContestNameLabel('AOJ, JAG Prelim 2023')({
     contestId: 'JAGPrelim2023',
     expected: 'AOJ - JAG模擬国内予選2023',
