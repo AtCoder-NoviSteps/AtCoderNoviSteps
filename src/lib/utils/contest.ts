@@ -286,6 +286,16 @@ export const getContestNameLabel = (contest_id: string) => {
   return contest_id.toUpperCase();
 };
 
+/**
+ * Maps PCK contest type abbreviations to their Japanese translations.
+ *
+ * @example
+ * {
+ *   PCK: 'パソコン甲子園',
+ *   Prelim: '予選',
+ *   Final: '本選'
+ * }
+ */
 const PCK_TRANSLATIONS = {
   PCK: 'パソコン甲子園',
   Prelim: '予選',
@@ -306,18 +316,19 @@ const JAG_TRANSLATIONS = {
   Regional: '模擬アジア地区予選',
 };
 
+const aojBaseLabel = 'AOJ - ';
+
 function getAojChallengeLabel(
   translations: Readonly<ContestLabelTranslations>,
   contestId: string,
 ): string {
-  const baseLabel = 'AOJ - ';
   let label = contestId;
 
   Object.entries(translations).forEach(([abbrEnglish, japanese]) => {
     label = label.replace(abbrEnglish, japanese);
   });
 
-  return baseLabel + label;
+  return aojBaseLabel + label;
 }
 
 export const addContestNameToTaskIndex = (contestId: string, taskTableIndex: string): string => {
