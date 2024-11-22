@@ -194,7 +194,7 @@ export function getContestPrefixes(contestPrefixes: Record<string, string>) {
  * - Educational contests (0-10): ABS, ABC, APG4B, etc.
  * - Contests for genius (11-15): ARC, AGC, and their variants
  * - Special contests (16-17): UNIVERSITY, OTHERS
- * - External platforms (18-19): AOJ_COURSES, AOJ_PCK
+ * - External platforms (18-20): AOJ_COURSES, AOJ_PCK, AOJ_JAG
  *
  * @remarks
  * HACK: The priorities for ARC, AGC, UNIVERSITY, AOJ_COURSES, and AOJ_PCK are temporary
@@ -292,12 +292,24 @@ const PCK_TRANSLATIONS = {
   Final: '本選',
 };
 
+/**
+ * Maps JAG contest type abbreviations to their Japanese translations.
+ *
+ * @example
+ * {
+ *   Prelim: '模擬国内予選',
+ *   Regional: '模擬アジア地区予選'
+ * }
+ */
 const JAG_TRANSLATIONS = {
   Prelim: '模擬国内予選',
   Regional: '模擬アジア地区予選',
 };
 
-function getAojChallengeLabel(translations: ContestLabelTranslations, contestId: string): string {
+function getAojChallengeLabel(
+  translations: Readonly<ContestLabelTranslations>,
+  contestId: string,
+): string {
   const baseLabel = 'AOJ - ';
   let label = contestId;
 
