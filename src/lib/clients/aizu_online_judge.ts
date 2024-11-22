@@ -115,19 +115,75 @@ type ChallengeRoundMap = {
 const PENDING = -1;
 
 /**
+ * The time-to-live (TTL) for the cache, specified in milliseconds.
+ * This value represents 1 hour.
+ */
+const CACHE_TTL = 60 * 60 * 1000; // 1 hour in milliseconds
+
+/**
+ * Represents a cache entry with data and a timestamp.
+ *
+ * @template T - The type of the cached data.
+ * @property {T} data - The cached data.
+ * @property {number} timestamp - The timestamp when the data was cached.
+ */
+type CacheEntry<T> = {
+  data: T;
+  timestamp: number;
+};
+
+/**
  * A cache to store contests for import, keyed by contest ID.
  * This cache is used to avoid redundant API calls to the Aizu Online Judge.
  *
- * @type {Map<string, ContestsForImport>}
+ * @type {Map<string, CacheEntry<ContestsForImport>>}
  */
-const contestCache: Map<string, ContestsForImport> = new Map();
+const contestCache: Map<string, CacheEntry<ContestsForImport>> = new Map();
+
 /**
  * A cache to store tasks for import, keyed by a string identifier.
  *
  * This cache is implemented as a Map where the key is a string and the value is of type `TasksForImport`.
  * It is used to temporarily hold tasks to avoid redundant imports and improve performance.
+ *
+ * @type {Map<string, CacheEntry<TasksForImport>>}
  */
-const taskCache: Map<string, TasksForImport> = new Map();
+const taskCache: Map<string, CacheEntry<TasksForImport>> = new Map();
+
+/**
+ * Retrieves a cache entry from the provided cache map.
+ *
+ * @template T - The type of the data stored in the cache entry.
+ * @param {Map<string, CacheEntry<T>>} cache - The cache map containing the entries.
+ * @param {string} key - The key of the cache entry to retrieve.
+ * @returns {T | undefined} - The data of the cache entry if it exists and is valid, otherwise undefined.
+ */
+function getCacheEntry<T>(cache: Map<string, CacheEntry<T>>, key: string): T | undefined {
+  const entry = cache.get(key);
+
+  if (!entry) {
+    return undefined;
+  }
+
+  if (Date.now() - entry.timestamp > CACHE_TTL) {
+    cache.delete(key);
+    return undefined;
+  }
+
+  return entry.data;
+}
+
+/**
+ * Sets a cache entry with the specified key and data.
+ *
+ * @template T - The type of the data to be cached.
+ * @param {Map<string, CacheEntry<T>>} cache - The cache map where the entry will be stored.
+ * @param {string} key - The key under which the data will be stored.
+ * @param {T} data - The data to be cached.
+ */
+function setCacheEntry<T>(cache: Map<string, CacheEntry<T>>, key: string, data: T): void {
+  cache.set(key, { data, timestamp: Date.now() });
+}
 
 /**
  * AojApiClient is a client for interacting with the Aizu Online Judge (AOJ) API.
@@ -226,10 +282,11 @@ export class AojApiClient extends ContestSiteApiClient {
     round: ChallengeRoundMap[T],
   ): Promise<ContestsForImport> {
     const cacheKey = `${contestType}_${round}`;
+    const cachedContests = getCacheEntry(contestCache, cacheKey);
 
-    if (contestCache.has(cacheKey)) {
-      console.log('Using cached contest data for', cacheKey);
-      return contestCache.get(cacheKey)!;
+    if (cachedContests) {
+      console.log('Using cached contests for', cacheKey);
+      return cachedContests;
     }
 
     const contestTypeLabel = contestType.toUpperCase();
@@ -237,7 +294,7 @@ export class AojApiClient extends ContestSiteApiClient {
     try {
       const results = await this.fetchApiWithConfig<AOJChallengeContestAPI>({
         baseApiUrl: AOJ_API_BASE_URL,
-        endpoint: `challenges/cl/${contestType}/${round}`,
+        endpoint: this.buildEndpoint(['challenges', 'cl', contestType, round]),
         errorMessage: `Failed to fetch ${contestTypeLabel} ${round} contests from AOJ API`,
         validateResponse: (data) =>
           'contests' in data && Array.isArray(data.contests) && data.contests.length > 0,
@@ -257,13 +314,23 @@ export class AojApiClient extends ContestSiteApiClient {
 
       console.log(`Found AOJ ${contestTypeLabel} ${round}: ${contests.length} contests.`);
 
-      contestCache.set(cacheKey, contests);
+      setCacheEntry(contestCache, cacheKey, contests);
 
       return contests;
     } catch (error) {
       console.error(`Failed to fetch from AOJ ${contestTypeLabel} ${round} contests:`, error);
       return [];
     }
+  }
+
+  /**
+   * Constructs an endpoint URL by encoding each segment and joining them with a '/'.
+   *
+   * @param segments - An array of strings representing the segments of the URL.
+   * @returns The constructed endpoint URL as a string.
+   */
+  private buildEndpoint(segments: string[]): string {
+    return segments.map((segment) => encodeURIComponent(segment)).join('/');
   }
 
   /**
@@ -400,10 +467,11 @@ export class AojApiClient extends ContestSiteApiClient {
     round: ChallengeRoundMap[T],
   ): Promise<TasksForImport> {
     const cacheKey = `${contestType}_${round}`;
+    const cachedTasks = getCacheEntry(taskCache, cacheKey);
 
-    if (taskCache.has(cacheKey)) {
+    if (cachedTasks) {
       console.log('Using cached tasks for', cacheKey);
-      return taskCache.get(cacheKey)!;
+      return cachedTasks;
     }
 
     const contestTypeLabel = contestType.toUpperCase();
@@ -411,7 +479,7 @@ export class AojApiClient extends ContestSiteApiClient {
     try {
       const allPckContests = await this.fetchApiWithConfig<AOJChallengeContestAPI>({
         baseApiUrl: AOJ_API_BASE_URL,
-        endpoint: `challenges/cl/${contestType}/${round}`,
+        endpoint: this.buildEndpoint(['challenges', 'cl', contestType, round]),
         errorMessage: `Failed to fetch ${contestTypeLabel} ${round} tasks from AOJ API`,
         validateResponse: (data) =>
           'contests' in data && Array.isArray(data.contests) && data.contests.length > 0,
@@ -433,7 +501,7 @@ export class AojApiClient extends ContestSiteApiClient {
       );
       console.log(`Found ${contestTypeLabel} ${round}: ${tasks.length} tasks.`);
 
-      taskCache.set(cacheKey, tasks);
+      setCacheEntry(taskCache, cacheKey, tasks);
 
       return tasks;
     } catch (error) {
