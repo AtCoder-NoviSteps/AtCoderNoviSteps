@@ -119,6 +119,7 @@ const PENDING = -1;
  * This value represents 1 hour.
  */
 const CACHE_TTL = 60 * 60 * 1000; // 1 hour in milliseconds
+const MAX_CACHE_SIZE = 50;
 
 /**
  * Represents a cache entry with data and a timestamp.
@@ -133,38 +134,77 @@ type CacheEntry<T> = {
 };
 
 /**
- * Retrieves a cache entry from the provided cache map.
+ * A generic cache class that stores data with a timestamp and provides methods to set, get, and delete cache entries.
+ * The cache automatically removes the oldest entry when the maximum cache size is reached.
+ * Entries are also automatically invalidated and removed if they exceed a specified time-to-live (TTL).
  *
- * @template T - The type of the data stored in the cache entry.
- * @param {Map<string, CacheEntry<T>>} cache - The cache map containing the entries.
- * @param {string} key - The key of the cache entry to retrieve.
- * @returns {T | undefined} - The data of the cache entry if it exists and is valid, otherwise undefined.
+ * @template T - The type of data to be stored in the cache.
  */
-function getCacheEntry<T>(cache: Map<string, CacheEntry<T>>, key: string): T | undefined {
-  const entry = cache.get(key);
+class Cache<T> {
+  private cache: Map<string, CacheEntry<T>> = new Map();
 
-  if (!entry) {
-    return undefined;
+  /**
+   * Sets a new entry in the cache with the specified key and data.
+   * If the cache size exceeds the maximum limit, the oldest entry is removed.
+   *
+   * @param key - The key associated with the data to be cached.
+   * @param data - The data to be cached.
+   */
+  set(key: string, data: T): void {
+    if (this.cache.size >= MAX_CACHE_SIZE) {
+      const oldestKey = this.findOldestEntry();
+
+      if (oldestKey) {
+        this.cache.delete(oldestKey);
+      }
+    }
+
+    this.cache.set(key, { data, timestamp: Date.now() });
   }
 
-  if (Date.now() - entry.timestamp > CACHE_TTL) {
-    cache.delete(key);
-    return undefined;
+  /**
+   * Retrieves an entry from the cache.
+   *
+   * @param key - The key associated with the cache entry.
+   * @returns The cached data if it exists and is not expired, otherwise `undefined`.
+   */
+  get(key: string): T | undefined {
+    const entry = this.cache.get(key);
+
+    if (!entry) {
+      return undefined;
+    }
+
+    if (Date.now() - entry.timestamp > CACHE_TTL) {
+      this.cache.delete(key);
+      return undefined;
+    }
+
+    return entry.data;
   }
 
-  return entry.data;
-}
+  /**
+   * Deletes an entry from the cache.
+   *
+   * @param key - The key of the entry to delete.
+   */
+  delete(key: string): void {
+    this.cache.delete(key);
+  }
 
-/**
- * Sets a cache entry with the specified key and data.
- *
- * @template T - The type of the data to be cached.
- * @param {Map<string, CacheEntry<T>>} cache - The cache map where the entry will be stored.
- * @param {string} key - The key under which the data will be stored.
- * @param {T} data - The data to be cached.
- */
-function setCacheEntry<T>(cache: Map<string, CacheEntry<T>>, key: string, data: T): void {
-  cache.set(key, { data, timestamp: Date.now() });
+  private findOldestEntry(): string | undefined {
+    let oldestKey: string | undefined;
+    let oldestTime = Infinity;
+
+    for (const [key, entry] of this.cache.entries()) {
+      if (entry.timestamp < oldestTime) {
+        oldestTime = entry.timestamp;
+        oldestKey = key;
+      }
+    }
+
+    return oldestKey;
+  }
 }
 
 /**
@@ -182,7 +222,8 @@ export class AojApiClient extends ContestSiteApiClient {
    *
    * @type {Map<string, CacheEntry<ContestsForImport>>}
    */
-  private readonly contestCache: Map<string, CacheEntry<ContestsForImport>> = new Map();
+  // private readonly contestCache: Map<string, CacheEntry<ContestsForImport>> = new Map();
+  private readonly contestCache = new Cache<ContestsForImport>();
 
   /**
    * A cache to store tasks for import, keyed by a string identifier.
@@ -192,7 +233,7 @@ export class AojApiClient extends ContestSiteApiClient {
    *
    * @type {Map<string, CacheEntry<TasksForImport>>}
    */
-  private readonly taskCache: Map<string, CacheEntry<TasksForImport>> = new Map();
+  private readonly taskCache = new Cache<TasksForImport>();
 
   /**
    * Fetches and combines contests from different sources.
@@ -282,7 +323,7 @@ export class AojApiClient extends ContestSiteApiClient {
     round: ChallengeRoundMap[T],
   ): Promise<ContestsForImport> {
     const cacheKey = `${contestType}_${round}`;
-    const cachedContests = getCacheEntry(this.contestCache, cacheKey);
+    const cachedContests = this.contestCache.get(cacheKey);
 
     if (cachedContests) {
       console.log('Using cached contests for', cacheKey);
@@ -314,7 +355,7 @@ export class AojApiClient extends ContestSiteApiClient {
 
       console.log(`Found AOJ ${contestTypeLabel} ${round}: ${contests.length} contests.`);
 
-      setCacheEntry(this.contestCache, cacheKey, contests);
+      this.contestCache.set(cacheKey, contests);
 
       return contests;
     } catch (error) {
@@ -332,6 +373,17 @@ export class AojApiClient extends ContestSiteApiClient {
   private buildEndpoint(segments: string[]): string {
     if (!segments?.length) {
       throw new Error('Endpoint segments array cannot be empty');
+    }
+
+    // Allow alphanumeric characters, hyphens, and underscores
+    const validateSegment = (segment: string): boolean => {
+      return /^[a-zA-Z0-9-_]+$/.test(segment);
+    };
+
+    for (const segment of segments) {
+      if (!validateSegment(segment)) {
+        throw new Error(`Invalid segment: ${segment}`);
+      }
     }
 
     return segments.map((segment) => encodeURIComponent(segment)).join('/');
@@ -471,7 +523,7 @@ export class AojApiClient extends ContestSiteApiClient {
     round: ChallengeRoundMap[T],
   ): Promise<TasksForImport> {
     const cacheKey = `${contestType}_${round}`;
-    const cachedTasks = getCacheEntry(this.taskCache, cacheKey);
+    const cachedTasks = this.taskCache.get(cacheKey);
 
     if (cachedTasks) {
       console.log('Using cached tasks for', cacheKey);
@@ -505,7 +557,7 @@ export class AojApiClient extends ContestSiteApiClient {
       );
       console.log(`Found ${contestTypeLabel} ${round}: ${tasks.length} tasks.`);
 
-      setCacheEntry(this.taskCache, cacheKey, tasks);
+      this.taskCache.set(cacheKey, tasks);
 
       return tasks;
     } catch (error) {
