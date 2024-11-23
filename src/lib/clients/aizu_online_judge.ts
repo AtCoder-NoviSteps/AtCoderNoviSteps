@@ -142,6 +142,7 @@ type CacheEntry<T> = {
  */
 class Cache<T> {
   private cache: Map<string, CacheEntry<T>> = new Map();
+  private cleanupInterval: NodeJS.Timeout;
 
   /**
    * Constructs an instance of the class with the specified cache time-to-live (TTL) and maximum cache size.
@@ -159,6 +160,8 @@ class Cache<T> {
     if (maxSize <= 0) {
       throw new Error('Max size must be positive');
     }
+
+    this.cleanupInterval = setInterval(() => this.cleanup(), timeToLive);
   }
 
   /**
@@ -225,6 +228,17 @@ class Cache<T> {
   }
 
   /**
+   * Disposes of resources used by the Aizu Online Judge client.
+   *
+   * This method clears the interval used for cleanup and clears the cache.
+   * It should be called when the client is no longer needed to prevent memory leaks.
+   */
+  dispose(): void {
+    clearInterval(this.cleanupInterval);
+    this.cache.clear();
+  }
+
+  /**
    * Clears all entries from the cache.
    */
   clear(): void {
@@ -238,6 +252,16 @@ class Cache<T> {
    */
   delete(key: string): void {
     this.cache.delete(key);
+  }
+
+  private cleanup(): void {
+    const now = Date.now();
+
+    for (const [key, entry] of this.cache.entries()) {
+      if (now - entry.timestamp > this.timeToLive) {
+        this.cache.delete(key);
+      }
+    }
   }
 
   private findOldestEntry(): string | undefined {
@@ -285,6 +309,15 @@ export class AojApiClient extends ContestSiteApiClient {
    * @type {Cache<TasksForImport>}
    */
   private readonly taskCache = new Cache<TasksForImport>();
+
+  /**
+   * Disposes of the resources used by the client.
+   * Clears the contest and task caches to free up memory.
+   */
+  dispose(): void {
+    this.contestCache.clear();
+    this.taskCache.clear();
+  }
 
   /**
    * Fetches and combines contests from different sources.
@@ -459,7 +492,7 @@ export class AojApiClient extends ContestSiteApiClient {
     const validateSegment = (segment: string): boolean => {
       return (
         segment.length <= MAX_SEGMENT_LENGTH &&
-        /^[a-zA-Z0-9][-_a-zA-Z0-9]*$/.test(segment) &&
+        /^[a-zA-Z][a-zA-Z0-9][-_a-zA-Z0-9]*$/.test(segment) &&
         !segment.includes('..')
       );
     };
