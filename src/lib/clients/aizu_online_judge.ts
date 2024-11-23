@@ -217,21 +217,24 @@ class Cache<T> {
  */
 export class AojApiClient extends ContestSiteApiClient {
   /**
-   * A cache to store contests for import, keyed by contest ID.
-   * This cache is used to avoid redundant API calls to the Aizu Online Judge.
+   * A cache for storing contests to be imported.
+   * This cache is used to temporarily hold contest data to improve performance
+   * and reduce the number of requests to the Aizu Online Judge API.
    *
-   * @type {Map<string, CacheEntry<ContestsForImport>>}
+   * @private
+   * @readonly
+   * @type {Cache<ContestsForImport>}
    */
-  // private readonly contestCache: Map<string, CacheEntry<ContestsForImport>> = new Map();
   private readonly contestCache = new Cache<ContestsForImport>();
 
   /**
-   * A cache to store tasks for import, keyed by a string identifier.
+   * A cache for storing tasks to be imported.
+   * This cache helps in reducing the number of requests to the external source
+   * by storing previously fetched tasks.
    *
-   * This cache is implemented as a Map where the key is a string and the value is of type `TasksForImport`.
-   * It is used to temporarily hold tasks to avoid redundant imports and improve performance.
-   *
-   * @type {Map<string, CacheEntry<TasksForImport>>}
+   * @private
+   * @readonly
+   * @type {Cache<TasksForImport>}
    */
   private readonly taskCache = new Cache<TasksForImport>();
 
