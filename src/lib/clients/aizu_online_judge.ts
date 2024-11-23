@@ -31,6 +31,11 @@ type AOJChallengeContestAPI = {
 };
 
 /**
+ * Represents the types of challenge contests available.
+ */
+type ChallengeContestType = 'PCK' | 'JAG';
+
+/**
  * Represents a challenge contest in the AOJ
  */
 type ChallengeContest = {
@@ -73,18 +78,217 @@ type AOJTaskAPI = {
 type AOJTaskAPIs = AOJTaskAPI[];
 
 /**
- * Enum representing PCK contest rounds
+ * Represents PCK contest rounds
  */
-enum PckRound {
-  PRELIM = 'prelim',
-  FINAL = 'final',
-}
+type PckRound = 'PRELIM' | 'FINAL';
+
+/**
+ * Represents JAG contest rounds
+ */
+type JagRound = 'PRELIM' | 'REGIONAL';
+
+/**
+ * A map that associates each type of challenge contest with its corresponding round type.
+ *
+ * @typedef {Object} ChallengeRoundMap
+ * @property {PckRound} PCK - The round type for PCK contests.
+ * @property {JagRound} JAG - The round type for JAG contests.
+ */
+type ChallengeRoundMap = {
+  PCK: PckRound;
+  JAG: JagRound;
+};
 
 /**
  * Constant used as a placeholder for missing timestamp data in AOJ contests
  * Value: -1
  */
 const PENDING = -1;
+
+/**
+ * The time-to-live (TTL) for the cache, specified in milliseconds.
+ * This value represents 1 hour.
+ */
+const DEFAULT_CACHE_TTL = 60 * 60 * 1000; // 1 hour in milliseconds
+const DEFAULT_MAX_CACHE_SIZE = 50;
+
+/**
+ * Configuration options for caching.
+ *
+ * @property {number} [timeToLive] - The duration (in milliseconds) for which a cache entry should remain valid.
+ * @property {number} [maxSize] - The maximum number of entries that the cache can hold.
+ */
+interface CacheConfig {
+  timeToLive?: number;
+  maxSize?: number;
+}
+
+/**
+ * Represents a cache entry with data and a timestamp.
+ *
+ * @template T - The type of the cached data.
+ * @property {T} data - The cached data.
+ * @property {number} timestamp - The timestamp when the data was cached.
+ */
+type CacheEntry<T> = {
+  data: T;
+  timestamp: number;
+};
+
+/**
+ * A generic cache class that stores data with a timestamp and provides methods to set, get, and delete cache entries.
+ * The cache automatically removes the oldest entry when the maximum cache size is reached.
+ * Entries are also automatically invalidated and removed if they exceed a specified time-to-live (TTL).
+ *
+ * @template T - The type of data to be stored in the cache.
+ */
+class Cache<T> {
+  private cache: Map<string, CacheEntry<T>> = new Map();
+  private cleanupInterval: NodeJS.Timeout;
+
+  /**
+   * Constructs an instance of the class with the specified cache time-to-live (TTL) and maximum cache size.
+   *
+   * @param timeToLive - The time-to-live for the cache entries, in milliseconds. Defaults to `CACHE_TTL`.
+   * @param maxSize - The maximum number of entries the cache can hold. Defaults to `MAX_CACHE_SIZE`.
+   */
+  constructor(
+    private readonly timeToLive: number = DEFAULT_CACHE_TTL,
+    private readonly maxSize: number = DEFAULT_MAX_CACHE_SIZE,
+  ) {
+    if (timeToLive <= 0) {
+      throw new Error('TTL must be positive');
+    }
+    if (maxSize <= 0) {
+      throw new Error('Max size must be positive');
+    }
+
+    this.cleanupInterval = setInterval(() => this.cleanup(), timeToLive);
+  }
+
+  /**
+   * Gets the size of the cache.
+   *
+   * @returns {number} The number of items in the cache.
+   */
+  get size(): number {
+    return this.cache.size;
+  }
+
+  /**
+   * Retrieves the health status of the cache.
+   *
+   * @returns An object containing the size of the cache and the timestamp of the oldest entry.
+   * @property {number} size - The number of entries in the cache.
+   * @property {number} oldestEntry - The timestamp of the oldest entry in the cache.
+   */
+  get health(): { size: number; oldestEntry: number } {
+    const oldestEntry = Math.min(
+      ...Array.from(this.cache.values()).map((entry) => entry.timestamp),
+    );
+    return { size: this.cache.size, oldestEntry };
+  }
+
+  /**
+   * Sets a new entry in the cache with the specified key and data.
+   * If the cache size exceeds the maximum limit, the oldest entry is removed.
+   *
+   * @param key - The key associated with the data to be cached.
+   * @param data - The data to be cached.
+   */
+  set(key: string, data: T): void {
+    if (!key || typeof key !== 'string' || key.length > 255) {
+      throw new Error('Invalid cache key');
+    }
+
+    if (this.cache.size >= this.maxSize) {
+      const oldestKey = this.findOldestEntry();
+
+      if (oldestKey) {
+        this.cache.delete(oldestKey);
+      }
+    }
+
+    this.cache.set(key, { data, timestamp: Date.now() });
+  }
+
+  /**
+   * Retrieves an entry from the cache.
+   *
+   * @param key - The key associated with the cache entry.
+   * @returns The cached data if it exists and is not expired, otherwise `undefined`.
+   */
+  get(key: string): T | undefined {
+    const entry = this.cache.get(key);
+
+    if (!entry) {
+      return undefined;
+    }
+
+    if (Date.now() - entry.timestamp > this.timeToLive) {
+      this.cache.delete(key);
+      return undefined;
+    }
+
+    return entry.data;
+  }
+
+  /**
+   * Disposes of resources used by the Aizu Online Judge client.
+   *
+   * This method clears the interval used for cleanup and clears the cache.
+   * It should be called when the client is no longer needed to prevent memory leaks.
+   */
+  dispose(): void {
+    clearInterval(this.cleanupInterval);
+    this.cache.clear();
+  }
+
+  /**
+   * Clears all entries from the cache.
+   */
+  clear(): void {
+    this.cache.clear();
+  }
+
+  /**
+   * Deletes an entry from the cache.
+   *
+   * @param key - The key of the entry to delete.
+   */
+  delete(key: string): void {
+    this.cache.delete(key);
+  }
+
+  private cleanup(): void {
+    const now = Date.now();
+
+    for (const [key, entry] of this.cache.entries()) {
+      if (now - entry.timestamp > this.timeToLive) {
+        this.cache.delete(key);
+      }
+    }
+  }
+
+  private findOldestEntry(): string | undefined {
+    let oldestKey: string | undefined;
+    let oldestTime = Infinity;
+
+    for (const [key, entry] of this.cache.entries()) {
+      if (entry.timestamp < oldestTime) {
+        oldestTime = entry.timestamp;
+        oldestKey = key;
+      }
+    }
+
+    return oldestKey;
+  }
+}
+
+interface ApiClientConfig {
+  contestCache: CacheConfig;
+  taskCache: CacheConfig;
+}
 
 /**
  * AojApiClient is a client for interacting with the Aizu Online Judge (AOJ) API.
@@ -96,23 +300,93 @@ const PENDING = -1;
  */
 export class AojApiClient extends ContestSiteApiClient {
   /**
+   * A cache for storing contests to be imported.
+   * This cache is used to temporarily hold contest data to improve performance
+   * and reduce the number of requests to the Aizu Online Judge API.
+   *
+   * @private
+   * @readonly
+   * @type {Cache<ContestsForImport>}
+   */
+  private readonly contestCache = new Cache<ContestsForImport>();
+
+  /**
+   * A cache for storing tasks to be imported.
+   * This cache helps in reducing the number of requests to the external source
+   * by storing previously fetched tasks.
+   *
+   * @private
+   * @readonly
+   * @type {Cache<TasksForImport>}
+   */
+  private readonly taskCache = new Cache<TasksForImport>();
+
+  /**
+   * Constructs an instance of the Aizu Online Judge client.
+   *
+   * @param {ApiClientConfig} [config] - Optional configuration object for the API client.
+   * @param {Cache<ContestsForImport>} [config.contestCache] - Configuration for the contest cache.
+   * @param {number} [config.contestCache.timeToLive] - Time to live for contest cache entries.
+   * @param {number} [config.contestCache.maxSize] - Maximum size of the contest cache.
+   * @param {Cache<TasksForImport>} [config.taskCache] - Configuration for the task cache.
+   * @param {number} [config.taskCache.timeToLive] - Time to live for task cache entries.
+   * @param {number} [config.taskCache.maxSize] - Maximum size of the task cache.
+   */
+  constructor(config?: ApiClientConfig) {
+    super();
+
+    this.contestCache = new Cache<ContestsForImport>(
+      config?.contestCache?.timeToLive,
+      config?.contestCache?.maxSize,
+    );
+    this.taskCache = new Cache<TasksForImport>(
+      config?.taskCache?.timeToLive,
+      config?.taskCache?.maxSize,
+    );
+  }
+
+  /**
+   * Disposes of the resources used by the client.
+   * Clears the contest and task caches to free up memory.
+   */
+  dispose(): void {
+    this.contestCache.dispose();
+    this.taskCache.dispose();
+  }
+
+  /**
    * Fetches and combines contests from different sources.
    *
-   * This method concurrently fetches course contests, preliminary PCK contests,
-   * and final PCK contests, then combines them into a single array.
+   * This method concurrently fetches course contests, preliminary and final PCK contests,
+   * and prelim and regional JAG contests, then combines them into a single array.
    *
    * @returns {Promise<ContestsForImport>} A promise that resolves to an array of contests.
    */
   async getContests(): Promise<ContestsForImport> {
     try {
-      const [courses, pckPrelims, pckFinals] = await Promise.all([
+      const results = await Promise.allSettled([
         this.fetchCourseContests(),
-        this.fetchPckContests(PckRound.PRELIM),
-        this.fetchPckContests(PckRound.FINAL),
+        this.fetchChallengeContests('PCK', 'PRELIM'),
+        this.fetchChallengeContests('PCK', 'FINAL'),
+        this.fetchChallengeContests('JAG', 'PRELIM'),
+        this.fetchChallengeContests('JAG', 'REGIONAL'),
       ]);
 
-      const contests = courses.concat(pckPrelims, pckFinals);
-      console.log(`Found AOJ: ${contests.length} contests.`);
+      const [courses, pckPrelims, pckFinals, jagPrelims, jagRegionals] = results.map((result) => {
+        if (result.status === 'rejected') {
+          console.error(`Failed to fetch contests from AOJ API:`, result.reason);
+          return [];
+        }
+
+        return result.value;
+      });
+      const contests = courses.concat(pckPrelims, pckFinals, jagPrelims, jagRegionals);
+
+      this.logEntityCount('contests', {
+        courses: courses.length,
+        pck: pckPrelims.length + pckFinals.length,
+        jag: jagPrelims.length + jagRegionals.length,
+      });
 
       return contests;
     } catch (error) {
@@ -158,24 +432,39 @@ export class AojApiClient extends ContestSiteApiClient {
   }
 
   /**
-   * Fetches PCK contests from the AOJ API for a given round.
+   * Fetches challenge contests from the AOJ API for a given round.
    *
-   * @param {PckRound} round - The round identifier for which to fetch contests.
+   * @param {ChallengeContestType} contestType - The type of challenge contest for which to fetch contests.
+   * @param {PckRound | JagRound} round - The round identifier for which to fetch contests.
    * @returns {Promise<ContestsForImport>} A promise that resolves to an array of contests for import.
    *
    * @throws Will throw an error if the API request fails or the response validation fails.
    *
    * @example
+   * const contestType = ChallengeContestType.PCK;
    * const round = 'PRELIM';
-   * const contests = await fetchPckContests(round);
+   * const contests = await fetchChallengeContests(contestType, round);
    * console.log(contests);
    */
-  private async fetchPckContests(round: PckRound): Promise<ContestsForImport> {
+  private async fetchChallengeContests<T extends ChallengeContestType>(
+    contestType: T,
+    round: ChallengeRoundMap[T],
+  ): Promise<ContestsForImport> {
+    const cacheKey = `${contestType.toLowerCase()}_${round.toLowerCase()}`;
+    const cachedContests = this.contestCache.get(cacheKey);
+
+    if (cachedContests) {
+      console.log('Using cached contests for', cacheKey);
+      return cachedContests;
+    }
+
+    const contestTypeLabel = contestType.toUpperCase();
+
     try {
       const results = await this.fetchApiWithConfig<AOJChallengeContestAPI>({
         baseApiUrl: AOJ_API_BASE_URL,
-        endpoint: `challenges/cl/pck/${round}`,
-        errorMessage: `Failed to fetch ${round} contests from AOJ API`,
+        endpoint: this.buildEndpoint(['challenges', 'cl', contestType, round]),
+        errorMessage: `Failed to fetch ${contestTypeLabel} ${round} contests from AOJ API`,
         validateResponse: (data) =>
           'contests' in data && Array.isArray(data.contests) && data.contests.length > 0,
       });
@@ -192,13 +481,66 @@ export class AojApiClient extends ContestSiteApiClient {
         [] as ContestsForImport,
       );
 
-      console.log(`Found AOJ PCK ${round}: ${contests.length} contests.`);
+      console.log(`Found AOJ ${contestTypeLabel} ${round}: ${contests.length} contests.`);
+
+      this.contestCache.set(cacheKey, contests);
 
       return contests;
     } catch (error) {
-      console.error(`Failed to fetch from AOJ PCK ${round} contests:`, error);
+      console.error(`Failed to fetch from AOJ ${contestTypeLabel} ${round} contests:`, error);
       return [];
     }
+  }
+
+  /**
+   * Logs the count of AOJ entities (contests or tasks) to the console.
+   *
+   * @param entity - The type of entity being logged, either 'contests' or 'tasks'.
+   * @param counts - An object containing the counts of different categories.
+   * @param counts.courses - The count of courses.
+   * @param counts.pck - The count of PCK.
+   * @param counts.jag - The count of JAG.
+   */
+  private logEntityCount(
+    entity: 'contests' | 'tasks',
+    counts: { courses: number; pck: number; jag: number },
+  ): void {
+    console.info(
+      `Found AOJ ${entity} - Total: ${counts.courses + counts.pck + counts.jag} ` +
+        `(Courses: ${counts.courses}, PCK: ${counts.pck}, JAG: ${counts.jag})`,
+    );
+  }
+
+  /**
+   * Constructs an endpoint URL by encoding each segment and joining them with a '/'.
+   *
+   * @param segments - An array of strings representing the segments of the URL.
+   * @returns The constructed endpoint URL as a string.
+   */
+  private buildEndpoint(segments: string[]): string {
+    if (!segments?.length) {
+      throw new Error('Endpoint segments array cannot be empty');
+    }
+
+    // Allow alphanumeric characters, hyphens, and underscores
+    const MAX_SEGMENT_LENGTH = 100;
+    const validateSegment = (segment: string): boolean => {
+      return (
+        segment.length <= MAX_SEGMENT_LENGTH &&
+        /^[a-zA-Z](?:[a-zA-Z0-9]|[-_](?=[a-zA-Z0-9])){0,98}[a-zA-Z0-9]$/.test(segment) &&
+        !segment.includes('..')
+      );
+    };
+
+    for (const segment of segments) {
+      if (!validateSegment(segment)) {
+        throw new Error(
+          `Invalid segment: ${segment}. Segments must be alphanumeric with hyphens and underscores, max length ${MAX_SEGMENT_LENGTH}`,
+        );
+      }
+    }
+
+    return segments.map((segment) => encodeURIComponent(segment)).join('/');
   }
 
   /**
@@ -226,10 +568,12 @@ export class AojApiClient extends ContestSiteApiClient {
   /**
    * Fetches tasks from various sources and combines them into a single list.
    *
-   * This method concurrently fetches tasks from three different sources:
+   * This method concurrently fetches tasks from five different sources:
    * - Course tasks
    * - PCK Prelim tasks
    * - PCK Final tasks
+   * - JAG Prelim tasks
+   * - JAG Regional tasks
    *
    * The fetched tasks are then concatenated into a single array and returned.
    *
@@ -239,13 +583,29 @@ export class AojApiClient extends ContestSiteApiClient {
    */
   async getTasks(): Promise<TasksForImport> {
     try {
-      const [courses, pckPrelims, pckFinals] = await Promise.all([
+      const results = await Promise.allSettled([
         this.fetchCourseTasks(),
-        this.fetchPckTasks(PckRound.PRELIM),
-        this.fetchPckTasks(PckRound.FINAL),
+        this.fetchChallengeTasks('PCK', 'PRELIM'),
+        this.fetchChallengeTasks('PCK', 'FINAL'),
+        this.fetchChallengeTasks('JAG', 'PRELIM'),
+        this.fetchChallengeTasks('JAG', 'REGIONAL'),
       ]);
-      const tasks = courses.concat(pckPrelims, pckFinals);
-      console.log(`Found AOJ: ${tasks.length} tasks.`);
+
+      const [courses, pckPrelims, pckFinals, jagPrelims, jagRegionals] = results.map((result) => {
+        if (result.status === 'rejected') {
+          console.error(`Failed to fetch tasks from AOJ API:`, result.reason);
+          return [];
+        }
+
+        return result.value;
+      });
+      const tasks = courses.concat(pckPrelims, pckFinals, jagPrelims, jagRegionals);
+
+      this.logEntityCount('tasks', {
+        courses: courses.length,
+        pck: pckPrelims.length + pckFinals.length,
+        jag: jagPrelims.length + jagRegionals.length,
+      });
 
       return tasks;
     } catch (error) {
@@ -309,9 +669,10 @@ export class AojApiClient extends ContestSiteApiClient {
   };
 
   /**
-   * Fetches tasks for a specified PCK round from the AOJ API.
+   * Fetches tasks for a specified challenge contest round from the AOJ API.
    *
-   * @param {string} round - The round identifier for which to fetch tasks.
+   * @param {ChallengeContestType} contestType - The type of challenge contest for which to fetch tasks.
+   * @param {PckRound | JagRound} round - The round identifier for which to fetch tasks.
    * @returns {Promise<TasksForImport>} A promise that resolves to an object containing tasks for import.
    * @throws Will throw an error if the API request fails or the response is invalid.
    *
@@ -321,17 +682,25 @@ export class AojApiClient extends ContestSiteApiClient {
    * 3. Maps the contest data to a list of tasks, extracting relevant information such as task ID, contest ID, and title.
    * 4. Logs the number of tasks found for the specified round.
    */
-  private async fetchPckTasks(round: string): Promise<TasksForImport> {
-    if (!Object.values(PckRound).includes(round as PckRound)) {
-      console.error(`Found invalid PCK round: ${round}`);
-      return [];
+  private async fetchChallengeTasks<T extends ChallengeContestType>(
+    contestType: T,
+    round: ChallengeRoundMap[T],
+  ): Promise<TasksForImport> {
+    const cacheKey = `${contestType.toLowerCase()}_${round.toLowerCase()}`;
+    const cachedTasks = this.taskCache.get(cacheKey);
+
+    if (cachedTasks) {
+      console.log('Using cached tasks for', cacheKey);
+      return cachedTasks;
     }
+
+    const contestTypeLabel = contestType.toUpperCase();
 
     try {
       const allPckContests = await this.fetchApiWithConfig<AOJChallengeContestAPI>({
         baseApiUrl: AOJ_API_BASE_URL,
-        endpoint: `challenges/cl/pck/${round}`,
-        errorMessage: `Failed to fetch PCK ${round} tasks from AOJ API`,
+        endpoint: this.buildEndpoint(['challenges', 'cl', contestType, round]),
+        errorMessage: `Failed to fetch ${contestTypeLabel} ${round} tasks from AOJ API`,
         validateResponse: (data) =>
           'contests' in data && Array.isArray(data.contests) && data.contests.length > 0,
       });
@@ -350,11 +719,13 @@ export class AojApiClient extends ContestSiteApiClient {
         },
         [],
       );
-      console.log(`Found PCK ${round}: ${tasks.length} tasks.`);
+      console.log(`Found ${contestTypeLabel} ${round}: ${tasks.length} tasks.`);
+
+      this.taskCache.set(cacheKey, tasks);
 
       return tasks;
     } catch (error) {
-      console.error(`Failed to fetch from PCK ${round} tasks:`, error);
+      console.error(`Failed to fetch from ${contestTypeLabel} ${round} tasks:`, error);
       return [];
     }
   }

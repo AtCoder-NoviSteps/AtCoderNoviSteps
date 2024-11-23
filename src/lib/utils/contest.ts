@@ -1,4 +1,4 @@
-import { ContestType, type ContestPrefix } from '$lib/types/contest';
+import { ContestType, type ContestPrefix, type ContestLabelTranslations } from '$lib/types/contest';
 
 // See:
 // https://github.com/kenkoooo/AtCoderProblems/blob/master/atcoder-problems-frontend/src/utils/ContestClassifier.ts
@@ -79,6 +79,10 @@ export const classifyContest = (contest_id: string) => {
 
   if (/^PCK(Prelim|Final)\d*$/.exec(contest_id)) {
     return ContestType.AOJ_PCK;
+  }
+
+  if (/^JAG(Prelim|Regional|Summer|Winter|Spring)\d*$/.exec(contest_id)) {
+    return ContestType.AOJ_JAG;
   }
 
   return null;
@@ -190,7 +194,7 @@ export function getContestPrefixes(contestPrefixes: Record<string, string>) {
  * - Educational contests (0-10): ABS, ABC, APG4B, etc.
  * - Contests for genius (11-15): ARC, AGC, and their variants
  * - Special contests (16-17): UNIVERSITY, OTHERS
- * - External platforms (18-19): AOJ_COURSES, AOJ_PCK
+ * - External platforms (18-20): AOJ_COURSES, AOJ_PCK, AOJ_JAG
  *
  * @remarks
  * HACK: The priorities for ARC, AGC, UNIVERSITY, AOJ_COURSES, and AOJ_PCK are temporary
@@ -220,6 +224,7 @@ export const contestTypePriorities: Map<ContestType, number> = new Map([
   [ContestType.OTHERS, 17], // AtCoder (その他)
   [ContestType.AOJ_COURSES, 18],
   [ContestType.AOJ_PCK, 19],
+  [ContestType.AOJ_JAG, 20],
 ]);
 
 export function getContestPriority(contestId: string): number {
@@ -271,26 +276,59 @@ export const getContestNameLabel = (contest_id: string) => {
   }
 
   if (contest_id.startsWith('PCK')) {
-    return getAojPckLabel(contest_id);
+    return getAojChallengeLabel(PCK_TRANSLATIONS, contest_id);
+  }
+
+  if (contest_id.startsWith('JAG')) {
+    return getAojChallengeLabel(JAG_TRANSLATIONS, contest_id);
   }
 
   return contest_id.toUpperCase();
 };
 
-function getAojPckLabel(contestId: string): string {
-  const PCK_TRANSLATIONS = {
-    PCK: 'パソコン甲子園',
-    Prelim: '予選',
-    Final: '本選',
-  };
+/**
+ * Maps PCK contest type abbreviations to their Japanese translations.
+ *
+ * @example
+ * {
+ *   PCK: 'パソコン甲子園',
+ *   Prelim: '予選',
+ *   Final: '本選'
+ * }
+ */
+const PCK_TRANSLATIONS = {
+  PCK: 'パソコン甲子園',
+  Prelim: '予選',
+  Final: '本選',
+};
 
-  const baseLabel = 'AOJ - ';
+/**
+ * Maps JAG contest type abbreviations to their Japanese translations.
+ *
+ * @example
+ * {
+ *   Prelim: '模擬国内予選',
+ *   Regional: '模擬アジア地区予選'
+ * }
+ */
+const JAG_TRANSLATIONS = {
+  Prelim: '模擬国内予選',
+  Regional: '模擬アジア地区予選',
+};
 
-  Object.entries(PCK_TRANSLATIONS).forEach(([abbrEnglish, japanese]) => {
-    contestId = contestId.replace(abbrEnglish, japanese);
+const aojBaseLabel = 'AOJ - ';
+
+function getAojChallengeLabel(
+  translations: Readonly<ContestLabelTranslations>,
+  contestId: string,
+): string {
+  let label = contestId;
+
+  Object.entries(translations).forEach(([abbrEnglish, japanese]) => {
+    label = label.replace(abbrEnglish, japanese);
   });
 
-  return baseLabel + contestId;
+  return aojBaseLabel + label;
 }
 
 export const addContestNameToTaskIndex = (contestId: string, taskTableIndex: string): string => {

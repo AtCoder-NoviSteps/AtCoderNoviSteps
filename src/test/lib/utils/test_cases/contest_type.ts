@@ -343,3 +343,33 @@ export const aojPck = aojPckContestData.map(({ name, contestId }) =>
     expected: ContestType.AOJ_PCK,
   }),
 );
+
+const aojJagContestData = [
+  { name: 'AOJ, JAG Prelim 2005', contestId: 'JAGPrelim2005' },
+  { name: 'AOJ, JAG Prelim 2006', contestId: 'JAGPrelim2006' },
+  { name: 'AOJ, JAG Prelim 2009', contestId: 'JAGPrelim2009' },
+  { name: 'AOJ, JAG Prelim 2010', contestId: 'JAGPrelim2010' },
+  { name: 'AOJ, JAG Prelim 2011', contestId: 'JAGPrelim2011' },
+  { name: 'AOJ, JAG Prelim 2020', contestId: 'JAGPrelim2020' },
+  { name: 'AOJ, JAG Prelim 2021', contestId: 'JAGPrelim2021' },
+  { name: 'AOJ, JAG Prelim 2022', contestId: 'JAGPrelim2022' },
+  { name: 'AOJ, JAG Prelim 2023', contestId: 'JAGPrelim2023' },
+  { name: 'AOJ, JAG Prelim 2024', contestId: 'JAGPrelim2024' },
+  { name: 'AOJ, JAG Regional 2005', contestId: 'JAGRegional2005' },
+  { name: 'AOJ, JAG Regional 2006', contestId: 'JAGRegional2006' },
+  { name: 'AOJ, JAG Regional 2009', contestId: 'JAGRegional2009' },
+  { name: 'AOJ, JAG Regional 2010', contestId: 'JAGRegional2010' },
+  { name: 'AOJ, JAG Regional 2011', contestId: 'JAGRegional2011' },
+  { name: 'AOJ, JAG Regional 2016', contestId: 'JAGRegional2016' },
+  { name: 'AOJ, JAG Regional 2017', contestId: 'JAGRegional2017' },
+  { name: 'AOJ, JAG Regional 2020', contestId: 'JAGRegional2020' },
+  { name: 'AOJ, JAG Regional 2021', contestId: 'JAGRegional2021' },
+  { name: 'AOJ, JAG Regional 2022', contestId: 'JAGRegional2022' },
+];
+
+export const aojJag = aojJagContestData.map(({ name, contestId }) =>
+  createTestCaseForContestType(name)({
+    contestId: contestId,
+    expected: ContestType.AOJ_JAG,
+  }),
+);

@@ -16,6 +16,7 @@ import type { TaskForImport, TasksForImport } from '$lib/types/task';
 //   ・Courses
 //   ・Challenges
 //     ・PCK (All-Japan High School Programming Contest)
+//     ・JAG (ACM-ICPC Japan Alumni Group Contest)
 
 /**
  * Creates and returns an object containing instances of various API clients.

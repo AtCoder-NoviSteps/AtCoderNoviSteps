@@ -417,3 +417,101 @@ const generateAojPckTestCases = (
 export const aojPck = Object.entries(AOJ_PCK_TEST_DATA).flatMap(([contestId, tasks]) =>
   generateAojPckTestCases(Array(tasks.tasks.length).fill(contestId), tasks.tasks),
 );
+
+/**
+ * Test cases for AOJ JAG contests
+ * Includes both preliminary (模擬国内予選) and regional (模擬アジア地区予選) rounds
+ * Format: {round}{year} - {problemId}
+ *  - Task ID format:
+ *  - Recent contests (2021+): 33xx-33xx
+ *  - Older contests (2005-2006): 20xx-20xx
+ */
+const AOJ_JAG_TEST_DATA = {
+  Prelim2005: {
+    contestId: 'Prelim2005',
+    tasks: ['2006', '2007', '2011'],
+  },
+  Prelim2006: {
+    contestId: 'Prelim2006',
+    tasks: ['2000', '2001', '2005'],
+  },
+  Prelim2023: {
+    contestId: 'Prelim2023',
+    tasks: ['3358', '3359', '3365'],
+  },
+  Prelim2024: {
+    contestId: 'Prelim2024',
+    tasks: ['3386', '3387', '3394'],
+  },
+  Regional2005: {
+    contestId: 'Regional2005',
+    tasks: ['2024', '2025', '2029'],
+  },
+  Regional2006: {
+    contestId: 'Regional2006',
+    tasks: ['2030', '2031', '2038'],
+  },
+  Regional2017: {
+    contestId: 'Regional2017',
+    tasks: ['2856', '2857', '2866'],
+  },
+  Regional2020: {
+    contestId: 'Regional2020',
+    tasks: ['3218', '3219', '3228'],
+  },
+  Regional2021: {
+    contestId: 'Regional2021',
+    tasks: ['3300', '3301', '3310'],
+  },
+  Regional2022: {
+    contestId: 'Regional2022',
+    tasks: ['3346', '3347', '3357'],
+  },
+};
+
+// Note: Test cases cover years when JAG contests were actually held
+// Prelims: 2005-2006, 2009-2011, 2020-2024
+// Regionals: 2005-2006, 2009-2011, 2016-2017, 2020-2022
+type JagRound = 'Prelim' | 'Regional';
+type JagYear =
+  | '2005'
+  | '2006'
+  | '2009'
+  | '2010'
+  | '2011'
+  | '2017'
+  | '2020'
+  | '2021'
+  | '2022'
+  | '2023'
+  | '2024';
+type JagContestId = `${JagRound}${JagYear}`;
+type JagContestIds = JagContestId[];
+
+const generateContestTestCases = <T extends string>(
+  contestIds: T[],
+  taskIndices: string[],
+  formattedName: (contestId: T, taskIndex: string) => string,
+  expectedFormat: (contestId: T, taskIndex: string) => string,
+): { name: string; value: TestCaseForContestNameAndTaskIndex }[] => {
+  return zip(contestIds, taskIndices).map(([contestId, taskIndex]) => {
+    return createTestCaseForContestNameAndTaskIndex(formattedName(contestId, taskIndex))({
+      contestId: `JAG${contestId}`,
+      taskTableIndex: taskIndex,
+      expected: expectedFormat(contestId, taskIndex),
+    });
+  });
+};
+
+const generateAojJagTestCases = (contestIds: JagContestIds, taskIndices: string[]) =>
+  generateContestTestCases(
+    contestIds,
+    taskIndices,
+    (contestId, taskIndex) => `AOJ, JAG${contestId} - ${taskIndex}`,
+    (contestId, taskIndex) =>
+      `AOJ - JAG${contestId.replace('Prelim', '模擬国内予選').replace('Regional', '模擬アジア地区予選')} - ${taskIndex}`,
+  );
+
+export const aojJag = Object.entries(AOJ_JAG_TEST_DATA).flatMap(([contestId, tasks]) =>
+  generateAojJagTestCases(Array(tasks.tasks.length).fill(contestId), tasks.tasks),
+);

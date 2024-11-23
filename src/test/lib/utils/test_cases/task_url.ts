@@ -128,10 +128,33 @@ const pckContests = [
   { contestId: 'PCKFinal2003', tasks: ['0000', '0098'] },
 ];
 
-export const aojPck = pckContests.flatMap((course) =>
-  course.tasks.map((task) => {
-    return createTestCaseForTaskUrl(`AOJ Courses, ${course.contestId} ${task}`)({
-      contestId: course.contestId,
+export const aojPck = pckContests.flatMap((pck) =>
+  pck.tasks.map((task) => {
+    return createTestCaseForTaskUrl(`AOJ PCK, ${pck.contestId} ${task}`)({
+      contestId: pck.contestId,
+      taskId: task,
+      expected: `${AOJ_TASKS_URL}/${task}`,
+    });
+  }),
+);
+
+// JAG contests follow these patterns:
+// - Contest ID format: JAG(Prelim|Regional)<YEAR>
+const jagContests = [
+  { contestId: 'JAGPrelim2005', tasks: ['2006', '2007', '2011'] },
+  { contestId: 'JAGPrelim2006', tasks: ['2000', '2001', '2005'] },
+  { contestId: 'JAGPrelim2023', tasks: ['3358', '3359', '3365'] },
+  { contestId: 'JAGPrelim2024', tasks: ['3386', '3387', '3394'] },
+  { contestId: 'JAGRegional2005', tasks: ['2024', '2025', '2029'] },
+  { contestId: 'JAGRegional2006', tasks: ['2030', '2031', '2038'] },
+  { contestId: 'JAGRegional2021', tasks: ['3300', '3301', '3310'] },
+  { contestId: 'JAGRegional2022', tasks: ['3346', '3347', '3357'] },
+];
+
+export const aojJag = jagContests.flatMap((jag) =>
+  jag.tasks.map((task) => {
+    return createTestCaseForTaskUrl(`AOJ JAG, ${jag.contestId} ${task}`)({
+      contestId: jag.contestId,
       taskId: task,
       expected: `${AOJ_TASKS_URL}/${task}`,
     });

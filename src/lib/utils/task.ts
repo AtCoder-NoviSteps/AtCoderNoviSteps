@@ -30,7 +30,11 @@ class AtCoderGenerator implements UrlGenerator {
 
 class AojGenerator implements UrlGenerator {
   canHandle(contestId: string): boolean {
-    return getPrefixForAojCourses().includes(contestId) || contestId.startsWith('PCK');
+    return (
+      getPrefixForAojCourses().includes(contestId) ||
+      contestId.startsWith('PCK') ||
+      contestId.startsWith('JAG')
+    );
   }
 
   // Note: contestId is not used because it is not included in the URL.

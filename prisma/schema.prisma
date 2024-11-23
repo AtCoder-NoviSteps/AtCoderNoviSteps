@@ -224,6 +224,7 @@ enum ContestType {
   OTHERS // AtCoder (その他)
   AOJ_COURSES // AIZU ONLINE JUDGE Courses
   AOJ_PCK // All-Japan High School Programming Contest (PCK)
+  AOJ_JAG // ACM-ICPC Japan Alumni Group Contest (JAG)
 }
 
 // 11Q(最も簡単)〜6D(最難関)。
