@@ -118,8 +118,8 @@ const PENDING = -1;
  * The time-to-live (TTL) for the cache, specified in milliseconds.
  * This value represents 1 hour.
  */
-const CACHE_TTL = 60 * 60 * 1000; // 1 hour in milliseconds
-const MAX_CACHE_SIZE = 50;
+const DEFAULT_CACHE_TTL = 60 * 60 * 1000; // 1 hour in milliseconds
+const DEFAULT_MAX_CACHE_SIZE = 50;
 
 /**
  * Represents a cache entry with data and a timestamp.
@@ -150,8 +150,8 @@ class Cache<T> {
    * @param maxSize - The maximum number of entries the cache can hold. Defaults to `MAX_CACHE_SIZE`.
    */
   constructor(
-    private readonly timeToLive: number = CACHE_TTL,
-    private readonly maxSize: number = MAX_CACHE_SIZE,
+    private readonly timeToLive: number = DEFAULT_CACHE_TTL,
+    private readonly maxSize: number = DEFAULT_MAX_CACHE_SIZE,
   ) {
     if (timeToLive <= 0) {
       throw new Error('TTL must be positive');
@@ -304,9 +304,14 @@ export class AojApiClient extends ContestSiteApiClient {
         this.fetchChallengeContests(ChallengeContestType.JAG, JagRound.REGIONAL),
       ]);
 
-      const [courses, pckPrelims, pckFinals, jagPrelims, jagRegionals] = results.map((result) =>
-        result.status === 'fulfilled' ? result.value : [],
-      );
+      const [courses, pckPrelims, pckFinals, jagPrelims, jagRegionals] = results.map((result) => {
+        if (result.status === 'rejected') {
+          console.error(`Failed to fetch contests from AOJ API:`, result.reason);
+          return [];
+        }
+
+        return result.value;
+      });
       const contests = courses.concat(pckPrelims, pckFinals, jagPrelims, jagRegionals);
 
       this.logEntityCount('contests', {
@@ -377,7 +382,7 @@ export class AojApiClient extends ContestSiteApiClient {
     contestType: T,
     round: ChallengeRoundMap[T],
   ): Promise<ContestsForImport> {
-    const cacheKey = `${contestType}_${round}`;
+    const cacheKey = `${contestType.toLowerCase()}_${round.toLowerCase()}`;
     const cachedContests = this.contestCache.get(cacheKey);
 
     if (cachedContests) {
@@ -454,7 +459,7 @@ export class AojApiClient extends ContestSiteApiClient {
     const validateSegment = (segment: string): boolean => {
       return (
         segment.length <= MAX_SEGMENT_LENGTH &&
-        /^[a-zA-Z0-9-_]+$/.test(segment) &&
+        /^[a-zA-Z0-9][-_a-zA-Z0-9]*$/.test(segment) &&
         !segment.includes('..')
       );
     };
@@ -518,9 +523,14 @@ export class AojApiClient extends ContestSiteApiClient {
         this.fetchChallengeTasks(ChallengeContestType.JAG, JagRound.REGIONAL),
       ]);
 
-      const [courses, pckPrelims, pckFinals, jagPrelims, jagRegionals] = results.map((result) =>
-        result.status === 'fulfilled' ? result.value : [],
-      );
+      const [courses, pckPrelims, pckFinals, jagPrelims, jagRegionals] = results.map((result) => {
+        if (result.status === 'rejected') {
+          console.error(`Failed to fetch tasks from AOJ API:`, result.reason);
+          return [];
+        }
+
+        return result.value;
+      });
       const tasks = courses.concat(pckPrelims, pckFinals, jagPrelims, jagRegionals);
 
       this.logEntityCount('tasks', {
@@ -608,7 +618,7 @@ export class AojApiClient extends ContestSiteApiClient {
     contestType: T,
     round: ChallengeRoundMap[T],
   ): Promise<TasksForImport> {
-    const cacheKey = `${contestType}_${round}`;
+    const cacheKey = `${contestType.toLowerCase()}_${round.toLowerCase()}`;
     const cachedTasks = this.taskCache.get(cacheKey);
 
     if (cachedTasks) {
