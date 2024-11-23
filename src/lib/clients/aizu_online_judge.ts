@@ -31,12 +31,9 @@ type AOJChallengeContestAPI = {
 };
 
 /**
- * Enum representing the types of challenge contests available.
+ * Represents the types of challenge contests available.
  */
-enum ChallengeContestType {
-  PCK = 'pck',
-  JAG = 'jag',
-}
+type ChallengeContestType = 'PCK' | 'JAG';
 
 /**
  * Represents a challenge contest in the AOJ
@@ -81,31 +78,25 @@ type AOJTaskAPI = {
 type AOJTaskAPIs = AOJTaskAPI[];
 
 /**
- * Enum representing PCK contest rounds
+ * Represents PCK contest rounds
  */
-enum PckRound {
-  PRELIM = 'prelim',
-  FINAL = 'final',
-}
+type PckRound = 'PRELIM' | 'FINAL';
 
 /**
- * Enum representing JAG contest rounds
+ * Represents JAG contest rounds
  */
-enum JagRound {
-  PRELIM = 'prelim',
-  REGIONAL = 'regional',
-}
+type JagRound = 'PRELIM' | 'REGIONAL';
 
 /**
  * A map that associates each type of challenge contest with its corresponding round type.
  *
  * @typedef {Object} ChallengeRoundMap
- * @property {PckRound} ChallengeContestType.PCK - The round type for PCK contests.
- * @property {JagRound} ChallengeContestType.JAG - The round type for JAG contests.
+ * @property {PckRound} PCK - The round type for PCK contests.
+ * @property {JagRound} JAG - The round type for JAG contests.
  */
 type ChallengeRoundMap = {
-  [ChallengeContestType.PCK]: PckRound;
-  [ChallengeContestType.JAG]: JagRound;
+  PCK: PckRound;
+  JAG: JagRound;
 };
 
 /**
@@ -120,6 +111,17 @@ const PENDING = -1;
  */
 const DEFAULT_CACHE_TTL = 60 * 60 * 1000; // 1 hour in milliseconds
 const DEFAULT_MAX_CACHE_SIZE = 50;
+
+/**
+ * Configuration options for caching.
+ *
+ * @property {number} [timeToLive] - The duration (in milliseconds) for which a cache entry should remain valid.
+ * @property {number} [maxSize] - The maximum number of entries that the cache can hold.
+ */
+interface CacheConfig {
+  timeToLive?: number;
+  maxSize?: number;
+}
 
 /**
  * Represents a cache entry with data and a timestamp.
@@ -195,6 +197,10 @@ class Cache<T> {
    * @param data - The data to be cached.
    */
   set(key: string, data: T): void {
+    if (!key || typeof key !== 'string' || key.length > 255) {
+      throw new Error('Invalid cache key');
+    }
+
     if (this.cache.size >= this.maxSize) {
       const oldestKey = this.findOldestEntry();
 
@@ -279,6 +285,11 @@ class Cache<T> {
   }
 }
 
+interface ApiClientConfig {
+  contestCache: CacheConfig;
+  taskCache: CacheConfig;
+}
+
 /**
  * AojApiClient is a client for interacting with the Aizu Online Judge (AOJ) API.
  * It extends the ContestSiteApiClient and provides methods to fetch contests and tasks
@@ -311,6 +322,30 @@ export class AojApiClient extends ContestSiteApiClient {
   private readonly taskCache = new Cache<TasksForImport>();
 
   /**
+   * Constructs an instance of the Aizu Online Judge client.
+   *
+   * @param {ApiClientConfig} [config] - Optional configuration object for the API client.
+   * @param {Cache<ContestsForImport>} [config.contestCache] - Configuration for the contest cache.
+   * @param {number} [config.contestCache.timeToLive] - Time to live for contest cache entries.
+   * @param {number} [config.contestCache.maxSize] - Maximum size of the contest cache.
+   * @param {Cache<TasksForImport>} [config.taskCache] - Configuration for the task cache.
+   * @param {number} [config.taskCache.timeToLive] - Time to live for task cache entries.
+   * @param {number} [config.taskCache.maxSize] - Maximum size of the task cache.
+   */
+  constructor(config?: ApiClientConfig) {
+    super();
+
+    this.contestCache = new Cache<ContestsForImport>(
+      config?.contestCache?.timeToLive,
+      config?.contestCache?.maxSize,
+    );
+    this.taskCache = new Cache<TasksForImport>(
+      config?.taskCache?.timeToLive,
+      config?.taskCache?.maxSize,
+    );
+  }
+
+  /**
    * Disposes of the resources used by the client.
    * Clears the contest and task caches to free up memory.
    */
@@ -331,10 +366,10 @@ export class AojApiClient extends ContestSiteApiClient {
     try {
       const results = await Promise.allSettled([
         this.fetchCourseContests(),
-        this.fetchChallengeContests(ChallengeContestType.PCK, PckRound.PRELIM),
-        this.fetchChallengeContests(ChallengeContestType.PCK, PckRound.FINAL),
-        this.fetchChallengeContests(ChallengeContestType.JAG, JagRound.PRELIM),
-        this.fetchChallengeContests(ChallengeContestType.JAG, JagRound.REGIONAL),
+        this.fetchChallengeContests('PCK', 'PRELIM'),
+        this.fetchChallengeContests('PCK', 'FINAL'),
+        this.fetchChallengeContests('JAG', 'PRELIM'),
+        this.fetchChallengeContests('JAG', 'REGIONAL'),
       ]);
 
       const [courses, pckPrelims, pckFinals, jagPrelims, jagRegionals] = results.map((result) => {
@@ -492,7 +527,7 @@ export class AojApiClient extends ContestSiteApiClient {
     const validateSegment = (segment: string): boolean => {
       return (
         segment.length <= MAX_SEGMENT_LENGTH &&
-        /^[a-zA-Z][a-zA-Z0-9]{0,98}[-_a-zA-Z0-9]*$/.test(segment) &&
+        /^[a-zA-Z](?:[a-zA-Z0-9]|[-_](?=[a-zA-Z0-9])){0,98}[a-zA-Z0-9]$/.test(segment) &&
         !segment.includes('..')
       );
     };
@@ -550,10 +585,10 @@ export class AojApiClient extends ContestSiteApiClient {
     try {
       const results = await Promise.allSettled([
         this.fetchCourseTasks(),
-        this.fetchChallengeTasks(ChallengeContestType.PCK, PckRound.PRELIM),
-        this.fetchChallengeTasks(ChallengeContestType.PCK, PckRound.FINAL),
-        this.fetchChallengeTasks(ChallengeContestType.JAG, JagRound.PRELIM),
-        this.fetchChallengeTasks(ChallengeContestType.JAG, JagRound.REGIONAL),
+        this.fetchChallengeTasks('PCK', 'PRELIM'),
+        this.fetchChallengeTasks('PCK', 'FINAL'),
+        this.fetchChallengeTasks('JAG', 'PRELIM'),
+        this.fetchChallengeTasks('JAG', 'REGIONAL'),
       ]);
 
       const [courses, pckPrelims, pckFinals, jagPrelims, jagRegionals] = results.map((result) => {
