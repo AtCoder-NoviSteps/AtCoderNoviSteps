@@ -146,13 +146,43 @@ class Cache<T> {
   /**
    * Constructs an instance of the class with the specified cache time-to-live (TTL) and maximum cache size.
    *
-   * @param ttl - The time-to-live for the cache entries, in milliseconds. Defaults to `CACHE_TTL`.
+   * @param timeToLive - The time-to-live for the cache entries, in milliseconds. Defaults to `CACHE_TTL`.
    * @param maxSize - The maximum number of entries the cache can hold. Defaults to `MAX_CACHE_SIZE`.
    */
   constructor(
-    private readonly ttl: number = CACHE_TTL,
+    private readonly timeToLive: number = CACHE_TTL,
     private readonly maxSize: number = MAX_CACHE_SIZE,
-  ) {}
+  ) {
+    if (timeToLive <= 0) {
+      throw new Error('TTL must be positive');
+    }
+    if (maxSize <= 0) {
+      throw new Error('Max size must be positive');
+    }
+  }
+
+  /**
+   * Gets the size of the cache.
+   *
+   * @returns {number} The number of items in the cache.
+   */
+  get size(): number {
+    return this.cache.size;
+  }
+
+  /**
+   * Retrieves the health status of the cache.
+   *
+   * @returns An object containing the size of the cache and the timestamp of the oldest entry.
+   * @property {number} size - The number of entries in the cache.
+   * @property {number} oldestEntry - The timestamp of the oldest entry in the cache.
+   */
+  get health(): { size: number; oldestEntry: number } {
+    const oldestEntry = Math.min(
+      ...Array.from(this.cache.values()).map((entry) => entry.timestamp),
+    );
+    return { size: this.cache.size, oldestEntry };
+  }
 
   /**
    * Sets a new entry in the cache with the specified key and data.
@@ -186,7 +216,7 @@ class Cache<T> {
       return undefined;
     }
 
-    if (Date.now() - entry.timestamp > this.ttl) {
+    if (Date.now() - entry.timestamp > this.timeToLive) {
       this.cache.delete(key);
       return undefined;
     }
@@ -266,7 +296,7 @@ export class AojApiClient extends ContestSiteApiClient {
    */
   async getContests(): Promise<ContestsForImport> {
     try {
-      const [courses, pckPrelims, pckFinals, jagPrelims, jagRegionals] = await Promise.all([
+      const results = await Promise.allSettled([
         this.fetchCourseContests(),
         this.fetchChallengeContests(ChallengeContestType.PCK, PckRound.PRELIM),
         this.fetchChallengeContests(ChallengeContestType.PCK, PckRound.FINAL),
@@ -274,12 +304,16 @@ export class AojApiClient extends ContestSiteApiClient {
         this.fetchChallengeContests(ChallengeContestType.JAG, JagRound.REGIONAL),
       ]);
 
-      const contests = courses.concat(pckPrelims, pckFinals, jagPrelims, jagRegionals);
-      console.info(
-        `Found AOJ contests - Total: ${contests.length} ` +
-          `(Courses: ${courses.length}, PCK: ${pckPrelims.length + pckFinals.length}, ` +
-          `JAG: ${jagPrelims.length + jagRegionals.length})`,
+      const [courses, pckPrelims, pckFinals, jagPrelims, jagRegionals] = results.map((result) =>
+        result.status === 'fulfilled' ? result.value : [],
       );
+      const contests = courses.concat(pckPrelims, pckFinals, jagPrelims, jagRegionals);
+
+      this.logEntityCount('contests', {
+        courses: courses.length,
+        pck: pckPrelims.length + pckFinals.length,
+        jag: jagPrelims.length + jagRegionals.length,
+      });
 
       return contests;
     } catch (error) {
@@ -386,6 +420,25 @@ export class AojApiClient extends ContestSiteApiClient {
   }
 
   /**
+   * Logs the count of AOJ entities (contests or tasks) to the console.
+   *
+   * @param entity - The type of entity being logged, either 'contests' or 'tasks'.
+   * @param counts - An object containing the counts of different categories.
+   * @param counts.courses - The count of courses.
+   * @param counts.pck - The count of PCK.
+   * @param counts.jag - The count of JAG.
+   */
+  private logEntityCount(
+    entity: 'contests' | 'tasks',
+    counts: { courses: number; pck: number; jag: number },
+  ): void {
+    console.info(
+      `Found AOJ ${entity} - Total: ${counts.courses + counts.pck + counts.jag} ` +
+        `(Courses: ${counts.courses}, PCK: ${counts.pck}, JAG: ${counts.jag})`,
+    );
+  }
+
+  /**
    * Constructs an endpoint URL by encoding each segment and joining them with a '/'.
    *
    * @param segments - An array of strings representing the segments of the URL.
@@ -457,19 +510,24 @@ export class AojApiClient extends ContestSiteApiClient {
    */
   async getTasks(): Promise<TasksForImport> {
     try {
-      const [courses, pckPrelims, pckFinals, jagPrelims, jagRegionals] = await Promise.all([
+      const results = await Promise.allSettled([
         this.fetchCourseTasks(),
         this.fetchChallengeTasks(ChallengeContestType.PCK, PckRound.PRELIM),
         this.fetchChallengeTasks(ChallengeContestType.PCK, PckRound.FINAL),
         this.fetchChallengeTasks(ChallengeContestType.JAG, JagRound.PRELIM),
         this.fetchChallengeTasks(ChallengeContestType.JAG, JagRound.REGIONAL),
       ]);
-      const tasks = courses.concat(pckPrelims, pckFinals, jagPrelims, jagRegionals);
-      console.info(
-        `Found AOJ tasks - Total: ${tasks.length} ` +
-          `(Courses: ${courses.length}, PCK: ${pckPrelims.length + pckFinals.length}, ` +
-          `JAG: ${jagPrelims.length + jagRegionals.length})`,
+
+      const [courses, pckPrelims, pckFinals, jagPrelims, jagRegionals] = results.map((result) =>
+        result.status === 'fulfilled' ? result.value : [],
       );
+      const tasks = courses.concat(pckPrelims, pckFinals, jagPrelims, jagRegionals);
+
+      this.logEntityCount('tasks', {
+        courses: courses.length,
+        pck: pckPrelims.length + pckFinals.length,
+        jag: jagPrelims.length + jagRegionals.length,
+      });
 
       return tasks;
     } catch (error) {
