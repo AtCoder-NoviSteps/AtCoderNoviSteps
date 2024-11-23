@@ -213,6 +213,7 @@ export const agcLike = [
 
 // Note:
 // UTPC contests on AtCoder: 2011-2014 and 2020-2023 (not held during 2015-2019)
+// TTPC contests on AtCoder: 2015, 2019, 2022-
 // TUPC contests on AtCoder: 2022-
 //
 // See:
@@ -226,6 +227,10 @@ const universityContestIds = [
   'utpc2021',
   'utpc2022',
   'utpc2023',
+  'ttpc2015',
+  'ttpc2019',
+  'ttpc2022',
+  'ttpc2023',
   'tupc2022',
   'tupc2023',
 ];

@@ -251,6 +251,29 @@ const UTPC_TEST_DATA: UniversityContestsTestData = Object.fromEntries(
     ]),
 ) as UniversityContestsTestData;
 
+type TtpcYear = '2015' | '2019' | '2022' | '2023';
+type TtpcTaskPatterns = {
+  [K in TtpcYear]: string[];
+};
+
+const TTPC_TASK_PATTERNS: TtpcTaskPatterns = {
+  '2015': ['A', 'B', 'C', 'N', 'O', 'P'],
+  '2019': ['A', 'B', 'C', 'M', 'N', 'O'],
+  '2022': ['A', 'B', 'C', 'M', 'N', 'O'],
+  '2023': ['A', 'B', 'C', 'N', 'O', 'P'],
+};
+
+const TTPC_YEARS = [2015, 2019, 2022, 2023];
+const TTPC_TEST_DATA: UniversityContestsTestData = Object.fromEntries(
+  TTPC_YEARS.map((year) => [
+    `ttpc${year}`,
+    {
+      contestId: `ttpc${year}`,
+      tasks: TTPC_TASK_PATTERNS[year.toString() as keyof TtpcTaskPatterns],
+    },
+  ]),
+) as UniversityContestsTestData;
+
 type TupcYear = '2022' | '2023';
 type TupcTaskPatterns = {
   [K in TupcYear]: string[];
@@ -290,6 +313,7 @@ const generateUniversityTestCases = (
 
 const ALL_UNIVERSITY_TEST_DATA: UniversityContestsTestData = {
   ...UTPC_TEST_DATA,
+  ...TTPC_TEST_DATA,
   ...TUPC_TEST_DATA,
 };
 
