@@ -263,6 +263,18 @@ const generateUtpcTestCases = (
     return testCase;
   });
 };
+const generateTtpcTestCases = (
+  years: number[],
+): { name: string; value: TestCaseForContestNameLabel }[] => {
+  return years.map((year) => {
+    const testCase = createTestCaseForContestNameLabel(`TTPC ${year}`)({
+      contestId: `ttpc${year}`,
+      expected: `TTPC${year}`,
+    });
+
+    return testCase;
+  });
+};
 const generateTupcTestCases = (
   years: number[],
 ): { name: string; value: TestCaseForContestNameLabel }[] => {
@@ -278,12 +290,14 @@ const generateTupcTestCases = (
 
 // Note:
 // UTPC contests on AtCoder: 2011-2014 and 2020-2023 (not held during 2015-2019)
+// TTPC contests on AtCoder: 2015, 2019, 2022-
 // TUPC contests on AtCoder: 2022-
 //
 // See:
 // https://kenkoooo.com/atcoder/resources/contests.json
 export const universities = [
   ...generateUtpcTestCases([2011, 2012, 2013, 2014, 2020, 2021, 2022, 2023]),
+  ...generateTtpcTestCases([2015, 2019, 2022, 2023]),
   ...generateTupcTestCases([2022, 2023]),
 ];
 
