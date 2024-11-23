@@ -144,6 +144,17 @@ class Cache<T> {
   private cache: Map<string, CacheEntry<T>> = new Map();
 
   /**
+   * Constructs an instance of the class with the specified cache time-to-live (TTL) and maximum cache size.
+   *
+   * @param ttl - The time-to-live for the cache entries, in milliseconds. Defaults to `CACHE_TTL`.
+   * @param maxSize - The maximum number of entries the cache can hold. Defaults to `MAX_CACHE_SIZE`.
+   */
+  constructor(
+    private readonly ttl: number = CACHE_TTL,
+    private readonly maxSize: number = MAX_CACHE_SIZE,
+  ) {}
+
+  /**
    * Sets a new entry in the cache with the specified key and data.
    * If the cache size exceeds the maximum limit, the oldest entry is removed.
    *
@@ -151,7 +162,7 @@ class Cache<T> {
    * @param data - The data to be cached.
    */
   set(key: string, data: T): void {
-    if (this.cache.size >= MAX_CACHE_SIZE) {
+    if (this.cache.size >= this.maxSize) {
       const oldestKey = this.findOldestEntry();
 
       if (oldestKey) {
@@ -175,7 +186,7 @@ class Cache<T> {
       return undefined;
     }
 
-    if (Date.now() - entry.timestamp > CACHE_TTL) {
+    if (Date.now() - entry.timestamp > this.ttl) {
       this.cache.delete(key);
       return undefined;
     }
