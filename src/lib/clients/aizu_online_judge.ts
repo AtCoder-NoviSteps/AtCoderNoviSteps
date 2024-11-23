@@ -195,6 +195,13 @@ class Cache<T> {
   }
 
   /**
+   * Clears all entries from the cache.
+   */
+  clear(): void {
+    this.cache.clear();
+  }
+
+  /**
    * Deletes an entry from the cache.
    *
    * @param key - The key of the entry to delete.
@@ -268,7 +275,7 @@ export class AojApiClient extends ContestSiteApiClient {
       ]);
 
       const contests = courses.concat(pckPrelims, pckFinals, jagPrelims, jagRegionals);
-      console.log(
+      console.info(
         `Found AOJ contests - Total: ${contests.length} ` +
           `(Courses: ${courses.length}, PCK: ${pckPrelims.length + pckFinals.length}, ` +
           `JAG: ${jagPrelims.length + jagRegionals.length})`,
@@ -390,13 +397,20 @@ export class AojApiClient extends ContestSiteApiClient {
     }
 
     // Allow alphanumeric characters, hyphens, and underscores
+    const MAX_SEGMENT_LENGTH = 100;
     const validateSegment = (segment: string): boolean => {
-      return /^[a-zA-Z0-9-_]+$/.test(segment);
+      return (
+        segment.length <= MAX_SEGMENT_LENGTH &&
+        /^[a-zA-Z0-9-_]+$/.test(segment) &&
+        !segment.includes('..')
+      );
     };
 
     for (const segment of segments) {
       if (!validateSegment(segment)) {
-        throw new Error(`Invalid segment: ${segment}`);
+        throw new Error(
+          `Invalid segment: ${segment}. Segments must be alphanumeric with hyphens and underscores, max length ${MAX_SEGMENT_LENGTH}`,
+        );
       }
     }
 
@@ -451,7 +465,7 @@ export class AojApiClient extends ContestSiteApiClient {
         this.fetchChallengeTasks(ChallengeContestType.JAG, JagRound.REGIONAL),
       ]);
       const tasks = courses.concat(pckPrelims, pckFinals, jagPrelims, jagRegionals);
-      console.log(
+      console.info(
         `Found AOJ tasks - Total: ${tasks.length} ` +
           `(Courses: ${courses.length}, PCK: ${pckPrelims.length + pckFinals.length}, ` +
           `JAG: ${jagPrelims.length + jagRegionals.length})`,
