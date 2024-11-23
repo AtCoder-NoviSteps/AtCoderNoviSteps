@@ -263,16 +263,15 @@ const TTPC_TASK_PATTERNS: TtpcTaskPatterns = {
   '2023': ['A', 'B', 'C', 'N', 'O', 'P'],
 };
 
+const TTPC_YEARS = [2015, 2019, 2022, 2023];
 const TTPC_TEST_DATA: UniversityContestsTestData = Object.fromEntries(
-  Array.from({ length: 9 }, (_, i) => 2015 + i)
-    .filter((year) => year === 2015 || year === 2019 || year >= 2022)
-    .map((year) => [
-      `ttpc${year}`,
-      {
-        contestId: `ttpc${year}`,
-        tasks: TTPC_TASK_PATTERNS[year.toString() as keyof TtpcTaskPatterns],
-      },
-    ]),
+  TTPC_YEARS.map((year) => [
+    `ttpc${year}`,
+    {
+      contestId: `ttpc${year}`,
+      tasks: TTPC_TASK_PATTERNS[year.toString() as keyof TtpcTaskPatterns],
+    },
+  ]),
 ) as UniversityContestsTestData;
 
 type TupcYear = '2022' | '2023';
