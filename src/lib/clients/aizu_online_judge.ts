@@ -315,8 +315,8 @@ export class AojApiClient extends ContestSiteApiClient {
    * Clears the contest and task caches to free up memory.
    */
   dispose(): void {
-    this.contestCache.clear();
-    this.taskCache.clear();
+    this.contestCache.dispose();
+    this.taskCache.dispose();
   }
 
   /**
@@ -492,7 +492,7 @@ export class AojApiClient extends ContestSiteApiClient {
     const validateSegment = (segment: string): boolean => {
       return (
         segment.length <= MAX_SEGMENT_LENGTH &&
-        /^[a-zA-Z][a-zA-Z0-9][-_a-zA-Z0-9]*$/.test(segment) &&
+        /^[a-zA-Z][a-zA-Z0-9]{0,98}[-_a-zA-Z0-9]*$/.test(segment) &&
         !segment.includes('..')
       );
     };
