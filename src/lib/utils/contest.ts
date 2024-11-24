@@ -240,52 +240,81 @@ export function getContestPriority(contestId: string): number {
   }
 }
 
-export const getContestNameLabel = (contest_id: string) => {
-  if (contest_id === 'APG4b' || contest_id === 'APG4bPython') {
-    return contest_id;
+/**
+ * Regular expression to match contest codes.
+ *
+ * This regex matches strings that start with one of the following prefixes:
+ * - "abc"
+ * - "arc"
+ * - "agc"
+ *
+ * followed by exactly three digits. The matching is case-insensitive.
+ *
+ * Example matches:
+ * - "abc376"
+ * - "ARC128"
+ * - "agc045"
+ *
+ * Example non-matches:
+ * - "xyz123"
+ * - "abc12"
+ * - "abc1234"
+ */
+const regexForAxc = /^(abc|arc|agc)(\d{3})/i;
+
+export const getContestNameLabel = (contestId: string) => {
+  if (regexForAxc.exec(contestId)) {
+    return contestId.replace(
+      regexForAxc,
+      (_, contestType, contestNumber) => `${contestType.toUpperCase()} ${contestNumber}`,
+    );
   }
 
-  if (contest_id === 'typical90') {
+  if (contestId === 'APG4b' || contestId === 'APG4bPython') {
+    return contestId;
+  }
+
+  if (contestId === 'typical90') {
     return '競プロ典型 90 問';
   }
 
-  if (contest_id === 'dp') {
+  if (contestId === 'dp') {
     return 'EDPC';
   }
 
-  if (contest_id === 'tdpc') {
+  if (contestId === 'tdpc') {
     return 'TDPC';
   }
 
-  if (contest_id === 'practice2') {
+  if (contestId === 'practice2') {
     return 'ACL Practice';
   }
 
-  if (contest_id === 'tessoku-book') {
+  if (contestId === 'tessoku-book') {
     return '競技プログラミングの鉄則';
   }
 
-  if (contest_id === 'math-and-algorithm') {
+  if (contestId === 'math-and-algorithm') {
     return 'アルゴリズムと数学';
   }
 
-  if (contest_id.startsWith('chokudai_S')) {
-    return contest_id.replace('chokudai_S', 'Chokudai SpeedRun ');
+  if (contestId.startsWith('chokudai_S')) {
+    return contestId.replace('chokudai_S', 'Chokudai SpeedRun ');
   }
 
-  if (aojCoursePrefixes.has(contest_id)) {
+  if (aojCoursePrefixes.has(contestId)) {
     return 'AOJ Courses';
   }
 
-  if (contest_id.startsWith('PCK')) {
-    return getAojChallengeLabel(PCK_TRANSLATIONS, contest_id);
+  if (contestId.startsWith('PCK')) {
+    return getAojChallengeLabel(PCK_TRANSLATIONS, contestId);
   }
 
-  if (contest_id.startsWith('JAG')) {
-    return getAojChallengeLabel(JAG_TRANSLATIONS, contest_id);
+  if (contestId.startsWith('JAG')) {
+    return getAojChallengeLabel(JAG_TRANSLATIONS, contestId);
   }
 
-  return contest_id.toUpperCase();
+  return contestId.toUpperCase();
 };
 
 /**

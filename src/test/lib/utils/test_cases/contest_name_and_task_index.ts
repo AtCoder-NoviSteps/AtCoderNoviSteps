@@ -13,13 +13,13 @@ const generateAbcTestCases = (
   taskIndices: string[],
 ): { name: string; value: TestCaseForContestNameAndTaskIndex }[] => {
   return zip(contestIds, taskIndices).map(([contestId, taskIndex]) => {
-    const testCase = createTestCaseForContestNameAndTaskIndex(`ABC${contestId}, task ${taskIndex}`)(
-      {
-        contestId: `abc${contestId}`,
-        taskTableIndex: taskIndex,
-        expected: `ABC${contestId} - ${taskIndex}`,
-      },
-    );
+    const testCase = createTestCaseForContestNameAndTaskIndex(
+      `ABC ${contestId}, task ${taskIndex}`,
+    )({
+      contestId: `abc${contestId}`,
+      taskTableIndex: taskIndex,
+      expected: `ABC ${contestId} - ${taskIndex}`,
+    });
 
     return testCase;
   });
@@ -162,13 +162,13 @@ const generateArcTestCases = (
   taskIndices: string[],
 ): { name: string; value: TestCaseForContestNameAndTaskIndex }[] => {
   return zip(contestIds, taskIndices).map(([contestId, taskIndex]) => {
-    const testCase = createTestCaseForContestNameAndTaskIndex(`ARC${contestId}, task ${taskIndex}`)(
-      {
-        contestId: `arc${contestId}`,
-        taskTableIndex: taskIndex,
-        expected: `ARC${contestId} - ${taskIndex}`,
-      },
-    );
+    const testCase = createTestCaseForContestNameAndTaskIndex(
+      `ARC ${contestId}, task ${taskIndex}`,
+    )({
+      contestId: `arc${contestId}`,
+      taskTableIndex: taskIndex,
+      expected: `ARC ${contestId} - ${taskIndex}`,
+    });
 
     return testCase;
   });
@@ -184,13 +184,13 @@ const generateAgcTestCases = (
   taskIndices: string[],
 ): { name: string; value: TestCaseForContestNameAndTaskIndex }[] => {
   return zip(contestIds, taskIndices).map(([contestId, taskIndex]) => {
-    const testCase = createTestCaseForContestNameAndTaskIndex(`AGC${contestId}, task ${taskIndex}`)(
-      {
-        contestId: `agc${contestId}`,
-        taskTableIndex: taskIndex,
-        expected: `AGC${contestId} - ${taskIndex}`,
-      },
-    );
+    const testCase = createTestCaseForContestNameAndTaskIndex(
+      `AGC ${contestId}, task ${taskIndex}`,
+    )({
+      contestId: `agc${contestId}`,
+      taskTableIndex: taskIndex,
+      expected: `AGC ${contestId} - ${taskIndex}`,
+    });
 
     return testCase;
   });

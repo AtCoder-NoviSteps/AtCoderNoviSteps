@@ -11,9 +11,9 @@ const generateAbcTestCases = (
   contestIds: string[],
 ): { name: string; value: TestCaseForContestNameLabel }[] => {
   return contestIds.map((contestId) => {
-    const testCase = createTestCaseForContestNameLabel(`ABC${contestId}`)({
+    const testCase = createTestCaseForContestNameLabel(`ABC ${contestId}`)({
       contestId: `abc${contestId}`,
-      expected: `ABC${contestId}`,
+      expected: `ABC ${contestId}`,
     });
 
     return testCase;
@@ -28,7 +28,7 @@ export const abc = generateAbcTestCases([
   '101',
   '200',
   '201',
-  '365',
+  '380',
   '999',
 ]);
 
@@ -170,84 +170,84 @@ export const mathAndAlgorithm = [
 ];
 
 export const arc = [
-  createTestCaseForContestNameLabel('ARC001')({
+  createTestCaseForContestNameLabel('ARC 001')({
     contestId: 'arc001',
-    expected: 'ARC001',
+    expected: 'ARC 001',
   }),
-  createTestCaseForContestNameLabel('ARC002')({
+  createTestCaseForContestNameLabel('ARC 002')({
     contestId: 'arc002',
-    expected: 'ARC002',
+    expected: 'ARC 002',
   }),
-  createTestCaseForContestNameLabel('ARC057')({
+  createTestCaseForContestNameLabel('ARC 057')({
     contestId: 'arc057',
-    expected: 'ARC057',
+    expected: 'ARC 057',
   }),
-  createTestCaseForContestNameLabel('ARC058')({
+  createTestCaseForContestNameLabel('ARC 058')({
     contestId: 'arc058',
-    expected: 'ARC058',
+    expected: 'ARC 058',
   }),
-  createTestCaseForContestNameLabel('ARC099')({
+  createTestCaseForContestNameLabel('ARC 099')({
     contestId: 'arc099',
-    expected: 'ARC099',
+    expected: 'ARC 099',
   }),
-  createTestCaseForContestNameLabel('ARC100')({
+  createTestCaseForContestNameLabel('ARC 100')({
     contestId: 'arc100',
-    expected: 'ARC100',
+    expected: 'ARC 100',
   }),
-  createTestCaseForContestNameLabel('ARC101')({
+  createTestCaseForContestNameLabel('ARC 101')({
     contestId: 'arc101',
-    expected: 'ARC101',
+    expected: 'ARC 101',
   }),
-  createTestCaseForContestNameLabel('ARC103')({
+  createTestCaseForContestNameLabel('ARC 103')({
     contestId: 'arc103',
-    expected: 'ARC103',
+    expected: 'ARC 103',
   }),
-  createTestCaseForContestNameLabel('ARC104')({
+  createTestCaseForContestNameLabel('ARC 104')({
     contestId: 'arc104',
-    expected: 'ARC104',
+    expected: 'ARC 104',
   }),
-  createTestCaseForContestNameLabel('ARC105')({
+  createTestCaseForContestNameLabel('ARC 105')({
     contestId: 'arc105',
-    expected: 'ARC105',
+    expected: 'ARC 105',
   }),
-  createTestCaseForContestNameLabel('ARC182')({
-    contestId: 'arc182',
-    expected: 'ARC182',
+  createTestCaseForContestNameLabel('ARC 187')({
+    contestId: 'arc187',
+    expected: 'ARC 187',
   }),
-  createTestCaseForContestNameLabel('ARC183')({
-    contestId: 'arc183',
-    expected: 'ARC183',
+  createTestCaseForContestNameLabel('ARC 188')({
+    contestId: 'arc188',
+    expected: 'ARC 188',
   }),
 ];
 
 export const agc = [
-  createTestCaseForContestNameLabel('AGC001')({
+  createTestCaseForContestNameLabel('AGC 001')({
     contestId: 'agc001',
-    expected: 'AGC001',
+    expected: 'AGC 001',
   }),
-  createTestCaseForContestNameLabel('AGC002')({
+  createTestCaseForContestNameLabel('AGC 002')({
     contestId: 'agc002',
-    expected: 'AGC002',
+    expected: 'AGC 002',
   }),
-  createTestCaseForContestNameLabel('AGC009')({
+  createTestCaseForContestNameLabel('AGC 009')({
     contestId: 'agc009',
-    expected: 'AGC009',
+    expected: 'AGC 009',
   }),
-  createTestCaseForContestNameLabel('AGC010')({
+  createTestCaseForContestNameLabel('AGC 010')({
     contestId: 'agc010',
-    expected: 'AGC010',
+    expected: 'AGC 010',
   }),
-  createTestCaseForContestNameLabel('AGC011')({
+  createTestCaseForContestNameLabel('AGC 011')({
     contestId: 'agc011',
-    expected: 'AGC011',
+    expected: 'AGC 011',
   }),
-  createTestCaseForContestNameLabel('AGC066')({
+  createTestCaseForContestNameLabel('AGC 066')({
     contestId: 'agc066',
-    expected: 'AGC066',
+    expected: 'AGC 066',
   }),
-  createTestCaseForContestNameLabel('AGC067')({
+  createTestCaseForContestNameLabel('AGC 067')({
     contestId: 'agc067',
-    expected: 'AGC067',
+    expected: 'AGC 067',
   }),
 ];
 
