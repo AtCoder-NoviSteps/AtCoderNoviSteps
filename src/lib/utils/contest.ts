@@ -356,6 +356,8 @@ export function getAtCoderUniversityContestLabel(contestId: string): string {
   );
 }
 
+const SPACE = ' ';
+
 /**
  * Maps PCK contest type abbreviations to their Japanese translations.
  *
@@ -368,8 +370,8 @@ export function getAtCoderUniversityContestLabel(contestId: string): string {
  */
 const PCK_TRANSLATIONS = {
   PCK: 'パソコン甲子園',
-  Prelim: '予選',
-  Final: '本選',
+  Prelim: SPACE + '予選' + SPACE,
+  Final: SPACE + '本選' + SPACE,
 };
 
 /**
@@ -382,8 +384,8 @@ const PCK_TRANSLATIONS = {
  * }
  */
 const JAG_TRANSLATIONS = {
-  Prelim: '模擬国内',
-  Regional: '模擬地区',
+  Prelim: SPACE + '模擬国内' + SPACE,
+  Regional: SPACE + '模擬地区' + SPACE,
 };
 
 const aojBaseLabel = 'AOJ - ';
@@ -398,7 +400,7 @@ function getAojChallengeLabel(
     label = label.replace(abbrEnglish, japanese);
   });
 
-  return aojBaseLabel + label;
+  return aojBaseLabel + '（' + label + '）';
 }
 
 export const addContestNameToTaskIndex = (contestId: string, taskTableIndex: string): string => {

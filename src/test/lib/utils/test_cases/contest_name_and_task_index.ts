@@ -432,7 +432,7 @@ const generateAojPckTestCases = (
     )({
       contestId: `PCK${contestId}`,
       taskTableIndex: taskIndex,
-      expected: `AOJ - パソコン甲子園${contestId.replace('Prelim', '予選').replace('Final', '本選')} - ${taskIndex}`,
+      expected: `AOJ - （パソコン甲子園${contestId.replace('Prelim', ' 予選 ').replace('Final', ' 本選 ')}） - ${taskIndex}`,
     });
 
     return testCase;
@@ -534,7 +534,7 @@ const generateAojJagTestCases = (contestIds: JagContestIds, taskIndices: string[
     taskIndices,
     (contestId, taskIndex) => `AOJ, JAG${contestId} - ${taskIndex}`,
     (contestId, taskIndex) =>
-      `AOJ - JAG${contestId.replace('Prelim', '模擬国内').replace('Regional', '模擬地区')} - ${taskIndex}`,
+      `AOJ - （JAG${contestId.replace('Prelim', ' 模擬国内 ').replace('Regional', ' 模擬地区 ')}） - ${taskIndex}`,
   );
 
 export const aojJag = Object.entries(AOJ_JAG_TEST_DATA).flatMap(([contestId, tasks]) =>
