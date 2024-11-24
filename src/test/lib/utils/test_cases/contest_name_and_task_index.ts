@@ -534,7 +534,7 @@ const generateAojJagTestCases = (contestIds: JagContestIds, taskIndices: string[
     taskIndices,
     (contestId, taskIndex) => `AOJ, JAG${contestId} - ${taskIndex}`,
     (contestId, taskIndex) =>
-      `AOJ - JAG${contestId.replace('Prelim', '模擬国内予選').replace('Regional', '模擬アジア地区予選')} - ${taskIndex}`,
+      `AOJ - JAG${contestId.replace('Prelim', '模擬国内').replace('Regional', '模擬地区')} - ${taskIndex}`,
   );
 
 export const aojJag = Object.entries(AOJ_JAG_TEST_DATA).flatMap(([contestId, tasks]) =>

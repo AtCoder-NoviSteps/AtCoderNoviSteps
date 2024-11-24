@@ -377,13 +377,13 @@ const PCK_TRANSLATIONS = {
  *
  * @example
  * {
- *   Prelim: '模擬国内予選',
- *   Regional: '模擬アジア地区予選'
+ *   Prelim: '模擬国内',
+ *   Regional: '模擬地区'
  * }
  */
 const JAG_TRANSLATIONS = {
-  Prelim: '模擬国内予選',
-  Regional: '模擬アジア地区予選',
+  Prelim: '模擬国内',
+  Regional: '模擬地区',
 };
 
 const aojBaseLabel = 'AOJ - ';
