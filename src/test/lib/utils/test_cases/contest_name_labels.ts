@@ -257,7 +257,7 @@ const generateUtpcTestCases = (
   return years.map((year) => {
     const testCase = createTestCaseForContestNameLabel(`UTPC ${year}`)({
       contestId: `utpc${year}`,
-      expected: `UTPC${year}`,
+      expected: `UTPC ${year}`,
     });
 
     return testCase;
@@ -269,7 +269,7 @@ const generateTtpcTestCases = (
   return years.map((year) => {
     const testCase = createTestCaseForContestNameLabel(`TTPC ${year}`)({
       contestId: `ttpc${year}`,
-      expected: `TTPC${year}`,
+      expected: `TTPC ${year}`,
     });
 
     return testCase;
@@ -281,7 +281,7 @@ const generateTupcTestCases = (
   return years.map((year) => {
     const testCase = createTestCaseForContestNameLabel(`TUPC ${year}`)({
       contestId: `tupc${year}`,
-      expected: `TUPC${year}`,
+      expected: `TUPC ${year}`,
     });
 
     return testCase;

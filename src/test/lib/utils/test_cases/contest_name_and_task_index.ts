@@ -1,4 +1,5 @@
 import { createTestCase, zip } from '../../common/test_helpers';
+import { getAtCoderUniversityContestLabel } from '$lib/utils/contest';
 
 export type TestCaseForContestNameAndTaskIndex = {
   contestId: string;
@@ -300,11 +301,11 @@ const generateUniversityTestCases = (
 ): { name: string; value: TestCaseForContestNameAndTaskIndex }[] => {
   return zip(contestIds, taskIndices).map(([contestId, taskIndex]) => {
     const testCase = createTestCaseForContestNameAndTaskIndex(
-      `${contestId.toUpperCase()} ${taskIndex}`,
+      `${getAtCoderUniversityContestLabel(contestId)} ${taskIndex}`,
     )({
       contestId: `${contestId}`,
       taskTableIndex: taskIndex,
-      expected: `${contestId.toUpperCase()} - ${taskIndex}`,
+      expected: `${getAtCoderUniversityContestLabel(contestId)} - ${taskIndex}`,
     });
 
     return testCase;

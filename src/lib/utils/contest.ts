@@ -108,7 +108,7 @@ const AGC_LIKE: ContestPrefix = {
 } as const;
 const agcLikePrefixes = getContestPrefixes(AGC_LIKE);
 
-// HACK: As of early November 2024, only UTPC is included.
+// HACK: As of November 2024, UTPC, TTPC and TUPC are included.
 // More university contests may be added in the future.
 /**
  * Maps university contest ID prefixes to their display names.
@@ -190,7 +190,7 @@ export function getContestPrefixes(contestPrefixes: Record<string, string>) {
 }
 
 /**
- * Contest type priorities (0 = Highest, 19 = Lowest)
+ * Contest type priorities (0 = Highest, 20 = Lowest)
  *
  * Priority assignment rationale:
  * - Educational contests (0-10): ABS, ABC, APG4B, etc.
@@ -262,7 +262,23 @@ export function getContestPriority(contestId: string): number {
  */
 const regexForAxc = /^(abc|arc|agc)(\d{3})/i;
 
+/**
+ * Regular expression to match AtCoder University contest identifiers.
+ *
+ * The pattern matches strings that:
+ * - Start with either "ut", "tt", or "tu"
+ * - Followed by "pc"
+ * - End with exactly year (four digits)
+ *
+ * Example matches:
+ * - "utpc2014"
+ * - "ttpc2022"
+ * - "tupc2023"
+ */
+const regexForAtCoderUniversity = /^(ut|tt|tu)(pc)(\d{4})/;
+
 export const getContestNameLabel = (contestId: string) => {
+  // AtCoder
   if (regexForAxc.exec(contestId)) {
     return contestId.replace(
       regexForAxc,
@@ -298,10 +314,15 @@ export const getContestNameLabel = (contestId: string) => {
     return 'アルゴリズムと数学';
   }
 
+  if (atCoderUniversityPrefixes.some((prefix) => contestId.startsWith(prefix))) {
+    return getAtCoderUniversityContestLabel(contestId);
+  }
+
   if (contestId.startsWith('chokudai_S')) {
     return contestId.replace('chokudai_S', 'Chokudai SpeedRun ');
   }
 
+  // AIZU ONLINE JUDGE
   if (aojCoursePrefixes.has(contestId)) {
     return 'AOJ Courses';
   }
@@ -316,6 +337,24 @@ export const getContestNameLabel = (contestId: string) => {
 
   return contestId.toUpperCase();
 };
+
+/**
+ * Generates a formatted contest label for AtCoder University contests.
+ *
+ * This function takes a contest ID string and replaces parts of it using a regular expression
+ * to generate a formatted label. The label is constructed by converting the contest type and
+ * common part to uppercase and appending the contest year.
+ *
+ * @param contestId - The ID of the contest to format (ex: utpc2023).
+ * @returns The formatted contest label (ex: UTPC 2023).
+ */
+export function getAtCoderUniversityContestLabel(contestId: string): string {
+  return contestId.replace(
+    regexForAtCoderUniversity,
+    (_, contestType, common, contestYear) =>
+      `${(contestType + common).toUpperCase()} ${contestYear}`,
+  );
+}
 
 /**
  * Maps PCK contest type abbreviations to their Japanese translations.
