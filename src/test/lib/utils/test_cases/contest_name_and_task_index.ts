@@ -221,6 +221,13 @@ interface UniversityContestsTestData {
   [key: string]: UniversityContestTestData;
 }
 
+// Note:
+// UTPC contests on AtCoder: 2011-2014 and 2020-2023 (not held during 2015-2019)
+// TTPC contests on AtCoder: 2015, 2019, 2022-
+// TUPC contests on AtCoder: 2022-
+//
+// See:
+// https://kenkoooo.com/atcoder/resources/contests.json
 type UtpcTaskPatterns = {
   '2011-2014': string[];
   '2020': string[];
