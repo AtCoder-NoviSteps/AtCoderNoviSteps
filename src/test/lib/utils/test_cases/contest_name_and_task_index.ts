@@ -383,37 +383,37 @@ export const aojCourses = Object.entries(AOJ_COURSES_TEST_DATA).flatMap(([contes
  * Format: {round}{year} - {problemId}
  */
 const AOJ_PCK_TEST_DATA = {
-  Prelim2023: {
-    contestId: 'Prelim2023',
-    tasks: ['4012', '4013', '4022'],
-  },
-  Prelim2022: {
-    contestId: 'Prelim2022',
-    tasks: ['0479', '0489'],
+  Prelim2004: {
+    contestId: 'Prelim2004',
+    tasks: ['0027', '0043'],
   },
   Prelim2005: {
     contestId: 'Prelim2005',
     tasks: ['0073', '0092'],
   },
-  Prelim2004: {
-    contestId: 'Prelim2004',
-    tasks: ['0027', '0043'],
+  Prelim2022: {
+    contestId: 'Prelim2022',
+    tasks: ['0479', '0489'],
   },
-  Final2023: {
-    contestId: 'Final2023',
-    tasks: ['4023', '4035'],
+  Prelim2023: {
+    contestId: 'Prelim2023',
+    tasks: ['4012', '4013', '4022'],
   },
-  Final2022: {
-    contestId: 'Final2022',
-    tasks: ['4000', '4011'],
+  Final2003: {
+    contestId: 'Final2003',
+    tasks: ['0000', '0098'],
   },
   Final2004: {
     contestId: 'Final2004',
     tasks: ['0044', '0097'],
   },
-  Final2003: {
-    contestId: 'Final2003',
-    tasks: ['0000', '0098'],
+  Final2022: {
+    contestId: 'Final2022',
+    tasks: ['4000', '4011'],
+  },
+  Final2023: {
+    contestId: 'Final2023',
+    tasks: ['4023', '4035'],
   },
 };
 
@@ -432,7 +432,7 @@ const generateAojPckTestCases = (
     )({
       contestId: `PCK${contestId}`,
       taskTableIndex: taskIndex,
-      expected: `AOJ - （パソコン甲子園${contestId.replace('Prelim', ' 予選 ').replace('Final', ' 本選 ')}） - ${taskIndex}`,
+      expected: `AOJ ${taskIndex}（パソコン甲子園${contestId.replace('Prelim', ' 予選 ').replace('Final', ' 本選 ')}）`,
     });
 
     return testCase;
@@ -534,7 +534,7 @@ const generateAojJagTestCases = (contestIds: JagContestIds, taskIndices: string[
     taskIndices,
     (contestId, taskIndex) => `AOJ, JAG${contestId} - ${taskIndex}`,
     (contestId, taskIndex) =>
-      `AOJ - （JAG${contestId.replace('Prelim', ' 模擬国内 ').replace('Regional', ' 模擬地区 ')}） - ${taskIndex}`,
+      `AOJ ${taskIndex}（JAG${contestId.replace('Prelim', ' 模擬国内 ').replace('Regional', ' 模擬地区 ')}）`,
   );
 
 export const aojJag = Object.entries(AOJ_JAG_TEST_DATA).flatMap(([contestId, tasks]) =>

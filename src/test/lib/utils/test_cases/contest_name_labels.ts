@@ -332,123 +332,123 @@ export const aojCourses = [
 ];
 
 export const aojPck = [
-  createTestCaseForContestNameLabel('AOJ, PCK Prelim 2023')({
-    contestId: 'PCKPrelim2023',
-    expected: 'AOJ - （パソコン甲子園 予選 2023）',
-  }),
-  createTestCaseForContestNameLabel('AOJ, PCK Prelim 2022')({
-    contestId: 'PCKPrelim2022',
-    expected: 'AOJ - （パソコン甲子園 予選 2022）',
+  createTestCaseForContestNameLabel('AOJ, PCK Prelim 2004')({
+    contestId: 'PCKPrelim2004',
+    expected: '（パソコン甲子園 予選 2004）',
   }),
   createTestCaseForContestNameLabel('AOJ, PCK Prelim 2005')({
     contestId: 'PCKPrelim2005',
-    expected: 'AOJ - （パソコン甲子園 予選 2005）',
+    expected: '（パソコン甲子園 予選 2005）',
   }),
-  createTestCaseForContestNameLabel('AOJ, PCK Prelim 2004')({
-    contestId: 'PCKPrelim2004',
-    expected: 'AOJ - （パソコン甲子園 予選 2004）',
+  createTestCaseForContestNameLabel('AOJ, PCK Prelim 2022')({
+    contestId: 'PCKPrelim2022',
+    expected: '（パソコン甲子園 予選 2022）',
   }),
-  createTestCaseForContestNameLabel('AOJ, PCK Final 2023')({
-    contestId: 'PCKFinal2023',
-    expected: 'AOJ - （パソコン甲子園 本選 2023）',
-  }),
-  createTestCaseForContestNameLabel('AOJ, PCK Final 2022')({
-    contestId: 'PCKFinal2022',
-    expected: 'AOJ - （パソコン甲子園 本選 2022）',
-  }),
-  createTestCaseForContestNameLabel('AOJ, PCK Final 2021')({
-    contestId: 'PCKFinal2021',
-    expected: 'AOJ - （パソコン甲子園 本選 2021）',
-  }),
-  createTestCaseForContestNameLabel('AOJ, PCK Final 2004')({
-    contestId: 'PCKFinal2004',
-    expected: 'AOJ - （パソコン甲子園 本選 2004）',
+  createTestCaseForContestNameLabel('AOJ, PCK Prelim 2023')({
+    contestId: 'PCKPrelim2023',
+    expected: '（パソコン甲子園 予選 2023）',
   }),
   createTestCaseForContestNameLabel('AOJ, PCK Final 2003')({
     contestId: 'PCKFinal2003',
-    expected: 'AOJ - （パソコン甲子園 本選 2003）',
+    expected: '（パソコン甲子園 本選 2003）',
+  }),
+  createTestCaseForContestNameLabel('AOJ, PCK Final 2004')({
+    contestId: 'PCKFinal2004',
+    expected: '（パソコン甲子園 本選 2004）',
+  }),
+  createTestCaseForContestNameLabel('AOJ, PCK Final 2021')({
+    contestId: 'PCKFinal2021',
+    expected: '（パソコン甲子園 本選 2021）',
+  }),
+  createTestCaseForContestNameLabel('AOJ, PCK Final 2022')({
+    contestId: 'PCKFinal2022',
+    expected: '（パソコン甲子園 本選 2022）',
+  }),
+  createTestCaseForContestNameLabel('AOJ, PCK Final 2023')({
+    contestId: 'PCKFinal2023',
+    expected: '（パソコン甲子園 本選 2023）',
   }),
 ];
 
 export const aojJag = [
   createTestCaseForContestNameLabel('AOJ, JAG Prelim 2005')({
     contestId: 'JAGPrelim2005',
-    expected: 'AOJ - （JAG 模擬国内 2005）',
+    expected: '（JAG 模擬国内 2005）',
   }),
   createTestCaseForContestNameLabel('AOJ, JAG Prelim 2006')({
     contestId: 'JAGPrelim2006',
-    expected: 'AOJ - （JAG 模擬国内 2006）',
+    expected: '（JAG 模擬国内 2006）',
   }),
   createTestCaseForContestNameLabel('AOJ, JAG Prelim 2009')({
     contestId: 'JAGPrelim2009',
-    expected: 'AOJ - （JAG 模擬国内 2009）',
+    expected: '（JAG 模擬国内 2009）',
   }),
   createTestCaseForContestNameLabel('AOJ, JAG Prelim 2010')({
     contestId: 'JAGPrelim2010',
-    expected: 'AOJ - （JAG 模擬国内 2010）',
+    expected: '（JAG 模擬国内 2010）',
   }),
   createTestCaseForContestNameLabel('AOJ, JAG Prelim 2011')({
     contestId: 'JAGPrelim2011',
-    expected: 'AOJ - （JAG 模擬国内 2011）',
+    expected: '（JAG 模擬国内 2011）',
   }),
   createTestCaseForContestNameLabel('AOJ, JAG Prelim 2020')({
     contestId: 'JAGPrelim2020',
-    expected: 'AOJ - （JAG 模擬国内 2020）',
+    expected: '（JAG 模擬国内 2020）',
   }),
   createTestCaseForContestNameLabel('AOJ, JAG Prelim 2021')({
     contestId: 'JAGPrelim2021',
-    expected: 'AOJ - （JAG 模擬国内 2021）',
+    expected: '（JAG 模擬国内 2021）',
   }),
   createTestCaseForContestNameLabel('AOJ, JAG Prelim 2022')({
     contestId: 'JAGPrelim2022',
-    expected: 'AOJ - （JAG 模擬国内 2022）',
+    expected: '（JAG 模擬国内 2022）',
   }),
   createTestCaseForContestNameLabel('AOJ, JAG Prelim 2023')({
     contestId: 'JAGPrelim2023',
-    expected: 'AOJ - （JAG 模擬国内 2023）',
+    expected: '（JAG 模擬国内 2023）',
   }),
   createTestCaseForContestNameLabel('AOJ, JAG Prelim 2024')({
     contestId: 'JAGPrelim2024',
-    expected: 'AOJ - （JAG 模擬国内 2024）',
+    expected: '（JAG 模擬国内 2024）',
   }),
   createTestCaseForContestNameLabel('AOJ, JAG Regional 2005')({
     contestId: 'JAGRegional2005',
-    expected: 'AOJ - （JAG 模擬地区 2005）',
+    expected: '（JAG 模擬地区 2005）',
   }),
   createTestCaseForContestNameLabel('AOJ, JAG Regional 2006')({
     contestId: 'JAGRegional2006',
-    expected: 'AOJ - （JAG 模擬地区 2006）',
+    expected: '（JAG 模擬地区 2006）',
   }),
   createTestCaseForContestNameLabel('AOJ, JAG Regional 2009')({
     contestId: 'JAGRegional2009',
-    expected: 'AOJ - （JAG 模擬地区 2009）',
+    expected: '（JAG 模擬地区 2009）',
   }),
   createTestCaseForContestNameLabel('AOJ, JAG Regional 2010')({
     contestId: 'JAGRegional2010',
-    expected: 'AOJ - （JAG 模擬地区 2010）',
+    expected: '（JAG 模擬地区 2010）',
   }),
   createTestCaseForContestNameLabel('AOJ, JAG Regional 2011')({
     contestId: 'JAGRegional2011',
-    expected: 'AOJ - （JAG 模擬地区 2011）',
+    expected: '（JAG 模擬地区 2011）',
   }),
   createTestCaseForContestNameLabel('AOJ, JAG Regional 2016')({
     contestId: 'JAGRegional2016',
-    expected: 'AOJ - （JAG 模擬地区 2016）',
+    expected: '（JAG 模擬地区 2016）',
   }),
   createTestCaseForContestNameLabel('AOJ, JAG Regional 2017')({
     contestId: 'JAGRegional2017',
-    expected: 'AOJ - （JAG 模擬地区 2017）',
+    expected: '（JAG 模擬地区 2017）',
   }),
   createTestCaseForContestNameLabel('AOJ, JAG Regional 2020')({
     contestId: 'JAGRegional2020',
-    expected: 'AOJ - （JAG 模擬地区 2020）',
+    expected: '（JAG 模擬地区 2020）',
   }),
   createTestCaseForContestNameLabel('AOJ, JAG Regional 2021')({
     contestId: 'JAGRegional2021',
-    expected: 'AOJ - （JAG 模擬地区 2021）',
+    expected: '（JAG 模擬地区 2021）',
   }),
   createTestCaseForContestNameLabel('AOJ, JAG Regional 2022')({
     contestId: 'JAGRegional2022',
-    expected: 'AOJ - （JAG 模擬地区 2022）',
+    expected: '（JAG 模擬地区 2022）',
   }),
 ];

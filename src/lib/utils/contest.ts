@@ -386,8 +386,6 @@ const JAG_TRANSLATIONS = {
   Regional: ' 模擬地区 ',
 };
 
-const aojBaseLabel = 'AOJ - ';
-
 function getAojChallengeLabel(
   translations: Readonly<ContestLabelTranslations>,
   contestId: string,
@@ -398,11 +396,19 @@ function getAojChallengeLabel(
     label = label.replace(abbrEnglish, japanese);
   });
 
-  return aojBaseLabel + '（' + label + '）';
+  return '（' + label + '）';
 }
 
 export const addContestNameToTaskIndex = (contestId: string, taskTableIndex: string): string => {
   const contestName = getContestNameLabel(contestId);
 
+  if (isAojContest(contestId)) {
+    return `AOJ ${taskTableIndex}${contestName}`;
+  }
+
   return `${contestName} - ${taskTableIndex}`;
 };
+
+function isAojContest(contestId: string): boolean {
+  return contestId.startsWith('PCK') || contestId.startsWith('JAG');
+}
