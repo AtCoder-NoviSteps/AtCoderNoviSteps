@@ -108,7 +108,7 @@ const AGC_LIKE: ContestPrefix = {
 } as const;
 const agcLikePrefixes = getContestPrefixes(AGC_LIKE);
 
-// HACK: As of early November 2024, only UTPC is included.
+// HACK: As of November 2024, UTPC, TTPC and TUPC are included.
 // More university contests may be added in the future.
 /**
  * Maps university contest ID prefixes to their display names.
@@ -190,7 +190,7 @@ export function getContestPrefixes(contestPrefixes: Record<string, string>) {
 }
 
 /**
- * Contest type priorities (0 = Highest, 19 = Lowest)
+ * Contest type priorities (0 = Highest, 20 = Lowest)
  *
  * Priority assignment rationale:
  * - Educational contests (0-10): ABS, ABC, APG4B, etc.
@@ -240,53 +240,121 @@ export function getContestPriority(contestId: string): number {
   }
 }
 
-export const getContestNameLabel = (contest_id: string) => {
-  if (contest_id === 'APG4b' || contest_id === 'APG4bPython') {
-    return contest_id;
+/**
+ * Regular expression to match contest codes.
+ *
+ * This regex matches strings that start with one of the following prefixes:
+ * - "abc"
+ * - "arc"
+ * - "agc"
+ *
+ * followed by exactly three digits. The matching is case-insensitive.
+ *
+ * Example matches:
+ * - "abc376"
+ * - "ARC128"
+ * - "agc045"
+ *
+ * Example non-matches:
+ * - "xyz123"
+ * - "abc12"
+ * - "abc1234"
+ */
+const regexForAxc = /^(abc|arc|agc)(\d{3})/i;
+
+/**
+ * Regular expression to match AtCoder University contest identifiers.
+ *
+ * The pattern matches strings that:
+ * - Start with either "ut", "tt", or "tu"
+ * - Followed by "pc"
+ * - End with exactly year (four digits)
+ *
+ * Example matches:
+ * - "utpc2014"
+ * - "ttpc2022"
+ * - "tupc2023"
+ */
+const regexForAtCoderUniversity = /^(ut|tt|tu)(pc)(\d{4})/i;
+
+export const getContestNameLabel = (contestId: string) => {
+  // AtCoder
+  if (regexForAxc.exec(contestId)) {
+    return contestId.replace(
+      regexForAxc,
+      (_, contestType, contestNumber) => `${contestType.toUpperCase()} ${contestNumber}`,
+    );
   }
 
-  if (contest_id === 'typical90') {
+  if (contestId === 'APG4b' || contestId === 'APG4bPython') {
+    return contestId;
+  }
+
+  if (contestId === 'typical90') {
     return '競プロ典型 90 問';
   }
 
-  if (contest_id === 'dp') {
+  if (contestId === 'dp') {
     return 'EDPC';
   }
 
-  if (contest_id === 'tdpc') {
+  if (contestId === 'tdpc') {
     return 'TDPC';
   }
 
-  if (contest_id === 'practice2') {
+  if (contestId === 'practice2') {
     return 'ACL Practice';
   }
 
-  if (contest_id === 'tessoku-book') {
+  if (contestId === 'tessoku-book') {
     return '競技プログラミングの鉄則';
   }
 
-  if (contest_id === 'math-and-algorithm') {
+  if (contestId === 'math-and-algorithm') {
     return 'アルゴリズムと数学';
   }
 
-  if (contest_id.startsWith('chokudai_S')) {
-    return contest_id.replace('chokudai_S', 'Chokudai SpeedRun ');
+  if (regexForAtCoderUniversity.exec(contestId)) {
+    return getAtCoderUniversityContestLabel(contestId);
   }
 
-  if (aojCoursePrefixes.has(contest_id)) {
+  if (contestId.startsWith('chokudai_S')) {
+    return contestId.replace('chokudai_S', 'Chokudai SpeedRun ');
+  }
+
+  // AIZU ONLINE JUDGE
+  if (aojCoursePrefixes.has(contestId)) {
     return 'AOJ Courses';
   }
 
-  if (contest_id.startsWith('PCK')) {
-    return getAojChallengeLabel(PCK_TRANSLATIONS, contest_id);
+  if (contestId.startsWith('PCK')) {
+    return getAojChallengeLabel(PCK_TRANSLATIONS, contestId);
   }
 
-  if (contest_id.startsWith('JAG')) {
-    return getAojChallengeLabel(JAG_TRANSLATIONS, contest_id);
+  if (contestId.startsWith('JAG')) {
+    return getAojChallengeLabel(JAG_TRANSLATIONS, contestId);
   }
 
-  return contest_id.toUpperCase();
+  return contestId.toUpperCase();
 };
+
+/**
+ * Generates a formatted contest label for AtCoder University contests.
+ *
+ * This function takes a contest ID string and replaces parts of it using a regular expression
+ * to generate a formatted label. The label is constructed by converting the contest type and
+ * common part to uppercase and appending the contest year.
+ *
+ * @param contestId - The ID of the contest to format (ex: utpc2023).
+ * @returns The formatted contest label (ex: UTPC 2023).
+ */
+export function getAtCoderUniversityContestLabel(contestId: string): string {
+  return contestId.replace(
+    regexForAtCoderUniversity,
+    (_, contestType, common, contestYear) =>
+      `${(contestType + common).toUpperCase()} ${contestYear}`,
+  );
+}
 
 /**
  * Maps PCK contest type abbreviations to their Japanese translations.
@@ -300,8 +368,8 @@ export const getContestNameLabel = (contest_id: string) => {
  */
 const PCK_TRANSLATIONS = {
   PCK: 'パソコン甲子園',
-  Prelim: '予選',
-  Final: '本選',
+  Prelim: ' 予選 ',
+  Final: ' 本選 ',
 };
 
 /**
@@ -309,16 +377,14 @@ const PCK_TRANSLATIONS = {
  *
  * @example
  * {
- *   Prelim: '模擬国内予選',
- *   Regional: '模擬アジア地区予選'
+ *   Prelim: '模擬国内',
+ *   Regional: '模擬地区'
  * }
  */
 const JAG_TRANSLATIONS = {
-  Prelim: '模擬国内予選',
-  Regional: '模擬アジア地区予選',
+  Prelim: ' 模擬国内 ',
+  Regional: ' 模擬地区 ',
 };
-
-const aojBaseLabel = 'AOJ - ';
 
 function getAojChallengeLabel(
   translations: Readonly<ContestLabelTranslations>,
@@ -330,11 +396,19 @@ function getAojChallengeLabel(
     label = label.replace(abbrEnglish, japanese);
   });
 
-  return aojBaseLabel + label;
+  return '（' + label + '）';
 }
 
 export const addContestNameToTaskIndex = (contestId: string, taskTableIndex: string): string => {
   const contestName = getContestNameLabel(contestId);
 
+  if (isAojContest(contestId)) {
+    return `AOJ ${taskTableIndex}${contestName}`;
+  }
+
   return `${contestName} - ${taskTableIndex}`;
 };
+
+function isAojContest(contestId: string): boolean {
+  return contestId.startsWith('PCK') || contestId.startsWith('JAG');
+}

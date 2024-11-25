@@ -1,4 +1,5 @@
 import { createTestCase, zip } from '../../common/test_helpers';
+import { getAtCoderUniversityContestLabel } from '$lib/utils/contest';
 
 export type TestCaseForContestNameAndTaskIndex = {
   contestId: string;
@@ -13,13 +14,13 @@ const generateAbcTestCases = (
   taskIndices: string[],
 ): { name: string; value: TestCaseForContestNameAndTaskIndex }[] => {
   return zip(contestIds, taskIndices).map(([contestId, taskIndex]) => {
-    const testCase = createTestCaseForContestNameAndTaskIndex(`ABC${contestId}, task ${taskIndex}`)(
-      {
-        contestId: `abc${contestId}`,
-        taskTableIndex: taskIndex,
-        expected: `ABC${contestId} - ${taskIndex}`,
-      },
-    );
+    const testCase = createTestCaseForContestNameAndTaskIndex(
+      `ABC ${contestId}, task ${taskIndex}`,
+    )({
+      contestId: `abc${contestId}`,
+      taskTableIndex: taskIndex,
+      expected: `ABC ${contestId} - ${taskIndex}`,
+    });
 
     return testCase;
   });
@@ -162,13 +163,13 @@ const generateArcTestCases = (
   taskIndices: string[],
 ): { name: string; value: TestCaseForContestNameAndTaskIndex }[] => {
   return zip(contestIds, taskIndices).map(([contestId, taskIndex]) => {
-    const testCase = createTestCaseForContestNameAndTaskIndex(`ARC${contestId}, task ${taskIndex}`)(
-      {
-        contestId: `arc${contestId}`,
-        taskTableIndex: taskIndex,
-        expected: `ARC${contestId} - ${taskIndex}`,
-      },
-    );
+    const testCase = createTestCaseForContestNameAndTaskIndex(
+      `ARC ${contestId}, task ${taskIndex}`,
+    )({
+      contestId: `arc${contestId}`,
+      taskTableIndex: taskIndex,
+      expected: `ARC ${contestId} - ${taskIndex}`,
+    });
 
     return testCase;
   });
@@ -184,13 +185,13 @@ const generateAgcTestCases = (
   taskIndices: string[],
 ): { name: string; value: TestCaseForContestNameAndTaskIndex }[] => {
   return zip(contestIds, taskIndices).map(([contestId, taskIndex]) => {
-    const testCase = createTestCaseForContestNameAndTaskIndex(`AGC${contestId}, task ${taskIndex}`)(
-      {
-        contestId: `agc${contestId}`,
-        taskTableIndex: taskIndex,
-        expected: `AGC${contestId} - ${taskIndex}`,
-      },
-    );
+    const testCase = createTestCaseForContestNameAndTaskIndex(
+      `AGC ${contestId}, task ${taskIndex}`,
+    )({
+      contestId: `agc${contestId}`,
+      taskTableIndex: taskIndex,
+      expected: `AGC ${contestId} - ${taskIndex}`,
+    });
 
     return testCase;
   });
@@ -220,6 +221,13 @@ interface UniversityContestsTestData {
   [key: string]: UniversityContestTestData;
 }
 
+// Note:
+// UTPC contests on AtCoder: 2011-2014 and 2020-2023 (not held during 2015-2019)
+// TTPC contests on AtCoder: 2015, 2019, 2022-
+// TUPC contests on AtCoder: 2022-
+//
+// See:
+// https://kenkoooo.com/atcoder/resources/contests.json
 type UtpcTaskPatterns = {
   '2011-2014': string[];
   '2020': string[];
@@ -300,11 +308,11 @@ const generateUniversityTestCases = (
 ): { name: string; value: TestCaseForContestNameAndTaskIndex }[] => {
   return zip(contestIds, taskIndices).map(([contestId, taskIndex]) => {
     const testCase = createTestCaseForContestNameAndTaskIndex(
-      `${contestId.toUpperCase()} ${taskIndex}`,
+      `${getAtCoderUniversityContestLabel(contestId)} ${taskIndex}`,
     )({
       contestId: `${contestId}`,
       taskTableIndex: taskIndex,
-      expected: `${contestId.toUpperCase()} - ${taskIndex}`,
+      expected: `${getAtCoderUniversityContestLabel(contestId)} - ${taskIndex}`,
     });
 
     return testCase;
@@ -382,37 +390,37 @@ export const aojCourses = Object.entries(AOJ_COURSES_TEST_DATA).flatMap(([contes
  * Format: {round}{year} - {problemId}
  */
 const AOJ_PCK_TEST_DATA = {
-  Prelim2023: {
-    contestId: 'Prelim2023',
-    tasks: ['4012', '4013', '4022'],
-  },
-  Prelim2022: {
-    contestId: 'Prelim2022',
-    tasks: ['0479', '0489'],
+  Prelim2004: {
+    contestId: 'Prelim2004',
+    tasks: ['0027', '0043'],
   },
   Prelim2005: {
     contestId: 'Prelim2005',
     tasks: ['0073', '0092'],
   },
-  Prelim2004: {
-    contestId: 'Prelim2004',
-    tasks: ['0027', '0043'],
+  Prelim2022: {
+    contestId: 'Prelim2022',
+    tasks: ['0479', '0489'],
   },
-  Final2023: {
-    contestId: 'Final2023',
-    tasks: ['4023', '4035'],
+  Prelim2023: {
+    contestId: 'Prelim2023',
+    tasks: ['4012', '4013', '4022'],
   },
-  Final2022: {
-    contestId: 'Final2022',
-    tasks: ['4000', '4011'],
+  Final2003: {
+    contestId: 'Final2003',
+    tasks: ['0000', '0098'],
   },
   Final2004: {
     contestId: 'Final2004',
     tasks: ['0044', '0097'],
   },
-  Final2003: {
-    contestId: 'Final2003',
-    tasks: ['0000', '0098'],
+  Final2022: {
+    contestId: 'Final2022',
+    tasks: ['4000', '4011'],
+  },
+  Final2023: {
+    contestId: 'Final2023',
+    tasks: ['4023', '4035'],
   },
 };
 
@@ -431,7 +439,7 @@ const generateAojPckTestCases = (
     )({
       contestId: `PCK${contestId}`,
       taskTableIndex: taskIndex,
-      expected: `AOJ - パソコン甲子園${contestId.replace('Prelim', '予選').replace('Final', '本選')} - ${taskIndex}`,
+      expected: `AOJ ${taskIndex}（パソコン甲子園${contestId.replace('Prelim', ' 予選 ').replace('Final', ' 本選 ')}）`,
     });
 
     return testCase;
@@ -533,7 +541,7 @@ const generateAojJagTestCases = (contestIds: JagContestIds, taskIndices: string[
     taskIndices,
     (contestId, taskIndex) => `AOJ, JAG${contestId} - ${taskIndex}`,
     (contestId, taskIndex) =>
-      `AOJ - JAG${contestId.replace('Prelim', '模擬国内予選').replace('Regional', '模擬アジア地区予選')} - ${taskIndex}`,
+      `AOJ ${taskIndex}（JAG${contestId.replace('Prelim', ' 模擬国内 ').replace('Regional', ' 模擬地区 ')}）`,
   );
 
 export const aojJag = Object.entries(AOJ_JAG_TEST_DATA).flatMap(([contestId, tasks]) =>
