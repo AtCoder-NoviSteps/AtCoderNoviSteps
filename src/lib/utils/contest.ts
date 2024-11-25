@@ -275,7 +275,7 @@ const regexForAxc = /^(abc|arc|agc)(\d{3})/i;
  * - "ttpc2022"
  * - "tupc2023"
  */
-const regexForAtCoderUniversity = /^(ut|tt|tu)(pc)(\d{4})/;
+const regexForAtCoderUniversity = /^(ut|tt|tu)(pc)(\d{4})/i;
 
 export const getContestNameLabel = (contestId: string) => {
   // AtCoder
@@ -314,7 +314,7 @@ export const getContestNameLabel = (contestId: string) => {
     return 'アルゴリズムと数学';
   }
 
-  if (atCoderUniversityPrefixes.some((prefix) => contestId.startsWith(prefix))) {
+  if (regexForAtCoderUniversity.exec(contestId)) {
     return getAtCoderUniversityContestLabel(contestId);
   }
 
@@ -356,8 +356,6 @@ export function getAtCoderUniversityContestLabel(contestId: string): string {
   );
 }
 
-const SPACE = ' ';
-
 /**
  * Maps PCK contest type abbreviations to their Japanese translations.
  *
@@ -370,8 +368,8 @@ const SPACE = ' ';
  */
 const PCK_TRANSLATIONS = {
   PCK: 'パソコン甲子園',
-  Prelim: SPACE + '予選' + SPACE,
-  Final: SPACE + '本選' + SPACE,
+  Prelim: ' 予選 ',
+  Final: ' 本選 ',
 };
 
 /**
@@ -384,8 +382,8 @@ const PCK_TRANSLATIONS = {
  * }
  */
 const JAG_TRANSLATIONS = {
-  Prelim: SPACE + '模擬国内' + SPACE,
-  Regional: SPACE + '模擬地区' + SPACE,
+  Prelim: ' 模擬国内 ',
+  Regional: ' 模擬地区 ',
 };
 
 const aojBaseLabel = 'AOJ - ';
