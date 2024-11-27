@@ -1,7 +1,9 @@
 import { createTestCase, zip } from '../../common/test_helpers';
 import {
+  getPastContestLabel,
   getAtCoderUniversityContestLabel,
   getAojContestLabel,
+  PAST_TRANSLATIONS,
   AOJ_COURSES,
 } from '$lib/utils/contest';
 
@@ -80,6 +82,70 @@ export const typical90 = [
     expected: '競プロ典型 90 問 - 090',
   }),
 ];
+
+const generatePastTestCases = (
+  contestIds: string[],
+  taskIndices: string[],
+): { name: string; value: TestCaseForContestNameAndTaskIndex }[] => {
+  return zip(contestIds, taskIndices).map(([contestId, taskIndex]) => {
+    const testCase = createTestCaseForContestNameAndTaskIndex(`PAST, ${contestId} ${taskIndex}`)({
+      contestId: `${contestId}`,
+      taskTableIndex: `${taskIndex}`,
+      expected: `${getPastContestLabel(PAST_TRANSLATIONS, contestId)} - ${taskIndex}`,
+    });
+
+    return testCase;
+  });
+};
+
+const PAST_TEST_DATA = {
+  // 1st
+  'past201912-open': {
+    contestId: 'past201904',
+    tasks: ['A', 'B', 'C', 'M', 'N', 'O'],
+  },
+  // 2nd
+  'past202004-open': {
+    contestId: 'past202004-open',
+    tasks: ['A', 'B', 'C', 'M', 'N', 'O'],
+  },
+  // 3rd
+  'past202005-open': {
+    contestId: 'past202005-open',
+    tasks: ['A', 'B', 'C', 'M', 'N', 'O'],
+  },
+  // 9th
+  'past202112-open': {
+    contestId: 'past202203-open',
+    tasks: ['A', 'B', 'C', 'M', 'N', 'O'],
+  },
+  // 10th
+  'past202203-open': {
+    contestId: 'past202203-open',
+    tasks: ['A', 'B', 'C', 'M', 'N', 'O'],
+  },
+  // 14th
+  'past202303-open': {
+    contestId: 'past202303-open',
+    tasks: ['A', 'B', 'C', 'M', 'N', 'O'],
+  },
+  'past15-open': {
+    contestId: 'past15-open',
+    tasks: ['A', 'B', 'C', 'M', 'N', 'O'],
+  },
+  'past16-open': {
+    contestId: 'past16-open',
+    tasks: ['A', 'B', 'C', 'M', 'N', 'O'],
+  },
+  'past17-open': {
+    contestId: 'past17-open',
+    tasks: ['A', 'B', 'C', 'M', 'N', 'O'],
+  },
+};
+
+export const past = Object.entries(PAST_TEST_DATA).flatMap(([contestId, tasks]) =>
+  generatePastTestCases(Array(tasks.tasks.length).fill(contestId), tasks.tasks),
+);
 
 export const tessokuBook = [
   createTestCaseForContestNameAndTaskIndex('Tessoku Book, Task A01')({

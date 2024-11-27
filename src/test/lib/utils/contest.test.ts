@@ -366,18 +366,6 @@ describe('Contest', () => {
         });
       });
 
-      // TODO(#issue): Skipped until notational inconsistencies are resolved.
-      // Current issues:
-      // 1. Contest names use inconsistent formats (e.g., "past201912-open" vs "past17-open")
-      // 2. Need to standardize naming conventions across all contests
-      describe.skip('when contest_id contains past', () => {
-        TestCasesForContestNameLabel.past.forEach(({ name, value }) => {
-          runTests(`${name}`, [value], ({ contestId, expected }: TestCaseForContestNameLabel) => {
-            expect(getContestNameLabel(contestId)).toEqual(expected);
-          });
-        });
-      });
-
       describe('when contest_id is practice2 (ACL practice)', () => {
         TestCasesForContestNameLabel.aclPractice.forEach(({ name, value }) => {
           runTests(`${name}`, [value], ({ contestId, expected }: TestCaseForContestNameLabel) => {
@@ -436,6 +424,18 @@ describe('Contest', () => {
 
       describe('when contest_id is typical90', () => {
         TestCasesForContestNameAndTaskIndex.typical90.forEach(({ name, value }) => {
+          runTests(
+            `${name}`,
+            [value],
+            ({ contestId, taskTableIndex, expected }: TestCaseForContestNameAndTaskIndex) => {
+              expect(addContestNameToTaskIndex(contestId, taskTableIndex)).toEqual(expected);
+            },
+          );
+        });
+      });
+
+      describe('when contest_id contains past', () => {
+        TestCasesForContestNameAndTaskIndex.past.forEach(({ name, value }) => {
           runTests(
             `${name}`,
             [value],

@@ -21,42 +21,6 @@ export const tdpc = [
   }),
 ];
 
-// Note: Not yet implemented, because notational distortion needs to be corrected for each contest.
-export const past = [
-  createTestCaseForContestNameLabel('PAST 17th')({
-    contestId: 'past17-open',
-    expected: '',
-  }),
-  createTestCaseForContestNameLabel('PAST 16th')({
-    contestId: 'past16-open',
-    expected: '',
-  }),
-  createTestCaseForContestNameLabel('PAST 15th')({
-    contestId: 'past15-open',
-    expected: '',
-  }),
-  createTestCaseForContestNameLabel('PAST 14th')({
-    contestId: 'past202303-open',
-    expected: '',
-  }),
-  createTestCaseForContestNameLabel('PAST 13th')({
-    contestId: 'past202212-open',
-    expected: '',
-  }),
-  createTestCaseForContestNameLabel('PAST 3rd')({
-    contestId: 'past202005-open',
-    expected: '',
-  }),
-  createTestCaseForContestNameLabel('PAST 2nd')({
-    contestId: 'past202004-open',
-    expected: '',
-  }),
-  createTestCaseForContestNameLabel('PAST 1st')({
-    contestId: 'past201912-open',
-    expected: '',
-  }),
-];
-
 export const aclPractice = [
   createTestCaseForContestNameLabel('ACL Practice')({
     contestId: 'practice2',
