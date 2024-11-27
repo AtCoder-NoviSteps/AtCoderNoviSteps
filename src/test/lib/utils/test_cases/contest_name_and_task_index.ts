@@ -1,5 +1,9 @@
 import { createTestCase, zip } from '../../common/test_helpers';
-import { getAtCoderUniversityContestLabel } from '$lib/utils/contest';
+import {
+  getAtCoderUniversityContestLabel,
+  getAojContestLabel,
+  AOJ_COURSES,
+} from '$lib/utils/contest';
 
 export type TestCaseForContestNameAndTaskIndex = {
   contestId: string;
@@ -373,7 +377,7 @@ const generateAojCoursesTestCases = (
     )({
       contestId: `${contestId}`,
       taskTableIndex: `${contestId}_${taskIndex}`,
-      expected: `AOJ Courses - ${contestId}_${taskIndex}`,
+      expected: `AOJ ${contestId}_${taskIndex}${getAojContestLabel(AOJ_COURSES, contestId)}`,
     });
 
     return testCase;

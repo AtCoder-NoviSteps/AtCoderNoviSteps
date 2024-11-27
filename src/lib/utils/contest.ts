@@ -324,15 +324,15 @@ export const getContestNameLabel = (contestId: string) => {
 
   // AIZU ONLINE JUDGE
   if (aojCoursePrefixes.has(contestId)) {
-    return 'AOJ Courses';
+    return getAojContestLabel(AOJ_COURSES, contestId);
   }
 
   if (contestId.startsWith('PCK')) {
-    return getAojChallengeLabel(PCK_TRANSLATIONS, contestId);
+    return getAojContestLabel(PCK_TRANSLATIONS, contestId);
   }
 
   if (contestId.startsWith('JAG')) {
-    return getAojChallengeLabel(JAG_TRANSLATIONS, contestId);
+    return getAojContestLabel(JAG_TRANSLATIONS, contestId);
   }
 
   return contestId.toUpperCase();
@@ -349,6 +349,10 @@ export const getContestNameLabel = (contestId: string) => {
  * @returns The formatted contest label (ex: UTPC 2023).
  */
 export function getAtCoderUniversityContestLabel(contestId: string): string {
+  if (!regexForAtCoderUniversity.test(contestId)) {
+    throw new Error(`Invalid university contest ID format: ${contestId}`);
+  }
+
   return contestId.replace(
     regexForAtCoderUniversity,
     (_, contestType, common, contestYear) =>
@@ -386,7 +390,7 @@ const JAG_TRANSLATIONS = {
   Regional: ' 模擬地区 ',
 };
 
-function getAojChallengeLabel(
+export function getAojContestLabel(
   translations: Readonly<ContestLabelTranslations>,
   contestId: string,
 ): string {
@@ -410,5 +414,7 @@ export const addContestNameToTaskIndex = (contestId: string, taskTableIndex: str
 };
 
 function isAojContest(contestId: string): boolean {
-  return contestId.startsWith('PCK') || contestId.startsWith('JAG');
+  return (
+    aojCoursePrefixes.has(contestId) || contestId.startsWith('PCK') || contestId.startsWith('JAG')
+  );
 }
