@@ -266,41 +266,6 @@ export const joi = Object.entries(JOI_TEST_DATA).flatMap(([contestId, tasks]) =>
   generateJoiTestCases(Array(tasks.tasks.length).fill(contestId), tasks.tasks),
 );
 
-// export const joi = [
-//   createTestCaseForContestNameLabel('JOI 2018 qual')({
-//     contestId: 'joi2018yo',
-//     expected: '',
-//   }),
-//   createTestCaseForContestNameLabel('JOI 2024 qual 1A')({
-//     contestId: 'joi2024yo1a',
-//     expected: '',
-//   }),
-//   createTestCaseForContestNameLabel('JOI 2024 qual 1B')({
-//     contestId: 'joi2024yo1b',
-//     expected: '',
-//   }),
-//   createTestCaseForContestNameLabel('JOI 2024 qual 1C')({
-//     contestId: 'joi2024yo1c',
-//     expected: '',
-//   }),
-//   createTestCaseForContestNameLabel('JOIG 2021 open')({
-//     contestId: 'joig2021-open',
-//     expected: '',
-//   }),
-//   createTestCaseForContestNameLabel('JOIG 2022 open')({
-//     contestId: 'joig2022-open',
-//     expected: '',
-//   }),
-//   createTestCaseForContestNameLabel('JOIG 2023 open')({
-//     contestId: 'joig2023-open',
-//     expected: '',
-//   }),
-//   createTestCaseForContestNameLabel('JOIG 2024 open')({
-//     contestId: 'joig2024-open',
-//     expected: '',
-//   }),
-// ];
-
 export const tessokuBook = [
   createTestCaseForContestNameAndTaskIndex('Tessoku Book, Task A01')({
     contestId: 'tessoku-book',
