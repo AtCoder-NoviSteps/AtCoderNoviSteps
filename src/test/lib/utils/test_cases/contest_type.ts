@@ -88,10 +88,12 @@ export const aclPractice = [
 ];
 
 const joiContestData = [
+  // Historical JOI Qualifiers (2006-2007)
   { name: 'JOI 2006 qual', contestId: 'joi2006yo' },
   { name: 'JOI 2007 qual', contestId: 'joi2007yo' },
   { name: 'JOI 2018 qual', contestId: 'joi2018yo' },
   { name: 'JOI 2019 qual', contestId: 'joi2019yo' },
+  // Recent JOI Qualifiers (2024-)
   { name: 'JOI 2024 qual 1A', contestId: 'joi2024yo1a' },
   { name: 'JOI 2024 qual 1B', contestId: 'joi2024yo1b' },
   { name: 'JOI 2024 qual 1C', contestId: 'joi2024yo1c' },
@@ -101,6 +103,7 @@ const joiContestData = [
   { name: 'JOI 2020 qual 2', contestId: 'joi2020yo2' },
   { name: 'JOI 2023 qual 2', contestId: 'joi2023yo2' },
   { name: 'JOI 2024 qual 2', contestId: 'joi2024yo2' },
+  //JOI Finals (2006-)
   { name: 'JOI 2006 final', contestId: 'joi2006ho' },
   { name: 'JOI 2007 final', contestId: 'joi2007ho' },
   { name: 'JOI 2019 final', contestId: 'joi2019ho' },
@@ -108,19 +111,24 @@ const joiContestData = [
   { name: 'JOI 2022 final', contestId: 'joi2022ho' },
   { name: 'JOI 2023 final', contestId: 'joi2023ho' },
   { name: 'JOI 2024 final', contestId: 'joi2024ho' },
+  // JOI Spring Camp (2007-)
   { name: 'JOI 2007 Spring', contestId: 'joisc2007' },
   { name: 'JOI 2008 Spring', contestId: 'joisc2008' },
   { name: 'JOI 2020 Spring', contestId: 'joisc2020' },
   { name: 'JOI 2022 Spring', contestId: 'joisc2022' },
   { name: 'JOI 2023 Spring', contestId: 'joisp2023' },
   { name: 'JOI 2024 Spring', contestId: 'joisp2024' },
+  // JOI Open Contests (2022-)
   { name: 'JOI Open 2022', contestId: 'joiopen2022' },
   { name: 'JOI Open 2023', contestId: 'joiopen2023' },
   { name: 'JOI Open 2024', contestId: 'joiopen2024' },
+  // JOIG Contests (2021-)
   { name: 'JOIG 2021 open', contestId: 'joig2021-open' },
   { name: 'JOIG 2022 open', contestId: 'joig2022-open' },
   { name: 'JOIG 2023 open', contestId: 'joig2023-open' },
   { name: 'JOIG 2024 open', contestId: 'joig2024-open' },
+  // JOIG Spring Camp (2022-)
+  // Note: Contest ID pattern changed from joisc to joisp starting from 2023
   { name: 'JOIG 2022 Spring', contestId: 'joigsc2022' },
   { name: 'JOIG 2023 Spring', contestId: 'joigsp2023' },
   { name: 'JOIG 2024 Spring', contestId: 'joigsp2024' },
