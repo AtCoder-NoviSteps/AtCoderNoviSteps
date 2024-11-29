@@ -387,9 +387,8 @@ export const PAST_TRANSLATIONS = {
  * - "past15-open" (matches)
  * - "past16-open" (matches)
  * - "past99-open" (matches)
- * - "past1-open" (does not match)
  */
-const regexForPast = /^past(\d{2})-open$/i;
+const regexForPast = /^past(\d+)-open$/i;
 
 export function getPastContestLabel(
   translations: Readonly<ContestLabelTranslations>,
