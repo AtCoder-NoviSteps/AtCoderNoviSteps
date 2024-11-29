@@ -102,7 +102,7 @@ const generatePastTestCases = (
 const PAST_TEST_DATA = {
   // 1st
   'past201912-open': {
-    contestId: 'past201904',
+    contestId: 'past201912-open',
     tasks: ['A', 'B', 'C', 'M', 'N', 'O'],
   },
   // 2nd
@@ -248,6 +248,7 @@ const JOI_TEST_DATA = {
     contestId: 'joig2023-open',
     tasks: ['A', 'B', 'F'],
   },
+  // Note: Contest ID pattern changed from joisc to joisp starting from 2023
   joigsc2022: {
     contestId: 'joigsc2022',
     tasks: ['A', 'B', 'H'],
