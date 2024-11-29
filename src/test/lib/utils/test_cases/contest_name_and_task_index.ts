@@ -117,7 +117,7 @@ const PAST_TEST_DATA = {
   },
   // 9th
   'past202112-open': {
-    contestId: 'past202203-open',
+    contestId: 'past202112-open',
     tasks: ['A', 'B', 'C', 'M', 'N', 'O'],
   },
   // 10th
