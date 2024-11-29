@@ -302,8 +302,16 @@ export const getContestNameLabel = (contestId: string) => {
     return 'TDPC';
   }
 
+  if (contestId.startsWith('past')) {
+    return getPastContestLabel(PAST_TRANSLATIONS, contestId);
+  }
+
   if (contestId === 'practice2') {
     return 'ACL Practice';
+  }
+
+  if (contestId.startsWith('joi')) {
+    return getJoiContestLabel(contestId);
   }
 
   if (contestId === 'tessoku-book') {
@@ -324,19 +332,202 @@ export const getContestNameLabel = (contestId: string) => {
 
   // AIZU ONLINE JUDGE
   if (aojCoursePrefixes.has(contestId)) {
-    return 'AOJ Courses';
+    return getAojContestLabel(AOJ_COURSES, contestId);
   }
 
   if (contestId.startsWith('PCK')) {
-    return getAojChallengeLabel(PCK_TRANSLATIONS, contestId);
+    return getAojContestLabel(PCK_TRANSLATIONS, contestId);
   }
 
   if (contestId.startsWith('JAG')) {
-    return getAojChallengeLabel(JAG_TRANSLATIONS, contestId);
+    return getAojContestLabel(JAG_TRANSLATIONS, contestId);
   }
 
   return contestId.toUpperCase();
 };
+
+/**
+ * A mapping of contest dates to their respective Japanese translations.
+ * Each key represents a date in the format 'YYYYMM', and the corresponding value
+ * is the Japanese translation indicating the contest number.
+ *
+ * Note:
+ * After the 15th contest, the URL includes the number of times the contest has been held
+ *
+ * See:
+ * https://atcoder.jp/contests/archive?ratedType=0&category=50
+ *
+ * Example:
+ * - '201912': ' 第 1 回' (The 1st contest in December 2019)
+ * - '202303': ' 第 14 回' (The 14th contest in March 2023)
+ */
+export const PAST_TRANSLATIONS = {
+  '201912': ' 第 1 回',
+  '202004': ' 第 2 回',
+  '202005': ' 第 3 回',
+  '202010': ' 第 4 回',
+  '202012': ' 第 5 回',
+  '202104': ' 第 6 回',
+  '202107': ' 第 7 回',
+  '202109': ' 第 8 回',
+  '202112': ' 第 9 回',
+  '202203': ' 第 10 回',
+  '202206': ' 第 11 回',
+  '202209': ' 第 12 回',
+  '202212': ' 第 13 回',
+  '202303': ' 第 14 回',
+};
+
+/**
+ * A regular expression to match strings that representing the 15th or later PAST contests.
+ * The string should start with "past" followed by exactly two digits and end with "-open".
+ * The matching is case-insensitive.
+ *
+ * Examples:
+ * - "past15-open" (matches)
+ * - "past16-open" (matches)
+ * - "past99-open" (matches)
+ */
+const regexForPast = /^past(\d+)-open$/i;
+
+export function getPastContestLabel(
+  translations: Readonly<ContestLabelTranslations>,
+  contestId: string,
+): string {
+  let label = contestId;
+
+  Object.entries(translations).forEach(([abbrEnglish, japanese]) => {
+    label = label.replace(abbrEnglish, japanese);
+  });
+
+  if (label == contestId) {
+    label = label.replace(regexForPast, (_, round) => {
+      return `PAST 第 ${round} 回`;
+    });
+  }
+
+  // Remove suffix
+  return label.replace('-open', '').toUpperCase();
+}
+
+/**
+ * Regular expression to match specific patterns in contest identifiers.
+ *
+ * The pattern matches strings that follow these rules:
+ * - Starts with "joi" (case insensitive).
+ * - Optionally followed by "g" or "open".
+ * - Optionally represents year (4-digit number).
+ * - Optionally followed by "yo", "ho", "sc", or "sp" (Qual, Final and Spring camp).
+ * - Optionally represents year (4-digit number).
+ * - Optionally followed by "1" or "2" (Qual 1st, 2nd).
+ * - Optionally followed by "a", "b", or "c" (Round 1, 2 and 3).
+ *
+ * Flags:
+ * - `i`: Case insensitive matching.
+ *
+ * Examples:
+ * - "joi2024yo1a" (matches)
+ * - "joi2023ho" (matches)
+ * - "joisc2022" (matches)
+ * - "joisp2021" (matches)
+ * - "joig2024-open" (matches)
+ * - "joisc2024" (matches)
+ * - "joisp2022" (matches)
+ * - "joi24yo3d" (does not match)
+ */
+const regexForJoi = /^(joi)(g|open)*(\d{4})*(yo|ho|sc|sp)*(\d{4})*(1|2)*(a|b|c)*/i;
+
+/**
+ * Transforms a contest ID into a formatted contest label.
+ *
+ * This function processes the given contest ID by removing specific suffixes
+ * and applying various transformations to generate a human-readable contest label.
+ *
+ * @param contestId - The ID of the contest to be transformed.
+ * @returns The formatted contest label.
+ */
+export function getJoiContestLabel(contestId: string): string {
+  let label = contestId;
+  // Remove suffix
+  label = label.replace('-open', '');
+
+  label = label.replace(
+    regexForJoi,
+    (_, base, subType, yearPrefix, division, yearSuffix, qual, qualRound) => {
+      const SPACE = ' ';
+
+      let newLabel = base.toUpperCase();
+      newLabel += addJoiSubTypeIfNeeds(subType);
+
+      if (division !== undefined) {
+        newLabel += SPACE;
+        newLabel += addJoiDivisionNameIfNeeds(division, qual);
+      }
+
+      newLabel += SPACE;
+      newLabel += addJoiYear(yearSuffix, yearPrefix);
+
+      if (qualRound !== undefined) {
+        newLabel += SPACE;
+        newLabel += addJoiQualRoundNameIfNeeds(qualRound);
+      }
+
+      return newLabel;
+    },
+  );
+
+  return label;
+}
+
+function addJoiSubTypeIfNeeds(subType: string): string {
+  if (subType === 'g') {
+    return subType.toUpperCase();
+  } else if (subType === 'open') {
+    return ' Open';
+  }
+
+  return '';
+}
+
+function addJoiDivisionNameIfNeeds(division: string, qual: string): string {
+  if (division === 'yo') {
+    if (qual === undefined) {
+      return '予選';
+    } else if (qual === '1') {
+      return '一次予選';
+    } else if (qual === '2') {
+      return '二次予選';
+    }
+  } else if (division === 'ho') {
+    return '本選';
+  } else if (division === 'sc' || division === 'sp') {
+    return '春合宿';
+  }
+
+  return '';
+}
+
+function addJoiYear(yearSuffix: string, yearPrefix: string): string {
+  if (yearPrefix !== undefined) {
+    return yearPrefix;
+  } else if (yearSuffix !== undefined) {
+    return yearSuffix;
+  }
+
+  return '';
+}
+
+function addJoiQualRoundNameIfNeeds(qualRound: string): string {
+  if (qualRound === 'a') {
+    return '第 1 回';
+  } else if (qualRound === 'b') {
+    return '第 2 回';
+  } else if (qualRound === 'c') {
+    return '第 3 回';
+  }
+
+  return '';
+}
 
 /**
  * Generates a formatted contest label for AtCoder University contests.
@@ -349,6 +540,10 @@ export const getContestNameLabel = (contestId: string) => {
  * @returns The formatted contest label (ex: UTPC 2023).
  */
 export function getAtCoderUniversityContestLabel(contestId: string): string {
+  if (!regexForAtCoderUniversity.test(contestId)) {
+    throw new Error(`Invalid university contest ID format: ${contestId}`);
+  }
+
   return contestId.replace(
     regexForAtCoderUniversity,
     (_, contestType, common, contestYear) =>
@@ -386,7 +581,7 @@ const JAG_TRANSLATIONS = {
   Regional: ' 模擬地区 ',
 };
 
-function getAojChallengeLabel(
+export function getAojContestLabel(
   translations: Readonly<ContestLabelTranslations>,
   contestId: string,
 ): string {
@@ -410,5 +605,7 @@ export const addContestNameToTaskIndex = (contestId: string, taskTableIndex: str
 };
 
 function isAojContest(contestId: string): boolean {
-  return contestId.startsWith('PCK') || contestId.startsWith('JAG');
+  return (
+    aojCoursePrefixes.has(contestId) || contestId.startsWith('PCK') || contestId.startsWith('JAG')
+  );
 }
