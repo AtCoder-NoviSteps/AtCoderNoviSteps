@@ -374,18 +374,6 @@ describe('Contest', () => {
         });
       });
 
-      // TODO(#issue): Skipped until notational inconsistencies are resolved.
-      // Current issues:
-      // 1. Contest names use inconsistent formats
-      // 2. Need to standardize naming conventions across all contests
-      describe.skip('when contest_id contains joi', () => {
-        TestCasesForContestNameLabel.joi.forEach(({ name, value }) => {
-          runTests(`${name}`, [value], ({ contestId, expected }: TestCaseForContestNameLabel) => {
-            expect(getContestNameLabel(contestId)).toEqual(expected);
-          });
-        });
-      });
-
       describe('when contest_id contains chokudai_S', () => {
         TestCasesForContestNameLabel.atCoderOthers.forEach(({ name, value }) => {
           runTests(`${name}`, [value], ({ contestId, expected }: TestCaseForContestNameLabel) => {
@@ -436,6 +424,18 @@ describe('Contest', () => {
 
       describe('when contest_id contains past', () => {
         TestCasesForContestNameAndTaskIndex.past.forEach(({ name, value }) => {
+          runTests(
+            `${name}`,
+            [value],
+            ({ contestId, taskTableIndex, expected }: TestCaseForContestNameAndTaskIndex) => {
+              expect(addContestNameToTaskIndex(contestId, taskTableIndex)).toEqual(expected);
+            },
+          );
+        });
+      });
+
+      describe('when contest_id contains joi', () => {
+        TestCasesForContestNameAndTaskIndex.joi.forEach(({ name, value }) => {
           runTests(
             `${name}`,
             [value],

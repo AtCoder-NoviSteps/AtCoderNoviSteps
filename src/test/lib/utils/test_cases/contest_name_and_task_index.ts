@@ -1,6 +1,7 @@
 import { createTestCase, zip } from '../../common/test_helpers';
 import {
   getPastContestLabel,
+  getJoiContestLabel,
   getAtCoderUniversityContestLabel,
   getAojContestLabel,
   PAST_TRANSLATIONS,
@@ -146,6 +147,159 @@ const PAST_TEST_DATA = {
 export const past = Object.entries(PAST_TEST_DATA).flatMap(([contestId, tasks]) =>
   generatePastTestCases(Array(tasks.tasks.length).fill(contestId), tasks.tasks),
 );
+
+const generateJoiTestCases = (
+  contestIds: string[],
+  taskIndices: string[],
+): { name: string; value: TestCaseForContestNameAndTaskIndex }[] => {
+  return zip(contestIds, taskIndices).map(([contestId, taskIndex]) => {
+    const testCase = createTestCaseForContestNameAndTaskIndex(`JOI, ${contestId} ${taskIndex}`)({
+      contestId: `${contestId}`,
+      taskTableIndex: `${taskIndex}`,
+      expected: `${getJoiContestLabel(contestId)} - ${taskIndex}`,
+    });
+
+    return testCase;
+  });
+};
+
+const JOI_TEST_DATA = {
+  joi2006yo: {
+    contestId: 'joi2006yo',
+    tasks: ['A', 'B', 'C', 'D', 'E'],
+  },
+  joi2007yo: {
+    contestId: 'joi2007yo',
+    tasks: ['A', 'B', 'E', 'F'],
+  },
+  joi2018yo: {
+    contestId: 'joi2018yo',
+    tasks: ['A', 'B', 'F'],
+  },
+  joi2024yo1c: {
+    contestId: 'joi2024yo1c',
+    tasks: ['A', 'B', 'C', 'D'],
+  },
+  joi2025yo1a: {
+    contestId: 'joi2025yo1a',
+    tasks: ['A', 'B', 'D'],
+  },
+  joi2025yo1b: {
+    contestId: 'joi2025yo1b',
+    tasks: ['A', 'B', 'D'],
+  },
+  joi2023yo2: {
+    contestId: 'joi2023yo2',
+    tasks: ['A', 'B', 'C', 'D', 'E'],
+  },
+  joi2024yo2: {
+    contestId: 'joi2024yo2',
+    tasks: ['A', 'B', 'E'],
+  },
+  joi2006ho: {
+    contestId: 'joi2006ho',
+    tasks: ['A', 'B', 'C', 'D', 'E'],
+  },
+  joi2007ho: {
+    contestId: 'joi2007ho',
+    tasks: ['A', 'B', 'E'],
+  },
+  joi2023ho: {
+    contestId: 'joi2023ho',
+    tasks: ['A', 'B', 'E'],
+  },
+  joi2024ho: {
+    contestId: 'joi2024ho',
+    tasks: ['A', 'B', 'E'],
+  },
+  joisc2007: {
+    contestId: 'joisc2007',
+    tasks: ['anagra', 'buildi', 'salt', 'score'],
+  },
+  joisc2008: {
+    contestId: 'joisc2008',
+    tasks: ['belt', 'typhoon'],
+  },
+  joisc2022: {
+    contestId: 'joisc2022',
+    tasks: ['A', 'B', 'K', 'L'],
+  },
+  joisp2023: {
+    contestId: 'joisp2023',
+    tasks: ['A', 'B', 'K', 'L'],
+  },
+  joisp2024: {
+    contestId: 'joisp2024',
+    tasks: ['A', 'B', 'K', 'L'],
+  },
+  joiopen2024: {
+    contestId: 'joiopen2024',
+    tasks: ['A', 'B', 'C'],
+  },
+  'joig2021-open': {
+    contestId: 'joig2021-open',
+    tasks: ['A', 'B', 'C', 'D', 'E', 'F'],
+  },
+  'joig2022-open': {
+    contestId: 'joig2022-open',
+    tasks: ['A', 'B', 'F'],
+  },
+  'joig2023-open': {
+    contestId: 'joig2023-open',
+    tasks: ['A', 'B', 'F'],
+  },
+  joigsc2022: {
+    contestId: 'joigsc2022',
+    tasks: ['A', 'B', 'H'],
+  },
+  joigsp2023: {
+    contestId: 'joigsp2023',
+    tasks: ['A', 'B', 'H'],
+  },
+  joigsp2024: {
+    contestId: 'joigsp2024',
+    tasks: ['A', 'B', 'H'],
+  },
+};
+
+export const joi = Object.entries(JOI_TEST_DATA).flatMap(([contestId, tasks]) =>
+  generateJoiTestCases(Array(tasks.tasks.length).fill(contestId), tasks.tasks),
+);
+
+// export const joi = [
+//   createTestCaseForContestNameLabel('JOI 2018 qual')({
+//     contestId: 'joi2018yo',
+//     expected: '',
+//   }),
+//   createTestCaseForContestNameLabel('JOI 2024 qual 1A')({
+//     contestId: 'joi2024yo1a',
+//     expected: '',
+//   }),
+//   createTestCaseForContestNameLabel('JOI 2024 qual 1B')({
+//     contestId: 'joi2024yo1b',
+//     expected: '',
+//   }),
+//   createTestCaseForContestNameLabel('JOI 2024 qual 1C')({
+//     contestId: 'joi2024yo1c',
+//     expected: '',
+//   }),
+//   createTestCaseForContestNameLabel('JOIG 2021 open')({
+//     contestId: 'joig2021-open',
+//     expected: '',
+//   }),
+//   createTestCaseForContestNameLabel('JOIG 2022 open')({
+//     contestId: 'joig2022-open',
+//     expected: '',
+//   }),
+//   createTestCaseForContestNameLabel('JOIG 2023 open')({
+//     contestId: 'joig2023-open',
+//     expected: '',
+//   }),
+//   createTestCaseForContestNameLabel('JOIG 2024 open')({
+//     contestId: 'joig2024-open',
+//     expected: '',
+//   }),
+// ];
 
 export const tessokuBook = [
   createTestCaseForContestNameAndTaskIndex('Tessoku Book, Task A01')({

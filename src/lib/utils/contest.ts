@@ -459,12 +459,19 @@ export function getJoiContestLabel(contestId: string): string {
 
       let newLabel = base.toUpperCase();
       newLabel += addJoiSubTypeIfNeeds(subType);
-      newLabel += SPACE;
-      newLabel += addJoiDivisionNameIfNeeds(division, qual);
+
+      if (division !== undefined) {
+        newLabel += SPACE;
+        newLabel += addJoiDivisionNameIfNeeds(division, qual);
+      }
+
       newLabel += SPACE;
       newLabel += addJoiYear(yearSuffix, yearPrefix);
-      newLabel += SPACE;
-      newLabel += addJoiQualRoundNameIfNeeds(qualRound);
+
+      if (qualRound !== undefined) {
+        newLabel += SPACE;
+        newLabel += addJoiQualRoundNameIfNeeds(qualRound);
+      }
 
       return newLabel;
     },
@@ -485,7 +492,9 @@ function addJoiSubTypeIfNeeds(subType: string): string {
 
 function addJoiDivisionNameIfNeeds(division: string, qual: string): string {
   if (division === 'yo') {
-    if (qual === '1') {
+    if (qual === undefined) {
+      return '予選';
+    } else if (qual === '1') {
       return '一次予選';
     } else if (qual === '2') {
       return '二次予選';
