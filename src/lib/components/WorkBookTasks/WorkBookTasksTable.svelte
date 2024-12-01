@@ -111,16 +111,18 @@
     <span>問題一覧（{workBookTasksForTable.length} 問）</span>
   </Label>
 
-  <Table shadow class="text-md">
+  <Table shadow class="text-md table-fixed w-full">
     <TableHead class="text-sm bg-gray-100">
-      <TableHeadCell class="min-w-[18px] pl-2 md:pl-4 pr-0 text-center">#</TableHeadCell>
-      <TableHeadCell class="text-center px-0" aria-label="Task grade">グレード</TableHeadCell>
-      <TableHeadCell class="min-w-[240px] pl-0 truncate">問題名</TableHeadCell>
-      <TableHeadCell class="min-w-[120px] max-w-[150px] truncate">出典</TableHeadCell>
-      <TableHeadCell class="min-w-[120px] max-w-[150px] px-0 truncate">
-        一言（50文字以下）
-      </TableHeadCell>
-      <TableHeadCell class="min-w-[24px] px-0 text-center">
+      <TableHeadCell class="w-6 pl-2 md:pl-4 pr-0 text-center">#</TableHeadCell>
+      <TableHeadCell class="w-20 xs:w-24 text-center px-0" aria-label="Task grade"
+        >グレード</TableHeadCell
+      >
+      <TableHeadCell class="w-1/2 pl-0 truncate">問題名</TableHeadCell>
+      <TableHeadCell class="w-1/3 hidden sm:table-cell truncate">出典</TableHeadCell>
+      <TableHeadCell class="w-24 md:w-64 hidden sm:table-cell px-0 truncate"
+        >一言（50文字以下）</TableHeadCell
+      >
+      <TableHeadCell class="w-6 text-center">
         <span class="sr-only">編集</span>
       </TableHeadCell>
     </TableHead>
@@ -140,8 +142,8 @@
           </TableBodyCell>
 
           <!-- グレード -->
-          <TableBodyCell>
-            <div class="flex items-center justify-center min-w-[54px] max-w-fit">
+          <TableBodyCell class="w-20 xs:w-24">
+            <div class="flex items-center justify-center">
               <GradeLabel taskGrade={getTaskGrade(tasksMapByIds, task.taskId)} />
             </div>
           </TableBodyCell>
@@ -158,7 +160,9 @@
           </TableBodyCell>
 
           <!-- 出典 -->
-          <TableBodyCell class="xs:text-lg text-gray-700 dark:text-gray-300 truncate">
+          <TableBodyCell
+            class="xs:text-lg hidden sm:table-cell text-gray-700 dark:text-gray-300 truncate"
+          >
             {addContestNameToTaskIndex(
               task.contestId,
               getTaskTableIndex(tasksMapByIds, task.taskId),
@@ -169,7 +173,7 @@
           <!-- Note: <TableBodyCell>コンポーネントだとon:inputが動作しない -->
           <td
             contenteditable={true}
-            class="xs:text-lg text-gray-700 dark:text-gray-300 truncate"
+            class="xs:text-lg hidden sm:table-cell text-gray-700 dark:text-gray-300 truncate"
             on:input={(event) => updateComment(index, event)}
             on:focus={handleFocus}
             on:blur={handleBlur}
@@ -179,8 +183,8 @@
           </td>
 
           <!-- 削除 -->
-          <TableBodyCell class="px-0" on:click={() => removeWorkBookTask(task)}>
-            <div class="flex justify-center items-center px-0">削除</div>
+          <TableBodyCell on:click={() => removeWorkBookTask(task)}>
+            <div class="flex justify-center items-center">削除</div>
           </TableBodyCell>
         </TableBodyRow>
       {/each}
