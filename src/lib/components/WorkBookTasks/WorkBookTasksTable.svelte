@@ -117,12 +117,13 @@
     <span>問題一覧（{workBookTasksForTable.length} 問）</span>
   </Label>
 
-  <Table shadow class="text-md table-fixed w-full">
+  <Table shadow class="text-md table-fixed w-full" aria-label="Workbook tasks">
+    <caption class="sr-only">List of workbook tasks with their grades and comments</caption>
     <TableHead class="text-sm bg-gray-100">
       <TableHeadCell class="w-6 pl-2 md:pl-4 pr-0 text-center">#</TableHeadCell>
-      <TableHeadCell class="w-20 xs:w-24 text-center px-0" aria-label="Task grade"
-        >グレード</TableHeadCell
-      >
+      <TableHeadCell class="w-20 xs:w-24 text-center px-0" aria-label="Task grade">
+        グレード
+      </TableHeadCell>
       <TableHeadCell class="w-1/2 pl-0 truncate">問題名</TableHeadCell>
       <TableHeadCell class="w-1/3 hidden sm:table-cell truncate">出典</TableHeadCell>
       <TableHeadCell class="w-24 md:w-64 hidden sm:table-cell px-0 truncate">
