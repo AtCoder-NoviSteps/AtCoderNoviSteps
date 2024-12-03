@@ -53,16 +53,16 @@
     <!-- TODO: 問題が多くなってきたら、ページネーションを導入する -->
     <!-- TODO: 回答状況に応じて、フィルタリングできるようにする -->
     <div class="overflow-auto rounded-md border">
-      <Table shadow id={grade} class="text-md">
+      <Table shadow id={grade} class="text-md table-fixed w-full">
         <TableHead class="text-sm bg-gray-100">
-          <TableHeadCell class="min-w-[96px] max-w-[120px]">回答</TableHeadCell>
-          <TableHeadCell class="min-w-[240px] max-w-2/3 text-left pl-0 sm:pl-6 truncate">
+          <TableHeadCell class="w-20 sm:w-24 min-w-[5rem]">回答</TableHeadCell>
+          <TableHeadCell class="w-1/2 text-left pl-0 sm:pl-6 truncate overflow-ellipsis">
             問題名
           </TableHeadCell>
-          <TableHeadCell class="min-w-[120px] max-w-[150px] text-left pl-0 truncate">
+          <TableHeadCell class="w-1/3 hidden sm:table-cell text-left pl-0 truncate">
             出典
           </TableHeadCell>
-          <TableHeadCell class="min-w-[24px] text-center">
+          <TableHeadCell class="w-6 text-center">
             <span class="sr-only">編集</span>
           </TableHeadCell>
         </TableHead>
@@ -80,7 +80,7 @@
                   <SubmissionStatusImage {taskResult} {isLoggedIn} />
                 </div>
               </TableBodyCell>
-              <TableBodyCell class="pl-0 sm:pl-6 w-2/3">
+              <TableBodyCell class="w-1/2 text-left truncate pl-0 sm:pl-6">
                 <ExternalLinkWrapper
                   url={getTaskUrl(taskResult.contest_id, taskResult.task_id)}
                   description={removeTaskIndexFromTitle(
@@ -91,10 +91,12 @@
                   textColorInDarkMode="dark:text-gray-300"
                 />
               </TableBodyCell>
-              <TableBodyCell class="pl-0 xs:text-lg text-gray-700 dark:text-gray-300">
+              <TableBodyCell
+                class="w-1/3 hidden sm:table-cell text-left truncate pl-0 xs:text-lg text-gray-700 dark:text-gray-300"
+              >
                 {addContestNameToTaskIndex(taskResult.contest_id, taskResult.task_table_index)}
               </TableBodyCell>
-              <TableBodyCell class="px-0">
+              <TableBodyCell class="w-6 px-0">
                 {#if isAdmin}
                   <div class="flex justify-center items-center px-0">
                     <a

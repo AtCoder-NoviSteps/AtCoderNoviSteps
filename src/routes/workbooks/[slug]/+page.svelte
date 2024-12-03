@@ -140,14 +140,13 @@
   <!-- 問題一覧 -->
   {#if workBookTasks.length}
     <div class="overflow-auto rounded-md border">
-      <Table shadow class="text-md">
+      <Table shadow class="text-md table-fixed w-full">
         <TableHead class="text-xs xs:text-sm bg-gray-100">
-          <TableHeadCell class="text-center w-14 px-0.5 xs:px-0">グレード</TableHeadCell>
-          <TableHeadCell class="text-center min-w-[96px] max-w-[120px]">回答</TableHeadCell>
-          <TableHeadCell class="min-w-[240px] max-w-2/3 truncate px-0 sm:px-6">問題名</TableHeadCell
-          >
-          <TableHeadCell class="min-w-[120px] max-w-[150px] truncate">出典</TableHeadCell>
-          <TableHeadCell class="text-center px-0">一言</TableHeadCell>
+          <TableHeadCell class="text-center w-16 xs:w-20 px-0.5 xs:px-0">グレード</TableHeadCell>
+          <TableHeadCell class="text-center w-20">回答</TableHeadCell>
+          <TableHeadCell class="w-1/2 truncate px-3 sm:px-6">問題名</TableHeadCell>
+          <TableHeadCell class="w-1/3 hidden xs:table-cell truncate">出典</TableHeadCell>
+          <TableHeadCell class="w-14 text-center px-0.5">一言</TableHeadCell>
         </TableHead>
         <TableBody tableBodyClass="divide-y">
           {#each workBookTasks as workBookTask}
@@ -156,7 +155,7 @@
               class={getBackgroundColorFrom(getTaskResult(workBookTask.taskId).status_name)}
             >
               <!-- 問題のグレード -->
-              <TableBodyCell class="justify-center w-14 px-3">
+              <TableBodyCell class="justify-center w-16 px-0.5 xs:px-3">
                 <div class="flex items-center justify-center min-w-[54px] max-w-[54px]">
                   <GradeLabel taskGrade={getTaskGrade(workBookTask.taskId)} />
                 </div>
@@ -176,7 +175,7 @@
               </TableBodyCell>
 
               <!-- 問題のリンク -->
-              <TableBodyCell class="px-0 sm:px-6">
+              <TableBodyCell class="w-1/2 px-3 sm:px-6">
                 <div class="xs:text-lg truncate">
                   <ExternalLinkWrapper
                     url={getTaskUrl(getContestIdFrom(workBookTask.taskId), workBookTask.taskId)}
@@ -188,15 +187,15 @@
               </TableBodyCell>
 
               <!-- 出典 -->
-              <TableBodyCell>
+              <TableBodyCell class="w-1/3 hidden xs:table-cell">
                 <div class="xs:text-lg text-gray-700 dark:text-gray-300 truncate">
                   {getContestNameFrom(workBookTask.taskId)}
                 </div>
               </TableBodyCell>
 
               <!-- 一言（コメント・ヒント） -->
-              <TableBodyCell class="justify-center w-14 px-0.5 sm:px-3">
-                <div class="flex items-center justify-center min-w-[54px] max-w-[54px]">
+              <TableBodyCell class="justify-center w-14 px-0.5">
+                <div class="flex items-center justify-center">
                   <CommentAndHint
                     uniqueId={getUniqueIdUsing(workBookTask.taskId)}
                     commentAndHint={workBookTask.comment}
