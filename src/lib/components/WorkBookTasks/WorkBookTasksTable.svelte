@@ -1,4 +1,6 @@
 <script lang="ts">
+  import xss from 'xss';
+
   import {
     Label,
     Table,
@@ -33,7 +35,7 @@
     const target = event.target as HTMLElement;
 
     if (target && target instanceof HTMLElement) {
-      const newComment = target.innerText as string;
+      const newComment = xss(target.innerText as string);
 
       // HACK: 代替手段として、50文字以下の場合のみ更新
       if (newComment.length <= 50) {
