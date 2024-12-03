@@ -55,8 +55,10 @@
     <div class="overflow-auto rounded-md border">
       <Table shadow id={grade} class="text-md table-fixed w-full">
         <TableHead class="text-sm bg-gray-100">
-          <TableHeadCell class="w-20 sm:w-24">回答</TableHeadCell>
-          <TableHeadCell class="w-1/2 text-left pl-0 sm:pl-6 truncate">問題名</TableHeadCell>
+          <TableHeadCell class="w-20 sm:w-24 min-w-[5rem]">回答</TableHeadCell>
+          <TableHeadCell class="w-1/2 text-left pl-0 sm:pl-6 truncate overflow-ellipsis">
+            問題名
+          </TableHeadCell>
           <TableHeadCell class="w-1/3 hidden sm:table-cell text-left pl-0 truncate">
             出典
           </TableHeadCell>
