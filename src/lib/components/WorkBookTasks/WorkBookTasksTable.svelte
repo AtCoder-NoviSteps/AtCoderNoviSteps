@@ -9,6 +9,8 @@
     TableHeadCell,
   } from 'flowbite-svelte';
 
+  import TrashBinOutline from 'flowbite-svelte-icons/TrashBinOutline.svelte';
+
   import GradeLabel from '$lib/components/GradeLabel.svelte';
   import ExternalLinkWrapper from '$lib/components/ExternalLinkWrapper.svelte';
 
@@ -104,6 +106,8 @@
 
     return task;
   }
+
+  let isDeleting = false;
 </script>
 
 {#if workBookTasksForTable.length}
@@ -119,10 +123,10 @@
       >
       <TableHeadCell class="w-1/2 pl-0 truncate">問題名</TableHeadCell>
       <TableHeadCell class="w-1/3 hidden sm:table-cell truncate">出典</TableHeadCell>
-      <TableHeadCell class="w-24 md:w-64 hidden sm:table-cell px-0 truncate"
-        >一言（50文字以下）</TableHeadCell
-      >
-      <TableHeadCell class="w-6 text-center">
+      <TableHeadCell class="w-24 md:w-64 hidden sm:table-cell px-0 truncate">
+        一言（50文字以下）
+      </TableHeadCell>
+      <TableHeadCell class="w-12 xs:w-16 text-center">
         <span class="sr-only">編集</span>
       </TableHeadCell>
     </TableHead>
@@ -162,6 +166,7 @@
           <!-- 出典 -->
           <TableBodyCell
             class="xs:text-lg hidden sm:table-cell text-gray-700 dark:text-gray-300 truncate"
+            aria-hidden={true}
           >
             {addContestNameToTaskIndex(
               task.contestId,
@@ -183,8 +188,25 @@
           </td>
 
           <!-- 削除 -->
-          <TableBodyCell on:click={() => removeWorkBookTask(task)}>
-            <div class="flex justify-center items-center">削除</div>
+          <TableBodyCell class="w-12 xs:w-16">
+            <button
+              type="button"
+              class="flex justify-center items-center"
+              on:click={() => {
+                if (confirm('本当に削除しますか?')) {
+                  try {
+                    isDeleting = true;
+                    removeWorkBookTask(task);
+                  } finally {
+                    isDeleting = false;
+                  }
+                }
+              }}
+              disabled={isDeleting}
+            >
+              <TrashBinOutline class="w-5 h-5 xs:w-6 xs:h-6" />
+              <span class="sr-only">削除</span>
+            </button>
           </TableBodyCell>
         </TableBodyRow>
       {/each}
