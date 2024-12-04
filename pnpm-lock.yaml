@@ -60,8 +60,8 @@ importers:
         specifier: 3.4.16
         version: 3.4.16(ts-node@10.9.1(@types/node@16.18.11)(typescript@5.6.3))
       vercel:
-        specifier: 39.1.2
-        version: 39.1.2
+        specifier: 39.1.3
+        version: 39.1.3
       xss:
         specifier: 1.0.15
         version: 1.0.15
@@ -1181,8 +1181,8 @@ packages:
     engines: {node: '>=16'}
     hasBin: true
 
-  '@vercel/node@3.2.27':
-    resolution: {integrity: sha512-vvTBD8Rz2jgbnm9/mTe+wB1rh/uISr7HRkyECUt92IlI4tYxOf/vS7ARgR86TGzb9WDwTrnRVxCl92q//f7hHA==}
+  '@vercel/node@3.2.28':
+    resolution: {integrity: sha512-1TJqaBs8iiZX8l18rW2UGWB9XhHIBpkigFitqMRPapU3W8AaS29Uns64lgH4t9OVlcH4Jd9+3gNcy7amB7vhLQ==}
 
   '@vercel/python@4.5.1':
     resolution: {integrity: sha512-nZX1oezs5E+Un5Pw21P7cEXV9WBohRSq8gDAqipu7KHFfdAQ7ubfBclRmDTGaHOiYvdLsJPiE599vsUfKKob/w==}
@@ -4122,8 +4122,8 @@ packages:
     resolution: {integrity: sha512-c1Q0mCiPlgdTVVVIJIrBuxNicYE+t/7oKeI9MWLj3fh/uq2Pxh/3eeWbVZ4OcGW1TUf53At0njHw5SMdA3tmMg==}
     engines: {node: '>= 0.10'}
 
-  vercel@39.1.2:
-    resolution: {integrity: sha512-L6oidHoWgcHsP58p7yHbYJL6ZErO2HmloBJs75+qu9tDND7/X/NaMLDb2F0PMiwuWRnMk93k+qVgtpWmAgR6lg==}
+  vercel@39.1.3:
+    resolution: {integrity: sha512-dB9soUMRY+MHg5JDyztBWpOWYPTAS5PoU/4YwyrOI+QfF9d5GUVIQ3TVb/CccFSXGrpAgLdkoaEBNDmg9+700g==}
     engines: {node: '>= 16'}
     hasBin: true
 
@@ -5316,7 +5316,7 @@ snapshots:
       - encoding
       - supports-color
 
-  '@vercel/node@3.2.27':
+  '@vercel/node@3.2.28':
     dependencies:
       '@edge-runtime/node-utils': 2.3.0
       '@edge-runtime/primitives': 4.1.0
@@ -8434,14 +8434,14 @@ snapshots:
   validator@13.12.0:
     optional: true
 
-  vercel@39.1.2:
+  vercel@39.1.3:
     dependencies:
       '@vercel/build-utils': 8.6.0
       '@vercel/fun': 1.1.0
       '@vercel/go': 3.2.1
       '@vercel/hydrogen': 1.0.9
       '@vercel/next': 4.4.0
-      '@vercel/node': 3.2.27
+      '@vercel/node': 3.2.28
       '@vercel/python': 4.5.1
       '@vercel/redwood': 2.1.8
       '@vercel/remix-builder': 2.2.14
