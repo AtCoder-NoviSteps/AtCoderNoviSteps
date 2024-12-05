@@ -33,7 +33,7 @@
     "@eslint/eslintrc": "3.2.0",
     "@eslint/js": "9.16.0",
     "@playwright/test": "1.49.0",
-    "@quramy/prisma-fabbrica": "2.2.1",
+    "@quramy/prisma-fabbrica": "2.2.2",
     "@sveltejs/adapter-auto": "3.3.1",
     "@sveltejs/adapter-vercel": "5.5.0",
     "@sveltejs/kit": "2.9.0",
