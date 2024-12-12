@@ -4,7 +4,7 @@ import { delay } from '$lib/utils/time';
 describe('Delay', () => {
   it('expected to be resolved after the specified delay', async () => {
     const start = performance.now();
-    const milliseconds = 100;
+    const milliseconds = 90;
     await delay(milliseconds);
     const end = performance.now();
 
