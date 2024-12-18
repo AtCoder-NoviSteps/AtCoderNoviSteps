@@ -89,7 +89,7 @@
     "prisma-erd-generator": "1.11.2",
     "svelte-eslint-parser": "0.43.0",
     "tailwind-merge": "2.5.5",
-    "tailwindcss": "3.4.16",
+    "tailwindcss": "3.4.17",
     "vercel": "39.2.2",
     "xss": "1.0.15"
   },
