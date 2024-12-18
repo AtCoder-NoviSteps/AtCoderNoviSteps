@@ -186,6 +186,13 @@ export const agc = agcContestIds.map((contestId) =>
   }),
 );
 
+export const abcLike = [
+  createTestCaseForContestType('Panasonic 2020')({
+    contestId: 'panasonic2020',
+    expected: ContestType.ABC_LIKE,
+  }),
+];
+
 export const arcLike = [
   createTestCaseForContestType('Tenka1 2018')({
     contestId: 'tenka1-2018',

@@ -123,7 +123,15 @@ describe('Contest', () => {
         });
       });
 
-      describe('when contest_id mean arc-like', () => {
+      describe('when contest_id means abc-like', () => {
+        TestCasesForContestType.abcLike.forEach(({ name, value }) => {
+          runTests(`${name}`, [value], ({ contestId, expected }: TestCaseForContestType) => {
+            expect(classifyContest(contestId)).toEqual(expected);
+          });
+        });
+      });
+
+      describe('when contest_id means arc-like', () => {
         TestCasesForContestType.arcLike.forEach(({ name, value }) => {
           runTests(`${name}`, [value], ({ contestId, expected }: TestCaseForContestType) => {
             expect(classifyContest(contestId)).toEqual(expected);
@@ -131,7 +139,7 @@ describe('Contest', () => {
         });
       });
 
-      describe('when contest_id mean agc-like', () => {
+      describe('when contest_id means agc-like', () => {
         TestCasesForContestType.agcLike.forEach(({ name, value }) => {
           runTests(`${name}`, [value], ({ contestId, expected }: TestCaseForContestType) => {
             expect(classifyContest(contestId)).toEqual(expected);
@@ -283,6 +291,14 @@ describe('Contest', () => {
 
       describe('when contest_id contains agc', () => {
         TestCasesForContestType.agc.forEach(({ name, value }) => {
+          runTests(`${name}`, [value], ({ contestId, expected }: TestCaseForContestType) => {
+            expect(getContestPriority(contestId)).toEqual(contestTypePriorities.get(expected));
+          });
+        });
+      });
+
+      describe('when contest_id means abc-like', () => {
+        TestCasesForContestType.abcLike.forEach(({ name, value }) => {
           runTests(`${name}`, [value], ({ contestId, expected }: TestCaseForContestType) => {
             expect(getContestPriority(contestId)).toEqual(contestTypePriorities.get(expected));
           });
