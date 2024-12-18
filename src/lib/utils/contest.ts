@@ -56,6 +56,10 @@ export const classifyContest = (contest_id: string) => {
     return ContestType.MATH_AND_ALGORITHM;
   }
 
+  if (abcLikePrefixes.has(contest_id)) {
+    return ContestType.ABC_LIKE;
+  }
+
   if (arcLikePrefixes.has(contest_id)) {
     return ContestType.ARC_LIKE;
   }
@@ -88,8 +92,13 @@ export const classifyContest = (contest_id: string) => {
   return null;
 };
 
-// HACK: As of early November 2024, the following contests are applicable.
+// HACK: As of December 2024, the following contests are applicable.
 // Note: The classification logic may need to be revised when new contests are added.
+const ABC_LIKE: ContestPrefix = {
+  panasonic2020: 'パナソニックプログラミングコンテスト 2020',
+} as const;
+const abcLikePrefixes = new Set(getContestPrefixes(ABC_LIKE));
+
 const ARC_LIKE: ContestPrefix = {
   'tenka1-2018': 'Tenka1 Programmer Contest 2018',
   'dwacon5th-prelims': '第5回 ドワンゴからの挑戦状 予選',
