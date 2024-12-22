@@ -13,7 +13,12 @@
 </script>
 
 <div class="container w-full lg:w-2/3 mx-auto mt-6 lg:mt-10 overflow-auto rounded-md border">
-  <Table shadow id="grade-guideline" class="text-md table-fixed w-full">
+  <Table
+    shadow
+    id="grade-guideline"
+    class="text-md table-fixed w-full"
+    aria-label="Task grade guideline table"
+  >
     <TableHead class="text-sm bg-gray-100">
       <TableHeadCell class="w-28 xs:w-32 text-center">ABCの配点</TableHeadCell>
       <TableHeadCell class="w-40 hidden sm:table-cell text-center">問題</TableHeadCell>
