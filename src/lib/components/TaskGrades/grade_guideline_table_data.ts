@@ -1,6 +1,15 @@
 import { TaskGrade } from '$lib/types/task';
 
-export const gradeGuidelineTableData = [
+type TaskGradeGuideline = {
+  point: string;
+  task: string;
+  lowerGrade: TaskGrade;
+  upperGrade: TaskGrade;
+};
+
+type TaskGradeGuidelines = TaskGradeGuideline[];
+
+export const gradeGuidelineTableData: TaskGradeGuidelines = [
   {
     point: '〜 100',
     task: '（JOI 一次予選 A）',
