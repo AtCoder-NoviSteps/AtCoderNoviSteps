@@ -1,11 +1,14 @@
 <script lang="ts">
   import { Tabs } from 'flowbite-svelte';
 
-  import { compareByContestIdAndTaskId } from '$lib/utils/task.js';
+  import type { TaskResults } from '$lib/types/task';
+
+  import { compareByContestIdAndTaskId } from '$lib/utils/task';
+
   import HeadingOne from '$lib/components/HeadingOne.svelte';
   import TabItemWrapper from '$lib/components/TabItemWrapper.svelte';
-  import type { TaskResults } from '$lib/types/task';
   import TaskGradeList from '$lib/components/TaskGradeList.svelte';
+  import GradeGuidelineTable from '$lib/components/TaskGrades/GradeGuidelineTable.svelte';
 
   export let data;
 
@@ -25,6 +28,11 @@
     <!-- Grades -->
     <TabItemWrapper workbookType={null} isOpen={true} title="グレード">
       <TaskGradeList {taskResults} {isAdmin} {isLoggedIn}></TaskGradeList>
+    </TabItemWrapper>
+
+    <!-- Grade guidelines -->
+    <TabItemWrapper workbookType={null} title="グレードの目安">
+      <GradeGuidelineTable />
     </TabItemWrapper>
 
     <!-- HACK: 以下、各テーブルを実装するまで非表示 -->
