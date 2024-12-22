@@ -22,3 +22,6 @@ export const AOJ_PCK_URL: string = 'https://pro-ktmr.github.io/aoj-pck/';
 export const ICPC_JAPAN_PROBLEMS_URL: string = 'https://icpc-japan-problems.irrrrr.cc/';
 
 export const GITHUB_URL: string = 'https://github.com/AtCoder-NoviSteps/AtCoderNoviSteps';
+
+export const TASK_GRADE_CRITERIA_SHEET_URL: string =
+  'https://docs.google.com/spreadsheets/d/1GJbTRRBsoBaY-CXIr3dIXmxkwacV4nHOTOIMCmo__Ug/';

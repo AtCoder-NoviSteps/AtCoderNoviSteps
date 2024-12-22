@@ -8,11 +8,25 @@
     TableHeadCell,
   } from 'flowbite-svelte';
 
+  import ExternalLinkWrapper from '$lib/components/ExternalLinkWrapper.svelte';
   import { gradeGuidelineTableData } from '$lib/components/TaskGrades/grade_guideline_table_data';
   import GradeLabel from '$lib/components/GradeLabel.svelte';
+
+  import { TASK_GRADE_CRITERIA_SHEET_URL } from '$lib/constants/urls';
 </script>
 
-<div class="container w-full lg:w-2/3 mx-auto mt-6 lg:mt-10 overflow-auto rounded-md border">
+<div class="container mx-auto w-5/6 lg:w-2/3 mt-6 text-gray-800 dark:text-gray-300">
+  <div>
+    AtCoder Beginners Contest（通称、ABC）の配点・問題と、対応するグレードの目安を示しています。
+  </div>
+  <div>
+    また、各グレードの基準に関しては、
+    <ExternalLinkWrapper url={TASK_GRADE_CRITERIA_SHEET_URL} description="こちら" />
+    をご覧ください。
+  </div>
+</div>
+
+<div class="container w-full lg:w-2/3 mx-auto mt-3 sm:mt-4 overflow-auto rounded-md border">
   <Table
     shadow
     id="grade-guideline"
