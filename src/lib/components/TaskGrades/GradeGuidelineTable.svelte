@@ -20,7 +20,7 @@
     aria-label="Task grade guideline table"
   >
     <TableHead class="text-sm bg-gray-100">
-      <TableHeadCell class="w-28 xs:w-32 text-center">ABCの配点</TableHeadCell>
+      <TableHeadCell class="w-24 xs:w-32 px-3 sm:px-6 text-center">ABCの配点</TableHeadCell>
       <TableHeadCell class="w-40 hidden sm:table-cell text-center">問題</TableHeadCell>
       <TableHeadCell class="w-40 text-center">対応グレード</TableHeadCell>
     </TableHead>
