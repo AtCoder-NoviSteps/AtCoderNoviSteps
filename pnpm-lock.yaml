@@ -54,8 +54,8 @@ importers:
         specifier: 0.43.0
         version: 0.43.0(svelte@4.2.19)
       tailwind-merge:
-        specifier: 2.5.5
-        version: 2.5.5
+        specifier: 2.6.0
+        version: 2.6.0
       tailwindcss:
         specifier: 3.4.17
         version: 3.4.17(ts-node@10.9.1(@types/node@16.18.11)(typescript@5.6.3))
@@ -125,7 +125,7 @@ importers:
         version: 0.46.6(rollup@4.24.0)(svelte@4.2.19)
       flowbite-svelte-icons:
         specifier: 1.6.2
-        version: 1.6.2(svelte@4.2.19)(tailwind-merge@2.5.5)(tailwindcss@3.4.17(ts-node@10.9.1(@types/node@16.18.11)(typescript@5.6.3)))
+        version: 1.6.2(svelte@4.2.19)(tailwind-merge@2.6.0)(tailwindcss@3.4.17(ts-node@10.9.1(@types/node@16.18.11)(typescript@5.6.3)))
       globals:
         specifier: 15.14.0
         version: 15.14.0
@@ -3923,8 +3923,8 @@ packages:
     resolution: {integrity: sha512-qd/R7n5rQTRFi+Zf2sk5XVVd9UQl6ZkduPFC3S7WEGJAmetDTjY3qPN50eSKzwuzEyQKy5TN2TiZdkIjos2L6A==}
     engines: {node: '>=8.0.0'}
 
-  tailwind-merge@2.5.5:
-    resolution: {integrity: sha512-0LXunzzAZzo0tEPxV3I297ffKZPlKDrjj7NXphC8V5ak9yHC5zRmxnOe2m/Rd/7ivsOMJe3JZ2JVocoDdQTRBA==}
+  tailwind-merge@2.6.0:
+    resolution: {integrity: sha512-P+Vu1qXfzediirmHOC3xKGAYeZtPcV9g76X+xg2FD4tYgR71ewMA35Y3sCz3zhiN/dwefRpJX0yBcgwi1fXNQA==}
 
   tailwindcss@3.4.17:
     resolution: {integrity: sha512-w33E2aCvSDP0tW9RZuNXadXlkHXqFzSkQew/aIa2i/Sj8fThxwovwlXHSPXTbAHwEIhBFXAedUhP2tueAKP8Og==}
@@ -6710,10 +6710,10 @@ snapshots:
     transitivePeerDependencies:
       - rollup
 
-  flowbite-svelte-icons@1.6.2(svelte@4.2.19)(tailwind-merge@2.5.5)(tailwindcss@3.4.17(ts-node@10.9.1(@types/node@16.18.11)(typescript@5.6.3))):
+  flowbite-svelte-icons@1.6.2(svelte@4.2.19)(tailwind-merge@2.6.0)(tailwindcss@3.4.17(ts-node@10.9.1(@types/node@16.18.11)(typescript@5.6.3))):
     dependencies:
       svelte: 4.2.19
-      tailwind-merge: 2.5.5
+      tailwind-merge: 2.6.0
       tailwindcss: 3.4.17(ts-node@10.9.1(@types/node@16.18.11)(typescript@5.6.3))
 
   flowbite-svelte@0.46.6(rollup@4.24.0)(svelte@4.2.19):
@@ -6722,7 +6722,7 @@ snapshots:
       apexcharts: 3.49.2
       flowbite: 2.5.2(rollup@4.24.0)
       svelte: 4.2.19
-      tailwind-merge: 2.5.5
+      tailwind-merge: 2.6.0
     transitivePeerDependencies:
       - rollup
 
@@ -8164,7 +8164,7 @@ snapshots:
       nanoid: 5.0.7
       randomcolor: 0.6.2
       svelte: 4.2.19
-      tailwind-merge: 2.5.5
+      tailwind-merge: 2.6.0
       tippy.js: 6.3.7
 
   stylis@4.3.2: {}
@@ -8317,7 +8317,7 @@ snapshots:
       typical: 5.2.0
       wordwrapjs: 4.0.1
 
-  tailwind-merge@2.5.5: {}
+  tailwind-merge@2.6.0: {}
 
   tailwindcss@3.4.17(ts-node@10.9.1(@types/node@16.18.11)(typescript@5.6.3)):
     dependencies:
