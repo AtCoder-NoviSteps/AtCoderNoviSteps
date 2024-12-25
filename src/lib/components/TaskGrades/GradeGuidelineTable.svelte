@@ -35,7 +35,7 @@
   >
     <TableHead class="text-sm bg-gray-100">
       <TableHeadCell class="w-24 xs:w-32 px-3 sm:px-6 text-center">ABC の配点</TableHeadCell>
-      <TableHeadCell class="w-40 hidden sm:table-cell text-center">ABC の問題 id</TableHeadCell>
+      <TableHeadCell class="w-40 hidden sm:table-cell text-center">ABC の問題 ID</TableHeadCell>
       <TableHeadCell class="w-40 text-center">対応グレード</TableHeadCell>
     </TableHead>
 
