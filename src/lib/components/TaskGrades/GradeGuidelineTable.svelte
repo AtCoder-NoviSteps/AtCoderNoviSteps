@@ -17,7 +17,7 @@
 
 <div class="container mx-auto w-5/6 lg:w-2/3 mt-6 text-gray-800 dark:text-gray-300">
   <div>
-    AtCoder Beginners Contest（通称、ABC）の配点・問題と、対応するグレードの目安を示しています。
+    AtCoder Beginners Contest（通称、ABC）の配点・問題 IDと、対応するグレードの目安を示しています。
   </div>
   <div>
     また、各グレードの基準に関しては、
@@ -34,8 +34,8 @@
     aria-label="Task grade guideline table"
   >
     <TableHead class="text-sm bg-gray-100">
-      <TableHeadCell class="w-24 xs:w-32 px-3 sm:px-6 text-center">ABCの配点</TableHeadCell>
-      <TableHeadCell class="w-40 hidden sm:table-cell text-center">問題</TableHeadCell>
+      <TableHeadCell class="w-24 xs:w-32 px-3 sm:px-6 text-center">ABC の配点</TableHeadCell>
+      <TableHeadCell class="w-40 hidden sm:table-cell text-center">ABC の問題 ID</TableHeadCell>
       <TableHeadCell class="w-40 text-center">対応グレード</TableHeadCell>
     </TableHead>
 
@@ -45,17 +45,11 @@
           <TableBodyCell class="text-sm xs:text-md text-center py-3">{point}</TableBodyCell>
           <TableBodyCell class="text-center py-3 hidden sm:table-cell">{task}</TableBodyCell>
 
-          {#if upperGrade === lowerGrade}
-            <TableBodyCell class="flex items-center justify-center space-x-3 py-3">
-              <GradeLabel taskGrade={upperGrade} />
-            </TableBodyCell>
-          {:else}
-            <TableBodyCell class="flex items-center justify-center space-x-3 py-3">
-              <GradeLabel taskGrade={lowerGrade} />
-              <p>〜</p>
-              <GradeLabel taskGrade={upperGrade} />
-            </TableBodyCell>
-          {/if}
+          <TableBodyCell class="flex items-center justify-center space-x-3 py-3">
+            <GradeLabel taskGrade={lowerGrade} />
+            <p>〜</p>
+            <GradeLabel taskGrade={upperGrade} />
+          </TableBodyCell>
         </TableBodyRow>
       {/each}
     </TableBody>

@@ -11,12 +11,6 @@ type TaskGradeGuidelines = TaskGradeGuideline[];
 
 export const gradeGuidelineTableData: TaskGradeGuidelines = [
   {
-    point: '〜 100',
-    task: '（JOI 一次予選 A）',
-    lowerGrade: TaskGrade.Q10,
-    upperGrade: TaskGrade.Q10,
-  },
-  {
     point: '100',
     task: 'A',
     lowerGrade: TaskGrade.Q9,
