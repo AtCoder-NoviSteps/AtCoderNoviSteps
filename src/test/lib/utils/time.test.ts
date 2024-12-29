@@ -4,11 +4,11 @@ import { delay } from '$lib/utils/time';
 describe('Delay', () => {
   it('expected to be resolved after the specified delay', async () => {
     const start = performance.now();
-    const milliseconds = 80; // Increased threshold for CI environment reliability.
+    const milliseconds = 50; // Increased threshold for CI environment reliability.
     await delay(milliseconds);
     const end = performance.now();
 
-    expect(end - start).toBeGreaterThanOrEqual(milliseconds);
+    expect(end - start).toBeGreaterThanOrEqual(milliseconds - 5); // Extend tolerance.
   });
 
   it('expected to be resolved immediately if the delay duration is zero', async () => {

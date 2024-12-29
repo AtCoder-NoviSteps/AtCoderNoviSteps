@@ -93,5 +93,5 @@
     "vercel": "39.2.2",
     "xss": "1.0.15"
   },
-  "packageManager": "pnpm@9.13.2"
+  "packageManager": "pnpm@9.15.2"
 }
