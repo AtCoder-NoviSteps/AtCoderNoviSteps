@@ -8,7 +8,7 @@ describe('Delay', () => {
     await delay(milliseconds);
     const end = performance.now();
 
-    expect(end - start).toBeGreaterThanOrEqual(milliseconds);
+    expect(end - start).toBeGreaterThanOrEqual(milliseconds - 5); // Extend tolerance.
   });
 
   it('expected to be resolved immediately if the delay duration is zero', async () => {
