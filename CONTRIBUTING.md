@@ -24,13 +24,13 @@
 - 開発言語
   - [TypeScript](https://www.typescriptlang.org/)
 - JavaScriptのランタイム
-  - [Node.js](https://nodejs.org): v20+
+  - [Node.js](https://nodejs.org): v22.x
 - 汎用フレームワーク
-  - [SvelteKit](https://kit.svelte.dev/)
+  - [SvelteKit](https://kit.svelte.dev/): v5.xに移行予定。
 - UIライブラリ
   - [shadcn-svelte](https://www.shadcn-svelte.com/): 主にData Tableを使用予定。将来的には、以下のライブラリを使って実装している部分を置き換える。
   - [Flowbite Svelte](https://flowbite-svelte.com/)
-  - [STWUI](https://stwui.vercel.app/)
+  - [STWUI](https://stwui.vercel.app/): 開発が事実上終了した可能性が高いため、使用しているコンポーネントを調べて別のライブラリに移行する。
 - テスティングフレームワーク
   - [Vitest](https://vitest.dev/): 単体テスト (ユーティリティ、コンポーネント)
   - [Playwright](https://playwright.dev/): e2eテスト
