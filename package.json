@@ -85,7 +85,7 @@
     "just-extend": "6.2.0",
     "lucia": "2.7.7",
     "playwright": "1.49.1",
-    "pnpm": "9.15.1",
+    "pnpm": "9.15.2",
     "prisma-erd-generator": "1.11.2",
     "svelte-eslint-parser": "0.43.0",
     "tailwind-merge": "2.6.0",
