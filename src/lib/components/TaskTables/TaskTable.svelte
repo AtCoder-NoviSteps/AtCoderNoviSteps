@@ -15,6 +15,7 @@
   import { ContestType } from '$lib/types/contest';
 
   import ExternalLinkWrapper from '$lib/components/ExternalLinkWrapper.svelte';
+  import GradeLabel from '$lib/components/GradeLabel.svelte';
 
   import { classifyContest, getContestNameLabel } from '$lib/utils/contest';
   import { getTaskTableHeaderName, getTaskUrl, removeTaskIndexFromTitle } from '$lib/utils/task';
@@ -95,11 +96,11 @@
 <div class="overflow-auto rounded-md border">
   <Table shadow class="text-md">
     <TableHead class="text-sm bg-gray-100">
-      <TableHeadCell>Round</TableHeadCell>
+      <TableHeadCell class="text-center border-r">Round</TableHeadCell>
 
       {#if taskTableIndices.length}
-        {#each taskTableIndices as taskIndex}
-          <TableHeadCell>{taskIndex}</TableHeadCell>
+        {#each taskTableIndices as taskTableIndex}
+          <TableHeadCell class="text-center border-r">{taskTableIndex}</TableHeadCell>
         {/each}
       {/if}
     </TableHead>
@@ -108,20 +109,28 @@
       {#if contestIds.length && taskTableIndices.length}
         {#each contestIds as contestId}
           <TableBodyRow>
-            <TableBodyCell>{getContestNameLabel(contestId)}</TableBodyCell>
+            <TableBodyCell class="px-3 py-2 text-center border-r">
+              {getContestNameLabel(contestId)}
+            </TableBodyCell>
 
             {#each taskTableIndices as taskIndex}
-              <TableBodyCell>
+              <TableBodyCell class="px-2 py-2 border-r">
                 {#if taskTable[contestId][taskIndex]}
-                  <ExternalLinkWrapper
-                    url={getTaskUrl(contestId, taskTable[contestId][taskIndex].task_id)}
-                    description={removeTaskIndexFromTitle(
-                      taskTable[contestId][taskIndex].title,
-                      taskTable[contestId][taskIndex].task_table_index,
-                    )}
-                    textSize="xs:text-md"
-                    textColorInDarkMode="dark:text-gray-300"
-                  />
+                  <!-- TODO: コンポーネントとして切り出す -->
+                  <div class="w-28 truncate">
+                    <ExternalLinkWrapper
+                      url={getTaskUrl(contestId, taskTable[contestId][taskIndex].task_id)}
+                      description={removeTaskIndexFromTitle(
+                        taskTable[contestId][taskIndex].title,
+                        taskTable[contestId][taskIndex].task_table_index,
+                      )}
+                      textSize="xs:text-md"
+                      textColorInDarkMode="dark:text-gray-300"
+                    />
+                  </div>
+                  <GradeLabel taskGrade={taskTable[contestId][taskIndex].grade} />
+                  {'更新'}
+                  {'詳細'}
                 {/if}
               </TableBodyCell>
             {/each}
