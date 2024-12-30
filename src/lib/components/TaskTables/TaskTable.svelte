@@ -21,28 +21,29 @@
   let contestNames: Array<string> | null = null;
   let headerNames: Array<string> | null = null;
 
-  $: selectedTaskResults = taskResults.filter(fromABC212_Onwards);
+  $: selectedTaskResults = filterTaskResultsByContestType(fromABC212_Onwards);
+  $: contestNames = getContestNames(selectedTaskResults);
+  $: headerNames = getTaskIndices(selectedTaskResults, ContestType.ABC);
 
-  // FIXME: 冗長な記述をリファクタリング
-  // eslint-disable-next-line  @typescript-eslint/no-explicit-any
-  const handleClick = (event: any) => {
-    selectedContestType = event.target.value;
-    selectedTaskResults = taskResults.filter(
-      (taskResult: TaskResult) => classifyContest(taskResult.contest_id) === selectedContestType,
-    );
+  function filterTaskResultsByContestType(
+    condition: (taskResult: TaskResult) => boolean,
+  ): TaskResults {
+    return taskResults.filter(condition);
+  }
 
+  function getContestNames(selectedTaskResults: TaskResults): Array<string> {
     const contestList = selectedTaskResults.map((taskResult: TaskResult) => taskResult.contest_id);
-    contestNames = Array.from(new Set(contestList)).sort().reverse();
+    return Array.from(new Set(contestList)).sort().reverse();
+  }
 
+  function getTaskIndices(
+    selectedTaskResults: TaskResults,
+    selectedContestType: ContestType,
+  ): Array<string> {
     const headerList = selectedTaskResults.map((taskResult: TaskResult) =>
       getTaskTableHeaderName(selectedContestType, taskResult),
     );
-
-    headerNames = Array.from(new Set(headerList)).sort();
-  };
-
-  function filterByContestType(condition: (taskResult: TaskResult) => boolean): void {
-    selectedTaskResults = taskResults.filter(condition);
+    return Array.from(new Set(headerList)).sort();
   }
 
   // Note:
@@ -55,7 +56,7 @@
 <!-- See: -->
 <!-- https://flowbite-svelte.com/docs/components/button-group -->
 <ButtonGroup class="m-4 contents-center">
-  <Button on:click={() => filterByContestType(fromABC212_Onwards)}>ABC212〜</Button>
+  <Button on:click={() => filterTaskResultsByContestType(fromABC212_Onwards)}>ABC212〜</Button>
 </ButtonGroup>
 
 <!-- TODO: 該当する問題をテーブル形式で表示する -->
