@@ -66,6 +66,7 @@
   <p>問題数: {selectedTaskResults.length}</p>
 {/if}
 
+<!-- TODO: ページネーションを実装 -->
 <Table shadow hoverable={true}>
   <TableHead>
     <TableHeadCell>Contest</TableHeadCell>
