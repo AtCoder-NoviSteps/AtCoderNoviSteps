@@ -30,6 +30,7 @@
     return taskResults.filter(condition);
   }
 
+  // TODO: 任意のコンテスト種別に拡張
   function getContestNames(selectedTaskResults: TaskResults): Array<string> {
     const contestList = selectedTaskResults.map((taskResult: TaskResult) => taskResult.contest_id);
     return Array.from(new Set(contestList)).sort().reverse();
