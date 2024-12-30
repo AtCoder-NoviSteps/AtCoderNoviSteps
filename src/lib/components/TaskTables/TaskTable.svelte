@@ -1,5 +1,6 @@
 <script lang="ts">
   import {
+    Heading,
     ButtonGroup,
     Button,
     Table,
@@ -11,10 +12,12 @@
   } from 'flowbite-svelte';
 
   import type { TaskResults, TaskResult } from '$lib/types/task';
-
   import { ContestType } from '$lib/types/contest';
+
+  import ExternalLinkWrapper from '$lib/components/ExternalLinkWrapper.svelte';
+
   import { classifyContest, getContestNameLabel } from '$lib/utils/contest';
-  import { getTaskTableHeaderName } from '$lib/utils/task';
+  import { getTaskTableHeaderName, getTaskUrl, removeTaskIndexFromTitle } from '$lib/utils/task';
 
   export let taskResults: TaskResults;
 
@@ -83,43 +86,48 @@
   <Button on:click={() => filterTaskResultsByContestType(fromABC212_Onwards)}>ABC212〜</Button>
 </ButtonGroup>
 
-<!-- TODO: コンテスト種別に応じて変更できるようにする -->
-<h2 class="dark:text-gray-100">AtCoder Beginners Contest</h2>
+<!-- TODO: コンテスト種別に応じて動的に変更できるようにする -->
+<Heading tag="h2" class="text-2xl pb-3 text-gray-900 dark:text-white">
+  {'AtCoder Beginners Contest'}
+</Heading>
 
 <!-- TODO: ページネーションを実装 -->
-<Table shadow>
-  <TableHead>
-    <TableHeadCell>Round</TableHeadCell>
+<div class="overflow-auto rounded-md border">
+  <Table shadow class="text-md">
+    <TableHead class="text-sm bg-gray-100">
+      <TableHeadCell>Round</TableHeadCell>
 
-    {#if taskTableIndices.length}
-      {#each taskTableIndices as taskIndex}
-        <TableHeadCell>{taskIndex}</TableHeadCell>
-      {/each}
-    {/if}
-  </TableHead>
+      {#if taskTableIndices.length}
+        {#each taskTableIndices as taskIndex}
+          <TableHeadCell>{taskIndex}</TableHeadCell>
+        {/each}
+      {/if}
+    </TableHead>
 
-  <TableBody tableBodyClass="divede-y">
-    {#if contestIds.length && taskTableIndices.length}
-      {#each contestIds as contestName}
-        <TableBodyRow>
-          <TableBodyCell>{getContestNameLabel(contestName)}</TableBodyCell>
+    <TableBody tableBodyClass="divede-y">
+      {#if contestIds.length && taskTableIndices.length}
+        {#each contestIds as contestId}
+          <TableBodyRow>
+            <TableBodyCell>{getContestNameLabel(contestId)}</TableBodyCell>
 
-          {#each taskTableIndices as taskIndex}
-            <TableBodyCell>
-              {#if taskTable[contestName][taskIndex]}
-                {taskTable[contestName][taskIndex].title}
-                <!-- <a
-                  href={`https://atcoder.jp/contests/${contestName}/tasks/${taskIndex}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  {contestIdAndTaskIndexTable[contestName][taskIndex].task_name}
-                </a> -->
-              {/if}
-            </TableBodyCell>
-          {/each}
-        </TableBodyRow>
-      {/each}
-    {/if}
-  </TableBody>
-</Table>
+            {#each taskTableIndices as taskIndex}
+              <TableBodyCell>
+                {#if taskTable[contestId][taskIndex]}
+                  <ExternalLinkWrapper
+                    url={getTaskUrl(contestId, taskTable[contestId][taskIndex].task_id)}
+                    description={removeTaskIndexFromTitle(
+                      taskTable[contestId][taskIndex].title,
+                      taskTable[contestId][taskIndex].task_table_index,
+                    )}
+                    textSize="xs:text-md"
+                    textColorInDarkMode="dark:text-gray-300"
+                  />
+                {/if}
+              </TableBodyCell>
+            {/each}
+          </TableBodyRow>
+        {/each}
+      {/if}
+    </TableBody>
+  </Table>
+</div>
