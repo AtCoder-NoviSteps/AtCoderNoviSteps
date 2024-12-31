@@ -30,7 +30,7 @@
     <!-- WIP: UIのデザインが試行錯誤の段階であるため、管理者のみ閲覧可能 -->
     {#if isAdmin}
       <TabItemWrapper workbookType={null} isOpen={true} title="テーブル">
-        <TaskTable {taskResults} />
+        <TaskTable {taskResults} {isLoggedIn} />
       </TabItemWrapper>
     {/if}
 

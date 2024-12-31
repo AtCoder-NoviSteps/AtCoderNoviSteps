@@ -16,11 +16,14 @@
 
   import ExternalLinkWrapper from '$lib/components/ExternalLinkWrapper.svelte';
   import GradeLabel from '$lib/components/GradeLabel.svelte';
+  import SubmissionStatusImage from '$lib/components/SubmissionStatus/SubmissionStatusImage.svelte';
 
   import { classifyContest, getContestNameLabel } from '$lib/utils/contest';
   import { getTaskTableHeaderName, getTaskUrl, removeTaskIndexFromTitle } from '$lib/utils/task';
+  import { getBackgroundColorFrom } from '$lib/services/submission_status';
 
   export let taskResults: TaskResults;
+  export let isLoggedIn: boolean;
 
   let selectedTaskResults: TaskResults;
   let contestIds: Array<string>;
@@ -78,6 +81,16 @@
 
     return table;
   }
+
+  function getBackgroundColor(taskResult: TaskResult): string {
+    const statusName = taskResult?.status_name;
+
+    if (taskResult && statusName !== 'ns') {
+      return getBackgroundColorFrom(statusName);
+    }
+
+    return '';
+  }
 </script>
 
 <!-- TODO: コンテスト種別のボタンの並び順を決める -->
@@ -96,7 +109,7 @@
 <!-- See: -->
 <!-- https://github.com/kenkoooo/AtCoderProblems/blob/master/atcoder-problems-frontend/src/pages/TablePage/AtCoderRegularTable.tsx -->
 <!-- https://github.com/birdou/atcoder-blogs/blob/main/app/atcoder-blogs-frontend/src/pages/BlogTablePage/BlogTablePage.tsx -->
-<div class="container w-full overflow-auto rounded-md">
+<div class="container w-full overflow-auto border rounded-md">
   <Table shadow id="task-table" class="text-md table-fixed" aria-label="Task table">
     <TableHead class="text-sm bg-gray-100">
       <TableHeadCell class="w-16 px-2 text-center border">Round</TableHeadCell>
@@ -118,9 +131,12 @@
             </TableBodyCell>
 
             {#each taskTableIndices as taskIndex}
-              <TableBodyCell class="px-2 py-2 border">
+              <TableBodyCell
+                class="px-2 py-2 border {getBackgroundColor(taskTable[contestId][taskIndex])}"
+              >
                 {#if taskTable[contestId][taskIndex]}
                   <!-- TODO: コンポーネントとして切り出す -->
+                  <!-- Task name and URL -->
                   <ExternalLinkWrapper
                     url={getTaskUrl(contestId, taskTable[contestId][taskIndex].task_id)}
                     description={removeTaskIndexFromTitle(
@@ -133,13 +149,18 @@
                     iconSize={0}
                   />
 
+                  <!-- Grade -->
                   <div class="flex items-center justify-center space-x-3 py-0.5">
                     <GradeLabel taskGrade={taskTable[contestId][taskIndex].grade} />
                   </div>
 
                   <div class="place-items-center">
                     <div>
-                      {'更新'}
+                      <SubmissionStatusImage
+                        isHideImage={true}
+                        taskResult={taskTable[contestId][taskIndex]}
+                        {isLoggedIn}
+                      />
                     </div>
                     <div>
                       {'詳細'}
