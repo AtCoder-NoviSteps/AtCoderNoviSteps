@@ -132,7 +132,9 @@
 
             {#each taskTableIndices as taskIndex}
               <TableBodyCell
-                class="px-2 py-2 border {getBackgroundColor(taskTable[contestId][taskIndex])}"
+                class="px-2 py-2 text-center border {getBackgroundColor(
+                  taskTable[contestId][taskIndex],
+                )}"
               >
                 {#if taskTable[contestId][taskIndex]}
                   <!-- TODO: コンポーネントとして切り出す -->
@@ -150,11 +152,12 @@
                   />
 
                   <!-- Grade -->
-                  <div class="flex items-center justify-center space-x-3 py-0.5">
+                  <div class="flex items-center justify-center space-x-3 py-2">
                     <GradeLabel taskGrade={taskTable[contestId][taskIndex].grade} />
                   </div>
 
-                  <div class="place-items-center">
+                  <!-- Submission updater and links of task detail page -->
+                  <div class="flex justify-between space-x-3">
                     <div>
                       <SubmissionStatusImage
                         isHideImage={true}
@@ -162,7 +165,7 @@
                         {isLoggedIn}
                       />
                     </div>
-                    <div>
+                    <div class="flex items-center justify-center text-sm">
                       {'詳細'}
                     </div>
                   </div>
