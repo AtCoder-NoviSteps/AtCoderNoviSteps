@@ -89,18 +89,21 @@
 
 <!-- TODO: コンテスト種別に応じて動的に変更できるようにする -->
 <Heading tag="h2" class="text-2xl pb-3 text-gray-900 dark:text-white">
-  {'AtCoder Beginners Contest'}
+  {'AtCoder Beginners Contest 212 〜'}
 </Heading>
 
 <!-- TODO: ページネーションを実装 -->
-<div class="overflow-auto rounded-md border">
-  <Table shadow class="text-md">
+<!-- See: -->
+<!-- https://github.com/kenkoooo/AtCoderProblems/blob/master/atcoder-problems-frontend/src/pages/TablePage/AtCoderRegularTable.tsx -->
+<!-- https://github.com/birdou/atcoder-blogs/blob/main/app/atcoder-blogs-frontend/src/pages/BlogTablePage/BlogTablePage.tsx -->
+<div class="container w-full overflow-auto rounded-md">
+  <Table shadow id="task-table" class="text-md table-fixed" aria-label="Task table">
     <TableHead class="text-sm bg-gray-100">
-      <TableHeadCell class="text-center border-r">Round</TableHeadCell>
+      <TableHeadCell class="w-16 px-2 text-center border">Round</TableHeadCell>
 
       {#if taskTableIndices.length}
         {#each taskTableIndices as taskTableIndex}
-          <TableHeadCell class="text-center border-r">{taskTableIndex}</TableHeadCell>
+          <TableHeadCell class="text-center border">{taskTableIndex}</TableHeadCell>
         {/each}
       {/if}
     </TableHead>
@@ -109,28 +112,39 @@
       {#if contestIds.length && taskTableIndices.length}
         {#each contestIds as contestId}
           <TableBodyRow>
-            <TableBodyCell class="px-3 py-2 text-center border-r">
-              {getContestNameLabel(contestId)}
+            <TableBodyCell class="w-16 truncate px-2 py-2 text-center border">
+              <!-- FIXME: コンテスト種別に合わせて修正できるようにする -->
+              {getContestNameLabel(contestId).replace('ABC ', '')}
             </TableBodyCell>
 
             {#each taskTableIndices as taskIndex}
-              <TableBodyCell class="px-2 py-2 border-r">
+              <TableBodyCell class="px-2 py-2 border">
                 {#if taskTable[contestId][taskIndex]}
                   <!-- TODO: コンポーネントとして切り出す -->
-                  <div class="w-28 truncate">
-                    <ExternalLinkWrapper
-                      url={getTaskUrl(contestId, taskTable[contestId][taskIndex].task_id)}
-                      description={removeTaskIndexFromTitle(
-                        taskTable[contestId][taskIndex].title,
-                        taskTable[contestId][taskIndex].task_table_index,
-                      )}
-                      textSize="xs:text-md"
-                      textColorInDarkMode="dark:text-gray-300"
-                    />
+                  <ExternalLinkWrapper
+                    url={getTaskUrl(contestId, taskTable[contestId][taskIndex].task_id)}
+                    description={removeTaskIndexFromTitle(
+                      taskTable[contestId][taskIndex].title,
+                      taskTable[contestId][taskIndex].task_table_index,
+                    )}
+                    textSize="xs:text-md"
+                    textColorInDarkMode="dark:text-gray-300"
+                    textOverflow="min-w-[60px] max-w-[132px]"
+                    iconSize={0}
+                  />
+
+                  <div class="flex items-center justify-center space-x-3 py-0.5">
+                    <GradeLabel taskGrade={taskTable[contestId][taskIndex].grade} />
                   </div>
-                  <GradeLabel taskGrade={taskTable[contestId][taskIndex].grade} />
-                  {'更新'}
-                  {'詳細'}
+
+                  <div class="place-items-center">
+                    <div>
+                      {'更新'}
+                    </div>
+                    <div>
+                      {'詳細'}
+                    </div>
+                  </div>
                 {/if}
               </TableBodyCell>
             {/each}
