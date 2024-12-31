@@ -5,6 +5,7 @@
 
   import type { TaskResult } from '$lib/types/task';
 
+  export let isHideImage: boolean = false;
   export let taskResult: TaskResult;
   export let isLoggedIn: boolean;
 
@@ -17,7 +18,9 @@
   }
 </script>
 
-<Img src={imagePath} alt={imageAlt} class="h-7 xs:h-8 w-7 xs:w-8" />
+{#if !isHideImage}
+  <Img src={imagePath} alt={imageAlt} class="h-7 xs:h-8 w-7 xs:w-8" />
+{/if}
 
 {#if isLoggedIn}
   <div class="flex flex-col items-center ml-2 md:ml-4 text-xs">
