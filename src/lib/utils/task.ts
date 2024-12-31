@@ -1,4 +1,5 @@
 import type { UrlGenerator, UrlGenerators } from '$lib/types/url';
+import { ContestType } from '$lib/types/contest';
 import { type TaskResult, type TaskResults, TaskGrade, type TaskGrades } from '$lib/types/task';
 import { type WorkBookTaskBase } from '$lib/types/workbook';
 import { ATCODER_BASE_CONTEST_URL, AOJ_TASKS_URL } from '$lib/constants/urls';
@@ -91,6 +92,18 @@ export function compareByContestIdAndTaskId(first: TaskResult, second: TaskResul
   // 3. 問題ID(昇順)
   return first.task_table_index.localeCompare(second.task_table_index);
 }
+
+// See:
+// https://github.com/kenkoooo/AtCoderProblems/blob/master/atcoder-problems-frontend/src/pages/TablePage/AtCoderRegularTable.tsx
+export const getTaskTableHeaderName = (contestType: ContestType, taskResult: TaskResult) => {
+  if (contestType === ContestType.ABC && taskResult.task_table_index === 'H') {
+    return 'H/Ex';
+  } else if (taskResult.task_table_index === 'Ex') {
+    return 'H/Ex';
+  }
+
+  return taskResult.task_table_index;
+};
 
 // 問題一覧や問題集の詳細ページでは、AtCoder ProblemsのAPIから取得したタイトルからプレフィックス（A., B., ..., G. など）を非表示にする
 // 理由: 問題を解くときに、プレフィックスからの先入観を受けないようにするため
