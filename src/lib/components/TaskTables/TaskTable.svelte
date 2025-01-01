@@ -16,7 +16,7 @@
 
   import ExternalLinkWrapper from '$lib/components/ExternalLinkWrapper.svelte';
   import GradeLabel from '$lib/components/GradeLabel.svelte';
-  import SubmissionStatusImage from '$lib/components/SubmissionStatus/SubmissionStatusImage.svelte';
+  import IconForUpdating from '$lib/components/SubmissionStatus/IconForUpdating.svelte';
 
   import { classifyContest, getContestNameLabel } from '$lib/utils/contest';
   import { getTaskTableHeaderName, getTaskUrl, removeTaskIndexFromTitle } from '$lib/utils/task';
@@ -163,11 +163,7 @@
                   <!-- Submission updater and links of task detail page -->
                   <div class="flex justify-between space-x-3">
                     <div>
-                      <SubmissionStatusImage
-                        isHideImage={true}
-                        taskResult={taskTable[contestId][taskIndex]}
-                        {isLoggedIn}
-                      />
+                      <IconForUpdating {isLoggedIn} />
                     </div>
                     <div class="flex items-center justify-center text-sm">
                       {'詳細'}
