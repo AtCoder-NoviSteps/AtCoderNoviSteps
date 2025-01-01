@@ -132,24 +132,24 @@
 
             {#each taskTableIndices as taskIndex}
               <TableBodyCell
-                class="px-2 py-2 text-center border {getBackgroundColor(
-                  taskTable[contestId][taskIndex],
-                )}"
+                class="px-2 py-2 border {getBackgroundColor(taskTable[contestId][taskIndex])}"
               >
                 {#if taskTable[contestId][taskIndex]}
                   <!-- TODO: コンポーネントとして切り出す -->
                   <!-- Task name and URL -->
-                  <ExternalLinkWrapper
-                    url={getTaskUrl(contestId, taskTable[contestId][taskIndex].task_id)}
-                    description={removeTaskIndexFromTitle(
-                      taskTable[contestId][taskIndex].title,
-                      taskTable[contestId][taskIndex].task_table_index,
-                    )}
-                    textSize="xs:text-md"
-                    textColorInDarkMode="dark:text-gray-300"
-                    textOverflow="min-w-[60px] max-w-[132px]"
-                    iconSize={0}
-                  />
+                  <div class="text-left text-lg">
+                    <ExternalLinkWrapper
+                      url={getTaskUrl(contestId, taskTable[contestId][taskIndex].task_id)}
+                      description={removeTaskIndexFromTitle(
+                        taskTable[contestId][taskIndex].title,
+                        taskTable[contestId][taskIndex].task_table_index,
+                      )}
+                      textSize="xs:text-md"
+                      textColorInDarkMode="dark:text-gray-300"
+                      textOverflow="min-w-[60px] max-w-[132px]"
+                      iconSize={0}
+                    />
+                  </div>
 
                   <!-- Grade -->
                   <div class="flex items-center justify-center space-x-3 py-2">
