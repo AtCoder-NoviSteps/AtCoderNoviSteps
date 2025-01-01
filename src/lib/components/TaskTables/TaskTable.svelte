@@ -16,6 +16,7 @@
 
   import ExternalLinkWrapper from '$lib/components/ExternalLinkWrapper.svelte';
   import GradeLabel from '$lib/components/GradeLabel.svelte';
+  import UpdatingModal from '$lib/components/SubmissionStatus/UpdatingModal.svelte';
   import IconForUpdating from '$lib/components/SubmissionStatus/IconForUpdating.svelte';
 
   import { classifyContest, getContestNameLabel } from '$lib/utils/contest';
@@ -29,14 +30,16 @@
   let contestIds: Array<string>;
   let taskTableIndices: Array<string>;
   let taskTable: Record<string, Record<string, TaskResult>>;
+  let updatingModal: UpdatingModal;
 
   // TODO: 任意のコンテスト種別に拡張
-  $: selectedTaskResults = filterTaskResultsByContestType(fromABC212_Onwards);
+  $: selectedTaskResults = filterTaskResultsByContestType(taskResults, fromABC212_Onwards);
   $: contestIds = getContestIds(selectedTaskResults);
   $: taskTableIndices = getTaskTableIndices(selectedTaskResults, ContestType.ABC);
   $: taskTable = prepareTaskTable(selectedTaskResults, ContestType.ABC);
 
   function filterTaskResultsByContestType(
+    taskResults: TaskResults,
     condition: (taskResult: TaskResult) => boolean,
   ): TaskResults {
     return taskResults.filter(condition);
@@ -97,7 +100,9 @@
 <!-- See: -->
 <!-- https://flowbite-svelte.com/docs/components/button-group -->
 <ButtonGroup class="m-4 contents-center">
-  <Button on:click={() => filterTaskResultsByContestType(fromABC212_Onwards)}>ABC212〜</Button>
+  <Button on:click={() => filterTaskResultsByContestType(taskResults, fromABC212_Onwards)}>
+    ABC212〜
+  </Button>
 </ButtonGroup>
 
 <!-- TODO: コンテスト種別に応じて動的に変更できるようにする -->
@@ -162,9 +167,14 @@
 
                   <!-- Submission updater and links of task detail page -->
                   <div class="flex items-center justify-between">
-                    <div class="flex-1 text-center">
+                    <button
+                      type="button"
+                      class="flex-1 text-center"
+                      on:click={() => updatingModal.openModal(taskTable[contestId][taskIndex])}
+                      aria-label="Update submission"
+                    >
                       <IconForUpdating {isLoggedIn} />
-                    </div>
+                    </button>
 
                     <!-- TODO: Add link of detailed page. -->
                     <div class="flex-1 text-center text-sm">
@@ -180,3 +190,5 @@
     </TableBody>
   </Table>
 </div>
+
+<UpdatingModal bind:this={updatingModal} {isLoggedIn} />
