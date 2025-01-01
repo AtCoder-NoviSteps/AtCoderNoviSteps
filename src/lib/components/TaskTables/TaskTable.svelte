@@ -153,7 +153,11 @@
 
                   <!-- Grade -->
                   <div class="flex items-center justify-center space-x-3 py-2">
-                    <GradeLabel taskGrade={taskTable[contestId][taskIndex].grade} />
+                    <GradeLabel
+                      taskGrade={taskTable[contestId][taskIndex].grade}
+                      defaultPadding={0.5}
+                      defaultWidth={8}
+                    />
                   </div>
 
                   <!-- Submission updater and links of task detail page -->
