@@ -8,7 +8,7 @@
 <!-- HACK: 以下のコンポーネントと類似しているが、差分が大きいため別コンポーネントとして用意 -->
 <!-- src/lib/components/SubmissionStatus/SubmissionStatusImage.svelte -->
 {#if isLoggedIn}
-  <div class="flex items-center text-sm">
+  <div class="flex items-center justify-center text-sm">
     <div class="dark:text-gray-300">
       {'更新'}
     </div>

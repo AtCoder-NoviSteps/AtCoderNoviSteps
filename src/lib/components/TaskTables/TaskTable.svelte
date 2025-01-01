@@ -152,7 +152,7 @@
                   </div>
 
                   <!-- Grade -->
-                  <div class="flex items-center justify-center space-x-3 py-2">
+                  <div class="flex items-center justify-center py-2">
                     <GradeLabel
                       taskGrade={taskTable[contestId][taskIndex].grade}
                       defaultPadding={0.5}
@@ -161,11 +161,13 @@
                   </div>
 
                   <!-- Submission updater and links of task detail page -->
-                  <div class="flex justify-between space-x-3">
-                    <div>
+                  <div class="flex items-center justify-between">
+                    <div class="flex-1 text-center">
                       <IconForUpdating {isLoggedIn} />
                     </div>
-                    <div class="flex items-center justify-center text-sm">
+
+                    <!-- TODO: Add link of detailed page. -->
+                    <div class="flex-1 text-center text-sm">
                       {'詳細'}
                     </div>
                   </div>
