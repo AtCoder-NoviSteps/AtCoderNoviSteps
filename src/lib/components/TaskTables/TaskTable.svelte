@@ -14,13 +14,11 @@
   import type { TaskResults, TaskResult } from '$lib/types/task';
   import { ContestType } from '$lib/types/contest';
 
-  import ExternalLinkWrapper from '$lib/components/ExternalLinkWrapper.svelte';
-  import GradeLabel from '$lib/components/GradeLabel.svelte';
   import UpdatingModal from '$lib/components/SubmissionStatus/UpdatingModal.svelte';
-  import IconForUpdating from '$lib/components/SubmissionStatus/IconForUpdating.svelte';
+  import TaskTableBodyCell from '$lib/components/TaskTables/TaskTableBodyCell.svelte';
 
   import { classifyContest, getContestNameLabel } from '$lib/utils/contest';
-  import { getTaskTableHeaderName, getTaskUrl, removeTaskIndexFromTitle } from '$lib/utils/task';
+  import { getTaskTableHeaderName } from '$lib/utils/task';
   import { getBackgroundColorFrom } from '$lib/services/submission_status';
 
   export let taskResults: TaskResults;
@@ -126,7 +124,7 @@
       {/if}
     </TableHead>
 
-    <TableBody tableBodyClass="divede-y">
+    <TableBody tableBodyClass="divide-y">
       {#if contestIds.length && taskTableIndices.length}
         {#each contestIds as contestId}
           <TableBodyRow>
@@ -140,47 +138,11 @@
                 class="px-2 py-2 border {getBackgroundColor(taskTable[contestId][taskIndex])}"
               >
                 {#if taskTable[contestId][taskIndex]}
-                  <!-- TODO: コンポーネントとして切り出す -->
-                  <!-- Task name and URL -->
-                  <div class="text-left text-lg">
-                    <ExternalLinkWrapper
-                      url={getTaskUrl(contestId, taskTable[contestId][taskIndex].task_id)}
-                      description={removeTaskIndexFromTitle(
-                        taskTable[contestId][taskIndex].title,
-                        taskTable[contestId][taskIndex].task_table_index,
-                      )}
-                      textSize="xs:text-md"
-                      textColorInDarkMode="dark:text-gray-300"
-                      textOverflow="min-w-[60px] max-w-[132px]"
-                      iconSize={0}
-                    />
-                  </div>
-
-                  <!-- Grade -->
-                  <div class="flex items-center justify-center py-2">
-                    <GradeLabel
-                      taskGrade={taskTable[contestId][taskIndex].grade}
-                      defaultPadding={0.5}
-                      defaultWidth={8}
-                    />
-                  </div>
-
-                  <!-- Submission updater and links of task detail page -->
-                  <div class="flex items-center justify-between">
-                    <button
-                      type="button"
-                      class="flex-1 text-center"
-                      on:click={() => updatingModal.openModal(taskTable[contestId][taskIndex])}
-                      aria-label="Update submission"
-                    >
-                      <IconForUpdating {isLoggedIn} />
-                    </button>
-
-                    <!-- TODO: Add link of detailed page. -->
-                    <div class="flex-1 text-center text-sm">
-                      {'詳細'}
-                    </div>
-                  </div>
+                  <TaskTableBodyCell
+                    taskResult={taskTable[contestId][taskIndex]}
+                    {isLoggedIn}
+                    {updatingModal}
+                  />
                 {/if}
               </TableBodyCell>
             {/each}
