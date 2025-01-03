@@ -63,6 +63,16 @@
     return Array.from(new Set(headerList)).sort();
   }
 
+  /**
+   * Prepare a table for task and submission statuses.
+   *
+   * Computational complexity of preparation table: O(N), where N is the number of task results.
+   * Computational complexity of accessing table: O(1).
+   *
+   * @param selectedTaskResults Task results to be shown in the table.
+   * @param selectedContestType Contest type of the task results.
+   * @returns A table for task and submission statuses.
+   */
   function prepareTaskTable(
     selectedTaskResults: TaskResults,
     selectedContestType: ContestType,
