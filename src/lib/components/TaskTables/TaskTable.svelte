@@ -93,6 +93,26 @@
     return table;
   }
 
+  function getContestNameLabelForTaskTable(contestId: string): string {
+    let contestNameLabel = getContestNameLabel(contestId);
+    const contestType = classifyContest(contestId);
+
+    switch (contestType) {
+      case ContestType.ABC:
+        return contestNameLabel.replace('ABC ', '');
+      // TODO: Add cases for other contest types.
+      default:
+        return contestNameLabel;
+    }
+  }
+
+  function getBodyCellClasses(contestId: string, taskIndex: string): string {
+    const baseClasses = 'w-1/2 xs:w-1/3 sm:w-1/4 md:w-1/5 lg:w-1/6 px-1 py-1 border';
+    const backgroundColor = getBackgroundColor(taskTable[contestId][taskIndex]);
+
+    return `${baseClasses} ${backgroundColor}`;
+  }
+
   function getBackgroundColor(taskResult: TaskResult): string {
     const statusName = taskResult?.status_name;
 
@@ -101,13 +121,6 @@
     }
 
     return '';
-  }
-
-  function getBodyCellClasses(contestId: string, taskIndex: string): string {
-    const baseClasses = 'w-1/2 xs:w-1/3 sm:w-1/4 md:w-1/5 lg:w-1/6 px-1 py-1 border';
-    const backgroundColor = getBackgroundColor(taskTable[contestId][taskIndex]);
-
-    return `${baseClasses} ${backgroundColor}`;
   }
 </script>
 
@@ -126,17 +139,19 @@
 </Heading>
 
 <!-- TODO: ページネーションを実装 -->
+<!-- TODO: ページネーションライブラリを導入するには、Svelte v4 から v5 へのアップデートが必要 -->
 <!-- See: -->
 <!-- https://github.com/kenkoooo/AtCoderProblems/blob/master/atcoder-problems-frontend/src/pages/TablePage/AtCoderRegularTable.tsx -->
 <!-- https://github.com/birdou/atcoder-blogs/blob/main/app/atcoder-blogs-frontend/src/pages/BlogTablePage/BlogTablePage.tsx -->
 <div class="container w-full overflow-auto border rounded-md">
   <Table shadow id="task-table" class="text-md table-fixed" aria-label="Task table">
     <TableHead class="text-sm bg-gray-100">
-      <TableHeadCell class="w-full xl:w-16 px-2 text-center border">Round</TableHeadCell>
+      <TableHeadCell class="w-full xl:w-16 px-2 text-center border" scope="col">Round</TableHeadCell
+      >
 
       {#if taskTableIndices.length}
         {#each taskTableIndices as taskTableIndex}
-          <TableHeadCell class="text-center border">{taskTableIndex}</TableHeadCell>
+          <TableHeadCell class="text-center border" scope="col">{taskTableIndex}</TableHeadCell>
         {/each}
       {/if}
     </TableHead>
@@ -147,7 +162,7 @@
           <TableBodyRow class="flex flex-wrap xl:table-row">
             <TableBodyCell class="w-full xl:w-16 truncate px-2 py-2 text-center border">
               <!-- FIXME: コンテスト種別に合わせて修正できるようにする -->
-              {getContestNameLabel(contestId).replace('ABC ', '')}
+              {getContestNameLabelForTaskTable(contestId)}
             </TableBodyCell>
 
             {#each taskTableIndices as taskIndex}
