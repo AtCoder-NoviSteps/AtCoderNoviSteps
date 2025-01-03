@@ -115,7 +115,7 @@
 <div class="container w-full overflow-auto border rounded-md">
   <Table shadow id="task-table" class="text-md table-fixed" aria-label="Task table">
     <TableHead class="text-sm bg-gray-100">
-      <TableHeadCell class="w-16 px-2 text-center border">Round</TableHeadCell>
+      <TableHeadCell class="w-full xl:w-16 px-2 text-center border">Round</TableHeadCell>
 
       {#if taskTableIndices.length}
         {#each taskTableIndices as taskTableIndex}
@@ -127,15 +127,18 @@
     <TableBody tableBodyClass="divide-y">
       {#if contestIds.length && taskTableIndices.length}
         {#each contestIds as contestId}
-          <TableBodyRow>
-            <TableBodyCell class="w-16 truncate px-2 py-2 text-center border">
+          <TableBodyRow class="flex flex-wrap xl:flex-row xl:table-row">
+            <TableBodyCell class="w-full xl:w-16 truncate px-2 py-2 text-center border">
               <!-- FIXME: コンテスト種別に合わせて修正できるようにする -->
               {getContestNameLabel(contestId).replace('ABC ', '')}
             </TableBodyCell>
 
             {#each taskTableIndices as taskIndex}
               <TableBodyCell
-                class="px-2 py-2 border {getBackgroundColor(taskTable[contestId][taskIndex])}"
+                key={contestId + '-' + taskIndex}
+                class="w-1/2 xs:w-1/3 sm:w-1/4 md:w-1/5 lg:w-1/6 px-1 py-1 border {getBackgroundColor(
+                  taskTable[contestId][taskIndex],
+                )}"
               >
                 {#if taskTable[contestId][taskIndex]}
                   <TaskTableBodyCell

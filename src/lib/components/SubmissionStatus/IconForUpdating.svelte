@@ -13,6 +13,6 @@
       {'更新'}
     </div>
 
-    <ChevronDownOutline class="w-5 h-5 text-primary-600 dark:text-gray-300 inline" />
+    <ChevronDownOutline class="w-4 h-4 text-primary-600 dark:text-gray-300 inline" />
   </div>
 {/if}

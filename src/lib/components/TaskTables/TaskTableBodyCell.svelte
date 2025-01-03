@@ -14,24 +14,22 @@
 </script>
 
 <!-- Task title and an external link -->
-<div class="text-left text-lg">
+<div class="text-left text-md sm:text-lg">
   <ExternalLinkWrapper
     url={getTaskUrl(taskResult.contest_id, taskResult.task_id)}
-    description={removeTaskIndexFromTitle(taskResult.title, taskResult.task_table_index)}
+    description={taskResult.title}
     textSize="xs:text-md"
     textColorInDarkMode="dark:text-gray-300"
-    textOverflow="min-w-[60px] max-w-[132px]"
+    textOverflow="min-w-[60px] max-w-[120px]"
     iconSize={0}
   />
 </div>
 
-<!-- Grade -->
-<div class="flex items-center justify-center py-2">
-  <GradeLabel taskGrade={taskResult.grade} defaultPadding={0.5} defaultWidth={8} />
-</div>
+<div class="flex items-center justify-between py-1">
+  <!-- Task grade -->
+  <GradeLabel taskGrade={taskResult.grade} defaultPadding={0.25} defaultWidth={8} />
 
-<!-- Submission updater and links of task detail page -->
-<div class="flex items-center justify-between">
+  <!-- Submission updater and links of task detail page -->
   <button
     type="button"
     class="flex-1 text-center"
@@ -42,7 +40,7 @@
   </button>
 
   <!-- TODO: Add link of detailed page. -->
-  <div class="flex-1 text-center text-sm dark:text-gray-300">
+  <div class="flex-1 text-center text-sm dark:text-gray-300 max-w-[32px]">
     {'詳細'}
   </div>
 </div>
