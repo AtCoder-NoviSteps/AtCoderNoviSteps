@@ -11,6 +11,7 @@ import {
   threeWorkBookTasks,
   tasksForVerificationOfOrder,
 } from './test_cases/task_results';
+import { taskResultsForTaskTableHeaderName } from './test_cases/task_table_header_name';
 import {
   getTaskUrl,
   countAcceptedTasks,
@@ -18,8 +19,10 @@ import {
   areAllTasksAccepted,
   compareByContestIdAndTaskId,
   removeTaskIndexFromTitle,
+  getTaskTableHeaderName,
 } from '$lib/utils/task';
 import type { WorkBookTaskBase } from '$lib/types/workbook';
+import { ContestType } from '$lib/types/contest';
 import { type TaskResult, type TaskResults } from '$lib/types/task';
 
 type TestCaseForTaskResults = {
@@ -52,6 +55,14 @@ type TestCaseForNewTitle = {
 };
 
 type TestCasesForNewTitle = TestCaseForNewTitle[];
+
+type TestCaseForTaskTableHeaderName = {
+  contestType: ContestType;
+  taskResult: TaskResult;
+  expected: string;
+};
+
+type TestCasesForTaskTableHeaderName = TestCaseForTaskTableHeaderName[];
 
 describe('Task', () => {
   describe('task url', () => {
@@ -445,6 +456,137 @@ describe('Task', () => {
         testCases,
         ({ first, second, expected }: TestCaseForSortingTaskResults) => {
           expect(compareByContestIdAndTaskId(first, second)).toBe(expected);
+        },
+      );
+    });
+  });
+
+  describe('get task table header name', () => {
+    describe('when ABCxxx A, B, F and G are given', () => {
+      const testCases: TestCasesForTaskTableHeaderName = [
+        {
+          contestType: ContestType.ABC,
+          taskResult: taskResultsForTaskTableHeaderName.abc212_a,
+          expected: 'A',
+        },
+        {
+          contestType: ContestType.ABC,
+          taskResult: taskResultsForTaskTableHeaderName.abc212_b,
+          expected: 'B',
+        },
+        {
+          contestType: ContestType.ABC,
+          taskResult: taskResultsForTaskTableHeaderName.abc212_f,
+          expected: 'F',
+        },
+        {
+          contestType: ContestType.ABC,
+          taskResult: taskResultsForTaskTableHeaderName.abc212_g,
+          expected: 'G',
+        },
+        {
+          contestType: ContestType.ABC,
+          taskResult: taskResultsForTaskTableHeaderName.abc233_a,
+          expected: 'A',
+        },
+        {
+          contestType: ContestType.ABC,
+          taskResult: taskResultsForTaskTableHeaderName.abc233_b,
+          expected: 'B',
+        },
+        {
+          contestType: ContestType.ABC,
+          taskResult: taskResultsForTaskTableHeaderName.abc319_a,
+          expected: 'A',
+        },
+        {
+          contestType: ContestType.ABC,
+          taskResult: taskResultsForTaskTableHeaderName.abc319_b,
+          expected: 'B',
+        },
+        {
+          contestType: ContestType.ABC,
+          taskResult: taskResultsForTaskTableHeaderName.abc319_f,
+          expected: 'F',
+        },
+        {
+          contestType: ContestType.ABC,
+          taskResult: taskResultsForTaskTableHeaderName.abc319_g,
+          expected: 'G',
+        },
+        {
+          contestType: ContestType.ABC,
+          taskResult: taskResultsForTaskTableHeaderName.abc386_g,
+          expected: 'G',
+        },
+      ];
+
+      runTests(
+        'getTaskTableHeaderName',
+        testCases,
+        ({ contestType, taskResult, expected }: TestCaseForTaskTableHeaderName) => {
+          expect(getTaskTableHeaderName(contestType, taskResult)).toBe(expected);
+        },
+      );
+    });
+
+    describe('when ABCxxx H are given', () => {
+      const testCases: TestCasesForTaskTableHeaderName = [
+        {
+          contestType: ContestType.ABC,
+          taskResult: taskResultsForTaskTableHeaderName.abc212_h,
+          expected: 'H/Ex',
+        },
+        {
+          contestType: ContestType.ABC,
+          taskResult: taskResultsForTaskTableHeaderName.abc213_h,
+          expected: 'H/Ex',
+        },
+        {
+          contestType: ContestType.ABC,
+          taskResult: taskResultsForTaskTableHeaderName.abc232_h,
+          expected: 'H/Ex',
+        },
+      ];
+
+      runTests(
+        'getTaskTableHeaderName',
+        testCases,
+        ({ contestType, taskResult, expected }: TestCaseForTaskTableHeaderName) => {
+          expect(getTaskTableHeaderName(contestType, taskResult)).toBe(expected);
+        },
+      );
+    });
+
+    describe('when ABCxxx Ex are given', () => {
+      const testCases: TestCasesForTaskTableHeaderName = [
+        {
+          contestType: ContestType.ABC,
+          taskResult: taskResultsForTaskTableHeaderName.abc233_ex,
+          expected: 'H/Ex',
+        },
+        {
+          contestType: ContestType.ABC,
+          taskResult: taskResultsForTaskTableHeaderName.abc234_ex,
+          expected: 'H/Ex',
+        },
+        {
+          contestType: ContestType.ABC,
+          taskResult: taskResultsForTaskTableHeaderName.abc317_ex,
+          expected: 'H/Ex',
+        },
+        {
+          contestType: ContestType.ABC,
+          taskResult: taskResultsForTaskTableHeaderName.abc318_ex,
+          expected: 'H/Ex',
+        },
+      ];
+
+      runTests(
+        'getTaskTableHeaderName',
+        testCases,
+        ({ contestType, taskResult, expected }: TestCaseForTaskTableHeaderName) => {
+          expect(getTaskTableHeaderName(contestType, taskResult)).toBe(expected);
         },
       );
     });
