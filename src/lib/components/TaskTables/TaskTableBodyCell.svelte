@@ -34,7 +34,7 @@
     type="button"
     class="flex-1 text-center"
     on:click={() => updatingModal.openModal(taskResult)}
-    aria-label="Update submission"
+    aria-label="Update submission for {taskResult.title}"
   >
     <IconForUpdating {isLoggedIn} />
   </button>
