@@ -1,7 +1,9 @@
 import type { TaskResult } from '$lib/types/task';
 
-// For the default task result, the updated_at field is set to the Unix epoch.
-// why: only use the parameter task_table_index
+// Default task result with minimal initialization.
+// Most fields are empty strings as they're not relevant for these tests.
+// The updated_at field is set to Unix epoch as we only care about task_table_index
+// and task_id for header name testing.
 const defaultTaskResult: TaskResult = {
   is_ac: true,
   user_id: '',
@@ -19,6 +21,9 @@ const defaultTaskResult: TaskResult = {
 
 /**
  * Creates a new TaskResult using defaultTaskResult as a base, overriding the taskId and taskTableIndex.
+ * @param taskId - The ID of the task (e.g., 'abc212')
+ * @param taskTableIndex - The index of the task in the table (e.g., 'A', 'B', 'Ex')
+ * @returns A new TaskResult object with the specified taskId and taskTableIndex
  */
 function createTaskResultWithTaskTableIndex(taskId: string, taskTableIndex: string): TaskResult {
   return {
