@@ -6,7 +6,7 @@
   import IconForUpdating from '$lib/components/SubmissionStatus/IconForUpdating.svelte';
   import UpdatingModal from '$lib/components/SubmissionStatus/UpdatingModal.svelte';
 
-  import { getTaskUrl, removeTaskIndexFromTitle } from '$lib/utils/task';
+  import { getTaskUrl } from '$lib/utils/task';
 
   export let taskResult: TaskResult;
   export let isLoggedIn: boolean;
