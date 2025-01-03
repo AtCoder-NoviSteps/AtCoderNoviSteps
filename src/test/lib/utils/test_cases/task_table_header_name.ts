@@ -17,6 +17,9 @@ const defaultTaskResult: TaskResult = {
   updated_at: new Date(0), // Use the Unix epoch as the default value.
 };
 
+/**
+ * Creates a new TaskResult using defaultTaskResult as a base, overriding the taskId and taskTableIndex.
+ */
 function createTaskResultWithTaskTableIndex(taskId: string, taskTableIndex: string): TaskResult {
   return {
     ...defaultTaskResult,
@@ -25,7 +28,7 @@ function createTaskResultWithTaskTableIndex(taskId: string, taskTableIndex: stri
   };
 }
 
-// ABC212 - ABC232: 8 tasks (A, B, C, D, E, F, G, H)
+// ABC212 - ABC232: 8 tasks (A, B, C, D, E, F, G and H)
 const abc212_a = createTaskResultWithTaskTableIndex('abc212', 'A');
 const abc212_b = createTaskResultWithTaskTableIndex('abc212', 'B');
 const abc212_f = createTaskResultWithTaskTableIndex('abc212', 'F');
@@ -34,7 +37,7 @@ const abc212_h = createTaskResultWithTaskTableIndex('abc212', 'H');
 const abc213_h = createTaskResultWithTaskTableIndex('abc213', 'H');
 const abc232_h = createTaskResultWithTaskTableIndex('abc232', 'H');
 
-// ABC233 - ABC318: 8 tasks (A, B, C, D, E, F, G, Ex)
+// ABC233 - ABC318: 8 tasks (A, B, C, D, E, F, G and Ex)
 const abc233_a = createTaskResultWithTaskTableIndex('abc233', 'A');
 const abc233_b = createTaskResultWithTaskTableIndex('abc233', 'B');
 const abc233_ex = createTaskResultWithTaskTableIndex('abc233', 'Ex');
@@ -42,7 +45,7 @@ const abc234_ex = createTaskResultWithTaskTableIndex('abc234', 'Ex');
 const abc317_ex = createTaskResultWithTaskTableIndex('abc317', 'Ex');
 const abc318_ex = createTaskResultWithTaskTableIndex('abc318', 'Ex');
 
-// ABC319 - : 7 tasks (A, B, C, D, E, F, G)
+// ABC319 - : 7 tasks (A, B, C, D, E, F and G)
 const abc319_a = createTaskResultWithTaskTableIndex('abc319', 'A');
 const abc319_b = createTaskResultWithTaskTableIndex('abc319', 'B');
 const abc319_f = createTaskResultWithTaskTableIndex('abc319', 'F');
