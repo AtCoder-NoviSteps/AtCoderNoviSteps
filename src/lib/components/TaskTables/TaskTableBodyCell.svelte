@@ -32,7 +32,7 @@
   <!-- Submission updater and links of task detail page -->
   <button
     type="button"
-    class="flex-1 text-center"
+    class="mx-2 w-8 text-center"
     on:click={() => updatingModal.openModal(taskResult)}
     aria-label="Update submission for {taskResult.title}"
   >
