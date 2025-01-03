@@ -92,6 +92,13 @@
 
     return '';
   }
+
+  function getBodyCellClasses(contestId: string, taskIndex: string): string {
+    const baseClasses = 'w-1/2 xs:w-1/3 sm:w-1/4 md:w-1/5 lg:w-1/6 px-1 py-1 border';
+    const backgroundColor = getBackgroundColor(taskTable[contestId][taskIndex]);
+
+    return `${baseClasses} ${backgroundColor}`;
+  }
 </script>
 
 <!-- TODO: コンテスト種別のボタンの並び順を決める -->
@@ -127,7 +134,7 @@
     <TableBody tableBodyClass="divide-y">
       {#if contestIds.length && taskTableIndices.length}
         {#each contestIds as contestId}
-          <TableBodyRow class="flex flex-wrap xl:flex-row xl:table-row">
+          <TableBodyRow class="flex flex-wrap xl:table-row">
             <TableBodyCell class="w-full xl:w-16 truncate px-2 py-2 text-center border">
               <!-- FIXME: コンテスト種別に合わせて修正できるようにする -->
               {getContestNameLabel(contestId).replace('ABC ', '')}
@@ -136,9 +143,7 @@
             {#each taskTableIndices as taskIndex}
               <TableBodyCell
                 key={contestId + '-' + taskIndex}
-                class="w-1/2 xs:w-1/3 sm:w-1/4 md:w-1/5 lg:w-1/6 px-1 py-1 border {getBackgroundColor(
-                  taskTable[contestId][taskIndex],
-                )}"
+                class={getBodyCellClasses(contestId, taskIndex)}
               >
                 {#if taskTable[contestId][taskIndex]}
                   <TaskTableBodyCell
