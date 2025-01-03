@@ -7,6 +7,7 @@
 
   import HeadingOne from '$lib/components/HeadingOne.svelte';
   import TabItemWrapper from '$lib/components/TabItemWrapper.svelte';
+  import TaskTable from '$lib/components/TaskTables/TaskTable.svelte';
   import TaskGradeList from '$lib/components/TaskGradeList.svelte';
   import GradeGuidelineTable from '$lib/components/TaskGrades/GradeGuidelineTable.svelte';
 
@@ -25,8 +26,16 @@
   <!-- See: -->
   <!-- https://flowbite-svelte.com/docs/components/tabs -->
   <Tabs tabStyle="underline" contentClass="bg-white dark:bg-gray-800">
+    <!-- Task table -->
+    <!-- WIP: UIのデザインが試行錯誤の段階であるため、管理者のみ閲覧可能 -->
+    {#if isAdmin}
+      <TabItemWrapper workbookType={null} isOpen={true} title="テーブル">
+        <TaskTable {taskResults} {isLoggedIn} />
+      </TabItemWrapper>
+    {/if}
+
     <!-- Grades -->
-    <TabItemWrapper workbookType={null} isOpen={true} title="グレード">
+    <TabItemWrapper workbookType={null} title="グレード">
       <TaskGradeList {taskResults} {isAdmin} {isLoggedIn}></TaskGradeList>
     </TabItemWrapper>
 
@@ -44,13 +53,6 @@
     <!-- Latest -->
     <!-- <TabItemWrapper title="Latest">
       <div class="m-4">Comming Soon.</div>
-    </TabItemWrapper> -->
-
-    <!-- Table -->
-    <!-- TODO: コンテスト種類をトグルボタンで切り替えられるようにする -->
-    <!-- <TabItemWrapper title="Table"> -->
-    <!-- <TaskTable {taskResults} /> -->
-    <!-- <div class="m-4">Comming Soon.</div>
     </TabItemWrapper> -->
   </Tabs>
 </div>

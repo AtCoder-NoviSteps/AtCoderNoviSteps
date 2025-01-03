@@ -5,6 +5,8 @@
   export let description: string;
   export let textSize: string = '';
   export let textColorInDarkMode = 'dark:text-primary-500';
+  export let textOverflow = '';
+  export let iconSize = 4;
 </script>
 
 <a
@@ -13,10 +15,12 @@
   target="_blank"
   rel="noreferrer"
 >
-  {description}
+  <div class="{textOverflow} truncate">
+    {description}
+  </div>
 
   <div class="ml-1.5">
-    <ExternalLinkIcon size="w-4 h-4" />
+    <ExternalLinkIcon size="w-{iconSize} h-{iconSize}" />
   </div>
 </a>
 
