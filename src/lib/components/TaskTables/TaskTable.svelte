@@ -127,8 +127,11 @@
 <!-- TODO: コンテスト種別のボタンの並び順を決める -->
 <!-- See: -->
 <!-- https://flowbite-svelte.com/docs/components/button-group -->
-<ButtonGroup class="m-4 contents-center">
-  <Button on:click={() => filterTaskResultsByContestType(taskResults, fromABC212_Onwards)}>
+<ButtonGroup class="m-4 contents-center" aria-label="Contest filter options">
+  <Button
+    on:click={() => filterTaskResultsByContestType(taskResults, fromABC212_Onwards)}
+    aria-label="Filter contests from ABC212 onwards"
+  >
     ABC212〜
   </Button>
 </ButtonGroup>
