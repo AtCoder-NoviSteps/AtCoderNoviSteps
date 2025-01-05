@@ -76,7 +76,8 @@
         muted
         controls
         loop
-      />
+      >
+      </video>
     </div>
 
     <div class="flex flex-wrap justify-center items-center">
