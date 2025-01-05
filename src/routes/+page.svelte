@@ -1,7 +1,7 @@
 <!-- See: -->
 <!-- https://lucia-auth.com/guidebook/sign-in-with-username-and-password/sveltekit/ -->
 <script lang="ts">
-  import { Heading, P, Button, Carousel } from 'flowbite-svelte';
+  import { Heading, Button, Carousel } from 'flowbite-svelte';
   // @ts-ignore
   import ArrowRightOutline from 'flowbite-svelte-icons/ArrowRightOutline.svelte';
 
@@ -36,11 +36,11 @@
       {PRODUCT_CATCH_PHRASE}
     </Heading>
 
-    <P class="mb-6 text-lg lg:text-xl sm:px-16 xl:px-48 dark:text-gray-300">
+    <p class="mb-6 text-lg lg:text-xl sm:px-16 xl:px-48 dark:text-gray-300">
       【非公式】
       <ExternalLinkWrapper url={ATCODER_BASE_URL} description="AtCoder" />
       上の問題について、取組み状況を記録していくサイトです。 各問題が細かく難易度付けされており、必要な知識を段階的に習得できます。
-    </P>
+    </p>
 
     <div class="flex flex-wrap justify-center items-center">
       <Button href={WORKBOOKS_PAGE} class="w-full sm:w-5/6 md:w-1/3 m-2">問題集へ</Button>

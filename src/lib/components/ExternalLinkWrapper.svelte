@@ -5,23 +5,23 @@
   export let description: string;
   export let textSize: string = '';
   export let textColorInDarkMode = 'dark:text-primary-500';
-  export let textOverflow = '';
-  export let iconSize = 4;
+  export let textOverflow: string = '';
+  export let iconSize: number = 4;
 </script>
 
 <a
   href={url}
-  class="inline-flex items-center font-medium {textSize} text-primary-600 hover:underline {textColorInDarkMode}"
+  class={`inline-flex items-center font-medium ${textSize} text-primary-600 hover:underline ${textColorInDarkMode}`}
   target="_blank"
   rel="noreferrer"
 >
-  <div class="{textOverflow} truncate">
+  <span class={`${textOverflow} truncate`}>
     {description}
-  </div>
+  </span>
 
-  <div class="ml-1.5">
-    <ExternalLinkIcon size="w-{iconSize} h-{iconSize}" />
-  </div>
+  <span class="ml-1.5">
+    <ExternalLinkIcon size={`w-${iconSize} h-${iconSize}`} />
+  </span>
 </a>
 
 <!-- See: -->
