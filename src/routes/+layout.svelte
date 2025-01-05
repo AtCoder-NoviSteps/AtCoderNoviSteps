@@ -1,6 +1,7 @@
 <script lang="ts">
   // See:
   // https://github.com/oekazuma/svelte-meta-tags
+  // https://oekazuma.github.io/svelte-meta-tags/ja/migration-guide/
   import { page } from '$app/stores';
   import { navigating } from '$app/stores';
 
