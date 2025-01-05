@@ -5,8 +5,7 @@
   import { page } from '$app/stores';
   import { navigating } from '$app/stores';
 
-  import { MetaTags } from 'svelte-meta-tags';
-  import extend from 'just-extend';
+  import { MetaTags, deepMerge } from 'svelte-meta-tags';
 
   import '../app.css';
 
@@ -20,7 +19,7 @@
 
   export let data;
 
-  $: metaTags = extend(true, {}, data.baseMetaTags, $page.data.pageMetaTags);
+  $: metaTags = deepMerge(data.baseMetaTags, $page.data.pageMetaTags);
 </script>
 
 <Header />

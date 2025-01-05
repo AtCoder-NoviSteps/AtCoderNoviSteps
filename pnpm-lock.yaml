@@ -38,9 +38,6 @@ importers:
       flowbite:
         specifier: 2.5.2
         version: 2.5.2(rollup@4.24.0)
-      just-extend:
-        specifier: 6.2.0
-        version: 6.2.0
       lucia:
         specifier: 2.7.7
         version: 2.7.7
@@ -2705,9 +2702,6 @@ packages:
 
   just-clone@6.2.0:
     resolution: {integrity: sha512-1IynUYEc/HAwxhi3WDpIpxJbZpMCvvrrmZVqvj9EhpvbH8lls7HhdhiByjL7DkAaWlLIzpC0Xc/VPvy/UxLNjA==}
-
-  just-extend@6.2.0:
-    resolution: {integrity: sha512-cYofQu2Xpom82S6qD778jBDpwvvy39s1l/hrYij2u9AMdQcGRpaBu6kY4mVhuno5kJVi1DAz4aiphA2WI1/OAw==}
 
   katex@0.16.10:
     resolution: {integrity: sha512-ZiqaC04tp2O5utMsl2TEZTXxa6WSC4yo0fv5ML++D3QZv/vx2Mct0mTlRx3O+uUkjfuAgOkzsCmq5MiUEsDDdA==}
@@ -6936,8 +6930,6 @@ snapshots:
       graceful-fs: 4.2.11
 
   just-clone@6.2.0: {}
-
-  just-extend@6.2.0: {}
 
   katex@0.16.10:
     dependencies:
