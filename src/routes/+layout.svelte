@@ -1,11 +1,11 @@
 <script lang="ts">
   // See:
   // https://github.com/oekazuma/svelte-meta-tags
-  import { page } from '$app/stores';
+  // https://oekazuma.github.io/svelte-meta-tags/ja/migration-guide/
+  import { page } from '$app/state';
   import { navigating } from '$app/stores';
 
-  import { MetaTags } from 'svelte-meta-tags';
-  import extend from 'just-extend';
+  import { MetaTags, deepMerge } from 'svelte-meta-tags';
 
   import '../app.css';
 
@@ -19,7 +19,7 @@
 
   export let data;
 
-  $: metaTags = extend(true, {}, data.baseMetaTags, $page.data.pageMetaTags);
+  $: metaTags = deepMerge(data.baseMetaTags, page.data.pageMetaTags);
 </script>
 
 <Header />
