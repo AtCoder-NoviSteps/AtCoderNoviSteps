@@ -2,7 +2,7 @@
   // See:
   // https://github.com/oekazuma/svelte-meta-tags
   // https://oekazuma.github.io/svelte-meta-tags/ja/migration-guide/
-  import { page } from '$app/stores';
+  import { page } from '$app/state';
   import { navigating } from '$app/stores';
 
   import { MetaTags, deepMerge } from 'svelte-meta-tags';
@@ -19,7 +19,7 @@
 
   export let data;
 
-  $: metaTags = deepMerge(data.baseMetaTags, $page.data.pageMetaTags);
+  $: metaTags = deepMerge(data.baseMetaTags, page.data.pageMetaTags);
 </script>
 
 <Header />
