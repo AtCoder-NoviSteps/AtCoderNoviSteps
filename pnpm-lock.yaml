@@ -60,8 +60,8 @@ importers:
         specifier: 3.4.17
         version: 3.4.17(ts-node@10.9.1(@types/node@22.10.5)(typescript@5.6.3))
       vercel:
-        specifier: 39.2.5
-        version: 39.2.5(rollup@4.24.0)
+        specifier: 39.2.6
+        version: 39.2.6(rollup@4.24.0)
       xss:
         specifier: 1.0.15
         version: 1.0.15
@@ -4058,8 +4058,8 @@ packages:
     resolution: {integrity: sha512-c1Q0mCiPlgdTVVVIJIrBuxNicYE+t/7oKeI9MWLj3fh/uq2Pxh/3eeWbVZ4OcGW1TUf53At0njHw5SMdA3tmMg==}
     engines: {node: '>= 0.10'}
 
-  vercel@39.2.5:
-    resolution: {integrity: sha512-mPrXm2Va5uPmajy3sEXf50ExEPAlZtYkKJpCvKMCGWNl6J/AH+n9qYrBo0GsKTYrMSnzGzeGZgzNCGoVFI4xCA==}
+  vercel@39.2.6:
+    resolution: {integrity: sha512-s3T8eEXeNcMcgU+NsHS2/1B7Pj1aWip+dy0IQqbDwy1ArFFI0S4IzpN2+XxfG8Y6fPJnLGUyywTe/nbFU7SWPg==}
     engines: {node: '>= 16'}
     hasBin: true
 
@@ -8330,7 +8330,7 @@ snapshots:
   validator@13.12.0:
     optional: true
 
-  vercel@39.2.5(rollup@4.24.0):
+  vercel@39.2.6(rollup@4.24.0):
     dependencies:
       '@vercel/build-utils': 9.0.1
       '@vercel/fun': 1.1.2
