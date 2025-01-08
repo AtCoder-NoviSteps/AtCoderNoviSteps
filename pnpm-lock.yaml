@@ -163,8 +163,8 @@ importers:
         specifier: 5.16.5
         version: 5.16.5
       svelte-check:
-        specifier: 4.1.1
-        version: 4.1.1(picomatch@4.0.2)(svelte@5.16.5)(typescript@5.6.3)
+        specifier: 4.1.2
+        version: 4.1.2(picomatch@4.0.2)(svelte@5.16.5)(typescript@5.6.3)
       svelte-meta-tags:
         specifier: 4.0.4
         version: 4.0.4(svelte@5.16.5)(typescript@5.6.3)
@@ -3722,8 +3722,8 @@ packages:
     resolution: {integrity: sha512-ot0WnXS9fgdkgIcePe6RHNk1WA8+muPa6cSjeR3V8K27q9BB1rTE3R1p7Hv0z1ZyAc8s6Vvv8DIyWf681MAt0w==}
     engines: {node: '>= 0.4'}
 
-  svelte-check@4.1.1:
-    resolution: {integrity: sha512-NfaX+6Qtc8W/CyVGS/F7/XdiSSyXz+WGYA9ZWV3z8tso14V2vzjfXviKaTFEzB7g8TqfgO2FOzP6XT4ApSTUTw==}
+  svelte-check@4.1.2:
+    resolution: {integrity: sha512-pF5uNEI6D4iawUeF1s0h8s+lfeuNWoZL1HNy+WeBQmN9ZkdG6J+l2QziVAAdX6fSwxJSv4B7Hq1II/HyAUnHCQ==}
     engines: {node: '>= 18.0.0'}
     hasBin: true
     peerDependencies:
@@ -7922,7 +7922,7 @@ snapshots:
 
   supports-preserve-symlinks-flag@1.0.0: {}
 
-  svelte-check@4.1.1(picomatch@4.0.2)(svelte@5.16.5)(typescript@5.6.3):
+  svelte-check@4.1.2(picomatch@4.0.2)(svelte@5.16.5)(typescript@5.6.3):
     dependencies:
       '@jridgewell/trace-mapping': 0.3.25
       chokidar: 4.0.1
