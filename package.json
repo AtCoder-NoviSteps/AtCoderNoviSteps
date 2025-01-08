@@ -61,7 +61,7 @@
     "prisma": "5.22.0",
     "stwui": "0.21.2-next",
     "super-sitemap": "1.0.3",
-    "svelte": "5.16.5",
+    "svelte": "5.17.0",
     "svelte-check": "4.1.2",
     "svelte-meta-tags": "4.0.4",
     "sveltekit-superforms": "2.22.1",
