@@ -151,7 +151,7 @@
         <TableBody tableBodyClass="divide-y">
           {#each workBookTasks as workBookTask}
             <TableBodyRow
-              key={getUniqueIdUsing(workBookTask.taskId)}
+              id={getUniqueIdUsing(workBookTask.taskId)}
               class={getBackgroundColorFrom(getTaskResult(workBookTask.taskId).status_name)}
             >
               <!-- 問題のグレード -->

@@ -69,7 +69,7 @@
         <TableBody tableBodyClass="divide-y">
           {#each taskResults as taskResult}
             <TableBodyRow
-              key={taskResult.contest_id + '-' + taskResult.task_id}
+              id={taskResult.contest_id + '-' + taskResult.task_id}
               class={getBackgroundColorFrom(taskResult.status_name)}
             >
               <TableBodyCell

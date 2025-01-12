@@ -170,7 +170,7 @@
 
             {#each taskTableIndices as taskIndex}
               <TableBodyCell
-                key={contestId + '-' + taskIndex}
+                id={contestId + '-' + taskIndex}
                 class={getBodyCellClasses(contestId, taskIndex)}
               >
                 {#if taskTable[contestId][taskIndex]}
