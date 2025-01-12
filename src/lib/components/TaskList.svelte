@@ -69,14 +69,14 @@
         <TableBody tableBodyClass="divide-y">
           {#each taskResults as taskResult}
             <TableBodyRow
-              key={taskResult.contest_id + '-' + taskResult.task_id}
+              id={taskResult.contest_id + '-' + taskResult.task_id}
               class={getBackgroundColorFrom(taskResult.status_name)}
             >
               <TableBodyCell
-                class="justify-center w-20 px-0.5 sm:px-3"
-                on:click={() => updatingModal.openModal(taskResult)}
+                class="justify-center w-20 px-1 sm:px-3 pt-1 sm:pt-3 pb-0.5 sm:pb-1"
+                onclick={() => updatingModal.openModal(taskResult)}
               >
-                <div class="flex items-center justify-center min-w-[80px] max-w-[80px]">
+                <div class="flex items-center justify-center w-full h-full">
                   <SubmissionStatusImage {taskResult} {isLoggedIn} />
                 </div>
               </TableBodyCell>

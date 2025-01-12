@@ -151,7 +151,7 @@
         <TableBody tableBodyClass="divide-y">
           {#each workBookTasks as workBookTask}
             <TableBodyRow
-              key={getUniqueIdUsing(workBookTask.taskId)}
+              id={getUniqueIdUsing(workBookTask.taskId)}
               class={getBackgroundColorFrom(getTaskResult(workBookTask.taskId).status_name)}
             >
               <!-- 問題のグレード -->
@@ -163,8 +163,8 @@
 
               <!-- 回答状況の更新 -->
               <TableBodyCell
-                class="justify-center w-20 px-0"
-                on:click={() => handleClick(workBookTask.taskId)}
+                class="justify-center w-20 px-0 pt-1 sm:pt-3 pb-0.5 sm:pb-1"
+                onclick={() => handleClick(workBookTask.taskId)}
               >
                 <div class="flex items-center justify-center min-w-[80px] max-w-[80px]">
                   <SubmissionStatusImage
