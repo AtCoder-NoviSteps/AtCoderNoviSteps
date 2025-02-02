@@ -2,14 +2,15 @@ services:
   web:
     build: .
     ports:
-      - 5173:5173
+      - '5173:5173'
     tty: true
     volumes:
       - .:/usr/src/app:cached
       - ./node_modules:/usr/src/app/node_modules:cached
     environment:
       - NODE_ENV=development
-      - DATABASE_URL=postgresql://db_user:db_password@db:5432/test_db
+      - DATABASE_URL=postgresql://db_user:db_password@db:5432/test_db?pgbouncer=true&connection_limit=10&connect_timeout=60&statement_timeout=60000 # Note: Local server cannot start if port is set to db:6543.
+      - DIRECT_URL=postgresql://db_user:db_password@db:5432/test_db
     command: sleep infinity
     depends_on:
       - db
@@ -25,7 +26,7 @@ services:
       POSTGRES_DB: test_db
       POSTGRES_INITDB_ARGS: '--encoding=UTF8'
     ports:
-      - 5432:5432
+      - '6543:5432'
 
 volumes:
   postgres-data:

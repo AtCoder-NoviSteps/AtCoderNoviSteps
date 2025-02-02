@@ -13,7 +13,8 @@
   // Use 'forwardPorts' to make a list of ports inside the container available locally.
   "forwardPorts": [
     5173,
-    5432 // for postgres
+    5432, // for postgres
+    6543 // for postgres
   ],
   // "shutdownAction": "none",
   //
