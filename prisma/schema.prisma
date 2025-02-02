@@ -3,9 +3,11 @@
 
 // See:
 // https://www.prisma.io/docs/concepts/components/prisma-schema/generators
+// https://www.prisma.io/docs/orm/prisma-client/deployment/edge/deploy-to-vercel
 generator client {
-  provider      = "prisma-client-js"
-  binaryTargets = ["native", "rhel-openssl-3.0.x"]
+  provider        = "prisma-client-js"
+  binaryTargets   = ["native", "rhel-openssl-3.0.x"]
+  previewFeatures = ["driverAdapters"]
 }
 
 // See:
@@ -26,8 +28,9 @@ generator fabbrica {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 // Note: Lucia v3 + v3 Prisma adaperでは、全てのフィールドがキャメルケースであることが要求されている。
