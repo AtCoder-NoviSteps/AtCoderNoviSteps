@@ -28,14 +28,15 @@
   <Tabs tabStyle="underline" contentClass="bg-white dark:bg-gray-800">
     <!-- Task table -->
     <!-- WIP: UIのデザインが試行錯誤の段階であるため、管理者のみ閲覧可能 -->
+    <!-- TODO: 一般公開するときに、デフォルトで開くタブにする -->
     {#if isAdmin}
-      <TabItemWrapper workbookType={null} isOpen={true} title="テーブル">
+      <TabItemWrapper workbookType={null} title="テーブル">
         <TaskTable {taskResults} {isLoggedIn} />
       </TabItemWrapper>
     {/if}
 
     <!-- Grades -->
-    <TabItemWrapper workbookType={null} title="グレード">
+    <TabItemWrapper workbookType={null} isOpen={true} title="グレード">
       <TaskGradeList {taskResults} {isAdmin} {isLoggedIn}></TaskGradeList>
     </TabItemWrapper>
 
