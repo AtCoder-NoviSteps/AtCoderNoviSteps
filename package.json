@@ -57,7 +57,7 @@
     "nock": "13.5.6",
     "prettier": "3.4.2",
     "prettier-plugin-svelte": "3.3.3",
-    "prettier-plugin-tailwindcss": "0.6.10",
+    "prettier-plugin-tailwindcss": "0.6.11",
     "prisma": "5.22.0",
     "stwui": "0.21.2-next",
     "super-sitemap": "1.0.3",
