@@ -28,6 +28,7 @@
   <Tabs tabStyle="underline" contentClass="bg-white dark:bg-gray-800">
     <!-- Task table -->
     <!-- WIP: UIのデザインが試行錯誤の段階であるため、管理者のみ閲覧可能 -->
+    <!-- TODO: 一般公開するときに、デフォルトで開くタブにする -->
     {#if isAdmin}
       <TabItemWrapper workbookType={null} title="テーブル">
         <TaskTable {taskResults} {isLoggedIn} />
