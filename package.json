@@ -32,7 +32,7 @@
   "devDependencies": {
     "@eslint/eslintrc": "3.2.0",
     "@eslint/js": "9.19.0",
-    "@playwright/test": "1.49.1",
+    "@playwright/test": "1.50.1",
     "@quramy/prisma-fabbrica": "2.2.2",
     "@sveltejs/adapter-auto": "4.0.0",
     "@sveltejs/adapter-vercel": "5.6.1",
