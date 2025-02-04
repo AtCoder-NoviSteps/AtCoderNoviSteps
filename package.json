@@ -84,7 +84,7 @@
     "debug": "4.4.0",
     "flowbite": "2.5.2",
     "lucia": "2.7.7",
-    "playwright": "1.49.1",
+    "playwright": "1.50.1",
     "pnpm": "9.15.5",
     "prisma-erd-generator": "2.0.4",
     "svelte-eslint-parser": "0.43.0",
