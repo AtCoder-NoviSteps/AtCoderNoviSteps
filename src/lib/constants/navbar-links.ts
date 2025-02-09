@@ -12,7 +12,7 @@ export const ACCOUNT_TRANSFER_PAGE = `/account_transfer`;
 
 export const navbarLinks = [
   { title: `ホーム`, path: HOME_PAGE },
-  { title: `問題集（アルファ版）`, path: WORKBOOKS_PAGE },
+  { title: `問題集`, path: WORKBOOKS_PAGE },
   { title: `問題一覧`, path: PROBLEMS_PAGE },
   { title: `サービスの説明`, path: ABOUT_PAGE },
 ];
