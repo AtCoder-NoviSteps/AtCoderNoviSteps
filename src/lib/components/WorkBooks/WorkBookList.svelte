@@ -57,7 +57,7 @@
   });
   $: readableReplenishedWorkbooksCount = () => countReadableWorkbooks(replenishedWorkbooks);
 
-  let isShowReplenishment: boolean = true;
+  let isShowReplenishment: boolean = false;
 
   function countReadableWorkbooks(workbooks: WorkbooksList): number {
     const results = workbooks.reduce((count, workbook: WorkbookList) => {
