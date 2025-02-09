@@ -187,6 +187,10 @@ export const agc = agcContestIds.map((contestId) =>
 );
 
 export const abcLike = [
+  createTestCaseForContestType('AISing 2020')({
+    contestId: 'aising2020',
+    expected: ContestType.ABC_LIKE,
+  }),
   createTestCaseForContestType('Panasonic 2020')({
     contestId: 'panasonic2020',
     expected: ContestType.ABC_LIKE,
@@ -295,12 +299,28 @@ export const atCoderOthers = [
     contestId: 'code-festival-2014-final',
     expected: ContestType.OTHERS,
   }),
+  createTestCaseForContestType('CODE THANKS FESTIVAL 2017')({
+    contestId: 'code-thanks-festival-2017',
+    expected: ContestType.OTHERS,
+  }),
+  createTestCaseForContestType('CODE THANKS FESTIVAL 2018')({
+    contestId: 'code-thanks-festival-2018',
+    expected: ContestType.OTHERS,
+  }),
   createTestCaseForContestType('Donuts Procon Challenge 2014')({
     contestId: 'donuts-live2014',
     expected: ContestType.OTHERS,
   }),
   createTestCaseForContestType('Donuts Procon Challenge 2015')({
     contestId: 'donuts-2015',
+    expected: ContestType.OTHERS,
+  }),
+  createTestCaseForContestType('IndeedNow Qual B')({
+    contestId: 'indeednow-qualb',
+    expected: ContestType.OTHERS,
+  }),
+  createTestCaseForContestType('第3回 ドワンゴからの挑戦状 予選')({
+    contestId: 'dwacon2017-prelims',
     expected: ContestType.OTHERS,
   }),
   createTestCaseForContestType('MUJIN Programming Challenge 2016')({
