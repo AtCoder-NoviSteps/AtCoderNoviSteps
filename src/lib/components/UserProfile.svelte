@@ -17,11 +17,7 @@
   <!-- See: -->
   <!-- https://svelte-5-ui-lib.codewithshin.com/components/avatar -->
   <div class=" flex flex-wrap justify-center space-x-4 rtl:space-x-reverse">
-    <Avatar
-      src="https://flowbite-svelte.com/images/examples/image-2@2x.jpg"
-      cornerStyle="rounded"
-      size="xl"
-    />
+    <Avatar dot={{}} cornerStyle="rounded" size="xl" />
   </div>
 
   <Table noborder={true}>
