@@ -41,10 +41,14 @@
 
   // HACK: $effect だと workBookTasksForTable が更新されない
   run(() => {
-    workBookTasksForTable = $form.workBookTasks.map((workBookTask) => {
-      const task = tasksMapByIds.get(workBookTask.taskId);
+    workBookTasksForTable = $form.workBookTasks
+      .map((workBookTask) => {
+        const task = tasksMapByIds.get(workBookTask.taskId);
 
-      if (task) {
+        if (!task) {
+          return null;
+        }
+
         return {
           contestId: task.contest_id,
           title: task.title,
@@ -52,8 +56,8 @@
           priority: workBookTask.priority,
           comment: workBookTask.comment,
         };
-      }
-    }) as WorkBookTasksEdit;
+      })
+      .filter((item): item is NonNullable<typeof item> => item !== null);
   });
 </script>
 
