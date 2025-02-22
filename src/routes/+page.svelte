@@ -1,7 +1,9 @@
 <!-- See: -->
 <!-- https://lucia-auth.com/guidebook/sign-in-with-username-and-password/sveltekit/ -->
 <script lang="ts">
-  import { Heading, Button, Carousel } from 'flowbite-svelte';
+  import { Heading, Button, Img } from 'svelte-5-ui-lib';
+  import emblaCarouselSvelte from 'embla-carousel-svelte';
+  import Autoplay from 'embla-carousel-autoplay';
   // @ts-ignore
   import ArrowRightOutline from 'flowbite-svelte-icons/ArrowRightOutline.svelte';
 
@@ -23,16 +25,15 @@
       title: 'Sample-of-problems-with-10Q',
     },
   ];
+
+  let options = { loop: true };
+  let plugins = [Autoplay()];
 </script>
 
 <!-- TODO: かっこいいロゴを入れる -->
 <div class="container mx-auto text-center">
   <div class="mx-auto py-8 w-5/6 lg:w-2/3">
-    <Heading
-      tag="h1"
-      class="mb-4"
-      customSize="text-2xl font-extrabold xs:text-3xl md:text-5xl lg:text-6xl"
-    >
+    <Heading tag="h1" class="text-2xl font-extrabold xs:text-3xl md:text-5xl lg:text-6xl mb-4">
       {PRODUCT_CATCH_PHRASE}
     </Heading>
 
@@ -44,7 +45,11 @@
 
     <div class="flex flex-wrap justify-center items-center">
       <Button href={WORKBOOKS_PAGE} class="w-full sm:w-5/6 md:w-1/3 m-2">問題集へ</Button>
-      <Button color="alternative" href={ABOUT_PAGE} class="w-full sm:w-5/6 md:w-1/3 m-2">
+      <Button
+        color="alternative"
+        href={ABOUT_PAGE}
+        class="w-full sm:w-5/6 md:w-1/3 m-2 dark:hover:bg-gray-700"
+      >
         使い方を見る
         <ArrowRightOutline class="w-3.5 h-3.5 ml-2" />
       </Button>
@@ -55,11 +60,7 @@
     <!-- 主要な機能 + スクリーンショット -->
     <!-- FIXME: 重複部分をコンポーネント化 -->
     <!-- 問題集 -->
-    <Heading
-      tag="h2"
-      class="mt-14 xs:mt-24 mb-3"
-      customSize="text-xl font-medium md:text-2xl lg:text-3xl"
-    >
+    <Heading tag="h2" class="text-xl font-medium md:text-2xl lg:text-3xl mt-14 xs:mt-24 mb-3">
       問題集で得意を伸ばす・苦手を克服
     </Heading>
 
@@ -85,11 +86,7 @@
     </div>
 
     <!-- 問題一覧 -->
-    <Heading
-      tag="h2"
-      class="mt-14 xs:mt-20 mb-3"
-      customSize="text-xl font-medium  md:text-2xl lg:text-3xl"
-    >
+    <Heading tag="h2" class="text-xl font-medium  md:text-2xl lg:text-3xl mt-14 xs:mt-20 mb-3">
       問題の回答状況を自分で記録できる
     </Heading>
 
@@ -99,16 +96,23 @@
       </p>
     </div>
 
-    <div class="m-4">
-      <Carousel
-        duration={3000}
-        images={problemImages}
-        imgClass="object-contain h-full w-fit"
-        let:Controls
-        class="min-h-[300px] xs:min-h-[400px] md:min-h-[540px] mb-8 xs:mb-12"
-      >
-        <Controls class="items-center text-primary-700 pt-4" />
-      </Carousel>
+    <!-- WHY: Svelte 5 UI lib では、Carousel が未実装なため、Embla Carousel で代用 -->
+    <!-- TODO: 左右にボタンが表示されるように -->
+    <!-- See: -->
+    <!-- https://github.com/davidjerleke/embla-carousel -->
+    <div class="overflow-hidden m-4" use:emblaCarouselSvelte={{ options, plugins }}>
+      <div class="flex min-h-[300px] xs:min-h-[400px] md:min-h-[540px] mb-8 xs:mb-12">
+        {#each problemImages as problemImage}
+          <div class="flex flex-shrink-0 w-full min-w-0 items-center justify-center">
+            <Img
+              src={problemImage.src}
+              alt={problemImage.alt}
+              figClass=""
+              imgClass="object-contain h-full w-fit"
+            />
+          </div>
+        {/each}
+      </div>
     </div>
 
     <div class="flex flex-wrap justify-center items-center">

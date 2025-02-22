@@ -1,6 +1,6 @@
 <script lang="ts">
+  import { Breadcrumb, BreadcrumbItem } from 'svelte-5-ui-lib';
   import { superForm } from 'sveltekit-superforms/client';
-  import { Breadcrumb, BreadcrumbItem } from 'flowbite-svelte';
 
   import {
     WorkBookType,
@@ -10,6 +10,7 @@
   import type { Task } from '$lib/types/task';
 
   import { preventEnterKey } from '$lib/actions/prevent_enter_key';
+
   import HeadingOne from '$lib/components/HeadingOne.svelte';
   import WorkBookInputFields from '$lib/components/WorkBooks/WorkBookInputFields.svelte';
   import WorkBookTasksTable from '$lib/components/WorkBookTasks/WorkBookTasksTable.svelte';
@@ -17,7 +18,7 @@
   import InputFieldWrapper from '$lib/components/InputFieldWrapper.svelte';
   import SubmissionButton from '$lib/components/SubmissionButton.svelte';
 
-  export let data;
+  let { data } = $props();
 
   // See:
   // https://superforms.rocks/concepts/nested-data
@@ -33,7 +34,11 @@
   $form.isOfficial = data.isAdmin;
   $form.workBookType = $form.isOfficial ? WorkBookType.CURRICULUM : WorkBookType.CREATED_BY_USER;
 
-  $: workBookTasksForTable = [] as WorkBookTaskCreate[];
+  let workBookTasksForTable: WorkBookTaskCreate[] = $state([]);
+
+  $effect(() => {
+    workBookTasksForTable = [] as WorkBookTaskCreate[];
+  });
 
   const tasksMapByIds: Map<string, Task> = data.tasksMapByIds;
 </script>

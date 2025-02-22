@@ -1,13 +1,17 @@
 <script lang="ts">
-  import { getTaskGradeColor, getTaskGradeLabel, toWhiteTextIfNeeds } from '$lib/utils/task';
   import { TaskGrade } from '$lib/types/task';
+  import { getTaskGradeColor, getTaskGradeLabel, toWhiteTextIfNeeds } from '$lib/utils/task';
 
-  export let taskGrade: TaskGrade | string;
-  export let defaultPadding: number = 1;
-  export let defaultWidth: number = 10;
+  interface Props {
+    taskGrade: TaskGrade | string;
+    defaultPadding?: number;
+    defaultWidth?: number;
+  }
 
-  $: grade = getTaskGradeLabel(taskGrade);
-  $: gradeColor = getTaskGradeColor(taskGrade);
+  let { taskGrade, defaultPadding = 1, defaultWidth = 10 }: Props = $props();
+
+  let grade = $derived(getTaskGradeLabel(taskGrade));
+  let gradeColor = $derived(getTaskGradeColor(taskGrade));
 </script>
 
 <div class="rounded-lg border-2 border-white">

@@ -1,8 +1,12 @@
 <script lang="ts">
-  import { Button } from 'flowbite-svelte';
+  import { Button } from 'svelte-5-ui-lib';
 
-  export let width: string = 'w-full';
-  export let labelName: string;
+  interface Props {
+    width?: string;
+    labelName: string;
+  }
+
+  let { width = 'w-full', labelName }: Props = $props();
 </script>
 
 <Button type="submit" class={width}>{labelName}</Button>

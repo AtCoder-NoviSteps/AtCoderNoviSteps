@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Tabs, TabItem, Alert } from 'flowbite-svelte';
+  import { Tabs, TabItem, Alert } from 'svelte-5-ui-lib';
 
   // import AtCoderUserValidationForm from '$lib/components/AtCoderUserValidationForm.svelte';
   import UserAccountDeletionForm from '$lib/components/UserAccountDeletionForm.svelte';
@@ -10,7 +10,22 @@
 
   import { Roles } from '$lib/types/user';
 
-  export let data;
+  interface Props {
+    data: {
+      userId: string;
+      username: string;
+      role: Roles;
+      isLoggedIn: boolean;
+      atcoder_username: string;
+      atcoder_validationcode: string;
+      is_validated: boolean;
+      message_type: string;
+      message: string;
+    };
+    status?: string;
+  }
+
+  let { data, status = $bindable('nothing') }: Props = $props();
 
   let role = data.role;
   let username = data.username;
@@ -20,8 +35,7 @@
   let message = data.message;
   let message_type = data.message_type;
 
-  export let status = 'nothing';
-  if (data.is_validated === true) {
+  if (data.is_validated) {
     status = 'validated';
   }
   if (data.atcoder_username.length > 0 && data.atcoder_validationcode.length > 0) {
@@ -49,7 +63,10 @@
   <Tabs tabStyle="underline" contentClass="bg-white dark:bg-gray-800">
     <!-- 基本情報 -->
     <TabItem open>
-      <span slot="title" class="text-lg">基本情報</span>
+      {#snippet titleSlot()}
+        <span class="text-lg">基本情報</span>
+      {/snippet}
+
       <ContainerWrapper>
         <FormWrapper action="update">
           <LabelWrapper labelName="ユーザ名" inputValue={username} />
@@ -99,7 +116,10 @@
     <!-- アカウント削除 (ゲストを除いた一般ユーザのみ) -->
     {#if isGeneralUser(role, username)}
       <TabItem>
-        <span slot="title" class="text-lg">アカウント削除</span>
+        {#snippet titleSlot()}
+          <span class="text-lg">アカウント削除</span>
+        {/snippet}
+
         <UserAccountDeletionForm {username} />
       </TabItem>
     {/if}

@@ -1,11 +1,15 @@
 <script lang="ts">
-  import { TableBodyCell } from 'flowbite-svelte';
+  import { TableBodyCell } from 'svelte-5-ui-lib';
 
   import type { WorkbookList } from '$lib/types/workbook';
   import PublicationStatusLabel from '$lib/components/WorkBooks/PublicationStatusLabel.svelte';
 
-  export let paddingLeft: string = 'pl-2 xs:pl-4';
-  export let workbook: WorkbookList;
+  interface Props {
+    paddingLeft?: string;
+    workbook: WorkbookList;
+  }
+
+  let { paddingLeft = 'pl-2 xs:pl-4', workbook }: Props = $props();
 </script>
 
 <TableBodyCell class="w-2/5 {paddingLeft} pr-4">

@@ -4,13 +4,16 @@
   import ExternalLinkWrapper from '$lib/components/ExternalLinkWrapper.svelte';
   import GradeLabel from '$lib/components/GradeLabel.svelte';
   import IconForUpdating from '$lib/components/SubmissionStatus/IconForUpdating.svelte';
-  import UpdatingModal from '$lib/components/SubmissionStatus/UpdatingModal.svelte';
 
   import { getTaskUrl } from '$lib/utils/task';
 
-  export let taskResult: TaskResult;
-  export let isLoggedIn: boolean;
-  export let updatingModal: UpdatingModal;
+  interface Props {
+    taskResult: TaskResult;
+    isLoggedIn: boolean;
+    onClick: () => void;
+  }
+
+  let { taskResult, isLoggedIn, onClick }: Props = $props();
 </script>
 
 <!-- Task title and an external link -->
@@ -30,10 +33,11 @@
   <GradeLabel taskGrade={taskResult.grade} defaultPadding={0.25} defaultWidth={8} />
 
   <!-- Submission updater and links of task detail page -->
+  <!-- TODO: 当たり判定をグレードのアイコンまで広げる -->
   <button
     type="button"
     class="mx-2 w-8 text-center"
-    on:click={() => updatingModal.openModal(taskResult)}
+    onclick={onClick}
     aria-label="Update submission for {taskResult.title}"
   >
     <IconForUpdating {isLoggedIn} />

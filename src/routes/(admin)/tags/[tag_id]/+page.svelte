@@ -1,6 +1,8 @@
-<script>
+<script lang="ts">
   import TagForm from '$lib/components/TagForm.svelte';
-  export let data;
+
+  let { data } = $props();
+
   let tag = data.tag;
   let tasks = data.tasks;
 </script>

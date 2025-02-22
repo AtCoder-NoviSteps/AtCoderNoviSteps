@@ -1,7 +1,7 @@
 <!-- See: -->
 <!-- https://github.com/kenkoooo/AtCoderProblems/blob/master/atcoder-problems-frontend/src/components/ProblemSearchBox.tsx -->
 <script lang="ts">
-  import { Input, Listgroup, ListgroupItem } from 'flowbite-svelte';
+  import { Input, Listgroup } from 'svelte-5-ui-lib';
 
   import SelectWrapper from '$lib/components/SelectWrapper.svelte';
   import LabelWithTooltips from '$lib/components/LabelWithTooltips.svelte';
@@ -21,11 +21,20 @@
   } from '$lib/utils/workbook_tasks';
   import { getTaskUrl } from '$lib/utils/task';
 
-  export let tasks: Tasks = [];
-  // HACK: やむなくデータベースへの保存用と問題集作成・編集用で分けている。
-  export let workBookTasks: WorkBookTasksBase = [];
-  export let workBookTasksForTable: WorkBookTasksCreate | WorkBookTasksEdit = [];
+  interface Props {
+    tasks?: Tasks;
+    // HACK: やむなくデータベースへの保存用と問題集作成・編集用で分けている。
+    workBookTasks?: WorkBookTasksBase;
+    workBookTasksForTable?: WorkBookTasksCreate | WorkBookTasksEdit;
+  }
 
+  let {
+    tasks = $bindable([]),
+    workBookTasks = $bindable([]),
+    workBookTasksForTable = $bindable([]),
+  }: Props = $props();
+
+  // TODO: utilsへ移動させる
   const isMatched = (task: Task, searchWords: string): boolean => {
     if (searchWords === undefined || searchWords.length === 0) {
       return false;
@@ -40,21 +49,22 @@
       );
   };
 
-  $: searchWordsOrURL = '';
-  $: filteredTasks = tasks
-    .filter((task: Task) => isMatched(task, searchWordsOrURL))
-    .slice(0, 30)
-    .sort((firstTask: Task, secondTask: Task) =>
-      firstTask.task_table_index.localeCompare(secondTask.task_table_index),
-    );
-
-  let focusingId = PENDING;
+  let searchWordsOrURL = $state('');
+  let filteredTasks = $derived(
+    tasks
+      .filter((task: Task) => isMatched(task, searchWordsOrURL))
+      .slice(0, 30)
+      .sort((firstTask: Task, secondTask: Task) =>
+        firstTask.task_table_index.localeCompare(secondTask.task_table_index),
+      ),
+  );
+  let focusingId = $state(PENDING);
 
   // Note: 問題を末尾に追加するのをデフォルトとする
-  let selectedIndex: number = workBookTasksForTable.length;
-  let workBookTaskMaxForTable = workBookTasksForTable.length;
+  let selectedIndex: number = $state(workBookTasksForTable.length);
+  let workBookTaskMaxForTable = $state(workBookTasksForTable.length);
 
-  $: workBookTaskOrders = generateWorkBookTaskOrders(workBookTasksForTable.length);
+  let workBookTaskOrders = $derived(generateWorkBookTaskOrders(workBookTasksForTable.length));
 
   function handleSelectClick(event: Event) {
     if (event.target instanceof HTMLSelectElement) {
@@ -65,7 +75,7 @@
   // HACK: 問題を追加する順番の指定と、問題の追加 / 削除に伴う順番の動的な更新を両立させるための苦肉の策
   //       1. 問題を追加 / 削除したときだけ、次の問題を末尾に追加する状態に（デフォルトと同じ、変更も可能）
   //       2. 問題を追加する順番を選択しているときは「問題数が増減しない」ことから、デフォルトの設定に更新しないようにする
-  $: {
+  $effect(() => {
     // HACK: 問題の削除を別のコンポーネントで行っており、確実に同期させるため
     // （以下の2行がないと、削除してから別の問題を追加するまで、問題を追加する順番を指定できなくなる）
     workBookTaskMaxForTable = workBookTasksForTable.length;
@@ -74,7 +84,7 @@
     if (workBookTasksForTable.length !== workBookTaskMaxForTable) {
       selectedIndex = workBookTasksForTable.length;
     }
-  }
+  });
 </script>
 
 <div class="flex flex-col md:flex-row items-start md:items-center justify-between md:space-x-4">
@@ -96,13 +106,13 @@
         placeholder="問題名かURLを入力してください。"
         class="flex-grow space-y-2"
         bind:value={searchWordsOrURL}
-        on:change={(e) => {
+        onchange={(e) => {
           if (e.target instanceof HTMLInputElement) {
             searchWordsOrURL = e.target.value;
             focusingId = PENDING;
           }
         }}
-        on:keydown={(e) => {
+        onkeydown={(e) => {
           if (e.key === 'Enter') {
             const selectedTask =
               filteredTasks.length > focusingId ? filteredTasks[focusingId] : undefined;
@@ -159,15 +169,19 @@
 {#if filteredTasks.length}
   <Listgroup>
     {#each filteredTasks as task, index}
-      <ListgroupItem
-        active={index === focusingId}
-        key={task.task_id}
-        focusClass="bg-primary-500 text-white"
-        class="truncate md:truncate-none"
+      <!-- See: -->
+      <!-- https://flowbite.com/docs/components/list-group/ -->
+      <!-- WHY: svelte-5-ui-lib の ListgroupItem だと、フォーカスした問題の <li> 要素が消えてスタイルが崩れるため -->
+      <li
+        data-name={task.task_id}
+        class="cursor-pointer truncate md:truncate-none px-4 pt-3 pb-1 border-b border-gray-200 dark:border-gray-600 first:rounded-tl-lg first:rounded-tr-lg last:rounded-bl-lg last:rounded-br-lg {index ===
+        focusingId
+          ? 'bg-primary-500 text-white'
+          : 'bg-white text-gray-700 dark:bg-gray-700 dark:text-white'}"
       >
         <button
           type="button"
-          on:click={() => {
+          onclick={() => {
             const results = addTaskToWorkBook(
               task,
               workBookTasks,
@@ -200,7 +214,7 @@
             </span>
           </div>
         </button>
-      </ListgroupItem>
+      </li>
     {/each}
   </Listgroup>
 {/if}

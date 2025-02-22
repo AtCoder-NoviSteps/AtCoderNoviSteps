@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Tabs } from 'flowbite-svelte';
+  import { Tabs } from 'svelte-5-ui-lib';
 
   import type { TaskResults } from '$lib/types/task';
 
@@ -11,10 +11,10 @@
   import TaskGradeList from '$lib/components/TaskGradeList.svelte';
   import GradeGuidelineTable from '$lib/components/TaskGrades/GradeGuidelineTable.svelte';
 
-  export let data;
+  let { data } = $props();
 
-  let taskResults: TaskResults;
-  $: taskResults = data.taskResults.sort(compareByContestIdAndTaskId);
+  let taskResults: TaskResults = $derived(data.taskResults.sort(compareByContestIdAndTaskId));
+
   let isAdmin: boolean = data.isAdmin;
   let isLoggedIn: boolean = data.isLoggedIn;
 </script>
@@ -25,7 +25,7 @@
 
   <!-- See: -->
   <!-- https://flowbite-svelte.com/docs/components/tabs -->
-  <Tabs tabStyle="underline" contentClass="bg-white dark:bg-gray-800">
+  <Tabs tabStyle="underline" contentClass="bg-white dark:bg-gray-800 mt-0 p-0">
     <!-- Task table -->
     <!-- WIP: UIのデザインが試行錯誤の段階であるため、管理者のみ閲覧可能 -->
     <!-- TODO: 一般公開するときに、デフォルトで開くタブにする -->

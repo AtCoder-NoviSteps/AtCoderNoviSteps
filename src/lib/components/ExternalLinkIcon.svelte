@@ -1,5 +1,9 @@
 <script lang="ts">
-  export let size = 'w-6 h-6';
+  interface Props {
+    size?: string;
+  }
+
+  let { size = 'w-6 h-6' }: Props = $props();
 </script>
 
 <!-- See: https://flowbite.com/icons/ -->

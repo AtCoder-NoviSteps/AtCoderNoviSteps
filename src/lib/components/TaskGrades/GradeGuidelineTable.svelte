@@ -6,7 +6,7 @@
     TableBodyRow,
     TableHead,
     TableHeadCell,
-  } from 'flowbite-svelte';
+  } from 'svelte-5-ui-lib';
 
   import ExternalLinkWrapper from '$lib/components/ExternalLinkWrapper.svelte';
   import { gradeGuidelineTableData } from '$lib/components/TaskGrades/grade_guideline_table_data';
@@ -15,7 +15,7 @@
   import { TASK_GRADE_CRITERIA_SHEET_URL } from '$lib/constants/urls';
 </script>
 
-<div class="container mx-auto w-5/6 lg:w-2/3 mt-6 text-gray-800 dark:text-gray-300">
+<div class="container mx-auto w-5/6 lg:w-2/3 mt-4 text-gray-800 dark:text-gray-300">
   <div>
     AtCoder Beginners Contest（通称、ABC）の配点・問題 IDと、対応するグレードの目安を示しています。
   </div>
@@ -39,7 +39,7 @@
       <TableHeadCell class="w-40 text-center">対応グレード</TableHeadCell>
     </TableHead>
 
-    <TableBody tableBodyClass="divide-y">
+    <TableBody class="divide-y">
       {#each gradeGuidelineTableData as { point, task, lowerGrade, upperGrade }}
         <TableBodyRow>
           <TableBodyCell class="text-sm xs:text-md text-center py-3">{point}</TableBodyCell>

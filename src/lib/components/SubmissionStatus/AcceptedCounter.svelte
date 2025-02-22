@@ -3,18 +3,22 @@
   import type { TaskResults } from '$lib/types/task';
   import { countAcceptedTasks, countAllTasks } from '$lib/utils/task';
 
-  export let workBookTasks: WorkBookTaskBase[] = [];
-  export let taskResults: TaskResults | [];
+  interface Props {
+    workBookTasks?: WorkBookTaskBase[];
+    taskResults: TaskResults | [];
+  }
 
-  let acceptedCount: number = 0;
-  let allTaskCount: number = 0;
-  let acceptedRatioPercent: number = 0;
+  let { workBookTasks = [], taskResults }: Props = $props();
 
-  $: {
+  let acceptedCount: number = $state(0);
+  let allTaskCount: number = $state(0);
+  let acceptedRatioPercent: number = $state(0);
+
+  $effect(() => {
     acceptedCount = countAcceptedTasks(taskResults);
     allTaskCount = countAllTasks(workBookTasks) || countAllTasks(taskResults);
     acceptedRatioPercent = allTaskCount ? (acceptedCount / allTaskCount) * 100 : 0;
-  }
+  });
 </script>
 
 <!-- FIXME: 横幅を微調整する -->

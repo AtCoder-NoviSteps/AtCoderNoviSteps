@@ -1,12 +1,23 @@
 <script lang="ts">
   import ExternalLinkIcon from '$lib/components/ExternalLinkIcon.svelte';
 
-  export let url: string;
-  export let description: string;
-  export let textSize: string = '';
-  export let textColorInDarkMode = 'dark:text-primary-500';
-  export let textOverflow: string = '';
-  export let iconSize: number = 4;
+  interface Props {
+    url: string;
+    description: string;
+    textSize?: string;
+    textColorInDarkMode?: string;
+    textOverflow?: string;
+    iconSize?: number;
+  }
+
+  let {
+    url,
+    description,
+    textSize = '',
+    textColorInDarkMode = 'dark:text-primary-500',
+    textOverflow = '',
+    iconSize = 4,
+  }: Props = $props();
 </script>
 
 <a

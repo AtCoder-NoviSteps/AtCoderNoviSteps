@@ -2,7 +2,11 @@
   // @ts-ignore
   import ChevronDownOutline from 'flowbite-svelte-icons/ChevronDownOutline.svelte';
 
-  export let isLoggedIn: boolean;
+  interface Props {
+    isLoggedIn: boolean;
+  }
+
+  let { isLoggedIn }: Props = $props();
 </script>
 
 <!-- HACK: 以下のコンポーネントと類似しているが、差分が大きいため別コンポーネントとして用意 -->

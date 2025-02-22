@@ -8,7 +8,7 @@
     TableBody,
     TableBodyCell,
     TableBodyRow,
-  } from 'flowbite-svelte';
+  } from 'svelte-5-ui-lib';
 
   import PublicationStatusLabel from '$lib/components/WorkBooks/PublicationStatusLabel.svelte';
   import CompletedTasks from '$lib/components/Trophies/CompletedTasks.svelte';
@@ -27,12 +27,16 @@
   import type { WorkBookTaskBase } from '$lib/types/workbook';
   import type { TaskResult, TaskGrade } from '$lib/types/task';
 
-  export let data;
+  let { data } = $props();
 
   let workBook = data.workBook;
-  let workBookTasks: WorkBookTaskBase[];
-  let taskResults: Map<string, TaskResult>;
-  $: taskResults = data.taskResults;
+  let workBookTasks: WorkBookTaskBase[] = $state([]);
+  let taskResults: Map<string, TaskResult> = $state(new Map());
+
+  $effect(() => {
+    taskResults = data.taskResults;
+  });
+
   let isLoggedIn = data.isLoggedIn;
 
   // TODO: 関数をutilへ移動させる
@@ -71,20 +75,28 @@
     return getContestIdFrom(taskId) + '-' + taskId;
   };
 
-  let updatingModal: UpdatingModal;
+  // HACK:: `updatingModal` is updated, but is not declared with `$state(...)`. Changing its value will not correctly trigger updates.
+  // eslint-disable-next-line svelte/valid-compile
+  let updatingModal: UpdatingModal | null = null;
 
   // HACK: clickを1回実行するとactionsが2回実行されてしまう。原因と修正方法が分かっていない。
   function handleClick(taskId: string) {
-    updatingModal.openModal(getTaskResult(taskId));
+    if (updatingModal) {
+      updatingModal.openModal(getTaskResult(taskId));
+    } else {
+      console.error('Failed to initialize UpdatingModal component.');
+    }
   }
 
-  $: if (taskResults && workBook && Array.isArray(workBook.workBookTasks)) {
-    workBookTasks = workBook.workBookTasks;
-  } else if (!taskResults) {
-    console.error('Not found taskResults.');
-  } else if (!workBook || !Array.isArray(workBook.workBookTasks)) {
-    console.error('Not found workBook or workBook.workBookTasks is not an array.');
-  }
+  $effect(() => {
+    if (taskResults && workBook && Array.isArray(workBook.workBookTasks)) {
+      workBookTasks = workBook.workBookTasks;
+    } else if (!taskResults) {
+      console.error('Not found taskResults.');
+    } else if (!workBook || !Array.isArray(workBook.workBookTasks)) {
+      console.error('Not found workBook or workBook.workBookTasks is not an array.');
+    }
+  });
 </script>
 
 <!-- TODO: コンポーネントが肥大化しつつあるので分割 -->
@@ -148,7 +160,7 @@
           <TableHeadCell class="w-1/3 hidden xs:table-cell truncate">出典</TableHeadCell>
           <TableHeadCell class="w-14 text-center px-0.5">一言</TableHeadCell>
         </TableHead>
-        <TableBody tableBodyClass="divide-y">
+        <TableBody class="divide-y">
           {#each workBookTasks as workBookTask}
             <TableBodyRow
               id={getUniqueIdUsing(workBookTask.taskId)}

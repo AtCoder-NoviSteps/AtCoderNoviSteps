@@ -1,18 +1,24 @@
 <script lang="ts">
   import { enhance } from '$app/forms';
-  import { Breadcrumb, BreadcrumbItem, Img } from 'flowbite-svelte';
+
+  import { Breadcrumb, BreadcrumbItem, Img } from 'svelte-5-ui-lib';
 
   import SubmissionStatusButton from '$lib/components/SubmissionStatusButton.svelte';
   import ExternalLinkIcon from '$lib/components/ExternalLinkIcon.svelte';
+
   import { getBackgroundColorFrom } from '$lib/services/submission_status';
+
   import { getTaskGradeLabel, getTaskUrl } from '$lib/utils/task';
 
-  export let data;
+  let { data } = $props();
 
   let taskResult = data.taskResult;
   let buttons = data.buttons;
 </script>
 
+<!-- TODO: 回答状況は、問題一覧のリストやテーブルから更新する -->
+<!-- TODO: 類題の表示できるようにする -->
+<!-- TODO: 解法メモなどを記録できるようにする -->
 <div class="container mx-auto w-5/6">
   <!-- FIXME: ホームアイコンを問題リストを表すアイコンに変更 -->
   <div class="max-w-lg md:max-w-2xl mx-auto mb-3">

@@ -9,13 +9,17 @@
     Select,
     Label,
     Button,
-  } from 'flowbite-svelte';
+  } from 'svelte-5-ui-lib';
 
   import { addContestNameToTaskIndex } from '$lib/utils/contest';
   import { taskGradeValues, type Task } from '$lib/types/task';
   import { getTaskGradeLabel, removeTaskIndexFromTitle } from '$lib/utils/task';
 
-  export let task: Task;
+  interface Props {
+    task: Task;
+  }
+
+  let { task = $bindable() }: Props = $props();
   //export const isAdmin: boolean; // Admin権限がある場合は、編集リンクを表示する
 
   let grades = taskGradeValues.map((taskGradeValue) => {
@@ -34,7 +38,7 @@
   <!-- task_id、contest_idを変える可能性は低い -->
   <!-- 主に、gradeと、tasktagsを変えることになると思う -->
   <Table shadow hoverable={true} class="text-md">
-    <TableBody tableBodyClass="divide-y">
+    <TableBody class="divide-y">
       <TableBodyRow>
         <TableBodyCell>タイトル</TableBodyCell>
         <TableBodyCell>

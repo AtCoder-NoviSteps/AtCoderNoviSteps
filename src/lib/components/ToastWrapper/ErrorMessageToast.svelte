@@ -1,18 +1,22 @@
 <script lang="ts">
-  import { Toast } from 'flowbite-svelte';
+  import { Toast } from 'svelte-5-ui-lib';
   import CloseCircleSolid from 'flowbite-svelte-icons/CloseCircleSolid.svelte';
 
-  export let errorMessage: string | null = null;
+  interface Props {
+    errorMessage?: string | null;
+  }
+
+  let { errorMessage = null }: Props = $props();
 </script>
 
 <!-- See: -->
 <!-- https://flowbite-svelte.com/docs/components/toast -->
 {#if errorMessage !== null}
   <Toast color="red" class="mb-4">
-    <svelte:fragment slot="icon">
+    {#snippet icon()}
       <CloseCircleSolid class="w-5 h-5" />
       <span class="sr-only">Error icon</span>
-    </svelte:fragment>
+    {/snippet}
 
     {errorMessage}
   </Toast>

@@ -17,9 +17,9 @@
 
   import { errorMessageStore } from '$lib/stores/error_message';
 
-  export let data;
+  let { data, children } = $props();
 
-  $: metaTags = deepMerge(data.baseMetaTags, page.data.pageMetaTags);
+  let metaTags = $derived(deepMerge(data.baseMetaTags, page.data.pageMetaTags));
 </script>
 
 <Header />
@@ -34,7 +34,7 @@
 {#if $navigating}
   <SpinnerWrapper />
 {:else}
-  <slot />
+  {@render children?.()}
 {/if}
 
 <Footer />

@@ -1,6 +1,8 @@
 <script lang="ts">
+  import { run } from 'svelte/legacy';
+
   import { superForm } from 'sveltekit-superforms/client';
-  import { Breadcrumb, BreadcrumbItem } from 'flowbite-svelte';
+  import { Breadcrumb, BreadcrumbItem } from 'svelte-5-ui-lib';
 
   import type { WorkBookTasksBase, WorkBookTasksEdit } from '$lib/types/workbook';
   import type { Task, Tasks } from '$lib/types/task.js';
@@ -14,9 +16,9 @@
   import SubmissionButton from '$lib/components/SubmissionButton.svelte';
   import { FORBIDDEN } from '$lib/constants/http-response-status-codes.js';
 
-  export let data;
+  let { data } = $props();
 
-  $: canView = data.status === FORBIDDEN ? false : true;
+  let canView = $derived(data.status === FORBIDDEN ? false : true);
 
   let workBook = data.workBook;
 
@@ -35,19 +37,24 @@
   // データベースに基づいて、問題集の編集用データを作成
   const tasksMapByIds: Map<string, Task> = data.tasksMapByIds;
 
-  $: workBookTasksForTable = $form.workBookTasks.map((workBookTask) => {
-    const task = tasksMapByIds.get(workBookTask.taskId);
+  let workBookTasksForTable: WorkBookTasksEdit = $state([]);
 
-    if (task) {
-      return {
-        contestId: task.contest_id,
-        title: task.title,
-        taskId: workBookTask.taskId,
-        priority: workBookTask.priority,
-        comment: workBookTask.comment,
-      };
-    }
-  }) as WorkBookTasksEdit;
+  // HACK: $effect だと workBookTasksForTable が更新されない
+  run(() => {
+    workBookTasksForTable = $form.workBookTasks.map((workBookTask) => {
+      const task = tasksMapByIds.get(workBookTask.taskId);
+
+      if (task) {
+        return {
+          contestId: task.contest_id,
+          title: task.title,
+          taskId: workBookTask.taskId,
+          priority: workBookTask.priority,
+          comment: workBookTask.comment,
+        };
+      }
+    }) as WorkBookTasksEdit;
+  });
 </script>
 
 {#if canView}

@@ -1,13 +1,26 @@
 <script lang="ts">
-  import { Tooltip } from 'flowbite-svelte';
+  import { Tooltip } from 'svelte-5-ui-lib';
   import LightbulbOutline from 'flowbite-svelte-icons/LightbulbOutline.svelte';
 
-  export let uniqueId: string;
-  export let commentAndHint: string;
+  import { TOOLTIP_CLASS_BASE } from '$lib/constants/tailwind-helper';
+
+  interface Props {
+    uniqueId: string;
+    commentAndHint: string;
+  }
+
+  let { uniqueId, commentAndHint }: Props = $props();
 </script>
 
 {#if uniqueId !== '' && commentAndHint !== ''}
-  <Tooltip type="auto" triggeredBy={`#${uniqueId}`}>
+  <!-- HACK: positionはデフォルトの"top" 以外にすると、一瞬しか表示されない -->
+  <Tooltip
+    showOn="hover"
+    arrow={false}
+    offset={0}
+    triggeredBy={`#${uniqueId}`}
+    class={`${TOOLTIP_CLASS_BASE}`}
+  >
     <div class="whitespace-normal break-words min-w-[150px] max-w-[200px]">
       {commentAndHint}
     </div>

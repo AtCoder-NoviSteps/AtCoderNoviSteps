@@ -81,7 +81,7 @@ export const actions = {
     }
 
     try {
-      await workBooksCrud.updateWorkBook(workBookId, workBook);
+      await workBooksCrud.updateWorkBook(workBookId, { id: workBookId, ...workBook });
     } catch (e) {
       console.error(`Failed to update WorkBook with id ${workBookId}:`, e);
       error(

@@ -7,16 +7,22 @@
     TableBodyRow,
     TableHead,
     TableHeadCell,
-  } from 'flowbite-svelte';
+  } from 'svelte-5-ui-lib';
 
   import type { TaskResults } from '$lib/types/task';
 
   import { addContestNameToTaskIndex } from '$lib/utils/contest';
   import { removeTaskIndexFromTitle } from '$lib/utils/task';
 
-  export let taskResults: TaskResults;
+  interface Props {
+    taskResults: TaskResults;
+  }
+
+  let { taskResults }: Props = $props();
 </script>
 
+<!-- TODO: レスポンシブデザインに -->
+<!-- FIXME: アイコンのサイズを他のページと合わせる -->
 <Table shadow hoverable={true} class="text-md">
   <TableHead class="text-md bg-gray-100">
     <TableHeadCell class="w-1/6">回答</TableHeadCell>
@@ -24,14 +30,15 @@
     <TableHeadCell class="w-1/6">出典</TableHeadCell>
     <TableHeadCell class="w-1/6">更新日時</TableHeadCell>
   </TableHead>
-  <TableBody tableBodyClass="divide-y">
+
+  <TableBody class="divide-y">
     {#each taskResults as taskResult}
       <TableBodyRow>
         <TableBodyCell class="p-3">
           <Img
             src="../../{taskResult.submission_status_image_path}"
             alt={taskResult.submission_status_label_name}
-            class="md:h-16 md:w-16"
+            class="h-7 w-7 xs:h-8 xs:w-8"
           />
         </TableBodyCell>
         <TableBodyCell>

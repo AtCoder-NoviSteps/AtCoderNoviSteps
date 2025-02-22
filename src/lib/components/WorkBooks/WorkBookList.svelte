@@ -1,7 +1,7 @@
 <script lang="ts">
   import { get } from 'svelte/store';
 
-  import { ButtonGroup, Button, Toggle } from 'flowbite-svelte';
+  import { ButtonGroup, Button, Toggle } from 'svelte-5-ui-lib';
 
   import { taskGradesByWorkBookTypeStore } from '$lib/stores/task_grades_by_workbook_type';
   import { canRead } from '$lib/utils/authorship';
@@ -15,49 +15,49 @@
   import LabelWithTooltips from '$lib/components/LabelWithTooltips.svelte';
   import WorkBookBaseTable from '$lib/components/WorkBooks/WorkBookBaseTable.svelte';
 
-  export let workbookType: WorkBookType;
-  export let workbooks: WorkbooksList;
-  export let workbookGradeModes: Map<number, TaskGrade>;
-  export let taskResultsWithWorkBookId: Map<number, TaskResults>;
-  export let loggedInUser;
+  interface Props {
+    workbookType: WorkBookType;
+    workbooks: WorkbooksList;
+    workbookGradeModes: Map<number, TaskGrade>;
+    taskResultsWithWorkBookId: Map<number, TaskResults>;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    loggedInUser: any;
+  }
+
+  let {
+    workbookType,
+    workbooks,
+    workbookGradeModes,
+    taskResultsWithWorkBookId,
+    loggedInUser,
+  }: Props = $props();
 
   let userId = loggedInUser.id;
   let role: Roles = loggedInUser.role;
 
-  let selectedGrade: TaskGrade;
-  // FIXME: Svelte 5では、derived storeを使う。
-  $: selectedGrade = get(taskGradesByWorkBookTypeStore).get(workbookType) || TaskGrade.Q10;
-
-  $: {
-    const grade = get(taskGradesByWorkBookTypeStore).get(workbookType) || TaskGrade.Q10;
-
-    if (grade) {
-      selectedGrade = grade;
-    }
-  }
+  let selectedGrade: TaskGrade = $state(
+    get(taskGradesByWorkBookTypeStore).get(workbookType) || TaskGrade.Q10,
+  );
 
   // カリキュラム（手引き）、解法別、ユーザ作成
-  let mainWorkbooks: WorkbooksList;
-
-  $: mainWorkbooks =
+  let mainWorkbooks: WorkbooksList = $derived(
     workbookType === WorkBookType.CURRICULUM
       ? workbooks.filter((workbook: WorkbookList) => {
           const gradeMode = getGradeMode(workbook.id);
           return gradeMode === selectedGrade && !workbook.isReplenished;
         })
-      : workbooks;
-  $: readableMainWorkbooksCount = () => countReadableWorkbooks(mainWorkbooks);
+      : workbooks,
+  );
 
   // カリキュラム（補充）
-  let replenishedWorkbooks: WorkbooksList;
+  let replenishedWorkbooks: WorkbooksList = $derived(
+    workbooks.filter((workbook: WorkbookList) => {
+      const gradeMode = getGradeMode(workbook.id);
+      return gradeMode === selectedGrade && workbook.isReplenished;
+    }),
+  );
 
-  $: replenishedWorkbooks = workbooks.filter((workbook: WorkbookList) => {
-    const gradeMode = getGradeMode(workbook.id);
-    return gradeMode === selectedGrade && workbook.isReplenished;
-  });
-  $: readableReplenishedWorkbooksCount = () => countReadableWorkbooks(replenishedWorkbooks);
-
-  let isShowReplenishment: boolean = false;
+  let isShowReplenishment: boolean = $state(false);
 
   function countReadableWorkbooks(workbooks: WorkbooksList): number {
     const results = workbooks.reduce((count, workbook: WorkbookList) => {
@@ -84,6 +84,19 @@
     selectedGrade = grade;
     taskGradesByWorkBookTypeStore.updateTaskGrade(workbookType, grade);
   }
+
+  $effect(() => {
+    const grade = get(taskGradesByWorkBookTypeStore).get(workbookType) || TaskGrade.Q10;
+
+    if (grade) {
+      selectedGrade = grade;
+    }
+  });
+
+  let readableMainWorkbooksCount = $derived(() => countReadableWorkbooks(mainWorkbooks));
+  let readableReplenishedWorkbooksCount = $derived(() =>
+    countReadableWorkbooks(replenishedWorkbooks),
+  );
 </script>
 
 <!-- TODO: 5Q〜1Qにも対応 -->
@@ -95,7 +108,7 @@
         <ButtonGroup>
           {#each AVAILABLE_GRADES as grade}
             <Button
-              on:click={() => filterByGradeMode(grade)}
+              onclick={() => filterByGradeMode(grade)}
               class={selectedGrade === grade ? 'text-primary-700' : 'text-gray-900'}
             >
               {getTaskGradeLabel(grade)}

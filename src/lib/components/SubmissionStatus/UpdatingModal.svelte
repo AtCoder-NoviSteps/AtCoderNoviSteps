@@ -1,28 +1,37 @@
 <script lang="ts">
   import { enhance } from '$app/forms';
-  import { Button, Modal, Select } from 'flowbite-svelte';
+
+  import { Button, Modal, Select, uiHelpers } from 'svelte-5-ui-lib';
 
   import type { TaskResult } from '$lib/types/task';
+
   import { submission_statuses } from '$lib/services/submission_status';
   import { errorMessageStore } from '$lib/stores/error_message';
 
   import { getContestNameLabel } from '$lib/utils/contest';
   import InputFieldWrapper from '$lib/components/InputFieldWrapper.svelte';
 
-  export let isLoggedIn: boolean;
-
-  let defaultModal = false;
-  let selectedTaskResult: TaskResult;
-  let selectedSubmissionStatus: string;
-
-  export function openModal(taskResult: TaskResult) {
-    defaultModal = true;
-    selectedTaskResult = taskResult;
-    selectedSubmissionStatus = taskResult.status_name;
+  interface Props {
+    isLoggedIn: boolean;
   }
 
-  function closeModal() {
-    defaultModal = false;
+  let { isLoggedIn }: Props = $props();
+
+  const modal = uiHelpers();
+  let modalStatus = $state(false);
+  const closeModal = modal.close;
+
+  $effect(() => {
+    modalStatus = modal.isOpen;
+  });
+
+  let selectedTaskResult: TaskResult | null = $state(null);
+  let selectedSubmissionStatus: string = $state('');
+
+  export function openModal(taskResult: TaskResult) {
+    modal.open();
+    selectedTaskResult = taskResult;
+    selectedSubmissionStatus = taskResult.status_name;
   }
 
   // FIXME: 回答状況をカスタマイズする場合はDBから取得できるようにする。
@@ -64,11 +73,11 @@
   <Modal
     title="{getContestNameLabel(selectedTaskResult.contest_id)} - {selectedTaskResult.title}"
     size="sm"
-    outsideclose
-    bind:open={defaultModal}
-    on:close={closeModal}
+    {modalStatus}
+    {closeModal}
+    outsideClose
   >
-    <form method="POST" action="?/update" on:submit={handleSubmit} use:enhance>
+    <form method="POST" action="?/update" onsubmit={handleSubmit} use:enhance>
       <!-- 問題名-->
       <InputFieldWrapper
         inputFieldType="hidden"

@@ -1,7 +1,8 @@
 <script lang="ts">
   import { onMount, onDestroy } from 'svelte';
-  import { superForm } from 'sveltekit-superforms';
+  import { run } from 'svelte/legacy';
 
+  import { superForm } from 'sveltekit-superforms';
   import {
     Table,
     TableBody,
@@ -10,31 +11,44 @@
     Label,
     Input,
     Button,
-  } from 'flowbite-svelte';
+  } from 'svelte-5-ui-lib';
   import BadgeCheckOutline from 'flowbite-svelte-icons/BadgeCheckOutline.svelte';
   import BanOutline from 'flowbite-svelte-icons/BanOutline.svelte';
 
   import HeadingOne from '$lib/components/HeadingOne.svelte';
   import ContainerWrapper from '$lib/components/ContainerWrapper.svelte';
   import MessageHelperWrapper from '$lib/components/MessageHelperWrapper.svelte';
+
   import type { FloatingMessages } from '$lib/types/floating_message';
 
-  export let formAction: string = 'account_transfer';
-  export let data;
+  interface Props {
+    formAction?: string;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    data: any;
+  }
+
+  let { formAction = 'account_transfer', data }: Props = $props();
 
   const { form, errors, message, submitting, enhance } = superForm(data.form);
 
-  $: accountTransferMessages = data.accountTransferMessages as FloatingMessages;
-  let clearMessagesTimeout: ReturnType<typeof setTimeout>;
+  let accountTransferMessages: FloatingMessages = $state([]);
+
+  run(() => {
+    accountTransferMessages = data.accountTransferMessages as FloatingMessages;
+  });
+
+  let clearMessagesTimeout: ReturnType<typeof setTimeout> | undefined = $state();
 
   // 10秒後にメッセージを空にする
-  $: if (accountTransferMessages.length > 0) {
-    clearTimeout(clearMessagesTimeout);
+  run(() => {
+    if (accountTransferMessages.length > 0) {
+      clearTimeout(clearMessagesTimeout);
 
-    clearMessagesTimeout = setTimeout(() => {
-      accountTransferMessages = [];
-    }, 10000);
-  }
+      clearMessagesTimeout = setTimeout(() => {
+        accountTransferMessages = [];
+      }, 10000);
+    }
+  });
 
   // HACK: アカウントの移行後に、別のページから戻ってくると処理内容が残ったままとなることへの対応。
   onMount(() => {
@@ -57,7 +71,7 @@
     <MessageHelperWrapper message={$message} />
 
     <Table shadow hoverable={true} class="text-md">
-      <TableBody tableBodyClass="divide-y">
+      <TableBody class="divide-y">
         <TableBodyRow>
           <TableBodyCell>
             <Label>
