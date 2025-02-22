@@ -1,7 +1,6 @@
 <script lang="ts">
   import { Input, Button, Alert, Checkbox, Modal, uiHelpers } from 'svelte-5-ui-lib';
-  // @ts-ignore
-  import InfoCircleSolid from 'flowbite-svelte-icons/InfoCircleSolid.svelte';
+  import Info from 'lucide-svelte/icons/info';
 
   import ContainerWrapper from '$lib/components/ContainerWrapper.svelte';
   import FormWrapper from '$lib/components/FormWrapper.svelte';
@@ -37,7 +36,7 @@
   <FormWrapper action="">
     <Alert color="red" class="!items-start">
       {#snippet icon()}
-        <InfoCircleSolid class="w-6 h-6" />
+        <Info class="w-6 h-6" />
       {/snippet}
       <span class="font-medium text-lg">警告</span>
       <WarningMessageOnDeletingAccount />

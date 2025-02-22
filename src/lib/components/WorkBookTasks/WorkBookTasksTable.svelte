@@ -9,7 +9,7 @@
     TableHead,
     TableHeadCell,
   } from 'svelte-5-ui-lib';
-  import TrashBinOutline from 'flowbite-svelte-icons/TrashBinOutline.svelte';
+  import Trash2 from 'lucide-svelte/icons/trash-2';
 
   import GradeLabel from '$lib/components/GradeLabel.svelte';
   import ExternalLinkWrapper from '$lib/components/ExternalLinkWrapper.svelte';
@@ -239,7 +239,7 @@
               }}
               disabled={isDeleting}
             >
-              <TrashBinOutline class="w-5 h-5 xs:w-6 xs:h-6" />
+              <Trash2 class="w-5 h-5 xs:w-6 xs:h-6" />
               <span class="sr-only">削除</span>
             </button>
           </TableBodyCell>

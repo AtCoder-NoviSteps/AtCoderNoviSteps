@@ -5,9 +5,9 @@
   import { Card, Button, Label, Input, Hr } from 'svelte-5-ui-lib';
 
   // 必要なコンポーネントだけを読み込んで、コンパイルを時間を短縮
-  import UserOutlineSolid from 'flowbite-svelte-icons/UserCircleSolid.svelte';
-  import EyeOutline from 'flowbite-svelte-icons/EyeOutline.svelte';
-  import EyeSlashOutline from 'flowbite-svelte-icons/EyeSlashOutline.svelte';
+  import CirCleUserRound from 'lucide-svelte/icons/circle-user-round';
+  import Eye from 'lucide-svelte/icons/eye';
+  import EyeOff from 'lucide-svelte/icons/eye-off';
 
   import MessageHelperWrapper from '$lib/components/MessageHelperWrapper.svelte';
 
@@ -94,8 +94,7 @@
 <!-- FIXME: コンポーネントが巨大になってきたと思われるので、分割しましょう -->
 <!-- TODO: containerのデフォルト値を設定できないか? -->
 <!-- See: -->
-<!-- https://flowbite-svelte.com/docs/components/card#Card_with_form_inputs -->
-<!-- https://github.com/themesberg/flowbite-svelte-icons/tree/main/src/lib -->
+<!-- https://github.com/lucide-icons/lucide -->
 <div class="container mx-auto py-8 w-5/6 flex flex-col items-center">
   <Card class="w-full max-w-md">
     <form id="auth-form" method="post" use:enhance class="flex flex-col space-y-6">
@@ -137,7 +136,7 @@
           class="ps-10"
         >
           {#snippet left()}
-            <UserOutlineSolid class="w-5 h-5" tabindex={UNFOCUSABLE} />
+            <CirCleUserRound class="w-5 h-5" tabindex={UNFOCUSABLE} />
           {/snippet}
         </Input>
 
@@ -173,9 +172,9 @@
               class="pointer-events-auto"
             >
               {#if showPassword}
-                <EyeOutline class="w-5 h-5" tabindex={UNFOCUSABLE} />
+                <Eye class="w-5 h-5" tabindex={UNFOCUSABLE} />
               {:else}
-                <EyeSlashOutline class="w-5 h-5" tabindex={UNFOCUSABLE} />
+                <EyeOff class="w-5 h-5" tabindex={UNFOCUSABLE} />
               {/if}
             </button>
           {/snippet}

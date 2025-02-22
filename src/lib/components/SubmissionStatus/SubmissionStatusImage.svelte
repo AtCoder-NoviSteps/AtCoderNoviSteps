@@ -1,6 +1,6 @@
 <script lang="ts">
   import { Img } from 'svelte-5-ui-lib';
-  import ChevronDownOutline from 'flowbite-svelte-icons/ChevronDownOutline.svelte';
+  import ChevronDown from 'lucide-svelte/icons/chevron-down';
 
   import type { TaskResult } from '$lib/types/task';
 
@@ -30,6 +30,6 @@
     <div class="pb-1 dark:text-gray-300">
       {'更新'}
     </div>
-    <ChevronDownOutline class="w-3 h-3 text-primary-600 dark:text-gray-300 inline" />
+    <ChevronDown class="w-3 h-3 text-primary-600 dark:text-white inline" />
   </div>
 {/if}

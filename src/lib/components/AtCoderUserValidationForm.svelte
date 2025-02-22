@@ -1,6 +1,7 @@
 <script lang="ts">
   import { Label, Input, P } from 'svelte-5-ui-lib';
-  import ClipboardOutline from 'flowbite-svelte-icons/ClipboardOutline.svelte';
+  import ClipboardCopy from 'lucide-svelte/icons/clipboard-copy';
+
   // FIXME: stwui は事実上開発が終了しているので、別のライブラリに置き換える
   import { copyToClipboard } from 'stwui/utils/copyToClipboard';
 
@@ -86,7 +87,7 @@
         <div>
           <Input size="md" bind:value={atcoder_validationcode}>
             {#snippet right()}
-              <ClipboardOutline class="w-5 h-5" onclick={handleClick} />
+              <ClipboardCopy class="w-5 h-5" onclick={handleClick} />
             {/snippet}
           </Input>
         </div>

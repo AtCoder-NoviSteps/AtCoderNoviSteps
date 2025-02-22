@@ -1,6 +1,6 @@
 <script lang="ts">
   import { Tooltip } from 'svelte-5-ui-lib';
-  import LightbulbOutline from 'flowbite-svelte-icons/LightbulbOutline.svelte';
+  import Lightbulb from 'lucide-svelte/icons/lightbulb';
 
   import { TOOLTIP_CLASS_BASE } from '$lib/constants/tailwind-helper';
 
@@ -27,6 +27,6 @@
   </Tooltip>
 
   <span id={uniqueId}>
-    <LightbulbOutline class="text-gray-700 dark:text-gray-300" size="lg" />
+    <Lightbulb class="w-6 h-6 text-gray-700 dark:text-gray-300" size="lg" />
   </span>
 {/if}

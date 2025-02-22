@@ -2,7 +2,7 @@
   import { onMount } from 'svelte';
 
   import { Tooltip } from 'svelte-5-ui-lib';
-  import QuestionCircleOutline from 'flowbite-svelte-icons/QuestionCircleOutline.svelte';
+  import CircleHelp from 'lucide-svelte/icons/circle-help';
 
   import { TOOLTIP_CLASS_BASE } from '$lib/constants/tailwind-helper';
 
@@ -19,14 +19,12 @@
   });
 </script>
 
-<!-- See: -->
-<!-- https://flowbite-svelte.com/docs/components/tooltip#Placement -->
 {#if tooltipContent !== '' && titleId !== ''}
   <Tooltip showOn="hover" triggeredBy={`#${titleId}`} class={`max-w-[200px] ${TOOLTIP_CLASS_BASE}`}>
     {tooltipContent}
   </Tooltip>
 
   <span id={titleId}>
-    <QuestionCircleOutline class="dark:text-white" />
+    <CircleHelp class="w-5 h-5 dark:text-gray-200" />
   </span>
 {/if}

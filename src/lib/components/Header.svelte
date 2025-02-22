@@ -16,8 +16,7 @@
     NavUl,
     uiHelpers,
   } from 'svelte-5-ui-lib';
-  // @ts-ignore
-  import ChevronDownOutline from 'flowbite-svelte-icons/ChevronDownOutline.svelte';
+  import ChevronDown from 'lucide-svelte/icons/chevron-down';
 
   import { PRODUCT_NAME } from '$lib/constants/product-info';
   import { navbarDashboardLinks, navbarLinks } from '$lib/constants/navbar-links';
@@ -94,7 +93,7 @@
     {onclick}
   >
     {description}
-    <ChevronDownOutline class="w-3 h-3 ms-1 inline text-primary-800 dark:text-white" />
+    <ChevronDown class="w-3 h-3 ms-1 inline text-primary-800 dark:text-white" />
   </NavLi>
 {/snippet}
 

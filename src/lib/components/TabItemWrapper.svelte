@@ -2,7 +2,7 @@
   import { type Snippet, onMount } from 'svelte';
 
   import { TabItem, Tooltip } from 'svelte-5-ui-lib';
-  import QuestionCircleOutline from 'flowbite-svelte-icons/QuestionCircleOutline.svelte';
+  import CircleHelp from 'lucide-svelte/icons/circle-help';
 
   import { WorkBookType } from '$lib/types/workbook';
   import { activeWorkbookTabStore } from '$lib/stores/active_workbook_tab';
@@ -39,7 +39,6 @@
 </script>
 
 <!-- See: -->
-<!-- https://flowbite-svelte.com/docs/components/tooltip#Placement -->
 <!-- https://svelte-5-ui-lib.codewithshin.com/components/tooltip -->
 <div>
   {#if tooltipContent !== '' && titleId !== ''}
@@ -64,7 +63,7 @@
         </span>
 
         {#if tooltipContent !== ''}
-          <QuestionCircleOutline />
+          <CircleHelp class="w-5 h-5" />
         {/if}
       </div>
     </span>

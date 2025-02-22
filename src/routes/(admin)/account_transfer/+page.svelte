@@ -12,8 +12,8 @@
     Input,
     Button,
   } from 'svelte-5-ui-lib';
-  import BadgeCheckOutline from 'flowbite-svelte-icons/BadgeCheckOutline.svelte';
-  import BanOutline from 'flowbite-svelte-icons/BanOutline.svelte';
+  import BadgeCheck from 'lucide-svelte/icons/badge-check';
+  import Ban from 'lucide-svelte/icons/ban';
 
   import HeadingOne from '$lib/components/HeadingOne.svelte';
   import ContainerWrapper from '$lib/components/ContainerWrapper.svelte';
@@ -125,11 +125,11 @@
     {#each accountTransferMessages as accountTransferMessage}
       <div class="flex items-center space-x-2">
         {#if accountTransferMessage.status}
-          <!-- 成功時のアイコン: BadgeCheckOutline -->
-          <BadgeCheckOutline class="w-5 h-5 text-green-500" aria-hidden="true" />
+          <!-- 成功時のアイコン -->
+          <BadgeCheck class="w-5 h-5 text-green-500" aria-hidden="true" />
         {:else}
-          <!-- 失敗時のアイコン: BanOutline -->
-          <BanOutline class="w-5 h-5 text-red-500" aria-hidden="true" />
+          <!-- 失敗時のアイコン -->
+          <Ban class="w-5 h-5 text-red-500" aria-hidden="true" />
         {/if}
         <span>{accountTransferMessage.message}</span>
       </div>

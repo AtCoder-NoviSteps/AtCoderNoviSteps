@@ -1,6 +1,6 @@
 <script lang="ts">
   import { Label, Tooltip } from 'svelte-5-ui-lib';
-  import QuestionCircleOutline from 'flowbite-svelte-icons/QuestionCircleOutline.svelte';
+  import CircleHelp from 'lucide-svelte/icons/circle-help';
 
   import { TOOLTIP_CLASS_BASE } from '$lib/constants/tailwind-helper';
 
@@ -30,6 +30,7 @@
         {/each}
       {/if}
     </Tooltip>
-    <QuestionCircleOutline id={tooltipId} />
+
+    <CircleHelp class="w-5 h-5" id={tooltipId} />
   </div>
 </Label>

@@ -4,8 +4,7 @@
   import { Heading, Button, Img } from 'svelte-5-ui-lib';
   import emblaCarouselSvelte from 'embla-carousel-svelte';
   import Autoplay from 'embla-carousel-autoplay';
-  // @ts-ignore
-  import ArrowRightOutline from 'flowbite-svelte-icons/ArrowRightOutline.svelte';
+  import ArrowRight from 'lucide-svelte/icons/arrow-right';
 
   import ExternalLinkWrapper from '$lib/components/ExternalLinkWrapper.svelte';
 
@@ -51,7 +50,7 @@
         class="w-full sm:w-5/6 md:w-1/3 m-2 dark:hover:bg-gray-700"
       >
         使い方を見る
-        <ArrowRightOutline class="w-3.5 h-3.5 ml-2" />
+        <ArrowRight class="w-4 h-4 ml-2" />
       </Button>
     </div>
   </div>
