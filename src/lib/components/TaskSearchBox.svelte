@@ -170,7 +170,6 @@
   <Listgroup>
     {#each filteredTasks as task, index}
       <!-- See: -->
-      <!-- https://flowbite.com/docs/components/list-group/ -->
       <!-- WHY: svelte-5-ui-lib の ListgroupItem だと、フォーカスした問題の <li> 要素が消えてスタイルが崩れるため -->
       <li
         data-name={task.task_id}
