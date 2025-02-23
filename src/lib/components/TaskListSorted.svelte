@@ -21,8 +21,8 @@
   let { taskResults }: Props = $props();
 </script>
 
-<!-- TODO: レスポンシブデザインに -->
-<!-- FIXME: アイコンのサイズを他のページと合わせる -->
+<!-- TODO: Implement responsive design -->
+<!-- FIXME: Align icon sizes with other pages -->
 <Table shadow hoverable={true} class="text-md">
   <TableHead class="text-md bg-gray-100">
     <TableHeadCell class="w-1/6">回答</TableHeadCell>
