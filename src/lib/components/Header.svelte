@@ -80,7 +80,9 @@
   // HACK: ログイン直後にドロップダウンが表示されてしまうので、ユーザがクリックしたときだけ表示
   $effect(() => {
     if (user) {
+      closeDropdownForDashboard();
       closeDropdownForUserPage();
+      closeDropdownForExternalLinks();
     }
   });
 </script>
