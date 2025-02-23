@@ -6,6 +6,11 @@
 
   import { areAllTasksAccepted } from '$lib/utils/task';
 
+  /**
+   * Props for the CompletedTasks component
+   * @property {TaskResults} taskResults - The current task results
+   * @property {TaskResults | WorkBookTaskBase[]} allTasks - All available tasks
+   */
   interface Props {
     taskResults: TaskResults;
     allTasks: TaskResults | WorkBookTaskBase[];
