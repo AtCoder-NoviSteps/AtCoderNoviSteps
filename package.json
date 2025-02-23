@@ -30,7 +30,7 @@
     "coverage": "vitest run --coverage"
   },
   "devDependencies": {
-    "@eslint/eslintrc": "3.2.0",
+    "@eslint/eslintrc": "3.3.0",
     "@eslint/js": "9.21.0",
     "@playwright/test": "1.50.1",
     "@quramy/prisma-fabbrica": "2.2.2",
