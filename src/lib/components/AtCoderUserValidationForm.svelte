@@ -2,7 +2,7 @@
   import { Label, Input, P } from 'svelte-5-ui-lib';
   import ClipboardCopy from 'lucide-svelte/icons/clipboard-copy';
 
-  // FIXME: stwui は事実上開発が終了しているので、別のライブラリに置き換える
+  // FIXME: stwui is effectively end-of-life, replace with another library
   import { copyToClipboard } from 'stwui/utils/copyToClipboard';
 
   import ContainerWrapper from '$lib/components/ContainerWrapper.svelte';
@@ -24,8 +24,8 @@
     status,
   }: Props = $props();
 
-  // TODO: クリックしたときに、Copied!といったメッセージを表示できるようにしたい。
-  // WHY: コピーができているか、確認できるようにするため
+  // TODO: Add a "Copied!" message when clicking
+  // WHY: To provide feedback when the copy operation succeeds
   const handleClick = () => {
     copyToClipboard(atcoder_validationcode);
   };

@@ -77,7 +77,7 @@
     dropdownForUserPage.toggle();
   }
 
-  // HACK: ログイン直後にドロップダウンが表示されてしまうので、ユーザがクリックしたときだけ表示
+  // HACK: Close dropdowns when user state changes
   $effect(() => {
     if (user) {
       closeDropdownForDashboard();
