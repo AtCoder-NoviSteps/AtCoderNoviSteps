@@ -13,7 +13,7 @@
 </script>
 
 {#if uniqueId !== '' && commentAndHint !== ''}
-  <!-- HACK: positionはデフォルトの"top" 以外にすると、一瞬しか表示されない -->
+  <!-- HACK: Position values other than the default "top" cause the tooltip to display only momentarily -->
   <Tooltip
     showOn="hover"
     arrow={false}
