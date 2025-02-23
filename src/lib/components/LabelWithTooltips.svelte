@@ -1,17 +1,27 @@
 <script lang="ts">
-  import { Label, Tooltip } from 'flowbite-svelte';
-  import QuestionCircleOutline from 'flowbite-svelte-icons/QuestionCircleOutline.svelte';
+  import { Label, Tooltip } from 'svelte-5-ui-lib';
+  import CircleHelp from 'lucide-svelte/icons/circle-help';
 
-  export let labelName: string;
-  export let tooltipId: string;
-  export let tooltipContents: string | string[];
-  export let tooltipWidth: number = 280;
+  import { TOOLTIP_CLASS_BASE } from '$lib/constants/tailwind-helper';
+
+  interface Props {
+    labelName: string;
+    tooltipId: string;
+    tooltipContents: string | string[];
+    tooltipWidth?: number;
+  }
+
+  let { labelName, tooltipId, tooltipContents, tooltipWidth = 280 }: Props = $props();
 </script>
 
 <Label>
   <div class="flex items-center space-x-2">
     <span>{labelName}</span>
-    <Tooltip type="auto" triggeredBy="#{tooltipId}" class="max-w-[{tooltipWidth}px]">
+    <Tooltip
+      showOn="hover"
+      triggeredBy="#{tooltipId}"
+      class={`max-w-[${tooltipWidth}px] ${TOOLTIP_CLASS_BASE}`}
+    >
       {#if typeof tooltipContents === 'string'}
         {tooltipContents}
       {:else}
@@ -20,6 +30,7 @@
         {/each}
       {/if}
     </Tooltip>
-    <QuestionCircleOutline id={tooltipId} />
+
+    <CircleHelp class="w-5 h-5" id={tooltipId} />
   </div>
 </Label>

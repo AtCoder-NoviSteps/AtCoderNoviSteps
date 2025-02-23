@@ -2,10 +2,14 @@
   import type { PageData } from './$types';
   import { superForm } from 'sveltekit-superforms/client';
 
-  export let data: PageData;
-
   import AuthForm from '$lib/components/AuthForm.svelte';
   import { CREATE_ACCOUNT_LABEL, LOGIN_LABEL } from '$lib/constants/forms';
+
+  interface Props {
+    data: PageData;
+  }
+
+  let { data }: Props = $props();
 </script>
 
 <AuthForm

@@ -1,9 +1,13 @@
 <script lang="ts">
-  import { Label, Input } from 'flowbite-svelte';
+  import { Label, Input } from 'svelte-5-ui-lib';
 
-  export let labelName: string;
-  export let innerName: string = '';
-  export let inputValue: string;
+  interface Props {
+    labelName: string;
+    innerName?: string;
+    inputValue: string;
+  }
+
+  let { labelName, innerName = '', inputValue = $bindable() }: Props = $props();
 </script>
 
 <Label class="space-y-2">

@@ -1,23 +1,37 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
-  import { TabItem, Tooltip } from 'flowbite-svelte';
-  import QuestionCircleOutline from 'flowbite-svelte-icons/QuestionCircleOutline.svelte';
+  import { type Snippet, onMount } from 'svelte';
+
+  import { TabItem, Tooltip } from 'svelte-5-ui-lib';
+  import CircleHelp from 'lucide-svelte/icons/circle-help';
 
   import { WorkBookType } from '$lib/types/workbook';
   import { activeWorkbookTabStore } from '$lib/stores/active_workbook_tab';
 
-  export let workbookType: WorkBookType | null;
-  export let isOpen: boolean = false;
-  export let title: string;
-  export let tooltipContent: string = '';
+  import { TOOLTIP_CLASS_BASE } from '$lib/constants/tailwind-helper';
 
-  let titleId = '';
+  interface Props {
+    workbookType: WorkBookType | null;
+    isOpen?: boolean;
+    title: string;
+    tooltipContent?: string;
+    children?: Snippet;
+  }
+
+  let {
+    workbookType = null,
+    isOpen = false,
+    title,
+    tooltipContent = '',
+    children,
+  }: Props = $props();
+
+  let titleId = $state('');
 
   onMount(() => {
     titleId = `title-${Math.floor(Math.random() * 10000)}`;
   });
 
-  function handleClick(workBookType: WorkBookType | null) {
+  function handleClick(workBookType: WorkBookType | null): void {
     if (workBookType === null) return;
 
     activeWorkbookTabStore.setActiveWorkbookTab(workBookType);
@@ -25,26 +39,35 @@
 </script>
 
 <!-- See: -->
-<!-- https://flowbite-svelte.com/docs/components/tooltip#Placement -->
+<!-- https://svelte-5-ui-lib.codewithshin.com/components/tooltip -->
 <div>
   {#if tooltipContent !== '' && titleId !== ''}
-    <Tooltip type="auto" triggeredBy={`#${titleId}`} class="max-w-[200px]">
+    <Tooltip
+      showOn="hover"
+      triggeredBy={`#${titleId}`}
+      class={`max-w-[200px] ${TOOLTIP_CLASS_BASE}`}
+    >
       {tooltipContent}
     </Tooltip>
   {/if}
 </div>
 
-<TabItem open={isOpen} on:click={() => handleClick(workbookType)}>
-  <span slot="title" class="text-lg" id={titleId}>
-    <div class="flex items-center space-x-2">
-      <span>
-        {title}
-      </span>
+<!-- See: -->
+<!-- https://svelte-5-ui-lib.codewithshin.com/components/tabs -->
+<TabItem open={isOpen} onclick={() => handleClick(workbookType)}>
+  {#snippet titleSlot()}
+    <span class="text-lg" id={titleId}>
+      <div class="flex items-center space-x-2">
+        <span>
+          {title}
+        </span>
 
-      {#if tooltipContent !== ''}
-        <QuestionCircleOutline />
-      {/if}
-    </div>
-  </span>
-  <slot />
+        {#if tooltipContent !== ''}
+          <CircleHelp class="w-5 h-5" />
+        {/if}
+      </div>
+    </span>
+  {/snippet}
+
+  {@render children?.()}
 </TabItem>

@@ -48,8 +48,6 @@
     "eslint": "9.20.0",
     "eslint-config-prettier": "10.0.1",
     "eslint-plugin-svelte": "2.46.1",
-    "flowbite-svelte": "0.47.4",
-    "flowbite-svelte-icons": "2.0.2",
     "globals": "15.14.0",
     "husky": "9.1.7",
     "jsdom": "26.0.0",
@@ -62,6 +60,7 @@
     "stwui": "0.21.2-next",
     "super-sitemap": "1.0.3",
     "svelte": "5.19.9",
+    "svelte-5-ui-lib": "0.12.2",
     "svelte-check": "4.1.4",
     "svelte-meta-tags": "4.1.0",
     "sveltekit-superforms": "2.23.1",
@@ -82,8 +81,11 @@
     "@types/node": "22.13.1",
     "autoprefixer": "10.4.20",
     "debug": "4.4.0",
+    "embla-carousel-autoplay": "8.5.2",
+    "embla-carousel-svelte": "8.5.2",
     "flowbite": "2.5.2",
     "lucia": "2.7.7",
+    "lucide-svelte": "^0.475.0",
     "playwright": "1.50.1",
     "pnpm": "10.2.1",
     "prisma-erd-generator": "2.0.4",
@@ -93,5 +95,5 @@
     "vercel": "41.0.3",
     "xss": "1.0.15"
   },
-  "packageManager": "pnpm@9.15.2"
+  "packageManager": "pnpm@10.2.1"
 }

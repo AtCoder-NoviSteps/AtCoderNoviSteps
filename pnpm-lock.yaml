@@ -35,12 +35,21 @@ importers:
       debug:
         specifier: 4.4.0
         version: 4.4.0
+      embla-carousel-autoplay:
+        specifier: 8.5.2
+        version: 8.5.2(embla-carousel@8.5.2)
+      embla-carousel-svelte:
+        specifier: 8.5.2
+        version: 8.5.2(svelte@5.19.9)
       flowbite:
         specifier: 2.5.2
         version: 2.5.2(rollup@4.34.6)
       lucia:
         specifier: 2.7.7
         version: 2.7.7
+      lucide-svelte:
+        specifier: ^0.475.0
+        version: 0.475.0(svelte@5.19.9)
       playwright:
         specifier: 1.50.1
         version: 1.50.1
@@ -120,12 +129,6 @@ importers:
       eslint-plugin-svelte:
         specifier: 2.46.1
         version: 2.46.1(eslint@9.20.0(jiti@1.21.6))(svelte@5.19.9)(ts-node@10.9.1(@types/node@22.13.1)(typescript@5.6.3))
-      flowbite-svelte:
-        specifier: 0.47.4
-        version: 0.47.4(rollup@4.34.6)(svelte@5.19.9)
-      flowbite-svelte-icons:
-        specifier: 2.0.2
-        version: 2.0.2(svelte@5.19.9)(tailwind-merge@2.6.0)(tailwindcss@3.4.17(ts-node@10.9.1(@types/node@22.13.1)(typescript@5.6.3)))
       globals:
         specifier: 15.14.0
         version: 15.14.0
@@ -162,6 +165,9 @@ importers:
       svelte:
         specifier: 5.19.9
         version: 5.19.9
+      svelte-5-ui-lib:
+        specifier: 0.12.2
+        version: 0.12.2(svelte@5.19.9)(tailwindcss@3.4.17(ts-node@10.9.1(@types/node@22.13.1)(typescript@5.6.3)))
       svelte-check:
         specifier: 4.1.4
         version: 4.1.4(picomatch@4.0.2)(svelte@5.19.9)(typescript@5.6.3)
@@ -1769,8 +1775,8 @@ packages:
     resolution: {integrity: sha512-8WB3Jcas3swSvjIeA2yvCJ+Miyz5l1ZmB6HFb9R1317dt9LCQoswg/BGrmAmkWVEszSrrg4RwmO46qIm2OEnSA==}
     engines: {node: '>=16'}
 
-  caniuse-lite@1.0.30001649:
-    resolution: {integrity: sha512-fJegqZZ0ZX8HOWr6rcafGr72+xcgJKI9oWfDW5DrD7ExUtgZC7a7R7ZYmZqplh7XDocFdGeIFn7roAxhOeYrPQ==}
+  caniuse-lite@1.0.30001699:
+    resolution: {integrity: sha512-b+uH5BakXZ9Do9iK+CkDmctUSEqZl+SP056vc5usa0PL+ev5OHw003rZXcnjNDv3L8P5j6rwT6C0BPKSikW08w==}
 
   chai@5.1.2:
     resolution: {integrity: sha512-aGtmf24DW6MLHHG5gCx4zaI3uBq3KRtxeVs0DjFH6Z0rDNbsvTxFASFvdj79pxjxZ8/5u3PIiN3IwEIQkiiuPw==}
@@ -2251,6 +2257,24 @@ packages:
   electron-to-chromium@1.5.4:
     resolution: {integrity: sha512-orzA81VqLyIGUEA77YkVA1D+N+nNfl2isJVjjmOyrlxuooZ19ynb+dOlaDTqd/idKRS9lDCSBmtzM+kyCsMnkA==}
 
+  embla-carousel-autoplay@8.5.2:
+    resolution: {integrity: sha512-27emJ0px3q/c0kCHCjwRrEbYcyYUPfGO3g5IBWF1i7714TTzE6L9P81V6PHLoSMAKJ1aHoT2e7YFOsuFKCbyag==}
+    peerDependencies:
+      embla-carousel: 8.5.2
+
+  embla-carousel-reactive-utils@8.5.2:
+    resolution: {integrity: sha512-QC8/hYSK/pEmqEdU1IO5O+XNc/Ptmmq7uCB44vKplgLKhB/l0+yvYx0+Cv0sF6Ena8Srld5vUErZkT+yTahtDg==}
+    peerDependencies:
+      embla-carousel: 8.5.2
+
+  embla-carousel-svelte@8.5.2:
+    resolution: {integrity: sha512-tuzX8df2cMBwBtxJtIGPzUbLFBv0ujT4iOx1wMferFfztE7ebbHoYXrE9/JRjjp8ld+Wsc35yR8fWkuSaSxgpQ==}
+    peerDependencies:
+      svelte: ^3.49.0 || ^4.0.0 || ^5.0.0
+
+  embla-carousel@8.5.2:
+    resolution: {integrity: sha512-xQ9oVLrun/eCG/7ru3R+I5bJ7shsD8fFwLEY7yPe27/+fDHCNj0OT5EoG5ZbFyOxOcG6yTwW8oTz/dWyFnyGpg==}
+
   emoji-regex@10.4.0:
     resolution: {integrity: sha512-EC+0oUMY1Rqm4O6LLrgjtYDvcVYTy7chDnM4Q7030tP4Kwj3u/pR6gP9ygnp2CJMK5Gq+9Q2oqmrFJAz01DXjw==}
 
@@ -2643,19 +2667,6 @@ packages:
 
   flowbite-datepicker@1.3.0:
     resolution: {integrity: sha512-CLVqzuoE2vkUvWYK/lJ6GzT0be5dlTbH3uuhVwyB67+PjqJWABm2wv68xhBf5BqjpBxvTSQ3mrmLHpPJ2tvrSQ==}
-
-  flowbite-svelte-icons@2.0.2:
-    resolution: {integrity: sha512-Vkmduy2867Rk8R7TziPirsWkixJnToFBEXRaN4ouJabOx62NQjiBbHFe+HTaMOQmdp4FNMI2Nhtk2I2CQ8r3RQ==}
-    engines: {node: '>=18.0.0', npm: '>=7.0.0'}
-    peerDependencies:
-      svelte: ^5.0.0
-      tailwind-merge: ^2.3.0
-      tailwindcss: ^3.4.3
-
-  flowbite-svelte@0.47.4:
-    resolution: {integrity: sha512-8oiY/oeWA7fgkDF91MZKEBo5VmjL8El3wuqTDWAFO1j7p45BHIL6G1VGnnidgCEYlbADDQN9BIGCvyPq4J3g+w==}
-    peerDependencies:
-      svelte: ^3.55.1 || ^4.0.0 || ^5.0.0
 
   flowbite@2.5.2:
     resolution: {integrity: sha512-kwFD3n8/YW4EG8GlY3Od9IoKND97kitO+/ejISHSqpn3vw2i5K/+ZI8Jm2V+KC4fGdnfi0XZ+TzYqQb4Q1LshA==}
@@ -3133,6 +3144,11 @@ packages:
 
   lucia@2.7.7:
     resolution: {integrity: sha512-Hy1nMcLquLl3yDvV9zYA9fSBGUDy/Fw2zEUw2Ia4iGdk/O+hI/TvQ1tAfED/U1WE/c5DT1hEger3m7qIx1qbUg==}
+
+  lucide-svelte@0.475.0:
+    resolution: {integrity: sha512-N5+hFTPHaZe9HhqJDxxxODfYuOmI6v+JIowzERcea/uxytN/JZlehVTcINBNp8wMo7l6ov1Jf5srrDbkI/WsJg==}
+    peerDependencies:
+      svelte: ^3 || ^4 || ^5.0.0-next.42
 
   lz-string@1.5.0:
     resolution: {integrity: sha512-h5bgJWpxJNswbU7qCrV0tIKQCaS3blPDrqKWx+QxzuzL1zGUzij9XCWLrSLsJPu5t+eWA/ycetzYAO5IOMcWAQ==}
@@ -4080,6 +4096,12 @@ packages:
     resolution: {integrity: sha512-ot0WnXS9fgdkgIcePe6RHNk1WA8+muPa6cSjeR3V8K27q9BB1rTE3R1p7Hv0z1ZyAc8s6Vvv8DIyWf681MAt0w==}
     engines: {node: '>= 0.4'}
 
+  svelte-5-ui-lib@0.12.2:
+    resolution: {integrity: sha512-94eOQx8891haCCTot+jjEeMLIANvAKpwFl0eS8AWXn/bVpFHtEWvcVgvB7WM+l2El4zDphUGiHEyReQHPdV4mA==}
+    peerDependencies:
+      svelte: ^5.0.0
+      tailwindcss: ^3.0.0
+
   svelte-check@4.1.4:
     resolution: {integrity: sha512-v0j7yLbT29MezzaQJPEDwksybTE2Ups9rUxEXy92T06TiA0cbqcO8wAOwNUVkFW6B0hsYHA+oAX3BS8b/2oHtw==}
     engines: {node: '>= 18.0.0'}
@@ -4150,8 +4172,17 @@ packages:
     resolution: {integrity: sha512-qd/R7n5rQTRFi+Zf2sk5XVVd9UQl6ZkduPFC3S7WEGJAmetDTjY3qPN50eSKzwuzEyQKy5TN2TiZdkIjos2L6A==}
     engines: {node: '>=8.0.0'}
 
+  tailwind-merge@2.5.4:
+    resolution: {integrity: sha512-0q8cfZHMu9nuYP/b5Shb7Y7Sh1B7Nnl5GqNr1U+n2p6+mybvRtayrQ+0042Z5byvTA8ihjlP8Odo8/VnHbZu4Q==}
+
   tailwind-merge@2.6.0:
     resolution: {integrity: sha512-P+Vu1qXfzediirmHOC3xKGAYeZtPcV9g76X+xg2FD4tYgR71ewMA35Y3sCz3zhiN/dwefRpJX0yBcgwi1fXNQA==}
+
+  tailwind-variants@0.3.1:
+    resolution: {integrity: sha512-krn67M3FpPwElg4FsZrOQd0U26o7UDH/QOkK8RNaiCCrr052f6YJPBUfNKnPo/s/xRzNPtv1Mldlxsg8Tb46BQ==}
+    engines: {node: '>=16.x', pnpm: '>=7.x'}
+    peerDependencies:
+      tailwindcss: '*'
 
   tailwindcss@3.4.17:
     resolution: {integrity: sha512-w33E2aCvSDP0tW9RZuNXadXlkHXqFzSkQew/aIa2i/Sj8fThxwovwlXHSPXTbAHwEIhBFXAedUhP2tueAKP8Og==}
@@ -5055,7 +5086,7 @@ snapshots:
 
   '@floating-ui/dom@1.6.13':
     dependencies:
-      '@floating-ui/core': 1.6.2
+      '@floating-ui/core': 1.6.9
       '@floating-ui/utils': 0.2.9
 
   '@floating-ui/dom@1.6.5':
@@ -6342,7 +6373,7 @@ snapshots:
   autoprefixer@10.4.20(postcss@8.4.49):
     dependencies:
       browserslist: 4.23.3
-      caniuse-lite: 1.0.30001649
+      caniuse-lite: 1.0.30001699
       fraction.js: 4.3.7
       normalize-range: 0.1.2
       picocolors: 1.0.1
@@ -6382,7 +6413,7 @@ snapshots:
 
   browserslist@4.23.3:
     dependencies:
-      caniuse-lite: 1.0.30001649
+      caniuse-lite: 1.0.30001699
       electron-to-chromium: 1.5.4
       node-releases: 2.0.18
       update-browserslist-db: 1.1.0(browserslist@4.23.3)
@@ -6415,7 +6446,7 @@ snapshots:
   camelcase@8.0.0:
     optional: true
 
-  caniuse-lite@1.0.30001649: {}
+  caniuse-lite@1.0.30001699: {}
 
   chai@5.1.2:
     dependencies:
@@ -6899,6 +6930,22 @@ snapshots:
 
   electron-to-chromium@1.5.4: {}
 
+  embla-carousel-autoplay@8.5.2(embla-carousel@8.5.2):
+    dependencies:
+      embla-carousel: 8.5.2
+
+  embla-carousel-reactive-utils@8.5.2(embla-carousel@8.5.2):
+    dependencies:
+      embla-carousel: 8.5.2
+
+  embla-carousel-svelte@8.5.2(svelte@5.19.9):
+    dependencies:
+      embla-carousel: 8.5.2
+      embla-carousel-reactive-utils: 8.5.2(embla-carousel@8.5.2)
+      svelte: 5.19.9
+
+  embla-carousel@8.5.2: {}
+
   emoji-regex@10.4.0: {}
 
   emoji-regex@8.0.0: {}
@@ -7324,22 +7371,6 @@ snapshots:
     dependencies:
       '@rollup/plugin-node-resolve': 15.2.3(rollup@4.34.6)
       flowbite: 2.5.2(rollup@4.34.6)
-    transitivePeerDependencies:
-      - rollup
-
-  flowbite-svelte-icons@2.0.2(svelte@5.19.9)(tailwind-merge@2.6.0)(tailwindcss@3.4.17(ts-node@10.9.1(@types/node@22.13.1)(typescript@5.6.3))):
-    dependencies:
-      svelte: 5.19.9
-      tailwind-merge: 2.6.0
-      tailwindcss: 3.4.17(ts-node@10.9.1(@types/node@22.13.1)(typescript@5.6.3))
-
-  flowbite-svelte@0.47.4(rollup@4.34.6)(svelte@5.19.9):
-    dependencies:
-      '@floating-ui/dom': 1.6.13
-      apexcharts: 3.54.1
-      flowbite: 2.5.2(rollup@4.34.6)
-      svelte: 5.19.9
-      tailwind-merge: 2.6.0
     transitivePeerDependencies:
       - rollup
 
@@ -7850,6 +7881,10 @@ snapshots:
       yallist: 4.0.0
 
   lucia@2.7.7: {}
+
+  lucide-svelte@0.475.0(svelte@5.19.9):
+    dependencies:
+      svelte: 5.19.9
 
   lz-string@1.5.0: {}
 
@@ -8702,6 +8737,16 @@ snapshots:
 
   supports-preserve-symlinks-flag@1.0.0: {}
 
+  svelte-5-ui-lib@0.12.2(svelte@5.19.9)(tailwindcss@3.4.17(ts-node@10.9.1(@types/node@22.13.1)(typescript@5.6.3))):
+    dependencies:
+      '@floating-ui/dom': 1.6.13
+      apexcharts: 3.54.1
+      clsx: 2.1.1
+      svelte: 5.19.9
+      tailwind-merge: 2.6.0
+      tailwind-variants: 0.3.1(tailwindcss@3.4.17(ts-node@10.9.1(@types/node@22.13.1)(typescript@5.6.3)))
+      tailwindcss: 3.4.17(ts-node@10.9.1(@types/node@22.13.1)(typescript@5.6.3))
+
   svelte-check@4.1.4(picomatch@4.0.2)(svelte@5.19.9)(typescript@5.6.3):
     dependencies:
       '@jridgewell/trace-mapping': 0.3.25
@@ -8815,7 +8860,14 @@ snapshots:
       typical: 5.2.0
       wordwrapjs: 4.0.1
 
+  tailwind-merge@2.5.4: {}
+
   tailwind-merge@2.6.0: {}
+
+  tailwind-variants@0.3.1(tailwindcss@3.4.17(ts-node@10.9.1(@types/node@22.13.1)(typescript@5.6.3))):
+    dependencies:
+      tailwind-merge: 2.5.4
+      tailwindcss: 3.4.17(ts-node@10.9.1(@types/node@22.13.1)(typescript@5.6.3))
 
   tailwindcss@3.4.17(ts-node@10.9.1(@types/node@22.13.1)(typescript@5.6.3)):
     dependencies:

@@ -9,7 +9,7 @@
     TableBodyRow,
     TableHead,
     TableHeadCell,
-  } from 'flowbite-svelte';
+  } from 'svelte-5-ui-lib';
 
   import type { TaskResults, TaskResult } from '$lib/types/task';
   import { ContestType } from '$lib/types/contest';
@@ -21,20 +21,40 @@
   import { getTaskTableHeaderName } from '$lib/utils/task';
   import { getBackgroundColorFrom } from '$lib/services/submission_status';
 
-  export let taskResults: TaskResults;
-  export let isLoggedIn: boolean;
+  interface Props {
+    taskResults: TaskResults;
+    isLoggedIn: boolean;
+  }
 
-  let selectedTaskResults: TaskResults;
-  let contestIds: Array<string>;
-  let taskTableIndices: Array<string>;
-  let taskTable: Record<string, Record<string, TaskResult>>;
-  let updatingModal: UpdatingModal;
+  let { taskResults, isLoggedIn }: Props = $props();
 
   // TODO: 任意のコンテスト種別に拡張
-  $: selectedTaskResults = filterTaskResultsByContestType(taskResults, fromABC212_Onwards);
-  $: contestIds = getContestIds(selectedTaskResults);
-  $: taskTableIndices = getTaskTableIndices(selectedTaskResults, ContestType.ABC);
-  $: taskTable = prepareTaskTable(selectedTaskResults, ContestType.ABC);
+  // Note:
+  // Before and from ABC212 onwards, the number and tendency of tasks are very different.
+  const fromABC212_Onwards = (taskResult: TaskResult) =>
+    classifyContest(taskResult.contest_id) === ContestType.ABC && taskResult.contest_id >= 'abc212';
+
+  let selectedTaskResults: TaskResults = $derived(
+    filterTaskResultsByContestType(taskResults, fromABC212_Onwards),
+  );
+  let contestIds: Array<string> = $derived(getContestIds(selectedTaskResults));
+  let taskTableIndices: Array<string> = $derived(
+    getTaskTableIndices(selectedTaskResults, ContestType.ABC),
+  );
+  let taskTable: Record<string, Record<string, TaskResult>> = $derived(
+    prepareTaskTable(selectedTaskResults, ContestType.ABC),
+  );
+  // FIXME: 他のコンポーネントと完全に重複しているので、コンポーネントとして切り出す。
+  let updatingModal: UpdatingModal | null = null;
+
+  // WHY: () => updatingModal.openModal(taskResult) だけだと、updatingModalがnullの可能性があるため。
+  function openModal(taskResult: TaskResult): void {
+    if (updatingModal) {
+      updatingModal.openModal(taskResult);
+    } else {
+      console.error('Failed to initialize UpdatingModal component.');
+    }
+  }
 
   function filterTaskResultsByContestType(
     taskResults: TaskResults,
@@ -42,11 +62,6 @@
   ): TaskResults {
     return taskResults.filter(condition);
   }
-
-  // Note:
-  // Before and from ABC212 onwards, the number and tendency of tasks are very different.
-  const fromABC212_Onwards = (taskResult: TaskResult) =>
-    classifyContest(taskResult.contest_id) === ContestType.ABC && taskResult.contest_id >= 'abc212';
 
   function getContestIds(selectedTaskResults: TaskResults): Array<string> {
     const contestList = selectedTaskResults.map((taskResult: TaskResult) => taskResult.contest_id);
@@ -127,9 +142,9 @@
 <!-- TODO: コンテスト種別のボタンの並び順を決める -->
 <!-- See: -->
 <!-- https://flowbite-svelte.com/docs/components/button-group -->
-<ButtonGroup class="m-4 contents-center" aria-label="Contest filter options">
+<ButtonGroup class="m-4 contents-center">
   <Button
-    on:click={() => filterTaskResultsByContestType(taskResults, fromABC212_Onwards)}
+    onclick={() => filterTaskResultsByContestType(taskResults, fromABC212_Onwards)}
     aria-label="Filter contests from ABC212 onwards"
   >
     ABC212〜
@@ -142,7 +157,6 @@
 </Heading>
 
 <!-- TODO: ページネーションを実装 -->
-<!-- TODO: ページネーションライブラリを導入するには、Svelte v4 から v5 へのアップデートが必要 -->
 <!-- See: -->
 <!-- https://github.com/kenkoooo/AtCoderProblems/blob/master/atcoder-problems-frontend/src/pages/TablePage/AtCoderRegularTable.tsx -->
 <!-- https://github.com/birdou/atcoder-blogs/blob/main/app/atcoder-blogs-frontend/src/pages/BlogTablePage/BlogTablePage.tsx -->
@@ -159,7 +173,7 @@
       {/if}
     </TableHead>
 
-    <TableBody tableBodyClass="divide-y">
+    <TableBody class="divide-y">
       {#if contestIds.length && taskTableIndices.length}
         {#each contestIds as contestId}
           <TableBodyRow class="flex flex-wrap xl:table-row">
@@ -177,7 +191,7 @@
                   <TaskTableBodyCell
                     taskResult={taskTable[contestId][taskIndex]}
                     {isLoggedIn}
-                    {updatingModal}
+                    onClick={() => openModal(taskTable[contestId][taskIndex])}
                   />
                 {/if}
               </TableBodyCell>

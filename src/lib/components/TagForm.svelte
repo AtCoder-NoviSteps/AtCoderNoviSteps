@@ -1,6 +1,4 @@
 <script lang="ts">
-  //Tagを修正するためのフォームを用意する
-
   import {
     Table,
     TableBody,
@@ -10,26 +8,35 @@
     Button,
     TableHead,
     TableHeadCell,
-  } from 'flowbite-svelte';
+  } from 'svelte-5-ui-lib';
+
+  import type { Task } from '$lib/types/task';
   import type { Tag } from '$lib/types/tag';
-  import type { Task } from '../types/task';
+
   import { getContestNameLabel } from '$lib/utils/contest';
   import { ATCODER_BASE_CONTEST_URL } from '$lib/constants/urls';
 
-  export let tag: Tag;
-  export let tasks: Task[];
-  let id: string = tag.id;
-  let name: string = tag.name;
+  interface Props {
+    tag: Tag;
+    tasks: Task[];
+  }
+
+  let { tag = $bindable(), tasks }: Props = $props();
+
+  let id: string = $state(tag.id);
+  let name: string = $state(tag.name);
 
   //export const isAdmin: boolean; // Admin権限がある場合は、編集リンクを表示する
 </script>
 
+<!-- TODO: レスポンシブ対応 -->
+<!-- TODO: Tagを修正するためのフォームを用意する -->
 <a href="/tags"> タグ一覧へもどる（パンくずリストにしたい） </a>
 <br />
 Edit Tag
 <form method="POST" action="/tags?/update">
   <Table shadow hoverable={true} class="text-md">
-    <TableBody tableBodyClass="divide-y">
+    <TableBody class="divide-y">
       <TableBodyRow>
         <TableBodyCell class="w-1/6">tagId</TableBodyCell>
         <TableBodyCell class="w-5/6">{id}</TableBodyCell>
@@ -75,7 +82,8 @@ Edit Tag
     <TableHeadCell class="w-4/6">問題名</TableHeadCell>
     <TableHeadCell class="w-5/6"></TableHeadCell>
   </TableHead>
-  <TableBody tableBodyClass="divide-y">
+
+  <TableBody class="divide-y">
     {#each tasks as task}
       <TableBodyRow>
         <TableBodyCell>

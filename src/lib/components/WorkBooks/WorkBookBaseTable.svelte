@@ -8,7 +8,7 @@
     TableBodyRow,
     TableHead,
     TableHeadCell,
-  } from 'flowbite-svelte';
+  } from 'svelte-5-ui-lib';
 
   import { WorkBookType, type WorkbooksList } from '$lib/types/workbook';
   import { TaskGrade, type TaskResults } from '$lib/types/task';
@@ -23,12 +23,16 @@
 
   import { canRead, canEdit, canDelete } from '$lib/utils/authorship';
 
-  export let workbookType: WorkBookType;
-  export let workbooks: WorkbooksList;
-  export let workbookGradeModes: Map<number, TaskGrade>;
-  export let userId: string;
-  export let role: Roles;
-  export let taskResults: Map<number, TaskResults>;
+  interface Props {
+    workbookType: WorkBookType;
+    workbooks: WorkbooksList;
+    workbookGradeModes: Map<number, TaskGrade>;
+    userId: string;
+    role: Roles;
+    taskResults: Map<number, TaskResults>;
+  }
+
+  let { workbookType, workbooks, workbookGradeModes, userId, role, taskResults }: Props = $props();
 
   function getGradeMode(workbookId: number): TaskGrade {
     return workbookGradeModes.get(workbookId) ?? TaskGrade.PENDING;
@@ -39,6 +43,7 @@
   }
 </script>
 
+<!-- FIXME: 問題集の種類別にコンポーネントを分ける -->
 <!-- HACK: (2024年9月時点) 問題集の仕様が大きく異なるので、暫定的に条件分岐で対処 -->
 <div class="overflow-auto rounded-md border">
   <Table shadow class="text-md">
@@ -61,7 +66,7 @@
       <TableHeadCell></TableHeadCell>
     </TableHead>
 
-    <TableBody tableBodyClass="divide-y">
+    <TableBody class="divide-y">
       {#each workbooks as workbook}
         {#if canRead(workbook.isPublished, userId, workbook.authorId)}
           <TableBodyRow>
@@ -105,7 +110,7 @@
                 />
               </div>
             </TableBodyCell>
-            <TableBodyCell tdClass="justify-center items-center min-w-[54px] max-w-[54px]">
+            <TableBodyCell class="justify-center items-center min-w-[54px] max-w-[54px] px-0">
               <div class="flex justify-center items-center">
                 <CompletedTasks
                   taskResults={getTaskResult(workbook.id)}

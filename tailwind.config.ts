@@ -1,18 +1,20 @@
 import forms from '@tailwindcss/forms';
 import flowbitePlugin from 'flowbite/plugin';
+// TODO: stwui は事実上開発が終了したと思われるため、別のライブラリに移行
 import stwuiPlugin from 'stwui/plugin';
+
+import type { Config } from 'tailwindcss';
 
 const config = {
   content: [
     './src/**/*.{html,js,svelte,ts}',
-    './node_modules/flowbite-svelte/**/*.{html,js,svelte,ts}',
-    './node_modules/flowbite-svelte-icons/**/*.{html,js,svelte,ts}',
+    './node_modules/svelte-5-ui-lib/**/*.{html,js,svelte,ts}',
     './node_modules/stwui/**/*.{svelte,js,ts,html}',
   ],
 
   plugins: [forms, flowbitePlugin, stwuiPlugin],
 
-  darkMode: 'class',
+  darkMode: 'selector',
 
   theme: {
     extend: {
@@ -85,6 +87,6 @@ const config = {
       },
     },
   },
-};
+} as Config;
 
 export default config;

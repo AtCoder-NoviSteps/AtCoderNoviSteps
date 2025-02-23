@@ -8,46 +8,63 @@
     TableBodyRow,
     TableHead,
     TableHeadCell,
-  } from 'flowbite-svelte';
+  } from 'svelte-5-ui-lib';
 
-  import { type TaskResults, TaskGrade } from '$lib/types/task';
+  import { type TaskResult, type TaskResults, TaskGrade } from '$lib/types/task';
 
   import ThermometerProgressBar from '$lib/components/ThermometerProgressBar.svelte';
   import UpdatingModal from '$lib/components/SubmissionStatus/UpdatingModal.svelte';
   import SubmissionStatusImage from '$lib/components/SubmissionStatus/SubmissionStatusImage.svelte';
   import ExternalLinkWrapper from '$lib/components/ExternalLinkWrapper.svelte';
   import AcceptedCounter from '$lib/components/SubmissionStatus/AcceptedCounter.svelte';
+
   import { getBackgroundColorFrom } from '$lib/services/submission_status';
+
   import { addContestNameToTaskIndex } from '$lib/utils/contest';
   import { toWhiteTextIfNeeds, getTaskUrl, removeTaskIndexFromTitle } from '$lib/utils/task';
 
-  export let grade: string;
-  export let gradeColor: string;
-  export let taskResults: TaskResults;
-  export let isAdmin: boolean;
-  export let isLoggedIn: boolean;
+  interface Props {
+    grade: string;
+    gradeColor: string;
+    taskResults: TaskResults;
+    isAdmin: boolean;
+    isLoggedIn: boolean;
+  }
 
-  let updatingModal: UpdatingModal;
+  let { grade, gradeColor, taskResults, isAdmin, isLoggedIn }: Props = $props();
+
+  // TODO: 他のコンポーネントでも利用できるようにする。
+  let updatingModal: UpdatingModal | null = null;
+
+  function openModal(taskResult: TaskResult): void {
+    if (updatingModal) {
+      updatingModal.openModal(taskResult);
+    } else {
+      console.error('Failed to initialize UpdatingModal component.');
+    }
+  }
 </script>
 
-<Accordion flush class="mt-4 mb-2">
+<Accordion flush>
   <AccordionItem>
-    <span slot="header" class="flex justify-around w-full place-items-center">
-      <div
-        class="text-sm xs:text-xl w-9 xs:w-12 p-0.5 text-center rounded-lg {toWhiteTextIfNeeds(
-          grade,
-        )} {gradeColor}"
-      >
-        {#if grade !== TaskGrade.PENDING}
-          {grade}
-        {:else}
-          ??
-        {/if}
-      </div>
+    {#snippet header()}
+      <span class="flex justify-around w-full place-items-center">
+        <div
+          class="text-sm xs:text-xl w-9 xs:w-12 p-0.5 text-center rounded-lg {toWhiteTextIfNeeds(
+            grade,
+          )} {gradeColor}"
+        >
+          {#if grade !== TaskGrade.PENDING}
+            {grade}
+          {:else}
+            ??
+          {/if}
+        </div>
 
-      <ThermometerProgressBar {taskResults} />
-      <AcceptedCounter {taskResults} />
-    </span>
+        <ThermometerProgressBar {taskResults} />
+        <AcceptedCounter {taskResults} />
+      </span>
+    {/snippet}
 
     <!-- FIXME: clickを1回実行するとactionsが2回実行されてしまう。原因と修正方法が分かっていない。 -->
     <!-- TODO: 問題が多くなってきたら、ページネーションを導入する -->
@@ -66,7 +83,8 @@
             <span class="sr-only">編集</span>
           </TableHeadCell>
         </TableHead>
-        <TableBody tableBodyClass="divide-y">
+
+        <TableBody class="divide-y">
           {#each taskResults as taskResult}
             <TableBodyRow
               id={taskResult.contest_id + '-' + taskResult.task_id}
@@ -74,7 +92,7 @@
             >
               <TableBodyCell
                 class="justify-center w-20 px-1 sm:px-3 pt-1 sm:pt-3 pb-0.5 sm:pb-1"
-                onclick={() => updatingModal.openModal(taskResult)}
+                onclick={() => openModal(taskResult)}
               >
                 <div class="flex items-center justify-center w-full h-full">
                   <SubmissionStatusImage {taskResult} {isLoggedIn} />

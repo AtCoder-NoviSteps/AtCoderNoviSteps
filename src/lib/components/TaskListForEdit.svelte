@@ -9,20 +9,27 @@
     Button,
     Label,
     Input,
-  } from 'flowbite-svelte';
+  } from 'svelte-5-ui-lib';
 
   import type { Contests } from '$lib/types/contest';
+
   import { getContestNameLabel } from '$lib/utils/contest';
   import { newline } from '$lib/utils/newline';
 
   //gradeでソート済みのTaskのリストと、APIから取得したtasklistを表示する
   //export let tasks: Task[];
-  //APIから取得したリストで、データベースに追加していないTaskのリストにする
-  export let importContests: Contests;
+
+  interface Props {
+    //APIから取得したリストで、データベースに追加していないTaskのリストにする
+    importContests: Contests;
+  }
+
+  let { importContests }: Props = $props();
 </script>
 
 <!-- TODO: 問題が多くなってきたら、ページネーションを導入する -->
 <!-- TODO: 回答状況に応じて、フィルタリングできるようにする -->
+<!-- FIXME: レスポンシブデザインに -->
 <Table shadow hoverable={true} class="text-md" divClass="">
   <TableHead class="text-md bg-gray-100">
     <TableHeadCell class="w-1/8">コンテストID</TableHeadCell>
@@ -30,10 +37,10 @@
     <TableHeadCell class="w-1/3">問題名</TableHeadCell>
     <TableHeadCell class="w-1/8"></TableHeadCell>
   </TableHead>
-  <TableBody tableBodyClass="divide-y">
+  <TableBody class="divide-y">
     {#each importContests as importContest}
       {#if importContest.tasks.length > 0}
-        <TableBodyRow height="40px">
+        <TableBodyRow>
           <TableBodyCell class="p-3">
             <Label>
               {#each newline(getContestNameLabel(importContest.id), 10) as line}

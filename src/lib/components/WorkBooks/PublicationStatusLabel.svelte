@@ -1,5 +1,9 @@
 <script lang="ts">
-  export let isPublished: boolean;
+  interface Props {
+    isPublished: boolean;
+  }
+
+  let { isPublished }: Props = $props();
 
   const getPublicationStatusLabel = (isPublished: boolean) => {
     if (!isPublished) {

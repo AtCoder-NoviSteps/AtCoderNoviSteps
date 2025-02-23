@@ -1,7 +1,11 @@
 <script lang="ts">
-  import { TableHeadCell } from 'flowbite-svelte';
+  import { TableHeadCell } from 'svelte-5-ui-lib';
 
-  export let paddingX: string = 'px-1 xs:px-3';
+  interface Props {
+    paddingX?: string;
+  }
+
+  let { paddingX = 'px-1 xs:px-3' }: Props = $props();
 </script>
 
 <TableHeadCell

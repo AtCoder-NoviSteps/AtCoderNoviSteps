@@ -24,6 +24,23 @@ const config = {
       '$lib/*': resolve('./src/lib/*'),
     },
   },
+
+  compilerOptions: {
+    runes: true,
+  },
+
+  // [Work around]
+  // SuperDebug.svelte: Cannot use `export let` in runes mode — use `$props()` instead.
+  //
+  // See:
+  // https://github.com/ciscoheat/sveltekit-superforms/issues/306#issuecomment-1891015986
+  vitePlugin: {
+    dynamicCompileOptions({ filename }) {
+      if (filename.includes('node_modules')) {
+        return { runes: undefined }; // or false, check what works
+      }
+    },
+  },
 };
 
 export default config;

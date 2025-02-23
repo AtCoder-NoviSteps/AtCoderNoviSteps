@@ -1,12 +1,13 @@
 <script lang="ts">
   import { tick } from 'svelte';
   import { goto } from '$app/navigation';
-  import { Card, Button, Label, Input, Hr } from 'flowbite-svelte';
+
+  import { Card, Button, Label, Input, Hr } from 'svelte-5-ui-lib';
 
   // 必要なコンポーネントだけを読み込んで、コンパイルを時間を短縮
-  import UserOutlineSolid from 'flowbite-svelte-icons/UserCircleSolid.svelte';
-  import EyeOutline from 'flowbite-svelte-icons/EyeOutline.svelte';
-  import EyeSlashOutline from 'flowbite-svelte-icons/EyeSlashOutline.svelte';
+  import CirCleUserRound from 'lucide-svelte/icons/circle-user-round';
+  import Eye from 'lucide-svelte/icons/eye';
+  import EyeOff from 'lucide-svelte/icons/eye-off';
 
   import MessageHelperWrapper from '$lib/components/MessageHelperWrapper.svelte';
 
@@ -17,17 +18,29 @@
   } from '$lib/constants/forms';
   import { HOME_PAGE, LOGIN_PAGE } from '$lib/constants/navbar-links';
 
-  // FIXME: 構造体に相当するものを利用した方が拡張・修正がしやすくなるかもしれせまん
-  export let formProperties;
-  export let title: string;
-  export let submitButtonLabel: string;
-  export let confirmationMessage: string;
-  export let alternativePageName: string;
-  export let alternativePageLink: string;
+  interface Props {
+    // FIXME: 構造体に相当するものを利用した方が拡張・修正がしやすくなるかもしれせまん
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    formProperties: any;
+    title: string;
+    submitButtonLabel: string;
+    confirmationMessage: string;
+    alternativePageName: string;
+    alternativePageLink: string;
+  }
+
+  let {
+    formProperties,
+    title,
+    submitButtonLabel,
+    confirmationMessage,
+    alternativePageName,
+    alternativePageLink,
+  }: Props = $props();
 
   const { form, message, errors, submitting, enhance } = formProperties;
 
-  $: isSubmitting = false;
+  let isSubmitting = $state(false);
 
   async function handleLoginAsGuest(event: Event) {
     if (!event || (event instanceof KeyboardEvent && event.key !== 'Enter')) {
@@ -65,6 +78,7 @@
         return;
       }
 
+      // FIXME: ログイン前のページに戻れるようにする
       await goto(HOME_PAGE);
     } catch (error) {
       console.error('Failed to login as a guest: ', error);
@@ -74,14 +88,13 @@
   }
 
   const UNFOCUSABLE = -1;
-  let showPassword = false;
+  let showPassword = $state(false);
 </script>
 
 <!-- FIXME: コンポーネントが巨大になってきたと思われるので、分割しましょう -->
 <!-- TODO: containerのデフォルト値を設定できないか? -->
 <!-- See: -->
-<!-- https://flowbite-svelte.com/docs/components/card#Card_with_form_inputs -->
-<!-- https://github.com/themesberg/flowbite-svelte-icons/tree/main/src/lib -->
+<!-- https://github.com/lucide-icons/lucide -->
 <div class="container mx-auto py-8 w-5/6 flex flex-col items-center">
   <Card class="w-full max-w-md">
     <form id="auth-form" method="post" use:enhance class="flex flex-col space-y-6">
@@ -92,15 +105,15 @@
       <Button
         type="button"
         class="w-full"
-        on:click={handleLoginAsGuest}
-        on:keydown={handleLoginAsGuest}
+        onclick={handleLoginAsGuest}
+        onkeydown={handleLoginAsGuest}
         disabled={isSubmitting || $submitting}
       >
         <div class="text-md">お試し用のアカウントでログイン</div>
       </Button>
 
       <div>
-        <Hr classHr="my-2 h-0.5 bg-gray-400 dark:bg-gray-200" />
+        <Hr hrClass="my-2 h-0.5 bg-gray-400 dark:bg-gray-200" />
       </div>
 
       <!-- User name -->
@@ -110,16 +123,21 @@
           <p>（変更不可。3〜24文字で、半角英数字と_のみ）</p>
         </Label>
 
+        <!-- Note: class=“ps-10” is required to ensure that the string does not overlap with the icon. -->
         <Input
           id="username-in-auth-form"
+          type="text"
           name="username"
           placeholder="chokudai"
           aria-invalid={$errors.username ? 'true' : undefined}
           bind:value={$form.username}
           disabled={$submitting || isSubmitting}
           required
+          class="ps-10"
         >
-          <UserOutlineSolid slot="left" class="w-5 h-5" tabindex={UNFOCUSABLE} />
+          {#snippet left()}
+            <CirCleUserRound class="w-5 h-5" tabindex={UNFOCUSABLE} />
+          {/snippet}
         </Input>
 
         <!-- エラーメッセージがあれば表示 -->
@@ -143,21 +161,23 @@
           bind:value={$form.password}
           disabled={$submitting || isSubmitting}
           required
+          class="ps-10"
         >
           <!-- Show / hide password -->
-          <button
-            type="button"
-            tabindex={UNFOCUSABLE}
-            slot="left"
-            on:click={() => (showPassword = !showPassword)}
-            class="pointer-events-auto"
-          >
-            {#if showPassword}
-              <EyeOutline class="w-5 h-5" tabindex={UNFOCUSABLE} />
-            {:else}
-              <EyeSlashOutline class="w-5 h-5" tabindex={UNFOCUSABLE} />
-            {/if}
-          </button>
+          {#snippet left()}
+            <button
+              type="button"
+              tabindex={UNFOCUSABLE}
+              onclick={() => (showPassword = !showPassword)}
+              class="pointer-events-auto"
+            >
+              {#if showPassword}
+                <Eye class="w-5 h-5" tabindex={UNFOCUSABLE} />
+              {:else}
+                <EyeOff class="w-5 h-5" tabindex={UNFOCUSABLE} />
+              {/if}
+            </button>
+          {/snippet}
         </Input>
 
         <!-- エラーメッセージがあれば表示 -->

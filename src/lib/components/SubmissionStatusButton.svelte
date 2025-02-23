@@ -1,9 +1,13 @@
 <script lang="ts">
-  export let value: string;
-  export let textColor: string;
-  export let bgColor: string;
-  export let bgColorOnHover: string;
-  export let labelName: string;
+  interface Props {
+    value: string;
+    textColor: string;
+    bgColor: string;
+    bgColorOnHover: string;
+    labelName: string;
+  }
+
+  let { value, textColor, bgColor, bgColorOnHover, labelName }: Props = $props();
 </script>
 
 <!-- HACK: カスタマイズしやすいボタンコンポーネントを見つけたら差し替える -->

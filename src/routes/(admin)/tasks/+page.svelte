@@ -1,7 +1,8 @@
-<script>
+<script lang="ts">
   import HeadingOne from '$lib/components/HeadingOne.svelte';
   import TaskListForEdit from '$lib/components/TaskListForEdit.svelte';
-  export let data;
+
+  let { data } = $props();
 
   let importContests = data.importContests;
 </script>

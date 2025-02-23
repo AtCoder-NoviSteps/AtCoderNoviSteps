@@ -1,10 +1,13 @@
 <script lang="ts">
-  import { Footer, FooterCopyright } from 'flowbite-svelte';
+  import { Footer, FooterCopyright } from 'svelte-5-ui-lib';
 
   import { PRODUCT_TEAM_URL, PRODUCT_NAME } from '$lib/constants/product-info';
 </script>
 
-<!-- FIXME: Expect to be centered because it moves to the left edge when the pixel is less than 768. -->
-<Footer class="shadow-none w-screen text-center m-6">
-  <FooterCopyright href={PRODUCT_TEAM_URL} by="{PRODUCT_NAME} team, " />
+<!-- See: -->
+<!-- https://svelte-5-ui-lib.codewithshin.com/components/footer -->
+<Footer class="shadow-none w-screen m-6" footerType="logo">
+  <div class="flex items-center justify-center">
+    <FooterCopyright href={PRODUCT_TEAM_URL} by="{PRODUCT_NAME} team, " />
+  </div>
 </Footer>

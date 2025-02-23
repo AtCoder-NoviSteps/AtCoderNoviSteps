@@ -26,11 +26,15 @@
 - JavaScriptのランタイム
   - [Node.js](https://nodejs.org): v22.x
 - 汎用フレームワーク
-  - [Svelte](https://svelte.dev/): v5.x。後方互換性を優先しているが、Runes が利用できるように破壊的な変更が含まれる箇所を段階的に移行予定
+  - [Svelte](https://svelte.dev/): v5.x。Runes mode で運用中
   - [SvelteKit](https://svelte.dev/): v2.x
 - UIライブラリ
-  - [Flowbite Svelte](https://flowbite-svelte.com/)
+  - [Svelte 5 UI lib](https://svelte-5-ui-lib.codewithshin.com/) - Svelte v5.xにおける[Flowbite Svelte](https://flowbite-svelte.com/)の代替ライブラリ。一部の属性名・値などが変更されていることに注意が必要
+    - コンポーネントが未実装である場合は、主に[Flowbite](https://flowbite.com/)を暫定的に利用する
+    - [Embla Carousel](https://github.com/davidjerleke/embla-carousel) - Svelte 5 UI lib ではカルーセルコンポーネントが未実装（2025年2月時点）なため、暫定的に導入している
+    - Tailwind v4 に未対応（2025年2月時点）のため、[Skeleton](https://github.com/skeletonlabs/skeleton)などへ移行する可能性もある
   - [STWUI](https://stwui.vercel.app/): 開発が事実上終了した可能性が高いため、使用しているコンポーネントを調べて別のライブラリに移行する
+  - [Lucide](https://github.com/lucide-icons/lucide) - アイコンライブラリ
 - テスティングフレームワーク
   - [Vitest](https://vitest.dev/): 単体テスト (ユーティリティ、コンポーネント)
   - [Playwright](https://playwright.dev/): e2eテスト
@@ -120,18 +124,17 @@
 
   `docker compose exec web pnpm exec playwright install-deps`
 
-  `docker compose exec -e DATABASE_URL=postgresql://db_user:db_password@db:5432/test_db web pnpm prisma db push`
+  `docker compose exec -e DATABASE_URL=postgresql://db_user:db_password@db:5432/test_db?pgbouncer=true&connection_limit=10&connect_timeout=60&statement_timeout=60000 -e DIRECT_URL=postgresql://db_user:db_password@db:5432/test_db web pnpm prisma db push`
 
   `docker compose exec web pnpm prisma generate`
 
-- 開発サーバ(port番号: 5173)を起動します。その後、以下のリンクを順番にクリックしてください。
+- 開発サーバ(port番号: 5174)を起動します。その後、以下のリンクを順番にクリックしてください。
 
   - Note: リンクのアドレス・ポート番号は、環境によって変わる可能性もあります。
 
   `docker compose exec web pnpm dev --host`
 
-  http://172.18.0.3:5173
-  http://127.0.0.1:5173/
+  [http://localhost:5174/](http://localhost:5174/)
 
 - ホーム画面が起動し、ユーザの登録・ログインができれば、環境構築は完了です。
 
@@ -166,11 +169,11 @@
 
 - 以下のリンクをクリックしてください。
 
-  <http://127.0.0.1:5173/>
+  <http://localhost:5174/>
 
 - また、開発サーバの起動と同時に新しいブラウザタブでアプリを開くこともできます。
 
-  `pnpm dev -- --open`
+  `pnpm dev --open`
 
 - 先ほどとは異なるターミナルで以下のコマンドをそれぞれ実行すると、データベースの初期データ投入やローカル環境でのテーブル・サンプルデータが閲覧できます。
 
@@ -267,6 +270,17 @@
 6. プルリクエストを作成します。
 
 ### トラブルシューティング
+
+- エラー: ローカル環境で開発用サーバを立ち上げても、ブラウザに表示されない
+
+  - 前提条件: Docker Desktop 4.30.0 以上、かつ、VSCode DevContainer で Vite を動かす場合。Windows、macOS で発生する
+  - 原因: Dockerで、ホストが IPv4 のみを使用している場合でも、`::1` を返すようになったため
+  - 対処方法: `vite.config` に、server の host を追記する
+  - 参考資料
+    - [Docker の Issues](https://github.com/docker/for-mac/issues/7276)
+    - [Vite の Issues](https://github.com/vitejs/vite/issues/16522#issuecomment-2432846922)
+    - [Zenn の記事](https://zenn.dev/onozaty/articles/docker-desktop-portforward-not-working)
+    - [本プロジェクトでの対処状況](https://github.com/AtCoder-NoviSteps/AtCoderNoviSteps/issues/814#issuecomment-2131173142)
 
 - エラー: Docker Desktop で Vite を利用したときに Segmentation Fault が発生
 

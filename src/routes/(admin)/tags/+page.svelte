@@ -1,9 +1,9 @@
-<script>
+<script lang="ts">
   import HeadingOne from '$lib/components/HeadingOne.svelte';
   import TagListForEdit from '$lib/components/TagListForEdit.svelte';
-  export let data;
+
+  let { data } = $props();
   let tags = data.tags;
-  //let importContests = data.importContests;
 </script>
 
 <div class="container mx-auto w-5/6">

@@ -1,30 +1,31 @@
 <script lang="ts">
-  import { Label, Input, P } from 'flowbite-svelte';
-  // @ts-ignore
-  import ClipboardOutline from 'flowbite-svelte-icons/ClipboardOutline.svelte';
+  import { Label, Input, P } from 'svelte-5-ui-lib';
+  import ClipboardCopy from 'lucide-svelte/icons/clipboard-copy';
+
+  // FIXME: stwui is effectively end-of-life, replace with another library
   import { copyToClipboard } from 'stwui/utils/copyToClipboard';
-  //import type { ActionForm } from './$types';
 
   import ContainerWrapper from '$lib/components/ContainerWrapper.svelte';
   import FormWrapper from '$lib/components/FormWrapper.svelte';
   import LabelWrapper from '$lib/components/LabelWrapper.svelte';
   import SubmissionButton from '$lib/components/SubmissionButton.svelte';
 
-  export let username: string;
-  export let atcoder_username: string;
-  export let atcoder_validationcode: string;
+  interface Props {
+    username: string;
+    atcoder_username: string;
+    atcoder_validationcode: string;
+    status: string;
+  }
 
-  // status = notiong : username = "hogehoge" and atcoder_username = "" and atcoder_validationcode = "" and atcoder_validated = false
-  // status = generated : username = "hogehoge" and atcoder_username = "fugafuga" and atcoder_validationcode = "xxxxxx" and validated = false
-  // status = validated =  username = "hogehoge" and atcoder_username = "fugafuga" and atcoder_validationcode = "" and validated = true
-  // for noting -> generated, push "generate" button (only "generate" button is aveilable)
-  // for generated -> validated, push "validate" button ( "validate" and "edit" button is available )
+  let {
+    username = $bindable(),
+    atcoder_username = $bindable(),
+    atcoder_validationcode = $bindable(),
+    status,
+  }: Props = $props();
 
-  // for generated/validated -> notiong, push "edit" button ( "edit" is available)
-  export let status: string;
-
-  // TODO: クリックしたときに、Copied!といったメッセージを表示できるようにしたい。
-  // WHY: コピーができているか、確認できるようにするため
+  // TODO: Add a "Copied!" message when clicking
+  // WHY: To provide feedback when the copy operation succeeds
   const handleClick = () => {
     copyToClipboard(atcoder_validationcode);
   };
@@ -37,7 +38,7 @@
         本人確認の準備中
       </h3>
 
-      <P PsizeType="md" class="mt-6">AtCoder IDを入力し、本人確認用の文字列を生成してください。</P>
+      <P size="base" class="mt-6">AtCoder IDを入力し、本人確認用の文字列を生成してください。</P>
 
       <!-- hiddenでusernameを持つのは共通-->
       <Input size="md" type="hidden" name="username" bind:value={username} />
@@ -48,7 +49,6 @@
         <span>AtCoder ID</span>
         <Input
           size="md"
-          label="atcoder_username"
           name="atcoder_username"
           placeholder="chokudai"
           bind:value={atcoder_username}
@@ -63,7 +63,7 @@
     <FormWrapper action="?/validate" marginTop="">
       <h3 class="text-xl text-center mt-6 font-medium text-gray-900 dark:text-white">本人確認中</h3>
 
-      <P PsizeType="md" class="mt-6">
+      <P size="base" class="mt-6">
         AtCoderの所属欄に生成した文字列を貼り付けてから、「本人確認」ボタンを押してください。
       </P>
 
@@ -78,7 +78,7 @@
       <Input
         size="md"
         type="hidden"
-        name="usernatcoder_validationcodeame"
+        name="atcoder_validationcode"
         bind:value={atcoder_validationcode}
       />
 
@@ -86,7 +86,9 @@
         <span>本人確認用の文字列</span>
         <div>
           <Input size="md" bind:value={atcoder_validationcode}>
-            <ClipboardOutline slot="right" class="w-5 h-5" on:click={handleClick} />
+            {#snippet right()}
+              <ClipboardCopy class="w-5 h-5" onclick={handleClick} />
+            {/snippet}
           </Input>
         </div>
       </Label>

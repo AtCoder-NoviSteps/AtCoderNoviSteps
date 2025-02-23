@@ -1,13 +1,26 @@
 <script lang="ts">
-  import { Label, Select } from 'flowbite-svelte';
+  import { Label, Select } from 'svelte-5-ui-lib';
 
-  export let labelClass: string = 'space-y-2';
-  export let labelName: string = '';
-  export let innerName: string;
-  export let items;
-  export let inputValue: unknown;
-  export let isEditable: boolean = true;
-  export let onClick: (event: Event) => void = () => {};
+  interface Props {
+    labelClass?: string;
+    labelName?: string;
+    innerName: string;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    items: any;
+    inputValue: unknown;
+    isEditable?: boolean;
+    onClick?: (event: Event) => void;
+  }
+
+  let {
+    labelClass = 'space-y-2',
+    labelName = '',
+    innerName,
+    items,
+    inputValue = $bindable(),
+    isEditable = true,
+    onClick = () => {},
+  }: Props = $props();
 </script>
 
 <Label class={labelClass}>
@@ -18,6 +31,6 @@
     {items}
     bind:value={inputValue}
     disabled={!isEditable}
-    on:click={onClick}
+    onclick={onClick}
   />
 </Label>

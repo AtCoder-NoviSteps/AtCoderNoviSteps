@@ -1,6 +1,5 @@
 <script lang="ts">
   import xss from 'xss';
-
   import {
     Label,
     Table,
@@ -9,9 +8,8 @@
     TableBodyRow,
     TableHead,
     TableHeadCell,
-  } from 'flowbite-svelte';
-
-  import TrashBinOutline from 'flowbite-svelte-icons/TrashBinOutline.svelte';
+  } from 'svelte-5-ui-lib';
+  import Trash2 from 'lucide-svelte/icons/trash-2';
 
   import GradeLabel from '$lib/components/GradeLabel.svelte';
   import ExternalLinkWrapper from '$lib/components/ExternalLinkWrapper.svelte';
@@ -19,38 +17,70 @@
   import { addContestNameToTaskIndex } from '$lib/utils/contest';
   import { getTaskUrl, removeTaskIndexFromTitle } from '$lib/utils/task';
 
-  import type { WorkBookTaskBase, WorkBookTaskCreate, WorkBookTaskEdit } from '$lib/types/workbook';
+  import type {
+    WorkBookTasksBase,
+    WorkBookTaskBase,
+    WorkBookTasksCreate,
+    WorkBookTaskCreate,
+    WorkBookTasksEdit,
+    WorkBookTaskEdit,
+  } from '$lib/types/workbook';
   import type { Task } from '$lib/types/task';
 
-  export let tasksMapByIds: Map<string, Task>;
-  export let workBookTasks = [] as WorkBookTaskBase[];
-  export let workBookTasksForTable = [] as WorkBookTaskCreate[] | WorkBookTaskEdit[];
+  interface Props {
+    tasksMapByIds: Map<string, Task>;
+    workBookTasks?: WorkBookTasksBase;
+    workBookTasksForTable?: WorkBookTasksCreate | WorkBookTasksEdit;
+  }
+
+  let {
+    tasksMapByIds,
+    workBookTasks = $bindable([] as WorkBookTasksBase),
+    workBookTasksForTable = $bindable([] as WorkBookTasksCreate | WorkBookTasksEdit),
+  }: Props = $props();
 
   // HACK: $errorsからcommentに関する内容が安定的に取り出せない。
   //       (Zodのスキーマで入れ子になっている場合に、子要素のエラーの取り出し方が調べても分からないため)
   //
   // 1. 一言（コメント）に関するものは問題のインデックス?であるのに対して、なぜか問題数に関するものは_errorsとなっている。
-  // 2. 存在するインデックスを参照しても、なぜかundefineになっている場合がある。
+  // 2. 存在するインデックスを参照しても、なぜか undefined になっている場合がある。
   function updateComment(index: number, event: Event) {
     const target = event.target as HTMLElement;
 
     if (target && target instanceof HTMLElement) {
-      const newComment = xss(target.innerText as string);
+      const newComment = xss(target.textContent as string);
 
       // HACK: 代替手段として、50文字以下の場合のみ更新
       if (newComment.length <= 50) {
-        workBookTasks[index].comment = newComment;
-        workBookTasksForTable[index].comment = newComment;
+        workBookTasks = updateWorkBookTasks(workBookTasks, index, newComment);
+        workBookTasksForTable = updateWorkBookTasks(workBookTasksForTable, index, newComment);
       } else {
-        target.innerText = workBookTasks[index].comment;
+        target.textContent = workBookTasks[index].comment;
       }
     }
   }
 
+  // WHY: コメントの変更を親コンポーネントに確実に反映させるため、新しい配列を返す。
+  function updateWorkBookTasks<T extends WorkBookTaskBase>(
+    workBookTasks: T[],
+    index: number,
+    newComment: string,
+  ): T[] {
+    const newWorkBookTasks = [
+      ...workBookTasks.slice(0, index),
+      { ...workBookTasks[index], comment: newComment },
+      ...workBookTasks.slice(index + 1),
+    ];
+
+    return newWorkBookTasks;
+  }
+
   function removeWorkBookTask(task: WorkBookTaskCreate | WorkBookTaskEdit) {
-    workBookTasks = workBookTasks.filter((workBookTask) => workBookTask.taskId !== task.taskId);
+    workBookTasks = workBookTasks.filter(
+      (workBookTask: WorkBookTaskBase) => workBookTask.taskId !== task.taskId,
+    );
     workBookTasksForTable = workBookTasksForTable.filter(
-      (workBookTask) => workBookTask.taskId !== task.taskId,
+      (workBookTask: WorkBookTaskCreate | WorkBookTaskEdit) => workBookTask.taskId !== task.taskId,
     );
   }
 
@@ -63,8 +93,8 @@
 
     const target = event.target as HTMLElement;
 
-    if (target && target instanceof HTMLElement && target.innerText === placeholderForComment) {
-      (event.target as HTMLElement).innerText = '';
+    if (target && target instanceof HTMLElement && target.textContent === placeholderForComment) {
+      (event.target as HTMLElement).textContent = '';
       (event.target as HTMLElement).classList.remove('placeholder');
     }
   }
@@ -76,8 +106,8 @@
 
     const target = event.target as HTMLElement;
 
-    if (target && target instanceof HTMLElement && target.innerText.trim() === '') {
-      (event.target as HTMLElement).innerText = placeholderForComment;
+    if (target && target instanceof HTMLElement && target.textContent?.trim() === '') {
+      (event.target as HTMLElement).textContent = placeholderForComment;
       (event.target as HTMLElement).classList.add('placeholder');
     }
   }
@@ -109,7 +139,7 @@
     return task;
   }
 
-  let isDeleting = false;
+  let isDeleting = $state(false);
 </script>
 
 {#if workBookTasksForTable.length}
@@ -134,11 +164,10 @@
       </TableHeadCell>
     </TableHead>
 
-    <TableBody tableBodyClass="divide-y">
-      <!-- TODO: 編集にリンクを付ける -->
-      <!-- TODO: 削除にゴミ箱マークを付ける -->
+    <TableBody class="divide-y">
       {#each workBookTasksForTable as task, index}
         <TableBodyRow>
+          <!-- ID -->
           <TableBodyCell
             class="xs:text-lg text-gray-700 dark:text-gray-300 truncate pl-2 md:pl-4 pr-0"
           >
@@ -178,16 +207,19 @@
           </TableBodyCell>
 
           <!-- 一言（コメント・ヒント） -->
-          <!-- Note: <TableBodyCell>コンポーネントだとon:inputが動作しない -->
+          <!-- See: -->
+          <!-- https://svelte.dev/docs/svelte/v5-migration-guide#Other-breaking-changes-contenteditable-behavior-change -->
           <td
-            contenteditable={true}
+            contenteditable="true"
             class="xs:text-lg hidden sm:table-cell text-gray-700 dark:text-gray-300 truncate"
-            on:input={(event) => updateComment(index, event)}
-            on:focus={handleFocus}
-            on:blur={handleBlur}
-            class:placeholder={task.comment === ''}
+            oninput={(event) => updateComment(index, event)}
+            onfocus={handleFocus}
+            onblur={handleBlur}
+            class:placeholder={!task.comment}
           >
-            {task.comment || placeholderForComment}
+            <span>
+              {task.comment || placeholderForComment}
+            </span>
           </td>
 
           <!-- 削除 -->
@@ -195,7 +227,7 @@
             <button
               type="button"
               class="flex justify-center items-center"
-              on:click={() => {
+              onclick={() => {
                 if (confirm('本当に削除しますか?')) {
                   try {
                     isDeleting = true;
@@ -207,7 +239,7 @@
               }}
               disabled={isDeleting}
             >
-              <TrashBinOutline class="w-5 h-5 xs:w-6 xs:h-6" />
+              <Trash2 class="w-5 h-5 xs:w-6 xs:h-6" />
               <span class="sr-only">削除</span>
             </button>
           </TableBodyCell>

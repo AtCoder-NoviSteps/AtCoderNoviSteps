@@ -7,7 +7,7 @@
     TableHead,
     TableHeadCell,
     Label,
-  } from 'flowbite-svelte';
+  } from 'svelte-5-ui-lib';
 
   import type { Tag } from '$lib/types/tag';
   //import { ATCODER_BASE_CONTEST_URL } from '$lib/constants/urls';
@@ -16,8 +16,13 @@
 
   //gradeでソート済みのTaskのリストと、APIから取得したtasklistを表示する
   //xport let tasks: Task[];
-  //APIから取得したリストで、データベースに追加していないTaskのリストにする
-  export let tags: Tag[];
+
+  interface Props {
+    //APIから取得したリストで、データベースに追加していないTaskのリストにする
+    tags: Tag[];
+  }
+
+  let { tags }: Props = $props();
 </script>
 
 <!-- TODO: 問題が多くなってきたら、ページネーションを導入する -->
@@ -30,9 +35,9 @@
     <TableHeadCell class="w-1/8">公開中</TableHeadCell>
     <TableHeadCell class="w-1/8"></TableHeadCell>
   </TableHead>
-  <TableBody tableBodyClass="divide-y">
+  <TableBody class="divide-y">
     {#each tags as tag}
-      <TableBodyRow height="40px">
+      <TableBodyRow>
         <TableBodyCell class="p-3">
           <Label>
             {#each newline(tag.name, 10) as line}

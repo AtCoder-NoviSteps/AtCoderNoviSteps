@@ -4,19 +4,36 @@
   import SelectWrapper from '$lib/components/SelectWrapper.svelte';
   import { WorkBookType } from '$lib/types/workbook';
 
-  // FIXME: 引数がとても多いので、コンポーネントに渡す引数を減らす方法を調べて実装。
-  export let authorId: string;
-  export let workBookTitle: string;
-  export let description: string;
-  export let editorialUrl: string;
-  export let isPublished: boolean;
-  export let isOfficial: boolean;
-  export let isReplenished: boolean;
-  export let workBookType: WorkBookType;
-  export let isAdmin: boolean;
-  export let isEditable: boolean = true;
-  export let message: string = '';
-  export let errors: Record<string, unknown> = {};
+  interface Props {
+    // FIXME: 引数がとても多いので、コンポーネントに渡す引数を減らす方法を調べて実装。
+    authorId: string;
+    workBookTitle: string;
+    description: string;
+    editorialUrl: string;
+    isPublished: boolean;
+    isOfficial: boolean;
+    isReplenished: boolean;
+    workBookType: WorkBookType;
+    isAdmin: boolean;
+    isEditable?: boolean;
+    message?: string;
+    errors?: Record<string, unknown>;
+  }
+
+  let {
+    authorId = $bindable(),
+    workBookTitle = $bindable(),
+    description = $bindable(),
+    editorialUrl = $bindable(),
+    isPublished = $bindable(),
+    isOfficial = $bindable(),
+    isReplenished = $bindable(),
+    workBookType = $bindable(),
+    isAdmin,
+    isEditable = true,
+    message = '',
+    errors = {},
+  }: Props = $props();
 
   let isPublishedOptions = [
     { value: false, name: '非公開' },
@@ -46,7 +63,7 @@
     }
   };
 
-  $: isCurriculum = workBookType === WorkBookType.CURRICULUM;
+  let isCurriculum = $derived(workBookType === WorkBookType.CURRICULUM);
 </script>
 
 <MessageHelperWrapper {message} />

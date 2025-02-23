@@ -1,8 +1,6 @@
 <script lang="ts">
-  export let data;
-
   import { get } from 'svelte/store';
-  import { Button, Tabs } from 'flowbite-svelte';
+  import { Button, Tabs } from 'svelte-5-ui-lib';
 
   import HeadingOne from '$lib/components/HeadingOne.svelte';
   import TabItemWrapper from '$lib/components/TabItemWrapper.svelte';
@@ -20,7 +18,9 @@
   import { Roles } from '$lib/types/user';
   import { canViewWorkBook } from '$lib/utils/workbooks';
 
-  $: workbooks = data.workbooks as WorkbooksList;
+  let { data } = $props();
+
+  let workbooks = $derived(data.workbooks as WorkbooksList);
   let loggedInUser = data.loggedInUser;
   // HACK: loggedInUser.roleで比較すると、@prisma/clientと型が異なるため、やむを得ずasでキャスト
   let role = loggedInUser?.role as Roles;
@@ -127,7 +127,7 @@
 
   <!-- TODO: ページネーションを追加 -->
   <div>
-    <Tabs tabStyle="underline" contentClass="bg-white dark:bg-gray-800">
+    <Tabs tabStyle="underline" contentClass="bg-white dark:bg-gray-800 mt-0 p-0">
       {#each workBookTabs as workBookTab}
         {#if loggedInUser && canViewWorkBook(role, workBookTab.canUsersView)}
           <TabItemWrapper
