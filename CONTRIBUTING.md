@@ -134,7 +134,7 @@
 
   `docker compose exec web pnpm dev --host`
 
-  http://localhost:5174/
+  [http://localhost:5174/](http://localhost:5174/)
 
 - ホーム画面が起動し、ユーザの登録・ログインができれば、環境構築は完了です。
 
