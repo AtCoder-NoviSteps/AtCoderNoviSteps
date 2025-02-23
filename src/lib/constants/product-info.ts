@@ -26,15 +26,17 @@ export const features = [
   },
 ];
 
+const X_BASE_URL = 'https://x.com/';
+
 export const members = [
-  { name: '@けんちょん', account: 'https://x.com/drken1215' },
-  { name: '@hiro', account: 'https://x.com/k_hiro1818' },
-  { name: '@ウルズニャー', account: 'https://x.com/uruzunyaa' },
-  { name: '@nonon', account: 'https://x.com/nonon_kyopro' },
-  { name: '@Bluebery1001', account: 'https://x.com/bluebery1001' },
-  { name: '@seekworser（ぷせうど）', account: 'https://x.com/pseudo_thermal' },
-  { name: '@Satsuki / さつき先生', account: 'https://x.com/Satsuki_8198' },
-  { name: '@あべみ', account: 'https://x.com/cats0830v' },
-  { name: '@わさせき', account: 'https://x.com/wasaseki' },
-  { name: '@toshi201', account: 'https://x.com/toshicon201' },
+  { name: '@けんちょん', account: `${X_BASE_URL}drken1215` },
+  { name: '@hiro', account: `${X_BASE_URL}k_hiro1818` },
+  { name: '@ウルズニャー', account: `${X_BASE_URL}uruzunyaa` },
+  { name: '@nonon', account: `${X_BASE_URL}nonon_kyopro` },
+  { name: '@Bluebery1001', account: `${X_BASE_URL}bluebery1001` },
+  { name: '@seekworser（ぷせうど）', account: `${X_BASE_URL}pseudo_thermal` },
+  { name: '@Satsuki / さつき先生', account: `${X_BASE_URL}Satsuki_8198` },
+  { name: '@あべみ', account: `${X_BASE_URL}cats0830v` },
+  { name: '@わさせき', account: `${X_BASE_URL}wasaseki` },
+  { name: '@toshi201', account: `${X_BASE_URL}toshicon201` },
 ];
