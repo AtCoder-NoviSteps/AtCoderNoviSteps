@@ -19,7 +19,9 @@
 
   const modal = uiHelpers();
   let modalStatus = $state(false);
-  const closeModal = modal.close;
+  const closeModal = () => {
+    modal.close();
+  };
 
   $effect(() => {
     modalStatus = modal.isOpen;
@@ -28,13 +30,13 @@
   let selectedTaskResult: TaskResult | null = $state(null);
   let selectedSubmissionStatus: string = $state('');
 
-  export function openModal(taskResult: TaskResult) {
+  export function openModal(taskResult: TaskResult): void {
     modal.open();
     selectedTaskResult = taskResult;
     selectedSubmissionStatus = taskResult.status_name;
   }
 
-  // FIXME: 回答状況をカスタマイズする場合はDBから取得できるようにする。
+  // FIXME: When customizing submission status, implement DB fetching for status options.
   const submissionStatusOptions = submission_statuses.map((status) => {
     const option = {
       value: status.status_name,
