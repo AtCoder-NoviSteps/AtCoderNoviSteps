@@ -51,7 +51,7 @@
 {#each taskGradeValues as taskGrade}
   <!-- Pendingは、Adminのみ表示。-->
   <!-- HACK: Svelteでcontinueに相当する構文は確認できず(2024年1月時点)。 -->
-  {#if countTasks(taskGrade) >= 1 && isShowTaskList(isAdmin, taskGrade)}
+  {#if countTasks(taskGrade) && isShowTaskList(isAdmin, taskGrade)}
     <TaskList
       grade={getTaskGradeLabel(taskGrade)}
       gradeColor={getTaskGradeColor(taskGrade)}
