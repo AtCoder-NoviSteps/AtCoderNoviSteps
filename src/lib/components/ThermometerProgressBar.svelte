@@ -71,11 +71,8 @@
   });
 </script>
 
-<!-- HACK: 本来であれば、Flowbite SvelteにあるProgressbarのcolor属性で色を指定したいが、同属性の拡張方法が分からないのでFlowbiteのコンポーネントをやむなく利用 -->
+<!-- HACK: svelte-5-ui-lib にある Progressbar では 回答状況に合わせた内訳を表示できないので、HTML + tailwindcss で実装 -->
 <!-- See: -->
-<!-- https://flowbite.com/docs/components/progress/ -->
-<!-- https://flowbite-svelte.com/docs/pages/typescript -->
-<!-- https://flowbite.com/docs/components/progress/ -->
 <!-- https://blog.canopas.com/designing-stunning-progress-bars-made-easy-with-tailwind-css-ae620ba7b4be -->
 <!-- https://www.creative-tim.com/learning-lab/tailwind-starter-kit/documentation/css/progressbars -->
 <div class="{width} rounded-full border border-gray-200 p-1">
