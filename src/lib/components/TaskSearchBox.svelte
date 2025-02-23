@@ -49,10 +49,10 @@
       );
   };
 
-  let searchWordsOrURL = $state('');
+  let searchQueryOrURL = $state('');
   let filteredTasks = $derived(
     tasks
-      .filter((task: Task) => isMatched(task, searchWordsOrURL))
+      .filter((task: Task) => isMatched(task, searchQueryOrURL))
       .slice(0, 30)
       .sort((firstTask: Task, secondTask: Task) =>
         firstTask.task_table_index.localeCompare(secondTask.task_table_index),
@@ -105,10 +105,10 @@
         type="search"
         placeholder="問題名かURLを入力してください。"
         class="flex-grow space-y-2"
-        bind:value={searchWordsOrURL}
+        bind:value={searchQueryOrURL}
         onchange={(e) => {
           if (e.target instanceof HTMLInputElement) {
-            searchWordsOrURL = e.target.value;
+            searchQueryOrURL = e.target.value;
             focusingId = PENDING;
           }
         }}
@@ -129,7 +129,7 @@
               workBookTaskMaxForTable = results.updatedWorkBookTasksForTable.length;
               selectedIndex = results.updatedWorkBookTasksForTable.length;
 
-              searchWordsOrURL = '';
+              searchQueryOrURL = '';
               focusingId = PENDING;
             }
           } else if (e.key === 'ArrowDown') {
@@ -193,7 +193,7 @@
             workBookTaskMaxForTable = results.updatedWorkBookTasksForTable.length;
             selectedIndex = results.updatedWorkBookTasksForTable.length;
 
-            searchWordsOrURL = '';
+            searchQueryOrURL = '';
             focusingId = PENDING;
           }}
         >
