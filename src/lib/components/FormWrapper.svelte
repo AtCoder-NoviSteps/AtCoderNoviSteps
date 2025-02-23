@@ -22,5 +22,7 @@
 </script>
 
 <form {method} {action} class={`w-full max-w-md ${marginTop} ${spaceYAxis}`} use:enhance>
-  {@render children?.()}
+  {#if children}
+    {@render children()}
+  {/if}
 </form>
