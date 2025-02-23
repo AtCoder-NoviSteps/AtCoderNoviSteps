@@ -77,12 +77,21 @@
     dropdownForUserPage.toggle();
   }
 
-  // HACK: Close dropdowns when user state changes
+  // Close dropdowns when user state changes
+  const dropdownManager = {
+    dropdowns: [
+      { name: 'dashboard', close: closeDropdownForDashboard },
+      { name: 'userPage', close: closeDropdownForUserPage },
+      { name: 'externalLinks', close: closeDropdownForExternalLinks },
+    ],
+    closeAll() {
+      this.dropdowns.forEach((dropdown) => dropdown.close());
+    },
+  };
+
   $effect(() => {
     if (user) {
-      closeDropdownForDashboard();
-      closeDropdownForUserPage();
-      closeDropdownForExternalLinks();
+      dropdownManager.closeAll();
     }
   });
 </script>
