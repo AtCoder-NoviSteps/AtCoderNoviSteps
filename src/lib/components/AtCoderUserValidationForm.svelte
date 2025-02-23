@@ -78,7 +78,7 @@
       <Input
         size="md"
         type="hidden"
-        name="usernatcoder_validationcodeame"
+        name="atcoder_validationcode"
         bind:value={atcoder_validationcode}
       />
 
