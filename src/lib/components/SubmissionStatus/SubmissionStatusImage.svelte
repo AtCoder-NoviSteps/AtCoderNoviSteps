@@ -24,7 +24,7 @@
 
 <Img src={imagePath} alt={imageAlt} imgClass="h-7 w-7 xs:h-8 xs:w-8" />
 
-<!-- TODO: 未ログインのときは、ログイン画面に遷移させる -->
+<!-- TODO: Redirect to login screen when user is not logged in -->
 {#if isLoggedIn}
   <div class="flex flex-col items-center ml-2 md:ml-4 text-xs">
     <div class="pb-1 dark:text-gray-300">
