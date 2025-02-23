@@ -18,5 +18,8 @@
 
 <h1 class={`${textSize} ${fontWeight} py-6 truncate dark:text-white`}>
   {title}
-  {@render children?.()}
+
+  {#if children}
+    {@render children()}
+  {/if}
 </h1>
