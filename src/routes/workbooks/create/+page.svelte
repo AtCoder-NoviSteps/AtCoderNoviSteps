@@ -36,7 +36,7 @@
 
   let workBookTasksForTable: WorkBookTaskCreate[] = $state([]);
 
-  $effect(() => {
+  $effect((): void => {
     workBookTasksForTable = [] as WorkBookTaskCreate[];
   });
 
