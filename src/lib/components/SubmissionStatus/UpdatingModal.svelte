@@ -27,7 +27,7 @@
     modalStatus = modal.isOpen;
   });
 
-  let selectedTaskResult: TaskResult | null = $state(null);
+  let selectedTaskResult = $state<TaskResult | null>(null);
   let selectedSubmissionStatus: string = $state('');
 
   export function openModal(taskResult: TaskResult): void {
