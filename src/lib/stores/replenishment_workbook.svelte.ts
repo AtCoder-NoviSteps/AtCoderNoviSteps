@@ -29,11 +29,11 @@ class ReplenishmentWorkBooksStore {
     }
   }
 
-  canView() {
+  canView(): boolean {
     return this.isShown;
   }
 
-  toggleView() {
+  toggleView(): void {
     this.isShown = !this.isShown;
 
     if (browser) {
