@@ -160,8 +160,9 @@
           <Toggle
             checked={replenishmentWorkBooksStore.canView()}
             onclick={replenishmentWorkBooksStore.toggleView}
+            aria-label="Toggle visibility of replenishment workbooks for curriculum"
           >
-            表示
+            問題集を表示
           </Toggle>
         </div>
       </div>
