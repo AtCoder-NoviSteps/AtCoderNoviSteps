@@ -23,6 +23,10 @@ describe('Replenishment workbooks store', () => {
     replenishmentWorkBooksStore.reset();
   });
 
+  afterEach(() => {
+    vi.unstubAllGlobals();
+  });
+
   test('expects to be invisible before toggling', () => {
     expect(replenishmentWorkBooksStore.canView()).toBeFalsy();
   });
