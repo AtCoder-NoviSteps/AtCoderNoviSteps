@@ -53,16 +53,20 @@ describe('Replenishment workbooks store', () => {
     expect(mockLocalStorage.setItem).toHaveBeenCalledWith(localStorageKey, JSON.stringify(true));
   });
 
-  test('handles SSR gracefully', () => {
+  test('handles invalid localStorage data', () => {
+    localStorage.setItem(localStorageKey, 'invalid-json');
+    expect(replenishmentWorkBooksStore.canView()).toBeFalsy();
+  });
+});
+
+describe('Replenishment workbooks store in SSR', () => {
+  beforeEach(() => {
     vi.mock('$app/environment', () => ({
       browser: false,
     }));
-
-    expect(replenishmentWorkBooksStore.canView()).toBeFalsy();
   });
 
-  test('handles invalid localStorage data', () => {
-    localStorage.setItem(localStorageKey, 'invalid-json');
+  test('handles SSR gracefully', () => {
     expect(replenishmentWorkBooksStore.canView()).toBeFalsy();
   });
 });
