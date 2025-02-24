@@ -8,11 +8,13 @@ vi.mock('$app/environment', () => ({
 
 describe('Replenishment workbooks store', () => {
   const localStorageKey = 'is_shown_replenishment_workbooks';
-  const mockLocalStorage = {
+  const mockLocalStorage: Storage = {
     getItem: vi.fn(),
     setItem: vi.fn(),
     removeItem: vi.fn(),
     clear: vi.fn(),
+    length: 0,
+    key: vi.fn(),
   };
 
   beforeEach(() => {
@@ -45,7 +47,7 @@ describe('Replenishment workbooks store', () => {
 
   // Note: This test is skipped because it is not possible to mock localStorage in JSDOM.
   test.skip('persists state in localStorage', () => {
-    mockLocalStorage.getItem.mockReturnValue(JSON.stringify(false));
+    (mockLocalStorage.getItem as jest.Mock).mockReturnValue(JSON.stringify(false));
 
     replenishmentWorkBooksStore.toggleView();
 
