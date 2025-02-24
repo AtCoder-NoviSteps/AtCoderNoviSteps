@@ -20,7 +20,13 @@ class ReplenishmentWorkBooksStore {
     }
 
     const savedStatus = localStorage.getItem(IS_SHOWN_REPLENISHMENT_WORKBOOKS);
-    return savedStatus ? JSON.parse(savedStatus) : false;
+
+    try {
+      return savedStatus ? JSON.parse(savedStatus) : false;
+    } catch (error) {
+      console.warn('Failed to parse replenishment workbooks visibility state:', error);
+      return false;
+    }
   }
 
   canView() {
