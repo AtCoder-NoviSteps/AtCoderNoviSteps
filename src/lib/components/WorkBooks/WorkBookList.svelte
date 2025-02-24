@@ -159,7 +159,7 @@
         <div class="mt-4 md:mt-0 pb-4">
           <Toggle
             checked={replenishmentWorkBooksStore.canView()}
-            onclick={replenishmentWorkBooksStore.toggleView}
+            onclick={() => replenishmentWorkBooksStore.toggleView()}
             aria-label="Toggle visibility of replenishment workbooks for curriculum"
           >
             問題集を表示
