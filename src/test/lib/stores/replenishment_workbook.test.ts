@@ -31,31 +31,16 @@ describe('Replenishment workbooks store', () => {
     expect(replenishmentWorkBooksStore.canView()).toBeFalsy();
   });
 
-  test('expects to be visible after toggling once', () => {
-    replenishmentWorkBooksStore.toggleView();
-    expect(replenishmentWorkBooksStore.canView()).toBeTruthy();
-  });
-
-  test('expects to be invisible after toggling twice', () => {
-    replenishmentWorkBooksStore.toggleView();
-    replenishmentWorkBooksStore.toggleView();
-    expect(replenishmentWorkBooksStore.canView()).toBeFalsy();
-  });
-
-  test('expects to be visible after toggling three times', () => {
-    for (let i = 1; i <= 3; i++) {
+  test.each([
+    { toggles: 1, expected: true },
+    { toggles: 2, expected: false },
+    { toggles: 3, expected: true },
+    { toggles: 4, expected: false },
+  ])('expects to be $expected after toggling $toggles times', ({ toggles, expected }) => {
+    for (let i = 1; i <= toggles; i++) {
       replenishmentWorkBooksStore.toggleView();
     }
-
-    expect(replenishmentWorkBooksStore.canView()).toBeTruthy();
-  });
-
-  test('expects to be invisible after toggling four times', () => {
-    for (let i = 1; i <= 4; i++) {
-      replenishmentWorkBooksStore.toggleView();
-    }
-
-    expect(replenishmentWorkBooksStore.canView()).toBeFalsy();
+    expect(replenishmentWorkBooksStore.canView()).toBe(expected);
   });
 
   // Note: This test is skipped because it is not possible to mock localStorage in JSDOM.
