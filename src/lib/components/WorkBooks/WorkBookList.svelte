@@ -4,6 +4,7 @@
   import { ButtonGroup, Button, Toggle } from 'svelte-5-ui-lib';
 
   import { taskGradesByWorkBookTypeStore } from '$lib/stores/task_grades_by_workbook_type';
+  import { replenishmentWorkBooksStore } from '$lib/stores/replenishment_workbook.svelte';
   import { canRead } from '$lib/utils/authorship';
   import { WorkBookType, type WorkbookList, type WorkbooksList } from '$lib/types/workbook';
   import { getTaskGradeLabel } from '$lib/utils/task';
@@ -57,8 +58,6 @@
     }),
   );
 
-  let isShowReplenishment: boolean = $state(false);
-
   function countReadableWorkbooks(workbooks: WorkbooksList): number {
     const results = workbooks.reduce((count, workbook: WorkbookList) => {
       const hasReadPermission = canRead(workbook.isPublished, userId, workbook.authorId);
@@ -103,27 +102,21 @@
 <!-- TODO: 「ユーザ作成」の問題集には、検索機能を追加 -->
 {#if workbookType === WorkBookType.CURRICULUM}
   <div class="mb-6">
-    <div class="flex flex-col md:flex-row items-start md:items-center justify-between">
-      <div class="flex items-center space-x-4">
-        <ButtonGroup>
-          {#each AVAILABLE_GRADES as grade}
-            <Button
-              onclick={() => filterByGradeMode(grade)}
-              class={selectedGrade === grade ? 'text-primary-700' : 'text-gray-900'}
-            >
-              {getTaskGradeLabel(grade)}
-            </Button>
-          {/each}
-        </ButtonGroup>
+    <div class="flex items-center space-x-4">
+      <ButtonGroup>
+        {#each AVAILABLE_GRADES as grade}
+          <Button
+            onclick={() => filterByGradeMode(grade)}
+            class={selectedGrade === grade ? 'text-primary-700' : 'text-gray-900'}
+          >
+            {getTaskGradeLabel(grade)}
+          </Button>
+        {/each}
+      </ButtonGroup>
 
-        <TooltipWrapper
-          tooltipContent="問題集のグレードを指定します（最頻値。2つ以上ある場合は、最も易しいグレードに掲載）"
-        />
-      </div>
-
-      <div class="mt-4 md:mt-0">
-        <Toggle bind:checked={isShowReplenishment}>「補充」があれば表示</Toggle>
-      </div>
+      <TooltipWrapper
+        tooltipContent="問題集のグレードを指定します（最頻値。2つ以上ある場合は、最も易しいグレードに掲載）"
+      />
     </div>
   </div>
 {/if}
@@ -144,31 +137,46 @@
     />
   </div>
 
-  <!-- カリキュラムの場合、かつ、公開されている【補充】問題集があるときだけ表示 -->
-  {#if workbookType === WorkBookType.CURRICULUM && readableReplenishedWorkbooksCount() && isShowReplenishment}
+  <!-- カリキュラム、かつ、公開されている【補充】問題集があるときのみ -->
+  {#if workbookType === WorkBookType.CURRICULUM && readableReplenishedWorkbooksCount()}
     <div class="mt-12">
-      <div class="flex items-center space-x-3 pb-4">
-        <div class="text-2xl dark:text-white">補充</div>
+      <!-- 見出しと説明文、表示の切り替え用ボタンを常に表示 -->
+      <div class="flex flex-col md:flex-row items-start md:items-center md:space-x-6">
+        <div class="flex items-center space-x-1 pb-0 md:pb-4">
+          <div class="text-2xl dark:text-white">補充</div>
 
-        <LabelWithTooltips
-          labelName=""
-          tooltipId="tooltip-for-replenished-workbooks"
-          tooltipContents={[
-            '（任意）',
-            '特定の課題を持つ人向けの問題集です。',
-            '苦手意識があれば、挑戦してみましょう。',
-          ]}
-        />
+          <LabelWithTooltips
+            labelName=""
+            tooltipId="tooltip-for-replenished-workbooks"
+            tooltipContents={[
+              '（任意）',
+              '特定の課題（数学的素養や実装力など）を持つ人向けの問題集です。',
+              '苦手意識があれば、挑戦してみましょう。',
+            ]}
+          />
+        </div>
+
+        <div class="mt-4 md:mt-0 pb-4">
+          <Toggle
+            checked={replenishmentWorkBooksStore.canView()}
+            onclick={replenishmentWorkBooksStore.toggleView}
+            aria-label="Toggle visibility of replenishment workbooks for curriculum"
+          >
+            問題集を表示
+          </Toggle>
+        </div>
       </div>
 
-      <WorkBookBaseTable
-        {workbookType}
-        workbooks={replenishedWorkbooks}
-        {workbookGradeModes}
-        {userId}
-        {role}
-        taskResults={taskResultsWithWorkBookId}
-      />
+      {#if replenishmentWorkBooksStore.canView()}
+        <WorkBookBaseTable
+          {workbookType}
+          workbooks={replenishedWorkbooks}
+          {workbookGradeModes}
+          {userId}
+          {role}
+          taskResults={taskResultsWithWorkBookId}
+        />
+      {/if}
     </div>
   {/if}
 {:else}
