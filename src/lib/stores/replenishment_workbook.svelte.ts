@@ -27,13 +27,13 @@ class ReplenishmentWorkBooksStore {
     return this.isShown;
   }
 
-  toggleView = () => {
+  toggleView() {
     this.isShown = !this.isShown;
 
     if (browser) {
       localStorage.setItem(IS_SHOWN_REPLENISHMENT_WORKBOOKS, JSON.stringify(this.isShown));
     }
-  };
+  }
 
   reset() {
     this.isShown = false;
