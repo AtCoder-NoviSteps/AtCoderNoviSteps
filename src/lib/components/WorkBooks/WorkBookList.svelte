@@ -58,8 +58,6 @@
     }),
   );
 
-  let isShowReplenishment: boolean = $state(replenishmentWorkBooksStore.canView());
-
   function countReadableWorkbooks(workbooks: WorkbooksList): number {
     const results = workbooks.reduce((count, workbook: WorkbookList) => {
       const hasReadPermission = canRead(workbook.isPublished, userId, workbook.authorId);
@@ -160,7 +158,7 @@
 
         <div class="mt-4 md:mt-0 pb-4">
           <Toggle
-            checked={isShowReplenishment}
+            checked={replenishmentWorkBooksStore.canView()}
             onclick={() => replenishmentWorkBooksStore.toggleView()}
             aria-label="Toggle visibility of replenishment workbooks for curriculum"
           >
@@ -169,7 +167,7 @@
         </div>
       </div>
 
-      {#if isShowReplenishment}
+      {#if replenishmentWorkBooksStore.canView()}
         <WorkBookBaseTable
           {workbookType}
           workbooks={replenishedWorkbooks}
