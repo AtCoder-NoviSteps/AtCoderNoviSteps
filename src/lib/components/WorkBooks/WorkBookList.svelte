@@ -4,6 +4,7 @@
   import { ButtonGroup, Button, Toggle } from 'svelte-5-ui-lib';
 
   import { taskGradesByWorkBookTypeStore } from '$lib/stores/task_grades_by_workbook_type';
+  import { replenishmentWorkBooksStore } from '$lib/stores/replenishment_workbook.svelte';
   import { canRead } from '$lib/utils/authorship';
   import { WorkBookType, type WorkbookList, type WorkbooksList } from '$lib/types/workbook';
   import { getTaskGradeLabel } from '$lib/utils/task';
@@ -56,8 +57,6 @@
       return gradeMode === selectedGrade && workbook.isReplenished;
     }),
   );
-
-  let isShowReplenishment: boolean = $state(false);
 
   function countReadableWorkbooks(workbooks: WorkbooksList): number {
     const results = workbooks.reduce((count, workbook: WorkbookList) => {
@@ -158,11 +157,16 @@
         </div>
 
         <div class="mt-4 md:mt-0 pb-4">
-          <Toggle bind:checked={isShowReplenishment}>表示</Toggle>
+          <Toggle
+            checked={replenishmentWorkBooksStore.canView()}
+            onclick={replenishmentWorkBooksStore.toggleView}
+          >
+            表示
+          </Toggle>
         </div>
       </div>
 
-      {#if isShowReplenishment}
+      {#if replenishmentWorkBooksStore.canView()}
         <WorkBookBaseTable
           {workbookType}
           workbooks={replenishedWorkbooks}
