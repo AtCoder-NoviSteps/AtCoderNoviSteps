@@ -54,8 +54,8 @@ importers:
         specifier: 1.50.1
         version: 1.50.1
       pnpm:
-        specifier: 10.5.1
-        version: 10.5.1
+        specifier: 10.5.2
+        version: 10.5.2
       prisma-erd-generator:
         specifier: 2.0.4
         version: 2.0.4(@prisma/client@5.22.0(prisma@5.22.0))(puppeteer@19.11.1(typescript@5.6.3))(ts-node@10.9.1(@types/node@22.13.5)(typescript@5.6.3))(typescript@5.6.3)
@@ -3526,8 +3526,8 @@ packages:
     engines: {node: '>=18'}
     hasBin: true
 
-  pnpm@10.5.1:
-    resolution: {integrity: sha512-xCTAdr0lwaWxiMN7scpWzB4Tb79TDZi8syiZgqCP0lUnuMnE7BE75eM5PDmvBFId1ke88dCAHq+KxqexTaMTrw==}
+  pnpm@10.5.2:
+    resolution: {integrity: sha512-2p3CjNP/QNBZIYgjWrJdMgKt2KIHr77caCIg5KACn/v/RWIQK55uRrTj+ei9U+bQXeSFRLDFfUsBeeIsdtEZmw==}
     engines: {node: '>=18.12'}
     hasBin: true
 
@@ -8192,7 +8192,7 @@ snapshots:
     optionalDependencies:
       fsevents: 2.3.2
 
-  pnpm@10.5.1: {}
+  pnpm@10.5.2: {}
 
   points-on-curve@0.2.0: {}
 
