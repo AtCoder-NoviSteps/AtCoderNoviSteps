@@ -172,8 +172,8 @@ importers:
         specifier: 4.1.4
         version: 4.1.4(picomatch@4.0.2)(svelte@5.20.5)(typescript@5.6.3)
       svelte-meta-tags:
-        specifier: 4.1.1
-        version: 4.1.1(svelte@5.20.5)(typescript@5.6.3)
+        specifier: 4.2.0
+        version: 4.2.0(svelte@5.20.5)
       sveltekit-superforms:
         specifier: 2.23.1
         version: 2.23.1(@sveltejs/kit@2.17.3(@sveltejs/vite-plugin-svelte@5.0.3(svelte@5.20.5)(vite@6.2.0(@types/node@22.13.8)(jiti@1.21.6)(yaml@2.7.0)))(svelte@5.20.5)(vite@6.2.0(@types/node@22.13.8)(jiti@1.21.6)(yaml@2.7.0)))(@types/json-schema@7.0.15)(svelte@5.20.5)(typescript@5.6.3)
@@ -3909,10 +3909,8 @@ packages:
     resolution: {integrity: sha512-xAg7SOnEhrm5zI3puOOKyy1OMcMlIJZYNJY7xLBwSze0UjhPLnWfj2GF2EpT0jmzaJKIWKHLsaSSajf35bcYnA==}
     engines: {node: '>=v12.22.7'}
 
-  schema-dts@1.1.2:
-    resolution: {integrity: sha512-MpNwH0dZJHinVxk9bT8XUdjKTxMYrA5bLtrrGmFA6PTLwlOKnhi67XoRd6/ty+Djt6ZC0slR57qFhZDNMI6DhQ==}
-    peerDependencies:
-      typescript: '>=4.1.0'
+  schema-dts@1.1.5:
+    resolution: {integrity: sha512-RJr9EaCmsLzBX2NDiO5Z3ux2BVosNZN5jo0gWgsyKvxKIUL5R3swNvoorulAeL9kLB0iTSX7V6aokhla2m7xbg==}
 
   semver@6.3.1:
     resolution: {integrity: sha512-BR7VvDCVHO+q2xBEWskxS6DJE1qRnb7DxzUrogb71CWoSficBxYsiAGd+Kl0mmq/MprG9yArRkyrQxTO6XjMzA==}
@@ -4141,8 +4139,8 @@ packages:
       svelte:
         optional: true
 
-  svelte-meta-tags@4.1.1:
-    resolution: {integrity: sha512-7FaGUy4PuTvUpHZ43K9qtetc/MTIVMduFH5PMs7NMtwNVlICDk903CQEpJDJgYXlRNgo7a/EHg6dAFqA5usF9A==}
+  svelte-meta-tags@4.2.0:
+    resolution: {integrity: sha512-VFnbdN4CNLeGaiRK++mhHKm/otgId3qM0hY6fu6vhh+e+jGE9Xr3kSUjgKAEnquktskEjUEo7W0ek7EANsyTHw==}
     peerDependencies:
       svelte: ^5.0.0
 
@@ -8574,9 +8572,7 @@ snapshots:
     dependencies:
       xmlchars: 2.2.0
 
-  schema-dts@1.1.2(typescript@5.6.3):
-    dependencies:
-      typescript: 5.6.3
+  schema-dts@1.1.5: {}
 
   semver@6.3.1: {}
 
@@ -8809,12 +8805,10 @@ snapshots:
     optionalDependencies:
       svelte: 5.20.5
 
-  svelte-meta-tags@4.1.1(svelte@5.20.5)(typescript@5.6.3):
+  svelte-meta-tags@4.2.0(svelte@5.20.5):
     dependencies:
-      schema-dts: 1.1.2(typescript@5.6.3)
+      schema-dts: 1.1.5
       svelte: 5.20.5
-    transitivePeerDependencies:
-      - typescript
 
   svelte@5.20.5:
     dependencies:
