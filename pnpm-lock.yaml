@@ -51,8 +51,8 @@ importers:
         specifier: ^0.477.0
         version: 0.477.0(svelte@5.22.5)
       playwright:
-        specifier: 1.50.1
-        version: 1.50.1
+        specifier: 1.51.0
+        version: 1.51.0
       pnpm:
         specifier: 10.5.2
         version: 10.5.2
