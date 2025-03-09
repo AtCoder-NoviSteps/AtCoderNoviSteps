@@ -17,8 +17,20 @@
   import UpdatingModal from '$lib/components/SubmissionStatus/UpdatingModal.svelte';
   import TaskTableBodyCell from '$lib/components/TaskTables/TaskTableBodyCell.svelte';
 
-  import { classifyContest, getContestNameLabel } from '$lib/utils/contest';
-  import { getTaskTableHeaderName } from '$lib/utils/task';
+  import {
+    type TaskResultsFilter,
+    taskResultsForABCLatest20,
+    taskResultsFromABC319Onwards,
+    taskResultsFromABC212ToABC318,
+  } from '$lib/utils/task_results_filter';
+
+  import {
+    type TaskTable,
+    taskTableForABCLatest20,
+    taskTableFromABC319Onwards,
+    taskTableFromABC212ToABC318,
+  } from '$lib/utils/task_table';
+
   import { getBackgroundColorFrom } from '$lib/services/submission_status';
 
   interface Props {
@@ -29,21 +41,18 @@
   let { taskResults, isLoggedIn }: Props = $props();
 
   // TODO: 任意のコンテスト種別に拡張
-  // Note:
-  // Before and from ABC212 onwards, the number and tendency of tasks are very different.
-  const fromABC212_Onwards = (taskResult: TaskResult) =>
-    classifyContest(taskResult.contest_id) === ContestType.ABC && taskResult.contest_id >= 'abc212';
+  let taskResultsFilter: TaskResultsFilter | null = taskResultsForABCLatest20(taskResults);
 
-  let selectedTaskResults: TaskResults = $derived(
-    filterTaskResultsByContestType(taskResults, fromABC212_Onwards),
+  let selectedTaskResults: TaskResults = $state(taskResultsFilter.run());
+
+  let aTaskTable: TaskTable | null = $state(
+    taskTableForABCLatest20(selectedTaskResults, ContestType.ABC),
   );
-  let contestIds: Array<string> = $derived(getContestIds(selectedTaskResults));
-  let taskTableIndices: Array<string> = $derived(
-    getTaskTableIndices(selectedTaskResults, ContestType.ABC),
-  );
-  let taskTable: Record<string, Record<string, TaskResult>> = $derived(
-    prepareTaskTable(selectedTaskResults, ContestType.ABC),
-  );
+
+  let contestIds: Array<string> = $derived(aTaskTable.getContestRoundIds());
+
+  let taskTableIndices: Array<string> = $derived(aTaskTable.getHeaderIdsForTask());
+  let taskTable: Record<string, Record<string, TaskResult>> = $derived(aTaskTable.prepare());
   // FIXME: 他のコンポーネントと完全に重複しているので、コンポーネントとして切り出す。
   let updatingModal: UpdatingModal | null = null;
 
@@ -53,71 +62,6 @@
       updatingModal.openModal(taskResult);
     } else {
       console.error('Failed to initialize UpdatingModal component.');
-    }
-  }
-
-  function filterTaskResultsByContestType(
-    taskResults: TaskResults,
-    condition: (taskResult: TaskResult) => boolean,
-  ): TaskResults {
-    return taskResults.filter(condition);
-  }
-
-  function getContestIds(selectedTaskResults: TaskResults): Array<string> {
-    const contestList = selectedTaskResults.map((taskResult: TaskResult) => taskResult.contest_id);
-    return Array.from(new Set(contestList)).sort().reverse();
-  }
-
-  function getTaskTableIndices(
-    selectedTaskResults: TaskResults,
-    selectedContestType: ContestType,
-  ): Array<string> {
-    const headerList = selectedTaskResults.map((taskResult: TaskResult) =>
-      getTaskTableHeaderName(selectedContestType, taskResult),
-    );
-    return Array.from(new Set(headerList)).sort();
-  }
-
-  /**
-   * Prepare a table for task and submission statuses.
-   *
-   * Computational complexity of preparation table: O(N), where N is the number of task results.
-   * Computational complexity of accessing table: O(1).
-   *
-   * @param selectedTaskResults Task results to be shown in the table.
-   * @param selectedContestType Contest type of the task results.
-   * @returns A table for task and submission statuses.
-   */
-  function prepareTaskTable(
-    selectedTaskResults: TaskResults,
-    selectedContestType: ContestType,
-  ): Record<string, Record<string, TaskResult>> {
-    const table: Record<string, Record<string, TaskResult>> = {};
-
-    selectedTaskResults.forEach((taskResult: TaskResult) => {
-      const contestId = taskResult.contest_id;
-      const taskTableIndex = getTaskTableHeaderName(selectedContestType, taskResult);
-
-      if (!table[contestId]) {
-        table[contestId] = {};
-      }
-
-      table[contestId][taskTableIndex] = taskResult;
-    });
-
-    return table;
-  }
-
-  function getContestNameLabelForTaskTable(contestId: string): string {
-    let contestNameLabel = getContestNameLabel(contestId);
-    const contestType = classifyContest(contestId);
-
-    switch (contestType) {
-      case ContestType.ABC:
-        return contestNameLabel.replace('ABC ', '');
-      // TODO: Add cases for other contest types.
-      default:
-        return contestNameLabel;
     }
   }
 
@@ -144,16 +88,37 @@
 <!-- https://flowbite-svelte.com/docs/components/button-group -->
 <ButtonGroup class="m-4 contents-center">
   <Button
-    onclick={() => filterTaskResultsByContestType(taskResults, fromABC212_Onwards)}
+    onclick={() => (
+      (taskResultsFilter = taskResultsForABCLatest20(taskResults)),
+      (aTaskTable = taskTableForABCLatest20(selectedTaskResults, ContestType.ABC))
+    )}
     aria-label="Filter contests from ABC212 onwards"
   >
-    ABC212〜
+    ABC Latest 20 rounds
+  </Button>
+  <Button
+    onclick={() => (
+      (taskResultsFilter = taskResultsFromABC319Onwards(taskResults)),
+      (aTaskTable = taskTableFromABC319Onwards(selectedTaskResults, ContestType.ABC))
+    )}
+    aria-label="Filter contests from ABC319 onwards"
+  >
+    ABC319〜
+  </Button>
+  <Button
+    onclick={() => (
+      (taskResultsFilter = taskResultsFromABC212ToABC318(taskResults)),
+      (aTaskTable = taskTableFromABC212ToABC318(selectedTaskResults, ContestType.ABC))
+    )}
+    aria-label="Filter contests from ABC319 onwards"
+  >
+    ABC212〜318
   </Button>
 </ButtonGroup>
 
 <!-- TODO: コンテスト種別に応じて動的に変更できるようにする -->
 <Heading tag="h2" class="text-2xl pb-3 text-gray-900 dark:text-white">
-  {'AtCoder Beginners Contest 212 〜'}
+  {aTaskTable?.getTitle()}
 </Heading>
 
 <!-- TODO: ページネーションを実装 -->
@@ -178,8 +143,7 @@
         {#each contestIds as contestId}
           <TableBodyRow class="flex flex-wrap xl:table-row">
             <TableBodyCell class="w-full xl:w-16 truncate px-2 py-2 text-center border">
-              <!-- FIXME: コンテスト種別に合わせて修正できるようにする -->
-              {getContestNameLabelForTaskTable(contestId)}
+              {aTaskTable?.getContestRoundLabel(contestId)}
             </TableBodyCell>
 
             {#each taskTableIndices as taskIndex}
