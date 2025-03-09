@@ -83,12 +83,12 @@
   let taskTableHeaderIds: Array<string> = $derived(taskTableGenerator.getHeaderIdsForTask());
   let contestIds: Array<string> = $derived(taskTableGenerator.getContestRoundIds());
 
-  function getTaskTableTitle(taskTable: TaskTableGenerator): string {
-    return taskTable.getTitle() ?? '';
+  function getTaskTableTitle(taskTableGenerator: TaskTableGenerator): string {
+    return taskTableGenerator.getTitle() ?? '';
   }
 
-  function getContestRoundLabel(taskTable: TaskTableGenerator, contestId: string): string {
-    return taskTable.getContestRoundLabel(contestId);
+  function getContestRoundLabel(taskTableGenerator: TaskTableGenerator, contestId: string): string {
+    return taskTableGenerator.getContestRoundLabel(contestId);
   }
 
   // FIXME: 他のコンポーネントと完全に重複しているので、コンポーネントとして切り出す。
