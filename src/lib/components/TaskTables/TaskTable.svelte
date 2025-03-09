@@ -25,11 +25,11 @@
   } from '$lib/utils/task_results_filter';
 
   import {
-    type TaskTable,
-    taskTableForABCLatest20,
-    taskTableFromABC319Onwards,
-    taskTableFromABC212ToABC318,
-  } from '$lib/utils/task_table';
+    type TaskTableGenerator,
+    taskTableGeneratorForABCLatest20,
+    taskTableGeneratorFromABC319Onwards,
+    taskTableGeneratorFromABC212ToABC318,
+  } from '$lib/utils/task_table_generator';
 
   import { getBackgroundColorFrom } from '$lib/services/submission_status';
 
@@ -40,19 +40,57 @@
 
   let { taskResults, isLoggedIn }: Props = $props();
 
-  // TODO: 任意のコンテスト種別に拡張
-  let taskResultsFilter: TaskResultsFilter | null = taskResultsForABCLatest20(taskResults);
+  // TODO: 任意のコンテスト種別を追加
+  // TODO: コンテスト種別の並び順を決める
+  const contestFilterConfigs = {
+    abcLatest20Rounds: {
+      filter: () => taskResultsForABCLatest20(taskResults),
+      table: (results: TaskResults) => taskTableGeneratorForABCLatest20(results, ContestType.ABC),
+      buttonLabel: 'ABC 最新 20 回',
+      ariaLabel: 'Filter ABC latest 20 rounds',
+    },
+    abc319Onwards: {
+      filter: () => taskResultsFromABC319Onwards(taskResults),
+      table: (results: TaskResults) =>
+        taskTableGeneratorFromABC319Onwards(results, ContestType.ABC),
+      buttonLabel: 'ABC319 〜',
+      ariaLabel: 'Filter contests from ABC 319 onwards',
+    },
+    abc212To318: {
+      filter: () => taskResultsFromABC212ToABC318(taskResults),
+      table: (results: TaskResults) =>
+        taskTableGeneratorFromABC212ToABC318(results, ContestType.ABC),
+      buttonLabel: 'ABC212 〜 318',
+      ariaLabel: 'Filter contests from ABC 212 to ABC 318',
+    },
+  };
 
-  let selectedTaskResults: TaskResults = $state(taskResultsFilter.run());
+  type ContestTypeFilter = 'abcLatest20Rounds' | 'abc319Onwards' | 'abc212To318';
 
-  let aTaskTable: TaskTable | null = $state(
-    taskTableForABCLatest20(selectedTaskResults, ContestType.ABC),
+  let activeContestType = $state<ContestTypeFilter>('abcLatest20Rounds');
+
+  // Select the task results based on the active contest type.
+  let taskResultsFilter: TaskResultsFilter = $derived(
+    contestFilterConfigs[activeContestType].filter(),
   );
+  let selectedTaskResults: TaskResults = $derived(taskResultsFilter.run());
 
-  let contestIds: Array<string> = $derived(aTaskTable.getContestRoundIds());
+  // Generate the task table based on the selected task results.
+  let taskTableGenerator: TaskTableGenerator = $derived(
+    contestFilterConfigs[activeContestType].table(selectedTaskResults),
+  );
+  let taskTable: Record<string, Record<string, TaskResult>> = $derived(taskTableGenerator.run());
+  let taskTableHeaderIds: Array<string> = $derived(taskTableGenerator.getHeaderIdsForTask());
+  let contestIds: Array<string> = $derived(taskTableGenerator.getContestRoundIds());
 
-  let taskTableIndices: Array<string> = $derived(aTaskTable.getHeaderIdsForTask());
-  let taskTable: Record<string, Record<string, TaskResult>> = $derived(aTaskTable.prepare());
+  function getTaskTableTitle(taskTable: TaskTableGenerator): string {
+    return taskTable.getTitle() ?? '';
+  }
+
+  function getContestRoundLabel(taskTable: TaskTableGenerator, contestId: string): string {
+    return taskTable.getContestRoundLabel(contestId);
+  }
+
   // FIXME: 他のコンポーネントと完全に重複しているので、コンポーネントとして切り出す。
   let updatingModal: UpdatingModal | null = null;
 
@@ -83,42 +121,22 @@
   }
 </script>
 
-<!-- TODO: コンテスト種別のボタンの並び順を決める -->
 <!-- See: -->
 <!-- https://flowbite-svelte.com/docs/components/button-group -->
 <ButtonGroup class="m-4 contents-center">
-  <Button
-    onclick={() => (
-      (taskResultsFilter = taskResultsForABCLatest20(taskResults)),
-      (aTaskTable = taskTableForABCLatest20(selectedTaskResults, ContestType.ABC))
-    )}
-    aria-label="Filter contests from ABC212 onwards"
-  >
-    ABC Latest 20 rounds
-  </Button>
-  <Button
-    onclick={() => (
-      (taskResultsFilter = taskResultsFromABC319Onwards(taskResults)),
-      (aTaskTable = taskTableFromABC319Onwards(selectedTaskResults, ContestType.ABC))
-    )}
-    aria-label="Filter contests from ABC319 onwards"
-  >
-    ABC319〜
-  </Button>
-  <Button
-    onclick={() => (
-      (taskResultsFilter = taskResultsFromABC212ToABC318(taskResults)),
-      (aTaskTable = taskTableFromABC212ToABC318(selectedTaskResults, ContestType.ABC))
-    )}
-    aria-label="Filter contests from ABC319 onwards"
-  >
-    ABC212〜318
-  </Button>
+  {#each Object.entries(contestFilterConfigs) as [type, config]}
+    <Button
+      onclick={() => (activeContestType = type as ContestTypeFilter)}
+      class={activeContestType === type ? 'active-button-class' : ''}
+      aria-label={config.ariaLabel}
+    >
+      {config.buttonLabel}
+    </Button>
+  {/each}
 </ButtonGroup>
 
-<!-- TODO: コンテスト種別に応じて動的に変更できるようにする -->
 <Heading tag="h2" class="text-2xl pb-3 text-gray-900 dark:text-white">
-  {aTaskTable?.getTitle()}
+  {getTaskTableTitle(taskTableGenerator)}
 </Heading>
 
 <!-- TODO: ページネーションを実装 -->
@@ -128,34 +146,35 @@
 <div class="container w-full overflow-auto border rounded-md">
   <Table shadow id="task-table" class="text-md table-fixed" aria-label="Task table">
     <TableHead class="text-sm bg-gray-100">
-      <TableHeadCell class="w-full xl:w-16 px-2 text-center border" scope="col">Round</TableHeadCell
-      >
+      <TableHeadCell class="w-full xl:w-16 px-2 text-center border" scope="col">
+        Round
+      </TableHeadCell>
 
-      {#if taskTableIndices.length}
-        {#each taskTableIndices as taskTableIndex}
-          <TableHeadCell class="text-center border" scope="col">{taskTableIndex}</TableHeadCell>
+      {#if taskTableHeaderIds.length}
+        {#each taskTableHeaderIds as taskTableHeaderId}
+          <TableHeadCell class="text-center border" scope="col">{taskTableHeaderId}</TableHeadCell>
         {/each}
       {/if}
     </TableHead>
 
     <TableBody class="divide-y">
-      {#if contestIds.length && taskTableIndices.length}
+      {#if contestIds.length && taskTableHeaderIds.length}
         {#each contestIds as contestId}
           <TableBodyRow class="flex flex-wrap xl:table-row">
             <TableBodyCell class="w-full xl:w-16 truncate px-2 py-2 text-center border">
-              {aTaskTable?.getContestRoundLabel(contestId)}
+              {getContestRoundLabel(taskTableGenerator, contestId)}
             </TableBodyCell>
 
-            {#each taskTableIndices as taskIndex}
+            {#each taskTableHeaderIds as taskTableHeaderId}
               <TableBodyCell
-                id={contestId + '-' + taskIndex}
-                class={getBodyCellClasses(contestId, taskIndex)}
+                id={contestId + '-' + taskTableHeaderId}
+                class={getBodyCellClasses(contestId, taskTableHeaderId)}
               >
-                {#if taskTable[contestId][taskIndex]}
+                {#if taskTable[contestId][taskTableHeaderId]}
                   <TaskTableBodyCell
-                    taskResult={taskTable[contestId][taskIndex]}
+                    taskResult={taskTable[contestId][taskTableHeaderId]}
                     {isLoggedIn}
-                    onClick={() => openModal(taskTable[contestId][taskIndex])}
+                    onClick={() => openModal(taskTable[contestId][taskTableHeaderId])}
                   />
                 {/if}
               </TableBodyCell>

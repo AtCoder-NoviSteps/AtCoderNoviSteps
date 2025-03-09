@@ -43,14 +43,6 @@ export abstract class TaskResultsFilter {
    * and returns a boolean indicating whether the task result meets the condition.
    */
   protected abstract setCondition(): (taskResult: TaskResult) => boolean;
-
-  /**
-   *  This component represents a table for displaying tasks.
-   *  It includes an abstract method `getAbbreviatedName` that should be implemented by subclasses to return an abbreviated name for filtered tasks.
-   * @abstract
-   * @protected
-   */
-  protected abstract getAbbreviatedName(): string;
 }
 
 // ABC Latest 20 rounds
@@ -75,10 +67,6 @@ class TaskResultsForABCLatest20 extends TaskResultsFilter {
   protected setCondition(): (taskResult: TaskResult) => boolean {
     return (taskResult: TaskResult) => classifyContest(taskResult.contest_id) === ContestType.ABC;
   }
-
-  getAbbreviatedName(): string {
-    return 'ABC 最新20回';
-  }
 }
 
 // ABC319 〜 (2023/09/09 〜 )
@@ -88,10 +76,6 @@ class TaskResultsFromABC319Onwards extends TaskResultsFilter {
     return (taskResult: TaskResult) =>
       taskResult.contest_id >= 'abc319' && taskResult.contest_id <= 'abc999';
   }
-
-  getAbbreviatedName(): string {
-    return 'ABC319 〜 ';
-  }
 }
 
 // ABC212 〜 ABC318 (2021/07/31 〜 2023/09/02)
@@ -100,9 +84,5 @@ class TaskResultsFromABC212ToABC318 extends TaskResultsFilter {
   protected setCondition(): (taskResult: TaskResult) => boolean {
     return (taskResult: TaskResult) =>
       taskResult.contest_id >= 'abc212' && taskResult.contest_id <= 'abc318';
-  }
-
-  getAbbreviatedName(): string {
-    return 'ABC212 〜 318';
   }
 }

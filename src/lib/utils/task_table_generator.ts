@@ -4,24 +4,33 @@ import { ContestType } from '$lib/types/contest';
 import { getContestNameLabel } from '$lib/utils/contest';
 import { getTaskTableHeaderName } from '$lib/utils/task';
 
-export const taskTableForABCLatest20 = (taskResults: TaskResults, contestType: ContestType) => {
-  return new TaskTableForABCLatest20(taskResults, contestType);
+export const taskTableGeneratorForABCLatest20 = (
+  taskResults: TaskResults,
+  contestType: ContestType,
+) => {
+  return new TaskTableGeneratorForABCLatest20(taskResults, contestType);
 };
 
-export const taskTableFromABC319Onwards = (taskResults: TaskResults, contestType: ContestType) => {
-  return new TaskTableFromABC319Onwards(taskResults, contestType);
+export const taskTableGeneratorFromABC319Onwards = (
+  taskResults: TaskResults,
+  contestType: ContestType,
+) => {
+  return new TaskTableGeneratorFromABC319Onwards(taskResults, contestType);
 };
 
-export const taskTableFromABC212ToABC318 = (taskResults: TaskResults, contestType: ContestType) => {
-  return new TaskTableFromABC212ToABC318(taskResults, contestType);
+export const taskTableGeneratorFromABC212ToABC318 = (
+  taskResults: TaskResults,
+  contestType: ContestType,
+) => {
+  return new TaskTableGeneratorFromABC212ToABC318(taskResults, contestType);
 };
 
-export abstract class TaskTable {
+export abstract class TaskTableGenerator {
   protected selectedTaskResults: TaskResults;
   protected contestType: ContestType;
 
   /**
-   * Creates a new TaskTable instance.
+   * Creates a new TaskTableGenerator instance.
    *
    * @param {TaskResults} selectedTaskResults - The task results to be displayed in the table.
    * @param {ContestType} contestType - The type of contest associated with these tasks.
@@ -39,7 +48,7 @@ export abstract class TaskTable {
    *
    * @returns A table for task and submission statuses.
    */
-  prepare(): Record<string, Record<string, TaskResult>> {
+  run(): Record<string, Record<string, TaskResult>> {
     const table: Record<string, Record<string, TaskResult>> = {};
 
     this.selectedTaskResults.forEach((taskResult: TaskResult) => {
@@ -103,7 +112,7 @@ export abstract class TaskTable {
   abstract getTitle(): string;
 }
 
-class TaskTableForABC extends TaskTable {
+class TaskTableGeneratorForABC extends TaskTableGenerator {
   getContestRoundLabel(contestId: string): string {
     const contestNameLabel = getContestNameLabel(contestId);
     return contestNameLabel.replace('ABC ', '');
@@ -114,19 +123,19 @@ class TaskTableForABC extends TaskTable {
   }
 }
 
-class TaskTableForABCLatest20 extends TaskTableForABC {
+class TaskTableGeneratorForABCLatest20 extends TaskTableGeneratorForABC {
   getTitle(): string {
     return 'AtCoder Beginners Contest latest 20 rounds';
   }
 }
 
-class TaskTableFromABC319Onwards extends TaskTableForABC {
+class TaskTableGeneratorFromABC319Onwards extends TaskTableGeneratorForABC {
   getTitle(): string {
     return 'AtCoder Beginners Contest 319 〜 ';
   }
 }
 
-class TaskTableFromABC212ToABC318 extends TaskTableForABC {
+class TaskTableGeneratorFromABC212ToABC318 extends TaskTableGeneratorForABC {
   getTitle(): string {
     return 'AtCoder Beginners Contest 212 〜 318';
   }
