@@ -162,6 +162,7 @@ const atCoderUniversityPrefixes = getContestPrefixes(ATCODER_UNIVERSITIES);
  */
 const ATCODER_OTHERS: ContestPrefix = {
   chokudai_S: 'Chokudai SpeedRun',
+  'code-festival-2014-qualb': 'Code Festival 2014 予選',
   'code-festival-2014-final': 'Code Festival 2014 決勝',
   'code-thanks-festival': 'CODE THANKS FESTIVAL',
   donuts: 'Donutsプロコンチャレンジ',
