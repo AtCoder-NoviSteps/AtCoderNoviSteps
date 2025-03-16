@@ -1,0 +1,105 @@
+import type { TaskResults, TaskResult } from '$lib/types/task';
+
+/**
+ * Provider interface for building and managing contest tables.
+ *
+ * This interface defines the contract for components that create, filter, and
+ * generate contest tables from task results.
+ *
+ */
+export interface ContestTableProvider {
+  /**
+   * Filters the provided task results according to implementation-specific criteria.
+   *
+   * @param {TaskResults} taskResults - The original task results to be filtered
+   * @returns {TaskResults} The filtered task results
+   */
+  filter(taskResults: TaskResults): TaskResults;
+
+  /**
+   * Generates a contest table based on the provided filtered task results.
+   *
+   * @param {TaskResults} filteredTaskResults - The filtered task results to use for table generation
+   * @returns {ContestTable} The generated contest table
+   */
+  generateTable(filteredTaskResults: TaskResults): ContestTable;
+
+  /**
+   * Retrieves the unique identifiers for all contest rounds.
+   *
+   * @param {TaskResults} filteredTaskResults - The filtered task results to use for table generation
+   * @returns {Array<string>} An array of contest round identifiers.
+   */
+  getContestRoundIds(filteredTaskResults: TaskResults): Array<string>;
+
+  /**
+   * Retrieves an array of header IDs associated with the current contest tasks.
+   * These IDs are used to identify and display the relevant columns in the task table.
+   *
+   * @param {TaskResults} filteredTaskResults - The filtered task results to use for table generation
+   * @returns {Array<string>} An array of string IDs corresponding to the header columns for the task.
+   */
+  getHeaderIdsForTask(filteredTaskResults: TaskResults): Array<string>;
+
+  /**
+   * Retrieves metadata associated with the contest table.
+   *
+   * @returns {ContestTableMetaData} Metadata for the contest table
+   */
+  getMetadata(): ContestTableMetaData;
+
+  /**
+   * Returns a formatted label for the contest round.
+   *
+   * This abstract method must be implemented by subclasses to provide
+   * a string representation of the contest round that can be displayed
+   * in the task table.
+   *
+   * @param contestId - The ID of the contest.
+   *
+   * @returns {string} The formatted label string for the contest round.
+   */
+  getContestRoundLabel(contestId: string): string;
+}
+
+/**
+ * Represents a two-dimensional table of contest results.
+ *
+ * The structure is organized as a nested record:
+ * - The outer keys represent contest id
+ * - The inner keys represent task id
+ * - The values are the results for each task
+ *
+ * @example
+ * {
+ *   "abc396": {
+ *     "abc396_a": {contest_id: "abc396", task_id: "abc396_a", status_name: "ac", ...},
+ *     "abc396_b": {contest_id: "abc396", task_id: "abc396_b", status_name: "ac", ...},
+ *     "abc396_c": {contest_id: "abc396", task_id: "abc396_c", status_name: "ac_with_editorial", ...},
+ *     ...,
+ *     "abc396_g": {contest_id: "abc396", task_id: "abc396_g", status_name: "wa", ...},
+ *   },
+ *   "abc395": {
+ *     "abc395_a": {contest_id: "abc395", task_id: "abc395_a", status_name: "ac", ...},
+ *     "abc395_b": {contest_id: "abc395", task_id: "abc395_b", status_name: "ac", ...},
+ *     "abc395_c": {contest_id: "abc395", task_id: "abc395_c", status_name: "ac", ...},
+ *     ...,
+ *     "abc395_g": {contest_id: "abc395", task_id: "abc395_g", status_name: "wa", ...},
+ *   },
+ * }
+ */
+export type ContestTable = Record<string, Record<string, TaskResult>>;
+
+/**
+ * Metadata for configuring a contest table's display properties.
+ *
+ * @typedef {Object} ContestTableMetaData
+ * @property {string} title - The title text to display for the contest table.
+ * @property {string} buttonLabel - The text to display on the contest table's primary action button.
+ * @property {string} ariaLabel - Accessibility label for screen readers describing the contest table.
+ */
+export type ContestTableMetaData = {
+  title: string;
+  buttonLabel: string;
+  ariaLabel: string;
+};
