@@ -106,7 +106,7 @@
 <!-- https://github.com/kenkoooo/AtCoderProblems/blob/master/atcoder-problems-frontend/src/pages/TablePage/AtCoderRegularTable.tsx -->
 <!-- https://github.com/birdou/atcoder-blogs/blob/main/app/atcoder-blogs-frontend/src/pages/BlogTablePage/BlogTablePage.tsx -->
 <!-- https://tailwindcss.com/docs/position#sticky-positioning-elements -->
-<div class="container w-full overflow-hidden rounded-md border border-gray-300 shadow-sm">
+<div class="container w-full overflow-hidden rounded-md border border-gray-100 shadow-sm">
   <div class="w-full overflow-auto">
     <Table id="task-table" class="text-md table-fixed w-full" aria-label="Task table">
       <TableHead class="text-sm bg-gray-100">
