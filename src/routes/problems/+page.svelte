@@ -50,10 +50,5 @@
     <!-- <TabItemWrapper title="Tags">
       <div class="m-4">Comming Soon.</div>
     </TabItemWrapper> -->
-
-    <!-- Latest -->
-    <!-- <TabItemWrapper title="Latest">
-      <div class="m-4">Comming Soon.</div>
-    </TabItemWrapper> -->
   </Tabs>
 </div>
