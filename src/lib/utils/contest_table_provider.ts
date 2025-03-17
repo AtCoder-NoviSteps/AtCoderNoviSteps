@@ -117,8 +117,10 @@ class ABCLatest20RoundsProvider extends ContestTableProviderBase {
 // 7 tasks per contest
 class ABC319OnwardsProvider extends ContestTableProviderBase {
   protected setFilterCondition(): (taskResult: TaskResult) => boolean {
-    return (taskResult: TaskResult) =>
-      taskResult.contest_id >= 'abc319' && taskResult.contest_id <= 'abc999';
+    return (taskResult: TaskResult) => {
+      const contestRound = parseContestRound(taskResult.contest_id, 'abc');
+      return contestRound >= 319;
+    };
   }
 
   getMetadata(): ContestTableMetaData {
@@ -142,8 +144,10 @@ class ABC319OnwardsProvider extends ContestTableProviderBase {
 // Before and from ABC212 onwards, the number and tendency of tasks are very different.
 class ABC212ToABC318Provider extends ContestTableProviderBase {
   protected setFilterCondition(): (taskResult: TaskResult) => boolean {
-    return (taskResult: TaskResult) =>
-      taskResult.contest_id >= 'abc212' && taskResult.contest_id <= 'abc318';
+    return (taskResult: TaskResult) => {
+      const contestRound = parseContestRound(taskResult.contest_id, 'abc');
+      return contestRound >= 212 && contestRound <= 318;
+    };
   }
 
   getMetadata(): ContestTableMetaData {
@@ -158,6 +162,17 @@ class ABC212ToABC318Provider extends ContestTableProviderBase {
     const contestNameLabel = getContestNameLabel(contestId);
     return contestNameLabel.replace('ABC ', '');
   }
+}
+
+function parseContestRound(contestId: string, prefix: string): number {
+  const withoutPrefix = contestId.replace(prefix, '');
+
+  // Verify the prefix was present and the remaining string is numeric
+  if (withoutPrefix === contestId || !/^\d+$/.test(withoutPrefix)) {
+    throw new Error(`Invalid contest id has given: ${contestId}`);
+  }
+
+  return parseInt(withoutPrefix, 10);
 }
 
 // TODO: Add providers for other contest types if needs.
