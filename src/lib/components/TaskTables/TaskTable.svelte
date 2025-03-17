@@ -64,7 +64,8 @@
   }
 
   function getBodyCellClasses(contestId: string, taskIndex: string): string {
-    const baseClasses = 'w-1/2 xs:w-1/3 sm:w-1/4 md:w-1/5 lg:w-1/6 px-1 py-1 border';
+    const baseClasses =
+      'w-1/2 xs:w-1/3 sm:w-1/4 md:w-1/5 lg:w-1/6 px-1 py-1 border hover:brightness-125 transition-all';
     const backgroundColor = getBackgroundColor(taskTable[contestId][taskIndex]);
 
     return `${baseClasses} ${backgroundColor}`;
