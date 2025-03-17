@@ -6,9 +6,10 @@
     taskGrade: TaskGrade | string;
     defaultPadding?: number;
     defaultWidth?: number;
+    reducedWidth?: number;
   }
 
-  let { taskGrade, defaultPadding = 1, defaultWidth = 10 }: Props = $props();
+  let { taskGrade, defaultPadding = 1, defaultWidth = 10, reducedWidth = 8 }: Props = $props();
 
   let grade = $derived(getTaskGradeLabel(taskGrade));
   let gradeColor = $derived(getTaskGradeColor(taskGrade));
@@ -16,7 +17,7 @@
 
 <div class="rounded-lg border-2 border-white">
   <div
-    class="p-{defaultPadding} w-8 xs:w-{defaultWidth} text-sm xs:text-md text-center rounded-md {toWhiteTextIfNeeds(
+    class="p-{defaultPadding} w-{reducedWidth} xs:w-{defaultWidth} text-sm xs:text-md text-center rounded-md {toWhiteTextIfNeeds(
       grade,
     )} {gradeColor}"
   >
