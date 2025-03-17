@@ -165,7 +165,14 @@ class ABC212ToABC318Provider extends ContestTableProviderBase {
 }
 
 function parseContestRound(contestId: string, prefix: string): number {
-  return parseInt(contestId.replace(prefix, ''), 10);
+  const withoutPrefix = contestId.replace(prefix, '');
+
+  // Verify the prefix was present and the remaining string is numeric
+  if (withoutPrefix === contestId || !/^\d+$/.test(withoutPrefix)) {
+    throw new Error(`Invalid contest id has given: ${contestId}`);
+  }
+
+  return parseInt(withoutPrefix, 10);
 }
 
 // TODO: Add providers for other contest types if needs.
