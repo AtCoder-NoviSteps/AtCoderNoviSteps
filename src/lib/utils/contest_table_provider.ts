@@ -118,8 +118,12 @@ class ABCLatest20RoundsProvider extends ContestTableProviderBase {
 class ABC319OnwardsProvider extends ContestTableProviderBase {
   protected setFilterCondition(): (taskResult: TaskResult) => boolean {
     return (taskResult: TaskResult) => {
+      if (classifyContest(taskResult.contest_id) !== this.contestType) {
+        return false;
+      }
+
       const contestRound = parseContestRound(taskResult.contest_id, 'abc');
-      return contestRound >= 319;
+      return contestRound >= 319 && contestRound <= 999;
     };
   }
 
@@ -145,6 +149,10 @@ class ABC319OnwardsProvider extends ContestTableProviderBase {
 class ABC212ToABC318Provider extends ContestTableProviderBase {
   protected setFilterCondition(): (taskResult: TaskResult) => boolean {
     return (taskResult: TaskResult) => {
+      if (classifyContest(taskResult.contest_id) !== this.contestType) {
+        return false;
+      }
+
       const contestRound = parseContestRound(taskResult.contest_id, 'abc');
       return contestRound >= 212 && contestRound <= 318;
     };
