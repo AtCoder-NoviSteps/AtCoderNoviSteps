@@ -106,47 +106,50 @@
 <!-- https://github.com/kenkoooo/AtCoderProblems/blob/master/atcoder-problems-frontend/src/pages/TablePage/AtCoderRegularTable.tsx -->
 <!-- https://github.com/birdou/atcoder-blogs/blob/main/app/atcoder-blogs-frontend/src/pages/BlogTablePage/BlogTablePage.tsx -->
 <!-- https://tailwindcss.com/docs/position#sticky-positioning-elements -->
-<div class="container w-full overflow-auto border rounded-md">
-  <Table shadow id="task-table" class="text-md table-fixed" aria-label="Task table">
-    <TableHead class="text-sm bg-gray-100">
-      <TableHeadCell class="w-full xl:w-16 px-2 text-center border" scope="col">
-        Round
-      </TableHeadCell>
+<div class="container w-full overflow-hidden rounded-md border border-gray-300 shadow-sm">
+  <div class="w-full overflow-auto">
+    <Table id="task-table" class="text-md table-fixed w-full" aria-label="Task table">
+      <TableHead class="text-sm bg-gray-100">
+        <TableHeadCell class="w-full xl:w-16 px-2 text-center border" scope="col">
+          Round
+        </TableHeadCell>
 
-      {#if taskTableHeaderIds.length}
-        {#each taskTableHeaderIds as taskTableHeaderId}
-          <TableHeadCell class="text-center border" scope="col">{taskTableHeaderId}</TableHeadCell>
-        {/each}
-      {/if}
-    </TableHead>
+        {#if taskTableHeaderIds.length}
+          {#each taskTableHeaderIds as taskTableHeaderId}
+            <TableHeadCell class="text-center border" scope="col">{taskTableHeaderId}</TableHeadCell
+            >
+          {/each}
+        {/if}
+      </TableHead>
 
-    <TableBody class="divide-y">
-      {#if contestIds.length && taskTableHeaderIds.length}
-        {#each contestIds as contestId}
-          <TableBodyRow class="flex flex-wrap xl:table-row">
-            <TableBodyCell class="w-full xl:w-16 truncate px-2 py-2 text-center border">
-              {getContestRoundLabel(provider, contestId)}
-            </TableBodyCell>
-
-            {#each taskTableHeaderIds as taskTableHeaderId}
-              <TableBodyCell
-                id={contestId + '-' + taskTableHeaderId}
-                class={getBodyCellClasses(contestId, taskTableHeaderId)}
-              >
-                {#if taskTable[contestId][taskTableHeaderId]}
-                  <TaskTableBodyCell
-                    taskResult={taskTable[contestId][taskTableHeaderId]}
-                    {isLoggedIn}
-                    onClick={() => openModal(taskTable[contestId][taskTableHeaderId])}
-                  />
-                {/if}
+      <TableBody class="divide-y">
+        {#if contestIds.length && taskTableHeaderIds.length}
+          {#each contestIds as contestId}
+            <TableBodyRow class="flex flex-wrap xl:table-row">
+              <TableBodyCell class="w-full xl:w-16 truncate px-2 py-2 text-center border">
+                {getContestRoundLabel(provider, contestId)}
               </TableBodyCell>
-            {/each}
-          </TableBodyRow>
-        {/each}
-      {/if}
-    </TableBody>
-  </Table>
+
+              {#each taskTableHeaderIds as taskTableHeaderId}
+                <TableBodyCell
+                  id={contestId + '-' + taskTableHeaderId}
+                  class={getBodyCellClasses(contestId, taskTableHeaderId)}
+                >
+                  {#if taskTable[contestId][taskTableHeaderId]}
+                    <TaskTableBodyCell
+                      taskResult={taskTable[contestId][taskTableHeaderId]}
+                      {isLoggedIn}
+                      onClick={() => openModal(taskTable[contestId][taskTableHeaderId])}
+                    />
+                  {/if}
+                </TableBodyCell>
+              {/each}
+            </TableBodyRow>
+          {/each}
+        {/if}
+      </TableBody>
+    </Table>
+  </div>
 </div>
 
 <UpdatingModal bind:this={updatingModal} {isLoggedIn} />
