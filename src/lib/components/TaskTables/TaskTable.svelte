@@ -100,9 +100,12 @@
 </Heading>
 
 <!-- TODO: ページネーションを実装 -->
+<!-- TODO: ヘッダーを固定できるようにする。-->
+<!-- HACK: Flowbite と tailwindcss の相性が悪いのかもしれない。tailwindcss のクラス指定、raw HTML & CSS を試したが、いずれも実現できず。 -->
 <!-- See: -->
 <!-- https://github.com/kenkoooo/AtCoderProblems/blob/master/atcoder-problems-frontend/src/pages/TablePage/AtCoderRegularTable.tsx -->
 <!-- https://github.com/birdou/atcoder-blogs/blob/main/app/atcoder-blogs-frontend/src/pages/BlogTablePage/BlogTablePage.tsx -->
+<!-- https://tailwindcss.com/docs/position#sticky-positioning-elements -->
 <div class="container w-full overflow-auto border rounded-md">
   <Table shadow id="task-table" class="text-md table-fixed" aria-label="Task table">
     <TableHead class="text-sm bg-gray-100">
