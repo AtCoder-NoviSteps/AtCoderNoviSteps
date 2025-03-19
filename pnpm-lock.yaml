@@ -48,8 +48,8 @@ importers:
         specifier: 2.7.7
         version: 2.7.7
       lucide-svelte:
-        specifier: ^0.482.0
-        version: 0.482.0(svelte@5.23.2)
+        specifier: ^0.483.0
+        version: 0.483.0(svelte@5.23.2)
       playwright:
         specifier: 1.51.1
         version: 1.51.1
@@ -3144,8 +3144,8 @@ packages:
   lucia@2.7.7:
     resolution: {integrity: sha512-Hy1nMcLquLl3yDvV9zYA9fSBGUDy/Fw2zEUw2Ia4iGdk/O+hI/TvQ1tAfED/U1WE/c5DT1hEger3m7qIx1qbUg==}
 
-  lucide-svelte@0.482.0:
-    resolution: {integrity: sha512-C8JbaG0ZW6ap65xyUGlbp/1iOxVlSHhmLHp1lqP7AZu2gX/OoB7FjBroSOR8MTL3HjG4PrL+o0I50Yj6Tqh0iA==}
+  lucide-svelte@0.483.0:
+    resolution: {integrity: sha512-MyMgEVLlFfPbyodGpkB+KCpyPkpjI7EKiFw1crA92B1ZXRK5hq5vTsGWAm9Nt3GAKHunoNc5MVsq3EOCz0DZSQ==}
     peerDependencies:
       svelte: ^3 || ^4 || ^5.0.0-next.42
 
@@ -7878,7 +7878,7 @@ snapshots:
 
   lucia@2.7.7: {}
 
-  lucide-svelte@0.482.0(svelte@5.23.2):
+  lucide-svelte@0.483.0(svelte@5.23.2):
     dependencies:
       svelte: 5.23.2
 
