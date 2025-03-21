@@ -16,6 +16,7 @@
 
   import TaskTableBodyCell from '$lib/components/TaskTables/TaskTableBodyCell.svelte';
 
+  import { activeContestTypeStore } from '$lib/stores/active_contest_type.svelte';
   import {
     contestTableProviders,
     type ContestTableProviders,
@@ -31,7 +32,7 @@
   let { taskResults, isLoggedIn }: Props = $props();
 
   // Prepare contest table provider based on the active contest type.
-  let activeContestType = $state<ContestTableProviders>('abcLatest20Rounds');
+  let activeContestType = $derived(activeContestTypeStore.get());
 
   let provider: ContestTableProvider = $derived(
     contestTableProviders[activeContestType as ContestTableProviders],
@@ -112,8 +113,10 @@
 <ButtonGroup class="m-4 contents-center">
   {#each Object.entries(contestTableProviders) as [type, config]}
     <Button
-      onclick={() => (activeContestType = type as ContestTableProviders)}
-      class={activeContestType === type ? 'active-button-class' : ''}
+      onclick={() => activeContestTypeStore.set(type as ContestTableProviders)}
+      class={activeContestTypeStore.isSame(type as ContestTableProviders)
+        ? 'active-button-class'
+        : ''}
       aria-label={config.getMetadata().ariaLabel}
     >
       {config.getMetadata().buttonLabel}
