@@ -106,6 +106,13 @@
       // Cancel the default form submission.
       cancel();
 
+      if (isSame(submissionStatus, taskResult)) {
+        console.log('Skipping: Submission status already set to', submissionStatus.labelName);
+
+        resetDropdown();
+        return () => {};
+      }
+
       // Submit data manually using fetch API.
       fetch(action, {
         method: 'POST',
@@ -124,14 +131,22 @@
           errorMessageStore.setAndClearAfterTimeout(FAILED_TO_UPDATE_SUBMISSION_STATUS, 10000);
         })
         .finally(() => {
-          closeDropdown();
-          showForm = false;
+          resetDropdown();
         });
 
       // Do not change anything in SvelteKit.
       return () => {};
     };
   };
+
+  function isSame(submissionStatus: SubmissionStatus, taskResult: TaskResult): boolean {
+    return submissionStatus.innerName === taskResult.status_name;
+  }
+
+  function resetDropdown(): void {
+    closeDropdown();
+    showForm = false;
+  }
 
   function updateTaskResult(
     taskResult: TaskResult,
