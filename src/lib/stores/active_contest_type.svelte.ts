@@ -15,6 +15,16 @@ export class ActiveContestTypeStore {
   value = $state<ContestTableProviders>('abcLatest20Rounds');
 
   /**
+   * Creates an instance with the specified contest type.
+   *
+   * @param defaultContestType - The default contest type to initialize.
+   * Defaults to 'abcLatest20Rounds'.
+   */
+  constructor(defaultContestType: ContestTableProviders = 'abcLatest20Rounds') {
+    this.value = defaultContestType;
+  }
+
+  /**
    * Gets the current contest table providers.
    *
    * @returns The current value of contest table providers.
