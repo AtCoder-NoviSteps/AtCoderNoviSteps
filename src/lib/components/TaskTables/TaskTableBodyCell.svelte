@@ -12,7 +12,7 @@
   interface Props {
     taskResult: TaskResult;
     isLoggedIn: boolean;
-    onupdate?: (updatedTask: TaskResult) => void;
+    onupdate?: (updatedTask: TaskResult) => void; // Ensure to update task result in parent component.
   }
 
   let { taskResult, isLoggedIn, onupdate = () => {} }: Props = $props();
