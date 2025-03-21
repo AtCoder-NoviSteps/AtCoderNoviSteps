@@ -3,18 +3,21 @@
 
   import type { TaskResult } from '$lib/types/task';
 
-  import ExternalLinkWrapper from '$lib/components/ExternalLinkWrapper.svelte';
   import GradeLabel from '$lib/components/GradeLabel.svelte';
+  import ExternalLinkWrapper from '$lib/components/ExternalLinkWrapper.svelte';
+  import UpdatingDropdown from '$lib/components/SubmissionStatus/UpdatingDropdown.svelte';
 
   import { getTaskUrl, removeTaskIndexFromTitle } from '$lib/utils/task';
 
   interface Props {
     taskResult: TaskResult;
     isLoggedIn: boolean;
-    onClick: () => void;
+    onupdate?: (updatedTask: TaskResult) => void; // Ensure to update task result in parent component.
   }
 
-  let { taskResult, isLoggedIn, onClick }: Props = $props();
+  let { taskResult, isLoggedIn, onupdate = () => {} }: Props = $props();
+
+  let updatingDropdown: UpdatingDropdown;
 </script>
 
 <div class="flex items-center w-full space-x-1 text-left text-sm sm:text-md">
@@ -22,10 +25,7 @@
 
   <div class="flex justify-between w-full min-w-0">
     {@render taskTitleAndExternalLink(taskResult)}
-
-    {#if isLoggedIn}
-      {@render submissionUpdaterAndLinksOfTaskDetailPage(onClick, taskResult)}
-    {/if}
+    {@render submissionUpdaterAndLinksOfTaskDetailPage(taskResult)}
   </div>
 </div>
 
@@ -52,13 +52,19 @@
   </div>
 {/snippet}
 
-{#snippet submissionUpdaterAndLinksOfTaskDetailPage(onClick: () => void, taskResult: TaskResult)}
-  <button
-    type="button"
-    class="flex-shrink-0 w-6 ml-auto"
-    onclick={onClick}
-    aria-label="Update submission for {taskResult.title}"
-  >
-    <EllipsisVertical class="w-4 h-4 mx-auto" />
-  </button>
+<!-- See: -->
+<!-- https://svelte-5-ui-lib.codewithshin.com/components/dropdown -->
+{#snippet submissionUpdaterAndLinksOfTaskDetailPage(selectedTaskResult: TaskResult)}
+  <div class="flex items-start justify-center">
+    <button
+      type="button"
+      class="flex-shrink-0 w-6 ml-auto"
+      onclick={() => updatingDropdown.toggle()}
+      aria-label="Update submission for {selectedTaskResult.title}"
+    >
+      <EllipsisVertical class="w-4 h-4 mx-auto" />
+    </button>
+
+    <UpdatingDropdown bind:this={updatingDropdown} {taskResult} {isLoggedIn} {onupdate} />
+  </div>
 {/snippet}

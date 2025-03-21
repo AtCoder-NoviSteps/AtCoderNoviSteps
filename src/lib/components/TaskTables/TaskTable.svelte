@@ -14,7 +14,6 @@
   import type { TaskResults, TaskResult } from '$lib/types/task';
   import type { ContestTableProvider } from '$lib/types/contest_table_provider';
 
-  import UpdatingModal from '$lib/components/SubmissionStatus/UpdatingModal.svelte';
   import TaskTableBodyCell from '$lib/components/TaskTables/TaskTableBodyCell.svelte';
 
   import {
@@ -31,6 +30,7 @@
 
   let { taskResults, isLoggedIn }: Props = $props();
 
+  // Prepare contest table provider based on the active contest type.
   let activeContestType = $state<ContestTableProviders>('abcLatest20Rounds');
 
   let provider: ContestTableProvider = $derived(
@@ -52,20 +52,8 @@
     return provider.getContestRoundLabel(contestId);
   }
 
-  let updatingModal: UpdatingModal | null = null;
-
-  // WHY: () => updatingModal.openModal(taskResult) だけだと、updatingModalがnullの可能性があるため。
-  function openModal(taskResult: TaskResult): void {
-    if (updatingModal) {
-      updatingModal.openModal(taskResult);
-    } else {
-      console.error('Failed to initialize UpdatingModal component.');
-    }
-  }
-
   function getBodyCellClasses(contestId: string, taskIndex: string): string {
-    const baseClasses =
-      'w-1/2 xs:w-1/3 sm:w-1/4 md:w-1/5 lg:w-1/6 px-1 py-1 border hover:brightness-125 transition-all';
+    const baseClasses = 'w-1/2 xs:w-1/3 sm:w-1/4 md:w-1/5 lg:w-1/6 px-1 py-1 border';
     const backgroundColor = getBackgroundColor(taskTable[contestId][taskIndex]);
 
     return `${baseClasses} ${backgroundColor}`;
@@ -79,6 +67,43 @@
     }
 
     return '';
+  }
+
+  // Update task results dynamically.
+  // Computational complexity of preparation table: O(N), where N is the number of task results.
+  let taskResultsMap = $derived(() => {
+    return taskResults.reduce((map: Map<string, TaskResult>, taskResult: TaskResult) => {
+      if (!map.has(taskResult.task_id)) {
+        map.set(taskResult.task_id, taskResult);
+      }
+      return map;
+    }, new Map<string, TaskResult>());
+  });
+
+  let taskIndicesMap = $derived(() => {
+    const indices = new Map<string, number>();
+
+    taskResults.forEach((task, index) => {
+      indices.set(task.task_id, index);
+    });
+
+    return indices;
+  });
+
+  function handleUpdateTaskResult(updatedTask: TaskResult): void {
+    const map = taskResultsMap();
+
+    if (map.has(updatedTask.task_id)) {
+      map.set(updatedTask.task_id, updatedTask);
+    }
+
+    const index = taskIndicesMap().get(updatedTask.task_id);
+
+    if (index !== undefined) {
+      const newTaskResults = [...taskResults];
+      newTaskResults[index] = updatedTask;
+      taskResults = newTaskResults;
+    }
   }
 </script>
 
@@ -117,8 +142,9 @@
 
         {#if taskTableHeaderIds.length}
           {#each taskTableHeaderIds as taskTableHeaderId}
-            <TableHeadCell class="text-center border" scope="col">{taskTableHeaderId}</TableHeadCell
-            >
+            <TableHeadCell class="text-center border" scope="col">
+              {taskTableHeaderId}
+            </TableHeadCell>
           {/each}
         {/if}
       </TableHead>
@@ -140,7 +166,7 @@
                     <TaskTableBodyCell
                       taskResult={taskTable[contestId][taskTableHeaderId]}
                       {isLoggedIn}
-                      onClick={() => openModal(taskTable[contestId][taskTableHeaderId])}
+                      onupdate={(updatedTask: TaskResult) => handleUpdateTaskResult(updatedTask)}
                     />
                   {/if}
                 </TableBodyCell>
@@ -152,5 +178,3 @@
     </Table>
   </div>
 </div>
-
-<UpdatingModal bind:this={updatingModal} {isLoggedIn} />
