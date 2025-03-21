@@ -25,10 +25,7 @@
 
   <div class="flex justify-between w-full min-w-0">
     {@render taskTitleAndExternalLink(taskResult)}
-
-    {#if isLoggedIn}
-      {@render submissionUpdaterAndLinksOfTaskDetailPage(taskResult)}
-    {/if}
+    {@render submissionUpdaterAndLinksOfTaskDetailPage(taskResult)}
   </div>
 </div>
 

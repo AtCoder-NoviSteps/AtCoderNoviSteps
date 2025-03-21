@@ -38,6 +38,8 @@
   import { submission_statuses } from '$lib/services/submission_status';
   import { errorMessageStore } from '$lib/stores/error_message';
 
+  import { SIGNUP_PAGE, LOGIN_PAGE } from '$lib/constants/navbar-links';
+
   interface Props {
     taskResult: TaskResult;
     isLoggedIn: boolean;
@@ -178,7 +180,7 @@
     {activeUrl}
     {dropdownStatus}
     {closeDropdown}
-    class="absolute w-24 z-20 left-auto right-0 mt-8"
+    class="absolute w-32 z-20 left-auto right-0 mt-8"
   >
     <DropdownUl>
       {#if isLoggedIn}
@@ -187,6 +189,9 @@
             {submissionStatus.labelName}
           </DropdownLi>
         {/each}
+      {:else}
+        <DropdownLi href={SIGNUP_PAGE}>アカウント作成</DropdownLi>
+        <DropdownLi href={LOGIN_PAGE}>ログイン</DropdownLi>
       {/if}
     </DropdownUl>
   </Dropdown>
