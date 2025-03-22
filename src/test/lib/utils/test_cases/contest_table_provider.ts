@@ -6,11 +6,16 @@ import type { TaskResult, TaskResults } from '$lib/types/task';
 // and task_id for header name testing.
 
 /**
- * Default task result object used as a template for test data.
- * Most fields are initialized as empty strings as they're not relevant for these tests.
- * @type {TaskResult}
+ * Default initial values for a TaskResult object.
+ *
+ * This constant provides empty or falsy default values for all properties
+ * of a TaskResult. It's marked as readonly to prevent modifications.
+ * The `updated_at` date is set to Unix epoch (January 1, 1970) as a
+ * clearly identifiable default timestamp.
+ *
+ * @type {Readonly<TaskResult>} An immutable default TaskResult object
  */
-const defaultTaskResult: TaskResult = {
+const defaultTaskResult: Readonly<TaskResult> = {
   is_ac: false,
   user_id: '',
   status_name: '',
@@ -120,6 +125,41 @@ const [abc319_a, abc319_b, abc319_c, abc319_d, abc319_e, abc319_f, abc319_g] = c
   ],
 );
 
+/**
+ * Creates an array of contest task results with sequential contest numbers.
+ *
+ * @param startContestNumber - The first contest number in the sequence
+ * @param contestCount - The number of contests to generate
+ * @param taskIndex - The task index (e.g., 'A', 'B', 'C') to use for all contests
+ * @returns An array of task results with alternating statuses (AC, AC_WITH_EDITORIAL, TRYING, PENDING)
+ * in a repeating pattern. Each task has the format `abc{contestNumber}_{taskIndex.toLowerCase()}`.
+ *
+ * @example
+ * Creates 3 contest results starting from ABC123 with task index D
+ * const contests = createContestsRange(123, 3, 'D');
+ */
+function createContestsRange(startContestNumber: number, contestCount: number, taskIndex: string) {
+  return Array.from({ length: contestCount }, (_, i) => {
+    const contestNumber = startContestNumber + i;
+    const contestId = `abc${contestNumber}`;
+    const taskId = `${contestId}_${taskIndex.toLowerCase()}`;
+    // Alternating statuses for variety
+    let statusName;
+
+    if (i % 4 === 0) {
+      statusName = AC;
+    } else if (i % 4 === 1) {
+      statusName = AC_WITH_EDITORIAL;
+    } else if (i % 4 === 2) {
+      statusName = TRYING;
+    } else {
+      statusName = PENDING;
+    }
+
+    return createTaskResultWithTaskTableIndex(contestId, taskId, 'G', statusName);
+  });
+}
+
 const [
   abc376_g,
   abc377_g,
@@ -143,25 +183,7 @@ const [
   abc395_g,
   abc396_g,
   abc397_g,
-] = Array.from({ length: 22 }, (_, i) => {
-  const contestNum = 376 + i;
-  const contestId = `abc${contestNum}`;
-  const taskId = `${contestId}_g`;
-  // Alternating statuses for variety
-  let statusName;
-
-  if (i % 4 === 0) {
-    statusName = AC;
-  } else if (i % 4 === 1) {
-    statusName = AC_WITH_EDITORIAL;
-  } else if (i % 4 === 2) {
-    statusName = TRYING;
-  } else {
-    statusName = PENDING;
-  }
-
-  return createTaskResultWithTaskTableIndex(contestId, taskId, 'G', statusName);
-});
+] = createContestsRange(376, 22, 'G');
 
 export const taskResultsForContestTableProvider: TaskResults = [
   abc212_a,
