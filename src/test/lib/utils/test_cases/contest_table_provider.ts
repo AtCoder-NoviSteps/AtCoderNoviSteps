@@ -49,6 +49,7 @@ function createTaskResultWithTaskTableIndex(
 }
 
 // ABC212 - ABC232: 8 tasks (A, B, C, D, E, F, G and H)
+// // Mix of different submission statuses to test various filtering and display scenarios.
 const abc212_a = createTaskResultWithTaskTableIndex('abc212', 'abc212_a', 'A', AC);
 const abc212_b = createTaskResultWithTaskTableIndex('abc212', 'abc212_b', 'B', AC);
 const abc212_f = createTaskResultWithTaskTableIndex('abc212', 'abc212_f', 'F', AC_WITH_EDITORIAL);
@@ -68,6 +69,9 @@ const abc318_ex = createTaskResultWithTaskTableIndex('abc318', 'abc318_ex', 'Ex'
 // ABC319 - : 7 tasks (A, B, C, D, E, F and G)
 const abc319_a = createTaskResultWithTaskTableIndex('abc319', 'abc319_a', 'A', AC);
 const abc319_b = createTaskResultWithTaskTableIndex('abc319', 'abc319_b', 'B', AC);
+const abc319_c = createTaskResultWithTaskTableIndex('abc319', 'abc319_c', 'C', AC);
+const abc319_d = createTaskResultWithTaskTableIndex('abc319', 'abc319_d', 'D', AC);
+const abc319_e = createTaskResultWithTaskTableIndex('abc319', 'abc319_e', 'E', AC_WITH_EDITORIAL);
 const abc319_f = createTaskResultWithTaskTableIndex('abc319', 'abc319_f', 'F', TRYING);
 const abc319_g = createTaskResultWithTaskTableIndex('abc319', 'abc319_g', 'G', PENDING);
 const abc376_g = createTaskResultWithTaskTableIndex('abc376', 'abc376_g', 'G', AC);
@@ -109,6 +113,9 @@ export const taskResultsForContestTableProvider: TaskResults = [
   abc318_ex,
   abc319_a,
   abc319_b,
+  abc319_c,
+  abc319_d,
+  abc319_e,
   abc319_f,
   abc319_g,
   abc376_g,

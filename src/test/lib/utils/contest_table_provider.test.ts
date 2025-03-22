@@ -33,6 +33,9 @@ vi.mock('$lib/utils/task', () => ({
 
 describe('ContestTableProviderBase and implementations', () => {
   const mockTaskResults: TaskResults = taskResultsForContestTableProvider;
+  const getContestRound = (contestId: string): number => {
+    return parseInt(contestId.replace('abc', ''), 10);
+  };
 
   describe('ABC latest 20 rounds provider', () => {
     test('expects to filter tasks to include only ABC contests', () => {
@@ -50,7 +53,7 @@ describe('ContestTableProviderBase and implementations', () => {
       const filtered = provider.filter(largeDataset);
       const uniqueContests = new Set(filtered.map((task) => task.contest_id));
 
-      expect(uniqueContests.size).toBeLessThanOrEqual(20);
+      expect(uniqueContests.size).toBe(20);
     });
 
     test('expects to generate correct table structure', () => {
@@ -90,7 +93,7 @@ describe('ContestTableProviderBase and implementations', () => {
       expect(filtered.every((task) => task.contest_id.startsWith('abc'))).toBeTruthy();
       expect(
         filtered.every((task) => {
-          const round = parseInt(task.contest_id.replace('abc', ''), 10);
+          const round = getContestRound(task.contest_id);
           return round >= 319 && round <= 999;
         }),
       ).toBeTruthy();
@@ -121,7 +124,7 @@ describe('ContestTableProviderBase and implementations', () => {
       expect(filtered.every((task) => task.contest_id.startsWith('abc'))).toBeTruthy();
       expect(
         filtered.every((task) => {
-          const round = parseInt(task.contest_id.replace('abc', ''), 10);
+          const round = getContestRound(task.contest_id);
           return round >= 212 && round <= 318;
         }),
       ).toBeTruthy();
@@ -147,16 +150,10 @@ describe('ContestTableProviderBase and implementations', () => {
   describe('Common provider functionality', () => {
     test('expects to get contest round IDs correctly', () => {
       const provider = contestTableProviders.abcLatest20Rounds;
-      const filtered = [
-        { contest_id: 'abc397', task_id: 'a', status_name: 'ac' },
-        { contest_id: 'abc319', task_id: 'a', status_name: 'ac' },
-        { contest_id: 'abc319', task_id: 'b', status_name: 'ac' },
-        { contest_id: 'abc319', task_id: 'c', status_name: 'ac' },
-        { contest_id: 'abc319', task_id: 'e', status_name: 'ac_with_editorial' },
-        { contest_id: 'abc319', task_id: 'f', status_name: 'wa' },
-        { contest_id: 'abc319', task_id: 'g', status_name: 'ns' },
-        { contest_id: 'abc318', task_id: 'a', status_name: 'ac' },
-      ] as TaskResults;
+      // Use a subset of the mock data that covers the relevant contest IDs
+      const filtered = mockTaskResults.filter((task) =>
+        ['abc397', 'abc319', 'abc318'].includes(task.contest_id),
+      );
 
       const roundIds = provider.getContestRoundIds(filtered);
 
@@ -165,21 +162,7 @@ describe('ContestTableProviderBase and implementations', () => {
 
     test('expects to get header IDs for tasks correctly', () => {
       const provider = contestTableProviders.abcLatest20Rounds;
-      const filtered = [
-        { contest_id: 'abc319', task_id: 'abc319_a', task_table_index: 'A', status_name: 'ac' },
-        { contest_id: 'abc319', task_id: 'abc319_b', task_table_index: 'B', status_name: 'ac' },
-        { contest_id: 'abc319', task_id: 'abc319_c', task_table_index: 'C', status_name: 'ac' },
-        { contest_id: 'abc319', task_id: 'abc319_d', task_table_index: 'D', status_name: 'ac' },
-        {
-          contest_id: 'abc319',
-          task_id: 'abc319_e',
-          task_table_index: 'E',
-          status_name: 'ac_with_editorial',
-        },
-        { contest_id: 'abc319', task_id: 'abc319_f', task_table_index: 'F', status_name: 'wa' },
-        { contest_id: 'abc319', task_id: 'abc319_g', task_table_index: 'G', status_name: 'ns' },
-      ] as TaskResults;
-
+      const filtered = mockTaskResults.filter((task) => task.contest_id === 'abc319');
       const headerIds = provider.getHeaderIdsForTask(filtered);
 
       expect(headerIds).toEqual(['A', 'B', 'C', 'D', 'E', 'F', 'G']);
