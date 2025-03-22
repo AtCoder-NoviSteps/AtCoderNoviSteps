@@ -1,4 +1,6 @@
 <script lang="ts">
+  import type { Snippet } from 'svelte';
+
   import { Tabs } from 'svelte-5-ui-lib';
 
   import type { TaskResults } from '$lib/types/task';
@@ -11,12 +13,21 @@
   import TaskGradeList from '$lib/components/TaskGradeList.svelte';
   import GradeGuidelineTable from '$lib/components/TaskGrades/GradeGuidelineTable.svelte';
 
+  import {
+    activeProblemListTabStore,
+    type ActiveProblemListTab,
+  } from '$lib/stores/active_problem_list_tab.svelte';
+
   let { data } = $props();
 
   let taskResults: TaskResults = $derived(data.taskResults.sort(compareByContestIdAndTaskId));
 
   let isAdmin: boolean = data.isAdmin;
   let isLoggedIn: boolean = data.isLoggedIn;
+
+  function isActiveTab(currentTab: ActiveProblemListTab): boolean {
+    return currentTab === activeProblemListTabStore.get();
+  }
 </script>
 
 <!-- TODO: Searchを追加 -->
@@ -26,29 +37,35 @@
   <!-- See: -->
   <!-- https://flowbite-svelte.com/docs/components/tabs -->
   <Tabs tabStyle="underline" contentClass="bg-white dark:bg-gray-800 mt-0 p-0">
-    <!-- Task table -->
+    <!-- Contest table -->
     <!-- WIP: UIのデザインが試行錯誤の段階であるため、管理者のみ閲覧可能 -->
     <!-- TODO: 一般公開するときに、デフォルトで開くタブにする -->
     {#if isAdmin}
-      <TabItemWrapper workbookType={null} title="テーブル">
-        <TaskTable {taskResults} {isLoggedIn} />
-      </TabItemWrapper>
+      {@render problemListTab('テーブル', 'contestTable', contestTable)}
     {/if}
 
     <!-- Grades -->
-    <TabItemWrapper workbookType={null} isOpen={true} title="グレード">
-      <TaskGradeList {taskResults} {isAdmin} {isLoggedIn}></TaskGradeList>
-    </TabItemWrapper>
+    {@render problemListTab('グレード', 'listByGrade', listByGrade)}
 
     <!-- Grade guidelines -->
-    <TabItemWrapper workbookType={null} title="グレードの目安">
-      <GradeGuidelineTable />
-    </TabItemWrapper>
-
-    <!-- HACK: 以下、各テーブルを実装するまで非表示 -->
-    <!-- Tags -->
-    <!-- <TabItemWrapper title="Tags">
-      <div class="m-4">Comming Soon.</div>
-    </TabItemWrapper> -->
+    {@render problemListTab('グレードの目安', 'gradeGuidelineTable', gradeGuidelineTable)}
   </Tabs>
 </div>
+
+{#snippet problemListTab(title: string, tab: ActiveProblemListTab, children: Snippet)}
+  <TabItemWrapper {title} activeProblemList={tab} isOpen={isActiveTab(tab)}>
+    {@render children()}
+  </TabItemWrapper>
+{/snippet}
+
+{#snippet contestTable()}
+  <TaskTable {taskResults} {isLoggedIn} />
+{/snippet}
+
+{#snippet listByGrade()}
+  <TaskGradeList {taskResults} {isAdmin} {isLoggedIn}></TaskGradeList>
+{/snippet}
+
+{#snippet gradeGuidelineTable()}
+  <GradeGuidelineTable />
+{/snippet}
