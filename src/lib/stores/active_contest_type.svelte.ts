@@ -50,6 +50,14 @@ export class ActiveContestTypeStore {
   isSame(contestType: ContestTableProviders): boolean {
     return this.value === contestType;
   }
+
+  /**
+   * Resets the active contest type to the default value.
+   * Sets the internal value to 'abcLatest20Rounds'.
+   */
+  reset(): void {
+    this.value = 'abcLatest20Rounds';
+  }
 }
 
 export const activeContestTypeStore = new ActiveContestTypeStore();
