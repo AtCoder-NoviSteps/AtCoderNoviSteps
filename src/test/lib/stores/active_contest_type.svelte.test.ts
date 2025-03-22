@@ -14,11 +14,16 @@ describe('ActiveContestTypeStore', () => {
     expect(store.get()).toBe('abcLatest20Rounds');
   });
 
+  test('expects to initialize with provided value', () => {
+    const customStore = new ActiveContestTypeStore('abc319Onwards' as ContestTableProviders);
+    expect(customStore.get()).toBe('abc319Onwards');
+  });
+
   test('expects to return the current value when calling get()', () => {
     expect(store.get()).toBe('abcLatest20Rounds');
 
     // Change the value and verify get() returns the new value
-    store.value = 'abc319Onwards' as ContestTableProviders;
+    store.set('abc319Onwards' as ContestTableProviders);
     expect(store.get()).toBe('abc319Onwards');
   });
 
