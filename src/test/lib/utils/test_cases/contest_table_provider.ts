@@ -4,6 +4,12 @@ import type { TaskResult, TaskResults } from '$lib/types/task';
 // Most fields are empty strings as they're not relevant for these tests.
 // The updated_at field is set to Unix epoch as we only care about task_table_index
 // and task_id for header name testing.
+
+/**
+ * Default task result object used as a template for test data.
+ * Most fields are initialized as empty strings as they're not relevant for these tests.
+ * @type {TaskResult}
+ */
 const defaultTaskResult: TaskResult = {
   is_ac: false,
   user_id: '',
@@ -19,9 +25,13 @@ const defaultTaskResult: TaskResult = {
   updated_at: new Date(0), // Use the Unix epoch as the default value.
 };
 
+/** Represents a fully accepted submission status */
 const AC = 'ac';
+/** Represents a submission that was accepted with reference to the editorial */
 const AC_WITH_EDITORIAL = 'ac_with_editorial';
+/** Represents a challenge is underway */
 const TRYING = 'wa';
+/** Represents an unchallenged */
 const PENDING = 'ns';
 
 /**
@@ -48,54 +58,110 @@ function createTaskResultWithTaskTableIndex(
   };
 }
 
+// Define a structure for contest tasks
+/**
+ * Creates task results for a given contest based on provided task configurations.
+ *
+ * @param contestId - The unique identifier of the contest
+ * @param taskConfigs - Array of task configurations with task table indices and status names
+ * @param taskConfigs.taskTableIndex - The table index identifier for the task
+ * @param taskConfigs.statusName - The status name to assign to the task
+ * @returns An array of task results created from the given configurations
+ */
+const createContestTasks = (
+  contestId: string,
+  taskConfigs: Array<{ taskTableIndex: string; statusName: string }>,
+) => {
+  return taskConfigs.map((config) => {
+    const taskId = `${contestId}_${config.taskTableIndex.toLowerCase()}`;
+
+    return createTaskResultWithTaskTableIndex(
+      contestId,
+      taskId,
+      config.taskTableIndex,
+      config.statusName,
+    );
+  });
+};
+
 // ABC212 - ABC232: 8 tasks (A, B, C, D, E, F, G and H)
-// // Mix of different submission statuses to test various filtering and display scenarios.
-const abc212_a = createTaskResultWithTaskTableIndex('abc212', 'abc212_a', 'A', AC);
-const abc212_b = createTaskResultWithTaskTableIndex('abc212', 'abc212_b', 'B', AC);
-const abc212_f = createTaskResultWithTaskTableIndex('abc212', 'abc212_f', 'F', AC_WITH_EDITORIAL);
-const abc212_g = createTaskResultWithTaskTableIndex('abc212', 'abc212_g', 'G', TRYING);
-const abc212_h = createTaskResultWithTaskTableIndex('abc212', 'abc212_h', 'H', PENDING);
-const abc213_h = createTaskResultWithTaskTableIndex('abc213', 'abc213_h', 'H', PENDING);
-const abc232_h = createTaskResultWithTaskTableIndex('abc232', 'abc232_h', 'H', TRYING);
+// Mix of different submission statuses to test various filtering and display scenarios.
+const [abc212_a, abc212_b, abc212_f, abc212_g, abc212_h] = createContestTasks('abc212', [
+  { taskTableIndex: 'A', statusName: AC },
+  { taskTableIndex: 'B', statusName: AC },
+  { taskTableIndex: 'F', statusName: AC_WITH_EDITORIAL },
+  { taskTableIndex: 'G', statusName: TRYING },
+  { taskTableIndex: 'H', statusName: PENDING },
+]);
+const [abc213_h] = createContestTasks('abc213', [{ taskTableIndex: 'H', statusName: PENDING }]);
+const [abc232_h] = createContestTasks('abc232', [{ taskTableIndex: 'H', statusName: TRYING }]);
 
 // ABC233 - ABC318: 8 tasks (A, B, C, D, E, F, G and Ex)
-const abc233_a = createTaskResultWithTaskTableIndex('abc233', 'abc233_a', 'A', AC);
-const abc233_b = createTaskResultWithTaskTableIndex('abc233', 'abc233_b', 'B', TRYING);
-const abc233_ex = createTaskResultWithTaskTableIndex('abc233', 'abc233_ex', 'Ex', PENDING);
-const abc234_ex = createTaskResultWithTaskTableIndex('abc234', 'abc234_ex', 'Ex', AC);
-const abc317_ex = createTaskResultWithTaskTableIndex('abc317', 'abc317_ex', 'Ex', TRYING);
-const abc318_ex = createTaskResultWithTaskTableIndex('abc318', 'abc318_ex', 'Ex', PENDING);
+const [abc233_a, abc233_b, abc233_ex] = createContestTasks('abc233', [
+  { taskTableIndex: 'A', statusName: AC },
+  { taskTableIndex: 'B', statusName: TRYING },
+  { taskTableIndex: 'Ex', statusName: PENDING },
+]);
+const [abc234_ex] = createContestTasks('abc234', [{ taskTableIndex: 'Ex', statusName: AC }]);
+const [abc317_ex] = createContestTasks('abc317', [{ taskTableIndex: 'Ex', statusName: TRYING }]);
+const [abc318_ex] = createContestTasks('abc318', [{ taskTableIndex: 'Ex', statusName: PENDING }]);
 
 // ABC319 - : 7 tasks (A, B, C, D, E, F and G)
-const abc319_a = createTaskResultWithTaskTableIndex('abc319', 'abc319_a', 'A', AC);
-const abc319_b = createTaskResultWithTaskTableIndex('abc319', 'abc319_b', 'B', AC);
-const abc319_c = createTaskResultWithTaskTableIndex('abc319', 'abc319_c', 'C', AC);
-const abc319_d = createTaskResultWithTaskTableIndex('abc319', 'abc319_d', 'D', AC);
-const abc319_e = createTaskResultWithTaskTableIndex('abc319', 'abc319_e', 'E', AC_WITH_EDITORIAL);
-const abc319_f = createTaskResultWithTaskTableIndex('abc319', 'abc319_f', 'F', TRYING);
-const abc319_g = createTaskResultWithTaskTableIndex('abc319', 'abc319_g', 'G', PENDING);
-const abc376_g = createTaskResultWithTaskTableIndex('abc376', 'abc376_g', 'G', AC);
-const abc377_g = createTaskResultWithTaskTableIndex('abc377', 'abc377_g', 'G', AC);
-const abc378_g = createTaskResultWithTaskTableIndex('abc378', 'abc378_g', 'G', TRYING);
-const abc379_g = createTaskResultWithTaskTableIndex('abc379', 'abc379_g', 'G', PENDING);
-const abc380_g = createTaskResultWithTaskTableIndex('abc380', 'abc380_g', 'G', AC);
-const abc381_g = createTaskResultWithTaskTableIndex('abc381', 'abc381_g', 'G', AC_WITH_EDITORIAL);
-const abc382_g = createTaskResultWithTaskTableIndex('abc382', 'abc382_g', 'G', TRYING);
-const abc383_g = createTaskResultWithTaskTableIndex('abc383', 'abc383_g', 'G', AC);
-const abc384_g = createTaskResultWithTaskTableIndex('abc384', 'abc384_g', 'G', AC);
-const abc385_g = createTaskResultWithTaskTableIndex('abc385', 'abc385_g', 'G', AC);
-const abc386_g = createTaskResultWithTaskTableIndex('abc386', 'abc386_g', 'G', AC_WITH_EDITORIAL);
-const abc387_g = createTaskResultWithTaskTableIndex('abc387', 'abc387_g', 'G', TRYING);
-const abc388_g = createTaskResultWithTaskTableIndex('abc388', 'abc388_g', 'G', TRYING);
-const abc389_g = createTaskResultWithTaskTableIndex('abc389', 'abc389_g', 'G', TRYING);
-const abc390_g = createTaskResultWithTaskTableIndex('abc390', 'abc390_g', 'G', TRYING);
-const abc391_g = createTaskResultWithTaskTableIndex('abc391', 'abc391_g', 'G', TRYING);
-const abc392_g = createTaskResultWithTaskTableIndex('abc392', 'abc392_g', 'G', TRYING);
-const abc393_g = createTaskResultWithTaskTableIndex('abc393', 'abc393_g', 'G', TRYING);
-const abc394_g = createTaskResultWithTaskTableIndex('abc394', 'abc394_g', 'G', TRYING);
-const abc395_g = createTaskResultWithTaskTableIndex('abc395', 'abc395_g', 'G', TRYING);
-const abc396_g = createTaskResultWithTaskTableIndex('abc396', 'abc396_g', 'G', TRYING);
-const abc397_g = createTaskResultWithTaskTableIndex('abc397', 'abc397_g', 'G', TRYING);
+const [abc319_a, abc319_b, abc319_c, abc319_d, abc319_e, abc319_f, abc319_g] = createContestTasks(
+  'abc319',
+  [
+    { taskTableIndex: 'A', statusName: AC },
+    { taskTableIndex: 'B', statusName: AC },
+    { taskTableIndex: 'C', statusName: AC },
+    { taskTableIndex: 'D', statusName: AC },
+    { taskTableIndex: 'E', statusName: AC_WITH_EDITORIAL },
+    { taskTableIndex: 'F', statusName: TRYING },
+    { taskTableIndex: 'G', statusName: PENDING },
+  ],
+);
+
+const [
+  abc376_g,
+  abc377_g,
+  abc378_g,
+  abc379_g,
+  abc380_g,
+  abc381_g,
+  abc382_g,
+  abc383_g,
+  abc384_g,
+  abc385_g,
+  abc386_g,
+  abc387_g,
+  abc388_g,
+  abc389_g,
+  abc390_g,
+  abc391_g,
+  abc392_g,
+  abc393_g,
+  abc394_g,
+  abc395_g,
+  abc396_g,
+  abc397_g,
+] = Array.from({ length: 22 }, (_, i) => {
+  const contestNum = 376 + i;
+  const contestId = `abc${contestNum}`;
+  const taskId = `${contestId}_g`;
+  // Alternating statuses for variety
+  let statusName;
+
+  if (i % 4 === 0) {
+    statusName = AC;
+  } else if (i % 4 === 1) {
+    statusName = AC_WITH_EDITORIAL;
+  } else if (i % 4 === 2) {
+    statusName = TRYING;
+  } else {
+    statusName = PENDING;
+  }
+
+  return createTaskResultWithTaskTableIndex(contestId, taskId, 'G', statusName);
+});
 
 export const taskResultsForContestTableProvider: TaskResults = [
   abc212_a,

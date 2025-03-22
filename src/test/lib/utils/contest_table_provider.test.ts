@@ -33,8 +33,16 @@ vi.mock('$lib/utils/task', () => ({
 
 describe('ContestTableProviderBase and implementations', () => {
   const mockTaskResults: TaskResults = taskResultsForContestTableProvider;
+
   const getContestRound = (contestId: string): number => {
-    return parseInt(contestId.replace('abc', ''), 10);
+    const roundString = contestId.replace(/^\D+/, '');
+    const round = parseInt(roundString, 10);
+
+    if (isNaN(round)) {
+      throw new Error(`Invalid contest ID format: ${contestId}`);
+    }
+
+    return round;
   };
 
   describe('ABC latest 20 rounds provider', () => {
@@ -52,8 +60,17 @@ describe('ContestTableProviderBase and implementations', () => {
       const largeDataset = [...mockTaskResults];
       const filtered = provider.filter(largeDataset);
       const uniqueContests = new Set(filtered.map((task) => task.contest_id));
-
       expect(uniqueContests.size).toBe(20);
+
+      // Verify these are the latest 20 rounds
+      const contestRounds = Array.from(uniqueContests)
+        .map((id) => getContestRound(id))
+        .sort((a, b) => b - a); // Sort in descending order
+
+      // Validate if the rounds are sequential and latest
+      const latestRound = Math.max(...contestRounds);
+      const expectedRounds = Array.from({ length: 20 }, (_, i) => latestRound - i);
+      expect(contestRounds).toEqual(expectedRounds);
     });
 
     test('expects to generate correct table structure', () => {
@@ -65,6 +82,12 @@ describe('ContestTableProviderBase and implementations', () => {
       expect(table.abc378).toHaveProperty('G');
       expect(table.abc378.G).toEqual(
         expect.objectContaining({ contest_id: 'abc378', task_id: 'abc378_g' }),
+      );
+
+      expect(table).toHaveProperty('abc397');
+      expect(table.abc397).toHaveProperty('G');
+      expect(table.abc397.G).toEqual(
+        expect.objectContaining({ contest_id: 'abc397', task_id: 'abc397_g' }),
       );
     });
 
