@@ -4,9 +4,9 @@ export class ActiveProblemListTabStore {
   value = $state<ActiveProblemListTab>('listByGrade');
 
   /**
-   * Creates an instance with the specified contest type.
+   * Creates an instance with the specified problem list tab.
    *
-   * @param activeTab - The default contest type to initialize.
+   * @param activeTab - The default problem list tab to initialize.
    * Defaults to 'listByGrade'.
    */
   constructor(activeTab: ActiveProblemListTab = 'listByGrade') {
