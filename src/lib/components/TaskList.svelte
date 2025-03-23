@@ -13,10 +13,9 @@
   import { type TaskResult, type TaskResults, TaskGrade } from '$lib/types/task';
 
   import ThermometerProgressBar from '$lib/components/ThermometerProgressBar.svelte';
-  import UpdatingModal from '$lib/components/SubmissionStatus/UpdatingModal.svelte';
-  import SubmissionStatusImage from '$lib/components/SubmissionStatus/SubmissionStatusImage.svelte';
-  import ExternalLinkWrapper from '$lib/components/ExternalLinkWrapper.svelte';
   import AcceptedCounter from '$lib/components/SubmissionStatus/AcceptedCounter.svelte';
+  import SubmissionStatusTableBodyCell from '$lib/components/SubmissionStatus/SubmissionStatusInTableBodyCell.svelte';
+  import ExternalLinkWrapper from '$lib/components/ExternalLinkWrapper.svelte';
 
   import { getBackgroundColorFrom } from '$lib/services/submission_status';
 
@@ -33,15 +32,18 @@
 
   let { grade, gradeColor, taskResults, isAdmin, isLoggedIn }: Props = $props();
 
-  // TODO: 他のコンポーネントでも利用できるようにする。
-  let updatingModal: UpdatingModal | null = null;
+  function updateTaskResult(updatedTask: TaskResult): void {
+    const newTaskResults = [...taskResults];
 
-  function openModal(taskResult: TaskResult): void {
-    if (updatingModal) {
-      updatingModal.openModal(taskResult);
-    } else {
-      console.error('Failed to initialize UpdatingModal component.');
+    const index = newTaskResults.findIndex(
+      (task: TaskResult) => task.task_id === updatedTask.task_id,
+    );
+
+    if (index !== -1) {
+      newTaskResults[index] = updatedTask;
     }
+
+    taskResults = newTaskResults;
   }
 </script>
 
@@ -66,7 +68,6 @@
       </span>
     {/snippet}
 
-    <!-- FIXME: clickを1回実行するとactionsが2回実行されてしまう。原因と修正方法が分かっていない。 -->
     <!-- TODO: 問題が多くなってきたら、ページネーションを導入する -->
     <!-- TODO: 回答状況に応じて、フィルタリングできるようにする -->
     <div class="overflow-auto rounded-md border">
@@ -90,14 +91,14 @@
               id={taskResult.contest_id + '-' + taskResult.task_id}
               class={getBackgroundColorFrom(taskResult.status_name)}
             >
-              <TableBodyCell
-                class="justify-center w-20 px-1 sm:px-3 pt-1 sm:pt-3 pb-0.5 sm:pb-1"
-                onclick={() => openModal(taskResult)}
-              >
-                <div class="flex items-center justify-center w-full h-full">
-                  <SubmissionStatusImage {taskResult} {isLoggedIn} />
-                </div>
-              </TableBodyCell>
+              <div class="px-1 sm:px-3">
+                <SubmissionStatusTableBodyCell
+                  {taskResult}
+                  {isLoggedIn}
+                  onupdate={(updatedTask: TaskResult) => updateTaskResult(updatedTask)}
+                />
+              </div>
+
               <TableBodyCell class="w-1/2 text-left truncate pl-0 sm:pl-6">
                 <ExternalLinkWrapper
                   url={getTaskUrl(taskResult.contest_id, taskResult.task_id)}
@@ -135,5 +136,3 @@
     </div>
   </AccordionItem>
 </Accordion>
-
-<UpdatingModal bind:this={updatingModal} {isLoggedIn} />

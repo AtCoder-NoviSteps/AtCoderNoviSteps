@@ -9,9 +9,10 @@
     taskResult: TaskResult;
     isLoggedIn: boolean;
     onupdate?: (updatedTask: TaskResult) => void;
+    dropdownClass?: string;
   }
 
-  let { taskResult, isLoggedIn, onupdate = () => {} }: Props = $props();
+  let { taskResult, isLoggedIn, onupdate, dropdownClass = '' }: Props = $props();
 
   let updatingDropdown: UpdatingDropdown;
 </script>
@@ -44,9 +45,10 @@
     taskResult: TaskResult;
     isLoggedIn: boolean;
     onupdate: (updatedTask: TaskResult) => void; // Ensure to update task result in parent component.
+    dropdownClass?: string;
   }
 
-  let { taskResult, isLoggedIn, onupdate }: Props = $props();
+  let { taskResult, isLoggedIn, onupdate, dropdownClass = '' }: Props = $props();
 
   const { page } = getStores();
   let activeUrl = $state($page.url.pathname);
@@ -67,11 +69,7 @@
   let selectedSubmissionStatus = $state<SubmissionStatus>();
   let showForm = $state(false);
 
-  function handleClick(submissionStatus: {
-    innerId: string;
-    innerName: string;
-    labelName: string;
-  }): void {
+  function handleClick(submissionStatus: SubmissionStatus): void {
     selectedSubmissionStatus = submissionStatus;
     showForm = true;
 
@@ -92,6 +90,7 @@
     innerId: string;
     innerName: string;
     labelName: string;
+    imagePath: string;
   };
 
   type EnhanceForSubmit = {
@@ -158,8 +157,10 @@
       ...taskResult,
       status_name: submissionStatus.innerName,
       status_id: submissionStatus.innerId,
+      submission_status_image_path: submissionStatus.imagePath,
       submission_status_label_name: submissionStatus.labelName,
-      is_ac: submissionStatus.innerName === 'ac',
+      is_ac:
+        submissionStatus.innerName === 'ac' || submissionStatus.innerName === 'ac_with_editorial',
       updated_at: new Date(),
     };
   }
@@ -170,17 +171,19 @@
       innerId: status.id,
       innerName: status.status_name,
       labelName: status.label_name,
+      imagePath: status.image_path,
     };
     return option;
   });
 </script>
 
 <div class="relative">
+  <!-- HACK: classの設定は、テーブルの上部・下部をクリックしたときに、いずれもドロップダウンを操作できるようにするための苦肉の策 -->
   <Dropdown
     {activeUrl}
     {dropdownStatus}
     {closeDropdown}
-    class="absolute w-32 z-20 left-auto right-0 mt-8"
+    class="absolute w-32 z-50 top-12 -translate-y-full {dropdownClass}"
   >
     <DropdownUl>
       {#if isLoggedIn}

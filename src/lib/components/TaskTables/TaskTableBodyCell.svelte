@@ -65,6 +65,12 @@
       <EllipsisVertical class="w-4 h-4 mx-auto" />
     </button>
 
-    <UpdatingDropdown bind:this={updatingDropdown} {taskResult} {isLoggedIn} {onupdate} />
+    <UpdatingDropdown
+      bind:this={updatingDropdown}
+      {taskResult}
+      {isLoggedIn}
+      {onupdate}
+      dropdownClass="left-auto right-0 mt-8"
+    />
   </div>
 {/snippet}
