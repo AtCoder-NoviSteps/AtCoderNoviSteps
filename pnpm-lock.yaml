@@ -60,8 +60,8 @@ importers:
         specifier: 2.0.4
         version: 2.0.4(@prisma/client@5.22.0(prisma@5.22.0))(puppeteer@19.11.1(typescript@5.6.3))(ts-node@10.9.1(@types/node@22.13.13)(typescript@5.6.3))(typescript@5.6.3)
       svelte-eslint-parser:
-        specifier: 1.1.0
-        version: 1.1.0(svelte@5.25.3)
+        specifier: 1.1.1
+        version: 1.1.1(svelte@5.25.3)
       tailwind-merge:
         specifier: 2.6.0
         version: 2.6.0
@@ -4125,8 +4125,8 @@ packages:
       svelte:
         optional: true
 
-  svelte-eslint-parser@1.1.0:
-    resolution: {integrity: sha512-JP0v/wzDXWxza6c8K9ZjKKHYfgt0KidlbWx1e9n9UV4q+o28GTkk71fR0IDZDmLUDYs3vSq0+Tm9fofDqzGe1w==}
+  svelte-eslint-parser@1.1.1:
+    resolution: {integrity: sha512-QLVGPIMDettl30qRHXU2VrPvVJKG8GsGstye7n8rFbEiu3gEARksuQg9Xu4GzubNxhGNM8stfBZkhyMbBQmjFA==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
     peerDependencies:
       svelte: ^3.37.0 || ^4.0.0 || ^5.0.0
@@ -8777,7 +8777,7 @@ snapshots:
     optionalDependencies:
       svelte: 5.25.3
 
-  svelte-eslint-parser@1.1.0(svelte@5.25.3):
+  svelte-eslint-parser@1.1.1(svelte@5.25.3):
     dependencies:
       eslint-scope: 8.3.0
       eslint-visitor-keys: 4.2.0
