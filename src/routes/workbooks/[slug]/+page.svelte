@@ -13,9 +13,8 @@
   import PublicationStatusLabel from '$lib/components/WorkBooks/PublicationStatusLabel.svelte';
   import CompletedTasks from '$lib/components/Trophies/CompletedTasks.svelte';
   import HeadingOne from '$lib/components/HeadingOne.svelte';
-  import UpdatingModal from '$lib/components/SubmissionStatus/UpdatingModal.svelte';
-  import SubmissionStatusImage from '$lib/components/SubmissionStatus/SubmissionStatusImage.svelte';
   import GradeLabel from '$lib/components/GradeLabel.svelte';
+  import SubmissionStatusTableBodyCell from '$lib/components/SubmissionStatus/SubmissionStatusInTableBodyCell.svelte';
   import ExternalLinkWrapper from '$lib/components/ExternalLinkWrapper.svelte';
   import CommentAndHint from '$lib/components/WorkBook/CommentAndHint.svelte';
 
@@ -42,6 +41,17 @@
   // TODO: 関数をutilへ移動させる
   const getTaskResult = (taskId: string): TaskResult => {
     return taskResults?.get(taskId) as TaskResult;
+  };
+
+  const updateTaskResult = (updatedTask: TaskResult): void => {
+    const taskId = updatedTask.task_id;
+
+    if (taskResults.has(taskId)) {
+      // Force to update the task result.
+      const newTaskResults = new Map(taskResults);
+      newTaskResults.set(taskId, updatedTask);
+      taskResults = newTaskResults;
+    }
   };
 
   const getTaskGrade = (taskId: string): TaskGrade => {
@@ -74,19 +84,6 @@
   const getUniqueIdUsing = (taskId: string): string => {
     return getContestIdFrom(taskId) + '-' + taskId;
   };
-
-  // HACK:: `updatingModal` is updated, but is not declared with `$state(...)`. Changing its value will not correctly trigger updates.
-  // eslint-disable-next-line svelte/valid-compile
-  let updatingModal: UpdatingModal | null = null;
-
-  // HACK: clickを1回実行するとactionsが2回実行されてしまう。原因と修正方法が分かっていない。
-  function handleClick(taskId: string) {
-    if (updatingModal) {
-      updatingModal.openModal(getTaskResult(taskId));
-    } else {
-      console.error('Failed to initialize UpdatingModal component.');
-    }
-  }
 
   $effect(() => {
     if (taskResults && workBook && Array.isArray(workBook.workBookTasks)) {
@@ -173,18 +170,14 @@
                 </div>
               </TableBodyCell>
 
-              <!-- 回答状況の更新 -->
-              <TableBodyCell
-                class="justify-center w-20 px-0 pt-1 sm:pt-3 pb-0.5 sm:pb-1"
-                onclick={() => handleClick(workBookTask.taskId)}
-              >
-                <div class="flex items-center justify-center min-w-[80px] max-w-[80px]">
-                  <SubmissionStatusImage
-                    taskResult={getTaskResult(workBookTask.taskId)}
-                    {isLoggedIn}
-                  />
-                </div>
-              </TableBodyCell>
+              <!-- 回答状況 -->
+              <div class="">
+                <SubmissionStatusTableBodyCell
+                  taskResult={getTaskResult(workBookTask.taskId)}
+                  {isLoggedIn}
+                  onupdate={(updatedTask: TaskResult) => updateTaskResult(updatedTask)}
+                />
+              </div>
 
               <!-- 問題のリンク -->
               <TableBodyCell class="w-1/2 px-3 sm:px-6">
@@ -219,8 +212,6 @@
         </TableBody>
       </Table>
     </div>
-
-    <UpdatingModal bind:this={updatingModal} {isLoggedIn} />
   {:else}
     {'問題を1問以上登録してください。'}
   {/if}
