@@ -1,5 +1,5 @@
 <script lang="ts">
-  import EllipsisVertical from 'lucide-svelte/icons/ellipsis-vertical';
+  import ChevronDown from 'lucide-svelte/icons/chevron-down';
 
   import type { TaskResult } from '$lib/types/task';
 
@@ -20,10 +20,12 @@
   let updatingDropdown: UpdatingDropdown;
 </script>
 
-<div class="flex items-center w-full space-x-1 text-left text-sm sm:text-md">
+<div
+  class="flex items-center w-full pl-0 lg:pl-1 space-x-1 lg:space-x-2 text-left text-sm sm:text-md"
+>
   {@render taskGradeLabel(taskResult)}
 
-  <div class="flex justify-between w-full min-w-0">
+  <div class="flex items-center justify-between w-full min-w-0">
     {@render taskTitleAndExternalLink(taskResult)}
     {@render submissionUpdaterAndLinksOfTaskDetailPage(taskResult)}
   </div>
@@ -62,7 +64,7 @@
       onclick={() => updatingDropdown.toggle()}
       aria-label="Update submission for {selectedTaskResult.title}"
     >
-      <EllipsisVertical class="w-4 h-4 mx-auto" />
+      <ChevronDown class="w-4 h-4 mx-auto" />
     </button>
 
     <UpdatingDropdown bind:this={updatingDropdown} {taskResult} {isLoggedIn} {onupdate} />
