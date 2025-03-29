@@ -30,6 +30,7 @@
   import { enhance } from '$app/forms';
 
   import { Dropdown, DropdownUl, DropdownLi, uiHelpers } from 'svelte-5-ui-lib';
+  import Check from 'lucide-svelte/icons/check';
 
   import type { TaskResult } from '$lib/types/task';
 
@@ -180,13 +181,19 @@
     {activeUrl}
     {dropdownStatus}
     {closeDropdown}
-    class="absolute w-32 z-20 left-auto right-0 mt-8"
+    class="absolute w-32 z-20 left-auto right-0 mt-5"
   >
-    <DropdownUl>
+    <DropdownUl class="border rounded-lg shadow">
       {#if isLoggedIn}
         {#each submissionStatusOptions as submissionStatus}
           <DropdownLi href="javascript:void(0)" onclick={() => handleClick(submissionStatus)}>
-            {submissionStatus.labelName}
+            <div class="flex items-center justify-between">
+              {submissionStatus.labelName}
+
+              {#if taskResult.status_name === submissionStatus.innerName}
+                <Check class="w-4 h-4 text-primary-600 dark:text-gray-300" strokeWidth={3} />
+              {/if}
+            </div>
           </DropdownLi>
         {/each}
       {:else}
