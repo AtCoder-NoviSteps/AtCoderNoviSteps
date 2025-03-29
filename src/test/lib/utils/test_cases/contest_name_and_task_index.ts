@@ -412,12 +412,39 @@ interface UniversityContestsTestData {
 }
 
 // Note:
+// KUPC contests on AtCoder: 2012-2021 and 2024- (not held during 2022-2023)
 // UTPC contests on AtCoder: 2011-2014 and 2020-2023 (not held during 2015-2019)
 // TTPC contests on AtCoder: 2015, 2019, 2022-
 // TUPC contests on AtCoder: 2022-
 //
 // See:
 // https://kenkoooo.com/atcoder/resources/contests.json
+type KupcYear = '2012' | '2013' | '2014' | '2019' | '2020' | '2021' | '2024';
+type KupcTaskPatterns = {
+  [K in KupcYear]: string[];
+};
+
+const KUPC_TASK_PATTERNS: KupcTaskPatterns = {
+  '2012': ['A', 'B', 'C', 'G', 'H', 'I'],
+  '2013': ['A', 'B', 'C', 'I', 'J', 'K'],
+  '2014': ['A', 'B', 'C', 'J', 'K', 'L'],
+  '2019': ['A', 'B', 'C', 'J', 'K', 'L'],
+  '2020': ['A', 'B', 'C', 'K', 'L', 'M'],
+  '2021': ['A', 'B', 'C', 'K', 'L', 'M'],
+  '2024': ['A', 'B', 'C', 'N', 'O', 'P'],
+};
+
+const KUPC_YEARS = [2012, 2013, 2014, 2019, 2020, 2021, 2024];
+const KUPC_TEST_DATA: UniversityContestsTestData = Object.fromEntries(
+  KUPC_YEARS.map((year) => [
+    `kupc${year}`,
+    {
+      contestId: `kupc${year}`,
+      tasks: KUPC_TASK_PATTERNS[year.toString() as keyof KupcTaskPatterns],
+    },
+  ]),
+) as UniversityContestsTestData;
+
 type UtpcTaskPatterns = {
   '2011-2014': string[];
   '2020': string[];
@@ -510,6 +537,7 @@ const generateUniversityTestCases = (
 };
 
 const ALL_UNIVERSITY_TEST_DATA: UniversityContestsTestData = {
+  ...KUPC_TEST_DATA,
   ...UTPC_TEST_DATA,
   ...TTPC_TEST_DATA,
   ...TUPC_TEST_DATA,

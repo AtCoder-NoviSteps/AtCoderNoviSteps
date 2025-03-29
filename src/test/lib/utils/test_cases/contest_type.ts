@@ -256,6 +256,7 @@ export const agcLike = [
 ];
 
 // Note:
+// KUPC contests on AtCoder: 2012-2021 and 2024- (not held during 2022-2023)
 // UTPC contests on AtCoder: 2011-2014 and 2020-2023 (not held during 2015-2019)
 // TTPC contests on AtCoder: 2015, 2019, 2022-
 // TUPC contests on AtCoder: 2022-
@@ -263,6 +264,13 @@ export const agcLike = [
 // See:
 // https://kenkoooo.com/atcoder/resources/contests.json
 const universityContestIds = [
+  'kupc2012',
+  'kupc2013',
+  'kupc2014',
+  'kupc2019',
+  'kupc2020',
+  'kupc2021',
+  'kupc2024',
   'utpc2011',
   'utpc2012',
   'utpc2013',
@@ -301,6 +309,10 @@ export const atCoderOthers = [
   }),
   createTestCaseForContestType('CODE FESTIVAL 2014 final')({
     contestId: 'code-festival-2014-final',
+    expected: ContestType.OTHERS,
+  }),
+  createTestCaseForContestType('CODE FESTIVAL 2015 あさぷろ Middle')({
+    contestId: 'code-festival-2015-morning-middle',
     expected: ContestType.OTHERS,
   }),
   createTestCaseForContestType('CODE THANKS FESTIVAL 2017')({

@@ -118,13 +118,14 @@ const AGC_LIKE: ContestPrefix = {
 } as const;
 const agcLikePrefixes = getContestPrefixes(AGC_LIKE);
 
-// HACK: As of November 2024, UTPC, TTPC and TUPC are included.
+// HACK: As of March 2025, KUPC, UTPC, TTPC and TUPC are included.
 // More university contests may be added in the future.
 /**
  * Maps university contest ID prefixes to their display names.
  *
  * @example
  * {
+ *   kupc: 'KUPC' // Kyoto University Programming Contest
  *   utpc: 'UTPC' // University of Tokyo Programming Contest
  *   ttpc: 'TTPC' // Tokyo Institute of Technology Programming Contest
  *   tupc: 'TUPC' // Tohoku University Programming Contest
@@ -137,6 +138,7 @@ const agcLikePrefixes = getContestPrefixes(AGC_LIKE);
  * 3. Ensure prefix doesn't conflict with existing contest types
  */
 const ATCODER_UNIVERSITIES: ContestPrefix = {
+  kupc: 'KUPC',
   utpc: 'UTPC',
   ttpc: 'TTPC',
   tupc: 'TUPC',
@@ -164,6 +166,7 @@ const ATCODER_OTHERS: ContestPrefix = {
   chokudai_S: 'Chokudai SpeedRun',
   'code-festival-2014-qualb': 'Code Festival 2014 予選 B',
   'code-festival-2014-final': 'Code Festival 2014 決勝',
+  'code-festival-2015-morning-middle': 'CODE FESTIVAL 2015 あさぷろ Middle',
   'code-thanks-festival': 'CODE THANKS FESTIVAL',
   donuts: 'Donutsプロコンチャレンジ',
   indeednow: 'Indeedなう',
@@ -280,16 +283,17 @@ const regexForAxc = /^(abc|arc|agc)(\d{3})/i;
  * Regular expression to match AtCoder University contest identifiers.
  *
  * The pattern matches strings that:
- * - Start with either "ut", "tt", or "tu"
+ * - Start with either "ku", "ut", "tt", or "tu"
  * - Followed by "pc"
  * - End with exactly year (four digits)
  *
  * Example matches:
+ * - "kupc2024"
  * - "utpc2014"
  * - "ttpc2022"
  * - "tupc2023"
  */
-const regexForAtCoderUniversity = /^(ut|tt|tu)(pc)(\d{4})/i;
+const regexForAtCoderUniversity = /^(ku|ut|tt|tu)(pc)(\d{4})/i;
 
 export const getContestNameLabel = (contestId: string) => {
   // AtCoder
