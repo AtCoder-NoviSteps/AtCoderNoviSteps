@@ -220,15 +220,7 @@
     <DropdownUl class="border rounded-lg shadow">
       {#if isLoggedIn}
         {#each submissionStatusOptions as submissionStatus}
-          <DropdownLi href="javascript:void(0)" onclick={() => handleClick(submissionStatus)}>
-            <div class="flex items-center justify-between">
-              {submissionStatus.labelName}
-
-              {#if taskResult.status_name === submissionStatus.innerName}
-                <Check class="w-4 h-4 text-primary-600 dark:text-gray-300" strokeWidth={3} />
-              {/if}
-            </div>
-          </DropdownLi>
+          {@render dropdownListForSubmissionStatus(taskResult, submissionStatus)}
         {/each}
       {:else}
         <DropdownLi href={SIGNUP_PAGE}>アカウント作成</DropdownLi>
@@ -241,6 +233,21 @@
     {@render submissionStatusForm(taskResult, selectedSubmissionStatus)}
   {/if}
 </div>
+
+{#snippet dropdownListForSubmissionStatus(
+  taskResult: TaskResult,
+  submissionStatus: SubmissionStatus,
+)}
+  <DropdownLi href="javascript:void(0)" onclick={() => handleClick(submissionStatus)}>
+    <div class="flex items-center justify-between">
+      {submissionStatus.labelName}
+
+      {#if taskResult.status_name === submissionStatus.innerName}
+        <Check class="w-4 h-4 text-primary-600 dark:text-gray-300" strokeWidth={3} />
+      {/if}
+    </div>
+  </DropdownLi>
+{/snippet}
 
 {#snippet submissionStatusForm(selectedTaskResult: TaskResult, submissionStatus: SubmissionStatus)}
   <form
