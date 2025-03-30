@@ -20,7 +20,7 @@
 // Component
 <button
   type="button"
-  onclick={() => updatingDropdown.toggle()} // Open / close the dropdown.
+  onclick={(event) => updatingDropdown.toggle(event)} // Open / close the dropdown.
 >
 
 <UpdatingDropdown bind:this={updatingDropdown} {taskResult} {isLoggedIn} {onupdate} />
@@ -56,13 +56,47 @@
   let dropdownStatus = $state(false);
   let closeDropdown = dropdown.close;
 
+  let dropdownX = $state(0);
+  let dropdownY = $state(0);
+  let isLowerHalfInScreen = $state(false);
+
   $effect(() => {
     activeUrl = $page.url.pathname;
     dropdownStatus = dropdown.isOpen;
+
+    if (dropdownStatus) {
+      document.documentElement.style.setProperty('--dropdown-x', `${dropdownX}px`);
+      document.documentElement.style.setProperty('--dropdown-y', `${dropdownY}px`);
+    }
   });
 
-  export function toggle(): void {
+  export function toggle(event?: MouseEvent): void {
+    if (event) {
+      getDropdownPosition(event);
+    }
+
     dropdown.toggle();
+  }
+
+  function getDropdownPosition(event: MouseEvent): void {
+    const rect = (event.currentTarget as HTMLElement).getBoundingClientRect();
+
+    dropdownX = rect.right;
+    dropdownY = rect.bottom;
+
+    isLowerHalfInScreen = rect.top > window.innerHeight / 2;
+  }
+
+  function getDropdownClasses(isLower: boolean): string {
+    let classes =
+      'absolute w-32 z-[999] shadow-lg pointer-events-auto left-[var(--dropdown-x)] transform -translate-x-full ';
+
+    if (isLower) {
+      classes += 'bottom-[calc(100vh-var(--dropdown-y))] mb-5';
+    } else {
+      classes += 'top-[var(--dropdown-y)] mt-1';
+    }
+    return classes;
   }
 
   let selectedSubmissionStatus = $state<SubmissionStatus>();
@@ -176,12 +210,12 @@
   });
 </script>
 
-<div class="relative">
+<div class="fixed inset-0 pointer-events-none z-50 w-full h-full">
   <Dropdown
     {activeUrl}
     {dropdownStatus}
     {closeDropdown}
-    class="absolute w-32 z-20 left-auto right-0 mt-5"
+    class={getDropdownClasses(isLowerHalfInScreen)}
   >
     <DropdownUl class="border rounded-lg shadow">
       {#if isLoggedIn}

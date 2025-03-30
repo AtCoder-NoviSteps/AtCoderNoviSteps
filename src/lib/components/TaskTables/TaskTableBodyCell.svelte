@@ -61,7 +61,7 @@
     <button
       type="button"
       class="flex-shrink-0 w-6 ml-auto"
-      onclick={() => updatingDropdown.toggle()}
+      onclick={(event) => updatingDropdown.toggle(event)}
       aria-label="Update submission for {selectedTaskResult.title}"
     >
       <ChevronDown class="w-4 h-4 mx-auto" />
