@@ -54,7 +54,7 @@
   }
 
   function getBodyCellClasses(contestId: string, taskIndex: string): string {
-    const baseClasses = 'w-1/2 xs:w-1/3 sm:w-1/4 md:w-1/5 lg:w-1/6 px-1 py-1 border';
+    const baseClasses = 'w-1/2 xs:w-1/3 sm:w-1/4 md:w-1/5 lg:w-1/6 px-1 py-1';
     const backgroundColor = getBackgroundColor(taskTable[contestId][taskIndex]);
 
     return `${baseClasses} ${backgroundColor}`;
@@ -129,34 +129,34 @@
 </Heading>
 
 <!-- TODO: ページネーションを実装 -->
-<!-- TODO: ヘッダーを固定できるようにする。-->
-<!-- HACK: Flowbite と tailwindcss の相性が悪いのかもしれない。tailwindcss のクラス指定、raw HTML & CSS を試したが、いずれも実現できず。 -->
 <!-- See: -->
 <!-- https://github.com/kenkoooo/AtCoderProblems/blob/master/atcoder-problems-frontend/src/pages/TablePage/AtCoderRegularTable.tsx -->
 <!-- https://github.com/birdou/atcoder-blogs/blob/main/app/atcoder-blogs-frontend/src/pages/BlogTablePage/BlogTablePage.tsx -->
 <!-- https://tailwindcss.com/docs/position#sticky-positioning-elements -->
-<div class="container w-full overflow-hidden rounded-md border border-gray-100 shadow-sm">
-  <div class="w-full overflow-auto">
+<div class="container w-full rounded-md border shadow-sm">
+  <div class="w-full sticky top-0 z-20 border-b">
     <Table id="task-table" class="text-md table-fixed w-full" aria-label="Task table">
       <TableHead class="text-sm bg-gray-100">
-        <TableHeadCell class="w-full xl:w-16 px-2 text-center border" scope="col">
-          Round
-        </TableHeadCell>
+        <TableHeadCell class="w-full xl:w-16 px-2 text-center" scope="col">Round</TableHeadCell>
 
         {#if taskTableHeaderIds.length}
           {#each taskTableHeaderIds as taskTableHeaderId}
-            <TableHeadCell class="text-center border" scope="col">
+            <TableHeadCell class="text-center" scope="col">
               {taskTableHeaderId}
             </TableHeadCell>
           {/each}
         {/if}
       </TableHead>
+    </Table>
+  </div>
 
+  <div class="w-full overflow-auto max-h-[calc(80vh-56px)]">
+    <Table id="task-table" class="text-md table-fixed w-full" aria-label="Task table">
       <TableBody class="divide-y">
         {#if contestIds.length && taskTableHeaderIds.length}
           {#each contestIds as contestId}
             <TableBodyRow class="flex flex-wrap xl:table-row">
-              <TableBodyCell class="w-full xl:w-16 truncate px-2 py-2 text-center border">
+              <TableBodyCell class="w-full xl:w-16 truncate px-2 py-2 text-center">
                 {getContestRoundLabel(provider, contestId)}
               </TableBodyCell>
 
