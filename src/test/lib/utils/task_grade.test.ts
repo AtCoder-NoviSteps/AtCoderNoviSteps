@@ -529,18 +529,21 @@ describe('Task grade', () => {
 
   describe('to change border color if needs', () => {
     describe('when task grades from 11Q to 5D are given', () => {
-      const testCases: TestCasesForTaskGrade = [
+      const testCasesForQGrades = [
         { taskGrade: TaskGrade.Q11, expected: 'border-white' },
         { taskGrade: TaskGrade.Q10, expected: 'border-white' },
         { taskGrade: TaskGrade.Q7, expected: 'border-white' },
         { taskGrade: TaskGrade.Q6, expected: 'border-white' },
         { taskGrade: TaskGrade.Q2, expected: 'border-white' },
         { taskGrade: TaskGrade.Q1, expected: 'border-white' },
+      ];
+      const testCasesForDGrades = [
         { taskGrade: TaskGrade.D1, expected: 'border-white' },
         { taskGrade: TaskGrade.D2, expected: 'border-white' },
         { taskGrade: TaskGrade.D4, expected: 'border-white' },
         { taskGrade: TaskGrade.D5, expected: 'border-white' },
       ];
+      const testCases: TestCasesForTaskGrade = [...testCasesForQGrades, ...testCasesForDGrades];
 
       runTests(
         'toChangeBorderColorIfNeeds',
