@@ -1,10 +1,13 @@
 import { expect, test } from 'vitest';
 
+import { runTests } from '../common/test_helpers';
 import {
   getGradeOrder,
   taskGradeOrderInfinity,
   calcGradeMode,
   getTaskGradeLabel,
+  toChangeTextColorIfNeeds,
+  toChangeBorderColorIfNeeds,
 } from '$lib/utils/task';
 
 import { TaskGrade, type TaskGrades } from '$lib/types/task';
@@ -29,6 +32,13 @@ type TestCaseForTaskGradeLabel = {
 };
 
 type TestCasesForTaskGradeLabel = TestCaseForTaskGradeLabel[];
+
+type TestCaseForTaskGrade = {
+  taskGrade: TaskGrade;
+  expected: string;
+};
+
+type TestCasesForTaskGrade = TestCaseForTaskGrade[];
 
 // See: src/lib/utils/task.ts
 //
@@ -462,5 +472,97 @@ describe('Task grade', () => {
     ) {
       test.each(testCases)(`${testName}(taskGrade: $taskGrade)`, testFunction);
     }
+  });
+
+  describe('to change text color if needs', () => {
+    describe('when task grades from 11Q to 1Q are given ', () => {
+      const testCases: TestCasesForTaskGrade = [
+        { taskGrade: TaskGrade.Q11, expected: 'text-black' },
+        { taskGrade: TaskGrade.Q10, expected: 'text-black' },
+        { taskGrade: TaskGrade.Q6, expected: 'text-black' },
+        { taskGrade: TaskGrade.Q5, expected: 'text-black' },
+        { taskGrade: TaskGrade.Q2, expected: 'text-black' },
+        { taskGrade: TaskGrade.Q1, expected: 'text-black' },
+      ];
+
+      runTests(
+        'toChangeTextColorIfNeeds',
+        testCases,
+        ({ taskGrade, expected }: TestCaseForTaskGrade) => {
+          expect(toChangeTextColorIfNeeds(getTaskGradeLabel(taskGrade))).toBe(expected);
+        },
+      );
+    });
+
+    describe('when task grades from 1D to 5D are given', () => {
+      const testCases: TestCasesForTaskGrade = [
+        { taskGrade: TaskGrade.D1, expected: 'text-white' },
+        { taskGrade: TaskGrade.D2, expected: 'text-white' },
+        { taskGrade: TaskGrade.D3, expected: 'text-white' },
+        { taskGrade: TaskGrade.D4, expected: 'text-white' },
+        { taskGrade: TaskGrade.D5, expected: 'text-white' },
+      ];
+
+      runTests(
+        'toChangeTextColorIfNeeds',
+        testCases,
+        ({ taskGrade, expected }: TestCaseForTaskGrade) => {
+          expect(toChangeTextColorIfNeeds(getTaskGradeLabel(taskGrade))).toBe(expected);
+        },
+      );
+    });
+
+    describe('when task grades 6D is given', () => {
+      const testCases: TestCasesForTaskGrade = [
+        { taskGrade: TaskGrade.D6, expected: 'text-atcoder-bronze' },
+      ];
+
+      runTests(
+        'toChangeTextColorIfNeeds',
+        testCases,
+        ({ taskGrade, expected }: TestCaseForTaskGrade) => {
+          expect(toChangeTextColorIfNeeds(getTaskGradeLabel(taskGrade))).toBe(expected);
+        },
+      );
+    });
+  });
+
+  describe('to change border color if needs', () => {
+    describe('when task grades from 11Q to 5D are given', () => {
+      const testCases: TestCasesForTaskGrade = [
+        { taskGrade: TaskGrade.Q11, expected: 'border-white' },
+        { taskGrade: TaskGrade.Q10, expected: 'border-white' },
+        { taskGrade: TaskGrade.Q7, expected: 'border-white' },
+        { taskGrade: TaskGrade.Q6, expected: 'border-white' },
+        { taskGrade: TaskGrade.Q2, expected: 'border-white' },
+        { taskGrade: TaskGrade.Q1, expected: 'border-white' },
+        { taskGrade: TaskGrade.D1, expected: 'border-white' },
+        { taskGrade: TaskGrade.D2, expected: 'border-white' },
+        { taskGrade: TaskGrade.D4, expected: 'border-white' },
+        { taskGrade: TaskGrade.D5, expected: 'border-white' },
+      ];
+
+      runTests(
+        'toChangeBorderColorIfNeeds',
+        testCases,
+        ({ taskGrade, expected }: TestCaseForTaskGrade) => {
+          expect(toChangeBorderColorIfNeeds(getTaskGradeLabel(taskGrade))).toBe(expected);
+        },
+      );
+    });
+
+    describe('when task grade 6D is given ', () => {
+      const testCases: TestCasesForTaskGrade = [
+        { taskGrade: TaskGrade.D6, expected: 'border-atcoder-bronze' },
+      ];
+
+      runTests(
+        'toChangeBorderColorIfNeeds',
+        testCases,
+        ({ taskGrade, expected }: TestCaseForTaskGrade) => {
+          expect(toChangeBorderColorIfNeeds(getTaskGradeLabel(taskGrade))).toBe(expected);
+        },
+      );
+    });
   });
 });
