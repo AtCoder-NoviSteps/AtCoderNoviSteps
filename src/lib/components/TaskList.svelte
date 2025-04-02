@@ -10,8 +10,9 @@
     TableHeadCell,
   } from 'svelte-5-ui-lib';
 
-  import { type TaskResult, type TaskResults, TaskGrade } from '$lib/types/task';
+  import { type TaskResult, type TaskResults } from '$lib/types/task';
 
+  import GradeLabel from '$lib/components/GradeLabel.svelte';
   import ThermometerProgressBar from '$lib/components/ThermometerProgressBar.svelte';
   import UpdatingModal from '$lib/components/SubmissionStatus/UpdatingModal.svelte';
   import SubmissionStatusImage from '$lib/components/SubmissionStatus/SubmissionStatusImage.svelte';
@@ -21,17 +22,16 @@
   import { getBackgroundColorFrom } from '$lib/services/submission_status';
 
   import { addContestNameToTaskIndex } from '$lib/utils/contest';
-  import { toWhiteTextIfNeeds, getTaskUrl, removeTaskIndexFromTitle } from '$lib/utils/task';
+  import { getTaskUrl, removeTaskIndexFromTitle } from '$lib/utils/task';
 
   interface Props {
     grade: string;
-    gradeColor: string;
     taskResults: TaskResults;
     isAdmin: boolean;
     isLoggedIn: boolean;
   }
 
-  let { grade, gradeColor, taskResults, isAdmin, isLoggedIn }: Props = $props();
+  let { grade, taskResults, isAdmin, isLoggedIn }: Props = $props();
 
   // TODO: 他のコンポーネントでも利用できるようにする。
   let updatingModal: UpdatingModal | null = null;
@@ -49,17 +49,13 @@
   <AccordionItem>
     {#snippet header()}
       <span class="flex justify-around w-full place-items-center">
-        <div
-          class="text-sm xs:text-xl w-9 xs:w-12 p-0.5 text-center rounded-lg {toWhiteTextIfNeeds(
-            grade,
-          )} {gradeColor}"
-        >
-          {#if grade !== TaskGrade.PENDING}
-            {grade}
-          {:else}
-            ??
-          {/if}
-        </div>
+        <GradeLabel
+          taskGrade={grade}
+          defaultPadding={0.25}
+          defaultWidth={12}
+          reducedWidth={9}
+          defaultTextSize="xl"
+        />
 
         <ThermometerProgressBar {taskResults} />
         <AcceptedCounter {taskResults} />

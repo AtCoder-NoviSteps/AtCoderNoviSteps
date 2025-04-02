@@ -3,8 +3,6 @@
 
   import TaskList from '$lib/components/TaskList.svelte';
 
-  import { getTaskGradeColor, getTaskGradeLabel } from '$lib/utils/task';
-
   import type { TaskResults, TaskResult } from '$lib/types/task';
   import { TaskGrade, taskGradeValues } from '$lib/types/task';
 
@@ -53,8 +51,7 @@
   <!-- HACK: Svelteでcontinueに相当する構文は確認できず(2024年1月時点)。 -->
   {#if countTasks(taskGrade) && isShowTaskList(isAdmin, taskGrade)}
     <TaskList
-      grade={getTaskGradeLabel(taskGrade)}
-      gradeColor={getTaskGradeColor(taskGrade)}
+      grade={taskGrade}
       taskResults={taskResultsForEachGrade.get(taskGrade)}
       {isAdmin}
       {isLoggedIn}
