@@ -8,6 +8,7 @@
     textColorInDarkMode?: string;
     textOverflow?: string;
     iconSize?: number;
+    useInlineFlex?: boolean;
   }
 
   let {
@@ -17,12 +18,13 @@
     textColorInDarkMode = 'dark:text-primary-500',
     textOverflow = '',
     iconSize = 4,
+    useInlineFlex = true,
   }: Props = $props();
 </script>
 
 <a
   href={url}
-  class={`inline-flex items-center font-medium ${textSize} text-primary-600 hover:underline ${textColorInDarkMode}`}
+  class={`${useInlineFlex ? 'inline-flex' : ''} items-center font-medium ${textSize} text-primary-600 hover:underline ${textColorInDarkMode}`}
   target="_blank"
   rel="noreferrer"
 >
