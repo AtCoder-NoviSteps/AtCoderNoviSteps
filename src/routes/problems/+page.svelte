@@ -38,7 +38,7 @@
   <!-- https://flowbite-svelte.com/docs/components/tabs -->
   <Tabs tabStyle="underline" contentClass="bg-white dark:bg-gray-800 mt-0 p-0">
     <!-- Contest table -->
-    {@render problemListTab('テーブル', 'contestTable', contestTable)}
+    {@render problemListTab('テーブル（アルファ版）', 'contestTable', contestTable)}
 
     <!-- Grades -->
     {@render problemListTab('グレード', 'listByGrade', listByGrade)}
