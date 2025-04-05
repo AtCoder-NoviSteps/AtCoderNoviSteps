@@ -1,15 +1,15 @@
 export type ActiveProblemListTab = 'contestTable' | 'listByGrade' | 'gradeGuidelineTable';
 
 export class ActiveProblemListTabStore {
-  value = $state<ActiveProblemListTab>('listByGrade');
+  value = $state<ActiveProblemListTab>('contestTable');
 
   /**
    * Creates an instance with the specified problem list tab.
    *
    * @param activeTab - The default problem list tab to initialize.
-   * Defaults to 'listByGrade'.
+   * Defaults to 'contestTable'.
    */
-  constructor(activeTab: ActiveProblemListTab = 'listByGrade') {
+  constructor(activeTab: ActiveProblemListTab = 'contestTable') {
     this.value = activeTab;
   }
 
@@ -42,10 +42,10 @@ export class ActiveProblemListTabStore {
 
   /**
    * Resets the active tab to the default value.
-   * Sets the internal value to 'listByGrade'.
+   * Sets the internal value to 'contestTable'.
    */
   reset(): void {
-    this.value = 'listByGrade';
+    this.value = 'contestTable';
   }
 }
 
