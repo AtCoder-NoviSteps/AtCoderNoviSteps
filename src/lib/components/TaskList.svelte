@@ -33,7 +33,6 @@
 
   let { grade, taskResults, isAdmin, isLoggedIn }: Props = $props();
 
-  // TODO: 他のコンポーネントでも利用できるようにする。
   let updatingModal: UpdatingModal | null = null;
 
   function openModal(taskResult: TaskResult): void {
@@ -48,17 +47,24 @@
 <Accordion flush>
   <AccordionItem>
     {#snippet header()}
-      <span class="flex justify-around w-full place-items-center">
-        <GradeLabel
-          taskGrade={grade}
-          defaultPadding={0.25}
-          defaultWidth={12}
-          reducedWidth={9}
-          defaultTextSize="xl"
-        />
+      <span class="grid grid-cols-[1fr_6fr_0fr] sm:grid-cols-[1fr_6fr_1fr] w-full items-center">
+        <div class="flex justify-center">
+          <GradeLabel
+            taskGrade={grade}
+            defaultPadding={0.25}
+            defaultWidth={12}
+            reducedWidth={9}
+            defaultTextSize="xl"
+          />
+        </div>
 
-        <ThermometerProgressBar {taskResults} />
-        <AcceptedCounter {taskResults} />
+        <div class="flex justify-center">
+          <ThermometerProgressBar {taskResults} width="w-5/6 md:w-11/12 lg:w-full" />
+        </div>
+
+        <div class="hidden sm:flex justify-center">
+          <AcceptedCounter {taskResults} />
+        </div>
       </span>
     {/snippet}
 

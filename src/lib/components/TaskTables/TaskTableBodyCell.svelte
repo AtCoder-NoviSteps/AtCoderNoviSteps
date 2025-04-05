@@ -43,13 +43,14 @@
 {/snippet}
 
 {#snippet taskTitleAndExternalLink(taskResult: TaskResult)}
-  <div class="max-w-[calc(100%-2rem)] truncate">
+  <div class="max-w-[calc(100%-1rem)] truncate">
     <ExternalLinkWrapper
       url={getTaskUrl(taskResult.contest_id, taskResult.task_id)}
       description={removeTaskIndexFromTitle(taskResult.title, taskResult.task_table_index)}
       textSize="xs:text-md"
       textColorInDarkMode="dark:text-gray-300"
       iconSize={0}
+      useInlineFlex={false}
     />
   </div>
 {/snippet}

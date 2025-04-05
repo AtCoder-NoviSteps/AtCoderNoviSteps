@@ -38,11 +38,7 @@
   <!-- https://flowbite-svelte.com/docs/components/tabs -->
   <Tabs tabStyle="underline" contentClass="bg-white dark:bg-gray-800 mt-0 p-0">
     <!-- Contest table -->
-    <!-- WIP: UIのデザインが試行錯誤の段階であるため、管理者のみ閲覧可能 -->
-    <!-- TODO: 一般公開するときに、デフォルトで開くタブにする -->
-    {#if isAdmin}
-      {@render problemListTab('テーブル', 'contestTable', contestTable)}
-    {/if}
+    {@render problemListTab('テーブル（アルファ版）', 'contestTable', contestTable)}
 
     <!-- Grades -->
     {@render problemListTab('グレード', 'listByGrade', listByGrade)}
