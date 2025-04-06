@@ -236,7 +236,7 @@
     return option;
   });
 
-  function manageDropdown(node: HTMLElement) {
+  function handleDropdown(node: HTMLElement) {
     if (!browser) {
       return {
         destroy: () => {},
@@ -288,7 +288,7 @@
   }
 </script>
 
-<div class="fixed inset-0 pointer-events-none z-50 w-full h-full" use:manageDropdown>
+<div class="fixed inset-0 pointer-events-none z-50 w-full h-full" use:handleDropdown>
   <Dropdown
     {activeUrl}
     {dropdownStatus}
