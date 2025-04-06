@@ -265,17 +265,17 @@ export const getTaskGradeLabel = (taskGrade: TaskGrade | string) => {
 // https://developer.mozilla.org/ja/docs/Web/JavaScript/Reference/Global_Objects/Array/includes
 export const toChangeTextColorIfNeeds = (grade: string): string => {
   const gradeToWhiteText = [
-    `${getTaskGradeLabel(TaskGrade.D1)}`,
+    `${getTaskGradeLabel(TaskGrade.Q4)}`,
+    `${getTaskGradeLabel(TaskGrade.Q3)}`,
+    `${getTaskGradeLabel(TaskGrade.Q2)}`,
     `${getTaskGradeLabel(TaskGrade.D2)}`,
-    `${getTaskGradeLabel(TaskGrade.D3)}`,
     `${getTaskGradeLabel(TaskGrade.D4)}`,
     `${getTaskGradeLabel(TaskGrade.D5)}`,
+    `${getTaskGradeLabel(TaskGrade.D6)}`,
   ];
 
   if (gradeToWhiteText.includes(grade)) {
     return 'text-white';
-  } else if (getTaskGradeLabel(grade) === TaskGrade.D6) {
-    return 'text-atcoder-bronze';
   } else {
     return 'text-black';
   }

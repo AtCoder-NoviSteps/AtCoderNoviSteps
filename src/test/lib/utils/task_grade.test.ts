@@ -475,14 +475,15 @@ describe('Task grade', () => {
   });
 
   describe('to change text color if needs', () => {
-    describe('when task grades from 11Q to 1Q are given ', () => {
+    describe('when task grades with black text color are given ', () => {
       const testCases: TestCasesForTaskGrade = [
         { taskGrade: TaskGrade.Q11, expected: 'text-black' },
         { taskGrade: TaskGrade.Q10, expected: 'text-black' },
         { taskGrade: TaskGrade.Q6, expected: 'text-black' },
         { taskGrade: TaskGrade.Q5, expected: 'text-black' },
-        { taskGrade: TaskGrade.Q2, expected: 'text-black' },
         { taskGrade: TaskGrade.Q1, expected: 'text-black' },
+        { taskGrade: TaskGrade.D1, expected: 'text-black' },
+        { taskGrade: TaskGrade.D3, expected: 'text-black' },
       ];
 
       runTests(
@@ -494,11 +495,12 @@ describe('Task grade', () => {
       );
     });
 
-    describe('when task grades from 1D to 5D are given', () => {
+    describe('when task grades with white text color are given', () => {
       const testCases: TestCasesForTaskGrade = [
-        { taskGrade: TaskGrade.D1, expected: 'text-white' },
+        { taskGrade: TaskGrade.Q4, expected: 'text-white' },
+        { taskGrade: TaskGrade.Q3, expected: 'text-white' },
+        { taskGrade: TaskGrade.Q2, expected: 'text-white' },
         { taskGrade: TaskGrade.D2, expected: 'text-white' },
-        { taskGrade: TaskGrade.D3, expected: 'text-white' },
         { taskGrade: TaskGrade.D4, expected: 'text-white' },
         { taskGrade: TaskGrade.D5, expected: 'text-white' },
       ];
@@ -514,7 +516,7 @@ describe('Task grade', () => {
 
     describe('when task grades 6D is given', () => {
       const testCases: TestCasesForTaskGrade = [
-        { taskGrade: TaskGrade.D6, expected: 'text-atcoder-bronze' },
+        { taskGrade: TaskGrade.D6, expected: 'text-white' },
       ];
 
       runTests(
