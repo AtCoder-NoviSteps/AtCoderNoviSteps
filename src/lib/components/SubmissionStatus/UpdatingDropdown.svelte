@@ -25,18 +25,9 @@
 
 <UpdatingDropdown bind:this={updatingDropdown} {taskResult} {isLoggedIn} {onupdate} />
 -->
-<script module lang="ts">
-  import { writable } from 'svelte/store';
-
-  // Avoid multiple activation of dropdowns.
-  const activeDropdownId = writable<string | null>(null);
-</script>
-
 <script lang="ts">
   import { getStores } from '$app/stores';
   import { enhance } from '$app/forms';
-  import { onMount } from 'svelte';
-  import { browser } from '$app/environment';
 
   import { Dropdown, DropdownUl, DropdownLi, uiHelpers } from 'svelte-5-ui-lib';
   import Check from 'lucide-svelte/icons/check';
@@ -45,6 +36,11 @@
 
   import InputFieldWrapper from '$lib/components/InputFieldWrapper.svelte';
 
+  import {
+    handleDropdownBehavior,
+    calculateDropdownPosition,
+    toggleDropdown,
+  } from '$lib/actions/handle_dropdown';
   import { submission_statuses } from '$lib/services/submission_status';
   import { errorMessageStore } from '$lib/stores/error_message';
 
@@ -66,18 +62,7 @@
   let closeDropdown = dropdown.close;
 
   let dropdownPosition = $state({ x: 0, y: 0, isLower: false });
-
   const componentId = Math.random().toString(36).substring(2);
-
-  onMount(() => {
-    const unsubscribe = activeDropdownId.subscribe((id) => {
-      if (id && id !== componentId && dropdownStatus) {
-        closeDropdown();
-      }
-    });
-
-    return unsubscribe;
-  });
 
   $effect(() => {
     activeUrl = $page.url.pathname;
@@ -90,28 +75,16 @@
   });
 
   export function toggle(event?: MouseEvent): void {
-    if (event) {
-      event.stopPropagation();
-      getDropdownPosition(event);
-    }
-
-    activeDropdownId.set(componentId);
-    dropdown.toggle();
-
-    // Note: Wait until the next event cycle before accepting a click event.
-    if (!dropdownStatus) {
-      setTimeout(() => {}, 0);
-    }
+    toggleDropdown(event, {
+      dropdownId: componentId,
+      toggle: dropdown.toggle,
+      getPosition: updateDropdownPosition,
+    });
   }
 
-  function getDropdownPosition(event: MouseEvent): void {
-    const rect = (event.currentTarget as HTMLElement).getBoundingClientRect();
-
-    dropdownPosition = {
-      x: rect.right,
-      y: rect.bottom,
-      isLower: rect.top > window.innerHeight / 2,
-    };
+  // Required for the dropdown to open at the correct position.
+  function updateDropdownPosition(event: MouseEvent): void {
+    dropdownPosition = calculateDropdownPosition(event);
   }
 
   function getDropdownClasses(isLower: boolean): string {
@@ -235,60 +208,19 @@
     };
     return option;
   });
-
-  function handleDropdown(node: HTMLElement) {
-    if (!browser) {
-      return {
-        destroy: () => {},
-      };
-    }
-
-    let justOpened = false;
-
-    const handleScroll = () => {
-      if (dropdownStatus) {
-        closeDropdown();
-      }
-    };
-
-    const handleWindowClick = (event: MouseEvent) => {
-      if (justOpened) {
-        justOpened = false;
-        return;
-      }
-
-      if (dropdownStatus && !node.contains(event.target as Node)) {
-        closeDropdown();
-      }
-    };
-
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    window.addEventListener('click', handleWindowClick);
-
-    return {
-      update(newStatus: boolean) {
-        if (newStatus && !dropdownStatus) {
-          justOpened = true;
-
-          setTimeout(() => {
-            justOpened = false;
-          }, 0);
-        }
-
-        dropdownStatus = newStatus;
-      },
-
-      destroy() {
-        if (browser) {
-          window.removeEventListener('scroll', handleScroll);
-          window.removeEventListener('click', handleWindowClick);
-        }
-      },
-    };
-  }
 </script>
 
-<div class="fixed inset-0 pointer-events-none z-50 w-full h-full" use:handleDropdown>
+<div
+  class="fixed inset-0 pointer-events-none z-50 w-full h-full"
+  use:handleDropdownBehavior={{
+    dropdownId: componentId,
+    isOpen: dropdownStatus,
+    closeDropdown,
+    onStatusChange: (status: boolean) => {
+      dropdownStatus = status;
+    },
+  }}
+>
   <Dropdown
     {activeUrl}
     {dropdownStatus}
