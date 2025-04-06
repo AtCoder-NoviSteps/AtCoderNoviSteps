@@ -25,9 +25,18 @@
 
 <UpdatingDropdown bind:this={updatingDropdown} {taskResult} {isLoggedIn} {onupdate} />
 -->
+<script module lang="ts">
+  import { writable } from 'svelte/store';
+
+  // Avoid multiple activation of dropdowns.
+  const activeDropdownId = writable<string | null>(null);
+</script>
+
 <script lang="ts">
   import { getStores } from '$app/stores';
   import { enhance } from '$app/forms';
+  import { onMount } from 'svelte';
+  import { browser } from '$app/environment';
 
   import { Dropdown, DropdownUl, DropdownLi, uiHelpers } from 'svelte-5-ui-lib';
   import Check from 'lucide-svelte/icons/check';
@@ -56,35 +65,53 @@
   let dropdownStatus = $state(false);
   let closeDropdown = dropdown.close;
 
-  let dropdownX = $state(0);
-  let dropdownY = $state(0);
-  let isLowerHalfInScreen = $state(false);
+  let dropdownPosition = $state({ x: 0, y: 0, isLower: false });
+
+  const componentId = Math.random().toString(36).substring(2);
+
+  onMount(() => {
+    const unsubscribe = activeDropdownId.subscribe((id) => {
+      if (id && id !== componentId && dropdownStatus) {
+        closeDropdown();
+      }
+    });
+
+    return unsubscribe;
+  });
 
   $effect(() => {
     activeUrl = $page.url.pathname;
     dropdownStatus = dropdown.isOpen;
 
     if (dropdownStatus) {
-      document.documentElement.style.setProperty('--dropdown-x', `${dropdownX}px`);
-      document.documentElement.style.setProperty('--dropdown-y', `${dropdownY}px`);
+      document.documentElement.style.setProperty('--dropdown-x', `${dropdownPosition.x}px`);
+      document.documentElement.style.setProperty('--dropdown-y', `${dropdownPosition.y}px`);
     }
   });
 
   export function toggle(event?: MouseEvent): void {
     if (event) {
+      event.stopPropagation();
       getDropdownPosition(event);
     }
 
+    activeDropdownId.set(componentId);
     dropdown.toggle();
+
+    // Note: Wait until the next event cycle before accepting a click event.
+    if (!dropdownStatus) {
+      setTimeout(() => {}, 0);
+    }
   }
 
   function getDropdownPosition(event: MouseEvent): void {
     const rect = (event.currentTarget as HTMLElement).getBoundingClientRect();
 
-    dropdownX = rect.right;
-    dropdownY = rect.bottom;
-
-    isLowerHalfInScreen = rect.top > window.innerHeight / 2;
+    dropdownPosition = {
+      x: rect.right,
+      y: rect.bottom,
+      isLower: rect.top > window.innerHeight / 2,
+    };
   }
 
   function getDropdownClasses(isLower: boolean): string {
@@ -208,14 +235,65 @@
     };
     return option;
   });
+
+  function manageDropdown(node: HTMLElement) {
+    if (!browser) {
+      return {
+        destroy: () => {},
+      };
+    }
+
+    let justOpened = false;
+
+    const handleScroll = () => {
+      if (dropdownStatus) {
+        closeDropdown();
+      }
+    };
+
+    const handleWindowClick = (event: MouseEvent) => {
+      if (justOpened) {
+        justOpened = false;
+        return;
+      }
+
+      if (dropdownStatus && !node.contains(event.target as Node)) {
+        closeDropdown();
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    window.addEventListener('click', handleWindowClick);
+
+    return {
+      update(newStatus: boolean) {
+        if (newStatus && !dropdownStatus) {
+          justOpened = true;
+
+          setTimeout(() => {
+            justOpened = false;
+          }, 0);
+        }
+
+        dropdownStatus = newStatus;
+      },
+
+      destroy() {
+        if (browser) {
+          window.removeEventListener('scroll', handleScroll);
+          window.removeEventListener('click', handleWindowClick);
+        }
+      },
+    };
+  }
 </script>
 
-<div class="fixed inset-0 pointer-events-none z-50 w-full h-full">
+<div class="fixed inset-0 pointer-events-none z-50 w-full h-full" use:manageDropdown>
   <Dropdown
     {activeUrl}
     {dropdownStatus}
     {closeDropdown}
-    class={getDropdownClasses(isLowerHalfInScreen)}
+    class={getDropdownClasses(dropdownPosition.isLower)}
   >
     <DropdownUl class="border rounded-lg shadow">
       {#if isLoggedIn}
