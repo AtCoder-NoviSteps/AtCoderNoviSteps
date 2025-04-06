@@ -46,7 +46,7 @@
     {#if taskGrade !== TaskGrade.PENDING}
       {grade}
     {:else}
-      {'??'}
+      {'−'}
     {/if}
   </div>
 </div>
