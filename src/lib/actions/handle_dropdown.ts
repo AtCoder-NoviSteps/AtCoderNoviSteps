@@ -34,6 +34,7 @@ let resizeTimeout: ReturnType<typeof setTimeout>;
  *   isOpen: $isMenuOpen,
  *   closeDropdown: () => isMenuOpen.set(false),
  *   onStatusChange: (status) => console.log(`Menu is ${status ? 'open' : 'closed'}`)
+ *   updatePosition: (x, y, isLower) => {updateDropdownPosition(x, y, isLower)},
  * }}>
  *   <!-- Dropdown content -->
  * </div>
