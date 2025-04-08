@@ -28,6 +28,7 @@
 <script lang="ts">
   import { getStores } from '$app/stores';
   import { enhance } from '$app/forms';
+  import { browser } from '$app/environment';
 
   import { Dropdown, DropdownUl, DropdownLi, uiHelpers } from 'svelte-5-ui-lib';
   import Check from 'lucide-svelte/icons/check';
@@ -84,7 +85,17 @@
 
   // Required for the dropdown to open at the correct position.
   function updateDropdownPosition(event: MouseEvent): void {
-    dropdownPosition = calculateDropdownPosition(event);
+    const position = calculateDropdownPosition(event);
+    updatePositionInComponent(position.x, position.y, position.isLower);
+  }
+
+  function updatePositionInComponent(x: number, y: number, isLower: boolean) {
+    dropdownPosition = { x, y, isLower };
+
+    if (browser) {
+      document.documentElement.style.setProperty('--dropdown-x', `${x}px`);
+      document.documentElement.style.setProperty('--dropdown-y', `${y}px`);
+    }
   }
 
   function getDropdownClasses(isLower: boolean): string {
@@ -219,6 +230,7 @@
     onStatusChange: (status: boolean) => {
       dropdownStatus = status;
     },
+    updatePosition: updatePositionInComponent,
   }}
 >
   <Dropdown
