@@ -79,10 +79,6 @@ export function handleDropdownBehavior(
 
   // Recalculate the dropdown position on resize.
   const handleWindowResize = () => {
-    if (options.isOpen) {
-      options.closeDropdown();
-    }
-
     clearTimeout(resizeTimeout);
 
     resizeTimeout = setTimeout(() => {
@@ -146,10 +142,11 @@ export function calculateDropdownPosition(event: MouseEvent): {
 } {
   lastTriggerElement = event.currentTarget as HTMLElement;
   const rect = (lastTriggerElement as HTMLElement).getBoundingClientRect();
+  const { x, y } = preventDropdownOverflowWhenNearViewportEdge(rect.right, rect.bottom);
 
   return {
-    x: rect.right,
-    y: rect.bottom,
+    x: x,
+    y: y,
     isLower: rect.top > window.innerHeight / 2,
   };
 }
@@ -182,7 +179,36 @@ export function recalculateDropdownPosition(options: {
   }
 
   const rect = lastTriggerElement.getBoundingClientRect();
-  options.updatePosition(rect.right, rect.bottom, rect.top > window.innerHeight / 2);
+  const { x, y } = preventDropdownOverflowWhenNearViewportEdge(rect.right, rect.bottom);
+  options.updatePosition(x, y, rect.top > window.innerHeight / 2);
+}
+
+/**
+ * Adjusts coordinates to prevent a dropdown from overflowing the viewport edge.
+ *
+ * @param x - The horizontal coordinate to adjust
+ * @param y - The vertical coordinate to adjust
+ * @returns An object containing adjusted x and y coordinates that ensure the dropdown
+ *          will have at least a 10px margin from the viewport edge
+ *
+ * @example
+ * // Adjust coordinates for dropdown positioning
+ * const adjustedPosition = preventDropdownOverflowWhenNearViewportEdge(mouseX, mouseY);
+ */
+function preventDropdownOverflowWhenNearViewportEdge(
+  x: number,
+  y: number,
+): { x: number; y: number } {
+  const margin = 10; // minimal margin from viewport edge
+
+  if (x > window.innerWidth - margin) {
+    x = window.innerWidth - margin;
+  }
+  if (y > window.innerHeight - margin) {
+    y = window.innerHeight - margin;
+  }
+
+  return { x, y };
 }
 
 /**
