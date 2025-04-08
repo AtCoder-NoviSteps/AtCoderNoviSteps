@@ -14,6 +14,7 @@ let resizeTimeout: ReturnType<typeof setTimeout>;
  * - Closing when clicking outside the dropdown
  * - Closing on page scroll
  * - Coordinating with other dropdowns to ensure only one is open at a time
+ * - Recalculating the dropdown position on window resize
  *
  * @param node - The HTML element that contains the dropdown
  * @param options - Configuration options for the dropdown behavior
@@ -76,7 +77,7 @@ export function handleDropdownBehavior(
   };
 
   // Recalculate the dropdown position on resize.
-  const handleResize = () => {
+  const handleWindowResize = () => {
     if (options.isOpen) {
       options.closeDropdown();
     }
@@ -101,7 +102,7 @@ export function handleDropdownBehavior(
   // Add event listeners.
   window.addEventListener('click', handleWindowClick);
   window.addEventListener('scroll', handleScroll, { passive: true });
-  window.addEventListener('resize', handleResize, { passive: true });
+  window.addEventListener('resize', handleWindowResize, { passive: true });
 
   return {
     update(newOptions: {
@@ -119,7 +120,7 @@ export function handleDropdownBehavior(
         // Remove event listeners to prevent memory leaks.
         window.removeEventListener('scroll', handleScroll);
         window.removeEventListener('click', handleWindowClick);
-        window.removeEventListener('resize', handleResize);
+        window.removeEventListener('resize', handleWindowResize);
 
         clearTimeout(resizeTimeout);
         unsubscribe();
