@@ -3,9 +3,12 @@ import { browser } from '$app/environment';
 
 const activeDropdownId: Writable<string | null> = writable<string | null>(null);
 
-let lastTriggerElement: HTMLElement | null = null;
-// Bounce timer for resizing event.
-let resizeTimeout: ReturnType<typeof setTimeout>;
+const dropdownContext = {
+  // Reference to the element that triggered the dropdown.
+  lastTriggerElement: null as HTMLElement | null,
+  // Bounce timer for resizing event.
+  resizeTimeout: undefined as ReturnType<typeof setTimeout> | undefined,
+};
 
 /**
  * A Svelte action that manages dropdown behavior for an HTML element.
@@ -56,6 +59,8 @@ export function handleDropdownBehavior(
     };
   }
 
+  // Flag to prevent the dropdown from closing immediately after opening
+  // when a click event propagates to the window.
   let ignoreNextClick = false;
 
   // Close the dropdown on scroll.
@@ -79,9 +84,9 @@ export function handleDropdownBehavior(
 
   // Recalculate the dropdown position on resize.
   const handleWindowResize = () => {
-    clearTimeout(resizeTimeout);
+    clearTimeout(dropdownContext.resizeTimeout);
 
-    resizeTimeout = setTimeout(() => {
+    dropdownContext.resizeTimeout = setTimeout(() => {
       recalculateDropdownPosition({
         updatePosition: options.updatePosition || (() => {}),
         dropdownIsOpen: options.isOpen,
@@ -119,7 +124,7 @@ export function handleDropdownBehavior(
         window.removeEventListener('click', handleWindowClick);
         window.removeEventListener('resize', handleWindowResize);
 
-        clearTimeout(resizeTimeout);
+        clearTimeout(dropdownContext.resizeTimeout);
         unsubscribe();
       }
     },
@@ -140,13 +145,14 @@ export function calculateDropdownPosition(event: MouseEvent): {
   y: number;
   isInBottomHalf: boolean;
 } {
-  lastTriggerElement = event.currentTarget as HTMLElement;
-  const rect = (lastTriggerElement as HTMLElement).getBoundingClientRect();
+  dropdownContext.lastTriggerElement = event.currentTarget as HTMLElement;
+  const rect = dropdownContext.lastTriggerElement.getBoundingClientRect();
   const { x, y } = preventDropdownOverflowWhenNearViewportEdge(rect.right, rect.bottom);
 
   return {
     x: x,
     y: y,
+    // Returns true if the element is in the bottom half of the viewport.
     isInBottomHalf: rect.top > window.innerHeight / 2,
   };
 }
@@ -168,17 +174,17 @@ export function calculateDropdownPosition(event: MouseEvent): {
  *
  * The dropdown will be positioned at the bottom-right corner of the trigger element.
  * The `isInBottomHalf` parameter passed to `updatePosition` will be true if the trigger is
- * in the top half of the screen, suggesting the dropdown should expand downward.
+ * in the bottom half of the screen, suggesting the dropdown should expand upward.
  */
 export function recalculateDropdownPosition(options: {
   updatePosition: (x: number, y: number, isInBottomHalf: boolean) => void;
   dropdownIsOpen: boolean;
 }): void {
-  if (!browser || !lastTriggerElement || !options.dropdownIsOpen) {
+  if (!browser || !dropdownContext.lastTriggerElement || !options.dropdownIsOpen) {
     return;
   }
 
-  const rect = lastTriggerElement.getBoundingClientRect();
+  const rect = dropdownContext.lastTriggerElement.getBoundingClientRect();
   const { x, y } = preventDropdownOverflowWhenNearViewportEdge(rect.right, rect.bottom);
   options.updatePosition(x, y, rect.top > window.innerHeight / 2);
 }
@@ -201,8 +207,15 @@ function preventDropdownOverflowWhenNearViewportEdge(
 ): { x: number; y: number } {
   const margin = 10; // minimal margin from viewport edge
 
+  if (x < margin) {
+    x = margin;
+  }
   if (x > window.innerWidth - margin) {
     x = window.innerWidth - margin;
+  }
+
+  if (y < margin) {
+    y = margin;
   }
   if (y > window.innerHeight - margin) {
     y = window.innerHeight - margin;
@@ -241,7 +254,7 @@ export function toggleDropdown(
     event.stopPropagation();
 
     // Save the last trigger element for position calculations.
-    lastTriggerElement = event.currentTarget as HTMLElement;
+    dropdownContext.lastTriggerElement = event.currentTarget as HTMLElement;
 
     if (options.getPosition) {
       options.getPosition(event);
@@ -250,6 +263,8 @@ export function toggleDropdown(
 
   activeDropdownId.set(options.dropdownId);
 
+  // Small delay to ensure DOM updates and event propagation is complete
+  // before toggling the dropdown
   setTimeout(() => {
     options.toggle();
   }, 10);
