@@ -24,12 +24,12 @@ import type { FloatingMessages } from '$lib/types/floating_message';
 
 import { NOT_FOUND } from '$lib/constants/http-response-status-codes';
 
-// DBから取得した問題一覧とログインしているユーザの回答を紐付けしたデータ保持
+// DBから取得した問題とログインしているユーザの回答を紐付けしたデータ保持
 const statusById = await getSubmissionStatusMapWithId();
 const statusByName = await getSubmissionStatusMapWithName();
 
 export async function getTaskResults(userId: string): Promise<TaskResults> {
-  // 問題一覧と特定のユーザの回答状況を使ってデータを結合
+  // 問題と特定のユーザの回答状況を使ってデータを結合
   // 計算量: 問題数をN、特定のユーザの解答数をMとすると、O(N + M)になるはず。
   const tasks = await getTasks();
   const answers = await answer_crud.getAnswers(userId);

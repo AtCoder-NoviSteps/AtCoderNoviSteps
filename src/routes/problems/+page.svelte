@@ -32,16 +32,16 @@
 
 <!-- TODO: Searchを追加 -->
 <div class="container mx-auto w-5/6">
-  <HeadingOne title="問題一覧" />
+  <HeadingOne title="一覧表" />
 
   <!-- See: -->
   <!-- https://flowbite-svelte.com/docs/components/tabs -->
   <Tabs tabStyle="underline" contentClass="bg-white dark:bg-gray-800 mt-0 p-0">
     <!-- Contest table -->
-    {@render problemListTab('テーブル（アルファ版）', 'contestTable', contestTable)}
+    {@render problemListTab('コンテスト別（アルファ版）', 'contestTable', contestTable)}
 
     <!-- Grades -->
-    {@render problemListTab('グレード', 'listByGrade', listByGrade)}
+    {@render problemListTab('グレード別', 'listByGrade', listByGrade)}
 
     <!-- Grade guidelines -->
     {@render problemListTab('グレードの目安', 'gradeGuidelineTable', gradeGuidelineTable)}

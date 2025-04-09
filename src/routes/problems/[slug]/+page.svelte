@@ -16,7 +16,7 @@
   let buttons = data.buttons;
 </script>
 
-<!-- TODO: 回答状況は、問題一覧のリストやテーブルから更新する -->
+<!-- TODO: 回答状況は、一覧表のリストやテーブルから更新する -->
 <!-- TODO: 類題の表示できるようにする -->
 <!-- TODO: 解法メモなどを記録できるようにする -->
 <div class="container mx-auto w-5/6">

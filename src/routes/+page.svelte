@@ -84,7 +84,7 @@
       <Button href={WORKBOOKS_PAGE} class="w-full sm:w-5/6 md:w-1/3 m-2">問題集へ</Button>
     </div>
 
-    <!-- 問題一覧 -->
+    <!-- 一覧表 -->
     <Heading tag="h2" class="text-xl font-medium  md:text-2xl lg:text-3xl mt-14 xs:mt-20 mb-3">
       問題の回答状況を自分で記録できる
     </Heading>
@@ -115,7 +115,7 @@
     </div>
 
     <div class="flex flex-wrap justify-center items-center">
-      <Button href={PROBLEMS_PAGE} class="w-full sm:w-5/6 md:w-1/3 m-2">問題一覧へ</Button>
+      <Button href={PROBLEMS_PAGE} class="w-full sm:w-5/6 md:w-1/3 m-2">一覧表へ</Button>
     </div>
 
     <p class="mb-10 xs:mb-16"></p>

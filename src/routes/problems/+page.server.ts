@@ -5,7 +5,7 @@ import type { TaskResults } from '$lib/types/task';
 import { Roles } from '$lib/types/user';
 import * as action from '$lib/actions/update_task_result';
 
-// 問題一覧ページは、ログインしていなくても閲覧できるようにする
+// 一覧表ページは、ログインしていなくても閲覧できるようにする
 export async function load({ locals, url }) {
   const session = await locals.auth.validate();
   const params = await url.searchParams;
