@@ -4,6 +4,7 @@ import { browser } from '$app/environment';
 const activeDropdownId: Writable<string | null> = writable<string | null>(null);
 
 const dropdownContext = {
+  // Reference to the element that triggered the dropdown.
   lastTriggerElement: null as HTMLElement | null,
   // Bounce timer for resizing event.
   resizeTimeout: undefined as ReturnType<typeof setTimeout> | undefined,
