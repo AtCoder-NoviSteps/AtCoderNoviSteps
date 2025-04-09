@@ -115,7 +115,7 @@
     </div>
 
     <div class="flex flex-wrap justify-center items-center">
-      <Button href={PROBLEMS_PAGE} class="w-full sm:w-5/6 md:w-1/3 m-2">問題一覧へ</Button>
+      <Button href={PROBLEMS_PAGE} class="w-full sm:w-5/6 md:w-1/3 m-2">一覧表へ</Button>
     </div>
 
     <p class="mb-10 xs:mb-16"></p>
