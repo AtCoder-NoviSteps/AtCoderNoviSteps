@@ -253,7 +253,6 @@ export function toggleDropdown(
     event.stopPropagation();
 
     // Save the last trigger element for position calculations.
-    // lastTriggerElement = event.currentTarget as HTMLElement;
     dropdownContext.lastTriggerElement = event.currentTarget as HTMLElement;
 
     if (options.getPosition) {
