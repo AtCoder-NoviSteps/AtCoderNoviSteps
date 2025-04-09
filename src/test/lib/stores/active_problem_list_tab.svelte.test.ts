@@ -1,12 +1,37 @@
-import { describe, test, expect, beforeEach } from 'vitest';
+import { describe, test, expect, vi, beforeEach } from 'vitest';
 
-import { ActiveProblemListTabStore } from '$lib/stores/active_problem_list_tab.svelte';
+import {
+  activeProblemListTabStore,
+  ActiveProblemListTabStore,
+} from '$lib/stores/active_problem_list_tab.svelte';
+
+vi.mock('$app/environment', () => ({
+  browser: true,
+}));
 
 describe('ActiveProblemListTabStore', () => {
   let store: ActiveProblemListTabStore;
 
+  const mockLocalStorage: Storage = {
+    getItem: vi.fn(),
+    setItem: vi.fn(),
+    removeItem: vi.fn(),
+    clear: vi.fn(),
+    length: 0,
+    key: vi.fn(),
+  };
+
   beforeEach(() => {
+    vi.clearAllMocks();
+    // Setup mock for localStorage
+    vi.stubGlobal('localStorage', mockLocalStorage);
+
     store = new ActiveProblemListTabStore();
+    store.reset();
+  });
+
+  afterEach(() => {
+    vi.unstubAllGlobals();
   });
 
   describe('constructor', () => {
@@ -57,5 +82,17 @@ describe('ActiveProblemListTabStore', () => {
       store.reset();
       expect(store.get()).toBe('contestTable');
     });
+  });
+});
+
+describe('Active problem list tab store in SSR', () => {
+  beforeEach(() => {
+    vi.mock('$app/environment', () => ({
+      browser: false,
+    }));
+  });
+
+  test('handles SSR gracefully', () => {
+    expect(activeProblemListTabStore.get()).toBe('contestTable');
   });
 });
