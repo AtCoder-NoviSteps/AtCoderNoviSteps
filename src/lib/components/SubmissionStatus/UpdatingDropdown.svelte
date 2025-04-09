@@ -28,6 +28,7 @@
 <script lang="ts">
   import { getStores } from '$app/stores';
   import { enhance } from '$app/forms';
+  import { browser } from '$app/environment';
 
   import { Dropdown, DropdownUl, DropdownLi, uiHelpers } from 'svelte-5-ui-lib';
   import Check from 'lucide-svelte/icons/check';
@@ -36,6 +37,11 @@
 
   import InputFieldWrapper from '$lib/components/InputFieldWrapper.svelte';
 
+  import {
+    handleDropdownBehavior,
+    calculateDropdownPosition,
+    toggleDropdown,
+  } from '$lib/actions/handle_dropdown';
   import { submission_statuses } from '$lib/services/submission_status';
   import { errorMessageStore } from '$lib/stores/error_message';
 
@@ -56,42 +62,47 @@
   let dropdownStatus = $state(false);
   let closeDropdown = dropdown.close;
 
-  let dropdownX = $state(0);
-  let dropdownY = $state(0);
-  let isLowerHalfInScreen = $state(false);
+  let dropdownPosition = $state({ x: 0, y: 0, isInBottomHalf: false });
+  const componentId = Math.random().toString(36).substring(2);
 
   $effect(() => {
     activeUrl = $page.url.pathname;
     dropdownStatus = dropdown.isOpen;
 
     if (dropdownStatus) {
-      document.documentElement.style.setProperty('--dropdown-x', `${dropdownX}px`);
-      document.documentElement.style.setProperty('--dropdown-y', `${dropdownY}px`);
+      document.documentElement.style.setProperty('--dropdown-x', `${dropdownPosition.x}px`);
+      document.documentElement.style.setProperty('--dropdown-y', `${dropdownPosition.y}px`);
     }
   });
 
   export function toggle(event?: MouseEvent): void {
-    if (event) {
-      getDropdownPosition(event);
+    toggleDropdown(event, {
+      dropdownId: componentId,
+      toggle: dropdown.toggle,
+      getPosition: updateDropdownPosition,
+    });
+  }
+
+  // Required for the dropdown to open at the correct position.
+  function updateDropdownPosition(event: MouseEvent): void {
+    const position = calculateDropdownPosition(event);
+    updatePositionInComponent(position.x, position.y, position.isInBottomHalf);
+  }
+
+  function updatePositionInComponent(x: number, y: number, isInBottomHalf: boolean) {
+    dropdownPosition = { x, y, isInBottomHalf };
+
+    if (browser) {
+      document.documentElement.style.setProperty('--dropdown-x', `${x}px`);
+      document.documentElement.style.setProperty('--dropdown-y', `${y}px`);
     }
-
-    dropdown.toggle();
   }
 
-  function getDropdownPosition(event: MouseEvent): void {
-    const rect = (event.currentTarget as HTMLElement).getBoundingClientRect();
-
-    dropdownX = rect.right;
-    dropdownY = rect.bottom;
-
-    isLowerHalfInScreen = rect.top > window.innerHeight / 2;
-  }
-
-  function getDropdownClasses(isLower: boolean): string {
+  function getDropdownClasses(isInBottomHalf: boolean): string {
     let classes =
       'absolute w-32 z-[999] shadow-lg pointer-events-auto left-[var(--dropdown-x)] transform -translate-x-full ';
 
-    if (isLower) {
+    if (isInBottomHalf) {
       classes += 'bottom-[calc(100vh-var(--dropdown-y))] mb-5';
     } else {
       classes += 'top-[var(--dropdown-y)] mt-1';
@@ -210,12 +221,23 @@
   });
 </script>
 
-<div class="fixed inset-0 pointer-events-none z-50 w-full h-full">
+<div
+  class="fixed inset-0 pointer-events-none z-50 w-full h-full"
+  use:handleDropdownBehavior={{
+    dropdownId: componentId,
+    isOpen: dropdownStatus,
+    closeDropdown,
+    onStatusChange: (status: boolean) => {
+      dropdownStatus = status;
+    },
+    updatePosition: updatePositionInComponent,
+  }}
+>
   <Dropdown
     {activeUrl}
     {dropdownStatus}
     {closeDropdown}
-    class={getDropdownClasses(isLowerHalfInScreen)}
+    class={getDropdownClasses(dropdownPosition.isInBottomHalf)}
   >
     <DropdownUl class="border rounded-lg shadow">
       {#if isLoggedIn}
