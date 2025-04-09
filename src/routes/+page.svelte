@@ -14,6 +14,11 @@
 
   const problemImages = [
     {
+      alt: 'Contest Table',
+      src: '../../contest_table.png',
+      title: 'contest-table',
+    },
+    {
       alt: 'List of problems',
       src: '../../grade_11Q_4Q.png',
       title: 'List-of-problems',
@@ -71,7 +76,7 @@
     <div class="flex flex-wrap justify-center items-center mb-8 xs:mb-12">
       <video
         width="720"
-        src="https://github.com/user-attachments/assets/690bae58-f653-4b0d-9342-5f6813dcc7e8"
+        src="https://github.com/user-attachments/assets/fec06b21-dc31-497f-80bc-181e64394da9"
         autoplay
         muted
         controls
