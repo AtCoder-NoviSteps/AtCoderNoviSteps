@@ -34,7 +34,7 @@ let resizeTimeout: ReturnType<typeof setTimeout>;
  *   isOpen: $isMenuOpen,
  *   closeDropdown: () => isMenuOpen.set(false),
  *   onStatusChange: (status) => console.log(`Menu is ${status ? 'open' : 'closed'}`)
- *   updatePosition: (x, y, isLower) => {updateDropdownPosition(x, y, isLower)},
+ *   updatePosition: (x, y, isInBottomHalf) => {updateDropdownPosition(x, y, isInBottomHalf)},
  * }}>
  *   <!-- Dropdown content -->
  * </div>
@@ -46,7 +46,7 @@ export function handleDropdownBehavior(
     isOpen: boolean;
     closeDropdown: () => void;
     onStatusChange?: (status: boolean) => void;
-    updatePosition?: (x: number, y: number, isLower: boolean) => void;
+    updatePosition?: (x: number, y: number, isInBottomHalf: boolean) => void;
   },
 ) {
   if (!browser) {
@@ -107,7 +107,7 @@ export function handleDropdownBehavior(
       isOpen: boolean;
       closeDropdown: () => void;
       onStatusChange?: (status: boolean) => void;
-      updatePosition?: (x: number, y: number, isLower: boolean) => void;
+      updatePosition?: (x: number, y: number, isInBottomHalf: boolean) => void;
     }) {
       Object.assign(options, newOptions);
     },
@@ -133,12 +133,12 @@ export function handleDropdownBehavior(
  * @returns An object containing:
  *   - x: The horizontal position (right edge of the element)
  *   - y: The vertical position (bottom edge of the element)
- *   - isLower: Boolean indicating whether the element is in the lower half of the viewport
+ *   - isInBottomHalf: Boolean indicating whether the element is in the lower half of the viewport
  */
 export function calculateDropdownPosition(event: MouseEvent): {
   x: number;
   y: number;
-  isLower: boolean;
+  isInBottomHalf: boolean;
 } {
   lastTriggerElement = event.currentTarget as HTMLElement;
   const rect = (lastTriggerElement as HTMLElement).getBoundingClientRect();
@@ -147,7 +147,7 @@ export function calculateDropdownPosition(event: MouseEvent): {
   return {
     x: x,
     y: y,
-    isLower: rect.top > window.innerHeight / 2,
+    isInBottomHalf: rect.top > window.innerHeight / 2,
   };
 }
 
@@ -167,11 +167,11 @@ export function calculateDropdownPosition(event: MouseEvent): {
  * and will do nothing if either is undefined or if the dropdown is not open.
  *
  * The dropdown will be positioned at the bottom-right corner of the trigger element.
- * The `isLower` parameter passed to `updatePosition` will be true if the trigger is
+ * The `isInBottomHalf` parameter passed to `updatePosition` will be true if the trigger is
  * in the top half of the screen, suggesting the dropdown should expand downward.
  */
 export function recalculateDropdownPosition(options: {
-  updatePosition: (x: number, y: number, isLower: boolean) => void;
+  updatePosition: (x: number, y: number, isInBottomHalf: boolean) => void;
   dropdownIsOpen: boolean;
 }): void {
   if (!browser || !lastTriggerElement || !options.dropdownIsOpen) {

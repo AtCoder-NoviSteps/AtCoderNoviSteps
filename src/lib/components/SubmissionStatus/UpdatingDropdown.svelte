@@ -62,7 +62,7 @@
   let dropdownStatus = $state(false);
   let closeDropdown = dropdown.close;
 
-  let dropdownPosition = $state({ x: 0, y: 0, isLower: false });
+  let dropdownPosition = $state({ x: 0, y: 0, isInBottomHalf: false });
   const componentId = Math.random().toString(36).substring(2);
 
   $effect(() => {
@@ -86,11 +86,11 @@
   // Required for the dropdown to open at the correct position.
   function updateDropdownPosition(event: MouseEvent): void {
     const position = calculateDropdownPosition(event);
-    updatePositionInComponent(position.x, position.y, position.isLower);
+    updatePositionInComponent(position.x, position.y, position.isInBottomHalf);
   }
 
-  function updatePositionInComponent(x: number, y: number, isLower: boolean) {
-    dropdownPosition = { x, y, isLower };
+  function updatePositionInComponent(x: number, y: number, isInBottomHalf: boolean) {
+    dropdownPosition = { x, y, isInBottomHalf };
 
     if (browser) {
       document.documentElement.style.setProperty('--dropdown-x', `${x}px`);
@@ -98,11 +98,11 @@
     }
   }
 
-  function getDropdownClasses(isLower: boolean): string {
+  function getDropdownClasses(isInBottomHalf: boolean): string {
     let classes =
       'absolute w-32 z-[999] shadow-lg pointer-events-auto left-[var(--dropdown-x)] transform -translate-x-full ';
 
-    if (isLower) {
+    if (isInBottomHalf) {
       classes += 'bottom-[calc(100vh-var(--dropdown-y))] mb-5';
     } else {
       classes += 'top-[var(--dropdown-y)] mt-1';
@@ -237,7 +237,7 @@
     {activeUrl}
     {dropdownStatus}
     {closeDropdown}
-    class={getDropdownClasses(dropdownPosition.isLower)}
+    class={getDropdownClasses(dropdownPosition.isInBottomHalf)}
   >
     <DropdownUl class="border rounded-lg shadow">
       {#if isLoggedIn}
