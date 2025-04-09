@@ -34,7 +34,7 @@ export const actions = {
       return fail(BAD_REQUEST, { slug });
     }
 
-    // HACK: 回答状況をクリックした後に問題一覧ページに戻るのをユーザが望んでいるか?
+    // HACK: 回答状況をクリックした後に一覧表ページに戻るのをユーザが望んでいるか?
     redirect(TEMPORARY_REDIRECT, '/problems');
   },
 } satisfies Actions;

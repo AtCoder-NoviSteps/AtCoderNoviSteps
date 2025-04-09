@@ -105,7 +105,7 @@ export const getTaskTableHeaderName = (contestType: ContestType, taskResult: Tas
   return taskResult.task_table_index;
 };
 
-// 問題一覧や問題集の詳細ページでは、AtCoder ProblemsのAPIから取得したタイトルからプレフィックス（A., B., ..., G. など）を非表示にする
+// 一覧表や問題集の詳細ページでは、AtCoder ProblemsのAPIから取得したタイトルからプレフィックス（A., B., ..., G. など）を非表示にする
 // 理由: 問題を解くときに、プレフィックスからの先入観を受けないようにするため
 // その他: プレフィックスは、同じテーブルの出典に記載する
 export const removeTaskIndexFromTitle = (title: string, taskTableIndex: string = '') => {
