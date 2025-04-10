@@ -34,6 +34,12 @@
   // Prepare contest table provider based on the active contest type.
   let activeContestType = $derived(activeContestTypeStore.get());
 
+  // Note: This is necessary to ensure that the active contest type is updated correctly.
+  function updateActiveContestType(type: ContestTableProviders): void {
+    activeContestType = type;
+    activeContestTypeStore.set(type);
+  }
+
   let provider: ContestTableProvider = $derived(
     contestTableProviders[activeContestType as ContestTableProviders],
   );
@@ -113,7 +119,7 @@
 <ButtonGroup class="m-4 contents-center">
   {#each Object.entries(contestTableProviders) as [type, config]}
     <Button
-      onclick={() => activeContestTypeStore.set(type as ContestTableProviders)}
+      onclick={() => updateActiveContestType(type as ContestTableProviders)}
       class={activeContestTypeStore.isSame(type as ContestTableProviders)
         ? 'active-button-class'
         : ''}

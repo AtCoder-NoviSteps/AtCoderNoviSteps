@@ -1,7 +1,12 @@
+import { useLocalStorage } from '$lib/stores/local_storage_helper.svelte';
+
 export type ActiveProblemListTab = 'contestTable' | 'listByGrade' | 'gradeGuidelineTable';
 
 export class ActiveProblemListTabStore {
-  value = $state<ActiveProblemListTab>('contestTable');
+  private storage = useLocalStorage<ActiveProblemListTab>(
+    'active_problem_list_tab',
+    'contestTable',
+  );
 
   /**
    * Creates an instance with the specified problem list tab.
@@ -10,7 +15,9 @@ export class ActiveProblemListTabStore {
    * Defaults to 'contestTable'.
    */
   constructor(activeTab: ActiveProblemListTab = 'contestTable') {
-    this.value = activeTab;
+    if (activeTab !== 'contestTable' || !this.storage.value) {
+      this.storage.value = activeTab;
+    }
   }
 
   /**
@@ -19,7 +26,7 @@ export class ActiveProblemListTabStore {
    * @returns The current active tab.
    */
   get(): ActiveProblemListTab {
-    return this.value;
+    return this.storage.value;
   }
 
   /**
@@ -28,7 +35,7 @@ export class ActiveProblemListTabStore {
    * @param activeTab - The active tab to set as the current value
    */
   set(activeTab: ActiveProblemListTab): void {
-    this.value = activeTab;
+    this.storage.value = activeTab;
   }
 
   /**
@@ -37,7 +44,7 @@ export class ActiveProblemListTabStore {
    * @returns `true` if the active tab matches the task list, `false` otherwise
    */
   isSame(activeTab: ActiveProblemListTab): boolean {
-    return this.value === activeTab;
+    return this.storage.value === activeTab;
   }
 
   /**
@@ -45,8 +52,19 @@ export class ActiveProblemListTabStore {
    * Sets the internal value to 'contestTable'.
    */
   reset(): void {
-    this.value = 'contestTable';
+    this.storage.value = 'contestTable';
   }
 }
 
-export const activeProblemListTabStore = new ActiveProblemListTabStore();
+let instance: ActiveProblemListTabStore | null = null;
+
+export function getActiveProblemListTabStore(): ActiveProblemListTabStore {
+  if (!instance) {
+    instance = new ActiveProblemListTabStore();
+  }
+
+  return instance;
+}
+
+// Export the singleton instance of the store.
+export const activeProblemListTabStore = getActiveProblemListTabStore();

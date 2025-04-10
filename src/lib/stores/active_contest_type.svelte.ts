@@ -1,3 +1,4 @@
+import { useLocalStorage } from '$lib/stores/local_storage_helper.svelte';
 import { type ContestTableProviders } from '$lib/utils/contest_table_provider';
 
 /**
@@ -12,7 +13,10 @@ import { type ContestTableProviders } from '$lib/utils/contest_table_provider';
  * with a default value of 'abcLatest20Rounds'.
  */
 export class ActiveContestTypeStore {
-  value = $state<ContestTableProviders>('abcLatest20Rounds');
+  private storage = useLocalStorage<ContestTableProviders>(
+    'contest_table_providers',
+    'abcLatest20Rounds',
+  );
 
   /**
    * Creates an instance with the specified contest type.
@@ -21,7 +25,9 @@ export class ActiveContestTypeStore {
    * Defaults to 'abcLatest20Rounds'.
    */
   constructor(defaultContestType: ContestTableProviders = 'abcLatest20Rounds') {
-    this.value = defaultContestType;
+    if (defaultContestType !== 'abcLatest20Rounds' || !this.storage.value) {
+      this.storage.value = defaultContestType;
+    }
   }
 
   /**
@@ -30,7 +36,7 @@ export class ActiveContestTypeStore {
    * @returns The current value of contest table providers.
    */
   get(): ContestTableProviders {
-    return this.value;
+    return this.storage.value;
   }
 
   /**
@@ -39,7 +45,7 @@ export class ActiveContestTypeStore {
    * @param newContestType - The contest type to set as the current value
    */
   set(newContestType: ContestTableProviders): void {
-    this.value = newContestType;
+    this.storage.value = newContestType;
   }
 
   /**
@@ -48,7 +54,7 @@ export class ActiveContestTypeStore {
    * @returns `true` if the current contest type matches the provided contest type, `false` otherwise
    */
   isSame(contestType: ContestTableProviders): boolean {
-    return this.value === contestType;
+    return this.storage.value === contestType;
   }
 
   /**
@@ -56,8 +62,19 @@ export class ActiveContestTypeStore {
    * Sets the internal value to 'abcLatest20Rounds'.
    */
   reset(): void {
-    this.value = 'abcLatest20Rounds';
+    this.storage.value = 'abcLatest20Rounds';
   }
 }
 
-export const activeContestTypeStore = new ActiveContestTypeStore();
+let instance: ActiveContestTypeStore | null = null;
+
+export function getActiveContestTypeStore(): ActiveContestTypeStore {
+  if (!instance) {
+    instance = new ActiveContestTypeStore();
+  }
+
+  return instance;
+}
+
+// Export the singleton instance of the store.
+export const activeContestTypeStore = getActiveContestTypeStore();
