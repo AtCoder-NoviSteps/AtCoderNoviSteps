@@ -14,13 +14,16 @@ describe('ActiveContestTypeStore', () => {
   let store: ActiveContestTypeStore;
 
   const mockLocalStorage: Storage = {
-    getItem: vi.fn(),
-    setItem: vi.fn(),
+    getItem: vi.fn((key) => mockStorage[key] || null),
+    setItem: vi.fn((key, value) => {
+      mockStorage[key] = value;
+    }),
     removeItem: vi.fn(),
     clear: vi.fn(),
     length: 0,
     key: vi.fn(),
   };
+  const mockStorage: Record<string, string> = {};
 
   beforeEach(() => {
     vi.clearAllMocks();
@@ -96,9 +99,14 @@ describe('ActiveContestTypeStore', () => {
 
 describe('Active contest type store in SSR', () => {
   beforeEach(() => {
+    vi.restoreAllMocks();
     vi.mock('$app/environment', () => ({
       browser: false,
     }));
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
   });
 
   test('handles SSR gracefully', () => {
