@@ -80,9 +80,9 @@
 
 [GitHub Sponsors](https://github.com/sponsors/KATO-Hiro)で寄付していただいた方には、いくつかの特典をご用意しております。
 
-### 💚 AtCoder Clans Sponsor
+### 🏢 𝑬𝑵𝑻𝑬𝑹𝑷𝑹𝑰𝑺𝑬 Sponsor
 
-- [chokudai](https://github.com/chokudai)
+- [AtCoder株式会社](https://github.com/atcoder)
 
 ### 🌐 Domain Supporter
 
@@ -91,8 +91,8 @@
 ### 🍨 Ice Cream Supporter
 
 - ia7ck
+- ngtkana
 - tomii9273
-- toshi201
 
 ## 注意事項
 
