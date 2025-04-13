@@ -89,7 +89,7 @@
     <!-- Back to login page -->
     <div class="flex justify-center mt-6">
       <Button href={LOGIN_PAGE} color="primary" class="px-6">
-        {LOGIN_LABEL}
+        {LOGIN_LABEL}ページに戻る
       </Button>
     </div>
   </Card>
