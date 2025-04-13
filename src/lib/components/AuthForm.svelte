@@ -15,6 +15,7 @@
     GUEST_USER_NAME,
     GUEST_USER_PASSWORD,
     // GUEST_USER_PASSWORD_FOR_LOCAL,
+    LOGIN_LABEL,
   } from '$lib/constants/forms';
   import { HOME_PAGE, LOGIN_PAGE, FORGOT_PASSWORD_PAGE } from '$lib/constants/navbar-links';
 
@@ -89,6 +90,10 @@
 
   const UNFOCUSABLE = -1;
   let showPassword = $state(false);
+
+  function isLoginForm(title: string): boolean {
+    return title === LOGIN_LABEL;
+  }
 </script>
 
 <!-- FIXME: コンポーネントが巨大になってきたと思われるので、分割しましょう -->
@@ -186,16 +191,18 @@
 
       <!-- TODO: ログイン画面で、パスワードの記録・忘れた場合のリセット機能を追加 -->
       <!-- HACK: 認証ライブラリの移行・メールアドレスの登録・送信機能などが必要なため、暫定的に「アカウント移行機能」で対応 -->
-      <div class="flex items-start">
-        <!-- <Checkbox>Remember me</Checkbox> -->
+      {#if isLoginForm(title)}
+        <div class="flex items-start">
+          <!-- <Checkbox>Remember me</Checkbox> -->
 
-        <a
-          href={FORGOT_PASSWORD_PAGE}
-          class="ml-auto text-sm text-primary-700 hover:underline dark:text-primary-500"
-        >
-          パスワードを忘れましたか?
-        </a>
-      </div>
+          <a
+            href={FORGOT_PASSWORD_PAGE}
+            class="ml-auto text-sm text-primary-700 hover:underline dark:text-primary-500"
+          >
+            パスワードを忘れましたか?
+          </a>
+        </div>
+      {/if}
 
       <Button type="submit" class="w-full" disabled={$submitting || isSubmitting}>
         {submitButtonLabel}
