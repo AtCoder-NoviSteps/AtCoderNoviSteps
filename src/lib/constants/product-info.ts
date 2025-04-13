@@ -28,6 +28,8 @@ export const features = [
 
 const X_BASE_URL = 'https://x.com/';
 
+export const X_OFFICIAL_ACCOUNT_URL = `${X_BASE_URL}acnovisteps`;
+
 export const members = [
   { name: '@けんちょん', account: `${X_BASE_URL}drken1215` },
   { name: '@hiro', account: `${X_BASE_URL}k_hiro1818` },

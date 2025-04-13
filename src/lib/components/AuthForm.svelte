@@ -16,7 +16,7 @@
     GUEST_USER_PASSWORD,
     // GUEST_USER_PASSWORD_FOR_LOCAL,
   } from '$lib/constants/forms';
-  import { HOME_PAGE, LOGIN_PAGE } from '$lib/constants/navbar-links';
+  import { HOME_PAGE, LOGIN_PAGE, FORGOT_PASSWORD_PAGE } from '$lib/constants/navbar-links';
 
   interface Props {
     // FIXME: 構造体に相当するものを利用した方が拡張・修正がしやすくなるかもしれせまん
@@ -185,12 +185,17 @@
       </div>
 
       <!-- TODO: ログイン画面で、パスワードの記録・忘れた場合のリセット機能を追加 -->
-      <!-- <div class="flex items-start">
-      <Checkbox>Remember me</Checkbox>
-      <a href="/" class="ml-auto text-sm text-primary-700 hover:underline dark:text-primary-500">
-        Lost password?
-      </a>
-    </div> -->
+      <!-- HACK: 認証ライブラリの移行・メールアドレスの登録・送信機能などが必要なため、暫定的に「アカウント移行機能」で対応 -->
+      <div class="flex items-start">
+        <!-- <Checkbox>Remember me</Checkbox> -->
+
+        <a
+          href={FORGOT_PASSWORD_PAGE}
+          class="ml-auto text-sm text-primary-700 hover:underline dark:text-primary-500"
+        >
+          パスワードを忘れましたか?
+        </a>
+      </div>
 
       <Button type="submit" class="w-full" disabled={$submitting || isSubmitting}>
         {submitButtonLabel}
