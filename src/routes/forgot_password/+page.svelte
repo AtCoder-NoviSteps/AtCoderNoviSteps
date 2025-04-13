@@ -10,7 +10,7 @@
   import { LOGIN_LABEL } from '$lib/constants/forms';
 </script>
 
-<div class="container mx-auto w-5/6 lg:w-2/3">
+<div class="container mx-auto md:w-4/5 lg:w-2/3 py-4 md:py-8 px-3 md:px-0">
   <HeadingOne title="パスワードを忘れた場合の対応について" />
 
   <Card size="xl" class="mb-5" padding="sm">
@@ -55,7 +55,7 @@
       >
     </List>
 
-    <Alert color="red" class="mb-5">
+    <Alert color="red" class="mb-5 ">
       <Heading tag="h3" class="text-lg mb-2 text-red-500 dark:text-red-500">注意</Heading>
 
       <List tag="ul" class="pl-5 list-disc">
