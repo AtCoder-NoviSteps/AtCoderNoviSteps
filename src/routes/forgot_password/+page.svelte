@@ -65,7 +65,7 @@
       >
     </List>
 
-    <Alert color="red" class="mb-5 ">
+    <Alert color="red" class="mb-5">
       <Heading tag="h3" class="text-lg mb-2 text-red-500 dark:text-red-500">注意</Heading>
 
       <List tag="ul" class="pl-5 list-disc">
