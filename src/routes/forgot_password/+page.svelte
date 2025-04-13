@@ -10,6 +10,9 @@
   import { LOGIN_LABEL } from '$lib/constants/forms';
 </script>
 
+<!-- See: -->
+<!-- https://github.com/lucia-auth/example-sveltekit-email-password-2fa/blob/main/src/routes/forgot-password/%2Bpage.svelte -->
+<!-- https://svelte-5-ui-lib.codewithshin.com/components/card -->
 <div class="container mx-auto md:w-4/5 lg:w-2/3 py-4 md:py-8 px-3 md:px-0">
   <HeadingOne title="パスワードを忘れた場合の対応について" />
 
