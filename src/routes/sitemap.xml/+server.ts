@@ -60,6 +60,8 @@ export const GET: RequestHandler = async () => {
       '/users/.*',
       '/workbooks/create.*',
       '/workbooks/edit/.*',
+      // Pages for not-logged-in users
+      '/forgot_password',
       // Deprecated page
       '/problems/\\[slug\\]',
     ],

@@ -8,6 +8,7 @@
     textColorInDarkMode?: string;
     textOverflow?: string;
     iconSize?: number;
+    ariaLabel?: string;
     useInlineFlex?: boolean;
   }
 
@@ -18,6 +19,7 @@
     textColorInDarkMode = 'dark:text-primary-500',
     textOverflow = '',
     iconSize = 4,
+    ariaLabel = '',
     useInlineFlex = true,
   }: Props = $props();
 </script>
@@ -25,6 +27,7 @@
 <a
   href={url}
   class={`${useInlineFlex ? 'inline-flex' : ''} items-center font-medium ${textSize} text-primary-600 hover:underline ${textColorInDarkMode}`}
+  aria-label={ariaLabel}
   target="_blank"
   rel="noreferrer"
 >

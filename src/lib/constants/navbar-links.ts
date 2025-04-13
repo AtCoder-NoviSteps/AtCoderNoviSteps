@@ -2,6 +2,7 @@ export const HOME_PAGE = `/`;
 export const ABOUT_PAGE = `/about`;
 export const SIGNUP_PAGE = `/signup`;
 export const LOGIN_PAGE = `/login`;
+export const FORGOT_PASSWORD_PAGE = `/forgot_password`;
 export const WORKBOOKS_PAGE = `/workbooks`;
 export const PROBLEMS_PAGE = `/problems`;
 
