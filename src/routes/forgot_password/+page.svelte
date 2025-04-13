@@ -13,6 +13,11 @@
 <div class="container mx-auto md:w-4/5 lg:w-2/3 py-4 md:py-8 px-3 md:px-0">
   <HeadingOne title="パスワードを忘れた場合の対応について" />
 
+  {@render passwordResetSection()}
+  {@render accountMigrationGuideSection()}
+</div>
+
+{#snippet passwordResetSection()}
   <Card size="xl" class="mb-5" padding="sm">
     <Heading tag="h2" class="text-xl mb-2 text-gray-900 dark:text-white">
       パスワードリセット機能
@@ -22,7 +27,9 @@
       パスワードリセット機能は開発中です。しばらくお待ちください。
     </p>
   </Card>
+{/snippet}
 
+{#snippet accountMigrationGuideSection()}
   <Card size="xl" padding="sm">
     <Heading tag="h2" class="text-xl mb-2 text-gray-900 dark:text-white">
       アカウント移行のご案内
@@ -75,4 +82,4 @@
       </Button>
     </div>
   </Card>
-</div>
+{/snippet}
