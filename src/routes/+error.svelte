@@ -1,8 +1,10 @@
 <script lang="ts">
   import { page } from '$app/state';
 
-  import { Heading } from 'svelte-5-ui-lib';
+  import { Heading, Button } from 'svelte-5-ui-lib';
   import HeadingOne from '$lib/components/HeadingOne.svelte';
+
+  import { HOME_PAGE } from '$lib/constants/navbar-links';
 </script>
 
 <div
@@ -17,4 +19,10 @@
 
     <p class="dark:text-gray-300">{page.error.message}</p>
   {/if}
+
+  <div class="flex justify-center mt-6">
+    <Button href={HOME_PAGE} color="primary" class="px-6">
+      {'ホームに戻る'}
+    </Button>
+  </div>
 </div>
