@@ -34,6 +34,7 @@
 
 {#snippet accountMigrationGuideSection()}
   <Card size="xl" padding="sm">
+    <!-- Header -->
     <Heading tag="h2" class="text-xl mb-2 text-gray-900 dark:text-white">
       アカウント移行のご案内
     </Heading>
@@ -42,6 +43,7 @@
       お急ぎの場合は、<strong>回答履歴を新しいアカウントに移行</strong>することができます。
     </p>
 
+    <!-- Guide -->
     <Heading tag="h3" class="text-lg mb-2 text-gray-800 dark:text-gray-200">手順</Heading>
 
     <List tag="ol" class="mb-5 pl-5 list-decimal dark:text-gray-300">
@@ -57,7 +59,11 @@
       </Li>
       <Li>
         開発・運営チームの
-        <ExternalLinkWrapper url={X_OFFICIAL_ACCOUNT_URL} description="公式アカウント" />
+        <ExternalLinkWrapper
+          url={X_OFFICIAL_ACCOUNT_URL}
+          description="公式アカウント"
+          ariaLabel="Open official X account as a new tab"
+        />
         にダイレクトメッセージでご連絡ください
       </Li>
       <Li class="dark:text-gray-300">
@@ -65,6 +71,7 @@
       >
     </List>
 
+    <!-- Warnings -->
     <Alert color="red" class="mb-5">
       <Heading tag="h3" class="text-lg mb-2 text-red-500 dark:text-red-500">注意</Heading>
 
@@ -79,6 +86,7 @@
       ご不便をおかけして申し訳ありませんが、ご理解とご協力をお願いいたします。
     </p>
 
+    <!-- Back to login page -->
     <div class="flex justify-center mt-6">
       <Button href={LOGIN_PAGE} color="primary" class="px-6">
         {LOGIN_LABEL}
