@@ -92,10 +92,11 @@ export const classifyContest = (contest_id: string) => {
   return null;
 };
 
-// HACK: As of December 2024, the following contests are applicable.
+// HACK: As of April 2025, the following contests are applicable.
 // Note: The classification logic may need to be revised when new contests are added.
 const ABC_LIKE: ContestPrefix = {
   aising2020: 'エイシング プログラミング コンテスト 2020',
+  hhkb2020: 'HHKB プログラミングコンテスト 2020',
   panasonic2020: 'パナソニックプログラミングコンテスト 2020',
 } as const;
 const abcLikePrefixes = new Set(getContestPrefixes(ABC_LIKE));

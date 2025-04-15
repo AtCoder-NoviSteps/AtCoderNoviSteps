@@ -191,6 +191,10 @@ export const abcLike = [
     contestId: 'aising2020',
     expected: ContestType.ABC_LIKE,
   }),
+  createTestCaseForContestType('HHKB 2020')({
+    contestId: 'hhkb2020',
+    expected: ContestType.ABC_LIKE,
+  }),
   createTestCaseForContestType('Panasonic 2020')({
     contestId: 'panasonic2020',
     expected: ContestType.ABC_LIKE,
