@@ -107,7 +107,9 @@
         {#each AVAILABLE_GRADES as grade}
           <Button
             onclick={() => filterByGradeMode(grade)}
-            class={selectedGrade === grade ? 'text-primary-700' : 'text-gray-900'}
+            class={selectedGrade === grade
+              ? 'text-primary-700  dark:!text-primary-500'
+              : 'text-gray-900'}
           >
             {getTaskGradeLabel(grade)}
           </Button>

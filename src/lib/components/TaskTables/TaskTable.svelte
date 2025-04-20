@@ -120,8 +120,8 @@
   {#each Object.entries(contestTableProviders) as [type, config]}
     <Button
       onclick={() => updateActiveContestType(type as ContestTableProviders)}
-      class={activeContestTypeStore.isSame(type as ContestTableProviders)
-        ? 'active-button-class'
+      class={activeContestType === (type as ContestTableProviders)
+        ? 'active-button-class text-primary-700 dark:!text-primary-500'
         : ''}
       aria-label={config.getMetadata().ariaLabel}
     >
