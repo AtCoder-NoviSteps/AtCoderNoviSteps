@@ -1,9 +1,10 @@
-import { ContestSiteApiClient } from '$lib/clients/common';
-import { AOJ_API_BASE_URL } from '$lib/constants/urls';
+import { ContestSiteApiClient } from '$lib/clients/http_client';
 import { Cache, type ApiClientConfig } from '$lib/clients/cache';
 
 import type { ContestForImport, ContestsForImport } from '$lib/types/contest';
 import type { TasksForImport } from '$lib/types/task';
+
+import { AOJ_API_BASE_URL } from '$lib/constants/urls';
 
 /**
  * Represents the response structure from AOJ Course API

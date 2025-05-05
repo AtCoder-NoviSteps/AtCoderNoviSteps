@@ -5,7 +5,7 @@ import path from 'path';
 import nock from 'nock';
 import fs from 'fs';
 
-import type { ContestSiteApiClient } from '$lib/clients/common';
+import type { ContestSiteApiClient } from '$lib/clients/http_client';
 import { AtCoderProblemsApiClient } from '$lib/clients/atcoder_problems';
 import { AojApiClient } from '$lib/clients/aizu_online_judge';
 
