@@ -46,6 +46,10 @@ export class Cache<T> {
    * @property {number} oldestEntry - The timestamp of the oldest entry in the cache.
    */
   get health(): { size: number; oldestEntry: number } {
+    if (this.cache.size === 0) {
+      return { size: 0, oldestEntry: 0 };
+    }
+
     const oldestEntry = Math.min(
       ...Array.from(this.cache.values()).map((entry) => entry.timestamp),
     );
@@ -97,7 +101,7 @@ export class Cache<T> {
   }
 
   /**
-   * Disposes of resources used by the Aizu Online Judge client.
+   * Disposes of resources used by the cache instance.
    *
    * This method clears the interval used for cleanup and clears the cache.
    * It should be called when the client is no longer needed to prevent memory leaks.
