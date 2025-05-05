@@ -19,6 +19,7 @@ describe('Cache', () => {
     });
 
     test('expects to throw error if TTL is not positive', () => {
+      expect(() => new Cache<string>(0)).toThrow('TTL must be positive');
       expect(() => new Cache<string>(-1)).toThrow('TTL must be positive');
       expect(() => new Cache<string>(-2)).toThrow('TTL must be positive');
     });
@@ -201,6 +202,12 @@ describe('Cache', () => {
       const health = cache.health;
       expect(health.size).toBe(2);
       expect(health.oldestEntry).toBe(new Date('2023-01-01T00:00:00.000Z').getTime());
+    });
+
+    test('expects to handle empty cache health information', () => {
+      const cache = new Cache<string>();
+      const health = cache.health;
+      expect(health.size).toBe(0);
     });
   });
 
