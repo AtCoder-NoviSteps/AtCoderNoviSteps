@@ -62,6 +62,8 @@ export class Cache<T> {
    *
    * @param key - The key associated with the data to be cached.
    * @param data - The data to be cached.
+   *
+   * @throws {Error} If the key is empty, not a string, or longer than 255 characters.
    */
   set(key: string, data: T): void {
     if (!key || typeof key !== 'string' || key.length > 255) {
@@ -127,6 +129,10 @@ export class Cache<T> {
     this.cache.delete(key);
   }
 
+  /**
+   * Removes expired entries from the cache.
+   * This method is called periodically by the cleanup interval.
+   */
   private cleanup(): void {
     const now = Date.now();
 
@@ -137,6 +143,11 @@ export class Cache<T> {
     }
   }
 
+  /**
+   * Finds the key of the oldest entry in the cache based on timestamp.
+   *
+   * @returns The key of the oldest entry, or undefined if the cache is empty.
+   */
   private findOldestEntry(): string | undefined {
     let oldestKey: string | undefined;
     let oldestTime = Infinity;
@@ -169,6 +180,10 @@ type CacheEntry<T> = {
  * This value represents 1 hour.
  */
 const DEFAULT_CACHE_TTL = 60 * 60 * 1000; // 1 hour in milliseconds
+/**
+ * The default maximum number of entries the cache can hold.
+ * This value represents 50 entries.
+ */
 const DEFAULT_MAX_CACHE_SIZE = 50;
 
 /**
@@ -178,7 +193,7 @@ const DEFAULT_MAX_CACHE_SIZE = 50;
  * @property {number} [maxSize] - The maximum number of entries that the cache can hold.
  */
 
-interface CacheConfig {
+export interface CacheConfig {
   timeToLive?: number;
   maxSize?: number;
 }

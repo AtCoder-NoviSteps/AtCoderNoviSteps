@@ -142,12 +142,8 @@ export class AojApiClient extends ContestSiteApiClient {
    * Constructs an instance of the Aizu Online Judge client.
    *
    * @param {ApiClientConfig} [config] - Optional configuration object for the API client.
-   * @param {Cache<ContestsForImport>} [config.contestCache] - Configuration for the contest cache.
-   * @param {number} [config.contestCache.timeToLive] - Time to live for contest cache entries.
-   * @param {number} [config.contestCache.maxSize] - Maximum size of the contest cache.
-   * @param {Cache<TasksForImport>} [config.taskCache] - Configuration for the task cache.
-   * @param {number} [config.taskCache.timeToLive] - Time to live for task cache entries.
-   * @param {number} [config.taskCache.maxSize] - Maximum size of the task cache.
+   * @param {CacheConfig} [config.contestCache] - Configuration for the contest cache.
+   * @param {CacheConfig} [config.taskCache] - Configuration for the task cache.
    */
   constructor(config?: ApiClientConfig) {
     super();
