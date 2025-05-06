@@ -149,8 +149,8 @@ export class AojApiClient extends ContestSiteApiClient {
       config?.contestCache?.maxSize,
     );
     const taskCache = new Cache<TasksForImport>(
-      config?.contestCache?.timeToLive,
-      config?.contestCache?.maxSize,
+      config?.taskCache?.timeToLive,
+      config?.taskCache?.maxSize,
     );
 
     // Common dependencies.
