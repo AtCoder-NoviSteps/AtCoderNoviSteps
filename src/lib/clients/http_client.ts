@@ -113,7 +113,7 @@ export abstract class ContestSiteApiClient {
  * @property {(data: T) => boolean} [validateResponse] - Optional function to validate the API response data.
  */
 export type FetchAPIConfig<T> = {
-  baseApiUrl: string;
+  baseApiUrl?: string; // (Deprecated) Use baseApiUrl in HttpRequestClient.
   endpoint: string;
   errorMessage: string;
   validateResponse?: (data: T) => boolean;
