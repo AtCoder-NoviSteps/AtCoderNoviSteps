@@ -82,6 +82,16 @@ export class Cache<T> {
   }
 
   /**
+   * Checks if a key exists in the cache without removing expired entries.
+   *
+   * @param key - The key to check.
+   * @returns True if the key exists in the cache, false otherwise.
+   */
+  has(key: string): boolean {
+    return this.cache.has(key);
+  }
+
+  /**
    * Retrieves an entry from the cache.
    *
    * @param key - The key associated with the cache entry.
@@ -106,7 +116,7 @@ export class Cache<T> {
    * Disposes of resources used by the cache instance.
    *
    * This method clears the interval used for cleanup and clears the cache.
-   * It should be called when the client is no longer needed to prevent memory leaks.
+   * It should be called when the cache instance is no longer needed to prevent memory leaks.
    */
   dispose(): void {
     clearInterval(this.cleanupInterval);
