@@ -3,6 +3,16 @@ import type { TasksForImport } from '$lib/types/task';
 import { delay } from '$lib/utils/time';
 
 /**
+ * Client interface for interacting with tasks and contests API endpoints.
+ *
+ * @template T - The type of parameters to pass to API methods, defaults to void if not specified.
+ */
+export interface TasksApiClient<T = void> {
+  getContests(params?: T): Promise<ContestsForImport>;
+  getTasks(params?: T): Promise<TasksForImport>;
+}
+
+/**
  * A client for making HTTP requests to an API with a base URL.
  *
  * @class HttpRequestClient
@@ -45,16 +55,6 @@ export class HttpRequestClient {
       throw new Error(`Failed to fetch from ${endpoint}: ${error}`);
     }
   }
-}
-
-/**
- * Client interface for interacting with tasks and contests API endpoints.
- *
- * @template T - The type of parameters to pass to API methods, defaults to void if not specified.
- */
-export interface TasksApiClient<T = void> {
-  getContests(params?: T): Promise<ContestsForImport>;
-  getTasks(params?: T): Promise<TasksForImport>;
 }
 
 /**
