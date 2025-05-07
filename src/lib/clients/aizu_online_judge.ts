@@ -374,7 +374,7 @@ export class AojCoursesApiClient extends AojTasksApiClientBase {
 
         return courseForContest;
       });
-      console.log(`Found AOJ course: ${coursesForContest.length} contests.`);
+      console.debug(`Found AOJ course: ${coursesForContest.length} contests.`);
 
       return coursesForContest;
     });
@@ -396,7 +396,7 @@ export class AojCoursesApiClient extends AojTasksApiClientBase {
         .map((task: AOJTaskAPI) => {
           return this.mapToTask(task, this.getCourseName(task.id));
         });
-      console.log(`Found AOJ course: ${courseTasks.length} tasks.`);
+      console.debug(`Found AOJ course: ${courseTasks.length} tasks.`);
 
       return courseTasks;
     });
@@ -463,7 +463,7 @@ export class AojChallengesApiClient extends AojTasksApiClientBase<ChallengeParam
         },
         [] as ContestsForImport,
       );
-      console.log(
+      console.debug(
         `Found AOJ ${contestTypeLabel} ${round}: ${contestsForChallenges.length} contests.`,
       );
 
@@ -503,7 +503,7 @@ export class AojChallengesApiClient extends AojTasksApiClientBase<ChallengeParam
         },
         [],
       );
-      console.log(`Found ${contestTypeLabel} ${round}: ${tasksForChallenges.length} tasks.`);
+      console.debug(`Found ${contestTypeLabel} ${round}: ${tasksForChallenges.length} tasks.`);
 
       return tasksForChallenges;
     });
