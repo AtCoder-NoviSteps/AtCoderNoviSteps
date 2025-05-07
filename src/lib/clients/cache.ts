@@ -19,14 +19,14 @@ export class Cache<T> {
     private readonly timeToLive: number = DEFAULT_CACHE_TTL,
     private readonly maxSize: number = DEFAULT_MAX_CACHE_SIZE,
   ) {
-    if (timeToLive <= 0) {
+    if (this.timeToLive <= 0) {
       throw new Error('TTL must be positive');
     }
     if (maxSize <= 0) {
       throw new Error('Max size must be positive');
     }
 
-    this.cleanupInterval = setInterval(() => this.cleanup(), timeToLive);
+    this.cleanupInterval = setInterval(() => this.cleanup(), this.timeToLive);
   }
 
   /**
