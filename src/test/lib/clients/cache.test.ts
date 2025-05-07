@@ -211,6 +211,86 @@ describe('Cache', () => {
     });
   });
 
+  describe('has', () => {
+    test('expects to return false when key does not exist', () => {
+      const cache = new Cache<string>();
+      expect(cache.has('nonexistent')).toBeFalsy();
+    });
+
+    test('expects to return true when key exists and is not expired', () => {
+      const cache = new Cache<string>();
+      cache.set('key', 'value');
+      expect(cache.has('key')).toBeTruthy();
+    });
+
+    test('expects to return false and remove entry when key exists but is expired', () => {
+      const TTL = 1000; // 1 sec.
+      const cache = new Cache<string>(TTL);
+
+      cache.set('key', 'value');
+      expect(cache.has('key')).toBeTruthy();
+
+      // Exceeds the TTL, so the entry should be removed.
+      vi.advanceTimersByTime(TTL + 100);
+      expect(cache.has('key')).toBeFalsy();
+
+      // Validate that the entry is removed from the cache.
+      expect(cache.get('key')).toBeUndefined();
+      expect(cache.size).toBe(0);
+    });
+
+    test('expects not to affect other valid entries when checking an expired one', () => {
+      const TTL = 1000;
+      const cache = new Cache<string>(TTL);
+
+      // Add the first entry.
+      cache.set('expired', 'old-value');
+      vi.advanceTimersByTime(600);
+
+      // Add the second entry.
+      cache.set('valid', 'new-value');
+
+      // Exceeds the TTL, so the first entry should be removed.
+      vi.advanceTimersByTime(500); // Total: 1100ms
+
+      // Remove the expired entry.
+      expect(cache.has('expired')).toBeFalsy();
+
+      // Not affected by the valid entry.
+      expect(cache.has('valid')).toBeTruthy();
+      expect(cache.get('valid')).toBe('new-value');
+      expect(cache.size).toBe(1);
+    });
+
+    test('expects to delete multiple expired entries at once', () => {
+      const TTL = 1000;
+      const cache = new Cache<string>(TTL);
+
+      // Add multiple entries at once.
+      cache.set('key1', 'value1');
+      cache.set('key2', 'value2');
+      cache.set('key3', 'value3');
+
+      expect(cache.size).toBe(3);
+
+      // Exceed the TTL for the first entry.
+      vi.advanceTimersByTime(TTL + 100);
+
+      // Remove the entry, when checking the first key.
+      expect(cache.has('key1')).toBeFalsy();
+
+      // Not yet removed, as the expired entries are not checked until the has() method is called.
+      expect(cache.size).toBe(2);
+
+      // Remove the expired entries, when validating the second and third keys.
+      expect(cache.has('key2')).toBeFalsy();
+      expect(cache.has('key3')).toBeFalsy();
+
+      // All keys are expired, so the cache should be empty.
+      expect(cache.size).toBe(0);
+    });
+  });
+
   describe('delete and clear', () => {
     test('expects to delete an entry', () => {
       const cache = new Cache<string>();
