@@ -52,7 +52,10 @@ export class HttpRequestClient {
 
       return data;
     } catch (error) {
-      throw new Error(`Failed to fetch from ${endpoint}: ${error}`);
+      throw new Error(
+        `Failed to fetch from ${endpoint}: ${error instanceof Error ? error.message : String(error)}`,
+        { cause: error as Error },
+      );
     }
   }
 }
