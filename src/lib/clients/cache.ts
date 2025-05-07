@@ -91,7 +91,18 @@ export class Cache<T> {
    * @returns True if the key exists in the cache, false otherwise.
    */
   has(key: string): boolean {
-    return this.cache.has(key);
+    const entry = this.cache.get(key);
+
+    if (!entry) {
+      return false;
+    }
+
+    if (Date.now() - entry.timestamp > this.timeToLive) {
+      this.cache.delete(key);
+      return false;
+    }
+
+    return true;
   }
 
   /**
