@@ -70,6 +70,9 @@ export class Cache<T> {
       throw new Error('Invalid cache key');
     }
 
+    // Note: Remove existing entry first to avoid counting it twice.
+    this.cache.delete(key);
+
     if (this.cache.size >= this.maxSize) {
       const oldestKey = this.findOldestEntry();
 
