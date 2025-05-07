@@ -440,10 +440,10 @@ export class AojCoursesApiClient extends AojTasksApiClientBase {
 export class AojChallengesApiClient extends AojTasksApiClientBase<ChallengeParams> {
   async getContests(params: ChallengeParams): Promise<ContestsForImport> {
     const { contestType, round } = params;
-    const cacheKey = `aoj_${contestType.toLowerCase()}_${round.toLowerCase()}`;
+    const cacheKey = this.getCacheKey(contestType, round);
 
     const contests = await this.cache.getCachedOrFetchContests(cacheKey, async () => {
-      const contestTypeLabel = contestType.toUpperCase();
+      const contestTypeLabel = this.getContestTypeLabel(contestType);
 
       const results = await this.httpClient.fetchApiWithConfig<AOJChallengeContestAPI>({
         endpoint: this.buildEndpoint(['challenges', 'cl', contestType, round]),
@@ -475,10 +475,10 @@ export class AojChallengesApiClient extends AojTasksApiClientBase<ChallengeParam
 
   async getTasks(params: ChallengeParams): Promise<TasksForImport> {
     const { contestType, round } = params;
-    const cacheKey = `aoj_${contestType.toLowerCase()}_${round.toLowerCase()}`;
+    const cacheKey = this.getCacheKey(contestType, round);
 
     const tasks = await this.cache.getCachedOrFetchTasks(cacheKey, async () => {
-      const contestTypeLabel = contestType.toUpperCase();
+      const contestTypeLabel = this.getContestTypeLabel(contestType);
 
       const allChallengeContests = await this.httpClient.fetchApiWithConfig<AOJChallengeContestAPI>(
         {
@@ -509,5 +509,31 @@ export class AojChallengesApiClient extends AojTasksApiClientBase<ChallengeParam
     });
 
     return tasks;
+  }
+
+  /**
+   * Generates a unique cache key for Aizu Online Judge contest data.
+   *
+   * @param contestType - The type of the contest
+   * @param round - The round of the contest, specific to the contest type
+   * @returns A string in the format "aoj_[contestType]_[round]" with lowercase values
+   * @private
+   */
+  private getCacheKey(
+    contestType: ChallengeContestType,
+    round: ChallengeRoundMap[ChallengeContestType],
+  ): string {
+    return `aoj_${contestType.toLowerCase()}_${round.toLowerCase()}`;
+  }
+
+  /**
+   * Converts the contest type to an uppercase string representation.
+   *
+   * @param contestType - The type of contest to convert
+   * @returns The uppercase string representation of the contest type
+   * @private
+   */
+  private getContestTypeLabel(contestType: ChallengeContestType): string {
+    return contestType.toUpperCase();
   }
 }
