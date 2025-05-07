@@ -87,6 +87,10 @@ export abstract class ContestSiteApiClient {
     errorMessage,
     validateResponse,
   }: FetchAPIConfig<T>): Promise<T> {
+    if (!baseApiUrl) {
+      throw new Error('baseApiUrl is required when using ContestSiteApiClient');
+    }
+
     try {
       const url = new URL(endpoint, baseApiUrl).toString();
       const data = await fetchAPI<T>(url, errorMessage);
