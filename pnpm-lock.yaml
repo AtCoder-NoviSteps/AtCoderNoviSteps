@@ -69,8 +69,8 @@ importers:
         specifier: 3.4.17
         version: 3.4.17(ts-node@10.9.1(@types/node@22.15.14)(typescript@5.6.3))
       vercel:
-        specifier: 41.7.2
-        version: 41.7.2(rollup@4.40.1)
+        specifier: 41.7.3
+        version: 41.7.3(rollup@4.40.1)
       xss:
         specifier: 1.0.15
         version: 1.0.15
@@ -4676,8 +4676,8 @@ packages:
     resolution: {integrity: sha512-BNGbWLfd0eUPabhkXUVm0j8uuvREyTh5ovRa/dyow/BqAbZJyC+5fU+IzQOzmAKzYqYRAISoRhdQr3eIZ/PXqg==}
     engines: {node: '>= 0.8'}
 
-  vercel@41.7.2:
-    resolution: {integrity: sha512-XL62xOTXSU2AucAWWNrNaY98M6UQyzPCKMeaTTbAdk42bgcmiL/3GKyKJs0T+li0aFp7w4QPZyB/9+Ll0qRzEw==}
+  vercel@41.7.3:
+    resolution: {integrity: sha512-cVKpbnwPQP/nRt0GkDBkaiWP8ZoBYeowCUKRTnacp1Hg6miKYqQsqjNK6aMJL4zHC1YE6zpJNUJdiEftWNqwqQ==}
     engines: {node: '>= 18'}
     hasBin: true
 
@@ -9688,7 +9688,7 @@ snapshots:
 
   vary@1.1.2: {}
 
-  vercel@41.7.2(rollup@4.40.1):
+  vercel@41.7.3(rollup@4.40.1):
     dependencies:
       '@vercel/build-utils': 10.5.1
       '@vercel/fun': 1.1.5
