@@ -2,8 +2,9 @@ import { describe, test, expect } from 'vitest';
 
 import { loadMockData } from '../common/test_helpers';
 
-import { ContestSiteApiClient } from '$lib/clients/common';
+import { ContestSiteApiClient } from '$lib/clients/http_client';
 import { AtCoderProblemsApiClient } from '$lib/clients/atcoder_problems';
+
 import type { ContestsForImport } from '$lib/types/contest';
 import type { TasksForImport } from '$lib/types/task';
 

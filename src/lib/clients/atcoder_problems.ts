@@ -1,7 +1,9 @@
-import { ContestSiteApiClient } from '$lib/clients/common';
-import { ATCODER_PROBLEMS_API_BASE_URL } from '$lib/constants/urls';
+import { ContestSiteApiClient } from '$lib/clients/http_client';
+
 import type { ContestsForImport } from '$lib/types/contest';
 import type { TasksForImport } from '$lib/types/task';
+
+import { ATCODER_PROBLEMS_API_BASE_URL } from '$lib/constants/urls';
 
 /**
  * The `AtCoderProblemsApiClient` class provides methods to interact with the AtCoder Problems API.
