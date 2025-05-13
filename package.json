@@ -80,7 +80,7 @@
     "@types/jest": "29.5.14",
     "@types/node": "22.15.17",
     "autoprefixer": "10.4.21",
-    "debug": "4.4.0",
+    "debug": "4.4.1",
     "embla-carousel-autoplay": "8.6.0",
     "embla-carousel-svelte": "8.6.0",
     "flowbite": "2.5.2",
