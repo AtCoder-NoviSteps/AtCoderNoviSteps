@@ -54,7 +54,7 @@
     "lint-staged": "16.0.0",
     "nock": "14.0.4",
     "prettier": "3.5.3",
-    "prettier-plugin-svelte": "3.3.3",
+    "prettier-plugin-svelte": "3.4.0",
     "prettier-plugin-tailwindcss": "0.6.11",
     "prisma": "5.22.0",
     "stwui": "0.21.2-next",
