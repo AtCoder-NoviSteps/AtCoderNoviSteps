@@ -134,6 +134,22 @@ export class AojApiClient extends ContestSiteApiClient {
   private readonly challengesApiClient: AojChallengesApiClient;
 
   /**
+   * Array of API clients configured for Aizu Online Judge.
+   *
+   * @private
+   * @readonly
+   * @property {Object[]} apiClients - Collection of tasks API clients
+   * @property {string} apiClients[].label - Identifier for the API client
+   * @property {TasksApiClient<void | ChallengeParams>} apiClients[].client - API client instance
+   * @property {ChallengeParams} [apiClients[].params] - Optional challenge parameters for the API client
+   */
+  private readonly apiClients: {
+    label: string;
+    client: TasksApiClient<void | ChallengeParams>;
+    params?: ChallengeParams;
+  }[];
+
+  /**
    * Constructs an instance of the Aizu Online Judge client.
    *
    * @param {ApiClientConfig} [config] - Optional configuration object for the API client.
@@ -160,6 +176,34 @@ export class AojApiClient extends ContestSiteApiClient {
     // Initialize API clients for different contests.
     this.coursesApiClient = new AojCoursesApiClient(httpClient, caches);
     this.challengesApiClient = new AojChallengesApiClient(httpClient, caches);
+
+    // Set up the API clients with their labels and parameters.
+    this.apiClients = [
+      {
+        label: 'course',
+        client: this.coursesApiClient,
+      },
+      {
+        label: 'pck-prelim',
+        client: this.challengesApiClient,
+        params: { contestType: 'PCK', round: 'PRELIM' },
+      },
+      {
+        label: 'pck-final',
+        client: this.challengesApiClient,
+        params: { contestType: 'PCK', round: 'FINAL' },
+      },
+      {
+        label: 'jag-prelim',
+        client: this.challengesApiClient,
+        params: { contestType: 'JAG', round: 'PRELIM' },
+      },
+      {
+        label: 'jag-regional',
+        client: this.challengesApiClient,
+        params: { contestType: 'JAG', round: 'REGIONAL' },
+      },
+    ];
   }
 
   /**
@@ -171,30 +215,7 @@ export class AojApiClient extends ContestSiteApiClient {
    * @returns {Promise<ContestsForImport>} A promise that resolves to an array of contests.
    */
   async getContests(): Promise<ContestsForImport> {
-    try {
-      const results = await Promise.allSettled([
-        this.coursesApiClient.getContests(),
-        this.challengesApiClient.getContests({ contestType: 'PCK', round: 'PRELIM' }),
-        this.challengesApiClient.getContests({ contestType: 'PCK', round: 'FINAL' }),
-        this.challengesApiClient.getContests({ contestType: 'JAG', round: 'PRELIM' }),
-        this.challengesApiClient.getContests({ contestType: 'JAG', round: 'REGIONAL' }),
-      ]);
-
-      const [courses, pckPrelims, pckFinals, jagPrelims, jagRegionals] = results.map((result) => {
-        if (result.status === 'rejected') {
-          console.error(`Failed to fetch contests from AOJ API:`, result.reason);
-          return [];
-        }
-
-        return result.value;
-      });
-      const contests = courses.concat(pckPrelims, pckFinals, jagPrelims, jagRegionals);
-
-      return contests;
-    } catch (error) {
-      console.error(`Failed to fetch contests from AOJ API:`, error);
-      return [];
-    }
+    return (await this.fetchAllData<ContestsForImport>('getContests')).flat();
   }
 
   /**
@@ -214,28 +235,43 @@ export class AojApiClient extends ContestSiteApiClient {
    * @throws Will throw an error if the API request fails or the response validation fails.
    */
   async getTasks(): Promise<TasksForImport> {
-    try {
-      const results = await Promise.allSettled([
-        this.coursesApiClient.getTasks(),
-        this.challengesApiClient.getTasks({ contestType: 'PCK', round: 'PRELIM' }),
-        this.challengesApiClient.getTasks({ contestType: 'PCK', round: 'FINAL' }),
-        this.challengesApiClient.getTasks({ contestType: 'JAG', round: 'PRELIM' }),
-        this.challengesApiClient.getTasks({ contestType: 'JAG', round: 'REGIONAL' }),
-      ]);
+    return (await this.fetchAllData<TasksForImport>('getTasks')).flat();
+  }
 
-      const [courses, pckPrelims, pckFinals, jagPrelims, jagRegionals] = results.map((result) => {
-        if (result.status === 'rejected') {
-          console.error(`Failed to fetch tasks from AOJ API:`, result.reason);
+  /**
+   * Fetches data from all configured API clients using the specified method.
+   *
+   * @private
+   * @template T The type of data to be returned from the API
+   * @param {('getContests' | 'getTasks')} methodName - The API method to call on each client
+   * @returns {Promise<T[]>} A promise that resolves to an array of results from all API clients
+   *
+   * @remarks
+   * This method will attempt to fetch data from all configured API clients in parallel.
+   * If any individual request fails, it will log the error and include an empty array in that position.
+   * If the entire operation fails, it will log the error and return an empty array.
+   */
+  private async fetchAllData<T>(methodName: 'getContests' | 'getTasks'): Promise<T[]> {
+    try {
+      const requests = this.apiClients.map((apiClient) =>
+        apiClient.client[methodName](apiClient.params),
+      );
+
+      const responses = await Promise.allSettled(requests);
+      let results: T[] = [];
+
+      results = responses.map((result, index) => {
+        if (result.status === 'fulfilled') {
+          return result.value;
+        } else {
+          console.error(`Failed to fetch from ${this.apiClients[index].label}:`, result.reason);
           return [];
         }
+      }) as T[];
 
-        return result.value;
-      });
-      const tasks = courses.concat(pckPrelims, pckFinals, jagPrelims, jagRegionals);
-
-      return tasks;
+      return results;
     } catch (error) {
-      console.error(`Failed to fetch tasks from AOJ API:`, error);
+      console.error(`Failed to fetch data from AOJ API:`, error);
       return [];
     }
   }
@@ -272,6 +308,98 @@ export abstract class AojTasksApiClientBase<TParams = void> implements TasksApiC
   abstract getContests(params?: TParams): Promise<ContestsForImport>;
 
   abstract getTasks(params?: TParams): Promise<TasksForImport>;
+
+  /**
+   * Retrieves contest data either from cache or from the Aizu Online Judge API.
+   *
+   * @protected
+   * @template T - The type of the raw API response
+   * @param {Object} options - The options for fetching contests
+   * @param {string} options.cacheKey - The key used to store/retrieve data in the cache
+   * @param {string} options.endpoint - The API endpoint to fetch data from
+   * @param {string} options.errorMessage - The error message to use if the API request fails
+   * @param {(data: T) => boolean} options.validateResponse - Function to validate the API response
+   * @param {(data: T) => ContestsForImport} options.transformer - Function to transform API data to ContestsForImport format
+   * @param {string} options.label - Label used for logging the fetch result
+   * @returns {Promise<ContestsForImport>} A promise that resolves to the contests data
+   */
+  protected async getCachedOrFetchContests<T>({
+    cacheKey,
+    endpoint,
+    errorMessage,
+    validateResponse,
+    transformer,
+    label,
+  }: {
+    cacheKey: string;
+    endpoint: string;
+    errorMessage: string;
+    validateResponse: (data: T) => boolean;
+    transformer: (data: T) => ContestsForImport;
+    label: string;
+  }): Promise<ContestsForImport> {
+    return this.cache.getCachedOrFetchContests(cacheKey, async () => {
+      const apiResponse = await this.httpClient.fetchApiWithConfig<T>({
+        endpoint,
+        errorMessage,
+        validateResponse,
+      });
+
+      const transformedContests = transformer(apiResponse);
+      this.printLogForFetchedResults(label, transformedContests, 'contest');
+
+      return transformedContests;
+    });
+  }
+
+  /**
+   * Retrieves tasks from cache or fetches them from the API if not cached.
+   *
+   * @protected
+   * @template T - The type of data returned by the API
+   * @param options - Object containing fetch and cache configuration
+   * @param options.cacheKey - Unique key used to store and retrieve data from cache
+   * @param options.endpoint - API endpoint to fetch tasks from
+   * @param options.errorMessage - Message to display if the API request fails
+   * @param options.validateResponse - Function to validate the API response data
+   * @param options.transformer - Function to convert API response into TasksForImport format
+   * @param options.label - Identifier used in logging statements
+   * @returns Promise resolving to transformed tasks ready for import
+   */
+  protected async getCachedOrFetchTasks<T>({
+    cacheKey,
+    endpoint,
+    errorMessage,
+    validateResponse,
+    transformer,
+    label,
+  }: {
+    cacheKey: string;
+    endpoint: string;
+    errorMessage: string;
+    validateResponse: (data: T) => boolean;
+    transformer: (data: T) => TasksForImport;
+    label: string;
+  }): Promise<TasksForImport> {
+    return this.cache.getCachedOrFetchTasks(cacheKey, async () => {
+      const apiResponse = await this.httpClient.fetchApiWithConfig<T>({
+        endpoint,
+        errorMessage,
+        validateResponse,
+      });
+
+      const transformedTasks = transformer(apiResponse);
+      this.printLogForFetchedResults(label, transformedTasks, 'task');
+
+      return transformedTasks;
+    });
+  }
+
+  private printLogForFetchedResults<R>(label: string, data: R, dataType: 'task' | 'contest'): void {
+    const countText = Array.isArray(data) ? `${data.length} ${dataType}s` : typeof data;
+
+    console.debug(`Found AOJ ${label}: ${countText}`);
+  }
 
   /**
    * Constructs an endpoint URL by encoding each segment and joining them with a '/'.
@@ -361,47 +489,42 @@ export abstract class AojTasksApiClientBase<TParams = void> implements TasksApiC
  */
 export class AojCoursesApiClient extends AojTasksApiClientBase {
   async getContests(): Promise<ContestsForImport> {
-    const contests = await this.cache.getCachedOrFetchContests('aoj_courses', async () => {
-      const results = await this.httpClient.fetchApiWithConfig<AOJCourseAPI>({
-        endpoint: 'courses',
-        errorMessage: 'Failed to fetch course contests from AOJ API',
-        validateResponse: (data) =>
-          'courses' in data && Array.isArray(data.courses) && data.courses.length > 0,
-      });
-
-      const coursesForContest = results.courses.map((course: Course) => {
-        const courseForContest: ContestForImport = this.mapToContest(course.shortName, course.name);
-
-        return courseForContest;
-      });
-      console.debug(`Found AOJ course: ${coursesForContest.length} contests.`);
-
-      return coursesForContest;
+    return this.getCachedOrFetchContests<AOJCourseAPI>({
+      cacheKey: 'aoj_courses',
+      endpoint: 'courses',
+      errorMessage: 'Failed to fetch course contests from AOJ API',
+      validateResponse: (data) =>
+        'courses' in data && Array.isArray(data.courses) && data.courses.length > 0,
+      transformer: (data) => this.transformCourseContests(data),
+      label: 'course',
     });
-
-    return contests;
   }
 
   async getTasks(): Promise<TasksForImport> {
-    const tasks = await this.cache.getCachedOrFetchTasks('aoj_courses', async () => {
-      const size = 10 ** 4;
-      const allTasks = await this.httpClient.fetchApiWithConfig<AOJTaskAPIs>({
-        endpoint: `problems?size=${size}`,
-        errorMessage: 'Failed to fetch course tasks from AOJ API',
-        validateResponse: (data) => Array.isArray(data) && data.length > 0,
-      });
+    const size = 10 ** 4;
 
-      const courseTasks: TasksForImport = allTasks
-        .filter((task: AOJTaskAPI) => this.getCourseName(task.id) !== '')
-        .map((task: AOJTaskAPI) => {
-          return this.mapToTask(task, this.getCourseName(task.id));
-        });
-      console.debug(`Found AOJ course: ${courseTasks.length} tasks.`);
-
-      return courseTasks;
+    return this.getCachedOrFetchTasks<AOJTaskAPIs>({
+      cacheKey: 'aoj_courses',
+      endpoint: `problems?size=${size}`,
+      errorMessage: 'Failed to fetch course tasks from AOJ API',
+      validateResponse: (data) => Array.isArray(data) && data.length > 0,
+      transformer: (data) => this.transformCourseTasks(data),
+      label: 'course',
     });
+  }
 
-    return tasks;
+  private transformCourseContests(data: AOJCourseAPI): ContestsForImport {
+    return data.courses.map((course: Course) => {
+      return this.mapToContest(course.shortName, course.name);
+    });
+  }
+
+  private transformCourseTasks(data: AOJTaskAPIs): TasksForImport {
+    return data
+      .filter((task: AOJTaskAPI) => this.getCourseName(task.id) !== '')
+      .map((task: AOJTaskAPI) => {
+        return this.mapToTask(task, this.getCourseName(task.id));
+      });
   }
 
   /**
@@ -440,75 +563,30 @@ export class AojCoursesApiClient extends AojTasksApiClientBase {
 export class AojChallengesApiClient extends AojTasksApiClientBase<ChallengeParams> {
   async getContests(params: ChallengeParams): Promise<ContestsForImport> {
     const { contestType, round } = params;
-    const cacheKey = this.getCacheKey(contestType, round);
 
-    const contests = await this.cache.getCachedOrFetchContests(cacheKey, async () => {
-      const contestTypeLabel = this.getContestTypeLabel(contestType);
-
-      const results = await this.httpClient.fetchApiWithConfig<AOJChallengeContestAPI>({
-        endpoint: this.buildEndpoint(['challenges', 'cl', contestType, round]),
-        errorMessage: `Failed to fetch ${contestTypeLabel} ${round} contests from AOJ API`,
-        validateResponse: (data) =>
-          'contests' in data && Array.isArray(data.contests) && data.contests.length > 0,
-      });
-
-      const contestsForChallenges = results.contests.reduce(
-        (importContests: ContestsForImport, contest: ChallengeContest) => {
-          const titles = contest.days.map((day) => day.title);
-          titles.forEach((title: string) => {
-            importContests.push(this.mapToContest(contest.abbr, title));
-          });
-
-          return importContests;
-        },
-        [] as ContestsForImport,
-      );
-      console.debug(
-        `Found AOJ ${contestTypeLabel} ${round}: ${contestsForChallenges.length} contests.`,
-      );
-
-      return contestsForChallenges;
+    return this.getCachedOrFetchContests<AOJChallengeContestAPI>({
+      cacheKey: this.getCacheKey(contestType, round),
+      endpoint: this.buildEndpoint(['challenges', 'cl', contestType, round]),
+      errorMessage: `Failed to fetch ${this.getContestTypeLabel(contestType)} ${round} contests from AOJ API`,
+      validateResponse: (data) =>
+        'contests' in data && Array.isArray(data.contests) && data.contests.length > 0,
+      transformer: (data) => this.transformToContests(data),
+      label: `${this.getContestTypeLabel(contestType)} ${round}`,
     });
-
-    return contests;
   }
 
   async getTasks(params: ChallengeParams): Promise<TasksForImport> {
     const { contestType, round } = params;
-    const cacheKey = this.getCacheKey(contestType, round);
 
-    const tasks = await this.cache.getCachedOrFetchTasks(cacheKey, async () => {
-      const contestTypeLabel = this.getContestTypeLabel(contestType);
-
-      const allChallengeContests = await this.httpClient.fetchApiWithConfig<AOJChallengeContestAPI>(
-        {
-          endpoint: this.buildEndpoint(['challenges', 'cl', contestType, round]),
-          errorMessage: `Failed to fetch ${contestTypeLabel} ${round} tasks from AOJ API`,
-          validateResponse: (data) =>
-            'contests' in data && Array.isArray(data.contests) && data.contests.length > 0,
-        },
-      );
-
-      const tasksForChallenges: TasksForImport = allChallengeContests.contests.reduce(
-        (tasksForImport: TasksForImport, contest) => {
-          contest.days.forEach((day) => {
-            const contestTasks = day.problems.map((problem) =>
-              this.mapToTask(problem, contest.abbr),
-            );
-
-            tasksForImport.push(...contestTasks);
-          });
-
-          return tasksForImport;
-        },
-        [],
-      );
-      console.debug(`Found ${contestTypeLabel} ${round}: ${tasksForChallenges.length} tasks.`);
-
-      return tasksForChallenges;
+    return this.getCachedOrFetchTasks<AOJChallengeContestAPI>({
+      cacheKey: this.getCacheKey(contestType, round),
+      endpoint: this.buildEndpoint(['challenges', 'cl', contestType, round]),
+      errorMessage: `Failed to fetch ${this.getContestTypeLabel(contestType)} ${round} tasks from AOJ API`,
+      validateResponse: (data) =>
+        'contests' in data && Array.isArray(data.contests) && data.contests.length > 0,
+      transformer: (data) => this.transformToTasks(data),
+      label: `${this.getContestTypeLabel(contestType)} ${round}`,
     });
-
-    return tasks;
   }
 
   /**
@@ -524,6 +602,26 @@ export class AojChallengesApiClient extends AojTasksApiClientBase<ChallengeParam
     round: ChallengeRoundMap[ChallengeContestType],
   ): string {
     return `aoj_${contestType.toLowerCase()}_${round.toLowerCase()}`;
+  }
+
+  private transformToContests(data: AOJChallengeContestAPI): ContestsForImport {
+    return data.contests.flatMap((contest: ChallengeContest) =>
+      contest.days
+        .map((day) => day.title)
+        .map((title: string) => {
+          return this.mapToContest(contest.abbr, title);
+        }),
+    );
+  }
+
+  private transformToTasks(data: AOJChallengeContestAPI): TasksForImport {
+    return data.contests.flatMap((contest: ChallengeContest) =>
+      contest.days.flatMap((day) =>
+        day.problems.map((problem) => {
+          return this.mapToTask(problem, contest.abbr);
+        }),
+      ),
+    );
   }
 
   /**
