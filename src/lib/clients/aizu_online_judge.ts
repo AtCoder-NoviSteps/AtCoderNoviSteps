@@ -568,8 +568,7 @@ export class AojChallengesApiClient extends AojTasksApiClientBase<ChallengeParam
       cacheKey: this.getCacheKey(contestType, round),
       endpoint: this.buildEndpoint(['challenges', 'cl', contestType, round]),
       errorMessage: `Failed to fetch ${this.getContestTypeLabel(contestType)} ${round} contests from AOJ API`,
-      validateResponse: (data) =>
-        'contests' in data && Array.isArray(data.contests) && data.contests.length > 0,
+      validateResponse: (data) => this.validateApiResponse(data),
       transformer: (data) => this.transformToContests(data),
       label: `${this.getContestTypeLabel(contestType)} ${round}`,
     });
@@ -582,8 +581,7 @@ export class AojChallengesApiClient extends AojTasksApiClientBase<ChallengeParam
       cacheKey: this.getCacheKey(contestType, round),
       endpoint: this.buildEndpoint(['challenges', 'cl', contestType, round]),
       errorMessage: `Failed to fetch ${this.getContestTypeLabel(contestType)} ${round} tasks from AOJ API`,
-      validateResponse: (data) =>
-        'contests' in data && Array.isArray(data.contests) && data.contests.length > 0,
+      validateResponse: (data) => this.validateApiResponse(data),
       transformer: (data) => this.transformToTasks(data),
       label: `${this.getContestTypeLabel(contestType)} ${round}`,
     });
@@ -602,6 +600,10 @@ export class AojChallengesApiClient extends AojTasksApiClientBase<ChallengeParam
     round: ChallengeRoundMap[ChallengeContestType],
   ): string {
     return `aoj_${contestType.toLowerCase()}_${round.toLowerCase()}`;
+  }
+
+  private validateApiResponse(data: AOJChallengeContestAPI): boolean {
+    return 'contests' in data && Array.isArray(data.contests) && data.contests.length > 0;
   }
 
   private transformToContests(data: AOJChallengeContestAPI): ContestsForImport {
