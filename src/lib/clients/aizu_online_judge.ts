@@ -140,12 +140,12 @@ export class AojApiClient extends ContestSiteApiClient {
    * @readonly
    * @property {Object[]} apiClients - Collection of tasks API clients
    * @property {string} apiClients[].label - Identifier for the API client
-   * @property {TasksApiClient<void | ChallengeParams>} apiClients[].client - API client instance
+   * @property {TasksApiClient<undefined | ChallengeParams>} apiClients[].client - API client instance
    * @property {ChallengeParams} [apiClients[].params] - Optional challenge parameters for the API client
    */
   private readonly apiClients: {
     label: string;
-    client: TasksApiClient<void | ChallengeParams>;
+    client: TasksApiClient<undefined | ChallengeParams>;
     params?: ChallengeParams;
   }[];
 
