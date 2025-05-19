@@ -190,8 +190,8 @@ importers:
         specifier: 3.0.0-beta.3
         version: 3.0.0-beta.3(@edge-runtime/vm@3.2.0)(@types/node@22.15.19)(@vitest/ui@3.0.0-beta.3)(jiti@1.21.6)(jsdom@26.1.0)(yaml@2.7.1)
       zod:
-        specifier: 3.24.4
-        version: 3.24.4
+        specifier: 3.25.3
+        version: 3.25.3
 
 packages:
 
@@ -4686,8 +4686,8 @@ packages:
     peerDependencies:
       zod: ^3.24.1
 
-  zod@3.24.4:
-    resolution: {integrity: sha512-OdqJE9UDRPwWsrHjLN2F8bPxvwJBK22EHLWtanu0LSYr5YqzsaaW3RMgmjwr8Rypg5k+meEJdSPXJZXE/yqOMg==}
+  zod@3.25.3:
+    resolution: {integrity: sha512-VGZqnyYNrl8JpEJRZaFPqeVNIuqgXNu4cXZ5cOb6zEUO1OxKbRnWB4UdDIXMmiERWncs0yDQukssHov8JUxykQ==}
 
 snapshots:
 
@@ -8732,8 +8732,8 @@ snapshots:
       superstruct: 2.0.2
       valibot: 1.0.0-rc.3(typescript@5.6.3)
       yup: 1.6.1
-      zod: 3.24.4
-      zod-to-json-schema: 3.24.5(zod@3.24.4)
+      zod: 3.25.3
+      zod-to-json-schema: 3.24.5(zod@3.25.3)
     transitivePeerDependencies:
       - '@types/json-schema'
       - typescript
@@ -9327,9 +9327,9 @@ snapshots:
 
   zimmerframe@1.1.2: {}
 
-  zod-to-json-schema@3.24.5(zod@3.24.4):
+  zod-to-json-schema@3.24.5(zod@3.25.3):
     dependencies:
-      zod: 3.24.4
+      zod: 3.25.3
     optional: true
 
-  zod@3.24.4: {}
+  zod@3.25.3: {}
