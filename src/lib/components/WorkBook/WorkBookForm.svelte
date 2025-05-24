@@ -1,6 +1,4 @@
 <script lang="ts">
-  import { run } from 'svelte/legacy';
-
   import { Breadcrumb, BreadcrumbItem } from 'svelte-5-ui-lib';
 
   import HeadingOne from '$lib/components/HeadingOne.svelte';
@@ -42,11 +40,8 @@
 
   const { form, message, errors, enhance } = superFormObject;
 
-  let workBookTasksForTable: WorkBookTasksCreate | WorkBookTasksEdit = $state([]);
-
-  // HACK: This is a workaround to ensure that the derived state is updated correctly.
-  run(() => {
-    workBookTasksForTable = $form.workBookTasks
+  let workBookTasksForTable: WorkBookTasksCreate | WorkBookTasksEdit = $derived(
+    $form.workBookTasks
       .map((workBookTask: WorkBookTaskCreate | WorkBookTaskEdit) => {
         const task = tasksMapByIds.get(workBookTask.taskId);
 
@@ -65,8 +60,8 @@
       .filter(
         (item: WorkBookTaskCreate | WorkBookTaskEdit): item is NonNullable<typeof item> =>
           item !== null,
-      );
-  });
+      ),
+  );
 
   const truncateClass = 'min-w-[96px] max-w-[120px] sm:max-w-[300px] lg:max-w-[600px] truncate';
   const tasks: Tasks = $derived(Array.from(tasksMapByIds.values()));
