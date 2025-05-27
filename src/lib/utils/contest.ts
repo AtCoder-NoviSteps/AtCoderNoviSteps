@@ -165,6 +165,7 @@ const atCoderUniversityPrefixes = getContestPrefixes(ATCODER_UNIVERSITIES);
  */
 const ATCODER_OTHERS: ContestPrefix = {
   chokudai_S: 'Chokudai SpeedRun',
+  'code-festival-2014-quala': 'Code Festival 2014 予選 A',
   'code-festival-2014-qualb': 'Code Festival 2014 予選 B',
   'code-festival-2014-final': 'Code Festival 2014 決勝',
   'code-festival-2015-morning-middle': 'CODE FESTIVAL 2015 あさぷろ Middle',

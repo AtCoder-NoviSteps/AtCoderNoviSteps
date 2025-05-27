@@ -307,6 +307,10 @@ export const atCoderOthers = [
     contestId: 'chokudai_S002',
     expected: ContestType.OTHERS,
   }),
+  createTestCaseForContestType('CODE FESTIVAL 2014 qual A')({
+    contestId: 'code-festival-2014-quala',
+    expected: ContestType.OTHERS,
+  }),
   createTestCaseForContestType('CODE FESTIVAL 2014 qual B')({
     contestId: 'code-festival-2014-qualb',
     expected: ContestType.OTHERS,
