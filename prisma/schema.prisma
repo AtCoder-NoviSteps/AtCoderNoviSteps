@@ -181,6 +181,7 @@ model WorkBook {
   isOfficial    Boolean      @default(false)
   isReplenished Boolean      @default(false) // カリキュラムの【補充】を識別するために使用
   workBookType  WorkBookType @default(CREATED_BY_USER)
+  urlSlug       String?      @unique // 問題集（カリキュラムと解法別）をURLで識別するためのオプション。a-z、0-9、(-)ハイフンのみ使用可能。例: bfs、dfs、dp、union-find、2-sat。
   createdAt     DateTime     @default(now())
   updatedAt     DateTime     @updatedAt
 
@@ -231,7 +232,7 @@ enum ContestType {
 }
 
 // 11Q(最も簡単)〜6D(最難関)。
-// 注: 基準は非公開。
+// 注: 基準は一般公開中。
 enum TaskGrade {
   PENDING // 未確定
   Q11 // 11Qのように表記したいが、数字を最初の文字として利用できないため
