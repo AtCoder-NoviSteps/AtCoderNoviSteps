@@ -8,7 +8,7 @@ export type WorkBookBase = {
   isOfficial: boolean;
   isReplenished: boolean; // カリキュラムの【補充】を識別するために使用
   workBookType: WorkBookType;
-  urlSlug?: string; // 問題集（カリキュラムと解法別）をURLで識別するためのオプション。a-z、0-9、(-)ハイフンのみ使用可能。例: bfs、dfs、dp、union-find、2-sat。
+  urlSlug?: string | null; // 問題集（カリキュラムと解法別）をURLで識別するためのオプション。a-z、0-9、(-)ハイフンのみ使用可能。例: bfs、dfs、dp、union-find、2-sat。
   workBookTasks: WorkBookTaskBase[];
 };
 
