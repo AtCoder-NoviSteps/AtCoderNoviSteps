@@ -37,6 +37,30 @@ export async function getWorkBook(workBookId: number): Promise<WorkBook | null> 
   return workBook;
 }
 
+/**
+ * Retrieves a WorkBook from the database by its URL slug.
+ *
+ * @param urlSlug - The URL slug identifier for the WorkBook to retrieve (e.g., 'bfs', 'dfs', 'union-find', '2-sat').
+ * @returns A Promise that resolves to the found WorkBook (with included workBookTasks
+ *          ordered by priority) or null if no WorkBook with the given slug exists
+ */
+export async function getWorkBookByUrlSlug(urlSlug: string): Promise<WorkBook | null> {
+  const workBook = await db.workBook.findUnique({
+    where: {
+      urlSlug: urlSlug,
+    },
+    include: {
+      workBookTasks: {
+        orderBy: {
+          priority: 'asc',
+        },
+      },
+    },
+  });
+
+  return workBook;
+}
+
 // See:
 // https://www.prisma.io/docs/orm/prisma-schema/data-model/relations#create-a-record-and-nested-records
 export async function createWorkBook(workBook: WorkBook): Promise<void> {
@@ -53,6 +77,7 @@ export async function createWorkBook(workBook: WorkBook): Promise<void> {
       isOfficial: workBook.isOfficial,
       isReplenished: workBook.isReplenished,
       workBookType: workBook.workBookType as WorkBookType,
+      urlSlug: workBook.urlSlug,
       workBookTasks: {
         create: newWorkBookTasks,
       },
