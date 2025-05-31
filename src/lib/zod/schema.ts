@@ -4,7 +4,7 @@
 // https://qiita.com/mpyw/items/886218e7b418dfed254b
 import { z } from 'zod';
 import { WorkBookType } from '$lib/types/workbook';
-import { isValidUrl } from '$lib/utils/url';
+import { isValidUrl, isValidUrlSlug } from '$lib/utils/url';
 
 const INPUT_AT_LEAST_3_CHARACTERS = '3文字以上入力してください';
 const DELETE_UNTIL_24_CHARACTERS_ARE_LEFT = '24文字になるまで削除してください';
@@ -76,7 +76,7 @@ export const workBookSchema = z.object({
     .min(0, { message: '' })
     .max(30, { message: '30文字になるまで削除してください' }) // 問題集（カリキュラムと解法別）をURLで識別するためのオプション。a-z、0-9、(-)ハイフンのみ使用可能。例: bfs、dfs、dp、union-find、2-sat。
     .transform((value) => (value === '' ? undefined : value))
-    .refine((value) => value === undefined || /^[a-z0-9]+(-[a-z0-9]+)*$/.test(value), {
+    .refine((value) => value === undefined || isValidUrlSlug(value), {
       message: '半角英小文字、数字、ハイフンのみ使用可能です',
     })
     .optional(),
