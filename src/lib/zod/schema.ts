@@ -51,6 +51,7 @@ const workBookTaskSchema = z.object({
     .max(50, { message: '50文字になるまで削除してください' }), // FIXME: 上限は暫定値。
 });
 
+// TODO: URL用のカラムとバリデーションを追加
 export const workBookSchema = z.object({
   authorId: z.string(),
   title: z
@@ -70,6 +71,15 @@ export const workBookSchema = z.object({
   isOfficial: z.boolean(),
   isReplenished: z.boolean(), // カリキュラムの【補充】を識別するために使用
   workBookType: z.nativeEnum(WorkBookType),
+  urlSlug: z
+    .string()
+    .min(0, { message: '' })
+    .max(30, { message: '30文字になるまで削除してください' }) // 問題集（カリキュラムと解法別）をURLで識別するためのオプション。a-z、0-9、(-)ハイフンのみ使用可能。例: bfs、dfs、dp、union-find、2-sat。
+    .transform((value) => (value === '' ? undefined : value))
+    .refine((value) => value === undefined || /^[a-z0-9]+(-[a-z0-9]+)*$/.test(value), {
+      message: '半角英小文字、数字、ハイフンのみ使用可能です',
+    })
+    .optional(),
   workBookTasks: z
     .array(workBookTaskSchema)
     .min(1, { message: '1問以上登録してください' })
