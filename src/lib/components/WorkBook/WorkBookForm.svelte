@@ -88,6 +88,7 @@
       bind:isPublished={$form.isPublished}
       bind:isOfficial={$form.isOfficial}
       bind:isReplenished={$form.isReplenished}
+      bind:urlSlug={$form.urlSlug}
       bind:workBookType={$form.workBookType}
       {isAdmin}
       message={$message}

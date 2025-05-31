@@ -4,6 +4,7 @@
   import SelectWrapper from '$lib/components/SelectWrapper.svelte';
   import { WorkBookType } from '$lib/types/workbook';
 
+  // TODO: WorkBookディレクトリに移動させる
   interface Props {
     // FIXME: 引数がとても多いので、コンポーネントに渡す引数を減らす方法を調べて実装。
     authorId: string;
@@ -13,6 +14,7 @@
     isPublished: boolean;
     isOfficial: boolean;
     isReplenished: boolean;
+    urlSlug?: string | null;
     workBookType: WorkBookType;
     isAdmin: boolean;
     isEditable?: boolean;
@@ -28,6 +30,7 @@
     isPublished = $bindable(),
     isOfficial = $bindable(),
     isReplenished = $bindable(),
+    urlSlug = $bindable(undefined),
     workBookType = $bindable(),
     isAdmin,
     isEditable = true,
@@ -144,3 +147,12 @@
     />
   </div>
 </div>
+
+<!-- 管理者のみ: 問題集のカスタムURL -->
+<InputFieldWrapper
+  labelName="問題集のカスタムURL（30文字以下、半角英小文字・半角数字・ハイフンのみ）"
+  inputFieldName="urlSlug"
+  bind:inputValue={urlSlug}
+  isEditable={isAdmin && isEditable}
+  message={errors.urlSlug}
+/>
