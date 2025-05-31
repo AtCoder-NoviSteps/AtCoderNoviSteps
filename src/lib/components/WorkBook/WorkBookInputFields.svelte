@@ -147,9 +147,12 @@
   </div>
 </div>
 
-<!-- 管理者のみ: 問題集のカスタムURL -->
+<!-- 管理者のみ: 問題集のカスタムURL (一般ユーザには非表示) -->
 <InputFieldWrapper
-  labelName="問題集のカスタムURL（30文字以下、半角英小文字・半角数字・ハイフンのみ）"
+  inputFieldType={isAdmin ? undefined : 'hidden'}
+  labelName={isAdmin
+    ? '問題集のカスタムURL（30文字以下、半角英小文字・半角数字・ハイフンのみ）'
+    : ''}
   inputFieldName="urlSlug"
   bind:inputValue={urlSlug}
   isEditable={isAdmin && isEditable}
