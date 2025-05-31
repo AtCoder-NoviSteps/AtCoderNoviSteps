@@ -4,7 +4,6 @@
   import SelectWrapper from '$lib/components/SelectWrapper.svelte';
   import { WorkBookType } from '$lib/types/workbook';
 
-  // TODO: WorkBookディレクトリに移動させる
   interface Props {
     // FIXME: 引数がとても多いので、コンポーネントに渡す引数を減らす方法を調べて実装。
     authorId: string;
