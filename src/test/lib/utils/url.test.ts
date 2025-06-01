@@ -1,6 +1,6 @@
 import { expect, test } from 'vitest';
 
-import { isValidUrl, sanitizeUrl } from '$lib/utils/url';
+import { isValidUrl, isValidUrlSlug, sanitizeUrl } from '$lib/utils/url';
 
 type TestCaseForUrlValidation = {
   rawUrl: string;
@@ -49,6 +49,67 @@ describe('URL', () => {
 
       runTests('isValidUrl', testCases, ({ rawUrl }: TestCaseForUrlValidation) => {
         expect(isValidUrl(rawUrl)).toBeFalsy();
+      });
+    });
+
+    function runTests(
+      testName: string,
+      testCases: TestCasesForUrlValidation,
+      testFunction: (testCase: TestCaseForUrlValidation) => void,
+    ) {
+      test.each(testCases)(`${testName}(rawUrl: $rawUrl)`, testFunction);
+    }
+  });
+
+  describe('is valid URL slug', () => {
+    describe('when valid URL slugs are given', () => {
+      const testCases = [
+        { rawUrl: 'a' },
+        { rawUrl: 'a'.repeat(2) },
+        { rawUrl: 'a'.repeat(30) },
+        { rawUrl: 'bfs' },
+        { rawUrl: 'dfs' },
+        { rawUrl: 'dp' },
+        { rawUrl: 'union-find' },
+        { rawUrl: 'warshall-floyd' },
+        { rawUrl: 'digit-dp' },
+        { rawUrl: '2-sat' },
+        { rawUrl: 'directed-acyclic-graph' },
+      ];
+
+      runTests('isValidUrlSlug', testCases, ({ rawUrl }: TestCaseForUrlValidation) => {
+        expect(isValidUrlSlug(rawUrl)).toBeTruthy();
+      });
+    });
+
+    describe('when invalid URL slugs are given', () => {
+      const testCases = [
+        { rawUrl: '' },
+        { rawUrl: '-bfs' },
+        { rawUrl: 'bfs-' },
+        { rawUrl: 'bfs--dfs' },
+        { rawUrl: 'Bfs' },
+        { rawUrl: 'A' },
+        { rawUrl: 'BFS' },
+        { rawUrl: 'Union_Find' },
+        { rawUrl: 'union_find' },
+        { rawUrl: 'union.find' },
+        { rawUrl: 'union/find' },
+        { rawUrl: 'union@find' },
+        { rawUrl: '@union-find' },
+        { rawUrl: 'union-find@' },
+        { rawUrl: 'directed acyclic graph' },
+        { rawUrl: '-' },
+        { rawUrl: '--' },
+        { rawUrl: 'ー' },
+        { rawUrl: '１' },
+        { rawUrl: '２' },
+        { rawUrl: '９' },
+        { rawUrl: '１０' },
+      ];
+
+      runTests('isValidUrlSlug', testCases, ({ rawUrl }: TestCaseForUrlValidation) => {
+        expect(isValidUrlSlug(rawUrl)).toBeFalsy();
       });
     });
 
