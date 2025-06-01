@@ -80,6 +80,71 @@ describe('workbook schema', () => {
       validateWorkBookSchema(workBookSchema, workbook);
     });
 
+    test('when an url slug is given one character', () => {
+      const workbook: WorkBook = createWorkBookBase({
+        authorId: '1',
+        isPublished: true,
+        urlSlug: 'a',
+      });
+      validateWorkBookSchema(workBookSchema, workbook);
+    });
+
+    test('when an url slug is given characters and hyphen', () => {
+      const workbook: WorkBook = createWorkBookBase({
+        authorId: '1',
+        isPublished: true,
+        urlSlug: 'union-find',
+        workBookType: WorkBookType.SOLUTION,
+      });
+      validateWorkBookSchema(workBookSchema, workbook);
+    });
+
+    test('when an url slug is given characters, number and hyphens', () => {
+      const workbook: WorkBook = createWorkBookBase({
+        authorId: '1',
+        isPublished: true,
+        urlSlug: '2-sat',
+        workBookType: WorkBookType.SOLUTION,
+      });
+      validateWorkBookSchema(workBookSchema, workbook);
+    });
+
+    test('when an url slug is given 30 characters', () => {
+      const workbook: WorkBook = createWorkBookBase({
+        authorId: '1',
+        isPublished: true,
+        urlSlug: 'a'.repeat(30),
+      });
+      validateWorkBookSchema(workBookSchema, workbook);
+    });
+
+    test('when an url slug is given an empty string', () => {
+      const workbook: WorkBook = createWorkBookBase({
+        authorId: '1',
+        isPublished: true,
+        urlSlug: '',
+      });
+      validateWorkBookSchema(workBookSchema, workbook);
+    });
+
+    test('when an url slug is given null', () => {
+      const workbook: WorkBook = createWorkBookBase({
+        authorId: '1',
+        isPublished: true,
+        urlSlug: null,
+      });
+      validateWorkBookSchema(workBookSchema, workbook);
+    });
+
+    test('when an url slug is given undefined', () => {
+      const workbook: WorkBook = createWorkBookBase({
+        authorId: '1',
+        isPublished: true,
+        urlSlug: undefined,
+      });
+      validateWorkBookSchema(workBookSchema, workbook);
+    });
+
     test('when workbook tasks are given 200 tasks', () => {
       const workBookTasks = [];
 
@@ -225,6 +290,42 @@ describe('workbook schema', () => {
     test('when an invalid editorial url is given', () => {
       const workbook: WorkBook = createWorkBookBase({
         editorialUrl: 'example.c',
+      });
+      validateWorkBookSchema(workBookSchema, workbook);
+    });
+
+    test('when an invalid url slug is given 31 characters', () => {
+      const workbook: WorkBook = createWorkBookBase({
+        authorId: '1',
+        isPublished: true,
+        urlSlug: 'a'.repeat(31),
+      });
+      validateWorkBookSchema(workBookSchema, workbook);
+    });
+
+    test('when an invalid url slug is given characters and spaces', () => {
+      const workbook: WorkBook = createWorkBookBase({
+        authorId: '1',
+        isPublished: true,
+        urlSlug: 'directed acyclic graph',
+      });
+      validateWorkBookSchema(workBookSchema, workbook);
+    });
+
+    test('when an invalid url slug is given hyphen', () => {
+      const workbook: WorkBook = createWorkBookBase({
+        authorId: '1',
+        isPublished: true,
+        urlSlug: '-',
+      });
+      validateWorkBookSchema(workBookSchema, workbook);
+    });
+
+    test('when an invalid url slug is given hyphens', () => {
+      const workbook: WorkBook = createWorkBookBase({
+        authorId: '1',
+        isPublished: true,
+        urlSlug: '--',
       });
       validateWorkBookSchema(workBookSchema, workbook);
     });
