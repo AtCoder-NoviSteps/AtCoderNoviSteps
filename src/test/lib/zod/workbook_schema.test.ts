@@ -149,6 +149,7 @@ describe('workbook schema', () => {
           'AtCoder の数学的な問題に苦手意識がある方向けの問題集です。これらの問題を通して、数学の感覚を集中的に磨いていきましょう！',
         isPublished: true,
         isOfficial: true,
+        isReplenished: true,
         workBookType: WorkBookType.CURRICULUM,
         workBookTasks: workBookTasks,
       });
