@@ -22,7 +22,6 @@
   import AcceptedCounter from '$lib/components/SubmissionStatus/AcceptedCounter.svelte';
 
   import { canRead, canEdit, canDelete } from '$lib/utils/authorship';
-  import WorkBookList from './WorkBookList.svelte';
 
   interface Props {
     workbookType: WorkBookType;
