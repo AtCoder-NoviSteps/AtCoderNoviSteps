@@ -51,7 +51,6 @@ const workBookTaskSchema = z.object({
     .max(50, { message: '50文字になるまで削除してください' }), // FIXME: 上限は暫定値。
 });
 
-// TODO: URL用のカラムとバリデーションを追加
 export const workBookSchema = z.object({
   authorId: z.string(),
   title: z
