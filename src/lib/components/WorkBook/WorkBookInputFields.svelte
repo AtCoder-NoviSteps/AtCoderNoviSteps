@@ -149,7 +149,7 @@
 
 <!-- 管理者のみ: 問題集のカスタムURL (一般ユーザには非表示) -->
 <InputFieldWrapper
-  inputFieldType={isAdmin ? undefined : 'hidden'}
+  inputFieldType={isAdmin ? null : 'hidden'}
   labelName={isAdmin
     ? '問題集のカスタムURL（30文字以下、半角英小文字・半角数字・ハイフンのみ）'
     : ''}
