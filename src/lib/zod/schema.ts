@@ -75,7 +75,7 @@ export const workBookSchema = z.object({
     .string()
     .min(0, { message: '' })
     .max(30, { message: '30文字になるまで削除してください' }) // 問題集（カリキュラムと解法別）をURLで識別するためのオプション。a-z、0-9、(-)ハイフンのみ使用可能。例: bfs、dfs、dp、union-find、2-sat。
-    .transform((value) => (value === '' ? undefined : value))
+    .transform((value) => (value === '' ? undefined : value.toLowerCase()))
     .refine((value) => value === undefined || isValidUrlSlug(value), {
       message: '半角英小文字、数字、ハイフンのみ使用可能です',
     })
