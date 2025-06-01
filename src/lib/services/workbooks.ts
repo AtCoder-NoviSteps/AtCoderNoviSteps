@@ -64,6 +64,12 @@ export async function getWorkBookByUrlSlug(urlSlug: string): Promise<WorkBook | 
 // See:
 // https://www.prisma.io/docs/orm/prisma-schema/data-model/relations#create-a-record-and-nested-records
 export async function createWorkBook(workBook: WorkBook): Promise<void> {
+  const slug = workBook.urlSlug as string;
+
+  if (await isExistingUrlSlug(slug)) {
+    throw new Error(`WorkBook slug ${slug} has already existed`);
+  }
+
   const sanitizedUrl = sanitizeUrl(workBook.editorialUrl);
   const newWorkBookTasks: WorkBookTasksBase = await getWorkBookTasks(workBook);
 
@@ -88,6 +94,10 @@ export async function createWorkBook(workBook: WorkBook): Promise<void> {
   });
 
   console.log(`Created workbook with title: ${newWorkBook.title}`);
+}
+
+async function isExistingUrlSlug(slug: string): Promise<boolean> {
+  return (await getWorkBookByUrlSlug(slug)) ? true : false;
 }
 
 async function isExistingWorkBook(workBookId: number): Promise<boolean> {
