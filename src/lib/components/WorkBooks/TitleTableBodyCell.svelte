@@ -10,6 +10,12 @@
   }
 
   let { paddingLeft = 'pl-2 xs:pl-4', workbook }: Props = $props();
+
+  function getUrlSlugFrom(workbook: WorkbookList): string {
+    const slug = workbook.urlSlug;
+
+    return slug ? slug : workbook.id.toString();
+  }
 </script>
 
 <TableBodyCell class="w-2/5 {paddingLeft} pr-4">
@@ -18,7 +24,7 @@
   >
     <PublicationStatusLabel isPublished={workbook.isPublished} />
     <a
-      href="/workbooks/{workbook.id}"
+      href="/workbooks/{getUrlSlugFrom(workbook)}"
       class="flex-1 font-medium xs:text-lg text-primary-600 hover:underline dark:text-primary-500 truncate"
       aria-labelledby="View details for workbook: {workbook.title}"
     >
