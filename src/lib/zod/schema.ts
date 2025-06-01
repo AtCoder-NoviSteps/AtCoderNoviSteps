@@ -72,13 +72,24 @@ export const workBookSchema = z.object({
   workBookType: z.nativeEnum(WorkBookType),
   urlSlug: z
     .string()
-    .min(0, { message: '' })
-    .max(30, { message: '30文字になるまで削除してください' }) // 問題集（カリキュラムと解法別）をURLで識別するためのオプション。a-z、0-9、(-)ハイフンのみ使用可能。例: bfs、dfs、dp、union-find、2-sat。
-    .transform((value) => (value === '' ? undefined : value.toLowerCase()))
+    .nullable()
+    .optional()
+    .refine(
+      (value) => {
+        // Allow empty string, null, or undefined
+        if (value === '' || value === null || value === undefined) {
+          return true;
+        }
+        return value.length <= 30;
+      },
+      { message: '30文字以下になるまで削除してください' },
+    )
+    .transform((value) =>
+      value === '' || value === null || value === undefined ? undefined : value.toLowerCase(),
+    )
     .refine((value) => value === undefined || isValidUrlSlug(value), {
       message: '半角英小文字、数字、ハイフンのみ使用可能です',
-    })
-    .optional(),
+    }),
   workBookTasks: z
     .array(workBookTaskSchema)
     .min(1, { message: '1問以上登録してください' })
