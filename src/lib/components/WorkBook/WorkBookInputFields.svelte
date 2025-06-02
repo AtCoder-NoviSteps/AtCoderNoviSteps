@@ -151,7 +151,7 @@
 <InputFieldWrapper
   inputFieldType={isAdmin ? null : 'hidden'}
   labelName={isAdmin
-    ? '問題集のカスタムURL（30文字以下、半角英小文字・半角数字・ハイフンのみ）'
+    ? '問題集のカスタムURL（30文字以下、半角英小文字・半角数字・ハイフンのみ。ただし、数字のみは不可）'
     : ''}
   inputFieldName="urlSlug"
   bind:inputValue={urlSlug}
