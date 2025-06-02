@@ -110,6 +110,12 @@ describe('parse workbook URL slug', () => {
     const testCases = [
       { slug: '', expected: null },
       { slug: ' ', expected: null },
+      { slug: '1', expected: null },
+      { slug: '2', expected: null },
+      { slug: '9', expected: null },
+      { slug: '10', expected: null },
+      { slug: '99', expected: null },
+      { slug: '100', expected: null },
       { slug: 'bfs dfs', expected: null },
       { slug: 'invalid@slug', expected: null },
       { slug: 'invalid#slug', expected: null },
