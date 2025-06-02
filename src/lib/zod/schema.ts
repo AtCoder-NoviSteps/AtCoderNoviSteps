@@ -88,7 +88,7 @@ export const workBookSchema = z.object({
       value === '' || value === null || value === undefined ? undefined : value.toLowerCase(),
     )
     .refine((value) => value === undefined || isValidUrlSlug(value), {
-      message: '半角英小文字、数字、ハイフンのみ使用可能です',
+      message: '半角英小文字、半角数字、ハイフンのみ使用できます（数字のみは不可）',
     }),
   workBookTasks: z
     .array(workBookTaskSchema)
