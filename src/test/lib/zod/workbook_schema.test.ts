@@ -85,6 +85,7 @@ describe('workbook schema', () => {
         authorId: '1',
         isPublished: true,
         urlSlug: 'a',
+        workBookType: WorkBookType.SOLUTION,
       });
       validateWorkBookSchema(workBookSchema, workbook);
     });
@@ -114,6 +115,7 @@ describe('workbook schema', () => {
         authorId: '1',
         isPublished: true,
         urlSlug: 'a'.repeat(30),
+        workBookType: WorkBookType.SOLUTION,
       });
       validateWorkBookSchema(workBookSchema, workbook);
     });
@@ -123,6 +125,7 @@ describe('workbook schema', () => {
         authorId: '1',
         isPublished: true,
         urlSlug: '',
+        workBookType: WorkBookType.SOLUTION,
       });
       validateWorkBookSchema(workBookSchema, workbook);
     });
@@ -132,6 +135,7 @@ describe('workbook schema', () => {
         authorId: '1',
         isPublished: true,
         urlSlug: null,
+        workBookType: WorkBookType.SOLUTION,
       });
       validateWorkBookSchema(workBookSchema, workbook);
     });
@@ -141,6 +145,7 @@ describe('workbook schema', () => {
         authorId: '1',
         isPublished: true,
         urlSlug: undefined,
+        workBookType: WorkBookType.SOLUTION,
       });
       validateWorkBookSchema(workBookSchema, workbook);
     });
@@ -299,6 +304,27 @@ describe('workbook schema', () => {
         authorId: '1',
         isPublished: true,
         urlSlug: 'a'.repeat(31),
+        workBookType: WorkBookType.SOLUTION,
+      });
+      validateWorkBookSchema(workBookSchema, workbook);
+    });
+
+    test('when an invalid url slug is given a numeric', () => {
+      const workbook: WorkBook = createWorkBookBase({
+        authorId: '1',
+        isPublished: true,
+        urlSlug: '1',
+        workBookType: WorkBookType.SOLUTION,
+      });
+      validateWorkBookSchema(workBookSchema, workbook);
+    });
+
+    test('when an invalid url slug is given numerics', () => {
+      const workbook: WorkBook = createWorkBookBase({
+        authorId: '1',
+        isPublished: true,
+        urlSlug: '10',
+        workBookType: WorkBookType.SOLUTION,
       });
       validateWorkBookSchema(workBookSchema, workbook);
     });
@@ -308,24 +334,27 @@ describe('workbook schema', () => {
         authorId: '1',
         isPublished: true,
         urlSlug: 'directed acyclic graph',
+        workBookType: WorkBookType.SOLUTION,
       });
       validateWorkBookSchema(workBookSchema, workbook);
     });
 
-    test('when an invalid url slug is given hyphen', () => {
+    test('when an invalid url slug is given with hyphen', () => {
       const workbook: WorkBook = createWorkBookBase({
         authorId: '1',
         isPublished: true,
         urlSlug: '-',
+        workBookType: WorkBookType.SOLUTION,
       });
       validateWorkBookSchema(workBookSchema, workbook);
     });
 
-    test('when an invalid url slug is given hyphens', () => {
+    test('when an invalid url slug is given with hyphens', () => {
       const workbook: WorkBook = createWorkBookBase({
         authorId: '1',
         isPublished: true,
         urlSlug: '--',
+        workBookType: WorkBookType.SOLUTION,
       });
       validateWorkBookSchema(workBookSchema, workbook);
     });
