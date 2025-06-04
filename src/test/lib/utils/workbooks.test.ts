@@ -15,6 +15,7 @@ function createWorkBookListBase(overrides: Partial<WorkbookList> = {}): Workbook
     isPublished: false,
     isOfficial: false,
     isReplenished: false,
+    urlSlug: undefined,
     workBookType: WorkBookType.CREATED_BY_USER,
     workBookTasks: [],
     ...overrides,
