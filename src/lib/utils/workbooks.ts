@@ -1,5 +1,5 @@
 import { Roles } from '$lib/types/user';
-import { type WorkbookList } from '$lib/types/workbook';
+import type { WorkBook, WorkbookList } from '$lib/types/workbook';
 
 import { isAdmin } from '$lib/utils/authorship';
 
@@ -14,7 +14,7 @@ export function canViewWorkBook(role: Roles, isPublished: boolean) {
  * @param workbook - The workbook object containing urlSlug and id properties
  * @returns The URL slug if available, otherwise the workbook ID as a string
  */
-export function getUrlSlugFrom(workbook: WorkbookList): string {
+export function getUrlSlugFrom(workbook: WorkbookList | WorkBook): string {
   const slug = workbook.urlSlug;
 
   return slug ? slug : workbook.id.toString();

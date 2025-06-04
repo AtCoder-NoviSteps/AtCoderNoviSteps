@@ -25,6 +25,11 @@ import { INTERNAL_SERVER_ERROR } from '$lib/constants/http-response-status-codes
  * <?xml version="1.0" encoding="UTF-8"?>
  * <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
  *   <url>
+ *     <loc>https://atcoder-novisteps.vercel.app/workbooks/2-sat</loc>
+ *     <changefreq>daily</changefreq>
+ *     <priority>0.8</priority>
+ *   </url>
+ *   <url>
  *     <loc>https://atcoder-novisteps.vercel.app/workbooks/123</loc>
  *     <changefreq>daily</changefreq>
  *     <priority>0.8</priority>
@@ -43,8 +48,7 @@ export const GET: RequestHandler = async () => {
     publishedWorkBookIds = workbooks
       .filter((workbook) => workbook.isPublished)
       .map((workbook) => {
-        // Note: To get the urlSlug, passing an empty string for authorName is sufficient
-        return getUrlSlugFrom({ ...workbook, authorName: '' });
+        return getUrlSlugFrom(workbook);
       });
   } catch (e) {
     const errorMessage = e instanceof Error ? e.message : 'Unknown error';
