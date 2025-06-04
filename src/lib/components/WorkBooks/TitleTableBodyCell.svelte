@@ -2,6 +2,8 @@
   import { TableBodyCell } from 'svelte-5-ui-lib';
 
   import type { WorkbookList } from '$lib/types/workbook';
+
+  import { getUrlSlugFrom } from '$lib/utils/workbooks';
   import PublicationStatusLabel from '$lib/components/WorkBooks/PublicationStatusLabel.svelte';
 
   interface Props {
@@ -10,12 +12,6 @@
   }
 
   let { paddingLeft = 'pl-2 xs:pl-4', workbook }: Props = $props();
-
-  function getUrlSlugFrom(workbook: WorkbookList): string {
-    const slug = workbook.urlSlug;
-
-    return slug ? slug : workbook.id.toString();
-  }
 </script>
 
 <TableBodyCell class="w-2/5 {paddingLeft} pr-4">

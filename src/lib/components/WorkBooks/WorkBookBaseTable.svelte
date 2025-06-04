@@ -10,7 +10,7 @@
     TableHeadCell,
   } from 'svelte-5-ui-lib';
 
-  import { WorkBookType, type WorkbooksList, type WorkbookList } from '$lib/types/workbook';
+  import { WorkBookType, type WorkbooksList } from '$lib/types/workbook';
   import { TaskGrade, type TaskResults } from '$lib/types/task';
   import type { Roles } from '$lib/types/user';
 
@@ -22,6 +22,7 @@
   import AcceptedCounter from '$lib/components/SubmissionStatus/AcceptedCounter.svelte';
 
   import { canRead, canEdit, canDelete } from '$lib/utils/authorship';
+  import { getUrlSlugFrom } from '$lib/utils/workbooks';
 
   interface Props {
     workbookType: WorkBookType;
@@ -40,12 +41,6 @@
 
   function getTaskResult(workbookId: number): TaskResults {
     return taskResults?.get(workbookId) ?? [];
-  }
-
-  function getUrlSlugFrom(workbook: WorkbookList): string {
-    const slug = workbook.urlSlug;
-
-    return slug ? slug : workbook.id.toString();
   }
 </script>
 
