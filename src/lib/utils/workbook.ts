@@ -35,7 +35,7 @@ export async function getWorkbookWithAuthor(
 
   // Validate if the author of the workbook exists after the workbook has been created.
   const workbookAuthor = await userCrud.getUserById(workBook.authorId);
-  const isExistingAuthor = workbookAuthor ? true : false;
+  const isExistingAuthor = !!workbookAuthor;
 
   return { workBook: workBook, isExistingAuthor: isExistingAuthor };
 }

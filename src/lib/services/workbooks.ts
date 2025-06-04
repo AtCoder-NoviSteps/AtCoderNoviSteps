@@ -97,7 +97,7 @@ export async function createWorkBook(workBook: WorkBook): Promise<void> {
 }
 
 async function isExistingUrlSlug(slug: string): Promise<boolean> {
-  return (await getWorkBookByUrlSlug(slug)) ? true : false;
+  return !!(await getWorkBookByUrlSlug(slug));
 }
 
 async function isExistingWorkBook(workBookId: number): Promise<boolean> {
