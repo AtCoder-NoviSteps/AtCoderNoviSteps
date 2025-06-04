@@ -17,11 +17,15 @@
 >
   <HeadingOne title="エラーが発生しました" />
 
-  <Heading tag="h2" class="text-3xl mb-3 text-gray-900 dark:text-gray-300">
-    {errorStatus}
+  <Heading
+    tag="h2"
+    class="text-3xl mb-3 text-gray-900 dark:text-gray-300"
+    aria-label="error status"
+  >
+    {errorStatus ?? ''}
   </Heading>
 
-  <p class="dark:text-gray-300">{errorMessage}</p>
+  <p class="dark:text-gray-300" aria-label="error messages">{errorMessage ?? ''}</p>
 
   <div class="flex justify-center mt-6">
     <Button href={returnUrl} color="primary" class="px-6">
