@@ -1,16 +1,15 @@
-import { redirect, error, fail } from '@sveltejs/kit';
+import { redirect, fail } from '@sveltejs/kit';
 import { superValidate } from 'sveltekit-superforms/server';
 import { zod } from 'sveltekit-superforms/adapters';
 
 import { getLoggedInUser, canEdit, isAdmin } from '$lib/utils/authorship';
 import { Roles } from '$lib/types/user';
 import {
-  BAD_REQUEST,
   FORBIDDEN,
   TEMPORARY_REDIRECT,
   INTERNAL_SERVER_ERROR,
 } from '$lib/constants/http-response-status-codes';
-import { getWorkbookWithAuthor, findWorkBookIdFrom } from '$lib/utils/workbook';
+import { getWorkbookWithAuthor } from '$lib/utils/workbook';
 import { workBookSchema } from '$lib/zod/schema';
 import * as tasksCrud from '$lib/services/tasks';
 import * as workBooksCrud from '$lib/services/workbooks';
@@ -76,11 +75,8 @@ export const actions = {
 
     const workBook = form.data;
     const slug = params.slug.toLowerCase();
-    const workBookId = await findWorkBookIdFrom(slug);
-
-    if (workBookId === null) {
-      error(BAD_REQUEST, '不正な問題集idです。');
-    }
+    const workBookWithAuthor = await getWorkbookWithAuthor(slug);
+    const workBookId = workBookWithAuthor.workBook.id;
 
     try {
       await workBooksCrud.updateWorkBook(workBookId, { ...workBook, id: workBookId });
