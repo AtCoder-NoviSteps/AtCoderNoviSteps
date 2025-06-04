@@ -63,12 +63,12 @@
     "svelte-5-ui-lib": "0.12.2",
     "svelte-check": "4.2.1",
     "svelte-meta-tags": "4.4.0",
-    "sveltekit-superforms": "2.25.0",
+    "sveltekit-superforms": "2.26.0",
     "tslib": "2.8.1",
     "typescript": "5.6.3",
     "vite": "6.3.5",
     "vitest": "3.0.0-beta.3",
-    "zod": "3.25.50"
+    "zod": "3.25.51"
   },
   "type": "module",
   "dependencies": {
@@ -85,7 +85,7 @@
     "embla-carousel-svelte": "8.6.0",
     "flowbite": "2.5.2",
     "lucia": "2.7.7",
-    "lucide-svelte": "^0.512.0",
+    "lucide-svelte": "^0.513.0",
     "playwright": "1.52.0",
     "pnpm": "10.11.1",
     "prisma-erd-generator": "2.0.4",
