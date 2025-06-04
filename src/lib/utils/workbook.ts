@@ -40,45 +40,6 @@ export async function getWorkbookWithAuthor(
   return { workBook: workBook, isExistingAuthor: isExistingAuthor };
 }
 
-/**
- * Finds a workbook ID from a given slug string.
- *
- * This function first attempts to parse the slug as a direct workbook ID.
- * If that fails, it tries to parse it as a workbook URL slug and looks up
- * the corresponding workbook in the database.
- *
- * @param slug - The slug string to search for, can be either a numeric ID or URL slug
- * @returns A Promise that resolves to the workbook ID if found, or null if not found
- *
- * @example
- * ```typescript
- * // Using numeric ID
- * const id1 = await findWorkBookIdFrom("123");
- *
- * // Using URL slug
- * const id2 = await findWorkBookIdFrom("union-find");
- * ```
- */
-export async function findWorkBookIdFrom(slug: string): Promise<number | null> {
-  const workBookId = parseWorkBookId(slug);
-
-  if (workBookId !== null) {
-    return workBookId;
-  }
-
-  const workBookUrlSlug = parseWorkBookUrlSlug(slug);
-
-  if (workBookUrlSlug !== null) {
-    const workBook = await workBookCrud.getWorkBookByUrlSlug(slug);
-
-    if (workBook !== null && workBook.id !== null) {
-      return workBook.id;
-    }
-  }
-
-  return null;
-}
-
 export function parseWorkBookId(slug: string): number | null {
   const isOnlyDigits = (id: string) => /^\d+$/.test(id);
   const id = Number(slug);
