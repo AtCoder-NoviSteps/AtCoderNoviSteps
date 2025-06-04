@@ -11,6 +11,8 @@ import type { RequestHandler } from '@sveltejs/kit';
 import * as sitemap from 'super-sitemap';
 
 import * as workBooksCrud from '$lib/services/workbooks';
+
+import { getUrlSlugFrom } from '$lib/utils/workbooks';
 import { INTERNAL_SERVER_ERROR } from '$lib/constants/http-response-status-codes';
 
 /**
@@ -40,7 +42,10 @@ export const GET: RequestHandler = async () => {
     const workbooks = await workBooksCrud.getWorkBooks();
     publishedWorkBookIds = workbooks
       .filter((workbook) => workbook.isPublished)
-      .map((workbook) => String(workbook.id));
+      .map((workbook) => {
+        // Note: To get the urlSlug, passing an empty string for authorName is sufficient
+        return getUrlSlugFrom({ ...workbook, authorName: '' });
+      });
   } catch (e) {
     const errorMessage = e instanceof Error ? e.message : 'Unknown error';
     console.error(`Failed to generate sitemap: ${errorMessage}`);
