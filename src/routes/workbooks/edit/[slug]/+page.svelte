@@ -2,11 +2,13 @@
   import { superForm } from 'sveltekit-superforms/client';
 
   import WorkBookForm from '$lib/components/WorkBook/WorkBookForm.svelte';
+  import ErrorMessageAndReturnButton from '$lib/components/Messages/ErrorMessageAndReturnButton.svelte';
 
   import type { WorkBookTasksBase } from '$lib/types/workbook';
   import type { Task } from '$lib/types/task.js';
 
   import { FORBIDDEN } from '$lib/constants/http-response-status-codes.js';
+  import { WORKBOOKS_PAGE } from '$lib/constants/navbar-links';
 
   let { data } = $props();
   let canView = $derived(data.status === FORBIDDEN ? false : true);
@@ -37,7 +39,10 @@
     submitButtonLabel="更新"
   />
 {:else}
-  <!-- TODO: コンポーネントとして抽出 -->
-  <h1>{data.status}</h1>
-  <p>{data.message}</p>
+  <ErrorMessageAndReturnButton
+    errorStatus={data.status}
+    errorMessage={data.message}
+    returnUrl={WORKBOOKS_PAGE}
+    returnButtonLabel="問題集に戻る"
+  />
 {/if}

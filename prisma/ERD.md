@@ -178,6 +178,7 @@ OTHERS OTHERS
     Boolean isOfficial 
     Boolean isReplenished 
     WorkBookType workBookType 
+    String urlSlug "❓"
     DateTime createdAt 
     DateTime updatedAt 
     }

@@ -1,9 +1,9 @@
 import { expect, test } from 'vitest';
-import { parseWorkBookId } from '$lib/utils/workbook';
+import { parseWorkBookId, parseWorkBookUrlSlug } from '$lib/utils/workbook';
 
 type TestCase = {
   slug: string;
-  expected: number | null;
+  expected: number | string | null;
 };
 
 type TestCases = TestCase[];
@@ -89,4 +89,54 @@ describe('Workbook', () => {
       test.each(testCases)(`${testName}(slug: $slug)`, testFunction);
     }
   });
+});
+
+describe('parse workbook URL slug', () => {
+  describe('when valid URL slugs are given', () => {
+    const testCases = [
+      { slug: 'a', expected: 'a' },
+      { slug: 'a'.repeat(30), expected: 'a'.repeat(30) },
+      { slug: 'bfs', expected: 'bfs' },
+      { slug: 'union-find', expected: 'union-find' },
+      { slug: '2-sat', expected: '2-sat' },
+    ];
+
+    runTests('parseWorkBookUrlSlug', testCases, ({ slug, expected }: TestCase) => {
+      expect(parseWorkBookUrlSlug(slug)).toBe(expected);
+    });
+  });
+
+  describe('when invalid URL slugs are given', () => {
+    const testCases = [
+      { slug: '', expected: null },
+      { slug: ' ', expected: null },
+      { slug: '1', expected: null },
+      { slug: '2', expected: null },
+      { slug: '9', expected: null },
+      { slug: '10', expected: null },
+      { slug: '99', expected: null },
+      { slug: '100', expected: null },
+      { slug: 'bfs dfs', expected: null },
+      { slug: 'invalid@slug', expected: null },
+      { slug: 'invalid#slug', expected: null },
+      { slug: 'invalid/slug', expected: null },
+      { slug: 'UPPERCASE', expected: null },
+      { slug: 'slug_with_underscore', expected: null },
+      { slug: '-invalid-start', expected: null },
+      { slug: 'invalid-end-', expected: null },
+      { slug: 'double--dash', expected: null },
+    ];
+
+    runTests('parseWorkBookUrlSlug', testCases, ({ slug, expected }: TestCase) => {
+      expect(parseWorkBookUrlSlug(slug)).toBe(expected);
+    });
+  });
+
+  function runTests(
+    testName: string,
+    testCases: TestCases,
+    testFunction: (testCase: TestCase) => void,
+  ) {
+    test.each(testCases)(`${testName}(slug: $slug)`, testFunction);
+  }
 });

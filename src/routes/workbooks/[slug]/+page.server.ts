@@ -1,29 +1,27 @@
 import { error, type Actions } from '@sveltejs/kit';
 
-import { getLoggedInUser, isAdmin, canRead } from '$lib/utils/authorship';
 import { Roles } from '$lib/types/user';
-import { getWorkbookWithAuthor, parseWorkBookId } from '$lib/utils/workbook';
-import * as taskResultsCrud from '$lib/services/task_results';
 import type { TaskResult } from '$lib/types/task';
-import { BAD_REQUEST, FORBIDDEN } from '$lib/constants/http-response-status-codes';
+
+import * as taskResultsCrud from '$lib/services/task_results';
 import * as action from '$lib/actions/update_task_result';
+
+import { getLoggedInUser, isAdmin, canRead } from '$lib/utils/authorship';
+import { getWorkbookWithAuthor } from '$lib/utils/workbook';
+import { FORBIDDEN } from '$lib/constants/http-response-status-codes';
 
 export async function load({ locals, params }) {
   const loggedInUser = await getLoggedInUser(locals);
   const loggedInAsAdmin = isAdmin(loggedInUser?.role as Roles);
-  const workBookId = parseWorkBookId(params.slug);
+  const slug = params.slug.toLowerCase();
 
-  if (workBookId === null) {
-    error(BAD_REQUEST, '不正な問題集idです。');
-  }
-
-  const workbookWithAuthor = await getWorkbookWithAuthor(params.slug);
+  const workbookWithAuthor = await getWorkbookWithAuthor(slug);
   const workBook = workbookWithAuthor.workBook;
   const isPublished = workBook.isPublished;
   const authorId = workBook.authorId;
 
   if (loggedInUser && !canRead(isPublished, loggedInUser.id, authorId)) {
-    error(FORBIDDEN, `問題集id: ${params.slug} にアクセスする権限がありません。`);
+    error(FORBIDDEN, `問題集id: ${slug} にアクセスする権限がありません。`);
   }
 
   const taskResults: Map<string, TaskResult> = await taskResultsCrud.getTaskResultsByTaskId(

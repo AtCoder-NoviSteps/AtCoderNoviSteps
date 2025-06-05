@@ -4,7 +4,7 @@
 // https://qiita.com/mpyw/items/886218e7b418dfed254b
 import { z } from 'zod';
 import { WorkBookType } from '$lib/types/workbook';
-import { isValidUrl } from '$lib/utils/url';
+import { isValidUrl, isValidUrlSlug } from '$lib/utils/url';
 
 const INPUT_AT_LEAST_3_CHARACTERS = '3文字以上入力してください';
 const DELETE_UNTIL_24_CHARACTERS_ARE_LEFT = '24文字になるまで削除してください';
@@ -70,6 +70,26 @@ export const workBookSchema = z.object({
   isOfficial: z.boolean(),
   isReplenished: z.boolean(), // カリキュラムの【補充】を識別するために使用
   workBookType: z.nativeEnum(WorkBookType),
+  urlSlug: z
+    .string()
+    .nullable()
+    .optional()
+    .refine(
+      (value) => {
+        // Allow empty string, null, or undefined
+        if (value === '' || value === null || value === undefined) {
+          return true;
+        }
+        return value.length <= 30;
+      },
+      { message: '30文字以下になるまで削除してください' },
+    )
+    .transform((value) =>
+      value === '' || value === null || value === undefined ? undefined : value.toLowerCase(),
+    )
+    .refine((value) => value === undefined || isValidUrlSlug(value), {
+      message: '半角英小文字、半角数字、ハイフンのみ使用できます（数字のみは不可）',
+    }),
   workBookTasks: z
     .array(workBookTaskSchema)
     .min(1, { message: '1問以上登録してください' })

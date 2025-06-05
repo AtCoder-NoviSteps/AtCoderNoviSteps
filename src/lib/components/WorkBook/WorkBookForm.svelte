@@ -2,7 +2,7 @@
   import { Breadcrumb, BreadcrumbItem } from 'svelte-5-ui-lib';
 
   import HeadingOne from '$lib/components/HeadingOne.svelte';
-  import WorkBookInputFields from '$lib/components/WorkBooks/WorkBookInputFields.svelte';
+  import WorkBookInputFields from '$lib/components/WorkBook/WorkBookInputFields.svelte';
   import WorkBookTasksTable from '$lib/components/WorkBookTasks/WorkBookTasksTable.svelte';
   import TaskSearchBox from '$lib/components/TaskSearchBox.svelte';
   import InputFieldWrapper from '$lib/components/InputFieldWrapper.svelte';
@@ -88,6 +88,7 @@
       bind:isPublished={$form.isPublished}
       bind:isOfficial={$form.isOfficial}
       bind:isReplenished={$form.isReplenished}
+      bind:urlSlug={$form.urlSlug}
       bind:workBookType={$form.workBookType}
       {isAdmin}
       message={$message}

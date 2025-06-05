@@ -13,6 +13,7 @@
     isPublished: boolean;
     isOfficial: boolean;
     isReplenished: boolean;
+    urlSlug?: string | null;
     workBookType: WorkBookType;
     isAdmin: boolean;
     isEditable?: boolean;
@@ -28,6 +29,7 @@
     isPublished = $bindable(),
     isOfficial = $bindable(),
     isReplenished = $bindable(),
+    urlSlug = $bindable(undefined),
     workBookType = $bindable(),
     isAdmin,
     isEditable = true,
@@ -144,3 +146,15 @@
     />
   </div>
 </div>
+
+<!-- 管理者のみ: 問題集のカスタムURL (一般ユーザには非表示) -->
+<InputFieldWrapper
+  inputFieldType={isAdmin ? null : 'hidden'}
+  labelName={isAdmin
+    ? '問題集のカスタムURL（30文字以下、半角英小文字・半角数字・ハイフンのみ。ただし、数字のみは不可）'
+    : ''}
+  inputFieldName="urlSlug"
+  bind:inputValue={urlSlug}
+  isEditable={isAdmin && isEditable}
+  message={errors.urlSlug}
+/>

@@ -2,6 +2,8 @@
   import { TableBodyCell } from 'svelte-5-ui-lib';
 
   import type { WorkbookList } from '$lib/types/workbook';
+
+  import { getUrlSlugFrom } from '$lib/utils/workbooks';
   import PublicationStatusLabel from '$lib/components/WorkBooks/PublicationStatusLabel.svelte';
 
   interface Props {
@@ -18,7 +20,7 @@
   >
     <PublicationStatusLabel isPublished={workbook.isPublished} />
     <a
-      href="/workbooks/{workbook.id}"
+      href="/workbooks/{getUrlSlugFrom(workbook)}"
       class="flex-1 font-medium xs:text-lg text-primary-600 hover:underline dark:text-primary-500 truncate"
       aria-labelledby="View details for workbook: {workbook.title}"
     >

@@ -2,20 +2,28 @@
   import { get } from 'svelte/store';
   import { Button, Tabs } from 'svelte-5-ui-lib';
 
-  import HeadingOne from '$lib/components/HeadingOne.svelte';
-  import TabItemWrapper from '$lib/components/TabItemWrapper.svelte';
-  import { activeWorkbookTabStore } from '$lib/stores/active_workbook_tab';
-  import WorkBookList from '$lib/components/WorkBooks/WorkBookList.svelte';
-  import { calcGradeMode } from '$lib/utils/task';
-  import { type Task, TaskGrade, type TaskGrades } from '$lib/types/task';
-  import type { TaskResult, TaskResults } from '$lib/types/task';
+  import { Roles } from '$lib/types/user';
+  import {
+    type Task,
+    TaskGrade,
+    type TaskGrades,
+    type TaskResult,
+    type TaskResults,
+  } from '$lib/types/task';
   import {
     type WorkbookList,
     type WorkbooksList,
     type WorkBookTaskBase,
     WorkBookType,
   } from '$lib/types/workbook';
-  import { Roles } from '$lib/types/user';
+
+  import { activeWorkbookTabStore } from '$lib/stores/active_workbook_tab';
+
+  import HeadingOne from '$lib/components/HeadingOne.svelte';
+  import TabItemWrapper from '$lib/components/TabItemWrapper.svelte';
+  import WorkBookList from '$lib/components/WorkBooks/WorkBookList.svelte';
+
+  import { calcGradeMode } from '$lib/utils/task';
   import { canViewWorkBook } from '$lib/utils/workbooks';
 
   let { data } = $props();
