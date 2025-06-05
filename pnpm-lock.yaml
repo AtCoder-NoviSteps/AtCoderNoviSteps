@@ -175,8 +175,8 @@ importers:
         specifier: 4.4.0
         version: 4.4.0(svelte@5.33.14)
       sveltekit-superforms:
-        specifier: 2.26.0
-        version: 2.26.0(@sveltejs/kit@2.21.2(@sveltejs/vite-plugin-svelte@5.1.0(svelte@5.33.14)(vite@6.3.5(@types/node@22.15.29)(jiti@1.21.6)(yaml@2.8.0)))(svelte@5.33.14)(vite@6.3.5(@types/node@22.15.29)(jiti@1.21.6)(yaml@2.8.0)))(@types/json-schema@7.0.15)(svelte@5.33.14)(typescript@5.6.3)
+        specifier: 2.26.1
+        version: 2.26.1(@sveltejs/kit@2.21.2(@sveltejs/vite-plugin-svelte@5.1.0(svelte@5.33.14)(vite@6.3.5(@types/node@22.15.29)(jiti@1.21.6)(yaml@2.8.0)))(svelte@5.33.14)(vite@6.3.5(@types/node@22.15.29)(jiti@1.21.6)(yaml@2.8.0)))(@types/json-schema@7.0.15)(svelte@5.33.14)(typescript@5.6.3)
       tslib:
         specifier: 2.8.1
         version: 2.8.1
@@ -251,8 +251,8 @@ packages:
     resolution: {integrity: sha512-1x3D2xEk2fRo3PAhwQwu5UubzgiVWSXTBfWpVd2Mx2AzRqJuDJCsgaDVZ7HB5iGzDW1Hl1sWN2mFyKjmR9uAog==}
     engines: {node: '>=6.9.0'}
 
-  '@babel/runtime@7.27.4':
-    resolution: {integrity: sha512-t3yaEOuGu9NlIZ+hIeGbBjFtZT7j2cb2tg0fuaJKeGotchRjjLfrBA9Kwf8quhpP1EUuxModQg04q/mBwyg8uA==}
+  '@babel/runtime@7.27.6':
+    resolution: {integrity: sha512-vbavdySgbTTrmFE+EsiqUTzlOr5bzlnJtUv9PynGCAKvfQqjIXbvFdumPM/GxMDfyuGMJaJAU6TO4zc1Jf1i8Q==}
     engines: {node: '>=6.9.0'}
 
   '@babel/types@7.26.0':
@@ -3230,8 +3230,8 @@ packages:
     resolution: {integrity: sha512-+bT2uH4E5LGE7h/n3evcS/sQlJXCpIp6ym8OWJ5eV6+67Dsql/LaaT7qJBAt2rzfoa/5QBGBhxDix1dMt2kQKQ==}
     engines: {node: '>= 0.8.0'}
 
-  libphonenumber-js@1.12.8:
-    resolution: {integrity: sha512-f1KakiQJa9tdc7w1phC2ST+DyxWimy9c3g3yeF+84QtEanJr2K77wAmBPP22riU05xldniHsvXuflnLZ4oysqA==}
+  libphonenumber-js@1.12.9:
+    resolution: {integrity: sha512-VWwAdNeJgN7jFOD+wN4qx83DTPMVPPAUyx9/TUkBXKLiNkuWWk6anV0439tgdtwaJDrEdqkvdN22iA6J4bUCZg==}
 
   lilconfig@2.1.0:
     resolution: {integrity: sha512-utWOt/GHzuUxnLKxB6dk81RoOeoNeHgbrXiuGk4yyF5qlRz+iIVWu56E2fqGHFrXz0QNUhLB/8nKqvRH66JKGQ==}
@@ -4251,8 +4251,8 @@ packages:
     resolution: {integrity: sha512-kRlbhIlMTijbFmVDQFDeKXPLlX1/ovXwV0I162wRqQhRcygaqDIcu1d/Ese3H2uI+yt3uT8E7ndgDthQv5v5BA==}
     engines: {node: '>=18'}
 
-  sveltekit-superforms@2.26.0:
-    resolution: {integrity: sha512-8S0fOl8vNVubaovid7u/dgHLOj2q3M/XH4Cs96ZDBSfs33/UIWRVmk2zgXXwPVSs9Ra93niCcIT2uPKSp/aSgw==}
+  sveltekit-superforms@2.26.1:
+    resolution: {integrity: sha512-DALfzbIsF+KV2pjsnVDzA6fe021ffn/oo6hCwa+oSdnH8ANhhUI6vZBafxyTRqRBojsUNZ/pvFkuY9UwHyiUDA==}
     peerDependencies:
       '@sveltejs/kit': 1.x || 2.x
       svelte: 3.x || 4.x || >=5.0.0-next.51
@@ -4905,7 +4905,7 @@ snapshots:
 
   '@babel/runtime@7.27.1': {}
 
-  '@babel/runtime@7.27.4':
+  '@babel/runtime@7.27.6':
     optional: true
 
   '@babel/types@7.26.0':
@@ -6725,7 +6725,7 @@ snapshots:
   class-validator@0.14.2:
     dependencies:
       '@types/validator': 13.15.1
-      libphonenumber-js: 1.12.8
+      libphonenumber-js: 1.12.9
       validator: 13.15.15
     optional: true
 
@@ -7944,7 +7944,7 @@ snapshots:
 
   json-schema-to-ts@3.1.1:
     dependencies:
-      '@babel/runtime': 7.27.4
+      '@babel/runtime': 7.27.6
       ts-algebra: 2.0.0
     optional: true
 
@@ -7997,7 +7997,7 @@ snapshots:
       prelude-ls: 1.2.1
       type-check: 0.4.0
 
-  libphonenumber-js@1.12.8:
+  libphonenumber-js@1.12.9:
     optional: true
 
   lilconfig@2.1.0: {}
@@ -8966,7 +8966,7 @@ snapshots:
       magic-string: 0.30.17
       zimmerframe: 1.1.2
 
-  sveltekit-superforms@2.26.0(@sveltejs/kit@2.21.2(@sveltejs/vite-plugin-svelte@5.1.0(svelte@5.33.14)(vite@6.3.5(@types/node@22.15.29)(jiti@1.21.6)(yaml@2.8.0)))(svelte@5.33.14)(vite@6.3.5(@types/node@22.15.29)(jiti@1.21.6)(yaml@2.8.0)))(@types/json-schema@7.0.15)(svelte@5.33.14)(typescript@5.6.3):
+  sveltekit-superforms@2.26.1(@sveltejs/kit@2.21.2(@sveltejs/vite-plugin-svelte@5.1.0(svelte@5.33.14)(vite@6.3.5(@types/node@22.15.29)(jiti@1.21.6)(yaml@2.8.0)))(svelte@5.33.14)(vite@6.3.5(@types/node@22.15.29)(jiti@1.21.6)(yaml@2.8.0)))(@types/json-schema@7.0.15)(svelte@5.33.14)(typescript@5.6.3):
     dependencies:
       '@sveltejs/kit': 2.21.2(@sveltejs/vite-plugin-svelte@5.1.0(svelte@5.33.14)(vite@6.3.5(@types/node@22.15.29)(jiti@1.21.6)(yaml@2.8.0)))(svelte@5.33.14)(vite@6.3.5(@types/node@22.15.29)(jiti@1.21.6)(yaml@2.8.0))
       devalue: 5.1.1
