@@ -92,12 +92,13 @@ export const classifyContest = (contest_id: string) => {
   return null;
 };
 
-// HACK: As of April 2025, the following contests are applicable.
+// HACK: As of June 2025, the following contests are applicable.
 // Note: The classification logic may need to be revised when new contests are added.
 const ABC_LIKE: ContestPrefix = {
   aising2020: 'エイシング プログラミング コンテスト 2020',
   hhkb2020: 'HHKB プログラミングコンテスト 2020',
   panasonic2020: 'パナソニックプログラミングコンテスト 2020',
+  jsc2021: '第二回日本最強プログラマー学生選手権',
 } as const;
 const abcLikePrefixes = new Set(getContestPrefixes(ABC_LIKE));
 
@@ -105,6 +106,7 @@ const ARC_LIKE: ContestPrefix = {
   'tenka1-2018': 'Tenka1 Programmer Contest 2018',
   'dwacon5th-prelims': '第5回 ドワンゴからの挑戦状 予選',
   'dwacon6th-prelims': '第6回 ドワンゴからの挑戦状 予選',
+  diverta2019: 'diverta 2019 Programming Contest',
   keyence2019: 'キーエンス プログラミング コンテスト 2019',
   keyence2020: 'キーエンス プログラミング コンテスト 2020',
   keyence2021: 'キーエンス プログラミング コンテスト 2021',
@@ -168,6 +170,7 @@ const ATCODER_OTHERS: ContestPrefix = {
   'code-festival-2014-quala': 'Code Festival 2014 予選 A',
   'code-festival-2014-qualb': 'Code Festival 2014 予選 B',
   'code-festival-2014-final': 'Code Festival 2014 決勝',
+  'code-festival-2015-qualb': 'Code Festival 2015 予選 B',
   'code-festival-2015-morning-middle': 'CODE FESTIVAL 2015 あさぷろ Middle',
   'code-thanks-festival': 'CODE THANKS FESTIVAL',
   donuts: 'Donutsプロコンチャレンジ',
@@ -181,6 +184,7 @@ const ATCODER_OTHERS: ContestPrefix = {
   colopl: 'COLOCON',
   gigacode: 'GigaCode',
   cpsco2019: 'CPSCO 2019',
+  'jsc2019-final': '第一回日本最強プログラマー学生選手権決勝',
   DEGwer2023: 'DEGwer さんの D 論応援コンテスト',
 } as const;
 const atCoderOthersPrefixes = getContestPrefixes(ATCODER_OTHERS);

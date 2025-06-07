@@ -199,6 +199,10 @@ export const abcLike = [
     contestId: 'panasonic2020',
     expected: ContestType.ABC_LIKE,
   }),
+  createTestCaseForContestType('Japanese Student Championship 2021')({
+    contestId: 'jsc2021',
+    expected: ContestType.ABC_LIKE,
+  }),
 ];
 
 export const arcLike = [
@@ -212,6 +216,10 @@ export const arcLike = [
   }),
   createTestCaseForContestType('DWACON 6TH PRELIMS')({
     contestId: 'dwacon6th-prelims',
+    expected: ContestType.ARC_LIKE,
+  }),
+  createTestCaseForContestType('diverta 2019 Programming Contest')({
+    contestId: 'diverta2019',
     expected: ContestType.ARC_LIKE,
   }),
   createTestCaseForContestType('KEYENCE2019')({
@@ -319,6 +327,10 @@ export const atCoderOthers = [
     contestId: 'code-festival-2014-final',
     expected: ContestType.OTHERS,
   }),
+  createTestCaseForContestType('CODE FESTIVAL 2015 qual B')({
+    contestId: 'code-festival-2015-qualb',
+    expected: ContestType.OTHERS,
+  }),
   createTestCaseForContestType('CODE FESTIVAL 2015 あさぷろ Middle')({
     contestId: 'code-festival-2015-morning-middle',
     expected: ContestType.OTHERS,
@@ -383,6 +395,10 @@ export const atCoderOthers = [
       expected: ContestType.OTHERS,
     }),
   ),
+  createTestCaseForContestType('第一回日本最強プログラマー学生選手権決勝')({
+    contestId: 'jsc2019-final',
+    expected: ContestType.OTHERS,
+  }),
   createTestCaseForContestType('DEGwer さんの D 論応援コンテスト')({
     contestId: 'DEGwer2023',
     expected: ContestType.OTHERS,
