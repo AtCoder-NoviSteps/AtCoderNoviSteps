@@ -10,6 +10,7 @@ import {
   defineTaskTagFactory,
   defineTaskAnswerFactory,
   defineSubmissionStatusFactory,
+  defineWorkBookFactory,
 } from './.fabbrica';
 import { generateLuciaPasswordHash } from 'lucia/utils';
 
@@ -17,6 +18,7 @@ import { classifyContest } from '../src/lib/utils/contest';
 
 import { users } from './users';
 import { tasks } from './tasks';
+import { workbooks } from './workbooks';
 import { tags } from './tags';
 import { task_tags } from './task_tags';
 import { answers } from './answers';
@@ -31,15 +33,16 @@ initialize({ prisma });
 // https://lucia-auth.com/basics/keys/#password-hashing
 // https://www.prisma.io/docs/reference/api-reference/prisma-client-reference#findunique
 async function main() {
-  addUsers();
-  addTasks();
-  addTags();
-  addTaskTags();
-  addSubmissionStatuses();
-  addAnswers();
+  await addUsers();
+  await addTasks();
+  await addWorkBooks();
+  await addTags();
+  await addTaskTags();
+  await addSubmissionStatuses();
+  await addAnswers();
 }
 
-function addUsers() {
+async function addUsers() {
   const userFactory = defineUserFactory();
   const keyFactory = defineKeyFactory({ defaultData: { user: userFactory } });
 
@@ -77,7 +80,7 @@ async function addUser(user, password: string, userFactory, keyFactory) {
   });
 }
 
-function addTasks() {
+async function addTasks() {
   const taskFactory = defineTaskFactory();
 
   tasks.map(async (task) => {
@@ -96,7 +99,7 @@ function addTasks() {
       console.log('task id:', task.id, 'was registered.');
       await addTask(task, taskFactory, registeredTaskTag.length !== 0);
     } else {
-      //console.log('task id:', task.id, 'has already been registered.');
+      // console.log('task id:', task.id, 'has already been registered.');
     }
   });
 }
@@ -132,6 +135,44 @@ async function addTask(task, taskFactory, isHavingTaskTag) {
   }
 }
 
+async function addWorkBooks() {
+  const userFactory = defineUserFactory();
+  const workBookFactory = defineWorkBookFactory({ defaultData: { user: userFactory } });
+
+  workbooks.map(async (workbook) => {
+    const author = await prisma.user.findUnique({
+      where: {
+        id: workbook.authorId,
+      },
+    });
+
+    if (author) {
+      await addWorkBook(workbook, workBookFactory);
+      console.log('workbook title:', workbook.title, 'was registered.');
+    } else {
+      console.log('Not found author id: ', workbook.authorId, '.');
+    }
+  });
+}
+
+async function addWorkBook(workbook, workBookFactory) {
+  await workBookFactory.create({
+    user: {
+      connect: { id: workbook.authorId },
+    },
+    title: workbook.title,
+    description: workbook.description,
+    editorialUrl: workbook.editorialUrl,
+    isPublished: workbook.isPublished,
+    isOfficial: workbook.isOfficial,
+    isReplenished: workbook.isReplenished,
+    workBookType: workbook.workBookType,
+    workBookTasks: {
+      create: workbook.workBookTasks,
+    },
+  });
+}
+
 async function addTags() {
   const tagFactory = defineTagFactory();
 
@@ -152,7 +193,7 @@ async function addTags() {
       console.log('tag id:', tag.id, 'was registered.');
       await addTag(tag, tagFactory, registeredTaskTag.length !== 0);
     } else {
-      //console.log('tag id:', tag.id, 'has already been registered.');
+      // console.log('tag id:', tag.id, 'has already been registered.');
     }
   });
 }
@@ -218,15 +259,15 @@ async function addTaskTags() {
       console.log('tag id:', task_tag.tag_id, 'task_id:', task_tag.task_id, 'was registered.');
       await addTaskTag(task_tag, taskTagFactory);
     } else if (registeredTaskTag.length !== 0) {
-      //console.log(
-      //  'tag id:',
-      //  task_tag.tag_id,
-      //  'task id:',
-      //  task_tag.task_id,
-      //  'has already been registered.',
-      //);
+      // console.log(
+      //   'tag id:',
+      //   task_tag.tag_id,
+      //   'task id:',
+      //   task_tag.task_id,
+      //   'has already been registered.',
+      // );
     } else if (registeredTag.length !== 1 || registeredTask.length !== 1) {
-      //console.log('tag id:', task_tag.tag_id, ' or task id:', task_tag.task_id, 'is missing.');
+      // console.log('tag id:', task_tag.tag_id, ' or task id:', task_tag.task_id, 'is missing.');
     }
   });
 }
@@ -243,7 +284,7 @@ async function addTaskTag(task_tag, taskTagFactory) {
   });
 }
 
-//insert data to submission_status table
+// Add data to submission_status table
 async function addSubmissionStatuses() {
   const submissionStatusFactory = defineSubmissionStatusFactory();
 
@@ -274,7 +315,7 @@ async function addSubmissionStatus(submission_status, submissionStatusFactory) {
   });
 }
 
-//insert data to answer table
+// Add data to answer table
 async function addAnswers() {
   const answerFactory = defineTaskAnswerFactory();
 
@@ -310,11 +351,9 @@ async function addAnswers() {
 async function addAnswer(answer, taskAnswerFactory) {
   await taskAnswerFactory.create({
     id: answer.id,
-    //task_id: answer.task_id,
     task: {
       connect: { task_id: answer.task_id },
     },
-    //username: answer.username,
     user: {
       connect: { id: answer.user_id },
     },
