@@ -449,7 +449,6 @@ export const workbooks = [
       { taskId: 'abc307_d', priority: 5, comment: '' },
       { taskId: 'abc333_e', priority: 6, comment: '' },
       { taskId: 'abc372_d', priority: 7, comment: '' },
-      { taskId: 'acl1_a', priority: 8, comment: '' },
       { taskId: 'abc359_e', priority: 9, comment: '' },
       { taskId: 'abc379_f', priority: 10, comment: '' },
       { taskId: 'arc076_c', priority: 11, comment: '' },

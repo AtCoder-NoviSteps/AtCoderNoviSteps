@@ -159,7 +159,7 @@ export const tasks = [
     problem_index: 'D',
     name: 'Garbage Removal',
     title: 'D. Garbage Removal',
-    grade: '1Q',
+    grade: 'Q1',
   },
   {
     id: 'abc406_c',
@@ -167,7 +167,7 @@ export const tasks = [
     problem_index: 'C',
     name: '~',
     title: 'C. ~',
-    grade: '2Q',
+    grade: 'Q2',
   },
   {
     id: 'abc406_b',
@@ -175,7 +175,7 @@ export const tasks = [
     problem_index: 'B',
     name: 'Product Calculator',
     title: 'B. Product Calculator',
-    grade: '5Q',
+    grade: 'Q5',
   },
   {
     id: 'abc406_a',
@@ -183,7 +183,7 @@ export const tasks = [
     problem_index: 'A',
     name: 'Not Acceptable',
     title: 'A. Not Acceptable',
-    grade: '8Q',
+    grade: 'Q8',
   },
   {
     id: 'abc405_g',
@@ -4827,14 +4827,6 @@ export const tasks = [
     name: 'Wildcards',
     title: 'G. Wildcards',
     grade: 'Q1',
-  },
-  {
-    id: 'acl1_a',
-    contest_id: 'acl1',
-    problem_index: 'A',
-    name: 'Reachable Towns',
-    title: 'A. Reachable Towns',
-    grade: 'D1',
   },
   {
     id: 'panasonic2020_a',
