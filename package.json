@@ -90,7 +90,7 @@
     "pnpm": "10.12.1",
     "prisma-erd-generator": "2.0.4",
     "svelte-eslint-parser": "1.2.0",
-    "tailwind-merge": "2.6.0",
+    "tailwind-merge": "3.3.1",
     "tailwindcss": "3.4.17",
     "vercel": "42.3.0",
     "xss": "1.0.15"
