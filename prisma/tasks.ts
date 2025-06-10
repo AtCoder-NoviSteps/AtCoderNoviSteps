@@ -10,14 +10,6 @@ export const tasks = [
     grade: 'Q8',
   },
   {
-    id: 'APG4b_cm',
-    contest_id: 'APG4b',
-    problem_index: 'EX10',
-    name: '1.10',
-    title: 'EX10. 1.10',
-    grade: 'Q8',
-  },
-  {
     id: 'abc408_g',
     contest_id: 'abc408',
     problem_index: 'G',
