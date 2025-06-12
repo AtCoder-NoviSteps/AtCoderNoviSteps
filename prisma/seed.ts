@@ -1,3 +1,8 @@
+/**
+ * This script seeds the database with initial data.
+ * Run this script using `pnpm db:seed`.
+ */
+
 // See:
 // https://www.prisma.io/docs/getting-started/quickstart
 import { PrismaClient } from '@prisma/client';
