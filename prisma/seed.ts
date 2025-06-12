@@ -83,25 +83,27 @@ async function addUser(user, password: string, userFactory, keyFactory) {
 async function addTasks() {
   const taskFactory = defineTaskFactory();
 
-  tasks.map(async (task) => {
-    const registeredTask = await prisma.task.findMany({
-      where: {
-        task_id: task.id,
-      },
-    });
-    const registeredTaskTag = await prisma.taskTag.findMany({
-      where: {
-        task_id: task.id,
-      },
-    });
+  await Promise.all(
+    tasks.map(async (task) => {
+      const registeredTask = await prisma.task.findUnique({
+        where: {
+          task_id: task.id,
+        },
+      });
+      const registeredTaskTag = await prisma.taskTag.findMany({
+        where: {
+          task_id: task.id,
+        },
+      });
 
-    if (registeredTask.length === 0) {
-      console.log('task id:', task.id, 'was registered.');
-      await addTask(task, taskFactory, registeredTaskTag.length !== 0);
-    } else {
-      // console.log('task id:', task.id, 'has already been registered.');
-    }
-  });
+      if (!registeredTask) {
+        await addTask(task, taskFactory, registeredTaskTag.length !== 0);
+        console.log('task id:', task.id, 'was registered.');
+      } else {
+        // console.log('task id:', task.id, 'has already been registered.');
+      }
+    }),
+  );
 }
 
 async function addTask(task, taskFactory, isHavingTaskTag) {
@@ -139,20 +141,22 @@ async function addWorkBooks() {
   const userFactory = defineUserFactory();
   const workBookFactory = defineWorkBookFactory({ defaultData: { user: userFactory } });
 
-  workbooks.map(async (workbook) => {
-    const author = await prisma.user.findUnique({
-      where: {
-        id: workbook.authorId,
-      },
-    });
+  await Promise.all(
+    workbooks.map(async (workbook) => {
+      const author = await prisma.user.findUnique({
+        where: {
+          id: workbook.authorId,
+        },
+      });
 
-    if (author) {
-      await addWorkBook(workbook, workBookFactory);
-      console.log('workbook title:', workbook.title, 'was registered.');
-    } else {
-      console.log('Not found author id: ', workbook.authorId, '.');
-    }
-  });
+      if (author) {
+        await addWorkBook(workbook, workBookFactory);
+        console.log('workbook title:', workbook.title, 'was registered.');
+      } else {
+        console.log('Not found author id: ', workbook.authorId, '.');
+      }
+    }),
+  );
 }
 
 async function addWorkBook(workbook, workBookFactory) {
