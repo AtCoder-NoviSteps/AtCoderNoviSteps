@@ -1,5 +1,5 @@
-// // See:
-// // https://www.prisma.io/docs/getting-started/quickstart
+// See:
+// https://www.prisma.io/docs/getting-started/quickstart
 import { PrismaClient } from '@prisma/client';
 import {
   initialize,
