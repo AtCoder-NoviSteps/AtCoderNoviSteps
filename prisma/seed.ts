@@ -38,34 +38,49 @@ initialize({ prisma });
 // https://lucia-auth.com/basics/keys/#password-hashing
 // https://www.prisma.io/docs/reference/api-reference/prisma-client-reference#findunique
 async function main() {
-  await addUsers();
-  await addTasks();
-  await addWorkBooks();
-  await addTags();
-  await addTaskTags();
-  await addSubmissionStatuses();
-  await addAnswers();
+  try {
+    console.log('Seeding has been started.');
+    await addUsers();
+    await addTasks();
+    await addWorkBooks();
+    await addTags();
+    await addTaskTags();
+    await addSubmissionStatuses();
+    await addAnswers();
+    console.log('Seeding has been completed.');
+  } catch (e) {
+    console.error('Failed to seeding:', e);
+    throw e;
+  }
 }
 
 async function addUsers() {
+  console.log('Start adding users...');
+
   const userFactory = defineUserFactory();
   const keyFactory = defineKeyFactory({ defaultData: { user: userFactory } });
 
-  users.map(async (user) => {
-    const password = 'Ch0kuda1';
-    const registeredUser = await prisma.user.findUnique({
-      where: {
-        username: user.name,
-      },
-    });
+  await Promise.all(
+    users.map(async (user) => {
+      try {
+        const password = 'Ch0kuda1';
+        const registeredUser = await prisma.user.findUnique({
+          where: {
+            username: user.name,
+          },
+        });
 
-    if (!registeredUser) {
-      await addUser(user, password, userFactory, keyFactory);
-      console.log('username:', user.name, 'was registered.');
-    } else {
-      console.log('username:', user.name, 'has already registered.');
-    }
-  });
+        if (!registeredUser) {
+          await addUser(user, password, userFactory, keyFactory);
+          console.log('username:', user.name, 'was registered.');
+        }
+      } catch (e) {
+        console.error('Failed to add user', user.name, e);
+      }
+    }),
+  );
+
+  console.log('Finished adding users.');
 }
 
 // See:
@@ -86,29 +101,35 @@ async function addUser(user, password: string, userFactory, keyFactory) {
 }
 
 async function addTasks() {
+  console.log('Start adding tasks...');
+
   const taskFactory = defineTaskFactory();
 
   await Promise.all(
     tasks.map(async (task) => {
-      const registeredTask = await prisma.task.findUnique({
-        where: {
-          task_id: task.id,
-        },
-      });
-      const registeredTaskTag = await prisma.taskTag.findMany({
-        where: {
-          task_id: task.id,
-        },
-      });
+      try {
+        const registeredTask = await prisma.task.findUnique({
+          where: {
+            task_id: task.id,
+          },
+        });
+        const registeredTaskTag = await prisma.taskTag.findMany({
+          where: {
+            task_id: task.id,
+          },
+        });
 
-      if (!registeredTask) {
-        await addTask(task, taskFactory, registeredTaskTag.length !== 0);
-        console.log('task id:', task.id, 'was registered.');
-      } else {
-        // console.log('task id:', task.id, 'has already been registered.');
+        if (!registeredTask) {
+          await addTask(task, taskFactory, registeredTaskTag.length !== 0);
+          console.log('task id:', task.id, 'was registered.');
+        }
+      } catch (e) {
+        console.error('Failed to add task', task.id, e);
       }
     }),
   );
+
+  console.log('Finished adding tasks.');
 }
 
 async function addTask(task, taskFactory, isHavingTaskTag) {
@@ -143,25 +164,33 @@ async function addTask(task, taskFactory, isHavingTaskTag) {
 }
 
 async function addWorkBooks() {
+  console.log('Start adding workbooks...');
+
   const userFactory = defineUserFactory();
   const workBookFactory = defineWorkBookFactory({ defaultData: { user: userFactory } });
 
   await Promise.all(
     workbooks.map(async (workbook) => {
-      const author = await prisma.user.findUnique({
-        where: {
-          id: workbook.authorId,
-        },
-      });
+      try {
+        const author = await prisma.user.findUnique({
+          where: {
+            id: workbook.authorId,
+          },
+        });
 
-      if (author) {
-        await addWorkBook(workbook, workBookFactory);
-        console.log('workbook title:', workbook.title, 'was registered.');
-      } else {
-        console.log('Not found author id: ', workbook.authorId, '.');
+        if (author) {
+          await addWorkBook(workbook, workBookFactory);
+          console.log('workbook title:', workbook.title, 'was registered.');
+        } else {
+          console.warn('Not found author id: ', workbook.authorId, '.');
+        }
+      } catch (e) {
+        console.error('Failed to add workbook', workbook.title, e);
       }
     }),
   );
+
+  console.log('Finished adding workbooks.');
 }
 
 async function addWorkBook(workbook, workBookFactory) {
@@ -183,28 +212,35 @@ async function addWorkBook(workbook, workBookFactory) {
 }
 
 async function addTags() {
+  console.log('Start adding tags...');
+
   const tagFactory = defineTagFactory();
 
-  tags.map(async (tag) => {
-    const registeredTag = await prisma.tag.findMany({
-      where: {
-        id: tag.id,
-      },
-    });
+  await Promise.all(
+    tags.map(async (tag) => {
+      try {
+        const registeredTag = await prisma.tag.findMany({
+          where: {
+            id: tag.id,
+          },
+        });
+        const registeredTaskTag = await prisma.taskTag.findMany({
+          where: {
+            tag_id: tag.id,
+          },
+        });
 
-    const registeredTaskTag = await prisma.taskTag.findMany({
-      where: {
-        tag_id: tag.id,
-      },
-    });
+        if (registeredTag.length === 0) {
+          console.log('tag id:', tag.id, 'was registered.');
+          await addTag(tag, tagFactory, registeredTaskTag.length !== 0);
+        }
+      } catch (e) {
+        console.error('Failed to add tag', tag.id, e);
+      }
+    }),
+  );
 
-    if (registeredTag.length === 0) {
-      console.log('tag id:', tag.id, 'was registered.');
-      await addTag(tag, tagFactory, registeredTaskTag.length !== 0);
-    } else {
-      // console.log('tag id:', tag.id, 'has already been registered.');
-    }
-  });
+  console.log('Finished adding tags.');
 }
 
 async function addTag(tag, tagFactory, isHavingTaskTag) {
@@ -235,50 +271,48 @@ async function addTag(tag, tagFactory, isHavingTaskTag) {
 }
 
 async function addTaskTags() {
+  console.log('Start adding task tags...');
+
   const taskFactory = defineTaskFactory();
   const tagFactory = defineTagFactory();
   const taskTagFactory = defineTaskTagFactory({
     defaultData: { task: taskFactory, tag: tagFactory },
   });
 
-  task_tags.map(async (task_tag) => {
-    const registeredTaskTag = await prisma.taskTag.findMany({
-      where: {
-        AND: [{ task_id: task_tag.task_id }, { tag_id: task_tag.tag_id }],
-      },
-    });
+  await Promise.all(
+    task_tags.map(async (task_tag) => {
+      try {
+        const registeredTaskTag = await prisma.taskTag.findMany({
+          where: {
+            AND: [{ task_id: task_tag.task_id }, { tag_id: task_tag.tag_id }],
+          },
+        });
+        const registeredTask = await prisma.task.findMany({
+          where: {
+            task_id: task_tag.task_id,
+          },
+        });
+        const registeredTag = await prisma.tag.findMany({
+          where: {
+            id: task_tag.tag_id,
+          },
+        });
 
-    const registeredTask = await prisma.task.findMany({
-      where: {
-        task_id: task_tag.task_id,
-      },
-    });
+        if (
+          registeredTaskTag.length === 0 &&
+          registeredTag.length === 1 &&
+          registeredTask.length === 1
+        ) {
+          await addTaskTag(task_tag, taskTagFactory);
+          console.log('tag id:', task_tag.tag_id, 'task_id:', task_tag.task_id, 'was registered.');
+        }
+      } catch (e) {
+        console.error('Failed to add task tag', task_tag, e);
+      }
+    }),
+  );
 
-    const registeredTag = await prisma.tag.findMany({
-      where: {
-        id: task_tag.tag_id,
-      },
-    });
-
-    if (
-      registeredTaskTag.length === 0 &&
-      registeredTag.length === 1 &&
-      registeredTask.length === 1
-    ) {
-      console.log('tag id:', task_tag.tag_id, 'task_id:', task_tag.task_id, 'was registered.');
-      await addTaskTag(task_tag, taskTagFactory);
-    } else if (registeredTaskTag.length !== 0) {
-      // console.log(
-      //   'tag id:',
-      //   task_tag.tag_id,
-      //   'task id:',
-      //   task_tag.task_id,
-      //   'has already been registered.',
-      // );
-    } else if (registeredTag.length !== 1 || registeredTask.length !== 1) {
-      // console.log('tag id:', task_tag.tag_id, ' or task id:', task_tag.task_id, 'is missing.');
-    }
-  });
+  console.log('Finished adding task tags.');
 }
 async function addTaskTag(task_tag, taskTagFactory) {
   await taskTagFactory.create({
@@ -295,22 +329,30 @@ async function addTaskTag(task_tag, taskTagFactory) {
 
 // Add data to submission_status table
 async function addSubmissionStatuses() {
+  console.log('Start adding submission statuses...');
+
   const submissionStatusFactory = defineSubmissionStatusFactory();
 
-  submission_statuses.map(async (submission_status) => {
-    const registeredSubmissionStatus = await prisma.submissionStatus.findMany({
-      where: {
-        id: submission_status.id,
-      },
-    });
+  await Promise.all(
+    submission_statuses.map(async (submission_status) => {
+      try {
+        const registeredSubmissionStatus = await prisma.submissionStatus.findMany({
+          where: {
+            id: submission_status.id,
+          },
+        });
 
-    if (registeredSubmissionStatus.length === 0) {
-      console.log('submission_status id:', submission_status.id, 'was registered.');
-      await addSubmissionStatus(submission_status, submissionStatusFactory);
-    } else {
-      //console.log('tag id:', tag.id, 'has already been registered.');
-    }
-  });
+        if (registeredSubmissionStatus.length === 0) {
+          await addSubmissionStatus(submission_status, submissionStatusFactory);
+          console.log('submission_status id:', submission_status.id, 'was registered.');
+        }
+      } catch (e) {
+        console.error('Failed to add submission status', submission_status.id, e);
+      }
+    }),
+  );
+
+  console.log('Finished adding submission statuses.');
 }
 
 async function addSubmissionStatus(submission_status, submissionStatusFactory) {
@@ -326,35 +368,45 @@ async function addSubmissionStatus(submission_status, submissionStatusFactory) {
 
 // Add data to answer table
 async function addAnswers() {
+  console.log('Start adding answers...');
+
   const answerFactory = defineTaskAnswerFactory();
 
-  answers.map(async (answer) => {
-    const registeredAnswer = await prisma.taskAnswer.findMany({
-      where: {
-        id: answer.id,
-      },
-    });
+  await Promise.all(
+    answers.map(async (answer) => {
+      try {
+        const registeredAnswer = await prisma.taskAnswer.findMany({
+          where: {
+            id: answer.id,
+          },
+        });
 
-    const registeredUser = await prisma.user.findMany({
-      where: {
-        id: answer.user_id,
-      },
-    });
+        const registeredUser = await prisma.user.findMany({
+          where: {
+            id: answer.user_id,
+          },
+        });
 
-    if (registeredAnswer.length === 0 && registeredUser.length === 1) {
-      console.log('answer id:', answer.id, 'was registered.');
-      await addAnswer(answer, answerFactory);
-    } else {
-      console.log(
-        'answer len:',
-        registeredAnswer.length,
-        'user len:',
-        registeredUser.length,
-        answer.id,
-        'was not registered.',
-      );
-    }
-  });
+        if (registeredAnswer.length === 0 && registeredUser.length === 1) {
+          await addAnswer(answer, answerFactory);
+          console.log('answer id:', answer.id, 'was registered.');
+        } else {
+          console.warn(
+            'answer len:',
+            registeredAnswer.length,
+            'user len:',
+            registeredUser.length,
+            answer.id,
+            'was not registered.',
+          );
+        }
+      } catch (e) {
+        console.error('Error adding answer', answer.id, e);
+      }
+    }),
+  );
+
+  console.log('Finished adding answers.');
 }
 
 async function addAnswer(answer, taskAnswerFactory) {
