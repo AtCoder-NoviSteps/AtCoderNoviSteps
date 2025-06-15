@@ -192,18 +192,42 @@ async function addWorkBooks() {
           id: workbook.authorId,
         },
       });
-      // Allow undefined to match empty strings
-      const normalizedUrlSlug = workbook.urlSlug || undefined;
-      const registeredWorkBook = await prisma.workBook.findMany({
-        where: {
-          urlSlug: normalizedUrlSlug,
-        },
-      });
+
+      const normalizedUrlSlug = normalizeUrlSlug(workbook.urlSlug);
+      // Validate for existing workbook using appropriate criteria
+      let registeredWorkBook;
+
+      if (normalizedUrlSlug) {
+        // If urlSlug exists, check by urlSlug
+        registeredWorkBook = await prisma.workBook.findMany({
+          where: {
+            urlSlug: normalizedUrlSlug,
+          },
+        });
+      } else {
+        // If no urlSlug, check by title and authorId to avoid duplicates
+        registeredWorkBook = await prisma.workBook.findMany({
+          where: {
+            title: workbook.title,
+            authorId: workbook.authorId,
+          },
+        });
+      }
 
       if (!author) {
         console.warn('Not found author id: ', workbook.authorId, '.');
       } else if (registeredWorkBook.length >= 1) {
-        console.warn('Url slug ', workbook.urlSlug, ' has already been registered.');
+        if (normalizedUrlSlug) {
+          console.warn('Url slug ', workbook.urlSlug, ' has already been registered.');
+        } else {
+          console.warn(
+            'Workbook title "',
+            workbook.title,
+            '" by author',
+            workbook.authorId,
+            'has already been registered.',
+          );
+        }
       } else {
         await addWorkBook(workbook, workBookFactory);
         console.log('workbook title:', workbook.title, 'was registered.');
@@ -217,7 +241,7 @@ async function addWorkBooks() {
 }
 
 async function addWorkBook(workbook, workBookFactory) {
-  const urlSlug = workbook.urlSlug !== '' ? workbook.urlSlug : undefined;
+  const urlSlug = normalizeUrlSlug(workbook.urlSlug);
 
   await workBookFactory.create({
     user: {
@@ -235,6 +259,24 @@ async function addWorkBook(workbook, workBookFactory) {
       create: workbook.workBookTasks,
     },
   });
+}
+
+/**
+ * Normalizes a URL slug by converting empty strings and null values to undefined.
+ *
+ * @param urlSlug - The URL slug to normalize. Can be a string, null, or undefined.
+ * @returns The normalized URL slug as a string if it has content, otherwise undefined.
+ *
+ * @example
+ * ```typescript
+ * normalizeUrlSlug("union-find") // returns "union-find"
+ * normalizeUrlSlug("") // returns undefined
+ * normalizeUrlSlug(null) // returns undefined
+ * normalizeUrlSlug(undefined) // returns undefined
+ * ```
+ */
+function normalizeUrlSlug(urlSlug: string | null | undefined): string | undefined {
+  return urlSlug && urlSlug !== '' ? urlSlug : undefined;
 }
 
 async function addTags() {
