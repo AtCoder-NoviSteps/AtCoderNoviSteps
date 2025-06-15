@@ -1,4 +1,4 @@
-import { WorkBookType, type WorkBook, type WorkBookTasksBase } from '../src/lib/types/workbook';
+import { WorkBookType, type WorkBook } from '../src/lib/types/workbook';
 
 function createWorkBookBase(overrides: Partial<WorkBook> = {}): WorkBook {
   return {
@@ -11,14 +11,10 @@ function createWorkBookBase(overrides: Partial<WorkBook> = {}): WorkBook {
     isOfficial: false,
     isReplenished: false,
     workBookType: WorkBookType.CREATED_BY_USER,
-    urlSlug: '',
-    workBookTasks: createWorkBookTasks(),
+    urlSlug: '', // Only include urlSlug when it's explicitly provided
+    workBookTasks: [],
     ...overrides,
   };
-}
-
-function createWorkBookTasks(): WorkBookTasksBase {
-  return [{ taskId: 'abc322_d', priority: 1, comment: '' }];
 }
 
 export const workbooks = [

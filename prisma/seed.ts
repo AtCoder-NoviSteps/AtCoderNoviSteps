@@ -177,9 +177,11 @@ async function addWorkBooks() {
           id: workbook.authorId,
         },
       });
+      // Allow undefined to match empty strings
+      const normalizedUrlSlug = workbook.urlSlug || undefined;
       const registeredWorkBook = await prisma.workBook.findMany({
         where: {
-          urlSlug: workbook.urlSlug,
+          urlSlug: normalizedUrlSlug,
         },
       });
 
