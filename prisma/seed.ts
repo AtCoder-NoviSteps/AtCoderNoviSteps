@@ -17,6 +17,7 @@ import {
   defineSubmissionStatusFactory,
   defineWorkBookFactory,
 } from './.fabbrica';
+import PQueue from 'p-queue';
 import { generateLuciaPasswordHash } from 'lucia/utils';
 
 import { classifyContest } from '../src/lib/utils/contest';
@@ -37,16 +38,22 @@ initialize({ prisma });
 // https://github.com/TeemuKoivisto/sveltekit-monorepo-template/blob/main/packages/db/prisma/seed.ts
 // https://lucia-auth.com/basics/keys/#password-hashing
 // https://www.prisma.io/docs/reference/api-reference/prisma-client-reference#findunique
+// https://github.com/sindresorhus/p-queue
 async function main() {
   try {
     console.log('Seeding has been started.');
-    await addUsers();
-    await addTasks();
-    await addWorkBooks();
-    await addTags();
-    await addTaskTags();
-    await addSubmissionStatuses();
-    await addAnswers();
+
+    // Create a queue to ensure sequential execution
+    const mainQueue = new PQueue({ concurrency: 1 });
+
+    await mainQueue.add(() => addUsers());
+    await mainQueue.add(() => addTasks());
+    await mainQueue.add(() => addWorkBooks());
+    await mainQueue.add(() => addTags());
+    await mainQueue.add(() => addTaskTags());
+    await mainQueue.add(() => addSubmissionStatuses());
+    await mainQueue.add(() => addAnswers());
+
     console.log('Seeding has been completed.');
   } catch (e) {
     console.error('Failed to seeding:', e);
@@ -60,8 +67,11 @@ async function addUsers() {
   const userFactory = defineUserFactory();
   const keyFactory = defineKeyFactory({ defaultData: { user: userFactory } });
 
-  await Promise.all(
-    users.map(async (user) => {
+  // Create a queue with limited concurrency for user operations
+  const userQueue = new PQueue({ concurrency: 2 });
+
+  const userPromises = users.map((user) =>
+    userQueue.add(async () => {
       try {
         const password = 'Ch0kuda1';
         const registeredUser = await prisma.user.findUnique({
@@ -80,6 +90,7 @@ async function addUsers() {
     }),
   );
 
+  await Promise.all(userPromises);
   console.log('Finished adding users.');
 }
 
@@ -105,8 +116,11 @@ async function addTasks() {
 
   const taskFactory = defineTaskFactory();
 
-  await Promise.all(
-    tasks.map(async (task) => {
+  // Create a queue with limited concurrency for database operations
+  const taskQueue = new PQueue({ concurrency: 3 });
+
+  const taskPromises = tasks.map((task) =>
+    taskQueue.add(async () => {
       try {
         const registeredTask = await prisma.task.findUnique({
           where: {
@@ -129,6 +143,7 @@ async function addTasks() {
     }),
   );
 
+  await Promise.all(taskPromises);
   console.log('Finished adding tasks.');
 }
 
@@ -227,8 +242,11 @@ async function addTags() {
 
   const tagFactory = defineTagFactory();
 
-  await Promise.all(
-    tags.map(async (tag) => {
+  // Create a queue with limited concurrency for tag operations
+  const tagQueue = new PQueue({ concurrency: 2 });
+
+  const tagPromises = tags.map((tag) =>
+    tagQueue.add(async () => {
       try {
         const registeredTag = await prisma.tag.findMany({
           where: {
@@ -251,6 +269,7 @@ async function addTags() {
     }),
   );
 
+  await Promise.all(tagPromises);
   console.log('Finished adding tags.');
 }
 
@@ -290,8 +309,11 @@ async function addTaskTags() {
     defaultData: { task: taskFactory, tag: tagFactory },
   });
 
-  await Promise.all(
-    task_tags.map(async (task_tag) => {
+  // Create a queue with limited concurrency for task tag operations
+  const taskTagQueue = new PQueue({ concurrency: 2 });
+
+  const taskTagPromises = task_tags.map((task_tag) =>
+    taskTagQueue.add(async () => {
       try {
         const registeredTaskTag = await prisma.taskTag.findMany({
           where: {
@@ -323,6 +345,7 @@ async function addTaskTags() {
     }),
   );
 
+  await Promise.all(taskTagPromises);
   console.log('Finished adding task tags.');
 }
 async function addTaskTag(task_tag, taskTagFactory) {
@@ -344,8 +367,11 @@ async function addSubmissionStatuses() {
 
   const submissionStatusFactory = defineSubmissionStatusFactory();
 
-  await Promise.all(
-    submission_statuses.map(async (submission_status) => {
+  // Create a queue with limited concurrency for submission status operations
+  const submissionStatusQueue = new PQueue({ concurrency: 2 });
+
+  const submissionStatusPromises = submission_statuses.map((submission_status) =>
+    submissionStatusQueue.add(async () => {
       try {
         const registeredSubmissionStatus = await prisma.submissionStatus.findMany({
           where: {
@@ -363,6 +389,7 @@ async function addSubmissionStatuses() {
     }),
   );
 
+  await Promise.all(submissionStatusPromises);
   console.log('Finished adding submission statuses.');
 }
 
@@ -383,8 +410,11 @@ async function addAnswers() {
 
   const answerFactory = defineTaskAnswerFactory();
 
-  await Promise.all(
-    answers.map(async (answer) => {
+  // Create a queue with limited concurrency for answer operations
+  const answerQueue = new PQueue({ concurrency: 2 });
+
+  const answerPromises = answers.map((answer) =>
+    answerQueue.add(async () => {
       try {
         const registeredAnswer = await prisma.taskAnswer.findMany({
           where: {
@@ -417,6 +447,7 @@ async function addAnswers() {
     }),
   );
 
+  await Promise.all(answerPromises);
   console.log('Finished adding answers.');
 }
 
