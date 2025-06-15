@@ -22,7 +22,7 @@ import { generateLuciaPasswordHash } from 'lucia/utils';
 
 import { classifyContest } from '../src/lib/utils/contest';
 
-import { users } from './users';
+import { users, USER_PASSWORD_FOR_SEED } from './users';
 import { tasks } from './tasks';
 import { workbooks } from './workbooks';
 import { tags } from './tags';
@@ -70,7 +70,6 @@ async function addUsers() {
   for (const user of users) {
     userQueue.add(async () => {
       try {
-        const password = 'Ch0kuda1';
         const registeredUser = await prisma.user.findUnique({
           where: {
             username: user.name,
@@ -78,7 +77,7 @@ async function addUsers() {
         });
 
         if (!registeredUser) {
-          await addUser(user, password, userFactory, keyFactory);
+          await addUser(user, USER_PASSWORD_FOR_SEED, userFactory, keyFactory);
           console.log('username:', user.name, 'was registered.');
         }
       } catch (e) {
