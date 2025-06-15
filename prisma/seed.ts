@@ -127,14 +127,9 @@ async function addTasks() {
             task_id: task.id,
           },
         });
-        const registeredTaskTag = await prisma.taskTag.findMany({
-          where: {
-            task_id: task.id,
-          },
-        });
 
         if (!registeredTask) {
-          await addTask(task, taskFactory, registeredTaskTag.length !== 0);
+          await addTask(task, taskFactory);
           console.log('task id:', task.id, 'was registered.');
         }
       } catch (e) {
@@ -147,35 +142,16 @@ async function addTasks() {
   console.log('Finished adding tasks.');
 }
 
-async function addTask(task, taskFactory, isHavingTaskTag) {
-  if (isHavingTaskTag) {
-    await taskFactory.create({
-      contest_type: classifyContest(task.contest_id),
-      contest_id: task.contest_id,
-      task_table_index: task.problem_index,
-      task_id: task.id,
-      title: task.title,
-      grade: task.grade,
-      tags: {
-        create: [
-          {
-            tag: {
-              connect: { task_id: task.id },
-            },
-          },
-        ],
-      },
-    });
-  } else {
-    await taskFactory.create({
-      contest_type: classifyContest(task.contest_id),
-      contest_id: task.contest_id,
-      task_table_index: task.problem_index,
-      task_id: task.id,
-      title: task.title,
-      grade: task.grade,
-    });
-  }
+async function addTask(task, taskFactory) {
+  // Note: Task-Tag relationships are handled separately via TaskTag table
+  await taskFactory.create({
+    contest_type: classifyContest(task.contest_id),
+    contest_id: task.contest_id,
+    task_table_index: task.problem_index,
+    task_id: task.id,
+    title: task.title,
+    grade: task.grade,
+  });
 }
 
 async function addWorkBooks() {
@@ -295,15 +271,10 @@ async function addTags() {
             id: tag.id,
           },
         });
-        const registeredTaskTag = await prisma.taskTag.findMany({
-          where: {
-            tag_id: tag.id,
-          },
-        });
 
         if (registeredTag.length === 0) {
           console.log('tag id:', tag.id, 'was registered.');
-          await addTag(tag, tagFactory, registeredTaskTag.length !== 0);
+          await addTag(tag, tagFactory);
         }
       } catch (e) {
         console.error('Failed to add tag', tag.id, e);
@@ -315,31 +286,15 @@ async function addTags() {
   console.log('Finished adding tags.');
 }
 
-async function addTag(tag, tagFactory, isHavingTaskTag) {
-  if (isHavingTaskTag) {
-    await tagFactory.create({
-      id: tag.id,
-      name: tag.name,
-      is_official: tag.is_official,
-      is_published: tag.is_published,
-      tasks: {
-        create: [
-          {
-            task: {
-              connect: { tag_id: tag.id },
-            },
-          },
-        ],
-      },
-    });
-  } else {
-    await tagFactory.create({
-      id: tag.id,
-      name: tag.name,
-      is_official: tag.is_official,
-      is_published: tag.is_published,
-    });
-  }
+async function addTag(tag, tagFactory) {
+  // Note: Tags and Tasks are connected via the TaskTag relationship table
+  // which is handled separately in addTaskTags()
+  await tagFactory.create({
+    id: tag.id,
+    name: tag.name,
+    is_official: tag.is_official,
+    is_published: tag.is_published,
+  });
 }
 
 async function addTaskTags() {
