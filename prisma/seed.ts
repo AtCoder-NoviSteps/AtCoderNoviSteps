@@ -34,6 +34,18 @@ import { submission_statuses } from './submission_statuses';
 const prisma = new PrismaClient();
 initialize({ prisma });
 
+// Queue concurrency configuration
+// Adjust these values based on your database connection limits and performance requirements
+// Can be overridden via environment variables (e.g., SEED_USERS_CONCURRENCY=4)
+const QUEUE_CONCURRENCY = {
+  users: Number(process.env.SEED_USERS_CONCURRENCY) || 2, // User creation with password hashing (CPU intensive)
+  tasks: Number(process.env.SEED_TASKS_CONCURRENCY) || 3, // Task creation (lightweight)
+  tags: Number(process.env.SEED_TAGS_CONCURRENCY) || 2, // Tag creation (lightweight)
+  taskTags: Number(process.env.SEED_TASK_TAGS_CONCURRENCY) || 2, // TaskTag relations (multiple validations)
+  submissionStatuses: Number(process.env.SEED_SUBMISSION_STATUSES_CONCURRENCY) || 2, // SubmissionStatus creation (lightweight)
+  answers: Number(process.env.SEED_ANSWERS_CONCURRENCY) || 2, // Answer creation (multiple validations)
+} as const;
+
 // See:
 // https://github.com/TeemuKoivisto/sveltekit-monorepo-template/blob/main/packages/db/prisma/seed.ts
 // https://lucia-auth.com/basics/keys/#password-hashing
@@ -65,7 +77,7 @@ async function addUsers() {
   const keyFactory = defineKeyFactory({ defaultData: { user: userFactory } });
 
   // Create a queue with limited concurrency for user operations
-  const userQueue = new PQueue({ concurrency: 2 });
+  const userQueue = new PQueue({ concurrency: QUEUE_CONCURRENCY.users });
 
   for (const user of users) {
     userQueue.add(async () => {
@@ -113,7 +125,7 @@ async function addTasks() {
   const taskFactory = defineTaskFactory();
 
   // Create a queue with limited concurrency for database operations
-  const taskQueue = new PQueue({ concurrency: 3 });
+  const taskQueue = new PQueue({ concurrency: QUEUE_CONCURRENCY.tasks });
 
   for (const task of tasks) {
     taskQueue.add(async () => {
@@ -153,8 +165,7 @@ async function addTask(task, taskFactory) {
 async function addWorkBooks() {
   console.log('Start adding workbooks...');
 
-  const userFactory = defineUserFactory();
-  const workBookFactory = defineWorkBookFactory({ defaultData: { user: userFactory } });
+  const workBookFactory = defineWorkBookFactory({ defaultData: { user: defineUserFactory() } });
 
   // Note: Use a for loop to ensure each workbook is processed sequentially.
   for (const workbook of workbooks) {
@@ -257,7 +268,7 @@ async function addTags() {
   const tagFactory = defineTagFactory();
 
   // Create a queue with limited concurrency for tag operations
-  const tagQueue = new PQueue({ concurrency: 2 });
+  const tagQueue = new PQueue({ concurrency: QUEUE_CONCURRENCY.tags });
 
   for (const tag of tags) {
     tagQueue.add(async () => {
@@ -303,29 +314,31 @@ async function addTaskTags() {
   });
 
   // Create a queue with limited concurrency for task tag operations
-  const taskTagQueue = new PQueue({ concurrency: 2 });
+  const taskTagQueue = new PQueue({ concurrency: QUEUE_CONCURRENCY.taskTags });
 
   for (const task_tag of task_tags) {
     taskTagQueue.add(async () => {
       try {
-        const registeredTaskTag = await prisma.taskTag.findUnique({
-          where: {
-            task_id_tag_id: {
-              task_id: task_tag.task_id,
-              tag_id: task_tag.tag_id,
+        const [registeredTaskTag, registeredTask, registeredTag] = await Promise.all([
+          prisma.taskTag.findUnique({
+            where: {
+              task_id_tag_id: {
+                task_id: task_tag.task_id,
+                tag_id: task_tag.tag_id,
+              },
             },
-          },
-        });
-        const registeredTask = await prisma.task.findUnique({
-          where: {
-            task_id: task_tag.task_id,
-          },
-        });
-        const registeredTag = await prisma.tag.findUnique({
-          where: {
-            id: task_tag.tag_id,
-          },
-        });
+          }),
+          prisma.task.findUnique({
+            where: {
+              task_id: task_tag.task_id,
+            },
+          }),
+          prisma.tag.findUnique({
+            where: {
+              id: task_tag.tag_id,
+            },
+          }),
+        ]);
 
         if (!registeredTaskTag && registeredTag && registeredTask) {
           await addTaskTag(task_tag, taskTagFactory);
@@ -360,7 +373,7 @@ async function addSubmissionStatuses() {
   const submissionStatusFactory = defineSubmissionStatusFactory();
 
   // Create a queue with limited concurrency for submission status operations
-  const submissionStatusQueue = new PQueue({ concurrency: 2 });
+  const submissionStatusQueue = new PQueue({ concurrency: QUEUE_CONCURRENCY.submissionStatuses });
 
   for (const submission_status of submission_statuses) {
     submissionStatusQueue.add(async () => {
@@ -403,25 +416,26 @@ async function addAnswers() {
   const answerFactory = defineTaskAnswerFactory();
 
   // Create a queue with limited concurrency for answer operations
-  const answerQueue = new PQueue({ concurrency: 2 });
+  const answerQueue = new PQueue({ concurrency: QUEUE_CONCURRENCY.answers });
 
   for (const answer of answers) {
     answerQueue.add(async () => {
       try {
-        const registeredAnswer = await prisma.taskAnswer.findUnique({
-          where: {
-            task_id_user_id: {
-              task_id: answer.task_id,
-              user_id: answer.user_id,
+        const [registeredAnswer, registeredUser] = await Promise.all([
+          prisma.taskAnswer.findUnique({
+            where: {
+              task_id_user_id: {
+                task_id: answer.task_id,
+                user_id: answer.user_id,
+              },
             },
-          },
-        });
-
-        const registeredUser = await prisma.user.findUnique({
-          where: {
-            id: answer.user_id,
-          },
-        });
+          }),
+          prisma.user.findUnique({
+            where: {
+              id: answer.user_id,
+            },
+          }),
+        ]);
 
         if (!registeredAnswer && registeredUser) {
           await addAnswer(answer, answerFactory);
