@@ -172,7 +172,7 @@ async function addWorkBooks() {
 
       if (normalizedUrlSlug) {
         // If urlSlug exists, check by urlSlug
-        registeredWorkBook = await prisma.workBook.findFirst({
+        registeredWorkBook = await prisma.workBook.findUnique({
           where: {
             urlSlug: normalizedUrlSlug,
           },
@@ -249,7 +249,7 @@ async function addWorkBook(workbook, workBookFactory) {
  * ```
  */
 function normalizeUrlSlug(urlSlug: string | null | undefined): string | undefined {
-  return urlSlug && urlSlug !== '' ? urlSlug.toLowerCase() : undefined;
+  return urlSlug && urlSlug.trim() !== '' ? urlSlug.trim().toLowerCase() : undefined;
 }
 
 async function addTags() {
