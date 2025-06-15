@@ -169,31 +169,39 @@ async function addWorkBooks() {
   const userFactory = defineUserFactory();
   const workBookFactory = defineWorkBookFactory({ defaultData: { user: userFactory } });
 
-  await Promise.all(
-    workbooks.map(async (workbook) => {
-      try {
-        const author = await prisma.user.findUnique({
-          where: {
-            id: workbook.authorId,
-          },
-        });
+  // Note: Use a for loop to ensure each workbook is processed sequentially.
+  for (const workbook of workbooks) {
+    try {
+      const author = await prisma.user.findUnique({
+        where: {
+          id: workbook.authorId,
+        },
+      });
+      const registeredWorkBook = await prisma.workBook.findMany({
+        where: {
+          urlSlug: workbook.urlSlug,
+        },
+      });
 
-        if (author) {
-          await addWorkBook(workbook, workBookFactory);
-          console.log('workbook title:', workbook.title, 'was registered.');
-        } else {
-          console.warn('Not found author id: ', workbook.authorId, '.');
-        }
-      } catch (e) {
-        console.error('Failed to add workbook', workbook.title, e);
+      if (!author) {
+        console.warn('Not found author id: ', workbook.authorId, '.');
+      } else if (registeredWorkBook.length >= 1) {
+        console.warn('Url slug ', workbook.urlSlug, ' has already been registered.');
+      } else {
+        await addWorkBook(workbook, workBookFactory);
+        console.log('workbook title:', workbook.title, 'was registered.');
       }
-    }),
-  );
+    } catch (e) {
+      console.error('Failed to add workbook', workbook.title, e);
+    }
+  }
 
   console.log('Finished adding workbooks.');
 }
 
 async function addWorkBook(workbook, workBookFactory) {
+  const urlSlug = workbook.urlSlug !== '' ? workbook.urlSlug : undefined;
+
   await workBookFactory.create({
     user: {
       connect: { id: workbook.authorId },
@@ -205,6 +213,7 @@ async function addWorkBook(workbook, workBookFactory) {
     isOfficial: workbook.isOfficial,
     isReplenished: workbook.isReplenished,
     workBookType: workbook.workBookType,
+    urlSlug: urlSlug,
     workBookTasks: {
       create: workbook.workBookTasks,
     },
