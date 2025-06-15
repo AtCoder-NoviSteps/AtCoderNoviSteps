@@ -160,7 +160,7 @@ async function addTask(task, taskFactory, isHavingTaskTag) {
         create: [
           {
             tag: {
-              connect: { task_id: task.task_id },
+              connect: { task_id: task.id },
             },
           },
         ],
