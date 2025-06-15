@@ -30,6 +30,7 @@ export const workbooks = [
     isPublished: true,
     isOfficial: true,
     workBookType: WorkBookType.CURRICULUM,
+    urlSlug: 'standard-input-output-1-integer',
     workBookTasks: [
       { taskId: 'math_and_algorithm_a', priority: 1, comment: '' },
       { taskId: 'tessoku_book_a', priority: 2, comment: '' },
@@ -77,6 +78,7 @@ export const workbooks = [
     isPublished: true,
     isOfficial: true,
     workBookType: WorkBookType.CURRICULUM,
+    urlSlug: 'operator-precedence',
     workBookTasks: [
       { taskId: 'abc172_a', priority: 1, comment: '' },
       { taskId: 'abc387_a', priority: 2, comment: '' },
@@ -91,6 +93,7 @@ export const workbooks = [
     isPublished: true,
     isOfficial: true,
     workBookType: WorkBookType.CURRICULUM,
+    urlSlug: 'floating-point-numbers',
     workBookTasks: [
       { taskId: 'abc163_a', priority: 1, comment: '' },
       { taskId: 'abc231_a', priority: 2, comment: '' },
@@ -104,6 +107,7 @@ export const workbooks = [
     isPublished: true,
     isOfficial: true,
     workBookType: WorkBookType.CURRICULUM,
+    urlSlug: 'if-statement-1',
     workBookTasks: [
       { taskId: 'abc174_a', priority: 1, comment: '' },
       { taskId: 'abc334_a', priority: 2, comment: '' },
@@ -118,6 +122,7 @@ export const workbooks = [
     isPublished: true,
     isOfficial: true,
     workBookType: WorkBookType.CURRICULUM,
+    urlSlug: 'string-1',
     workBookTasks: [
       { taskId: 'abc325_a', priority: 1, comment: '' },
       { taskId: 'abc244_a', priority: 2, comment: '' },
@@ -148,6 +153,7 @@ export const workbooks = [
     isOfficial: true,
     isReplenished: true,
     workBookType: WorkBookType.CURRICULUM,
+    urlSlug: 'math-9q',
     workBookTasks: [
       { taskId: 'abc205_a', priority: 1, comment: '' },
       { taskId: 'abc202_a', priority: 2, comment: '' },
@@ -164,6 +170,7 @@ export const workbooks = [
     isPublished: true,
     isOfficial: true,
     workBookType: WorkBookType.CURRICULUM,
+    urlSlug: 'if-statement-2',
     workBookTasks: [
       { taskId: 'joi2023_yo1b_b', priority: 1, comment: '' },
       { taskId: 'abc219_a', priority: 2, comment: '' },
@@ -180,6 +187,7 @@ export const workbooks = [
     isPublished: true,
     isOfficial: true,
     workBookType: WorkBookType.CURRICULUM,
+    urlSlug: 'while-statement',
     workBookTasks: [
       { taskId: 'APG4b_cm', priority: 1, comment: '' },
       { taskId: 'APG4bPython_co', priority: 2, comment: '' },
@@ -195,6 +203,7 @@ export const workbooks = [
     isPublished: true,
     isOfficial: true,
     workBookType: WorkBookType.CURRICULUM,
+    urlSlug: 'for-statement-1',
     workBookTasks: [
       { taskId: 'APG4b_cm', priority: 1, comment: '' },
       { taskId: 'APG4bPython_co', priority: 2, comment: '' },
@@ -210,6 +219,7 @@ export const workbooks = [
     isPublished: true,
     isOfficial: true,
     workBookType: WorkBookType.CURRICULUM,
+    urlSlug: 'abs-sqrt',
     workBookTasks: [
       { taskId: 'abc239_a', priority: 1, comment: '' },
       { taskId: 'abc188_a', priority: 2, comment: '' },
@@ -223,6 +233,7 @@ export const workbooks = [
     isOfficial: true,
     isReplenished: true,
     workBookType: WorkBookType.CURRICULUM,
+    urlSlug: 'math-8q',
     workBookTasks: [
       { taskId: 'abc400_a', priority: 1, comment: '' },
       { taskId: 'abc343_a', priority: 2, comment: '' },
@@ -272,6 +283,7 @@ export const workbooks = [
     isPublished: true,
     isOfficial: true,
     workBookType: WorkBookType.CURRICULUM,
+    urlSlug: 'for-statement-3',
     workBookTasks: [
       { taskId: 'abc329_b', priority: 1, comment: '' },
       { taskId: 'abc310_a', priority: 2, comment: '' },
@@ -286,6 +298,7 @@ export const workbooks = [
     isPublished: true,
     isOfficial: true,
     workBookType: WorkBookType.CURRICULUM,
+    urlSlug: 'nested-for-statement-1',
     workBookTasks: [
       { taskId: 'abc294_b', priority: 1, comment: '' },
       { taskId: 'abc351_b', priority: 2, comment: '' },
@@ -300,6 +313,7 @@ export const workbooks = [
     isPublished: true,
     isOfficial: true,
     workBookType: WorkBookType.CURRICULUM,
+    urlSlug: 'function',
     workBookTasks: [
       { taskId: 'abc234_a', priority: 1, comment: '' },
       { taskId: 'abc284_b', priority: 2, comment: '' },
@@ -314,6 +328,7 @@ export const workbooks = [
     isOfficial: true,
     isReplenished: true,
     workBookType: WorkBookType.CURRICULUM,
+    urlSlug: 'combination-of-8q-techniques',
     workBookTasks: [
       { taskId: 'abc357_b', priority: 1, comment: '' },
       { taskId: 'abc303_a', priority: 2, comment: '' },
@@ -355,6 +370,7 @@ export const workbooks = [
     isPublished: true,
     isOfficial: true,
     workBookType: WorkBookType.CURRICULUM,
+    urlSlug: 'exhaustive-search-1',
     workBookTasks: [
       { taskId: 'abc342_a', priority: 1, comment: '' },
       { taskId: 'abc393_b', priority: 2, comment: '' },
@@ -368,6 +384,7 @@ export const workbooks = [
     isPublished: true,
     isOfficial: true,
     workBookType: WorkBookType.CURRICULUM,
+    urlSlug: 'bucket',
     workBookTasks: [
       { taskId: 'abc245_b', priority: 1, comment: '' },
       { taskId: 'abc350_b', priority: 2, comment: '' },
@@ -387,6 +404,7 @@ export const workbooks = [
     isPublished: true,
     isOfficial: true,
     workBookType: WorkBookType.CURRICULUM,
+    urlSlug: 'bit-operation-1',
     workBookTasks: [
       { taskId: 'abc306_b', priority: 1, comment: '' },
       { taskId: 'tessoku_book_d', priority: 2, comment: '' },
@@ -401,6 +419,7 @@ export const workbooks = [
     isOfficial: true,
     isReplenished: true,
     workBookType: WorkBookType.CURRICULUM,
+    urlSlug: 'heavy-implementation-6q',
     workBookTasks: [
       { taskId: 'abc328_b', priority: 1, comment: '' },
       { taskId: 'abc278_b', priority: 2, comment: '' },
@@ -428,6 +447,7 @@ export const workbooks = [
     isOfficial: true,
     isReplenished: true,
     workBookType: WorkBookType.CURRICULUM,
+    urlSlug: 'geometry-6q',
     workBookTasks: [
       { taskId: 'math_and_algorithm_af', priority: 1, comment: '' },
       { taskId: 'abc362_b', priority: 2, comment: '' },
@@ -441,6 +461,7 @@ export const workbooks = [
     isPublished: true,
     isOfficial: true,
     workBookType: WorkBookType.SOLUTION,
+    urlSlug: 'stack',
     workBookTasks: [
       { taskId: 'tessoku_book_ay', priority: 1, comment: '' },
       { taskId: 'abc396_b', priority: 2, comment: '' },
@@ -462,6 +483,7 @@ export const workbooks = [
     isPublished: true,
     isOfficial: true,
     workBookType: WorkBookType.SOLUTION,
+    urlSlug: 'union-find-with-potential',
     workBookTasks: [
       { taskId: 'abc373_d', priority: 1, comment: 'DFS・BFSでも解けます' },
       { taskId: 'abc320_d', priority: 2, comment: 'DFS・BFSでも解けます' },
@@ -484,6 +506,7 @@ export const workbooks = [
     isPublished: true,
     isOfficial: true,
     workBookType: WorkBookType.SOLUTION,
+    urlSlug: 'bit-exhaustive-search',
     workBookTasks: [
       { taskId: 'abc374_c', priority: 1, comment: '' },
       { taskId: 'abc358_c', priority: 2, comment: '' },
@@ -501,6 +524,7 @@ export const workbooks = [
     isPublished: true,
     isOfficial: true,
     workBookType: WorkBookType.SOLUTION,
+    urlSlug: 'greedy-method',
     workBookTasks: [
       { taskId: 'abc397_b', priority: 1, comment: '' },
       { taskId: 'abc315_c', priority: 2, comment: '' },
@@ -518,6 +542,7 @@ export const workbooks = [
     isPublished: true,
     isOfficial: true,
     workBookType: WorkBookType.SOLUTION,
+    urlSlug: 'recursive-function',
     workBookTasks: [
       { taskId: 'abc273_a', priority: 1, comment: '' },
       { taskId: 'abc263_c', priority: 2, comment: '' },
@@ -538,6 +563,7 @@ export const workbooks = [
     isPublished: true,
     isOfficial: true,
     workBookType: WorkBookType.SOLUTION,
+    urlSlug: 'priority-queue',
     workBookTasks: [
       { taskId: 'abc123_d', priority: 1, comment: '' },
       { taskId: 'abc297_e', priority: 2, comment: '' },
@@ -551,6 +577,7 @@ export const workbooks = [
     isPublished: true,
     isOfficial: true,
     workBookType: WorkBookType.SOLUTION,
+    urlSlug: 'map-dict',
     workBookTasks: [
       { taskId: 'abc308_b', priority: 1, comment: '' },
       { taskId: 'abc378_c', priority: 2, comment: '' },
@@ -568,6 +595,7 @@ export const workbooks = [
     isPublished: true,
     isOfficial: true,
     workBookType: WorkBookType.SOLUTION,
+    urlSlug: 'ordered-set',
     workBookTasks: [
       { taskId: 'tessoku_book_bc', priority: 1, comment: '' },
       { taskId: 'tessoku_book_eb', priority: 2, comment: '' },
