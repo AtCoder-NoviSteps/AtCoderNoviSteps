@@ -401,7 +401,7 @@ async function addAnswers() {
           );
         }
       } catch (e) {
-        console.error('Error adding answer', answer.id, e);
+        console.error('Failed to add answer', answer.id, e);
       }
     }),
   );
