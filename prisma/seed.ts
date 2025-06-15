@@ -309,27 +309,26 @@ async function addTaskTags() {
   for (const task_tag of task_tags) {
     taskTagQueue.add(async () => {
       try {
-        const registeredTaskTag = await prisma.taskTag.findMany({
+        const registeredTaskTag = await prisma.taskTag.findUnique({
           where: {
-            AND: [{ task_id: task_tag.task_id }, { tag_id: task_tag.tag_id }],
+            task_id_tag_id: {
+              task_id: task_tag.task_id,
+              tag_id: task_tag.tag_id,
+            },
           },
         });
-        const registeredTask = await prisma.task.findMany({
+        const registeredTask = await prisma.task.findUnique({
           where: {
             task_id: task_tag.task_id,
           },
         });
-        const registeredTag = await prisma.tag.findMany({
+        const registeredTag = await prisma.tag.findUnique({
           where: {
             id: task_tag.tag_id,
           },
         });
 
-        if (
-          registeredTaskTag.length === 0 &&
-          registeredTag.length === 1 &&
-          registeredTask.length === 1
-        ) {
+        if (!registeredTaskTag && registeredTag && registeredTask) {
           await addTaskTag(task_tag, taskTagFactory);
           console.log('tag id:', task_tag.tag_id, 'task_id:', task_tag.task_id, 'was registered.');
         }
@@ -367,13 +366,13 @@ async function addSubmissionStatuses() {
   for (const submission_status of submission_statuses) {
     submissionStatusQueue.add(async () => {
       try {
-        const registeredSubmissionStatus = await prisma.submissionStatus.findMany({
+        const registeredSubmissionStatus = await prisma.submissionStatus.findUnique({
           where: {
             id: submission_status.id,
           },
         });
 
-        if (registeredSubmissionStatus.length === 0) {
+        if (!registeredSubmissionStatus) {
           await addSubmissionStatus(submission_status, submissionStatusFactory);
           console.log('submission_status id:', submission_status.id, 'was registered.');
         }
@@ -410,27 +409,30 @@ async function addAnswers() {
   for (const answer of answers) {
     answerQueue.add(async () => {
       try {
-        const registeredAnswer = await prisma.taskAnswer.findMany({
+        const registeredAnswer = await prisma.taskAnswer.findUnique({
           where: {
-            id: answer.id,
+            task_id_user_id: {
+              task_id: answer.task_id,
+              user_id: answer.user_id,
+            },
           },
         });
 
-        const registeredUser = await prisma.user.findMany({
+        const registeredUser = await prisma.user.findUnique({
           where: {
             id: answer.user_id,
           },
         });
 
-        if (registeredAnswer.length === 0 && registeredUser.length === 1) {
+        if (!registeredAnswer && registeredUser) {
           await addAnswer(answer, answerFactory);
           console.log('answer id:', answer.id, 'was registered.');
         } else {
           console.warn(
-            'answer len:',
-            registeredAnswer.length,
-            'user len:',
-            registeredUser.length,
+            'answer exists:',
+            !!registeredAnswer,
+            'user exists:',
+            !!registeredUser,
             answer.id,
             'was not registered.',
           );
