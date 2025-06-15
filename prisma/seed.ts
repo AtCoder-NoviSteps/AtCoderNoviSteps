@@ -70,7 +70,7 @@ async function addUsers() {
   // Create a queue with limited concurrency for user operations
   const userQueue = new PQueue({ concurrency: 2 });
 
-  const userPromises = users.map((user) =>
+  users.map((user) =>
     userQueue.add(async () => {
       try {
         const password = 'Ch0kuda1';
@@ -90,7 +90,7 @@ async function addUsers() {
     }),
   );
 
-  await Promise.all(userPromises);
+  await userQueue.onIdle(); // Wait for all users to complete
   console.log('Finished adding users.');
 }
 
@@ -119,7 +119,7 @@ async function addTasks() {
   // Create a queue with limited concurrency for database operations
   const taskQueue = new PQueue({ concurrency: 3 });
 
-  const taskPromises = tasks.map((task) =>
+  tasks.map((task) =>
     taskQueue.add(async () => {
       try {
         const registeredTask = await prisma.task.findUnique({
@@ -143,7 +143,7 @@ async function addTasks() {
     }),
   );
 
-  await Promise.all(taskPromises);
+  await taskQueue.onIdle(); // Wait for all tasks to complete
   console.log('Finished adding tasks.');
 }
 
@@ -276,7 +276,7 @@ async function addWorkBook(workbook, workBookFactory) {
  * ```
  */
 function normalizeUrlSlug(urlSlug: string | null | undefined): string | undefined {
-  return urlSlug && urlSlug !== '' ? urlSlug : undefined;
+  return urlSlug && urlSlug !== '' ? urlSlug.toLocaleLowerCase() : undefined;
 }
 
 async function addTags() {
@@ -287,7 +287,7 @@ async function addTags() {
   // Create a queue with limited concurrency for tag operations
   const tagQueue = new PQueue({ concurrency: 2 });
 
-  const tagPromises = tags.map((tag) =>
+  tags.map((tag) =>
     tagQueue.add(async () => {
       try {
         const registeredTag = await prisma.tag.findMany({
@@ -311,7 +311,7 @@ async function addTags() {
     }),
   );
 
-  await Promise.all(tagPromises);
+  await tagQueue.onIdle(); // Wait for all tags to complete
   console.log('Finished adding tags.');
 }
 
@@ -354,7 +354,7 @@ async function addTaskTags() {
   // Create a queue with limited concurrency for task tag operations
   const taskTagQueue = new PQueue({ concurrency: 2 });
 
-  const taskTagPromises = task_tags.map((task_tag) =>
+  task_tags.map((task_tag) =>
     taskTagQueue.add(async () => {
       try {
         const registeredTaskTag = await prisma.taskTag.findMany({
@@ -387,7 +387,7 @@ async function addTaskTags() {
     }),
   );
 
-  await Promise.all(taskTagPromises);
+  await taskTagQueue.onIdle(); // Wait for all task tags to complete
   console.log('Finished adding task tags.');
 }
 async function addTaskTag(task_tag, taskTagFactory) {
@@ -412,7 +412,7 @@ async function addSubmissionStatuses() {
   // Create a queue with limited concurrency for submission status operations
   const submissionStatusQueue = new PQueue({ concurrency: 2 });
 
-  const submissionStatusPromises = submission_statuses.map((submission_status) =>
+  submission_statuses.map((submission_status) =>
     submissionStatusQueue.add(async () => {
       try {
         const registeredSubmissionStatus = await prisma.submissionStatus.findMany({
@@ -431,7 +431,7 @@ async function addSubmissionStatuses() {
     }),
   );
 
-  await Promise.all(submissionStatusPromises);
+  await submissionStatusQueue.onIdle(); // Wait for all submission statuses to complete
   console.log('Finished adding submission statuses.');
 }
 
@@ -455,7 +455,7 @@ async function addAnswers() {
   // Create a queue with limited concurrency for answer operations
   const answerQueue = new PQueue({ concurrency: 2 });
 
-  const answerPromises = answers.map((answer) =>
+  answers.map((answer) =>
     answerQueue.add(async () => {
       try {
         const registeredAnswer = await prisma.taskAnswer.findMany({
@@ -489,7 +489,7 @@ async function addAnswers() {
     }),
   );
 
-  await Promise.all(answerPromises);
+  await answerQueue.onIdle(); // Wait for all answers to complete
   console.log('Finished adding answers.');
 }
 
