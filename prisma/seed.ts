@@ -56,7 +56,7 @@ async function main() {
 
     console.log('Seeding has been completed.');
   } catch (e) {
-    console.error('Failed to seeding:', e);
+    console.error('Failed to seed:', e);
     throw e;
   }
 }
