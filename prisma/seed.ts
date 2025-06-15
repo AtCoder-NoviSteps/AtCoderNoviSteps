@@ -43,16 +43,13 @@ async function main() {
   try {
     console.log('Seeding has been started.');
 
-    // Create a queue to ensure sequential execution
-    const mainQueue = new PQueue({ concurrency: 1 });
-
-    await mainQueue.add(() => addUsers());
-    await mainQueue.add(() => addTasks());
-    await mainQueue.add(() => addWorkBooks());
-    await mainQueue.add(() => addTags());
-    await mainQueue.add(() => addTaskTags());
-    await mainQueue.add(() => addSubmissionStatuses());
-    await mainQueue.add(() => addAnswers());
+    await addUsers();
+    await addTasks();
+    await addWorkBooks();
+    await addTags();
+    await addTaskTags();
+    await addSubmissionStatuses();
+    await addAnswers();
 
     console.log('Seeding has been completed.');
   } catch (e) {
@@ -70,7 +67,7 @@ async function addUsers() {
   // Create a queue with limited concurrency for user operations
   const userQueue = new PQueue({ concurrency: 2 });
 
-  users.map((user) =>
+  for (const user of users) {
     userQueue.add(async () => {
       try {
         const password = 'Ch0kuda1';
@@ -87,8 +84,8 @@ async function addUsers() {
       } catch (e) {
         console.error('Failed to add user', user.name, e);
       }
-    }),
-  );
+    });
+  }
 
   await userQueue.onIdle(); // Wait for all users to complete
   console.log('Finished adding users.');
@@ -119,7 +116,7 @@ async function addTasks() {
   // Create a queue with limited concurrency for database operations
   const taskQueue = new PQueue({ concurrency: 3 });
 
-  tasks.map((task) =>
+  for (const task of tasks) {
     taskQueue.add(async () => {
       try {
         const registeredTask = await prisma.task.findUnique({
@@ -135,8 +132,8 @@ async function addTasks() {
       } catch (e) {
         console.error('Failed to add task', task.id, e);
       }
-    }),
-  );
+    });
+  }
 
   await taskQueue.onIdle(); // Wait for all tasks to complete
   console.log('Finished adding tasks.');
@@ -175,14 +172,14 @@ async function addWorkBooks() {
 
       if (normalizedUrlSlug) {
         // If urlSlug exists, check by urlSlug
-        registeredWorkBook = await prisma.workBook.findMany({
+        registeredWorkBook = await prisma.workBook.findFirst({
           where: {
             urlSlug: normalizedUrlSlug,
           },
         });
       } else {
         // If no urlSlug, check by title and authorId to avoid duplicates
-        registeredWorkBook = await prisma.workBook.findMany({
+        registeredWorkBook = await prisma.workBook.findFirst({
           where: {
             title: workbook.title,
             authorId: workbook.authorId,
@@ -192,7 +189,7 @@ async function addWorkBooks() {
 
       if (!author) {
         console.warn('Not found author id: ', workbook.authorId, '.');
-      } else if (registeredWorkBook.length >= 1) {
+      } else if (registeredWorkBook) {
         if (normalizedUrlSlug) {
           console.warn('Url slug ', workbook.urlSlug, ' has already been registered.');
         } else {
@@ -252,7 +249,7 @@ async function addWorkBook(workbook, workBookFactory) {
  * ```
  */
 function normalizeUrlSlug(urlSlug: string | null | undefined): string | undefined {
-  return urlSlug && urlSlug !== '' ? urlSlug.toLocaleLowerCase() : undefined;
+  return urlSlug && urlSlug !== '' ? urlSlug.toLowerCase() : undefined;
 }
 
 async function addTags() {
@@ -263,24 +260,24 @@ async function addTags() {
   // Create a queue with limited concurrency for tag operations
   const tagQueue = new PQueue({ concurrency: 2 });
 
-  tags.map((tag) =>
+  for (const tag of tags) {
     tagQueue.add(async () => {
       try {
-        const registeredTag = await prisma.tag.findMany({
+        const registeredTag = await prisma.tag.findUnique({
           where: {
             id: tag.id,
           },
         });
 
-        if (registeredTag.length === 0) {
-          console.log('tag id:', tag.id, 'was registered.');
+        if (!registeredTag) {
           await addTag(tag, tagFactory);
+          console.log('tag id:', tag.id, 'was registered.');
         }
       } catch (e) {
         console.error('Failed to add tag', tag.id, e);
       }
-    }),
-  );
+    });
+  }
 
   await tagQueue.onIdle(); // Wait for all tags to complete
   console.log('Finished adding tags.');
@@ -309,7 +306,7 @@ async function addTaskTags() {
   // Create a queue with limited concurrency for task tag operations
   const taskTagQueue = new PQueue({ concurrency: 2 });
 
-  task_tags.map((task_tag) =>
+  for (const task_tag of task_tags) {
     taskTagQueue.add(async () => {
       try {
         const registeredTaskTag = await prisma.taskTag.findMany({
@@ -339,8 +336,8 @@ async function addTaskTags() {
       } catch (e) {
         console.error('Failed to add task tag', task_tag, e);
       }
-    }),
-  );
+    });
+  }
 
   await taskTagQueue.onIdle(); // Wait for all task tags to complete
   console.log('Finished adding task tags.');
@@ -367,7 +364,7 @@ async function addSubmissionStatuses() {
   // Create a queue with limited concurrency for submission status operations
   const submissionStatusQueue = new PQueue({ concurrency: 2 });
 
-  submission_statuses.map((submission_status) =>
+  for (const submission_status of submission_statuses) {
     submissionStatusQueue.add(async () => {
       try {
         const registeredSubmissionStatus = await prisma.submissionStatus.findMany({
@@ -383,8 +380,8 @@ async function addSubmissionStatuses() {
       } catch (e) {
         console.error('Failed to add submission status', submission_status.id, e);
       }
-    }),
-  );
+    });
+  }
 
   await submissionStatusQueue.onIdle(); // Wait for all submission statuses to complete
   console.log('Finished adding submission statuses.');
@@ -410,7 +407,7 @@ async function addAnswers() {
   // Create a queue with limited concurrency for answer operations
   const answerQueue = new PQueue({ concurrency: 2 });
 
-  answers.map((answer) =>
+  for (const answer of answers) {
     answerQueue.add(async () => {
       try {
         const registeredAnswer = await prisma.taskAnswer.findMany({
@@ -441,8 +438,8 @@ async function addAnswers() {
       } catch (e) {
         console.error('Failed to add answer', answer.id, e);
       }
-    }),
-  );
+    });
+  }
 
   await answerQueue.onIdle(); // Wait for all answers to complete
   console.log('Finished adding answers.');
