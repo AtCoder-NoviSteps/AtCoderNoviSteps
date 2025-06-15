@@ -11,3 +11,5 @@ export const users = [
   { id: '8', name: 'Frank', role: Roles.USER },
   { id: '9', name: 'hogehoge', role: Roles.USER },
 ];
+
+export const USER_PASSWORD_FOR_SEED = 'Ch0kuda1';
