@@ -65,10 +65,7 @@ export const actions = {
     }
 
     // Note: form.data includes authorId
-    const workBook = {
-      ...form.data,
-      id: 0, // Dummy id (Prisma will auto-generate it)
-    };
+    const workBook = { ...form.data };
 
     try {
       await workBooksCrud.createWorkBook(workBook);
