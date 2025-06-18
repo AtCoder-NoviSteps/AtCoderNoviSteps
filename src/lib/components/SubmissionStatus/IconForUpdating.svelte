@@ -13,7 +13,7 @@
 {#if isLoggedIn}
   <div class="flex items-center justify-center text-sm space-x-1">
     <div class="dark:text-gray-300">
-      {'更新'}
+      更新
     </div>
 
     <div class="text-primary-600 dark:text-gray-300 inline">
