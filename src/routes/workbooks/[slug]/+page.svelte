@@ -75,7 +75,7 @@
     return getContestIdFrom(taskId) + '-' + taskId;
   };
 
-  let updatingModal: UpdatingModal | null = $state(null);
+  let updatingModal = $state<UpdatingModal | null>(null);
 
   // HACK: clickを1回実行するとactionsが2回実行されてしまう。原因と修正方法が分かっていない。
   function handleClick(taskId: string) {
