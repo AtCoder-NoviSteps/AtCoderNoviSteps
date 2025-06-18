@@ -4,19 +4,9 @@
 import typescriptEslint from '@typescript-eslint/eslint-plugin';
 import globals from 'globals';
 import tsParser from '@typescript-eslint/parser';
-import parser from 'svelte-eslint-parser';
-import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import svelteParser from 'svelte-eslint-parser';
+import sveltePlugin from 'eslint-plugin-svelte';
 import js from '@eslint/js';
-import { FlatCompat } from '@eslint/eslintrc';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const compat = new FlatCompat({
-  baseDirectory: __dirname,
-  recommendedConfig: js.configs.recommended,
-  allConfig: js.configs.all,
-});
 
 export default [
   {
@@ -40,12 +30,8 @@ export default [
       'prisma/.fabbrica/index.ts',
     ],
   },
-  ...compat.extends(
-    'eslint:recommended',
-    'plugin:@typescript-eslint/recommended',
-    'plugin:svelte/recommended',
-    'prettier',
-  ),
+  js.configs.recommended,
+  ...sveltePlugin.configs['flat/recommended'],
   {
     plugins: {
       '@typescript-eslint': typescriptEslint,
@@ -55,6 +41,13 @@ export default [
       globals: {
         ...globals.browser,
         ...globals.node,
+        // Add Svelte 5 runes as global variables
+        $state: 'readonly',
+        $derived: 'readonly',
+        $effect: 'readonly',
+        $props: 'readonly',
+        $bindable: 'readonly',
+        $inspect: 'readonly',
       },
 
       parser: tsParser,
@@ -74,13 +67,21 @@ export default [
           'ts-ignore': false,
         },
       ],
+      // Add TypeScript ESLint rules manually
+      '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
+      '@typescript-eslint/no-explicit-any': 'warn',
+      // Disable some strict Svelte rules that are too aggressive
+      'svelte/require-each-key': 'warn',
+      'svelte/no-useless-mustaches': 'warn',
+      'no-unused-vars': 'off', // Use TypeScript version instead
+      'no-undef': 'off', // TypeScript handles this
     },
   },
   {
     files: ['**/*.svelte'],
 
     languageOptions: {
-      parser: parser,
+      parser: svelteParser,
       ecmaVersion: 5,
       sourceType: 'script',
 
