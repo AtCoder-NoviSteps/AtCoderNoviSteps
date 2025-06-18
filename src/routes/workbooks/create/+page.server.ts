@@ -47,6 +47,11 @@ export const actions = {
       return fail(FORBIDDEN, { message: 'ログインが必要です。' });
     }
 
+    // Security check: Only admins can create workbooks
+    if (author.role !== Roles.ADMIN) {
+      return fail(FORBIDDEN, { message: '管理者のみ問題集を作成できます。' });
+    }
+
     const form = await superValidate(request, zod(workBookSchema));
 
     if (!form.valid) {
