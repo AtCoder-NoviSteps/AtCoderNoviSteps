@@ -27,9 +27,7 @@
 <!-- TODO: Redirect to login screen when user is not logged in -->
 {#if isLoggedIn}
   <div class="flex flex-col items-center ml-2 md:ml-4 text-xs">
-    <div class="pb-1 dark:text-gray-300">
-      {'更新'}
-    </div>
+    <div class="pb-1 dark:text-gray-300">更新</div>
     <ChevronDown class="w-3 h-3 text-primary-600 dark:text-white inline" />
   </div>
 {/if}

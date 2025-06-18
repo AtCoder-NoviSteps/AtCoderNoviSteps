@@ -21,8 +21,6 @@
   {/if}
 
   <div class="flex justify-center mt-6">
-    <Button href={HOME_PAGE} color="primary" class="px-6">
-      {'ホームに戻る'}
-    </Button>
+    <Button href={HOME_PAGE} color="primary" class="px-6">ホームに戻る</Button>
   </div>
 </div>

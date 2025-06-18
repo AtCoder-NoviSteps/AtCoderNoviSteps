@@ -28,7 +28,7 @@
 
 <WorkBookForm
   pageTitle="問題集を作成"
-  breadcrumbTitle={'問題集を作成'}
+  breadcrumbTitle="問題集を作成"
   isAdmin={data.isAdmin}
   {superFormObject}
   {tasksMapByIds}

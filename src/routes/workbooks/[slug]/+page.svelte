@@ -76,7 +76,6 @@
   };
 
   // HACK:: `updatingModal` is updated, but is not declared with `$state(...)`. Changing its value will not correctly trigger updates.
-  // eslint-disable-next-line svelte/valid-compile
   let updatingModal: UpdatingModal | null = null;
 
   // HACK: clickを1回実行するとactionsが2回実行されてしまう。原因と修正方法が分かっていない。
@@ -222,6 +221,6 @@
 
     <UpdatingModal bind:this={updatingModal} {isLoggedIn} />
   {:else}
-    {'問題を1問以上登録してください。'}
+    問題を1問以上登録してください。
   {/if}
 </div>
