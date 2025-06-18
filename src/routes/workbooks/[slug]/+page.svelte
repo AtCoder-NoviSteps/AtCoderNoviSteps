@@ -75,8 +75,7 @@
     return getContestIdFrom(taskId) + '-' + taskId;
   };
 
-  // HACK:: `updatingModal` is updated, but is not declared with `$state(...)`. Changing its value will not correctly trigger updates.
-  let updatingModal: UpdatingModal | null = null;
+  let updatingModal: UpdatingModal | null = $state(null);
 
   // HACK: clickを1回実行するとactionsが2回実行されてしまう。原因と修正方法が分かっていない。
   function handleClick(taskId: string) {

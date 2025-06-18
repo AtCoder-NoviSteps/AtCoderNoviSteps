@@ -2,17 +2,19 @@ import { error, fail, redirect } from '@sveltejs/kit';
 import { superValidate } from 'sveltekit-superforms/server';
 import { zod } from 'sveltekit-superforms/adapters';
 
-import { getLoggedInUser } from '$lib/utils/authorship';
 import { workBookSchema } from '$lib/zod/schema';
+
 import * as workBooksCrud from '$lib/services/workbooks';
+import * as tasksCrud from '$lib/services/tasks';
+
 import { Roles } from '$lib/types/user';
-import type { WorkBook } from '$lib/types/workbook';
+
+import { getLoggedInUser } from '$lib/utils/authorship';
 import {
   BAD_REQUEST,
   FORBIDDEN,
   TEMPORARY_REDIRECT,
 } from '$lib/constants/http-response-status-codes';
-import * as tasksCrud from '$lib/services/tasks';
 
 export const load = async ({ locals }) => {
   // ログインしていない場合は、ログイン画面へ遷移させる
@@ -39,7 +41,12 @@ export const load = async ({ locals }) => {
 export const actions = {
   default: async ({ locals, request }) => {
     console.log('form -> actions -> create');
-    await getLoggedInUser(locals);
+    const author = await getLoggedInUser(locals);
+
+    if (!author) {
+      return fail(FORBIDDEN, { message: 'ログインが必要です。' });
+    }
+
     const form = await superValidate(request, zod(workBookSchema));
 
     if (!form.valid) {
@@ -52,7 +59,11 @@ export const actions = {
       });
     }
 
-    const workBook: WorkBook = form.data;
+    // Note: form.data includes authorId
+    const workBook = {
+      ...form.data,
+      id: 0, // Dummy id (Prisma will auto-generate it)
+    };
 
     try {
       await workBooksCrud.createWorkBook(workBook);
