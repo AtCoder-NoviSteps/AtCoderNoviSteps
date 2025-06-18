@@ -30,7 +30,10 @@ export default [
       'prisma/.fabbrica/index.ts',
     ],
   },
+  // Base JS rules first
   js.configs.recommended,
+  // Svelte rules override JS rules where appropriate (intentional)
+  // This allows Svelte-specific handling of rules like no-undef, no-unused-vars
   ...sveltePlugin.configs['flat/recommended'],
   {
     plugins: {
