@@ -73,6 +73,8 @@ export default [
       // Disable some strict Svelte rules that are too aggressive
       'svelte/require-each-key': 'warn',
       'svelte/no-useless-mustaches': 'warn',
+      'svelte/prefer-writable-derived': 'warn', // New in 3.6.0 - prefer $derived over $state+$effect
+      'svelte/valid-prop-names-in-kit-pages': 'warn', // Allow props other than data/errors in pages
       'no-unused-vars': 'off', // Use TypeScript version instead
       'no-undef': 'off', // TypeScript handles this
     },
