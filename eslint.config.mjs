@@ -84,8 +84,8 @@ export default [
 
     languageOptions: {
       parser: svelteParser,
-      ecmaVersion: 5,
-      sourceType: 'script',
+      ecmaVersion: 'latest', // ES2023+ features support
+      sourceType: 'module', // ESM import/export support
 
       parserOptions: {
         parser: '@typescript-eslint/parser',
