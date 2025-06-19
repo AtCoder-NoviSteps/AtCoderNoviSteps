@@ -6,16 +6,25 @@
   const copyToClipboard = async (text: string): Promise<void> => {
     try {
       await navigator.clipboard.writeText(text);
+      console.log('Text copied to clipboard successfully');
     } catch (error) {
       // Fallback for older browsers that do not support the Clipboard API
       const textArea = document.createElement('textarea');
       textArea.value = text;
+      textArea.style.position = 'fixed';
+      textArea.style.opacity = '0';
       document.body.appendChild(textArea);
       textArea.focus();
       textArea.select();
-      document.execCommand('copy');
+
+      try {
+        document.execCommand('copy');
+        console.log('Text copied fallback method');
+      } catch (fallbackError) {
+        console.error('Both Clipboard API and fallback failed:', error, fallbackError);
+      }
+
       document.body.removeChild(textArea);
-      console.log('Failed to copy text using Clipboard API, fallback used:', error);
     }
   };
 
