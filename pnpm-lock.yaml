@@ -12,8 +12,8 @@ importers:
         specifier: 3.0.2
         version: 3.0.2(@prisma/client@5.22.0(prisma@5.22.0))(lucia@2.7.7)
       '@mermaid-js/mermaid-cli':
-        specifier: 11.4.3
-        version: 11.4.3(puppeteer@19.11.1(typescript@5.8.3))(ts-node@10.9.1(@types/node@24.0.3)(typescript@5.8.3))
+        specifier: 11.6.0
+        version: 11.6.0(puppeteer@19.11.1(typescript@5.8.3))(ts-node@10.9.1(@types/node@24.0.3)(typescript@5.8.3))
       '@popperjs/core':
         specifier: 2.11.8
         version: 2.11.8
@@ -980,8 +980,8 @@ packages:
     engines: {node: '>=18'}
     hasBin: true
 
-  '@mermaid-js/mermaid-cli@11.4.3':
-    resolution: {integrity: sha512-N0kjhWQXQXUc8LkRzySvKPqoZ1LMA9mxFyqShjUhbAHGTYYOYkXCD3+shmO2OWVJ9iOUKQQ6+Y6jY+U5JeiTSw==}
+  '@mermaid-js/mermaid-cli@11.6.0':
+    resolution: {integrity: sha512-ijidNS6QFZWZA6XYzjLldVB3WgjFnevepdhOAwdGhMrPcg2yNhDCY4CmNj/7r032WWZzeUoONNZ9OYFP/23KaQ==}
     engines: {node: ^18.19 || >=20.0}
     hasBin: true
     peerDependencies:
@@ -2100,10 +2100,6 @@ packages:
     resolution: {integrity: sha512-sH5ZSPr+7UStsloltmDh7Ce5fb8XPlHyoPzTpyyMuYCtervL65+ubVZ6Q61cFtFl62UyJlc8/JwERRbAFPUqgw==}
     engines: {node: '>=8.0.0'}
 
-  commander@13.1.0:
-    resolution: {integrity: sha512-/rFeCpNJQbhSZjGVwO9RFV3xPqbnERS8MmIQzCtD/zl6gpJuV/bMLuN92oG3F7d8oDEHHRrujSXNUr8fpjntKw==}
-    engines: {node: '>=18'}
-
   commander@14.0.0:
     resolution: {integrity: sha512-2uM9rYjPvyq39NwLRqaiLtWHyDC1FvryJDa2ATTVims5YAS4PupsEQsDvP14FqhFr0P49CYDugi59xaxJlTXRA==}
     engines: {node: '>=20'}
@@ -2776,8 +2772,8 @@ packages:
     resolution: {integrity: sha512-xCdPp6gwiR9q9lsPCHANarIkFTN/IMZso6Kkq03sOm9IIGtzK/UJqml0dkhHibGh8HKOj8BIDIpZ0BZuU7QK6w==}
     engines: {node: ^18.14.0 || ^20.0.0 || ^22.0.0 || >=24.0.0}
 
-  exsolve@1.0.5:
-    resolution: {integrity: sha512-pz5dvkYYKQ1AHVrgOzBKWeP4u4FRb3a6DNK2ucr0OoNwYIU4QWsJ+NM36LLzORT+z845MzKHHhpXiUF5nvQoJg==}
+  exsolve@1.0.6:
+    resolution: {integrity: sha512-Q05uIdxhPBVBwK29gcPsl2K220xSBy52TZQPdeYWE0zOs8jM+yJ6y5h7jm6cpAo1p+OOMZRIj/Ftku4EQQBLnQ==}
 
   extract-zip@2.0.1:
     resolution: {integrity: sha512-GDhU9ntwuKyGXdZBUgTIe+vXnWj0fppUEtMDL0+idd5Sta8TGpHssn/eusA9mrPr9qNDym6SxAYZjNvCn/9RBg==}
@@ -3948,8 +3944,8 @@ packages:
   quick-format-unescaped@4.0.4:
     resolution: {integrity: sha512-tYC1Q1hgyRuHgloV/YXs2w15unPVh8qfu/qCTfhTYamaw7fyhumKa2yGpdSo87vY32rIclj+4fWYQXUMs9EHvg==}
 
-  radash@12.1.0:
-    resolution: {integrity: sha512-b0Zcf09AhqKS83btmUeYBS8tFK7XL2e3RvLmZcm0sTdF1/UUlHSsjXdCcWNxe7yfmAlPve5ym0DmKGtTzP6kVQ==}
+  radash@12.1.1:
+    resolution: {integrity: sha512-h36JMxKRqrAxVD8201FrCpyeNuUY9Y5zZwujr20fFO77tpUtGa6EZzfKw/3WaiBX95fq7+MpsuMLNdSnORAwSA==}
     engines: {node: '>=14.18.0'}
 
   ramda@0.28.0:
@@ -5496,11 +5492,11 @@ snapshots:
       - encoding
       - supports-color
 
-  '@mermaid-js/mermaid-cli@11.4.3(puppeteer@19.11.1(typescript@5.8.3))(ts-node@10.9.1(@types/node@24.0.3)(typescript@5.8.3))':
+  '@mermaid-js/mermaid-cli@11.6.0(puppeteer@19.11.1(typescript@5.8.3))(ts-node@10.9.1(@types/node@24.0.3)(typescript@5.8.3))':
     dependencies:
       '@mermaid-js/mermaid-zenuml': 0.2.0(mermaid@11.6.0)(ts-node@10.9.1(@types/node@24.0.3)(typescript@5.8.3))
       chalk: 5.4.1
-      commander: 13.1.0
+      commander: 14.0.0
       import-meta-resolve: 4.1.0
       mermaid: 11.6.0
       puppeteer: 19.11.1(typescript@5.8.3)
@@ -6501,7 +6497,7 @@ snapshots:
       jotai: 2.12.5(react@19.1.0)
       marked: 4.3.0
       pino: 8.21.0
-      radash: 12.1.0
+      radash: 12.1.1
       ramda: 0.28.0
       react: 19.1.0
       react-dom: 19.1.0(react@19.1.0)
@@ -6868,8 +6864,6 @@ snapshots:
       chalk: 2.4.2
       table-layout: 1.0.2
       typical: 5.2.0
-
-  commander@13.1.0: {}
 
   commander@14.0.0: {}
 
@@ -7573,7 +7567,7 @@ snapshots:
       jest-mock: 30.0.0
       jest-util: 30.0.0
 
-  exsolve@1.0.5: {}
+  exsolve@1.0.6: {}
 
   extract-zip@2.0.1:
     dependencies:
@@ -8461,7 +8455,7 @@ snapshots:
   pkg-types@2.1.0:
     dependencies:
       confbox: 0.2.2
-      exsolve: 1.0.5
+      exsolve: 1.0.6
       pathe: 2.0.3
 
   playwright-core@1.53.1: {}
@@ -8585,7 +8579,7 @@ snapshots:
 
   prisma-erd-generator@2.0.4(@prisma/client@5.22.0(prisma@5.22.0))(puppeteer@19.11.1(typescript@5.8.3))(ts-node@10.9.1(@types/node@24.0.3)(typescript@5.8.3)):
     dependencies:
-      '@mermaid-js/mermaid-cli': 11.4.3(puppeteer@19.11.1(typescript@5.8.3))(ts-node@10.9.1(@types/node@24.0.3)(typescript@5.8.3))
+      '@mermaid-js/mermaid-cli': 11.6.0(puppeteer@19.11.1(typescript@5.8.3))(ts-node@10.9.1(@types/node@24.0.3)(typescript@5.8.3))
       '@prisma/client': 5.22.0(prisma@5.22.0)
       '@prisma/generator-helper': 6.3.0
       dotenv: 16.4.7
@@ -8673,7 +8667,7 @@ snapshots:
 
   quick-format-unescaped@4.0.4: {}
 
-  radash@12.1.0: {}
+  radash@12.1.1: {}
 
   ramda@0.28.0: {}
 
