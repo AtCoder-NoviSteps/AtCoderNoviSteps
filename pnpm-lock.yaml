@@ -72,8 +72,8 @@ importers:
         specifier: 3.4.17
         version: 3.4.17(ts-node@10.9.1(@types/node@24.0.3)(typescript@5.8.3))
       vercel:
-        specifier: 43.2.0
-        version: 43.2.0(rollup@4.40.1)
+        specifier: 43.3.0
+        version: 43.3.0(rollup@4.40.1)
       xss:
         specifier: 1.0.15
         version: 1.0.15
@@ -1665,8 +1665,8 @@ packages:
     engines: {node: '>=18'}
     hasBin: true
 
-  '@vercel/node@5.2.2':
-    resolution: {integrity: sha512-BcpCn6NVLBBWDSKUVCMmmM1mUoYttGwWIuOL8HpF2AbOnx1NzUTlrR6pvBLxs403DIjEfPzqgYHLxITg85oi7w==}
+  '@vercel/node@5.3.0':
+    resolution: {integrity: sha512-NeE5c7dRt9PXUzq7zUA+rj94l7AoXBw2cE+xK0hIoYDcWbIJVYBhbkBtzNdZx8CGncUJ2wMq01gn8pCwoQ0xYA==}
 
   '@vercel/python@4.7.2':
     resolution: {integrity: sha512-i2QBNMvNxUZQ2e5vLIL7mUkLg5Qkl9nqxUNXCYezdyvk2Ql6xYKjg7tMhpK/uiy094KfZSOECpDbDxkIN0jUSw==}
@@ -4636,8 +4636,8 @@ packages:
     resolution: {integrity: sha512-BgWVbCI72aIQy937xbawcs+hrVaN/CZ2UwutgaJ36hGqRrLNM+f5LUT/YPRbo8IV/ASeFzXszezV+y2+rq3l8A==}
     engines: {node: '>= 0.10'}
 
-  vercel@43.2.0:
-    resolution: {integrity: sha512-e47JEu7Hk5XA+FysBN4ZH9XiM1+RRRW9FC4fo5dDXsnHSsVlMkU1WWa8B4OERPYEqQGS2usfUf9kRAsNBShWGQ==}
+  vercel@43.3.0:
+    resolution: {integrity: sha512-EID1ooEAp8F6JxR9WEckDX91qBuLhNvEltHbdKVmYwAbaPyB8q/G/51DJgDoT4ZALdbDujsVxGXDUp0nU26ouQ==}
     engines: {node: '>= 18'}
     hasBin: true
 
@@ -6325,7 +6325,7 @@ snapshots:
       - rollup
       - supports-color
 
-  '@vercel/node@5.2.2(rollup@4.40.1)':
+  '@vercel/node@5.3.0(rollup@4.40.1)':
     dependencies:
       '@edge-runtime/node-utils': 2.3.0
       '@edge-runtime/primitives': 4.1.0
@@ -9417,7 +9417,7 @@ snapshots:
   validator@13.15.15:
     optional: true
 
-  vercel@43.2.0(rollup@4.40.1):
+  vercel@43.3.0(rollup@4.40.1):
     dependencies:
       '@vercel/blob': 1.0.2
       '@vercel/build-utils': 10.6.1
@@ -9425,7 +9425,7 @@ snapshots:
       '@vercel/go': 3.2.1
       '@vercel/hydrogen': 1.2.2
       '@vercel/next': 4.9.0(rollup@4.40.1)
-      '@vercel/node': 5.2.2(rollup@4.40.1)
+      '@vercel/node': 5.3.0(rollup@4.40.1)
       '@vercel/python': 4.7.2
       '@vercel/redwood': 2.3.3(rollup@4.40.1)
       '@vercel/remix-builder': 5.4.9(rollup@4.40.1)
