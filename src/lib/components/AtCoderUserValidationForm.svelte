@@ -2,8 +2,31 @@
   import { Label, Input, P } from 'svelte-5-ui-lib';
   import ClipboardCopy from 'lucide-svelte/icons/clipboard-copy';
 
-  // FIXME: stwui is effectively end-of-life, replace with another library
-  import { copyToClipboard } from 'stwui/utils/copyToClipboard';
+  // TODO: Use Flowbite's ClipboardCopy component when available
+  const copyToClipboard = async (text: string): Promise<void> => {
+    try {
+      await navigator.clipboard.writeText(text);
+      console.log('Text copied to clipboard successfully');
+    } catch (error) {
+      // Fallback for older browsers that do not support the Clipboard API
+      const textArea = document.createElement('textarea');
+      textArea.value = text;
+      textArea.style.position = 'fixed';
+      textArea.style.opacity = '0';
+      document.body.appendChild(textArea);
+      textArea.focus();
+      textArea.select();
+
+      try {
+        document.execCommand('copy');
+        console.log('Text copied fallback method');
+      } catch (fallbackError) {
+        console.error('Both Clipboard API and fallback failed:', error, fallbackError);
+      }
+
+      document.body.removeChild(textArea);
+    }
+  };
 
   import ContainerWrapper from '$lib/components/ContainerWrapper.svelte';
   import FormWrapper from '$lib/components/FormWrapper.svelte';

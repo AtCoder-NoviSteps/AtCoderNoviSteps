@@ -32,8 +32,6 @@
   - [Svelte 5 UI lib](https://svelte-5-ui-lib.codewithshin.com/) - Svelte v5.xにおける[Flowbite Svelte](https://flowbite-svelte.com/)の代替ライブラリ。一部の属性名・値などが変更されていることに注意が必要
     - コンポーネントが未実装である場合は、主に[Flowbite](https://flowbite.com/)を暫定的に利用する
     - [Embla Carousel](https://github.com/davidjerleke/embla-carousel) - Svelte 5 UI lib ではカルーセルコンポーネントが未実装（2025年2月時点）なため、暫定的に導入している
-    - Tailwind v4 に未対応（2025年2月時点）のため、[Skeleton](https://github.com/skeletonlabs/skeleton)などへ移行する可能性もある
-  - [STWUI](https://stwui.vercel.app/): 開発が事実上終了した可能性が高いため、使用しているコンポーネントを調べて別のライブラリに移行する
   - [Lucide](https://github.com/lucide-icons/lucide) - アイコンライブラリ
 - テスティングフレームワーク
   - [Vitest](https://vitest.dev/): 単体テスト (ユーティリティ、コンポーネント)
