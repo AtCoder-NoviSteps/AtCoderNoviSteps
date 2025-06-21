@@ -187,6 +187,10 @@ export const agc = agcContestIds.map((contestId) =>
 );
 
 export const abcLike = [
+  createTestCaseForContestType('CADDi 2018 for Beginners')({
+    contestId: 'caddi2018b',
+    expected: ContestType.ABC_LIKE,
+  }),
   createTestCaseForContestType('AISing 2020')({
     contestId: 'aising2020',
     expected: ContestType.ABC_LIKE,
