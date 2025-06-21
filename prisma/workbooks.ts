@@ -479,7 +479,7 @@ export const workbooks = [
     isPublished: true,
     isOfficial: true,
     workBookType: WorkBookType.SOLUTION,
-    urlSlug: 'union-find-with-potential',
+    urlSlug: 'potentialized-union-find',
     workBookTasks: [
       { taskId: 'abc373_d', priority: 1, comment: 'DFS・BFSでも解けます' },
       { taskId: 'abc320_d', priority: 2, comment: 'DFS・BFSでも解けます' },
@@ -502,7 +502,7 @@ export const workbooks = [
     isPublished: true,
     isOfficial: true,
     workBookType: WorkBookType.SOLUTION,
-    urlSlug: 'bit-exhaustive-search',
+    urlSlug: 'bitmask-brute-force-search',
     workBookTasks: [
       { taskId: 'abc374_c', priority: 1, comment: '' },
       { taskId: 'abc358_c', priority: 2, comment: '' },
@@ -608,6 +608,7 @@ export const workbooks = [
     isPublished: false,
     isOfficial: true,
     workBookType: WorkBookType.SOLUTION,
+    urlSlug: 'number-theory-search',
     workBookTasks: [
       { taskId: 'math_and_algorithm_l', priority: 1, comment: '' },
       { taskId: 'abc343_c', priority: 2, comment: '' },
