@@ -36,7 +36,7 @@
   </span>
 
   <span class="ml-1.5">
-    <ExternalLink class=" text-primary-600 dark:text-gray-300" size={iconSize} />
+    <ExternalLink class="text-primary-600 dark:text-gray-300" size={iconSize} aria-hidden="true" />
   </span>
 </a>
 
