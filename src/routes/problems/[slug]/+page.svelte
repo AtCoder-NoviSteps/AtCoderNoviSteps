@@ -2,9 +2,9 @@
   import { enhance } from '$app/forms';
 
   import { Breadcrumb, BreadcrumbItem, Img } from 'svelte-5-ui-lib';
+  import { ExternalLink } from 'lucide-svelte';
 
   import SubmissionStatusButton from '$lib/components/SubmissionStatusButton.svelte';
-  import ExternalLinkIcon from '$lib/components/ExternalLinkIcon.svelte';
 
   import { getBackgroundColorFrom } from '$lib/services/submission_status';
 
@@ -51,7 +51,7 @@
         <div class="mr-2">
           {taskResult.title}
         </div>
-        <ExternalLinkIcon />
+        <ExternalLink />
       </h5>
     </div>
   </a>

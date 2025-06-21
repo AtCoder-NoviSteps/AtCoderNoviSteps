@@ -1,5 +1,5 @@
 <script lang="ts">
-  import ExternalLinkIcon from '$lib/components/ExternalLinkIcon.svelte';
+  import { ExternalLink } from 'lucide-svelte';
 
   interface Props {
     url: string;
@@ -18,7 +18,7 @@
     textSize = '',
     textColorInDarkMode = 'dark:text-primary-500',
     textOverflow = '',
-    iconSize = 4,
+    iconSize = 20,
     ariaLabel = '',
     useInlineFlex = true,
   }: Props = $props();
@@ -36,7 +36,7 @@
   </span>
 
   <span class="ml-1.5">
-    <ExternalLinkIcon size={`w-${iconSize} h-${iconSize}`} />
+    <ExternalLink class="text-primary-600 dark:text-gray-300" size={iconSize} aria-hidden="true" />
   </span>
 </a>
 
