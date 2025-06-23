@@ -86,7 +86,7 @@
     "lucide-svelte": "^0.522.0",
     "p-queue": "^8.1.0",
     "playwright": "1.53.1",
-    "pnpm": "10.12.1",
+    "pnpm": "10.12.2",
     "prisma-erd-generator": "2.0.4",
     "svelte-eslint-parser": "1.2.0",
     "tailwind-merge": "2.6.0",
