@@ -83,7 +83,7 @@
     "embla-carousel-svelte": "8.6.0",
     "flowbite": "2.5.2",
     "lucia": "2.7.7",
-    "lucide-svelte": "^0.522.0",
+    "lucide-svelte": "^0.523.0",
     "p-queue": "^8.1.0",
     "playwright": "1.53.1",
     "pnpm": "10.12.3",
