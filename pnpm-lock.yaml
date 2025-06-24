@@ -72,8 +72,8 @@ importers:
         specifier: 3.4.17
         version: 3.4.17(ts-node@10.9.1(@types/node@24.0.3)(typescript@5.8.3))
       vercel:
-        specifier: 44.1.0
-        version: 44.1.0(rollup@4.40.1)
+        specifier: 44.2.1
+        version: 44.2.1(rollup@4.40.1)
       xss:
         specifier: 1.0.15
         version: 1.0.15
@@ -1648,8 +1648,8 @@ packages:
   '@vercel/hydrogen@1.2.2':
     resolution: {integrity: sha512-PRA3r1/ZRcklGgs/hczprQZ27jX9Avyq/iEbtmzAFNbFovkTlkE0Wy93pVKJfJ4ISCBzBgUSMktX9+6wgjs32A==}
 
-  '@vercel/next@4.9.0':
-    resolution: {integrity: sha512-bX1/4ymvd7VaXpbNsM0nhjLLvlMXjAiK5EklnMp22wnE7GVey+gCPXAx6JmAM2pqxdl6HkTeppC4WstiktOkfA==}
+  '@vercel/next@4.9.1':
+    resolution: {integrity: sha512-mQ+N5Srm79nSO6roV9Wr0rX91nqV84zbXZeTQf7lJKZtVCzZaj2vvAP55smDgpkUy8KNDizMz6nDaPAyN+jzEw==}
 
   '@vercel/nft@0.29.2':
     resolution: {integrity: sha512-A/Si4mrTkQqJ6EXJKv5EYCDQ3NL6nJXxG8VGXePsaiQigsomHYQC9xSpX8qGk7AEZk4b1ssbYIqJ0ISQQ7bfcA==}
@@ -4587,8 +4587,8 @@ packages:
     resolution: {integrity: sha512-BgWVbCI72aIQy937xbawcs+hrVaN/CZ2UwutgaJ36hGqRrLNM+f5LUT/YPRbo8IV/ASeFzXszezV+y2+rq3l8A==}
     engines: {node: '>= 0.10'}
 
-  vercel@44.1.0:
-    resolution: {integrity: sha512-4fw0ahMv/MUzwix3Gp2hUReRby4FhTOMJfvpJUKLfiEZqwqlo92KhDQ9QSuXNnOvQ/oM6nL4fVFm9b8Skt8N3g==}
+  vercel@44.2.1:
+    resolution: {integrity: sha512-zGduoWGBCO72R48QUbfTkI43Qxc9DCGGmC516fj9fEj+Np8tLdZYDJjbWeqSmr7DpQedpWUwRZfmCIoo6saCog==}
     engines: {node: '>= 18'}
     hasBin: true
 
@@ -6240,7 +6240,7 @@ snapshots:
       '@vercel/static-config': 3.1.1
       ts-morph: 12.0.0
 
-  '@vercel/next@4.9.0(rollup@4.40.1)':
+  '@vercel/next@4.9.1(rollup@4.40.1)':
     dependencies:
       '@vercel/nft': 0.29.2(rollup@4.40.1)
     transitivePeerDependencies:
@@ -9316,14 +9316,14 @@ snapshots:
   validator@13.15.15:
     optional: true
 
-  vercel@44.1.0(rollup@4.40.1):
+  vercel@44.2.1(rollup@4.40.1):
     dependencies:
       '@vercel/blob': 1.0.2
       '@vercel/build-utils': 10.6.1
       '@vercel/fun': 1.1.6
       '@vercel/go': 3.2.1
       '@vercel/hydrogen': 1.2.2
-      '@vercel/next': 4.9.0(rollup@4.40.1)
+      '@vercel/next': 4.9.1(rollup@4.40.1)
       '@vercel/node': 5.3.0(rollup@4.40.1)
       '@vercel/python': 4.7.2
       '@vercel/redwood': 2.3.3(rollup@4.40.1)
