@@ -127,7 +127,6 @@
   `docker compose exec web pnpm prisma generate`
 
 - 開発サーバ(port番号: 5174)を起動します。その後、以下のリンクを順番にクリックしてください。
-
   - Note: リンクのアドレス・ポート番号は、環境によって変わる可能性もあります。
 
   `docker compose exec web pnpm dev --host`
@@ -270,7 +269,6 @@
 ### トラブルシューティング
 
 - エラー: ローカル環境で開発用サーバを立ち上げても、ブラウザに表示されない
-
   - 前提条件: Docker Desktop 4.30.0 以上、かつ、VSCode DevContainer で Vite を動かす場合。Windows、macOS で発生する
   - 原因: Dockerで、ホストが IPv4 のみを使用している場合でも、`::1` を返すようになったため
   - 対処方法: `vite.config` に、server の host を追記する
@@ -281,7 +279,6 @@
     - [本プロジェクトでの対処状況](https://github.com/AtCoder-NoviSteps/AtCoderNoviSteps/issues/814#issuecomment-2131173142)
 
 - エラー: Docker Desktop で Vite を利用したときに Segmentation Fault が発生
-
   - 対処方法: Docker Desktopで「Use Visualization Framework」のチェックを外す
   - 参考資料: https://qiita.com/naoto24kawa/items/160aad0ca58642216a0a
 
