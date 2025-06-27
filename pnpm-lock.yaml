@@ -48,8 +48,8 @@ importers:
         specifier: 2.7.7
         version: 2.7.7
       lucide-svelte:
-        specifier: ^0.523.0
-        version: 0.523.0(svelte@5.34.8)
+        specifier: ^0.524.0
+        version: 0.524.0(svelte@5.34.8)
       p-queue:
         specifier: ^8.1.0
         version: 8.1.0
@@ -3302,8 +3302,8 @@ packages:
     resolution: {integrity: sha512-Hy1nMcLquLl3yDvV9zYA9fSBGUDy/Fw2zEUw2Ia4iGdk/O+hI/TvQ1tAfED/U1WE/c5DT1hEger3m7qIx1qbUg==}
     deprecated: This package has been deprecated. Please see https://lucia-auth.com/lucia-v3/migrate.
 
-  lucide-svelte@0.523.0:
-    resolution: {integrity: sha512-aFLBJxFLY7e2Hu0yPb/vG+UwfAYWMkT4ZBhqC3wv9AmfNW7P/b8XDjfcSY1GREihBDgUo9fWoQiXVWsNHGIUJg==}
+  lucide-svelte@0.524.0:
+    resolution: {integrity: sha512-me6r5R8ld3BWgY+Ha9/0rKYiXMKH/HUBaFTBJX3eH5aDBX4LFBZZQwCJoB3NOIdivPl/HHCoPAlpQIo6J3NeDQ==}
     peerDependencies:
       svelte: ^3 || ^4 || ^5.0.0-next.42
 
@@ -8075,7 +8075,7 @@ snapshots:
 
   lucia@2.7.7: {}
 
-  lucide-svelte@0.523.0(svelte@5.34.8):
+  lucide-svelte@0.524.0(svelte@5.34.8):
     dependencies:
       svelte: 5.34.8
 
