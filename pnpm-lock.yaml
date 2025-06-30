@@ -54,8 +54,8 @@ importers:
         specifier: ^8.1.0
         version: 8.1.0
       playwright:
-        specifier: 1.53.1
-        version: 1.53.1
+        specifier: 1.53.2
+        version: 1.53.2
       pnpm:
         specifier: 10.12.4
         version: 10.12.4
@@ -3697,8 +3697,18 @@ packages:
     engines: {node: '>=18'}
     hasBin: true
 
+  playwright-core@1.53.2:
+    resolution: {integrity: sha512-ox/OytMy+2w1jcYEYlOo1Hhp8hZkLCximMTUTMBXjGUA1KoFfiSZ+DU+3a739jsPY0yoKH2TFy9S2fsJas8yAw==}
+    engines: {node: '>=18'}
+    hasBin: true
+
   playwright@1.53.1:
     resolution: {integrity: sha512-LJ13YLr/ocweuwxyGf1XNFWIU4M2zUSo149Qbp+A4cpwDjsxRPj7k6H25LBrEHiEwxvRbD8HdwvQmRMSvquhYw==}
+    engines: {node: '>=18'}
+    hasBin: true
+
+  playwright@1.53.2:
+    resolution: {integrity: sha512-6K/qQxVFuVQhRQhFsVZ9fGeatxirtrpPgxzBYWyZLEXJzqYwuL4fuNmfOfD5et1tJE4GScKyPNeLhZeRwuTU3A==}
     engines: {node: '>=18'}
     hasBin: true
 
@@ -8467,9 +8477,17 @@ snapshots:
 
   playwright-core@1.53.1: {}
 
+  playwright-core@1.53.2: {}
+
   playwright@1.53.1:
     dependencies:
       playwright-core: 1.53.1
+    optionalDependencies:
+      fsevents: 2.3.2
+
+  playwright@1.53.2:
+    dependencies:
+      playwright-core: 1.53.2
     optionalDependencies:
       fsevents: 2.3.2
 
