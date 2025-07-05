@@ -3,7 +3,11 @@ import { describe, test, expect, vi } from 'vitest';
 import { ContestType } from '$lib/types/contest';
 import type { TaskResult, TaskResults } from '$lib/types/task';
 
-import { contestTableProviders } from '$lib/utils/contest_table_provider';
+import {
+  ABCLatest20RoundsProvider,
+  ABC319OnwardsProvider,
+  ABC212ToABC318Provider,
+} from '$lib/utils/contest_table_provider';
 import { taskResultsForContestTableProvider } from './test_cases/contest_table_provider';
 
 // Mock the imported functions
@@ -47,15 +51,15 @@ describe('ContestTableProviderBase and implementations', () => {
 
   describe('ABC latest 20 rounds provider', () => {
     test('expects to filter tasks to include only ABC contests', () => {
-      const provider = contestTableProviders.abcLatest20Rounds;
+      const provider = new ABCLatest20RoundsProvider(ContestType.ABC);
       const filtered = provider.filter(mockTaskResults);
 
-      expect(filtered.every((task) => task.contest_id.startsWith('abc'))).toBeTruthy();
+      expect(filtered?.every((task) => task.contest_id.startsWith('abc'))).toBeTruthy();
       expect(filtered).not.toContainEqual(expect.objectContaining({ contest_id: 'arc100' }));
     });
 
     test('expects to limit results to the latest 20 rounds', () => {
-      const provider = contestTableProviders.abcLatest20Rounds;
+      const provider = new ABCLatest20RoundsProvider(ContestType.ABC);
 
       const largeDataset = [...mockTaskResults];
       const filtered = provider.filter(largeDataset);
@@ -74,7 +78,7 @@ describe('ContestTableProviderBase and implementations', () => {
     });
 
     test('expects to generate correct table structure', () => {
-      const provider = contestTableProviders.abcLatest20Rounds;
+      const provider = new ABCLatest20RoundsProvider(ContestType.ABC);
       const filtered = provider.filter(mockTaskResults);
       const table = provider.generateTable(filtered);
 
@@ -92,7 +96,7 @@ describe('ContestTableProviderBase and implementations', () => {
     });
 
     test('expects to get correct metadata', () => {
-      const provider = contestTableProviders.abcLatest20Rounds;
+      const provider = new ABCLatest20RoundsProvider(ContestType.ABC);
       const metadata = provider.getMetadata();
 
       expect(metadata.title).toBe('AtCoder Beginner Contest 最新 20 回');
@@ -101,7 +105,7 @@ describe('ContestTableProviderBase and implementations', () => {
     });
 
     test('expects to format contest round label correctly', () => {
-      const provider = contestTableProviders.abcLatest20Rounds;
+      const provider = new ABCLatest20RoundsProvider(ContestType.ABC);
       const label = provider.getContestRoundLabel('abc378');
 
       expect(label).toBe('378');
@@ -110,7 +114,7 @@ describe('ContestTableProviderBase and implementations', () => {
 
   describe('ABC319 onwards provider', () => {
     test('expects to filter tasks to include only ABC319 and later', () => {
-      const provider = contestTableProviders.abc319Onwards;
+      const provider = new ABC319OnwardsProvider(ContestType.ABC);
       const filtered = provider.filter(mockTaskResults);
 
       expect(filtered.every((task) => task.contest_id.startsWith('abc'))).toBeTruthy();
@@ -123,7 +127,7 @@ describe('ContestTableProviderBase and implementations', () => {
     });
 
     test('expects to get correct metadata', () => {
-      const provider = contestTableProviders.abc319Onwards;
+      const provider = new ABC319OnwardsProvider(ContestType.ABC);
       const metadata = provider.getMetadata();
 
       expect(metadata.title).toBe('AtCoder Beginner Contest 319 〜 ');
@@ -132,7 +136,7 @@ describe('ContestTableProviderBase and implementations', () => {
     });
 
     test('expects to format contest round label correctly', () => {
-      const provider = contestTableProviders.abc319Onwards;
+      const provider = new ABC319OnwardsProvider(ContestType.ABC);
       const label = provider.getContestRoundLabel('abc397');
 
       expect(label).toBe('397');
@@ -141,7 +145,7 @@ describe('ContestTableProviderBase and implementations', () => {
 
   describe('ABC212 to ABC318 provider', () => {
     test('expects to filter tasks to include only ABC between 212 and 318', () => {
-      const provider = contestTableProviders.fromAbc212ToAbc318;
+      const provider = new ABC212ToABC318Provider(ContestType.ABC);
       const filtered = provider.filter(mockTaskResults);
 
       expect(filtered.every((task) => task.contest_id.startsWith('abc'))).toBeTruthy();
@@ -154,7 +158,7 @@ describe('ContestTableProviderBase and implementations', () => {
     });
 
     test('expects to get correct metadata', () => {
-      const provider = contestTableProviders.fromAbc212ToAbc318;
+      const provider = new ABC212ToABC318Provider(ContestType.ABC);
       const metadata = provider.getMetadata();
 
       expect(metadata.title).toBe('AtCoder Beginner Contest 212 〜 318');
@@ -163,7 +167,7 @@ describe('ContestTableProviderBase and implementations', () => {
     });
 
     test('expects to format contest round label correctly', () => {
-      const provider = contestTableProviders.fromAbc212ToAbc318;
+      const provider = new ABC212ToABC318Provider(ContestType.ABC);
       const label = provider.getContestRoundLabel('abc318');
 
       expect(label).toBe('318');
@@ -172,7 +176,7 @@ describe('ContestTableProviderBase and implementations', () => {
 
   describe('Common provider functionality', () => {
     test('expects to get contest round IDs correctly', () => {
-      const provider = contestTableProviders.abcLatest20Rounds;
+      const provider = new ABCLatest20RoundsProvider(ContestType.ABC);
       // Use a subset of the mock data that covers the relevant contest IDs
       const filtered = mockTaskResults.filter((task) =>
         ['abc397', 'abc319', 'abc318'].includes(task.contest_id),
@@ -184,7 +188,7 @@ describe('ContestTableProviderBase and implementations', () => {
     });
 
     test('expects to get header IDs for tasks correctly', () => {
-      const provider = contestTableProviders.abcLatest20Rounds;
+      const provider = new ABCLatest20RoundsProvider(ContestType.ABC);
       const filtered = mockTaskResults.filter((task) => task.contest_id === 'abc319');
       const headerIds = provider.getHeaderIdsForTask(filtered);
 

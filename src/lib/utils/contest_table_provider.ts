@@ -2,6 +2,7 @@ import type {
   ContestTableProvider,
   ContestTable,
   ContestTableMetaData,
+  ContestTablesMetaData,
 } from '$lib/types/contest_table_provider';
 import { ContestType } from '$lib/types/contest';
 import type { TaskResults, TaskResult } from '$lib/types/task';
@@ -77,7 +78,7 @@ export abstract class ContestTableProviderBase implements ContestTableProvider {
   abstract getContestRoundLabel(contestId: string): string;
 }
 
-class ABCLatest20RoundsProvider extends ContestTableProviderBase {
+export class ABCLatest20RoundsProvider extends ContestTableProviderBase {
   filter(taskResults: TaskResults): TaskResults {
     const taskResultsOnlyABC = taskResults.filter(this.setFilterCondition());
 
@@ -104,6 +105,7 @@ class ABCLatest20RoundsProvider extends ContestTableProviderBase {
       title: 'AtCoder Beginner Contest 最新 20 回',
       buttonLabel: 'ABC 最新 20 回',
       ariaLabel: 'Filter ABC latest 20 rounds',
+      abbreviationName: 'abcLatest20Rounds',
     };
   }
 
@@ -115,7 +117,7 @@ class ABCLatest20RoundsProvider extends ContestTableProviderBase {
 
 // ABC319 〜 (2023/09/09 〜 )
 // 7 tasks per contest
-class ABC319OnwardsProvider extends ContestTableProviderBase {
+export class ABC319OnwardsProvider extends ContestTableProviderBase {
   protected setFilterCondition(): (taskResult: TaskResult) => boolean {
     return (taskResult: TaskResult) => {
       if (classifyContest(taskResult.contest_id) !== this.contestType) {
@@ -132,6 +134,7 @@ class ABC319OnwardsProvider extends ContestTableProviderBase {
       title: 'AtCoder Beginner Contest 319 〜 ',
       buttonLabel: 'ABC 319 〜 ',
       ariaLabel: 'Filter contests from ABC 319 onwards',
+      abbreviationName: 'abc319Onwards',
     };
   }
 
@@ -146,7 +149,7 @@ class ABC319OnwardsProvider extends ContestTableProviderBase {
 //
 // Note:
 // Before and from ABC212 onwards, the number and tendency of tasks are very different.
-class ABC212ToABC318Provider extends ContestTableProviderBase {
+export class ABC212ToABC318Provider extends ContestTableProviderBase {
   protected setFilterCondition(): (taskResult: TaskResult) => boolean {
     return (taskResult: TaskResult) => {
       if (classifyContest(taskResult.contest_id) !== this.contestType) {
@@ -163,6 +166,7 @@ class ABC212ToABC318Provider extends ContestTableProviderBase {
       title: 'AtCoder Beginner Contest 212 〜 318',
       buttonLabel: 'ABC 212 〜 318',
       ariaLabel: 'Filter contests from ABC 212 to ABC 318',
+      abbreviationName: 'fromAbc212ToAbc318',
     };
   }
 
@@ -183,11 +187,213 @@ function parseContestRound(contestId: string, prefix: string): number {
   return parseInt(withoutPrefix, 10);
 }
 
-// TODO: Add providers for other contest types if needs.
-export const contestTableProviders = {
-  abcLatest20Rounds: new ABCLatest20RoundsProvider(ContestType.ABC),
-  abc319Onwards: new ABC319OnwardsProvider(ContestType.ABC),
-  fromAbc212ToAbc318: new ABC212ToABC318Provider(ContestType.ABC),
+export class EDPCProvider extends ContestTableProviderBase {
+  protected setFilterCondition(): (taskResult: TaskResult) => boolean {
+    return (taskResult: TaskResult) => {
+      if (classifyContest(taskResult.contest_id) !== this.contestType) {
+        return false;
+      }
+
+      return taskResult.contest_id === 'dp';
+    };
+  }
+
+  getMetadata(): ContestTableMetaData {
+    return {
+      title: 'Educational DP Contest / DP まとめコンテスト',
+      buttonLabel: 'EDPC',
+      ariaLabel: 'Extract EDPC contest only',
+      abbreviationName: 'edpc',
+    };
+  }
+
+  getContestRoundLabel(contestId: string): string {
+    return '';
+  }
+}
+
+export class TDPCProvider extends ContestTableProviderBase {
+  protected setFilterCondition(): (taskResult: TaskResult) => boolean {
+    return (taskResult: TaskResult) => {
+      if (classifyContest(taskResult.contest_id) !== this.contestType) {
+        return false;
+      }
+
+      return taskResult.contest_id === 'tdpc';
+    };
+  }
+
+  getMetadata(): ContestTableMetaData {
+    return {
+      title: 'Typical DP Contest',
+      buttonLabel: 'TDPC',
+      ariaLabel: 'Extract TDPC contest only',
+      abbreviationName: 'tdpc',
+    };
+  }
+
+  getContestRoundLabel(contestId: string): string {
+    return '';
+  }
+}
+
+/**
+ * A class that manages individual provider groups
+ * Manages multiple ContestTableProviders as a single group,
+ * enabling group-level operations.
+ */
+export class ContestTableProviderGroup {
+  private groupName: string;
+  private metadata: ContestTablesMetaData;
+  private providers = new Map<ContestType, ContestTableProviderBase>();
+
+  constructor(groupName: string, metadata: ContestTablesMetaData) {
+    this.groupName = groupName;
+    this.metadata = metadata;
+  }
+
+  /**
+   * Add a provider
+   * @param contestType Contest type
+   * @param provider Provider instance
+   * @returns Returns this for method chaining
+   */
+  addProvider(contestType: ContestType, provider: ContestTableProviderBase): this {
+    this.providers.set(contestType, provider);
+    return this;
+  }
+
+  /**
+   * Add multiple providers in pairs
+   * @param providers Array of contest type and provider pairs
+   * @returns Returns this for method chaining
+   */
+  addProviders(
+    ...providers: Array<{
+      contestType: ContestType;
+      provider: ContestTableProviderBase;
+    }>
+  ): this {
+    providers.forEach(({ contestType, provider }) => {
+      this.providers.set(contestType, provider);
+    });
+    return this;
+  }
+
+  /**
+   * Get a provider for a specific contest type
+   * @param contestType Contest type
+   * @returns Provider instance, or undefined
+   */
+  getProvider(contestType: ContestType): ContestTableProviderBase | undefined {
+    return this.providers.get(contestType);
+  }
+
+  /**
+   * Get all providers in the group
+   * @returns Array of providers
+   */
+  getAllProviders(): ContestTableProviderBase[] {
+    return Array.from(this.providers.values());
+  }
+
+  /**
+   * Get the group name
+   * @returns Group name
+   */
+  getGroupName(): string {
+    return this.groupName;
+  }
+
+  /**
+   * Get the metadata for the group
+   * @returns Metadata for the group
+   */
+  getMetadata(): ContestTablesMetaData {
+    return this.metadata;
+  }
+
+  /**
+   * Get the number of providers in the group
+   * @returns Number of providers
+   */
+  getSize(): number {
+    return this.providers.size;
+  }
+
+  /**
+   * Get group statistics
+   * @returns Group statistics
+   */
+  getStats() {
+    return {
+      groupName: this.groupName,
+      providerCount: this.providers.size,
+      providers: Array.from(this.providers.entries()).map(([type, provider]) => ({
+        contestType: type,
+        metadata: provider.getMetadata(),
+      })),
+    };
+  }
+}
+
+/**
+ * Builder class for easily creating ContestProviderGroups
+ */
+export class ContestProviderBuilder {
+  /**
+   * Create predefined groups
+   * Easily create groups with commonly used combinations
+   */
+  static createPresets() {
+    return {
+      /**
+       * Single ABC group (latest 20 rounds)
+       */
+      ABCLatest20Rounds: () =>
+        new ContestTableProviderGroup(`ABC Latest 20 Rounds`, {
+          buttonLabel: 'ABC 最新 20 回',
+          ariaLabel: 'Filter ABC latest 20 rounds',
+        }).addProvider(ContestType.ABC, new ABCLatest20RoundsProvider(ContestType.ABC)),
+
+      /**
+       * Single group for ABC 319 onwards
+       */
+      ABC319Onwards: () =>
+        new ContestTableProviderGroup(`ABC 319 Onwards`, {
+          buttonLabel: 'ABC 319 〜 ',
+          ariaLabel: 'Filter contests from ABC 319 onwards',
+        }).addProvider(ContestType.ABC, new ABC319OnwardsProvider(ContestType.ABC)),
+
+      /**
+       * Single group for ABC 212-318
+       */
+      ABC212ToABC318: () =>
+        new ContestTableProviderGroup(`From ABC 212 to ABC 318`, {
+          buttonLabel: 'ABC 212 〜 318',
+          ariaLabel: 'Filter contests from ABC 212 to ABC 318',
+        }).addProvider(ContestType.ABC, new ABC212ToABC318Provider(ContestType.ABC)),
+
+      /**
+       * DP group (EDPC and TDPC)
+       */
+      dps: () =>
+        new ContestTableProviderGroup(`EDPC・TDPC`, {
+          buttonLabel: 'EDPC・TDPC',
+          ariaLabel: 'EDPC and TDPC contests',
+        }).addProviders(
+          { contestType: ContestType.EDPC, provider: new EDPCProvider(ContestType.EDPC) },
+          { contestType: ContestType.TDPC, provider: new TDPCProvider(ContestType.TDPC) },
+        ),
+    };
+  }
+}
+
+export const contestTableProviderGroups = {
+  abcLatest20Rounds: ContestProviderBuilder.createPresets().ABCLatest20Rounds(),
+  abc319Onwards: ContestProviderBuilder.createPresets().ABC319Onwards(),
+  fromAbc212ToAbc318: ContestProviderBuilder.createPresets().ABC212ToABC318(),
+  dps: ContestProviderBuilder.createPresets().dps(), // Dynamic Programming (DP) Contests
 };
 
-export type ContestTableProviders = keyof typeof contestTableProviders;
+export type ContestTableProviderGroups = keyof typeof contestTableProviderGroups;

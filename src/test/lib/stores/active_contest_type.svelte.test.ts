@@ -1,6 +1,6 @@
 import { describe, test, expect, vi, beforeEach } from 'vitest';
 
-import type { ContestTableProviders } from '$lib/utils/contest_table_provider';
+import type { ContestTableProviderGroups } from '$lib/utils/contest_table_provider';
 import {
   activeContestTypeStore,
   ActiveContestTypeStore,
@@ -43,7 +43,7 @@ describe('ActiveContestTypeStore', () => {
   });
 
   test('expects to initialize with provided value', () => {
-    const customStore = new ActiveContestTypeStore('abc319Onwards' as ContestTableProviders);
+    const customStore = new ActiveContestTypeStore('abc319Onwards' as ContestTableProviderGroups);
     expect(customStore.get()).toBe('abc319Onwards');
   });
 
@@ -51,37 +51,37 @@ describe('ActiveContestTypeStore', () => {
     expect(store.get()).toBe('abcLatest20Rounds');
 
     // Change the value and verify get() returns the new value
-    store.set('abc319Onwards' as ContestTableProviders);
+    store.set('abc319Onwards' as ContestTableProviderGroups);
     expect(store.get()).toBe('abc319Onwards');
   });
 
   test('expects to update the value when calling set()', () => {
-    store.set('fromAbc212ToAbc318' as ContestTableProviders);
+    store.set('fromAbc212ToAbc318' as ContestTableProviderGroups);
     expect(store.get()).toBe('fromAbc212ToAbc318');
 
-    store.set('abc319Onwards' as ContestTableProviders);
+    store.set('abc319Onwards' as ContestTableProviderGroups);
     expect(store.get()).toBe('abc319Onwards');
   });
 
   test('expects to correctly determine if contest type is the same with isSame()', () => {
-    expect(store.isSame('abcLatest20Rounds' as ContestTableProviders)).toBe(true);
-    expect(store.isSame('abc319Onwards' as ContestTableProviders)).toBe(false);
-    expect(store.isSame('fromAbc212ToAbc318' as ContestTableProviders)).toBe(false);
+    expect(store.isSame('abcLatest20Rounds' as ContestTableProviderGroups)).toBe(true);
+    expect(store.isSame('abc319Onwards' as ContestTableProviderGroups)).toBe(false);
+    expect(store.isSame('fromAbc212ToAbc318' as ContestTableProviderGroups)).toBe(false);
 
-    store.set('abc319Onwards' as ContestTableProviders);
-    expect(store.isSame('abc319Onwards' as ContestTableProviders)).toBe(true);
-    expect(store.isSame('abcLatest20Rounds' as ContestTableProviders)).toBe(false);
-    expect(store.isSame('fromAbc212ToAbc318' as ContestTableProviders)).toBe(false);
+    store.set('abc319Onwards' as ContestTableProviderGroups);
+    expect(store.isSame('abc319Onwards' as ContestTableProviderGroups)).toBe(true);
+    expect(store.isSame('abcLatest20Rounds' as ContestTableProviderGroups)).toBe(false);
+    expect(store.isSame('fromAbc212ToAbc318' as ContestTableProviderGroups)).toBe(false);
 
-    store.set('fromAbc212ToAbc318' as ContestTableProviders);
-    expect(store.isSame('fromAbc212ToAbc318' as ContestTableProviders)).toBe(true);
-    expect(store.isSame('abcLatest20Rounds' as ContestTableProviders)).toBe(false);
-    expect(store.isSame('abc319Onwards' as ContestTableProviders)).toBe(false);
+    store.set('fromAbc212ToAbc318' as ContestTableProviderGroups);
+    expect(store.isSame('fromAbc212ToAbc318' as ContestTableProviderGroups)).toBe(true);
+    expect(store.isSame('abcLatest20Rounds' as ContestTableProviderGroups)).toBe(false);
+    expect(store.isSame('abc319Onwards' as ContestTableProviderGroups)).toBe(false);
   });
 
   test('expects to reset the value to default when calling reset()', () => {
     // First change the value to something else
-    store.set('abc319Onwards' as ContestTableProviders);
+    store.set('abc319Onwards' as ContestTableProviderGroups);
     expect(store.get()).toBe('abc319Onwards');
 
     // Call reset and verify it goes back to default
@@ -89,7 +89,7 @@ describe('ActiveContestTypeStore', () => {
     expect(store.get()).toBe('abcLatest20Rounds');
 
     // Change to a different value and reset again to verify consistency
-    store.set('fromAbc212ToAbc318' as ContestTableProviders);
+    store.set('fromAbc212ToAbc318' as ContestTableProviderGroups);
     expect(store.get()).toBe('fromAbc212ToAbc318');
 
     store.reset();
