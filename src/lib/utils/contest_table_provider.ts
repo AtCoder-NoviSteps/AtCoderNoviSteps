@@ -10,6 +10,23 @@ import type { TaskResults, TaskResult } from '$lib/types/task';
 import { classifyContest, getContestNameLabel } from '$lib/utils/contest';
 import { getTaskTableHeaderName } from '$lib/utils/task';
 
+/**
+ * How to add a new contest table provider:
+ *
+ * Step 1: Create a new provider class
+ *   - Extend ContestTableProviderBase
+ *   - Implement abstract methods: setFilterCondition(), getMetadata(), getContestRoundLabel()
+ *   - Example: export class MyNewProvider extends ContestTableProviderBase { ... }
+ *
+ * Step 2: Register in ContestProviderBuilder
+ *   - Add the new provider to createPresets() that returns a ContestTableProviderGroup
+ *   - Example: MyNewProvider: () => new ContestTableProviderGroup(...).addProvider(...)
+ *
+ * Step 3: Export in contestTableProviderGroups
+ *   - Add the new provider group to the contestTableProviderGroups object
+ *   - Example: myNewProvider: ContestProviderBuilder.createPresets().MyNewProvider()
+ */
+
 export abstract class ContestTableProviderBase implements ContestTableProvider {
   protected contestType: ContestType;
 
