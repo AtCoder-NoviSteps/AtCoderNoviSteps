@@ -64,7 +64,7 @@ describe('ContestTableProviderBase and implementations', () => {
       const provider = new ABCLatest20RoundsProvider(ContestType.ABC);
       const filtered = provider.filter(mockTaskResults);
 
-      expect(filtered?.every((task) => task.contest_id.startsWith('abc'))).toBeTruthy();
+      expect(filtered?.every((task) => task.contest_id.startsWith('abc'))).toBe(true);
       expect(filtered).not.toContainEqual(expect.objectContaining({ contest_id: 'arc100' }));
     });
 
@@ -134,13 +134,13 @@ describe('ContestTableProviderBase and implementations', () => {
       const provider = new ABC319OnwardsProvider(ContestType.ABC);
       const filtered = provider.filter(mockTaskResults);
 
-      expect(filtered.every((task) => task.contest_id.startsWith('abc'))).toBeTruthy();
+      expect(filtered.every((task) => task.contest_id.startsWith('abc'))).toBe(true);
       expect(
         filtered.every((task) => {
           const round = getContestRound(task.contest_id);
           return round >= 319 && round <= 999;
         }),
-      ).toBeTruthy();
+      ).toBe(true);
     });
 
     test('expects to get correct metadata', () => {
@@ -172,13 +172,13 @@ describe('ContestTableProviderBase and implementations', () => {
       const provider = new ABC212ToABC318Provider(ContestType.ABC);
       const filtered = provider.filter(mockTaskResults);
 
-      expect(filtered.every((task) => task.contest_id.startsWith('abc'))).toBeTruthy();
+      expect(filtered.every((task) => task.contest_id.startsWith('abc'))).toBe(true);
       expect(
         filtered.every((task) => {
           const round = getContestRound(task.contest_id);
           return round >= 212 && round <= 318;
         }),
-      ).toBeTruthy();
+      ).toBe(true);
     });
 
     test('expects to get correct metadata', () => {
