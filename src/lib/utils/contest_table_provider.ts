@@ -3,6 +3,7 @@ import type {
   ContestTable,
   ContestTableMetaData,
   ContestTablesMetaData,
+  ContestTableDisplayConfig,
 } from '$lib/types/contest_table_provider';
 import { ContestType } from '$lib/types/contest';
 import type { TaskResults, TaskResult } from '$lib/types/task';
@@ -92,6 +93,14 @@ export abstract class ContestTableProviderBase implements ContestTableProvider {
   }
 
   abstract getMetadata(): ContestTableMetaData;
+
+  getDisplayConfig(): ContestTableDisplayConfig {
+    return {
+      isShownHeader: true,
+      isShownRoundLabel: true,
+    };
+  }
+
   abstract getContestRoundLabel(contestId: string): string;
 }
 
@@ -224,6 +233,13 @@ export class EDPCProvider extends ContestTableProviderBase {
     };
   }
 
+  getDisplayConfig(): ContestTableDisplayConfig {
+    return {
+      isShownHeader: false,
+      isShownRoundLabel: false,
+    };
+  }
+
   getContestRoundLabel(contestId: string): string {
     return '';
   }
@@ -246,6 +262,13 @@ export class TDPCProvider extends ContestTableProviderBase {
       buttonLabel: 'TDPC',
       ariaLabel: 'Extract TDPC contest only',
       abbreviationName: 'tdpc',
+    };
+  }
+
+  getDisplayConfig(): ContestTableDisplayConfig {
+    return {
+      isShownHeader: false,
+      isShownRoundLabel: false,
     };
   }
 

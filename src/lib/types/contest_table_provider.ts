@@ -49,6 +49,11 @@ export interface ContestTableProvider {
   getMetadata(): ContestTableMetaData;
 
   /**
+   * Returns the display configuration for the contest table.
+   */
+  getDisplayConfig(): ContestTableDisplayConfig;
+
+  /**
    * Returns a formatted label for the contest round.
    *
    * This abstract method must be implemented by subclasses to provide
@@ -117,3 +122,15 @@ export type ContestTablesMetaData = {
   buttonLabel: string;
   ariaLabel: string;
 };
+
+/**
+ * Configuration object that controls the display behavior of contest table components.
+ *
+ * @interface ContestTableDisplayConfig
+ * @property {boolean} isShownHeader - Whether to display the table header
+ * @property {boolean} isShownRoundLabel - Whether to display round labels in the contest table
+ */
+export interface ContestTableDisplayConfig {
+  isShownHeader: boolean;
+  isShownRoundLabel: boolean;
+}

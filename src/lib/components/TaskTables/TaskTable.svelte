@@ -12,7 +12,10 @@
   } from 'svelte-5-ui-lib';
 
   import type { TaskResults, TaskResult } from '$lib/types/task';
-  import type { ContestTableProvider } from '$lib/types/contest_table_provider';
+  import type {
+    ContestTableProvider,
+    ContestTableDisplayConfig,
+  } from '$lib/types/contest_table_provider';
 
   import TaskTableBodyCell from '$lib/components/TaskTables/TaskTableBodyCell.svelte';
 
@@ -52,6 +55,7 @@
     headerIds: Array<string>;
     contestIds: Array<string>;
     metadata: any;
+    displayConfig: ContestTableDisplayConfig;
   }
 
   let contestTableMaps = $derived(() => prepareContestTablesMap(providers));
@@ -84,6 +88,7 @@
       headerIds: provider.getHeaderIdsForTask(filteredTaskResults),
       contestIds: provider.getContestRoundIds(filteredTaskResults),
       metadata: provider.getMetadata(),
+      displayConfig: provider.getDisplayConfig(),
     };
   }
 
@@ -188,20 +193,21 @@
 
   <div class="container w-full rounded-md border shadow-sm mb-6">
     <!-- Table header -->
-    <!-- TODO: 複数のコンテストを1ページで表示するときはoffにする -->
     <div class="w-full sticky top-0 z-20 border-b">
       <Table id="task-table" class="text-md table-fixed w-full" aria-label="Task table">
-        <TableHead class="text-sm bg-gray-100">
-          <TableHeadCell class="w-full xl:w-16 px-2 text-center" scope="col">Round</TableHeadCell>
+        {#if contestTable && contestTable.displayConfig.isShownHeader}
+          <TableHead class="text-sm bg-gray-100">
+            <TableHeadCell class="w-full xl:w-16 px-2 text-center" scope="col">Round</TableHeadCell>
 
-          {#if contestTable && contestTable.headerIds}
-            {#each contestTable.headerIds as taskTableHeaderId}
-              <TableHeadCell class="text-center" scope="col">
-                {taskTableHeaderId}
-              </TableHeadCell>
-            {/each}
-          {/if}
-        </TableHead>
+            {#if contestTable.headerIds}
+              {#each contestTable.headerIds as taskTableHeaderId}
+                <TableHeadCell class="text-center" scope="col">
+                  {taskTableHeaderId}
+                </TableHeadCell>
+              {/each}
+            {/if}
+          </TableHead>
+        {/if}
       </Table>
     </div>
 
@@ -214,10 +220,11 @@
 
             {#each contestTable.contestIds as contestId}
               <TableBodyRow class={getBodyRowClasses(totalColumns)}>
-                <!-- TODO: 複数のコンテストを1ページで表示するときはoffにする -->
-                <TableBodyCell class="w-full xl:w-16 truncate px-2 py-2 text-center">
-                  {getContestRoundLabel(provider, contestId)}
-                </TableBodyCell>
+                {#if contestTable.displayConfig.isShownRoundLabel}
+                  <TableBodyCell class="w-full xl:w-16 truncate px-2 py-2 text-center">
+                    {getContestRoundLabel(provider, contestId)}
+                  </TableBodyCell>
+                {/if}
 
                 {#each contestTable.headerIds as taskTableHeaderId}
                   {@const taskResult = contestTable.innerTaskTable[contestId][taskTableHeaderId]}
