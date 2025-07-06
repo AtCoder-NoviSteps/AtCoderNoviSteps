@@ -100,14 +100,10 @@ export type ContestTable = Record<string, Record<string, TaskResult>>;
  *
  * @typedef {Object} ContestTableMetaData
  * @property {string} title - The title text to display for the contest table.
- * @property {string} buttonLabel - [Deprecated] The text to display on the contest table's primary action button.
- * @property {string} ariaLabel - [Deprecated] Accessibility label for screen readers describing the contest table.
  * @property {string} abbreviationName - Contest abbreviation, used for map keys.
  */
 export type ContestTableMetaData = {
   title: string;
-  buttonLabel: string;
-  ariaLabel: string;
   abbreviationName: string;
 };
 

@@ -100,8 +100,7 @@ describe('ContestTableProviderBase and implementations', () => {
       const metadata = provider.getMetadata();
 
       expect(metadata.title).toBe('AtCoder Beginner Contest 最新 20 回');
-      expect(metadata.buttonLabel).toBe('ABC 最新 20 回');
-      expect(metadata.ariaLabel).toBe('Filter ABC latest 20 rounds');
+      expect(metadata.abbreviationName).toBe('abcLatest20Rounds');
     });
 
     test('expects to format contest round label correctly', () => {
@@ -131,8 +130,7 @@ describe('ContestTableProviderBase and implementations', () => {
       const metadata = provider.getMetadata();
 
       expect(metadata.title).toBe('AtCoder Beginner Contest 319 〜 ');
-      expect(metadata.buttonLabel).toBe('ABC 319 〜 ');
-      expect(metadata.ariaLabel).toBe('Filter contests from ABC 319 onwards');
+      expect(metadata.abbreviationName).toBe('abc319Onwards');
     });
 
     test('expects to format contest round label correctly', () => {
@@ -162,8 +160,7 @@ describe('ContestTableProviderBase and implementations', () => {
       const metadata = provider.getMetadata();
 
       expect(metadata.title).toBe('AtCoder Beginner Contest 212 〜 318');
-      expect(metadata.buttonLabel).toBe('ABC 212 〜 318');
-      expect(metadata.ariaLabel).toBe('Filter contests from ABC 212 to ABC 318');
+      expect(metadata.abbreviationName).toBe('fromAbc212ToAbc318');
     });
 
     test('expects to format contest round label correctly', () => {

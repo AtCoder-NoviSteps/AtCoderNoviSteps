@@ -129,8 +129,6 @@ export class ABCLatest20RoundsProvider extends ContestTableProviderBase {
   getMetadata(): ContestTableMetaData {
     return {
       title: 'AtCoder Beginner Contest 最新 20 回',
-      buttonLabel: 'ABC 最新 20 回',
-      ariaLabel: 'Filter ABC latest 20 rounds',
       abbreviationName: 'abcLatest20Rounds',
     };
   }
@@ -158,8 +156,6 @@ export class ABC319OnwardsProvider extends ContestTableProviderBase {
   getMetadata(): ContestTableMetaData {
     return {
       title: 'AtCoder Beginner Contest 319 〜 ',
-      buttonLabel: 'ABC 319 〜 ',
-      ariaLabel: 'Filter contests from ABC 319 onwards',
       abbreviationName: 'abc319Onwards',
     };
   }
@@ -190,8 +186,6 @@ export class ABC212ToABC318Provider extends ContestTableProviderBase {
   getMetadata(): ContestTableMetaData {
     return {
       title: 'AtCoder Beginner Contest 212 〜 318',
-      buttonLabel: 'ABC 212 〜 318',
-      ariaLabel: 'Filter contests from ABC 212 to ABC 318',
       abbreviationName: 'fromAbc212ToAbc318',
     };
   }
@@ -227,8 +221,6 @@ export class EDPCProvider extends ContestTableProviderBase {
   getMetadata(): ContestTableMetaData {
     return {
       title: 'Educational DP Contest / DP まとめコンテスト',
-      buttonLabel: 'EDPC',
-      ariaLabel: 'Extract EDPC contest only',
       abbreviationName: 'edpc',
     };
   }
@@ -259,8 +251,6 @@ export class TDPCProvider extends ContestTableProviderBase {
   getMetadata(): ContestTableMetaData {
     return {
       title: 'Typical DP Contest',
-      buttonLabel: 'TDPC',
-      ariaLabel: 'Extract TDPC contest only',
       abbreviationName: 'tdpc',
     };
   }
@@ -372,6 +362,7 @@ export class ContestTableProviderGroup {
       providers: Array.from(this.providers.entries()).map(([type, provider]) => ({
         contestType: type,
         metadata: provider.getMetadata(),
+        displayConfig: provider.getDisplayConfig(),
       })),
     };
   }
