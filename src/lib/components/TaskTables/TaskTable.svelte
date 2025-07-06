@@ -95,11 +95,17 @@
     return provider.getContestRoundLabel(contestId);
   }
 
-  function getBodyCellClasses(taskResult: TaskResult): string {
+  // More than 8 columns will wrap to the next line to align with ABC212 〜 ABC318 (8 tasks per contest).
+  function getBodyRowClasses(totalColumns: number): string {
+    return totalColumns > 8 ? 'flex flex-wrap' : 'flex flex-wrap xl:table-row';
+  }
+
+  function getBodyCellClasses(taskResult: TaskResult, totalColumns: number): string {
     const baseClasses = 'w-1/2 xs:w-1/3 sm:w-1/4 md:w-1/5 lg:w-1/6 px-1 py-1';
+    const additionalClasses = totalColumns > 8 ? 'lg:w-1/7 2xl:w-1/8' : '';
     const backgroundColor = getBackgroundColor(taskResult);
 
-    return `${baseClasses} ${backgroundColor}`;
+    return `${baseClasses} ${additionalClasses} ${backgroundColor}`;
   }
 
   function getBackgroundColor(taskResult: TaskResult): string {
@@ -204,8 +210,10 @@
       <Table id="task-table" class="text-md table-fixed w-full" aria-label="Task table">
         <TableBody class="divide-y">
           {#if contestTable && contestTable.contestIds && contestTable.headerIds}
+            {@const totalColumns = contestTable.headerIds.length}
+
             {#each contestTable.contestIds as contestId}
-              <TableBodyRow class="flex flex-wrap xl:table-row">
+              <TableBodyRow class={getBodyRowClasses(totalColumns)}>
                 <!-- TODO: 複数のコンテストを1ページで表示するときはoffにする -->
                 <TableBodyCell class="w-full xl:w-16 truncate px-2 py-2 text-center">
                   {getContestRoundLabel(provider, contestId)}
@@ -216,7 +224,7 @@
 
                   <TableBodyCell
                     id={contestId + '-' + taskTableHeaderId}
-                    class={getBodyCellClasses(taskResult)}
+                    class={getBodyCellClasses(taskResult, totalColumns)}
                   >
                     {#if taskResult}
                       <TaskTableBodyCell
