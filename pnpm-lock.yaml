@@ -109,7 +109,7 @@ importers:
         specifier: 0.0.20
         version: 0.0.20
       '@types/jsdom':
-        specifier: ^21.1.7
+        specifier: 21.1.7
         version: 21.1.7
       '@typescript-eslint/eslint-plugin':
         specifier: 8.35.1
