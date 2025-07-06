@@ -10,7 +10,7 @@ import {
   EDPCProvider,
   TDPCProvider,
   ContestTableProviderGroup,
-  ContestProviderBuilder,
+  prepareContestProviderPresets,
 } from '$lib/utils/contest_table_provider';
 import { taskResultsForContestTableProvider } from './test_cases/contest_table_provider';
 
@@ -380,9 +380,9 @@ describe('ContestTableProviderGroup', () => {
   });
 });
 
-describe('ContestProviderBuilder', () => {
+describe('prepareContestProviderPresets', () => {
   test('expects to create ABCLatest20Rounds preset correctly', () => {
-    const group = ContestProviderBuilder.createPresets().ABCLatest20Rounds();
+    const group = prepareContestProviderPresets().ABCLatest20Rounds();
 
     expect(group.getGroupName()).toBe('ABC Latest 20 Rounds');
     expect(group.getMetadata()).toEqual({
@@ -394,7 +394,7 @@ describe('ContestProviderBuilder', () => {
   });
 
   test('expects to create ABC319Onwards preset correctly', () => {
-    const group = ContestProviderBuilder.createPresets().ABC319Onwards();
+    const group = prepareContestProviderPresets().ABC319Onwards();
 
     expect(group.getGroupName()).toBe('ABC 319 Onwards');
     expect(group.getMetadata()).toEqual({
@@ -406,7 +406,7 @@ describe('ContestProviderBuilder', () => {
   });
 
   test('expects to create fromABC212ToABC318 preset correctly', () => {
-    const group = ContestProviderBuilder.createPresets().ABC212ToABC318();
+    const group = prepareContestProviderPresets().ABC212ToABC318();
 
     expect(group.getGroupName()).toBe('From ABC 212 to ABC 318');
     expect(group.getMetadata()).toEqual({
@@ -418,7 +418,7 @@ describe('ContestProviderBuilder', () => {
   });
 
   test('expects to create DPs preset correctly', () => {
-    const group = ContestProviderBuilder.createPresets().dps();
+    const group = prepareContestProviderPresets().dps();
 
     expect(group.getGroupName()).toBe('EDPC・TDPC');
     expect(group.getMetadata()).toEqual({
@@ -431,7 +431,7 @@ describe('ContestProviderBuilder', () => {
   });
 
   test('expects to verify all presets are functions', () => {
-    const presets = ContestProviderBuilder.createPresets();
+    const presets = prepareContestProviderPresets();
 
     expect(typeof presets.ABCLatest20Rounds).toBe('function');
     expect(typeof presets.ABC319Onwards).toBe('function');
@@ -440,7 +440,7 @@ describe('ContestProviderBuilder', () => {
   });
 
   test('expects each preset to create independent instances', () => {
-    const presets = ContestProviderBuilder.createPresets();
+    const presets = prepareContestProviderPresets();
     const group1 = presets.ABCLatest20Rounds();
     const group2 = presets.ABCLatest20Rounds();
 

@@ -19,13 +19,13 @@ import { getTaskTableHeaderName } from '$lib/utils/task';
  *   - Implement abstract methods: setFilterCondition(), getMetadata(), getContestRoundLabel()
  *   - Example: export class MyNewProvider extends ContestTableProviderBase { ... }
  *
- * Step 2: Register in ContestProviderBuilder
- *   - Add the new provider to createPresets() that returns a ContestTableProviderGroup
+ * Step 2: Register using prepareContestProviderPresets
+ *   - Add the new provider to prepareContestProviderPresets() that returns preset functions
  *   - Example: MyNewProvider: () => new ContestTableProviderGroup(...).addProvider(...)
  *
  * Step 3: Export in contestTableProviderGroups
  *   - Add the new provider group to the contestTableProviderGroups object
- *   - Example: myNewProvider: ContestProviderBuilder.createPresets().MyNewProvider()
+ *   - Example: myNewProvider: prepareContestProviderPresets().MyNewProvider()
  */
 
 export abstract class ContestTableProviderBase implements ContestTableProvider {
@@ -369,62 +369,57 @@ export class ContestTableProviderGroup {
 }
 
 /**
- * Builder class for easily creating ContestProviderGroups
+ * Prepare predefined provider groups
+ * Easily create groups with commonly used combinations
  */
-export class ContestProviderBuilder {
-  /**
-   * Create predefined groups
-   * Easily create groups with commonly used combinations
-   */
-  static createPresets() {
-    return {
-      /**
-       * Single ABC group (latest 20 rounds)
-       */
-      ABCLatest20Rounds: () =>
-        new ContestTableProviderGroup(`ABC Latest 20 Rounds`, {
-          buttonLabel: 'ABC 最新 20 回',
-          ariaLabel: 'Filter ABC latest 20 rounds',
-        }).addProvider(ContestType.ABC, new ABCLatest20RoundsProvider(ContestType.ABC)),
+export const prepareContestProviderPresets = () => {
+  return {
+    /**
+     * Single group for ABC latest 20 rounds
+     */
+    ABCLatest20Rounds: () =>
+      new ContestTableProviderGroup(`ABC Latest 20 Rounds`, {
+        buttonLabel: 'ABC 最新 20 回',
+        ariaLabel: 'Filter ABC latest 20 rounds',
+      }).addProvider(ContestType.ABC, new ABCLatest20RoundsProvider(ContestType.ABC)),
 
-      /**
-       * Single group for ABC 319 onwards
-       */
-      ABC319Onwards: () =>
-        new ContestTableProviderGroup(`ABC 319 Onwards`, {
-          buttonLabel: 'ABC 319 〜 ',
-          ariaLabel: 'Filter contests from ABC 319 onwards',
-        }).addProvider(ContestType.ABC, new ABC319OnwardsProvider(ContestType.ABC)),
+    /**
+     * Single group for ABC 319 onwards
+     */
+    ABC319Onwards: () =>
+      new ContestTableProviderGroup(`ABC 319 Onwards`, {
+        buttonLabel: 'ABC 319 〜 ',
+        ariaLabel: 'Filter contests from ABC 319 onwards',
+      }).addProvider(ContestType.ABC, new ABC319OnwardsProvider(ContestType.ABC)),
 
-      /**
-       * Single group for ABC 212-318
-       */
-      ABC212ToABC318: () =>
-        new ContestTableProviderGroup(`From ABC 212 to ABC 318`, {
-          buttonLabel: 'ABC 212 〜 318',
-          ariaLabel: 'Filter contests from ABC 212 to ABC 318',
-        }).addProvider(ContestType.ABC, new ABC212ToABC318Provider(ContestType.ABC)),
+    /**
+     * Single group for ABC 212-318
+     */
+    ABC212ToABC318: () =>
+      new ContestTableProviderGroup(`From ABC 212 to ABC 318`, {
+        buttonLabel: 'ABC 212 〜 318',
+        ariaLabel: 'Filter contests from ABC 212 to ABC 318',
+      }).addProvider(ContestType.ABC, new ABC212ToABC318Provider(ContestType.ABC)),
 
-      /**
-       * DP group (EDPC and TDPC)
-       */
-      dps: () =>
-        new ContestTableProviderGroup(`EDPC・TDPC`, {
-          buttonLabel: 'EDPC・TDPC',
-          ariaLabel: 'EDPC and TDPC contests',
-        }).addProviders(
-          { contestType: ContestType.EDPC, provider: new EDPCProvider(ContestType.EDPC) },
-          { contestType: ContestType.TDPC, provider: new TDPCProvider(ContestType.TDPC) },
-        ),
-    };
-  }
-}
+    /**
+     * DP group (EDPC and TDPC)
+     */
+    dps: () =>
+      new ContestTableProviderGroup(`EDPC・TDPC`, {
+        buttonLabel: 'EDPC・TDPC',
+        ariaLabel: 'EDPC and TDPC contests',
+      }).addProviders(
+        { contestType: ContestType.EDPC, provider: new EDPCProvider(ContestType.EDPC) },
+        { contestType: ContestType.TDPC, provider: new TDPCProvider(ContestType.TDPC) },
+      ),
+  };
+};
 
 export const contestTableProviderGroups = {
-  abcLatest20Rounds: ContestProviderBuilder.createPresets().ABCLatest20Rounds(),
-  abc319Onwards: ContestProviderBuilder.createPresets().ABC319Onwards(),
-  fromAbc212ToAbc318: ContestProviderBuilder.createPresets().ABC212ToABC318(),
-  dps: ContestProviderBuilder.createPresets().dps(), // Dynamic Programming (DP) Contests
+  abcLatest20Rounds: prepareContestProviderPresets().ABCLatest20Rounds(),
+  abc319Onwards: prepareContestProviderPresets().ABC319Onwards(),
+  fromAbc212ToAbc318: prepareContestProviderPresets().ABC212ToABC318(),
+  dps: prepareContestProviderPresets().dps(), // Dynamic Programming (DP) Contests
 };
 
 export type ContestTableProviderGroups = keyof typeof contestTableProviderGroups;
