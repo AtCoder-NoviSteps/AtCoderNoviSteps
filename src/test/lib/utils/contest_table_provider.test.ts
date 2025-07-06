@@ -7,6 +7,8 @@ import {
   ABCLatest20RoundsProvider,
   ABC319OnwardsProvider,
   ABC212ToABC318Provider,
+  EDPCProvider,
+  TDPCProvider,
 } from '$lib/utils/contest_table_provider';
 import { taskResultsForContestTableProvider } from './test_cases/contest_table_provider';
 
@@ -15,6 +17,10 @@ vi.mock('$lib/utils/contest', () => ({
   classifyContest: vi.fn((contestId: string) => {
     if (contestId.startsWith('abc')) {
       return ContestType.ABC;
+    } else if (contestId.startsWith('edpc')) {
+      return ContestType.EDPC;
+    } else if (contestId.startsWith('tdpc')) {
+      return ContestType.TDPC;
     }
 
     return ContestType.OTHERS;
@@ -23,6 +29,8 @@ vi.mock('$lib/utils/contest', () => ({
   getContestNameLabel: vi.fn((contestId: string) => {
     if (contestId.startsWith('abc')) {
       return `ABC ${contestId.replace('abc', '')}`;
+    } else if (contestId.startsWith('edpc') || contestId.startsWith('tdpc')) {
+      return '';
     }
 
     return contestId;
@@ -109,6 +117,14 @@ describe('ContestTableProviderBase and implementations', () => {
 
       expect(label).toBe('378');
     });
+
+    test('expects to get correct display configuration', () => {
+      const provider = new ABCLatest20RoundsProvider(ContestType.ABC);
+      const displayConfig = provider.getDisplayConfig();
+
+      expect(displayConfig.isShownHeader).toBe(true);
+      expect(displayConfig.isShownRoundLabel).toBe(true);
+    });
   });
 
   describe('ABC319 onwards provider', () => {
@@ -139,6 +155,14 @@ describe('ContestTableProviderBase and implementations', () => {
 
       expect(label).toBe('397');
     });
+
+    test('expects to get correct display configuration', () => {
+      const provider = new ABC319OnwardsProvider(ContestType.ABC);
+      const displayConfig = provider.getDisplayConfig();
+
+      expect(displayConfig.isShownHeader).toBe(true);
+      expect(displayConfig.isShownRoundLabel).toBe(true);
+    });
   });
 
   describe('ABC212 to ABC318 provider', () => {
@@ -168,6 +192,64 @@ describe('ContestTableProviderBase and implementations', () => {
       const label = provider.getContestRoundLabel('abc318');
 
       expect(label).toBe('318');
+    });
+
+    test('expects to get correct display configuration', () => {
+      const provider = new ABC212ToABC318Provider(ContestType.ABC);
+      const displayConfig = provider.getDisplayConfig();
+
+      expect(displayConfig.isShownHeader).toBe(true);
+      expect(displayConfig.isShownRoundLabel).toBe(true);
+    });
+  });
+
+  describe('EDPC provider', () => {
+    test('expects to get correct metadata', () => {
+      const provider = new EDPCProvider(ContestType.EDPC);
+      const metadata = provider.getMetadata();
+
+      expect(metadata.title).toBe('Educational DP Contest / DP まとめコンテスト');
+      expect(metadata.abbreviationName).toBe('edpc');
+    });
+
+    test('expects to get correct display configuration', () => {
+      const provider = new EDPCProvider(ContestType.EDPC);
+      const displayConfig = provider.getDisplayConfig();
+
+      expect(displayConfig.isShownHeader).toBe(false);
+      expect(displayConfig.isShownRoundLabel).toBe(false);
+    });
+
+    test('expects to format contest round label correctly', () => {
+      const provider = new EDPCProvider(ContestType.EDPC);
+      const label = provider.getContestRoundLabel('dp');
+
+      expect(label).toBe('');
+    });
+  });
+
+  describe('TDPC provider', () => {
+    test('expects to get correct metadata', () => {
+      const provider = new TDPCProvider(ContestType.TDPC);
+      const metadata = provider.getMetadata();
+
+      expect(metadata.title).toBe('Typical DP Contest');
+      expect(metadata.abbreviationName).toBe('tdpc');
+    });
+
+    test('expects to get correct display configuration', () => {
+      const provider = new TDPCProvider(ContestType.TDPC);
+      const displayConfig = provider.getDisplayConfig();
+
+      expect(displayConfig.isShownHeader).toBe(false);
+      expect(displayConfig.isShownRoundLabel).toBe(false);
+    });
+
+    test('expects to format contest round label correctly', () => {
+      const provider = new TDPCProvider(ContestType.TDPC);
+      const label = provider.getContestRoundLabel('');
+
+      expect(label).toBe('');
     });
   });
 
