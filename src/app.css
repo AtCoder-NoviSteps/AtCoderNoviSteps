@@ -12,15 +12,6 @@ body {
   font-style: normal;
 }
 
-@layer utilities {
-  .w-1\/7 {
-    width: 14.285714%;
-  }
-  .w-1\/8 {
-    width: 12.5%;
-  }
-}
-
 #root {
   @apply w-full max-w-screen-xl;
 }
