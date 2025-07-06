@@ -191,12 +191,14 @@
     {metadata.title}
   </Heading>
 
-  <div class="container w-full rounded-md border shadow-sm mb-6">
+  <div
+    class="container w-full rounded-md border border-gray-200 dark:border-gray-100 shadow-sm mb-6 overflow-hidden"
+  >
     <!-- Table header -->
-    <div class="w-full sticky top-0 z-20 border-b">
-      <Table id="task-table" class="text-md table-fixed w-full" aria-label="Task table">
-        {#if contestTable && contestTable.displayConfig.isShownHeader}
-          <TableHead class="text-sm bg-gray-100">
+    {#if contestTable && contestTable.displayConfig.isShownHeader}
+      <div class="w-full sticky top-0 z-20 border-b border-gray-200 dark:border-gray-100">
+        <Table id="task-table" class="text-md table-fixed w-full" aria-label="Task table">
+          <TableHead class="text-sm border-gray-200 dark:border-gray-100">
             <TableHeadCell class="w-full xl:w-16 px-2 text-center" scope="col">Round</TableHeadCell>
 
             {#if contestTable.headerIds}
@@ -207,21 +209,23 @@
               {/each}
             {/if}
           </TableHead>
-        {/if}
-      </Table>
-    </div>
+        </Table>
+      </div>
+    {/if}
 
     <!-- Table body -->
-    <div class="w-full overflow-auto max-h-[calc(80vh-56px)]">
+    <div class="w-full overflow-auto max-h-[calc(80vh-56px)] bg-white dark:bg-gray-900">
       <Table id="task-table" class="text-md table-fixed w-full" aria-label="Task table">
-        <TableBody class="divide-y">
+        <TableBody class="divide-y divide-gray-200 dark:divide-gray-700">
           {#if contestTable && contestTable.contestIds && contestTable.headerIds}
             {@const totalColumns = contestTable.headerIds.length}
 
             {#each contestTable.contestIds as contestId}
               <TableBodyRow class={getBodyRowClasses(totalColumns)}>
                 {#if contestTable.displayConfig.isShownRoundLabel}
-                  <TableBodyCell class="w-full xl:w-16 truncate px-2 py-2 text-center">
+                  <TableBodyCell
+                    class="w-full xl:w-16 truncate px-2 py-2 text-center bg-gray-50 dark:bg-gray-800"
+                  >
                     {getContestRoundLabel(provider, contestId)}
                   </TableBodyCell>
                 {/if}
