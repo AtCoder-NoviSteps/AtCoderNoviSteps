@@ -9,6 +9,8 @@ import {
   ABC212ToABC318Provider,
   EDPCProvider,
   TDPCProvider,
+  ContestTableProviderGroup,
+  ContestProviderBuilder,
 } from '$lib/utils/contest_table_provider';
 import { taskResultsForContestTableProvider } from './test_cases/contest_table_provider';
 
@@ -17,9 +19,9 @@ vi.mock('$lib/utils/contest', () => ({
   classifyContest: vi.fn((contestId: string) => {
     if (contestId.startsWith('abc')) {
       return ContestType.ABC;
-    } else if (contestId.startsWith('edpc')) {
+    } else if (contestId === 'dp') {
       return ContestType.EDPC;
-    } else if (contestId.startsWith('tdpc')) {
+    } else if (contestId === 'tdpc') {
       return ContestType.TDPC;
     }
 
@@ -29,7 +31,7 @@ vi.mock('$lib/utils/contest', () => ({
   getContestNameLabel: vi.fn((contestId: string) => {
     if (contestId.startsWith('abc')) {
       return `ABC ${contestId.replace('abc', '')}`;
-    } else if (contestId.startsWith('edpc') || contestId.startsWith('tdpc')) {
+    } else if (contestId === 'dp' || contestId === 'tdpc') {
       return '';
     }
 
@@ -273,5 +275,177 @@ describe('ContestTableProviderBase and implementations', () => {
 
       expect(headerIds).toEqual(['A', 'B', 'C', 'D', 'E', 'F', 'G']);
     });
+  });
+});
+
+describe('ContestTableProviderGroup', () => {
+  test('expects to create a group with metadata correctly', () => {
+    const group = new ContestTableProviderGroup('only metadata', {
+      buttonLabel: '',
+      ariaLabel: 'only metadata',
+    });
+
+    expect(group.getGroupName()).toBe('only metadata');
+    expect(group.getMetadata()).toEqual({
+      buttonLabel: '',
+      ariaLabel: 'only metadata',
+    });
+    expect(group.getSize()).toBe(0);
+  });
+
+  test('expects to add a single provider correctly', () => {
+    const group = new ContestTableProviderGroup('ABC Latest 20 Rounds', {
+      buttonLabel: 'ABC 最新 20 回',
+      ariaLabel: 'Filter ABC latest 20 rounds',
+    });
+    const provider = new ABCLatest20RoundsProvider(ContestType.ABC);
+
+    group.addProvider(ContestType.ABC, provider);
+
+    expect(group.getSize()).toBe(1);
+    expect(group.getProvider(ContestType.ABC)).toBe(provider);
+    expect(group.getProvider(ContestType.OTHERS)).toBeUndefined();
+  });
+
+  test('expects to add multiple providers correctly', () => {
+    const group = new ContestTableProviderGroup('EDPC・TDPC', {
+      buttonLabel: 'EDPC・TDPC',
+      ariaLabel: 'EDPC and TDPC contests',
+    });
+    const edpcProvider = new EDPCProvider(ContestType.EDPC);
+    const tdpcProvider = new TDPCProvider(ContestType.TDPC);
+
+    group.addProviders(
+      { contestType: ContestType.EDPC, provider: edpcProvider },
+      { contestType: ContestType.TDPC, provider: tdpcProvider },
+    );
+
+    expect(group.getSize()).toBe(2);
+    expect(group.getProvider(ContestType.EDPC)).toBe(edpcProvider);
+    expect(group.getProvider(ContestType.TDPC)).toBe(tdpcProvider);
+  });
+
+  test('expects to get all providers correctly', () => {
+    const group = new ContestTableProviderGroup('Algorithm Training Pack', {
+      buttonLabel: 'アルゴリズム練習パック',
+      ariaLabel: 'Filter algorithm training contests',
+    });
+    const edpcProvider = new EDPCProvider(ContestType.EDPC);
+    const tdpcProvider = new TDPCProvider(ContestType.TDPC);
+
+    group.addProvider(ContestType.EDPC, edpcProvider);
+    group.addProvider(ContestType.TDPC, tdpcProvider);
+
+    const allProviders = group.getAllProviders();
+    expect(allProviders).toHaveLength(2);
+    expect(allProviders).toContain(edpcProvider);
+    expect(allProviders).toContain(tdpcProvider);
+  });
+
+  test('expects to return method chaining correctly', () => {
+    const group = new ContestTableProviderGroup('Collection for beginner', {
+      buttonLabel: '初心者向けセット',
+      ariaLabel: 'Filter contests for beginner',
+    });
+    const abcProvider = new ABCLatest20RoundsProvider(ContestType.ABC);
+    const edpcProvider = new EDPCProvider(ContestType.EDPC);
+
+    const result = group
+      .addProvider(ContestType.ABC, abcProvider)
+      .addProvider(ContestType.EDPC, edpcProvider);
+
+    expect(result).toBe(group);
+    expect(group.getSize()).toBe(2);
+  });
+
+  test('expects to get group statistics correctly', () => {
+    const group = new ContestTableProviderGroup('Statistics for contest table', {
+      buttonLabel: 'コンテストテーブルに関する統計情報',
+      ariaLabel: 'Statistics for contest table',
+    });
+    const abcProvider = new ABCLatest20RoundsProvider(ContestType.ABC);
+    const edpcProvider = new EDPCProvider(ContestType.EDPC);
+
+    group.addProvider(ContestType.ABC, abcProvider);
+    group.addProvider(ContestType.EDPC, edpcProvider);
+
+    const stats = group.getStats();
+
+    expect(stats.groupName).toBe('Statistics for contest table');
+    expect(stats.providerCount).toBe(2);
+    expect(stats.providers).toHaveLength(2);
+    expect(stats.providers[0]).toHaveProperty('contestType');
+    expect(stats.providers[0]).toHaveProperty('metadata');
+    expect(stats.providers[0]).toHaveProperty('displayConfig');
+  });
+});
+
+describe('ContestProviderBuilder', () => {
+  test('expects to create ABCLatest20Rounds preset correctly', () => {
+    const group = ContestProviderBuilder.createPresets().ABCLatest20Rounds();
+
+    expect(group.getGroupName()).toBe('ABC Latest 20 Rounds');
+    expect(group.getMetadata()).toEqual({
+      buttonLabel: 'ABC 最新 20 回',
+      ariaLabel: 'Filter ABC latest 20 rounds',
+    });
+    expect(group.getSize()).toBe(1);
+    expect(group.getProvider(ContestType.ABC)).toBeInstanceOf(ABCLatest20RoundsProvider);
+  });
+
+  test('expects to create ABC319Onwards preset correctly', () => {
+    const group = ContestProviderBuilder.createPresets().ABC319Onwards();
+
+    expect(group.getGroupName()).toBe('ABC 319 Onwards');
+    expect(group.getMetadata()).toEqual({
+      buttonLabel: 'ABC 319 〜 ',
+      ariaLabel: 'Filter contests from ABC 319 onwards',
+    });
+    expect(group.getSize()).toBe(1);
+    expect(group.getProvider(ContestType.ABC)).toBeInstanceOf(ABC319OnwardsProvider);
+  });
+
+  test('expects to create fromABC212ToABC318 preset correctly', () => {
+    const group = ContestProviderBuilder.createPresets().ABC212ToABC318();
+
+    expect(group.getGroupName()).toBe('From ABC 212 to ABC 318');
+    expect(group.getMetadata()).toEqual({
+      buttonLabel: 'ABC 212 〜 318',
+      ariaLabel: 'Filter contests from ABC 212 to ABC 318',
+    });
+    expect(group.getSize()).toBe(1);
+    expect(group.getProvider(ContestType.ABC)).toBeInstanceOf(ABC212ToABC318Provider);
+  });
+
+  test('expects to create DPs preset correctly', () => {
+    const group = ContestProviderBuilder.createPresets().dps();
+
+    expect(group.getGroupName()).toBe('EDPC・TDPC');
+    expect(group.getMetadata()).toEqual({
+      buttonLabel: 'EDPC・TDPC',
+      ariaLabel: 'EDPC and TDPC contests',
+    });
+    expect(group.getSize()).toBe(2);
+    expect(group.getProvider(ContestType.EDPC)).toBeInstanceOf(EDPCProvider);
+    expect(group.getProvider(ContestType.TDPC)).toBeInstanceOf(TDPCProvider);
+  });
+
+  test('expects to verify all presets are functions', () => {
+    const presets = ContestProviderBuilder.createPresets();
+
+    expect(typeof presets.ABCLatest20Rounds).toBe('function');
+    expect(typeof presets.ABC319Onwards).toBe('function');
+    expect(typeof presets.ABC212ToABC318).toBe('function');
+    expect(typeof presets.dps).toBe('function');
+  });
+
+  test('expects each preset to create independent instances', () => {
+    const presets = ContestProviderBuilder.createPresets();
+    const group1 = presets.ABCLatest20Rounds();
+    const group2 = presets.ABCLatest20Rounds();
+
+    expect(group1).not.toBe(group2);
+    expect(group1.getGroupName()).toBe(group2.getGroupName());
+    expect(group1.getProvider(ContestType.ABC)).not.toBe(group2.getProvider(ContestType.ABC));
   });
 });
