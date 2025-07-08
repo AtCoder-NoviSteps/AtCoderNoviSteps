@@ -41,8 +41,8 @@
     "@testing-library/jest-dom": "6.6.3",
     "@types/gtag.js": "0.0.20",
     "@types/jsdom": "21.1.7",
-    "@typescript-eslint/eslint-plugin": "8.35.1",
-    "@typescript-eslint/parser": "8.35.1",
+    "@typescript-eslint/eslint-plugin": "8.36.0",
+    "@typescript-eslint/parser": "8.36.0",
     "@vitest/coverage-v8": "3.2.4",
     "@vitest/ui": "3.2.4",
     "eslint": "9.30.1",
@@ -57,8 +57,8 @@
     "prettier-plugin-svelte": "3.4.0",
     "prettier-plugin-tailwindcss": "0.6.13",
     "prisma": "5.22.0",
-    "super-sitemap": "1.0.3",
-    "svelte": "5.35.2",
+    "super-sitemap": "1.0.4",
+    "svelte": "5.35.4",
     "svelte-5-ui-lib": "0.12.2",
     "svelte-check": "4.2.2",
     "svelte-meta-tags": "4.4.0",
@@ -67,7 +67,7 @@
     "typescript": "5.8.3",
     "vite": "6.3.5",
     "vitest": "3.2.4",
-    "zod": "3.25.74"
+    "zod": "3.25.75"
   },
   "type": "module",
   "dependencies": {
@@ -92,7 +92,7 @@
     "svelte-eslint-parser": "1.2.0",
     "tailwind-merge": "2.6.0",
     "tailwindcss": "3.4.17",
-    "vercel": "44.2.12",
+    "vercel": "44.2.13",
     "xss": "1.0.15"
   },
   "packageManager": "pnpm@10.12.1"
