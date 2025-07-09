@@ -182,7 +182,7 @@
 <!-- https://github.com/kenkoooo/AtCoderProblems/blob/master/atcoder-problems-frontend/src/pages/TablePage/AtCoderRegularTable.tsx -->
 <!-- https://github.com/birdou/atcoder-blogs/blob/main/app/atcoder-blogs-frontend/src/pages/BlogTablePage/BlogTablePage.tsx -->
 <!-- https://tailwindcss.com/docs/position#sticky-positioning-elements -->
-{#each providers as provider}
+{#each providers as provider (provider.getMetadata().abbreviationName)}
   {@const metadata = provider.getMetadata()}
   {@const contestTable = getTaskTable(metadata.abbreviationName)}
 
@@ -202,7 +202,7 @@
             <TableHeadCell class="w-full xl:w-16 px-2 text-center" scope="col">Round</TableHeadCell>
 
             {#if contestTable.headerIds}
-              {#each contestTable.headerIds as taskTableHeaderId}
+              {#each contestTable.headerIds as taskTableHeaderId (taskTableHeaderId)}
                 <TableHeadCell class="text-center" scope="col">
                   {taskTableHeaderId}
                 </TableHeadCell>
@@ -220,7 +220,7 @@
           {#if contestTable && contestTable.contestIds && contestTable.headerIds}
             {@const totalColumns = contestTable.headerIds.length}
 
-            {#each contestTable.contestIds as contestId}
+            {#each contestTable.contestIds as contestId (contestId)}
               <TableBodyRow class={getBodyRowClasses(totalColumns)}>
                 {#if contestTable.displayConfig.isShownRoundLabel}
                   <TableBodyCell
@@ -230,7 +230,7 @@
                   </TableBodyCell>
                 {/if}
 
-                {#each contestTable.headerIds as taskTableHeaderId}
+                {#each contestTable.headerIds as taskTableHeaderId (taskTableHeaderId)}
                   {@const taskResult = contestTable.innerTaskTable[contestId][taskTableHeaderId]}
 
                   <TableBodyCell
