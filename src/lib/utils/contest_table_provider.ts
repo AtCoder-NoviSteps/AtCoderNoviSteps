@@ -98,6 +98,7 @@ export abstract class ContestTableProviderBase implements ContestTableProvider {
     return {
       isShownHeader: true,
       isShownRoundLabel: true,
+      isShownTaskIndex: false,
     };
   }
 
@@ -229,6 +230,7 @@ export class EDPCProvider extends ContestTableProviderBase {
     return {
       isShownHeader: false,
       isShownRoundLabel: false,
+      isShownTaskIndex: true,
     };
   }
 
@@ -259,6 +261,7 @@ export class TDPCProvider extends ContestTableProviderBase {
     return {
       isShownHeader: false,
       isShownRoundLabel: false,
+      isShownTaskIndex: true,
     };
   }
 

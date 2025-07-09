@@ -125,8 +125,10 @@ export type ContestTablesMetaData = {
  * @interface ContestTableDisplayConfig
  * @property {boolean} isShownHeader - Whether to display the table header
  * @property {boolean} isShownRoundLabel - Whether to display round labels in the contest table
+ * @property {boolean} isShownTaskIndex - Whether to display task index in the contest table cells
  */
 export interface ContestTableDisplayConfig {
   isShownHeader: boolean;
   isShownRoundLabel: boolean;
+  isShownTaskIndex: boolean;
 }

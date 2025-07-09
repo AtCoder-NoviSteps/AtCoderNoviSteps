@@ -126,6 +126,7 @@ describe('ContestTableProviderBase and implementations', () => {
 
       expect(displayConfig.isShownHeader).toBe(true);
       expect(displayConfig.isShownRoundLabel).toBe(true);
+      expect(displayConfig.isShownTaskIndex).toBe(false);
     });
   });
 
@@ -164,6 +165,7 @@ describe('ContestTableProviderBase and implementations', () => {
 
       expect(displayConfig.isShownHeader).toBe(true);
       expect(displayConfig.isShownRoundLabel).toBe(true);
+      expect(displayConfig.isShownTaskIndex).toBe(false);
     });
   });
 
@@ -202,6 +204,7 @@ describe('ContestTableProviderBase and implementations', () => {
 
       expect(displayConfig.isShownHeader).toBe(true);
       expect(displayConfig.isShownRoundLabel).toBe(true);
+      expect(displayConfig.isShownTaskIndex).toBe(false);
     });
   });
 
@@ -220,6 +223,7 @@ describe('ContestTableProviderBase and implementations', () => {
 
       expect(displayConfig.isShownHeader).toBe(false);
       expect(displayConfig.isShownRoundLabel).toBe(false);
+      expect(displayConfig.isShownTaskIndex).toBe(true);
     });
 
     test('expects to format contest round label correctly', () => {
@@ -245,6 +249,7 @@ describe('ContestTableProviderBase and implementations', () => {
 
       expect(displayConfig.isShownHeader).toBe(false);
       expect(displayConfig.isShownRoundLabel).toBe(false);
+      expect(displayConfig.isShownTaskIndex).toBe(true);
     });
 
     test('expects to format contest round label correctly', () => {
