@@ -1,5 +1,5 @@
 import { useLocalStorage } from '$lib/stores/local_storage_helper.svelte';
-import { type ContestTableProviders } from '$lib/utils/contest_table_provider';
+import { type ContestTableProviderGroups } from '$lib/utils/contest_table_provider';
 
 /**
  * Store that manages the active contest type selection.
@@ -8,12 +8,12 @@ import { type ContestTableProviders } from '$lib/utils/contest_table_provider';
  * is currently active button. It provides methods to get, set, and
  * compare the active contest type.
  *
- * The store uses the ContestTableProviders type which represents
+ * The store uses the ContestTableProviderGroups type which represents
  * different contest table configurations or data providers,
  * with a default value of 'abcLatest20Rounds'.
  */
 export class ActiveContestTypeStore {
-  private storage = useLocalStorage<ContestTableProviders>(
+  private storage = useLocalStorage<ContestTableProviderGroups>(
     'contest_table_providers',
     'abcLatest20Rounds',
   );
@@ -24,7 +24,7 @@ export class ActiveContestTypeStore {
    * @param defaultContestType - The default contest type to initialize.
    * Defaults to 'abcLatest20Rounds'.
    */
-  constructor(defaultContestType: ContestTableProviders = 'abcLatest20Rounds') {
+  constructor(defaultContestType: ContestTableProviderGroups = 'abcLatest20Rounds') {
     if (defaultContestType !== 'abcLatest20Rounds' || !this.storage.value) {
       this.storage.value = defaultContestType;
     }
@@ -35,7 +35,7 @@ export class ActiveContestTypeStore {
    *
    * @returns The current value of contest table providers.
    */
-  get(): ContestTableProviders {
+  get(): ContestTableProviderGroups {
     return this.storage.value;
   }
 
@@ -44,7 +44,7 @@ export class ActiveContestTypeStore {
    *
    * @param newContestType - The contest type to set as the current value
    */
-  set(newContestType: ContestTableProviders): void {
+  set(newContestType: ContestTableProviderGroups): void {
     this.storage.value = newContestType;
   }
 
@@ -53,7 +53,7 @@ export class ActiveContestTypeStore {
    * @param contestType - The contest type to compare against
    * @returns `true` if the current contest type matches the provided contest type, `false` otherwise
    */
-  isSame(contestType: ContestTableProviders): boolean {
+  isSame(contestType: ContestTableProviderGroups): boolean {
     return this.storage.value === contestType;
   }
 

@@ -12,10 +12,11 @@
   interface Props {
     taskResult: TaskResult;
     isLoggedIn: boolean;
+    isShownTaskIndex: boolean;
     onupdate?: (updatedTask: TaskResult) => void; // Ensure to update task result in parent component.
   }
 
-  let { taskResult, isLoggedIn, onupdate = () => {} }: Props = $props();
+  let { taskResult, isLoggedIn, isShownTaskIndex, onupdate = () => {} }: Props = $props();
 
   let updatingDropdown: UpdatingDropdown;
 </script>
@@ -26,7 +27,7 @@
   {@render taskGradeLabel(taskResult)}
 
   <div class="flex items-center justify-between w-full min-w-0">
-    {@render taskTitleAndExternalLink(taskResult)}
+    {@render taskTitleAndExternalLink(taskResult, isShownTaskIndex)}
     {@render submissionUpdaterAndLinksOfTaskDetailPage(taskResult)}
   </div>
 </div>
@@ -42,11 +43,13 @@
   </div>
 {/snippet}
 
-{#snippet taskTitleAndExternalLink(taskResult: TaskResult)}
+{#snippet taskTitleAndExternalLink(taskResult: TaskResult, isShownTaskIndex: boolean)}
   <div class="max-w-[calc(100%-1rem)] truncate">
     <ExternalLinkWrapper
       url={getTaskUrl(taskResult.contest_id, taskResult.task_id)}
-      description={removeTaskIndexFromTitle(taskResult.title, taskResult.task_table_index)}
+      description={isShownTaskIndex
+        ? taskResult.title
+        : removeTaskIndexFromTitle(taskResult.title, taskResult.task_table_index)}
       textSize="xs:text-md"
       textColorInDarkMode="dark:text-gray-300"
       iconSize={0}

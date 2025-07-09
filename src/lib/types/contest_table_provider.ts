@@ -49,6 +49,11 @@ export interface ContestTableProvider {
   getMetadata(): ContestTableMetaData;
 
   /**
+   * Returns the display configuration for the contest table.
+   */
+  getDisplayConfig(): ContestTableDisplayConfig;
+
+  /**
    * Returns a formatted label for the contest round.
    *
    * This abstract method must be implemented by subclasses to provide
@@ -95,11 +100,35 @@ export type ContestTable = Record<string, Record<string, TaskResult>>;
  *
  * @typedef {Object} ContestTableMetaData
  * @property {string} title - The title text to display for the contest table.
- * @property {string} buttonLabel - The text to display on the contest table's primary action button.
- * @property {string} ariaLabel - Accessibility label for screen readers describing the contest table.
+ * @property {string} abbreviationName - Contest abbreviation, used for map keys.
  */
 export type ContestTableMetaData = {
   title: string;
+  abbreviationName: string;
+};
+
+/**
+ * Metadata configuration for contest table UI components.
+ *
+ * @typeof {Object} ContestTablesMetaData
+ * @property {string} buttonLabel - The text to display on the contest table's primary action button.
+ * @property {string} ariaLabel - Accessibility label for screen readers describing the contest table.
+ */
+export type ContestTablesMetaData = {
   buttonLabel: string;
   ariaLabel: string;
 };
+
+/**
+ * Configuration object that controls the display behavior of contest table components.
+ *
+ * @interface ContestTableDisplayConfig
+ * @property {boolean} isShownHeader - Whether to display the table header
+ * @property {boolean} isShownRoundLabel - Whether to display round labels in the contest table
+ * @property {boolean} isShownTaskIndex - Whether to display task index in the contest table cells
+ */
+export interface ContestTableDisplayConfig {
+  isShownHeader: boolean;
+  isShownRoundLabel: boolean;
+  isShownTaskIndex: boolean;
+}
