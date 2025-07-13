@@ -56,9 +56,6 @@ importers:
       playwright:
         specifier: 1.54.1
         version: 1.54.1
-      pnpm:
-        specifier: 10.13.1
-        version: 10.13.1
       prisma-erd-generator:
         specifier: 2.0.4
         version: 2.0.4(@prisma/client@5.22.0(prisma@5.22.0))(puppeteer@19.11.1(typescript@5.8.3))(ts-node@10.9.1(@types/node@24.0.13)(typescript@5.8.3))
@@ -147,6 +144,9 @@ importers:
       nock:
         specifier: 14.0.5
         version: 14.0.5
+      pnpm:
+        specifier: 10.13.1
+        version: 10.13.1
       prettier:
         specifier: 3.6.2
         version: 3.6.2
