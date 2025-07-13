@@ -95,5 +95,8 @@
     "vercel": "44.4.1",
     "xss": "1.0.15"
   },
-  "packageManager": "pnpm@10.12.1"
+  "packageManager": "pnpm@10.12.1",
+  "engines": {
+    "node": ">=18.16.0"
+  }
 }
