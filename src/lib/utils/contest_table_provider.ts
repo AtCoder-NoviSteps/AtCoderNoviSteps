@@ -98,6 +98,7 @@ export abstract class ContestTableProviderBase implements ContestTableProvider {
     return {
       isShownHeader: true,
       isShownRoundLabel: true,
+      roundLabelWidth: 'xl:w-16', // Default width for task index column
       isShownTaskIndex: false,
     };
   }
@@ -230,6 +231,7 @@ export class EDPCProvider extends ContestTableProviderBase {
     return {
       isShownHeader: false,
       isShownRoundLabel: false,
+      roundLabelWidth: '', // No specific width for task index in EDPC
       isShownTaskIndex: true,
     };
   }
@@ -261,12 +263,48 @@ export class TDPCProvider extends ContestTableProviderBase {
     return {
       isShownHeader: false,
       isShownRoundLabel: false,
+      roundLabelWidth: '', // No specific width for task index in TDPC
       isShownTaskIndex: true,
     };
   }
 
   getContestRoundLabel(contestId: string): string {
     return '';
+  }
+}
+
+const regexForJoiFirstQualRound = /^(joi)(\d{4})(yo1)(a|b|c)/i;
+
+export class JOIFirstQualRoundProvider extends ContestTableProviderBase {
+  protected setFilterCondition(): (taskResult: TaskResult) => boolean {
+    return (taskResult: TaskResult) => {
+      if (classifyContest(taskResult.contest_id) !== this.contestType) {
+        return false;
+      }
+
+      return regexForJoiFirstQualRound.test(taskResult.contest_id);
+    };
+  }
+
+  getMetadata(): ContestTableMetaData {
+    return {
+      title: 'JOI 一次予選',
+      abbreviationName: 'joiFirstQualRound',
+    };
+  }
+
+  getDisplayConfig(): ContestTableDisplayConfig {
+    return {
+      isShownHeader: true,
+      isShownRoundLabel: true,
+      isShownTaskIndex: false,
+      roundLabelWidth: 'xl:w-28',
+    };
+  }
+
+  getContestRoundLabel(contestId: string): string {
+    const contestNameLabel = getContestNameLabel(contestId);
+    return contestNameLabel.replace('JOI 一次予選 ', '');
   }
 }
 
@@ -415,6 +453,12 @@ export const prepareContestProviderPresets = () => {
         { contestType: ContestType.EDPC, provider: new EDPCProvider(ContestType.EDPC) },
         { contestType: ContestType.TDPC, provider: new TDPCProvider(ContestType.TDPC) },
       ),
+
+    JOIFirstQualRound: () =>
+      new ContestTableProviderGroup(`JOI 一次予選`, {
+        buttonLabel: 'JOI 一次予選',
+        ariaLabel: 'Filter JOI First Qualifying Round',
+      }).addProvider(ContestType.JOI, new JOIFirstQualRoundProvider(ContestType.JOI)),
   };
 };
 
@@ -423,6 +467,7 @@ export const contestTableProviderGroups = {
   abc319Onwards: prepareContestProviderPresets().ABC319Onwards(),
   fromAbc212ToAbc318: prepareContestProviderPresets().ABC212ToABC318(),
   dps: prepareContestProviderPresets().dps(), // Dynamic Programming (DP) Contests
+  joiFirstQualRound: prepareContestProviderPresets().JOIFirstQualRound(),
 };
 
 export type ContestTableProviderGroups = keyof typeof contestTableProviderGroups;
