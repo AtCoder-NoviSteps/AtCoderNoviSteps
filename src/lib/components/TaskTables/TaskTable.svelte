@@ -106,7 +106,10 @@
   }
 
   function getBodyCellClasses(taskResult: TaskResult, totalColumns: number): string {
-    const baseClasses = 'w-1/2 xs:w-1/3 sm:w-1/4 md:w-1/5 lg:w-1/6 px-1 py-1';
+    const baseClasses =
+      totalColumns >= 5
+        ? 'w-1/2 xs:w-1/3 sm:w-1/4 md:w-1/5 lg:w-1/6 px-1 py-1'
+        : 'w-1/2 xs:w-1/3 sm:w-1/4 px-1 py-1';
     const additionalClasses = totalColumns > 8 ? '2xl:w-1/7 py-2' : '';
     const backgroundColor = getBackgroundColor(taskResult);
 
@@ -199,7 +202,12 @@
       <div class="w-full sticky top-0 z-20 border-b border-gray-200 dark:border-gray-100">
         <Table id="task-table" class="text-md table-fixed w-full" aria-label="Task table">
           <TableHead class="text-sm border-gray-200 dark:border-gray-100">
-            <TableHeadCell class="w-full xl:w-16 px-2 text-center" scope="col">Round</TableHeadCell>
+            <TableHeadCell
+              class="w-full {contestTable.displayConfig.roundLabelWidth} px-2 text-center"
+              scope="col"
+            >
+              Round
+            </TableHeadCell>
 
             {#if contestTable.headerIds}
               {#each contestTable.headerIds as taskTableHeaderId (taskTableHeaderId)}
@@ -224,7 +232,8 @@
               <TableBodyRow class={getBodyRowClasses(totalColumns)}>
                 {#if contestTable.displayConfig.isShownRoundLabel}
                   <TableBodyCell
-                    class="w-full xl:w-16 truncate px-2 py-2 text-center bg-gray-50 dark:bg-gray-800"
+                    class="w-full {contestTable.displayConfig
+                      .roundLabelWidth} truncate px-2 py-2 text-center bg-gray-50 dark:bg-gray-800"
                   >
                     {getContestRoundLabel(provider, contestId)}
                   </TableBodyCell>
