@@ -273,7 +273,7 @@ export class TDPCProvider extends ContestTableProviderBase {
   }
 }
 
-const regexForJoiFirstQualRound = /^(joi)(\d{4})(yo1)(a|b|c)/i;
+const regexForJoiFirstQualRound = /^(joi)(\d{4})(yo1)(a|b|c)$/i;
 
 export class JOIFirstQualRoundProvider extends ContestTableProviderBase {
   protected setFilterCondition(): (taskResult: TaskResult) => boolean {
