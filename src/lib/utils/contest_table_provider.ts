@@ -308,6 +308,38 @@ export class JOIFirstQualRoundProvider extends ContestTableProviderBase {
   }
 }
 
+export class Typical90Provider extends ContestTableProviderBase {
+  protected setFilterCondition(): (taskResult: TaskResult) => boolean {
+    return (taskResult: TaskResult) => {
+      if (classifyContest(taskResult.contest_id) !== this.contestType) {
+        return false;
+      }
+
+      return taskResult.contest_id === 'typical90';
+    };
+  }
+
+  getMetadata(): ContestTableMetaData {
+    return {
+      title: '競プロ典型 90 問',
+      abbreviationName: 'typical90',
+    };
+  }
+
+  getDisplayConfig(): ContestTableDisplayConfig {
+    return {
+      isShownHeader: false,
+      isShownRoundLabel: false,
+      roundLabelWidth: '', // No specific width for the round label in Typical90
+      isShownTaskIndex: true,
+    };
+  }
+
+  getContestRoundLabel(contestId: string): string {
+    return '';
+  }
+}
+
 /**
  * A class that manages individual provider groups
  * Manages multiple ContestTableProviders as a single group,
@@ -459,6 +491,15 @@ export const prepareContestProviderPresets = () => {
         buttonLabel: 'JOI 一次予選',
         ariaLabel: 'Filter JOI First Qualifying Round',
       }).addProvider(ContestType.JOI, new JOIFirstQualRoundProvider(ContestType.JOI)),
+
+    /**
+     * Single group for Typical 90 Problems
+     */
+    Typical90: () =>
+      new ContestTableProviderGroup(`競プロ典型 90 問`, {
+        buttonLabel: '競プロ典型 90 問',
+        ariaLabel: 'Filter Typical 90 Problems',
+      }).addProvider(ContestType.TYPICAL90, new Typical90Provider(ContestType.TYPICAL90)),
   };
 };
 
@@ -468,6 +509,7 @@ export const contestTableProviderGroups = {
   fromAbc212ToAbc318: prepareContestProviderPresets().ABC212ToABC318(),
   dps: prepareContestProviderPresets().dps(), // Dynamic Programming (DP) Contests
   joiFirstQualRound: prepareContestProviderPresets().JOIFirstQualRound(),
+  typical90: prepareContestProviderPresets().Typical90(),
 };
 
 export type ContestTableProviderGroups = keyof typeof contestTableProviderGroups;
