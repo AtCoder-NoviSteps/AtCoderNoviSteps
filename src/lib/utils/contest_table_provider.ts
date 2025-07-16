@@ -330,7 +330,7 @@ export class Typical90Provider extends ContestTableProviderBase {
     return {
       isShownHeader: false,
       isShownRoundLabel: false,
-      roundLabelWidth: '', // No specific width for task index in Typical90
+      roundLabelWidth: '', // No specific width for the round label in Typical90
       isShownTaskIndex: true,
     };
   }
