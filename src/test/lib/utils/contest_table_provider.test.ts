@@ -10,6 +10,7 @@ import {
   EDPCProvider,
   TDPCProvider,
   JOIFirstQualRoundProvider,
+  Typical90Provider,
   ContestTableProviderGroup,
   prepareContestProviderPresets,
 } from '$lib/utils/contest_table_provider';
@@ -26,6 +27,8 @@ vi.mock('$lib/utils/contest', () => ({
       return ContestType.TDPC;
     } else if (contestId.startsWith('joi')) {
       return ContestType.JOI;
+    } else if (contestId === 'typical90') {
+      return ContestType.TYPICAL90;
     }
 
     return ContestType.OTHERS;
@@ -34,7 +37,7 @@ vi.mock('$lib/utils/contest', () => ({
   getContestNameLabel: vi.fn((contestId: string) => {
     if (contestId.startsWith('abc')) {
       return `ABC ${contestId.replace('abc', '')}`;
-    } else if (contestId === 'dp' || contestId === 'tdpc') {
+    } else if (contestId === 'dp' || contestId === 'tdpc' || contestId === 'typical90') {
       return '';
     } else if (contestId.startsWith('joi')) {
       // First qual round
@@ -395,6 +398,147 @@ describe('ContestTableProviderBase and implementations', () => {
     });
   });
 
+  describe('Typical90 provider', () => {
+    test('expects to filter tasks to include only typical90 contest', () => {
+      const provider = new Typical90Provider(ContestType.TYPICAL90);
+      const mockTypical90Tasks = [
+        { contest_id: 'typical90', task_id: 'typical90_a', task_table_index: '001' },
+        { contest_id: 'typical90', task_id: 'typical90_b', task_table_index: '002' },
+        { contest_id: 'typical90', task_id: 'typical90_j', task_table_index: '010' },
+        { contest_id: 'typical90', task_id: 'typical90_ck', task_table_index: '089' },
+        { contest_id: 'typical90', task_id: 'typical90_cl', task_table_index: '090' },
+        { contest_id: 'abc123', task_id: 'abc123_a', task_table_index: 'A' },
+        { contest_id: 'dp', task_id: 'dp_a', task_table_index: 'A' },
+      ];
+
+      const filtered = provider.filter(mockTypical90Tasks as any);
+
+      expect(filtered?.every((task) => task.contest_id === 'typical90')).toBe(true);
+      expect(filtered?.length).toBe(5);
+      expect(filtered).not.toContainEqual(expect.objectContaining({ contest_id: 'abc123' }));
+      expect(filtered).not.toContainEqual(expect.objectContaining({ contest_id: 'dp' }));
+    });
+
+    test('expects to get correct metadata', () => {
+      const provider = new Typical90Provider(ContestType.TYPICAL90);
+      const metadata = provider.getMetadata();
+
+      expect(metadata.title).toBe('競プロ典型 90 問');
+      expect(metadata.abbreviationName).toBe('typical90');
+    });
+
+    test('expects to get correct display configuration', () => {
+      const provider = new Typical90Provider(ContestType.TYPICAL90);
+      const displayConfig = provider.getDisplayConfig();
+
+      expect(displayConfig.isShownHeader).toBe(false);
+      expect(displayConfig.isShownRoundLabel).toBe(false);
+      expect(displayConfig.roundLabelWidth).toBe('');
+      expect(displayConfig.isShownTaskIndex).toBe(true);
+    });
+
+    test('expects to format contest round label correctly', () => {
+      const provider = new Typical90Provider(ContestType.TYPICAL90);
+      const label = provider.getContestRoundLabel('typical90');
+
+      expect(label).toBe('');
+    });
+
+    test('expects to generate correct table structure', () => {
+      const provider = new Typical90Provider(ContestType.TYPICAL90);
+      const mockTypical90Tasks = [
+        { contest_id: 'typical90', task_id: 'typical90_a', task_table_index: '001' },
+        { contest_id: 'typical90', task_id: 'typical90_b', task_table_index: '002' },
+        { contest_id: 'typical90', task_id: 'typical90_c', task_table_index: '003' },
+        { contest_id: 'typical90', task_id: 'typical90_j', task_table_index: '010' },
+        { contest_id: 'typical90', task_id: 'typical90_ck', task_table_index: '089' },
+        { contest_id: 'typical90', task_id: 'typical90_cl', task_table_index: '090' },
+      ];
+
+      const table = provider.generateTable(mockTypical90Tasks as any);
+
+      expect(table).toHaveProperty('typical90');
+      expect(table.typical90).toHaveProperty('001');
+      expect(table.typical90).toHaveProperty('002');
+      expect(table.typical90).toHaveProperty('003');
+      expect(table.typical90).toHaveProperty('010');
+      expect(table.typical90).toHaveProperty('089');
+      expect(table.typical90).toHaveProperty('090');
+      expect(table.typical90['001']).toEqual(
+        expect.objectContaining({ contest_id: 'typical90', task_id: 'typical90_a' }),
+      );
+      expect(table.typical90['002']).toEqual(
+        expect.objectContaining({ contest_id: 'typical90', task_id: 'typical90_b' }),
+      );
+      expect(table.typical90['003']).toEqual(
+        expect.objectContaining({ contest_id: 'typical90', task_id: 'typical90_c' }),
+      );
+      expect(table.typical90['010']).toEqual(
+        expect.objectContaining({ contest_id: 'typical90', task_id: 'typical90_j' }),
+      );
+      expect(table.typical90['089']).toEqual(
+        expect.objectContaining({ contest_id: 'typical90', task_id: 'typical90_ck' }),
+      );
+      expect(table.typical90['090']).toEqual(
+        expect.objectContaining({ contest_id: 'typical90', task_id: 'typical90_cl' }),
+      );
+    });
+
+    test('expects to get contest round IDs correctly', () => {
+      const provider = new Typical90Provider(ContestType.TYPICAL90);
+      const mockTypical90Tasks = [
+        { contest_id: 'typical90', task_id: 'typical90_a', task_table_index: '001' },
+        { contest_id: 'typical90', task_id: 'typical90_b', task_table_index: '002' },
+        { contest_id: 'typical90', task_id: 'typical90_c', task_table_index: '003' },
+        { contest_id: 'typical90', task_id: 'typical90_j', task_table_index: '010' },
+        { contest_id: 'typical90', task_id: 'typical90_ck', task_table_index: '089' },
+        { contest_id: 'typical90', task_id: 'typical90_cl', task_table_index: '090' },
+      ];
+
+      const roundIds = provider.getContestRoundIds(mockTypical90Tasks as any);
+
+      expect(roundIds).toEqual(['typical90']);
+    });
+
+    test('expects to get header IDs for tasks correctly', () => {
+      const provider = new Typical90Provider(ContestType.TYPICAL90);
+      const mockTypical90Tasks = [
+        { contest_id: 'typical90', task_id: 'typical90_a', task_table_index: '001' },
+        { contest_id: 'typical90', task_id: 'typical90_b', task_table_index: '002' },
+        { contest_id: 'typical90', task_id: 'typical90_c', task_table_index: '003' },
+        { contest_id: 'typical90', task_id: 'typical90_d', task_table_index: '004' },
+        { contest_id: 'typical90', task_id: 'typical90_e', task_table_index: '005' },
+        { contest_id: 'typical90', task_id: 'typical90_j', task_table_index: '010' },
+        { contest_id: 'typical90', task_id: 'typical90_ck', task_table_index: '089' },
+        { contest_id: 'typical90', task_id: 'typical90_cl', task_table_index: '090' },
+      ];
+
+      const headerIds = provider.getHeaderIdsForTask(mockTypical90Tasks as any);
+
+      expect(headerIds).toEqual(['001', '002', '003', '004', '005', '010', '089', '090']);
+    });
+
+    test('expects to handle empty task results', () => {
+      const provider = new Typical90Provider(ContestType.TYPICAL90);
+      const filtered = provider.filter([]);
+
+      expect(filtered).toEqual([]);
+    });
+
+    test('expects to handle task results with different contest types', () => {
+      const provider = new Typical90Provider(ContestType.TYPICAL90);
+      const mockMixedTasks = [
+        { contest_id: 'abc123', task_id: 'abc123_a', task_table_index: 'A' },
+        { contest_id: 'dp', task_id: 'dp_a', task_table_index: 'A' },
+        { contest_id: 'tdpc', task_id: 'tdpc_a', task_table_index: 'A' },
+      ];
+
+      const filtered = provider.filter(mockMixedTasks as any);
+
+      expect(filtered).toEqual([]);
+    });
+  });
+
   describe('Common provider functionality', () => {
     test('expects to get contest round IDs correctly', () => {
       const provider = new ABCLatest20RoundsProvider(ContestType.ABC);
@@ -570,6 +714,18 @@ describe('prepareContestProviderPresets', () => {
     expect(group.getProvider(ContestType.TDPC)).toBeInstanceOf(TDPCProvider);
   });
 
+  test('expects to create Typical90 preset correctly', () => {
+    const group = prepareContestProviderPresets().Typical90();
+
+    expect(group.getGroupName()).toBe('競プロ典型 90 問');
+    expect(group.getMetadata()).toEqual({
+      buttonLabel: '競プロ典型 90 問',
+      ariaLabel: 'Filter Typical 90 Problems',
+    });
+    expect(group.getSize()).toBe(1);
+    expect(group.getProvider(ContestType.TYPICAL90)).toBeInstanceOf(Typical90Provider);
+  });
+
   test('expects to verify all presets are functions', () => {
     const presets = prepareContestProviderPresets();
 
@@ -577,6 +733,7 @@ describe('prepareContestProviderPresets', () => {
     expect(typeof presets.ABC319Onwards).toBe('function');
     expect(typeof presets.ABC212ToABC318).toBe('function');
     expect(typeof presets.dps).toBe('function');
+    expect(typeof presets.Typical90).toBe('function');
   });
 
   test('expects each preset to create independent instances', () => {
