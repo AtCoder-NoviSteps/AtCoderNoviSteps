@@ -168,9 +168,7 @@
       {#each workBookTasksForTable as task, index}
         <TableBodyRow>
           <!-- ID -->
-          <TableBodyCell
-            class="xs:text-lg text-gray-700 dark:text-gray-300 truncate pl-6 pr-3"
-          >
+          <TableBodyCell class="xs:text-lg text-gray-700 dark:text-gray-300 truncate pl-6 pr-3">
             <div class="flex justify-center items-center h-full">
               <!-- HACK: 1-indexedにしているが、0-indexedで揃えた方がいい? -->
               {index + 1}
