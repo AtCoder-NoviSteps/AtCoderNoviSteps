@@ -150,8 +150,8 @@
   <Table shadow class="text-md table-fixed w-full" aria-label="Workbook tasks">
     <caption class="sr-only">List of workbook tasks with their grades and comments</caption>
     <TableHead class="text-sm bg-gray-100">
-      <TableHeadCell class="w-6 pl-2 md:pl-4 pr-0 text-center">#</TableHeadCell>
-      <TableHeadCell class="w-20 xs:w-24 text-center px-0" aria-label="Task grade">
+      <TableHeadCell class="w-10 pl-3 pr-3 text-center">#</TableHeadCell>
+      <TableHeadCell class="w-16 xs:w-20 text-center px-0" aria-label="Task grade">
         グレード
       </TableHeadCell>
       <TableHeadCell class="w-1/2 pl-0 truncate">問題名</TableHeadCell>
@@ -168,17 +168,15 @@
       {#each workBookTasksForTable as task, index}
         <TableBodyRow>
           <!-- ID -->
-          <TableBodyCell
-            class="xs:text-lg text-gray-700 dark:text-gray-300 truncate pl-2 md:pl-4 pr-0"
-          >
-            <div class="flex justify-center items-center">
+          <TableBodyCell class="xs:text-lg text-gray-700 dark:text-gray-300 truncate pl-6 pr-3">
+            <div class="flex justify-center items-center h-full">
               <!-- HACK: 1-indexedにしているが、0-indexedで揃えた方がいい? -->
               {index + 1}
             </div>
           </TableBodyCell>
 
           <!-- グレード -->
-          <TableBodyCell class="w-20 xs:w-24">
+          <TableBodyCell>
             <div class="flex items-center justify-center">
               <GradeLabel taskGrade={getTaskGrade(tasksMapByIds, task.taskId)} />
             </div>
