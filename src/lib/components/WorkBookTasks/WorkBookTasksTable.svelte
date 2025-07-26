@@ -178,7 +178,7 @@
           </TableBodyCell>
 
           <!-- グレード -->
-          <TableBodyCell class="w-16 xs:w-20">
+          <TableBodyCell>
             <div class="flex items-center justify-center">
               <GradeLabel taskGrade={getTaskGrade(tasksMapByIds, task.taskId)} />
             </div>
