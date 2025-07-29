@@ -99,6 +99,7 @@ export abstract class ContestTableProviderBase implements ContestTableProvider {
       isShownHeader: true,
       isShownRoundLabel: true,
       roundLabelWidth: 'xl:w-16', // Default width for task index column
+      tableBodyCellsWidth: 'w-1/2 xs:w-1/3 sm:w-1/4 md:w-1/5 lg:w-1/6 px-1 py-1', // Default width for table body cells
       isShownTaskIndex: false,
     };
   }
@@ -232,6 +233,7 @@ export class EDPCProvider extends ContestTableProviderBase {
       isShownHeader: false,
       isShownRoundLabel: false,
       roundLabelWidth: '', // No specific width for task index in EDPC
+      tableBodyCellsWidth: 'w-1/2 xs:w-1/3 sm:w-1/4 md:w-1/5 lg:w-1/6 2xl:w-1/7 px-1 py-2',
       isShownTaskIndex: true,
     };
   }
@@ -264,6 +266,7 @@ export class TDPCProvider extends ContestTableProviderBase {
       isShownHeader: false,
       isShownRoundLabel: false,
       roundLabelWidth: '', // No specific width for task index in TDPC
+      tableBodyCellsWidth: 'w-1/2 xs:w-1/3 sm:w-1/4 md:w-1/5 lg:w-1/6 2xl:w-1/7 px-1 py-2',
       isShownTaskIndex: true,
     };
   }
@@ -298,6 +301,7 @@ export class JOIFirstQualRoundProvider extends ContestTableProviderBase {
       isShownHeader: true,
       isShownRoundLabel: true,
       isShownTaskIndex: false,
+      tableBodyCellsWidth: 'w-1/2 md:w-1/3 lg:w-1/4 px-1 py-1',
       roundLabelWidth: 'xl:w-28',
     };
   }
@@ -331,6 +335,7 @@ export class Typical90Provider extends ContestTableProviderBase {
       isShownHeader: false,
       isShownRoundLabel: false,
       roundLabelWidth: '', // No specific width for the round label in Typical90
+      tableBodyCellsWidth: 'w-1/2 lg:w-1/3 xl:w-1/4 px-1 py-2',
       isShownTaskIndex: true,
     };
   }

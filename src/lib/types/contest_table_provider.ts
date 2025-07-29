@@ -125,12 +125,14 @@ export type ContestTablesMetaData = {
  * @interface ContestTableDisplayConfig
  * @property {boolean} isShownHeader - Whether to display the table header
  * @property {boolean} isShownRoundLabel - Whether to display round labels in the contest table
- * @property {string} roundLabelWidth - tailwind CSS width for the round label column, e.g., "w-16" or "w-20"
+ * @property {string} roundLabelWidth - tailwind CSS width for the round label column, e.g., "xl:w-16" or "xl:w-20"
+ * @property {string} tableBodyCellsWidth - tailwind CSS width for the table body cells, e.g., "w-1/2 xs:w-1/3 sm:w-1/4 md:w-1/5 lg:w-1/6 px-1 py-1"
  * @property {boolean} isShownTaskIndex - Whether to display task index in the contest table cells
  */
 export interface ContestTableDisplayConfig {
   isShownHeader: boolean;
   isShownRoundLabel: boolean;
   roundLabelWidth: string;
+  tableBodyCellsWidth: string;
   isShownTaskIndex: boolean;
 }

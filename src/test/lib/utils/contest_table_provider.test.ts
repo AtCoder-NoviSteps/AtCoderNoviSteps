@@ -143,6 +143,9 @@ describe('ContestTableProviderBase and implementations', () => {
       expect(displayConfig.isShownHeader).toBe(true);
       expect(displayConfig.isShownRoundLabel).toBe(true);
       expect(displayConfig.roundLabelWidth).toBe('xl:w-16');
+      expect(displayConfig.tableBodyCellsWidth).toBe(
+        'w-1/2 xs:w-1/3 sm:w-1/4 md:w-1/5 lg:w-1/6 px-1 py-1',
+      );
       expect(displayConfig.isShownTaskIndex).toBe(false);
     });
   });
@@ -183,6 +186,9 @@ describe('ContestTableProviderBase and implementations', () => {
       expect(displayConfig.isShownHeader).toBe(true);
       expect(displayConfig.isShownRoundLabel).toBe(true);
       expect(displayConfig.roundLabelWidth).toBe('xl:w-16');
+      expect(displayConfig.tableBodyCellsWidth).toBe(
+        'w-1/2 xs:w-1/3 sm:w-1/4 md:w-1/5 lg:w-1/6 px-1 py-1',
+      );
       expect(displayConfig.isShownTaskIndex).toBe(false);
     });
   });
@@ -223,6 +229,9 @@ describe('ContestTableProviderBase and implementations', () => {
       expect(displayConfig.isShownHeader).toBe(true);
       expect(displayConfig.isShownRoundLabel).toBe(true);
       expect(displayConfig.roundLabelWidth).toBe('xl:w-16');
+      expect(displayConfig.tableBodyCellsWidth).toBe(
+        'w-1/2 xs:w-1/3 sm:w-1/4 md:w-1/5 lg:w-1/6 px-1 py-1',
+      );
       expect(displayConfig.isShownTaskIndex).toBe(false);
     });
   });
@@ -243,6 +252,9 @@ describe('ContestTableProviderBase and implementations', () => {
       expect(displayConfig.isShownHeader).toBe(false);
       expect(displayConfig.isShownRoundLabel).toBe(false);
       expect(displayConfig.roundLabelWidth).toBe('');
+      expect(displayConfig.tableBodyCellsWidth).toBe(
+        'w-1/2 xs:w-1/3 sm:w-1/4 md:w-1/5 lg:w-1/6 2xl:w-1/7 px-1 py-2',
+      );
       expect(displayConfig.isShownTaskIndex).toBe(true);
     });
 
@@ -270,6 +282,9 @@ describe('ContestTableProviderBase and implementations', () => {
       expect(displayConfig.isShownHeader).toBe(false);
       expect(displayConfig.isShownRoundLabel).toBe(false);
       expect(displayConfig.roundLabelWidth).toBe('');
+      expect(displayConfig.tableBodyCellsWidth).toBe(
+        'w-1/2 xs:w-1/3 sm:w-1/4 md:w-1/5 lg:w-1/6 2xl:w-1/7 px-1 py-2',
+      );
       expect(displayConfig.isShownTaskIndex).toBe(true);
     });
 
@@ -334,6 +349,7 @@ describe('ContestTableProviderBase and implementations', () => {
       expect(displayConfig.isShownHeader).toBe(true);
       expect(displayConfig.isShownRoundLabel).toBe(true);
       expect(displayConfig.roundLabelWidth).toBe('xl:w-28');
+      expect(displayConfig.tableBodyCellsWidth).toBe('w-1/2 md:w-1/3 lg:w-1/4 px-1 py-1');
       expect(displayConfig.isShownTaskIndex).toBe(false);
     });
 
@@ -434,6 +450,7 @@ describe('ContestTableProviderBase and implementations', () => {
       expect(displayConfig.isShownHeader).toBe(false);
       expect(displayConfig.isShownRoundLabel).toBe(false);
       expect(displayConfig.roundLabelWidth).toBe('');
+      expect(displayConfig.tableBodyCellsWidth).toBe('w-1/2 lg:w-1/3 xl:w-1/4 px-1 py-2');
       expect(displayConfig.isShownTaskIndex).toBe(true);
     });
 
