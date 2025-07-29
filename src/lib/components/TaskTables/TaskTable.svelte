@@ -105,15 +105,10 @@
     return totalColumns > 8 ? 'flex flex-wrap' : 'flex flex-wrap xl:table-row';
   }
 
-  function getBodyCellClasses(taskResult: TaskResult, totalColumns: number): string {
-    const baseClasses =
-      totalColumns >= 5
-        ? 'w-1/2 xs:w-1/3 sm:w-1/4 md:w-1/5 lg:w-1/6 px-1 py-1'
-        : 'w-1/2 xs:w-1/3 sm:w-1/4 px-1 py-1';
-    const additionalClasses = totalColumns > 8 ? '2xl:w-1/7 py-2' : '';
+  function getBodyCellClasses(taskResult: TaskResult, tableBodyCellWidth: string): string {
     const backgroundColor = getBackgroundColor(taskResult);
 
-    return `${baseClasses} ${additionalClasses} ${backgroundColor}`;
+    return `${tableBodyCellWidth} ${backgroundColor}`;
   }
 
   function getBackgroundColor(taskResult: TaskResult): string {
@@ -244,7 +239,10 @@
 
                   <TableBodyCell
                     id={contestId + '-' + taskTableHeaderId}
-                    class={getBodyCellClasses(taskResult, totalColumns)}
+                    class={getBodyCellClasses(
+                      taskResult,
+                      contestTable.displayConfig.tableBodyCellsWidth,
+                    )}
                   >
                     {#if taskResult}
                       <TaskTableBodyCell
