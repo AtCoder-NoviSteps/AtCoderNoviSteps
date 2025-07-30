@@ -75,10 +75,10 @@ function createTaskResultWithTaskTableIndex(
  */
 const createContestTasks = (
   contestId: string,
-  taskConfigs: Array<{ taskTableIndex: string; statusName: string }>,
+  taskConfigs: Array<{ taskId?: string; taskTableIndex: string; statusName: string }>,
 ) => {
   return taskConfigs.map((config) => {
-    const taskId = `${contestId}_${config.taskTableIndex.toLowerCase()}`;
+    const taskId = config.taskId || `${contestId}_${config.taskTableIndex.toLowerCase()}`;
 
     return createTaskResultWithTaskTableIndex(
       contestId,
@@ -124,6 +124,17 @@ const [abc319_a, abc319_b, abc319_c, abc319_d, abc319_e, abc319_f, abc319_g] = c
     { taskTableIndex: 'G', statusName: PENDING },
   ],
 );
+
+// Typical 90 Problems: 6 tasks (001, 002, 003, 010, 089 and 090)
+const [typical90_001, typical90_002, typical90_003, typical90_010, typical90_089, typical90_090] =
+  createContestTasks('typical90', [
+    { taskId: 'typical90_a', taskTableIndex: '001', statusName: AC },
+    { taskId: 'typical90_b', taskTableIndex: '002', statusName: TRYING },
+    { taskId: 'typical90_c', taskTableIndex: '003', statusName: PENDING },
+    { taskId: 'typical90_j', taskTableIndex: '010', statusName: AC },
+    { taskId: 'typical90_ck', taskTableIndex: '089', statusName: TRYING },
+    { taskId: 'typical90_cl', taskTableIndex: '090', statusName: PENDING },
+  ]);
 
 /**
  * Creates an array of contest task results with sequential contest numbers.
@@ -228,4 +239,10 @@ export const taskResultsForContestTableProvider: TaskResults = [
   abc395_g,
   abc396_g,
   abc397_g,
+  typical90_001,
+  typical90_002,
+  typical90_003,
+  typical90_010,
+  typical90_089,
+  typical90_090,
 ];
