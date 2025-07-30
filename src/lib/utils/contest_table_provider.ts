@@ -213,11 +213,7 @@ function parseContestRound(contestId: string, prefix: string): number {
 export class Typical90Provider extends ContestTableProviderBase {
   protected setFilterCondition(): (taskResult: TaskResult) => boolean {
     return (taskResult: TaskResult) => {
-      if (classifyContest(taskResult.contest_id) !== this.contestType) {
-        return false;
-      }
-
-      return taskResult.contest_id === 'typical90';
+      return classifyContest(taskResult.contest_id) === this.contestType;
     };
   }
 
