@@ -335,7 +335,7 @@ describe('ContestTableProviderBase and implementations', () => {
       const provider = new Typical90Provider(ContestType.TYPICAL90);
       const filtered = provider.filter([] as TaskResults);
 
-      expect(filtered).toEqual([]);
+      expect(filtered).toEqual([] as TaskResults);
     });
 
     test('expects to handle task results with different contest types', () => {
@@ -345,8 +345,7 @@ describe('ContestTableProviderBase and implementations', () => {
         { contest_id: 'dp', task_id: 'dp_a', task_table_index: 'A' },
         { contest_id: 'tdpc', task_id: 'tdpc_a', task_table_index: 'A' },
       ];
-
-      const filtered = provider.filter(mockMixedTasks as any);
+      const filtered = provider.filter(mockMixedTasks as TaskResults);
 
       expect(filtered).toEqual([]);
     });
