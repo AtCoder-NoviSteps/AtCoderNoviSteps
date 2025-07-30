@@ -450,7 +450,7 @@ describe('ContestTableProviderBase and implementations', () => {
       expect(displayConfig.isShownHeader).toBe(false);
       expect(displayConfig.isShownRoundLabel).toBe(false);
       expect(displayConfig.roundLabelWidth).toBe('');
-      expect(displayConfig.tableBodyCellsWidth).toBe('w-1/2 lg:w-1/3 xl:w-1/4 px-1 py-2');
+      expect(displayConfig.tableBodyCellsWidth).toBe('w-1/2 xl:w-1/3 px-1 py-2');
       expect(displayConfig.isShownTaskIndex).toBe(true);
     });
 
