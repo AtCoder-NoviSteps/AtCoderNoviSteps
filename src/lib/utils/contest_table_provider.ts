@@ -210,6 +210,39 @@ function parseContestRound(contestId: string, prefix: string): number {
   return parseInt(withoutPrefix, 10);
 }
 
+export class Typical90Provider extends ContestTableProviderBase {
+  protected setFilterCondition(): (taskResult: TaskResult) => boolean {
+    return (taskResult: TaskResult) => {
+      if (classifyContest(taskResult.contest_id) !== this.contestType) {
+        return false;
+      }
+
+      return taskResult.contest_id === 'typical90';
+    };
+  }
+
+  getMetadata(): ContestTableMetaData {
+    return {
+      title: '競プロ典型 90 問',
+      abbreviationName: 'typical90',
+    };
+  }
+
+  getDisplayConfig(): ContestTableDisplayConfig {
+    return {
+      isShownHeader: false,
+      isShownRoundLabel: false,
+      roundLabelWidth: '', // No specific width for the round label in Typical90
+      tableBodyCellsWidth: 'w-1/2 xl:w-1/3 px-1 py-2',
+      isShownTaskIndex: true,
+    };
+  }
+
+  getContestRoundLabel(contestId: string): string {
+    return '';
+  }
+}
+
 export class EDPCProvider extends ContestTableProviderBase {
   protected setFilterCondition(): (taskResult: TaskResult) => boolean {
     return (taskResult: TaskResult) => {
@@ -309,39 +342,6 @@ export class JOIFirstQualRoundProvider extends ContestTableProviderBase {
   getContestRoundLabel(contestId: string): string {
     const contestNameLabel = getContestNameLabel(contestId);
     return contestNameLabel.replace('JOI 一次予選 ', '');
-  }
-}
-
-export class Typical90Provider extends ContestTableProviderBase {
-  protected setFilterCondition(): (taskResult: TaskResult) => boolean {
-    return (taskResult: TaskResult) => {
-      if (classifyContest(taskResult.contest_id) !== this.contestType) {
-        return false;
-      }
-
-      return taskResult.contest_id === 'typical90';
-    };
-  }
-
-  getMetadata(): ContestTableMetaData {
-    return {
-      title: '競プロ典型 90 問',
-      abbreviationName: 'typical90',
-    };
-  }
-
-  getDisplayConfig(): ContestTableDisplayConfig {
-    return {
-      isShownHeader: false,
-      isShownRoundLabel: false,
-      roundLabelWidth: '', // No specific width for the round label in Typical90
-      tableBodyCellsWidth: 'w-1/2 xl:w-1/3 px-1 py-2',
-      isShownTaskIndex: true,
-    };
-  }
-
-  getContestRoundLabel(contestId: string): string {
-    return '';
   }
 }
 
@@ -480,6 +480,15 @@ export const prepareContestProviderPresets = () => {
       }).addProvider(ContestType.ABC, new ABC212ToABC318Provider(ContestType.ABC)),
 
     /**
+     * Single group for Typical 90 Problems
+     */
+    Typical90: () =>
+      new ContestTableProviderGroup(`競プロ典型 90 問`, {
+        buttonLabel: '競プロ典型 90 問',
+        ariaLabel: 'Filter Typical 90 Problems',
+      }).addProvider(ContestType.TYPICAL90, new Typical90Provider(ContestType.TYPICAL90)),
+
+    /**
      * DP group (EDPC and TDPC)
      */
     dps: () =>
@@ -496,15 +505,6 @@ export const prepareContestProviderPresets = () => {
         buttonLabel: 'JOI 一次予選',
         ariaLabel: 'Filter JOI First Qualifying Round',
       }).addProvider(ContestType.JOI, new JOIFirstQualRoundProvider(ContestType.JOI)),
-
-    /**
-     * Single group for Typical 90 Problems
-     */
-    Typical90: () =>
-      new ContestTableProviderGroup(`競プロ典型 90 問`, {
-        buttonLabel: '競プロ典型 90 問',
-        ariaLabel: 'Filter Typical 90 Problems',
-      }).addProvider(ContestType.TYPICAL90, new Typical90Provider(ContestType.TYPICAL90)),
   };
 };
 
@@ -512,9 +512,9 @@ export const contestTableProviderGroups = {
   abcLatest20Rounds: prepareContestProviderPresets().ABCLatest20Rounds(),
   abc319Onwards: prepareContestProviderPresets().ABC319Onwards(),
   fromAbc212ToAbc318: prepareContestProviderPresets().ABC212ToABC318(),
+  typical90: prepareContestProviderPresets().Typical90(),
   dps: prepareContestProviderPresets().dps(), // Dynamic Programming (DP) Contests
   joiFirstQualRound: prepareContestProviderPresets().JOIFirstQualRound(),
-  typical90: prepareContestProviderPresets().Typical90(),
 };
 
 export type ContestTableProviderGroups = keyof typeof contestTableProviderGroups;
