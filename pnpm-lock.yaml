@@ -169,8 +169,8 @@ importers:
         specifier: 0.12.2
         version: 0.12.2(svelte@5.37.3)(tailwindcss@3.4.17(ts-node@10.9.1(@types/node@24.1.0)(typescript@5.8.3)))
       svelte-check:
-        specifier: 4.3.0
-        version: 4.3.0(picomatch@4.0.3)(svelte@5.37.3)(typescript@5.8.3)
+        specifier: 4.3.1
+        version: 4.3.1(picomatch@4.0.3)(svelte@5.37.3)(typescript@5.8.3)
       svelte-meta-tags:
         specifier: 4.4.0
         version: 4.4.0(svelte@5.37.3)
@@ -3940,8 +3940,8 @@ packages:
       svelte: ^5.0.0
       tailwindcss: ^3.0.0
 
-  svelte-check@4.3.0:
-    resolution: {integrity: sha512-Iz8dFXzBNAM7XlEIsUjUGQhbEE+Pvv9odb9+0+ITTgFWZBGeJRRYqHUUglwe2EkLD5LIsQaAc4IUJyvtKuOO5w==}
+  svelte-check@4.3.1:
+    resolution: {integrity: sha512-lkh8gff5gpHLjxIV+IaApMxQhTGnir2pNUAqcNgeKkvK5bT/30Ey/nzBxNLDlkztCH4dP7PixkMt9SWEKFPBWg==}
     engines: {node: '>= 18.0.0'}
     hasBin: true
     peerDependencies:
@@ -8440,7 +8440,7 @@ snapshots:
       tailwind-variants: 0.3.1(tailwindcss@3.4.17(ts-node@10.9.1(@types/node@24.1.0)(typescript@5.8.3)))
       tailwindcss: 3.4.17(ts-node@10.9.1(@types/node@24.1.0)(typescript@5.8.3))
 
-  svelte-check@4.3.0(picomatch@4.0.3)(svelte@5.37.3)(typescript@5.8.3):
+  svelte-check@4.3.1(picomatch@4.0.3)(svelte@5.37.3)(typescript@5.8.3):
     dependencies:
       '@jridgewell/trace-mapping': 0.3.29
       chokidar: 4.0.3
