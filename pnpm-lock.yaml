@@ -69,8 +69,8 @@ importers:
         specifier: 3.4.17
         version: 3.4.17(ts-node@10.9.1(@types/node@24.2.0)(typescript@5.8.3))
       vercel:
-        specifier: 44.7.2
-        version: 44.7.2(rollup@4.45.1)
+        specifier: 44.7.3
+        version: 44.7.3(rollup@4.45.1)
       xss:
         specifier: 1.0.15
         version: 1.0.15
@@ -1359,8 +1359,8 @@ packages:
   '@vercel/gatsby-plugin-vercel-builder@2.0.91':
     resolution: {integrity: sha512-I0kD+79QRi2EsplUXEkNF1OlXw1PqZuOuKza1wTwim6Y3NQNZQxZfADbKEorps1sn2HICXlzuoFdYQ1RxIuMyQ==}
 
-  '@vercel/go@3.2.2':
-    resolution: {integrity: sha512-yYIU3OXkuoxzr47vf+HZnVGujzkVW/e5hrUK0jzCzzmjgo4+5ECrXDSA1bTB6qmWEy6HVsSovnKoHkwDqNIN6Q==}
+  '@vercel/go@3.2.3':
+    resolution: {integrity: sha512-PErgHlV7cf8hyPq31aRsL4xm5t4rCSO6vN5AQLlAGSy3ctdgqG7sI6hq/CAKo3CfgIhVHUwNYapFJgGJB/s4OA==}
 
   '@vercel/hono@0.0.9':
     resolution: {integrity: sha512-ct0oOfRaCLCOTucMpfTEJ8NjDyE5PvjLJ+LNxfegXvOtcW2jt9xdVYs4gz6/tQ/KY9UfZj0pApfaD0xsC/N0FQ==}
@@ -4291,8 +4291,8 @@ packages:
     resolution: {integrity: sha512-BgWVbCI72aIQy937xbawcs+hrVaN/CZ2UwutgaJ36hGqRrLNM+f5LUT/YPRbo8IV/ASeFzXszezV+y2+rq3l8A==}
     engines: {node: '>= 0.10'}
 
-  vercel@44.7.2:
-    resolution: {integrity: sha512-RL8+b23qnxcxNELm4Mt74Ye88iRL5JX0OZWfHBcnAXWyp4laK2hE2BEZgvr0AobprFBAzIdBXyaqSscQ+rQNqw==}
+  vercel@44.7.3:
+    resolution: {integrity: sha512-tSYF3bPmJ81XuX5/9pu8bx6xI2LxTP7RhRjymkcr7yHQniVpmFe9FQA06OH5DALydPmELRyKJAiWO2eu6llM9A==}
     engines: {node: '>= 18'}
     hasBin: true
 
@@ -5801,7 +5801,7 @@ snapshots:
       etag: 1.8.1
       fs-extra: 11.1.0
 
-  '@vercel/go@3.2.2': {}
+  '@vercel/go@3.2.3': {}
 
   '@vercel/hono@0.0.9(rollup@4.45.1)':
     dependencies:
@@ -8840,12 +8840,12 @@ snapshots:
   validator@13.15.15:
     optional: true
 
-  vercel@44.7.2(rollup@4.45.1):
+  vercel@44.7.3(rollup@4.45.1):
     dependencies:
       '@vercel/blob': 1.0.2
       '@vercel/build-utils': 11.0.0
       '@vercel/fun': 1.1.6
-      '@vercel/go': 3.2.2
+      '@vercel/go': 3.2.3
       '@vercel/hono': 0.0.9(rollup@4.45.1)
       '@vercel/hydrogen': 1.2.3
       '@vercel/next': 4.11.0(rollup@4.45.1)
