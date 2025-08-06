@@ -63,7 +63,7 @@ export async function getWorkBookByUrlSlug(urlSlug: string): Promise<WorkBook | 
 
 // See:
 // https://www.prisma.io/docs/orm/prisma-schema/data-model/relations#create-a-record-and-nested-records
-export async function createWorkBook(workBook: WorkBook): Promise<void> {
+export async function createWorkBook(workBook: Omit<WorkBook, 'id'>): Promise<void> {
   const slug = workBook.urlSlug;
 
   if (slug && (await isExistingUrlSlug(slug))) {

@@ -1,6 +1,6 @@
 import type { WorkBook, WorkBookTaskBase, WorkBookTasksBase } from '$lib/types/workbook';
 
-export async function getWorkBookTasks(workBook: WorkBook): Promise<WorkBookTasksBase> {
+export async function getWorkBookTasks(workBook: Omit<WorkBook, 'id'>): Promise<WorkBookTasksBase> {
   const workBookTasks: WorkBookTasksBase = await Promise.all(
     workBook.workBookTasks.map(async (workBookTask: WorkBookTaskBase) => {
       return {
