@@ -75,37 +75,112 @@ const formCreationStrategies = [
     name: 'Create form by manually defining structure',
     async run() {
       const defaultForm = {
-        id: 'fallback-form-' + Date.now(), // Note: Use only client-side validation
         valid: true,
         posted: false,
-        data: { username: '', password: '' },
         errors: {},
-        constraints: {
-          username: { minlength: 3, maxlength: 24, required: true, pattern: '[\\w]*' },
-          password: {
-            minlength: 8,
-            maxlength: 128,
-            required: true,
-            pattern: '(?=.*?[a-z])(?=.*?[A-Z])(?=.*?\\d)[a-zA-Z\\d]{8,128}',
-          },
-        },
-        // [Workaround] Critical fix for production environment schema shape error
-        // SuperForms requires a 'shape' property for internal form structure validation
-        // In production builds, Zod schema internals may be optimized away, causing
-        // "SchemaError: No shape could be created for schema" errors
-        //
-        // See:
-        // SuperForms source - schemaShape() function in adapters/zod.ts
-        // https://github.com/ciscoheat/sveltekit-superforms/issues/594
-        shape: {
-          username: { type: 'string' },
-          password: { type: 'string' },
-        },
+        message: '',
+        ...createBaseAuthForm(),
       };
+
       return { form: { ...defaultForm, message: '' } };
     },
   },
 ];
+
+/**
+ * Validate authentication form data with comprehensive fallback handling
+ * Tries multiple strategies until one succeeds
+ *
+ * @param request - The incoming request containing form data
+ * @returns Object containing success status and either form or errorResponse
+ */
+export const validateAuthFormWithFallback = async (request: Request) => {
+  for (const strategy of formValidationStrategies) {
+    try {
+      const result = await strategy.run(request);
+      console.log(`${strategy.name} successful`);
+
+      return result.form;
+    } catch (error) {
+      console.warn(`Failed to ${strategy.name}`);
+
+      if (error instanceof Error) {
+        console.warn('Error:', error.message);
+      }
+    }
+  }
+
+  // This should never be reached due to fallback strategy
+  throw new Error('Failed to validate form for authentication.');
+};
+
+/**
+ * Form validation strategies for action handlers
+ * Each strategy attempts a different approach to validate form data from requests
+ */
+const formValidationStrategies = [
+  {
+    name: '(Basic Case) Use standard superValidate with request',
+    async run(request: Request) {
+      const form = await superValidate(request, zod(authSchema));
+      return { form: { ...form, message: '' } };
+    },
+  },
+  {
+    name: 'Use zod adapter explicitly with request',
+    async run(request: Request) {
+      const zodAdapter = zod(authSchema);
+      const form = await superValidate(request, zodAdapter);
+      return { form: { ...form, message: '' } };
+    },
+  },
+  {
+    name: 'Create fallback form manually',
+    async run(request: Request) {
+      // Create a fallback form with error state
+      // This maintains consistency with other strategies by returning { form }
+      const fallbackForm = {
+        valid: false,
+        posted: true,
+        errors: { _form: ['ログインできませんでした。'] },
+        message: 'サーバでエラーが発生しました。本サービスの開発・運営チームまでご連絡ください。',
+        ...createBaseAuthForm(),
+      };
+
+      return { form: { ...fallbackForm, message: '' } };
+    },
+  },
+];
+
+/**
+ * Common form structure for authentication forms
+ * Contains constraints and shape definitions used across different form strategies
+ */
+const createBaseAuthForm = () => ({
+  id: 'error-fallback-form-' + Date.now(), // Note: Use only client-side validation
+  data: { username: '', password: '' },
+  constraints: {
+    username: { minlength: 3, maxlength: 24, required: true, pattern: '[\\w]*' },
+    password: {
+      minlength: 8,
+      maxlength: 128,
+      required: true,
+      pattern: '(?=.*?[a-z])(?=.*?[A-Z])(?=.*?\\d)[a-zA-Z\\d]{8,128}',
+    },
+  },
+  // [Workaround] Critical fix for production environment schema shape error
+  // SuperForms requires a 'shape' property for internal form structure validation
+  // In production builds, Zod schema internals may be optimized away, causing
+  // "SchemaError: No shape could be created for schema" errors
+  //
+  // See:
+  // SuperForms source - schemaShape() function in adapters/zod.ts
+  // https://github.com/ciscoheat/sveltekit-superforms/issues/594
+  shape: {
+    username: { type: 'string' },
+    password: { type: 'string' },
+  },
+});
 
 export const ensureSessionOrRedirect = async (locals: App.Locals): Promise<void> => {
   const session = await locals.auth.validate();

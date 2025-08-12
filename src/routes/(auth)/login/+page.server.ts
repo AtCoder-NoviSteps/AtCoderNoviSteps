@@ -1,13 +1,10 @@
 // See:
 // https://lucia-auth.com/guidebook/sign-in-with-username-and-password/sveltekit/
 // https://superforms.rocks/get-started
-import { superValidate } from 'sveltekit-superforms/server';
-import { zod } from 'sveltekit-superforms/adapters';
 import { fail, redirect } from '@sveltejs/kit';
 import { LuciaError } from 'lucia';
 
-import { initializeAuthForm } from '$lib/utils/authorship';
-import { authSchema } from '$lib/zod/schema';
+import { initializeAuthForm, validateAuthFormWithFallback } from '$lib/utils/authorship';
 import { auth } from '$lib/server/auth';
 
 import {
@@ -25,7 +22,7 @@ export const load: PageServerLoad = async ({ locals }) => {
 
 export const actions: Actions = {
   default: async ({ request, locals }) => {
-    const form = await superValidate(request, zod(authSchema));
+    const form = await validateAuthFormWithFallback(request);
 
     if (!form.valid) {
       return fail(BAD_REQUEST, {
