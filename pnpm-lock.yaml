@@ -142,8 +142,8 @@ importers:
         specifier: 16.1.5
         version: 16.1.5
       nock:
-        specifier: 14.0.9
-        version: 14.0.9
+        specifier: 14.0.10
+        version: 14.0.10
       pnpm:
         specifier: 10.14.0
         version: 10.14.0
@@ -3152,8 +3152,8 @@ packages:
   natural-compare@1.4.0:
     resolution: {integrity: sha512-OWND8ei3VtNC9h7V60qff3SVobHr996CTwgxubgyQYEpg290h9J0buyECNNJexkFm5sOajh5G116RYA1c8ZMSw==}
 
-  nock@14.0.9:
-    resolution: {integrity: sha512-aVIPgW9WVyb3XPCqfrwETc+hazxzgt8/QvARHAhC6BYHtTsZONUjlXoIB8EGmwqUBkKvOew4yqkGRBmwctdCrw==}
+  nock@14.0.10:
+    resolution: {integrity: sha512-Q7HjkpyPeLa0ZVZC5qpxBt5EyLczFJ91MEewQiIi9taWuA0KB/MDJlUWtON+7dGouVdADTQsf9RA7TZk6D8VMw==}
     engines: {node: '>=18.20.0 <20 || >=20.12.1'}
 
   node-fetch@2.6.7:
@@ -7751,7 +7751,7 @@ snapshots:
 
   natural-compare@1.4.0: {}
 
-  nock@14.0.9:
+  nock@14.0.10:
     dependencies:
       '@mswjs/interceptors': 0.39.5
       json-stringify-safe: 5.0.1
