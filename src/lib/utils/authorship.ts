@@ -98,7 +98,7 @@ export const validateAuthFormWithFallback = async (request: Request) => {
   for (const strategy of formValidationStrategies) {
     try {
       const result = await strategy.run(request);
-      console.log(`${strategy.name} successful`);
+      console.log(`Success: ${strategy.name}`);
 
       return result.form;
     } catch (error) {
