@@ -1,7 +1,111 @@
 import { redirect } from '@sveltejs/kit';
 
-import { TEMPORARY_REDIRECT } from '$lib/constants/http-response-status-codes';
+import { superValidate } from 'sveltekit-superforms/server';
+import { zod } from 'sveltekit-superforms/adapters';
+
+import { TEMPORARY_REDIRECT, SEE_OTHER } from '$lib/constants/http-response-status-codes';
+import { HOME_PAGE } from '$lib/constants/navbar-links';
+import { authSchema } from '$lib/zod/schema';
 import { Roles } from '$lib/types/user';
+
+/**
+ * Initialize authentication form pages (login/signup)
+ * Redirects to home page if already logged in,
+ * otherwise initializes the authentication form for unauthenticated users
+ */
+export const initializeAuthForm = async (locals: App.Locals) => {
+  const session = await locals.auth.validate();
+
+  if (session) {
+    redirect(SEE_OTHER, HOME_PAGE);
+  }
+
+  return await createAuthFormWithFallback();
+};
+
+/**
+ * Create authentication form with comprehensive fallback handling
+ * Tries multiple strategies until one succeeds
+ */
+const createAuthFormWithFallback = async () => {
+  for (const strategy of formCreationStrategies) {
+    try {
+      const result = await strategy.run();
+      console.log(`Success: ${strategy.name}`);
+
+      return result;
+    } catch (error) {
+      console.warn(`Failed to ${strategy.name}`);
+
+      if (error instanceof Error) {
+        console.warn('Error:', error.message);
+      }
+    }
+  }
+
+  // This should never be reached due to manual creation strategy
+  throw new Error('Failed to create form for authentication.');
+};
+
+/**
+ * Form creation strategies in order of preference
+ * Each strategy attempts a different approach to create a valid form
+ *
+ * See:
+ * https://superforms.rocks/concepts/client-validation
+ * https://superforms.rocks/api#supervalidate-options
+ */
+const formCreationStrategies = [
+  {
+    name: '(Basic case) Use standard superValidate',
+    async run() {
+      const form = await superValidate(null, zod(authSchema));
+      return { form: { ...form, message: '' } };
+    },
+  },
+  {
+    name: 'Use zod adapter explicitly',
+    async run() {
+      const zodAdapter = zod(authSchema);
+      const form = await superValidate(null, zodAdapter);
+      return { form: { ...form, message: '' } };
+    },
+  },
+  {
+    name: 'Create form by manually defining structure',
+    async run() {
+      const defaultForm = {
+        id: 'fallback-form-' + Date.now(), // Note: Use only client-side validation
+        valid: true,
+        posted: false,
+        data: { username: '', password: '' },
+        errors: {},
+        constraints: {
+          username: { minlength: 3, maxlength: 24, required: true, pattern: '[\\w]*' },
+          password: {
+            minlength: 8,
+            maxlength: 128,
+            required: true,
+            pattern: '(?=.*?[a-z])(?=.*?[A-Z])(?=.*?\\d)[a-zA-Z\\d]{8,128}',
+          },
+        },
+        // [Workaround] Critical fix for production environment schema shape error
+        // SuperForms requires a 'shape' property for internal form structure validation
+        // In production builds, Zod schema internals may be optimized away, causing
+        // "SchemaError: No shape could be created for schema" errors
+        //
+        // See:
+        // SuperForms source - schemaShape() function in adapters/zod.ts
+        // https://github.com/ciscoheat/sveltekit-superforms/issues/594
+        shape: {
+          username: { type: 'string' },
+          password: { type: 'string' },
+        },
+      };
+      return { form: { ...defaultForm, message: '' } };
+    },
+  },
+];
 
 export const ensureSessionOrRedirect = async (locals: App.Locals): Promise<void> => {
   const session = await locals.auth.validate();

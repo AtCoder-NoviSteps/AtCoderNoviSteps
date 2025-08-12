@@ -7,6 +7,7 @@ import { fail, redirect } from '@sveltejs/kit';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import { LuciaError } from 'lucia';
 
+import { initializeAuthForm } from '$lib/utils/authorship';
 import { authSchema } from '$lib/zod/schema';
 import { auth } from '$lib/server/auth';
 
@@ -20,15 +21,7 @@ import { HOME_PAGE } from '$lib/constants/navbar-links';
 import type { Actions, PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ locals }) => {
-  const session = await locals.auth.validate();
-
-  if (session) {
-    redirect(SEE_OTHER, HOME_PAGE);
-  }
-
-  const form = await superValidate(null, zod(authSchema));
-
-  return { form: { ...form, message: '' } };
+  return await initializeAuthForm(locals);
 };
 
 // FIXME: エラー処理に共通部分があるため、リファクタリングをしましょう。
