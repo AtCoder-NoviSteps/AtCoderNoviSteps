@@ -27,7 +27,7 @@ export const initializeAuthForm = async (locals: App.Locals) => {
  * Create authentication form with comprehensive fallback handling
  * Tries multiple strategies until one succeeds
  */
-const createAuthFormWithFallback = async () => {
+export const createAuthFormWithFallback = async () => {
   for (const strategy of formCreationStrategies) {
     try {
       const result = await strategy.run();
@@ -149,7 +149,7 @@ const formValidationStrategies = [
         ...createBaseAuthForm(),
       };
 
-      return { form: { ...fallbackForm, message: '' } };
+      return { form: fallbackForm };
     },
   },
 ];
