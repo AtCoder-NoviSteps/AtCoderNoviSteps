@@ -136,7 +136,7 @@ const formValidationStrategies = [
   },
   {
     name: 'Create fallback form manually',
-    async run(request: Request) {
+    async run(_request: Request) {
       // Create a fallback form with error state
       // This maintains consistency with other strategies by returning { form }
       const fallbackForm = {
