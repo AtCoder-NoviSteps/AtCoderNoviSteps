@@ -34,10 +34,12 @@ const createAuthFormWithFallback = async () => {
 
       return result;
     } catch (error) {
-      console.warn(`Failed to ${strategy.name}`);
+      if (import.meta.env.DEV) {
+        console.warn(`Failed to ${strategy.name}`);
 
-      if (error instanceof Error) {
-        console.warn('Error:', error.message);
+        if (error instanceof Error) {
+          console.warn('Error:', error.message);
+        }
       }
     }
   }
@@ -100,10 +102,12 @@ export const validateAuthFormWithFallback = async (request: Request) => {
 
       return result.form;
     } catch (error) {
-      console.warn(`Failed to ${strategy.name}`);
+      if (import.meta.env.DEV) {
+        console.warn(`Failed to ${strategy.name}`);
 
-      if (error instanceof Error) {
-        console.warn('Error:', error.message);
+        if (error instanceof Error) {
+          console.warn('Error:', error.message);
+        }
       }
     }
   }
