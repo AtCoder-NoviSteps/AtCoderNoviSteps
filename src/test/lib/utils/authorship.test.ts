@@ -163,6 +163,85 @@ describe('createAuthFormWithFallback', () => {
       });
     });
   });
+
+  describe('Auth form for error cases', () => {
+    test('expect to handle errors during strategy execution gracefully', async () => {
+      // Mock console.warn to spy on error logging
+      const consoleWarnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+
+      // Mock first two strategies to fail, third should succeed
+      vi.mocked(superValidate)
+        .mockRejectedValueOnce(new Error('Failed to create basic strategy'))
+        .mockRejectedValueOnce(new Error('Failed to create strategy with zod adapter'));
+      vi.mocked(zod).mockReturnValue({} as any);
+
+      const result = await createAuthFormWithFallback();
+
+      // Should successfully fallback to manual creation
+      expect(result.form).toMatchObject({
+        valid: true,
+        posted: false,
+        data: { username: '', password: '' },
+        errors: {},
+        message: '',
+      });
+      expect(result.form.constraints).toBeDefined();
+      expect(result.form.shape).toBeDefined();
+
+      // Console.warn should be called in DEV environment
+      // (Note: This depends on import.meta.env.DEV being true in test environment)
+      consoleWarnSpy.mockRestore();
+    });
+
+    test('expect to handle zod adapter creation errors', async () => {
+      // Mock zod to throw an error
+      vi.mocked(zod)
+        .mockImplementationOnce(() => {
+          throw new Error('Failed to create Zod adapter');
+        })
+        .mockImplementationOnce(() => {
+          throw new Error('Failed to create Zod adapter again');
+        })
+        .mockReturnValue({} as any); // Third call succeeds for manual creation
+
+      vi.mocked(superValidate).mockRejectedValue(
+        new Error('Failed to create strategy with SuperValidate'),
+      );
+
+      const result = await createAuthFormWithFallback();
+
+      // Expect to succeed with manual creation
+      expect(result.form).toMatchObject({
+        valid: true,
+        posted: false,
+        data: { username: '', password: '' },
+        errors: {},
+        message: '',
+      });
+    });
+
+    test('expect to handle unexpected error types gracefully', async () => {
+      // Mock superValidate to throw non-Error objects
+      vi.mocked(superValidate)
+        .mockRejectedValueOnce('String error instead of Error object')
+        .mockRejectedValueOnce(null)
+        .mockRejectedValueOnce(undefined);
+      vi.mocked(zod).mockReturnValue({} as any);
+
+      // Should still fallback to manual creation successfully
+      const result = await createAuthFormWithFallback();
+
+      expect(result.form).toMatchObject({
+        valid: true,
+        posted: false,
+        data: { username: '', password: '' },
+        errors: {},
+        message: '',
+      });
+      expect(result.form.constraints).toBeDefined();
+      expect(result.form.shape).toBeDefined();
+    });
+  });
 });
 
 describe('validateAuthFormWithFallback', () => {
