@@ -1,207 +1,77 @@
 import { redirect } from '@sveltejs/kit';
 
-import { superValidate } from 'sveltekit-superforms/server';
-import { zod } from 'sveltekit-superforms/adapters';
-
-import { TEMPORARY_REDIRECT, SEE_OTHER } from '$lib/constants/http-response-status-codes';
-import { HOME_PAGE } from '$lib/constants/navbar-links';
-import { authSchema } from '$lib/zod/schema';
+import { TEMPORARY_REDIRECT } from '$lib/constants/http-response-status-codes';
 import { Roles } from '$lib/types/user';
 
 /**
- * Initialize authentication form pages (login/signup)
- * Redirects to home page if already logged in,
- * otherwise initializes the authentication form for unauthenticated users
+ * Ensure user has a valid session or redirect to login
+ * @param locals - The application locals containing auth and user information
+ * @returns {Promise<void>}
  */
-export const initializeAuthForm = async (locals: App.Locals) => {
-  const session = await locals.auth.validate();
-
-  if (session) {
-    redirect(SEE_OTHER, HOME_PAGE);
-  }
-
-  return await createAuthFormWithFallback();
-};
-
-/**
- * Create authentication form with comprehensive fallback handling
- * Tries multiple strategies until one succeeds
- */
-export const createAuthFormWithFallback = async () => {
-  for (const strategy of formCreationStrategies) {
-    try {
-      const result = await strategy.run();
-
-      return result;
-    } catch (error) {
-      if (import.meta.env.DEV) {
-        console.warn(`Failed to ${strategy.name}`);
-
-        if (error instanceof Error) {
-          console.warn('Error:', error.message);
-        }
-      }
-    }
-  }
-
-  // This should never be reached due to manual creation strategy
-  throw new Error('Failed to create form for authentication.');
-};
-
-/**
- * Form creation strategies in order of preference
- * Each strategy attempts a different approach to create a valid form
- *
- * See:
- * https://superforms.rocks/migration-v2#supervalidate
- * https://superforms.rocks/concepts/client-validation
- * https://superforms.rocks/api#supervalidate-options
- */
-const formCreationStrategies = [
-  {
-    name: '(Basic case) Use standard superValidate',
-    async run() {
-      const form = await superValidate(zod(authSchema));
-      return { form: { ...form, message: '' } };
-    },
-  },
-  {
-    name: 'Create form by manually defining structure',
-    async run() {
-      const defaultForm = {
-        valid: true,
-        posted: false,
-        errors: {},
-        message: '',
-        ...createBaseAuthForm(),
-      };
-
-      return { form: { ...defaultForm, message: '' } };
-    },
-  },
-];
-
-/**
- * Validate authentication form data with comprehensive fallback handling
- * Tries multiple strategies until one succeeds
- *
- * @param request - The incoming request containing form data
- * @returns The validated form object
- */
-export const validateAuthFormWithFallback = async (request: Request) => {
-  for (const strategy of formValidationStrategies) {
-    try {
-      const result = await strategy.run(request);
-
-      return result.form;
-    } catch (error) {
-      if (import.meta.env.DEV) {
-        console.warn(`Failed to ${strategy.name}`);
-
-        if (error instanceof Error) {
-          console.warn('Error:', error.message);
-        }
-      }
-    }
-  }
-
-  // This should never be reached due to fallback strategy
-  throw new Error('Failed to validate form for authentication.');
-};
-
-/**
- * Form validation strategies for action handlers
- * Each strategy attempts a different approach to validate form data from requests
- */
-const formValidationStrategies = [
-  {
-    name: '(Basic Case) Use standard superValidate with request',
-    async run(request: Request) {
-      const form = await superValidate(request, zod(authSchema));
-      return { form: { ...form, message: '' } };
-    },
-  },
-  {
-    name: 'Create fallback form manually',
-    async run(_request: Request) {
-      // Create a fallback form with error state
-      // This maintains consistency with other strategies by returning { form }
-      const fallbackForm = {
-        valid: false,
-        posted: true,
-        errors: { _form: ['ログインできませんでした。'] },
-        message: 'サーバでエラーが発生しました。本サービスの開発・運営チームまでご連絡ください。',
-        ...createBaseAuthForm(),
-      };
-
-      return { form: fallbackForm };
-    },
-  },
-];
-
-/**
- * Common form structure for authentication forms
- * Contains constraints and shape definitions used across different form strategies
- */
-const createBaseAuthForm = () => ({
-  id: 'error-fallback-form-' + crypto.randomUUID(),
-  data: { username: '', password: '' },
-  constraints: {
-    username: { minlength: 3, maxlength: 24, required: true, pattern: '[\\w]*' },
-    password: {
-      minlength: 8,
-      maxlength: 128,
-      required: true,
-      pattern: '(?=.*?[a-z])(?=.*?[A-Z])(?=.*?\\d)[a-zA-Z\\d]{8,128}',
-    },
-  },
-  // [Workaround] Critical fix for production environment schema shape error
-  // SuperForms requires a 'shape' property for internal form structure validation
-  // In production builds, Zod schema internals may be optimized away, causing
-  // "SchemaError: No shape could be created for schema" errors
-  //
-  // See:
-  // SuperForms source - schemaShape() function in adapters/zod.ts
-  // https://github.com/ciscoheat/sveltekit-superforms/issues/594
-  shape: {
-    username: { type: 'string' },
-    password: { type: 'string' },
-  },
-});
-
 export const ensureSessionOrRedirect = async (locals: App.Locals): Promise<void> => {
   const session = await locals.auth.validate();
 
   if (!session) {
-    throw redirect(TEMPORARY_REDIRECT, '/login');
+    redirect(TEMPORARY_REDIRECT, '/login');
   }
 };
 
+/**
+ * Get the current logged-in user or redirect to login
+ * @param locals - The application locals containing auth and user information
+ * @returns {Promise<App.Locals['user'] | null>} - The logged-in user or null
+ */
 export const getLoggedInUser = async (locals: App.Locals): Promise<App.Locals['user'] | null> => {
   await ensureSessionOrRedirect(locals);
   const loggedInUser = locals.user;
 
   if (!loggedInUser) {
-    throw redirect(TEMPORARY_REDIRECT, '/login');
+    redirect(TEMPORARY_REDIRECT, '/login');
   }
 
   return loggedInUser;
 };
 
+/**
+ * Validate if the user has admin role
+ * @param role - User role
+ * @returns {boolean} - True if user is admin, false otherwise
+ */
 export const isAdmin = (role: Roles): boolean => {
   return role === Roles.ADMIN;
 };
 
+/**
+ * Validate if the user has authority (is the author)
+ * @param userId - The user id
+ * @param authorId - The author id
+ * @returns {boolean} - True if user has authority, false otherwise
+ */
 export const hasAuthority = (userId: string, authorId: string): boolean => {
   return userId.toLowerCase() === authorId.toLowerCase();
 };
 
-// Note: 公開 + 非公開(本人のみ)の問題集が閲覧できる
+/**
+ * Validate if user can read the workbook
+ * Public workbooks can be read by anyone, private workbooks only by the author
+ * @param isPublished - Whether the workbook is published
+ * @param userId - The user id
+ * @param authorId - The author id
+ * @returns {boolean} - True if user can read, false otherwise
+ */
 export const canRead = (isPublished: boolean, userId: string, authorId: string): boolean => {
   return isPublished || hasAuthority(userId, authorId);
 };
 
-// Note: 特例として、管理者はユーザが公開している問題集を編集できる
+/**
+ * Validate if user can edit the workbook
+ * Authors can always edit their workbooks
+ * Admins can edit public workbooks as a special case
+ * @param userId - The user id
+ * @param authorId - The author id
+ * @param role - User role
+ * @returns {boolean} - True if user can edit, false otherwise
+ */
 export const canEdit = (
   userId: string,
   authorId: string,
@@ -211,7 +81,13 @@ export const canEdit = (
   return hasAuthority(userId, authorId) || (isAdmin(role) && isPublished);
 };
 
-// Note: 本人のみ削除可能
+/**
+ * Validate if user can delete the workbook
+ * Only the author can delete their workbooks
+ * @param userId - The user id
+ * @param authorId - The author id
+ * @returns {boolean} - True if user can delete, false otherwise
+ */
 export const canDelete = (userId: string, authorId: string): boolean => {
   return hasAuthority(userId, authorId);
 };

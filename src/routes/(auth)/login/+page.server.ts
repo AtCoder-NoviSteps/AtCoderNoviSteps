@@ -6,7 +6,7 @@
 import { fail, redirect } from '@sveltejs/kit';
 import { LuciaError } from 'lucia';
 
-import { initializeAuthForm, validateAuthFormWithFallback } from '$lib/utils/authorship';
+import { initializeAuthForm, validateAuthFormWithFallback } from '$lib/utils/auth_forms';
 import { auth } from '$lib/server/auth';
 
 import {
