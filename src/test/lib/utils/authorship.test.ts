@@ -255,6 +255,29 @@ describe('validateAuthFormWithFallback', () => {
     vi.restoreAllMocks();
   });
 
+  /**
+   * Creates a mock HTTP Request object for testing authentication endpoints.
+   *
+   * @param username - The username to include in the request body
+   * @param password - The password to include in the request body
+   * @returns A Request object with POST method, form-encoded body containing credentials, and appropriate headers
+   *
+   * @example
+   * ```typescript
+   * const request = createMockRequest('john_doe', 'secret123');
+   * // Creates a POST request to localhost with username and password in the body
+   * ```
+   */
+  function createMockRequest(username: string, password: string): Request {
+    return new Request('http://localhost', {
+      method: 'POST',
+      body: new URLSearchParams({ username, password }).toString(),
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+    });
+  }
+
   describe('Auth form for successful cases', () => {
     test('expect to validate valid form data successfully', async () => {
       const mockForm = {
@@ -270,13 +293,7 @@ describe('validateAuthFormWithFallback', () => {
       vi.mocked(superValidate).mockResolvedValueOnce(mockForm);
       vi.mocked(zod).mockReturnValue({} as any);
 
-      const mockRequest = new Request('http://localhost', {
-        method: 'POST',
-        body: new URLSearchParams({ username: 'testuser', password: 'TestPass123' }).toString(),
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-      });
+      const mockRequest = createMockRequest('testuser', 'TestPass123');
 
       const result = await validateAuthFormWithFallback(mockRequest);
 
@@ -303,13 +320,7 @@ describe('validateAuthFormWithFallback', () => {
       vi.mocked(superValidate).mockResolvedValueOnce(mockForm);
       vi.mocked(zod).mockReturnValue({} as any);
 
-      const mockRequest = new Request('http://localhost', {
-        method: 'POST',
-        body: new URLSearchParams({ username: 'ab', password: '123' }).toString(),
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-      });
+      const mockRequest = createMockRequest('ab', '123');
 
       const result = await validateAuthFormWithFallback(mockRequest);
 
@@ -323,13 +334,7 @@ describe('validateAuthFormWithFallback', () => {
         .mockRejectedValueOnce(new Error('Failed to create strategy with zod adapter'));
       vi.mocked(zod).mockReturnValue({} as any);
 
-      const mockRequest = new Request('http://localhost', {
-        method: 'POST',
-        body: new URLSearchParams({ username: 'testuser', password: 'TestPass123' }).toString(),
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-      });
+      const mockRequest = createMockRequest('testuser', 'TestPass123');
 
       const result = await validateAuthFormWithFallback(mockRequest);
 
