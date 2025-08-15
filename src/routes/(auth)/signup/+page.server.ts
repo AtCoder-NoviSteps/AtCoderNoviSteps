@@ -1,6 +1,8 @@
 // See:
 // https://lucia-auth.com/guidebook/sign-in-with-username-and-password/sveltekit/
-// https://superforms.rocks/get-started
+
+// This route uses centralized helpers with fallback validation strategies.
+// See src/lib/utils/authorship.ts for the current form handling approach.
 import { fail, redirect } from '@sveltejs/kit';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import { LuciaError } from 'lucia';
