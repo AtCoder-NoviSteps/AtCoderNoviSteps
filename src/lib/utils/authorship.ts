@@ -192,7 +192,7 @@ export const isAdmin = (role: Roles): boolean => {
 };
 
 export const hasAuthority = (userId: string, authorId: string): boolean => {
-  return userId.toLocaleLowerCase() === authorId.toLocaleLowerCase();
+  return userId.toLowerCase() === authorId.toLowerCase();
 };
 
 // Note: 公開 + 非公開(本人のみ)の問題集が閲覧できる
