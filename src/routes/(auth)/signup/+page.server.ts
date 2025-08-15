@@ -20,7 +20,7 @@ import { HOME_PAGE } from '$lib/constants/navbar-links';
 import type { Actions, PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ locals }) => {
-  return await initializeAuthForm(locals);
+  return initializeAuthForm(locals);
 };
 
 // FIXME: エラー処理に共通部分があるため、リファクタリングをしましょう。
