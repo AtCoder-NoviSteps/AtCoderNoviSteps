@@ -350,7 +350,7 @@ describe('validateAuthFormWithFallback', () => {
         .mockRejectedValueOnce(new Error('Invalid request'));
       vi.mocked(zod).mockReturnValue({} as any);
 
-      const mockRequest = null as any;
+      const mockRequest = {} as Request;
 
       const result = await validateAuthFormWithFallback(mockRequest);
 
