@@ -84,6 +84,6 @@ export const actions: Actions = {
 
     // redirect to
     // make sure you don't throw inside a try/catch block!
-    redirect(SEE_OTHER, HOME_PAGE);
+    return redirect(SEE_OTHER, HOME_PAGE);
   },
 };
