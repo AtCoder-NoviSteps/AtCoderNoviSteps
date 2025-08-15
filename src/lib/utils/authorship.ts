@@ -159,7 +159,7 @@ const formValidationStrategies = [
  * Contains constraints and shape definitions used across different form strategies
  */
 const createBaseAuthForm = () => ({
-  id: 'error-fallback-form-' + crypto.randomUUID(), // Note: Use only client-side validation
+  id: 'error-fallback-form-' + crypto.randomUUID(),
   data: { username: '', password: '' },
   constraints: {
     username: { minlength: 3, maxlength: 24, required: true, pattern: '[\\w]*' },
