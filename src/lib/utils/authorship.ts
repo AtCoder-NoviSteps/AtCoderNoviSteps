@@ -53,6 +53,7 @@ export const createAuthFormWithFallback = async () => {
  * Each strategy attempts a different approach to create a valid form
  *
  * See:
+ * https://superforms.rocks/migration-v2#supervalidate
  * https://superforms.rocks/concepts/client-validation
  * https://superforms.rocks/api#supervalidate-options
  */
@@ -60,7 +61,7 @@ const formCreationStrategies = [
   {
     name: '(Basic case) Use standard superValidate',
     async run() {
-      const form = await superValidate(null, zod(authSchema));
+      const form = await superValidate(zod(authSchema));
       return { form: { ...form, message: '' } };
     },
   },
