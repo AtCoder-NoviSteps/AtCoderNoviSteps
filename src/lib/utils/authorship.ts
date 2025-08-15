@@ -65,14 +65,6 @@ const formCreationStrategies = [
     },
   },
   {
-    name: 'Use zod adapter explicitly',
-    async run() {
-      const zodAdapter = zod(authSchema);
-      const form = await superValidate(null, zodAdapter);
-      return { form: { ...form, message: '' } };
-    },
-  },
-  {
     name: 'Create form by manually defining structure',
     async run() {
       const defaultForm = {
@@ -125,14 +117,6 @@ const formValidationStrategies = [
     name: '(Basic Case) Use standard superValidate with request',
     async run(request: Request) {
       const form = await superValidate(request, zod(authSchema));
-      return { form: { ...form, message: '' } };
-    },
-  },
-  {
-    name: 'Use zod adapter explicitly with request',
-    async run(request: Request) {
-      const zodAdapter = zod(authSchema);
-      const form = await superValidate(request, zodAdapter);
       return { form: { ...form, message: '' } };
     },
   },

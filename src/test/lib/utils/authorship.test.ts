@@ -67,31 +67,6 @@ describe('createAuthFormWithFallback', () => {
       });
     });
 
-    test('expect to fallback to explicit zod adapter when basic strategy fails', async () => {
-      const mockForm = {
-        id: 'test-form-id',
-        valid: true,
-        posted: false,
-        data: { username: '', password: '' },
-        errors: {},
-        constraints: {},
-        shape: {},
-      };
-
-      vi.mocked(superValidate)
-        .mockRejectedValueOnce(new Error('Failed to create with basic strategy'))
-        .mockResolvedValueOnce(mockForm);
-      vi.mocked(zod).mockReturnValue({} as any);
-
-      const result = await createAuthFormWithFallback();
-
-      expect(result.form).toMatchObject({
-        valid: true,
-        data: { username: '', password: '' },
-        message: '',
-      });
-    });
-
     test('expect to use manual form creation when all superValidate attempts fail', async () => {
       vi.mocked(superValidate)
         .mockRejectedValueOnce(new Error('Failed to create strategy using SuperValidate'))
