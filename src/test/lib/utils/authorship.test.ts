@@ -105,6 +105,8 @@ describe('Logged-in user id', () => {
       const testCases = [
         { userId: adminId, authorId: adminId },
         { userId: userId1, authorId: userId1 },
+        { userId: 'USER123', authorId: 'user123' },
+        { userId: 'AuthorX', authorId: 'authorx' },
       ];
       runTests('hasAuthority', testCases, ({ userId, authorId }: Authorship) => {
         expect(hasAuthority(userId, authorId)).toBe(true);
