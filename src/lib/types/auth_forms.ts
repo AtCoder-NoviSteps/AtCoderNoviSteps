@@ -7,14 +7,14 @@
  * @property {boolean} [required] - Whether the field is mandatory and must have a value
  * @property {string} [pattern] - Regular expression pattern that the field value must match
  */
-type FieldConstraints = {
+export type FieldConstraints = {
   minlength?: number;
   maxlength?: number;
   required?: boolean;
   pattern?: string;
 };
 
-type AuthFormConstraints = {
+export type AuthFormConstraints = {
   username?: FieldConstraints;
   password?: FieldConstraints;
 };
