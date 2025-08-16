@@ -121,14 +121,6 @@ const formValidationStrategies = [
     },
   },
   {
-    name: 'Use zod adapter explicitly',
-    async run(request: Request) {
-      const zodAdapter = zod(authSchema);
-      const form = await superValidate(request, zodAdapter);
-      return { form: { ...form, message: '' } };
-    },
-  },
-  {
     name: 'Create fallback form manually',
     async run(_request: Request) {
       // Create a fallback form with error state
