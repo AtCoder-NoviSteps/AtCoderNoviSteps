@@ -29,7 +29,7 @@ export type AuthFormConstraints = {
  * @property {Object} data - The form input data
  * @property {string} data.username - The username field value
  * @property {string} data.password - The password field value
- * @property {Record<string, unknown>} errors - Collection of validation errors keyed by field name
+ * @property {Record<string, string[]>} errors - Collection of validation errors keyed by field name
  * @property {AuthFormConstraints} [constraints] - Optional validation constraints for the form
  * @property {Record<string, unknown>} [shape] - Optional form schema or structure definition
  * @property {string} message - General message associated with the form (success, error, etc.)
@@ -39,7 +39,7 @@ export type AuthForm = {
   valid: boolean;
   posted: boolean;
   data: { username: string; password: string };
-  errors: Record<string, unknown>;
+  errors: Record<string, string[]>;
   constraints?: AuthFormConstraints;
   shape?: Record<string, unknown>;
   message: string;
