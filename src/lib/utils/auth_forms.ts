@@ -85,7 +85,7 @@ const formCreationStrategies = [
  * Tries multiple strategies until one succeeds
  *
  * @param request - The incoming request containing form data
- * @returns The validated form object
+ * @returns The validated form object (bare form, suitable for actions: fail(..., { form }))
  */
 export const validateAuthFormWithFallback = async (request: Request) => {
   for (const strategy of formValidationStrategies) {
