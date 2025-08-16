@@ -139,6 +139,7 @@
           disabled={$submitting || isSubmitting}
           required
           class="ps-10"
+          autocomplete="username"
         >
           {#snippet left()}
             <CirCleUserRound class="w-5 h-5" tabindex={UNFOCUSABLE} />
@@ -167,6 +168,7 @@
           disabled={$submitting || isSubmitting}
           required
           class="ps-10"
+          autocomplete={isLoginForm(title) ? 'current-password' : 'new-password'}
         >
           <!-- Show / hide password -->
           {#snippet left()}
