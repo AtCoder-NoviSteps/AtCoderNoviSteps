@@ -220,14 +220,26 @@ describe('Logged-in user id', () => {
     });
 
     describe('when the user is not the author', () => {
+      describe('and the user is admin', () => {
+        const testCases = [
+          { userId: adminId, authorId: userId1, role: Roles.ADMIN, isPublished: false },
+          { userId: adminId, authorId: userId2, role: Roles.ADMIN, isPublished: false },
+        ];
+        runTests(
+          'canEdit',
+          testCases,
+          ({ userId, authorId, role, isPublished }: AuthorshipForEdit) => {
+            expect(canEdit(userId, authorId, role, isPublished)).toBe(false);
+          },
+        );
+      });
+
       describe('and the user is not admin', () => {
         const testCases = [
           { userId: userId1, authorId: adminId, role: Roles.USER, isPublished: true },
           { userId: userId1, authorId: adminId, role: Roles.USER, isPublished: false },
           { userId: userId2, authorId: adminId, role: Roles.USER, isPublished: true },
           { userId: userId2, authorId: adminId, role: Roles.USER, isPublished: false },
-          { userId: adminId, authorId: userId1, role: Roles.ADMIN, isPublished: false },
-          { userId: adminId, authorId: userId2, role: Roles.ADMIN, isPublished: false },
           { userId: userId1, authorId: userId2, role: Roles.USER, isPublished: true },
           { userId: userId1, authorId: userId2, role: Roles.USER, isPublished: false },
           { userId: userId2, authorId: userId1, role: Roles.USER, isPublished: true },
