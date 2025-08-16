@@ -33,7 +33,7 @@ export const createAuthFormWithFallback = async () => {
 
       return result;
     } catch (error) {
-      if (import.meta.env.DEV) {
+      if (isDevelopmentMode()) {
         console.warn(`Failed to ${strategy.name}`);
 
         if (error instanceof Error) {
@@ -94,7 +94,7 @@ export const validateAuthFormWithFallback = async (request: Request) => {
 
       return result.form;
     } catch (error) {
-      if (import.meta.env.DEV) {
+      if (isDevelopmentMode()) {
         console.warn(`Failed to ${strategy.name}`);
 
         if (error instanceof Error) {
@@ -145,6 +145,14 @@ const formValidationStrategies = [
     },
   },
 ];
+
+/**
+ * Helper function to validate if we're in development mode
+ * This can be mocked in tests to control logging behavior
+ */
+export const isDevelopmentMode = (): boolean => {
+  return import.meta.env.DEV;
+};
 
 /**
  * Common form structure for authentication forms
