@@ -1,5 +1,12 @@
 import { expect, test, describe, vi } from 'vitest';
 
+// Mock modules
+vi.mock('@sveltejs/kit', () => ({
+  redirect: vi.fn().mockImplementation((status: number, location: string) => {
+    throw new Error(`Redirect ${status} ${location}`);
+  }),
+}));
+
 import {
   ensureSessionOrRedirect,
   getLoggedInUser,
@@ -16,13 +23,6 @@ import type {
   AuthorshipForDelete,
 } from '$lib/types/authorship';
 import { Roles } from '$lib/types/user';
-
-// Mock modules
-vi.mock('@sveltejs/kit', () => ({
-  redirect: vi.fn().mockImplementation((status: number, location: string) => {
-    throw new Error(`Redirect ${status} ${location}`);
-  }),
-}));
 
 const adminId = '1';
 const userId1 = '2';
