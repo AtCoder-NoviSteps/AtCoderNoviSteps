@@ -49,7 +49,7 @@ describe('ensureSessionOrRedirect', () => {
       },
     } as unknown as App.Locals;
 
-    await expect(ensureSessionOrRedirect(mockLocals)).rejects.toThrow();
+    await expect(ensureSessionOrRedirect(mockLocals)).rejects.toThrow(/Redirect \d{3} \/login/);
   });
 });
 
@@ -74,7 +74,7 @@ describe('getLoggedInUser', () => {
       },
     } as unknown as App.Locals;
 
-    await expect(getLoggedInUser(mockLocals)).rejects.toThrow();
+    await expect(getLoggedInUser(mockLocals)).rejects.toThrow(/Redirect \d{3} \/login/);
   });
 
   test('expect to redirect when session exists but no user', async () => {
@@ -85,7 +85,7 @@ describe('getLoggedInUser', () => {
       user: null,
     } as unknown as App.Locals;
 
-    await expect(getLoggedInUser(mockLocals)).rejects.toThrow();
+    await expect(getLoggedInUser(mockLocals)).rejects.toThrow(/Redirect \d{3} \/login/);
   });
 });
 
