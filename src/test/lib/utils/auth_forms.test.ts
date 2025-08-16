@@ -278,7 +278,13 @@ describe('auth_forms', () => {
 
       await createAuthFormWithFallback();
 
-      expect(mockConsoleWarn).toHaveBeenCalledWith('Error:', 'Test error message');
+      expect(mockConsoleWarn).toHaveBeenCalledWith(
+        'Create authForm strategy: Failed to (Basic case) Use standard superValidate',
+      );
+      // Error objects are converted to string and include stack trace
+      expect(mockConsoleWarn).toHaveBeenCalledWith(
+        expect.stringContaining('Error: Test error message'),
+      );
     });
 
     // Note: "expect to not log warnings in production mode" was removed
@@ -293,9 +299,10 @@ describe('auth_forms', () => {
 
       await createAuthFormWithFallback();
 
-      // Expect to warn about strategy failure but not log error message for non-Error objects
-      expect(mockConsoleWarn).toHaveBeenCalled();
-      expect(mockConsoleWarn).not.toHaveBeenCalledWith('Error:', expect.anything());
+      expect(mockConsoleWarn).toHaveBeenCalledWith(
+        'Create authForm strategy: Failed to (Basic case) Use standard superValidate',
+      );
+      expect(mockConsoleWarn).toHaveBeenCalledWith('String error');
     });
   });
 
