@@ -3,9 +3,14 @@ import { redirect } from '@sveltejs/kit';
 import { superValidate } from 'sveltekit-superforms/server';
 import { zod } from 'sveltekit-superforms/adapters';
 
+import type {
+  AuthFormCreationStrategies,
+  AuthFormValidationStrategies,
+} from '$lib/types/auth_forms';
+
+import { authSchema } from '$lib/zod/schema';
 import { SEE_OTHER } from '$lib/constants/http-response-status-codes';
 import { HOME_PAGE } from '$lib/constants/navbar-links';
-import { authSchema } from '$lib/zod/schema';
 
 /**
  * Initialize authentication form pages (login/signup)
@@ -56,7 +61,7 @@ export const createAuthFormWithFallback = async () => {
  * https://superforms.rocks/concepts/client-validation
  * https://superforms.rocks/api#supervalidate-options
  */
-const formCreationStrategies = [
+const formCreationStrategies: AuthFormCreationStrategies = [
   {
     name: '(Basic case) Use standard superValidate',
     async run() {
@@ -112,7 +117,7 @@ export const validateAuthFormWithFallback = async (request: Request) => {
  * Form validation strategies for action handlers
  * Each strategy attempts a different approach to validate form data from requests
  */
-const formValidationStrategies = [
+const formValidationStrategies: AuthFormValidationStrategies = [
   {
     name: '(Basic Case) Use standard superValidate with request',
     async run(request: Request) {
