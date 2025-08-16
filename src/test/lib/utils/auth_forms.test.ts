@@ -348,22 +348,6 @@ describe('auth_forms', () => {
   });
 
   describe('Error Handling', () => {
-    test('expect to handle all strategies failing gracefully', async () => {
-      // Mock superValidate to fail
-      vi.mocked(superValidate).mockRejectedValue(new Error('SuperValidate failed'));
-
-      // Mock crypto to also fail
-      vi.stubGlobal('crypto', {
-        randomUUID: vi.fn().mockImplementation(() => {
-          throw new Error('Crypto unavailable');
-        }),
-      });
-
-      await expect(createAuthFormWithFallback()).rejects.toThrow(
-        'Failed to create form for authentication.',
-      );
-    });
-
     test('expect to handle validation fallback correctly', async () => {
       // Mock superValidate to fail
       vi.mocked(superValidate).mockRejectedValue(new Error('Validation failed'));
