@@ -111,7 +111,7 @@ describe('Logged-in user id', () => {
       });
     });
 
-    describe('when userId and authorId are not same ', () => {
+    describe('when userId and authorId are not the same', () => {
       const testCases = [
         { userId: adminId, authorId: userId1 },
         { userId: userId1, authorId: adminId },
