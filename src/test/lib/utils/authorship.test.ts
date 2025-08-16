@@ -39,7 +39,7 @@ describe('ensureSessionOrRedirect', () => {
       },
     } as unknown as App.Locals;
 
-    await expect(ensureSessionOrRedirect(mockLocals)).resolves.not.toThrow();
+    await expect(ensureSessionOrRedirect(mockLocals)).resolves.toBeUndefined();
   });
 
   test('expect to redirect when user has no session', async () => {
