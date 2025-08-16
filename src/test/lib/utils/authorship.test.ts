@@ -135,12 +135,11 @@ describe('Logged-in user id', () => {
       const testCases = [
         { isPublished: true, userId: adminId, authorId: adminId },
         { isPublished: true, userId: adminId, authorId: userId1 },
+        { isPublished: true, userId: adminId, authorId: userId2 },
         { isPublished: true, userId: userId1, authorId: adminId },
         { isPublished: true, userId: userId1, authorId: userId1 },
         { isPublished: true, userId: userId2, authorId: userId1 },
         { isPublished: true, userId: userId1, authorId: userId2 },
-        { isPublished: true, userId: adminId, authorId: userId1 },
-        { isPublished: true, userId: adminId, authorId: userId2 },
       ];
       runTests('canRead', testCases, ({ isPublished, userId, authorId }: AuthorshipForRead) => {
         expect(canRead(isPublished, userId, authorId)).toBe(true);
