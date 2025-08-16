@@ -152,6 +152,7 @@ describe('Logged-in user id', () => {
         const testCases = [
           { isPublished: false, userId: adminId, authorId: adminId },
           { isPublished: false, userId: userId1, authorId: userId1 },
+          { isPublished: false, userId: userId2, authorId: userId2 },
         ];
         runTests('canRead', testCases, ({ isPublished, userId, authorId }: AuthorshipForRead) => {
           expect(canRead(isPublished, userId, authorId)).toBe(true);
@@ -160,9 +161,12 @@ describe('Logged-in user id', () => {
 
       describe('and the user is not the author', () => {
         const testCases = [
-          { isPublished: false, userId: adminId, authorId: userId1 },
           { isPublished: false, userId: userId1, authorId: adminId },
+          { isPublished: false, userId: userId2, authorId: adminId },
+          { isPublished: false, userId: adminId, authorId: userId1 },
+          { isPublished: false, userId: adminId, authorId: userId2 },
           { isPublished: false, userId: userId1, authorId: userId2 },
+          { isPublished: false, userId: userId2, authorId: userId1 },
         ];
         runTests('canRead', testCases, ({ isPublished, userId, authorId }: AuthorshipForRead) => {
           expect(canRead(isPublished, userId, authorId)).toBe(false);
@@ -220,8 +224,14 @@ describe('Logged-in user id', () => {
         const testCases = [
           { userId: userId1, authorId: adminId, role: Roles.USER, isPublished: true },
           { userId: userId1, authorId: adminId, role: Roles.USER, isPublished: false },
+          { userId: userId2, authorId: adminId, role: Roles.USER, isPublished: true },
+          { userId: userId2, authorId: adminId, role: Roles.USER, isPublished: false },
+          { userId: adminId, authorId: userId1, role: Roles.ADMIN, isPublished: false },
+          { userId: adminId, authorId: userId2, role: Roles.ADMIN, isPublished: false },
           { userId: userId1, authorId: userId2, role: Roles.USER, isPublished: true },
           { userId: userId1, authorId: userId2, role: Roles.USER, isPublished: false },
+          { userId: userId2, authorId: userId1, role: Roles.USER, isPublished: true },
+          { userId: userId2, authorId: userId1, role: Roles.USER, isPublished: false },
         ];
         runTests(
           'canEdit',
