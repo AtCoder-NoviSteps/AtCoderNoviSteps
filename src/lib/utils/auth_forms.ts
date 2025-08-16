@@ -151,7 +151,7 @@ export const isDevelopmentMode = (): boolean => {
  * Contains constraints and shape definitions used across different form strategies
  */
 const createBaseAuthForm = () => ({
-  id: 'error-fallback-form-' + crypto.randomUUID(), // Generate unique form ID for fallback
+  id: getBaseAuthFormId(),
   data: { username: '', password: '' },
   constraints: {
     username: { minlength: 3, maxlength: 24, required: true, pattern: '[\\w]*' },
@@ -167,3 +167,25 @@ const createBaseAuthForm = () => ({
     password: { type: 'string' },
   },
 });
+
+/**
+ * Generates a unique identifier for authentication form elements.
+ *
+ * Uses Web Crypto API's randomUUID() when available, falling back to a
+ * timestamp-based random string for environments where crypto is unavailable.
+ *
+ * @returns A unique string identifier prefixed with 'error-fallback-form-'
+ *
+ * @example
+ * ```typescript
+ * const formId = getBaseAuthFormId();
+ * // Returns: "error-fallback-form-550e8400-e29b-41d4-a716-446655440000"
+ * // or: "error-fallback-form-1703875200000-abc123def"
+ * ```
+ */
+const getBaseAuthFormId = () => {
+  return (
+    'error-fallback-form-' +
+    (globalThis.crypto?.randomUUID?.() ?? `${Date.now()}-${Math.random().toString(36).slice(2)}`)
+  ); // Fallback when Web Crypto is unavailable
+};

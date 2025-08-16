@@ -189,6 +189,19 @@ describe('auth_forms', () => {
       expect(crypto.randomUUID).toHaveBeenCalled();
     });
 
+    test('expect to use fallback ID generation when crypto.randomUUID is unavailable', async () => {
+      // Mock crypto.randomUUID to be undefined
+      vi.stubGlobal('crypto', {
+        randomUUID: undefined,
+      });
+
+      vi.mocked(superValidate).mockRejectedValueOnce(new Error('Primary strategy failed'));
+
+      const result = await createAuthFormWithFallback();
+
+      expect(result.form.id).toMatch(/^error-fallback-form-\d+-[a-z0-9]+$/);
+    });
+
     test('expect to use fallback strategy when primary strategy fails', async () => {
       // Mock superValidate to fail
       vi.mocked(superValidate).mockRejectedValueOnce(new Error('SuperValidate failed'));
