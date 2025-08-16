@@ -110,7 +110,7 @@
 
 - コンテナを起動し、webコンテナとdbコンテナが起動しているか確認します。
 
-  `docker compose up - d`
+  `docker compose up -d`
 
   `docker compose ps`
 
