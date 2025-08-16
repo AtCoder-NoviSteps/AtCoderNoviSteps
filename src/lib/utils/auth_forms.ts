@@ -3,7 +3,7 @@ import { redirect } from '@sveltejs/kit';
 import { superValidate } from 'sveltekit-superforms/server';
 import { zod } from 'sveltekit-superforms/adapters';
 
-import { TEMPORARY_REDIRECT, SEE_OTHER } from '$lib/constants/http-response-status-codes';
+import { SEE_OTHER } from '$lib/constants/http-response-status-codes';
 import { HOME_PAGE } from '$lib/constants/navbar-links';
 import { authSchema } from '$lib/zod/schema';
 
