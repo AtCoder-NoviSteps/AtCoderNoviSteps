@@ -83,15 +83,6 @@ describe('auth_forms', () => {
       randomUUID: vi.fn(() => 'test-uuid-12345'),
     });
 
-    // Mock import.meta.env
-    vi.stubGlobal('import', {
-      meta: {
-        env: {
-          DEV: true,
-        },
-      },
-    });
-
     // Setup mocks using mockImplementation for better type compatibility
     vi.mocked(superValidate).mockImplementation(() =>
       Promise.resolve({
