@@ -4,6 +4,7 @@ import { superValidate } from 'sveltekit-superforms/server';
 import { zod } from 'sveltekit-superforms/adapters';
 
 import type {
+  AuthForm,
   AuthFormCreationStrategies,
   AuthFormValidationStrategies,
 } from '$lib/types/auth_forms';
@@ -16,8 +17,10 @@ import { HOME_PAGE } from '$lib/constants/navbar-links';
  * Initialize authentication form pages (login/signup)
  * Redirects to home page if already logged in,
  * otherwise initializes the authentication form for unauthenticated users
+ * @param locals - The application locals containing authentication state
+ * @returns { form: AuthForm } - The initialized authentication form
  */
-export const initializeAuthForm = async (locals: App.Locals) => {
+export const initializeAuthForm = async (locals: App.Locals): Promise<{ form: AuthForm }> => {
   const session = await locals.auth.validate();
 
   if (session) {
@@ -31,7 +34,7 @@ export const initializeAuthForm = async (locals: App.Locals) => {
  * Create authentication form with comprehensive fallback handling
  * Tries multiple strategies until one succeeds
  */
-export const createAuthFormWithFallback = async () => {
+export const createAuthFormWithFallback = async (): Promise<{ form: AuthForm }> => {
   for (const strategy of formCreationStrategies) {
     try {
       const result = await strategy.run();
@@ -39,11 +42,8 @@ export const createAuthFormWithFallback = async () => {
       return result;
     } catch (error) {
       if (isDevelopmentMode()) {
-        console.warn(`Failed to ${strategy.name}`);
-
-        if (error instanceof Error) {
-          console.warn('Error:', error.message);
-        }
+        console.warn(`Create authForm strategy: Failed to ${strategy.name}`);
+        console.warn(error instanceof Error ? (error.stack ?? error.message) : error);
       }
     }
   }
@@ -73,7 +73,7 @@ const formCreationStrategies: AuthFormCreationStrategies = [
     name: 'Create form by manually defining structure',
     async run() {
       const defaultForm = {
-        valid: true,
+        valid: false,
         posted: false,
         errors: {},
         message: '',
@@ -92,7 +92,7 @@ const formCreationStrategies: AuthFormCreationStrategies = [
  * @param request - The incoming request containing form data
  * @returns The validated form object (bare form, suitable for actions: fail(..., { form }))
  */
-export const validateAuthFormWithFallback = async (request: Request) => {
+export const validateAuthFormWithFallback = async (request: Request): Promise<AuthForm> => {
   for (const strategy of formValidationStrategies) {
     try {
       const result = await strategy.run(request);
@@ -100,11 +100,8 @@ export const validateAuthFormWithFallback = async (request: Request) => {
       return result.form;
     } catch (error) {
       if (isDevelopmentMode()) {
-        console.warn(`Failed to ${strategy.name}`);
-
-        if (error instanceof Error) {
-          console.warn('Error:', error.message);
-        }
+        console.warn(`Validate authForm strategy: Failed to ${strategy.name}`);
+        console.warn(error instanceof Error ? (error.stack ?? error.message) : error);
       }
     }
   }
