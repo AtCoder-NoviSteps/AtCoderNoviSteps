@@ -140,6 +140,8 @@
           required
           class="ps-10"
           autocomplete="username"
+          autocapitalize="none"
+          spellcheck="false"
         >
           {#snippet left()}
             <CirCleUserRound class="w-5 h-5" tabindex={UNFOCUSABLE} />
@@ -169,6 +171,8 @@
           required
           class="ps-10"
           autocomplete={isLoginForm(title) ? 'current-password' : 'new-password'}
+          autocapitalize="none"
+          spellcheck="false"
         >
           <!-- Show / hide password -->
           {#snippet left()}
