@@ -1,4 +1,5 @@
 import { vi, expect, describe, beforeEach, afterEach, test } from 'vitest';
+import type { SuperValidated } from 'sveltekit-superforms';
 
 // Mock external dependencies BEFORE importing the module under test
 vi.mock('@sveltejs/kit', () => {
@@ -113,10 +114,10 @@ describe('auth_forms', () => {
           password: { type: 'string' },
         } as unknown,
         message: '',
-      } as unknown as ReturnType<typeof superValidate>),
+      } as unknown as SuperValidated<Record<string, string>, string>),
     );
 
-    vi.mocked(zod).mockImplementation(() => ({}) as ReturnType<typeof zod>);
+    vi.mocked(zod).mockImplementation((schema: unknown) => schema as any);
   });
 
   afterEach(() => {
@@ -197,14 +198,13 @@ describe('auth_forms', () => {
       const result = await createAuthFormWithFallback();
 
       expect(result.form.id).toContain('error-fallback-form-');
-      expect(crypto.randomUUID).toHaveBeenCalled();
+      expect(globalThis.crypto.randomUUID).toHaveBeenCalled();
     });
 
     test('expect to use fallback ID generation when crypto.randomUUID is unavailable', async () => {
-      // Mock crypto.randomUUID to be undefined
-      vi.stubGlobal('crypto', {
-        randomUUID: undefined,
-      });
+      // Mock crypto.randomUUID to be undefined (preserve other properties)
+      const prevCrypto = globalThis.crypto;
+      vi.stubGlobal('crypto', { ...(prevCrypto ?? {}), randomUUID: undefined });
 
       vi.mocked(superValidate).mockRejectedValueOnce(new Error('Primary strategy failed'));
 
@@ -223,7 +223,12 @@ describe('auth_forms', () => {
       expect(result.form).toBeDefined();
       expect(result.form.data).toEqual({ username: '', password: '' });
       expect(result.form.id).toContain('error-fallback-form-');
-      expect(mockConsoleWarn).toHaveBeenCalled();
+
+      if (import.meta.env.DEV) {
+        expect(mockConsoleWarn).toHaveBeenCalled();
+      } else {
+        expect(mockConsoleWarn).not.toHaveBeenCalled();
+      }
     });
   });
 
@@ -258,7 +263,12 @@ describe('auth_forms', () => {
       expect(result).toBeDefined();
       // When validation fails, but another strategy succeeds, valid could be true
       expect(result.posted).toBe(true);
-      expect(mockConsoleWarn).toHaveBeenCalled();
+
+      if (import.meta.env.DEV) {
+        expect(mockConsoleWarn).toHaveBeenCalled();
+      } else {
+        expect(mockConsoleWarn).not.toHaveBeenCalled();
+      }
     });
 
     test('expect to handle complex form data', async () => {
@@ -289,13 +299,17 @@ describe('auth_forms', () => {
 
       await createAuthFormWithFallback();
 
-      expect(mockConsoleWarn).toHaveBeenCalledWith(
-        'Create authForm strategy: Failed to (Basic case) Use standard superValidate',
-      );
-      // Error objects are converted to string and include stack trace
-      expect(mockConsoleWarn).toHaveBeenCalledWith(
-        expect.stringContaining('Error: Test error message'),
-      );
+      if (import.meta.env.DEV) {
+        expect(mockConsoleWarn).toHaveBeenCalledWith(
+          'Create authForm strategy: Failed to (Basic case) Use standard superValidate',
+        );
+        // Error objects are converted to string and include stack trace
+        expect(mockConsoleWarn).toHaveBeenCalledWith(
+          expect.stringContaining('Error: Test error message'),
+        );
+      } else {
+        expect(mockConsoleWarn).not.toHaveBeenCalled();
+      }
     });
 
     // Note: "expect to not log warnings in production mode" was removed
@@ -310,10 +324,14 @@ describe('auth_forms', () => {
 
       await createAuthFormWithFallback();
 
-      expect(mockConsoleWarn).toHaveBeenCalledWith(
-        'Create authForm strategy: Failed to (Basic case) Use standard superValidate',
-      );
-      expect(mockConsoleWarn).toHaveBeenCalledWith('String error');
+      if (import.meta.env.DEV) {
+        expect(mockConsoleWarn).toHaveBeenCalledWith(
+          'Create authForm strategy: Failed to (Basic case) Use standard superValidate',
+        );
+        expect(mockConsoleWarn).toHaveBeenCalledWith('String error');
+      } else {
+        expect(mockConsoleWarn).not.toHaveBeenCalled();
+      }
     });
   });
 

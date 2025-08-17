@@ -1,4 +1,4 @@
-import { expect, test, describe, vi } from 'vitest';
+import { expect, test, describe, vi, afterEach } from 'vitest';
 
 // Mock modules
 vi.mock('@sveltejs/kit', () => {
@@ -13,6 +13,10 @@ vi.mock('@sveltejs/kit', () => {
   };
 
   return { redirect: vi.fn(redirectImpl) };
+});
+
+afterEach(() => {
+  vi.clearAllMocks();
 });
 
 import {
@@ -48,6 +52,7 @@ describe('ensureSessionOrRedirect', () => {
     } as unknown as App.Locals;
 
     await expect(ensureSessionOrRedirect(mockLocals)).resolves.toBeUndefined();
+    expect(mockLocals.auth.validate).toHaveBeenCalledTimes(1);
   });
 
   test('expect to redirect when user has no session', async () => {
@@ -59,6 +64,7 @@ describe('ensureSessionOrRedirect', () => {
 
     await expect(ensureSessionOrRedirect(mockLocals)).rejects.toMatchObject({
       name: 'Redirect',
+      status: expect.any(Number),
       location: '/login',
     });
   });
@@ -89,6 +95,7 @@ describe('getLoggedInUser', () => {
 
     await expect(getLoggedInUser(mockLocals)).rejects.toMatchObject({
       name: 'Redirect',
+      status: expect.any(Number),
       location: '/login',
     });
   });
@@ -103,6 +110,7 @@ describe('getLoggedInUser', () => {
 
     await expect(getLoggedInUser(mockLocals)).rejects.toMatchObject({
       name: 'Redirect',
+      status: expect.any(Number),
       location: '/login',
     });
   });
@@ -173,6 +181,8 @@ describe('Logged-in user id', () => {
           { isPublished: false, userId: adminId, authorId: adminId },
           { isPublished: false, userId: userId1, authorId: userId1 },
           { isPublished: false, userId: userId2, authorId: userId2 },
+          { isPublished: false, userId: 'USER123', authorId: 'user123' },
+          { isPublished: false, userId: 'AuthorX', authorId: 'authorx' },
         ];
         runTests('canRead', testCases, ({ isPublished, userId, authorId }: AuthorshipForRead) => {
           expect(canRead(isPublished, userId, authorId)).toBe(true);
@@ -293,6 +303,7 @@ describe('Logged-in user id', () => {
         { userId: adminId, authorId: adminId },
         { userId: userId1, authorId: userId1 },
         { userId: userId2, authorId: userId2 },
+        { userId: 'UserX', authorId: 'userx' },
       ];
       runTests('canDelete', testCases, ({ userId, authorId }: AuthorshipForDelete) => {
         expect(canDelete(userId, authorId)).toBe(true);
