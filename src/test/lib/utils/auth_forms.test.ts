@@ -1,11 +1,19 @@
 import { vi, expect, describe, beforeEach, afterEach, test } from 'vitest';
 
 // Mock external dependencies BEFORE importing the module under test
-vi.mock('@sveltejs/kit', () => ({
-  redirect: vi.fn().mockImplementation((status: number, location: string) => {
-    throw new Error(`Redirect: ${status} ${location}`);
-  }),
-}));
+vi.mock('@sveltejs/kit', () => {
+  const redirectImpl = (status: number, location: string) => {
+    const error = new Error('Redirect');
+
+    (error as any).name = 'Redirect';
+    (error as any).status = status;
+    (error as any).location = location;
+
+    throw error;
+  };
+
+  return { redirect: vi.fn(redirectImpl) };
+});
 
 vi.mock('sveltekit-superforms/server', () => ({
   superValidate: vi.fn(),
@@ -119,7 +127,10 @@ describe('auth_forms', () => {
     test('expect to redirect to home page if user is already logged in', async () => {
       const mockLocals = createMockLocals(true);
 
-      await expect(initializeAuthForm(mockLocals)).rejects.toThrow('Redirect: 303 /');
+      await expect(initializeAuthForm(mockLocals)).rejects.toMatchObject({
+        name: 'Redirect',
+        location: '/',
+      });
       expect(redirect).toHaveBeenCalledWith(303, '/');
     });
 
