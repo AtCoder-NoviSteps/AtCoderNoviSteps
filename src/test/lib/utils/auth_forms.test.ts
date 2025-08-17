@@ -92,13 +92,33 @@ describe('auth_forms', () => {
       randomUUID: vi.fn(() => 'test-uuid-12345'),
     });
 
-    // Setup mocks using mockImplementation for better type compatibility
-    vi.mocked(superValidate).mockImplementation(() =>
-      Promise.resolve({
+    // Improved request-aware superValidate mock
+    vi.mocked(superValidate).mockImplementation(async (arg: unknown) => {
+      let data = { username: '', password: '' };
+      let posted = false;
+
+      // If arg is a Request, parse its form data
+      if (arg instanceof Request) {
+        posted = arg.method?.toUpperCase() === 'POST';
+
+        try {
+          const formData = await arg.clone().formData();
+
+          data = {
+            username: formData.get('username')?.toString() || '',
+            password: formData.get('password')?.toString() || '',
+          };
+        } catch {
+          // If parsing fails, use default data
+          data = { username: '', password: '' };
+        }
+      }
+
+      return {
         id: 'test-form-id',
         valid: true,
-        posted: false,
-        data: { username: '', password: '' },
+        posted,
+        data,
         errors: {},
         constraints: {
           username: { minlength: 3, maxlength: 24, required: true, pattern: '[\\w]*' },
@@ -114,8 +134,8 @@ describe('auth_forms', () => {
           password: { type: 'string' },
         } as unknown,
         message: '',
-      } as unknown as SuperValidated<Record<string, string>, string>),
-    );
+      } as unknown as SuperValidated<Record<string, string>, string>;
+    });
 
     vi.mocked(zod).mockImplementation((schema: unknown) => schema as any);
   });
@@ -239,7 +259,11 @@ describe('auth_forms', () => {
       const result = await validateAuthFormWithFallback(mockRequest);
 
       expect(result).toBeDefined();
-      expect(result.data).toBeDefined();
+      expect(result.data).toEqual({
+        username: 'testuser',
+        password: 'TestPass123',
+      });
+      expect(result.posted).toBe(true);
       expect(result.message).toBe('');
     });
 
@@ -249,7 +273,33 @@ describe('auth_forms', () => {
       const result = await validateAuthFormWithFallback(mockRequest);
 
       expect(result).toBeDefined();
-      expect(result.data).toBeDefined();
+      expect(result.data).toEqual({
+        username: '',
+        password: '',
+      });
+      expect(result.posted).toBe(true);
+    });
+
+    test('expect to distinguish between POST and GET requests', async () => {
+      // Test POST request
+      const postRequest = createMockRequest('testuser', 'testpass');
+      const postResult = await validateAuthFormWithFallback(postRequest);
+
+      expect(postResult.posted).toBe(true);
+      expect(postResult.data).toEqual({
+        username: 'testuser',
+        password: 'testpass',
+      });
+
+      // Test GET request (no form data)
+      const getRequest = new Request('http://localhost:3000', { method: 'GET' });
+      const getResult = await validateAuthFormWithFallback(getRequest);
+
+      expect(getResult.posted).toBe(false);
+      expect(getResult.data).toEqual({
+        username: '',
+        password: '',
+      });
     });
 
     test('expect to use fallback strategy when primary validation fails', async () => {
@@ -277,7 +327,11 @@ describe('auth_forms', () => {
       const result = await validateAuthFormWithFallback(mockRequest);
 
       expect(result).toBeDefined();
-      expect(result.data).toBeDefined();
+      expect(result.data).toEqual({
+        username: 'complexuser123',
+        password: 'ComplexPass123!',
+      });
+      expect(result.posted).toBe(true);
     });
   });
 
@@ -288,7 +342,11 @@ describe('auth_forms', () => {
 
       await createAuthFormWithFallback();
 
-      expect(mockConsoleWarn).toHaveBeenCalled();
+      if (import.meta.env.DEV) {
+        expect(mockConsoleWarn).toHaveBeenCalled();
+      } else {
+        expect(mockConsoleWarn).not.toHaveBeenCalled();
+      }
     });
 
     test('expect to handle Error objects correctly in strategy failure logging', async () => {
