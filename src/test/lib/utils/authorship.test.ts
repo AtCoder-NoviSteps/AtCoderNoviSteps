@@ -1,11 +1,19 @@
 import { expect, test, describe, vi } from 'vitest';
 
 // Mock modules
-vi.mock('@sveltejs/kit', () => ({
-  redirect: vi.fn().mockImplementation((status: number, location: string) => {
-    throw new Error(`Redirect ${status} ${location}`);
-  }),
-}));
+vi.mock('@sveltejs/kit', () => {
+  const redirectImpl = (status: number, location: string) => {
+    const error = new Error('Redirect');
+
+    (error as any).name = 'Redirect';
+    (error as any).status = status;
+    (error as any).location = location;
+
+    throw error;
+  };
+
+  return { redirect: vi.fn(redirectImpl) };
+});
 
 import {
   ensureSessionOrRedirect,
@@ -49,7 +57,10 @@ describe('ensureSessionOrRedirect', () => {
       },
     } as unknown as App.Locals;
 
-    await expect(ensureSessionOrRedirect(mockLocals)).rejects.toThrow(/Redirect \d{3} \/login/);
+    await expect(ensureSessionOrRedirect(mockLocals)).rejects.toMatchObject({
+      name: 'Redirect',
+      location: '/login',
+    });
   });
 });
 
@@ -74,7 +85,10 @@ describe('getLoggedInUser', () => {
       },
     } as unknown as App.Locals;
 
-    await expect(getLoggedInUser(mockLocals)).rejects.toThrow(/Redirect \d{3} \/login/);
+    await expect(getLoggedInUser(mockLocals)).rejects.toMatchObject({
+      name: 'Redirect',
+      location: '/login',
+    });
   });
 
   test('expect to redirect when session exists but no user', async () => {
@@ -85,7 +99,10 @@ describe('getLoggedInUser', () => {
       user: null,
     } as unknown as App.Locals;
 
-    await expect(getLoggedInUser(mockLocals)).rejects.toThrow(/Redirect \d{3} \/login/);
+    await expect(getLoggedInUser(mockLocals)).rejects.toMatchObject({
+      name: 'Redirect',
+      location: '/login',
+    });
   });
 });
 
