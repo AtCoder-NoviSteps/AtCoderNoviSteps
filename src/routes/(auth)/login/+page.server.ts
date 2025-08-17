@@ -1,12 +1,12 @@
 // See:
 // https://lucia-auth.com/guidebook/sign-in-with-username-and-password/sveltekit/
-// https://superforms.rocks/get-started
-import { superValidate } from 'sveltekit-superforms/server';
-import { zod } from 'sveltekit-superforms/adapters';
+
+// This route uses centralized helpers with fallback validation strategies.
+// See src/lib/utils/auth_forms.ts for the current form handling approach.
 import { fail, redirect } from '@sveltejs/kit';
 import { LuciaError } from 'lucia';
 
-import { authSchema } from '$lib/zod/schema';
+import { initializeAuthForm, validateAuthFormWithFallback } from '$lib/utils/auth_forms';
 import { auth } from '$lib/server/auth';
 
 import {
@@ -19,20 +19,12 @@ import { HOME_PAGE } from '$lib/constants/navbar-links';
 import type { Actions, PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ locals }) => {
-  const session = await locals.auth.validate();
-
-  if (session) {
-    redirect(SEE_OTHER, HOME_PAGE);
-  }
-
-  const form = await superValidate(null, zod(authSchema));
-
-  return { form: { ...form, message: '' } };
+  return initializeAuthForm(locals);
 };
 
 export const actions: Actions = {
   default: async ({ request, locals }) => {
-    const form = await superValidate(request, zod(authSchema));
+    const form = await validateAuthFormWithFallback(request);
 
     if (!form.valid) {
       return fail(BAD_REQUEST, {
