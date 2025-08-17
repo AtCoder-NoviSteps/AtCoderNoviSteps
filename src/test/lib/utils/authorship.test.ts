@@ -75,7 +75,9 @@ describe('getLoggedInUser', () => {
     } as unknown as App.Locals;
 
     const result = await getLoggedInUser(mockLocals);
+
     expect(result).toEqual(mockUser);
+    expect(mockLocals.auth.validate).toHaveBeenCalledTimes(1);
   });
 
   test('expect to redirect when no session', async () => {
