@@ -31,7 +31,7 @@ importers:
         version: 24.3.0
       autoprefixer:
         specifier: 10.4.21
-        version: 10.4.21(postcss@8.4.49)
+        version: 10.4.21(postcss@8.5.6)
       debug:
         specifier: 4.4.1
         version: 4.4.1
@@ -54,8 +54,8 @@ importers:
         specifier: ^8.1.0
         version: 8.1.0
       playwright:
-        specifier: 1.54.2
-        version: 1.54.2
+        specifier: 1.55.0
+        version: 1.55.0
       prisma-erd-generator:
         specifier: 2.0.4
         version: 2.0.4(@prisma/client@5.22.0(prisma@5.22.0))(puppeteer@19.11.1(typescript@5.9.2))(ts-node@10.9.1(@types/node@24.3.0)(typescript@5.9.2))
@@ -3402,8 +3402,18 @@ packages:
     engines: {node: '>=18'}
     hasBin: true
 
+  playwright-core@1.55.0:
+    resolution: {integrity: sha512-GvZs4vU3U5ro2nZpeiwyb0zuFaqb9sUiAJuyrWpcGouD8y9/HLgGbNRjIph7zU9D3hnPaisMl9zG9CgFi/biIg==}
+    engines: {node: '>=18'}
+    hasBin: true
+
   playwright@1.54.2:
     resolution: {integrity: sha512-Hu/BMoA1NAdRUuulyvQC0pEqZ4vQbGfn8f7wPXcnqQmM+zct9UliKxsIkLNmz/ku7LElUNqmaiv1TG/aL5ACsw==}
+    engines: {node: '>=18'}
+    hasBin: true
+
+  playwright@1.55.0:
+    resolution: {integrity: sha512-sdCWStblvV1YU909Xqx0DhOjPZE4/5lJsIS84IfN9dAZfcl/CIZ5O8l3o0j7hPMjDvqoTF8ZUcc+i/GL5erstA==}
     engines: {node: '>=18'}
     hasBin: true
 
@@ -6238,14 +6248,14 @@ snapshots:
 
   atomic-sleep@1.0.0: {}
 
-  autoprefixer@10.4.21(postcss@8.4.49):
+  autoprefixer@10.4.21(postcss@8.5.6):
     dependencies:
       browserslist: 4.24.4
       caniuse-lite: 1.0.30001703
       fraction.js: 4.3.7
       normalize-range: 0.1.2
       picocolors: 1.1.1
-      postcss: 8.4.49
+      postcss: 8.5.6
       postcss-value-parser: 4.2.0
 
   axobject-query@4.1.0: {}
@@ -7989,9 +7999,17 @@ snapshots:
 
   playwright-core@1.54.2: {}
 
+  playwright-core@1.55.0: {}
+
   playwright@1.54.2:
     dependencies:
       playwright-core: 1.54.2
+    optionalDependencies:
+      fsevents: 2.3.2
+
+  playwright@1.55.0:
+    dependencies:
+      playwright-core: 1.55.0
     optionalDependencies:
       fsevents: 2.3.2
 
