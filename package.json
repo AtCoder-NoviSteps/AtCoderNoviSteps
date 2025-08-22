@@ -85,7 +85,7 @@
     "embla-carousel-svelte": "8.6.0",
     "flowbite": "2.5.2",
     "lucia": "2.7.7",
-    "lucide-svelte": "^0.540.0",
+    "lucide-svelte": "^0.541.0",
     "p-queue": "^8.1.0",
     "playwright": "1.55.0",
     "prisma-erd-generator": "2.0.4",
