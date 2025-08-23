@@ -9,7 +9,6 @@
 # https://www.prisma.io/docs/orm/prisma-client/deployment/deploy-database-changes-with-prisma-migrate
 # https://www.prisma.io/docs/orm/prisma-migrate/workflows/baselining
 # https://github.com/pnpm/action-setup/issues/99#issuecomment-1918361558
-# https://github.com/nodejs/corepack/issues/612#issuecomment-2629496091
 name: CI
 
 env:
@@ -35,10 +34,8 @@ jobs:
       - name: Check out Git repository
         uses: actions/checkout@v5
 
-      - name: Use corepack
-        run: |
-          npm install -g corepack@latest
-          corepack enable
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
 
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4
@@ -77,10 +74,8 @@ jobs:
       - name: Check out Git repository
         uses: actions/checkout@v5
 
-      - name: Use corepack
-        run: |
-          npm install -g corepack@latest
-          corepack enable
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -126,10 +121,8 @@ jobs:
       - name: Check out Git repository
         uses: actions/checkout@v5
 
-      - name: Use corepack
-        run: |
-          npm install -g corepack@latest
-          corepack enable
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
