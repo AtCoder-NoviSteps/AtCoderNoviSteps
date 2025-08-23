@@ -1,6 +1,8 @@
 # See:
 # https://docs.github.com/en/actions/guides/building-and-testing-nodejs#building-and-testing-your-code
 # https://pnpm.io/ja/continuous-integration#github-actions
+# https://github.com/pnpm/action-setup/issues/99#issuecomment-1918361558
+# https://github.com/actions/setup-node#inputs
 # https://vercel.com/guides/how-can-i-use-github-actions-with-vercel
 # https://zenn.dev/ttskch/articles/691fb62fbb6b1b
 # https://vercel.com/guides/set-up-a-staging-environment-on-vercel
@@ -8,7 +10,6 @@
 # https://vercel.com/docs/cli/global-options#scope
 # https://www.prisma.io/docs/orm/prisma-client/deployment/deploy-database-changes-with-prisma-migrate
 # https://www.prisma.io/docs/orm/prisma-migrate/workflows/baselining
-# https://github.com/pnpm/action-setup/issues/99#issuecomment-1918361558
 name: CI
 
 env:
@@ -38,17 +39,19 @@ jobs:
         uses: pnpm/action-setup@v4
         with:
           # Auto-detect pnpm version from package.json (requires packageManager in package.json)
-          package_json_path: './package.json'
+          package_json_path: package.json
           run_install: false
 
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
+          check-latest: true
           cache: 'pnpm'
+          cache-dependency-path: pnpm-lock.yaml
 
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+        run: pnpm install
 
       - name: Build
         run: pnpm build
@@ -82,7 +85,7 @@ jobs:
         uses: pnpm/action-setup@v4
         with:
           # Auto-detect pnpm version from package.json (requires packageManager in package.json)
-          package_json_path: './package.json'
+          package_json_path: package.json
           run_install: false
 
       - name: Setup Node.js
@@ -91,9 +94,10 @@ jobs:
           node-version: 22
           check-latest: true
           cache: 'pnpm'
+          cache-dependency-path: pnpm-lock.yaml
 
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+        run: pnpm install
 
       - name: Build
         run: pnpm build
@@ -133,7 +137,7 @@ jobs:
         uses: pnpm/action-setup@v4
         with:
           # Auto-detect pnpm version from package.json (requires packageManager in package.json)
-          package_json_path: './package.json'
+          package_json_path: package.json
           run_install: false
 
       - name: Setup Node.js
@@ -142,9 +146,10 @@ jobs:
           node-version: 22
           check-latest: true
           cache: 'pnpm'
+          cache-dependency-path: pnpm-lock.yaml
 
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+        run: pnpm install
 
       - name: Build
         run: pnpm build
