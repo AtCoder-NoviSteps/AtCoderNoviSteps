@@ -420,6 +420,7 @@ const aojCoursesData = [
   { name: 'AOJ Courses, ALDS1', contestId: 'ALDS1' },
   { name: 'AOJ Courses, ITP2', contestId: 'ITP2' },
   { name: 'AOJ Courses, DPL', contestId: 'DPL' },
+  { name: 'AOJ Courses, GRL', contestId: 'GRL' },
 ];
 
 export const aojCourses = aojCoursesData.map(({ name, contestId }) =>

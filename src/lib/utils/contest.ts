@@ -197,6 +197,7 @@ export const AOJ_COURSES: ContestPrefix = {
   ALDS1: 'アルゴリズムとデータ構造入門',
   ITP2: 'プログラミング応用',
   DPL: '組み合わせ最適化',
+  GRL: 'グラフ',
 } as const;
 
 export function getPrefixForAojCourses() {

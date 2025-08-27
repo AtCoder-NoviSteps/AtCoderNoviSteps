@@ -579,6 +579,10 @@ const AOJ_COURSES_TEST_DATA = {
     contestId: 'DPL',
     tasks: ['1_A', '1_I', '5_A', '5_L'],
   },
+  GRL: {
+    contestId: 'GRL',
+    tasks: ['1_A', '1_C', '6_B', '7_A'],
+  },
 };
 
 const generateAojCoursesTestCases = (
