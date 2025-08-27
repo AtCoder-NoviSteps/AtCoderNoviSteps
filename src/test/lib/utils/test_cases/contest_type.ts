@@ -371,6 +371,10 @@ export const atCoderOthers = [
     contestId: 'mujin-pc-2018',
     expected: ContestType.OTHERS,
   }),
+  createTestCaseForContestType('天下一プログラマーコンテスト2015予選A')({
+    contestId: 'tenka1-2015-quala',
+    expected: ContestType.OTHERS,
+  }),
   createTestCaseForContestType('天下一プログラマーコンテスト2016本戦')({
     contestId: 'tenka1-2016-final',
     expected: ContestType.OTHERS,
