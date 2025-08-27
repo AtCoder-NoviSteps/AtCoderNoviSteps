@@ -179,6 +179,7 @@ const ATCODER_OTHERS: ContestPrefix = {
   'dwacon2017-prelims': '第3回 ドワンゴからの挑戦状 予選',
   'mujin-pc-2016': 'Mujin Programming Challenge 2016',
   'mujin-pc-2018': 'Mujin Programming Challenge 2018',
+  'tenka1-2015-quala': '天下一プログラマーコンテスト2015予選A',
   'tenka1-2016-final': '天下一プログラマーコンテスト2016本戦',
   // Discovery Channel contest featuring algorithm problems
   discovery2016: 'DISCO presents ディスカバリーチャンネル プログラミングコンテスト2016',
@@ -196,6 +197,7 @@ export const AOJ_COURSES: ContestPrefix = {
   ALDS1: 'アルゴリズムとデータ構造入門',
   ITP2: 'プログラミング応用',
   DPL: '組み合わせ最適化',
+  GRL: 'グラフ',
 } as const;
 
 export function getPrefixForAojCourses() {
