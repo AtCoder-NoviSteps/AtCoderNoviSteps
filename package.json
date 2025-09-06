@@ -47,7 +47,7 @@
     "@vitest/ui": "3.2.4",
     "eslint": "9.35.0",
     "eslint-config-prettier": "10.1.8",
-    "eslint-plugin-svelte": "3.10.1",
+    "eslint-plugin-svelte": "3.12.1",
     "globals": "16.3.0",
     "husky": "9.1.7",
     "jsdom": "26.1.0",
