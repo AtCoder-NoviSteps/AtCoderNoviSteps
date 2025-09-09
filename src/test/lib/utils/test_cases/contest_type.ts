@@ -207,6 +207,10 @@ export const abcLike = [
     contestId: 'jsc2021',
     expected: ContestType.ABC_LIKE,
   }),
+  createTestCaseForContestType('日本最強プログラマー学生選手権～Advance～')({
+    contestId: 'jsc2025advance-final',
+    expected: ContestType.ABC_LIKE,
+  }),
 ];
 
 export const arcLike = [

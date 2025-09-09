@@ -100,6 +100,7 @@ const ABC_LIKE: ContestPrefix = {
   hhkb2020: 'HHKB プログラミングコンテスト 2020',
   panasonic2020: 'パナソニックプログラミングコンテスト 2020',
   jsc2021: '第二回日本最強プログラマー学生選手権',
+  'jsc2025advance-final': '日本最強プログラマー学生選手権～Advance～',
 } as const;
 const abcLikePrefixes = new Set(getContestPrefixes(ABC_LIKE));
 
