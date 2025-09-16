@@ -190,8 +190,8 @@ importers:
         specifier: 3.2.4
         version: 3.2.4(@edge-runtime/vm@3.2.0)(@types/node@24.5.0)(@vitest/ui@3.2.4)(jiti@2.5.1)(jsdom@26.1.0)(yaml@2.8.1)
       zod:
-        specifier: 3.25.76
-        version: 3.25.76
+        specifier: 4.1.9
+        version: 4.1.9
 
 packages:
 
@@ -4737,6 +4737,9 @@ packages:
 
   zod@3.25.76:
     resolution: {integrity: sha512-gzUt/qt81nXsFGKIFcC3YnfEAx5NkunCfnDlvuBSSFS02bcXu4Lmea0AFIUwbLWxWPx3d9p8S5QoaujKcNQxcQ==}
+
+  zod@4.1.9:
+    resolution: {integrity: sha512-HI32jTq0AUAC125z30E8bQNz0RQ+9Uc+4J7V97gLYjZVKRjeydPgGt6dvQzFrav7MYOUGFqqOGiHpA/fdbd0cQ==}
 
 snapshots:
 
@@ -9473,4 +9476,7 @@ snapshots:
       zod: 3.25.76
     optional: true
 
-  zod@3.25.76: {}
+  zod@3.25.76:
+    optional: true
+
+  zod@4.1.9: {}
