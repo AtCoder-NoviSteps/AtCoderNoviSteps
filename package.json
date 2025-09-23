@@ -87,7 +87,7 @@
     "lucia": "2.7.7",
     "lucide-svelte": "^0.544.0",
     "p-queue": "^8.1.1",
-    "playwright": "1.55.0",
+    "playwright": "1.55.1",
     "prisma-erd-generator": "2.1.0",
     "svelte-eslint-parser": "1.3.3",
     "tailwind-merge": "2.6.0",
