@@ -187,6 +187,10 @@ export const agc = agcContestIds.map((contestId) =>
 );
 
 export const abcLike = [
+  createTestCaseForContestType('ACL Beginner Contest')({
+    contestId: 'abl',
+    expected: ContestType.ABC_LIKE,
+  }),
   createTestCaseForContestType('CADDi 2018 for Beginners')({
     contestId: 'caddi2018b',
     expected: ContestType.ABC_LIKE,
@@ -277,6 +281,7 @@ export const agcLike = [
 
 // Note:
 // KUPC contests on AtCoder: 2012-2021 and 2024- (not held during 2022-2023)
+// QUPC contests on AtCoder: 2014, 2018 (not held during 2015-2017, 2019-)
 // UTPC contests on AtCoder: 2011-2014 and 2020-2023 (not held during 2015-2019)
 // TTPC contests on AtCoder: 2015, 2019, 2022-
 // TUPC contests on AtCoder: 2022-
@@ -291,6 +296,8 @@ const universityContestIds = [
   'kupc2020',
   'kupc2021',
   'kupc2024',
+  'qupc2014',
+  'qupc2018',
   'utpc2011',
   'utpc2012',
   'utpc2013',
@@ -379,6 +386,10 @@ export const atCoderOthers = [
     contestId: 'tenka1-2015-quala',
     expected: ContestType.OTHERS,
   }),
+  createTestCaseForContestType('天下一プログラマーコンテスト2015予選B')({
+    contestId: 'tenka1-2015-qualb',
+    expected: ContestType.OTHERS,
+  }),
   createTestCaseForContestType('天下一プログラマーコンテスト2016本戦')({
     contestId: 'tenka1-2016-final',
     expected: ContestType.OTHERS,
@@ -409,6 +420,10 @@ export const atCoderOthers = [
   ),
   createTestCaseForContestType('第一回日本最強プログラマー学生選手権決勝')({
     contestId: 'jsc2019-final',
+    expected: ContestType.OTHERS,
+  }),
+  createTestCaseForContestType('第六回日本最強プログラマー学生選手権 -決勝-')({
+    contestId: 'jsc2025-final',
     expected: ContestType.OTHERS,
   }),
   createTestCaseForContestType('DEGwer さんの D 論応援コンテスト')({
