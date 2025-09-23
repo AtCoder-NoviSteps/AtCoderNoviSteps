@@ -309,7 +309,7 @@ const regexForAxc = /^(abc|arc|agc)(\d{3})/i;
  * - "ttpc2022"
  * - "tupc2023"
  */
-const regexForAtCoderUniversity = /^(ku|qu|ut|tt|tu)(pc)(\d{4})/i;
+const regexForAtCoderUniversity = /^(ku|qu|ut|tt|tu)(pc)(\d{4})$/i;
 
 export const getContestNameLabel = (contestId: string) => {
   // AtCoder
