@@ -92,9 +92,10 @@ export const classifyContest = (contest_id: string) => {
   return null;
 };
 
-// HACK: As of June 2025, the following contests are applicable.
+// HACK: As of September 2025, the following contests are applicable.
 // Note: The classification logic may need to be revised when new contests are added.
 const ABC_LIKE: ContestPrefix = {
+  abl: 'ACL Beginner Contest',
   caddi2018b: 'CADDi 2018 for Beginners',
   aising2020: 'エイシング プログラミング コンテスト 2020',
   hhkb2020: 'HHKB プログラミングコンテスト 2020',
@@ -123,7 +124,7 @@ const AGC_LIKE: ContestPrefix = {
 } as const;
 const agcLikePrefixes = getContestPrefixes(AGC_LIKE);
 
-// HACK: As of March 2025, KUPC, UTPC, TTPC and TUPC are included.
+// HACK: As of September 2025, KUPC, QUPC, UTPC, TTPC and TUPC are included.
 // More university contests may be added in the future.
 /**
  * Maps university contest ID prefixes to their display names.
@@ -131,6 +132,7 @@ const agcLikePrefixes = getContestPrefixes(AGC_LIKE);
  * @example
  * {
  *   kupc: 'KUPC' // Kyoto University Programming Contest
+ *   qupc: 'QUPC' // Kyushu University Programming Contest
  *   utpc: 'UTPC' // University of Tokyo Programming Contest
  *   ttpc: 'TTPC' // Tokyo Institute of Technology Programming Contest
  *   tupc: 'TUPC' // Tohoku University Programming Contest
@@ -144,6 +146,7 @@ const agcLikePrefixes = getContestPrefixes(AGC_LIKE);
  */
 const ATCODER_UNIVERSITIES: ContestPrefix = {
   kupc: 'KUPC',
+  qupc: 'QUPC',
   utpc: 'UTPC',
   ttpc: 'TTPC',
   tupc: 'TUPC',
@@ -181,6 +184,7 @@ const ATCODER_OTHERS: ContestPrefix = {
   'mujin-pc-2016': 'Mujin Programming Challenge 2016',
   'mujin-pc-2018': 'Mujin Programming Challenge 2018',
   'tenka1-2015-quala': '天下一プログラマーコンテスト2015予選A',
+  'tenka1-2015-qualb': '天下一プログラマーコンテスト2015予選B',
   'tenka1-2016-final': '天下一プログラマーコンテスト2016本戦',
   // Discovery Channel contest featuring algorithm problems
   discovery2016: 'DISCO presents ディスカバリーチャンネル プログラミングコンテスト2016',
@@ -188,6 +192,7 @@ const ATCODER_OTHERS: ContestPrefix = {
   gigacode: 'GigaCode',
   cpsco2019: 'CPSCO 2019',
   'jsc2019-final': '第一回日本最強プログラマー学生選手権決勝',
+  'jsc2025-final': '第六回日本最強プログラマー学生選手権 -決勝-',
   DEGwer2023: 'DEGwer さんの D 論応援コンテスト',
 } as const;
 const atCoderOthersPrefixes = getContestPrefixes(ATCODER_OTHERS);
@@ -293,17 +298,18 @@ const regexForAxc = /^(abc|arc|agc)(\d{3})/i;
  * Regular expression to match AtCoder University contest identifiers.
  *
  * The pattern matches strings that:
- * - Start with either "ku", "ut", "tt", or "tu"
+ * - Start with either "ku", "qu", "ut", "tt", or "tu"
  * - Followed by "pc"
  * - End with exactly year (four digits)
  *
  * Example matches:
  * - "kupc2024"
+ * - "qupc2018"
  * - "utpc2014"
  * - "ttpc2022"
  * - "tupc2023"
  */
-const regexForAtCoderUniversity = /^(ku|ut|tt|tu)(pc)(\d{4})/i;
+const regexForAtCoderUniversity = /^(ku|qu|ut|tt|tu)(pc)(\d{4})$/i;
 
 export const getContestNameLabel = (contestId: string) => {
   // AtCoder
