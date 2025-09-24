@@ -95,11 +95,11 @@ export const classifyContest = (contest_id: string) => {
 // HACK: As of September 2025, the following contests are applicable.
 // Note: The classification logic may need to be revised when new contests are added.
 const ABC_LIKE: ContestPrefix = {
-  'tenka1-2017-beginner': 'Tenka1 Programmer Beginner Contest',
+  'tenka1-2017-beginner': 'Tenka1 Programmer Beginner Contest 2017',
   abl: 'ACL Beginner Contest',
   caddi2018b: 'CADDi 2018 for Beginners',
   'soundhound2018-summer-qual': 'SoundHound Inc. Programming Contest 2018 -Masters Tournament-',
-  'tenka1-2018-beginner': 'Tenka1 Programmer Beginner Contest',
+  'tenka1-2018-beginner': 'Tenka1 Programmer Beginner Contest 2018',
   aising2019: 'エイシング プログラミング コンテスト 2019',
   sumitrust2019: '三井住友信託銀行プログラミングコンテスト2019',
   'tenka1-2019-beginner': 'Tenka1 Programmer Beginner Contest 2019',

@@ -187,7 +187,7 @@ export const agc = agcContestIds.map((contestId) =>
 );
 
 export const abcLike = [
-  createTestCaseForContestType('Tenka1 Programmer Beginner Contest')({
+  createTestCaseForContestType('Tenka1 Programmer Beginner Contest 2017')({
     contestId: 'tenka1-2017-beginner',
     expected: ContestType.ABC_LIKE,
   }),
@@ -203,7 +203,7 @@ export const abcLike = [
     contestId: 'soundhound2018-summer-qual',
     expected: ContestType.ABC_LIKE,
   }),
-  createTestCaseForContestType('Tenka1 Programmer Beginner Contest')({
+  createTestCaseForContestType('Tenka1 Programmer Beginner Contest 2018')({
     contestId: 'tenka1-2018-beginner',
     expected: ContestType.ABC_LIKE,
   }),
