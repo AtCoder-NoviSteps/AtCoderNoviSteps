@@ -187,12 +187,36 @@ export const agc = agcContestIds.map((contestId) =>
 );
 
 export const abcLike = [
+  createTestCaseForContestType('Tenka1 Programmer Beginner Contest 2017')({
+    contestId: 'tenka1-2017-beginner',
+    expected: ContestType.ABC_LIKE,
+  }),
   createTestCaseForContestType('ACL Beginner Contest')({
     contestId: 'abl',
     expected: ContestType.ABC_LIKE,
   }),
   createTestCaseForContestType('CADDi 2018 for Beginners')({
     contestId: 'caddi2018b',
+    expected: ContestType.ABC_LIKE,
+  }),
+  createTestCaseForContestType('SoundHound Inc. Programming Contest 2018 -Masters Tournament-')({
+    contestId: 'soundhound2018-summer-qual',
+    expected: ContestType.ABC_LIKE,
+  }),
+  createTestCaseForContestType('Tenka1 Programmer Beginner Contest 2018')({
+    contestId: 'tenka1-2018-beginner',
+    expected: ContestType.ABC_LIKE,
+  }),
+  createTestCaseForContestType('エイシング プログラミング コンテスト 2019')({
+    contestId: 'aising2019',
+    expected: ContestType.ABC_LIKE,
+  }),
+  createTestCaseForContestType('三井住友信託銀行プログラミングコンテスト2019')({
+    contestId: 'sumitrust2019',
+    expected: ContestType.ABC_LIKE,
+  }),
+  createTestCaseForContestType('Tenka1 Programmer Beginner Contest 2019')({
+    contestId: 'tenka1-2019-beginner',
     expected: ContestType.ABC_LIKE,
   }),
   createTestCaseForContestType('AISing 2020')({
@@ -203,12 +227,20 @@ export const abcLike = [
     contestId: 'hhkb2020',
     expected: ContestType.ABC_LIKE,
   }),
+  createTestCaseForContestType('M-SOLUTIONS プロコンオープン 2020')({
+    contestId: 'm-solutions2020',
+    expected: ContestType.ABC_LIKE,
+  }),
   createTestCaseForContestType('Panasonic 2020')({
     contestId: 'panasonic2020',
     expected: ContestType.ABC_LIKE,
   }),
   createTestCaseForContestType('Japanese Student Championship 2021')({
     contestId: 'jsc2021',
+    expected: ContestType.ABC_LIKE,
+  }),
+  createTestCaseForContestType('ZONeエナジー プログラミングコンテスト “HELLO SPACE”')({
+    contestId: 'zone2021',
     expected: ContestType.ABC_LIKE,
   }),
   createTestCaseForContestType('日本最強プログラマー学生選手権～Advance～')({
