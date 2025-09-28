@@ -97,7 +97,7 @@ export async function createContestTaskPair(
 
     if (existingRecord) {
       console.log(`ContestTaskPair already exists: contestId=${contestId}, taskId=${taskId}`);
-      return
+      return;
     }
 
     // 新規レコード作成
