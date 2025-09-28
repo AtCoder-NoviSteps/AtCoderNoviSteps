@@ -376,6 +376,7 @@ export function createContestTaskPairKey(contestId: string, taskId: string): Con
   }
   if (!taskId || taskId.trim() === '') {
     throw new Error('taskId must be a non-empty string');
+  }
 
   return `${contestId}:${taskId}`;
 }
