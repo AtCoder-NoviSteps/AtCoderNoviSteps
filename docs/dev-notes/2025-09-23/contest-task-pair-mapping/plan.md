@@ -97,6 +97,7 @@ export async function createContestTaskPair(
 
     if (existingRecord) {
       console.log(`ContestTaskPair already exists: contestId=${contestId}, taskId=${taskId}`);
+      return
     }
 
     // 新規レコード作成
@@ -377,7 +378,7 @@ export async function getContestTaskPairs(): Promise<Map<string, string[]>> {
   const map = new Map<string, string[]>();
 
   for (const r of rows) {
-    const arr = m.get(r.taskId) ?? [];
+    const arr = map.get(r.taskId) ?? [];
     arr.push(r.contestId);
     map.set(r.taskId, arr);
   }
