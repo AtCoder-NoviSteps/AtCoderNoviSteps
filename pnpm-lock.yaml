@@ -13,7 +13,7 @@ importers:
         version: 3.0.2(@prisma/client@5.22.0(prisma@5.22.0))(lucia@2.7.7)
       '@mermaid-js/mermaid-cli':
         specifier: 11.12.0
-        version: 11.12.0(puppeteer@19.11.1(typescript@5.9.2))(yaml@2.8.1)
+        version: 11.12.0(puppeteer@19.11.1(typescript@5.9.3))(yaml@2.8.1)
       '@popperjs/core':
         specifier: 2.11.8
         version: 2.11.8
@@ -58,7 +58,7 @@ importers:
         version: 1.55.1
       prisma-erd-generator:
         specifier: 2.1.0
-        version: 2.1.0(@prisma/client@5.22.0(prisma@5.22.0))(puppeteer@19.11.1(typescript@5.9.2))(yaml@2.8.1)
+        version: 2.1.0(@prisma/client@5.22.0(prisma@5.22.0))(puppeteer@19.11.1(typescript@5.9.3))(yaml@2.8.1)
       svelte-eslint-parser:
         specifier: 1.3.3
         version: 1.3.3(svelte@5.39.8)
@@ -86,7 +86,7 @@ importers:
         version: 1.55.1
       '@quramy/prisma-fabbrica':
         specifier: 2.3.1
-        version: 2.3.1(@prisma/client@5.22.0(prisma@5.22.0))(magicast@0.3.5)(typescript@5.9.2)
+        version: 2.3.1(@prisma/client@5.22.0(prisma@5.22.0))(magicast@0.3.5)(typescript@5.9.3)
       '@sveltejs/adapter-vercel':
         specifier: 5.10.3
         version: 5.10.3(@sveltejs/kit@2.43.8(@sveltejs/vite-plugin-svelte@6.2.1(svelte@5.39.8)(vite@7.1.9(@types/node@24.6.2)(jiti@1.21.7)(yaml@2.8.1)))(svelte@5.39.8)(vite@7.1.9(@types/node@24.6.2)(jiti@1.21.7)(yaml@2.8.1)))(rollup@4.52.4)
@@ -110,10 +110,10 @@ importers:
         version: 21.1.7
       '@typescript-eslint/eslint-plugin':
         specifier: 8.45.0
-        version: 8.45.0(@typescript-eslint/parser@8.45.0(eslint@9.37.0(jiti@1.21.7))(typescript@5.9.2))(eslint@9.37.0(jiti@1.21.7))(typescript@5.9.2)
+        version: 8.45.0(@typescript-eslint/parser@8.45.0(eslint@9.37.0(jiti@1.21.7))(typescript@5.9.3))(eslint@9.37.0(jiti@1.21.7))(typescript@5.9.3)
       '@typescript-eslint/parser':
         specifier: 8.45.0
-        version: 8.45.0(eslint@9.37.0(jiti@1.21.7))(typescript@5.9.2)
+        version: 8.45.0(eslint@9.37.0(jiti@1.21.7))(typescript@5.9.3)
       '@vitest/coverage-v8':
         specifier: 3.2.4
         version: 3.2.4(vitest@3.2.4)
@@ -128,7 +128,7 @@ importers:
         version: 10.1.8(eslint@9.37.0(jiti@1.21.7))
       eslint-plugin-svelte:
         specifier: 3.10.1
-        version: 3.10.1(eslint@9.37.0(jiti@1.21.7))(svelte@5.39.8)(ts-node@10.9.1(@types/node@24.6.2)(typescript@5.9.2))
+        version: 3.10.1(eslint@9.37.0(jiti@1.21.7))(svelte@5.39.8)(ts-node@10.9.1(@types/node@24.6.2)(typescript@5.9.3))
       globals:
         specifier: 16.4.0
         version: 16.4.0
@@ -170,19 +170,19 @@ importers:
         version: 0.12.2(svelte@5.39.8)(tailwindcss@3.4.18(yaml@2.8.1))
       svelte-check:
         specifier: 4.3.2
-        version: 4.3.2(picomatch@4.0.3)(svelte@5.39.8)(typescript@5.9.2)
+        version: 4.3.2(picomatch@4.0.3)(svelte@5.39.8)(typescript@5.9.3)
       svelte-meta-tags:
         specifier: 4.4.1
         version: 4.4.1(svelte@5.39.8)
       sveltekit-superforms:
         specifier: 2.27.2
-        version: 2.27.2(@sveltejs/kit@2.43.8(@sveltejs/vite-plugin-svelte@6.2.1(svelte@5.39.8)(vite@7.1.9(@types/node@24.6.2)(jiti@1.21.7)(yaml@2.8.1)))(svelte@5.39.8)(vite@7.1.9(@types/node@24.6.2)(jiti@1.21.7)(yaml@2.8.1)))(@types/json-schema@7.0.15)(esbuild@0.25.10)(svelte@5.39.8)(typescript@5.9.2)
+        version: 2.27.2(@sveltejs/kit@2.43.8(@sveltejs/vite-plugin-svelte@6.2.1(svelte@5.39.8)(vite@7.1.9(@types/node@24.6.2)(jiti@1.21.7)(yaml@2.8.1)))(svelte@5.39.8)(vite@7.1.9(@types/node@24.6.2)(jiti@1.21.7)(yaml@2.8.1)))(@types/json-schema@7.0.15)(esbuild@0.25.10)(svelte@5.39.8)(typescript@5.9.3)
       tslib:
         specifier: 2.8.1
         version: 2.8.1
       typescript:
-        specifier: 5.9.2
-        version: 5.9.2
+        specifier: 5.9.3
+        version: 5.9.3
       vite:
         specifier: 7.1.9
         version: 7.1.9(@types/node@24.6.2)(jiti@1.21.7)(yaml@2.8.1)
@@ -4408,8 +4408,8 @@ packages:
     engines: {node: '>=4.2.0'}
     hasBin: true
 
-  typescript@5.9.2:
-    resolution: {integrity: sha512-CWBzXQrc/qOkhidw1OzBTQuYRbfyxDXJMVJ1XNwUHGROVmuaeiEm3OslpZ1RV96d7SKKjZKrSJu3+t/xlw3R9A==}
+  typescript@5.9.3:
+    resolution: {integrity: sha512-jl1vZzPDinLr9eUt3J/t7V6FgNEw9QjvBPdysz9KfQDD41fQrC2Y4vKQdiaUpFT4bXlb1RHhLpp8wtm6M5TgSw==}
     engines: {node: '>=14.17'}
     hasBin: true
 
@@ -5085,9 +5085,9 @@ snapshots:
 
   '@floating-ui/utils@0.2.9': {}
 
-  '@gcornut/valibot-json-schema@0.42.0(esbuild@0.25.10)(typescript@5.9.2)':
+  '@gcornut/valibot-json-schema@0.42.0(esbuild@0.25.10)(typescript@5.9.3)':
     dependencies:
-      valibot: 0.42.1(typescript@5.9.2)
+      valibot: 0.42.1(typescript@5.9.3)
     optionalDependencies:
       '@types/json-schema': 7.0.15
       esbuild-runner: 2.2.2(esbuild@0.25.10)
@@ -5235,14 +5235,14 @@ snapshots:
       - encoding
       - supports-color
 
-  '@mermaid-js/mermaid-cli@11.12.0(puppeteer@19.11.1(typescript@5.9.2))(yaml@2.8.1)':
+  '@mermaid-js/mermaid-cli@11.12.0(puppeteer@19.11.1(typescript@5.9.3))(yaml@2.8.1)':
     dependencies:
       '@mermaid-js/mermaid-zenuml': 0.2.2(mermaid@11.12.0)(yaml@2.8.1)
       chalk: 5.6.2
       commander: 14.0.1
       import-meta-resolve: 4.2.0
       mermaid: 11.12.0
-      puppeteer: 19.11.1(typescript@5.9.2)
+      puppeteer: 19.11.1(typescript@5.9.3)
     transitivePeerDependencies:
       - '@babel/core'
       - '@babel/template'
@@ -5402,7 +5402,7 @@ snapshots:
     dependencies:
       '@prisma/debug': 6.14.0
 
-  '@prisma/internals@6.14.0(magicast@0.3.5)(typescript@5.9.2)':
+  '@prisma/internals@6.14.0(magicast@0.3.5)(typescript@5.9.3)':
     dependencies:
       '@prisma/config': 6.14.0(magicast@0.3.5)
       '@prisma/debug': 6.14.0
@@ -5419,7 +5419,7 @@ snapshots:
       arg: 5.0.2
       prompts: 2.4.2
     optionalDependencies:
-      typescript: 5.9.2
+      typescript: 5.9.3
     transitivePeerDependencies:
       - magicast
 
@@ -5432,7 +5432,7 @@ snapshots:
       '@prisma/prisma-schema-wasm': 6.14.0-25.717184b7b35ea05dfa71a3236b7af656013e1e49
       fs-extra: 11.3.0
 
-  '@puppeteer/browsers@0.5.0(typescript@5.9.2)':
+  '@puppeteer/browsers@0.5.0(typescript@5.9.3)':
     dependencies:
       debug: 4.3.4
       extract-zip: 2.0.1
@@ -5443,18 +5443,18 @@ snapshots:
       unbzip2-stream: 1.4.3
       yargs: 17.7.1
     optionalDependencies:
-      typescript: 5.9.2
+      typescript: 5.9.3
     transitivePeerDependencies:
       - supports-color
 
-  '@quramy/prisma-fabbrica@2.3.1(@prisma/client@5.22.0(prisma@5.22.0))(magicast@0.3.5)(typescript@5.9.2)':
+  '@quramy/prisma-fabbrica@2.3.1(@prisma/client@5.22.0(prisma@5.22.0))(magicast@0.3.5)(typescript@5.9.3)':
     dependencies:
       '@prisma/client': 5.22.0(prisma@5.22.0)
       '@prisma/generator-helper': 6.14.0
-      '@prisma/internals': 6.14.0(magicast@0.3.5)(typescript@5.9.2)
+      '@prisma/internals': 6.14.0(magicast@0.3.5)(typescript@5.9.3)
       short-uuid: 5.2.0
-      talt: 2.4.4(typescript@5.9.2)
-      typescript: 5.9.2
+      talt: 2.4.4(typescript@5.9.3)
+      typescript: 5.9.3
     transitivePeerDependencies:
       - magicast
 
@@ -5975,41 +5975,41 @@ snapshots:
       '@types/json-schema': 7.0.15
     optional: true
 
-  '@typescript-eslint/eslint-plugin@8.45.0(@typescript-eslint/parser@8.45.0(eslint@9.37.0(jiti@1.21.7))(typescript@5.9.2))(eslint@9.37.0(jiti@1.21.7))(typescript@5.9.2)':
+  '@typescript-eslint/eslint-plugin@8.45.0(@typescript-eslint/parser@8.45.0(eslint@9.37.0(jiti@1.21.7))(typescript@5.9.3))(eslint@9.37.0(jiti@1.21.7))(typescript@5.9.3)':
     dependencies:
       '@eslint-community/regexpp': 4.12.1
-      '@typescript-eslint/parser': 8.45.0(eslint@9.37.0(jiti@1.21.7))(typescript@5.9.2)
+      '@typescript-eslint/parser': 8.45.0(eslint@9.37.0(jiti@1.21.7))(typescript@5.9.3)
       '@typescript-eslint/scope-manager': 8.45.0
-      '@typescript-eslint/type-utils': 8.45.0(eslint@9.37.0(jiti@1.21.7))(typescript@5.9.2)
-      '@typescript-eslint/utils': 8.45.0(eslint@9.37.0(jiti@1.21.7))(typescript@5.9.2)
+      '@typescript-eslint/type-utils': 8.45.0(eslint@9.37.0(jiti@1.21.7))(typescript@5.9.3)
+      '@typescript-eslint/utils': 8.45.0(eslint@9.37.0(jiti@1.21.7))(typescript@5.9.3)
       '@typescript-eslint/visitor-keys': 8.45.0
       eslint: 9.37.0(jiti@1.21.7)
       graphemer: 1.4.0
       ignore: 7.0.5
       natural-compare: 1.4.0
-      ts-api-utils: 2.1.0(typescript@5.9.2)
-      typescript: 5.9.2
+      ts-api-utils: 2.1.0(typescript@5.9.3)
+      typescript: 5.9.3
     transitivePeerDependencies:
       - supports-color
 
-  '@typescript-eslint/parser@8.45.0(eslint@9.37.0(jiti@1.21.7))(typescript@5.9.2)':
+  '@typescript-eslint/parser@8.45.0(eslint@9.37.0(jiti@1.21.7))(typescript@5.9.3)':
     dependencies:
       '@typescript-eslint/scope-manager': 8.45.0
       '@typescript-eslint/types': 8.45.0
-      '@typescript-eslint/typescript-estree': 8.45.0(typescript@5.9.2)
+      '@typescript-eslint/typescript-estree': 8.45.0(typescript@5.9.3)
       '@typescript-eslint/visitor-keys': 8.45.0
       debug: 4.4.3
       eslint: 9.37.0(jiti@1.21.7)
-      typescript: 5.9.2
+      typescript: 5.9.3
     transitivePeerDependencies:
       - supports-color
 
-  '@typescript-eslint/project-service@8.45.0(typescript@5.9.2)':
+  '@typescript-eslint/project-service@8.45.0(typescript@5.9.3)':
     dependencies:
-      '@typescript-eslint/tsconfig-utils': 8.45.0(typescript@5.9.2)
+      '@typescript-eslint/tsconfig-utils': 8.45.0(typescript@5.9.3)
       '@typescript-eslint/types': 8.45.0
       debug: 4.4.3
-      typescript: 5.9.2
+      typescript: 5.9.3
     transitivePeerDependencies:
       - supports-color
 
@@ -6018,28 +6018,28 @@ snapshots:
       '@typescript-eslint/types': 8.45.0
       '@typescript-eslint/visitor-keys': 8.45.0
 
-  '@typescript-eslint/tsconfig-utils@8.45.0(typescript@5.9.2)':
+  '@typescript-eslint/tsconfig-utils@8.45.0(typescript@5.9.3)':
     dependencies:
-      typescript: 5.9.2
+      typescript: 5.9.3
 
-  '@typescript-eslint/type-utils@8.45.0(eslint@9.37.0(jiti@1.21.7))(typescript@5.9.2)':
+  '@typescript-eslint/type-utils@8.45.0(eslint@9.37.0(jiti@1.21.7))(typescript@5.9.3)':
     dependencies:
       '@typescript-eslint/types': 8.45.0
-      '@typescript-eslint/typescript-estree': 8.45.0(typescript@5.9.2)
-      '@typescript-eslint/utils': 8.45.0(eslint@9.37.0(jiti@1.21.7))(typescript@5.9.2)
+      '@typescript-eslint/typescript-estree': 8.45.0(typescript@5.9.3)
+      '@typescript-eslint/utils': 8.45.0(eslint@9.37.0(jiti@1.21.7))(typescript@5.9.3)
       debug: 4.4.3
       eslint: 9.37.0(jiti@1.21.7)
-      ts-api-utils: 2.1.0(typescript@5.9.2)
-      typescript: 5.9.2
+      ts-api-utils: 2.1.0(typescript@5.9.3)
+      typescript: 5.9.3
     transitivePeerDependencies:
       - supports-color
 
   '@typescript-eslint/types@8.45.0': {}
 
-  '@typescript-eslint/typescript-estree@8.45.0(typescript@5.9.2)':
+  '@typescript-eslint/typescript-estree@8.45.0(typescript@5.9.3)':
     dependencies:
-      '@typescript-eslint/project-service': 8.45.0(typescript@5.9.2)
-      '@typescript-eslint/tsconfig-utils': 8.45.0(typescript@5.9.2)
+      '@typescript-eslint/project-service': 8.45.0(typescript@5.9.3)
+      '@typescript-eslint/tsconfig-utils': 8.45.0(typescript@5.9.3)
       '@typescript-eslint/types': 8.45.0
       '@typescript-eslint/visitor-keys': 8.45.0
       debug: 4.4.3
@@ -6047,19 +6047,19 @@ snapshots:
       is-glob: 4.0.3
       minimatch: 9.0.5
       semver: 7.7.2
-      ts-api-utils: 2.1.0(typescript@5.9.2)
-      typescript: 5.9.2
+      ts-api-utils: 2.1.0(typescript@5.9.3)
+      typescript: 5.9.3
     transitivePeerDependencies:
       - supports-color
 
-  '@typescript-eslint/utils@8.45.0(eslint@9.37.0(jiti@1.21.7))(typescript@5.9.2)':
+  '@typescript-eslint/utils@8.45.0(eslint@9.37.0(jiti@1.21.7))(typescript@5.9.3)':
     dependencies:
       '@eslint-community/eslint-utils': 4.9.0(eslint@9.37.0(jiti@1.21.7))
       '@typescript-eslint/scope-manager': 8.45.0
       '@typescript-eslint/types': 8.45.0
-      '@typescript-eslint/typescript-estree': 8.45.0(typescript@5.9.2)
+      '@typescript-eslint/typescript-estree': 8.45.0(typescript@5.9.3)
       eslint: 9.37.0(jiti@1.21.7)
-      typescript: 5.9.2
+      typescript: 5.9.3
     transitivePeerDependencies:
       - supports-color
 
@@ -7285,7 +7285,7 @@ snapshots:
     dependencies:
       eslint: 9.37.0(jiti@1.21.7)
 
-  eslint-plugin-svelte@3.10.1(eslint@9.37.0(jiti@1.21.7))(svelte@5.39.8)(ts-node@10.9.1(@types/node@24.6.2)(typescript@5.9.2)):
+  eslint-plugin-svelte@3.10.1(eslint@9.37.0(jiti@1.21.7))(svelte@5.39.8)(ts-node@10.9.1(@types/node@24.6.2)(typescript@5.9.3)):
     dependencies:
       '@eslint-community/eslint-utils': 4.7.0(eslint@9.37.0(jiti@1.21.7))
       '@jridgewell/sourcemap-codec': 1.5.0
@@ -7294,7 +7294,7 @@ snapshots:
       globals: 16.4.0
       known-css-properties: 0.37.0
       postcss: 8.5.6
-      postcss-load-config: 3.1.4(postcss@8.5.6)(ts-node@10.9.1(@types/node@24.6.2)(typescript@5.9.2))
+      postcss-load-config: 3.1.4(postcss@8.5.6)(ts-node@10.9.1(@types/node@24.6.2)(typescript@5.9.3))
       postcss-safe-parser: 7.0.1(postcss@8.5.6)
       semver: 7.7.2
       svelte-eslint-parser: 1.3.3(svelte@5.39.8)
@@ -8348,13 +8348,13 @@ snapshots:
       camelcase-css: 2.0.1
       postcss: 8.5.6
 
-  postcss-load-config@3.1.4(postcss@8.5.6)(ts-node@10.9.1(@types/node@24.6.2)(typescript@5.9.2)):
+  postcss-load-config@3.1.4(postcss@8.5.6)(ts-node@10.9.1(@types/node@24.6.2)(typescript@5.9.3)):
     dependencies:
       lilconfig: 2.1.0
       yaml: 1.10.2
     optionalDependencies:
       postcss: 8.5.6
-      ts-node: 10.9.1(@types/node@24.6.2)(typescript@5.9.2)
+      ts-node: 10.9.1(@types/node@24.6.2)(typescript@5.9.3)
 
   postcss-load-config@6.0.1(jiti@1.21.7)(postcss@8.5.6)(yaml@2.8.1):
     dependencies:
@@ -8426,9 +8426,9 @@ snapshots:
     dependencies:
       parse-ms: 2.1.0
 
-  prisma-erd-generator@2.1.0(@prisma/client@5.22.0(prisma@5.22.0))(puppeteer@19.11.1(typescript@5.9.2))(yaml@2.8.1):
+  prisma-erd-generator@2.1.0(@prisma/client@5.22.0(prisma@5.22.0))(puppeteer@19.11.1(typescript@5.9.3))(yaml@2.8.1):
     dependencies:
-      '@mermaid-js/mermaid-cli': 11.12.0(puppeteer@19.11.1(typescript@5.9.2))(yaml@2.8.1)
+      '@mermaid-js/mermaid-cli': 11.12.0(puppeteer@19.11.1(typescript@5.9.3))(yaml@2.8.1)
       '@prisma/client': 5.22.0(prisma@5.22.0)
       '@prisma/generator-helper': 6.16.1
       dotenv: 16.6.1
@@ -8474,9 +8474,9 @@ snapshots:
 
   punycode@2.3.1: {}
 
-  puppeteer-core@19.11.1(typescript@5.9.2):
+  puppeteer-core@19.11.1(typescript@5.9.3):
     dependencies:
-      '@puppeteer/browsers': 0.5.0(typescript@5.9.2)
+      '@puppeteer/browsers': 0.5.0(typescript@5.9.3)
       chromium-bidi: 0.4.7(devtools-protocol@0.0.1107588)
       cross-fetch: 3.1.5
       debug: 4.3.4
@@ -8488,21 +8488,21 @@ snapshots:
       unbzip2-stream: 1.4.3
       ws: 8.13.0
     optionalDependencies:
-      typescript: 5.9.2
+      typescript: 5.9.3
     transitivePeerDependencies:
       - bufferutil
       - encoding
       - supports-color
       - utf-8-validate
 
-  puppeteer@19.11.1(typescript@5.9.2):
+  puppeteer@19.11.1(typescript@5.9.3):
     dependencies:
-      '@puppeteer/browsers': 0.5.0(typescript@5.9.2)
+      '@puppeteer/browsers': 0.5.0(typescript@5.9.3)
       cosmiconfig: 8.1.3
       https-proxy-agent: 5.0.1
       progress: 2.0.3
       proxy-from-env: 1.1.0
-      puppeteer-core: 19.11.1(typescript@5.9.2)
+      puppeteer-core: 19.11.1(typescript@5.9.3)
     transitivePeerDependencies:
       - bufferutil
       - encoding
@@ -8869,7 +8869,7 @@ snapshots:
       tailwind-variants: 0.3.1(tailwindcss@3.4.18(yaml@2.8.1))
       tailwindcss: 3.4.18(yaml@2.8.1)
 
-  svelte-check@4.3.2(picomatch@4.0.3)(svelte@5.39.8)(typescript@5.9.2):
+  svelte-check@4.3.2(picomatch@4.0.3)(svelte@5.39.8)(typescript@5.9.3):
     dependencies:
       '@jridgewell/trace-mapping': 0.3.31
       chokidar: 4.0.3
@@ -8877,7 +8877,7 @@ snapshots:
       picocolors: 1.1.1
       sade: 1.8.1
       svelte: 5.39.8
-      typescript: 5.9.2
+      typescript: 5.9.3
     transitivePeerDependencies:
       - picomatch
 
@@ -8914,7 +8914,7 @@ snapshots:
       magic-string: 0.30.19
       zimmerframe: 1.1.4
 
-  sveltekit-superforms@2.27.2(@sveltejs/kit@2.43.8(@sveltejs/vite-plugin-svelte@6.2.1(svelte@5.39.8)(vite@7.1.9(@types/node@24.6.2)(jiti@1.21.7)(yaml@2.8.1)))(svelte@5.39.8)(vite@7.1.9(@types/node@24.6.2)(jiti@1.21.7)(yaml@2.8.1)))(@types/json-schema@7.0.15)(esbuild@0.25.10)(svelte@5.39.8)(typescript@5.9.2):
+  sveltekit-superforms@2.27.2(@sveltejs/kit@2.43.8(@sveltejs/vite-plugin-svelte@6.2.1(svelte@5.39.8)(vite@7.1.9(@types/node@24.6.2)(jiti@1.21.7)(yaml@2.8.1)))(svelte@5.39.8)(vite@7.1.9(@types/node@24.6.2)(jiti@1.21.7)(yaml@2.8.1)))(@types/json-schema@7.0.15)(esbuild@0.25.10)(svelte@5.39.8)(typescript@5.9.3):
     dependencies:
       '@sveltejs/kit': 2.43.8(@sveltejs/vite-plugin-svelte@6.2.1(svelte@5.39.8)(vite@7.1.9(@types/node@24.6.2)(jiti@1.21.7)(yaml@2.8.1)))(svelte@5.39.8)(vite@7.1.9(@types/node@24.6.2)(jiti@1.21.7)(yaml@2.8.1))
       devalue: 5.3.2
@@ -8924,7 +8924,7 @@ snapshots:
     optionalDependencies:
       '@exodus/schemasafe': 1.3.0
       '@finom/zod-to-json-schema': 3.24.11(zod@4.1.11)
-      '@gcornut/valibot-json-schema': 0.42.0(esbuild@0.25.10)(typescript@5.9.2)
+      '@gcornut/valibot-json-schema': 0.42.0(esbuild@0.25.10)(typescript@5.9.3)
       '@sinclair/typebox': 0.34.41
       '@typeschema/class-validator': 0.3.0(@types/json-schema@7.0.15)(class-validator@0.14.2)
       '@vinejs/vine': 3.0.1
@@ -8934,7 +8934,7 @@ snapshots:
       joi: 17.13.3
       json-schema-to-ts: 3.1.1
       superstruct: 2.0.2
-      valibot: 1.1.0(typescript@5.9.2)
+      valibot: 1.1.0(typescript@5.9.3)
       yup: 1.7.1
       zod: 4.1.11
     transitivePeerDependencies:
@@ -9023,9 +9023,9 @@ snapshots:
       - tsx
       - yaml
 
-  talt@2.4.4(typescript@5.9.2):
+  talt@2.4.4(typescript@5.9.3):
     dependencies:
-      typescript: 5.9.2
+      typescript: 5.9.3
 
   tar-fs@2.1.1:
     dependencies:
@@ -9142,9 +9142,9 @@ snapshots:
   ts-algebra@2.0.0:
     optional: true
 
-  ts-api-utils@2.1.0(typescript@5.9.2):
+  ts-api-utils@2.1.0(typescript@5.9.3):
     dependencies:
-      typescript: 5.9.2
+      typescript: 5.9.3
 
   ts-dedent@2.2.0: {}
 
@@ -9175,7 +9175,7 @@ snapshots:
       v8-compile-cache-lib: 3.0.1
       yn: 3.1.1
 
-  ts-node@10.9.1(@types/node@24.6.2)(typescript@5.9.2):
+  ts-node@10.9.1(@types/node@24.6.2)(typescript@5.9.3):
     dependencies:
       '@cspotcode/source-map-support': 0.8.1
       '@tsconfig/node10': 1.0.11
@@ -9189,7 +9189,7 @@ snapshots:
       create-require: 1.1.1
       diff: 4.0.2
       make-error: 1.3.6
-      typescript: 5.9.2
+      typescript: 5.9.3
       v8-compile-cache-lib: 3.0.1
       yn: 3.1.1
     optional: true
@@ -9210,7 +9210,7 @@ snapshots:
 
   typescript@4.9.5: {}
 
-  typescript@5.9.2: {}
+  typescript@5.9.3: {}
 
   typical@4.0.0: {}
 
@@ -9261,14 +9261,14 @@ snapshots:
 
   v8-compile-cache-lib@3.0.1: {}
 
-  valibot@0.42.1(typescript@5.9.2):
+  valibot@0.42.1(typescript@5.9.3):
     optionalDependencies:
-      typescript: 5.9.2
+      typescript: 5.9.3
     optional: true
 
-  valibot@1.1.0(typescript@5.9.2):
+  valibot@1.1.0(typescript@5.9.3):
     optionalDependencies:
-      typescript: 5.9.2
+      typescript: 5.9.3
     optional: true
 
   validator@13.15.15:
