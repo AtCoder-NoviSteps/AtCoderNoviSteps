@@ -5,9 +5,8 @@
 // https://www.prisma.io/docs/concepts/components/prisma-schema/generators
 // https://www.prisma.io/docs/orm/prisma-client/deployment/edge/deploy-to-vercel
 generator client {
-  provider        = "prisma-client-js"
-  binaryTargets   = ["native", "rhel-openssl-3.0.x"]
-  previewFeatures = ["driverAdapters"]
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "rhel-openssl-3.0.x"]
 }
 
 // See:
@@ -107,6 +106,20 @@ model Task {
   workBookTasks WorkBookTask[]
 
   @@map("task")
+}
+
+// Handling cases where the same problem is used in different contests.
+model ContestTaskPair {
+  id             String   @id @default(uuid())
+  contestId      String
+  taskTableIndex String
+  taskId         String
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@unique([contestId, taskId]) // Prevent duplicate pairs of (contestId, taskId)
+  @@index([contestId]) // Add index on contestId to speed up queries filtering by contestId
+  @@map("contesttaskpair")
 }
 
 model Tag {
