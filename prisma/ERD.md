@@ -126,6 +126,16 @@ OTHERS OTHERS
     }
   
 
+  "contesttaskpair" {
+    String id "🗝️"
+    String contestId 
+    String taskTableIndex 
+    String taskId 
+    DateTime createdAt 
+    DateTime updatedAt 
+    }
+  
+
   "tag" {
     String id "🗝️"
     Boolean is_published 
@@ -195,28 +205,27 @@ OTHERS OTHERS
     }
   
     "user" o|--|| "Roles" : "enum:role"
-    "user" o{--}o "session" : "auth_session"
-    "user" o{--}o "key" : "key"
-    "user" o{--}o "taskanswer" : "taskAnswer"
-    "user" o{--}o "workbook" : "workBooks"
+    "user" o{--}o "session" : ""
+    "user" o{--}o "key" : ""
+    "user" o{--}o "taskanswer" : ""
+    "user" o{--}o "workbook" : ""
     "session" o|--|| "user" : "user"
     "key" o|--|| "user" : "user"
     "task" o|--|| "ContestType" : "enum:contest_type"
     "task" o|--|| "TaskGrade" : "enum:grade"
     "task" o|--|| "AtcoderProblemsDifficulty" : "enum:atcoder_problems_difficulty"
-    "task" o{--}o "tasktag" : "tags"
-    "task" o{--}o "taskanswer" : "task_answers"
-    "task" o{--}o "workbooktask" : "workBookTasks"
-    "tag" o{--}o "tasktag" : "tasks"
+    "task" o{--}o "tasktag" : ""
+    "task" o{--}o "taskanswer" : ""
+    "task" o{--}o "workbooktask" : ""
+    "tag" o{--}o "tasktag" : ""
     "tasktag" o|--|o "task" : "task"
     "tasktag" o|--|o "tag" : "tag"
     "taskanswer" o|--|o "task" : "task"
     "taskanswer" o|--|o "user" : "user"
     "taskanswer" o|--|o "submissionstatus" : "status"
-    "submissionstatus" o{--}o "taskanswer" : "task_answer"
     "workbook" o|--|| "WorkBookType" : "enum:workBookType"
     "workbook" o|--|| "user" : "user"
-    "workbook" o{--}o "workbooktask" : "workBookTasks"
+    "workbook" o{--}o "workbooktask" : ""
     "workbooktask" o|--|| "workbook" : "workBook"
     "workbooktask" o|--|| "task" : "task"
 ```
