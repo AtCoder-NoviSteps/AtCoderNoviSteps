@@ -1,5 +1,12 @@
 {
   "git": {
     "deploymentEnabled": false
-  }
+  },
+  "functions": {
+    ".svelte-kit/**/*.js": {
+      "memory": 3008,
+      "maxDuration": 30
+    }
+  },
+  "regions": ["hnd1"]
 }
