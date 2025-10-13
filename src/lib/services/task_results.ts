@@ -19,7 +19,7 @@ import type { User } from '@prisma/client';
 import type { TaskAnswer } from '$lib/types/answer';
 import type { Task } from '$lib/types/task';
 import type { TaskResult, TaskResults, Tasks } from '$lib/types/task';
-import type { WorkBookTaskBase, WorkBookTasksBase } from '$lib/types/workbook';
+import type { WorkBookTasksBase } from '$lib/types/workbook';
 import type { FloatingMessages } from '$lib/types/floating_message';
 
 import { NOT_FOUND } from '$lib/constants/http-response-status-codes';
@@ -183,44 +183,113 @@ export async function getTaskResultsOnlyResultExists(
 }
 
 // Note: 個別の問題集を参照するときのみ使用する。
-// Why : 未回答の問題も含めて取得するため、データ総量を抑えるためにも問題集の一覧（ユーザの回答を含む）を参照するときは上記のメソッドを使用する。
+// Why : 未回答の問題も含めて取得するため、データ総量を抑えるためにも問題集の一覧(ユーザの回答を含む)を参照するときは上記のメソッドを使用する。
 export async function getTaskResultsByTaskId(
   workBookTasks: WorkBookTasksBase,
   userId: string,
 ): Promise<Map<string, TaskResult>> {
-  const taskResultsWithTaskId = workBookTasks.map((workBookTask: WorkBookTaskBase) =>
-    getTaskResultWithErrorHandling(workBookTask.taskId, userId).then((taskResult: TaskResult) => ({
-      taskId: workBookTask.taskId,
-      taskResult: taskResult,
-    })),
-  );
+  const startTime = Date.now();
 
-  const taskResultsMap = (await Promise.all(taskResultsWithTaskId)).reduce(
-    (map, { taskId, taskResult }: { taskId: string; taskResult: TaskResult }) =>
-      map.set(taskId, taskResult),
-    new Map<string, TaskResult>(),
+  // Step 1: Extract task IDs with type-safe filtering
+  const taskIds = workBookTasks
+    .map((workBookTask) => workBookTask.taskId)
+    .filter((id): id is string => id !== null && id !== undefined);
+
+  if (taskIds.length === 0) {
+    return new Map();
+  }
+
+  // Step 2: Bulk fetch all tasks (1 query)
+  // Using Prisma's `where: { task_id: { in: taskIds } }` for efficient filtering
+  const tasks = await db.task.findMany({
+    where: {
+      task_id: { in: taskIds }, // SQL: WHERE task_id IN ('id1', 'id2', ...)
+    },
+    select: {
+      contest_id: true,
+      task_table_index: true,
+      task_id: true,
+      title: true,
+      grade: true,
+    },
+  });
+
+  // Step 3: Bulk fetch all answers (1 query)
+  // Using compound conditions: task_id IN (...) AND user_id = userId
+  const answers = userId
+    ? await db.taskAnswer.findMany({
+        where: {
+          task_id: { in: taskIds }, // SQL: WHERE task_id IN (...)
+          user_id: userId, // SQL: AND user_id = 'userId'
+        },
+        select: {
+          task_id: true,
+          user_id: true,
+          status_id: true,
+        },
+      })
+    : [];
+
+  // Step 4: Create Maps for O(1) lookup
+  const tasksMap = new Map(tasks.map((task: Task) => [task.task_id, task]));
+  const answersMap = new Map(answers.map((answer: TaskAnswer) => [answer.task_id, answer]));
+  const taskResultsMap = new Map<string, TaskResult>();
+
+  // Step 5: Merge in memory using mergeTaskAndAnswer
+  for (const taskId of taskIds) {
+    const task = tasksMap.get(taskId);
+
+    if (!task) {
+      console.warn(`Not found task: ${taskId} in database`);
+      continue;
+    }
+
+    const answer = answersMap.get(taskId);
+    const taskResult = mergeTaskAndAnswer(task, userId, answer);
+
+    taskResultsMap.set(taskId, taskResult);
+  }
+
+  const duration = Date.now() - startTime;
+  console.log(
+    `[getTaskResultsByTaskId] Loaded ${taskIds.length} tasks in ${duration}ms (${answers.length} answers)`,
   );
 
   return taskResultsMap;
 }
 
-async function getTaskResultWithErrorHandling(taskId: string, userId: string): Promise<TaskResult> {
-  try {
-    return await getTaskResult(taskId, userId);
-  } catch (error) {
-    console.error(`Failed to get task result for taskId ${taskId}:`, error);
-    return await handleTaskResultError(taskId, userId);
-  }
-}
+/**
+ * Merge task and answer to create TaskResult
+ * Extracted common logic from getTaskResult (excluding DB access)
+ *
+ * @param task - Task object from database
+ * @param userId - User ID for creating TaskResult
+ * @param answer - TaskAnswer object from database (can be null or undefined)
+ * @returns TaskResult with merged data
+ */
+function mergeTaskAndAnswer(
+  task: Task,
+  userId: string,
+  answer: TaskAnswer | null | undefined,
+): TaskResult {
+  const taskResult = createDefaultTaskResult(userId, task);
 
-async function handleTaskResultError(taskId: string, userId: string): Promise<TaskResult> {
-  try {
-    const task: Tasks = await getTask(taskId);
-    return await createDefaultTaskResult(userId, task[0]);
-  } catch (innerError) {
-    console.error(`Failed to create a default task result for taskId ${taskId}:`, innerError);
-    throw new Error(`問題id: ${taskId} の作成に失敗しました。`);
+  if (!answer) {
+    return taskResult;
   }
+
+  const status = statusById.get(answer.status_id);
+
+  if (status) {
+    taskResult.status_id = status.id;
+    taskResult.status_name = status.status_name;
+    taskResult.submission_status_image_path = status.image_path;
+    taskResult.submission_status_label_name = status.label_name;
+    taskResult.is_ac = status.is_ac;
+    taskResult.user_id = userId;
+  }
+
+  return taskResult;
 }
 
 export function createDefaultTaskResult(userId: string, task: Task): TaskResult {
@@ -242,6 +311,7 @@ export function createDefaultTaskResult(userId: string, task: Task): TaskResult 
   return taskResult;
 }
 
+// Note: This function will be deprecated in the future in favor of bulk operations (getTaskResultsByTaskId)
 export async function getTaskResult(slug: string, userId: string) {
   const task = await getTask(slug);
 
@@ -249,22 +319,9 @@ export async function getTaskResult(slug: string, userId: string) {
     error(NOT_FOUND, `問題 ${slug} は見つかりませんでした。`);
   }
 
-  const taskResult = createDefaultTaskResult(userId, task[0]);
-  const taskanswer: TaskAnswer | null = await answer_crud.getAnswer(slug, userId);
+  const taskAnswer: TaskAnswer | null = await answer_crud.getAnswer(slug, userId);
 
-  if (!taskanswer) {
-    return taskResult;
-  }
-
-  const status = statusById.get(taskanswer.status_id);
-  taskResult.status_id = status.id;
-  taskResult.status_name = status.status_name;
-  taskResult.submission_status_image_path = status.image_path;
-  taskResult.submission_status_label_name = status.label_name;
-  taskResult.is_ac = status.is_ac;
-  taskResult.user_id = userId;
-
-  return taskResult;
+  return mergeTaskAndAnswer(task[0], userId, taskAnswer);
 }
 
 export async function updateTaskResult(taskId: string, submissionStatus: string, userId: string) {
