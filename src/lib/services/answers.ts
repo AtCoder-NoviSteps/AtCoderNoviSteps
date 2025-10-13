@@ -32,7 +32,7 @@ export async function getAnswers(user_id: string) {
 export async function getAnswersWithSelectedTaskIds(
   selectedTaskIds: string[],
   userId: string,
-): Promise<Array<Pick<TaskAnswer, 'task_id' | 'user_id' | 'status_id'>>> {
+): Promise<Pick<TaskAnswer, 'task_id' | 'user_id' | 'status_id' | 'updated_at'>[]> {
   if (!selectedTaskIds?.length) {
     return [];
   }
@@ -46,6 +46,7 @@ export async function getAnswersWithSelectedTaskIds(
       task_id: true,
       user_id: true,
       status_id: true,
+      updated_at: true,
     },
   });
 }

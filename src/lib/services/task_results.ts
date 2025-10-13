@@ -260,6 +260,10 @@ function mergeTaskAndAnswer(
     taskResult.submission_status_label_name = status.label_name;
     taskResult.is_ac = status.is_ac;
     taskResult.user_id = userId;
+
+    if (status.updated_at) {
+      taskResult.updated_at = status.updated_at;
+    }
   }
 
   return taskResult;
