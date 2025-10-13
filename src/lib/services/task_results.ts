@@ -261,8 +261,8 @@ function mergeTaskAndAnswer(
     taskResult.is_ac = status.is_ac;
     taskResult.user_id = userId;
 
-    if (status.updated_at) {
-      taskResult.updated_at = status.updated_at;
+    if (answer.updated_at) {
+      taskResult.updated_at = answer.updated_at;
     }
   }
 
