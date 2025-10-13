@@ -205,7 +205,7 @@ export async function getTaskResultsByTaskId(
 
   // Step 4: Create Maps for O(1) lookup
   const tasksMap = new Map(tasks.map((task: Task) => [task.task_id, task]));
-  const answersMap = new Map(answers.map((answer: TaskAnswer) => [answer.task_id, answer]));
+  const answersMap = new Map(answers.map((answer) => [answer.task_id, answer]));
   const taskResultsMap = new Map<string, TaskResult>();
 
   // Step 5: Merge in memory using mergeTaskAndAnswer
