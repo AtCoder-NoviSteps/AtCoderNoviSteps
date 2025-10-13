@@ -310,7 +310,7 @@ export async function getTaskResultsByTaskId(
     }
 
     const answer = answersMap.get(taskId);
-    const taskResult = mergeTaskAndAnswer(task, answer, userId);
+    const taskResult = mergeTaskAndAnswer(task, userId, answer);
     taskResultsMap.set(taskId, taskResult);
   }
 
