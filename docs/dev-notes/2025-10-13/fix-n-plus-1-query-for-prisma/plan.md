@@ -10,7 +10,7 @@
 
 ### 発生しているエラー
 
-```
+```text
 Node.js process exited with signal: 6 (SIGABRT) (core dumped).
 Node.js process exited with signal: 11 (SIGSEGV) (core dumped).
 double free or corruption (out)
@@ -53,7 +53,7 @@ export async function getTaskResultsByTaskId(
 
 **メモリ計算**:
 
-```
+```text
 200個のPrismaクエリエンジン × 40-60MB/プロセス = 8GB〜12GB必要
 Vercel Pro (3008MB) < 必要メモリ → メモリ不足
 ```
