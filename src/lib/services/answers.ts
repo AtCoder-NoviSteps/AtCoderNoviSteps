@@ -20,6 +20,29 @@ export async function getAnswers(user_id: string) {
   return answersMap;
 }
 
+/**
+ * Fetches task answers for a specific user and a list of selected task IDs.
+ *
+ * @param selectedTaskIds - An array of task IDs to filter the answers.
+ * @param userId - The ID of the user whose answers are to be fetched.
+ *
+ * @returns A promise that resolves to an array of TaskAnswer objects.
+ * @note conditions: task_id IN (...) AND user_id = userId
+ */
+export async function getAnswersWithSelectedTaskIds(selectedTaskIds: string[], userId: string) {
+  return await prisma.taskAnswer.findMany({
+    where: {
+      task_id: { in: selectedTaskIds },
+      user_id: userId,
+    },
+    select: {
+      task_id: true,
+      user_id: true,
+      status_id: true,
+    },
+  });
+}
+
 export async function getAnswersOrderedByUpdatedDesc(user_id: string): Promise<TaskAnswer[]> {
   const answers_from_db = await prisma.taskAnswer.findMany({
     where: {

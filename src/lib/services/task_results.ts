@@ -5,7 +5,7 @@ import {
   getSubmissionStatusMapWithId,
   getSubmissionStatusMapWithName,
 } from '$lib/services/submission_status';
-import { getTasks, getTask } from '$lib/services/tasks';
+import { getTasks, getTasksWithSelectedTaskIds, getTask } from '$lib/services/tasks';
 import { getUser } from '$lib/services/users';
 import * as answer_crud from '$lib/services/answers';
 
@@ -199,36 +199,9 @@ export async function getTaskResultsByTaskId(
     return new Map();
   }
 
-  // Step 2: Bulk fetch all tasks (1 query)
-  // Using Prisma's `where: { task_id: { in: taskIds } }` for efficient filtering
-  const tasks = await db.task.findMany({
-    where: {
-      task_id: { in: taskIds }, // SQL: WHERE task_id IN ('id1', 'id2', ...)
-    },
-    select: {
-      contest_id: true,
-      task_table_index: true,
-      task_id: true,
-      title: true,
-      grade: true,
-    },
-  });
-
-  // Step 3: Bulk fetch all answers (1 query)
-  // Using compound conditions: task_id IN (...) AND user_id = userId
-  const answers = userId
-    ? await db.taskAnswer.findMany({
-        where: {
-          task_id: { in: taskIds }, // SQL: WHERE task_id IN (...)
-          user_id: userId, // SQL: AND user_id = 'userId'
-        },
-        select: {
-          task_id: true,
-          user_id: true,
-          status_id: true,
-        },
-      })
-    : [];
+  // Step 2 & 3: Bulk fetch all tasks and answers (2 query)
+  const tasks = await getTasksWithSelectedTaskIds(taskIds);
+  const answers = userId ? await answer_crud.getAnswersWithSelectedTaskIds(taskIds, userId) : [];
 
   // Step 4: Create Maps for O(1) lookup
   const tasksMap = new Map(tasks.map((task: Task) => [task.task_id, task]));

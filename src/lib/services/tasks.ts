@@ -1,7 +1,7 @@
 import { default as db } from '$lib/server/database';
 import { classifyContest } from '$lib/utils/contest';
 import type { TaskGrade } from '$lib/types/task';
-import type { Task } from '$lib/types/task';
+import type { Task, Tasks } from '$lib/types/task';
 
 // See:
 // https://www.prisma.io/docs/concepts/components/prisma-client/filtering-and-sorting
@@ -9,6 +9,28 @@ export async function getTasks(): Promise<Task[]> {
   const tasks = await db.task.findMany({ orderBy: { task_id: 'desc' } });
 
   return tasks;
+}
+
+/**
+ * Fetches tasks with the specified task IDs.
+ * @param taskIds - An array of task IDs to filter the tasks.
+ *
+ * @returns A promise that resolves to an array of Task objects.
+ * @note conditions: { task_id: { in: taskIds } }` for efficient filtering
+ */
+export async function getTasksWithSelectedTaskIds(selectedTaskIds: string[]): Promise<Tasks> {
+  return await db.task.findMany({
+    where: {
+      task_id: { in: selectedTaskIds }, // SQL: WHERE task_id IN ('id1', 'id2', ...)
+    },
+    select: {
+      contest_id: true,
+      task_table_index: true,
+      task_id: true,
+      title: true,
+      grade: true,
+    },
+  });
 }
 
 export async function getTasksByTaskId(): Promise<Map<string, Task>> {
