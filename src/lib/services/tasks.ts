@@ -13,15 +13,23 @@ export async function getTasks(): Promise<Task[]> {
 
 /**
  * Fetches tasks with the specified task IDs.
- * @param taskIds - An array of task IDs to filter the tasks.
+ * @param selectedTaskIds - An array of task IDs to filter the tasks.
  *
  * @returns A promise that resolves to an array of Task objects.
- * @note conditions: { task_id: { in: taskIds } }` for efficient filtering
+ * @note conditions: { task_id: { in: taskIds } } for efficient filtering
  */
-export async function getTasksWithSelectedTaskIds(selectedTaskIds: string[]): Promise<Tasks> {
+export async function getTasksWithSelectedTaskIds(
+  selectedTaskIds: string[],
+): Promise<Pick<Task, 'contest_id' | 'task_table_index' | 'task_id' | 'title' | 'grade'>[]> {
+  if (!selectedTaskIds?.length) {
+    return [];
+  }
+
+  const ids = Array.from(new Set(selectedTaskIds));
+
   return await db.task.findMany({
     where: {
-      task_id: { in: selectedTaskIds }, // SQL: WHERE task_id IN ('id1', 'id2', ...)
+      task_id: { in: ids }, // SQL: WHERE task_id IN ('id1', 'id2', ...)
     },
     select: {
       contest_id: true,

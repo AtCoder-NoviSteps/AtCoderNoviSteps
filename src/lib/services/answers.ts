@@ -29,7 +29,14 @@ export async function getAnswers(user_id: string) {
  * @returns A promise that resolves to an array of TaskAnswer objects.
  * @note conditions: task_id IN (...) AND user_id = userId
  */
-export async function getAnswersWithSelectedTaskIds(selectedTaskIds: string[], userId: string) {
+export async function getAnswersWithSelectedTaskIds(
+  selectedTaskIds: string[],
+  userId: string,
+): Promise<Array<Pick<TaskAnswer, 'task_id' | 'user_id' | 'status_id'>>> {
+  if (!selectedTaskIds?.length) {
+    return [];
+  }
+
   return await prisma.taskAnswer.findMany({
     where: {
       task_id: { in: selectedTaskIds },
