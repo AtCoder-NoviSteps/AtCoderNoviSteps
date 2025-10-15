@@ -148,7 +148,7 @@ export async function updateContestTaskPair(
 
 - DRY原則に従い `getContestTaskPair()` を共通メソッドとして切り出し
 - 複合ユニーク制約 `@@unique([contestId, taskId])` を活用
-- 重複チェック・存在確認を事前に実施し、適切なログ出力
+- Prisma のエラーハンドリング（例: `P2002`, `P2025`）を活用して、事前チェックを省略し、TOCTOU （Time-of-Check to Time-of-Use）競合を回避
 - Prisma の自動生成型を使用して型安全性を確保
 
 ## 3. 型定義の更新
@@ -202,13 +202,13 @@ type TaskResultMapByContestTaskPair = Map<ContestTaskPairKey, TaskResult>;
 
 - [✅] Prisma スキーマに ContestTaskPair モデル追加
 - [✅] マイグレーション実行
-- [✅] CURD メソッドを追加
+- [✅] CRUD メソッドを追加
 - [✅] TypeScript 型定義追加
 
 ## 決定事項
 
 1. **モデル名**: ContestTaskPair
-2. **型名**: ContestTaskPairKey, TaskResultByContestTaskPair
+2. **型名**: ContestTaskPairKey, TaskResultMapByContestTaskPair
 
 ## 今後の課題
 
