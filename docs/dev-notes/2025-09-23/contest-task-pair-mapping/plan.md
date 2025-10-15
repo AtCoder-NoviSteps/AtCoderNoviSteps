@@ -193,16 +193,18 @@ export type ContestTaskPairUpdate = ContestTaskPairCreate;
 ### マッピング用の型定義
 
 ```typescript
+import type { TaskResult } from '$lib/types/task_result';
+
 // 型定義
-type ContestTaskPairKey = `${string}:${string}`; // "contest_id:task_id"
+export type ContestTaskPairKey = `${string}:${string}`; // "contest_id:task_id"
 
 // ヘルパー関数
-function createContestTaskPairKey(contestId: string, taskId: string): ContestTaskPairKey {
+export function createContestTaskPairKey(contestId: string, taskId: string): ContestTaskPairKey {
   return `${contestId}:${taskId}`;
 }
 
 // マップの型（明示的）
-type TaskResultMapByContestTaskPair = Map<ContestTaskPairKey, TaskResult>;
+export type TaskResultMapByContestTaskPair = Map<ContestTaskPairKey, TaskResult>;
 ```
 
 **設計判断**:
