@@ -23,7 +23,7 @@ export async function getContestTaskPair(
   contestId: string,
   taskId: string,
 ): Promise<ContestTaskPair | null> {
-  const contestTaskPair = await db.contestTaskPair.findUnique({
+  return await db.contestTaskPair.findUnique({
     where: {
       contestId_taskId: {
         contestId,
@@ -31,8 +31,6 @@ export async function getContestTaskPair(
       },
     },
   });
-
-  return contestTaskPair;
 }
 
 /**
