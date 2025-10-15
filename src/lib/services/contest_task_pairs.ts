@@ -55,9 +55,7 @@ export async function createContestTaskPair(
       return;
     }
 
-    let contestTaskPair: ContestTaskPair | undefined;
-
-    contestTaskPair = await db.contestTaskPair.create({
+    const contestTaskPair = await db.contestTaskPair.create({
       data: {
         contestId,
         taskTableIndex,
