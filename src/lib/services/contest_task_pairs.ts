@@ -2,7 +2,12 @@ import { Prisma } from '@prisma/client';
 
 import { default as db } from '$lib/server/database';
 
-import type { ContestTaskPair, ContestTaskPairs } from '$lib/types/contest_task_pair';
+import type {
+  ContestTaskPair,
+  ContestTaskPairs,
+  ContestTaskPairCreate,
+  ContestTaskPairUpdate,
+} from '$lib/types/contest_task_pair';
 
 /**
  * Retrieves all ContestTaskPair records from the database.
@@ -38,19 +43,17 @@ export async function getContestTaskPair(
 /**
  * Creates a new ContestTaskPair record in the database.
  *
- * @param contestId - The ID of the contest.
- * @param taskTableIndex - The table index of the task.
- * @param taskId - The ID of the task.
+ * @param params - The parameters for creating a ContestTaskPair.
  *
  * @returns The created ContestTaskPair object or the existing one if it already exists.
  *
  * @throws Will throw an error if the creation fails.
  */
 export async function createContestTaskPair(
-  contestId: string,
-  taskTableIndex: string,
-  taskId: string,
+  params: ContestTaskPairCreate,
 ): Promise<ContestTaskPair> {
+  const { contestId, taskTableIndex, taskId } = params;
+
   try {
     const contestTaskPair = await db.contestTaskPair.create({
       data: {
@@ -83,19 +86,17 @@ export async function createContestTaskPair(
 /**
  * Updates an existing ContestTaskPair record in the database.
  *
- * @param contestId: The ID of the contest.
- * @param taskTableIndex: The table index of the task.
- * @param taskId: The ID of the task.
+ * @param params - The parameters for updating a ContestTaskPair.
  *
  * @returns The updated ContestTaskPair object.
  *
  * @throws Will throw an error if the update fails or if the record does not exist.
  */
 export async function updateContestTaskPair(
-  contestId: string,
-  taskTableIndex: string,
-  taskId: string,
+  params: ContestTaskPairUpdate,
 ): Promise<ContestTaskPair> {
+  const { contestId, taskTableIndex, taskId } = params;
+
   try {
     const updatedContestTaskPair = await db.contestTaskPair.update({
       where: {

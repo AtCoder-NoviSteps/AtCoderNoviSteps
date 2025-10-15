@@ -15,7 +15,7 @@ export type ContestTaskPairCreate = {
   taskId: string;
 };
 
-export type ContestTaskPairUpdate = Partial<ContestTaskPairCreate>;
+export type ContestTaskPairUpdate = ContestTaskPairCreate;
 
 // For mapping and identification
 export type ContestTaskPairKey = `${string}:${string}`; // "contest_id:task_id"

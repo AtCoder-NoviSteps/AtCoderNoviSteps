@@ -87,23 +87,32 @@ export async function getContestTaskPairs(): Promise<ContestTaskPairs> {
  * ContestTaskPair の新規レコードを作成
  */
 export async function createContestTaskPair(
-  contestId: string,
-  taskTableIndex: string,
-  taskId: string,
+  params: ContestTaskPairCreate,
 ): Promise<ContestTaskPair> {
+  const { contestId, taskTableIndex, taskId } = params;
+
   try {
-    return await db.contestTaskPair.create({
+    const contestTaskPair = await db.contestTaskPair.create({
       data: {
         contestId,
         taskTableIndex,
         taskId,
       },
     });
+
+    console.log('Created ContestTaskPair:', contestTaskPair);
+
+    return contestTaskPair;
   } catch (error) {
     if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2002') {
-      const errorMessage = `ContestTaskPair already exists: contestId=${contestId}, taskId=${taskId}`;
-      console.error(errorMessage);
-      throw new Error(errorMessage);
+      console.log(`ContestTaskPair already exists: contestId=${contestId}, taskId=${taskId}`);
+      const existingPair = await getContestTaskPair(contestId, taskId);
+
+      if (!existingPair) {
+        throw new Error('Unexpected: record exists but cannot be fetched');
+      }
+
+      return existingPair;
     }
 
     console.error('Failed to create ContestTaskPair:', error);
@@ -115,12 +124,12 @@ export async function createContestTaskPair(
  * ContestTaskPair のレコードを更新
  */
 export async function updateContestTaskPair(
-  contestId: string,
-  taskTableIndex: string,
-  taskId: string,
+  params: ContestTaskPairUpdate,
 ): Promise<ContestTaskPair> {
+  const { contestId, taskTableIndex, taskId } = params;
+
   try {
-    return await db.contestTaskPair.update({
+    const updatedContestTaskPair = await db.contestTaskPair.update({
       where: {
         contestId_taskId: {
           contestId,
@@ -131,6 +140,10 @@ export async function updateContestTaskPair(
         taskTableIndex,
       },
     });
+
+    console.log('Updated ContestTaskPair:', updatedContestTaskPair);
+
+    return updatedContestTaskPair;
   } catch (error) {
     if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2025') {
       const errorMessage = `Not found ContestTaskPair: contestId=${contestId}, taskId=${taskId}`;
