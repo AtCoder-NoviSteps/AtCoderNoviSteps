@@ -85,14 +85,6 @@ export async function updateContestTaskPair(
   taskId: string,
 ): Promise<void> {
   try {
-    const existingRecord = await getContestTaskPair(contestId, taskId);
-
-    if (!existingRecord) {
-      const errorMessage = `Not found ContestTaskPair: contestId=${contestId}, taskId=${taskId}`;
-      console.log(errorMessage);
-      throw new Error(errorMessage);
-    }
-
     const updatedContestTaskPair = await db.contestTaskPair.update({
       where: {
         contestId_taskId: {
@@ -107,6 +99,10 @@ export async function updateContestTaskPair(
 
     console.log('Updated ContestTaskPair:', updatedContestTaskPair);
   } catch (error) {
+    if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2025') {
+      console.error(`Not found ContestTaskPair: contestId=${contestId}, taskId=${taskId}`);
+    }
+
     console.error('Failed to update ContestTaskPair:', error);
     throw error;
   }
