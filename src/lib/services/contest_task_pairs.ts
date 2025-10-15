@@ -117,7 +117,7 @@ export async function updateContestTaskPair(
     if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2025') {
       const errorMessage = `Not found ContestTaskPair: contestId=${contestId}, taskId=${taskId}`;
       console.error(errorMessage);
-      throw new Error(errorMessage);
+      throw new Error(errorMessage, { cause: error as Error });
     }
 
     console.error('Failed to update ContestTaskPair:', error);
