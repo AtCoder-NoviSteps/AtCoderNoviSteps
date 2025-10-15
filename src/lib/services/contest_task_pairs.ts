@@ -1,3 +1,5 @@
+import { Prisma } from '@prisma/client';
+
 import { default as db } from '$lib/server/database';
 
 import type { ContestTaskPair, ContestTaskPairs } from '$lib/types/contest_task_pair';
@@ -58,7 +60,7 @@ export async function createContestTaskPair(
 
     console.log('Created ContestTaskPair:', contestTaskPair);
   } catch (error) {
-    if (error && typeof error === 'object' && 'code' in error && (error as any).code === 'P2002') {
+    if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2002') {
       console.log(`ContestTaskPair already exists: contestId=${contestId}, taskId=${taskId}`);
       return;
     }
