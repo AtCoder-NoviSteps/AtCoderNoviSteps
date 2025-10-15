@@ -48,13 +48,6 @@ export async function createContestTaskPair(
   taskId: string,
 ): Promise<void> {
   try {
-    const existingRecord = await getContestTaskPair(contestId, taskId);
-
-    if (existingRecord) {
-      console.log(`ContestTaskPair already exists: contestId=${contestId}, taskId=${taskId}`);
-      return;
-    }
-
     const contestTaskPair = await db.contestTaskPair.create({
       data: {
         contestId,
@@ -66,7 +59,7 @@ export async function createContestTaskPair(
     console.log('Created ContestTaskPair:', contestTaskPair);
   } catch (error) {
     if (error && typeof error === 'object' && 'code' in error && (error as any).code === 'P2002') {
-      console.log(`Found ContestTaskPair (race): contestId=${contestId}, taskId=${taskId}`);
+      console.log(`ContestTaskPair already exists: contestId=${contestId}, taskId=${taskId}`);
       return;
     }
 
