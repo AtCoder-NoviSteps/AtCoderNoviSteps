@@ -47,6 +47,8 @@ pnpm dlx prisma migrate dev --name create_contest_task_pair
 **ファイル**: `src/lib/services/contest_task_pairs.ts`
 
 ```typescript
+import { Prisma } from '@prisma/client';
+
 import { default as db } from '$lib/server/database';
 import type {
   ContestTaskPair,
@@ -98,7 +100,7 @@ export async function createContestTaskPair(
       },
     });
   } catch (error) {
-    if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2002') {
+    if (error instanceof PrismaClientKnownRequestError && error.code === 'P2002') {
       const errorMessage = `ContestTaskPair already exists: contestId=${contestId}, taskId=${taskId}`;
       console.error(errorMessage);
       throw new Error(errorMessage);
@@ -130,7 +132,7 @@ export async function updateContestTaskPair(
       },
     });
   } catch (error) {
-    if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2025') {
+    if (error instanceof PrismaClientKnownRequestError && error.code === 'P2025') {
       const errorMessage = `Not found ContestTaskPair: contestId=${contestId}, taskId=${taskId}`;
       console.error(errorMessage);
       throw new Error(errorMessage);
