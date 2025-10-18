@@ -54,8 +54,8 @@ importers:
         specifier: ^9.0.0
         version: 9.0.0
       playwright:
-        specifier: 1.55.1
-        version: 1.55.1
+        specifier: 1.56.1
+        version: 1.56.1
       prisma-erd-generator:
         specifier: 2.1.0
         version: 2.1.0(@prisma/client@5.22.0(prisma@5.22.0))(puppeteer@19.11.1(typescript@5.9.3))(yaml@2.8.1)
