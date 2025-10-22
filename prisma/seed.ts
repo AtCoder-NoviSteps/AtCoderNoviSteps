@@ -20,7 +20,7 @@ import {
 import PQueue from 'p-queue';
 import { generateLuciaPasswordHash } from 'lucia/utils';
 
-import type { TaskGrade } from '../src/lib/types/task';
+import { getTaskGrade } from '../src/lib/types/task';
 
 import { classifyContest } from '../src/lib/utils/contest';
 
@@ -168,7 +168,7 @@ async function addTask(
     task_table_index: task.problem_index,
     task_id: task.id,
     title: task.title,
-    grade: task.grade as TaskGrade,
+    grade: getTaskGrade(task.grade as string),
   });
 }
 
