@@ -20,6 +20,8 @@ import {
 import PQueue from 'p-queue';
 import { generateLuciaPasswordHash } from 'lucia/utils';
 
+import { getTaskGrade } from '../src/lib/types/task';
+
 import { classifyContest } from '../src/lib/utils/contest';
 
 import { users, USER_PASSWORD_FOR_SEED } from './users';
@@ -104,7 +106,12 @@ async function addUsers() {
 
 // See:
 // https://lucia-auth.com/reference/lucia/modules/utils/#generateluciapasswordhash
-async function addUser(user, password: string, userFactory, keyFactory) {
+async function addUser(
+  user: (typeof users)[number],
+  password: string,
+  userFactory: ReturnType<typeof defineUserFactory>,
+  keyFactory: ReturnType<typeof defineKeyFactory>,
+) {
   const currentUser = await userFactory.createForConnect({
     id: user.id,
     username: user.name,
@@ -150,7 +157,10 @@ async function addTasks() {
   console.log('Finished adding tasks.');
 }
 
-async function addTask(task, taskFactory) {
+async function addTask(
+  task: (typeof tasks)[number],
+  taskFactory: ReturnType<typeof defineTaskFactory>,
+) {
   // Note: Task-Tag relationships are handled separately via TaskTag table
   await taskFactory.create({
     contest_type: classifyContest(task.contest_id),
@@ -158,7 +168,7 @@ async function addTask(task, taskFactory) {
     task_table_index: task.problem_index,
     task_id: task.id,
     title: task.title,
-    grade: task.grade,
+    grade: getTaskGrade(task.grade as string),
   });
 }
 
@@ -223,7 +233,10 @@ async function addWorkBooks() {
   console.log('Finished adding workbooks.');
 }
 
-async function addWorkBook(workbook, workBookFactory) {
+async function addWorkBook(
+  workbook: (typeof workbooks)[number],
+  workBookFactory: ReturnType<typeof defineWorkBookFactory>,
+) {
   const urlSlug = normalizeUrlSlug(workbook.urlSlug);
 
   await workBookFactory.create({
@@ -293,7 +306,7 @@ async function addTags() {
   console.log('Finished adding tags.');
 }
 
-async function addTag(tag, tagFactory) {
+async function addTag(tag: (typeof tags)[number], tagFactory: ReturnType<typeof defineTagFactory>) {
   // Note: Tags and Tasks are connected via the TaskTag relationship table
   // which is handled separately in addTaskTags()
   await tagFactory.create({
@@ -353,7 +366,10 @@ async function addTaskTags() {
   await taskTagQueue.onIdle(); // Wait for all task tags to complete
   console.log('Finished adding task tags.');
 }
-async function addTaskTag(task_tag, taskTagFactory) {
+async function addTaskTag(
+  task_tag: (typeof task_tags)[number],
+  taskTagFactory: ReturnType<typeof defineTaskTagFactory>,
+) {
   await taskTagFactory.create({
     id: task_tag.id,
     priority: task_tag.priority,
@@ -398,7 +414,10 @@ async function addSubmissionStatuses() {
   console.log('Finished adding submission statuses.');
 }
 
-async function addSubmissionStatus(submission_status, submissionStatusFactory) {
+async function addSubmissionStatus(
+  submission_status: (typeof submission_statuses)[number],
+  submissionStatusFactory: ReturnType<typeof defineSubmissionStatusFactory>,
+) {
   await submissionStatusFactory.create({
     id: submission_status.id,
     status_name: submission_status.status_name,
@@ -460,7 +479,10 @@ async function addAnswers() {
   console.log('Finished adding answers.');
 }
 
-async function addAnswer(answer, taskAnswerFactory) {
+async function addAnswer(
+  answer: (typeof answers)[number],
+  taskAnswerFactory: ReturnType<typeof defineTaskAnswerFactory>,
+) {
   await taskAnswerFactory.create({
     id: answer.id,
     task: {
