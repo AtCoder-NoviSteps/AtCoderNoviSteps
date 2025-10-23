@@ -5297,6 +5297,13 @@ export const tasks = [
     grade: 'Q5',
   },
   {
+    id: 'typical90_s',
+    contest_id: 'typical90',
+    problem_index: '019',
+    name: 'Pick Two（★6）',
+    title: '019. Pick Two（★6）',
+  },
+  {
     id: 'typical90_n',
     contest_id: 'typical90',
     problem_index: '014',

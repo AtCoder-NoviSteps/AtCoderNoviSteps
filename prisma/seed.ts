@@ -187,16 +187,30 @@ async function addContestTaskPairs() {
   for (const pair of contest_task_pairs) {
     contestTaskPairQueue.add(async () => {
       try {
-        const registeredPair = await prisma.contestTaskPair.findUnique({
-          where: {
-            contestId_taskId: {
-              contestId: pair.contest_id,
-              taskId: pair.problem_id,
+        const [registeredPair, registeredTask] = await Promise.all([
+          prisma.contestTaskPair.findUnique({
+            where: {
+              contestId_taskId: {
+                contestId: pair.contest_id,
+                taskId: pair.problem_id,
+              },
             },
-          },
-        });
+          }),
+          prisma.task.findUnique({
+            where: { task_id: pair.problem_id },
+          }),
+        ]);
 
-        if (!registeredPair) {
+        if (!registeredTask) {
+          console.warn(
+            'Skipped contest task pair due to missing task:',
+            pair.problem_id,
+            'for contest',
+            pair.contest_id,
+            'index',
+            pair.problem_index,
+          );
+        } else if (!registeredPair) {
           await addContestTaskPair(pair, contestTaskPairFactory);
           console.log(
             'contest_id:',
