@@ -11,6 +11,7 @@ import {
   defineUserFactory,
   defineKeyFactory,
   defineTaskFactory,
+  defineContestTaskPairFactory,
   defineTagFactory,
   defineTaskTagFactory,
   defineTaskAnswerFactory,
@@ -26,6 +27,7 @@ import { classifyContest } from '../src/lib/utils/contest';
 
 import { users, USER_PASSWORD_FOR_SEED } from './users';
 import { tasks } from './tasks';
+import { contest_task_pairs } from './contest_task_pairs';
 import { workbooks } from './workbooks';
 import { tags } from './tags';
 import { task_tags } from './task_tags';
@@ -42,6 +44,7 @@ initialize({ prisma });
 const QUEUE_CONCURRENCY = {
   users: Number(process.env.SEED_USERS_CONCURRENCY) || 2, // User creation with password hashing (CPU intensive)
   tasks: Number(process.env.SEED_TASKS_CONCURRENCY) || 3, // Task creation (lightweight)
+  contestTaskPairs: Number(process.env.SEED_CONTEST_TASK_PAIRS_CONCURRENCY) || 2, // ContestTaskPair creation (lightweight)
   tags: Number(process.env.SEED_TAGS_CONCURRENCY) || 2, // Tag creation (lightweight)
   taskTags: Number(process.env.SEED_TASK_TAGS_CONCURRENCY) || 2, // TaskTag relations (multiple validations)
   submissionStatuses: Number(process.env.SEED_SUBMISSION_STATUSES_CONCURRENCY) || 2, // SubmissionStatus creation (lightweight)
@@ -59,6 +62,7 @@ async function main() {
 
     await addUsers();
     await addTasks();
+    await addContestTaskPairs();
     await addWorkBooks();
     await addTags();
     await addTaskTags();
@@ -169,6 +173,73 @@ async function addTask(
     task_id: task.id,
     title: task.title,
     grade: getTaskGrade(task.grade as string),
+  });
+}
+
+async function addContestTaskPairs() {
+  console.log('Start adding contest task pairs...');
+
+  const contestTaskPairFactory = defineContestTaskPairFactory();
+
+  // Create a queue with limited concurrency for contest task pair operations
+  const contestTaskPairQueue = new PQueue({ concurrency: QUEUE_CONCURRENCY.contestTaskPairs });
+
+  for (const pair of contest_task_pairs) {
+    contestTaskPairQueue.add(async () => {
+      try {
+        const [registeredPair, registeredTask] = await Promise.all([
+          prisma.contestTaskPair.findUnique({
+            where: {
+              contestId_taskId: {
+                contestId: pair.contest_id,
+                taskId: pair.problem_id,
+              },
+            },
+          }),
+          prisma.task.findUnique({
+            where: { task_id: pair.problem_id },
+          }),
+        ]);
+
+        if (!registeredTask) {
+          console.warn(
+            'Skipped contest task pair due to missing task:',
+            pair.problem_id,
+            'for contest',
+            pair.contest_id,
+            'index',
+            pair.problem_index,
+          );
+        } else if (!registeredPair) {
+          await addContestTaskPair(pair, contestTaskPairFactory);
+          console.log(
+            'contest_id:',
+            pair.contest_id,
+            'problem_index:',
+            pair.problem_index,
+            'task_id:',
+            pair.problem_id,
+            'was registered.',
+          );
+        }
+      } catch (e) {
+        console.error('Failed to add contest task pair', pair, e);
+      }
+    });
+  }
+
+  await contestTaskPairQueue.onIdle(); // Wait for all contest task pairs to complete
+  console.log('Finished adding contest task pairs.');
+}
+
+async function addContestTaskPair(
+  pair: (typeof contest_task_pairs)[number],
+  contestTaskPairFactory: ReturnType<typeof defineContestTaskPairFactory>,
+) {
+  await contestTaskPairFactory.create({
+    contestId: pair.contest_id,
+    taskTableIndex: pair.problem_index,
+    taskId: pair.problem_id,
   });
 }
 
