@@ -1,4 +1,4 @@
-import { describe, test, expect, beforeEach } from 'vitest';
+import { describe, test, expect } from 'vitest';
 
 import { createContestTaskPairKey } from '$lib/utils/contest_task_pair';
 
@@ -9,7 +9,7 @@ describe('createContestTaskPairKey', () => {
     taskId: string;
   }
 
-  type TestPairs = TestPair[];
+  type TestPairs = readonly TestPair[];
 
   // Helper to create test pairs
   const pairs = {
@@ -44,22 +44,15 @@ describe('createContestTaskPairKey', () => {
       { contestId: 'abc|123', taskId: 'abc|123_a' },
       { contestId: 'abc||123', taskId: 'task||id' },
       { contestId: 'abc.*+?^${}()', taskId: 'task[a-z]' },
+      { contestId: 'abc:123', taskId: 'task_a' },
+      { contestId: 'abc123', taskId: 'task:a' },
+      { contestId: 'abc:123', taskId: 'task:a' },
       { contestId: 'abc日本語123', taskId: 'task日本語a' },
       { contestId: 'abc😀', taskId: 'task😀' },
       { contestId: 'abc\n123', taskId: 'task\na' },
       { contestId: 'abc\t123', taskId: 'task\ta' },
     ] as const,
   };
-
-  let testNormalPairs: TestPairs;
-  let testEdgePairs: TestPairs;
-  let testAnomalyPairs: TestPairs;
-
-  beforeEach(() => {
-    testNormalPairs = [...pairs.normal];
-    testEdgePairs = [...pairs.edge];
-    testAnomalyPairs = [...pairs.anomaly];
-  });
 
   // Helper functions:
   // To generate expected key
@@ -98,7 +91,7 @@ describe('createContestTaskPairKey', () => {
 
   describe('Base cases', () => {
     test('expects to create a key with valid contest_id and task_id', () => {
-      const pair = testNormalPairs[0];
+      const pair = pairs.normal[0];
       const key = createTestKey(pair);
 
       expect(key).toBe(getExpectedKey(pair.contestId, pair.taskId));
@@ -106,27 +99,27 @@ describe('createContestTaskPairKey', () => {
     });
 
     test('expects to create different keys for different contest_ids', () => {
-      const pair = testNormalPairs[0];
+      const pair = pairs.normal[0];
       const modifiedPair = { ...pair, contestId: 'abc124' };
 
       expectKeysDifferent(pair, modifiedPair);
     });
 
     test('expects to create different keys for different task_ids', () => {
-      const pair = testNormalPairs[0];
+      const pair = pairs.normal[0];
       const modifiedPair = { ...pair, taskId: 'abc100_b' };
 
       expectKeysDifferent(pair, modifiedPair);
     });
 
     test('expects to create consistent keys for the same inputs', () => {
-      const pair = testNormalPairs[0];
+      const pair = pairs.normal[0];
 
       expectKeysToBeConsistent(pair);
     });
 
     test('expects to work with various contest types', () => {
-      testMultiplePairs(testNormalPairs, ({ contestId, taskId }) => {
+      testMultiplePairs(pairs.normal, ({ contestId, taskId }) => {
         const pair = { contestId, taskId };
         const key = createTestKey(pair);
 
@@ -142,10 +135,10 @@ describe('createContestTaskPairKey', () => {
     });
 
     test('expects to work with numeric task identifiers', () => {
-      const pair = testNormalPairs[5]; // typical90_a
+      const pair = pairs.normal[5]; // typical90_a
       const key = createTestKey(pair);
 
-      expect(key).toContain(pair.taskId);
+      expect(key).toBe(getExpectedKey(pair.contestId, pair.taskId));
     });
 
     test('expects to work with long contest and task IDs', () => {
@@ -162,7 +155,7 @@ describe('createContestTaskPairKey', () => {
   describe('Edge cases', () => {
     test('expects all edge cases to format correctly', () => {
       // Filter out empty string cases as they should throw
-      const validEdgePairs = testEdgePairs.filter(
+      const validEdgePairs = pairs.edge.filter(
         (pair) => pair.contestId.trim() !== '' && pair.taskId.trim() !== '',
       );
 
@@ -187,14 +180,14 @@ describe('createContestTaskPairKey', () => {
     );
 
     test('expects to preserve order of contest_id and task_id', () => {
-      const pair1 = testNormalPairs[0];
+      const pair1 = pairs.normal[0];
       const pair2 = { contestId: pair1.taskId, taskId: pair1.contestId };
 
       expectKeysDifferent(pair1, pair2);
     });
 
     test('expects to include the colon separator', () => {
-      const pair = testNormalPairs[0];
+      const pair = pairs.normal[0];
       const key = createTestKey(pair);
 
       expect(key).toContain(':');
@@ -205,7 +198,7 @@ describe('createContestTaskPairKey', () => {
   describe('Anomaly cases', () => {
     test('expects anomaly cases with special characters to format correctly', () => {
       // Filter out pipe character cases for basic testing
-      const specialCharCases = testAnomalyPairs.slice(4);
+      const specialCharCases = pairs.anomaly.slice(4);
 
       testMultiplePairs(specialCharCases, ({ contestId, taskId }) => {
         const pair = { contestId, taskId };
@@ -224,7 +217,10 @@ describe('createContestTaskPairKey', () => {
         'abc||123:task||id',
         'multiple consecutive pipes',
       ],
-    ])('expects pipe characters to be preserved (%s)', (pair, expected) => {
+      [{ contestId: 'abc:123', taskId: 'task_a' }, 'abc:123:task_a', 'colon in contest_id'],
+      [{ contestId: 'abc123', taskId: 'task:a' }, 'abc123:task:a', 'colon in task_id'],
+      [{ contestId: 'abc:123', taskId: 'task:a' }, 'abc:123:task:a', 'colons in both IDs'],
+    ])('expects special characters to be preserved (%s)', (pair, expected) => {
       const key = createTestKey(pair);
       expect(key).toBe(expected);
     });
@@ -246,7 +242,7 @@ describe('createContestTaskPairKey', () => {
 
   describe('Key validation', () => {
     test('expects key to be parseable back into components', () => {
-      testMultiplePairs(testNormalPairs, ({ contestId, taskId }) => {
+      testMultiplePairs(pairs.normal, ({ contestId, taskId }) => {
         const pair = { contestId, taskId };
         const key = createTestKey(pair);
         const [parsedContestId, parsedTaskId] = key.split(':');
@@ -257,7 +253,7 @@ describe('createContestTaskPairKey', () => {
     });
 
     test('expects key with colon separator to be splittable into two parts', () => {
-      const pair = testNormalPairs[0];
+      const pair = pairs.normal[0];
       const key = createTestKey(pair);
       const parts = key.split(':');
 
@@ -267,7 +263,7 @@ describe('createContestTaskPairKey', () => {
     });
 
     test('expects all keys to follow the same format pattern', () => {
-      const keys = testNormalPairs.map((pair) => createTestKey(pair));
+      const keys = pairs.normal.map((pair) => createTestKey(pair));
 
       keys.forEach((key) => {
         expect(key).toMatch(/^.+:.+$/);
@@ -275,21 +271,10 @@ describe('createContestTaskPairKey', () => {
     });
 
     test('expects multiple keys to be unique', () => {
-      const keys = testNormalPairs.map((pair) => createTestKey(pair));
+      const keys = pairs.normal.map((pair) => createTestKey(pair));
       const uniqueKeys = new Set(keys);
 
       expect(uniqueKeys.size).toBe(keys.length);
-    });
-
-    test('expects keys from different pairs to be different', () => {
-      const selectedPairs = testNormalPairs.slice(0, 3);
-      const keys = selectedPairs.map((pair) => createTestKey(pair));
-
-      for (let i = 0; i < keys.length; i++) {
-        for (let j = i + 1; j < keys.length; j++) {
-          expect(keys[i]).not.toBe(keys[j]);
-        }
-      }
     });
   });
 });
