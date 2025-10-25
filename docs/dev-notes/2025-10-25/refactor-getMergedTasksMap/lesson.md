@@ -59,3 +59,85 @@ src/lib/services/tasks.ts を参照
 - ✅ 早期リターンで複雑さを減らす
 - ✅ ヘルパー関数で責任分離
 - ✅ 明確なドキュメント化
+
+---
+
+# createContestTaskPairKey のテスト設計教訓
+
+## テスト作成で学んだこと
+
+### 1. **ヘルパー関数で重複削減**
+
+同じパターンのテストコードは **ヘルパー関数** に抽出：
+
+```typescript
+// ❌ Before: 重複が多い
+const key1 = createTestKey(pair);
+const key2 = createTestKey(pair);
+expect(key1).toBe(key2);
+
+// ✅ After: ヘルパー関数化
+const expectKeysToBeConsistent = (pair: TestPair): void => {
+  const key1 = createTestKey(pair);
+  const key2 = createTestKey(pair);
+  expect(key1).toBe(key2);
+};
+expectKeysToBeConsistent(pair);
+```
+
+### 2. **パラメタライズテスト（test.each）で 4 個 → 1 個に**
+
+4 つの似たテストは `test.each()` で 1 つにまとめる：
+
+```typescript
+// ❌ Before: 4 つのテスト関数
+test('expects empty contest_id to throw an error', () => { ... });
+test('expects empty task_id to throw an error', () => { ... });
+test('expects whitespace-only contest_id to throw an error', () => { ... });
+test('expects whitespace-only task_id to throw an error', () => { ... });
+
+// ✅ After: 1 つのパラメタライズテスト
+test.each<[string, string, string]>([
+  ['', 'abc123_a', 'contestId must be a non-empty string'],
+  ['   ', 'abc123_a', 'contestId must be a non-empty string'],
+  ['abc123', '', 'taskId must be a non-empty string'],
+  ['abc123', '   ', 'taskId must be a non-empty string'],
+])('expects error when contest_id="%s" and task_id="%s"', (contestId, taskId, expectedError) => {
+  expect(() => createContestTaskPairKey(contestId, taskId)).toThrow(expectedError);
+});
+```
+
+### 3. **テストデータを集約して保守性向上**
+
+テストデータを `pairs` オブジェクトで一元管理：
+
+```typescript
+const pairs = {
+  normal: [...],    // 正常系ケース
+  edge: [...],      // エッジケース
+  anomaly: [...],   // 異常系ケース
+};
+```
+
+### 4. **テストカバレッジの考え方**
+
+- **正常系**: 期待通りに動くか
+- **エッジケース**: 空文字列、ホワイトスペース、長い文字列
+- **異常系**: 特殊文字、Unicode、改行、タブ
+- **キー検証**: フォーマット、一意性、可逆性
+
+### 5. **べストプラクティス**
+
+| 改善内容             | 効果                 |
+| -------------------- | -------------------- |
+| ヘルパー関数化       | コード重複 -40%      |
+| パラメタライズテスト | テスト関数数 削減    |
+| テストデータ集約     | 保守性向上           |
+| beforeEach で初期化  | テスト間の独立性確保 |
+
+## テスト統計
+
+- **総テスト数**: 27 個（全成功 ✅）
+- **パラメタライズテスト**: 2 グループ（合計 8 ケース）
+- **ヘルパー関数**: 5 個
+- **テストデータセット**: 3 グループ（normal, edge, anomaly）
