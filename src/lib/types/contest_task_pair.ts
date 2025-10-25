@@ -1,6 +1,6 @@
 import type { ContestTaskPair as ContestTaskPairOrigin } from '@prisma/client';
 
-import type { TaskResult } from '$lib/types/task';
+import type { Task, TaskResult } from '$lib/types/task';
 
 export type ContestTaskPair = ContestTaskPairOrigin;
 
@@ -19,5 +19,7 @@ export type ContestTaskPairUpdate = ContestTaskPairCreate;
 
 // For mapping and identification
 export type ContestTaskPairKey = `${string}:${string}`; // "contest_id:task_id"
+
+export type TaskMapByContestTaskPair = Map<ContestTaskPairKey, Task>;
 
 export type TaskResultMapByContestTaskPair = Map<ContestTaskPairKey, TaskResult>;
