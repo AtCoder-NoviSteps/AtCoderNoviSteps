@@ -9,7 +9,7 @@
     TableHead,
     TableHeadCell,
   } from 'svelte-5-ui-lib';
-  import Trash2 from 'lucide-svelte/icons/trash-2';
+  import Trash2 from '@lucide/svelte/icons/trash-2';
 
   import GradeLabel from '$lib/components/GradeLabel.svelte';
   import ExternalLinkWrapper from '$lib/components/ExternalLinkWrapper.svelte';

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import ChevronDown from 'lucide-svelte/icons/chevron-down';
+  import ChevronDown from '@lucide/svelte/icons/chevron-down';
 
   interface Props {
     isLoggedIn: boolean;

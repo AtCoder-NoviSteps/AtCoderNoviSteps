@@ -4,7 +4,7 @@
   import { Heading, Button, Img } from 'svelte-5-ui-lib';
   import emblaCarouselSvelte from 'embla-carousel-svelte';
   import Autoplay from 'embla-carousel-autoplay';
-  import ArrowRight from 'lucide-svelte/icons/arrow-right';
+  import ArrowRight from '@lucide/svelte/icons/arrow-right';
 
   import ExternalLinkWrapper from '$lib/components/ExternalLinkWrapper.svelte';
 

@@ -1,6 +1,6 @@
 <script lang="ts">
   import { Input, Button, Alert, Checkbox, Modal, uiHelpers } from 'svelte-5-ui-lib';
-  import Info from 'lucide-svelte/icons/info';
+  import Info from '@lucide/svelte/icons/info';
 
   import ContainerWrapper from '$lib/components/ContainerWrapper.svelte';
   import FormWrapper from '$lib/components/FormWrapper.svelte';

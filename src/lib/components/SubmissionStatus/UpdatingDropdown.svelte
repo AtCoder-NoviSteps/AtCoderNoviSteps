@@ -31,7 +31,7 @@
   import { browser } from '$app/environment';
 
   import { Dropdown, DropdownUl, DropdownLi, uiHelpers } from 'svelte-5-ui-lib';
-  import Check from 'lucide-svelte/icons/check';
+  import Check from '@lucide/svelte/icons/check';
 
   import type { TaskResult } from '$lib/types/task';
 

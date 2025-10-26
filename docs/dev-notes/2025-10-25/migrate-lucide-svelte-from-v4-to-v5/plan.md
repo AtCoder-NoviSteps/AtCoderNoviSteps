@@ -103,20 +103,22 @@
 import ArrowRight from 'lucide-svelte/icons/arrow-right';
 ```
 
-**修正対象**: 全インポート文を以下のいずれかに統一
+**修正対象**: 全インポート文を以下の形式に統一
 
-- アイコンディレクトリから直接インポート（最軽量）
+- アイコンモジュールから直接インポート（推奨）
 
 ```svelte
-import {ArrowRight} from '@lucide/svelte/icons';
+import ArrowRight from '@lucide/svelte/icons/arrow-right';
 ```
 
-#### 3-2. ファイル別の修正対象
+**使用方法**:
 
-```bash
-# lucide-svelte のインポートを使用しているファイルを検索
-grep -r "from 'lucide-svelte" src/ --include="*.svelte" --include="*.ts" --include="*.js"
-```
+````svelte
+<ArrowRight class="w-4 h-4" color="#ff3e98" />
+
+#### 3-2. ファイル別の修正対象 ```bash # lucide-svelte のインポートを使用しているファイルを検索 grep
+-r "from 'lucide-svelte" src/ --include="*.svelte" --include="*.ts" --include="*.js"
+````
 
 **想定される修正ファイル**:
 

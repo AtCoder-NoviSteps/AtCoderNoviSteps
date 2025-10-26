@@ -16,7 +16,7 @@
     NavUl,
     uiHelpers,
   } from 'svelte-5-ui-lib';
-  import ChevronDown from 'lucide-svelte/icons/chevron-down';
+  import ChevronDown from '@lucide/svelte/icons/chevron-down';
 
   import { PRODUCT_NAME } from '$lib/constants/product-info';
   import { navbarDashboardLinks, navbarLinks } from '$lib/constants/navbar-links';

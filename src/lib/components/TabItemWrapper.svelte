@@ -2,7 +2,7 @@
   import { type Snippet, onMount } from 'svelte';
 
   import { TabItem, Tooltip } from 'svelte-5-ui-lib';
-  import CircleHelp from 'lucide-svelte/icons/circle-help';
+  import CircleHelp from '@lucide/svelte/icons/circle-help';
 
   import { WorkBookType } from '$lib/types/workbook';
   import { activeWorkbookTabStore } from '$lib/stores/active_workbook_tab';

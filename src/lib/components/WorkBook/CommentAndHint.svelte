@@ -1,6 +1,6 @@
 <script lang="ts">
   import { Tooltip } from 'svelte-5-ui-lib';
-  import Lightbulb from 'lucide-svelte/icons/lightbulb';
+  import Lightbulb from '@lucide/svelte/icons/lightbulb';
 
   import { TOOLTIP_CLASS_BASE } from '$lib/constants/tailwind-helper';
 

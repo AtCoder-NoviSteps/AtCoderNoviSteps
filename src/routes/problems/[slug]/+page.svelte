@@ -2,7 +2,7 @@
   import { enhance } from '$app/forms';
 
   import { Breadcrumb, BreadcrumbItem, Img } from 'svelte-5-ui-lib';
-  import { ExternalLink } from 'lucide-svelte';
+  import ExternalLink from '@lucide/svelte/icons/external-link';
 
   import SubmissionStatusButton from '$lib/components/SubmissionStatusButton.svelte';
 

@@ -1,6 +1,6 @@
 <script lang="ts">
   import { Toast } from 'svelte-5-ui-lib';
-  import CircleX from 'lucide-svelte/icons/circle-x';
+  import CircleX from '@lucide/svelte/icons/circle-x';
 
   interface Props {
     errorMessage?: string | null;

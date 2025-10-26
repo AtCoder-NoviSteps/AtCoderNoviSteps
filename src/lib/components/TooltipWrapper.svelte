@@ -2,7 +2,7 @@
   import { onMount } from 'svelte';
 
   import { Tooltip } from 'svelte-5-ui-lib';
-  import CircleHelp from 'lucide-svelte/icons/circle-help';
+  import CircleHelp from '@lucide/svelte/icons/circle-help';
 
   import { TOOLTIP_CLASS_BASE } from '$lib/constants/tailwind-helper';
 

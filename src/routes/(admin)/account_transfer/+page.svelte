@@ -12,8 +12,8 @@
     Input,
     Button,
   } from 'svelte-5-ui-lib';
-  import BadgeCheck from 'lucide-svelte/icons/badge-check';
-  import Ban from 'lucide-svelte/icons/ban';
+  import BadgeCheck from '@lucide/svelte/icons/badge-check';
+  import Ban from '@lucide/svelte/icons/ban';
 
   import HeadingOne from '$lib/components/HeadingOne.svelte';
   import ContainerWrapper from '$lib/components/ContainerWrapper.svelte';
