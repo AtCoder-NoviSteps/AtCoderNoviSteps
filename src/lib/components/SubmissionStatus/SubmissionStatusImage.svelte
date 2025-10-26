@@ -1,6 +1,6 @@
 <script lang="ts">
   import { Img } from 'svelte-5-ui-lib';
-  import ChevronDown from 'lucide-svelte/icons/chevron-down';
+  import ChevronDown from '@lucide/svelte/icons/chevron-down';
 
   import type { TaskResult } from '$lib/types/task';
 

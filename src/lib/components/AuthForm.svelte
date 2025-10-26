@@ -5,9 +5,9 @@
   import { Card, Button, Label, Input, Hr } from 'svelte-5-ui-lib';
 
   // 必要なコンポーネントだけを読み込んで、コンパイルを時間を短縮
-  import CirCleUserRound from 'lucide-svelte/icons/circle-user-round';
-  import Eye from 'lucide-svelte/icons/eye';
-  import EyeOff from 'lucide-svelte/icons/eye-off';
+  import CircleUserRound from '@lucide/svelte/icons/circle-user-round';
+  import Eye from '@lucide/svelte/icons/eye';
+  import EyeOff from '@lucide/svelte/icons/eye-off';
 
   import MessageHelperWrapper from '$lib/components/MessageHelperWrapper.svelte';
 
@@ -144,7 +144,7 @@
           spellcheck="false"
         >
           {#snippet left()}
-            <CirCleUserRound class="w-5 h-5" tabindex={UNFOCUSABLE} />
+            <CircleUserRound class="w-5 h-5" tabindex={UNFOCUSABLE} />
           {/snippet}
         </Input>
 
