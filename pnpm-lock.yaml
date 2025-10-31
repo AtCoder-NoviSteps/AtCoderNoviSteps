@@ -12,8 +12,8 @@ importers:
         specifier: 3.0.2
         version: 3.0.2(@prisma/client@5.22.0(prisma@5.22.0))(lucia@2.7.7)
       '@lucide/svelte':
-        specifier: 0.548.0
-        version: 0.548.0(svelte@5.43.2)
+        specifier: 0.552.0
+        version: 0.552.0(svelte@5.43.2)
       '@mermaid-js/mermaid-cli':
         specifier: 11.12.0
         version: 11.12.0(puppeteer@23.11.1(typescript@5.9.3))(tsx@4.19.2)(yaml@2.8.1)
@@ -816,8 +816,8 @@ packages:
       '@prisma/client': ^4.2.0 || ^5.0.0
       lucia: ^2.0.0
 
-  '@lucide/svelte@0.548.0':
-    resolution: {integrity: sha512-Iwh5GXK8+tE1lBjYoBPfOhBiWv6/K/XinZ/Bjx/2Qys86ufZ/CbjHKacYyZeGnyWQSsjcr7P3xavkmCMhv/1RA==}
+  '@lucide/svelte@0.552.0':
+    resolution: {integrity: sha512-8wQF1YUKgaXiFidPdHM5NKESArKHLrgf8A1EAOjvqRmdVlL2KFsPxTchez/lMUOJKxXeDgrRKfXQuaN1O5KlhQ==}
     peerDependencies:
       svelte: ^5
 
@@ -1917,8 +1917,8 @@ packages:
       bare-events:
         optional: true
 
-  bare-url@2.3.1:
-    resolution: {integrity: sha512-v2yl0TnaZTdEnelkKtXZGnotiV6qATBlnNuUMrHl6v9Lmmrh9mw9RYyImPU7/4RahumSwQS1k2oKXcRfXcbjJw==}
+  bare-url@2.3.2:
+    resolution: {integrity: sha512-ZMq4gd9ngV5aTMa5p9+UfY0b3skwhHELaDkhEHetMdX0LRkW9kzaym4oo/Eh+Ghm0CCDuMTsRIGM/ytUc1ZYmw==}
 
   base64-js@1.5.1:
     resolution: {integrity: sha512-AKpaYlHn8t4SVbOHCy+b5+KKgvR4vrsD8vbvrbiQJps7fKDTkjkDry6ji0rUJjC0kzbNePLwzxq8iypo41qeWA==}
@@ -5515,7 +5515,7 @@ snapshots:
       '@prisma/client': 5.22.0(prisma@5.22.0)
       lucia: 2.7.7
 
-  '@lucide/svelte@0.548.0(svelte@5.43.2)':
+  '@lucide/svelte@0.552.0(svelte@5.43.2)':
     dependencies:
       svelte: 5.43.2
 
@@ -6875,7 +6875,7 @@ snapshots:
       bare-events: 2.8.1
       bare-path: 3.0.0
       bare-stream: 2.7.0(bare-events@2.8.1)
-      bare-url: 2.3.1
+      bare-url: 2.3.2
       fast-fifo: 1.3.2
     transitivePeerDependencies:
       - bare-abort-controller
@@ -6900,7 +6900,7 @@ snapshots:
       - react-native-b4a
     optional: true
 
-  bare-url@2.3.1:
+  bare-url@2.3.2:
     dependencies:
       bare-path: 3.0.0
     optional: true
