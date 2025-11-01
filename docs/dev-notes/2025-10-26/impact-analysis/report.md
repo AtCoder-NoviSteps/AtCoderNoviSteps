@@ -746,16 +746,16 @@ export function createContestTaskPairKey(contestId: string, taskId: string): Con
 
 ### 修正対象サマリー
 
-| レイヤ         | ファイル           | 関数/箇所                          | 修正内容                                    | 優先度  |
-| -------------- | ------------------ | ---------------------------------- | ------------------------------------------- | ------- |
-| サービス       | `task_results.ts`  | `getTaskResults()`                 | getMergedTasksMap + mergeTaskAndAnswer 統合 | 🔴 1    |
-| サービス       | `task_results.ts`  | `getTasksWithTagIds()`             | getMergedTasksMap + mergeTaskAndAnswer 統合 | 🔴 1    |
-| サービス       | `task_results.ts`  | `relateTasksAndAnswers()`          | 削除（getTaskResults に統合）               | 🔴 1     |
-| サービス       | `task_results.ts`  | `getTaskResultsByTaskId()`         | キー + 戻り値型                             | 🟡 2    |
-| サービス       | `task_results.ts`  | `getTaskResultsOnlyResultExists()` | mergeTaskAndAnswer 統合                     | 🟡 2     |
-| コンポーネント | `TaskTable.svelte` | `taskResultsMap`                   | キー形式                                    | 🔴 1    |
-| コンポーネント | `TaskTable.svelte` | `taskIndicesMap`                   | キー形式                                    | 🔴 1     |
-| テスト         | `(new)`            | `task_results.test.ts`             | 新規作成                                    | 🔴 1 |
+| レイヤ         | ファイル           | 関数/箇所                          | 修正内容                                    | 優先度 |
+| -------------- | ------------------ | ---------------------------------- | ------------------------------------------- | ------ |
+| サービス       | `task_results.ts`  | `getTaskResults()`                 | getMergedTasksMap + mergeTaskAndAnswer 統合 | 🔴 1   |
+| サービス       | `task_results.ts`  | `getTasksWithTagIds()`             | getMergedTasksMap + mergeTaskAndAnswer 統合 | 🔴 1   |
+| サービス       | `task_results.ts`  | `relateTasksAndAnswers()`          | 削除（getTaskResults に統合）               | 🔴 1   |
+| サービス       | `task_results.ts`  | `getTaskResultsByTaskId()`         | キー + 戻り値型                             | 🟡 2   |
+| サービス       | `task_results.ts`  | `getTaskResultsOnlyResultExists()` | mergeTaskAndAnswer 統合                     | 🟡 2   |
+| コンポーネント | `TaskTable.svelte` | `taskResultsMap`                   | キー形式                                    | 🔴 1   |
+| コンポーネント | `TaskTable.svelte` | `taskIndicesMap`                   | キー形式                                    | 🔴 1   |
+| テスト         | `(new)`            | `task_results.test.ts`             | 新規作成                                    | 🔴 1   |
 
 ### 非修正確認サマリー
 
