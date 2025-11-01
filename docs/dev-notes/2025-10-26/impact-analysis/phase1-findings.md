@@ -108,7 +108,7 @@
 
 ### 4.1 他からインポートされる関数一覧
 
-```
+```text
 src/routes/problems/+page.server.ts
   ├─ getTaskResults()
   ├─ getTasksWithTagIds()
