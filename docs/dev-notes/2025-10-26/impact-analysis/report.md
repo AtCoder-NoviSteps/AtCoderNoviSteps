@@ -28,7 +28,7 @@
 
 ### 修正対象の階層構造
 
-```
+```text
 レイヤ0: サービス層
 ├─ src/lib/services/task_results.ts
 │  ├─ getTaskResults() 🔴 必須
@@ -452,7 +452,7 @@ return taskResults?.get(taskId) as TaskResult;
 
 **将来対応の検討項目**（メモ）:
 
-```
+```text
 将来的に Workbook が複数 contestId:taskId ペアを持つようになった場合:
 1. WorkbookTask に contest_id フィールド追加
 2. getTaskResultsByTaskId() の呼び出しで contestId も渡す
