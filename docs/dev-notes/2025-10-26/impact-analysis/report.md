@@ -2,6 +2,8 @@
 
 **作成日**: 2025-10-26
 
+**更新日**: 2025-11-01
+
 **対象ブランチ**: #2750
 
 **目的**: `contestId:taskId` 形式へのキー統一による全影響範囲の把握と計画策定
@@ -59,7 +61,7 @@
 
 レイヤ4: テスト層
 ├─ src/test/lib/utils/contest_task_pair.test.ts ✅ キー関数テスト
-└─ src/test/lib/utils/task_results.ts テスト ❌ 未実装（新規作成が必要）
+└─ src/test/lib/services/task_results.ts ✅ TaskResults のCRUD に関するテスト
 ```
 
 ---
