@@ -550,6 +550,17 @@ describe('mergeTaskAndAnswer', () => {
 });
 ```
 
+**新規 Fixture: src/test/lib/services/fixtures/task_results.ts**:
+
+- テスト用のモックデータやビルダー関数を集約
+- テストから上記のデータ・関数を分離して、見通しを良くするため
+
+**設計の原則**:
+
+- テストデータの中央集約で DRY 原則を維持
+- 複数テストで共有される Mock オブジェクトは fixtures に配置
+- ビルダー関数で柔軟なテストデータ生成を支援
+
 ### 6.3 目視テストチェックリスト
 
 #### ✅ `/problems` ページでの確認
