@@ -248,11 +248,11 @@ describe('mergeTaskAndAnswer', () => {
   );
 });
 
-const createMergedTaskResults = (
+function createMergedTaskResults(
   describeName: string,
   setupAnswers: () => void,
   testNameSuffix: string,
-) => {
+) {
   describe(describeName, () => {
     beforeEach(() => {
       setupAnswers();
@@ -271,4 +271,4 @@ const createMergedTaskResults = (
       });
     });
   });
-};
+}
