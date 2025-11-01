@@ -751,7 +751,7 @@ export function createContestTaskPairKey(contestId: string, taskId: string): Con
 
 ---
 
-**レポート終了**
+## レポート終了
 
 ---
 
