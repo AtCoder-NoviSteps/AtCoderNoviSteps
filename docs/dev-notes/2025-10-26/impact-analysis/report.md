@@ -528,7 +528,7 @@ return taskResults?.get(taskId) as TaskResult;
 
 ### 6.2 修正に伴い新規作成が必要なテスト
 
-**📋 新規テスト: `src/test/lib/utils/task_results.test.ts`**
+**📋 新規テスト: `src/test/lib/services/task_results.test.ts`**
 
 ```typescript
 describe('getTaskResultsByTaskId', () => {
