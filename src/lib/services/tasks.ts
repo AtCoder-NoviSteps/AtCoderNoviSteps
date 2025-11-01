@@ -3,7 +3,7 @@ import { default as db } from '$lib/server/database';
 import { getContestTaskPairs } from '$lib/services/contest_task_pairs';
 
 import { ContestType } from '$lib/types/contest';
-import type { Task, TaskGrade } from '$lib/types/task';
+import type { Task, Tasks, TaskGrade } from '$lib/types/task';
 import type {
   ContestTaskPair,
   ContestTaskPairKey,
@@ -22,13 +22,11 @@ export async function getTasks(): Promise<Task[]> {
 }
 
 /**
- * Fetches and merges tasks based on contest-task pairs.
+ * Fetches and merges tasks with the same task_id but different contest_id based on contest-task pairs.
  *
+ * @param tasks - Optional array of tasks to merge. If not provided, fetches all tasks from DB.
  * @returns A promise that resolves to a map of merged tasks keyed by contest-task pair.
  *
- * @note This function merges tasks with the same task_id but different contest_id
- *       from the contest-task pairs table. It enriches existing tasks with
- *       contest-specific information (contest_type, task_table_index, etc.).
  * @note Time Complexity: O(N + M)
  *       - N: number of tasks from the database
  *       - M: number of contest-task pairs
@@ -36,16 +34,19 @@ export async function getTasks(): Promise<Task[]> {
  * @example
  *       const mergedTasksMap = await getMergedTasksMap();
  *       const task = mergedTasksMap.get(createContestTaskPairKey('tessoku-book', 'typical90_s'));
+ * @example
+ *       const filteredTasks = await db.task.findMany({ where: { ... } });
+ *       const mergedTasksMap = await getMergedTasksMap(filteredTasks);
  */
-export async function getMergedTasksMap(): Promise<TaskMapByContestTaskPair> {
-  const tasks = await getTasks();
+export async function getMergedTasksMap(tasks?: Tasks): Promise<TaskMapByContestTaskPair> {
+  const tasksToMerge = tasks ?? (await getTasks());
   const contestTaskPairs = await getContestTaskPairs();
 
   const baseTaskMap = new Map<ContestTaskPairKey, Task>(
-    tasks.map((task) => [createContestTaskPairKey(task.contest_id, task.task_id), task]),
+    tasksToMerge.map((task) => [createContestTaskPairKey(task.contest_id, task.task_id), task]),
   );
   // Unique task_id in database
-  const taskMap = new Map(tasks.map((task) => [task.task_id, task]));
+  const taskMap = new Map(tasksToMerge.map((task) => [task.task_id, task]));
 
   // Filter task(s) only the same task_id but different contest_id
   const additionalTaskMap = contestTaskPairs

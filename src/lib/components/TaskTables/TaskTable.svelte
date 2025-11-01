@@ -16,6 +16,7 @@
     ContestTableProvider,
     ContestTableDisplayConfig,
   } from '$lib/types/contest_table_provider';
+  import type { ContestTaskPairKey } from '$lib/types/contest_task_pair';
 
   import TaskTableBodyCell from '$lib/components/TaskTables/TaskTableBodyCell.svelte';
 
@@ -27,6 +28,7 @@
   } from '$lib/utils/contest_table_provider';
 
   import { getBackgroundColorFrom } from '$lib/services/submission_status';
+  import { createContestTaskPairKey } from '$lib/utils/contest_task_pair';
 
   interface Props {
     taskResults: TaskResults;
@@ -124,32 +126,40 @@
   // Update task results dynamically.
   // Computational complexity of preparation table: O(N), where N is the number of task results.
   let taskResultsMap = $derived(() => {
-    return taskResults.reduce((map: Map<string, TaskResult>, taskResult: TaskResult) => {
-      if (!map.has(taskResult.task_id)) {
-        map.set(taskResult.task_id, taskResult);
-      }
-      return map;
-    }, new Map<string, TaskResult>());
+    return taskResults.reduce(
+      (map: Map<ContestTaskPairKey, TaskResult>, taskResult: TaskResult) => {
+        const key = createContestTaskPairKey(taskResult.contest_id, taskResult.task_id);
+
+        if (!map.has(key)) {
+          map.set(key, taskResult);
+        }
+
+        return map;
+      },
+      new Map<ContestTaskPairKey, TaskResult>(),
+    );
   });
 
   let taskIndicesMap = $derived(() => {
-    const indices = new Map<string, number>();
+    const indices = new Map<ContestTaskPairKey, number>();
 
     taskResults.forEach((task, index) => {
-      indices.set(task.task_id, index);
+      const key = createContestTaskPairKey(task.contest_id, task.task_id);
+      indices.set(key, index);
     });
 
     return indices;
   });
 
   function handleUpdateTaskResult(updatedTask: TaskResult): void {
+    const key = createContestTaskPairKey(updatedTask.contest_id, updatedTask.task_id);
     const map = taskResultsMap();
 
-    if (map.has(updatedTask.task_id)) {
-      map.set(updatedTask.task_id, updatedTask);
+    if (map.has(key)) {
+      map.set(key, updatedTask);
     }
 
-    const index = taskIndicesMap().get(updatedTask.task_id);
+    const index = taskIndicesMap().get(key);
 
     if (index !== undefined) {
       const newTaskResults = [...taskResults];

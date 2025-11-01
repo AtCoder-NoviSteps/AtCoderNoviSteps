@@ -5,7 +5,12 @@ import {
   getSubmissionStatusMapWithId,
   getSubmissionStatusMapWithName,
 } from '$lib/services/submission_status';
-import { getTasks, getTasksWithSelectedTaskIds, getTask } from '$lib/services/tasks';
+import {
+  getTasks,
+  getMergedTasksMap,
+  getTasksWithSelectedTaskIds,
+  getTask,
+} from '$lib/services/tasks';
 import { getUser } from '$lib/services/users';
 import * as answer_crud from '$lib/services/answers';
 
@@ -31,10 +36,10 @@ const statusByName = await getSubmissionStatusMapWithName();
 export async function getTaskResults(userId: string): Promise<TaskResults> {
   // 問題と特定のユーザの回答状況を使ってデータを結合
   // 計算量: 問題数をN、特定のユーザの解答数をMとすると、O(N + M)になるはず。
-  const tasks = await getTasks();
-  const answers = await answer_crud.getAnswers(userId);
+  const mergedTasksMap = await getMergedTasksMap();
+  const tasks = [...mergedTasksMap.values()];
 
-  return await relateTasksAndAnswers(userId, tasks, answers);
+  return await createTaskResults(tasks, userId);
 }
 
 export async function copyTaskResults(
@@ -117,32 +122,6 @@ async function transferAnswers(
 
     messages.push({ message: 'コピーが正常に完了しました', status: true });
   }
-}
-
-async function relateTasksAndAnswers(
-  userId: string,
-  tasks: Tasks,
-  answers: Map<string, TaskAnswer>,
-): Promise<TaskResults> {
-  // TODO: 汎用メソッドとして切り出す
-  const isLoggedIn = userId !== undefined;
-
-  const taskResults = tasks.map((task: Task) => {
-    const taskResult = createDefaultTaskResult(userId, task);
-
-    if (isLoggedIn && answers.has(task.task_id)) {
-      const answer = answers.get(task.task_id);
-      const status = statusById.get(answer?.status_id);
-      taskResult.status_name = status.status_name;
-      taskResult.submission_status_image_path = status.image_path;
-      taskResult.submission_status_label_name = status.label_name;
-      taskResult.is_ac = status.is_ac;
-    }
-
-    return taskResult;
-  });
-
-  return taskResults;
 }
 
 // Note: 問題集の一覧（ユーザの回答を含む）を参照するときに使用する。
@@ -229,6 +208,22 @@ export async function getTaskResultsByTaskId(
   );
 
   return taskResultsMap;
+}
+
+/**
+ * Helper function to create TaskResults from tasks and userId
+ * @param tasks - Array of Task objects
+ * @param userId - User ID for creating TaskResults
+ * @returns Promise<TaskResults> - Array of TaskResult objects
+ */
+async function createTaskResults(tasks: Tasks, userId: string): Promise<TaskResults> {
+  const answers = await answer_crud.getAnswers(userId);
+  const isLoggedIn = userId !== undefined;
+
+  return tasks.map((task: Task) => {
+    const answer = isLoggedIn ? answers.get(task.task_id) : null;
+    return mergeTaskAndAnswer(task, userId, answer);
+  });
 }
 
 /**
@@ -332,12 +327,19 @@ export async function getTasksWithTagIds(
   });
 
   const taskIds = taskIdByTagIds.map((item) => item.task_id);
-  const tasks = await db.task.findMany({
+
+  if (taskIds.length === 0) {
+    return [];
+  }
+
+  const filteredTasks = await db.task.findMany({
     where: {
       task_id: { in: taskIds },
     },
   });
-  const answers = await answer_crud.getAnswers(userId);
 
-  return await relateTasksAndAnswers(userId, tasks, answers);
+  const mergedTasksMap = await getMergedTasksMap(filteredTasks);
+  const tasks = [...mergedTasksMap.values()];
+
+  return await createTaskResults(tasks, userId);
 }
