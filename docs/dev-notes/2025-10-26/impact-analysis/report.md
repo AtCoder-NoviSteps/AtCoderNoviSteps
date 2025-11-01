@@ -61,7 +61,7 @@
 
 レイヤ4: テスト層
 ├─ src/test/lib/utils/contest_task_pair.test.ts ✅ キー関数テスト
-└─ src/test/lib/services/task_results.ts ✅ TaskResults のCRUD に関するテスト
+└─ src/test/lib/services/task_results.test.ts ✅ TaskResults のCRUD に関するテスト
 ```
 
 ---
