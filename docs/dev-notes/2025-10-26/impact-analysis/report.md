@@ -623,7 +623,9 @@ describe('mergeTaskAndAnswer', () => {
 1. **Phase 1-A: サービス層**
    - `mergeTaskAndAnswer` - `relateTasksAndAnswers` のメソッドの代わりに共通して利用
    - `getTaskResults()` - キー形式変更、戻り値型変更
+   - `getTasksWithTagIds()` - getMergedTasksMap + mergeTaskAndAnswer 統合
    - `getTaskResultsByTaskId()` - キー形式変更、戻り値型変更
+   - Delete `relateTasksAndAnswers()` - 関数を削除（getTaskResults に統合）
    - テスト作成（新規）
 
 2. **Phase 1-B: コンポーネント層**
