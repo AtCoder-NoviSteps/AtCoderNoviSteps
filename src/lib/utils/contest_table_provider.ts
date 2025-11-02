@@ -239,6 +239,35 @@ export class Typical90Provider extends ContestTableProviderBase {
   }
 }
 
+export class TessokuBookProvider extends ContestTableProviderBase {
+  protected setFilterCondition(): (taskResult: TaskResult) => boolean {
+    return (taskResult: TaskResult) => {
+      return classifyContest(taskResult.contest_id) === this.contestType;
+    };
+  }
+
+  getMetadata(): ContestTableMetaData {
+    return {
+      title: '競技プログラミングの鉄則',
+      abbreviationName: 'tessoku-book',
+    };
+  }
+
+  getDisplayConfig(): ContestTableDisplayConfig {
+    return {
+      isShownHeader: false,
+      isShownRoundLabel: false,
+      roundLabelWidth: '', // No specific width for the round label
+      tableBodyCellsWidth: 'w-1/2 xs:w-1/3 sm:w-1/4 md:w-1/5 lg:w-1/6 2xl:w-1/7 px-1 py-2',
+      isShownTaskIndex: true,
+    };
+  }
+
+  getContestRoundLabel(contestId: string): string {
+    return '';
+  }
+}
+
 export class EDPCProvider extends ContestTableProviderBase {
   protected setFilterCondition(): (taskResult: TaskResult) => boolean {
     return (taskResult: TaskResult) => {
@@ -485,6 +514,15 @@ export const prepareContestProviderPresets = () => {
       }).addProvider(ContestType.TYPICAL90, new Typical90Provider(ContestType.TYPICAL90)),
 
     /**
+     * Single group for Tessoku Book
+     */
+    TessokuBook: () =>
+      new ContestTableProviderGroup(`競技プログラミングの鉄則`, {
+        buttonLabel: '競技プログラミングの鉄則',
+        ariaLabel: 'Filter Tessoku Book',
+      }).addProvider(ContestType.TESSOKU_BOOK, new TessokuBookProvider(ContestType.TESSOKU_BOOK)),
+
+    /**
      * DP group (EDPC and TDPC)
      */
     dps: () =>
@@ -509,6 +547,7 @@ export const contestTableProviderGroups = {
   abc319Onwards: prepareContestProviderPresets().ABC319Onwards(),
   fromAbc212ToAbc318: prepareContestProviderPresets().ABC212ToABC318(),
   typical90: prepareContestProviderPresets().Typical90(),
+  tessokuBook: prepareContestProviderPresets().TessokuBook(),
   dps: prepareContestProviderPresets().dps(), // Dynamic Programming (DP) Contests
   joiFirstQualRound: prepareContestProviderPresets().JOIFirstQualRound(),
 };
