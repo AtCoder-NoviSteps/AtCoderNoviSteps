@@ -75,7 +75,7 @@ task_table_index: 'A06' | 'A77' | 'B07' | 'B63' | 'C09'
 
 ```typescript
 test('expects to filter tasks to include only tessoku-book contest', () => {
-  const provider = new TessokuBookProvider(ContestType.TESSOKUBOOK);
+  const provider = new TessokuBookProvider(ContestType.TESSOKU_BOOK);
   const mixedTasks = [
     { contest_id: 'abc123', task_id: 'abc123_a', task_table_index: 'A' },
     { contest_id: 'tessoku-book', task_id: 'tesskoku_book_a', task_table_index: 'A01' },
@@ -99,7 +99,7 @@ test('expects to filter tasks to include only tessoku-book contest', () => {
 
 ```typescript
 test('expects to get correct metadata', () => {
-  const provider = new TessokuBookProvider(ContestType.TESSOKUBOOK);
+  const provider = new TessokuBookProvider(ContestType.TESSOKU_BOOK);
   const metadata = provider.getMetadata();
 
   expect(metadata.title).toBe('競技プログラミングの鉄則');
@@ -116,7 +116,7 @@ test('expects to get correct metadata', () => {
 
 ```typescript
 test('expects to get correct display configuration', () => {
-  const provider = new TessokuBookProvider(ContestType.TESSOKUBOOK);
+  const provider = new TessokuBookProvider(ContestType.TESSOKU_BOOK);
   const displayConfig = provider.getDisplayConfig();
 
   expect(displayConfig.isShownHeader).toBe(false);
@@ -138,7 +138,7 @@ test('expects to get correct display configuration', () => {
 
 ```typescript
 test('expects to format contest round label correctly', () => {
-  const provider = new TessokuBookProvider(ContestType.TESSOKUBOOK);
+  const provider = new TessokuBookProvider(ContestType.TESSOKU_BOOK);
   const label = provider.getContestRoundLabel('tessoku-book');
 
   expect(label).toBe('');
@@ -154,7 +154,7 @@ test('expects to format contest round label correctly', () => {
 
 ```typescript
 test('expects to generate correct table structure with mixed problem sources', () => {
-  const provider = new TessokuBookProvider(ContestType.TESSOKUBOOK);
+  const provider = new TessokuBookProvider(ContestType.TESSOKU_BOOK);
   const tasks = [
     { contest_id: 'tessoku-book', task_id: 'tesskoku_book_a', task_table_index: 'A01' },
     { contest_id: 'tessoku-book', task_id: 'math_and_algorithm_ai', task_table_index: 'A06' },
@@ -182,7 +182,7 @@ test('expects to generate correct table structure with mixed problem sources', (
 
 ```typescript
 test('expects to get contest round IDs correctly', () => {
-  const provider = new TessokuBookProvider(ContestType.TESSOKUBOOK);
+  const provider = new TessokuBookProvider(ContestType.TESSOKU_BOOK);
   const tasks = [
     { contest_id: 'tessoku-book', task_id: 'math_and_algorithm_ai', task_table_index: 'A06' },
     { contest_id: 'tessoku-book', task_id: 'typical90_a', task_table_index: 'A77' },
@@ -202,7 +202,7 @@ test('expects to get contest round IDs correctly', () => {
 
 ```typescript
 test('expects to get header IDs for tasks correctly in ascending order', () => {
-  const provider = new TessokuBookProvider(ContestType.TESSOKUBOOK);
+  const provider = new TessokuBookProvider(ContestType.TESSOKU_BOOK);
   const tasks = [
     { contest_id: 'tessoku-book', task_id: 'tesskoku_book_a', task_table_index: 'A01' },
     { contest_id: 'tessoku-book', task_id: 'math_and_algorithm_ai', task_table_index: 'A06' },
@@ -226,7 +226,7 @@ test('expects to get header IDs for tasks correctly in ascending order', () => {
 
 ```typescript
 test('expects to maintain proper sort order across all sections', () => {
-  const provider = new TessokuBookProvider(ContestType.TESSOKUBOOK);
+  const provider = new TessokuBookProvider(ContestType.TESSOKU_BOOK);
   const tasks = [
     { contest_id: 'tessoku-book', task_id: 'math_and_algorithm_ac', task_table_index: 'C09' },
     { contest_id: 'tessoku-book', task_id: 'math_and_algorithm_ai', task_table_index: 'A06' },
@@ -248,7 +248,7 @@ test('expects to maintain proper sort order across all sections', () => {
 
 ```typescript
 test('expects to handle section boundaries correctly (A01-A77, B01-B69, C01-C20)', () => {
-  const provider = new TessokuBookProvider(ContestType.TESSOKUBOOK);
+  const provider = new TessokuBookProvider(ContestType.TESSOKU_BOOK);
   const tasks = [
     { contest_id: 'tessoku-book', task_id: 'tessoku_book_a', task_table_index: 'A01' },
     { contest_id: 'tessoku-book', task_id: 'typical90_a', task_table_index: 'A77' },
@@ -272,7 +272,7 @@ test('expects to handle section boundaries correctly (A01-A77, B01-B69, C01-C20)
 
 ```typescript
 test('expects to handle empty task results', () => {
-  const provider = new TessokuBookProvider(ContestType.TESSOKUBOOK);
+  const provider = new TessokuBookProvider(ContestType.TESSOKU_BOOK);
   const filtered = provider.filter([]);
 
   expect(filtered).toEqual([]);
@@ -288,7 +288,7 @@ test('expects to handle empty task results', () => {
 
 ```typescript
 test('expects to handle task results with different contest types', () => {
-  const provider = new TessokuBookProvider(ContestType.TESSOKUBOOK);
+  const provider = new TessokuBookProvider(ContestType.TESSOKU_BOOK);
   const mixedTasks = [
     { contest_id: 'tessoku-book', task_id: 'math_and_algorithm_ai', task_table_index: 'A06' },
     { contest_id: 'abc123', task_id: 'abc123_a', problem_index: 'A' },
