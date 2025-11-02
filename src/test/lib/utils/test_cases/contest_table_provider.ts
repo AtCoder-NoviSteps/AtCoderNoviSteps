@@ -200,6 +200,7 @@ const [
 // Sources: math_and_algorithm_*, typical90_*, abc*_*
 // Problem indices follow the format: A01-A77, B01-B69, C01-C20
 const [
+  tessoku_a01,
   tessoku_a06,
   tessoku_a27,
   tessoku_a29,
@@ -282,6 +283,7 @@ export const taskResultsForContestTableProvider: TaskResults = [
 ];
 
 export const taskResultsForTessokuBookProvider: TaskResults = [
+  tessoku_a01,
   tessoku_a06,
   tessoku_a27,
   tessoku_a29,
