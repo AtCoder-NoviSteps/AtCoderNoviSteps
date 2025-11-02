@@ -171,19 +171,23 @@
 
 <!-- See: -->
 <!-- https://flowbite-svelte.com/docs/components/button-group -->
-<ButtonGroup class="m-4 contents-center">
-  {#each Object.entries(contestTableProviderGroups) as [type, config]}
-    <Button
-      onclick={() => updateActiveContestType(type as ContestTableProviderGroups)}
-      class={activeContestType === (type as ContestTableProviderGroups)
-        ? 'active-button-class text-primary-700 dark:!text-primary-500'
-        : ''}
-      aria-label={config.getMetadata().ariaLabel}
-    >
-      {config.getMetadata().buttonLabel}
-    </Button>
-  {/each}
-</ButtonGroup>
+<div class="flex justify-center m-4">
+  <ButtonGroup class="flex flex-wrap justify-start gap-1">
+    {#each Object.entries(contestTableProviderGroups) as [type, config]}
+      <Button
+        onclick={() => updateActiveContestType(type as ContestTableProviderGroups)}
+        class={`rounded-lg ${
+          activeContestType === (type as ContestTableProviderGroups)
+            ? 'active-button-class text-primary-700 dark:!text-primary-500'
+            : ''
+        }`}
+        aria-label={config.getMetadata().ariaLabel}
+      >
+        {config.getMetadata().buttonLabel}
+      </Button>
+    {/each}
+  </ButtonGroup>
+</div>
 
 <!-- TODO: ページネーションを実装 -->
 <!-- See: -->
