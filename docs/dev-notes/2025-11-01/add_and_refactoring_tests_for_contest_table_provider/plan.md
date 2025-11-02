@@ -168,7 +168,7 @@ test('expects to generate correct table structure with mixed problem sources', (
   expect(table).toHaveProperty('tessoku-book');
   expect(table['tessoku-book']).toHaveProperty('A06');
   expect(table['tessoku-book']['A06']).toEqual(
-    expect.objectContaining({ problem_id: 'math_and_algorithm_ai' }),
+    expect.objectContaining({ task_id: 'math_and_algorithm_ai' }),
   );
 });
 ```
@@ -217,7 +217,7 @@ test('expects to get header IDs for tasks correctly in ascending order', () => {
 });
 ```
 
-**期待値**: 昇順ソート済みの problem_index 配列
+**期待値**: 昇順ソート済みの task_table_index 配列
 **検証方法**: `toEqual()` （順序重要）
 
 ---
@@ -291,7 +291,7 @@ test('expects to handle task results with different contest types', () => {
   const provider = new TessokuBookProvider(ContestType.TESSOKU_BOOK);
   const mixedTasks = [
     { contest_id: 'tessoku-book', task_id: 'math_and_algorithm_ai', task_table_index: 'A06' },
-    { contest_id: 'abc123', task_id: 'abc123_a', problem_index: 'A' },
+    { contest_id: 'abc123', task_id: 'abc123_a', task_table_index: 'A' },
     { contest_id: 'tessoku-book', task_id: 'typical90_a', task_table_index: 'A77' },
     { contest_id: 'typical90', task_id: 'typical90_b', task_table_index: 'B' },
   ];
@@ -315,63 +315,63 @@ test('expects to handle task results with different contest types', () => {
 export const taskResultsForTessokuBookProvider: TaskResults = [
   {
     contest_id: 'tessoku-book',
-    problem_id: 'math_and_algorithm_ai',
-    problem_index: 'A06',
+    task_id: 'math_and_algorithm_ai',
+    task_table_index: 'A06',
   },
   {
     contest_id: 'tessoku-book',
-    problem_id: 'math_and_algorithm_o',
-    problem_index: 'A27',
+    task_id: 'math_and_algorithm_o',
+    task_table_index: 'A27',
   },
   {
     contest_id: 'tessoku-book',
-    problem_id: 'math_and_algorithm_aq',
-    problem_index: 'A29',
+    task_id: 'math_and_algorithm_aq',
+    task_table_index: 'A29',
   },
   {
     contest_id: 'tessoku-book',
-    problem_id: 'math_and_algorithm_bn',
-    problem_index: 'A39',
+    task_id: 'math_and_algorithm_bn',
+    task_table_index: 'A39',
   },
   {
     contest_id: 'tessoku-book',
-    problem_id: 'math_and_algorithm_an',
-    problem_index: 'A63',
+    task_id: 'math_and_algorithm_an',
+    task_table_index: 'A63',
   },
   {
     contest_id: 'tessoku-book',
-    problem_id: 'typical90_a',
-    problem_index: 'A77',
+    task_id: 'typical90_a',
+    task_table_index: 'A77',
   },
   {
     contest_id: 'tessoku-book',
-    problem_id: 'math_and_algorithm_al',
-    problem_index: 'B07',
+    task_id: 'math_and_algorithm_al',
+    task_table_index: 'B07',
   },
   {
     contest_id: 'tessoku-book',
-    problem_id: 'dp_a',
-    problem_index: 'B16',
+    task_id: 'dp_a',
+    task_table_index: 'B16',
   },
   {
     contest_id: 'tessoku-book',
-    problem_id: 'math_and_algorithm_ap',
-    problem_index: 'B28',
+    task_id: 'math_and_algorithm_ap',
+    task_table_index: 'B28',
   },
   {
     contest_id: 'tessoku-book',
-    problem_id: 'abc007_3',
-    problem_index: 'B63',
+    task_id: 'abc007_3',
+    task_table_index: 'B63',
   },
   {
     contest_id: 'tessoku-book',
-    problem_id: 'math_and_algorithm_ac',
-    problem_index: 'C09',
+    task_id: 'math_and_algorithm_ac',
+    task_table_index: 'C09',
   },
   {
     contest_id: 'tessoku-book',
-    problem_id: 'typical90_s',
-    problem_index: 'C18',
+    task_id: 'typical90_s',
+    task_table_index: 'C18',
   },
 ];
 ```
