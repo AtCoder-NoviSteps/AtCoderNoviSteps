@@ -214,7 +214,7 @@ const [
   tessoku_c09,
   tessoku_c18,
 ] = createContestTasks('tessoku-book', [
-  { taskId: 'tesesoku_book_a', taskTableIndex: 'A01', statusName: AC },
+  { taskId: 'tessoku_book_a', taskTableIndex: 'A01', statusName: AC },
   { taskId: 'math_and_algorithm_ai', taskTableIndex: 'A06', statusName: AC },
   { taskId: 'math_and_algorithm_o', taskTableIndex: 'A27', statusName: AC },
   { taskId: 'math_and_algorithm_aq', taskTableIndex: 'A29', statusName: AC_WITH_EDITORIAL },
