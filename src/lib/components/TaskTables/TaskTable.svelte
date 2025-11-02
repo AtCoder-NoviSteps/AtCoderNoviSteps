@@ -172,7 +172,7 @@
 <!-- See: -->
 <!-- https://flowbite-svelte.com/docs/components/button-group -->
 <div class="flex justify-center m-4">
-  <ButtonGroup class="flex flex-wrap justify-start gap-1">
+  <ButtonGroup class="flex flex-wrap justify-start gap-1 shadow-none">
     {#each Object.entries(contestTableProviderGroups) as [type, config]}
       <Button
         onclick={() => updateActiveContestType(type as ContestTableProviderGroups)}

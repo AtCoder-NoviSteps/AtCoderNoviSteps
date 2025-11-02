@@ -20,7 +20,7 @@ Tailwind CSSのレスポンシブクラスを使用してボタンの折り返�
 
 ```svelte
 <div class="flex justify-center m-4">
-  <ButtonGroup class="flex flex-wrap justify-start gap-1">
+  <ButtonGroup class="flex flex-wrap justify-start gap-1 shadow-none">
     {#each Object.entries(contestTableProviderGroups) as [type, config]}
       <Button
         onclick={() => updateActiveContestType(type as ContestTableProviderGroups)}
@@ -45,7 +45,13 @@ Tailwind CSSのレスポンシブクラスを使用してボタンの折り返�
 | `justify-center` | ボタングループ全体を水平中央揃え（外側div） |
 | `justify-start`  | ボタン自体を左寄せ（ButtonGroup内）         |
 | `gap-1`          | ボタン間のスペーシング（0.25rem）           |
-| `rounded`        | ボタンの角に丸みを付与                      |
+| `rounded-lg`     | ボタンの角に丸みを付与                      |
+| `border-b-0`     | 下部ボーダーラインを削除                    |
+| `shadow-none`    | デフォルトシャドウを削除                    |
+
+## 注記
+
+`ButtonGroup`コンポーネントのデフォルトスタイルに、下部ボーダーラインとシャドウが含まれているため、`border-b-0`と`shadow-none`クラスを追加してそれらを打ち消す必要があります。
 
 ## 参考資料
 
@@ -53,6 +59,7 @@ Tailwind CSSのレスポンシブクラスを使用してボタンの折り返�
 - [Tailwind CSS - Justify Content](https://tailwindcss.com/docs/justify-content)
 - [Tailwind CSS - Gap](https://tailwindcss.com/docs/gap)
 - [Tailwind CSS - Border Radius](https://tailwindcss.com/docs/border-radius)
+- [Tailwind CSS - Box Shadow](https://tailwindcss.com/docs/box-shadow)
 
 ## 使用ライブラリ
 
