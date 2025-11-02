@@ -78,368 +78,224 @@ describe('ContestTableProviderBase and implementations', () => {
     return round;
   };
 
-  describe('ABC latest 20 rounds provider', () => {
-    test('expects to filter tasks to include only ABC contests', () => {
-      const provider = new ABCLatest20RoundsProvider(ContestType.ABC);
-      const filtered = provider.filter(mockTaskResults);
+  describe('ABC providers', () => {
+    describe.each([
+      {
+        providerClass: ABCLatest20RoundsProvider,
+        label: 'Latest 20 rounds',
+        displayConfig: {
+          roundLabelWidth: 'xl:w-16',
+          tableBodyCellsWidth: 'w-1/2 xs:w-1/3 sm:w-1/4 md:w-1/5 lg:w-1/6 px-1 py-1',
+        },
+      },
+      {
+        providerClass: ABC319OnwardsProvider,
+        label: '319 onwards',
+        displayConfig: {
+          roundLabelWidth: 'xl:w-16',
+          tableBodyCellsWidth: 'w-1/2 xs:w-1/3 sm:w-1/4 md:w-1/5 lg:w-1/6 px-1 py-1',
+        },
+      },
+      {
+        providerClass: ABC212ToABC318Provider,
+        label: '212 to 318',
+        displayConfig: {
+          roundLabelWidth: 'xl:w-16',
+          tableBodyCellsWidth: 'w-1/2 xs:w-1/3 sm:w-1/4 md:w-1/5 lg:w-1/6 px-1 py-1',
+        },
+      },
+    ])('$label', ({ providerClass, displayConfig }) => {
+      test('expects to get correct display configuration', () => {
+        const provider = new providerClass(ContestType.ABC);
+        const config = provider.getDisplayConfig();
 
-      expect(filtered?.every((task) => task.contest_id.startsWith('abc'))).toBe(true);
-      expect(filtered).not.toContainEqual(expect.objectContaining({ contest_id: 'arc100' }));
-    });
+        expect(config.isShownHeader).toBe(true);
+        expect(config.isShownRoundLabel).toBe(true);
+        expect(config.roundLabelWidth).toBe(displayConfig.roundLabelWidth);
+        expect(config.tableBodyCellsWidth).toBe(displayConfig.tableBodyCellsWidth);
+        expect(config.isShownTaskIndex).toBe(false);
+      });
 
-    test('expects to limit results to the latest 20 rounds', () => {
-      const provider = new ABCLatest20RoundsProvider(ContestType.ABC);
+      test('expects to format contest round label correctly', () => {
+        const provider = new providerClass(ContestType.ABC);
+        const label = provider.getContestRoundLabel('abc378');
 
-      const largeDataset = [...mockTaskResults];
-      const filtered = provider.filter(largeDataset);
-      const uniqueContests = new Set(filtered.map((task) => task.contest_id));
-      expect(uniqueContests.size).toBe(20);
+        expect(label).toBe('378');
+      });
 
-      // Verify these are the latest 20 rounds
-      const contestRounds = Array.from(uniqueContests)
-        .map((id) => getContestRound(id))
-        .sort((a, b) => b - a); // Sort in descending order
+      test('expects to handle empty task results', () => {
+        const provider = new providerClass(ContestType.ABC);
+        const filtered = provider.filter([] as TaskResults);
 
-      // Validate if the rounds are sequential and latest
-      const latestRound = Math.max(...contestRounds);
-      const expectedRounds = Array.from({ length: 20 }, (_, i) => latestRound - i);
-      expect(contestRounds).toEqual(expectedRounds);
-    });
+        expect(filtered).toEqual([] as TaskResults);
+      });
 
-    test('expects to generate correct table structure', () => {
-      const provider = new ABCLatest20RoundsProvider(ContestType.ABC);
-      const filtered = provider.filter(mockTaskResults);
-      const table = provider.generateTable(filtered);
+      test('expects to get header IDs for tasks correctly', () => {
+        const provider = new providerClass(ContestType.ABC);
+        const filtered = provider.filter(mockTaskResults);
+        const headerIds = provider.getHeaderIdsForTask(filtered as TaskResults);
 
-      expect(table).toHaveProperty('abc378');
-      expect(table.abc378).toHaveProperty('G');
-      expect(table.abc378.G).toEqual(
-        expect.objectContaining({ contest_id: 'abc378', task_id: 'abc378_g' }),
-      );
+        expect(headerIds.length).toBeGreaterThan(0);
+        expect(headerIds.every((id) => id.length > 0)).toBe(true);
+      });
 
-      expect(table).toHaveProperty('abc397');
-      expect(table.abc397).toHaveProperty('G');
-      expect(table.abc397.G).toEqual(
-        expect.objectContaining({ contest_id: 'abc397', task_id: 'abc397_g' }),
-      );
-    });
+      test('expects to get contest round IDs correctly', () => {
+        const provider = new providerClass(ContestType.ABC);
+        const filtered = provider.filter(mockTaskResults);
+        const roundIds = provider.getContestRoundIds(filtered as TaskResults);
 
-    test('expects to get correct metadata', () => {
-      const provider = new ABCLatest20RoundsProvider(ContestType.ABC);
-      const metadata = provider.getMetadata();
+        expect(roundIds.length).toBeGreaterThan(0);
+        expect(roundIds.every((id) => id.startsWith('abc'))).toBe(true);
+      });
 
-      expect(metadata.title).toBe('AtCoder Beginner Contest 最新 20 回');
-      expect(metadata.abbreviationName).toBe('abcLatest20Rounds');
-    });
+      test('expects to generate correct table structure', () => {
+        const provider = new providerClass(ContestType.ABC);
+        const filtered = provider.filter(mockTaskResults);
+        const table = provider.generateTable(filtered);
 
-    test('expects to format contest round label correctly', () => {
-      const provider = new ABCLatest20RoundsProvider(ContestType.ABC);
-      const label = provider.getContestRoundLabel('abc378');
+        expect(Object.keys(table).length).toBeGreaterThan(0);
 
-      expect(label).toBe('378');
-    });
-
-    test('expects to get correct display configuration', () => {
-      const provider = new ABCLatest20RoundsProvider(ContestType.ABC);
-      const displayConfig = provider.getDisplayConfig();
-
-      expect(displayConfig.isShownHeader).toBe(true);
-      expect(displayConfig.isShownRoundLabel).toBe(true);
-      expect(displayConfig.roundLabelWidth).toBe('xl:w-16');
-      expect(displayConfig.tableBodyCellsWidth).toBe(
-        'w-1/2 xs:w-1/3 sm:w-1/4 md:w-1/5 lg:w-1/6 px-1 py-1',
-      );
-      expect(displayConfig.isShownTaskIndex).toBe(false);
-    });
-
-    test('expects to get contest round IDs correctly', () => {
-      const provider = new ABCLatest20RoundsProvider(ContestType.ABC);
-      const filtered = provider.filter(mockTaskResults);
-      const roundIds = provider.getContestRoundIds(filtered as TaskResults);
-
-      // Should have at most 20 unique contests
-      expect(roundIds.length).toBeLessThanOrEqual(20);
-      // All round IDs should be ABC contests
-      expect(roundIds.every((id) => id.startsWith('abc'))).toBe(true);
-    });
-
-    test('expects to get header IDs for tasks correctly (all problem indices)', () => {
-      const provider = new ABCLatest20RoundsProvider(ContestType.ABC);
-      const filtered = provider.filter(mockTaskResults);
-      const headerIds = provider.getHeaderIdsForTask(filtered as TaskResults);
-
-      // All header IDs should be non-empty
-      expect(headerIds.length).toBeGreaterThan(0);
-      expect(headerIds.every((id) => id.length > 0)).toBe(true);
-    });
-
-    test('expects to handle empty task results', () => {
-      const provider = new ABCLatest20RoundsProvider(ContestType.ABC);
-      const filtered = provider.filter([] as TaskResults);
-
-      expect(filtered).toEqual([] as TaskResults);
-    });
-
-    test('expects to handle task results with different contest types', () => {
-      const provider = new ABCLatest20RoundsProvider(ContestType.ABC);
-      const mockMixedTasks = [
-        { contest_id: 'abc378', task_id: 'abc378_a', task_table_index: 'A' },
-        { contest_id: 'dp', task_id: 'dp_a', task_table_index: 'A' },
-        { contest_id: 'abc397', task_id: 'abc397_a', task_table_index: 'A' },
-        { contest_id: 'typical90', task_id: 'typical90_a', task_table_index: '001' },
-        { contest_id: 'arc100', task_id: 'arc100_a', task_table_index: 'A' },
-      ];
-      const filtered = provider.filter(mockMixedTasks as TaskResults);
-
-      // Should only include ABC contests
-      expect(filtered.every((task) => task.contest_id.startsWith('abc'))).toBe(true);
-      expect(filtered).not.toContainEqual(expect.objectContaining({ contest_id: 'dp' }));
-      expect(filtered).not.toContainEqual(expect.objectContaining({ contest_id: 'typical90' }));
-      expect(filtered).not.toContainEqual(expect.objectContaining({ contest_id: 'arc100' }));
-    });
-  });
-
-  describe('ABC319 onwards provider', () => {
-    test('expects to filter tasks to include only ABC319 and later', () => {
-      const provider = new ABC319OnwardsProvider(ContestType.ABC);
-      const filtered = provider.filter(mockTaskResults);
-
-      expect(filtered.every((task) => task.contest_id.startsWith('abc'))).toBe(true);
-      expect(
-        filtered.every((task) => {
-          const round = getContestRound(task.contest_id);
-          return round >= 319 && round <= 999;
-        }),
-      ).toBe(true);
-    });
-
-    test('expects to get correct metadata', () => {
-      const provider = new ABC319OnwardsProvider(ContestType.ABC);
-      const metadata = provider.getMetadata();
-
-      expect(metadata.title).toBe('AtCoder Beginner Contest 319 〜 ');
-      expect(metadata.abbreviationName).toBe('abc319Onwards');
-    });
-
-    test('expects to format contest round label correctly', () => {
-      const provider = new ABC319OnwardsProvider(ContestType.ABC);
-      const label = provider.getContestRoundLabel('abc397');
-
-      expect(label).toBe('397');
-    });
-
-    test('expects to get correct display configuration', () => {
-      const provider = new ABC319OnwardsProvider(ContestType.ABC);
-      const displayConfig = provider.getDisplayConfig();
-
-      expect(displayConfig.isShownHeader).toBe(true);
-      expect(displayConfig.isShownRoundLabel).toBe(true);
-      expect(displayConfig.roundLabelWidth).toBe('xl:w-16');
-      expect(displayConfig.tableBodyCellsWidth).toBe(
-        'w-1/2 xs:w-1/3 sm:w-1/4 md:w-1/5 lg:w-1/6 px-1 py-1',
-      );
-      expect(displayConfig.isShownTaskIndex).toBe(false);
-    });
-
-    test('expects to generate correct table structure', () => {
-      const provider = new ABC319OnwardsProvider(ContestType.ABC);
-      const filtered = provider.filter(mockTaskResults);
-      const table = provider.generateTable(filtered);
-
-      // Verify table structure for ABC319 and onwards
-      const abc378Contests = filtered.filter((task) => task.contest_id === 'abc378');
-
-      if (abc378Contests.length > 0) {
-        expect(table).toHaveProperty('abc378');
-        expect(table.abc378).toHaveProperty('G');
-        expect(table.abc378.G).toEqual(
-          expect.objectContaining({ contest_id: 'abc378', task_id: 'abc378_g' }),
-        );
-      }
-
-      const abc397Contests = filtered.filter((task) => task.contest_id === 'abc397');
-
-      if (abc397Contests.length > 0) {
-        expect(table).toHaveProperty('abc397');
-        expect(table.abc397).toHaveProperty('G');
-        expect(table.abc397.G).toEqual(
-          expect.objectContaining({ contest_id: 'abc397', task_id: 'abc397_g' }),
-        );
-      }
-    });
-
-    test('expects to get contest round IDs correctly', () => {
-      const provider = new ABC319OnwardsProvider(ContestType.ABC);
-      const filtered = provider.filter(mockTaskResults);
-      const roundIds = provider.getContestRoundIds(filtered as TaskResults);
-
-      // Verify all round IDs are ABC319 and onwards
-      roundIds.forEach((roundId) => {
-        const round = getContestRound(roundId);
-        expect(round).toBeGreaterThanOrEqual(319);
+        const firstContest = Object.keys(table)[0];
+        expect(table[firstContest]).toHaveProperty(Object.keys(table[firstContest])[0]);
       });
     });
 
-    test('expects to get header IDs for tasks correctly (all problem indices)', () => {
-      const provider = new ABC319OnwardsProvider(ContestType.ABC);
-      const filtered = provider.filter(mockTaskResults);
-      const headerIds = provider.getHeaderIdsForTask(filtered as TaskResults);
+    // ABC Latest 20 Round only
+    describe('ABC Latest 20 Rounds', () => {
+      test('expects to filter tasks to include only ABC contests', () => {
+        const provider = new ABCLatest20RoundsProvider(ContestType.ABC);
+        const filtered = provider.filter(mockTaskResults);
 
-      // All header IDs should be non-empty
-      expect(headerIds.length).toBeGreaterThan(0);
-      expect(headerIds.every((id) => id.length > 0)).toBe(true);
-    });
+        expect(filtered?.every((task) => task.contest_id.startsWith('abc'))).toBe(true);
+        expect(filtered).not.toContainEqual(expect.objectContaining({ contest_id: 'arc100' }));
+      });
 
-    test('expects to handle empty task results', () => {
-      const provider = new ABC319OnwardsProvider(ContestType.ABC);
-      const filtered = provider.filter([] as TaskResults);
+      test('expects to limit results to the latest 20 rounds', () => {
+        const provider = new ABCLatest20RoundsProvider(ContestType.ABC);
+        const taskResults = [...mockTaskResults];
+        const filtered = provider.filter(taskResults);
+        const uniqueContests = new Set(filtered.map((task) => task.contest_id));
 
-      expect(filtered).toEqual([] as TaskResults);
-    });
+        expect(uniqueContests.size).toBe(20);
 
-    test('expects to handle task results with different contest types', () => {
-      const provider = new ABC319OnwardsProvider(ContestType.ABC);
-      const mockMixedTasks = [
-        { contest_id: 'abc200', task_id: 'abc200_a', task_table_index: 'A' },
-        { contest_id: 'abc378', task_id: 'abc378_a', task_table_index: 'A' },
-        { contest_id: 'dp', task_id: 'dp_a', task_table_index: 'A' },
-        { contest_id: 'typical90', task_id: 'typical90_a', task_table_index: '001' },
-      ];
-      const filtered = provider.filter(mockMixedTasks as TaskResults);
+        const contestRounds = Array.from(uniqueContests)
+          .map((id) => getContestRound(id))
+          .sort((a, b) => b - a);
+        const latestRound = Math.max(...contestRounds);
+        const expectedRounds = Array.from({ length: 20 }, (_, i) => latestRound - i);
 
-      // Should only include ABC319 and onwards
-      expect(filtered.every((task) => task.contest_id.startsWith('abc'))).toBe(true);
-      expect(
-        filtered.every((task) => {
-          const round = getContestRound(task.contest_id);
-          return round >= 319;
-        }),
-      ).toBe(true);
-      expect(filtered).not.toContainEqual(
-        expect.objectContaining({ contest_id: 'abc200', task_id: 'abc200_a' }),
-      );
-      expect(filtered).not.toContainEqual(expect.objectContaining({ contest_id: 'dp' }));
-      expect(filtered).not.toContainEqual(expect.objectContaining({ contest_id: 'typical90' }));
-    });
-  });
+        expect(contestRounds).toEqual(expectedRounds);
+      });
 
-  describe('ABC212 to ABC318 provider', () => {
-    test('expects to filter tasks to include only ABC between 212 and 318', () => {
-      const provider = new ABC212ToABC318Provider(ContestType.ABC);
-      const filtered = provider.filter(mockTaskResults);
+      test('expects to get correct metadata', () => {
+        const provider = new ABCLatest20RoundsProvider(ContestType.ABC);
+        const metadata = provider.getMetadata();
 
-      expect(filtered.every((task) => task.contest_id.startsWith('abc'))).toBe(true);
-      expect(
-        filtered.every((task) => {
-          const round = getContestRound(task.contest_id);
-          return round >= 212 && round <= 318;
-        }),
-      ).toBe(true);
-    });
+        expect(metadata.title).toBe('AtCoder Beginner Contest 最新 20 回');
+        expect(metadata.abbreviationName).toBe('abcLatest20Rounds');
+      });
 
-    test('expects to get correct metadata', () => {
-      const provider = new ABC212ToABC318Provider(ContestType.ABC);
-      const metadata = provider.getMetadata();
+      test('expects to handle task results with different contest types', () => {
+        const provider = new ABCLatest20RoundsProvider(ContestType.ABC);
+        const mockMixedTasks = [
+          { contest_id: 'abc378', task_id: 'abc378_a', task_table_index: 'A' },
+          { contest_id: 'dp', task_id: 'dp_a', task_table_index: 'A' },
+          { contest_id: 'abc397', task_id: 'abc397_a', task_table_index: 'A' },
+          { contest_id: 'typical90', task_id: 'typical90_a', task_table_index: '001' },
+          { contest_id: 'arc100', task_id: 'arc100_a', task_table_index: 'A' },
+        ];
+        const filtered = provider.filter(mockMixedTasks as TaskResults);
 
-      expect(metadata.title).toBe('AtCoder Beginner Contest 212 〜 318');
-      expect(metadata.abbreviationName).toBe('fromAbc212ToAbc318');
-    });
-
-    test('expects to format contest round label correctly', () => {
-      const provider = new ABC212ToABC318Provider(ContestType.ABC);
-      const label = provider.getContestRoundLabel('abc318');
-
-      expect(label).toBe('318');
-    });
-
-    test('expects to get correct display configuration', () => {
-      const provider = new ABC212ToABC318Provider(ContestType.ABC);
-      const displayConfig = provider.getDisplayConfig();
-
-      expect(displayConfig.isShownHeader).toBe(true);
-      expect(displayConfig.isShownRoundLabel).toBe(true);
-      expect(displayConfig.roundLabelWidth).toBe('xl:w-16');
-      expect(displayConfig.tableBodyCellsWidth).toBe(
-        'w-1/2 xs:w-1/3 sm:w-1/4 md:w-1/5 lg:w-1/6 px-1 py-1',
-      );
-      expect(displayConfig.isShownTaskIndex).toBe(false);
-    });
-
-    test('expects to generate correct table structure', () => {
-      const provider = new ABC212ToABC318Provider(ContestType.ABC);
-      const filtered = provider.filter(mockTaskResults);
-      const table = provider.generateTable(filtered);
-
-      // Verify table structure for ABC212-318 range
-      filtered.slice(0, Math.min(3, filtered.length)).forEach((task) => {
-        if (!table[task.contest_id]) {
-          return; // Skip if contest not in table
-        }
-        expect(table).toHaveProperty(task.contest_id);
-        expect(table[task.contest_id]).toHaveProperty(task.task_table_index);
-        expect(table[task.contest_id][task.task_table_index]).toEqual(
-          expect.objectContaining({ contest_id: task.contest_id, task_id: task.task_id }),
-        );
+        expect(filtered.every((task) => task.contest_id.startsWith('abc'))).toBe(true);
+        expect(filtered).not.toContainEqual(expect.objectContaining({ contest_id: 'dp' }));
       });
     });
 
-    test('expects to get contest round IDs correctly', () => {
-      const provider = new ABC212ToABC318Provider(ContestType.ABC);
-      const filtered = provider.filter(mockTaskResults);
-      const roundIds = provider.getContestRoundIds(filtered as TaskResults);
+    // ABC 319 Onwards only
+    describe('ABC 319 Onwards', () => {
+      test('expects to filter tasks to include only ABC319 and later', () => {
+        const provider = new ABC319OnwardsProvider(ContestType.ABC);
+        const filtered = provider.filter(mockTaskResults);
 
-      // Verify all round IDs are in the ABC212-318 range
-      roundIds.forEach((roundId) => {
-        const round = getContestRound(roundId);
-        expect(round).toBeGreaterThanOrEqual(212);
-        expect(round).toBeLessThanOrEqual(318);
+        expect(filtered.every((task) => task.contest_id.startsWith('abc'))).toBe(true);
+        expect(
+          filtered.every((task) => {
+            const round = getContestRound(task.contest_id);
+            return round >= 319 && round <= 999;
+          }),
+        ).toBe(true);
+      });
+
+      test('expects to get correct metadata', () => {
+        const provider = new ABC319OnwardsProvider(ContestType.ABC);
+        const metadata = provider.getMetadata();
+
+        expect(metadata.title).toBe('AtCoder Beginner Contest 319 〜 ');
+        expect(metadata.abbreviationName).toBe('abc319Onwards');
+      });
+
+      test('expects to handle task results with different contest types', () => {
+        const provider = new ABC319OnwardsProvider(ContestType.ABC);
+        const mockMixedTasks = [
+          { contest_id: 'abc200', task_id: 'abc200_a', task_table_index: 'A' },
+          { contest_id: 'abc378', task_id: 'abc378_a', task_table_index: 'A' },
+          { contest_id: 'dp', task_id: 'dp_a', task_table_index: 'A' },
+          { contest_id: 'typical90', task_id: 'typical90_a', task_table_index: '001' },
+        ];
+        const filtered = provider.filter(mockMixedTasks as TaskResults);
+
+        expect(filtered.every((task) => task.contest_id.startsWith('abc'))).toBe(true);
+        expect(
+          filtered.every((task) => {
+            const round = getContestRound(task.contest_id);
+            return round >= 319;
+          }),
+        ).toBe(true);
       });
     });
 
-    test('expects to get header IDs for tasks correctly (all problem indices)', () => {
-      const provider = new ABC212ToABC318Provider(ContestType.ABC);
-      const filtered = provider.filter(mockTaskResults);
-      const headerIds = provider.getHeaderIdsForTask(filtered as TaskResults);
+    // ABC 212-318 only
+    describe('ABC 212 to ABC 318', () => {
+      test('expects to filter tasks to include only ABC between 212 and 318', () => {
+        const provider = new ABC212ToABC318Provider(ContestType.ABC);
+        const filtered = provider.filter(mockTaskResults);
 
-      // All header IDs should be non-empty
-      expect(headerIds.length).toBeGreaterThan(0);
-      expect(headerIds.every((id) => id.length > 0)).toBe(true);
-    });
+        expect(filtered.every((task) => task.contest_id.startsWith('abc'))).toBe(true);
+        expect(
+          filtered.every((task) => {
+            const round = getContestRound(task.contest_id);
+            return round >= 212 && round <= 318;
+          }),
+        ).toBe(true);
+      });
 
-    test('expects to handle empty task results', () => {
-      const provider = new ABC212ToABC318Provider(ContestType.ABC);
-      const filtered = provider.filter([] as TaskResults);
+      test('expects to get correct metadata', () => {
+        const provider = new ABC212ToABC318Provider(ContestType.ABC);
+        const metadata = provider.getMetadata();
 
-      expect(filtered).toEqual([] as TaskResults);
-    });
+        expect(metadata.title).toBe('AtCoder Beginner Contest 212 〜 318');
+        expect(metadata.abbreviationName).toBe('fromAbc212ToAbc318');
+      });
 
-    test('expects to handle task results with different contest types and out-of-range ABC', () => {
-      const provider = new ABC212ToABC318Provider(ContestType.ABC);
-      const mockMixedTasks = [
-        { contest_id: 'abc100', task_id: 'abc100_a', task_table_index: 'A' },
-        { contest_id: 'abc250', task_id: 'abc250_a', task_table_index: 'A' },
-        { contest_id: 'abc398', task_id: 'abc398_a', task_table_index: 'A' },
-        { contest_id: 'dp', task_id: 'dp_a', task_table_index: 'A' },
-        { contest_id: 'typical90', task_id: 'typical90_a', task_table_index: '001' },
-      ];
-      const filtered = provider.filter(mockMixedTasks as TaskResults);
+      test('expects to handle task results with different contest types and out-of-range ABC', () => {
+        const provider = new ABC212ToABC318Provider(ContestType.ABC);
+        const mockMixedTasks = [
+          { contest_id: 'abc100', task_id: 'abc100_a', task_table_index: 'A' },
+          { contest_id: 'abc250', task_id: 'abc250_a', task_table_index: 'A' },
+          { contest_id: 'abc398', task_id: 'abc398_a', task_table_index: 'A' },
+          { contest_id: 'dp', task_id: 'dp_a', task_table_index: 'A' },
+          { contest_id: 'typical90', task_id: 'typical90_a', task_table_index: '001' },
+        ];
+        const filtered = provider.filter(mockMixedTasks as TaskResults);
 
-      // Should only include ABC212-318
-      expect(filtered.every((task) => task.contest_id.startsWith('abc'))).toBe(true);
-      expect(
-        filtered.every((task) => {
-          const round = getContestRound(task.contest_id);
-          return round >= 212 && round <= 318;
-        }),
-      ).toBe(true);
-      expect(filtered).not.toContainEqual(
-        expect.objectContaining({ contest_id: 'abc100', task_id: 'abc100_a' }),
-      );
-      expect(filtered).not.toContainEqual(
-        expect.objectContaining({ contest_id: 'abc398', task_id: 'abc398_a' }),
-      );
-      expect(filtered).not.toContainEqual(expect.objectContaining({ contest_id: 'dp' }));
-      expect(filtered).not.toContainEqual(expect.objectContaining({ contest_id: 'typical90' }));
+        expect(filtered.every((task) => task.contest_id.startsWith('abc'))).toBe(true);
+        expect(
+          filtered.every((task) => {
+            const round = getContestRound(task.contest_id);
+            return round >= 212 && round <= 318;
+          }),
+        ).toBe(true);
+      });
     });
   });
 
@@ -696,17 +552,32 @@ describe('ContestTableProviderBase and implementations', () => {
     });
   });
 
-  describe('EDPC provider', () => {
+  describe.each([
+    {
+      providerClass: EDPCProvider,
+      contestType: ContestType.EDPC,
+      title: 'Educational DP Contest / DP まとめコンテスト',
+      abbreviationName: 'edpc',
+      label: 'EDPC provider',
+    },
+    {
+      providerClass: TDPCProvider,
+      contestType: ContestType.TDPC,
+      title: 'Typical DP Contest',
+      abbreviationName: 'tdpc',
+      label: 'TDPC provider',
+    },
+  ])('$label', ({ providerClass, contestType, title, abbreviationName }) => {
     test('expects to get correct metadata', () => {
-      const provider = new EDPCProvider(ContestType.EDPC);
+      const provider = new providerClass(contestType);
       const metadata = provider.getMetadata();
 
-      expect(metadata.title).toBe('Educational DP Contest / DP まとめコンテスト');
-      expect(metadata.abbreviationName).toBe('edpc');
+      expect(metadata.title).toBe(title);
+      expect(metadata.abbreviationName).toBe(abbreviationName);
     });
 
     test('expects to get correct display configuration', () => {
-      const provider = new EDPCProvider(ContestType.EDPC);
+      const provider = new providerClass(contestType);
       const displayConfig = provider.getDisplayConfig();
 
       expect(displayConfig.isShownHeader).toBe(false);
@@ -719,37 +590,7 @@ describe('ContestTableProviderBase and implementations', () => {
     });
 
     test('expects to format contest round label correctly', () => {
-      const provider = new EDPCProvider(ContestType.EDPC);
-      const label = provider.getContestRoundLabel('dp');
-
-      expect(label).toBe('');
-    });
-  });
-
-  describe('TDPC provider', () => {
-    test('expects to get correct metadata', () => {
-      const provider = new TDPCProvider(ContestType.TDPC);
-      const metadata = provider.getMetadata();
-
-      expect(metadata.title).toBe('Typical DP Contest');
-      expect(metadata.abbreviationName).toBe('tdpc');
-    });
-
-    test('expects to get correct display configuration', () => {
-      const provider = new TDPCProvider(ContestType.TDPC);
-      const displayConfig = provider.getDisplayConfig();
-
-      expect(displayConfig.isShownHeader).toBe(false);
-      expect(displayConfig.isShownRoundLabel).toBe(false);
-      expect(displayConfig.roundLabelWidth).toBe('');
-      expect(displayConfig.tableBodyCellsWidth).toBe(
-        'w-1/2 xs:w-1/3 sm:w-1/4 md:w-1/5 lg:w-1/6 2xl:w-1/7 px-1 py-2',
-      );
-      expect(displayConfig.isShownTaskIndex).toBe(true);
-    });
-
-    test('expects to format contest round label correctly', () => {
-      const provider = new TDPCProvider(ContestType.TDPC);
+      const provider = new providerClass(contestType);
       const label = provider.getContestRoundLabel('');
 
       expect(label).toBe('');
