@@ -196,6 +196,40 @@ const [
   abc397_g,
 ] = createContestsRange(376, 22, 'G');
 
+// Tessoku Book: Mixed problems from various contests
+// Sources: math_and_algorithm_*, typical90_*, abc*_*
+// Problem indices follow the format: A01-A77, B01-B69, C01-C20
+const [
+  tessoku_a06,
+  tessoku_a27,
+  tessoku_a29,
+  tessoku_a39,
+  tessoku_a63,
+  tessoku_a62,
+  tessoku_a77,
+  tessoku_b07,
+  tessoku_b16,
+  tessoku_b28,
+  tessoku_b63,
+  tessoku_c09,
+  tessoku_c18,
+] = createContestTasks('tessoku-book', [
+  { taskId: 'tesesoku_book_a', taskTableIndex: 'A01', statusName: AC },
+  { taskId: 'math_and_algorithm_ai', taskTableIndex: 'A06', statusName: AC },
+  { taskId: 'math_and_algorithm_o', taskTableIndex: 'A27', statusName: AC },
+  { taskId: 'math_and_algorithm_aq', taskTableIndex: 'A29', statusName: AC_WITH_EDITORIAL },
+  { taskId: 'math_and_algorithm_bn', taskTableIndex: 'A39', statusName: AC },
+  { taskId: 'math_and_algorithm_am', taskTableIndex: 'A62', statusName: TRYING },
+  { taskId: 'math_and_algorithm_an', taskTableIndex: 'A63', statusName: TRYING },
+  { taskId: 'typical90_a', taskTableIndex: 'A77', statusName: PENDING },
+  { taskId: 'math_and_algorithm_al', taskTableIndex: 'B07', statusName: AC },
+  { taskId: 'dp_a', taskTableIndex: 'B16', statusName: AC_WITH_EDITORIAL },
+  { taskId: 'math_and_algorithm_ap', taskTableIndex: 'B28', statusName: TRYING },
+  { taskId: 'abc007_3', taskTableIndex: 'B63', statusName: AC },
+  { taskId: 'math_and_algorithm_ac', taskTableIndex: 'C09', statusName: AC },
+  { taskId: 'typical90_s', taskTableIndex: 'C18', statusName: PENDING },
+]);
+
 export const taskResultsForContestTableProvider: TaskResults = [
   abc212_a,
   abc212_b,
@@ -245,4 +279,20 @@ export const taskResultsForContestTableProvider: TaskResults = [
   typical90_010,
   typical90_089,
   typical90_090,
+];
+
+export const taskResultsForTessokuBookProvider: TaskResults = [
+  tessoku_a06,
+  tessoku_a27,
+  tessoku_a29,
+  tessoku_a39,
+  tessoku_a62,
+  tessoku_a63,
+  tessoku_a77,
+  tessoku_b07,
+  tessoku_b16,
+  tessoku_b28,
+  tessoku_b63,
+  tessoku_c09,
+  tessoku_c18,
 ];
