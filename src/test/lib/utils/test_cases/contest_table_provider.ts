@@ -298,3 +298,43 @@ export const taskResultsForTessokuBookProvider: TaskResults = [
   tessoku_c09,
   tessoku_c18,
 ];
+
+// Math and Algorithm: 10 problems (028, 036, 042, 045, 046, 048, 052, 095, 101, 102)
+// Sources: dp_*, abc*_*, typical90_*, arc*_*
+// Problem indices follow the format: 3-digit numbers (001-104)
+const [
+  math_and_algorithm_028,
+  math_and_algorithm_036,
+  math_and_algorithm_042,
+  math_and_algorithm_045,
+  math_and_algorithm_046,
+  math_and_algorithm_048,
+  math_and_algorithm_052,
+  math_and_algorithm_095,
+  math_and_algorithm_101,
+  math_and_algorithm_102,
+] = createContestTasks('math-and-algorithm', [
+  { taskId: 'dp_a', taskTableIndex: '028', statusName: AC },
+  { taskId: 'abc168_c', taskTableIndex: '036', statusName: AC },
+  { taskId: 'abc172_d', taskTableIndex: '042', statusName: AC_WITH_EDITORIAL },
+  { taskId: 'typical90_bz', taskTableIndex: '045', statusName: AC },
+  { taskId: 'abc007_3', taskTableIndex: '046', statusName: TRYING },
+  { taskId: 'arc084_b', taskTableIndex: '048', statusName: AC },
+  { taskId: 'abc145_d', taskTableIndex: '052', statusName: PENDING },
+  { taskId: 'typical90_j', taskTableIndex: '095', statusName: AC },
+  { taskId: 'typical90_o', taskTableIndex: '101', statusName: AC },
+  { taskId: 'arc117_c', taskTableIndex: '102', statusName: AC },
+]);
+
+export const taskResultsForMathAndAlgorithmProvider: TaskResults = [
+  math_and_algorithm_028,
+  math_and_algorithm_036,
+  math_and_algorithm_042,
+  math_and_algorithm_045,
+  math_and_algorithm_046,
+  math_and_algorithm_048,
+  math_and_algorithm_052,
+  math_and_algorithm_095,
+  math_and_algorithm_101,
+  math_and_algorithm_102,
+];
