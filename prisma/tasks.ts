@@ -4623,13 +4623,6 @@ export const tasks = [
     grade: 'Q3',
   },
   {
-    id: 'dp_d',
-    contest_id: 'dp',
-    problem_index: 'D',
-    name: 'Knapsack 1',
-    title: 'D. Knapsack 1',
-  },
-  {
     id: 'dp_c',
     contest_id: 'dp',
     problem_index: 'C',
