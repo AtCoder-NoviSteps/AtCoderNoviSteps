@@ -268,6 +268,35 @@ export class TessokuBookProvider extends ContestTableProviderBase {
   }
 }
 
+export class MathAndAlgorithmProvider extends ContestTableProviderBase {
+  protected setFilterCondition(): (taskResult: TaskResult) => boolean {
+    return (taskResult: TaskResult) => {
+      return classifyContest(taskResult.contest_id) === this.contestType;
+    };
+  }
+
+  getMetadata(): ContestTableMetaData {
+    return {
+      title: 'アルゴリズムと数学',
+      abbreviationName: 'math-and-algorithm',
+    };
+  }
+
+  getDisplayConfig(): ContestTableDisplayConfig {
+    return {
+      isShownHeader: false,
+      isShownRoundLabel: false,
+      roundLabelWidth: '', // No specific width for the round label
+      tableBodyCellsWidth: 'w-1/2 xs:w-1/3 sm:w-1/4 md:w-1/5 lg:w-1/6 2xl:w-1/7 px-1 py-2',
+      isShownTaskIndex: true,
+    };
+  }
+
+  getContestRoundLabel(contestId: string): string {
+    return '';
+  }
+}
+
 export class EDPCProvider extends ContestTableProviderBase {
   protected setFilterCondition(): (taskResult: TaskResult) => boolean {
     return (taskResult: TaskResult) => {
@@ -523,6 +552,18 @@ export const prepareContestProviderPresets = () => {
       }).addProvider(ContestType.TESSOKU_BOOK, new TessokuBookProvider(ContestType.TESSOKU_BOOK)),
 
     /**
+     * Single group for Math and Algorithm Book
+     */
+    MathAndAlgorithm: () =>
+      new ContestTableProviderGroup(`アルゴリズムと数学`, {
+        buttonLabel: 'アルゴリズムと数学',
+        ariaLabel: 'Filter Math and Algorithm',
+      }).addProvider(
+        ContestType.MATH_AND_ALGORITHM,
+        new MathAndAlgorithmProvider(ContestType.MATH_AND_ALGORITHM),
+      ),
+
+    /**
      * DP group (EDPC and TDPC)
      */
     dps: () =>
@@ -548,6 +589,7 @@ export const contestTableProviderGroups = {
   fromAbc212ToAbc318: prepareContestProviderPresets().ABC212ToABC318(),
   typical90: prepareContestProviderPresets().Typical90(),
   tessokuBook: prepareContestProviderPresets().TessokuBook(),
+  mathAndAlgorithm: prepareContestProviderPresets().MathAndAlgorithm(),
   dps: prepareContestProviderPresets().dps(), // Dynamic Programming (DP) Contests
   joiFirstQualRound: prepareContestProviderPresets().JOIFirstQualRound(),
 };
