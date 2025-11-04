@@ -175,8 +175,8 @@ importers:
         specifier: 4.5.0
         version: 4.5.0(svelte@5.43.3)
       sveltekit-superforms:
-        specifier: 2.27.4
-        version: 2.27.4(@sveltejs/kit@2.43.8(@sveltejs/vite-plugin-svelte@6.2.1(svelte@5.43.3)(vite@7.1.12(@types/node@24.10.0)(jiti@1.21.7)(tsx@4.19.2)(yaml@2.8.1)))(svelte@5.43.3)(vite@7.1.12(@types/node@24.10.0)(jiti@1.21.7)(tsx@4.19.2)(yaml@2.8.1)))(@types/json-schema@7.0.15)(esbuild@0.25.11)(svelte@5.43.3)(typescript@5.9.3)
+        specifier: 2.28.0
+        version: 2.28.0(@sveltejs/kit@2.43.8(@sveltejs/vite-plugin-svelte@6.2.1(svelte@5.43.3)(vite@7.1.12(@types/node@24.10.0)(jiti@1.21.7)(tsx@4.19.2)(yaml@2.8.1)))(svelte@5.43.3)(vite@7.1.12(@types/node@24.10.0)(jiti@1.21.7)(tsx@4.19.2)(yaml@2.8.1)))(@types/json-schema@7.0.15)(esbuild@0.25.11)(svelte@5.43.3)(typescript@5.9.3)
       tslib:
         specifier: 2.8.1
         version: 2.8.1
@@ -212,14 +212,11 @@ packages:
   '@antfu/utils@9.3.0':
     resolution: {integrity: sha512-9hFT4RauhcUzqOE4f1+frMKLZrgNog5b06I7VmZQV1BkvwvqrbC8EBZf3L1eEL2AKb6rNKjER0sEvJiSP1FXEA==}
 
-  '@ark/regex@0.0.0':
-    resolution: {integrity: sha512-p4vsWnd/LRGOdGQglbwOguIVhPmCAf5UzquvnDoxqhhPWTP84wWgi1INea8MgJ4SnI2gp37f13oA4Waz9vwNYg==}
+  '@ark/schema@0.53.0':
+    resolution: {integrity: sha512-1PB7RThUiTlmIu8jbSurPrhHpVixPd4C+xNBUF/HrjIENCeDcAMg36n5mpMzED7OQGDVIzpfXXiMnaTiutjHJw==}
 
-  '@ark/schema@0.50.0':
-    resolution: {integrity: sha512-hfmP82GltBZDadIOeR3argKNlYYyB2wyzHp0eeAqAOFBQguglMV/S7Ip2q007bRtKxIMLDqFY6tfPie1dtssaQ==}
-
-  '@ark/util@0.50.0':
-    resolution: {integrity: sha512-tIkgIMVRpkfXRQIEf0G2CJryZVtHVrqcWHMDa5QKo0OEEBu0tHkRSIMm4Ln8cd8Bn9TPZtvc/kE2Gma8RESPSg==}
+  '@ark/util@0.53.0':
+    resolution: {integrity: sha512-TGn4gLlA6dJcQiqrtCtd88JhGb2XBHo6qIejsDre+nxpGuUVW4G3YZGVrwjNBTO0EyR+ykzIo4joHJzOj+/cpA==}
 
   '@asamuzakjp/css-color@3.2.0':
     resolution: {integrity: sha512-K1A6z8tS3XsmCMM86xoWdn7Fkdn9m6RSVtocUrJYIwZnFVkng/PvkEoWtOWmP+Scc6saYWHWZYbndEEXxl24jw==}
@@ -677,10 +674,10 @@ packages:
     resolution: {integrity: sha512-vBZP4NlzfOlerQTnba4aqZoMhE/a9HY7HRqoOPaETQcSQuWEIyZMHGfVu6w9wGtGK5fED5qRs2DteVCjOH60sA==}
     engines: {node: '>=14'}
 
-  '@finom/zod-to-json-schema@3.24.11':
-    resolution: {integrity: sha512-fL656yBPiWebtfGItvtXLWrFNGlF1NcDFS0WdMQXMs9LluVg0CfT5E2oXYp0pidl0vVG53XkW55ysijNkU5/hA==}
+  '@finom/zod-to-json-schema@3.24.12':
+    resolution: {integrity: sha512-mf8CyoW+dFvsvROvHIXznrYWdmlxvBJGIeQpGJaD9iBn23kSSPiC7H0YIqgziMZJDFIzL4VEFCwpcUSHmoeNVw==}
     peerDependencies:
-      zod: ^4.0.14
+      zod: ^3.25 || ^4.0.14
 
   '@floating-ui/core@1.7.3':
     resolution: {integrity: sha512-sGnvb5dmrJaKEZ+LDIpguvdX3bDlEllmv4/ClQ9awcmCZrlx5jQyyMWFM5kBI+EyNOCDDiKk8il0zeuX3Zlg/w==}
@@ -1485,8 +1482,8 @@ packages:
   '@types/trusted-types@2.0.7':
     resolution: {integrity: sha512-ScaPdn1dQczgbl0QFTeTOmVHFULt394XJgOQNoyVhZ6r2vLnMLJfBPd53SB52T/3G36VI1/g2MZaX0cwDuXsfw==}
 
-  '@types/validator@13.15.3':
-    resolution: {integrity: sha512-7bcUmDyS6PN3EuD9SlGGOxM77F8WLVsrwkxyWxKnxzmXoequ6c7741QBrANq6htVRGOITJ7z72mTP6Z4XyuG+Q==}
+  '@types/validator@13.15.4':
+    resolution: {integrity: sha512-LSFfpSnJJY9wbC0LQxgvfb+ynbHftFo0tMsFOl/J4wexLnYMmDSPaj2ZyDv3TkfL1UePxPrxOWJfbiRS8mQv7A==}
 
   '@types/yargs-parser@21.0.3':
     resolution: {integrity: sha512-I4q9QU9MQv4oEOz4tAHJtNz1cwuLxn2F3xcc2iV5WdqLPpUnj30aUuxt1mAxYTG+oe8CZMV/+6rU4S4gRDzqtQ==}
@@ -1820,8 +1817,11 @@ packages:
     resolution: {integrity: sha512-COROpnaoap1E2F000S62r6A60uHZnmlvomhfyT2DlTcrY1OrBKn2UhH7qn5wTC9zMvD0AY7csdPSNwKP+7WiQw==}
     engines: {node: '>= 0.4'}
 
-  arktype@2.1.23:
-    resolution: {integrity: sha512-tyxNWX6xJVMb2EPJJ3OjgQS1G/vIeQRrZuY4DeBNQmh8n7geS+czgbauQWB6Pr+RXiOO8ChEey44XdmxsqGmfQ==}
+  arkregex@0.0.2:
+    resolution: {integrity: sha512-ttjDUICBVoXD/m8bf7eOjx8XMR6yIT2FmmW9vsN0FCcFOygEZvvIX8zK98tTdXkzi0LkRi5CmadB44jFEIyDNA==}
+
+  arktype@2.1.25:
+    resolution: {integrity: sha512-fdj10sNlUPeDRg1QUqMbzJ4Q7gutTOWOpLUNdcC4vxeVrN0G+cbDOvLbuxQOFj/NDAode1G7kwFv4yKwQvupJg==}
 
   array-back@3.1.0:
     resolution: {integrity: sha512-TkuxA4UCOvxuDK6NZYXCalszEzj+TLszyASooky+i742l9TqsOdYCMJJupxRic61hwquNtppB3hgcuq9SVSH1Q==}
@@ -2370,6 +2370,9 @@ packages:
   dayjs@1.11.18:
     resolution: {integrity: sha512-zFBQ7WFRvVRhKcWoUh+ZA1g2HVgUbsZm9sbddh8EC5iv93sui8DVVz1Npvz+r6meo9VKfa8NyLWBsQK1VvIKPA==}
 
+  dayjs@1.11.19:
+    resolution: {integrity: sha512-t5EcLVS6QPBNqM2z8fakk/NKel+Xzshgt8FFKAn+qwlD1pzZWxh0nVCrvFK7ZDb6XucZeF9z8C7CBWTRIVApAw==}
+
   debug@4.3.4:
     resolution: {integrity: sha512-PRWFHuSU3eDtQJPvnNY7Jcket1j0t5OuOsFzPPzsekD52Zl8qUfFIPEiswXqIvHWGVHOgX+7G/vCNNhehwxfkQ==}
     engines: {node: '>=6.0'}
@@ -2479,6 +2482,9 @@ packages:
 
   effect@3.18.4:
     resolution: {integrity: sha512-b1LXQJLe9D11wfnOKAk3PKxuqYshQ0Heez+y5pnkd3jLj1yx9QhM72zZ9uUrOQyNvrs2GZZd/3maL0ZV18YuDA==}
+
+  effect@3.18.5:
+    resolution: {integrity: sha512-bpYVCwPUil6TxGhFN9lNqNysrxIY/6jPiCc8iaNhhbzN9UXD6FocTtD2mwPG8Pbz8tZxBtfcAck6l0uwk+iJpQ==}
 
   electron-to-chromium@1.5.240:
     resolution: {integrity: sha512-OBwbZjWgrCOH+g6uJsA2/7Twpas2OlepS9uvByJjR2datRDuKGYeD+nP8lBBks2qnB7bGJNHDUx7c/YLaT3QMQ==}
@@ -4416,8 +4422,8 @@ packages:
     resolution: {integrity: sha512-kjkAjCk41mJfvJZG56XcJNOdJSke94JxtcX8zFzzz2vrt47E0LnoBzU6azIZ1aBxJgUep8qegAkguSf1GjxLXQ==}
     engines: {node: '>=18'}
 
-  sveltekit-superforms@2.27.4:
-    resolution: {integrity: sha512-8iw2nSKUVaBimOw0XGGdI39AihY1r/Plh9LTmxQGYopQaom5PPbDJyU79dUy3bd4K7vlqTdjvMz5FO8IFFzoPQ==}
+  sveltekit-superforms@2.28.0:
+    resolution: {integrity: sha512-kHoROSmf5bzK9r261z2op5OPF5tRhxqQQOQc8dS6CatKAUDr3o94Fjjv7AwjD9i4FplyXI+OyTo6hGOXQ3qCKQ==}
     peerDependencies:
       '@sveltejs/kit': 1.x || 2.x
       svelte: 3.x || 4.x || >=5.0.0-next.51
@@ -4654,6 +4660,9 @@ packages:
     resolution: {integrity: sha512-RAH822pAdBgcNMAfWnCBU3CFZcfZ/i1eZjwFU/dsLKumyuuP3niueg2UAukXYF0E2AAoc82ZSSf9J0WQBinzHA==}
     engines: {node: '>=12.20'}
 
+  typebox@1.0.49:
+    resolution: {integrity: sha512-wNYIrDGDEAy51YlJGDHt9gapoFApU9c0OtTqCMW7jK8KSKUqBecaSvNOjX7+8+50IOj3p5hQH9HO33OewK/t3w==}
+
   typed-query-selector@2.12.0:
     resolution: {integrity: sha512-SbklCd1F0EiZOyPiW192rrHZzZ5sBijB6xM+cpmrwDqObvdtunOHHIk9fCGsoK5JVIYXoyEp4iEdE3upFH3PAg==}
 
@@ -4747,8 +4756,8 @@ packages:
       typescript:
         optional: true
 
-  validator@13.15.15:
-    resolution: {integrity: sha512-BgWVbCI72aIQy937xbawcs+hrVaN/CZ2UwutgaJ36hGqRrLNM+f5LUT/YPRbo8IV/ASeFzXszezV+y2+rq3l8A==}
+  validator@13.15.20:
+    resolution: {integrity: sha512-KxPOq3V2LmfQPP4eqf3Mq/zrT0Dqp2Vmx2Bn285LwVahLc+CsxOM0crBHczm8ijlcjZ0Q5Xd6LW3z3odTPnlrw==}
     engines: {node: '>= 0.10'}
 
   vercel@48.8.2:
@@ -5034,17 +5043,12 @@ snapshots:
 
   '@antfu/utils@9.3.0': {}
 
-  '@ark/regex@0.0.0':
+  '@ark/schema@0.53.0':
     dependencies:
-      '@ark/util': 0.50.0
+      '@ark/util': 0.53.0
     optional: true
 
-  '@ark/schema@0.50.0':
-    dependencies:
-      '@ark/util': 0.50.0
-    optional: true
-
-  '@ark/util@0.50.0':
+  '@ark/util@0.53.0':
     optional: true
 
   '@asamuzakjp/css-color@3.2.0':
@@ -5350,7 +5354,7 @@ snapshots:
 
   '@fastify/busboy@2.1.1': {}
 
-  '@finom/zod-to-json-schema@3.24.11(zod@4.1.12)':
+  '@finom/zod-to-json-schema@3.24.12(zod@4.1.12)':
     dependencies:
       zod: 4.1.12
     optional: true
@@ -6238,7 +6242,7 @@ snapshots:
   '@types/trusted-types@2.0.7':
     optional: true
 
-  '@types/validator@13.15.3':
+  '@types/validator@13.15.4':
     optional: true
 
   '@types/yargs-parser@21.0.3': {}
@@ -6622,13 +6626,13 @@ snapshots:
   '@vinejs/vine@3.0.1':
     dependencies:
       '@poppinss/macroable': 1.1.0
-      '@types/validator': 13.15.3
+      '@types/validator': 13.15.4
       '@vinejs/compiler': 3.0.0
       camelcase: 8.0.0
-      dayjs: 1.11.18
+      dayjs: 1.11.19
       dlv: 1.1.3
       normalize-url: 8.1.0
-      validator: 13.15.15
+      validator: 13.15.20
     optional: true
 
   '@vitest/coverage-v8@3.2.4(vitest@3.2.4)':
@@ -6829,11 +6833,16 @@ snapshots:
 
   aria-query@5.3.2: {}
 
-  arktype@2.1.23:
+  arkregex@0.0.2:
     dependencies:
-      '@ark/regex': 0.0.0
-      '@ark/schema': 0.50.0
-      '@ark/util': 0.50.0
+      '@ark/util': 0.53.0
+    optional: true
+
+  arktype@2.1.25:
+    dependencies:
+      '@ark/schema': 0.53.0
+      '@ark/util': 0.53.0
+      arkregex: 0.0.2
     optional: true
 
   array-back@3.1.0: {}
@@ -7074,9 +7083,9 @@ snapshots:
 
   class-validator@0.14.2:
     dependencies:
-      '@types/validator': 13.15.3
+      '@types/validator': 13.15.4
       libphonenumber-js: 1.12.25
-      validator: 13.15.15
+      validator: 13.15.20
     optional: true
 
   class-variance-authority@0.7.1:
@@ -7391,6 +7400,9 @@ snapshots:
 
   dayjs@1.11.18: {}
 
+  dayjs@1.11.19:
+    optional: true
+
   debug@4.3.4:
     dependencies:
       ms: 2.1.2
@@ -7474,6 +7486,12 @@ snapshots:
     dependencies:
       '@standard-schema/spec': 1.0.0
       fast-check: 3.23.2
+
+  effect@3.18.5:
+    dependencies:
+      '@standard-schema/spec': 1.0.0
+      fast-check: 3.23.2
+    optional: true
 
   electron-to-chromium@1.5.240: {}
 
@@ -9392,7 +9410,7 @@ snapshots:
       magic-string: 0.30.21
       zimmerframe: 1.1.4
 
-  sveltekit-superforms@2.27.4(@sveltejs/kit@2.43.8(@sveltejs/vite-plugin-svelte@6.2.1(svelte@5.43.3)(vite@7.1.12(@types/node@24.10.0)(jiti@1.21.7)(tsx@4.19.2)(yaml@2.8.1)))(svelte@5.43.3)(vite@7.1.12(@types/node@24.10.0)(jiti@1.21.7)(tsx@4.19.2)(yaml@2.8.1)))(@types/json-schema@7.0.15)(esbuild@0.25.11)(svelte@5.43.3)(typescript@5.9.3):
+  sveltekit-superforms@2.28.0(@sveltejs/kit@2.43.8(@sveltejs/vite-plugin-svelte@6.2.1(svelte@5.43.3)(vite@7.1.12(@types/node@24.10.0)(jiti@1.21.7)(tsx@4.19.2)(yaml@2.8.1)))(svelte@5.43.3)(vite@7.1.12(@types/node@24.10.0)(jiti@1.21.7)(tsx@4.19.2)(yaml@2.8.1)))(@types/json-schema@7.0.15)(esbuild@0.25.11)(svelte@5.43.3)(typescript@5.9.3):
     dependencies:
       '@sveltejs/kit': 2.43.8(@sveltejs/vite-plugin-svelte@6.2.1(svelte@5.43.3)(vite@7.1.12(@types/node@24.10.0)(jiti@1.21.7)(tsx@4.19.2)(yaml@2.8.1)))(svelte@5.43.3)(vite@7.1.12(@types/node@24.10.0)(jiti@1.21.7)(tsx@4.19.2)(yaml@2.8.1))
       devalue: 5.4.2
@@ -9401,17 +9419,17 @@ snapshots:
       ts-deepmerge: 7.0.3
     optionalDependencies:
       '@exodus/schemasafe': 1.3.0
-      '@finom/zod-to-json-schema': 3.24.11(zod@4.1.12)
+      '@finom/zod-to-json-schema': 3.24.12(zod@4.1.12)
       '@gcornut/valibot-json-schema': 0.42.0(esbuild@0.25.11)(typescript@5.9.3)
-      '@sinclair/typebox': 0.34.41
       '@typeschema/class-validator': 0.3.0(@types/json-schema@7.0.15)(class-validator@0.14.2)
       '@vinejs/vine': 3.0.1
-      arktype: 2.1.23
+      arktype: 2.1.25
       class-validator: 0.14.2
-      effect: 3.18.4
+      effect: 3.18.5
       joi: 17.13.3
       json-schema-to-ts: 3.1.1
       superstruct: 2.0.2
+      typebox: 1.0.49
       valibot: 1.1.0(typescript@5.9.3)
       yup: 1.7.1
       zod: 4.1.12
@@ -9700,6 +9718,9 @@ snapshots:
   type-fest@2.19.0:
     optional: true
 
+  typebox@1.0.49:
+    optional: true
+
   typed-query-selector@2.12.0: {}
 
   typescript@4.9.5: {}
@@ -9765,7 +9786,7 @@ snapshots:
       typescript: 5.9.3
     optional: true
 
-  validator@13.15.15:
+  validator@13.15.20:
     optional: true
 
   vercel@48.8.2(rollup@4.52.5)(typescript@5.9.3):
