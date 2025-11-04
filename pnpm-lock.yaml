@@ -69,8 +69,8 @@ importers:
         specifier: 3.4.18
         version: 3.4.18(tsx@4.19.2)(yaml@2.8.1)
       vercel:
-        specifier: 48.8.1
-        version: 48.8.1(rollup@4.52.5)(typescript@5.9.3)
+        specifier: 48.8.2
+        version: 48.8.2(rollup@4.52.5)(typescript@5.9.3)
       xss:
         specifier: 1.0.15
         version: 1.0.15
@@ -1597,6 +1597,9 @@ packages:
 
   '@vercel/express@0.1.5':
     resolution: {integrity: sha512-qfiO30xlesjHTu0boXvCjyEtEUKJCzOH2EyHXEwdwCUlapPIG2WC/nJRfvA4lG3D4QtLJKniXWQRFpgofOI0ug==}
+
+  '@vercel/fastify@0.1.5':
+    resolution: {integrity: sha512-8gT9a7dbRj0xNVsCQWLO5P/hZAsEnc2lGuj5vsSsmZlKDLDIF+olrIR0NnMVC9HVnO3mp601TIit0t28gV8VRg==}
 
   '@vercel/fun@1.1.6':
     resolution: {integrity: sha512-xDiM+bD0fSZyzcjsAua3D+guXclvHOSTzr03UcZEQwYzIjwWjLduT7bl2gAaeNIe7fASAIZd0P00clcj0On4rQ==}
@@ -4748,8 +4751,8 @@ packages:
     resolution: {integrity: sha512-BgWVbCI72aIQy937xbawcs+hrVaN/CZ2UwutgaJ36hGqRrLNM+f5LUT/YPRbo8IV/ASeFzXszezV+y2+rq3l8A==}
     engines: {node: '>= 0.10'}
 
-  vercel@48.8.1:
-    resolution: {integrity: sha512-1HzaEHUSDG1p7Go1LiV+dieCKC7SBNym8T1EMeEdAuHRfgDAqUTGy2nMG53Kec13sOGk+kjRRPdZtF91CJ/itg==}
+  vercel@48.8.2:
+    resolution: {integrity: sha512-RkUyyPfyM626hcx+GKFQfrO6NDvVXtBcgUu82IvVGnfUuYnk0nbDtq1Og0qbQj0+m61j8cmC4BBfe7nl2QhBHA==}
     engines: {node: '>= 18'}
     hasBin: true
 
@@ -6412,6 +6415,17 @@ snapshots:
       - rollup
       - supports-color
       - typescript
+
+  '@vercel/fastify@0.1.5(rollup@4.52.5)':
+    dependencies:
+      '@vercel/node': 5.5.4(rollup@4.52.5)
+      '@vercel/static-config': 3.1.2
+    transitivePeerDependencies:
+      - '@swc/core'
+      - '@swc/wasm'
+      - encoding
+      - rollup
+      - supports-color
 
   '@vercel/fun@1.1.6':
     dependencies:
@@ -9754,13 +9768,14 @@ snapshots:
   validator@13.15.15:
     optional: true
 
-  vercel@48.8.1(rollup@4.52.5)(typescript@5.9.3):
+  vercel@48.8.2(rollup@4.52.5)(typescript@5.9.3):
     dependencies:
       '@vercel/backends': 0.0.4(rollup@4.52.5)(typescript@5.9.3)
       '@vercel/blob': 1.0.2
       '@vercel/build-utils': 12.2.4
       '@vercel/detect-agent': 1.0.0
       '@vercel/express': 0.1.5(rollup@4.52.5)(typescript@5.9.3)
+      '@vercel/fastify': 0.1.5(rollup@4.52.5)
       '@vercel/fun': 1.1.6
       '@vercel/go': 3.2.3
       '@vercel/h3': 0.1.11(rollup@4.52.5)
