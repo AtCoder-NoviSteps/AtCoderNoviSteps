@@ -38,3 +38,17 @@ export const atCoderOthers = [
     expected: 'Chokudai SpeedRun 002',
   }),
 ];
+
+export const mathAndAlgorithm = [
+  createTestCaseForContestNameLabel('Math and Algorithm')({
+    contestId: 'math-and-algorithm',
+    expected: 'アルゴリズムと数学',
+  }),
+];
+
+export const fps24 = [
+  createTestCaseForContestNameLabel('FPS 24')({
+    contestId: 'fps-24',
+    expected: 'FPS 24 題',
+  }),
+];

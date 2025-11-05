@@ -56,6 +56,10 @@ export const classifyContest = (contest_id: string) => {
     return ContestType.MATH_AND_ALGORITHM;
   }
 
+  if (contest_id === 'fps-24') {
+    return ContestType.FPS_24;
+  }
+
   if (abcLikePrefixes.has(contest_id)) {
     return ContestType.ABC_LIKE;
   }
@@ -230,13 +234,13 @@ export function getContestPrefixes(contestPrefixes: Record<string, string>) {
 }
 
 /**
- * Contest type priorities (0 = Highest, 20 = Lowest)
+ * Contest type priorities (0 = Highest, 21 = Lowest)
  *
  * Priority assignment rationale:
  * - Educational contests (0-10): ABS, ABC, APG4B, etc.
  * - Contests for genius (11-15): ARC, AGC, and their variants
- * - Special contests (16-17): UNIVERSITY, OTHERS
- * - External platforms (18-20): AOJ_COURSES, AOJ_PCK, AOJ_JAG
+ * - Special contests (16-18): UNIVERSITY, FPS_24, OTHERS
+ * - External platforms (19-21): AOJ_COURSES, AOJ_PCK, AOJ_JAG
  *
  * @remarks
  * HACK: The priorities for ARC, AGC, UNIVERSITY, AOJ_COURSES, and AOJ_PCK are temporary
@@ -263,10 +267,11 @@ export const contestTypePriorities: Map<ContestType, number> = new Map([
   [ContestType.ARC_LIKE, 14],
   [ContestType.AGC_LIKE, 15],
   [ContestType.UNIVERSITY, 16],
-  [ContestType.OTHERS, 17], // AtCoder (その他)
-  [ContestType.AOJ_COURSES, 18],
-  [ContestType.AOJ_PCK, 19],
-  [ContestType.AOJ_JAG, 20],
+  [ContestType.FPS_24, 17],
+  [ContestType.OTHERS, 18], // AtCoder (その他)
+  [ContestType.AOJ_COURSES, 19],
+  [ContestType.AOJ_PCK, 20],
+  [ContestType.AOJ_JAG, 21],
 ]);
 
 export function getContestPriority(contestId: string): number {
@@ -362,6 +367,10 @@ export const getContestNameLabel = (contestId: string) => {
 
   if (contestId === 'math-and-algorithm') {
     return 'アルゴリズムと数学';
+  }
+
+  if (contestId === 'fps-24') {
+    return 'FPS 24 題';
   }
 
   if (regexForAtCoderUniversity.exec(contestId)) {

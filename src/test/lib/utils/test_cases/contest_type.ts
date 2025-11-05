@@ -155,6 +155,13 @@ export const mathAndAlgorithm = [
   }),
 ];
 
+export const fps24 = [
+  createTestCaseForContestType('FPS 24')({
+    contestId: 'fps-24',
+    expected: ContestType.FPS_24,
+  }),
+];
+
 const arcContestIds = [
   'arc001',
   'arc002',

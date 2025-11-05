@@ -45,6 +45,7 @@ export const ContestType: { [key in ContestTypeOrigin]: key } = {
   ARC_LIKE: 'ARC_LIKE', // AtCoder Regular Contest (ARC) 相当のコンテスト
   AGC_LIKE: 'AGC_LIKE', // AtCoder Grand Contest (AGC) 相当のコンテスト
   UNIVERSITY: 'UNIVERSITY', // University Programming Contests in AtCoder (e.g., UTPC)
+  FPS_24: 'FPS_24', // 24 Problems on Formal Power Series
   OTHERS: 'OTHERS', // AtCoder (その他)
   AOJ_COURSES: 'AOJ_COURSES', // AIZU ONLINE JUDGE Courses
   AOJ_PCK: 'AOJ_PCK', // All-Japan High School Programming Contest (PCK)
