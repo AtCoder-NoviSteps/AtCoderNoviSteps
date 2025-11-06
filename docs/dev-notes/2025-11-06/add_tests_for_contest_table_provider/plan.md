@@ -305,8 +305,8 @@ pnpm lint src/test/lib/utils/contest_table_provider.test.ts
 
 ## 8. 参考資料
 
-- PR #2286: FPS24Provider 実装（https://github.com/AtCoder-NoviSteps/AtCoderNoviSteps/pull/2286）
-- PR #2780: リファクタリング（https://github.com/AtCoder-NoviSteps/AtCoderNoviSteps/pull/2780）
+- PR #2286: FPS24Provider 実装 ([PR #2286](https://github.com/AtCoder-NoviSteps/AtCoderNoviSteps/pull/2286))
+- PR #2780: リファクタリング ([PR #2780](https://github.com/AtCoder-NoviSteps/AtCoderNoviSteps/pull/2780))
 - 参照ドキュメント: `docs/dev-notes/2025-11-01/add_and_refactoring_tests_for_contest_table_provider/plan.md`
 
 ---
