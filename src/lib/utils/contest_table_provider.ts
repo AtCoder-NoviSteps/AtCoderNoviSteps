@@ -363,6 +363,39 @@ export class TDPCProvider extends ContestTableProviderBase {
   }
 }
 
+export class FPS24Provider extends ContestTableProviderBase {
+  protected setFilterCondition(): (taskResult: TaskResult) => boolean {
+    return (taskResult: TaskResult) => {
+      if (classifyContest(taskResult.contest_id) !== this.contestType) {
+        return false;
+      }
+
+      return taskResult.contest_id === 'fps-24';
+    };
+  }
+
+  getMetadata(): ContestTableMetaData {
+    return {
+      title: 'FPS 24 題',
+      abbreviationName: 'fps-24',
+    };
+  }
+
+  getDisplayConfig(): ContestTableDisplayConfig {
+    return {
+      isShownHeader: false,
+      isShownRoundLabel: false,
+      roundLabelWidth: '', // No specific width for task index in FPS 24
+      tableBodyCellsWidth: 'w-1/2 xs:w-1/3 sm:w-1/4 md:w-1/5 lg:w-1/6 2xl:w-1/7 px-1 py-2',
+      isShownTaskIndex: true,
+    };
+  }
+
+  getContestRoundLabel(contestId: string): string {
+    return '';
+  }
+}
+
 const regexForJoiFirstQualRound = /^(joi)(\d{4})(yo1)(a|b|c)$/i;
 
 export class JOIFirstQualRoundProvider extends ContestTableProviderBase {
@@ -567,12 +600,13 @@ export const prepareContestProviderPresets = () => {
      * DP group (EDPC and TDPC)
      */
     dps: () =>
-      new ContestTableProviderGroup(`EDPC・TDPC`, {
-        buttonLabel: 'EDPC・TDPC',
-        ariaLabel: 'EDPC and TDPC contests',
+      new ContestTableProviderGroup(`EDPC・TDPC・FPS 24`, {
+        buttonLabel: 'EDPC・TDPC・FPS 24',
+        ariaLabel: 'EDPC and TDPC and FPS 24 contests',
       }).addProviders(
         { contestType: ContestType.EDPC, provider: new EDPCProvider(ContestType.EDPC) },
         { contestType: ContestType.TDPC, provider: new TDPCProvider(ContestType.TDPC) },
+        { contestType: ContestType.FPS_24, provider: new FPS24Provider(ContestType.FPS_24) },
       ),
 
     JOIFirstQualRound: () =>

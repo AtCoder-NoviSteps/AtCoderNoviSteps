@@ -9,6 +9,7 @@ import {
   ABC212ToABC318Provider,
   EDPCProvider,
   TDPCProvider,
+  FPS24Provider,
   JOIFirstQualRoundProvider,
   Typical90Provider,
   TessokuBookProvider,
@@ -27,6 +28,8 @@ vi.mock('$lib/utils/contest', () => ({
       return ContestType.EDPC;
     } else if (contestId === 'tdpc') {
       return ContestType.TDPC;
+    } else if (contestId === 'fps-24') {
+      return ContestType.FPS_24;
     } else if (contestId.startsWith('joi')) {
       return ContestType.JOI;
     } else if (contestId === 'typical90') {
@@ -555,6 +558,93 @@ describe('ContestTableProviderBase and implementations', () => {
     });
   });
 
+  describe('FPS24 provider', () => {
+    test('expects to filter tasks to include only fps-24 contest', () => {
+      const provider = new FPS24Provider(ContestType.FPS_24);
+      const mixedTasks = [
+        { contest_id: 'abc123', task_id: 'abc123_a', task_table_index: 'A' },
+        { contest_id: 'fps-24', task_id: 'fps_24_a', task_table_index: 'A' },
+        { contest_id: 'fps-24', task_id: 'fps_24_b', task_table_index: 'B' },
+        { contest_id: 'typical90', task_id: 'typical90_a', task_table_index: '001' },
+      ];
+      const filtered = provider.filter(mixedTasks as TaskResults);
+
+      expect(filtered?.every((task) => task.contest_id === 'fps-24')).toBe(true);
+      expect(filtered).not.toContainEqual(expect.objectContaining({ contest_id: 'abc123' }));
+      expect(filtered).not.toContainEqual(expect.objectContaining({ contest_id: 'typical90' }));
+    });
+
+    test('expects to generate correct table structure', () => {
+      const provider = new FPS24Provider(ContestType.FPS_24);
+      const tasks = [
+        { contest_id: 'fps-24', task_id: 'fps_24_a', task_table_index: 'A' },
+        { contest_id: 'fps-24', task_id: 'fps_24_b', task_table_index: 'B' },
+        { contest_id: 'fps-24', task_id: 'fps_24_x', task_table_index: 'X' },
+      ];
+      const table = provider.generateTable(tasks as TaskResults);
+
+      expect(table).toHaveProperty('fps-24');
+      expect(table['fps-24']).toHaveProperty('A');
+      expect(table['fps-24']).toHaveProperty('B');
+      expect(table['fps-24']).toHaveProperty('X');
+      expect(table['fps-24']['A']).toEqual(expect.objectContaining({ task_id: 'fps_24_a' }));
+    });
+
+    test('expects to get contest round IDs correctly', () => {
+      const provider = new FPS24Provider(ContestType.FPS_24);
+      const tasks = [
+        { contest_id: 'fps-24', task_id: 'fps_24_a', task_table_index: 'A' },
+        { contest_id: 'fps-24', task_id: 'fps_24_x', task_table_index: 'X' },
+      ];
+      const roundIds = provider.getContestRoundIds(tasks as TaskResults);
+
+      expect(roundIds).toEqual(['fps-24']);
+    });
+
+    test('expects to get header IDs for tasks correctly in ascending order', () => {
+      const provider = new FPS24Provider(ContestType.FPS_24);
+      const tasks = [
+        { contest_id: 'fps-24', task_id: 'fps_24_a', task_table_index: 'A' },
+        { contest_id: 'fps-24', task_id: 'fps_24_x', task_table_index: 'X' },
+        { contest_id: 'fps-24', task_id: 'fps_24_m', task_table_index: 'M' },
+        { contest_id: 'fps-24', task_id: 'fps_24_b', task_table_index: 'B' },
+      ];
+      const headerIds = provider.getHeaderIdsForTask(tasks as TaskResults);
+
+      expect(headerIds).toEqual(['A', 'B', 'M', 'X']);
+    });
+
+    test('expects to handle section boundaries correctly (A-X)', () => {
+      const provider = new FPS24Provider(ContestType.FPS_24);
+      const tasks = [
+        { contest_id: 'fps-24', task_id: 'fps_24_a', task_table_index: 'A' },
+        { contest_id: 'fps-24', task_id: 'fps_24_x', task_table_index: 'X' },
+      ];
+      const headerIds = provider.getHeaderIdsForTask(tasks as TaskResults);
+
+      expect(headerIds).toEqual(['A', 'X']);
+    });
+
+    test('expects to handle empty task results', () => {
+      const provider = new FPS24Provider(ContestType.FPS_24);
+      const filtered = provider.filter([] as TaskResults);
+
+      expect(filtered).toEqual([] as TaskResults);
+    });
+
+    test('expects to handle task results with different contest types', () => {
+      const provider = new FPS24Provider(ContestType.FPS_24);
+      const mockMixedTasks = [
+        { contest_id: 'abc123', task_id: 'abc123_a', task_table_index: 'A' },
+        { contest_id: 'dp', task_id: 'dp_a', task_table_index: 'A' },
+        { contest_id: 'tdpc', task_id: 'tdpc_a', task_table_index: 'A' },
+      ];
+      const filtered = provider.filter(mockMixedTasks as TaskResults);
+
+      expect(filtered).toEqual([] as TaskResults);
+    });
+  });
+
   describe('MathAndAlgorithm provider', () => {
     test('expects to filter tasks to include only math-and-algorithm contest', () => {
       const provider = new MathAndAlgorithmProvider(ContestType.MATH_AND_ALGORITHM);
@@ -720,6 +810,13 @@ describe('ContestTableProviderBase and implementations', () => {
       title: 'Typical DP Contest',
       abbreviationName: 'tdpc',
       label: 'TDPC provider',
+    },
+    {
+      providerClass: FPS24Provider,
+      contestType: ContestType.FPS_24,
+      title: 'FPS 24 題',
+      abbreviationName: 'fps-24',
+      label: 'FPS24 provider',
     },
   ])('$label', ({ providerClass, contestType, title, abbreviationName }) => {
     test('expects to get correct metadata', () => {
@@ -1034,14 +1131,15 @@ describe('prepareContestProviderPresets', () => {
   test('expects to create DPs preset correctly', () => {
     const group = prepareContestProviderPresets().dps();
 
-    expect(group.getGroupName()).toBe('EDPC・TDPC');
+    expect(group.getGroupName()).toBe('EDPC・TDPC・FPS 24');
     expect(group.getMetadata()).toEqual({
-      buttonLabel: 'EDPC・TDPC',
-      ariaLabel: 'EDPC and TDPC contests',
+      buttonLabel: 'EDPC・TDPC・FPS 24',
+      ariaLabel: 'EDPC and TDPC and FPS 24 contests',
     });
-    expect(group.getSize()).toBe(2);
+    expect(group.getSize()).toBe(3);
     expect(group.getProvider(ContestType.EDPC)).toBeInstanceOf(EDPCProvider);
     expect(group.getProvider(ContestType.TDPC)).toBeInstanceOf(TDPCProvider);
+    expect(group.getProvider(ContestType.FPS_24)).toBeInstanceOf(FPS24Provider);
   });
 
   test('expects to create Typical90 preset correctly', () => {
