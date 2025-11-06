@@ -338,3 +338,14 @@ export const taskResultsForMathAndAlgorithmProvider: TaskResults = [
   math_and_algorithm_101,
   math_and_algorithm_102,
 ];
+
+// FPS 24: 4 problems (A, B, M, X)
+// Represents a smaller problem set with uppercase letter indices
+const [fps24_a, fps24_b, fps24_m, fps24_x] = createContestTasks('fps-24', [
+  { taskId: 'fps_24_a', taskTableIndex: 'A', statusName: AC },
+  { taskId: 'fps_24_b', taskTableIndex: 'B', statusName: AC },
+  { taskId: 'fps_24_m', taskTableIndex: 'M', statusName: AC_WITH_EDITORIAL },
+  { taskId: 'fps_24_x', taskTableIndex: 'X', statusName: TRYING },
+]);
+
+export const taskResultsForFPS24Provider: TaskResults = [fps24_a, fps24_b, fps24_m, fps24_x];
