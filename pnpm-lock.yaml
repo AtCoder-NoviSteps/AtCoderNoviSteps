@@ -12,8 +12,8 @@ importers:
         specifier: 3.0.2
         version: 3.0.2(@prisma/client@5.22.0(prisma@5.22.0))(lucia@2.7.7)
       '@lucide/svelte':
-        specifier: 0.552.0
-        version: 0.552.0(svelte@5.43.4)
+        specifier: 0.553.0
+        version: 0.553.0(svelte@5.43.4)
       '@mermaid-js/mermaid-cli':
         specifier: 11.12.0
         version: 11.12.0(puppeteer@23.11.1(typescript@5.9.3))(tsx@4.19.2)(yaml@2.8.1)
@@ -972,8 +972,8 @@ packages:
       '@prisma/client': ^4.2.0 || ^5.0.0
       lucia: ^2.0.0
 
-  '@lucide/svelte@0.552.0':
-    resolution: {integrity: sha512-8wQF1YUKgaXiFidPdHM5NKESArKHLrgf8A1EAOjvqRmdVlL2KFsPxTchez/lMUOJKxXeDgrRKfXQuaN1O5KlhQ==}
+  '@lucide/svelte@0.553.0':
+    resolution: {integrity: sha512-uudJd5NF1zrsO0C2dmCo5lzctqGWNxQKUxM+HErUKyG2oCI2rSGllcsSjn6JfLaHUVy+sPESKa5Dsctm4mZHOQ==}
     peerDependencies:
       svelte: ^5
 
@@ -5757,7 +5757,7 @@ snapshots:
       '@prisma/client': 5.22.0(prisma@5.22.0)
       lucia: 2.7.7
 
-  '@lucide/svelte@0.552.0(svelte@5.43.4)':
+  '@lucide/svelte@0.553.0(svelte@5.43.4)':
     dependencies:
       svelte: 5.43.4
 
