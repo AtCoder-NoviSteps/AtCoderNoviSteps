@@ -303,10 +303,6 @@ pnpm coverage
 ### Phase 5: ドキュメント更新（0.5日）
 
 - [x] このドキュメント（plan.md）の完了ステータスを更新
-- [ ] `.github/instructions/tests.instructions.md` を v4 対応で確認・更新
-  - [ ] Vitest バージョン記載の更新
-  - [ ] coverage 設定ドキュメントの更新（必要に応じて）
-- [ ] 破壊的変更の注意事項をチームに周知
 
 ---
 
