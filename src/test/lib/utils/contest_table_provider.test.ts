@@ -1113,13 +1113,11 @@ describe('ContestTableProviderGroup', () => {
       const practicalsProvider = new TessokuBookForPracticalsProvider(ContestType.TESSOKU_BOOK);
       const challengesProvider = new TessokuBookForChallengesProvider(ContestType.TESSOKU_BOOK);
 
-      expect(examplesProvider['getProviderKey']()).toBe(
-        `TESSOKU_BOOK::${TESSOKU_SECTIONS.EXAMPLES}`,
-      );
-      expect(practicalsProvider['getProviderKey']()).toBe(
+      expect(examplesProvider.getProviderKey()).toBe(`TESSOKU_BOOK::${TESSOKU_SECTIONS.EXAMPLES}`);
+      expect(practicalsProvider.getProviderKey()).toBe(
         `TESSOKU_BOOK::${TESSOKU_SECTIONS.PRACTICALS}`,
       );
-      expect(challengesProvider['getProviderKey']()).toBe(
+      expect(challengesProvider.getProviderKey()).toBe(
         `TESSOKU_BOOK::${TESSOKU_SECTIONS.CHALLENGES}`,
       );
     });
