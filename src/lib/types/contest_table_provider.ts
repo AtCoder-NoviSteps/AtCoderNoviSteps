@@ -76,6 +76,15 @@ export interface ContestTableProvider {
 export type ProviderKey = `${ContestType}` | `${ContestType}::${string}`;
 
 /**
+ * Sections for contest type in provider key
+ */
+export const TESSOKU_SECTIONS = {
+  EXAMPLES: 'examples',
+  PRACTICALS: 'practicals',
+  CHALLENGES: 'challenges',
+} as const;
+
+/**
  * Represents a two-dimensional table of contest results.
  *
  * The structure is organized as a nested record:

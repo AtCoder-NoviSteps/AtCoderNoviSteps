@@ -1,10 +1,11 @@
-import type {
-  ContestTableProvider,
-  ContestTable,
-  ContestTableMetaData,
-  ContestTablesMetaData,
-  ContestTableDisplayConfig,
-  ProviderKey,
+import {
+  type ContestTableProvider,
+  type ContestTable,
+  type ContestTableMetaData,
+  type ContestTablesMetaData,
+  type ContestTableDisplayConfig,
+  type ProviderKey,
+  TESSOKU_SECTIONS,
 } from '$lib/types/contest_table_provider';
 import { ContestType } from '$lib/types/contest';
 import type { TaskResults, TaskResult } from '$lib/types/task';
@@ -304,7 +305,7 @@ export class TessokuBookProvider extends ContestTableProviderBase {
 
 export class TessokuBookForExamplesProvider extends TessokuBookProvider {
   constructor(contestType: ContestType) {
-    super(contestType, 'examples');
+    super(contestType, TESSOKU_SECTIONS.EXAMPLES);
   }
 
   protected setFilterCondition(): (taskResult: TaskResult) => boolean {
@@ -326,7 +327,7 @@ export class TessokuBookForExamplesProvider extends TessokuBookProvider {
 
 export class TessokuBookForPracticalsProvider extends TessokuBookProvider {
   constructor(contestType: ContestType) {
-    super(contestType, 'practicals');
+    super(contestType, TESSOKU_SECTIONS.PRACTICALS);
   }
 
   protected setFilterCondition(): (taskResult: TaskResult) => boolean {
@@ -348,7 +349,7 @@ export class TessokuBookForPracticalsProvider extends TessokuBookProvider {
 
 export class TessokuBookForChallengesProvider extends TessokuBookProvider {
   constructor(contestType: ContestType) {
-    super(contestType, 'challenges');
+    super(contestType, TESSOKU_SECTIONS.CHALLENGES);
   }
 
   protected setFilterCondition(): (taskResult: TaskResult) => boolean {

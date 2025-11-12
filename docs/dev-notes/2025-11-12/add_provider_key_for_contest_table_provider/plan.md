@@ -371,5 +371,112 @@ grep -r "getProvider.*TESSOKU_BOOK" /usr/src/app/src --include="*.ts" --include=
 
 ---
 
-**状態**: ✅ 完了（ProviderKey 型を活用、後方互換性検証済み）
+## 11. TESSOKU_SECTIONS 定数化による改善
+
+### 背景
+
+実装後、テストコードではセクション識別子（'examples', 'practicals', 'challenges'）を文字列リテラルとしてハードコードしていました。これを `TESSOKU_SECTIONS` 定数を使用して統一しました。
+
+### 改善内容
+
+#### テストコード定数化の効果
+
+**Before（文字列リテラル）**:
+
+```typescript
+expect(provider['getProviderKey']()).toBe('TESSOKU_BOOK::examples');
+expect(group.getProvider(ContestType.TESSOKU_BOOK, 'practicals')).toBe(practicalsProvider);
+```
+
+**After（TESSOKU_SECTIONS 定数）**:
+
+```typescript
+import { TESSOKU_SECTIONS } from '$lib/types/contest_table_provider';
+
+expect(provider['getProviderKey']()).toBe(`TESSOKU_BOOK::${TESSOKU_SECTIONS.EXAMPLES}`);
+expect(group.getProvider(ContestType.TESSOKU_BOOK, TESSOKU_SECTIONS.PRACTICALS)).toBe(
+  practicalsProvider,
+);
+```
+
+### メリット
+
+1. **型安全性の向上**
+   - 定数値の変更時、すべての利用箇所が自動的に追従
+   - タイポ防止：`'exapmles'` のようなスペルミスを事前防止
+
+2. **保守性の向上**
+   - セクション値の定義を一元管理（`contest_table_provider.ts` の `TESSOKU_SECTIONS`）
+   - 値の意図が明確（`EXAMPLES`, `PRACTICALS`, `CHALLENGES` はセマンティック）
+
+3. **ドキュメント性の向上**
+   - テストコード自体がドキュメント化
+   - セクションの有効値が明示的にわかる
+
+4. **リファクタリングの容易性**
+   - セクション名変更時、`TESSOKU_SECTIONS` 定義を変更するだけで全体を更新
+   - IDE のリファクタリング機能で安全な置き換えが可能
+
+### テスト実装例
+
+```typescript
+import { TESSOKU_SECTIONS } from '$lib/types/contest_table_provider';
+
+describe('TessokuBook provider keys with TESSOKU_SECTIONS', () => {
+  test('expects createProviderKey to generate correct composite key with TESSOKU_SECTIONS.EXAMPLES', () => {
+    const key = ContestTableProviderBase.createProviderKey(
+      ContestType.TESSOKU_BOOK,
+      TESSOKU_SECTIONS.EXAMPLES,
+    );
+    expect(key).toBe(`TESSOKU_BOOK::${TESSOKU_SECTIONS.EXAMPLES}`);
+  });
+
+  test('expects getProvider with TESSOKU_SECTIONS.PRACTICALS to retrieve correct provider', () => {
+    const provider = group.getProvider(ContestType.TESSOKU_BOOK, TESSOKU_SECTIONS.PRACTICALS);
+    expect(provider).toBe(practicalsProvider);
+  });
+});
+```
+
+### 型安全性の強化
+
+`TESSOKU_SECTIONS` は `as const` で定義されているため：
+
+```typescript
+export const TESSOKU_SECTIONS = {
+  EXAMPLES: 'examples',
+  PRACTICALS: 'practicals',
+  CHALLENGES: 'challenges',
+} as const;
+```
+
+- **値型の推論**: TypeScript は各プロパティの値を `'examples' | 'practicals' | 'challenges'` のリテラル型で推論
+- **プロパティアクセスの型安全**: `TESSOKU_SECTIONS.EXAMPLES` は常に `'examples'` 型に確定
+- **存在しないプロパティへのアクセス**: `TESSOKU_SECTIONS.INVALID` は型エラーになる
+
+### テスト結果
+
+定数化後のテスト実行結果：
+
+- **全テスト**: 105 テスト合格
+- **セクション関連テスト**: 7 テスト（すべて定数化対応）
+- **タイポエラー**: 0 件（定数化により未然に防止）
+
+### 推奨事項
+
+1. **セクション定義の一元管理**
+   - 新しいセクションを追加する場合、必ず `TESSOKU_SECTIONS` に定義してから使用
+   - 他の定数との一貫性を保つ
+
+2. **テスト・本番コード統一**
+   - テストコードとアプリケーションコード両方で `TESSOKU_SECTIONS` を利用
+   - 値の乖離を防止
+
+3. **ドキュメント更新**
+   - `TESSOKU_SECTIONS` の意図・用途を TSDoc でコメント化
+   - 今後のメンテナーへの情報伝達を確実に
+
+---
+
+**状態**: ✅ 完了（TESSOKU_SECTIONS 定数化、型安全性向上、保守性向上を達成）
 ````

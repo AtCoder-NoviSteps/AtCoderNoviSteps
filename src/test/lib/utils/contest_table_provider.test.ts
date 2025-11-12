@@ -21,6 +21,7 @@ import {
   ContestTableProviderGroup,
   prepareContestProviderPresets,
 } from '$lib/utils/contest_table_provider';
+import { TESSOKU_SECTIONS } from '$lib/types/contest_table_provider';
 import { taskResultsForContestTableProvider } from './test_cases/contest_table_provider';
 
 // Mock the imported functions
@@ -1098,8 +1099,11 @@ describe('ContestTableProviderGroup', () => {
     });
 
     test('expects createProviderKey to generate correct composite key with section', () => {
-      const key = ContestTableProviderBase.createProviderKey(ContestType.TESSOKU_BOOK, 'examples');
-      expect(key).toBe('TESSOKU_BOOK::examples');
+      const key = ContestTableProviderBase.createProviderKey(
+        ContestType.TESSOKU_BOOK,
+        TESSOKU_SECTIONS.EXAMPLES,
+      );
+      expect(key).toBe(`TESSOKU_BOOK::${TESSOKU_SECTIONS.EXAMPLES}`);
       // Verify key contains section separator
       expect(key).toContain('::');
     });
@@ -1109,9 +1113,15 @@ describe('ContestTableProviderGroup', () => {
       const practicalsProvider = new TessokuBookForPracticalsProvider(ContestType.TESSOKU_BOOK);
       const challengesProvider = new TessokuBookForChallengesProvider(ContestType.TESSOKU_BOOK);
 
-      expect(examplesProvider['getProviderKey']()).toBe('TESSOKU_BOOK::examples');
-      expect(practicalsProvider['getProviderKey']()).toBe('TESSOKU_BOOK::practicals');
-      expect(challengesProvider['getProviderKey']()).toBe('TESSOKU_BOOK::challenges');
+      expect(examplesProvider['getProviderKey']()).toBe(
+        `TESSOKU_BOOK::${TESSOKU_SECTIONS.EXAMPLES}`,
+      );
+      expect(practicalsProvider['getProviderKey']()).toBe(
+        `TESSOKU_BOOK::${TESSOKU_SECTIONS.PRACTICALS}`,
+      );
+      expect(challengesProvider['getProviderKey']()).toBe(
+        `TESSOKU_BOOK::${TESSOKU_SECTIONS.CHALLENGES}`,
+      );
     });
 
     test('expects multiple TessokuBook providers to be stored separately in group', () => {
@@ -1127,9 +1137,15 @@ describe('ContestTableProviderGroup', () => {
       group.addProviders(examplesProvider, practicalsProvider, challengesProvider);
 
       expect(group.getSize()).toBe(3);
-      expect(group.getProvider(ContestType.TESSOKU_BOOK, 'examples')).toBe(examplesProvider);
-      expect(group.getProvider(ContestType.TESSOKU_BOOK, 'practicals')).toBe(practicalsProvider);
-      expect(group.getProvider(ContestType.TESSOKU_BOOK, 'challenges')).toBe(challengesProvider);
+      expect(group.getProvider(ContestType.TESSOKU_BOOK, TESSOKU_SECTIONS.EXAMPLES)).toBe(
+        examplesProvider,
+      );
+      expect(group.getProvider(ContestType.TESSOKU_BOOK, TESSOKU_SECTIONS.PRACTICALS)).toBe(
+        practicalsProvider,
+      );
+      expect(group.getProvider(ContestType.TESSOKU_BOOK, TESSOKU_SECTIONS.CHALLENGES)).toBe(
+        challengesProvider,
+      );
     });
 
     test('expects backward compatibility for getProvider without section', () => {
@@ -1155,8 +1171,12 @@ describe('ContestTableProviderGroup', () => {
       const examplesProvider = new TessokuBookForExamplesProvider(ContestType.TESSOKU_BOOK);
       group.addProvider(examplesProvider);
 
-      expect(group.getProvider(ContestType.TESSOKU_BOOK, 'examples')).toBe(examplesProvider);
-      expect(group.getProvider(ContestType.TESSOKU_BOOK, 'practicals')).toBeUndefined();
+      expect(group.getProvider(ContestType.TESSOKU_BOOK, TESSOKU_SECTIONS.EXAMPLES)).toBe(
+        examplesProvider,
+      );
+      expect(
+        group.getProvider(ContestType.TESSOKU_BOOK, TESSOKU_SECTIONS.PRACTICALS),
+      ).toBeUndefined();
       expect(group.getProvider(ContestType.TESSOKU_BOOK, 'invalid')).toBeUndefined();
     });
   });
@@ -1234,13 +1254,13 @@ describe('prepareContestProviderPresets', () => {
       ariaLabel: 'Filter Tessoku Book',
     });
     expect(group.getSize()).toBe(3);
-    expect(group.getProvider(ContestType.TESSOKU_BOOK, 'examples')).toBeInstanceOf(
+    expect(group.getProvider(ContestType.TESSOKU_BOOK, TESSOKU_SECTIONS.EXAMPLES)).toBeInstanceOf(
       TessokuBookForExamplesProvider,
     );
-    expect(group.getProvider(ContestType.TESSOKU_BOOK, 'practicals')).toBeInstanceOf(
+    expect(group.getProvider(ContestType.TESSOKU_BOOK, TESSOKU_SECTIONS.PRACTICALS)).toBeInstanceOf(
       TessokuBookForPracticalsProvider,
     );
-    expect(group.getProvider(ContestType.TESSOKU_BOOK, 'challenges')).toBeInstanceOf(
+    expect(group.getProvider(ContestType.TESSOKU_BOOK, TESSOKU_SECTIONS.CHALLENGES)).toBeInstanceOf(
       TessokuBookForChallengesProvider,
     );
   });
