@@ -118,21 +118,21 @@ private providers = new Map<string, ContestTableProviderBase>();
 
 ```typescript
 addProvider(provider: ContestTableProviderBase): this {
-  const key = provider['getProviderKey']();
+  const key = provider.getProviderKey();
   this.providers.set(key, provider);
 
   return this;
 }
 ```
 
-**注**: `protected` メソッドへのアクセスのため、角括弧表記を使用
+**注**: `getProviderKey()` は public メソッドとして直接呼び出し可能
 
 #### addProviders() メソッド修正
 
 ```typescript
 addProviders(...providers: ContestTableProviderBase[]): this {
   providers.forEach((provider) => {
-    const key = provider['getProviderKey']();
+    const key = provider.getProviderKey();
     this.providers.set(key, provider);
   });
   return this;
@@ -237,9 +237,10 @@ pnpm format src/lib/utils/contest_table_provider.ts
 
 ### 実装時の留意事項
 
-1. **protected メソッドへのアクセス**
-   - `getProviderKey()` は protected なため、Group 内では `provider['getProviderKey']()` で呼び出す
-   - TypeScript の暗黙の型チェックを通すため、角括弧表記が必須
+1. **Public メソッドアクセス**
+   - `getProviderKey()` は public メソッドとして実装
+   - TypeScript strict mode で保護されており、アクセス制御が厳密に実施される
+   - Protected メソッドへのアクセスは角括弧表記 `provider['method']()` でも strict mode では禁止
 
 2. **後方互換性**
    - `getProvider(contestType)` で section 未指定時、複合キーなしで検索
@@ -302,9 +303,14 @@ pnpm format src/lib/utils/contest_table_provider.ts
 ### 実装パターン
 
 1. **ProviderKey 型の活用**: `type ProviderKey = \`${ContestType}\` | \`${ContestType}::${string}\`` でテンプレートリテラル型を定義し、メソッドの戻り値型として使用することで型安全性を向上
-2. **保護メソッドの外部アクセス**: Protected メソッドへの外部アクセスは角括弧表記 `provider['getProviderKey']()` で実装
+2. **Public メソッドアクセス**: Protected メソッドは TypeScript strict mode では直接アクセス不可。メソッドの責務と呼び出し元に応じて public/protected を適切に選択
 3. **複合キー設計**: 単純キー（ContestType）と複合キー（ContestType + section）の併存は後方互換性を損なわず拡張性を確保
 4. **静的ファクトリメソッド**: `createProviderKey()` を static メソッドで共通化することで、キー生成ロジックの一元管理を実現
+
+### TypeScript Strict Mode
+
+- **アクセス制御の厳密性**: Protected/private メンバーへのアクセスは角括弧表記でも strict mode では禁止
+- **推奨解決策**: public メソッドまたは公開 API として設計し、カプセル化を保ちながら必要な機能を公開
 
 ### テスト戦略
 

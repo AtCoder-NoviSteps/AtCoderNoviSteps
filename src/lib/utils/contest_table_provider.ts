@@ -59,10 +59,9 @@ export abstract class ContestTableProviderBase implements ContestTableProvider {
    * Get this provider's key
    * Combines contestType and section to create a unique identifier
    *
-   * @protected
    * @returns {ProviderKey} This provider's key
    */
-  protected getProviderKey(): ProviderKey {
+  getProviderKey(): ProviderKey {
     return ContestTableProviderBase.createProviderKey(this.contestType, this.section);
   }
 
@@ -546,8 +545,7 @@ export class ContestTableProviderGroup {
    * @returns Returns this for method chaining
    */
   addProvider(provider: ContestTableProviderBase): this {
-    // Access protected getProviderKey method using bracket notation
-    const key = provider['getProviderKey']();
+    const key = provider.getProviderKey();
     this.providers.set(key, provider);
     return this;
   }
@@ -561,8 +559,7 @@ export class ContestTableProviderGroup {
    */
   addProviders(...providers: ContestTableProviderBase[]): this {
     providers.forEach((provider) => {
-      // Access protected getProviderKey method using bracket notation
-      const key = provider['getProviderKey']();
+      const key = provider.getProviderKey();
       this.providers.set(key, provider);
     });
     return this;
