@@ -265,13 +265,11 @@ export class Typical90Provider extends ContestTableProviderBase {
 }
 
 /**
- * Base provider for Tessoku Book tasks.
+ * Base provider for Tessoku Book contests
  *
- * This provider has been refactored to use section-specific subclasses (examples, practicals, challenges)
- * instead of a single unified provider. The TessokuBook group registers only the section-specific providers
- * (TessokuBookForExamplesProvider, TessokuBookForPracticalsProvider, TessokuBookForChallengesProvider).
- * Ensure all callers use section-specific lookups via getProvider(ContestType.TESSOKU_BOOK, section)
- * rather than the non-sectioned variant.
+ * Note: This class is not intended to be registered directly.
+ * Use specialized subclasses (TessokuBookForExamplesProvider,
+ * TessokuBookForPracticalsProvider, TessokuBookForChallengesProvider) instead.
  *
  * @see https://github.com/AtCoder-NoviSteps/AtCoderNoviSteps/pull/2820
  */
@@ -682,6 +680,8 @@ export const prepareContestProviderPresets = () => {
 
     /**
      * Groups for Tessoku Book
+     * Note: Only sectioned providers are registered (examples, practicals, challenges).
+     * The base TessokuBookProvider is not registered as it's meant to be subclassed only.
      */
     TessokuBook: () =>
       new ContestTableProviderGroup(`競技プログラミングの鉄則`, {
