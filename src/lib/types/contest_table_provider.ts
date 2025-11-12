@@ -1,3 +1,4 @@
+import type { ContestType } from '$lib/types/contest';
 import type { TaskResults, TaskResult } from '$lib/types/task';
 
 /**
@@ -66,6 +67,13 @@ export interface ContestTableProvider {
    */
   getContestRoundLabel(contestId: string): string;
 }
+
+/**
+ * Type for provider key
+ * Supports simple contest type keys (e.g., 'ABC') and complex keys with sections
+ * (e.g., 'TESSOKU_BOOK::examples', 'TESSOKU_BOOK::practicals', 'TESSOKU_BOOK::challenges')
+ */
+export type ProviderKey = `${ContestType}` | `${ContestType}::${string}`;
 
 /**
  * Represents a two-dimensional table of contest results.

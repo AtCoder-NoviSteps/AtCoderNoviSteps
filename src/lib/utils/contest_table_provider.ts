@@ -4,6 +4,7 @@ import type {
   ContestTableMetaData,
   ContestTablesMetaData,
   ContestTableDisplayConfig,
+  ProviderKey,
 } from '$lib/types/contest_table_provider';
 import { ContestType } from '$lib/types/contest';
 import type { TaskResults, TaskResult } from '$lib/types/task';
@@ -29,15 +30,40 @@ import { getTaskTableHeaderName } from '$lib/utils/task';
  */
 
 export abstract class ContestTableProviderBase implements ContestTableProvider {
-  protected contestType: ContestType;
+  protected readonly contestType: ContestType;
+  protected readonly section?: string;
 
   /**
    * Creates a new TaskTableGenerator instance.
    *
    * @param {ContestType} contestType - The type of contest associated with these tasks.
+   * @param {string} [section] - Optional section identifier (e.g., 'examples', 'practicals', 'challenges').
    */
-  constructor(contestType: ContestType) {
+  constructor(contestType: ContestType, section?: string) {
     this.contestType = contestType;
+    this.section = section;
+  }
+
+  /**
+   * Create a provider key combining contestType and section
+   *
+   * @param {ContestType} contestType - Contest type
+   * @param {string} [section] - Optional section identifier
+   * @returns {ProviderKey} Provider key (e.g., 'TESSOKU_BOOK' or 'TESSOKU_BOOK::examples')
+   */
+  static createProviderKey(contestType: ContestType, section?: string): ProviderKey {
+    return section ? `${contestType}::${section}` : `${contestType}`;
+  }
+
+  /**
+   * Get this provider's key
+   * Combines contestType and section to create a unique identifier
+   *
+   * @protected
+   * @returns {ProviderKey} This provider's key
+   */
+  protected getProviderKey(): ProviderKey {
+    return ContestTableProviderBase.createProviderKey(this.contestType, this.section);
   }
 
   filter(taskResults: TaskResults): TaskResults {
@@ -268,6 +294,71 @@ export class TessokuBookProvider extends ContestTableProviderBase {
   }
 }
 
+export class TessokuBookForExamplesProvider extends TessokuBookProvider {
+  constructor(contestType: ContestType) {
+    super(contestType, 'examples');
+  }
+
+  protected setFilterCondition(): (taskResult: TaskResult) => boolean {
+    return (taskResult: TaskResult) => {
+      return (
+        classifyContest(taskResult.contest_id) === this.contestType &&
+        taskResult.task_table_index.startsWith('A')
+      );
+    };
+  }
+
+  getMetadata(): ContestTableMetaData {
+    return {
+      title: '競技プログラミングの鉄則（A. 例題）',
+      abbreviationName: 'tessoku-book-for-examples',
+    };
+  }
+}
+
+export class TessokuBookForPracticalsProvider extends TessokuBookProvider {
+  constructor(contestType: ContestType) {
+    super(contestType, 'practicals');
+  }
+
+  protected setFilterCondition(): (taskResult: TaskResult) => boolean {
+    return (taskResult: TaskResult) => {
+      return (
+        classifyContest(taskResult.contest_id) === this.contestType &&
+        taskResult.task_table_index.startsWith('B')
+      );
+    };
+  }
+
+  getMetadata(): ContestTableMetaData {
+    return {
+      title: '競技プログラミングの鉄則（B. 応用問題）',
+      abbreviationName: 'tessoku-book-for-practicals',
+    };
+  }
+}
+
+export class TessokuBookForChallengesProvider extends TessokuBookProvider {
+  constructor(contestType: ContestType) {
+    super(contestType, 'challenges');
+  }
+
+  protected setFilterCondition(): (taskResult: TaskResult) => boolean {
+    return (taskResult: TaskResult) => {
+      return (
+        classifyContest(taskResult.contest_id) === this.contestType &&
+        taskResult.task_table_index.startsWith('C')
+      );
+    };
+  }
+
+  getMetadata(): ContestTableMetaData {
+    return {
+      title: '競技プログラミングの鉄則（C. 力試し問題）',
+      abbreviationName: 'tessoku-book-for-challenges',
+    };
+  }
+}
 export class MathAndAlgorithmProvider extends ContestTableProviderBase {
   protected setFilterCondition(): (taskResult: TaskResult) => boolean {
     return (taskResult: TaskResult) => {
@@ -440,7 +531,7 @@ export class JOIFirstQualRoundProvider extends ContestTableProviderBase {
 export class ContestTableProviderGroup {
   private groupName: string;
   private metadata: ContestTablesMetaData;
-  private providers = new Map<ContestType, ContestTableProviderBase>();
+  private providers = new Map<string, ContestTableProviderBase>();
 
   constructor(groupName: string, metadata: ContestTablesMetaData) {
     this.groupName = groupName;
@@ -449,39 +540,45 @@ export class ContestTableProviderGroup {
 
   /**
    * Add a provider
-   * @param contestType Contest type
+   * Provider key is determined by the provider's getProviderKey() method
+   *
    * @param provider Provider instance
    * @returns Returns this for method chaining
    */
-  addProvider(contestType: ContestType, provider: ContestTableProviderBase): this {
-    this.providers.set(contestType, provider);
+  addProvider(provider: ContestTableProviderBase): this {
+    // Access protected getProviderKey method using bracket notation
+    const key = provider['getProviderKey']();
+    this.providers.set(key, provider);
     return this;
   }
 
   /**
-   * Add multiple providers in pairs
-   * @param providers Array of contest type and provider pairs
+   * Add multiple providers
+   * Each provider's key is determined by its getProviderKey() method
+   *
+   * @param providers Array of provider instances
    * @returns Returns this for method chaining
    */
-  addProviders(
-    ...providers: Array<{
-      contestType: ContestType;
-      provider: ContestTableProviderBase;
-    }>
-  ): this {
-    providers.forEach(({ contestType, provider }) => {
-      this.providers.set(contestType, provider);
+  addProviders(...providers: ContestTableProviderBase[]): this {
+    providers.forEach((provider) => {
+      // Access protected getProviderKey method using bracket notation
+      const key = provider['getProviderKey']();
+      this.providers.set(key, provider);
     });
     return this;
   }
 
   /**
-   * Get a provider for a specific contest type
+   * Get a provider for a specific contest type and optional section
+   * Maintains backward compatibility by supporting section-less lookups
+   *
    * @param contestType Contest type
+   * @param section Optional section identifier
    * @returns Provider instance, or undefined
    */
-  getProvider(contestType: ContestType): ContestTableProviderBase | undefined {
-    return this.providers.get(contestType);
+  getProvider(contestType: ContestType, section?: string): ContestTableProviderBase | undefined {
+    const key = ContestTableProviderBase.createProviderKey(contestType, section);
+    return this.providers.get(key);
   }
 
   /**
@@ -524,8 +621,8 @@ export class ContestTableProviderGroup {
     return {
       groupName: this.groupName,
       providerCount: this.providers.size,
-      providers: Array.from(this.providers.entries()).map(([type, provider]) => ({
-        contestType: type,
+      providers: Array.from(this.providers.entries()).map(([key, provider]) => ({
+        providerKey: key,
         metadata: provider.getMetadata(),
         displayConfig: provider.getDisplayConfig(),
       })),
@@ -546,7 +643,7 @@ export const prepareContestProviderPresets = () => {
       new ContestTableProviderGroup(`ABC Latest 20 Rounds`, {
         buttonLabel: 'ABC 最新 20 回',
         ariaLabel: 'Filter ABC latest 20 rounds',
-      }).addProvider(ContestType.ABC, new ABCLatest20RoundsProvider(ContestType.ABC)),
+      }).addProvider(new ABCLatest20RoundsProvider(ContestType.ABC)),
 
     /**
      * Single group for ABC 319 onwards
@@ -555,7 +652,7 @@ export const prepareContestProviderPresets = () => {
       new ContestTableProviderGroup(`ABC 319 Onwards`, {
         buttonLabel: 'ABC 319 〜 ',
         ariaLabel: 'Filter contests from ABC 319 onwards',
-      }).addProvider(ContestType.ABC, new ABC319OnwardsProvider(ContestType.ABC)),
+      }).addProvider(new ABC319OnwardsProvider(ContestType.ABC)),
 
     /**
      * Single group for ABC 212-318
@@ -564,7 +661,7 @@ export const prepareContestProviderPresets = () => {
       new ContestTableProviderGroup(`From ABC 212 to ABC 318`, {
         buttonLabel: 'ABC 212 〜 318',
         ariaLabel: 'Filter contests from ABC 212 to ABC 318',
-      }).addProvider(ContestType.ABC, new ABC212ToABC318Provider(ContestType.ABC)),
+      }).addProvider(new ABC212ToABC318Provider(ContestType.ABC)),
 
     /**
      * Single group for Typical 90 Problems
@@ -573,16 +670,20 @@ export const prepareContestProviderPresets = () => {
       new ContestTableProviderGroup(`競プロ典型 90 問`, {
         buttonLabel: '競プロ典型 90 問',
         ariaLabel: 'Filter Typical 90 Problems',
-      }).addProvider(ContestType.TYPICAL90, new Typical90Provider(ContestType.TYPICAL90)),
+      }).addProvider(new Typical90Provider(ContestType.TYPICAL90)),
 
     /**
-     * Single group for Tessoku Book
+     * Groups for Tessoku Book
      */
     TessokuBook: () =>
       new ContestTableProviderGroup(`競技プログラミングの鉄則`, {
         buttonLabel: '競技プログラミングの鉄則',
         ariaLabel: 'Filter Tessoku Book',
-      }).addProvider(ContestType.TESSOKU_BOOK, new TessokuBookProvider(ContestType.TESSOKU_BOOK)),
+      }).addProviders(
+        new TessokuBookForExamplesProvider(ContestType.TESSOKU_BOOK),
+        new TessokuBookForPracticalsProvider(ContestType.TESSOKU_BOOK),
+        new TessokuBookForChallengesProvider(ContestType.TESSOKU_BOOK),
+      ),
 
     /**
      * Single group for Math and Algorithm Book
@@ -591,10 +692,7 @@ export const prepareContestProviderPresets = () => {
       new ContestTableProviderGroup(`アルゴリズムと数学`, {
         buttonLabel: 'アルゴリズムと数学',
         ariaLabel: 'Filter Math and Algorithm',
-      }).addProvider(
-        ContestType.MATH_AND_ALGORITHM,
-        new MathAndAlgorithmProvider(ContestType.MATH_AND_ALGORITHM),
-      ),
+      }).addProvider(new MathAndAlgorithmProvider(ContestType.MATH_AND_ALGORITHM)),
 
     /**
      * DP group (EDPC and TDPC)
@@ -604,16 +702,16 @@ export const prepareContestProviderPresets = () => {
         buttonLabel: 'EDPC・TDPC・FPS 24',
         ariaLabel: 'EDPC and TDPC and FPS 24 contests',
       }).addProviders(
-        { contestType: ContestType.EDPC, provider: new EDPCProvider(ContestType.EDPC) },
-        { contestType: ContestType.TDPC, provider: new TDPCProvider(ContestType.TDPC) },
-        { contestType: ContestType.FPS_24, provider: new FPS24Provider(ContestType.FPS_24) },
+        new EDPCProvider(ContestType.EDPC),
+        new TDPCProvider(ContestType.TDPC),
+        new FPS24Provider(ContestType.FPS_24),
       ),
 
     JOIFirstQualRound: () =>
       new ContestTableProviderGroup(`JOI 一次予選`, {
         buttonLabel: 'JOI 一次予選',
         ariaLabel: 'Filter JOI First Qualifying Round',
-      }).addProvider(ContestType.JOI, new JOIFirstQualRoundProvider(ContestType.JOI)),
+      }).addProvider(new JOIFirstQualRoundProvider(ContestType.JOI)),
   };
 };
 
