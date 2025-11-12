@@ -13,10 +13,15 @@ import {
   JOIFirstQualRoundProvider,
   Typical90Provider,
   TessokuBookProvider,
+  TessokuBookForExamplesProvider,
+  TessokuBookForPracticalsProvider,
+  TessokuBookForChallengesProvider,
   MathAndAlgorithmProvider,
+  ContestTableProviderBase,
   ContestTableProviderGroup,
   prepareContestProviderPresets,
 } from '$lib/utils/contest_table_provider';
+import { TESSOKU_SECTIONS } from '$lib/types/contest_table_provider';
 import { taskResultsForContestTableProvider } from './test_cases/contest_table_provider';
 
 // Mock the imported functions
@@ -1011,7 +1016,7 @@ describe('ContestTableProviderGroup', () => {
     });
     const provider = new ABCLatest20RoundsProvider(ContestType.ABC);
 
-    group.addProvider(ContestType.ABC, provider);
+    group.addProvider(provider);
 
     expect(group.getSize()).toBe(1);
     expect(group.getProvider(ContestType.ABC)).toBe(provider);
@@ -1026,10 +1031,7 @@ describe('ContestTableProviderGroup', () => {
     const edpcProvider = new EDPCProvider(ContestType.EDPC);
     const tdpcProvider = new TDPCProvider(ContestType.TDPC);
 
-    group.addProviders(
-      { contestType: ContestType.EDPC, provider: edpcProvider },
-      { contestType: ContestType.TDPC, provider: tdpcProvider },
-    );
+    group.addProviders(edpcProvider, tdpcProvider);
 
     expect(group.getSize()).toBe(2);
     expect(group.getProvider(ContestType.EDPC)).toBe(edpcProvider);
@@ -1044,8 +1046,8 @@ describe('ContestTableProviderGroup', () => {
     const edpcProvider = new EDPCProvider(ContestType.EDPC);
     const tdpcProvider = new TDPCProvider(ContestType.TDPC);
 
-    group.addProvider(ContestType.EDPC, edpcProvider);
-    group.addProvider(ContestType.TDPC, tdpcProvider);
+    group.addProvider(edpcProvider);
+    group.addProvider(tdpcProvider);
 
     const allProviders = group.getAllProviders();
     expect(allProviders).toHaveLength(2);
@@ -1061,9 +1063,7 @@ describe('ContestTableProviderGroup', () => {
     const abcProvider = new ABCLatest20RoundsProvider(ContestType.ABC);
     const edpcProvider = new EDPCProvider(ContestType.EDPC);
 
-    const result = group
-      .addProvider(ContestType.ABC, abcProvider)
-      .addProvider(ContestType.EDPC, edpcProvider);
+    const result = group.addProvider(abcProvider).addProvider(edpcProvider);
 
     expect(result).toBe(group);
     expect(group.getSize()).toBe(2);
@@ -1077,17 +1077,106 @@ describe('ContestTableProviderGroup', () => {
     const abcProvider = new ABCLatest20RoundsProvider(ContestType.ABC);
     const edpcProvider = new EDPCProvider(ContestType.EDPC);
 
-    group.addProvider(ContestType.ABC, abcProvider);
-    group.addProvider(ContestType.EDPC, edpcProvider);
+    group.addProvider(abcProvider);
+    group.addProvider(edpcProvider);
 
     const stats = group.getStats();
 
     expect(stats.groupName).toBe('Statistics for contest table');
     expect(stats.providerCount).toBe(2);
     expect(stats.providers).toHaveLength(2);
-    expect(stats.providers[0]).toHaveProperty('contestType');
+    expect(stats.providers[0]).toHaveProperty('providerKey');
     expect(stats.providers[0]).toHaveProperty('metadata');
     expect(stats.providers[0]).toHaveProperty('displayConfig');
+  });
+
+  describe('Provider key functionality', () => {
+    test('expects createProviderKey to generate correct simple key', () => {
+      const key = ContestTableProviderBase.createProviderKey(ContestType.ABC);
+      expect(key).toBe('ABC');
+      // Verify key type is ProviderKey (string-based)
+      expect(typeof key).toBe('string');
+    });
+
+    test('expects createProviderKey to generate correct composite key with section', () => {
+      const key = ContestTableProviderBase.createProviderKey(
+        ContestType.TESSOKU_BOOK,
+        TESSOKU_SECTIONS.EXAMPLES,
+      );
+      expect(key).toBe(`TESSOKU_BOOK::${TESSOKU_SECTIONS.EXAMPLES}`);
+      // Verify key contains section separator
+      expect(key).toContain('::');
+    });
+
+    test('expects TessokuBook providers to have correct keys', () => {
+      const examplesProvider = new TessokuBookForExamplesProvider(ContestType.TESSOKU_BOOK);
+      const practicalsProvider = new TessokuBookForPracticalsProvider(ContestType.TESSOKU_BOOK);
+      const challengesProvider = new TessokuBookForChallengesProvider(ContestType.TESSOKU_BOOK);
+
+      expect(examplesProvider.getProviderKey()).toBe(`TESSOKU_BOOK::${TESSOKU_SECTIONS.EXAMPLES}`);
+      expect(practicalsProvider.getProviderKey()).toBe(
+        `TESSOKU_BOOK::${TESSOKU_SECTIONS.PRACTICALS}`,
+      );
+      expect(challengesProvider.getProviderKey()).toBe(
+        `TESSOKU_BOOK::${TESSOKU_SECTIONS.CHALLENGES}`,
+      );
+    });
+
+    test('expects multiple TessokuBook providers to be stored separately in group', () => {
+      const group = new ContestTableProviderGroup('Tessoku Book', {
+        buttonLabel: '競技プログラミングの鉄則',
+        ariaLabel: 'Filter Tessoku Book',
+      });
+
+      const examplesProvider = new TessokuBookForExamplesProvider(ContestType.TESSOKU_BOOK);
+      const practicalsProvider = new TessokuBookForPracticalsProvider(ContestType.TESSOKU_BOOK);
+      const challengesProvider = new TessokuBookForChallengesProvider(ContestType.TESSOKU_BOOK);
+
+      group.addProviders(examplesProvider, practicalsProvider, challengesProvider);
+
+      expect(group.getSize()).toBe(3);
+      expect(group.getProvider(ContestType.TESSOKU_BOOK, TESSOKU_SECTIONS.EXAMPLES)).toBe(
+        examplesProvider,
+      );
+      expect(group.getProvider(ContestType.TESSOKU_BOOK, TESSOKU_SECTIONS.PRACTICALS)).toBe(
+        practicalsProvider,
+      );
+      expect(group.getProvider(ContestType.TESSOKU_BOOK, TESSOKU_SECTIONS.CHALLENGES)).toBe(
+        challengesProvider,
+      );
+    });
+
+    test('expects backward compatibility for getProvider without section', () => {
+      const group = new ContestTableProviderGroup('ABC Latest 20 Rounds', {
+        buttonLabel: 'ABC 最新 20 回',
+        ariaLabel: 'Filter ABC latest 20 rounds',
+      });
+
+      const abcProvider = new ABCLatest20RoundsProvider(ContestType.ABC);
+      group.addProvider(abcProvider);
+
+      // Get provider without section should work with simple key
+      expect(group.getProvider(ContestType.ABC)).toBe(abcProvider);
+      expect(group.getProvider(ContestType.ABC, undefined)).toBe(abcProvider);
+    });
+
+    test('expects getProvider with non-existent section to return undefined', () => {
+      const group = new ContestTableProviderGroup('Tessoku Book', {
+        buttonLabel: '競技プログラミングの鉄則',
+        ariaLabel: 'Filter Tessoku Book',
+      });
+
+      const examplesProvider = new TessokuBookForExamplesProvider(ContestType.TESSOKU_BOOK);
+      group.addProvider(examplesProvider);
+
+      expect(group.getProvider(ContestType.TESSOKU_BOOK, TESSOKU_SECTIONS.EXAMPLES)).toBe(
+        examplesProvider,
+      );
+      expect(
+        group.getProvider(ContestType.TESSOKU_BOOK, TESSOKU_SECTIONS.PRACTICALS),
+      ).toBeUndefined();
+      expect(group.getProvider(ContestType.TESSOKU_BOOK, 'invalid')).toBeUndefined();
+    });
   });
 });
 
@@ -1152,6 +1241,26 @@ describe('prepareContestProviderPresets', () => {
     });
     expect(group.getSize()).toBe(1);
     expect(group.getProvider(ContestType.TYPICAL90)).toBeInstanceOf(Typical90Provider);
+  });
+
+  test('expects to create TessokuBook preset correctly with 3 providers', () => {
+    const group = prepareContestProviderPresets().TessokuBook();
+
+    expect(group.getGroupName()).toBe('競技プログラミングの鉄則');
+    expect(group.getMetadata()).toEqual({
+      buttonLabel: '競技プログラミングの鉄則',
+      ariaLabel: 'Filter Tessoku Book',
+    });
+    expect(group.getSize()).toBe(3);
+    expect(group.getProvider(ContestType.TESSOKU_BOOK, TESSOKU_SECTIONS.EXAMPLES)).toBeInstanceOf(
+      TessokuBookForExamplesProvider,
+    );
+    expect(group.getProvider(ContestType.TESSOKU_BOOK, TESSOKU_SECTIONS.PRACTICALS)).toBeInstanceOf(
+      TessokuBookForPracticalsProvider,
+    );
+    expect(group.getProvider(ContestType.TESSOKU_BOOK, TESSOKU_SECTIONS.CHALLENGES)).toBeInstanceOf(
+      TessokuBookForChallengesProvider,
+    );
   });
 
   test('expects to verify all presets are functions', () => {
