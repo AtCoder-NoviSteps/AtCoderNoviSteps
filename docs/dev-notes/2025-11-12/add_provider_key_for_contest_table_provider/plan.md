@@ -324,7 +324,52 @@ pnpm format src/lib/utils/contest_table_provider.ts
 - **段階的実装**: 型定義 → ベースクラス → 子クラス → Group クラス → プリセット の順序で実装することで、依存関係を最小化
 - **型安全性と実用性のバランス**: TypeScript のテンプレートリテラル型で型安全性を確保しつつ、runtime では string として柔軟に操作
 
+### 後方互換性に関する重要な知見
+
+**Backwards Compatibility Regression の防止**
+
+セクション化による Provider 実装変更時、後方互換性が壊れる可能性を検出したので記録：
+
+#### 問題状況
+
+従来のコードが `getProvider(ContestType.TESSOKU_BOOK)` を呼び出していた場合、セクション専用 Provider のみを登録すると以下が発生：
+
+```typescript
+// 登録: TESSOKU_BOOK::examples, TESSOKU_BOOK::practicals, TESSOKU_BOOK::challenges のみ
+// 呼び出し: getProvider(ContestType.TESSOKU_BOOK) ← セクション未指定
+// 結果: undefined が返る ❌ (互換性回帰)
+```
+
+#### 回避方法（複数の選択肢）
+
+1. **セクション化＋従来 Provider の併記**（最も安全）
+
+   ```typescript
+   .addProviders(
+     new TessokuBookProvider(ContestType.TESSOKU_BOOK),              // key: "TESSOKU_BOOK"
+     new TessokuBookForExamplesProvider(ContestType.TESSOKU_BOOK),   // key: "TESSOKU_BOOK::examples"
+     new TessokuBookForPracticalsProvider(ContestType.TESSOKU_BOOK), // key: "TESSOKU_BOOK::practicals"
+     new TessokuBookForChallengesProvider(ContestType.TESSOKU_BOOK), // key: "TESSOKU_BOOK::challenges"
+   )
+   ```
+
+2. **セクション専用のみ＋事前検証**（リスク低い場合）
+   - grep で既存コード全体から `getProvider(ContestType.TESSOKU_BOOK)` の セクション未指定呼び出しが **存在しない** ことを確認
+   - 本プロジェクトではこの検証後、セクション専用のみを採用
+
+#### 実装決定
+
+本プロジェクトでは方法 2 を採用：
+
+```bash
+# 検証コマンド例
+grep -r "getProvider.*TESSOKU_BOOK" /usr/src/app/src --include="*.ts" --include="*.tsx" --include="*.svelte"
+# 結果: すべてが section 付き呼び出し (getProvider(TESSOKU_BOOK, 'examples') など)
+```
+
+**結論**: セクション専用 Provider のみの登録は、セクション未指定の呼び出しが存在しないことが確認できればリスクがない。ただしコメント（TSDoc）で明記し、将来のメンテナーに注意喚起することが重要。
+
 ---
 
-**状態**: ✅ 完了（ProviderKey 型を活用）
+**状態**: ✅ 完了（ProviderKey 型を活用、後方互換性検証済み）
 ````
