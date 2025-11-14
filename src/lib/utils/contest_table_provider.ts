@@ -226,7 +226,7 @@ export class ABC212ToABC318Provider extends ContestTableProviderBase {
 }
 
 // ABC126 〜 ABC211 (2019/05/19 〜 2021/07/24)
-// 7 tasks per contest
+// 6 tasks per contest
 //
 // Note:
 // Before and from ABC126 onwards, the number and tendency of tasks are very different.
