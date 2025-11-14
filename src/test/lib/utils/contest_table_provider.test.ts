@@ -7,6 +7,7 @@ import {
   ABCLatest20RoundsProvider,
   ABC319OnwardsProvider,
   ABC212ToABC318Provider,
+  ABC126ToABC211Provider,
   EDPCProvider,
   TDPCProvider,
   FPS24Provider,
@@ -110,6 +111,14 @@ describe('ContestTableProviderBase and implementations', () => {
       {
         providerClass: ABC212ToABC318Provider,
         label: '212 to 318',
+        displayConfig: {
+          roundLabelWidth: 'xl:w-16',
+          tableBodyCellsWidth: 'w-1/2 xs:w-1/3 sm:w-1/4 md:w-1/5 lg:w-1/6 px-1 py-1',
+        },
+      },
+      {
+        providerClass: ABC126ToABC211Provider,
+        label: '126 to 211',
         displayConfig: {
           roundLabelWidth: 'xl:w-16',
           tableBodyCellsWidth: 'w-1/2 xs:w-1/3 sm:w-1/4 md:w-1/5 lg:w-1/6 px-1 py-1',
@@ -304,6 +313,60 @@ describe('ContestTableProviderBase and implementations', () => {
           filtered.every((task) => {
             const round = getContestRound(task.contest_id);
             return round >= 212 && round <= 318;
+          }),
+        ).toBe(true);
+      });
+    });
+
+    // ABC 126-211 only
+    describe('ABC 126 to ABC 211', () => {
+      test('expects to filter tasks to include only ABC between 126 and 211', () => {
+        const provider = new ABC126ToABC211Provider(ContestType.ABC);
+        const filtered = provider.filter(mockTaskResults);
+
+        expect(filtered.every((task) => task.contest_id.startsWith('abc'))).toBe(true);
+        expect(
+          filtered.every((task) => {
+            const round = getContestRound(task.contest_id);
+            return round >= 126 && round <= 211;
+          }),
+        ).toBe(true);
+      });
+
+      test('expects to get correct metadata', () => {
+        const provider = new ABC126ToABC211Provider(ContestType.ABC);
+        const metadata = provider.getMetadata();
+
+        expect(metadata.title).toBe('AtCoder Beginner Contest 126 〜 211');
+        expect(metadata.abbreviationName).toBe('fromAbc126ToAbc211');
+      });
+
+      test('expects to get header IDs for tasks correctly', () => {
+        const provider = new ABC126ToABC211Provider(ContestType.ABC);
+        const filtered = provider.filter(mockTaskResults);
+        const headerIds = provider.getHeaderIdsForTask(filtered);
+
+        expect(headerIds.length).toBeGreaterThan(0);
+        expect(headerIds.every((id) => ['A', 'B', 'C', 'D', 'E', 'F'].includes(id))).toBe(true);
+      });
+
+      test('expects to handle task results with different contest types and out-of-range ABC', () => {
+        const provider = new ABC126ToABC211Provider(ContestType.ABC);
+        const mockMixedTasks = [
+          { contest_id: 'abc100', task_id: 'abc100_a', task_table_index: 'A' },
+          { contest_id: 'abc150', task_id: 'abc150_a', task_table_index: 'A' },
+          { contest_id: 'abc211', task_id: 'abc211_f', task_table_index: 'F' },
+          { contest_id: 'abc398', task_id: 'abc398_a', task_table_index: 'A' },
+          { contest_id: 'dp', task_id: 'dp_a', task_table_index: 'A' },
+          { contest_id: 'typical90', task_id: 'typical90_a', task_table_index: '001' },
+        ];
+        const filtered = provider.filter(mockMixedTasks as TaskResults);
+
+        expect(filtered.every((task) => task.contest_id.startsWith('abc'))).toBe(true);
+        expect(
+          filtered.every((task) => {
+            const round = getContestRound(task.contest_id);
+            return round >= 126 && round <= 211;
           }),
         ).toBe(true);
       });

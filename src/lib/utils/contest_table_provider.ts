@@ -225,6 +225,36 @@ export class ABC212ToABC318Provider extends ContestTableProviderBase {
   }
 }
 
+// ABC126 〜 ABC211 (2019/05/19 〜 2021/07/24)
+// 8 tasks per contest
+//
+// Note:
+// Before and from ABC126 onwards, the number and tendency of tasks are very different.
+export class ABC126ToABC211Provider extends ContestTableProviderBase {
+  protected setFilterCondition(): (taskResult: TaskResult) => boolean {
+    return (taskResult: TaskResult) => {
+      if (classifyContest(taskResult.contest_id) !== this.contestType) {
+        return false;
+      }
+
+      const contestRound = parseContestRound(taskResult.contest_id, 'abc');
+      return contestRound >= 126 && contestRound <= 211;
+    };
+  }
+
+  getMetadata(): ContestTableMetaData {
+    return {
+      title: 'AtCoder Beginner Contest 126 〜 211',
+      abbreviationName: 'fromAbc126ToAbc211',
+    };
+  }
+
+  getContestRoundLabel(contestId: string): string {
+    const contestNameLabel = getContestNameLabel(contestId);
+    return contestNameLabel.replace('ABC ', '');
+  }
+}
+
 function parseContestRound(contestId: string, prefix: string): number {
   const withoutPrefix = contestId.replace(prefix, '');
 
@@ -671,6 +701,15 @@ export const prepareContestProviderPresets = () => {
       }).addProvider(new ABC212ToABC318Provider(ContestType.ABC)),
 
     /**
+     * Single group for ABC 126-211
+     */
+    ABC126ToABC211: () =>
+      new ContestTableProviderGroup(`From ABC 126 to ABC 211`, {
+        buttonLabel: 'ABC 126 〜 211',
+        ariaLabel: 'Filter contests from ABC 126 to ABC 211',
+      }).addProvider(new ABC126ToABC211Provider(ContestType.ABC)),
+
+    /**
      * Single group for Typical 90 Problems
      */
     Typical90: () =>
@@ -728,6 +767,7 @@ export const contestTableProviderGroups = {
   abcLatest20Rounds: prepareContestProviderPresets().ABCLatest20Rounds(),
   abc319Onwards: prepareContestProviderPresets().ABC319Onwards(),
   fromAbc212ToAbc318: prepareContestProviderPresets().ABC212ToABC318(),
+  fromAbc126ToAbc211: prepareContestProviderPresets().ABC126ToABC211(),
   typical90: prepareContestProviderPresets().Typical90(),
   tessokuBook: prepareContestProviderPresets().TessokuBook(),
   mathAndAlgorithm: prepareContestProviderPresets().MathAndAlgorithm(),
