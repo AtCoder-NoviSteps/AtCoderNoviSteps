@@ -89,6 +89,25 @@ const createContestTasks = (
   });
 };
 
+// ABC126 - ABC211: 6 tasks (A, B, C, D, E, F)
+// Mix of different submission statuses to test various filtering and display scenarios.
+const [abc126_a, abc126_b, abc126_e, abc126_f] = createContestTasks('abc126', [
+  { taskTableIndex: 'A', statusName: AC },
+  { taskTableIndex: 'B', statusName: AC },
+  { taskTableIndex: 'E', statusName: AC_WITH_EDITORIAL },
+  { taskTableIndex: 'F', statusName: TRYING },
+]);
+const [abc150_d, abc150_e, abc150_f] = createContestTasks('abc150', [
+  { taskTableIndex: 'D', statusName: AC },
+  { taskTableIndex: 'E', statusName: TRYING },
+  { taskTableIndex: 'F', statusName: PENDING },
+]);
+const [abc211_a, abc211_c, abc211_f] = createContestTasks('abc211', [
+  { taskTableIndex: 'A', statusName: AC },
+  { taskTableIndex: 'C', statusName: AC_WITH_EDITORIAL },
+  { taskTableIndex: 'F', statusName: PENDING },
+]);
+
 // ABC212 - ABC232: 8 tasks (A, B, C, D, E, F, G and H)
 // Mix of different submission statuses to test various filtering and display scenarios.
 const [abc212_a, abc212_b, abc212_f, abc212_g, abc212_h] = createContestTasks('abc212', [
@@ -232,6 +251,16 @@ const [
 ]);
 
 export const taskResultsForContestTableProvider: TaskResults = [
+  abc126_a,
+  abc126_b,
+  abc126_e,
+  abc126_f,
+  abc150_d,
+  abc150_e,
+  abc150_f,
+  abc211_a,
+  abc211_c,
+  abc211_f,
   abc212_a,
   abc212_b,
   abc212_f,
