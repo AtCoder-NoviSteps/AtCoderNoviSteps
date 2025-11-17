@@ -12,6 +12,7 @@ import type { TaskResults, TaskResult } from '$lib/types/task';
 
 import { classifyContest, getContestNameLabel } from '$lib/utils/contest';
 import { getTaskTableHeaderName } from '$lib/utils/task';
+import { arc } from '@/test/lib/utils/test_cases/contest_type';
 
 /**
  * How to add a new contest table provider:
@@ -252,6 +253,33 @@ export class ABC126ToABC211Provider extends ContestTableProviderBase {
   getContestRoundLabel(contestId: string): string {
     const contestNameLabel = getContestNameLabel(contestId);
     return contestNameLabel.replace('ABC ', '');
+  }
+}
+
+// ARC104 〜 (2020/10/03 〜 )
+// 4 〜 7 tasks per contest
+export class ARC104OnwardsProvider extends ContestTableProviderBase {
+  protected setFilterCondition(): (taskResult: TaskResult) => boolean {
+    return (taskResult: TaskResult) => {
+      if (classifyContest(taskResult.contest_id) !== this.contestType) {
+        return false;
+      }
+
+      const contestRound = parseContestRound(taskResult.contest_id, 'arc');
+      return contestRound >= 104 && contestRound <= 999;
+    };
+  }
+
+  getMetadata(): ContestTableMetaData {
+    return {
+      title: 'AtCoder Regular Contest 104 〜 ',
+      abbreviationName: 'arc104Onwards',
+    };
+  }
+
+  getContestRoundLabel(contestId: string): string {
+    const contestNameLabel = getContestNameLabel(contestId);
+    return contestNameLabel.replace('ARC ', '');
   }
 }
 
@@ -710,6 +738,15 @@ export const prepareContestProviderPresets = () => {
       }).addProvider(new ABC126ToABC211Provider(ContestType.ABC)),
 
     /**
+     * Single group for ARC 104 onwards
+     */
+    ARC104Onwards: () =>
+      new ContestTableProviderGroup(`ARC 104 Onwards`, {
+        buttonLabel: 'ARC 104 〜 ',
+        ariaLabel: 'Filter contests from ARC 104 onwards',
+      }).addProvider(new ARC104OnwardsProvider(ContestType.ARC)),
+
+    /**
      * Single group for Typical 90 Problems
      */
     Typical90: () =>
@@ -768,6 +805,7 @@ export const contestTableProviderGroups = {
   abc319Onwards: prepareContestProviderPresets().ABC319Onwards(),
   fromAbc212ToAbc318: prepareContestProviderPresets().ABC212ToABC318(),
   fromAbc126ToAbc211: prepareContestProviderPresets().ABC126ToABC211(),
+  arc104Onwards: prepareContestProviderPresets().ARC104Onwards(),
   typical90: prepareContestProviderPresets().Typical90(),
   tessokuBook: prepareContestProviderPresets().TessokuBook(),
   mathAndAlgorithm: prepareContestProviderPresets().MathAndAlgorithm(),
