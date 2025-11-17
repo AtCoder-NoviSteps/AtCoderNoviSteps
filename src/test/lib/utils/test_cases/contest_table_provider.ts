@@ -378,3 +378,70 @@ const [fps24_a, fps24_b, fps24_m, fps24_x] = createContestTasks('fps-24', [
 ]);
 
 export const taskResultsForFPS24Provider: TaskResults = [fps24_a, fps24_b, fps24_m, fps24_x];
+
+// ARC 104 Onwards: Multiple problem patterns (4, 5, 6, 7 problems)
+// ARC104 (6 problems: A, B, C, D, E, F)
+const [arc104_a, arc104_b, arc104_c, arc104_d, arc104_e, arc104_f] = createContestTasks('arc104', [
+  { taskTableIndex: 'A', statusName: AC },
+  { taskTableIndex: 'B', statusName: AC },
+  { taskTableIndex: 'C', statusName: AC_WITH_EDITORIAL },
+  { taskTableIndex: 'D', statusName: TRYING },
+  { taskTableIndex: 'E', statusName: PENDING },
+  { taskTableIndex: 'F', statusName: PENDING },
+]);
+
+// ARC120 (7 problems: A, B, C, D, E, F, F2 - exception case)
+const [arc120_a, arc120_b, arc120_c, arc120_d, arc120_e, arc120_f, arc120_f2] = createContestTasks(
+  'arc120',
+  [
+    { taskTableIndex: 'A', statusName: AC },
+    { taskTableIndex: 'B', statusName: AC },
+    { taskTableIndex: 'C', statusName: AC },
+    { taskTableIndex: 'D', statusName: AC_WITH_EDITORIAL },
+    { taskTableIndex: 'E', statusName: TRYING },
+    { taskTableIndex: 'F', statusName: PENDING },
+    { taskTableIndex: 'F2', statusName: PENDING },
+  ],
+);
+
+// ARC204 (4 problems: A, B, C, D)
+const [arc204_a, arc204_b, arc204_c, arc204_d] = createContestTasks('arc204', [
+  { taskTableIndex: 'A', statusName: AC },
+  { taskTableIndex: 'B', statusName: AC_WITH_EDITORIAL },
+  { taskTableIndex: 'C', statusName: TRYING },
+  { taskTableIndex: 'D', statusName: PENDING },
+]);
+
+// ARC208 (5 problems: A, B, C, D, E)
+const [arc208_a, arc208_b, arc208_c, arc208_d, arc208_e] = createContestTasks('arc208', [
+  { taskTableIndex: 'A', statusName: AC },
+  { taskTableIndex: 'B', statusName: AC },
+  { taskTableIndex: 'C', statusName: AC_WITH_EDITORIAL },
+  { taskTableIndex: 'D', statusName: TRYING },
+  { taskTableIndex: 'E', statusName: PENDING },
+]);
+
+export const taskResultsForARC104OnwardsProvider: TaskResults = [
+  arc104_a,
+  arc104_b,
+  arc104_c,
+  arc104_d,
+  arc104_e,
+  arc104_f,
+  arc120_a,
+  arc120_b,
+  arc120_c,
+  arc120_d,
+  arc120_e,
+  arc120_f,
+  arc120_f2,
+  arc204_a,
+  arc204_b,
+  arc204_c,
+  arc204_d,
+  arc208_a,
+  arc208_b,
+  arc208_c,
+  arc208_d,
+  arc208_e,
+];
