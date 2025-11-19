@@ -41,7 +41,7 @@
     "@testing-library/jest-dom": "6.9.1",
     "@types/gtag.js": "0.0.20",
     "@types/jsdom": "21.1.7",
-    "@typescript-eslint/eslint-plugin": "8.46.4",
+    "@typescript-eslint/eslint-plugin": "8.47.0",
     "@typescript-eslint/parser": "8.47.0",
     "@vitest/coverage-v8": "4.0.8",
     "@vitest/ui": "4.0.8",
