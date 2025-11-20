@@ -53,7 +53,7 @@
     "jsdom": "26.1.0",
     "lint-staged": "16.2.7",
     "nock": "14.0.10",
-    "pnpm": "10.22.0",
+    "pnpm": "10.23.0",
     "prettier": "3.6.2",
     "prettier-plugin-svelte": "3.4.0",
     "prettier-plugin-tailwindcss": "0.6.14",
