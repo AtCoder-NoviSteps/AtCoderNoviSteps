@@ -254,12 +254,14 @@ Prisma v7では以下の設計変更により、`datasource`内で接続URLを�
 ### 備考
 
 **修正内容**:
+
 - `pnpm dlx prisma migrate deploy` → `pnpm exec prisma migrate deploy`
 - `pnpm dlx` はレジストリから最新版（v7.x）をダウンロード実行する
 - `pnpm exec` は `node_modules` 内の指定版（v5.22）を実行する
 - 修正後、CI環境でもローカル環境と同じPrisma v5.22が使用される
 
 **得られた教訓**:
+
 1. **バージョン指定の重要性**: `pnpm dlx` と `pnpm exec` の挙動の違いを理解することが、環境の一貫性確保に不可欠
 2. **コマンドの選択が与える影響**: 一見単純なコマンド名の違いが、CI/CD環境で大きな問題につながる可能性
 3. **Prisma のバージョン管理**: メジャーバージョン間のbreaking changes（v5 → v7での `datasource url` 廃止）は、移行戦略とテストが重要
