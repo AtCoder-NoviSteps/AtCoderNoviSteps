@@ -145,8 +145,8 @@ importers:
         specifier: 14.0.10
         version: 14.0.10
       pnpm:
-        specifier: 10.22.0
-        version: 10.22.0
+        specifier: 10.23.0
+        version: 10.23.0
       prettier:
         specifier: 3.6.2
         version: 3.6.2
@@ -3959,8 +3959,8 @@ packages:
     engines: {node: '>=18'}
     hasBin: true
 
-  pnpm@10.22.0:
-    resolution: {integrity: sha512-vwSe/plbKPUn/StBrgR0zikYb37cs79UUIe9Yfu+uyv3U2LRMH/aCcLSiOHkmXh6wS1Py2F6l0cYpgUfLu50HA==}
+  pnpm@10.23.0:
+    resolution: {integrity: sha512-IcTlaYACrel+Tv6Li0qJqN48haN5GflX56DzDzj7xbvdBZgP/ikXmy+25uaRJC4JjZRdFgF3LK0P71+2QR4qSw==}
     engines: {node: '>=18.12'}
     hasBin: true
 
@@ -9058,7 +9058,7 @@ snapshots:
     optionalDependencies:
       fsevents: 2.3.2
 
-  pnpm@10.22.0: {}
+  pnpm@10.23.0: {}
 
   points-on-curve@0.2.0: {}
 
