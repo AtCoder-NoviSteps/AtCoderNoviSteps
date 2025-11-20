@@ -103,7 +103,7 @@ jobs:
         run: pnpm build
 
       - name: Apply all pending migrations to the database
-        run: pnpm dlx prisma migrate deploy
+        run: pnpm exec prisma migrate deploy
         env:
           DATABASE_URL: ${{ secrets.PREVIEW_DATABASE_URL }}
           DIRECT_URL: ${{ secrets.PREVIEW_DIRECT_URL }}
@@ -155,7 +155,7 @@ jobs:
         run: pnpm build
 
       - name: Apply all pending migrations to the database
-        run: pnpm dlx prisma migrate deploy
+        run: pnpm exec prisma migrate deploy
         env:
           DATABASE_URL: ${{ secrets.PRODUCTION_DATABASE_URL }}
           DIRECT_URL: ${{ secrets.PRODUCTION_DIRECT_URL }}
