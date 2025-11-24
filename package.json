@@ -42,7 +42,7 @@
     "@types/gtag.js": "0.0.20",
     "@types/jsdom": "21.1.7",
     "@typescript-eslint/eslint-plugin": "8.47.0",
-    "@typescript-eslint/parser": "8.47.0",
+    "@typescript-eslint/parser": "8.48.0",
     "@vitest/coverage-v8": "4.0.13",
     "@vitest/ui": "4.0.13",
     "eslint": "9.39.1",
@@ -92,7 +92,7 @@
     "svelte-eslint-parser": "1.4.0",
     "tailwind-merge": "2.6.0",
     "tailwindcss": "3.4.18",
-    "vercel": "48.10.10",
+    "vercel": "48.10.11",
     "xss": "1.0.15"
   },
   "packageManager": "pnpm@10.22.0",
