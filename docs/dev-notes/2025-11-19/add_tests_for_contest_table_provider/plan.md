@@ -77,7 +77,7 @@
 
 ### パターン1: 4問コンテスト（AGC073）
 
-```
+```text
 task_table_index: A, B, C, D
 ```
 
@@ -87,7 +87,7 @@ task_table_index: A, B, C, D
 
 ### パターン2: 5問コンテスト（AGC009、AGC067～）
 
-```
+```text
 task_table_index: A, B, C, D, E
 ```
 
@@ -97,7 +97,7 @@ task_table_index: A, B, C, D, E
 
 ### パターン3: 6問コンテスト（標準）
 
-```
+```text
 task_table_index: A, B, C, D, E, F
 ```
 
@@ -107,7 +107,7 @@ task_table_index: A, B, C, D, E, F
 
 ### パターン4: 7問コンテスト（AGC028のみ）
 
-```
+```text
 task_table_index: A, B, C, D, E, F, F2
 ```
 
