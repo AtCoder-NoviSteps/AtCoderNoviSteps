@@ -445,3 +445,100 @@ export const taskResultsForARC104OnwardsProvider: TaskResults = [
   arc208_d,
   arc208_e,
 ];
+
+// AGC 001 Onwards: Multiple problem patterns (4, 5, 6, 7 problems)
+// AGC001 (6 problems: A, B, C, D, E, F - standard pattern)
+const [agc001_a, agc001_b, agc001_c, agc001_d, agc001_e, agc001_f] = createContestTasks('agc001', [
+  { taskTableIndex: 'A', statusName: AC },
+  { taskTableIndex: 'B', statusName: AC },
+  { taskTableIndex: 'C', statusName: AC_WITH_EDITORIAL },
+  { taskTableIndex: 'D', statusName: TRYING },
+  { taskTableIndex: 'E', statusName: PENDING },
+  { taskTableIndex: 'F', statusName: PENDING },
+]);
+
+// AGC002 (6 problems: A, B, C, D, E, F - standard pattern)
+const [agc002_a, agc002_b, agc002_c, agc002_d, agc002_e, agc002_f] = createContestTasks('agc002', [
+  { taskTableIndex: 'A', statusName: AC },
+  { taskTableIndex: 'B', statusName: AC },
+  { taskTableIndex: 'C', statusName: AC },
+  { taskTableIndex: 'D', statusName: AC_WITH_EDITORIAL },
+  { taskTableIndex: 'E', statusName: TRYING },
+  { taskTableIndex: 'F', statusName: PENDING },
+]);
+
+// AGC009 (5 problems: A, B, C, D, E - historical exception)
+const [agc009_a, agc009_b, agc009_c, agc009_d, agc009_e] = createContestTasks('agc009', [
+  { taskTableIndex: 'A', statusName: AC },
+  { taskTableIndex: 'B', statusName: AC },
+  { taskTableIndex: 'C', statusName: AC_WITH_EDITORIAL },
+  { taskTableIndex: 'D', statusName: TRYING },
+  { taskTableIndex: 'E', statusName: PENDING },
+]);
+
+// AGC028 (7 problems: A, B, C, D, E, F, F2 - only 7-problem pattern in 2025)
+const [agc028_a, agc028_b, agc028_c, agc028_d, agc028_e, agc028_f, agc028_f2] = createContestTasks(
+  'agc028',
+  [
+    { taskTableIndex: 'A', statusName: AC },
+    { taskTableIndex: 'B', statusName: AC },
+    { taskTableIndex: 'C', statusName: AC },
+    { taskTableIndex: 'D', statusName: AC_WITH_EDITORIAL },
+    { taskTableIndex: 'E', statusName: TRYING },
+    { taskTableIndex: 'F', statusName: PENDING },
+    { taskTableIndex: 'F2', statusName: PENDING },
+  ],
+);
+
+// AGC073 (4 problems: A, B, C, D - only 4-problem pattern in 2025)
+const [agc073_a, agc073_b, agc073_c, agc073_d] = createContestTasks('agc073', [
+  { taskTableIndex: 'A', statusName: AC },
+  { taskTableIndex: 'B', statusName: AC_WITH_EDITORIAL },
+  { taskTableIndex: 'C', statusName: TRYING },
+  { taskTableIndex: 'D', statusName: PENDING },
+]);
+
+// AGC074 (5 problems: A, B, C, D, E - standard after AGC067)
+const [agc074_a, agc074_b, agc074_c, agc074_d, agc074_e] = createContestTasks('agc074', [
+  { taskTableIndex: 'A', statusName: AC },
+  { taskTableIndex: 'B', statusName: AC },
+  { taskTableIndex: 'C', statusName: AC_WITH_EDITORIAL },
+  { taskTableIndex: 'D', statusName: TRYING },
+  { taskTableIndex: 'E', statusName: PENDING },
+]);
+
+export const taskResultsForAGC001OnwardsProvider: TaskResults = [
+  agc001_a,
+  agc001_b,
+  agc001_c,
+  agc001_d,
+  agc001_e,
+  agc001_f,
+  agc002_a,
+  agc002_b,
+  agc002_c,
+  agc002_d,
+  agc002_e,
+  agc002_f,
+  agc009_a,
+  agc009_b,
+  agc009_c,
+  agc009_d,
+  agc009_e,
+  agc028_a,
+  agc028_b,
+  agc028_c,
+  agc028_d,
+  agc028_e,
+  agc028_f,
+  agc028_f2,
+  agc073_a,
+  agc073_b,
+  agc073_c,
+  agc073_d,
+  agc074_a,
+  agc074_b,
+  agc074_c,
+  agc074_d,
+  agc074_e,
+];
