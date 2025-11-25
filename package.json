@@ -87,7 +87,7 @@
     "flowbite": "2.5.2",
     "lucia": "2.7.7",
     "p-queue": "^9.0.1",
-    "playwright": "1.56.1",
+    "playwright": "1.57.0",
     "prisma-erd-generator": "2.3.0",
     "svelte-eslint-parser": "1.4.0",
     "tailwind-merge": "2.6.0",
