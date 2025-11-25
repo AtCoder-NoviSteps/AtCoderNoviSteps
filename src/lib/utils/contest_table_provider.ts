@@ -282,6 +282,33 @@ export class ARC104OnwardsProvider extends ContestTableProviderBase {
   }
 }
 
+// AGC001 〜 (2016/07/16 〜 )
+// 4 〜 7 tasks per contest
+export class AGC001OnwardsProvider extends ContestTableProviderBase {
+  protected setFilterCondition(): (taskResult: TaskResult) => boolean {
+    return (taskResult: TaskResult) => {
+      if (classifyContest(taskResult.contest_id) !== this.contestType) {
+        return false;
+      }
+
+      const contestRound = parseContestRound(taskResult.contest_id, 'agc');
+      return contestRound >= 1 && contestRound <= 999;
+    };
+  }
+
+  getMetadata(): ContestTableMetaData {
+    return {
+      title: 'AtCoder Grand Contest 001 〜 ',
+      abbreviationName: 'agc001Onwards',
+    };
+  }
+
+  getContestRoundLabel(contestId: string): string {
+    const contestNameLabel = getContestNameLabel(contestId);
+    return contestNameLabel.replace('AGC ', '');
+  }
+}
+
 function parseContestRound(contestId: string, prefix: string): number {
   const withoutPrefix = contestId.replace(prefix, '');
 
@@ -746,6 +773,15 @@ export const prepareContestProviderPresets = () => {
       }).addProvider(new ARC104OnwardsProvider(ContestType.ARC)),
 
     /**
+     * Single group for AGC 001 onwards
+     */
+    AGC001Onwards: () =>
+      new ContestTableProviderGroup(`AGC 001 Onwards`, {
+        buttonLabel: 'AGC 001 〜 ',
+        ariaLabel: 'Filter contests from AGC 001 onwards',
+      }).addProvider(new AGC001OnwardsProvider(ContestType.AGC)),
+
+    /**
      * Single group for Typical 90 Problems
      */
     Typical90: () =>
@@ -805,6 +841,7 @@ export const contestTableProviderGroups = {
   fromAbc212ToAbc318: prepareContestProviderPresets().ABC212ToABC318(),
   fromAbc126ToAbc211: prepareContestProviderPresets().ABC126ToABC211(),
   arc104Onwards: prepareContestProviderPresets().ARC104Onwards(),
+  agc001Onwards: prepareContestProviderPresets().AGC001Onwards(),
   typical90: prepareContestProviderPresets().Typical90(),
   tessokuBook: prepareContestProviderPresets().TessokuBook(),
   mathAndAlgorithm: prepareContestProviderPresets().MathAndAlgorithm(),
