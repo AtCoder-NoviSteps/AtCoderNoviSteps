@@ -264,7 +264,7 @@ describe('ContestTableProviderBase and implementations', () => {
         const provider = new ABC319OnwardsProvider(ContestType.ABC);
         const metadata = provider.getMetadata();
 
-        expect(metadata.title).toBe('AtCoder Beginner Contest 319 〜 ');
+        expect(metadata.title).toBe('AtCoder Beginner Contest 319 〜（7 問制）');
         expect(metadata.abbreviationName).toBe('abc319Onwards');
       });
 
@@ -307,7 +307,7 @@ describe('ContestTableProviderBase and implementations', () => {
         const provider = new ABC212ToABC318Provider(ContestType.ABC);
         const metadata = provider.getMetadata();
 
-        expect(metadata.title).toBe('AtCoder Beginner Contest 212 〜 318');
+        expect(metadata.title).toBe('AtCoder Beginner Contest 212 〜 318（8 問制）');
         expect(metadata.abbreviationName).toBe('fromAbc212ToAbc318');
       });
 
@@ -351,7 +351,7 @@ describe('ContestTableProviderBase and implementations', () => {
         const provider = new ABC126ToABC211Provider(ContestType.ABC);
         const metadata = provider.getMetadata();
 
-        expect(metadata.title).toBe('AtCoder Beginner Contest 126 〜 211');
+        expect(metadata.title).toBe('AtCoder Beginner Contest 126 〜 211（6 問制）');
         expect(metadata.abbreviationName).toBe('fromAbc126ToAbc211');
       });
 
