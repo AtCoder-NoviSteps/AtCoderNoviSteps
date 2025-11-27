@@ -184,7 +184,7 @@ export class ABC319OnwardsProvider extends ContestTableProviderBase {
 
   getMetadata(): ContestTableMetaData {
     return {
-      title: 'AtCoder Beginner Contest 319 〜 ',
+      title: 'AtCoder Beginner Contest 319 〜（7 問制）',
       abbreviationName: 'abc319Onwards',
     };
   }
@@ -214,7 +214,7 @@ export class ABC212ToABC318Provider extends ContestTableProviderBase {
 
   getMetadata(): ContestTableMetaData {
     return {
-      title: 'AtCoder Beginner Contest 212 〜 318',
+      title: 'AtCoder Beginner Contest 212 〜 318（8 問制）',
       abbreviationName: 'fromAbc212ToAbc318',
     };
   }
@@ -244,7 +244,7 @@ export class ABC126ToABC211Provider extends ContestTableProviderBase {
 
   getMetadata(): ContestTableMetaData {
     return {
-      title: 'AtCoder Beginner Contest 126 〜 211',
+      title: 'AtCoder Beginner Contest 126 〜 211（6 問制）',
       abbreviationName: 'fromAbc126ToAbc211',
     };
   }
