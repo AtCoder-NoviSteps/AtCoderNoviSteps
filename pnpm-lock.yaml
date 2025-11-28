@@ -69,8 +69,8 @@ importers:
         specifier: 3.4.18
         version: 3.4.18(tsx@4.19.2)(yaml@2.8.1)
       vercel:
-        specifier: 48.11.1
-        version: 48.11.1(rollup@4.53.3)(typescript@5.9.3)
+        specifier: 48.12.0
+        version: 48.12.0(rollup@4.53.3)(typescript@5.9.3)
       xss:
         specifier: 1.0.15
         version: 1.0.15
@@ -1649,6 +1649,9 @@ packages:
 
   '@vercel/introspection@0.0.4':
     resolution: {integrity: sha512-L9Pm7gdG8tTplLoaeXMQfX80njaegdF1rQpWS/Lf77cSgZlkEd2xuN0wKcXqCUzGTSpKt1n/lzF9lt/gWuXC5A==}
+
+  '@vercel/nestjs@0.2.15':
+    resolution: {integrity: sha512-+76J2mCOcsz3qo1cz2dh68qkiBZTH/xY7gPYpSN/TmYZT25MtZD/fweYTnTiNt7PclyLQIAKzjE1uuMuNzkCEg==}
 
   '@vercel/next@4.15.6':
     resolution: {integrity: sha512-iLURGmGQ2rzSilLm0KDid5J0M6biBJnoJyRVAHziXKa23lleXRAl/7V3J+vPoPqoiG8lQWT1bICRyPBEowCyuQ==}
@@ -4786,8 +4789,8 @@ packages:
     resolution: {integrity: sha512-BgWVbCI72aIQy937xbawcs+hrVaN/CZ2UwutgaJ36hGqRrLNM+f5LUT/YPRbo8IV/ASeFzXszezV+y2+rq3l8A==}
     engines: {node: '>= 0.10'}
 
-  vercel@48.11.1:
-    resolution: {integrity: sha512-eXcfXlscsPmaPqwMWekRZGmP51YUwjCT1nteTk4flMB5Q8IkcrF6rb8vhtu+zAyVI3pAAd43f3JTNFrIwvy9rQ==}
+  vercel@48.12.0:
+    resolution: {integrity: sha512-I2BagAzaLt+AJ2djooh1zC9VK4irWgeYVfCMCbKNnOd3BpgDaoIpTRBIWEdn3xwwe6QLKWHVqu84+PMlbkz73g==}
     engines: {node: '>= 18'}
     hasBin: true
 
@@ -6566,6 +6569,17 @@ snapshots:
     dependencies:
       path-to-regexp: 8.3.0
       zod: 3.22.4
+
+  '@vercel/nestjs@0.2.15(rollup@4.53.3)':
+    dependencies:
+      '@vercel/node': 5.5.13(rollup@4.53.3)
+      '@vercel/static-config': 3.1.2
+    transitivePeerDependencies:
+      - '@swc/core'
+      - '@swc/wasm'
+      - encoding
+      - rollup
+      - supports-color
 
   '@vercel/next@4.15.6(rollup@4.53.3)':
     dependencies:
@@ -9855,7 +9869,7 @@ snapshots:
   validator@13.15.15:
     optional: true
 
-  vercel@48.11.1(rollup@4.53.3)(typescript@5.9.3):
+  vercel@48.12.0(rollup@4.53.3)(typescript@5.9.3):
     dependencies:
       '@vercel/backends': 0.0.13(rollup@4.53.3)(typescript@5.9.3)
       '@vercel/blob': 1.0.2
@@ -9869,6 +9883,7 @@ snapshots:
       '@vercel/h3': 0.1.20(rollup@4.53.3)
       '@vercel/hono': 0.2.14(rollup@4.53.3)
       '@vercel/hydrogen': 1.3.2
+      '@vercel/nestjs': 0.2.15(rollup@4.53.3)
       '@vercel/next': 4.15.6(rollup@4.53.3)
       '@vercel/node': 5.5.13(rollup@4.53.3)
       '@vercel/python': 6.1.0
