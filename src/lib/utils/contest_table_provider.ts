@@ -866,7 +866,7 @@ export const prepareContestProviderPresets = () => {
     /**
      * Single group for ARC 058-103
      */
-    ARC058ToARC103Provider: () =>
+    ARC058ToARC103: () =>
       new ContestTableProviderGroup(`ARC 058 To ARC 103`, {
         buttonLabel: 'ARC 058 〜 103',
         ariaLabel: 'Filter contests from ARC 058 to ARC 103',
@@ -942,7 +942,7 @@ export const contestTableProviderGroups = {
   fromAbc126ToAbc211: prepareContestProviderPresets().ABC126ToABC211(),
   fromAbc042ToAbc125: prepareContestProviderPresets().ABC042ToABC125(),
   arc104Onwards: prepareContestProviderPresets().ARC104Onwards(),
-  fromArc058ToArc103: prepareContestProviderPresets().ARC058ToARC103Provider(),
+  fromArc058ToArc103: prepareContestProviderPresets().ARC058ToARC103(),
   agc001Onwards: prepareContestProviderPresets().AGC001Onwards(),
   typical90: prepareContestProviderPresets().Typical90(),
   tessokuBook: prepareContestProviderPresets().TessokuBook(),
