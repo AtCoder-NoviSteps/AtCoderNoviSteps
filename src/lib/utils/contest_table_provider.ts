@@ -255,6 +255,47 @@ export class ABC126ToABC211Provider extends ContestTableProviderBase {
   }
 }
 
+// ABC042 〜 ABC125 (2016/07/23 〜 2019/04/27)
+// 4 tasks per contest
+//
+// Note:
+// Before and from ABC042 onwards, the number and tendency of tasks are very different.
+// From this round onwards, contests became rated.
+export class ABC042ToABC125Provider extends ContestTableProviderBase {
+  protected setFilterCondition(): (taskResult: TaskResult) => boolean {
+    return (taskResult: TaskResult) => {
+      if (classifyContest(taskResult.contest_id) !== this.contestType) {
+        return false;
+      }
+
+      const contestRound = parseContestRound(taskResult.contest_id, 'abc');
+      return contestRound >= 42 && contestRound <= 125;
+    };
+  }
+
+  getMetadata(): ContestTableMetaData {
+    return {
+      title: 'AtCoder Beginner Contest 042 〜 125（ARC 同時開催が大半）',
+      abbreviationName: 'fromAbc042ToAbc125',
+    };
+  }
+
+  getDisplayConfig(): ContestTableDisplayConfig {
+    return {
+      isShownHeader: true,
+      isShownRoundLabel: true,
+      tableBodyCellsWidth: 'w-1/2 md:w-1/3 lg:w-1/4 px-1 py-1',
+      roundLabelWidth: 'xl:w-16',
+      isShownTaskIndex: false,
+    };
+  }
+
+  getContestRoundLabel(contestId: string): string {
+    const contestNameLabel = getContestNameLabel(contestId);
+    return contestNameLabel.replace('ABC ', '');
+  }
+}
+
 // ARC104 〜 (2020/10/03 〜 )
 // 4 〜 7 tasks per contest
 export class ARC104OnwardsProvider extends ContestTableProviderBase {
@@ -273,6 +314,47 @@ export class ARC104OnwardsProvider extends ContestTableProviderBase {
     return {
       title: 'AtCoder Regular Contest 104 〜 ',
       abbreviationName: 'arc104Onwards',
+    };
+  }
+
+  getContestRoundLabel(contestId: string): string {
+    const contestNameLabel = getContestNameLabel(contestId);
+    return contestNameLabel.replace('ARC ', '');
+  }
+}
+
+// ARC058 〜 ARC103 (2016/07/23 〜 2018/09/29)
+// 4 tasks per contest
+//
+// Note:
+// Before and from ARC058 onwards, the number and tendency of tasks are very different.
+// From this round onwards, contests became rated.
+export class ARC058ToARC103Provider extends ContestTableProviderBase {
+  protected setFilterCondition(): (taskResult: TaskResult) => boolean {
+    return (taskResult: TaskResult) => {
+      if (classifyContest(taskResult.contest_id) !== this.contestType) {
+        return false;
+      }
+
+      const contestRound = parseContestRound(taskResult.contest_id, 'arc');
+      return contestRound >= 58 && contestRound <= 103;
+    };
+  }
+
+  getMetadata(): ContestTableMetaData {
+    return {
+      title: 'AtCoder Regular Contest 058 〜 103（ABC 同時開催）',
+      abbreviationName: 'fromArc058ToArc103',
+    };
+  }
+
+  getDisplayConfig(): ContestTableDisplayConfig {
+    return {
+      isShownHeader: true,
+      isShownRoundLabel: true,
+      tableBodyCellsWidth: 'w-1/2 md:w-1/3 lg:w-1/4 px-1 py-1',
+      roundLabelWidth: 'xl:w-16',
+      isShownTaskIndex: false,
     };
   }
 
@@ -764,6 +846,15 @@ export const prepareContestProviderPresets = () => {
       }).addProvider(new ABC126ToABC211Provider(ContestType.ABC)),
 
     /**
+     * Single group for ABC 042-125
+     */
+    ABC042ToABC125: () =>
+      new ContestTableProviderGroup(`From ABC 042 to ABC 125`, {
+        buttonLabel: 'ABC 042 〜 125',
+        ariaLabel: 'Filter contests from ABC 042 to ABC 125',
+      }).addProvider(new ABC042ToABC125Provider(ContestType.ABC)),
+
+    /**
      * Single group for ARC 104 onwards
      */
     ARC104Onwards: () =>
@@ -771,6 +862,15 @@ export const prepareContestProviderPresets = () => {
         buttonLabel: 'ARC 104 〜 ',
         ariaLabel: 'Filter contests from ARC 104 onwards',
       }).addProvider(new ARC104OnwardsProvider(ContestType.ARC)),
+
+    /**
+     * Single group for ARC 058-103
+     */
+    ARC058ToARC103: () =>
+      new ContestTableProviderGroup(`ARC 058 To ARC 103`, {
+        buttonLabel: 'ARC 058 〜 103',
+        ariaLabel: 'Filter contests from ARC 058 to ARC 103',
+      }).addProvider(new ARC058ToARC103Provider(ContestType.ARC)),
 
     /**
      * Single group for AGC 001 onwards
@@ -840,7 +940,9 @@ export const contestTableProviderGroups = {
   abc319Onwards: prepareContestProviderPresets().ABC319Onwards(),
   fromAbc212ToAbc318: prepareContestProviderPresets().ABC212ToABC318(),
   fromAbc126ToAbc211: prepareContestProviderPresets().ABC126ToABC211(),
+  fromAbc042ToAbc125: prepareContestProviderPresets().ABC042ToABC125(),
   arc104Onwards: prepareContestProviderPresets().ARC104Onwards(),
+  fromArc058ToArc103: prepareContestProviderPresets().ARC058ToARC103(),
   agc001Onwards: prepareContestProviderPresets().AGC001Onwards(),
   typical90: prepareContestProviderPresets().Typical90(),
   tessokuBook: prepareContestProviderPresets().TessokuBook(),
