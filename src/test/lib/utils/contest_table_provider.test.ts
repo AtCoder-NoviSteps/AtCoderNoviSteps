@@ -8,7 +8,9 @@ import {
   ABC319OnwardsProvider,
   ABC212ToABC318Provider,
   ABC126ToABC211Provider,
+  ABC042ToABC125Provider,
   ARC104OnwardsProvider,
+  ARC058ToARC103Provider,
   AGC001OnwardsProvider,
   EDPCProvider,
   TDPCProvider,
@@ -387,6 +389,164 @@ describe('ContestTableProviderBase and implementations', () => {
     });
   });
 
+  // ABC042 to ABC125 only
+  describe('ABC 042 to ABC 125', () => {
+    test('expects to filter tasks within ABC042-125 range', () => {
+      const provider = new ABC042ToABC125Provider(ContestType.ABC);
+      const mixed = [
+        { contest_id: 'abc041', task_id: 'abc041_a', task_table_index: 'A' },
+        { contest_id: 'abc042', task_id: 'abc042_a', task_table_index: 'A' },
+        { contest_id: 'abc125', task_id: 'abc125_a', task_table_index: 'A' },
+        { contest_id: 'abc126', task_id: 'abc126_a', task_table_index: 'A' },
+      ];
+
+      const filtered = provider.filter(mixed as TaskResults);
+
+      expect(filtered).toHaveLength(2);
+      expect(filtered.map((task) => task.contest_id)).toEqual(['abc042', 'abc125']);
+    });
+
+    test('expects to filter only ABC-type contests', () => {
+      const provider = new ABC042ToABC125Provider(ContestType.ABC);
+      const mixed = [
+        { contest_id: 'abc042', task_id: 'abc042_a', task_table_index: 'A' },
+        { contest_id: 'abc042', task_id: 'arc058_a', task_table_index: 'C' },
+        { contest_id: 'arc058', task_id: 'arc058_a', task_table_index: 'C' },
+      ];
+
+      const filtered = provider.filter(mixed as TaskResults);
+
+      expect(filtered).toHaveLength(2);
+      expect(filtered[0].contest_id).toBe('abc042');
+      expect(filtered[1].contest_id).toBe('abc042');
+    });
+
+    test('expects to return correct metadata', () => {
+      const provider = new ABC042ToABC125Provider(ContestType.ABC);
+      const metadata = provider.getMetadata();
+
+      expect(metadata.title).toBe('AtCoder Beginner Contest 042 〜 125（ARC 同時開催が大半）');
+      expect(metadata.abbreviationName).toBe('fromAbc042ToAbc125');
+    });
+
+    test('expects to return correct display config', () => {
+      const provider = new ABC042ToABC125Provider(ContestType.ABC);
+      const config = provider.getDisplayConfig();
+
+      expect(config.isShownHeader).toBe(true);
+      expect(config.isShownRoundLabel).toBe(true);
+      expect(config.tableBodyCellsWidth).toBe('w-1/2 md:w-1/3 lg:w-1/4 px-1 py-1');
+      expect(config.roundLabelWidth).toBe('xl:w-16');
+      expect(config.isShownTaskIndex).toBe(false);
+    });
+
+    test('expects to format contest round label correctly', () => {
+      const provider = new ABC042ToABC125Provider(ContestType.ABC);
+
+      expect(provider.getContestRoundLabel('abc042')).toBe('042');
+      expect(provider.getContestRoundLabel('abc125')).toBe('125');
+    });
+
+    test('expects to generate correct table structure', () => {
+      const provider = new ABC042ToABC125Provider(ContestType.ABC);
+      const mockTasks = [
+        { contest_id: 'abc042', task_id: 'abc042_a', task_table_index: 'A' },
+        { contest_id: 'abc042', task_id: 'abc042_b', task_table_index: 'B' },
+        { contest_id: 'abc042', task_id: 'arc058_a', task_table_index: 'C' },
+        { contest_id: 'abc042', task_id: 'arc058_b', task_table_index: 'D' },
+      ];
+
+      const table = provider.generateTable(mockTasks as TaskResults);
+
+      expect(table).toHaveProperty('abc042');
+      expect(table.abc042).toHaveProperty('A');
+      expect(table.abc042).toHaveProperty('B');
+      expect(table.abc042).toHaveProperty('C');
+      expect(table.abc042).toHaveProperty('D');
+    });
+
+    test('expects to return correct round id', () => {
+      const provider = new ABC042ToABC125Provider(ContestType.ABC);
+      const mockTasks = [
+        { contest_id: 'abc042', task_id: 'abc042_a', task_table_index: 'A' },
+        { contest_id: 'abc125', task_id: 'abc125_a', task_table_index: 'A' },
+      ];
+      const filtered = provider.filter(mockTasks as TaskResults);
+      const roundIds = provider.getContestRoundIds(filtered);
+
+      expect(roundIds).toContain('abc042');
+      expect(roundIds).toContain('abc125');
+    });
+
+    test('expects to return correct header id metadata', () => {
+      const provider = new ABC042ToABC125Provider(ContestType.ABC);
+      const metadata = provider.getMetadata();
+
+      expect(metadata.abbreviationName).toBe('fromAbc042ToAbc125');
+    });
+
+    test('expects to handle empty input', () => {
+      const provider = new ABC042ToABC125Provider(ContestType.ABC);
+      const table = provider.generateTable([] as TaskResults);
+
+      expect(table).toEqual({});
+    });
+
+    test('expects to exclude non-ABC contests even if in range', () => {
+      const provider = new ABC042ToABC125Provider(ContestType.ABC);
+      const mixed = [
+        { contest_id: 'abc042', task_id: 'abc042_a', task_table_index: 'A' },
+        { contest_id: 'abc043', task_id: 'abc043_a', task_table_index: 'A' },
+        { contest_id: 'arc058', task_id: 'arc058_a', task_table_index: 'C' },
+        { contest_id: 'arc059', task_id: 'arc059_a', task_table_index: 'C' },
+      ];
+
+      const filtered = provider.filter(mixed as TaskResults);
+
+      expect(filtered).toHaveLength(2);
+      expect(filtered.every((t) => t.contest_id.startsWith('abc'))).toBe(true);
+    });
+
+    test('expects to generate correct table structure with shared problems (ABC042 with ARC058)', () => {
+      const provider = new ABC042ToABC125Provider(ContestType.ABC);
+      const mockAbc042Tasks = [
+        { contest_id: 'abc042', task_id: 'abc042_a', task_table_index: 'A' },
+        { contest_id: 'abc042', task_id: 'abc042_b', task_table_index: 'B' },
+        { contest_id: 'abc042', task_id: 'arc058_a', task_table_index: 'C' },
+        { contest_id: 'abc042', task_id: 'arc058_b', task_table_index: 'D' },
+      ];
+
+      const table = provider.generateTable(mockAbc042Tasks as TaskResults);
+
+      expect(table).toHaveProperty('abc042');
+      expect(table.abc042).toHaveProperty('A'); // only ABC
+      expect(table.abc042).toHaveProperty('B'); // only ABC
+      expect(table.abc042).toHaveProperty('C'); // shared problem (ARC side task_id)
+      expect(table.abc042).toHaveProperty('D'); // shared problem (ARC side task_id)
+    });
+
+    test('expects to handle both solo and concurrent contests correctly', () => {
+      const provider = new ABC042ToABC125Provider(ContestType.ABC);
+      const mixed = [
+        // ABC042: Concurrent with ARC058
+        { contest_id: 'abc042', task_id: 'abc042_a', task_table_index: 'A' },
+        { contest_id: 'abc042', task_id: 'arc058_a', task_table_index: 'C' },
+        // ABC051: Single round without ARC
+        { contest_id: 'abc051', task_id: 'abc051_c', task_table_index: 'C' },
+        { contest_id: 'abc051', task_id: 'abc051_d', task_table_index: 'D' },
+      ];
+
+      const filtered = provider.filter(mixed as TaskResults);
+      const table = provider.generateTable(filtered);
+
+      expect(table).toHaveProperty('abc042');
+      expect(table).toHaveProperty('abc051');
+      expect(table.abc042).toHaveProperty('C'); // shared problem
+      expect(table.abc051).toHaveProperty('C');
+      expect(table.abc051).toHaveProperty('D');
+    });
+  });
+
   // ARC 104 Onwards only
   describe('ARC 104 Onwards', () => {
     test('expects to filter tasks to include only ARC104 and later', () => {
@@ -531,6 +691,167 @@ describe('ContestTableProviderBase and implementations', () => {
           return round >= 104;
         }),
       ).toBe(true);
+    });
+  });
+
+  // ARC058 to ARC103 only
+  describe('ARC 058 to ARC 103', () => {
+    test('expects to filter tasks within ARC058-103 range', () => {
+      const provider = new ARC058ToARC103Provider(ContestType.ARC);
+      const mixed = [
+        { contest_id: 'arc057', task_id: 'arc057_a', task_table_index: 'A' },
+        { contest_id: 'arc058', task_id: 'arc058_a', task_table_index: 'C' },
+        { contest_id: 'arc103', task_id: 'arc103_a', task_table_index: 'C' },
+        { contest_id: 'arc104', task_id: 'arc104_a', task_table_index: 'A' },
+      ];
+
+      const filtered = provider.filter(mixed as TaskResults);
+
+      expect(filtered).toHaveLength(2);
+      expect(filtered.map((task) => task.contest_id)).toEqual(['arc058', 'arc103']);
+    });
+
+    test('expects to filter only ARC-type contests', () => {
+      const provider = new ARC058ToARC103Provider(ContestType.ARC);
+      const mixed = [
+        { contest_id: 'arc058', task_id: 'arc058_a', task_table_index: 'C' },
+        { contest_id: 'arc058', task_id: 'arc058_f', task_table_index: 'F' },
+        { contest_id: 'abc042', task_id: 'abc042_a', task_table_index: 'A' },
+      ];
+
+      const filtered = provider.filter(mixed as TaskResults);
+
+      expect(filtered).toHaveLength(2);
+      expect(filtered[0].contest_id).toBe('arc058');
+      expect(filtered[1].contest_id).toBe('arc058');
+    });
+
+    test('expects to return correct metadata', () => {
+      const provider = new ARC058ToARC103Provider(ContestType.ARC);
+      const metadata = provider.getMetadata();
+
+      expect(metadata.title).toBe('AtCoder Regular Contest 058 〜 103（ABC 同時開催）');
+      expect(metadata.abbreviationName).toBe('fromArc058ToArc103');
+    });
+
+    test('expects to return correct display config', () => {
+      const provider = new ARC058ToARC103Provider(ContestType.ARC);
+      const config = provider.getDisplayConfig();
+
+      expect(config.isShownHeader).toBe(true);
+      expect(config.isShownRoundLabel).toBe(true);
+      expect(config.tableBodyCellsWidth).toBe('w-1/2 md:w-1/3 lg:w-1/4 px-1 py-1');
+      expect(config.roundLabelWidth).toBe('xl:w-16');
+      expect(config.isShownTaskIndex).toBe(false);
+    });
+
+    test('expects to format contest round label correctly', () => {
+      const provider = new ARC058ToARC103Provider(ContestType.ARC);
+
+      expect(provider.getContestRoundLabel('arc058')).toBe('058');
+      expect(provider.getContestRoundLabel('arc103')).toBe('103');
+    });
+
+    test('expects to generate correct table structure', () => {
+      const provider = new ARC058ToARC103Provider(ContestType.ARC);
+      const mockTasks = [
+        { contest_id: 'arc058', task_id: 'arc058_a', task_table_index: 'C' },
+        { contest_id: 'arc058', task_id: 'arc058_b', task_table_index: 'D' },
+        { contest_id: 'arc058', task_id: 'arc058_c', task_table_index: 'E' },
+        { contest_id: 'arc058', task_id: 'arc058_d', task_table_index: 'F' },
+      ];
+
+      const table = provider.generateTable(mockTasks as TaskResults);
+
+      expect(table).toHaveProperty('arc058');
+      expect(table.arc058).toHaveProperty('C');
+      expect(table.arc058).toHaveProperty('D');
+      expect(table.arc058).toHaveProperty('E');
+      expect(table.arc058).toHaveProperty('F');
+    });
+
+    test('expects to return correct round ids', () => {
+      const provider = new ARC058ToARC103Provider(ContestType.ARC);
+      const mockTasks = [
+        { contest_id: 'arc058', task_id: 'arc058_a', task_table_index: 'C' },
+        { contest_id: 'arc103', task_id: 'arc103_a', task_table_index: 'C' },
+      ];
+      const filtered = provider.filter(mockTasks as TaskResults);
+      const roundIds = provider.getContestRoundIds(filtered);
+
+      expect(roundIds).toContain('arc058');
+      expect(roundIds).toContain('arc103');
+    });
+
+    test('expects to return correct header id metadata', () => {
+      const provider = new ARC058ToARC103Provider(ContestType.ARC);
+      const metadata = provider.getMetadata();
+
+      expect(metadata.abbreviationName).toBe('fromArc058ToArc103');
+    });
+
+    test('expects to handle empty input', () => {
+      const provider = new ARC058ToARC103Provider(ContestType.ARC);
+      const table = provider.generateTable([] as TaskResults);
+
+      expect(table).toEqual({});
+    });
+
+    test('expects to exclude non-ARC contests even if in range', () => {
+      const provider = new ARC058ToARC103Provider(ContestType.ARC);
+      const mixed = [
+        { contest_id: 'arc058', task_id: 'arc058_a', task_table_index: 'C' },
+        { contest_id: 'arc059', task_id: 'arc059_a', task_table_index: 'C' },
+        { contest_id: 'abc042', task_id: 'abc042_a', task_table_index: 'A' },
+        { contest_id: 'abc043', task_id: 'abc043_a', task_table_index: 'A' },
+      ];
+
+      const filtered = provider.filter(mixed as TaskResults);
+
+      expect(filtered).toHaveLength(2);
+      expect(filtered.every((task) => task.contest_id.startsWith('arc'))).toBe(true);
+    });
+
+    test('expects to generate correct table structure with shared and exclusive problems (ARC058)', () => {
+      const provider = new ARC058ToARC103Provider(ContestType.ARC);
+      const mockArc058Tasks = [
+        { contest_id: 'arc058', task_id: 'arc058_a', task_table_index: 'C' },
+        { contest_id: 'arc058', task_id: 'arc058_b', task_table_index: 'D' },
+        { contest_id: 'arc058', task_id: 'arc058_c', task_table_index: 'E' },
+        { contest_id: 'arc058', task_id: 'arc058_d', task_table_index: 'F' },
+      ];
+
+      const table = provider.generateTable(mockArc058Tasks as TaskResults);
+
+      expect(table).toHaveProperty('arc058');
+      expect(table.arc058).toHaveProperty('C'); // shared problem (ABC side task_id)
+      expect(table.arc058).toHaveProperty('D'); // shared problem (ABC side task_id)
+      expect(table.arc058).toHaveProperty('E'); // only ARC
+      expect(table.arc058).toHaveProperty('F'); // only ARC
+    });
+
+    test('expects to correctly handle ARC58-103 where all rounds are concurrent with ABC', () => {
+      const provider = new ARC058ToARC103Provider(ContestType.ARC);
+
+      // ARC058 (Concurrent with ABC042)
+      const arc058Tasks = [
+        { contest_id: 'arc058', task_id: 'arc058_a', task_table_index: 'C' },
+        { contest_id: 'arc058', task_id: 'arc058_b', task_table_index: 'D' },
+      ];
+
+      // ARC060 (Concurrent with ABC044)
+      const arc060Tasks = [
+        { contest_id: 'arc060', task_id: 'arc060_a', task_table_index: 'C' },
+        { contest_id: 'arc060', task_id: 'arc060_b', task_table_index: 'D' },
+      ];
+
+      const mixed = [...arc058Tasks, ...arc060Tasks];
+      const filtered = provider.filter(mixed as TaskResults);
+      const table = provider.generateTable(filtered);
+
+      expect(filtered).toHaveLength(4);
+      expect(table).toHaveProperty('arc058');
+      expect(table).toHaveProperty('arc060');
     });
   });
 
