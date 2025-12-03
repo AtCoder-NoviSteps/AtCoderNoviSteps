@@ -170,8 +170,8 @@ test('expects to generate correct table structure', () => {
 test('expects to return correct round id', () => {
   const provider = new ABC042ToABC125Provider(ContestType.ABC);
 
-  expect(provider.getRoundId('abc042')).toBe('abc042');
-  expect(provider.getRoundId('abc125')).toBe('abc125');
+  expect(provider.getContestRoundIds('abc042')).toBe('abc042');
+  expect(provider.getContestRoundIds('abc125')).toBe('abc125');
 });
 ```
 
@@ -181,7 +181,7 @@ test('expects to return correct round id', () => {
 test('expects to return correct header id', () => {
   const provider = new ABC042ToABC125Provider(ContestType.ABC);
 
-  expect(provider.getHeaderId()).toMatch(/fromAbc042ToAbc125/);
+  expect(provider.getHeaderIdsForTask()).toMatch(/fromAbc042ToAbc125/);
 });
 ```
 
@@ -375,8 +375,8 @@ test('expects to generate correct table structure', () => {
 test('expects to return correct round id', () => {
   const provider = new ARC058ToARC103Provider(ContestType.ARC);
 
-  expect(provider.getRoundId('arc058')).toBe('arc058');
-  expect(provider.getRoundId('arc103')).toBe('arc103');
+  expect(provider.getContestRoundIds('arc058')).toBe('arc058');
+  expect(provider.getContestRoundIds('arc103')).toBe('arc103');
 });
 ```
 
@@ -386,7 +386,7 @@ test('expects to return correct round id', () => {
 test('expects to return correct header id', () => {
   const provider = new ARC058ToARC103Provider(ContestType.ARC);
 
-  expect(provider.getHeaderId()).toMatch(/fromArc058ToArc103/);
+  expect(provider.getHeaderIdsForTask()).toMatch(/fromArc058ToArc103/);
 });
 ```
 
