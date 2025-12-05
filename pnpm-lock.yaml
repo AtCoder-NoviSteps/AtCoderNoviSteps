@@ -127,8 +127,8 @@ importers:
         specifier: 10.1.8
         version: 10.1.8(eslint@9.39.1(jiti@1.21.7))
       eslint-plugin-svelte:
-        specifier: 3.10.1
-        version: 3.10.1(eslint@9.39.1(jiti@1.21.7))(svelte@5.45.5)(ts-node@10.9.1(@types/node@24.10.1)(typescript@5.9.3))
+        specifier: 3.13.1
+        version: 3.13.1(eslint@9.39.1(jiti@1.21.7))(svelte@5.45.5)(ts-node@10.9.1(@types/node@24.10.1)(typescript@5.9.3))
       globals:
         specifier: 16.5.0
         version: 16.5.0
@@ -2728,8 +2728,8 @@ packages:
     peerDependencies:
       eslint: '>=7.0.0'
 
-  eslint-plugin-svelte@3.10.1:
-    resolution: {integrity: sha512-csCh2x0ge/DugXC7dCANh46Igi7bjMZEy6rHZCdS13AoGVJSu7a90Kru3I8oMYLGEemPRE1hQXadxvRPVMAAXQ==}
+  eslint-plugin-svelte@3.13.1:
+    resolution: {integrity: sha512-Ng+kV/qGS8P/isbNYVE3sJORtubB+yLEcYICMkUWNaDTb0SwZni/JhAYXh/Dz/q2eThUwWY0VMPZ//KYD1n3eQ==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
     peerDependencies:
       eslint: ^8.57.1 || ^9.0.0
@@ -7735,7 +7735,7 @@ snapshots:
     dependencies:
       eslint: 9.39.1(jiti@1.21.7)
 
-  eslint-plugin-svelte@3.10.1(eslint@9.39.1(jiti@1.21.7))(svelte@5.45.5)(ts-node@10.9.1(@types/node@24.10.1)(typescript@5.9.3)):
+  eslint-plugin-svelte@3.13.1(eslint@9.39.1(jiti@1.21.7))(svelte@5.45.5)(ts-node@10.9.1(@types/node@24.10.1)(typescript@5.9.3)):
     dependencies:
       '@eslint-community/eslint-utils': 4.9.0(eslint@9.39.1(jiti@1.21.7))
       '@jridgewell/sourcemap-codec': 1.5.5
