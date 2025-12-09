@@ -85,8 +85,8 @@ importers:
         specifier: 1.57.0
         version: 1.57.0
       '@quramy/prisma-fabbrica':
-        specifier: 2.3.2
-        version: 2.3.2(@prisma/client@5.22.0(prisma@5.22.0))(magicast@0.3.5)(typescript@5.9.3)
+        specifier: 2.3.3
+        version: 2.3.3(@prisma/client@5.22.0(prisma@5.22.0))(magicast@0.3.5)(typescript@5.9.3)
       '@sveltejs/adapter-vercel':
         specifier: 6.2.0
         version: 6.2.0(@sveltejs/kit@2.43.8(@sveltejs/vite-plugin-svelte@6.2.1(svelte@5.45.8)(vite@7.2.7(@types/node@24.10.2)(jiti@1.21.7)(tsx@4.19.2)(yaml@2.8.1)))(svelte@5.45.8)(vite@7.2.7(@types/node@24.10.2)(jiti@1.21.7)(tsx@4.19.2)(yaml@2.8.1)))(rollup@4.53.3)
@@ -1142,8 +1142,8 @@ packages:
     engines: {node: '>=18'}
     hasBin: true
 
-  '@quramy/prisma-fabbrica@2.3.2':
-    resolution: {integrity: sha512-9KOWQMn6OP8hwnrVAYSLXZnET/BCaWqr4tFjZrM30wQjgwZeyKD8cgMFU8X4h0054sC+vrNCyBqRrb0Q3MbMRQ==}
+  '@quramy/prisma-fabbrica@2.3.3':
+    resolution: {integrity: sha512-McwNGqw+Xhsvjeb8ehKwVZwvFnd7lCgbIGLQifJT8OLcU313lvpyrYsJHcP+Ao97Kr7aHRjbpe2tW9bn1spXwQ==}
     hasBin: true
     peerDependencies:
       '@prisma/client': ^5.0.0 || ^6.0.0
@@ -6018,7 +6018,7 @@ snapshots:
       - react-native-b4a
       - supports-color
 
-  '@quramy/prisma-fabbrica@2.3.2(@prisma/client@5.22.0(prisma@5.22.0))(magicast@0.3.5)(typescript@5.9.3)':
+  '@quramy/prisma-fabbrica@2.3.3(@prisma/client@5.22.0(prisma@5.22.0))(magicast@0.3.5)(typescript@5.9.3)':
     dependencies:
       '@prisma/client': 5.22.0(prisma@5.22.0)
       '@prisma/generator-helper': 6.19.0
