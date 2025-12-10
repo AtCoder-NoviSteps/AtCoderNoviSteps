@@ -120,6 +120,62 @@ const [abc212_a, abc212_b, abc212_f, abc212_g, abc212_h] = createContestTasks('a
 const [abc213_h] = createContestTasks('abc213', [{ taskTableIndex: 'H', statusName: PENDING }]);
 const [abc232_h] = createContestTasks('abc232', [{ taskTableIndex: 'H', statusName: TRYING }]);
 
+// ABC001 - ABC019: 4 tasks (A, B, C, D) with numeric suffix format
+const [abc001_1, abc001_2, abc001_3, abc001_4] = createContestTasks('abc001', [
+  { taskId: 'abc001_1', taskTableIndex: 'A', statusName: AC },
+  { taskId: 'abc001_2', taskTableIndex: 'B', statusName: AC },
+  { taskId: 'abc001_3', taskTableIndex: 'C', statusName: AC_WITH_EDITORIAL },
+  { taskId: 'abc001_4', taskTableIndex: 'D', statusName: TRYING },
+]);
+const [abc019_1, abc019_2, abc019_3, abc019_4] = createContestTasks('abc019', [
+  { taskId: 'abc019_1', taskTableIndex: 'A', statusName: AC },
+  { taskId: 'abc019_2', taskTableIndex: 'B', statusName: AC },
+  { taskId: 'abc019_3', taskTableIndex: 'C', statusName: PENDING },
+  { taskId: 'abc019_4', taskTableIndex: 'D', statusName: PENDING },
+]);
+
+// ABC020 - ABC041: 4 tasks (A, B, C, D) with alphabet suffix format
+const [abc020_a, abc020_b, abc020_c, abc020_d] = createContestTasks('abc020', [
+  { taskId: 'abc020_a', taskTableIndex: 'A', statusName: AC },
+  { taskId: 'abc020_b', taskTableIndex: 'B', statusName: AC },
+  { taskId: 'abc020_c', taskTableIndex: 'C', statusName: AC_WITH_EDITORIAL },
+  { taskId: 'abc020_d', taskTableIndex: 'D', statusName: TRYING },
+]);
+const [abc041_a, abc041_b, abc041_c, abc041_d] = createContestTasks('abc041', [
+  { taskId: 'abc041_a', taskTableIndex: 'A', statusName: AC },
+  { taskId: 'abc041_b', taskTableIndex: 'B', statusName: AC },
+  { taskId: 'abc041_c', taskTableIndex: 'C', statusName: PENDING },
+  { taskId: 'abc041_d', taskTableIndex: 'D', statusName: PENDING },
+]);
+
+// ARC001 - ARC034: 4 tasks (A, B, C, D) with numeric suffix format
+const [arc001_1, arc001_2, arc001_3, arc001_4] = createContestTasks('arc001', [
+  { taskId: 'arc001_1', taskTableIndex: 'A', statusName: AC },
+  { taskId: 'arc001_2', taskTableIndex: 'B', statusName: AC },
+  { taskId: 'arc001_3', taskTableIndex: 'C', statusName: AC_WITH_EDITORIAL },
+  { taskId: 'arc001_4', taskTableIndex: 'D', statusName: TRYING },
+]);
+const [arc034_1, arc034_2, arc034_3, arc034_4] = createContestTasks('arc034', [
+  { taskId: 'arc034_1', taskTableIndex: 'A', statusName: AC },
+  { taskId: 'arc034_2', taskTableIndex: 'B', statusName: AC },
+  { taskId: 'arc034_3', taskTableIndex: 'C', statusName: PENDING },
+  { taskId: 'arc034_4', taskTableIndex: 'D', statusName: PENDING },
+]);
+
+// ARC035 - ARC057: 4 tasks (A, B, C, D) with alphabet suffix format
+const [arc035_a, arc035_b, arc035_c, arc035_d] = createContestTasks('arc035', [
+  { taskId: 'arc035_a', taskTableIndex: 'A', statusName: AC },
+  { taskId: 'arc035_b', taskTableIndex: 'B', statusName: AC },
+  { taskId: 'arc035_c', taskTableIndex: 'C', statusName: AC_WITH_EDITORIAL },
+  { taskId: 'arc035_d', taskTableIndex: 'D', statusName: TRYING },
+]);
+const [arc057_a, arc057_b, arc057_c, arc057_d] = createContestTasks('arc057', [
+  { taskId: 'arc057_a', taskTableIndex: 'A', statusName: AC },
+  { taskId: 'arc057_b', taskTableIndex: 'B', statusName: AC },
+  { taskId: 'arc057_c', taskTableIndex: 'C', statusName: PENDING },
+  { taskId: 'arc057_d', taskTableIndex: 'D', statusName: PENDING },
+]);
+
 // ABC233 - ABC318: 8 tasks (A, B, C, D, E, F, G and Ex)
 const [abc233_a, abc233_b, abc233_ex] = createContestTasks('abc233', [
   { taskTableIndex: 'A', statusName: AC },
@@ -251,6 +307,38 @@ const [
 ]);
 
 export const taskResultsForContestTableProvider: TaskResults = [
+  abc001_1,
+  abc001_2,
+  abc001_3,
+  abc001_4,
+  abc019_1,
+  abc019_2,
+  abc019_3,
+  abc019_4,
+  abc020_a,
+  abc020_b,
+  abc020_c,
+  abc020_d,
+  abc041_a,
+  abc041_b,
+  abc041_c,
+  abc041_d,
+  arc001_1,
+  arc001_2,
+  arc001_3,
+  arc001_4,
+  arc034_1,
+  arc034_2,
+  arc034_3,
+  arc034_4,
+  arc035_a,
+  arc035_b,
+  arc035_c,
+  arc035_d,
+  arc057_a,
+  arc057_b,
+  arc057_c,
+  arc057_d,
   abc126_a,
   abc126_b,
   abc126_e,
