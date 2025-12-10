@@ -133,6 +133,35 @@ export abstract class ContestTableProviderBase implements ContestTableProvider {
   abstract getContestRoundLabel(contestId: string): string;
 }
 
+export class ABSProvider extends ContestTableProviderBase {
+  protected setFilterCondition(): (taskResult: TaskResult) => boolean {
+    return (taskResult: TaskResult) => {
+      return classifyContest(taskResult.contest_id) === this.contestType;
+    };
+  }
+
+  getMetadata(): ContestTableMetaData {
+    return {
+      title: 'AtCoder Beginners Selection',
+      abbreviationName: 'abs',
+    };
+  }
+
+  getDisplayConfig(): ContestTableDisplayConfig {
+    return {
+      isShownHeader: false,
+      isShownRoundLabel: false,
+      isShownTaskIndex: false,
+      tableBodyCellsWidth: 'w-1/2 md:w-1/3 lg:w-1/4 px-1 py-2',
+      roundLabelWidth: '', // No specific width for the round label
+    };
+  }
+
+  getContestRoundLabel(contestId: string): string {
+    return '';
+  }
+}
+
 export class ABCLatest20RoundsProvider extends ContestTableProviderBase {
   filter(taskResults: TaskResults): TaskResults {
     const taskResultsOnlyABC = taskResults.filter(this.setFilterCondition());
@@ -888,6 +917,15 @@ export class ContestTableProviderGroup {
 export const prepareContestProviderPresets = () => {
   return {
     /**
+     * Single group for AtCoder Beginners Selection
+     */
+    ABS: () =>
+      new ContestTableProviderGroup(`AtCoder Beginners Selection`, {
+        buttonLabel: 'ABS',
+        ariaLabel: 'Filter AtCoder Beginners Selection',
+      }).addProvider(new ABSProvider(ContestType.ABS)),
+
+    /**
      * Single group for ABC latest 20 rounds
      */
     ABCLatest20Rounds: () =>
@@ -1032,6 +1070,7 @@ export const prepareContestProviderPresets = () => {
 };
 
 export const contestTableProviderGroups = {
+  abs: prepareContestProviderPresets().ABS(),
   abcLatest20Rounds: prepareContestProviderPresets().ABCLatest20Rounds(),
   abc319Onwards: prepareContestProviderPresets().ABC319Onwards(),
   fromAbc212ToAbc318: prepareContestProviderPresets().ABC212ToABC318(),
