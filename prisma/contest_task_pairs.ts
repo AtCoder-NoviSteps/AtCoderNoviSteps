@@ -1,5 +1,55 @@
 export const contest_task_pairs = [
   {
+    contest_id: 'abs',
+    problem_id: 'arc089_a',
+    problem_index: 'K',
+  },
+  {
+    contest_id: 'abs',
+    problem_id: 'arc065_a',
+    problem_index: 'J',
+  },
+  {
+    contest_id: 'abs',
+    problem_id: 'abc085_c',
+    problem_index: 'I',
+  },
+  {
+    contest_id: 'abs',
+    problem_id: 'abc085_b',
+    problem_index: 'H',
+  },
+  {
+    contest_id: 'abs',
+    problem_id: 'abc088_b',
+    problem_index: 'G',
+  },
+  {
+    contest_id: 'abs',
+    problem_id: 'abc083_b',
+    problem_index: 'F',
+  },
+  {
+    contest_id: 'abs',
+    problem_id: 'abc087_b',
+    problem_index: 'E',
+  },
+  {
+    contest_id: 'abs',
+    problem_id: 'abc081_b',
+    problem_index: 'D',
+  },
+  {
+    contest_id: 'abs',
+    problem_id: 'abc081_a',
+    problem_index: 'C',
+  },
+  {
+    contest_id: 'abs',
+    problem_id: 'abc086_a',
+    problem_index: 'B',
+  },
+  {
     contest_id: 'abc111',
     problem_id: 'arc103_b',
     problem_index: 'D',

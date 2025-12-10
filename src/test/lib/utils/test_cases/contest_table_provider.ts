@@ -416,6 +416,38 @@ export const taskResultsForTessokuBookProvider: TaskResults = [
   tessoku_c18,
 ];
 
+// ABS (AtCoder Beginners Selection): 11 problems from various contests
+// Problem indices follow the format: A-K (alphabetical order)
+// Sources: practice_1, abc086, abc081 (2), abc087, abc083, abc088, abc085 (2), arc065, arc089
+const [abs_a, abs_b, abs_c, abs_d, abs_e, abs_f, abs_g, abs_h, abs_i, abs_j, abs_k] =
+  createContestTasks('abs', [
+    { taskId: 'practice_1', taskTableIndex: 'A', statusName: AC },
+    { taskId: 'abc086_a', taskTableIndex: 'B', statusName: AC },
+    { taskId: 'abc081_a', taskTableIndex: 'C', statusName: AC },
+    { taskId: 'abc081_b', taskTableIndex: 'D', statusName: AC },
+    { taskId: 'abc087_b', taskTableIndex: 'E', statusName: AC },
+    { taskId: 'abc083_b', taskTableIndex: 'F', statusName: AC },
+    { taskId: 'abc088_b', taskTableIndex: 'G', statusName: AC },
+    { taskId: 'abc085_b', taskTableIndex: 'H', statusName: AC },
+    { taskId: 'abc085_c', taskTableIndex: 'I', statusName: AC_WITH_EDITORIAL },
+    { taskId: 'arc065_a', taskTableIndex: 'J', statusName: TRYING },
+    { taskId: 'arc089_a', taskTableIndex: 'K', statusName: PENDING },
+  ]);
+
+export const taskResultsForABS: TaskResults = [
+  abs_a,
+  abs_b,
+  abs_c,
+  abs_d,
+  abs_e,
+  abs_f,
+  abs_g,
+  abs_h,
+  abs_i,
+  abs_j,
+  abs_k,
+];
+
 // Math and Algorithm: 10 problems (028, 036, 042, 045, 046, 048, 052, 095, 101, 102)
 // Sources: dp_*, abc*_*, typical90_*, arc*_*
 // Problem indices follow the format: 3-digit numbers (001-104)
