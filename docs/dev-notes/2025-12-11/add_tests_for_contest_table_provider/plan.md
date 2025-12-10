@@ -392,7 +392,7 @@ if (contestId === 'abs') {
 
 ### テスト実行結果
 
-```
+```text
 ✓ src/test/lib/utils/contest_table_provider.test.ts (196 tests) 24ms
 
  Test Files  1 passed (1)
