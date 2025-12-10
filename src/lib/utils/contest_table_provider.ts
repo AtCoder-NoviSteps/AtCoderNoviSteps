@@ -296,6 +296,45 @@ export class ABC042ToABC125Provider extends ContestTableProviderBase {
   }
 }
 
+// ABC001 〜 ABC041 (2013/10/12 〜 2016/07/02)
+// 4 tasks per contest
+//
+// Note: Unrated contests before ABC042.
+export class ABC001ToABC041Provider extends ContestTableProviderBase {
+  protected setFilterCondition(): (taskResult: TaskResult) => boolean {
+    return (taskResult: TaskResult) => {
+      if (classifyContest(taskResult.contest_id) !== this.contestType) {
+        return false;
+      }
+
+      const contestRound = parseContestRound(taskResult.contest_id, 'abc');
+      return contestRound >= 1 && contestRound <= 41;
+    };
+  }
+
+  getMetadata(): ContestTableMetaData {
+    return {
+      title: 'AtCoder Beginner Contest 001 〜 041（レーティング導入前）',
+      abbreviationName: 'fromAbc001ToAbc041',
+    };
+  }
+
+  getDisplayConfig(): ContestTableDisplayConfig {
+    return {
+      isShownHeader: true,
+      isShownRoundLabel: true,
+      tableBodyCellsWidth: 'w-1/2 md:w-1/3 lg:w-1/4 px-1 py-1',
+      roundLabelWidth: 'xl:w-16',
+      isShownTaskIndex: false,
+    };
+  }
+
+  getContestRoundLabel(contestId: string): string {
+    const contestNameLabel = getContestNameLabel(contestId);
+    return contestNameLabel.replace('ABC ', '');
+  }
+}
+
 // ARC104 〜 (2020/10/03 〜 )
 // 4 〜 7 tasks per contest
 export class ARC104OnwardsProvider extends ContestTableProviderBase {
@@ -345,6 +384,45 @@ export class ARC058ToARC103Provider extends ContestTableProviderBase {
     return {
       title: 'AtCoder Regular Contest 058 〜 103（ABC 同時開催）',
       abbreviationName: 'fromArc058ToArc103',
+    };
+  }
+
+  getDisplayConfig(): ContestTableDisplayConfig {
+    return {
+      isShownHeader: true,
+      isShownRoundLabel: true,
+      tableBodyCellsWidth: 'w-1/2 md:w-1/3 lg:w-1/4 px-1 py-1',
+      roundLabelWidth: 'xl:w-16',
+      isShownTaskIndex: false,
+    };
+  }
+
+  getContestRoundLabel(contestId: string): string {
+    const contestNameLabel = getContestNameLabel(contestId);
+    return contestNameLabel.replace('ARC ', '');
+  }
+}
+
+// ARC001 〜 ARC057 (2012/04/12 〜 2016/07/09)
+// 4 tasks per contest
+//
+// Note: Unrated contests before ARC058.
+export class ARC001ToARC057Provider extends ContestTableProviderBase {
+  protected setFilterCondition(): (taskResult: TaskResult) => boolean {
+    return (taskResult: TaskResult) => {
+      if (classifyContest(taskResult.contest_id) !== this.contestType) {
+        return false;
+      }
+
+      const contestRound = parseContestRound(taskResult.contest_id, 'arc');
+      return contestRound >= 1 && contestRound <= 57;
+    };
+  }
+
+  getMetadata(): ContestTableMetaData {
+    return {
+      title: 'AtCoder Regular Contest 001 〜 057（レーティング導入前）',
+      abbreviationName: 'fromArc001ToArc057',
     };
   }
 
@@ -855,6 +933,15 @@ export const prepareContestProviderPresets = () => {
       }).addProvider(new ABC042ToABC125Provider(ContestType.ABC)),
 
     /**
+     * Single group for ABC 001-041
+     */
+    ABC001ToABC041: () =>
+      new ContestTableProviderGroup(`From ABC 001 to ABC 041`, {
+        buttonLabel: '旧 ABC',
+        ariaLabel: 'Filter contests from ABC 001 to ABC 041',
+      }).addProvider(new ABC001ToABC041Provider(ContestType.ABC)),
+
+    /**
      * Single group for ARC 104 onwards
      */
     ARC104Onwards: () =>
@@ -871,6 +958,15 @@ export const prepareContestProviderPresets = () => {
         buttonLabel: 'ARC 058 〜 103',
         ariaLabel: 'Filter contests from ARC 058 to ARC 103',
       }).addProvider(new ARC058ToARC103Provider(ContestType.ARC)),
+
+    /**
+     * Single group for ARC 001-057
+     */
+    ARC001ToARC057: () =>
+      new ContestTableProviderGroup(`ARC 001 To ARC 057`, {
+        buttonLabel: '旧 ARC',
+        ariaLabel: 'Filter contests from ARC 001 to ARC 057',
+      }).addProvider(new ARC001ToARC057Provider(ContestType.ARC)),
 
     /**
      * Single group for AGC 001 onwards
@@ -944,6 +1040,8 @@ export const contestTableProviderGroups = {
   arc104Onwards: prepareContestProviderPresets().ARC104Onwards(),
   fromArc058ToArc103: prepareContestProviderPresets().ARC058ToARC103(),
   agc001Onwards: prepareContestProviderPresets().AGC001Onwards(),
+  fromAbc001ToAbc041: prepareContestProviderPresets().ABC001ToABC041(),
+  fromArc001ToArc057: prepareContestProviderPresets().ARC001ToARC057(),
   typical90: prepareContestProviderPresets().Typical90(),
   tessokuBook: prepareContestProviderPresets().TessokuBook(),
   mathAndAlgorithm: prepareContestProviderPresets().MathAndAlgorithm(),
