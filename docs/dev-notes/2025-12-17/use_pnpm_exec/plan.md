@@ -30,7 +30,7 @@ vite-node は本来、Nuxt 3 の SSR PoC として作成されました。その
 
 **トラブル:**
 
-```
+```text
 Error [ERR_MODULE_NOT_FOUND]: Cannot find package '$lib' imported from /usr/src/app/src/lib/utils/contest.ts
 ```
 
@@ -134,8 +134,8 @@ pnpm db:seed
 
 ## 参考資料
 
-- vite-node: https://github.com/vitest-dev/vitest
-- tsx: https://tsx.is/
-- pnpm CLI: https://pnpm.io/cli
-- Node.js TypeScript: https://nodejs.org/api/typescript.html
-- Vite Configuration: https://vite.dev/config/
+- [vite-node](https://github.com/vitest-dev/vitest)
+- [tsx](https://tsx.is/)
+- [pnpm CLI](https://pnpm.io/cli)
+- [Node.js TypeScript](https://nodejs.org/api/typescript.html)
+- [Vite Configuration](https://vite.dev/config/)
