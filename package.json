@@ -24,8 +24,8 @@
     "test:integration": "playwright test",
     "test:unit": "vitest",
     "postinstall": "prisma generate",
-    "db:seed": "pnpm dlx vite-node ./prisma/seed.ts",
-    "db:studio": "pnpm dlx prisma studio",
+    "db:seed": "pnpm exec tsx ./prisma/seed.ts",
+    "db:studio": "pnpm exec prisma studio",
     "prepare": "husky",
     "coverage": "vitest run --coverage"
   },
@@ -65,6 +65,7 @@
     "svelte-meta-tags": "4.5.0",
     "sveltekit-superforms": "2.27.4",
     "tslib": "2.8.1",
+    "tsx": "4.21.0",
     "typescript": "5.9.3",
     "vite": "7.3.0",
     "vitest": "4.0.15",
