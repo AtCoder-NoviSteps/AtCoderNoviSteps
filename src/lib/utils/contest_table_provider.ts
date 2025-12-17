@@ -12,7 +12,6 @@ import type { TaskResults, TaskResult } from '$lib/types/task';
 
 import { classifyContest, getContestNameLabel } from '$lib/utils/contest';
 import { getTaskTableHeaderName } from '$lib/utils/task';
-import { aclPractice } from '@/test/lib/utils/test_cases/contest_type';
 
 /**
  * How to add a new contest table provider:
