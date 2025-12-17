@@ -83,13 +83,13 @@
 0. [AtCoder NoviSteps](https://github.com/AtCoder-NoviSteps)にメンバー申請をします。[@KATO-Hiro](https://twitter.com/k_hiro1818)にDMなどでご連絡いただければ、GitHubで登録しているメールアドレスに招待メールが届きますので、承認してください。
 1. ターミナルなどを利用して、[本レポジトリ](https://github.com/AtCoder-NoviSteps/AtCoderNoviSteps)の内容をローカル環境にダウンロードします。
 
-`git clone https://github.com/AtCoder-NoviSteps/AtCoderNoviSteps.git`
+   `git clone https://github.com/AtCoder-NoviSteps/AtCoderNoviSteps.git`
 
 2. 作業ディレクトリを`AtCoderNovisteps`に変更します。
 
 3. 本レポジトリの最新情報を反映できるように、ご自身のリモートレポジトリに登録します。`git remote -v`で登録状況を確認できます。
 
-`git remote add root_branch https://github.com/AtCoder-NoviSteps/AtCoderNoviSteps.git`
+   `git remote add root_branch https://github.com/AtCoder-NoviSteps/AtCoderNoviSteps.git`
 
 ### (共通、Dockerのみ利用するユーザ向け) 開発環境のインストールとローカルの開発サーバを起動
 
@@ -194,31 +194,31 @@
 
 1. 本レポジトリの最新の内容を取得します。
 
-`git fetch root_branch`
+   `git fetch root_branch`
 
 2. 取得した内容をご自身のローカル上のブランチにマージします。`staging`の部分を変えれば、別のブランチにすることも可能です。
 
-`git merge root_branch/staging`
+   `git merge root_branch/staging`
 
 3. ご自身のリモートブランチを更新します。
 
-`git push origin staging`
+   `git push origin staging`
 
 #### 作業用のブランチ作成からプルリクエスト作成まで
 
 1. 作業用のブランチを作成します。
 
-`git checkout -b <your-new-branch-for-working> origin/staging`
+   `git checkout -b <your-new-branch-for-working> origin/staging`
 
-例: GitHubのIssue番号や機能名・ドキュメントやバグの種類などを表すキーワードを使います。
+   例: GitHubのIssue番号や機能名・ドキュメントやバグの種類などを表すキーワードを使います。
 
-`git checkout -b "#998244353" origin/staging`
+   `git checkout -b "#998244353" origin/staging`
 
-`git checkout -b "feature/feature-name" origin/staging`
+   `git checkout -b "feature/feature-name" origin/staging`
 
-`git checkout -b "docs/docs-name" origin/staging`
+   `git checkout -b "docs/docs-name" origin/staging`
 
-`git checkout -b "bugfix/bug-name" origin/staging`
+   `git checkout -b "bugfix/bug-name" origin/staging`
 
 2. ソースコードやドキュメントの加筆・修正を行います。以下のコマンドを実行し、アプリが意図した通りに動作するか確認してください。
 
@@ -244,25 +244,25 @@
 
 3. 2.の内容をレポジトリに反映します。コミットメッセージは、加筆・修正した内容を端的に表したものであることが望ましいです。
 
-`git add .`
+   `git add .`
 
-`git commit -m "your-commit-message (#IssueID)"`
+   `git commit -m "your-commit-message (#IssueID)"`
 
-例:
+   例:
 
-`git commit -m ":sparkles: Add hoge feature (#998244353)"`
+   `git commit -m ":sparkles: Add hoge feature (#998244353)"`
 
-`git commit -m ":books: Update README (#1333)"`
+   `git commit -m ":books: Update README (#1333)"`
 
-`git commit -m ":pencil2: Fix typo (#10007)"`
+   `git commit -m ":pencil2: Fix typo (#10007)"`
 
 4. プルリクエストを作成する前に、加筆・修正した内容を確認します。
 
-`git diff origin <your-current-branch>`
+   `git diff origin <your-current-branch>`
 
 5. 本レポジトリに更新内容を反映させます。
 
-`git push origin <your-current-branch>`
+   `git push origin <your-current-branch>`
 
 6. プルリクエストを作成します。
 
