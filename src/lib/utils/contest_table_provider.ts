@@ -769,6 +769,35 @@ export class FPS24Provider extends ContestTableProviderBase {
   }
 }
 
+export class ACLPracticeProvider extends ContestTableProviderBase {
+  protected setFilterCondition(): (taskResult: TaskResult) => boolean {
+    return (taskResult: TaskResult) => {
+      return classifyContest(taskResult.contest_id) === this.contestType;
+    };
+  }
+
+  getMetadata(): ContestTableMetaData {
+    return {
+      title: 'AtCoder Library Practice Contest',
+      abbreviationName: 'aclPractice',
+    };
+  }
+
+  getDisplayConfig(): ContestTableDisplayConfig {
+    return {
+      isShownHeader: false,
+      isShownRoundLabel: false,
+      roundLabelWidth: '', // No specific width for the round label
+      tableBodyCellsWidth: 'w-1/2 xs:w-1/3 sm:w-1/4 md:w-1/5 lg:w-1/6 2xl:w-1/7 px-1 py-2',
+      isShownTaskIndex: true,
+    };
+  }
+
+  getContestRoundLabel(_contestId: string): string {
+    return '';
+  }
+}
+
 const regexForJoiFirstQualRound = /^(joi)(\d{4})(yo1)(a|b|c)$/i;
 
 export class JOIFirstQualRoundProvider extends ContestTableProviderBase {
@@ -1061,6 +1090,15 @@ export const prepareContestProviderPresets = () => {
         new FPS24Provider(ContestType.FPS_24),
       ),
 
+    /**
+     * Single group for ACL Practice Contest
+     */
+    AclPractice: () =>
+      new ContestTableProviderGroup(`AtCoder Library Practice Contest`, {
+        buttonLabel: 'ACL Practice',
+        ariaLabel: 'Filter ACL Practice Contest',
+      }).addProvider(new ACLPracticeProvider(ContestType.ACL_PRACTICE)),
+
     JOIFirstQualRound: () =>
       new ContestTableProviderGroup(`JOI 一次予選`, {
         buttonLabel: 'JOI 一次予選',
@@ -1085,6 +1123,7 @@ export const contestTableProviderGroups = {
   tessokuBook: prepareContestProviderPresets().TessokuBook(),
   mathAndAlgorithm: prepareContestProviderPresets().MathAndAlgorithm(),
   dps: prepareContestProviderPresets().dps(), // Dynamic Programming (DP) Contests
+  aclPractice: prepareContestProviderPresets().AclPractice(),
   joiFirstQualRound: prepareContestProviderPresets().JOIFirstQualRound(),
 };
 

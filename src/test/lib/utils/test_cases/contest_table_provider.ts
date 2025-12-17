@@ -662,3 +662,48 @@ export const taskResultsForAGC001OnwardsProvider: TaskResults = [
   agc074_d,
   agc074_e,
 ];
+
+// ACL Practice: 12 problems (A, B, C, D, E, F, G, H, I, J, K, L)
+// Progressive difficulty from elementary to advanced techniques
+const [
+  practice2_a,
+  practice2_b,
+  practice2_c,
+  practice2_d,
+  practice2_e,
+  practice2_f,
+  practice2_g,
+  practice2_h,
+  practice2_i,
+  practice2_j,
+  practice2_k,
+  practice2_l,
+] = createContestTasks('practice2', [
+  { taskTableIndex: 'A', statusName: AC },
+  { taskTableIndex: 'B', statusName: AC },
+  { taskTableIndex: 'C', statusName: AC_WITH_EDITORIAL },
+  { taskTableIndex: 'D', statusName: AC_WITH_EDITORIAL },
+  { taskTableIndex: 'E', statusName: TRYING },
+  { taskTableIndex: 'F', statusName: AC_WITH_EDITORIAL },
+  { taskTableIndex: 'G', statusName: AC_WITH_EDITORIAL },
+  { taskTableIndex: 'H', statusName: TRYING },
+  { taskTableIndex: 'I', statusName: TRYING },
+  { taskTableIndex: 'J', statusName: AC },
+  { taskTableIndex: 'K', statusName: PENDING },
+  { taskTableIndex: 'L', statusName: AC_WITH_EDITORIAL },
+]);
+
+export const taskResultsForACLPracticeProvider: TaskResults = [
+  practice2_a,
+  practice2_b,
+  practice2_c,
+  practice2_d,
+  practice2_e,
+  practice2_f,
+  practice2_g,
+  practice2_h,
+  practice2_i,
+  practice2_j,
+  practice2_k,
+  practice2_l,
+];
