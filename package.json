@@ -80,7 +80,7 @@
     "@prisma/client": "5.22.0",
     "@testing-library/svelte": "5.2.9",
     "@types/jest": "30.0.0",
-    "@types/node": "25.0.2",
+    "@types/node": "25.0.3",
     "autoprefixer": "10.4.23",
     "debug": "4.4.3",
     "embla-carousel-autoplay": "8.6.0",
