@@ -2066,7 +2066,7 @@ describe('ContestTableProviderBase and implementations', () => {
     });
 
     test('expects to handle empty task results', () => {
-      const provider = new MathAndAlgorithmProvider(ContestType.ACL_PRACTICE);
+      const provider = new ACLPracticeProvider(ContestType.ACL_PRACTICE);
       const filtered = provider.filter([] as TaskResults);
 
       expect(filtered).toEqual([] as TaskResults);
