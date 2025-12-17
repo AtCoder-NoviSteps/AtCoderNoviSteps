@@ -53,7 +53,7 @@
     "jsdom": "27.3.0",
     "lint-staged": "16.2.7",
     "nock": "14.0.10",
-    "pnpm": "10.25.0",
+    "pnpm": "10.26.0",
     "prettier": "3.7.4",
     "prettier-plugin-svelte": "3.4.1",
     "prettier-plugin-tailwindcss": "0.6.14",
@@ -96,7 +96,7 @@
     "vercel": "50.0.1",
     "xss": "1.0.15"
   },
-  "packageManager": "pnpm@10.22.0",
+  "packageManager": "pnpm@10.26.0",
   "engines": {
     "node": ">=20.0.0"
   }
