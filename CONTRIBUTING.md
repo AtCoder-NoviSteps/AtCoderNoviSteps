@@ -160,7 +160,7 @@
 
   `pnpm exec playwright install-deps`
 
-  `pnpm dlx prisma db push`
+  `pnpm exec prisma db push`
 
   `pnpm dev`
 
