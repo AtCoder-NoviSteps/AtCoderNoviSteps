@@ -176,7 +176,9 @@
 
   `pnpm db:seed`
 
-  `pnpm db:studio`
+  `sh -lc "pkill -f 'prisma.*studio' || true"`
+
+  `pnpm db:studio --port 5555`
 
 - 以下のリンクをクリックしてください。
 

@@ -3,6 +3,7 @@ services:
     build: .
     ports:
       - '5173:5173'
+      - '5555:5555'
     tty: true
     volumes:
       - .:/usr/src/app:cached
