@@ -39,6 +39,7 @@ export const members = [
   { name: '@seekworser（ぷせうど）', account: `${X_BASE_URL}pseudo_thermal` },
   { name: '@Satsuki / さつき先生', account: `${X_BASE_URL}Satsuki_8198` },
   { name: '@あべみ', account: `${X_BASE_URL}cats0830v` },
+  { name: '@river0525', account: `${X_BASE_URL}river0525165521` },
   { name: '@わさせき', account: `${X_BASE_URL}wasaseki` },
   { name: '@toshi201', account: `${X_BASE_URL}toshicon201` },
 ];
