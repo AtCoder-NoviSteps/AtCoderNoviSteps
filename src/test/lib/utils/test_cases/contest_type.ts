@@ -289,6 +289,10 @@ export const arcLike = [
     contestId: 'jsc2019-qual',
     expected: ContestType.ARC_LIKE,
   }),
+  createTestCaseForContestType('NIKKEI2019 QUAL')({
+    contestId: 'nikkei2019-qual',
+    expected: ContestType.ARC_LIKE,
+  }),
 ];
 
 export const agcLike = [
