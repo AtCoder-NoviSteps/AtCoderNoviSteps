@@ -96,7 +96,7 @@ export const classifyContest = (contest_id: string) => {
   return null;
 };
 
-// HACK: As of September 2025, the following contests are applicable.
+// HACK: As of December 2025, the following contests are applicable.
 // Note: The classification logic may need to be revised when new contests are added.
 const ABC_LIKE: ContestPrefix = {
   'tenka1-2017-beginner': 'Tenka1 Programmer Beginner Contest 2017',
@@ -126,6 +126,7 @@ const ARC_LIKE: ContestPrefix = {
   keyence2020: 'キーエンス プログラミング コンテスト 2020',
   keyence2021: 'キーエンス プログラミング コンテスト 2021',
   'jsc2019-qual': '第一回日本最強プログラマー学生選手権-予選-',
+  'nikkei2019-qual': '全国統一プログラミング王決定戦予選',
 } as const;
 const arcLikePrefixes = new Set(getContestPrefixes(ARC_LIKE));
 
