@@ -152,7 +152,7 @@ lefthook は以下のように動作するため：
 
 ## 実装詳細
 
-### lefthook.yml（予想設定）
+### lefthook.yml（実装設定）
 
 ```yaml
 version: 2
@@ -161,13 +161,15 @@ pre-commit:
   parallel: true
   jobs:
     - name: format
-      run: pnpm format {staged_files}
+      run: pnpm exec prettier --write {staged_files}
       glob: '**/*.{js,jsx,ts,tsx,md,svelte}'
 
     - name: lint
-      run: pnpm lint {staged_files}
+      run: pnpm exec sh -c 'prettier --check {staged_files} && eslint {staged_files}'
       glob: '**/*.{js,jsx,ts,tsx,svelte}'
 ```
+
+**注記：** npm scripts（`pnpm format`、`pnpm lint`）経由ではなく、prettier/eslint を直接呼び出しています。これにより、`{staged_files}` で指定したファイルのみを処理でき、高速化を実現しています。
 
 ### package.json 修正内容
 
