@@ -1,0 +1,12 @@
+version: 2
+
+pre-commit:
+  parallel: true
+  jobs:
+    - name: format
+      run: pnpm exec prettier --write {staged_files}
+      glob: '**/*.{js,jsx,ts,tsx,md,svelte}'
+
+    - name: lint
+      run: pnpm exec sh -c 'prettier --check {staged_files} && eslint {staged_files}'
+      glob: '**/*.{js,jsx,ts,tsx,svelte}'
