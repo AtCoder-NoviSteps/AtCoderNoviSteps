@@ -936,7 +936,7 @@ export class JOISemiFinalRoundProvider extends ContestTableProviderBase {
   getMetadata(): ContestTableMetaData {
     return {
       title: 'JOI 本選',
-      abbreviationName: 'joiSemiFinalRoundProvider',
+      abbreviationName: 'joiSemiFinalRound',
     };
   }
 

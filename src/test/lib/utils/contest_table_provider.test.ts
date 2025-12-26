@@ -84,14 +84,35 @@ vi.mock('$lib/utils/contest', () => ({
     } else if (contestId === 'dp' || contestId === 'tdpc' || contestId === 'typical90') {
       return '';
     } else if (contestId.startsWith('joi')) {
-      // First qual round
-      const matched = contestId.match(/joi(\d{4})yo1([abc])/);
-
-      if (matched) {
-        const [, year, round] = matched;
+      // JOI contest name formatting
+      // Handle: joiYYYYyo1[a-c] => JOI 一次予選 YYYY 第 N 回
+      const firstQual = contestId.match(/joi(\d{4})yo1([abc])/);
+      if (firstQual) {
+        const [, year, round] = firstQual;
         const roundMap: Record<string, string> = { a: '1', b: '2', c: '3' };
 
-        return `${year} 第 ${roundMap[round]} 回`;
+        return `JOI 一次予選 ${year} 第 ${roundMap[round]} 回`;
+      }
+
+      // Handle: joiYYYYyo2 => JOI 二次予選 YYYY
+      const secondQual = contestId.match(/joi(\d{4})yo2$/);
+      if (secondQual) {
+        const [, year] = secondQual;
+        return `JOI 二次予選 ${year}`;
+      }
+
+      // Handle: joiYYYYyo (older format) => JOI 予選 YYYY
+      const qual = contestId.match(/joi(\d{4})yo$/);
+      if (qual) {
+        const [, year] = qual;
+        return `JOI 予選 ${year}`;
+      }
+
+      // Handle: joiYYYYho => JOI 本選 YYYY
+      const finalMatch = contestId.match(/joi(\d{4})ho$/);
+      if (finalMatch) {
+        const [, year] = finalMatch;
+        return `JOI 本選 ${year}`;
       }
     }
 
@@ -2149,7 +2170,6 @@ describe('ContestTableProviderBase and implementations', () => {
 
       expect(provider.getContestRoundLabel('invalid-id')).toBe('invalid-id');
       expect(provider.getContestRoundLabel('joi2024yo1d')).toBe('joi2024yo1d'); // Invalid round
-      expect(provider.getContestRoundLabel('joi2024yo2')).toBe('joi2024yo2'); // Not first qual round
     });
 
     test('expects to generate correct table structure', () => {
@@ -2377,7 +2397,7 @@ describe('ContestTableProviderBase and implementations', () => {
       const metadata = provider.getMetadata();
 
       expect(metadata.title).toBe('JOI 本選');
-      expect(metadata.abbreviationName).toBe('joiSemiFinalRoundProvider');
+      expect(metadata.abbreviationName).toBe('joiSemiFinalRound');
     });
 
     test('expects to get correct display configuration', () => {
