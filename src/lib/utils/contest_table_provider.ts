@@ -6,6 +6,8 @@ import {
   type ContestTableDisplayConfig,
   type ProviderKey,
   TESSOKU_SECTIONS,
+  JOI_SECOND_QUAL_ROUND_SECTIONS,
+  JOI_FINAL_ROUND_SECTIONS,
 } from '$lib/types/contest_table_provider';
 import { ContestType } from '$lib/types/contest';
 import type { TaskResults, TaskResult } from '$lib/types/task';
@@ -834,6 +836,126 @@ export class JOIFirstQualRoundProvider extends ContestTableProviderBase {
   }
 }
 
+const regexForJoiSecondQualRound = /^(joi)(\d{4})(yo2)$/i;
+
+export class JOISecondQualRound2020OnwardsProvider extends ContestTableProviderBase {
+  constructor(contestType: ContestType) {
+    super(contestType, JOI_SECOND_QUAL_ROUND_SECTIONS['2020Onwards']);
+  }
+
+  protected setFilterCondition(): (taskResult: TaskResult) => boolean {
+    return (taskResult: TaskResult) => {
+      if (classifyContest(taskResult.contest_id) !== this.contestType) {
+        return false;
+      }
+
+      return regexForJoiSecondQualRound.test(taskResult.contest_id);
+    };
+  }
+
+  getMetadata(): ContestTableMetaData {
+    return {
+      title: 'JOI 二次予選',
+      abbreviationName: 'joiSecondQualRound2020Onwards',
+    };
+  }
+
+  getDisplayConfig(): ContestTableDisplayConfig {
+    return {
+      isShownHeader: true,
+      isShownRoundLabel: true,
+      isShownTaskIndex: false,
+      tableBodyCellsWidth: 'w-1/2 xs:w-1/3 sm:w-1/4 md:w-1/5 px-1 py-1',
+      roundLabelWidth: 'xl:w-28',
+    };
+  }
+
+  getContestRoundLabel(contestId: string): string {
+    const contestNameLabel = getContestNameLabel(contestId);
+    return contestNameLabel.replace('JOI 二次予選 ', '');
+  }
+}
+
+const regexForJoiQualRound = /^(joi)(\d{4})(yo)$/i;
+
+export class JOIQualRoundFrom2006To2019Provider extends ContestTableProviderBase {
+  constructor(contestType: ContestType) {
+    super(contestType, JOI_SECOND_QUAL_ROUND_SECTIONS.from2006To2019);
+  }
+
+  protected setFilterCondition(): (taskResult: TaskResult) => boolean {
+    return (taskResult: TaskResult) => {
+      if (classifyContest(taskResult.contest_id) !== this.contestType) {
+        return false;
+      }
+
+      return regexForJoiQualRound.test(taskResult.contest_id);
+    };
+  }
+
+  getMetadata(): ContestTableMetaData {
+    return {
+      title: 'JOI 予選',
+      abbreviationName: 'joiQualRoundFrom2006To2019',
+    };
+  }
+
+  getDisplayConfig(): ContestTableDisplayConfig {
+    return {
+      isShownHeader: true,
+      isShownRoundLabel: true,
+      isShownTaskIndex: false,
+      tableBodyCellsWidth: 'w-1/2 xs:w-1/3 sm:w-1/4 md:w-1/5 lg:w-1/6 px-1 py-1',
+      roundLabelWidth: 'xl:w-28',
+    };
+  }
+
+  getContestRoundLabel(contestId: string): string {
+    const contestNameLabel = getContestNameLabel(contestId);
+    return contestNameLabel.replace('JOI 予選 ', '');
+  }
+}
+
+const regexForJoiSemiFinalRound = /^(joi)(\d{4})(ho)$/i;
+
+export class JOISemiFinalRoundProvider extends ContestTableProviderBase {
+  constructor(contestType: ContestType) {
+    super(contestType, JOI_FINAL_ROUND_SECTIONS.semiFinal);
+  }
+
+  protected setFilterCondition(): (taskResult: TaskResult) => boolean {
+    return (taskResult: TaskResult) => {
+      if (classifyContest(taskResult.contest_id) !== this.contestType) {
+        return false;
+      }
+
+      return regexForJoiSemiFinalRound.test(taskResult.contest_id);
+    };
+  }
+
+  getMetadata(): ContestTableMetaData {
+    return {
+      title: 'JOI 本選',
+      abbreviationName: 'joiSemiFinalRound',
+    };
+  }
+
+  getDisplayConfig(): ContestTableDisplayConfig {
+    return {
+      isShownHeader: true,
+      isShownRoundLabel: true,
+      isShownTaskIndex: false,
+      tableBodyCellsWidth: 'w-1/2 xs:w-1/3 sm:w-1/4 md:w-1/5 px-1 py-1',
+      roundLabelWidth: 'xl:w-28',
+    };
+  }
+
+  getContestRoundLabel(contestId: string): string {
+    const contestNameLabel = getContestNameLabel(contestId);
+    return contestNameLabel.replace('JOI 本選 ', '');
+  }
+}
+
 /**
  * A class that manages individual provider groups
  * Manages multiple ContestTableProviders as a single group,
@@ -1104,6 +1226,16 @@ export const prepareContestProviderPresets = () => {
         buttonLabel: 'JOI 一次予選',
         ariaLabel: 'Filter JOI First Qualifying Round',
       }).addProvider(new JOIFirstQualRoundProvider(ContestType.JOI)),
+
+    JOISecondQualAndSemiFinalRound: () =>
+      new ContestTableProviderGroup(`JOI 二次予選・予選・本選`, {
+        buttonLabel: 'JOI 二次予選・予選・本選',
+        ariaLabel: 'Filter JOI Second Qual Round',
+      }).addProviders(
+        new JOISecondQualRound2020OnwardsProvider(ContestType.JOI),
+        new JOIQualRoundFrom2006To2019Provider(ContestType.JOI),
+        new JOISemiFinalRoundProvider(ContestType.JOI),
+      ),
   };
 };
 
@@ -1125,6 +1257,7 @@ export const contestTableProviderGroups = {
   dps: prepareContestProviderPresets().dps(), // Dynamic Programming (DP) Contests
   aclPractice: prepareContestProviderPresets().AclPractice(),
   joiFirstQualRound: prepareContestProviderPresets().JOIFirstQualRound(),
+  joiSecondQualAndSemiFinalRound: prepareContestProviderPresets().JOISecondQualAndSemiFinalRound(),
 };
 
 export type ContestTableProviderGroups = keyof typeof contestTableProviderGroups;

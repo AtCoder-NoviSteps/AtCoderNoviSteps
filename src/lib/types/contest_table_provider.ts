@@ -84,6 +84,15 @@ export const TESSOKU_SECTIONS = {
   CHALLENGES: 'challenges',
 } as const;
 
+export const JOI_SECOND_QUAL_ROUND_SECTIONS = {
+  '2020Onwards': '2020Onwards',
+  from2006To2019: 'from2006To2019',
+} as const;
+
+export const JOI_FINAL_ROUND_SECTIONS = {
+  semiFinal: 'semiFinal',
+} as const;
+
 /**
  * Represents a two-dimensional table of contest results.
  *
