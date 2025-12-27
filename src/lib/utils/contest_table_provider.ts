@@ -1226,7 +1226,7 @@ export const prepareContestProviderPresets = () => {
         buttonLabel: 'JOI 一次予選',
         ariaLabel: 'Filter JOI First Qualifying Round',
       }).addProvider(new JOIFirstQualRoundProvider(ContestType.JOI)),
-    
+
     JOISecondQualAndSemiFinalRound: () =>
       new ContestTableProviderGroup(`JOI 二次予選・予選・本選`, {
         buttonLabel: 'JOI 二次予選・予選・本選',
