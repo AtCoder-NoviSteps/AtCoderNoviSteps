@@ -6,12 +6,6 @@
   "bugs": "https://github.com/AtCoder-NoviSteps/AtCoderNoviSteps/issues",
   "homepage": "",
   "license": "MIT",
-  "lint-staged": {
-    "**/*.{js,jsx,ts,tsx}": [
-      "pnpm format",
-      "pnpm lint"
-    ]
-  },
   "scripts": {
     "dev": "vite dev",
     "build": "prisma generate && vite build",
@@ -26,7 +20,6 @@
     "postinstall": "prisma generate",
     "db:seed": "pnpm exec tsx ./prisma/seed.ts",
     "db:studio": "pnpm exec prisma studio",
-    "prepare": "husky",
     "coverage": "vitest run --coverage"
   },
   "devDependencies": {
@@ -49,9 +42,8 @@
     "eslint-config-prettier": "10.1.8",
     "eslint-plugin-svelte": "3.10.1",
     "globals": "16.5.0",
-    "husky": "9.1.7",
+    "lefthook": "2.0.12",
     "jsdom": "27.4.0",
-    "lint-staged": "16.2.7",
     "nock": "14.0.10",
     "pnpm": "10.26.2",
     "prettier": "3.7.4",

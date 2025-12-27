@@ -49,6 +49,7 @@
 - 文法およびフォーマットチェッカー
   - [ESLint](https://eslint.org/)
   - [Prettier](https://prettier.io/)
+  - [lefthook](https://github.com/evilmartians/lefthook): Git hooks 管理ツール（コミット前の自動フォーマット・リント）
 - Search Engine Optimization (SEO) 対策
   - [Svelte Meta Tags](https://github.com/oekazuma/svelte-meta-tags): メタタグ、Open Graph などの設定
   - [super-sitemap](https://github.com/jasongitmail/super-sitemap): SvelteKit 専用の sitemap ジェネレータ
@@ -268,6 +269,35 @@
 
 6. プルリクエストを作成します。
 
+### Git Hooks（フォーマット・リント）
+
+本プロジェクトでは、[lefthook](https://github.com/evilmartians/lefthook)を使用して、コミット前に自動的にコードの書式チェック・フォーマットを行います。
+
+- **Pre-commit Hook**: ステージ済みファイルのみに対して以下を実行
+  - `prettier --write`: コード書式の自動修正（JavaScript、TypeScript、Markdown、Svelte）
+  - `eslint`: リント（JavaScript、TypeScript、Svelte）
+
+Hook は自動的にセットアップされるため、特別な操作は不要です。
+
+#### Hook を実行したくない場合
+
+環境変数 `LEFTHOOK=0` を設定して commit してください。
+
+```bash
+LEFTHOOK=0 git commit -m "コミットメッセージ"
+```
+
+#### (既存ユーザ向け) husky から lefthook への移行
+
+husky でセットアップ済みの開発環境で新しい PR をマージした場合、以下を実行してください：
+
+```bash
+git config --unset core.hooksPath
+pnpm exec lefthook install
+```
+
+これにより、古い husky の設定をクリアして lefthook に切り替わります。
+
 ### トラブルシューティング
 
 - エラー: ローカル環境で開発用サーバを立ち上げても、ブラウザに表示されない
@@ -283,6 +313,3 @@
 - エラー: Docker Desktop で Vite を利用したときに Segmentation Fault が発生
   - 対処方法: Docker Desktopで「Use Visualization Framework」のチェックを外す
   - 参考資料: https://qiita.com/naoto24kawa/items/160aad0ca58642216a0a
-
-- エラー: コミットを実行したときに、`hint: The '.husky/pre-commit' hook was ignored because it's not set as executable.`と表示される
-  - 対処方法: ターミナルで`chmod ug+x .husky/*`を実行する
