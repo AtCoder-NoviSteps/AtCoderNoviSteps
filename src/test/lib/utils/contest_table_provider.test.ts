@@ -2323,7 +2323,7 @@ describe('ContestTableProviderBase and implementations', () => {
       const provider = new JOIQualRoundFrom2006To2019Provider(ContestType.JOI);
       const metadata = provider.getMetadata();
 
-      expect(metadata.title).toBe('JOI 予選');
+      expect(metadata.title).toBe('JOI 予選（旧形式）');
       expect(metadata.abbreviationName).toBe('joiQualRoundFrom2006To2019');
     });
 
