@@ -895,7 +895,7 @@ export class JOIQualRoundFrom2006To2019Provider extends ContestTableProviderBase
 
   getMetadata(): ContestTableMetaData {
     return {
-      title: 'JOI 予選',
+      title: 'JOI 予選（旧形式）',
       abbreviationName: 'joiQualRoundFrom2006To2019',
     };
   }
@@ -1228,8 +1228,8 @@ export const prepareContestProviderPresets = () => {
       }).addProvider(new JOIFirstQualRoundProvider(ContestType.JOI)),
 
     JOISecondQualAndSemiFinalRound: () =>
-      new ContestTableProviderGroup(`JOI 二次予選・予選・本選`, {
-        buttonLabel: 'JOI 二次予選・予選・本選',
+      new ContestTableProviderGroup(`JOI 二次予選・予選（旧形式）・本選`, {
+        buttonLabel: 'JOI 二次予選・予選（旧形式）・本選',
         ariaLabel: 'Filter JOI Second Qual Round',
       }).addProviders(
         new JOISecondQualRound2020OnwardsProvider(ContestType.JOI),
