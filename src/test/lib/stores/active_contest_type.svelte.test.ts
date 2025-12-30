@@ -112,7 +112,7 @@ describe('ActiveContestTypeStore', () => {
     const types: ContestTableProviderGroups[] = [
       'abc319Onwards' as ContestTableProviderGroups,
       'fromAbc212ToAbc318' as ContestTableProviderGroups,
-      'arcLatest20Rounds' as ContestTableProviderGroups,
+      'abcLatest20Rounds' as ContestTableProviderGroups,
     ];
 
     types.forEach((type) => {
