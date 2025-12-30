@@ -46,10 +46,10 @@
     activeContestTypeStore.set(type);
   }
 
-  let providerGroups: ContestTableProviderGroup = $derived(
+  let providerGroups: ContestTableProviderGroup | undefined = $derived(
     contestTableProviderGroups[activeContestType as ContestTableProviderGroups],
   );
-  let providers = $derived(providerGroups.getAllProviders());
+  let providers = $derived(providerGroups?.getAllProviders() ?? []);
 
   interface ProviderData {
     filteredTaskResults: TaskResults;

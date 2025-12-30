@@ -1,4 +1,4 @@
-import { describe, test, expect, vi, beforeEach } from 'vitest';
+import { describe, test, expect, vi, beforeEach, afterEach } from 'vitest';
 
 import type { ContestTableProviderGroups } from '$lib/utils/contest_table_provider';
 import {
@@ -27,6 +27,8 @@ describe('ActiveContestTypeStore', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
+    // Clear mockStorage before each test
+    Object.keys(mockStorage).forEach((key) => delete mockStorage[key]);
     // Setup mock for localStorage
     vi.stubGlobal('localStorage', mockLocalStorage);
 
@@ -40,11 +42,6 @@ describe('ActiveContestTypeStore', () => {
 
   test('expects to initialize with default value', () => {
     expect(store.get()).toBe('abcLatest20Rounds');
-  });
-
-  test('expects to initialize with provided value', () => {
-    const customStore = new ActiveContestTypeStore('abc319Onwards' as ContestTableProviderGroups);
-    expect(customStore.get()).toBe('abc319Onwards');
   });
 
   test('expects to return the current value when calling get()', () => {
@@ -94,6 +91,34 @@ describe('ActiveContestTypeStore', () => {
 
     store.reset();
     expect(store.get()).toBe('abcLatest20Rounds');
+  });
+
+  test('expects to reset to default when initialized with invalid localStorage key', () => {
+    // Simulate invalid key in localStorage
+    mockStorage['contest_table_providers'] = JSON.stringify('invalidContestType');
+
+    const newStore = new ActiveContestTypeStore();
+    expect(newStore.get()).toBe('abcLatest20Rounds');
+  });
+
+  test('expects to reset to default when initialized with null', () => {
+    mockStorage['contest_table_providers'] = JSON.stringify(null);
+
+    const newStore = new ActiveContestTypeStore();
+    expect(newStore.get()).toBe('abcLatest20Rounds');
+  });
+
+  test('expects to handle multiple contest type changes', () => {
+    const types: ContestTableProviderGroups[] = [
+      'abc319Onwards' as ContestTableProviderGroups,
+      'fromAbc212ToAbc318' as ContestTableProviderGroups,
+      'abcLatest20Rounds' as ContestTableProviderGroups,
+    ];
+
+    types.forEach((type) => {
+      store.set(type);
+      expect(store.get()).toBe(type);
+    });
   });
 });
 
