@@ -2267,7 +2267,9 @@ describe('ContestTableProviderBase and implementations', () => {
       expect(displayConfig.isShownRoundLabel).toBe(true);
       expect(displayConfig.isShownTaskIndex).toBe(false);
       expect(displayConfig.roundLabelWidth).toBe('xl:w-28');
-      expect(displayConfig.tableBodyCellsWidth).toBe('w-1/2 xs:w-1/3 sm:w-1/4 md:w-1/5 px-1 py-1');
+      expect(displayConfig.tableBodyCellsWidth).toBe(
+        'w-1/2 xs:w-1/3 sm:w-1/4 md:w-1/5 lg:w-1/6 px-1 py-1',
+      );
     });
 
     test('expects to get contest round label', () => {

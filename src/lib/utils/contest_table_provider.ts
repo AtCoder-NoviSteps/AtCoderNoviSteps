@@ -865,7 +865,7 @@ export class JOISecondQualRound2020OnwardsProvider extends ContestTableProviderB
       isShownHeader: true,
       isShownRoundLabel: true,
       isShownTaskIndex: false,
-      tableBodyCellsWidth: 'w-1/2 xs:w-1/3 sm:w-1/4 md:w-1/5 px-1 py-1',
+      tableBodyCellsWidth: 'w-1/2 xs:w-1/3 sm:w-1/4 md:w-1/5 lg:w-1/6 px-1 py-1',
       roundLabelWidth: 'xl:w-28',
     };
   }
