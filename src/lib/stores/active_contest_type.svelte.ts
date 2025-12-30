@@ -1,5 +1,8 @@
 import { useLocalStorage } from '$lib/stores/local_storage_helper.svelte';
-import { type ContestTableProviderGroups } from '$lib/utils/contest_table_provider';
+import {
+  type ContestTableProviderGroups,
+  contestTableProviderGroups,
+} from '$lib/utils/contest_table_provider';
 
 /**
  * Store that manages the active contest type selection.
@@ -25,9 +28,23 @@ export class ActiveContestTypeStore {
    * Defaults to 'abcLatest20Rounds'.
    */
   constructor(defaultContestType: ContestTableProviderGroups = 'abcLatest20Rounds') {
-    if (defaultContestType !== 'abcLatest20Rounds' || !this.storage.value) {
+    if (!this.isValidContestType(this.storage.value)) {
       this.storage.value = defaultContestType;
     }
+  }
+
+  /**
+   * Validates if the provided contest type exists in contestTableProviderGroups.
+   *
+   * @param contestType - The contest type to validate
+   * @returns `true` if the contest type is valid, `false` otherwise
+   */
+  private isValidContestType(contestType: ContestTableProviderGroups | null | undefined): boolean {
+    return (
+      contestType !== null &&
+      contestType !== undefined &&
+      Object.keys(contestTableProviderGroups).includes(contestType)
+    );
   }
 
   /**
