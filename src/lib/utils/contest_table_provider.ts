@@ -164,41 +164,6 @@ export class ABSProvider extends ContestTableProviderBase {
   }
 }
 
-export class ABCLatest20RoundsProvider extends ContestTableProviderBase {
-  filter(taskResults: TaskResults): TaskResults {
-    const taskResultsOnlyABC = taskResults.filter(this.setFilterCondition());
-
-    const CONTEST_ROUND_COUNT = 20;
-    const latest20ContestIds = Array.from(
-      new Set(taskResultsOnlyABC.map((taskResult: TaskResult) => taskResult.contest_id)),
-    )
-      .sort()
-      .reverse()
-      .slice(0, CONTEST_ROUND_COUNT);
-
-    return taskResultsOnlyABC.filter((task: TaskResult) =>
-      latest20ContestIds.includes(task.contest_id),
-    );
-  }
-
-  protected setFilterCondition(): (taskResult: TaskResult) => boolean {
-    // Note: Narrow down taskResults in advance to reduce time to display.
-    return (task: TaskResult) => classifyContest(task.contest_id) === ContestType.ABC;
-  }
-
-  getMetadata(): ContestTableMetaData {
-    return {
-      title: 'AtCoder Beginner Contest 最新 20 回',
-      abbreviationName: 'abcLatest20Rounds',
-    };
-  }
-
-  getContestRoundLabel(contestId: string): string {
-    const contestNameLabel = getContestNameLabel(contestId);
-    return contestNameLabel.replace('ABC ', '');
-  }
-}
-
 // ABC319 〜 (2023/09/09 〜 )
 // 7 tasks per contest
 export class ABC319OnwardsProvider extends ContestTableProviderBase {
@@ -1077,15 +1042,6 @@ export const prepareContestProviderPresets = () => {
       }).addProvider(new ABSProvider(ContestType.ABS)),
 
     /**
-     * Single group for ABC latest 20 rounds
-     */
-    ABCLatest20Rounds: () =>
-      new ContestTableProviderGroup(`ABC Latest 20 Rounds`, {
-        buttonLabel: 'ABC 最新 20 回',
-        ariaLabel: 'Filter ABC latest 20 rounds',
-      }).addProvider(new ABCLatest20RoundsProvider(ContestType.ABC)),
-
-    /**
      * Single group for ABC 319 onwards
      */
     ABC319Onwards: () =>
@@ -1241,7 +1197,6 @@ export const prepareContestProviderPresets = () => {
 
 export const contestTableProviderGroups = {
   abs: prepareContestProviderPresets().ABS(),
-  abcLatest20Rounds: prepareContestProviderPresets().ABCLatest20Rounds(),
   abc319Onwards: prepareContestProviderPresets().ABC319Onwards(),
   fromAbc212ToAbc318: prepareContestProviderPresets().ABC212ToABC318(),
   fromAbc126ToAbc211: prepareContestProviderPresets().ABC126ToABC211(),
