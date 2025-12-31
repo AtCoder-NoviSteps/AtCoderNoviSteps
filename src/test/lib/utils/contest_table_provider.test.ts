@@ -5,7 +5,6 @@ import type { TaskResult, TaskResults } from '$lib/types/task';
 
 import {
   ABSProvider,
-  ABCLatest20RoundsProvider,
   ABC319OnwardsProvider,
   ABC212ToABC318Provider,
   ABC126ToABC211Provider,
@@ -142,14 +141,6 @@ describe('ContestTableProviderBase and implementations', () => {
 
   describe('ABC providers', () => {
     describe.each([
-      {
-        providerClass: ABCLatest20RoundsProvider,
-        label: 'Latest 20 rounds',
-        displayConfig: {
-          roundLabelWidth: 'xl:w-16',
-          tableBodyCellsWidth: 'w-1/2 xs:w-1/3 sm:w-1/4 md:w-1/5 lg:w-1/6 px-1 py-1',
-        },
-      },
       {
         providerClass: ABC319OnwardsProvider,
         label: '319 onwards',
@@ -349,57 +340,6 @@ describe('ContestTableProviderBase and implementations', () => {
         expect(tableEmpty).toEqual({});
         expect(idsEmpty).toEqual([]);
         expect(headerIdsEmpty).toEqual([]);
-      });
-    });
-
-    // ABC Latest 20 Round only
-    describe('ABC Latest 20 Rounds', () => {
-      test('expects to filter tasks to include only ABC contests', () => {
-        const provider = new ABCLatest20RoundsProvider(ContestType.ABC);
-        const filtered = provider.filter(mockTaskResults);
-
-        expect(filtered?.every((task) => task.contest_id.startsWith('abc'))).toBe(true);
-        expect(filtered).not.toContainEqual(expect.objectContaining({ contest_id: 'arc100' }));
-      });
-
-      test('expects to limit results to the latest 20 rounds', () => {
-        const provider = new ABCLatest20RoundsProvider(ContestType.ABC);
-        const taskResults = [...mockTaskResults];
-        const filtered = provider.filter(taskResults);
-        const uniqueContests = new Set(filtered.map((task) => task.contest_id));
-
-        expect(uniqueContests.size).toBe(20);
-
-        const contestRounds = Array.from(uniqueContests)
-          .map((id) => getContestRound(id))
-          .sort((a, b) => b - a);
-        const latestRound = Math.max(...contestRounds);
-        const expectedRounds = Array.from({ length: 20 }, (_, i) => latestRound - i);
-
-        expect(contestRounds).toEqual(expectedRounds);
-      });
-
-      test('expects to get correct metadata', () => {
-        const provider = new ABCLatest20RoundsProvider(ContestType.ABC);
-        const metadata = provider.getMetadata();
-
-        expect(metadata.title).toBe('AtCoder Beginner Contest 最新 20 回');
-        expect(metadata.abbreviationName).toBe('abcLatest20Rounds');
-      });
-
-      test('expects to handle task results with different contest types', () => {
-        const provider = new ABCLatest20RoundsProvider(ContestType.ABC);
-        const mockMixedTasks = [
-          { contest_id: 'abc378', task_id: 'abc378_a', task_table_index: 'A' },
-          { contest_id: 'dp', task_id: 'dp_a', task_table_index: 'A' },
-          { contest_id: 'abc397', task_id: 'abc397_a', task_table_index: 'A' },
-          { contest_id: 'typical90', task_id: 'typical90_a', task_table_index: '001' },
-          { contest_id: 'arc100', task_id: 'arc100_a', task_table_index: 'A' },
-        ];
-        const filtered = provider.filter(mockMixedTasks as TaskResults);
-
-        expect(filtered.every((task) => task.contest_id.startsWith('abc'))).toBe(true);
-        expect(filtered).not.toContainEqual(expect.objectContaining({ contest_id: 'dp' }));
       });
     });
 
@@ -703,6 +643,7 @@ describe('ContestTableProviderBase and implementations', () => {
     });
   });
 
+  // ABC001 to ABC 041
   describe('ABC 001 to ABC 041', () => {
     test('expects to filter tasks within ABC001-41 range', () => {
       const provider = new ABC001ToABC041Provider(ContestType.ABC);
@@ -2430,23 +2371,21 @@ describe('ContestTableProviderBase and implementations', () => {
 
   describe('Common provider functionality', () => {
     test('expects to get contest round IDs correctly', () => {
-      const provider = new ABCLatest20RoundsProvider(ContestType.ABC);
+      const provider = new ABSProvider(ContestType.ABS);
       // Use a subset of the mock data that covers the relevant contest IDs
-      const filtered = mockTaskResults.filter((task) =>
-        ['abc397', 'abc319', 'abc318'].includes(task.contest_id),
-      );
+      const filtered = taskResultsForABS.filter((task) => ['abs'].includes(task.contest_id));
 
       const roundIds = provider.getContestRoundIds(filtered);
 
-      expect(roundIds).toEqual(['abc397', 'abc319', 'abc318']);
+      expect(roundIds).toEqual(['abs']);
     });
 
     test('expects to get header IDs for tasks correctly', () => {
-      const provider = new ABCLatest20RoundsProvider(ContestType.ABC);
-      const filtered = mockTaskResults.filter((task) => task.contest_id === 'abc319');
+      const provider = new ABSProvider(ContestType.ABS);
+      const filtered = taskResultsForABS.filter((task) => task.contest_id === 'abs');
       const headerIds = provider.getHeaderIdsForTask(filtered);
 
-      expect(headerIds).toEqual(['A', 'B', 'C', 'D', 'E', 'F', 'G']);
+      expect(headerIds).toEqual(['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K']);
     });
   });
 });
@@ -2467,16 +2406,16 @@ describe('ContestTableProviderGroup', () => {
   });
 
   test('expects to add a single provider correctly', () => {
-    const group = new ContestTableProviderGroup('ABC Latest 20 Rounds', {
-      buttonLabel: 'ABC 最新 20 回',
-      ariaLabel: 'Filter ABC latest 20 rounds',
+    const group = new ContestTableProviderGroup('AtCoder Beginners Selection', {
+      buttonLabel: 'ABS',
+      ariaLabel: 'Filter AtCoder Beginners Selection',
     });
-    const provider = new ABCLatest20RoundsProvider(ContestType.ABC);
+    const provider = new ABSProvider(ContestType.ABS);
 
     group.addProvider(provider);
 
     expect(group.getSize()).toBe(1);
-    expect(group.getProvider(ContestType.ABC)).toBe(provider);
+    expect(group.getProvider(ContestType.ABS)).toBe(provider);
     expect(group.getProvider(ContestType.OTHERS)).toBeUndefined();
   });
 
@@ -2517,10 +2456,10 @@ describe('ContestTableProviderGroup', () => {
       buttonLabel: '初心者向けセット',
       ariaLabel: 'Filter contests for beginner',
     });
-    const abcProvider = new ABCLatest20RoundsProvider(ContestType.ABC);
+    const absProvider = new ABSProvider(ContestType.ABS);
     const edpcProvider = new EDPCProvider(ContestType.EDPC);
 
-    const result = group.addProvider(abcProvider).addProvider(edpcProvider);
+    const result = group.addProvider(absProvider).addProvider(edpcProvider);
 
     expect(result).toBe(group);
     expect(group.getSize()).toBe(2);
@@ -2531,7 +2470,7 @@ describe('ContestTableProviderGroup', () => {
       buttonLabel: 'コンテストテーブルに関する統計情報',
       ariaLabel: 'Statistics for contest table',
     });
-    const abcProvider = new ABCLatest20RoundsProvider(ContestType.ABC);
+    const abcProvider = new ABSProvider(ContestType.ABC);
     const edpcProvider = new EDPCProvider(ContestType.EDPC);
 
     group.addProvider(abcProvider);
@@ -2592,29 +2531,29 @@ describe('ContestTableProviderGroup', () => {
       group.addProviders(examplesProvider, practicalsProvider, challengesProvider);
 
       expect(group.getSize()).toBe(3);
-      expect(group.getProvider(ContestType.TESSOKU_BOOK, TESSOKU_SECTIONS.EXAMPLES)).toBe(
-        examplesProvider,
+      expect(group.getProvider(ContestType.TESSOKU_BOOK, TESSOKU_SECTIONS.EXAMPLES)).toBeInstanceOf(
+        TessokuBookForExamplesProvider,
       );
-      expect(group.getProvider(ContestType.TESSOKU_BOOK, TESSOKU_SECTIONS.PRACTICALS)).toBe(
-        practicalsProvider,
-      );
-      expect(group.getProvider(ContestType.TESSOKU_BOOK, TESSOKU_SECTIONS.CHALLENGES)).toBe(
-        challengesProvider,
-      );
+      expect(
+        group.getProvider(ContestType.TESSOKU_BOOK, TESSOKU_SECTIONS.PRACTICALS),
+      ).toBeInstanceOf(TessokuBookForPracticalsProvider);
+      expect(
+        group.getProvider(ContestType.TESSOKU_BOOK, TESSOKU_SECTIONS.CHALLENGES),
+      ).toBeInstanceOf(TessokuBookForChallengesProvider);
     });
 
     test('expects backward compatibility for getProvider without section', () => {
-      const group = new ContestTableProviderGroup('ABC Latest 20 Rounds', {
-        buttonLabel: 'ABC 最新 20 回',
-        ariaLabel: 'Filter ABC latest 20 rounds',
+      const group = new ContestTableProviderGroup('AtCoder Beginners Selection', {
+        buttonLabel: 'ABS',
+        ariaLabel: 'Filter AtCoder Beginners Selection',
       });
 
-      const abcProvider = new ABCLatest20RoundsProvider(ContestType.ABC);
-      group.addProvider(abcProvider);
+      const absProvider = new ABSProvider(ContestType.ABS);
+      group.addProvider(absProvider);
 
       // Get provider without section should work with simple key
-      expect(group.getProvider(ContestType.ABC)).toBe(abcProvider);
-      expect(group.getProvider(ContestType.ABC, undefined)).toBe(abcProvider);
+      expect(group.getProvider(ContestType.ABS)).toBe(absProvider);
+      expect(group.getProvider(ContestType.ABS, undefined)).toBe(absProvider);
     });
 
     test('expects getProvider with non-existent section to return undefined', () => {
@@ -2638,16 +2577,16 @@ describe('ContestTableProviderGroup', () => {
 });
 
 describe('prepareContestProviderPresets', () => {
-  test('expects to create ABCLatest20Rounds preset correctly', () => {
-    const group = prepareContestProviderPresets().ABCLatest20Rounds();
+  test('expects to create ABS preset correctly', () => {
+    const group = prepareContestProviderPresets().ABS();
 
-    expect(group.getGroupName()).toBe('ABC Latest 20 Rounds');
+    expect(group.getGroupName()).toBe('AtCoder Beginners Selection');
     expect(group.getMetadata()).toEqual({
-      buttonLabel: 'ABC 最新 20 回',
-      ariaLabel: 'Filter ABC latest 20 rounds',
+      buttonLabel: 'ABS',
+      ariaLabel: 'Filter AtCoder Beginners Selection',
     });
     expect(group.getSize()).toBe(1);
-    expect(group.getProvider(ContestType.ABC)).toBeInstanceOf(ABCLatest20RoundsProvider);
+    expect(group.getProvider(ContestType.ABS)).toBeInstanceOf(ABSProvider);
   });
 
   test('expects to create ABC319Onwards preset correctly', () => {
@@ -2723,7 +2662,7 @@ describe('prepareContestProviderPresets', () => {
   test('expects to verify all presets are functions', () => {
     const presets = prepareContestProviderPresets();
 
-    expect(typeof presets.ABCLatest20Rounds).toBe('function');
+    expect(typeof presets.ABS).toBe('function');
     expect(typeof presets.ABC319Onwards).toBe('function');
     expect(typeof presets.ABC212ToABC318).toBe('function');
     expect(typeof presets.Typical90).toBe('function');
@@ -2732,11 +2671,11 @@ describe('prepareContestProviderPresets', () => {
 
   test('expects each preset to create independent instances', () => {
     const presets = prepareContestProviderPresets();
-    const group1 = presets.ABCLatest20Rounds();
-    const group2 = presets.ABCLatest20Rounds();
+    const group1 = presets.ABS();
+    const group2 = presets.ABS();
 
     expect(group1).not.toBe(group2);
     expect(group1.getGroupName()).toBe(group2.getGroupName());
-    expect(group1.getProvider(ContestType.ABC)).not.toBe(group2.getProvider(ContestType.ABC));
+    expect(group1.getProvider(ContestType.ABS)).not.toBe(group2.getProvider(ContestType.ABS));
   });
 });

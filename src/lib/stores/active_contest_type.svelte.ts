@@ -13,21 +13,18 @@ import {
  *
  * The store uses the ContestTableProviderGroups type which represents
  * different contest table configurations or data providers,
- * with a default value of 'abcLatest20Rounds'.
+ * with a default value of 'abs'.
  */
 export class ActiveContestTypeStore {
-  private storage = useLocalStorage<ContestTableProviderGroups>(
-    'contest_table_providers',
-    'abcLatest20Rounds',
-  );
+  private storage = useLocalStorage<ContestTableProviderGroups>('contest_table_providers', 'abs');
 
   /**
    * Creates an instance with the specified contest type.
    *
    * @param defaultContestType - The default contest type to initialize.
-   * Defaults to 'abcLatest20Rounds'.
+   * Defaults to 'abs'.
    */
-  constructor(defaultContestType: ContestTableProviderGroups = 'abcLatest20Rounds') {
+  constructor(defaultContestType: ContestTableProviderGroups = 'abs') {
     if (!this.isValidContestType(this.storage.value)) {
       this.storage.value = defaultContestType;
     }
@@ -76,10 +73,10 @@ export class ActiveContestTypeStore {
 
   /**
    * Resets the active contest type to the default value.
-   * Sets the internal value to 'abcLatest20Rounds'.
+   * Sets the internal value to 'abs'.
    */
   reset(): void {
-    this.storage.value = 'abcLatest20Rounds';
+    this.storage.value = 'abs';
   }
 }
 

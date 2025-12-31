@@ -41,11 +41,11 @@ describe('ActiveContestTypeStore', () => {
   });
 
   test('expects to initialize with default value', () => {
-    expect(store.get()).toBe('abcLatest20Rounds');
+    expect(store.get()).toBe('abs');
   });
 
   test('expects to return the current value when calling get()', () => {
-    expect(store.get()).toBe('abcLatest20Rounds');
+    expect(store.get()).toBe('abs');
 
     // Change the value and verify get() returns the new value
     store.set('abc319Onwards' as ContestTableProviderGroups);
@@ -61,18 +61,18 @@ describe('ActiveContestTypeStore', () => {
   });
 
   test('expects to correctly determine if contest type is the same with isSame()', () => {
-    expect(store.isSame('abcLatest20Rounds' as ContestTableProviderGroups)).toBe(true);
+    expect(store.isSame('abs' as ContestTableProviderGroups)).toBe(true);
     expect(store.isSame('abc319Onwards' as ContestTableProviderGroups)).toBe(false);
     expect(store.isSame('fromAbc212ToAbc318' as ContestTableProviderGroups)).toBe(false);
 
     store.set('abc319Onwards' as ContestTableProviderGroups);
     expect(store.isSame('abc319Onwards' as ContestTableProviderGroups)).toBe(true);
-    expect(store.isSame('abcLatest20Rounds' as ContestTableProviderGroups)).toBe(false);
+    expect(store.isSame('abs' as ContestTableProviderGroups)).toBe(false);
     expect(store.isSame('fromAbc212ToAbc318' as ContestTableProviderGroups)).toBe(false);
 
     store.set('fromAbc212ToAbc318' as ContestTableProviderGroups);
     expect(store.isSame('fromAbc212ToAbc318' as ContestTableProviderGroups)).toBe(true);
-    expect(store.isSame('abcLatest20Rounds' as ContestTableProviderGroups)).toBe(false);
+    expect(store.isSame('abs' as ContestTableProviderGroups)).toBe(false);
     expect(store.isSame('abc319Onwards' as ContestTableProviderGroups)).toBe(false);
   });
 
@@ -83,14 +83,14 @@ describe('ActiveContestTypeStore', () => {
 
     // Call reset and verify it goes back to default
     store.reset();
-    expect(store.get()).toBe('abcLatest20Rounds');
+    expect(store.get()).toBe('abs');
 
     // Change to a different value and reset again to verify consistency
     store.set('fromAbc212ToAbc318' as ContestTableProviderGroups);
     expect(store.get()).toBe('fromAbc212ToAbc318');
 
     store.reset();
-    expect(store.get()).toBe('abcLatest20Rounds');
+    expect(store.get()).toBe('abs');
   });
 
   test('expects to reset to default when initialized with invalid localStorage key', () => {
@@ -98,21 +98,21 @@ describe('ActiveContestTypeStore', () => {
     mockStorage['contest_table_providers'] = JSON.stringify('invalidContestType');
 
     const newStore = new ActiveContestTypeStore();
-    expect(newStore.get()).toBe('abcLatest20Rounds');
+    expect(newStore.get()).toBe('abs');
   });
 
   test('expects to reset to default when initialized with null', () => {
     mockStorage['contest_table_providers'] = JSON.stringify(null);
 
     const newStore = new ActiveContestTypeStore();
-    expect(newStore.get()).toBe('abcLatest20Rounds');
+    expect(newStore.get()).toBe('abs');
   });
 
   test('expects to handle multiple contest type changes', () => {
     const types: ContestTableProviderGroups[] = [
       'abc319Onwards' as ContestTableProviderGroups,
       'fromAbc212ToAbc318' as ContestTableProviderGroups,
-      'abcLatest20Rounds' as ContestTableProviderGroups,
+      'abs' as ContestTableProviderGroups,
     ];
 
     types.forEach((type) => {
@@ -135,6 +135,6 @@ describe('Active contest type store in SSR', () => {
   });
 
   test('handles SSR gracefully', () => {
-    expect(activeContestTypeStore.get()).toBe('abcLatest20Rounds');
+    expect(activeContestTypeStore.get()).toBe('abs');
   });
 });
