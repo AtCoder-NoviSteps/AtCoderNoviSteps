@@ -513,7 +513,6 @@ describe.each([
 
 **ターゲット**:
 
-- `ABCLatest20RoundsProvider` テストの `generateTable` 検証を追加
 - `ABC319Onwards` と `ABC212to318` のテストもTypical90 同等レベルに
 
 **期間**: 2-3 日
