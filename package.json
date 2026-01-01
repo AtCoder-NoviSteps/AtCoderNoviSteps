@@ -41,7 +41,7 @@
     "eslint": "9.39.2",
     "eslint-config-prettier": "10.1.8",
     "eslint-plugin-svelte": "3.10.1",
-    "globals": "16.5.0",
+    "globals": "17.0.0",
     "lefthook": "2.0.13",
     "jsdom": "27.4.0",
     "nock": "14.0.10",
