@@ -510,6 +510,7 @@ pnpm playwright test tests/custom-colors.spec.ts
 Running 10 tests using 3 workers
 ✓ 10 passed (18.8s)
 ```
+
 ---
 
 ## テストコードのリファクタリング
