@@ -31,6 +31,7 @@ test.describe('Navbar - Regression from v3->v4 migration', () => {
     for (let i = 0; i < Math.min(count, 3); i++) {
       const item = navItems.nth(i);
       const bbox = await item.boundingBox();
+
       expect(bbox?.width).toBeGreaterThan(0);
       expect(bbox?.height).toBeGreaterThan(0);
       // Verify items fit within navbar viewport
