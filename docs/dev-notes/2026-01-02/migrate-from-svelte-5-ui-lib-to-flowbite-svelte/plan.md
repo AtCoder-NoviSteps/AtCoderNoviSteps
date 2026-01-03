@@ -97,6 +97,24 @@
 
 **目的:** Tailwind v4 環境を整え、カスタム colors と breakpoints が機能する状態にする
 
+#### 0-0. Flowbite / Flowbite Svelte Breaking Changes 確認
+
+**確認事項:**
+
+- [ ] Flowbite v3.0.0 以降の CSS architecture 変更を理解（詳細は「[Flowbite Breaking Changes（詳細）](#flowbite-breaking-changes詳細)」参照）
+  - TailwindCSS v4 への統合が完了しており、flowbite-svelte v1.31.0 経由で対応済み
+  - 直接対応不要：CSS ライブラリとしての変更は Svelte レイヤーで抽象化される
+
+- [ ] Flowbite Svelte v0.45.0 以降 → v1.31.0 の breaking changes を把握
+  - [Node 要件変更](https://github.com/themesberg/flowbite-svelte/releases/tag/v0.45.0)（>= 20.0.0）
+  - フェーズ1 でコンポーネント置き換え時に個別確認
+
+**出力:** 既存テスト環境（フェーズ-1 で実装）が v1.31.0 と互換性を持つことを確認
+
+**工数:** < 1 day（文献レビュー）
+
+---
+
 #### 0-1. TailwindCSS v4 breaking changes（必須対応）
 
 以下の **必須** 変更を実装：
@@ -388,6 +406,59 @@ pnpm test:integration
 ```
 
 **工数:** <1 day
+
+---
+
+## Flowbite Breaking Changes（詳細）
+
+### Flowbite v2.5.0 → v3.1.2 の破壊的変更
+
+#### v3.0.0 (2025-01-24) - TailwindCSS v4 統合による大型変更
+
+**主要な破壊的変更:**
+
+- **TailwindCSS v4 への完全移行**
+  - [GitHub Release](https://github.com/themesberg/flowbite/releases/tag/v3.0.0)
+  - CSS architecture が完全に再設計
+  - CSS variables の生成方式が変更
+  - Plugin システムが新規実装
+
+**対象プロジェクトへの影響:**
+
+- ✅ **直接影響なし** - Flowbite は CSS ライブラリであり、コンポーネント構造に変更なし
+- ✅ **flowbite-svelte v1.31.0 が対応済み** - Svelte レイヤーで抽象化
+
+#### v3.0.0 ~ v3.1.2 の間
+
+**v3.1.0, v3.1.1, v3.1.2:**
+
+- [CSS variables のバグ修正](https://github.com/themesberg/flowbite/releases/tag/v3.1.2)（theme file 新規作成）
+- 新たな破壊的変更なし - v3.0.0 が最大の転換点
+
+---
+
+### Flowbite Svelte v0.45.0 以降 → v1.31.0 の破壊的変更
+
+#### v0.45.0 (2024-04-16) - Node 要件変更
+
+**破壊的変更:**
+
+- **Node 要件を >= 20.0.0 に引き上げ**
+  - [GitHub Release](https://github.com/themesberg/flowbite-svelte/releases/tag/v0.45.0)
+  - v0.44 までは Node >= 18.0.0 で動作
+
+**対象プロジェクトへの影響:**
+
+- 🟡 **Node 要件確認が必須** - 本プロジェクトが Node 20+ で動作していることを確認
+  - [参考: package.json engines 確認](../../../../../../package.json)（✅ 既に Node >= 20.0.0 設定済み）
+
+#### v0.45.0 ~ v1.31.0 の間
+
+**v0.47.0 ~ v1.0.0 ~ v1.31.0:**
+
+- 機能追加と軽微なバグ修正のみ
+- [v1.0.0 では Button cursor デフォルト修正](https://github.com/themesberg/flowbite-svelte/releases/tag/v1.0.0)（TailwindCSS v4.0.0 対応）
+- 新たな破壊的変更なし
 
 ---
 
