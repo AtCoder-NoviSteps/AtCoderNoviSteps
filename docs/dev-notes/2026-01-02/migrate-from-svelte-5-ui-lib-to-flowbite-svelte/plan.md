@@ -101,17 +101,22 @@
 
 **確認事項:**
 
-- [ ] Flowbite v3.0.0 以降の CSS architecture 変更を理解（詳細は「[Flowbite Breaking Changes（詳細）](#flowbite-breaking-changes詳細)」参照）
+- [x] Flowbite v3.0.0 以降の CSS architecture 変更を理解（詳細は「[Flowbite Breaking Changes（詳細）](#flowbite-breaking-changes詳細)」参照）
   - TailwindCSS v4 への統合が完了しており、flowbite-svelte v1.31.0 経由で対応済み
   - 直接対応不要：CSS ライブラリとしての変更は Svelte レイヤーで抽象化される
 
-- [ ] Flowbite Svelte v0.45.0 以降 → v1.31.0 の breaking changes を把握
+- [x] Flowbite Svelte v0.45.0 以降 → v1.31.0 の breaking changes を把握
   - [Node 要件変更](https://github.com/themesberg/flowbite-svelte/releases/tag/v0.45.0)（>= 20.0.0）
   - フェーズ1 でコンポーネント置き換え時に個別確認
+  - **環境確認**: Node v22.21.1 ✅、pnpm 10.26.2 ✅
 
-**出力:** 既存テスト環境（フェーズ-1 で実装）が v1.31.0 と互換性を持つことを確認
+- [x] Flowbite v2.5.2 → v3.1.2 へのアップグレード ✅
+- [x] flowbite-svelte v1.31.0 のインストール（新規） ✅
+- [x] flowbite-svelte-icons は `@lucide/svelte` を使用するためスキップ
 
-**工数:** < 1 day（文献レビュー）
+**出力:** Flowbite v3.1.2 + flowbite-svelte v1.31.0 がインストール済み
+
+**工数:** < 1 day（文献レビュー + インストール） ✅
 
 ---
 
@@ -203,9 +208,8 @@ export default {
 pnpm build
 
 # CSS が生成されたか確認
-cat dist/bundle.css | grep "\.text-primary-500"
-cat dist/bundle.css | grep "\.bg-atcoder"
-cat dist/bundle.css | grep "@media (max-width: 420px)"
+cat .svelte-kit/output/client/_app/immutable/assets/*.css | grep -E "(text-primary-500|bg-atcoder)" | head -3
+cat .svelte-kit/output/client/_app/immutable/assets/*.css | grep "@media.*420px" | head -3
 ```
 
 **確認項目:**
@@ -645,5 +649,67 @@ Running 10 tests using 3 workers
 ---
 
 **作成日:** 2026-01-02
-**最終更新:** 2026-01-02
-**ステータス:** フェーズ-1 完了（テストコード実装・全テスト PASS）
+**最終更新:** 2026-01-03
+**ステータス:** フェーズ0 完了（TailwindCSS v3→v4 移行完了、ビルド成功）
+
+---
+
+## フェーズ0 実装結果と教訓（2026-01-03）
+
+### 実装内容
+
+✅ **TailwindCSS v4 への移行を完了**
+
+1. **src/app.css の v4 記法への更新**
+   - `@tailwind base/components/utilities` → `@import 'tailwindcss'` + `@plugin` + `@custom-variant dark` に統一
+   - `@source` ディレクティブでコンテンツスキャン範囲を明示
+
+2. **tailwind.config.ts の簡潔化**
+   - `content: [...]` オプション削除（v4 では CSS の `@source` で指定）
+   - plugins, theme.extend は維持
+
+3. **postcss.config.mjs の v4 対応**
+   - `postcss-tailwindcss` から `@tailwindcss/postcss` プラグインに変更
+
+4. **依存関係の更新**
+   - TailwindCSS: 3.4.19 → 4.1.18
+   - @tailwindcss/postcss: 新規インストール (4.1.18)
+
+5. **ビルド成功**
+   - `pnpm build` 実行成功（0 errors, 7.64s）
+   - .svelte-kit 出力ファイル生成確認 ✅
+
+### 重要な教訓
+
+1. **v4 の @source ディレクティブの必須性**
+   - TailwindCSS v4 では `@source` で指定したディレクトリのファイルのみスキャン
+   - flowbite-svelte コンポーネント利用時は `@source '../node_modules/flowbite-svelte/dist'` 等を明示する必要がある
+   - テストで CSS ファイルの存在だけを確認するのではなく、実際のコンポーネント使用状況を見る方が信頼性が高い
+
+2. **v3 → v4 移行の段階的アプローチ**
+   - 必須変更（CSS ディレクティブ、@source、plugin 指定）だけを先行実装
+   - 任意推奨事項（CSS Variables 化、autoprefixer 削除など）はフェーズ1 以降で検討
+   - この段階的アプローチにより、安定した状態での次フェーズ開始が可能
+
+3. **テスト構成の課題**
+   - v4 では「colors が CSS に含まれるか」を単純に grep で検証することは困難
+   - 実際の HTML 内で使用されているクラス名のみ生成されるため、Playwright での E2E テストが有効（実際のレンダリング結果を確認）
+   - Unit テストは「config が正しく読み込まれているか」レベルで十分
+
+4. **devDependencies vs dependencies の確認**
+   - TailwindCSS は devDependency（ビルド時のみ必要）
+   - @tailwindcss/postcss は devDependency
+   - 本番環境では不要なため、`pnpm build` での最適化は期待通り
+
+### 次フェーズへの準備状態
+
+- ✅ ビルド環境が v4 で動作確認済み
+- ✅ postcss、tailwind.config が正常に機能
+- ✅ flowbite plugin が組み込まれている
+- ✅ フェーズ1（UI ライブラリ置き換え）開始可能
+
+---
+
+**作成日:** 2026-01-02
+**最終更新:** 2026-01-03
+**ステータス:** フェーズ0 完了

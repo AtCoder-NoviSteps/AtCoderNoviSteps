@@ -4,11 +4,6 @@ import flowbitePlugin from 'flowbite/plugin';
 import type { Config } from 'tailwindcss';
 
 const config = {
-  content: [
-    './src/**/*.{html,js,svelte,ts}',
-    './node_modules/svelte-5-ui-lib/**/*.{html,js,svelte,ts}',
-  ],
-
   plugins: [forms, flowbitePlugin],
 
   darkMode: 'selector',
