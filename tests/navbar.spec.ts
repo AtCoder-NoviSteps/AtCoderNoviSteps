@@ -2,7 +2,7 @@ import { test, expect, Page } from '@playwright/test';
 
 // Helper function to navigate to home
 const goToHome = async (page: Page) => {
-  await page.goto('http://localhost:5174/');
+  await page.goto('/');
 };
 
 test.describe('Navbar - Regression from v3->v4 migration', () => {

@@ -6,7 +6,7 @@ const Desktop = { ...devices['Desktop Chrome'], viewport: { width: 1024, height:
 
 // Helper function to navigate to home
 const goToHome = async (page: Page) => {
-  await page.goto('http://localhost:5174/');
+  await page.goto('/');
 };
 
 // Custom fixture for device-specific pages with automatic context cleanup
