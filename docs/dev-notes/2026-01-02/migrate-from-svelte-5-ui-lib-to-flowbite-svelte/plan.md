@@ -80,6 +80,7 @@
 
 - `tests/navbar.spec.ts` （新規）
 - `tests/custom-colors.spec.ts` （新規）
+- `tests/dark-mode.spec.ts` （新規）
 
 **Gate チェック:**
 
