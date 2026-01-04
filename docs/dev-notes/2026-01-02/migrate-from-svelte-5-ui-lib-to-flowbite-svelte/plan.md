@@ -299,6 +299,7 @@ find src -name "*.svelte" -type f \
 pnpm test:unit  # Vitest
 pnpm playwright test tests/navbar.spec.ts  # Playwright
 pnpm playwright test tests/custom-colors.spec.ts  # Playwright
+pnpm playwright test tests/dark-mode.spec.ts  # Playwright
 ```
 
 **工数:** 1-2 days
@@ -319,34 +320,99 @@ pnpm playwright test tests/custom-colors.spec.ts  # Playwright
 
 ---
 
-**段階 1-3: Carousel 置き換え**
+**段階 1-3: Carousel 置き換え** ✅ **2026-01-04 完了**
 
 `embla-carousel-svelte` → `Flowbite Svelte Carousel` へ置き換え
 
-**API 差分:**
+**実装内容:**
 
-- v4: `bind:index` で slide 管理
-- `Controls`, `CarouselIndicators` コンポーネントの組み合わせ
+- ✅ embla-carousel-svelte, embla-carousel-autoplay をアンインストール
+- ✅ Flowbite Carousel に置き換え
+- ✅ CSS クラス互換性確認：
+  - ✅ レスポンシブ高さ：`min-h-[300px] xs:min-h-[400px] md:min-h-[540px]` 追加
+  - ✅ レスポンシブマージン：`mb-8 xs:mb-12` 追加
+  - ✅ `overflow-hidden` 追加（内部処理 + 安全性確保）
+  - ✅ `slideFit="contain"` で image scaling 制御
+  - ✅ `alt` 属性：image オブジェクトプロパティで自動適用
+- ✅ ビルド確認・成功
+- ✅ package.json から embla パッケージ削除確認
+
+**詳細:** component-mapping.md の「カテゴリ3」セクション参照
 
 **参考:** https://flowbite-svelte.com/docs/components/carousel
 
-**工数:** 1-2 days
+**工数:** 1-2 days ✅
 
 ---
 
-**段階 1-4: 複雑なコンポーネント（Dropdown, Modal, Toast）**
+**段階 1-4: 複雑なコンポーネント（Dropdown, Modal, Toast）** 🔄 **Pending**
 
-- `Dropdown`: v5 runes `$state(isOpen)` で管理
-- `Modal`: native `<dialog>` + `form` prop + `onaction` callback
-- `Toast`: `ToastContainer` で位置管理、auto-dismiss は手動
-- `Spinner`, `ButtonGroup`, `Footer`: シンプル置き換え
+- 🔄 `Dropdown`: v5 runes `$state(isOpen)` で管理 → Header.svelte で stub 化
+- 🔄 `Modal`: native `<dialog>` + `form` prop + `onaction` callback
+- 🔄 `Toast`: `ToastContainer` で位置管理、auto-dismiss は手動
+- 🔄 `Spinner`, `ButtonGroup`, `Footer`: シンプル置き換え
+
+**現状:**
+
+- Header.svelte の Dropdown/Modal 機能をコメント化して TODO 化済み
+- 後続フェーズで実装予定
 
 **参考:** Flowbite Svelte GitHub Repository
 
 - https://github.com/themesberg/flowbite-svelte/blob/main/src/lib/dropdown/Dropdown.svelte
 - https://github.com/themesberg/flowbite-svelte/blob/main/src/lib/modal/Modal.svelte
 
-**工数:** 3-4 days
+**工数:** 3-4 days（後日）
+
+---
+
+## 学習ポイント・教訓
+
+### UI ライブラリ移行で重要だったこと
+
+#### 1. **コンポーネント API の差異を先に把握する**
+
+- embla-carousel: Plugin-based API （`Autoplay()` plugin）
+- Flowbite: Prop-based API （`duration` prop）
+- **教訓**: 単純な「置き換え」ではなく、設計思想の違いを理解してから実装
+
+#### 2. **CSS 自動化の落とし穴**
+
+- embla: `imgClass="object-contain"` で自動化
+- Flowbite: `slideFit="contain"` prop で制御
+- レスポンシブクラス（`min-h-[300px] xs:min-h-[400px]`）は手動指定必須
+- **教訓**: コンポーネント ライブラリの「自動化範囲」の把握が重要
+
+#### 3. **Alt 属性は自動適用される**
+
+- `images` 配列に `alt` を含めば、Slide.svelte が自動で `<img alt="...">` に反映
+- ドキュメントに明記されていなかったため、ソースコード確認が必要だった
+- **教訓**: ドキュメントが不十分な場合は GitHub ソースコードを読むしかない
+
+#### 4. **Overflow 処理は明示的に指定**
+
+- Flowbite 内部で処理されているが、CSS overrides に対応するため外側 div に明示的に `overflow-hidden` を追加
+- **教訓**: "内部処理で大丈夫" は信じず、サイドエフェクトを考慮した設定が必要
+
+#### 5. **属性名の変更を見落とさない**
+
+- Tooltip: `type="auto"` → `showOn="hover"`
+- Input: `on:change` → `onchange`
+- **教訓**: Breaking Changes ドキュメントをリスト化して一括チェックが効果的
+
+#### 6. **Tailwind CSS canonical classes の使用**
+
+- VSCode 拡張機能 `suggestCanonicalClasses` で `min-h-[300px]` 等が推奨される
+- Tailwind v4 では arbitrary values は `min-h-[<value>]` 形式が standard
+- 標準 spacing scale の値（`min-h-64` など）より、明示的な px 単位が推奨される場合がある
+- **教訓**: 拡張機能の警告を無視せず、公式ドキュメントで確認する習慣が重要
+
+### 今後の移行作業での活用ポイント
+
+- **Category 4（Dropdown, Modal, Toast）** では、上記 1-2 の API 差異が大きいため、先に設計思想を理解してから実装
+- **テストファースト戦略**（Phase -1）の有効性が確認できた → TailwindCSS v4 colors の問題を事前に検出できた
+- **段階的実装**が効果的 → 各 Category 毎にビルド＋テスト実行で早期問題発見
+- **ソースコード読解**: ドキュメント不足の際は実装を進める前に GitHub リポジトリを確認するステップが必須
 
 ---
 
@@ -678,12 +744,6 @@ Running 10 tests using 3 workers
 
 ---
 
-**作成日:** 2026-01-02
-**最終更新:** 2026-01-03
-**ステータス:** フェーズ0 完了（TailwindCSS v3→v4 移行完了、ビルド成功）
-
----
-
 ## フェーズ0 実装結果と教訓（2026-01-03）
 
 ### 実装内容
@@ -737,12 +797,6 @@ Running 10 tests using 3 workers
 - ✅ postcss、tailwind.config が正常に機能
 - ✅ flowbite plugin が組み込まれている
 - ✅ フェーズ1（UI ライブラリ置き換え）開始可能
-
----
-
-**作成日:** 2026-01-02
-**最終更新:** 2026-01-03
-**ステータス:** フェーズ0 完了
 
 ---
 

@@ -357,6 +357,110 @@ import { Carousel, Controls, CarouselIndicators } from 'flowbite-svelte';
 
 ---
 
+## カテゴリ3：外部ライブラリ復帰（⭐⭐ 難易度中）
+
+| コンポーネント | 変更内容                                         | 詳細                                                |
+| -------------- | ------------------------------------------------ | --------------------------------------------------- |
+| **Carousel**   | embla-carousel-svelte → Flowbite Svelte Carousel | Plugin-based → Prop-based API、自動スケーリング無し |
+
+### Carousel プロパティ対応表
+
+| 項目                   | embla-carousel-svelte                            | Flowbite Carousel                            | 説明                                                          |
+| ---------------------- | ------------------------------------------------ | -------------------------------------------- | ------------------------------------------------------------- |
+| **基本API**            | `use:emblaCarouselSvelte={{ options, plugins }}` | `<Carousel {images} duration={3000}>`        | embla: action directive / Flowbite: component-based           |
+| **自動スライド**       | `Autoplay()` plugin                              | `duration` prop                              | embla: plugin系 / Flowbite: prop単位で制御                    |
+| **ループ動作**         | `options = { loop: true }`                       | デフォルト有効                               | Flowbite は常にループ（設定不可）                             |
+| **画像配列形式**       | `[{ src: '...', alt: '...' }]`                   | `[{ src: '...', alt: '...', title: '...' }]` | **互換性あり**（同一形式）                                    |
+| **画像スケーリング**   | `imgClass="object-contain h-full w-fit"`         | `slideFit="contain"`                         | embla: CSS class管理 / Flowbite: prop制御                     |
+| **レスポンシブ高さ**   | 外側div に手動で class 設定                      | `class="min-h-[300px] xs:min-h-[400px]..."`  | どちらも外側divで制御必須                                     |
+| **Overflow 処理**      | 外側 div に `overflow-hidden`                    | 内部処理あり + 明示的推奨                    | Flowbite内部処理だが、CSS overrides対応のため明示的指定が安全 |
+| **Alt 属性**           | 手動設定（`imgClass` 別管理）                    | `images` 配列内に `alt` 含める               | **自動適用**（Slide.svelte で自動反映）                       |
+| **インジケータ表示**   | 手動実装が必要                                   | `<CarouselIndicators />`                     | Flowbite が提供（コンポーネント化）                           |
+| **ナビゲーション矢印** | 手動実装が必要                                   | `<Controls />` (任意）                       | Flowbite が提供（optional）                                   |
+
+### 移行実装例
+
+**Before (embla-carousel-svelte v8.6.0)**
+
+```svelte
+<script>
+  import emblaCarouselSvelte from 'embla-carousel-svelte';
+  import Autoplay from 'embla-carousel-autoplay';
+
+  let options = { loop: true };
+  let plugins = [Autoplay()];
+  const problemImages = [
+    { src: '...', alt: 'Image 1', title: 'sample' },
+    // ...
+  ];
+</script>
+
+<div class="overflow-hidden m-4" use:emblaCarouselSvelte={{ options, plugins }}>
+  <div class="flex min-h-[300px] xs:min-h-[400px] md:min-h-[540px] mb-8 xs:mb-12">
+    {#each problemImages as image}
+      <div class="flex flex-shrink-0 w-full min-w-0 items-center justify-center">
+        <Img src={image.src} alt={image.alt} imgClass="object-contain h-full w-fit" />
+      </div>
+    {/each}
+  </div>
+</div>
+```
+
+**After (Flowbite Carousel v1.31.0)** ✅
+
+```svelte
+<script>
+  import { Carousel, CarouselIndicators } from 'flowbite-svelte';
+
+  const problemImages = [
+    { src: '...', alt: 'Image 1', title: 'sample' }, // alt は自動適用
+    // ...
+  ];
+</script>
+
+<div class="m-4 mb-8 xs:mb-12 overflow-hidden">
+  <Carousel
+    images={problemImages}
+    duration={3000}
+    slideFit="contain"
+    class="min-h-[300px] xs:min-h-[400px] md:min-h-[540px]"
+  >
+    <CarouselIndicators />
+  </Carousel>
+</div>
+```
+
+### 移行時の注意点
+
+1. **Plugin-based → Prop-based への設計変更**
+   - `Autoplay()` plugin → `duration` prop（ミリ秒単位）
+   - 簡潔だが、細かい制御が必要な場合は Flowbite API では対応不可
+
+2. **自動スケーリング不可**
+   - embla: `imgClass` で自動管理
+   - Flowbite: `slideFit` prop で明示的に指定が必要
+
+3. **レスポンシブクラスは手動指定**
+   - 外側 div の `class` prop に`min-h-[300px] xs:min-h-[400px]` など記載必須
+   - embla同様、Flowbite も内部では自動生成されない
+
+4. **Alt 属性は自動適用** ✅
+   - `images` 配列の各オブジェクトに `alt` を含める
+   - Slide.svelte 内で `{...image}` で展開されるため自動で反映
+
+5. **Overflow 処理は明示的に指定** ✅
+   - Flowbite 内部で処理される可能性だが、CSS overrides に対応するため外側 div に `overflow-hidden` を追加推奨
+
+### 教訓
+
+- **API 設計の違いを理解することの重要性**: Plugin-based と Prop-based では柔軟性が異なる
+- **ドキュメント不足時はソースコード確認が必須**: alt属性の自動適用はドキュメント未記載だったが GitHub で確認可能
+- **Canonical CSS classes の使用**: Tailwind v4 では `min-h-[300px]` 形式が推奨される（VSCode拡張で警告あり）
+
+---
+
 **作成日:** 2026-01-02
-**最終更新:** 2026-01-02
-**ステータス:** ドラフト完成
+
+**最終更新:** 2026-01-04
+
+**ステータス:** カテゴリ3 実装完了、ドキュメント更新完了
