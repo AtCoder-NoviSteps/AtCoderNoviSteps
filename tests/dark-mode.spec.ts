@@ -25,7 +25,7 @@ const test = base.extend<{ iPhonePage: Page; desktopPage: Page }>({
   },
 });
 
-test.describe('Dark mode - Regression from v3->v4 migration', () => {
+test.describe('Dark mode - Regression from tailwindcss v3 to v4 migration', () => {
   /**
    * Preconditions:
    * - Development server started with pnpm dev
