@@ -9,8 +9,7 @@
     TableBodyRow,
     TableHead,
     TableHeadCell,
-  } from 'svelte-5-ui-lib';
-
+  } from 'flowbite-svelte';
   import type { TaskResults, TaskResult } from '$lib/types/task';
   import type {
     ContestTableProvider,
