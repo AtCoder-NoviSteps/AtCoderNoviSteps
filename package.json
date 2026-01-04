@@ -79,8 +79,6 @@
     "@types/node": "25.0.3",
     "autoprefixer": "10.4.23",
     "debug": "4.4.3",
-    "embla-carousel-autoplay": "8.6.0",
-    "embla-carousel-svelte": "8.6.0",
     "lucia": "2.7.7",
     "p-queue": "^9.0.1",
     "playwright": "1.57.0",
