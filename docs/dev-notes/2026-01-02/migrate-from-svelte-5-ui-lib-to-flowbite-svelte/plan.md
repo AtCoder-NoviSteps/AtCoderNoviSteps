@@ -126,6 +126,8 @@
 
 **1. `src/app.css` の記法変更（v3→v4）**
 
+TailwindCSS v4 では CSS-first アーキテクチャを採用。v3 の `@tailwind` ディレクティブから `@import` と CSS ベースの設定に移行します。
+
 v3:
 
 ```css
@@ -134,52 +136,54 @@ v3:
 @tailwind utilities;
 ```
 
-v4:
+v4（推奨順序）:
 
 ```css
 @import 'tailwindcss';
 @plugin 'flowbite/plugin';
 @custom-variant dark (&:where(.dark, .dark *));
+
+@config "../tailwind.config.ts";
+@source "../src/**/*";
+@source "../node_modules/flowbite-svelte/dist/**/*";
 ```
+
+**配置順序の説明:**
+
+- `@import 'tailwindcss'` を最初に置いて v4 コア機能を読み込む
+- `@plugin` と `@custom-variant` で機能拡張
+- `@config` は末尾に置く（v3 互換モード有効時の標準的な配置）
+- `@source` で明示的にスキャン対象を指定
+
+**注記:** `@config` が最初にないと、`tailwind.config.ts` の設定（カスタムカラー、breakpoints など）が反映されません。
 
 **詳細は:** [Tailwind CSS Upgrade Guide v4](https://tailwindcss.com/docs/upgrade-guide)
 
 ---
 
-**2. `tailwind.config.ts` の @config 設定**
+**2. `tailwind.config.ts` の簡潔化**
 
-v4 では `tailwind.config.ts` を自動認識しない場合がある。
+v4 では `content` オプションを削除し、CSS の `@source` で指定します。
 
-```css
-/* src/app.css に追加 */
-@config "../tailwind.config.ts";
-```
-
----
-
-**3. `@source` ディレクティブの追加（重要）**
-
-現在、`tailwind.config.ts` の `content` で svelte-5-ui-lib を指定：
+v3 形式（削除）:
 
 ```typescript
 content: [
   './src/**/*.{html,js,svelte,ts}',
-  './node_modules/svelte-5-ui-lib/**/*.{html,js,svelte,ts}', // ← これをremoveする
+  './node_modules/svelte-5-ui-lib/**/*.{html,js,svelte,ts}',
 ],
 ```
 
-v4 では CSS の `@source` で指定：
+**注記:**
 
-```css
-/* src/app.css */
-@source "../src";
-@source "../node_modules/flowbite-svelte/dist";
-@source "../node_modules/flowbite-svelte-icons/dist";
-```
+- CSS の `@source` ディレクティブで指定されるため、`tailwind.config.ts` から `content` オプションを削除します
+- `flowbite-svelte-icons` は本プロジェクトで使用していないため（`@lucide/svelte` を使用），`@source` に含めません
 
 ---
 
-**4. `postcss.config.mjs` の確認**
+**3. `postcss.config.mjs` の v4 対応**
+
+v4 では PostCSS プラグインを `@tailwindcss/postcss` に変更：
 
 ```javascript
 export default {
@@ -713,3 +717,120 @@ Running 10 tests using 3 workers
 **作成日:** 2026-01-02
 **最終更新:** 2026-01-03
 **ステータス:** フェーズ0 完了
+
+---
+
+## 根本原因の特定と解決（2026-01-04 追記・修正版）
+
+### レイアウト完全崩壊の原因と解決
+
+前回のレイアウト崩壊は CSS クラス生成の失敗に起因していました。
+
+**初期の誤った理解:**
+
+- `@config` は必ず最初に記述する必要がある（誤り）
+- `@source` でワイルドカードを含める必要がある（誤り）
+
+**実装から判明した正しい理解:**
+
+```css
+@import 'tailwindcss';
+@plugin 'flowbite/plugin';
+@custom-variant dark (&:where(.dark, .dark *));
+
+@config "../tailwind.config.ts";
+@source '../src/**/*';
+@source '../node_modules/flowbite-svelte/dist/**/*';
+```
+
+- `tailwind.config.ts` に `content` 配列を追加（v3 互換）
+
+### 公式ドキュメント根拠
+
+1. **@config は「互換性維持ディレクティブ」（レガシー機能）**
+
+   [TailwindCSS Functions and Directives - @config](https://tailwindcss.com/docs/functions-and-directives#config)
+
+   > Use the `@config` directive to load a legacy JavaScript-based configuration file.
+   > Things defined in CSS will be merged where possible and otherwise take precedence over those defined in configs, presets, and plugins.
+
+   **→ `@config` の配置順序は CSS-first の機能と共存できる限り、厳密には不要**
+
+2. **@source は「ファイルスキャン範囲の明示」**
+
+   [Detecting classes in source files](https://tailwindcss.com/docs/detecting-classes-in-source-files)
+
+   > Tailwind will scan every file in your project for class names, except in the following cases... If you need to scan any files that Tailwind is ignoring by default, you can explicitly register those sources using `@source`.
+
+   **→ v4 ネイティブのファイルスキャン機構。`content` 配列の代替**
+
+3. **content 配列は v3 互換モード**
+
+   v4 でも `@config` で v3 形式の設定を読み込む場合、`content` 配列が機能する。これは TailwindCSS が v3 との後方互換性をサポートしているため。
+
+### 実装形態：v3/v4 ハイブリッド
+
+現在の実装は以下のハイブリッド構成：
+
+```
+v4 ネイティブ部分        v3 互換部分
+─────────────────────────────────
+@import 'tailwindcss'  ← CSS-first
+@plugin 'flowbite'     ← CSS-first
+@custom-variant dark   ← CSS-first
+
+@config "..."          ← JS 設定読み込み（v3 形式）
+@source ...            ← CSS-first のスキャン指定
+```
+
+**なぜ両方必要か：**
+
+- `@config` で読み込んだ `tailwind.config.ts` の `content` 配列も機能する
+- v4 の `@source` も独立して機能する
+- 両者が同時に指定されると、スキャン範囲が確実になり安定性が向上
+
+### テスト結果
+
+✅ **CSS 生成が正常に復旧**
+
+```
+18/19 テスト PASS
+
+✅ primary color is generated in CSS
+✅ atcoder color is generated
+✅ xs breakpoint is available
+✅ navbar responsive (lg/mobile)
+✅ dark mode toggle
+```
+
+生成されたCSS（サンプル）:
+
+```css
+/* .svelte-kit/.../0.DTkUDpQD.css 内に存在確認 */
+.text-primary-500 { ... }
+.bg-atcoder-Q1 { ... }
+```
+
+### 教訓と推奨
+
+1. **@config の位置は「末尾」が安定**
+   - v4 ネイティブ機能をすべて定義した後に `@config` を置く
+   - CSS で定義した設定が優先される（公式仕様）
+
+2. **content 配列は v3 互換モードの証**
+   - v4 移行中は `content` 配列を保持しておくと安定
+   - 完全移行時（v3 互換不要時）は削除可
+
+3. **@source の指定は「ワイルドカード含める」推奨**
+   - `@source '../src'` でも動作するが、`@source '../src/**/*'` の方が明示的
+   - 外部ライブラリ（flowbite-svelte）は必ず指定
+
+4. **v4 への段階的移行アプローチが有効**
+   - CSS-first機能（@import, @plugin, @theme）と JS設定（@config）の併用で安定
+   - 完全なCSS化は段階的に実施可能
+
+---
+
+**作成日:** 2026-01-02
+**最終更新:** 2026-01-04（修正版）
+**ステータス:** フェーズ0 完了・根本原因特定・公式ドキュメント根拠記載

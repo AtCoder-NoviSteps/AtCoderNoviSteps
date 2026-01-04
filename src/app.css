@@ -3,9 +3,9 @@
 @plugin 'flowbite/plugin';
 @custom-variant dark (&:where(.dark, .dark *));
 
-@source '../src';
-@source '../node_modules/flowbite-svelte/dist';
-@source '../node_modules/flowbite-svelte-icons/dist';
+@config "../tailwind.config.ts";
+@source "../src/**/*";
+@source "../node_modules/flowbite-svelte/dist/**/*";
 
 body {
   @apply flex flex-col items-center;
@@ -17,5 +17,5 @@ body {
 }
 
 #root {
-  @apply w-full max-w-screen-xl;
+  @apply w-full max-w-7xl;
 }
