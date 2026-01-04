@@ -802,4 +802,71 @@ Running 10 tests using 3 workers
 
 **作成日:** 2026-01-02
 **最終更新:** 2026-01-04
-**ステータス:** フェーズ0 完了・実装検証済み
+**ステータス:** フェーズ1-4 完了・Spinner/ButtonGroup/Footer 置き換え済み
+
+---
+
+## フェーズ1-4 実装完了（2026-01-04）
+
+### チェックリスト
+
+#### ✅ 実装対象コンポーネント（3つ）
+
+- ✅ **Spinner**: import パスを `'svelte-5-ui-lib/Spinner.svelte'` → `'flowbite-svelte'` に変更
+- ✅ **ButtonGroup**: import パスは既に `'flowbite-svelte'` で正しい状態を確認
+- ✅ **Footer**: import パス変更 + `footerType="logo"` prop 削除（Flowbite では不要）
+
+#### ✅ ビルド結果
+
+- ✅ `pnpm build` 成功（エラー 0）
+- ✅ .svelte-kit 出力生成成功
+- ✅ Svelte runes 警告のみ（非致命的）
+
+#### ⚠️ テスト結果
+
+- Playwright smoke test: 5 passed, 5 failed（ただしフェーズ1-4 の変更とは無関係）
+- 失敗原因：Header の Dropdown/Modal 実装が未完成のため、dark mode ボタンが見つからない
+- **結論**: Spinner/ButtonGroup/Footer 自体のエラーはなし
+
+### 重要な教訓
+
+#### 1. **シンプル置き換えの威力**
+
+- **Spinner**: 直接ファイルパス import → named import に統一するだけで完了
+  - 従来の `import Spinner from 'svelte-5-ui-lib/Spinner.svelte'` は、他のコンポーネント（`import { Button } from 'flowbite-svelte'`）と一貫性がなかった
+  - Flowbite Svelte に統一してから、全コンポーネントが同じ import パターン
+
+- **ButtonGroup**: 既に正しい状態
+  - WorkBookList.svelte で `import { ButtonGroup, Button, Toggle } from 'flowbite-svelte'` と設定済み
+  - 追加の修正は不要
+
+- **Footer**: `footerType="logo"` の削除が重要
+  - Flowbite Svelte では `<Footer>` のラッパーに `<FooterCopyright>` を配置するシンプルな構造
+  - svelte-5-ui-lib の `footerType` prop は存在しないため、削除して上記構造に統一
+
+#### 2. **置き換えと同時に実装の質を向上**
+
+- svelte-5-ui-lib: 複数の import パターン（named, default, パス指定）が混在
+- Flowbite Svelte: 統一された named import `import { Component } from 'flowbite-svelte'`
+- **利点**: 新規開発者の学習コストを削減、IDE オートコンプリートが一貫
+
+#### 3. **Flowbite のシンプルな設計**
+
+- Flowbite Svelte は **Tailwind CSS のラッパーコンポーネント** に徹している
+- Props が少なく、CSS クラスでカスタマイズする方針
+- 例：Footer では `class="shadow-none w-screen m-6"` で見た目をコントロール
+
+### 次フェーズへの展望
+
+**フェーズ1-4 の3コンポーネント完了により：**
+
+- ✅ シンプル置き換えパターンが確立された
+- ✅ ビルドプロセスは安定
+- ✅ Playwright テストで「置き換え前後の動作差異」を検出可能
+- 🔄 フェーズ1-1～1-3 の他のコンポーネント置き換えに同じ手法を適用可能
+
+**次のステップ（フェーズ1-1～1-3）:**
+
+- カテゴリ1（属性変更不要）: Heading, Button, Label, Input, Card など約20個
+- カテゴリ2（属性調整必要）: Tabs, Tooltip, Checkbox, Radio, Toggle など約10個
+- カテゴリ3（Carousel 削除）: embla-carousel → Flowbite Carousel への置き換え完了（2026-01-04 ✅）
