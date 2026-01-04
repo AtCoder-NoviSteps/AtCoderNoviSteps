@@ -1,9 +1,7 @@
 <!-- See: -->
 <!-- https://lucia-auth.com/guidebook/sign-in-with-username-and-password/sveltekit/ -->
 <script lang="ts">
-  import { Heading, Button, Img } from 'svelte-5-ui-lib';
-  import emblaCarouselSvelte from 'embla-carousel-svelte';
-  import Autoplay from 'embla-carousel-autoplay';
+  import { Heading, Button, Carousel, CarouselIndicators } from 'flowbite-svelte';
   import ArrowRight from '@lucide/svelte/icons/arrow-right';
 
   import ExternalLinkWrapper from '$lib/components/ExternalLinkWrapper.svelte';
@@ -29,9 +27,6 @@
       title: 'Sample-of-problems-with-10Q',
     },
   ];
-
-  let options = { loop: true };
-  let plugins = [Autoplay()];
 </script>
 
 <!-- TODO: かっこいいロゴを入れる -->
@@ -100,23 +95,15 @@
       </p>
     </div>
 
-    <!-- WHY: Svelte 5 UI lib では、Carousel が未実装なため、Embla Carousel で代用 -->
-    <!-- TODO: 左右にボタンが表示されるように -->
-    <!-- See: -->
-    <!-- https://github.com/davidjerleke/embla-carousel -->
-    <div class="overflow-hidden m-4" use:emblaCarouselSvelte={{ options, plugins }}>
-      <div class="flex min-h-[300px] xs:min-h-[400px] md:min-h-[540px] mb-8 xs:mb-12">
-        {#each problemImages as problemImage}
-          <div class="flex flex-shrink-0 w-full min-w-0 items-center justify-center">
-            <Img
-              src={problemImage.src}
-              alt={problemImage.alt}
-              figClass=""
-              imgClass="object-contain h-full w-fit"
-            />
-          </div>
-        {/each}
-      </div>
+    <div class="m-4 mb-8 xs:mb-12 overflow-hidden">
+      <Carousel
+        images={problemImages}
+        duration={3000}
+        slideFit="contain"
+        class="min-h-75 xs:min-h-100 md:min-h-135"
+      >
+        <CarouselIndicators />
+      </Carousel>
     </div>
 
     <div class="flex flex-wrap justify-center items-center">
