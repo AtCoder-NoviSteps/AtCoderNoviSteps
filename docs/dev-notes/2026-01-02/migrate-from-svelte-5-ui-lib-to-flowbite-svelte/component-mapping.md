@@ -53,13 +53,61 @@ import { Heading, Button, Label } from 'flowbite-svelte';
 
 ## カテゴリ2：置き換え + 属性調整（⭐⭐ 難易度中）
 
-| コンポーネント     | 変更内容                    | 詳細                                                           | 参考                                                                      |
-| ------------------ | --------------------------- | -------------------------------------------------------------- | ------------------------------------------------------------------------- |
-| `Tabs` + `TabItem` | import + slot 名確認        | API は同一だが、slot 名が異なる可能性                          | [Flowbite Tabs](https://flowbite-svelte.com/docs/components/tabs)         |
-| `Tooltip`          | import + `triggeredBy` prop | v3: `content` prop / v5: `triggeredBy` で target selector 指定 | [Flowbite Tooltip](https://flowbite-svelte.com/docs/components/tooltip)   |
-| `Checkbox`         | import + `bind:checked`     | Svelte v5 runes: `bind:checked` で直接管理                     | [Flowbite Checkbox](https://flowbite-svelte.com/docs/components/checkbox) |
-| `Radio`            | import + `bind:group`       | Svelte v5 runes: `bind:group` で group 管理                    | [Flowbite Radio](https://flowbite-svelte.com/docs/components/radio)       |
-| `Toggle`           | import + `bind:checked`     | Svelte v5 runes: `bind:checked` で state 管理                  | [Flowbite Toggle](https://flowbite-svelte.com/docs/components/toggle)     |
+| コンポーネント     | 変更内容                               | 詳細                                                           | 参考                                                                        |
+| ------------------ | -------------------------------------- | -------------------------------------------------------------- | --------------------------------------------------------------------------- |
+| `Tabs` + `TabItem` | import + slot 名確認                   | API は同一だが、slot 名が異なる可能性                          | [Flowbite Tabs](https://flowbite-svelte.com/docs/components/tabs)           |
+| `Tooltip`          | import + `triggeredBy` prop            | v3: `content` prop / v5: `triggeredBy` で target selector 指定 | [Flowbite Tooltip](https://flowbite-svelte.com/docs/components/tooltip)     |
+| `Checkbox`         | import + `bind:checked`                | Svelte v5 runes: `bind:checked` で直接管理                     | [Flowbite Checkbox](https://flowbite-svelte.com/docs/components/checkbox)   |
+| `Radio`            | import + `bind:group`                  | Svelte v5 runes: `bind:group` で group 管理                    | [Flowbite Radio](https://flowbite-svelte.com/docs/components/radio)         |
+| `Toggle`           | import + `bind:checked`                | Svelte v5 runes: `bind:checked` で state 管理                  | [Flowbite Toggle](https://flowbite-svelte.com/docs/components/toggle)       |
+| `Navbar`           | import + props 削減                    | 内部 state 管理に変更（`toggleNav`, `closeNav` props 廃止）    | [Flowbite Navbar](https://flowbite-svelte.com/docs/components/navbar)       |
+| `NavBrand`         | import のみ変更                        | slot 互換、`href` prop 互換                                    | [Flowbite NavBrand](https://flowbite-svelte.com/docs/components/navbar)     |
+| `NavUl`            | import + prop 確認                     | `activeUrl` で active state 管理、`classes` prop で styling    | [Flowbite NavUl](https://flowbite-svelte.com/docs/components/navbar)        |
+| `NavLi`            | `aClass` → `activeClass`               | `activeClass`, `nonActiveClass` で非アクティブ時のスタイル指定 | [Flowbite NavLi](https://flowbite-svelte.com/docs/components/navbar)        |
+| `NavHamburger`     | 新規追加（svelte-5-ui-lib に同等なし） | モバイル時の menu toggle ボタン。内部 state 自動管理           | [Flowbite NavHamburger](https://flowbite-svelte.com/docs/components/navbar) |
+
+**対応例：Navbar（Header.svelte の実装例）**
+
+```svelte
+<!-- Before (svelte-5-ui-lib + 独自 state 管理) -->
+<script>
+  let navStatus = $state(false);
+  function toggleNav() { navStatus = !navStatus; }
+  function closeNav() { navStatus = false; }
+</script>
+
+<Navbar {toggleNav} {closeNav} {navStatus}>
+  <NavUl>
+    <NavLi href="/about" aClass="dark:text-gray-400 lg:dark:hover:text-white">About</NavLi>
+  </NavUl>
+</Navbar>
+
+<!-- After (Flowbite Svelte v1.31.0 + Svelte 5 runes) -->
+<script lang="ts">
+  import { page } from '$app/stores';
+  let activeUrl = $state($page.url.pathname);
+</script>
+
+<Navbar breakPoint="lg">
+  <NavUl {activeUrl}>
+    <NavLi href="/about" class="..." activeClass="dark:text-gray-400 lg:dark:hover:text-white">
+      About
+    </NavLi>
+  </NavUl>
+  <NavHamburger />
+</Navbar>
+```
+
+**主な変更点:**
+
+- `navStatus`, `toggleNav`, `closeNav` → 廃止（`NavHamburger` が内部管理）
+- `aClass` → `activeClass` に rename
+- `NavHamburger` 新規追加（モバイル対応のハンバーガーメニュー）
+- Navbar の内部 state 管理が簡潔に
+
+**テスト:** Playwright navbar responsive + dropdown trigger test
+
+---
 
 **対応例：Tabs**
 
@@ -174,14 +222,243 @@ import { Carousel, Controls, CarouselIndicators } from 'flowbite-svelte';
 
 **主な変更点:**
 
-- `DropdownUl` / `DropdownLi` → `DropdownItem` に統合
-- `uiHelpers()` → `$state(isOpen)` runes で管理
-- `bind:isOpen` でバインド
-- slot ではなく component の直接配置
+- `DropdownUl` / `DropdownLi` → `DropdownUl`/`DropdownLi` （Flowbite でも互換）
+- `uiHelpers()` → `triggeredBy` prop で target selector 指定
+- Floating UI が自動ポジショニングを処理（複雑な CSS クラス不要）
+- `bind:isOpen` で内部状態管理
 
-**参考:** [Flowbite Dropdown](https://flowbite-svelte.com/docs/components/dropdown)
+#### Header.svelte における `triggeredBy` パターン
+
+**Before (svelte-5-ui-lib + 複雑な CSS positioning):**
+
+```svelte
+<script lang="ts">
+  import { Dropdown, DropdownUl, DropdownLi, uiHelpers } from 'svelte-5-ui-lib';
+  import { ChevronDown } from 'lucide-svelte';
+
+  const dropdownForDashboard = uiHelpers();
+  const dropdownForUserPage = uiHelpers();
+  const dropdownForExternalLinks = uiHelpers();
+</script>
+
+<NavLi
+  class="flex items-center cursor-pointer"
+  on:click={() => (dropdownForDashboard.open = !dropdownForDashboard.open)}
+>
+  管理画面
+  <ChevronDown class="ms-2 h-4 w-4 transition" />
+</NavLi>
+
+<Dropdown open={dropdownForDashboard.isOpen} class="left-32 mt-0 lg:-left-10 lg:mt-10">
+  <DropdownUl>
+    <DropdownLi href="/admin/dashboard">Submissions</DropdownLi>
+    <DropdownLi href="/admin/users">Users</DropdownLi>
+  </DropdownUl>
+</Dropdown>
+```
+
+**After (Flowbite Svelte + `triggeredBy` + Floating UI):**
+
+```svelte
+<script lang="ts">
+  import { Dropdown, DropdownUl, DropdownLi } from 'flowbite-svelte';
+  import { ChevronDown } from 'lucide-svelte';
+</script>
+
+<NavLi id="nav-dashboard" class="flex items-center cursor-pointer">
+  管理画面
+  <ChevronDown class="ms-2 h-4 w-4 transition" />
+</NavLi>
+
+<Dropdown triggeredBy="#nav-dashboard" class="w-48 z-20">
+  <DropdownUl>
+    <DropdownLi href="/admin/dashboard">Submissions</DropdownLi>
+    <DropdownLi href="/admin/users">Users</DropdownLi>
+  </DropdownUl>
+</Dropdown>
+
+<!-- 他の Dropdown も同様 -->
+<NavLi id="nav-userpage" class="flex items-center cursor-pointer">
+  ユーザーページ
+  <ChevronDown class="ms-2 h-4 w-4 transition" />
+</NavLi>
+
+<Dropdown triggeredBy="#nav-userpage" class="w-48 z-20">
+  <DropdownUl>
+    <DropdownLi href="/dashboard/profile">Profile</DropdownLi>
+  </DropdownUl>
+</Dropdown>
+```
+
+**主要改善点:**
+
+1. **ポジショニングの簡略化**: `left-32 mt-0 lg:-left-10 lg:mt-10` → `w-48 z-20` に削減
+2. **状態管理の削除**: `uiHelpers()` で 3つのオブジェクト管理 → Floating UI に委譲
+3. **ID ベース選択**: `triggeredBy="#nav-dashboard"` で CSS selector に統一
+4. **保守性向上**: trigger 要素と Dropdown の関連付けが明示的
+
+**参考:** [Flowbite Dropdown](https://flowbite-svelte.com/docs/components/dropdown) / [Floating UI Placement](https://floating-ui.com/docs/placement)
 
 ---
+
+#### Dropdown ベースのカスタムコンポーネント（⭐⭐ 難易度中）
+
+| コンポーネント        | 変更内容                              | 詳細                                                        |
+| --------------------- | ------------------------------------- | ----------------------------------------------------------- |
+| **UpdatingDropdown**  | `uiHelpers()` 削除 + trigger 内部移動 | `triggeredBy` CSS selector で自動制御、位置管理ロジック削除 |
+| **TaskTableBodyCell** | `bind:this` 削除、trigger ボタン削除  | UpdatingDropdown に trigger 統合、呼び出しを簡潔化          |
+
+### UpdatingDropdown + TaskTableBodyCell 移行実装例
+
+**変更内容:**
+
+1. **位置管理ロジックの削除**
+   - `calculateDropdownPosition()`, `updateDropdownPosition()` 等をコメントアウト
+   - `uiHelpers()` と `handleDropdownBehavior` action を削除
+   - CSS 変数 `--dropdown-x`, `--dropdown-y` の設定を削除
+   - → Floating UI が自動的にビューポート外での調整を担当
+
+2. **trigger ボタンの内部移動**
+   - 親側: `<button onclick={(event) => updatingDropdown.toggle(event)}>` を削除
+   - コンポーネント側: `<div id="update-dropdown-trigger-${componentId}">` を内部に配置
+   - trigger は `role="button"`, `tabindex="0"` でアクセシビリティ確保
+
+3. **Dropdown の `triggeredBy` 方式に統一**
+   - `<Dropdown triggeredBy="#update-dropdown-trigger-${componentId}">` で自動連携
+   - selector ベースの制御により、複数インスタンスでも unique ID で管理可能
+
+**Before (svelte-5-ui-lib)**
+
+```svelte
+<!-- TaskTableBodyCell.svelte -->
+<script>
+  let updatingDropdown: UpdatingDropdown;
+</script>
+
+<button
+  type="button"
+  class="flex-shrink-0 w-6 ml-auto"
+  onclick={(event) => updatingDropdown.toggle(event)}
+>
+  <ChevronDown class="w-4 h-4 mx-auto" />
+</button>
+
+<UpdatingDropdown bind:this={updatingDropdown} {taskResult} {isLoggedIn} {onupdate} />
+```
+
+```svelte
+<!-- UpdatingDropdown.svelte (内部) -->
+<script>
+  let dropdown = uiHelpers();
+  let dropdownStatus = $state(false);
+  let dropdownPosition = $state({ x: 0, y: 0, isInBottomHalf: false });
+
+  export function toggle(event?: MouseEvent): void {
+    toggleDropdown(event, { ... });
+  }
+
+  function updateDropdownPosition(event: MouseEvent): void { ... }
+  function getDropdownClasses(isInBottomHalf: boolean): string { ... }
+</script>
+
+<div use:handleDropdownBehavior={{ ... }}>
+  <Dropdown
+    {activeUrl}
+    {dropdownStatus}
+    class={getDropdownClasses(dropdownPosition.isInBottomHalf)}
+  >
+    <DropdownUl class="border rounded-lg shadow">
+      {#each submissionStatusOptions as submissionStatus}
+        <DropdownLi href="javascript:void(0)" onclick={() => handleClick(submissionStatus)}>
+          {submissionStatus.labelName}
+        </DropdownLi>
+      {/each}
+    </DropdownUl>
+  </Dropdown>
+</div>
+```
+
+**After (Flowbite Svelte v1.31.0)** ✅
+
+```svelte
+<!-- TaskTableBodyCell.svelte (シンプル化) -->
+<script>
+  // bind:this 削除、trigger ボタン削除
+</script>
+
+<UpdatingDropdown {taskResult} {isLoggedIn} {onupdate} />
+```
+
+```svelte
+<!-- UpdatingDropdown.svelte (位置管理削除、Floating UI 自動制御) -->
+<script>
+  const componentId = Math.random().toString(36).substring(2);
+  // uiHelpers() 削除
+  // 位置管理ロジック → コメントアウト
+</script>
+
+<div class="flex items-center gap-1">
+  <!-- Trigger Button (内部移動) -->
+  <div
+    id={`update-dropdown-trigger-${componentId}`}
+    class="flex-shrink-0 w-6 ml-auto cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700 rounded p-1 transition"
+    role="button"
+    tabindex="0"
+    aria-label="Update submission status"
+  >
+    <ChevronDown class="w-4 h-4 mx-auto" />
+  </div>
+
+  <!-- Dropdown Menu (triggeredBy で自動連携) -->
+  <Dropdown triggeredBy={`#update-dropdown-trigger-${componentId}`} class="w-32 z-50">
+    {#if isLoggedIn}
+      {#each submissionStatusOptions as submissionStatus}
+        <DropdownItem onclick={() => handleClick(submissionStatus)}>
+          <div class="flex items-center justify-between w-full">
+            <span>{submissionStatus.labelName}</span>
+            {#if taskResult.status_name === submissionStatus.innerName}
+              <Check class="w-4 h-4 text-primary-600 dark:text-gray-300" strokeWidth={3} />
+            {/if}
+          </div>
+        </DropdownItem>
+      {/each}
+    {:else}
+      <DropdownItem href={SIGNUP_PAGE}>アカウント作成</DropdownItem>
+      <DropdownDivider />
+      <DropdownItem href={LOGIN_PAGE}>ログイン</DropdownItem>
+    {/if}
+  </Dropdown>
+</div>
+
+{#if showForm && selectedSubmissionStatus}
+  {@render submissionStatusForm(taskResult, selectedSubmissionStatus)}
+{/if}
+```
+
+### 移行時の注意点
+
+1. **trigger ID の一意性確保** ✅
+   - `Math.random().toString(36).substring(2)` で unique ID 生成
+   - 複数の UpdatingDropdown インスタンスでも selector が重複しない
+
+2. **アクセシビリティ対応** ✅
+   - trigger `<div>` に `role="button"`, `tabindex="0"`, `aria-label` を付与
+   - ブラウザのデフォルトボタンスタイルを避けつつ、キーボード操作対応
+
+3. **スタイル統一** ✅
+   - trigger: `hover:bg-gray-200 dark:hover:bg-gray-700` でホバー状態表示
+   - Dropdown: `class="w-32 z-50"` で幅と重なり順序を指定
+   - 既存の見た目を保持
+
+4. **位置管理ロジックはコメント保持** ✅
+   - Floating UI の自動ポジショニングに任せる
+   - 将来的にカスタム配置が必要になった場合の参考用にコメント保持
+
+### 教訓
+
+- **trigger の責任分離**: 親から trigger ボタン管理を削除し、コンポーネント内で完結 → 呼び出し側が単純化
+- **CSS selector ベースの制御**: `bind:this` や export function より、`triggeredBy` selector による自動制御が保守性↑
+- **Floating UI の活用**: ビューポート外での自動調整により、複雑な位置計算が不要
 
 ### 4-2. Modal
 
@@ -190,39 +467,137 @@ import { Carousel, Controls, CarouselIndicators } from 'flowbite-svelte';
 **主な変更点:**
 
 - native HTML `<dialog>` element ベース
-- `form` prop で内部フォーム自動生成
-- `bind:open` でバインド
-- `onaction` callback で submit/cancel 処理
-- `uiHelpers()` 不要（フォーカストラップ、outside click は native で処理）
+- `$state(open)` runes で状態管理（uiHelpers 削除）
+- `bind:open` で Modal の可視性制御
+- SvelteKit Form Actions (`use:enhance`) との共存
+- フォーカストラップ、outside click は native で自動処理
 
-**Flowbite Svelte:**
+### Modal 状態管理パターン比較表
+
+| 項目                   | svelte-5-ui-lib                               | Flowbite Svelte                             | 説明                               |
+| ---------------------- | --------------------------------------------- | ------------------------------------------- | ---------------------------------- |
+| **状態管理**           | `uiHelpers()` で `open/close` 関数実装        | `$state(open)` runes で boolean 管理        | Flowbite は単純な boolean binding  |
+| **バインド方式**       | Custom `modalStatus` prop + 関数呼び出し      | `bind:open` で双方向バインド                | UI state の管理のみ                |
+| **フォーム統合**       | 手動 `<form>` タグで別管理                    | 手動 `<form method="POST">` タグで管理      | SvelteKit Form Actions と共存      |
+| **フォーム送信**       | `onsubmit` handler + `event.preventDefault()` | `use:enhance` で server action 自動処理     | server-side form submission に対応 |
+| **モーダルクローズ**   | `closeModal()` 関数を明示呼び出し             | form success 後に `modalOpen = false` 設定  | `use:enhance` result で制御        |
+| **フッターレンダリ**   | Slot で custom レンダリング                   | Button を form 内に直接配置                 | form submit button として機能      |
+| **フォーカストラップ** | `uiHelpers()` で実装                          | native `<dialog>` が自動処理                | HTML5仕様で自動                    |
+| **Outside Click**      | `uiHelpers()` で実装                          | `outsideclose` prop で制御（default: true） | clickoutside での dismiss 可能     |
+
+### Modal 実装例
+
+**Before (svelte-5-ui-lib)**
 
 ```svelte
 <script lang="ts">
-  import { Button, Modal } from 'flowbite-svelte';
-  let open = $state(false);
+  import { Modal, Button } from 'svelte-5-ui-lib';
+  import { uiHelpers } from 'svelte-5-ui-lib';
+
+  let { taskResult } = $props();
+  const { open, close, isOpen } = uiHelpers();
+
+  async function handleSubmit(event: Event) {
+    event.preventDefault();
+    const formData = new FormData(event.target);
+    const response = await fetch('?/update', {
+      method: 'POST',
+      body: formData,
+    });
+    if (response.ok) close();
+  }
 </script>
 
-<Button onclick={() => (open = true)}>Open Modal</Button>
+<Button onclick={() => open()}>Update Status</Button>
 
-<Modal
-  form
-  bind:open
-  onaction={({ action }) => {
-    if (action === 'accept') {
-      console.log('Accepted');
-    }
-  }}
->
-  <p>Modal content</p>
-  {#snippet footer()}
-    <Button type="submit" value="accept">Accept</Button>
-    <Button type="submit" value="decline">Decline</Button>
-  {/snippet}
+<Modal {isOpen} {close}>
+  <form onsubmit={handleSubmit}>
+    <select name="status">
+      <option>Accepted</option>
+      <option>Wrong Answer</option>
+    </select>
+    <button type="submit">Confirm</button>
+    <button type="button" onclick={close}>Cancel</button>
+  </form>
 </Modal>
 ```
 
-**参考:** [Flowbite Modal](https://flowbite-svelte.com/docs/components/modal)
+**After (Flowbite Svelte v1.31.0)** ✅
+
+```svelte
+<script lang="ts">
+  import { Modal, Button, Select } from 'flowbite-svelte';
+  import { enhance } from '$app/forms';
+
+  let { taskResult } = $props();
+  let modalOpen = $state(false);
+
+  async function handleSubmit(event: Event) {
+    event.preventDefault();
+    const formData = new FormData(event.target);
+    const response = await fetch('?/update', {
+      method: 'POST',
+      body: formData,
+    });
+    if (response.ok) {
+      modalOpen = false;
+    }
+  }
+</script>
+
+<Button onclick={() => (modalOpen = true)}>Update Status</Button>
+
+<Modal bind:open={modalOpen} size="sm" outsideclose={true}>
+  <form method="POST" action="?/update" onsubmit={handleSubmit} use:enhance>
+    <Select name="status" required>
+      <option selected>Accepted</option>
+      <option>Wrong Answer</option>
+    </Select>
+    <Button type="submit" class="w-full">Confirm</Button>
+  </form>
+</Modal>
+```
+
+### Modal 実装時の注意点
+
+1. **`form` prop は不要**
+   - Flowbite の `form` prop は「クライアント側の form validation UI」に特化
+   - SvelteKit server action には向かない
+   - 手動で `<form method="POST" action="?/update">` を用意すること
+
+2. **`bind:open` は UI state のみ**
+   - Modal の可視性を制御するだけ
+   - form submission とは独立
+
+3. **`use:enhance` で server action を自動処理**
+
+   ```typescript
+   async function handleSubmit(event: Event) {
+     event.preventDefault();
+     const response = await fetch('?/update', { ... });
+     if (response.ok) {
+       modalOpen = false;  // form success 時のみ close
+     }
+   }
+   ```
+
+4. **`outsideclose` で dismiss 制御**
+   - `outsideclose={true}` : outside click で modal close 可能（デフォルト）
+   - `outsideclose={false}` : outside click を無視
+
+5. **フォーカストラップと keyboard 処理**
+   - native `<dialog>` の focustrap は自動
+   - Esc キーでも close 可能（HTML5 standard）
+
+6. **エラーハンドリングは手動**
+   - `use:enhance` では server error を自動処理しない
+   - try-catch で HTTP error をキャッチして処理
+
+### 参考資料
+
+- [Flowbite Modal](https://flowbite-svelte.com/docs/components/modal)
+- [HTML5 `<dialog>` element](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/dialog)
+- [SvelteKit Form Actions use:enhance](https://kit.svelte.dev/docs/form-actions)
 
 ---
 

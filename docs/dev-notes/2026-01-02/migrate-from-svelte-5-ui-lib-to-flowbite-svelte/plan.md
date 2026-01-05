@@ -208,6 +208,37 @@ export default {
 ✅ dark mode toggle
 ```
 
+---
+
+### フェーズ-1.5: Header.svelte Navbar 実装（2026-01-04）
+
+**目的:** Navbar コンポーネントをフローブサイト Svelte に移行し、実装方法を確立する
+
+**実装内容:**
+
+1. `NavHamburger` 追加（モバイル対応）
+2. `navStatus`, `toggleNav`, `closeNav` 削除 → `NavHamburger` 内部管理に委譲
+3. `aClass` → `activeClass` に統一
+4. `$app/stores` 継続使用（SSR 互換性確保）
+
+**主な学習点:**
+
+- **State 管理の簡潔化**: svelte-5-ui-lib の独自 state 管理が Flowbite Svelte 内部管理に統一され、コード行数削減
+- **Props 名の確認重要**: `aClass`（svelte-5-ui-lib 固有）→ `activeClass`（Flowbite Svelte 標準）への変更は、デバッグ時に GitHub の NavLi コンポーネント定義確認が必須
+- **$app/state vs $app/stores**: Flowbite Svelte ドキュメント例は client-only デモのため `$app/state` 使用だが、SSR 環境では `$app/stores` が必須
+
+**成果:**
+
+✅ Header.svelte ビルド成功
+✅ Navbar, NavBrand, NavUl, NavLi, NavHamburger, Dropdown 等が Flowbite Svelte で正常動作確認
+✅ component-mapping.md に Navbar 関連実装例を記載
+
+**次ステップ:** Navbar responsive + dropdown trigger の E2E テスト実装
+
+---
+
+### フェーズ0：TailwindCSS v4 移行
+
 **設定根拠:**
 
 - `@config` は末尾に配置（v3 互換設定の安全な読み込み）
@@ -345,24 +376,45 @@ pnpm playwright test tests/dark-mode.spec.ts  # Playwright
 
 ---
 
-**段階 1-4: 複雑なコンポーネント（Dropdown, Modal, Toast）** 🔄 **Pending**
+**段階 1-4: 複雑なコンポーネント（Dropdown, Modal, Toast）** ✅ **完了（2026-01-05）**
 
-- 🔄 `Dropdown`: v5 runes `$state(isOpen)` で管理 → Header.svelte で stub 化
-- 🔄 `Modal`: native `<dialog>` + `form` prop + `onaction` callback
-- 🔄 `Toast`: `ToastContainer` で位置管理、auto-dismiss は手動
-- 🔄 `Spinner`, `ButtonGroup`, `Footer`: シンプル置き換え
+- ✅ `Modal`: native `<dialog>` + `$state(open)` + SvelteKit Form Actions 共存
+  - UpdatingModal.svelte: `form` prop 不使用、`bind:open` で UI 管理、`use:enhance` で server action 処理
+  - `handleSubmit()` で form submit + error handling を統一
+  - `modalOpen = false` で成功時のみ close
+  - ✅ UserAccountDeletionForm.svelte: 同パターンで修正完了（FormWrapper 活用）
+  - ✅ Header.svelte: logout modal も同パターンで修正完了（`action="../../logout"` 相対パス指定）
+- ✅ `Dropdown`: Flowbite Svelte `triggeredBy` + Floating UI 自動ポジショニング
+  - ✅ Header.svelte: 3つの Dropdown（Dashboard, User Page, External Links）を `triggeredBy` 方式に移行
+  - ✅ 複雑な CSS positioning を削除し、Floating UI の自動ポジショニングに任せる
+  - ✅ `uiHelpers()` による状態管理を廃止、Dropdown が内部で管理
+  - ✅ Darkmode コンポーネント有効化
+- ✅ `UpdatingDropdown`: Flowbite Svelte `triggeredBy` + Floating UI による自動ポジショニング
+  - ✅ UpdatingDropdown.svelte: `uiHelpers()` 削除、複雑な位置管理ロジックをコメントアウト
+  - ✅ trigger ボタンをコンポーネント内部に移動（`<div id="update-dropdown-trigger-${componentId}">` で実装）
+  - ✅ `<Dropdown triggeredBy="#...">` で Floating UI の自動ポジショニングに統一
+  - ✅ `DropdownItem` で統一（svelte-5-ui-lib の `DropdownLi`, `DropdownUl` から置き換え）
+  - ✅ TaskTableBodyCell.svelte: `bind:this={updatingDropdown}` 削除、trigger ボタン削除（UpdatingDropdown 内部に統合）
+- 🔄 `Toast`: `ToastContainer` で位置管理、auto-dismiss は手動（フェーズ2）
+- ✅ `Spinner`, `ButtonGroup`, `Footer`: シンプル置き換え完了（フェーズ1-4）
 
-**現状:**
+**完了内容:**
 
-- Header.svelte の Dropdown/Modal 機能をコメント化して TODO 化済み
-- 後続フェーズで実装予定
+- ✅ component-mapping.md に Modal 実装パターンを修正：`form` prop 不要、SvelteKit Form Actions との共存に焦点
+- ✅ component-mapping.md に Dropdown 移行パターンを追加：`triggeredBy` + Floating UI 自動ポジショニング
+- ✅ UpdatingModal.svelte 実装完了：`form` 削除、`handleSubmit()` 復活、`bind:open` + `use:enhance` で統合
+- ✅ UserAccountDeletionForm.svelte 修正完了：FormWrapper + Modal + server action の3層統合
+- ✅ Header.svelte 実装完了：Dropdown を `triggeredBy` 方式に統合、Darkmode 有効化、CSS 簡素化
+- ✅ UpdatingDropdown.svelte 実装完了：`triggeredBy` 方式に統一、複雑な位置管理削除、trigger 内部移動
+- ✅ TaskTableBodyCell.svelte 修正完了：`bind:this` 削除、trigger ボタン削除
 
-**参考:** Flowbite Svelte GitHub Repository
+**参考:** Flowbite Modal & Dropdown Documentation
 
-- https://github.com/themesberg/flowbite-svelte/blob/main/src/lib/dropdown/Dropdown.svelte
-- https://github.com/themesberg/flowbite-svelte/blob/main/src/lib/modal/Modal.svelte
+- https://flowbite-svelte.com/docs/components/modal
+- https://flowbite-svelte.com/docs/components/dropdown
+- https://kit.svelte.dev/docs/form-actions
 
-**工数:** 3-4 days（後日）
+**工数:** 5 hours（Modal 3.5h + Dropdown Header 0.5h + UpdatingDropdown 1h）
 
 ---
 
@@ -406,6 +458,57 @@ pnpm playwright test tests/dark-mode.spec.ts  # Playwright
 - Tailwind v4 では arbitrary values は `min-h-[<value>]` 形式が standard
 - 標準 spacing scale の値（`min-h-64` など）より、明示的な px 単位が推奨される場合がある
 - **教訓**: 拡張機能の警告を無視せず、公式ドキュメントで確認する習慣が重要
+
+#### 7. **Dropdown: Trigger 責任分離と CSS Selector ベース制御（UpdatingDropdown より）**
+
+- **従来**: 親コンポーネント側で trigger ボタンを配置し、`bind:this` + export function で制御
+  - 親: `<button onclick={(event) => updatingDropdown.toggle(event)}>`
+  - 子: `export function toggle(event?: MouseEvent) { ... }`
+  - 複数インスタンス時に各親で `bind:this` を管理必須
+- **新方式**: trigger をコンポーネント内部に移動、CSS selector で自動連携
+  - 内部: `<div id="update-dropdown-trigger-${componentId}">` + `<Dropdown triggeredBy="#...">`
+  - 親: シンプルに `<UpdatingDropdown {props} />` のみ
+  - 複数インスタンスでも unique ID で管理（`Math.random()` 利用）
+- **メリット**:
+  - 親側の実装が大幅簡潔化（`bind:this` 削除、trigger ボタン削除）
+  - Flowbite 標準パターンで保守性↑
+  - 責任分離が明確（dropdown 制御 = コンポーネント内部）
+- **教訓**: 参照管理（`bind:this`）より、selector ベースの制御が保守性と再利用性に優れる
+
+#### 8. **複雑な位置管理ロジックは不要（Floating UI の活用）**
+
+- **従来**: `calculateDropdownPosition()`, `updateDropdownPosition()`, CSS 変数 `--dropdown-x/y` で手動制御
+  - ビューポート外での調整を自前実装
+  - コンポーネント複雑度↑、テストコスト↑
+- **新方式**: Floating UI が自動調整
+  - `<Dropdown triggeredBy="#...">` のみで自動ポジショニング
+  - コンポーネント複雑度↓
+- **教訓**: "複雑そうだから自前実装" ではなく、ライブラリ機能を活用して単純化する発想が重要
+
+#### 9. **dropdown close は Dropdown コンポーネント内部で自動**
+
+- **従来**: `closeDropdown()` 関数を明示的に呼び出し
+- **新方式**: `triggeredBy` selector 方式では、trigger 以外をクリックで自動 close
+- **実装**: `resetDropdown()` 内で `closeDropdown()` をコメントアウト、`showForm = false` のみ
+- **教訓**: ライブラリの自動動作を信じて、余計な手動制御は削除する
+
+**10. Dropdown 位置管理: Floating UI と placement props のハイブリッド**
+
+- 初期案：Floating UI 自動のみ → ビューポート下部で使いづらい
+- 改善案：placement props で動的指定（top/bottom）
+- **教訓**：ライブラリ自動化 + 手動微調整のバランスが重要
+
+**11. Dropdown 親コンテナの CSS が子に影響**
+
+- 問題：flex/gap-1 親が Dropdown 内の ul に継承
+- 解決：Dropdown を親 div 外に分離
+- **教訓**：レイアウト系 class の影響を見落としやすい
+
+**12. Dropdown Item: ダークモード対応と hover による形変更**
+
+- 問題：色が見えない、border-radius が変わる
+- 解決：色と rounded を明示的に指定
+- **教訓**：ライブラリデフォルト CSS との競合が大多数の原因
 
 ### 今後の移行作業での活用ポイント
 
@@ -856,13 +959,61 @@ Running 10 tests using 3 workers
 - Props が少なく、CSS クラスでカスタマイズする方針
 - 例：Footer では `class="shadow-none w-screen m-6"` で見た目をコントロール
 
+### フェーズ1-4 実装による教訓
+
+#### 1. **「新しい = 正しい」という仮定は危険**
+
+- Flowbite Modal の `form` prop + `onaction` callback は「クライアント側の form validation UI」に特化
+- SvelteKit の server action context では **使うべきではない** パターン
+- ドキュメントをしっかり読み込まないと、誤った方向に進む
+
+#### 2. **ライブラリの API 仕様を context に合わせるべき**
+
+- 新しいライブラリのすべての機能を使う必要はない
+- SvelteKit Form Actions との共存を優先 → `form` prop は不要
+- `bind:open` (UI 管理) + `use:enhance` (server action) の分離が正解
+
+#### 3. **最小限の変更が最良**
+
+- uiHelpers 削除 → `$state(open)` のみ
+- Modal component の props 調整 → `bind:open` + `outsideclose` のみ
+- form structure は完全保持 → `handleSubmit()` + `?/update` action
+- **余計な最適化や「modernization」は避けるべき**
+
+#### 4. **ドキュメント読みは浅読みしてはいけない**
+
+- Flowbite Modal docs は「form validation」の例のみ
+- SvelteKit との統合例がない
+- ユーザーが批判的に指摘するまで、自分の誤解に気づかなかった
+
+#### 5. **相対パスの重要性（SvelteKit Form Actions）**
+
+- URL ネストが深い場合（`/hoge/foo`）、絶対パス `/logout` では routing が失敗する可能性
+- 相対パス `../../logout` で確実に target route に到達
+- **教訓**: form の action パスは component の位置を考慮した相対パスを使用
+
+#### 6. **FormWrapper を活用した nested form の設計**
+
+- 外側 FormWrapper（`action=""`）: styling 用、submit 機能なし
+- 内側 FormWrapper（`action="?/delete"`）: Modal 内で server action 処理
+- nested form は HTML 仕様で制限されるが、目的別の分離で機能は損なわない
+- **今後の refactor 課題**: FormWrapper の purpose を明確化してドキュメント化
+
+#### 7. **Floating UI による自動ポジショニングの活用**
+
+- `triggeredBy="#selector"` + Floating UI により、複雑な CSS positioning が不要
+- 状態管理を Dropdown 内部に委譲することで、コンポーネント側のロジックを簡潔化
+- 3つの Dropdown（Dashboard, User Page, External Links）すべてで同一 API で実装可能
+- **教訓**: ライブラリの自動機能を信頼し、手動管理を排除することで保守性向上
+
 ### 次フェーズへの展望
 
-**フェーズ1-4 の3コンポーネント完了により：**
+**フェーズ1-4 の4コンポーネント完了により：**
 
-- ✅ シンプル置き換えパターンが確立された
-- ✅ ビルドプロセスは安定
-- ✅ Playwright テストで「置き換え前後の動作差異」を検出可能
+- ✅ Modal 実装パターンが確立された（`bind:open` + `use:enhance` の統合）
+- ✅ Dropdown 実装パターンが確立された（`triggeredBy` + Floating UI）
+- ✅ SvelteKit Form Actions 共存の best practice を習得
+- ✅ FormWrapper + Modal の nested 設計が実装可能に
 - 🔄 フェーズ1-1～1-3 の他のコンポーネント置き換えに同じ手法を適用可能
 
 **次のステップ（フェーズ1-1～1-3）:**
