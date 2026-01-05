@@ -71,7 +71,7 @@
   });
 </script>
 
-<!-- HACK: svelte-5-ui-lib にある Progressbar では 回答状況に合わせた内訳を表示できないので、HTML + tailwindcss で実装 -->
+<!-- HACK: Flowbite Svelte にある Progressbar では 回答状況に合わせた内訳を表示できないので、HTML + tailwindcss で実装 -->
 <!-- See: -->
 <!-- https://blog.canopas.com/designing-stunning-progress-bars-made-easy-with-tailwind-css-ae620ba7b4be -->
 <!-- https://www.creative-tim.com/learning-lab/tailwind-starter-kit/documentation/css/progressbars -->

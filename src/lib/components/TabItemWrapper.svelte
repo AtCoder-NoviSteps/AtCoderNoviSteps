@@ -52,7 +52,7 @@
 </script>
 
 <!-- See: -->
-<!-- https://svelte-5-ui-lib.codewithshin.com/components/tooltip -->
+<!-- https://flowbite-svelte.com/docs/components/tooltip -->
 <div>
   {#if tooltipContent !== '' && titleId !== ''}
     <Tooltip type="auto" triggeredBy={`#${titleId}`} class={`max-w-[200px] ${TOOLTIP_CLASS_BASE}`}>
@@ -62,7 +62,7 @@
 </div>
 
 <!-- See: -->
-<!-- https://svelte-5-ui-lib.codewithshin.com/components/tabs -->
+<!-- https://flowbite-svelte.com/docs/components/tabs -->
 <TabItem open={isOpen} onclick={() => handleClick(workbookType, activeProblemList)}>
   {#snippet titleSlot()}
     <span class="text-lg" id={titleId}>

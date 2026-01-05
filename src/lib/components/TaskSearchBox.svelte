@@ -170,7 +170,7 @@
   <Listgroup>
     {#each filteredTasks as task, index}
       <!-- See: -->
-      <!-- WHY: svelte-5-ui-lib の ListgroupItem だと、フォーカスした問題の <li> 要素が消えてスタイルが崩れるため -->
+      <!-- WHY: Use a custom <li> element with conditional classes for highlighting, due not to be able to find attribute. -->
       <li
         data-name={task.task_id}
         class="cursor-pointer truncate md:truncate-none px-4 pt-3 pb-1 border-b border-gray-200 dark:border-gray-600 first:rounded-tl-lg first:rounded-tr-lg last:rounded-bl-lg last:rounded-br-lg {index ===

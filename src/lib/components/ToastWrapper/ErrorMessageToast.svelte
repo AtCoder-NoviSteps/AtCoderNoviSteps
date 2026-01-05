@@ -10,7 +10,7 @@
 </script>
 
 <!-- See: -->
-<!-- https://svelte-5-ui-lib.codewithshin.com/components/toast -->
+<!-- https://flowbite-svelte.com/docs/components/toast -->
 {#if errorMessage !== null}
   <Toast color="red" class="mb-4">
     {#snippet icon()}
