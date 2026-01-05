@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Label, Input } from 'svelte-5-ui-lib';
+  import { Label, Input } from 'flowbite-svelte';
 
   interface Props {
     labelName: string;

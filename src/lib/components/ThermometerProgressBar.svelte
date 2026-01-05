@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Tooltip } from 'svelte-5-ui-lib';
+  import { Tooltip } from 'flowbite-svelte';
 
   import type { WorkBookTaskBase } from '$lib/types/workbook';
   import type { TaskResult, TaskResults } from '$lib/types/task';
@@ -91,9 +91,9 @@
 </div>
 
 <Tooltip
-  showOn="hover"
+  type="auto"
   triggeredBy={`#${progressBarId}`}
-  position="top-start"
+  placement="top-start"
   class={`max-w-[200px] ${TOOLTIP_CLASS_BASE}`}
 >
   {#each submissionCounts as submissionCount}

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Toast } from 'svelte-5-ui-lib';
+  import { Toast } from 'flowbite-svelte';
   import CircleX from '@lucide/svelte/icons/circle-x';
 
   interface Props {

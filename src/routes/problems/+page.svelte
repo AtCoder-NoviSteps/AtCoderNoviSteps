@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { Snippet } from 'svelte';
 
-  import { Tabs } from 'svelte-5-ui-lib';
+  import { Tabs } from 'flowbite-svelte';
 
   import type { TaskResults } from '$lib/types/task';
 

@@ -8,8 +8,7 @@
     TableBodyRow,
     TableHead,
     TableHeadCell,
-  } from 'svelte-5-ui-lib';
-
+  } from 'flowbite-svelte';
   import { WorkBookType, type WorkbooksList } from '$lib/types/workbook';
   import { TaskGrade, type TaskResults } from '$lib/types/task';
   import type { Roles } from '$lib/types/user';

@@ -7,8 +7,7 @@
     TableHead,
     TableHeadCell,
     Label,
-  } from 'svelte-5-ui-lib';
-
+  } from 'flowbite-svelte';
   import type { Tag } from '$lib/types/tag';
   //import { ATCODER_BASE_CONTEST_URL } from '$lib/constants/urls';
   import { newline } from '$lib/utils/newline';

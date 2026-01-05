@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Label, Select } from 'svelte-5-ui-lib';
+  import { Label, Select } from 'flowbite-svelte';
 
   interface Props {
     labelClass?: string;

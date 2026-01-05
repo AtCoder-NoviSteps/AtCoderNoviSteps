@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Heading, Card, Alert, Button, List, Li } from 'svelte-5-ui-lib';
+  import { Heading, Card, Alert, Button, List, Li } from 'flowbite-svelte';
 
   import HeadingOne from '$lib/components/HeadingOne.svelte';
 
@@ -21,7 +21,7 @@
 </div>
 
 {#snippet passwordResetSection()}
-  <Card size="xl" class="mb-5" padding="sm">
+  <Card size="xl" class="mb-5 p-4">
     <Heading tag="h2" class="text-xl mb-2 text-gray-900 dark:text-white">
       パスワードリセット機能
     </Heading>
@@ -33,7 +33,7 @@
 {/snippet}
 
 {#snippet accountMigrationGuideSection()}
-  <Card size="xl" padding="sm">
+  <Card size="xl" class="p-4">
     <!-- Header -->
     <Heading tag="h2" class="text-xl mb-2 text-gray-900 dark:text-white">
       アカウント移行のご案内

@@ -8,7 +8,7 @@
     TableBodyRow,
     TableHead,
     TableHeadCell,
-  } from 'svelte-5-ui-lib';
+  } from 'flowbite-svelte';
 
   import { type TaskResult, type TaskResults } from '$lib/types/task';
 

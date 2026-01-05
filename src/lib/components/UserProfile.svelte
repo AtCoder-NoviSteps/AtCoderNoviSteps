@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Table, TableBody, TableBodyCell, TableBodyRow, Avatar, Button } from 'svelte-5-ui-lib';
+  import { Table, TableBody, TableBodyCell, TableBodyRow, Avatar, Button } from 'flowbite-svelte';
 
   interface Props {
     username?: string;
@@ -20,7 +20,7 @@
     <Avatar dot={{}} cornerStyle="rounded" size="xl" />
   </div>
 
-  <Table noborder={true}>
+  <Table border={false}>
     <TableBody>
       <TableBodyRow>
         <TableBodyCell>username:</TableBodyCell>

@@ -2,7 +2,7 @@
   import { tick } from 'svelte';
   import { goto } from '$app/navigation';
 
-  import { Card, Button, Label, Input, Hr } from 'svelte-5-ui-lib';
+  import { Card, Button, Label, Input, Hr } from 'flowbite-svelte';
 
   // 必要なコンポーネントだけを読み込んで、コンパイルを時間を短縮
   import CircleUserRound from '@lucide/svelte/icons/circle-user-round';
@@ -118,7 +118,7 @@
       </Button>
 
       <div>
-        <Hr hrClass="my-2 h-0.5 bg-gray-400 dark:bg-gray-200" />
+        <Hr class="my-2 h-0.5 bg-gray-400 dark:bg-gray-200" />
       </div>
 
       <!-- User name -->

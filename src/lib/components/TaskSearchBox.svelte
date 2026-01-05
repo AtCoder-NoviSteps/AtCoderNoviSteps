@@ -1,7 +1,7 @@
 <!-- See: -->
 <!-- https://github.com/kenkoooo/AtCoderProblems/blob/master/atcoder-problems-frontend/src/components/ProblemSearchBox.tsx -->
 <script lang="ts">
-  import { Input, Listgroup } from 'svelte-5-ui-lib';
+  import { Input, Listgroup } from 'flowbite-svelte';
 
   import SelectWrapper from '$lib/components/SelectWrapper.svelte';
   import LabelWithTooltips from '$lib/components/LabelWithTooltips.svelte';

@@ -1,7 +1,7 @@
 <script lang="ts">
   import { type Snippet, onMount } from 'svelte';
 
-  import { TabItem, Tooltip } from 'svelte-5-ui-lib';
+  import { TabItem, Tooltip } from 'flowbite-svelte';
   import CircleHelp from '@lucide/svelte/icons/circle-help';
 
   import { WorkBookType } from '$lib/types/workbook';
@@ -55,11 +55,7 @@
 <!-- https://svelte-5-ui-lib.codewithshin.com/components/tooltip -->
 <div>
   {#if tooltipContent !== '' && titleId !== ''}
-    <Tooltip
-      showOn="hover"
-      triggeredBy={`#${titleId}`}
-      class={`max-w-[200px] ${TOOLTIP_CLASS_BASE}`}
-    >
+    <Tooltip type="auto" triggeredBy={`#${titleId}`} class={`max-w-[200px] ${TOOLTIP_CLASS_BASE}`}>
       {tooltipContent}
     </Tooltip>
   {/if}

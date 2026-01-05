@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Breadcrumb, BreadcrumbItem } from 'svelte-5-ui-lib';
+  import { Breadcrumb, BreadcrumbItem } from 'flowbite-svelte';
 
   import HeadingOne from '$lib/components/HeadingOne.svelte';
   import WorkBookInputFields from '$lib/components/WorkBook/WorkBookInputFields.svelte';

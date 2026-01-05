@@ -8,7 +8,7 @@
     TableBodyRow,
     TableHead,
     TableHeadCell,
-  } from 'svelte-5-ui-lib';
+  } from 'flowbite-svelte';
   import Trash2 from '@lucide/svelte/icons/trash-2';
 
   import GradeLabel from '$lib/components/GradeLabel.svelte';

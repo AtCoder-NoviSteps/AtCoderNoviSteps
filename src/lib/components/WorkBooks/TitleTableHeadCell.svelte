@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { TableHeadCell } from 'svelte-5-ui-lib';
+  import { TableHeadCell } from 'flowbite-svelte';
 
   interface Props {
     paddingX?: string;

@@ -9,10 +9,9 @@
     Button,
     Label,
     Input,
-  } from 'svelte-5-ui-lib';
+  } from 'flowbite-svelte';
 
   import type { Contests } from '$lib/types/contest';
-
   import { getContestNameLabel } from '$lib/utils/contest';
   import { newline } from '$lib/utils/newline';
 

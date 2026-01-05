@@ -15,7 +15,7 @@
 
 <script lang="ts">
   import type { Snippet } from 'svelte';
-  import { Heading, Li, List } from 'svelte-5-ui-lib';
+  import { Heading, Li, List } from 'flowbite-svelte';
 
   import ExternalLinkWrapper from '$lib/components/ExternalLinkWrapper.svelte';
 

@@ -1,7 +1,7 @@
 <script lang="ts">
   import { type HTMLInputTypeAttribute } from 'svelte/elements';
 
-  import { Label, Input } from 'svelte-5-ui-lib';
+  import { Label, Input } from 'flowbite-svelte';
 
   import MessageHelperWrapper from '$lib/components/MessageHelperWrapper.svelte';
 

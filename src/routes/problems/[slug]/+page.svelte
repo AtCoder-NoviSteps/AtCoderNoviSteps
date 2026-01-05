@@ -1,7 +1,7 @@
 <script lang="ts">
   import { enhance } from '$app/forms';
 
-  import { Breadcrumb, BreadcrumbItem, Img } from 'svelte-5-ui-lib';
+  import { Breadcrumb, BreadcrumbItem, Img } from 'flowbite-svelte';
   import ExternalLink from '@lucide/svelte/icons/external-link';
 
   import SubmissionStatusButton from '$lib/components/SubmissionStatusButton.svelte';

@@ -6,8 +6,7 @@
     TableBodyRow,
     TableHead,
     TableHeadCell,
-  } from 'svelte-5-ui-lib';
-
+  } from 'flowbite-svelte';
   import ExternalLinkWrapper from '$lib/components/ExternalLinkWrapper.svelte';
   import { gradeGuidelineTableData } from '$lib/components/TaskGrades/grade_guideline_table_data';
   import GradeLabel from '$lib/components/GradeLabel.svelte';

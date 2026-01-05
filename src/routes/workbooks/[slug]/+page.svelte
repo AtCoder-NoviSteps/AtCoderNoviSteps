@@ -8,7 +8,7 @@
     TableBody,
     TableBodyCell,
     TableBodyRow,
-  } from 'svelte-5-ui-lib';
+  } from 'flowbite-svelte';
 
   import PublicationStatusLabel from '$lib/components/WorkBooks/PublicationStatusLabel.svelte';
   import CompletedTasks from '$lib/components/Trophies/CompletedTasks.svelte';

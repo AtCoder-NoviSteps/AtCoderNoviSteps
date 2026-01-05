@@ -11,7 +11,7 @@
     Label,
     Input,
     Button,
-  } from 'svelte-5-ui-lib';
+  } from 'flowbite-svelte';
   import BadgeCheck from '@lucide/svelte/icons/badge-check';
   import Ban from '@lucide/svelte/icons/ban';
 

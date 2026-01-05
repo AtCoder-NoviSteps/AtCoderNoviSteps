@@ -1,7 +1,7 @@
 <script lang="ts">
   import { onMount } from 'svelte';
 
-  import { Tooltip } from 'svelte-5-ui-lib';
+  import { Tooltip } from 'flowbite-svelte';
   import CircleHelp from '@lucide/svelte/icons/circle-help';
 
   import { TOOLTIP_CLASS_BASE } from '$lib/constants/tailwind-helper';
@@ -20,7 +20,7 @@
 </script>
 
 {#if tooltipContent !== '' && titleId !== ''}
-  <Tooltip showOn="hover" triggeredBy={`#${titleId}`} class={`max-w-[200px] ${TOOLTIP_CLASS_BASE}`}>
+  <Tooltip type="auto" triggeredBy={`#${titleId}`} class={`max-w-[200px] ${TOOLTIP_CLASS_BASE}`}>
     {tooltipContent}
   </Tooltip>
 

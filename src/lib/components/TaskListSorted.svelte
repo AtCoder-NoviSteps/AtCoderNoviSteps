@@ -7,8 +7,7 @@
     TableBodyRow,
     TableHead,
     TableHeadCell,
-  } from 'svelte-5-ui-lib';
-
+  } from 'flowbite-svelte';
   import type { TaskResults } from '$lib/types/task';
 
   import { addContestNameToTaskIndex } from '$lib/utils/contest';

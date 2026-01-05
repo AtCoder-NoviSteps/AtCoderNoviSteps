@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Label, Input, P } from 'svelte-5-ui-lib';
+  import { Label, Input, P } from 'flowbite-svelte';
   import ClipboardCopy from '@lucide/svelte/icons/clipboard-copy';
 
   // TODO: Use Flowbite's ClipboardCopy component when available

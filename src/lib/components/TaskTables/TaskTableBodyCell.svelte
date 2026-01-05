@@ -1,6 +1,4 @@
 <script lang="ts">
-  import ChevronDown from '@lucide/svelte/icons/chevron-down';
-
   import type { TaskResult } from '$lib/types/task';
 
   import GradeLabel from '$lib/components/GradeLabel.svelte';
@@ -17,8 +15,6 @@
   }
 
   let { taskResult, isLoggedIn, isShownTaskIndex, onupdate = () => {} }: Props = $props();
-
-  let updatingDropdown: UpdatingDropdown;
 </script>
 
 <div
@@ -58,19 +54,6 @@
   </div>
 {/snippet}
 
-<!-- See: -->
-<!-- https://svelte-5-ui-lib.codewithshin.com/components/dropdown -->
 {#snippet submissionUpdaterAndLinksOfTaskDetailPage(selectedTaskResult: TaskResult)}
-  <div class="flex items-start justify-center">
-    <button
-      type="button"
-      class="flex-shrink-0 w-6 ml-auto"
-      onclick={(event) => updatingDropdown.toggle(event)}
-      aria-label="Update submission for {selectedTaskResult.title}"
-    >
-      <ChevronDown class="w-4 h-4 mx-auto" />
-    </button>
-
-    <UpdatingDropdown bind:this={updatingDropdown} {taskResult} {isLoggedIn} {onupdate} />
-  </div>
+  <UpdatingDropdown taskResult={selectedTaskResult} {isLoggedIn} {onupdate} />
 {/snippet}

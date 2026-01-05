@@ -8,8 +8,7 @@
     Button,
     TableHead,
     TableHeadCell,
-  } from 'svelte-5-ui-lib';
-
+  } from 'flowbite-svelte';
   import type { Task } from '$lib/types/task';
   import type { Tag } from '$lib/types/tag';
 

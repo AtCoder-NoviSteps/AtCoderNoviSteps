@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Tabs, TabItem, Alert } from 'svelte-5-ui-lib';
+  import { Tabs, TabItem, Alert } from 'flowbite-svelte';
 
   // import AtCoderUserValidationForm from '$lib/components/AtCoderUserValidationForm.svelte';
   import UserAccountDeletionForm from '$lib/components/UserAccountDeletionForm.svelte';

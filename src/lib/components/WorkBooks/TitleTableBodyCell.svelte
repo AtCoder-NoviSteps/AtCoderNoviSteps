@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { TableBodyCell } from 'svelte-5-ui-lib';
+  import { TableBodyCell } from 'flowbite-svelte';
 
   import type { WorkbookList } from '$lib/types/workbook';
 

@@ -1,6 +1,6 @@
 <script lang="ts">
   import { get } from 'svelte/store';
-  import { Button, Tabs } from 'svelte-5-ui-lib';
+  import { Button, Tabs } from 'flowbite-svelte';
 
   import { Roles } from '$lib/types/user';
   import {

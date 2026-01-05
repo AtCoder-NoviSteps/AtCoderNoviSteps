@@ -1,7 +1,7 @@
 <script lang="ts">
   import { enhance } from '$app/forms';
 
-  import { Button, Modal, Select, uiHelpers } from 'svelte-5-ui-lib';
+  import { Button, Modal, Select } from 'flowbite-svelte';
 
   import type { TaskResult } from '$lib/types/task';
 
@@ -17,21 +17,12 @@
 
   let { isLoggedIn }: Props = $props();
 
-  const modal = uiHelpers();
-  let modalStatus = $state(false);
-  const closeModal = () => {
-    modal.close();
-  };
-
-  $effect(() => {
-    modalStatus = modal.isOpen;
-  });
-
+  let isOpenModal = $state(false);
   let selectedTaskResult = $state<TaskResult | null>(null);
   let selectedSubmissionStatus: string = $state('');
 
   export function openModal(taskResult: TaskResult): void {
-    modal.open();
+    isOpenModal = true;
     selectedTaskResult = taskResult;
     selectedSubmissionStatus = taskResult.status_name;
   }
@@ -63,7 +54,7 @@
       }
 
       errorMessageStore.setAndClearAfterTimeout(null);
-      closeModal();
+      isOpenModal = false;
     } catch (error) {
       console.error('Failed to update submission status: ', error);
       errorMessageStore.setAndClearAfterTimeout(FAILED_TO_UPDATE_SUBMISSION_STATUS, 10000);
@@ -73,11 +64,10 @@
 
 {#if isLoggedIn && selectedTaskResult}
   <Modal
-    title="{getContestNameLabel(selectedTaskResult.contest_id)} - {selectedTaskResult.title}"
+    bind:open={isOpenModal}
     size="sm"
-    {modalStatus}
-    {closeModal}
-    outsideClose
+    title="{getContestNameLabel(selectedTaskResult.contest_id)} - {selectedTaskResult.title}"
+    outsideclose={true}
   >
     <form method="POST" action="?/update" onsubmit={handleSubmit} use:enhance>
       <!-- 問題名-->

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Helper } from 'svelte-5-ui-lib';
+  import { Helper } from 'flowbite-svelte';
 
   // HACK: Use any type out of necessity to maintain compatibility with existing code.
   interface Props {

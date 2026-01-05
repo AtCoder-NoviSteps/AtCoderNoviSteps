@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Tooltip } from 'svelte-5-ui-lib';
+  import { Tooltip } from 'flowbite-svelte';
   import Lightbulb from '@lucide/svelte/icons/lightbulb';
 
   import { TOOLTIP_CLASS_BASE } from '$lib/constants/tailwind-helper';
@@ -15,7 +15,7 @@
 {#if uniqueId !== '' && commentAndHint !== ''}
   <!-- HACK: Position values other than the default "top" cause the tooltip to display only momentarily -->
   <Tooltip
-    showOn="hover"
+    type="auto"
     arrow={false}
     offset={0}
     triggeredBy={`#${uniqueId}`}

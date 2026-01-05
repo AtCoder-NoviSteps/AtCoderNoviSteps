@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Img } from 'svelte-5-ui-lib';
+  import { Img } from 'flowbite-svelte';
 
   import type { WorkBookTaskBase } from '$lib/types/workbook';
   import type { TaskResults } from '$lib/types/task';
@@ -20,5 +20,5 @@
 </script>
 
 {#if areAllTasksAccepted(taskResults, allTasks)}
-  <Img src="../../completed.png" alt="completed workbook" imgClass="h-10 w-12" />
+  <Img src="../../completed.png" alt="completed workbook" class="h-10 w-12" />
 {/if}
