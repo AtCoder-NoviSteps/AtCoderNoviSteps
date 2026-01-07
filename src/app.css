@@ -1,11 +1,90 @@
 /* Write your global styles here, in PostCSS syntax */
 @import 'tailwindcss';
+
+@plugin '@tailwindcss/forms';
 @plugin 'flowbite/plugin';
+
 @custom-variant dark (&:where(.dark, .dark *));
 
-@config "../tailwind.config.ts";
-@source "../src/**/*";
-@source "../node_modules/flowbite-svelte/dist/**/*";
+@source "../src/**/*.{html,js,svelte,ts}";
+@source "../node_modules/flowbite-svelte/dist/**/*.{html,js,svelte,ts}";
+
+@theme {
+  /* Colors */
+  /* Customized primary colors */
+  --color-primary-50: #eaf6f0;
+  --color-primary-100: #d2ecdf;
+  --color-primary-200: #bbe1ce;
+  --color-primary-300: #a3d7bd;
+  --color-primary-400: #8bcdac;
+  --color-primary-500: #74c29b;
+  --color-primary-600: #5cb88a;
+  --color-primary-700: #44ae79;
+  --color-primary-800: #2da368;
+  --color-primary-900: #159957;
+
+  /* NoviSteps grade colors */
+  /* 11Q - 1Q */
+  --color-atcoder-Q11: #e4e3e3;
+  --color-atcoder-Q10: #e4dfdc;
+  --color-atcoder-Q9: #dde3dc;
+  --color-atcoder-Q8: #dde7e7;
+  --color-atcoder-Q7: #dddceb;
+  --color-atcoder-Q6: #e8e7dc;
+  --color-atcoder-Q5: #dda0dd;
+  --color-atcoder-Q4: #da70d6;
+  --color-atcoder-Q3: #9370db;
+  --color-atcoder-Q2: #7f6000;
+  --color-atcoder-Q1: #01fb02;
+
+  /* 1D - 6D */
+  --color-atcoder-D1: #72c6ef;
+  --color-atcoder-D2: #002eff;
+  --color-atcoder-D3: #ffff02;
+  --color-atcoder-D4: #ff9900;
+  --color-atcoder-D5: #ff1000;
+  --color-atcoder-D6: #432414;
+
+  --color-atcoder-gray: ;
+  --color-atcoder-brown: ;
+  --color-atcoder-green: ;
+  --color-atcoder-cyan: ;
+  --color-atcoder-blue: ;
+  --color-atcoder-yellow: ;
+  --color-atcoder-orange: ;
+  --color-atcoder-red: ;
+
+  --color-atcoder-bronze: #e38a66;
+  --color-atcoder-silver: ;
+  --color-atcoder-gold: ;
+
+  /* Submission status colors */
+  --color-atcoder-ns: #ffffff;
+
+  --color-atcoder-wa-default: #f0ad4e;
+  --color-atcoder-wa-hover: #d97706;
+  --color-atcoder-wa-background: #ffeeba;
+  --color-atcoder-wa-background_dark: #91400f;
+
+  --color-atcoder-ac-default: #5cb85c;
+  --color-atcoder-ac-hover: #449d44;
+  --color-atcoder-ac-background: #c3e6cb;
+  --color-atcoder-ac-background_dark: #09c12f;
+
+  --color-atcoder-ac-with_editorial-default: #00aeef;
+  --color-atcoder-ac-with_editorial-hover: #21a0db;
+  --color-atcoder-ac-with_editorial-background: #d7dcf5;
+  --color-atcoder-ac-with_editorial-background_dark: #3abff8;
+
+  /* Customized breakpoints */
+  --breakpoint-xs: 420px;
+
+  /* Customized widths */
+  --width-1-7: 14.2857143%;
+  --width-1-8: 12.5%;
+  --width-1-9: 11.1111111%;
+  --width-1-10: 10%;
+}
 
 body {
   @apply flex flex-col items-center;
