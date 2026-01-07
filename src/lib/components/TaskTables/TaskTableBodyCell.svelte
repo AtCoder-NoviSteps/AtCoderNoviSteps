@@ -29,7 +29,7 @@
 </div>
 
 {#snippet taskGradeLabel(taskResult: TaskResult)}
-  <div class="flex-shrink-0">
+  <div class="shrink-0">
     <GradeLabel
       taskGrade={taskResult.grade}
       defaultPadding={0.25}

@@ -180,7 +180,7 @@
   <!-- Trigger Button (内部移動) -->
   <div
     id={`update-dropdown-trigger-${componentId}`}
-    class="flex-shrink-0 w-6 ml-auto cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700 rounded p-1 transition text-gray-700 dark:text-gray-400"
+    class="shrink-0 w-6 ml-auto cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700 rounded-sm p-1 transition text-gray-700 dark:text-gray-400"
     role="button"
     tabindex="0"
     aria-label="Update submission status"
@@ -197,7 +197,7 @@
 >
   {#if isLoggedIn}
     {#each submissionStatusOptions as submissionStatus}
-      <DropdownItem onclick={() => handleClick(submissionStatus)} class="rounded-lg">
+      <DropdownItem onclick={() => handleClick(submissionStatus)} class="rounded-md">
         <div
           class="flex items-center justify-between w-full text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white"
         >

@@ -203,7 +203,7 @@
   </Heading>
 
   <div
-    class="container w-full rounded-md border border-gray-200 dark:border-gray-100 shadow-sm mb-6 overflow-hidden"
+    class="container w-full rounded-md border border-gray-200 dark:border-gray-100 shadow-xs mb-6 overflow-hidden"
   >
     <!-- Table header -->
     {#if contestTable && contestTable.displayConfig.isShownHeader}
