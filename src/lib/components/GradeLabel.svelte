@@ -24,24 +24,31 @@
   }: Props = $props();
 
   let grade = $derived(getTaskGradeLabel(taskGrade));
-  let gradeColor = $derived(getTaskGradeColor(taskGrade));
+  let gradeStyle = $derived(getGradeStyle(taskGrade));
 
-  function addGradientIfNeeds(taskGrade: TaskGrade | string) {
+  function getGradeStyle(taskGrade: TaskGrade | string) {
     if (taskGrade === TaskGrade.D6) {
-      const bronze =
-        'bg-gradient-to-br from-atcoder-D6 via-stone-600 to-amber-600 shadow-inner shadow shadow-amber-900/80 ring-2 ring-amber-300/50 text-amber-50 font-bold drop-shadow relative overflow-hidden';
-      return bronze;
+      return {
+        classes:
+          'shadow-md shadow-inner shadow-amber-900/80 ring-2 ring-amber-300/50 font-bold drop-shadow relative overflow-hidden rounded-md',
+        style:
+          'background-image: linear-gradient(to bottom right, var(--color-atcoder-D6), rgb(120, 113, 108), rgb(217, 119, 6));',
+        textColor: 'text-white',
+      };
     }
-    return '';
-  }
 
-  let gradient = $derived(addGradientIfNeeds(taskGrade));
+    return {
+      classes: 'rounded-md',
+      style: `background-color: ${getTaskGradeColor(taskGrade)};`,
+      textColor: toChangeTextColorIfNeeds(getTaskGradeLabel(taskGrade)),
+    };
+  }
 </script>
 
-<div class="rounded-lg border-2 {toChangeBorderColorIfNeeds(grade)} {gradient ? 'shadow-md' : ''}">
+<div class="rounded-lg border-2 {toChangeBorderColorIfNeeds(grade)} shadow-md">
   <div
-    class="p-{defaultPadding} w-{reducedWidth} xs:w-{defaultWidth} text-sm xs:text-{defaultTextSize} text-center rounded-md
-    {gradient || toChangeTextColorIfNeeds(grade) + ' ' + gradeColor}"
+    class="p-{defaultPadding} w-{reducedWidth} xs:w-{defaultWidth} text-sm xs:text-{defaultTextSize} text-center {gradeStyle.classes} {gradeStyle.textColor}"
+    style={gradeStyle.style}
   >
     {#if taskGrade !== TaskGrade.PENDING}
       {grade}

@@ -190,66 +190,69 @@ export function calcGradeMode(taskGrades: TaskGrades): TaskGrade {
   return gradeMode;
 }
 
-// https://tailwindcss.com/docs/customizing-colors
-// https://tailwindcss.com/docs/content-configuration#dynamic-class-names
+// Note:
+// Use CSS variables because dynamic class names are not recognized in Tailwind CSS v4
+//
+// See:
+// https://tailwindcss.com/docs/upgrade-guide#arbitrary-values-must-be-explicitly-configured
 export const getTaskGradeColor = (grade: string) => {
-  let color = 'bg-gray-200';
+  let color = '--color-atcoder-pending';
 
   switch (grade) {
     case TaskGrade.Q11:
-      color = 'bg-atcoder-Q11';
+      color = '--color-atcoder-Q11';
       break;
     case TaskGrade.Q10:
-      color = 'bg-atcoder-Q10';
+      color = '--color-atcoder-Q10';
       break;
     case TaskGrade.Q9:
-      color = 'bg-atcoder-Q9';
+      color = '--color-atcoder-Q9';
       break;
     case TaskGrade.Q8:
-      color = 'bg-atcoder-Q8';
+      color = '--color-atcoder-Q8';
       break;
     case TaskGrade.Q7:
-      color = 'bg-atcoder-Q7';
+      color = '--color-atcoder-Q7';
       break;
     case TaskGrade.Q6:
-      color = 'bg-atcoder-Q6';
+      color = '--color-atcoder-Q6';
       break;
     case TaskGrade.Q5:
-      color = 'bg-atcoder-Q5';
+      color = '--color-atcoder-Q5';
       break;
     case TaskGrade.Q4:
-      color = 'bg-atcoder-Q4';
+      color = '--color-atcoder-Q4';
       break;
     case TaskGrade.Q3:
-      color = 'bg-atcoder-Q3';
+      color = '--color-atcoder-Q3';
       break;
     case TaskGrade.Q2:
-      color = 'bg-atcoder-Q2';
+      color = '--color-atcoder-Q2';
       break;
     case TaskGrade.Q1:
-      color = 'bg-atcoder-Q1';
+      color = '--color-atcoder-Q1';
       break;
     case TaskGrade.D1:
-      color = 'bg-atcoder-D1';
+      color = '--color-atcoder-D1';
       break;
     case TaskGrade.D2:
-      color = 'bg-atcoder-D2';
+      color = '--color-atcoder-D2';
       break;
     case TaskGrade.D3:
-      color = 'bg-atcoder-D3';
+      color = '--color-atcoder-D3';
       break;
     case TaskGrade.D4:
-      color = 'bg-atcoder-D4';
+      color = '--color-atcoder-D4';
       break;
     case TaskGrade.D5:
-      color = 'bg-atcoder-D5';
+      color = '--color-atcoder-D5';
       break;
     case TaskGrade.D6:
-      color = 'bg-atcoder-D6';
+      color = '--color-atcoder-D6';
       break;
   }
 
-  return color;
+  return `var(${color})`;
 };
 
 // Q11 → 11Q、D1 → 1D
