@@ -26,6 +26,10 @@
   // For Modal
   let isOpenModalForLogout = $state(false);
 
+  const closeLogoutModal = () => {
+    isOpenModalForLogout = false;
+  };
+
   let user = $derived($page.data.user);
 </script>
 
@@ -40,7 +44,7 @@
   </NavLi>
 {/snippet}
 
-<Navbar breakpoint="lg" class="max-w-none">
+<Navbar breakpoint="xl" class="">
   <NavBrand href="/">
     <img src="../../../favicon.png" class="mr-3 h-6 sm:h-9" alt="{PRODUCT_NAME} Logo" />
     <span class="self-center whitespace-nowrap text-xl font-semibold dark:text-white">
@@ -50,7 +54,7 @@
 
   <NavHamburger />
 
-  <NavUl {activeUrl} class="bg-white dark:bg-gray-900">
+  <NavUl {activeUrl}>
     {#if $page.data.isAdmin}
       {@render navLiForDropdown('nav-dashboard', '管理画面')}
 
@@ -127,11 +131,19 @@
 <Modal bind:open={isOpenModalForLogout} size="xs" outsideclose={true}>
   <p class="font-medium text-lg text-center">ログアウトしますか?</p>
 
-  <form method="POST" action="../../logout" use:enhance>
+  <form method="post" action="../../logout?/logout" use:enhance onsubmit={closeLogoutModal}>
     <input type="hidden" name="logout" value="Log out" />
-    <Button type="submit" class="w-full">ログアウト</Button>
-    <Button type="button" color="alternative" onclick={() => (isOpenModalForLogout = false)}>
-      キャンセル
-    </Button>
+
+    <div class="flex flex-wrap justify-center items-center gap-4">
+      <Button
+        type="button"
+        class="xs:flex-1"
+        color="alternative"
+        onclick={() => (isOpenModalForLogout = false)}
+      >
+        キャンセル
+      </Button>
+      <Button type="submit" class="xs:flex-1">ログアウト</Button>
+    </div>
   </form>
 </Modal>
