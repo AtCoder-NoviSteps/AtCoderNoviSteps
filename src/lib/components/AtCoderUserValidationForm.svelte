@@ -67,7 +67,7 @@
       <Input size="md" type="hidden" name="username" bind:value={username} />
       <LabelWrapper labelName="ユーザ名" inputValue={username} />
 
-      <Label class="space-y-2">
+      <Label class="flex flex-col gap-2">
         <!-- AtCoder IDを修正できるのは、notingのステータスの時のみ-->
         <span>AtCoder ID</span>
         <Input
@@ -105,7 +105,7 @@
         bind:value={atcoder_validationcode}
       />
 
-      <Label class="space-y-2">
+      <Label class="flex flex-col gap-2">
         <span>本人確認用の文字列</span>
         <div>
           <Input size="md" bind:value={atcoder_validationcode}>

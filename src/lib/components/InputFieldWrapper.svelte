@@ -29,7 +29,7 @@
   let isReadOnly = !isEditable;
 </script>
 
-<Label class="space-y-2">
+<Label class="flex flex-col gap-2">
   <span>{labelName}</span>
   <Input
     type={inputFieldType}

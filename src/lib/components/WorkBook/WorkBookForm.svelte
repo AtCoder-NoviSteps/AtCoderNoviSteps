@@ -100,7 +100,7 @@
       Because the attributes are slightly different, we have no choice
       but to separate the data for storing in the database and for creating and editing workbooks.
     -->
-    <div class="space-y-2">
+    <div class="flex flex-col gap-3">
       <TaskSearchBox {tasks} bind:workBookTasks={$form.workBookTasks} bind:workBookTasksForTable />
       <InputFieldWrapper
         inputFieldType="hidden"

@@ -877,9 +877,12 @@ Tailwind CSS v3→v4 の breaking changes により、以下の 3 つの UI 崩�
 - `WorkBookForm.svelte`: `space-y-4` → `gap-4`
 - `account_transfer/+page.svelte`: `space-y-4` → `gap-4`
 
-**追加修正**: `AuthForm.svelte` の `<Card>` に `p-4 sm:p-6 md:p-8` padding 追加
+**追加修正**:
 
-**理由**: v4 では space-\* セレクタが「最後の兄弟要素にマージン未適用」へ変更。gap はセレクタ変更の影響を受けないため推奨。
+- `AuthForm.svelte` の `<Card>` に `p-4 sm:p-6 md:p-8` padding 追加
+- `InputFieldWrapper.svelte` の `<Label>` で `space-y-2` → `flex flex-col gap-2` に変更
+
+**理由**: v4 では space-\* セレクタが「最後の兄弟要素にマージン未適用」へ変更。gap はセレクタ変更の影響を受けないため推奨。Label 内の子要素（span, Input, MessageHelperWrapper）間の間隔を gap-2 で均等に保つ。
 
 ##### 2️⃣ divide-y に color 明示
 

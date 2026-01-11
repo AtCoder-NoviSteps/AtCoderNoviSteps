@@ -87,7 +87,7 @@
   });
 </script>
 
-<div class="flex flex-col md:flex-row items-start md:items-center justify-between md:space-x-4">
+<div class="flex flex-col md:flex-row items-start md:items-center justify-between md:gap-4">
   <!-- 問題を検索・追加 -->
   <div class="w-full md:w-5/6 space-y-2 mb-2 md:mb-0">
     <LabelWithTooltips

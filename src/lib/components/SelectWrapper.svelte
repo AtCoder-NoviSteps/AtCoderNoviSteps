@@ -13,7 +13,7 @@
   }
 
   let {
-    labelClass = 'space-y-2',
+    labelClass = 'flex flex-col gap-2',
     labelName = '',
     innerName,
     items,

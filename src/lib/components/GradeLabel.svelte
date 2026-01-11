@@ -45,7 +45,7 @@
   }
 </script>
 
-<div class="rounded-lg border-2 {toChangeBorderColorIfNeeds(grade)} shadow-md">
+<div class="rounded-lg border-2 {toChangeBorderColorIfNeeds(grade)}">
   <div
     class="p-{defaultPadding} w-{reducedWidth} xs:w-{defaultWidth} text-sm xs:text-{defaultTextSize} text-center {gradeStyle.classes} {gradeStyle.textColor}"
     style={gradeStyle.style}

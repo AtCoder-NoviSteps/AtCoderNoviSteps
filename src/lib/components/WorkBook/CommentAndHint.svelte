@@ -21,7 +21,7 @@
     triggeredBy={`#${uniqueId}`}
     class={`${TOOLTIP_CLASS_BASE}`}
   >
-    <div class="whitespace-normal break-words min-w-[150px] max-w-[200px]">
+    <div class="whitespace-normal wrap-break-word min-w-[150px] max-w-[200px]">
       {commentAndHint}
     </div>
   </Tooltip>
