@@ -101,8 +101,8 @@
 <!-- See: -->
 <!-- https://github.com/lucide-icons/lucide -->
 <div class="container mx-auto py-8 w-5/6 flex flex-col items-center">
-  <Card class="w-full max-w-md">
-    <form id="auth-form" method="post" use:enhance class="flex flex-col space-y-6">
+  <Card class="w-full max-w-md p-4 sm:p-6 md:p-8">
+    <form id="auth-form" method="post" use:enhance class="flex flex-col gap-6">
       <h3 class="text-xl font-medium text-gray-900 dark:text-white">{title}</h3>
       <MessageHelperWrapper message={$message} />
 

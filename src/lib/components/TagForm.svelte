@@ -35,7 +35,7 @@
 Edit Tag
 <form method="POST" action="/tags?/update">
   <Table shadow hoverable={true} class="text-md">
-    <TableBody class="divide-y">
+    <TableBody class="divide-y divide-gray-200 dark:divide-gray-700">
       <TableBodyRow>
         <TableBodyCell class="w-1/6">tagId</TableBodyCell>
         <TableBodyCell class="w-5/6">{id}</TableBodyCell>
@@ -82,7 +82,7 @@ Edit Tag
     <TableHeadCell class="w-5/6"></TableHeadCell>
   </TableHead>
 
-  <TableBody class="divide-y">
+  <TableBody class="divide-y divide-gray-200 dark:divide-gray-700">
     {#each tasks as task}
       <TableBodyRow>
         <TableBodyCell>

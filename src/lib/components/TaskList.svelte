@@ -71,7 +71,7 @@
     <!-- FIXME: clickを1回実行するとactionsが2回実行されてしまう。原因と修正方法が分かっていない。 -->
     <!-- TODO: 問題が多くなってきたら、ページネーションを導入する -->
     <!-- TODO: 回答状況に応じて、フィルタリングできるようにする -->
-    <div class="overflow-auto rounded-md border">
+    <div class="overflow-auto rounded-md border border-gray-200 dark:border-gray-100">
       <Table shadow id={grade} class="text-md table-fixed w-full">
         <TableHead class="text-sm bg-gray-100">
           <TableHeadCell class="w-20 sm:w-24 min-w-[5rem]">回答</TableHeadCell>
@@ -86,7 +86,7 @@
           </TableHeadCell>
         </TableHead>
 
-        <TableBody class="divide-y">
+        <TableBody class="divide-y divide-gray-200 dark:divide-gray-700">
           {#each taskResults as taskResult}
             <TableBodyRow
               id={taskResult.contest_id + '-' + taskResult.task_id}

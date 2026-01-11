@@ -26,7 +26,7 @@
   });
 </script>
 
-<form method="POST" action="/tasks?/update" class="space-y-4">
+<form method="post" action="/tasks?/update" class="flex flex-col gap-4">
   <Breadcrumb aria-label="">
     <BreadcrumbItem href="/problems" home>問題一覧</BreadcrumbItem>
     <BreadcrumbItem>
@@ -36,30 +36,32 @@
 
   <!-- task_id、contest_idを変える可能性は低い -->
   <!-- 主に、gradeと、tasktagsを変えることになると思う -->
-  <Table shadow hoverable={true} class="text-md">
-    <TableBody class="divide-y">
-      <TableBodyRow>
-        <TableBodyCell>タイトル</TableBodyCell>
-        <TableBodyCell>
-          {removeTaskIndexFromTitle(task.title, task.task_table_index)}
-        </TableBodyCell>
-      </TableBodyRow>
-      <TableBodyRow>
-        <TableBodyCell>出典</TableBodyCell>
-        <TableBodyCell>
-          {addContestNameToTaskIndex(task.contest_id, task.task_table_index)}
-        </TableBodyCell>
-      </TableBodyRow>
-      <TableBodyRow>
-        <TableBodyCell>グレード</TableBodyCell>
-        <TableBodyCell>
-          <Label>
-            <Select name="task_grade" class="mt-2" items={grades} bind:value={task.grade} />
-          </Label>
-        </TableBodyCell>
-      </TableBodyRow>
-    </TableBody>
-  </Table>
+  <div class="rounded-md border border-gray-200 dark:border-gray-700 overflow-hidden">
+    <Table shadow hoverable={true} class="text-md">
+      <TableBody class="divide-y divide-gray-200 dark:divide-gray-700">
+        <TableBodyRow>
+          <TableBodyCell>タイトル</TableBodyCell>
+          <TableBodyCell>
+            {removeTaskIndexFromTitle(task.title, task.task_table_index)}
+          </TableBodyCell>
+        </TableBodyRow>
+        <TableBodyRow>
+          <TableBodyCell>出典</TableBodyCell>
+          <TableBodyCell>
+            {addContestNameToTaskIndex(task.contest_id, task.task_table_index)}
+          </TableBodyCell>
+        </TableBodyRow>
+        <TableBodyRow>
+          <TableBodyCell>グレード</TableBodyCell>
+          <TableBodyCell>
+            <Label>
+              <Select name="task_grade" class="mt-2" items={grades} bind:value={task.grade} />
+            </Label>
+          </TableBodyCell>
+        </TableBodyRow>
+      </TableBody>
+    </Table>
+  </div>
 
   <div class="flex justify-center">
     <Button type="submit" class="w-full sm:w-5/6 m-4">更新</Button>

@@ -851,3 +851,107 @@ toChangeTextColorIfNeeds(grade); // "4Q" を渡す（getTaskGradeLabel 済み）
 **実行日時**: 2026-01-07
 
 **次回アクション**: フェーズ D（Visual Regression テスト）を dev server で実施推奨
+
+---
+
+## 8. フェーズ D 実装ガイドライン（UI 崩れ修正）
+
+### 8.1 実施日: 2026-01-11
+
+#### 修正内容概要
+
+Tailwind CSS v3→v4 の breaking changes により、以下の 3 つの UI 崩れが発生していた：
+
+1. **Form 要素の余白消失（space-y-\* セレクタ変更）**
+2. **テーブル border 色変更（divide-\* デフォルト色変更）**
+3. **テーブル下部 border 消失（divide-\* セレクタ変更）**
+
+#### 修正方法と結果
+
+##### 1️⃣ Form の space-y-\* → gap への移行
+
+**修正対象** (4 ファイル):
+
+- `AuthForm.svelte`: `space-y-6` → `gap-6`
+- `TaskForm.svelte`: `space-y-4` → `gap-4`
+- `WorkBookForm.svelte`: `space-y-4` → `gap-4`
+- `account_transfer/+page.svelte`: `space-y-4` → `gap-4`
+
+**追加修正**: `AuthForm.svelte` の `<Card>` に `p-4 sm:p-6 md:p-8` padding 追加
+
+**理由**: v4 では space-\* セレクタが「最後の兄弟要素にマージン未適用」へ変更。gap はセレクタ変更の影響を受けないため推奨。
+
+##### 2️⃣ divide-y に color 明示
+
+**修正対象**: 12 ファイルの `divide-y` → `divide-y divide-gray-200 dark:divide-gray-700`
+
+**理由**: v4 では divide-\* のデフォルト色が `gray-200` → `currentColor` へ変更。色指定なしだと text color に連動して黒く見える。
+
+##### 3️⃣ Table 外側 border に color を明示
+
+**問題**: v4 では `border` クラスのデフォルト色が `currentColor` に変更。color 指定なし → text color（黒）に連動
+
+**修正対象**: 6 ファイルの `<div class="border">` → `<div class="border border-gray-200 dark:border-gray-100">`
+
+修正ファイル:
+
+- TaskTables/TaskTable.svelte (既に修正)
+- TaskForm.svelte (既に修正)
+- account_transfer/+page.svelte (既に修正)
+- WorkBooks/WorkBookBaseTable.svelte（追加修正）
+- workbooks/[slug]/+page.svelte（追加修正）
+- TaskList.svelte（追加修正）
+
+**理由**: Table 外枠の border が黒く見える問題を解決。divide-y で行間 border は制御し、外側 border は明示的に color 指定。
+
+#### ビルド結果
+
+✅ **ビルド成功**: 16.55 秒で完了（エラー・警告なし）
+
+---
+
+### 8.2 技術的教訓
+
+#### 1. セレクタ変更の 2 つの影響
+
+| 対象                      | v3 → v4                                                 | 結果                         |
+| ------------------------- | ------------------------------------------------------- | ---------------------------- |
+| `space-y-*` / `space-x-*` | `:not([hidden]) ~ :not([hidden])` → `:not(:last-child)` | 最後の要素への margin 消失   |
+| `divide-y` / `divide-x`   | `:not([hidden]) ~ :not([hidden])` → `:not(:last-child)` | 最後の子要素への border 消失 |
+
+**対応**: space-_ は `gap` で置き換え。divide-_ は color を明示 + 外側 border を色指定で補完。
+
+#### 2. Default color 変更（v4 の CSS-first 設計による）
+
+| クラス     | v3                              | v4                                  | 影響                     |
+| ---------- | ------------------------------- | ----------------------------------- | ------------------------ |
+| `border`   | グレー（暗黙）                  | `currentColor`（text color に連動） | 色指定なしだと黒く見える |
+| `divide-*` | `gray-200` / `gray-700`（暗黙） | `currentColor`                      | 色指定なしだと黒く見える |
+
+**対応**: 全 border / divide に color を明示的に指定。v4 は「暗黙のデフォルト」がない設計。
+
+#### 3. Table 構造の 2 層構成
+
+Tailwind v4 では Table のビジュアルが 2 層に分離：
+
+1. **内部 border**（行間）: `<TableBody class="divide-y divide-gray-200">` で制御
+2. **外部 border**（表枠）: `<div class="border border-gray-200 dark:border-gray-100">` で制御
+
+v3 では divide-y だけで完全に見えていたが、v4 では**外側 border を明示的に指定が必須**。
+
+---
+
+**実行ステータス**: ✅ フェーズ D 修正完了（2026-01-11 更新）
+
+**修正ファイル数**: 18 個（form 4 + divide-color 11 + border-color 3）
+
+**修正内容**:
+
+- ✅ space-y-\* → gap（4 ファイル）
+- ✅ divide-y に color 明示（11 ファイル）
+- ✅ Table 外側 border に color 明示（6 ファイル）
+- ✅ AuthForm Card に padding 追加
+
+**ビルド状態**: ✅ 成功（エラー・警告なし）
+
+**次回**: `pnpm dev` で visual regression テスト実施

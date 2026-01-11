@@ -25,7 +25,9 @@
   </div>
 </div>
 
-<div class="container w-full lg:w-2/3 mx-auto mt-3 sm:mt-4 overflow-auto rounded-md border">
+<div
+  class="container w-full lg:w-2/3 mx-auto mt-3 sm:mt-4 overflow-auto rounded-md border border-gray-200 dark:border-gray-100"
+>
   <Table
     shadow
     id="grade-guideline"
@@ -38,7 +40,7 @@
       <TableHeadCell class="w-40 text-center">対応グレード</TableHeadCell>
     </TableHead>
 
-    <TableBody class="divide-y">
+    <TableBody class="divide-y divide-gray-200 dark:divide-gray-700">
       {#each gradeGuidelineTableData as { point, task, lowerGrade, upperGrade }}
         <TableBodyRow>
           <TableBodyCell class="text-sm xs:text-md text-center py-3">{point}</TableBodyCell>

@@ -68,7 +68,7 @@
 </script>
 
 <div class="container mx-auto w-5/6">
-  <form method="post" use:enhance use:preventEnterKey class="space-y-4">
+  <form method="post" use:enhance use:preventEnterKey class="flex flex-col gap-4">
     <HeadingOne title={pageTitle} />
 
     <Breadcrumb aria-label="">

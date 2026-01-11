@@ -45,7 +45,7 @@
 
 <!-- FIXME: 問題集の種類別にコンポーネントを分ける -->
 <!-- HACK: (2024年9月時点) 問題集の仕様が大きく異なるので、暫定的に条件分岐で対処 -->
-<div class="overflow-auto rounded-md border">
+<div class="overflow-auto rounded-md border border-gray-200 dark:border-gray-100">
   <Table shadow class="text-md">
     <TableHead class="text-sm bg-gray-100">
       {#if workbookType === WorkBookType.CURRICULUM}
@@ -66,7 +66,7 @@
       <TableHeadCell></TableHeadCell>
     </TableHead>
 
-    <TableBody class="divide-y">
+    <TableBody class="divide-y divide-gray-200 dark:divide-gray-700">
       {#each workbooks as workbook}
         {#if canRead(workbook.isPublished, userId, workbook.authorId)}
           <TableBodyRow>

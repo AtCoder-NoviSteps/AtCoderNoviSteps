@@ -34,7 +34,7 @@
     <TableHeadCell class="w-1/8">公開中</TableHeadCell>
     <TableHeadCell class="w-1/8"></TableHeadCell>
   </TableHead>
-  <TableBody class="divide-y">
+  <TableBody class="divide-y divide-gray-200 dark:divide-gray-700">
     {#each tags as tag}
       <TableBodyRow>
         <TableBodyCell class="p-3">
