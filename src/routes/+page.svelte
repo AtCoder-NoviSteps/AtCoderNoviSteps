@@ -1,7 +1,7 @@
 <!-- See: -->
 <!-- https://lucia-auth.com/guidebook/sign-in-with-username-and-password/sveltekit/ -->
 <script lang="ts">
-  import { Heading, Button, Carousel, CarouselIndicators } from 'flowbite-svelte';
+  import { Heading, Button, Carousel } from 'flowbite-svelte';
   import ArrowRight from '@lucide/svelte/icons/arrow-right';
 
   import ExternalLinkWrapper from '$lib/components/ExternalLinkWrapper.svelte';
@@ -101,9 +101,7 @@
         duration={3000}
         slideFit="contain"
         class="min-h-75 xs:min-h-100 md:min-h-135"
-      >
-        <CarouselIndicators />
-      </Carousel>
+      />
     </div>
 
     <div class="flex flex-wrap justify-center items-center">
