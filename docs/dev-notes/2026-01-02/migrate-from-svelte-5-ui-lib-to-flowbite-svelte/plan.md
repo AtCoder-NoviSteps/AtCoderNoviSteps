@@ -1021,3 +1021,188 @@ Running 10 tests using 3 workers
 - カテゴリ1（属性変更不要）: Heading, Button, Label, Input, Card など約20個
 - カテゴリ2（属性調整必要）: Tabs, Tooltip, Checkbox, Radio, Toggle など約10個
 - カテゴリ3（Carousel 削除）: embla-carousel → Flowbite Carousel への置き換え完了（2026-01-04 ✅）
+
+---
+
+## ⚠️ 発見されたバグ：Flowbite-Svelte v1.31.0 の Navbar コンポーネント
+
+**調査日**: 2026-01-12
+
+**調査者**: ユーザー検証
+
+**ステータス**: 確認済み（v2.0 対応待ち推奨）
+
+### バグの症状
+
+ドキュメント通りに実装しても、以下の props が反映されていない：
+
+```svelte
+<!-- Header.svelte での実装（ドキュメント通り） -->
+<Navbar fluid={true} breakpoint="xl" class="">
+  <!-- ... -->
+</Navbar>
+
+<!-- 期待値 -->
+<!-- breakpoint="xl" → xl:flex-row クラスが生成される -->
+<!-- fluid={true} → w-full で 100% 幅 -->
+
+<!-- 実際の出力 -->
+<!-- breakpoint はデフォルト "md" → md:flex-row のみ生成 -->
+<!-- fluid={true} でも width が 323.719px に制限される（container の max-width） -->
+```
+
+### 根本原因の特定
+
+#### **問題1: breakpoint が効かない（確定）**
+
+**原因:** Svelte 5 Context API の不正な実装
+
+```
+flowbite-svelte/dist/context.js:
+  - モジュールレベルで createContext() を呼び出している
+  - Svelte 5 では component initialization 中に呼ぶ必要がある
+  - 結果、context propagation が完全に失敗している
+
+Navbar.svelte:
+  - $effect(() => { setNavbarBreakpointContext(breakpoint) })
+  - $effect は reactivity であり component initialization ではない
+  - context が子コンポーネントに伝わらない
+
+NavUl.svelte:
+  - getNavbarBreakpointContext() が undefined を返す
+  - デフォルト値 "md" がずっと使用される
+  - navBreakpoint ?? "md" でデフォルト値に fallback
+```
+
+**検証結果:**
+
+- ✅ HTML に `md:flex-row` のみ生成されている
+- ✅ `xl:flex-row` クラスは生成されていない
+- ✅ Console で `getNavbarBreakpointContext is not defined` エラー（context scope の問題を示唆）
+
+**テスト結果:**
+
+```
+<ul class="flex flex-col p-4 mt-0 rtl:space-x-reverse md:flex-row md:text-sm md:font-medium">
+<!-- xl: クラスが見当たらない → breakpoint="xl" prop が反映されていない -->
+```
+
+---
+
+#### **問題2: fluid が効かない（部分的に確定）**
+
+**原因:** Tailwind CSS v4 対応不足 + CSS specificity 問題
+
+```
+HTML には w-full が生成されている：
+  <div class="mx-auto flex flex-wrap items-center justify-between w-full">
+
+しかし Styles タブでは：
+  - .w-full { width: 100%; } は打ち消し線
+  - div.w-full という selector が上書き
+  - max-width: 528px (container の制限) が優先される
+
+CSS ファイルには .w-full の定義がない：
+  - Tailwind CSS v4 では CSS-driven で必要なクラスのみ生成
+  - flowbite-svelte が v4 に完全対応していない可能性
+```
+
+**検証結果:**
+
+- ✅ `fluid={true}` と `fluid={false}` で HTML のクラスは異なっている
+- ✅ `fluid={true}` → `w-full` が生成される
+- ✅ `fluid={false}` → `container` が生成される
+- ❌ しかし実際の width は両方とも 528px に制限されている
+- ❌ `.w-full` の CSS 定義が存在しない
+
+**DevTools 確認結果:**
+
+```
+Styles タブ：
+  - .w-full: あり（width: 100%）← 打ち消し線で上書きされている
+  - div.w-full: 上書きルール（max-width: 528px 等）
+
+Computed タブ：
+  - width: 528px（container の max-width）
+```
+
+### 原因分析
+
+#### **breakpoint 問題の根本**
+
+Svelte 5 の Context API 仕様：
+
+```javascript
+// ❌ 不正な使用方法（現在のコード）
+const [getMyContext, setMyContext] = createContext(); // モジュールレベル
+// context の scope がコンポーネント tree と無関係になる
+
+// ✅ 正しい使用方法
+// Navbar.svelte 内で（component initialization 中に）
+const [getMyContext, setMyContext] = createContext();
+setMyContext(breakpoint); // component initialization 中に呼ぶ
+```
+
+createContext() をモジュールレベルで呼ぶと、context の "scope key" がそのモジュール限定になり、コンポーネント tree での propagation が機能しない。
+
+#### **fluid 問題の根本**
+
+Tailwind CSS v4 での `.w-full` 生成失敗：
+
+```css
+/* Tailwind v4 では @source で明示されたファイルのみスキャン */
+@source "../src/**/*";
+@source "../node_modules/flowbite-svelte/dist/**/*";
+
+/* flowbite-svelte で w-full が使用されていないか、
+   v4 での生成ロジックで漏れている可能性 */
+```
+
+CSS specificity の問題：
+
+```
+.w-full { width: 100%; }        /* specificity: 0,1,0 */
+div.w-full { max-width: 528px; } /* specificity: 0,2,0 - 上書き */
+```
+
+### 推奨アクション
+
+#### **短期（v1.31.0 での対応不可）**
+
+1. **GitHub Issues で報告検討**
+   - v1.31.0 は maintenance mode のため対応が難しい可能性あり
+   - v2.0 の開発が進行中（issue #1614 で確認）
+
+2. **v2.0 へのアップグレード待機**
+   - Svelte 5 + Tailwind v4 対応の完成度が大幅向上の可能性
+   - リリーススケジュールを GitHub で確認
+
+3. **一時的な workaround（必要に応じて）**
+   - `pnpm patch flowbite-svelte` でローカル修正
+   - または、別のコンポーネントライブラリの検討
+
+#### **長期（v2.0 リリース後）**
+
+- v2.0 でこれらのバグが解決されているか確認
+- 解決されていれば速やかに upgrade を検討
+- 解決されていなければ、fork or alternative library への切り替え
+
+### 参考情報
+
+**関連ドキュメント:**
+
+- [Flowbite-Svelte v2.0 進捗](https://github.com/themesberg/flowbite-svelte/issues/1614)
+- [Svelte 5 Context API](https://svelte.dev/docs/svelte/svelte#createContext)
+- [Tailwind CSS v4 Breaking Changes](https://tailwindcss.com/docs/upgrade-guide)
+
+**テスト条件:**
+
+- flowbite-svelte: 1.31.0
+- svelte: 5.46.1
+- @tailwindcss/postcss: 4.1.18 (Tailwind CSS v4)
+
+### 結論
+
+Flowbite-Svelte v1.31.0 は **Svelte 5 と Tailwind CSS v4 への対応が不完全** であり、navbar の `breakpoint` と `fluid` props は ドキュメント通りに動作しない。
+
+これはユーザーの実装ミスではなく、**ライブラリの既知のバグ** 。v2.0 のリリースを待つか、workaround を検討する必要がある。
