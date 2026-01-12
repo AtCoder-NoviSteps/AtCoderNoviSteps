@@ -1,7 +1,6 @@
 <script lang="ts">
   import {
     Heading,
-    ButtonGroup,
     Button,
     Table,
     TableBody,
@@ -169,15 +168,17 @@
 </script>
 
 <!-- See: -->
-<!-- https://flowbite-svelte.com/docs/components/button-group -->
+<!-- https://flowbite-svelte.com/docs/components/buttons -->
 <div class="flex justify-center md:justify-start m-4">
-  <ButtonGroup class="flex flex-wrap justify-start gap-1 shadow-none">
+  <div class="flex flex-wrap justify-start gap-1 shadow-none">
     {#each Object.entries(contestTableProviderGroups) as [type, config]}
       <Button
         onclick={() => updateActiveContestType(type as ContestTableProviderGroups)}
-        class={`rounded-lg ${
+        color="alternative"
+        size="sm"
+        class={`rounded-lg dark:text-white ${
           activeContestType === (type as ContestTableProviderGroups)
-            ? 'active-button-class text-primary-700 dark:!text-primary-500'
+            ? 'active-button-class text-primary-700 dark:text-primary-500!'
             : ''
         }`}
         aria-label={config.getMetadata().ariaLabel}
@@ -185,7 +186,7 @@
         {config.getMetadata().buttonLabel}
       </Button>
     {/each}
-  </ButtonGroup>
+  </div>
 </div>
 
 <!-- TODO: ページネーションを実装 -->
