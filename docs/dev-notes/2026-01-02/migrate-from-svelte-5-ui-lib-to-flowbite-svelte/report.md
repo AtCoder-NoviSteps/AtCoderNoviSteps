@@ -958,3 +958,36 @@ v3 では divide-y だけで完全に見えていたが、v4 では**外側 bord
 **ビルド状態**: ✅ 成功（エラー・警告なし）
 
 **次回**: `pnpm dev` で visual regression テスト実施
+
+---
+
+## 9. Flowbite-Svelte ButtonGroup の角丸問題（v4移行後の発見）
+
+### 問題
+
+TaskTable.svelte の ButtonGroup 内のボタンの角が見切れていた（最初と最後のボタンのみ丸く、中間ボタンが四角い）
+
+### 根本原因
+
+**Flowbite-Svelte の実装上の問題**:
+
+1. **ButtonGroupのcontext自動設定**
+   - ButtonがButtonGroup内にあると、`getButtonGroupContext()` が自動的に context を返す
+   - Buttonコンポーネント内で `group: !!groupCtx?.size` が true になる
+
+2. **CSSの詳細度の競合**
+   - `pill: true` variant → `rounded-full` (低詳細度)
+   - `group: true` variant → `[&:not(:first-child)]:rounded-s-none [&:not(:last-child)]:rounded-e-none` (高詳細度の子セレクタ)
+   - 子セレクタの方が優先度が高いため、最初と最後以外のボタンの角が削除される
+
+3. **compoundVariantsが空**
+   - theme.js で `pill: true, group: true` の組み合わせが定義されていない
+   - つまり、両方が true の場合の競合解決ルールがない
+
+### 影響
+
+Tailwind CSS v3 では同じ構造でも角丸が表示されていたが、v4 でセレクタ処理が最適化された結果、優先度計算に微妙な変化が生じた可能性
+
+### 解決策
+
+ButtonGroup を使わず、プレーンな `<div>` でボタンをラップすることで、`group: true` が設定されなくなり、`pill: true` が正常に機能する
