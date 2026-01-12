@@ -1044,3 +1044,62 @@ Svelte 5 UI lib から Flowbite Svelte への移行時に、タブが md 未満�
 
 - **レスポンシブ対応は「全体」ではなく「個別要素」で制御**
   - `TabItemWrapper` を一括修正するのではなく、`Tabs` コンポーネント自体に responsive クラスを指定する方が効率的
+
+---
+
+## Dropdown コンポーネントのスタイリング（2026-01-12）
+
+### 問題点
+
+Flowbite Svelte v1.31 の Dropdown でデフォルト設定に以下の問題があった：
+
+1. **「・」（bullet point）が表示される**
+   - 各 `DropdownItem` が `<li>` でラップされ、ブラウザのデフォルト `list-disc` が表示される
+   - theme.ts の `li` slot が空で、`list-style` の制御がない
+
+2. **内側に `divide-y` が自動挿入**
+   - デフォルトの `divide-y divide-gray-300` でアイテム間に線が入る
+
+3. **外側に `border` がない**
+   - デフォルトでは `shadow-sm` のみで、border が提供されていない
+
+4. **ドロップダウンがボタンの右端に揃わない**
+   - placement `"bottom"` だけではドロップダウンの右端がボタンからずれていた
+
+### 解決策
+
+```svelte
+<Dropdown
+  triggeredBy={`#trigger-${id}`}
+  placement={isInBottomHalf ? 'top-end' : 'bottom-end'}
+  simple
+  class="w-32 z-50 border border-gray-200 dark:border-gray-100"
+>
+  {#each items as item}
+    <DropdownItem onclick={handleClick} class="rounded-md">
+      {item.label}
+    </DropdownItem>
+  {/each}
+</Dropdown>
+```
+
+**各施策の効果：**
+
+| 施策                                          | 効果                                                                           |
+| --------------------------------------------- | ------------------------------------------------------------------------------ |
+| `simple` 属性                                 | `DropdownGroup` で `<ul>` をラップ → `divide-y` の自動挿入が制御される         |
+| `placement="*-end"`                           | Floating UI で右端揃えを実現                                                   |
+| `border border-gray-200 dark:border-gray-100` | 外側に明示的なボーダーを追加                                                   |
+| `class="rounded-md"` on items                 | `liClass="list-none"` より、各 item の見た目を統一（`<li>` 内の `<a>` に適用） |
+
+### 重要な学び
+
+- **Flowbite Svelte のデフォルトは UI の基本形だけで、実用的なスタイリングには theme.ts の制約を意識すべき**
+  - `divide-y` は Header/Group/Footer との区切りのみが意図で、通常のドロップダウンには不要
+  - `border` は明示的に指定する必要がある
+
+- **Floating UI の placement オプションは `*-start`/`*-end` で細かい配置制御ができる**
+  - `bottom` → `bottom-end` で自動的に右端揃えが実現できる
+
+- **props の組み合わせ（`simple`, `placement`, `class`）を統合的に考える必要がある**
+  - 個別の施策ではなく、コンポーネント全体として一貫した設定が重要

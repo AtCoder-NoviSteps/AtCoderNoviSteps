@@ -174,8 +174,8 @@
   });
 </script>
 
+<!-- Trigger Button -->
 <div class="flex items-center gap-1">
-  <!-- Trigger Button -->
   <div
     id={`update-dropdown-trigger-${componentId}`}
     class="shrink-0 w-6 ml-auto cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700 rounded-sm p-1 transition text-gray-700 dark:text-gray-400"
@@ -191,8 +191,9 @@
 <!-- Note: Split outside div for better control, auto-linked with triggeredBy -->
 <Dropdown
   triggeredBy={`#update-dropdown-trigger-${componentId}`}
-  placement={isInBottomHalf ? 'top' : 'bottom'}
-  class="w-32 z-50"
+  placement={isInBottomHalf ? 'top-end' : 'bottom-end'}
+  simple
+  class="w-32 z-50 border border-gray-200 dark:border-gray-100"
 >
   {#if isLoggedIn}
     {#each submissionStatusOptions as submissionStatus}
@@ -208,9 +209,9 @@
       </DropdownItem>
     {/each}
   {:else}
-    <DropdownItem href={SIGNUP_PAGE} class="rounded-lg">アカウント作成</DropdownItem>
+    <DropdownItem href={SIGNUP_PAGE} class="rounded-md">アカウント作成</DropdownItem>
     <DropdownDivider />
-    <DropdownItem href={LOGIN_PAGE} class="rounded-lg">ログイン</DropdownItem>
+    <DropdownItem href={LOGIN_PAGE} class="rounded-md">ログイン</DropdownItem>
   {/if}
 </Dropdown>
 
