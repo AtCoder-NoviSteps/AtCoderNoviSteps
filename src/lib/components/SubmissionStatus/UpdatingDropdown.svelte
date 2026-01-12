@@ -29,8 +29,6 @@
 
   import InputFieldWrapper from '$lib/components/InputFieldWrapper.svelte';
 
-  // HACK: Temporarily disable the action for dropdown positioning due to issues with Flowbite-Svelte.
-  // import { calculateDropdownPosition } from '$lib/actions/handle_dropdown';
   import { submission_statuses } from '$lib/services/submission_status';
   import { errorMessageStore } from '$lib/stores/error_message';
 
@@ -177,7 +175,7 @@
 </script>
 
 <div class="flex items-center gap-1">
-  <!-- Trigger Button (内部移動) -->
+  <!-- Trigger Button -->
   <div
     id={`update-dropdown-trigger-${componentId}`}
     class="shrink-0 w-6 ml-auto cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700 rounded-sm p-1 transition text-gray-700 dark:text-gray-400"
@@ -189,7 +187,8 @@
   </div>
 </div>
 
-<!-- Dropdown Menu (外側 div から分離、triggeredBy で自動連携) -->
+<!-- Dropdown Menu -->
+<!-- Note: Split outside div for better control, auto-linked with triggeredBy -->
 <Dropdown
   triggeredBy={`#update-dropdown-trigger-${componentId}`}
   placement={isInBottomHalf ? 'top' : 'bottom'}
