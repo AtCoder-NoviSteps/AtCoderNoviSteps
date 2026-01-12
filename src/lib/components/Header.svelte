@@ -9,7 +9,6 @@
     DropdownItem,
     DropdownDivider,
     Modal,
-    Navbar,
     NavBrand,
     NavHamburger,
     NavLi,
@@ -44,88 +43,90 @@
   </NavLi>
 {/snippet}
 
-<Navbar breakpoint="xl" class="">
-  <NavBrand href="/">
-    <img src="../../../favicon.png" class="mr-3 h-6 sm:h-9" alt="{PRODUCT_NAME} Logo" />
-    <span class="self-center whitespace-nowrap text-xl font-semibold dark:text-white">
-      {PRODUCT_NAME}
-    </span>
-  </NavBrand>
+<nav class="text-gray-700 dark:text-gray-200 px-2 sm:px-4 py-0.5 w-full">
+  <div class="mx-auto flex flex-wrap items-center justify-between max-w-none">
+    <NavBrand href="/">
+      <img src="../../../favicon.png" class="mr-3 h-6 sm:h-9" alt="{PRODUCT_NAME} Logo" />
+      <span class="self-center whitespace-nowrap text-xl font-semibold dark:text-white">
+        {PRODUCT_NAME}
+      </span>
+    </NavBrand>
 
-  <NavHamburger />
+    <NavHamburger />
 
-  <NavUl {activeUrl}>
-    {#if $page.data.isAdmin}
-      {@render navLiForDropdown('nav-dashboard', '管理画面')}
+    <NavUl {activeUrl} class="hidden lg:flex lg:w-auto">
+      {#if $page.data.isAdmin}
+        {@render navLiForDropdown('nav-dashboard', '管理画面')}
 
-      <Dropdown triggeredBy="#nav-dashboard" class="w-48 z-20">
-        {#each navbarDashboardLinks as navbarDashboardLink}
-          <DropdownItem href={navbarDashboardLink.path}>
-            {navbarDashboardLink.title}
+        <Dropdown triggeredBy="#nav-dashboard" simple class="w-48 z-20">
+          {#each navbarDashboardLinks as navbarDashboardLink}
+            <DropdownItem href={navbarDashboardLink.path}>
+              {navbarDashboardLink.title}
+            </DropdownItem>
+          {/each}
+        </Dropdown>
+      {/if}
+
+      <!-- Internal Links -->
+      {#each navbarLinks as navbarLink}
+        <NavLi
+          href={navbarLink.path}
+          class="flex items-center"
+          activeClass="dark:text-gray-400 lg:dark:hover:text-white"
+        >
+          {navbarLink.title}
+        </NavLi>
+      {/each}
+
+      {#if !user}
+        <NavLi
+          href="/login"
+          class="flex items-center"
+          activeClass="dark:text-gray-400 lg:dark:hover:text-white"
+        >
+          ログイン
+        </NavLi>
+        <NavLi
+          href="/signup"
+          class="flex items-center"
+          activeClass="dark:text-gray-400 lg:dark:hover:text-white"
+        >
+          アカウント作成
+        </NavLi>
+      {:else}
+        {@render navLiForDropdown('nav-user-page', user.name)}
+
+        <Dropdown triggeredBy="#nav-user-page" simple class="w-48 z-20">
+          <!-- Profile -->
+          <DropdownItem href="/users/edit">基本設定</DropdownItem>
+
+          <DropdownDivider />
+
+          <!-- Logout -->
+          <DropdownItem
+            onclick={() => (isOpenModalForLogout = true)}
+            class="font-medium py-2 px-4 text-sm text-left text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600"
+          >
+            ログアウト
+          </DropdownItem>
+        </Dropdown>
+      {/if}
+
+      <!-- External Links -->
+      {@render navLiForDropdown('nav-external-links', '外部リンク')}
+
+      <Dropdown triggeredBy="#nav-external-links" simple class="w-48 z-20">
+        {#each externalLinks as externalLink}
+          <DropdownItem href={externalLink.path} target="_blank">
+            {externalLink.title}
           </DropdownItem>
         {/each}
       </Dropdown>
-    {/if}
 
-    <!-- Internal Links -->
-    {#each navbarLinks as navbarLink}
-      <NavLi
-        href={navbarLink.path}
-        class="flex items-center"
-        activeClass="dark:text-gray-400 lg:dark:hover:text-white"
-      >
-        {navbarLink.title}
-      </NavLi>
-    {/each}
-
-    {#if !user}
-      <NavLi
-        href="/login"
-        class="flex items-center"
-        activeClass="dark:text-gray-400 lg:dark:hover:text-white"
-      >
-        ログイン
-      </NavLi>
-      <NavLi
-        href="/signup"
-        class="flex items-center"
-        activeClass="dark:text-gray-400 lg:dark:hover:text-white"
-      >
-        アカウント作成
-      </NavLi>
-    {:else}
-      {@render navLiForDropdown('nav-user-page', user.name)}
-
-      <Dropdown triggeredBy="#nav-user-page" class="w-48 z-20">
-        <!-- Profile -->
-        <DropdownItem href="/users/edit">基本設定</DropdownItem>
-
-        <DropdownDivider />
-
-        <!-- Logout -->
-        <DropdownItem
-          onclick={() => (isOpenModalForLogout = true)}
-          class="font-medium py-2 px-4 text-sm text-left text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600"
-        >
-          ログアウト
-        </DropdownItem>
-      </Dropdown>
-    {/if}
-
-    <!-- External Links -->
-    {@render navLiForDropdown('nav-external-links', '外部リンク')}
-
-    <Dropdown triggeredBy="#nav-external-links" class="w-48 z-20">
-      {#each externalLinks as externalLink}
-        <DropdownItem href={externalLink.path} target="_blank">
-          {externalLink.title}
-        </DropdownItem>
-      {/each}
-    </Dropdown>
-
-    <DarkMode />
-  </NavUl>
-</Navbar>
+      <DarkMode />
+    </NavUl>
+  </div>
+</nav>
 
 <!-- Logout Modal -->
 <Modal bind:open={isOpenModalForLogout} size="xs" outsideclose={true}>
