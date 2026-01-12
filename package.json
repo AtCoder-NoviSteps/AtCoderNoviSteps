@@ -35,7 +35,7 @@
     "@types/gtag.js": "0.0.20",
     "@types/jsdom": "27.0.0",
     "@typescript-eslint/eslint-plugin": "8.52.0",
-    "@typescript-eslint/parser": "8.52.0",
+    "@typescript-eslint/parser": "8.53.0",
     "@vitest/coverage-v8": "4.0.16",
     "@vitest/ui": "4.0.16",
     "eslint": "9.39.2",
