@@ -991,3 +991,56 @@ Tailwind CSS v3 では同じ構造でも角丸が表示されていたが、v4 �
 ### 解決策
 
 ButtonGroup を使わず、プレーンな `<div>` でボタンをラップすることで、`group: true` が設定されなくなり、`pill: true` が正常に機能する
+
+---
+
+## 教訓: Flowbite Svelte Tabs のレスポンシブ対応
+
+### 事象
+
+Svelte 5 UI lib から Flowbite Svelte への移行時に、タブが md 未満の画面幅で「回り込む」のではなく「文字が圧縮される」という違いが発生。
+またレスポンシブ時に無駄な高さが出ていた。
+
+### 原因分析
+
+**1. デフォルトスタイルの制限**
+
+- Flowbite Svelte の `Tabs` コンポーネントは theme.ts で固定的なスタイルを設定
+  - `base: "flex space-x-2 rtl:space-x-reverse"`（flex のみ、flex-wrap がない）
+  - 各タブボタンの幅が自動決定されるため、狭い画面では圧縮される
+
+**2. Flexbox の動作**
+
+- デフォルトの `align-items: stretch` により、折り返し時に全行が最大高さで統一される
+- Tailwind CSS v4 での `gap` と `space-x` の使い分けが重要
+
+### 解決策
+
+`<Tabs>` コンポーネントの `ulClass` プロップで以下を指定：
+
+```svelte
+<Tabs
+  tabStyle="underline"
+  ulClass="flex flex-wrap md:flex-nowrap gap-2 rtl:space-x-reverse items-start md:items-center"
+>
+```
+
+**ポイント：**
+
+1. **`flex-wrap`**: md 未満で折り返し有効化
+2. **`md:flex-nowrap`**: md 以上で1行固定
+3. **`gap-2`**: Tailwind v4 推奨（`space-x-*` は legacy）
+4. **`items-start`**: md 未満で高さを最小化（全行が最大高さに統一されない）
+5. **`md:items-center`**: md 以上で元の中央揃え動作に戻す
+
+### 重要な学び
+
+- **Flowbite Svelte は「見た目の制御」が component 内部に深く組み込まれている**
+  - 単に CSS class を追加するだけでは不十分
+  - `ulClass` などの専用プロップで `<ul>` の flexbox 動作を明示的に制御する必要がある
+
+- **Tailwind CSS v4 では legacy な spacing syntax (`space-x-*`, `space-y-*`) を避けるべき**
+  - `gap` の方がより予測可能で、flex/grid 両方で統一できる
+
+- **レスポンシブ対応は「全体」ではなく「個別要素」で制御**
+  - `TabItemWrapper` を一括修正するのではなく、`Tabs` コンポーネント自体に responsive クラスを指定する方が効率的

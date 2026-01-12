@@ -36,7 +36,11 @@
 
   <!-- See: -->
   <!-- https://flowbite-svelte.com/docs/components/tabs -->
-  <Tabs tabStyle="underline" contentClass="bg-white dark:bg-gray-800 mt-0 p-0">
+  <Tabs
+    tabStyle="underline"
+    contentClass="bg-white dark:bg-gray-800 mt-0 p-0"
+    ulClass="flex flex-wrap md:flex-nowrap md:gap-2 rtl:space-x-reverse items-start"
+  >
     <!-- Contest table -->
     {@render problemListTab('コンテスト別（アルファ版）', 'contestTable', contestTable)}
 
