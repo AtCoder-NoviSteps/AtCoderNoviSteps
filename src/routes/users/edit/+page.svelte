@@ -60,7 +60,11 @@
 {/if}
 
 <div class="container mx-auto w-5/6 lg:w-3/4">
-  <Tabs tabStyle="underline" contentClass="bg-white dark:bg-gray-800">
+  <Tabs
+    tabStyle="underline"
+    contentClass="bg-white dark:bg-gray-800"
+    ulClass="flex flex-wrap md:flex-nowrap md:gap-2 rtl:space-x-reverse items-start"
+  >
     <!-- 基本情報 -->
     <TabItem open>
       {#snippet titleSlot()}

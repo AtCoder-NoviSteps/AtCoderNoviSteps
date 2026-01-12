@@ -10,7 +10,7 @@
   let { labelName, innerName = '', inputValue = $bindable() }: Props = $props();
 </script>
 
-<Label class="space-y-2">
+<Label class="flex flex-col gap-2">
   <span>{labelName}</span>
   <Input size="md" disabled readonly name={innerName} bind:value={inputValue} />
 </Label>
