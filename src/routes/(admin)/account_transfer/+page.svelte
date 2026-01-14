@@ -60,9 +60,9 @@
   });
 </script>
 
-<HeadingOne title="アカウント移行" />
-
 <ContainerWrapper>
+  <HeadingOne title="アカウント移行" />
+
   <form method="POST" class="flex flex-col gap-4" action={formAction} use:enhance>
     <div class="dark:text-gray-300">
       新しく作成された空のアカウントに、旧アカウントの回答データをコピーできます。
