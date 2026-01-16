@@ -45,7 +45,7 @@
 
   <NavHamburger />
 
-  <NavUl {activeUrl} ulClass="text-sm items-center lg:text-md lg:font-medium p-0">
+  <NavUl {activeUrl} classes={{ ul: 'text-sm items-center lg:text-md lg:font-medium p-0' }}>
     {#if page.data.isAdmin}
       {@render navLiForDropdown('nav-dashboard', '管理画面')}
 
