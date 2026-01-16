@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { page } from '$app/stores';
+  import { page } from '$app/state';
   import { enhance } from '$app/forms';
 
   import {
@@ -21,7 +21,7 @@
   import { navbarDashboardLinks, navbarLinks } from '$lib/constants/navbar-links';
   import { externalLinks } from '$lib/constants/external-links';
 
-  let activeUrl = $state($page.url.pathname);
+  let activeUrl = $derived(page.url.pathname);
 
   // For Modal
   let isOpenModalForLogout = $state(false);
@@ -30,7 +30,7 @@
     isOpenModalForLogout = false;
   };
 
-  let user = $derived($page.data.user);
+  let user = $derived(page.data.user);
 </script>
 
 <!-- Note: fluid and breakpoint props have not been working in v1.31.0 (as of January, 2026) -->
@@ -46,7 +46,7 @@
   <NavHamburger />
 
   <NavUl {activeUrl} ulClass="text-sm items-center lg:text-md lg:font-medium p-0">
-    {#if $page.data.isAdmin}
+    {#if page.data.isAdmin}
       {@render navLiForDropdown('nav-dashboard', '管理画面')}
 
       <Dropdown triggeredBy="#nav-dashboard" simple class="w-48 z-20">
@@ -63,7 +63,7 @@
       <NavLi
         href={navbarLink.path}
         class="flex items-center"
-        activeClass="dark:text-gray-400 lg:dark:hover:text-white"
+        activeClass="bg-primary-800 text-white md:bg-transparent md:text-primary-700 md:dark:text-primary-500 dark:hover:text-white md:hover:text-primary-700 md:dark:hover:text-white"
       >
         {navbarLink.title}
       </NavLi>
@@ -73,14 +73,14 @@
       <NavLi
         href="/login"
         class="flex items-center"
-        activeClass="dark:text-gray-400 lg:dark:hover:text-white"
+        activeClass="bg-primary-800 text-white md:bg-transparent md:text-primary-700 md:dark:text-primary-500 dark:hover:text-white md:hover:text-primary-700 md:dark:hover:text-white"
       >
         ログイン
       </NavLi>
       <NavLi
         href="/signup"
         class="flex items-center"
-        activeClass="dark:text-gray-400 lg:dark:hover:text-white"
+        activeClass="bg-primary-800 text-white md:bg-transparent md:text-primary-700 md:dark:text-primary-500 dark:hover:text-white md:hover:text-primary-700 md:dark:hover:text-white"
       >
         アカウント作成
       </NavLi>
@@ -123,7 +123,7 @@
   <NavLi
     {id}
     class="flex items-center cursor-pointer"
-    activeClass="dark:text-gray-400 lg:dark:hover:text-white"
+    activeClass="dark:text-primary-500 lg:dark:hover:text-white"
   >
     {description}
     <ChevronDown class="w-3 h-3 ms-1 inline text-primary-800 dark:text-white" />
