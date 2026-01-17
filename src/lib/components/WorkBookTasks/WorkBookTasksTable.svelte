@@ -148,7 +148,7 @@
   </Label>
 
   <div class="rounded-md border border-gray-200 dark:border-gray-700 overflow-hidden">
-    <Table shadow class="text-md table-fixed w-full" aria-label="Workbook tasks">
+    <Table shadow class="text-base table-fixed w-full" aria-label="Workbook tasks">
       <caption class="sr-only">List of workbook tasks with their grades and comments</caption>
       <TableHead class="text-sm bg-gray-100">
         <TableHeadCell class="w-10 pl-3 pr-3 text-center">#</TableHeadCell>
