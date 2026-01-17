@@ -1,7 +1,7 @@
 <script lang="ts">
   import { get } from 'svelte/store';
 
-  import { ButtonGroup, Button, Toggle } from 'svelte-5-ui-lib';
+  import { ButtonGroup, Button, Toggle } from 'flowbite-svelte';
 
   import { taskGradesByWorkBookTypeStore } from '$lib/stores/task_grades_by_workbook_type';
   import { replenishmentWorkBooksStore } from '$lib/stores/replenishment_workbook.svelte';
@@ -39,6 +39,13 @@
   let selectedGrade: TaskGrade = $state(
     get(taskGradesByWorkBookTypeStore).get(workbookType) || TaskGrade.Q10,
   );
+
+  let showReplenishmentWorkbooks = $state(replenishmentWorkBooksStore.canView());
+
+  function handleReplenishmentWorkbooks() {
+    showReplenishmentWorkbooks = !showReplenishmentWorkbooks;
+    replenishmentWorkBooksStore.toggleView();
+  }
 
   // カリキュラム（手引き）、解法別、ユーザ作成
   let mainWorkbooks: WorkbooksList = $derived(
@@ -160,8 +167,8 @@
 
         <div class="mt-4 md:mt-0 pb-4">
           <Toggle
-            checked={replenishmentWorkBooksStore.canView()}
-            onclick={() => replenishmentWorkBooksStore.toggleView()}
+            checked={showReplenishmentWorkbooks}
+            onchange={handleReplenishmentWorkbooks}
             aria-label="Toggle visibility of replenishment workbooks for curriculum"
           >
             問題集を表示
@@ -169,7 +176,7 @@
         </div>
       </div>
 
-      {#if replenishmentWorkBooksStore.canView()}
+      {#if showReplenishmentWorkbooks}
         <WorkBookBaseTable
           {workbookType}
           workbooks={replenishedWorkbooks}

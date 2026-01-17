@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Breadcrumb, BreadcrumbItem } from 'svelte-5-ui-lib';
+  import { Breadcrumb, BreadcrumbItem } from 'flowbite-svelte';
 
   import HeadingOne from '$lib/components/HeadingOne.svelte';
   import WorkBookInputFields from '$lib/components/WorkBook/WorkBookInputFields.svelte';
@@ -68,7 +68,7 @@
 </script>
 
 <div class="container mx-auto w-5/6">
-  <form method="post" use:enhance use:preventEnterKey class="space-y-4">
+  <form method="post" use:enhance use:preventEnterKey class="flex flex-col gap-4">
     <HeadingOne title={pageTitle} />
 
     <Breadcrumb aria-label="">
@@ -100,7 +100,7 @@
       Because the attributes are slightly different, we have no choice
       but to separate the data for storing in the database and for creating and editing workbooks.
     -->
-    <div class="space-y-2">
+    <div class="flex flex-col gap-3">
       <TaskSearchBox {tasks} bind:workBookTasks={$form.workBookTasks} bind:workBookTasksForTable />
       <InputFieldWrapper
         inputFieldType="hidden"

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Button } from 'svelte-5-ui-lib';
+  import { Button } from 'flowbite-svelte';
 
   interface Props {
     width?: string;

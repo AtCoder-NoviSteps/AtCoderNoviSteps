@@ -8,7 +8,7 @@
     TableBody,
     TableBodyCell,
     TableBodyRow,
-  } from 'svelte-5-ui-lib';
+  } from 'flowbite-svelte';
 
   import PublicationStatusLabel from '$lib/components/WorkBooks/PublicationStatusLabel.svelte';
   import CompletedTasks from '$lib/components/Trophies/CompletedTasks.svelte';
@@ -149,7 +149,7 @@
 
   <!-- 問題一覧 -->
   {#if workBookTasks.length}
-    <div class="overflow-auto rounded-md border">
+    <div class="overflow-auto rounded-md border border-gray-200 dark:border-gray-100">
       <Table shadow class="text-md table-fixed w-full">
         <TableHead class="text-xs xs:text-sm bg-gray-100">
           <TableHeadCell class="text-center w-16 xs:w-20 px-0.5 xs:px-0">グレード</TableHeadCell>
@@ -158,7 +158,7 @@
           <TableHeadCell class="w-1/3 hidden xs:table-cell truncate">出典</TableHeadCell>
           <TableHeadCell class="w-14 text-center px-0.5">一言</TableHeadCell>
         </TableHead>
-        <TableBody class="divide-y">
+        <TableBody class="divide-y divide-gray-200 dark:divide-gray-700">
           {#each workBookTasks as workBookTask}
             <TableBodyRow
               id={getUniqueIdUsing(workBookTask.taskId)}

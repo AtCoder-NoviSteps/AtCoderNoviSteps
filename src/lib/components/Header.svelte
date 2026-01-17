@@ -1,140 +1,60 @@
 <script lang="ts">
-  import { page } from '$app/stores';
+  import { page } from '$app/state';
   import { enhance } from '$app/forms';
 
   import {
     Button,
-    Darkmode,
+    DarkMode,
     Dropdown,
-    DropdownUl,
-    DropdownLi,
+    DropdownItem,
     DropdownDivider,
     Modal,
     Navbar,
     NavBrand,
+    NavHamburger,
     NavLi,
     NavUl,
-    uiHelpers,
-  } from 'svelte-5-ui-lib';
+  } from 'flowbite-svelte';
   import ChevronDown from '@lucide/svelte/icons/chevron-down';
 
   import { PRODUCT_NAME } from '$lib/constants/product-info';
   import { navbarDashboardLinks, navbarLinks } from '$lib/constants/navbar-links';
   import { externalLinks } from '$lib/constants/external-links';
 
-  let activeUrl = $state($page.url.pathname);
-
-  // For Navbar
-  //
-  // See:
-  // https://svelte-5-ui-lib.codewithshin.com/components/navbar
-  let nav = uiHelpers();
-  let navStatus = $state(false);
-  let toggleNav = nav.toggle;
-  let closeNav = nav.close;
-
-  // For Dropdown
-  // 1. Admin dashboard
-  let dropdownForDashboard = uiHelpers();
-  let dropdownForDashboardStatus = $state(false);
-  let closeDropdownForDashboard = dropdownForDashboard.close;
-
-  // 2. User page
-  let dropdownForUserPage = uiHelpers();
-  let dropdownForUserPageStatus = $state(false);
-  let closeDropdownForUserPage = dropdownForUserPage.close;
-
-  // 3. External links
-  let dropdownForExternalLinks = uiHelpers();
-  let dropdownForExternalLinksStatus = $state(false);
-  let closeDropdownForExternalLinks = dropdownForExternalLinks.close;
+  let activeUrl = $derived(page.url.pathname);
 
   // For Modal
-  // Logout
-  //
-  // See:
-  // https://svelte-5-ui-lib.codewithshin.com/components/modal
-  const modalForLogout = uiHelpers();
-  let modalForLogoutStatus = $state(false);
-  const openModal = modalForLogout.open;
-  const closeModal = modalForLogout.close;
+  let isOpenModalForLogout = $state(false);
 
-  $effect(() => {
-    activeUrl = $page.url.pathname;
-
-    navStatus = nav.isOpen;
-
-    dropdownForDashboardStatus = dropdownForDashboard.isOpen;
-    dropdownForUserPageStatus = dropdownForUserPage.isOpen;
-    dropdownForExternalLinksStatus = dropdownForExternalLinks.isOpen;
-
-    modalForLogoutStatus = modalForLogout.isOpen;
-  });
-
-  let user = $derived($page.data.user);
-
-  function handleDropdownForUserPage(): void {
-    dropdownForUserPage.toggle();
-  }
-
-  // Close dropdowns when user state changes
-  const dropdownManager = {
-    dropdowns: [
-      { name: 'dashboard', close: closeDropdownForDashboard },
-      { name: 'userPage', close: closeDropdownForUserPage },
-      { name: 'externalLinks', close: closeDropdownForExternalLinks },
-    ],
-    closeAll() {
-      this.dropdowns.forEach((dropdown) => dropdown.close());
-    },
+  const closeLogoutModal = () => {
+    isOpenModalForLogout = false;
   };
 
-  $effect(() => {
-    if (user) {
-      dropdownManager.closeAll();
-    }
-  });
+  let user = $derived(page.data.user);
 </script>
 
-{#snippet navLiForDropdown(id: string, description: string, onclick: () => void)}
-  <NavLi
-    {id}
-    class="flex items-center cursor-pointer"
-    aClass="dark:text-gray-400 lg:dark:hover:text-white"
-    {onclick}
-  >
-    {description}
-    <ChevronDown class="w-3 h-3 ms-1 inline text-primary-800 dark:text-white" />
-  </NavLi>
-{/snippet}
+<!-- Note: fluid and breakpoint props have not been working in v1.31.0 (as of January, 2026) -->
+<!-- See: docs/dev-notes/2026-01-02/migrate-from-svelte-5-ui-lib-to-flowbite-svelte/plan.md -->
+<Navbar fluid={true} breakpoint="lg">
+  <NavBrand href="/">
+    <img src="../../../favicon.png" class="mr-3 h-6 sm:h-9" alt="{PRODUCT_NAME} Logo" />
+    <span class="self-center whitespace-nowrap text-xl font-semibold dark:text-white">
+      {PRODUCT_NAME}
+    </span>
+  </NavBrand>
 
-<Navbar {toggleNav} {closeNav} {navStatus} breakPoint="lg" divClass="max-w-none">
-  {#snippet brand()}
-    <NavBrand href="/">
-      <img src="../../../favicon.png" class="mr-3 h-6 sm:h-9" alt="{PRODUCT_NAME} Logo" />
-      <span class="self-center whitespace-nowrap text-xl font-semibold dark:text-white">
-        {PRODUCT_NAME}
-      </span>
-    </NavBrand>
-  {/snippet}
+  <NavHamburger />
 
-  <NavUl {activeUrl} class="bg-white dark:bg-gray-900 relative">
-    <!-- Dashboard (Admin only) -->
-    {#if $page.data.isAdmin}
-      {@render navLiForDropdown('nav-dashboard', '管理画面', dropdownForDashboard.toggle)}
+  <NavUl {activeUrl} classes={{ ul: 'text-sm items-center lg:text-md lg:font-medium p-0' }}>
+    {#if page.data.isAdmin}
+      {@render navLiForDropdown('nav-dashboard', '管理画面')}
 
-      <Dropdown
-        dropdownStatus={dropdownForDashboardStatus}
-        closeDropdown={closeDropdownForDashboard}
-        class="absolute w-44 z-20 left-32 mt-0 lg:-left-10 lg:mt-10"
-      >
-        <DropdownUl>
-          {#each navbarDashboardLinks as navbarDashboardLink}
-            <DropdownLi href={navbarDashboardLink.path} rel="noreferrer">
-              {navbarDashboardLink.title}
-            </DropdownLi>
-          {/each}
-        </DropdownUl>
+      <Dropdown triggeredBy="#nav-dashboard" simple class="w-48 z-20">
+        {#each navbarDashboardLinks as navbarDashboardLink}
+          <DropdownItem href={navbarDashboardLink.path}>
+            {navbarDashboardLink.title}
+          </DropdownItem>
+        {/each}
       </Dropdown>
     {/if}
 
@@ -143,7 +63,7 @@
       <NavLi
         href={navbarLink.path}
         class="flex items-center"
-        aClass="dark:text-gray-400 lg:dark:hover:text-white"
+        activeClass="bg-primary-800 text-white md:bg-transparent md:text-primary-700 md:dark:text-primary-500 dark:hover:text-white md:hover:text-primary-700 md:dark:hover:text-white"
       >
         {navbarLink.title}
       </NavLi>
@@ -153,69 +73,80 @@
       <NavLi
         href="/login"
         class="flex items-center"
-        aClass="dark:text-gray-400 lg:dark:hover:text-white"
+        activeClass="bg-primary-800 text-white md:bg-transparent md:text-primary-700 md:dark:text-primary-500 dark:hover:text-white md:hover:text-primary-700 md:dark:hover:text-white"
       >
         ログイン
       </NavLi>
       <NavLi
         href="/signup"
         class="flex items-center"
-        aClass="dark:text-gray-400 lg:dark:hover:text-white"
+        activeClass="bg-primary-800 text-white md:bg-transparent md:text-primary-700 md:dark:text-primary-500 dark:hover:text-white md:hover:text-primary-700 md:dark:hover:text-white"
       >
         アカウント作成
       </NavLi>
     {:else}
-      {@render navLiForDropdown('nav-user-page', user.name, () => handleDropdownForUserPage())}
+      {@render navLiForDropdown('nav-user-page', user.name)}
 
-      <Dropdown
-        dropdownStatus={dropdownForUserPageStatus}
-        closeDropdown={closeDropdownForUserPage}
-        class="absolute w-48 z-20 left-32 mt-52 lg:left-auto lg:right-20 lg:mt-10"
-      >
-        <!-- TODO: アカウントページを表示 -->
-        <DropdownUl>
-          <!-- Profile -->
-          <DropdownLi href="/users/edit">基本設定</DropdownLi>
+      <Dropdown triggeredBy="#nav-user-page" simple class="w-48 z-20">
+        <!-- Profile -->
+        <DropdownItem href="/users/edit">基本設定</DropdownItem>
 
-          <DropdownDivider />
+        <DropdownDivider />
 
-          <!-- Logout -->
-          <button
-            name="logout_helper"
-            onclick={openModal}
-            class="font-medium py-2 px-4 text-sm text-left w-full rounded text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600"
-          >
-            ログアウト
-          </button>
-        </DropdownUl>
+        <!-- Logout -->
+        <DropdownItem
+          onclick={() => (isOpenModalForLogout = true)}
+          class="font-medium py-2 px-4 text-sm text-left text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600"
+        >
+          ログアウト
+        </DropdownItem>
       </Dropdown>
     {/if}
 
     <!-- External Links -->
-    {@render navLiForDropdown('nav-external-links', '外部リンク', dropdownForExternalLinks.toggle)}
+    {@render navLiForDropdown('nav-external-links', '外部リンク')}
 
-    <Dropdown
-      dropdownStatus={dropdownForExternalLinksStatus}
-      closeDropdown={closeDropdownForExternalLinks}
-      class="absolute w-48 z-20 left-32 mt-60 lg:left-auto lg:right-0 lg:mt-10"
-    >
-      <DropdownUl>
-        {#each externalLinks as externalLink}
-          <DropdownLi href={externalLink.path} target="_blank" rel="noreferrer">
-            {externalLink.title}
-          </DropdownLi>
-        {/each}
-      </DropdownUl>
+    <Dropdown triggeredBy="#nav-external-links" simple class="w-48 z-20">
+      {#each externalLinks as externalLink}
+        <DropdownItem href={externalLink.path} target="_blank">
+          {externalLink.title}
+        </DropdownItem>
+      {/each}
     </Dropdown>
 
-    <Darkmode />
+    <DarkMode />
   </NavUl>
 </Navbar>
 
-<Modal size="xs" modalStatus={modalForLogoutStatus} {closeModal} outsideClose>
+<!-- NavLi for Dropdown -->
+{#snippet navLiForDropdown(id: string, description: string)}
+  <NavLi
+    {id}
+    class="flex items-center cursor-pointer"
+    activeClass="dark:text-primary-500 lg:dark:hover:text-white"
+  >
+    {description}
+    <ChevronDown class="w-3 h-3 ms-1 inline text-primary-800 dark:text-white" />
+  </NavLi>
+{/snippet}
+
+<!-- Logout Modal -->
+<Modal bind:open={isOpenModalForLogout} size="xs" outsideclose={true}>
   <p class="font-medium text-lg text-center">ログアウトしますか?</p>
 
-  <form method="post" action="../../logout?/logout" use:enhance onsubmit={closeModal}>
-    <Button name="logout" value="Log out" type="submit" class="w-full">ログアウト</Button>
+  <form method="post" action="../../logout?/logout" use:enhance onsubmit={closeLogoutModal}>
+    <input type="hidden" name="logout" value="Log out" />
+
+    <div class="flex flex-wrap justify-center items-center gap-4">
+      <Button
+        type="button"
+        class="xs:flex-1"
+        color="alternative"
+        onclick={() => (isOpenModalForLogout = false)}
+      >
+        キャンセル
+      </Button>
+      <Button type="submit" class="xs:flex-1">ログアウト</Button>
+    </div>
   </form>
 </Modal>

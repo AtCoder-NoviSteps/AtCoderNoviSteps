@@ -1,7 +1,7 @@
 <script lang="ts">
   import { page } from '$app/state';
 
-  import { Heading, Button } from 'svelte-5-ui-lib';
+  import { Heading, Button } from 'flowbite-svelte';
   import HeadingOne from '$lib/components/HeadingOne.svelte';
 
   import { HOME_PAGE } from '$lib/constants/navbar-links';

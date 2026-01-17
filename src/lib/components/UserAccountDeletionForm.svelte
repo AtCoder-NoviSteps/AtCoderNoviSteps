@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Input, Button, Alert, Checkbox, Modal, uiHelpers } from 'svelte-5-ui-lib';
+  import { Input, Button, Alert, Checkbox, Modal } from 'flowbite-svelte';
   import Info from '@lucide/svelte/icons/info';
 
   import ContainerWrapper from '$lib/components/ContainerWrapper.svelte';
@@ -13,23 +13,8 @@
 
   let { username = $bindable() }: Props = $props();
 
-  let showDeleteButton = $state(false);
-
-  const toggleDeleteButton = () => {
-    showDeleteButton = !showDeleteButton;
-  };
-
-  // For modal
-  // See:
-  // https://svelte-5-ui-lib.codewithshin.com/components/modal
-  const modal = uiHelpers();
-  let modalStatus = $state(false);
-  const openModal = modal.open;
-  const closeModal = modal.close;
-
-  $effect(() => {
-    modalStatus = modal.isOpen;
-  });
+  let isShownButtonForDelete = $state(false);
+  let isOpenModalForDelete = $state(false);
 </script>
 
 <ContainerWrapper>
@@ -43,18 +28,18 @@
     </Alert>
 
     <LabelWrapper labelName="ユーザ名" inputValue={username} />
-    <Checkbox onclick={toggleDeleteButton}>同意する</Checkbox>
+    <Checkbox bind:checked={isShownButtonForDelete}>同意する</Checkbox>
 
-    {#if showDeleteButton}
-      <Button onclick={openModal} class="w-full">アカウントを削除</Button>
+    {#if isShownButtonForDelete}
+      <Button onclick={() => (isOpenModalForDelete = true)} class="w-full">アカウントを削除</Button>
 
-      <Modal size="xs" {modalStatus} {closeModal} outsideClose>
+      <Modal bind:open={isOpenModalForDelete} size="xs" outsideclose={true}>
         <p class="font-medium text-lg text-center">{username}さん、本当に削除しますか?</p>
         <WarningMessageOnDeletingAccount />
 
         <FormWrapper action="?/delete">
           <!-- hiddenでusernameを持つのは共通 -->
-          <Input size="sm" type="hidden" name="username" bind:value={username} />
+          <Input type="hidden" name="username" bind:value={username} />
           <Button type="submit" class="w-full">読んで理解したので、アカウントを削除</Button>
         </FormWrapper>
       </Modal>

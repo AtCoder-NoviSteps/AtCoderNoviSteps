@@ -1,6 +1,6 @@
 <script lang="ts">
   import { get } from 'svelte/store';
-  import { Button, Tabs } from 'svelte-5-ui-lib';
+  import { Button, Tabs } from 'flowbite-svelte';
 
   import { Roles } from '$lib/types/user';
   import {
@@ -135,7 +135,11 @@
 
   <!-- TODO: ページネーションを追加 -->
   <div>
-    <Tabs tabStyle="underline" contentClass="bg-white dark:bg-gray-800 mt-0 p-0">
+    <Tabs
+      tabStyle="underline"
+      contentClass="bg-white dark:bg-gray-800 mt-0 p-0"
+      ulClass="flex flex-wrap md:flex-nowrap md:gap-2 rtl:space-x-reverse items-start"
+    >
       {#each workBookTabs as workBookTab}
         {#if loggedInUser && canViewWorkBook(role, workBookTab.canUsersView)}
           <TabItemWrapper

@@ -2,7 +2,7 @@
   import { tick } from 'svelte';
   import { goto } from '$app/navigation';
 
-  import { Card, Button, Label, Input, Hr } from 'svelte-5-ui-lib';
+  import { Card, Button, Label, Input, Hr } from 'flowbite-svelte';
 
   // 必要なコンポーネントだけを読み込んで、コンパイルを時間を短縮
   import CircleUserRound from '@lucide/svelte/icons/circle-user-round';
@@ -101,8 +101,8 @@
 <!-- See: -->
 <!-- https://github.com/lucide-icons/lucide -->
 <div class="container mx-auto py-8 w-5/6 flex flex-col items-center">
-  <Card class="w-full max-w-md">
-    <form id="auth-form" method="post" use:enhance class="flex flex-col space-y-6">
+  <Card class="w-full max-w-md p-4 sm:p-6 md:p-8">
+    <form id="auth-form" method="post" use:enhance class="flex flex-col gap-6">
       <h3 class="text-xl font-medium text-gray-900 dark:text-white">{title}</h3>
       <MessageHelperWrapper message={$message} />
 
@@ -118,7 +118,7 @@
       </Button>
 
       <div>
-        <Hr hrClass="my-2 h-0.5 bg-gray-400 dark:bg-gray-200" />
+        <Hr class="my-2 h-0.5 bg-gray-400 dark:bg-gray-200" />
       </div>
 
       <!-- User name -->

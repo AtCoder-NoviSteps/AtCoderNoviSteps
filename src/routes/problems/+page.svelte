@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { Snippet } from 'svelte';
 
-  import { Tabs } from 'svelte-5-ui-lib';
+  import { Tabs } from 'flowbite-svelte';
 
   import type { TaskResults } from '$lib/types/task';
 
@@ -36,7 +36,11 @@
 
   <!-- See: -->
   <!-- https://flowbite-svelte.com/docs/components/tabs -->
-  <Tabs tabStyle="underline" contentClass="bg-white dark:bg-gray-800 mt-0 p-0">
+  <Tabs
+    tabStyle="underline"
+    contentClass="bg-white dark:bg-gray-800 mt-0 p-0"
+    ulClass="flex flex-wrap md:flex-nowrap md:gap-2 rtl:space-x-reverse items-start"
+  >
     <!-- Contest table -->
     {@render problemListTab('コンテスト別（アルファ版）', 'contestTable', contestTable)}
 

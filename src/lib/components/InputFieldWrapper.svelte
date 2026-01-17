@@ -1,7 +1,7 @@
 <script lang="ts">
   import { type HTMLInputTypeAttribute } from 'svelte/elements';
 
-  import { Label, Input } from 'svelte-5-ui-lib';
+  import { Label, Input } from 'flowbite-svelte';
 
   import MessageHelperWrapper from '$lib/components/MessageHelperWrapper.svelte';
 
@@ -29,7 +29,7 @@
   let isReadOnly = !isEditable;
 </script>
 
-<Label class="space-y-2">
+<Label class="flex flex-col gap-2">
   <span>{labelName}</span>
   <Input
     type={inputFieldType}

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Heading, Button } from 'svelte-5-ui-lib';
+  import { Heading, Button } from 'flowbite-svelte';
   import HeadingOne from '$lib/components/HeadingOne.svelte';
 
   interface Props {

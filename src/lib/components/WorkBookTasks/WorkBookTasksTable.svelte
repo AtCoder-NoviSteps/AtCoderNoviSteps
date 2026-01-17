@@ -8,7 +8,7 @@
     TableBodyRow,
     TableHead,
     TableHeadCell,
-  } from 'svelte-5-ui-lib';
+  } from 'flowbite-svelte';
   import Trash2 from '@lucide/svelte/icons/trash-2';
 
   import GradeLabel from '$lib/components/GradeLabel.svelte';
@@ -147,104 +147,106 @@
     <span>問題一覧（{workBookTasksForTable.length} 問）</span>
   </Label>
 
-  <Table shadow class="text-md table-fixed w-full" aria-label="Workbook tasks">
-    <caption class="sr-only">List of workbook tasks with their grades and comments</caption>
-    <TableHead class="text-sm bg-gray-100">
-      <TableHeadCell class="w-10 pl-3 pr-3 text-center">#</TableHeadCell>
-      <TableHeadCell class="w-16 xs:w-20 text-center px-0" aria-label="Task grade">
-        グレード
-      </TableHeadCell>
-      <TableHeadCell class="w-1/2 pl-0 truncate">問題名</TableHeadCell>
-      <TableHeadCell class="w-1/3 hidden sm:table-cell truncate">出典</TableHeadCell>
-      <TableHeadCell class="w-24 md:w-64 hidden sm:table-cell px-0 truncate">
-        一言（50文字以下）
-      </TableHeadCell>
-      <TableHeadCell class="w-12 xs:w-16 text-center">
-        <span class="sr-only">編集</span>
-      </TableHeadCell>
-    </TableHead>
+  <div class="rounded-md border border-gray-200 dark:border-gray-700 overflow-hidden">
+    <Table shadow class="text-base table-fixed w-full" aria-label="Workbook tasks">
+      <caption class="sr-only">List of workbook tasks with their grades and comments</caption>
+      <TableHead class="text-sm bg-gray-100">
+        <TableHeadCell class="w-10 pl-3 pr-3 text-center">#</TableHeadCell>
+        <TableHeadCell class="w-16 xs:w-20 text-center px-0" aria-label="Task grade">
+          グレード
+        </TableHeadCell>
+        <TableHeadCell class="w-1/2 pl-0 truncate">問題名</TableHeadCell>
+        <TableHeadCell class="w-1/3 hidden sm:table-cell truncate">出典</TableHeadCell>
+        <TableHeadCell class="w-24 md:w-64 hidden sm:table-cell px-0 truncate">
+          一言（50文字以下）
+        </TableHeadCell>
+        <TableHeadCell class="w-12 xs:w-16 text-center">
+          <span class="sr-only">削除</span>
+        </TableHeadCell>
+      </TableHead>
 
-    <TableBody class="divide-y">
-      {#each workBookTasksForTable as task, index}
-        <TableBodyRow>
-          <!-- ID -->
-          <TableBodyCell class="xs:text-lg text-gray-700 dark:text-gray-300 truncate pl-6 pr-3">
-            <div class="flex justify-center items-center h-full">
-              <!-- HACK: 1-indexedにしているが、0-indexedで揃えた方がいい? -->
-              {index + 1}
-            </div>
-          </TableBodyCell>
+      <TableBody class="divide-y divide-gray-200 dark:divide-gray-700">
+        {#each workBookTasksForTable as task, index}
+          <TableBodyRow>
+            <!-- ID -->
+            <TableBodyCell class="xs:text-lg text-gray-700 dark:text-gray-300 truncate pl-6 pr-3">
+              <div class="flex justify-center items-center h-full">
+                <!-- HACK: 1-indexedにしているが、0-indexedで揃えた方がいい? -->
+                {index + 1}
+              </div>
+            </TableBodyCell>
 
-          <!-- グレード -->
-          <TableBodyCell>
-            <div class="flex items-center justify-center">
-              <GradeLabel taskGrade={getTaskGrade(tasksMapByIds, task.taskId)} />
-            </div>
-          </TableBodyCell>
+            <!-- グレード -->
+            <TableBodyCell>
+              <div class="flex items-center justify-center">
+                <GradeLabel taskGrade={getTaskGrade(tasksMapByIds, task.taskId)} />
+              </div>
+            </TableBodyCell>
 
-          <!-- 問題名 -->
-          <TableBodyCell class="xs:text-lg pl-0 truncate">
-            <ExternalLinkWrapper
-              url={getTaskUrl(task.contestId, task.taskId)}
-              description={removeTaskIndexFromTitle(
-                task.title,
+            <!-- 問題名 -->
+            <TableBodyCell class="xs:text-lg pl-0 truncate">
+              <ExternalLinkWrapper
+                url={getTaskUrl(task.contestId, task.taskId)}
+                description={removeTaskIndexFromTitle(
+                  task.title,
+                  getTaskTableIndex(tasksMapByIds, task.taskId),
+                )}
+              />
+            </TableBodyCell>
+
+            <!-- 出典 -->
+            <TableBodyCell
+              class="xs:text-lg hidden sm:table-cell text-gray-700 dark:text-gray-300 truncate"
+              aria-hidden={true}
+            >
+              {addContestNameToTaskIndex(
+                task.contestId,
                 getTaskTableIndex(tasksMapByIds, task.taskId),
               )}
-            />
-          </TableBodyCell>
+            </TableBodyCell>
 
-          <!-- 出典 -->
-          <TableBodyCell
-            class="xs:text-lg hidden sm:table-cell text-gray-700 dark:text-gray-300 truncate"
-            aria-hidden={true}
-          >
-            {addContestNameToTaskIndex(
-              task.contestId,
-              getTaskTableIndex(tasksMapByIds, task.taskId),
-            )}
-          </TableBodyCell>
-
-          <!-- 一言（コメント・ヒント） -->
-          <!-- See: -->
-          <!-- https://svelte.dev/docs/svelte/v5-migration-guide#Other-breaking-changes-contenteditable-behavior-change -->
-          <td
-            contenteditable="true"
-            class="xs:text-lg hidden sm:table-cell text-gray-700 dark:text-gray-300 truncate"
-            oninput={(event) => updateComment(index, event)}
-            onfocus={handleFocus}
-            onblur={handleBlur}
-            class:placeholder={!task.comment}
-          >
-            <span>
-              {task.comment || placeholderForComment}
-            </span>
-          </td>
-
-          <!-- 削除 -->
-          <TableBodyCell class="w-12 xs:w-16">
-            <button
-              type="button"
-              class="flex justify-center items-center"
-              onclick={() => {
-                if (confirm('本当に削除しますか?')) {
-                  try {
-                    isDeleting = true;
-                    removeWorkBookTask(task);
-                  } finally {
-                    isDeleting = false;
-                  }
-                }
-              }}
-              disabled={isDeleting}
+            <!-- 一言（コメント・ヒント） -->
+            <!-- See: -->
+            <!-- https://svelte.dev/docs/svelte/v5-migration-guide#Other-breaking-changes-contenteditable-behavior-change -->
+            <td
+              contenteditable="true"
+              class="xs:text-lg hidden sm:table-cell text-gray-700 dark:text-gray-300 truncate"
+              oninput={(event) => updateComment(index, event)}
+              onfocus={handleFocus}
+              onblur={handleBlur}
+              class:placeholder={!task.comment}
             >
-              <Trash2 class="w-5 h-5 xs:w-6 xs:h-6" />
-              <span class="sr-only">削除</span>
-            </button>
-          </TableBodyCell>
-        </TableBodyRow>
-      {/each}
-    </TableBody>
-  </Table>
+              <span>
+                {task.comment || placeholderForComment}
+              </span>
+            </td>
+
+            <!-- 削除 -->
+            <TableBodyCell class="w-12 xs:w-16">
+              <button
+                type="button"
+                class="flex justify-center items-center"
+                onclick={() => {
+                  if (confirm('本当に削除しますか?')) {
+                    try {
+                      isDeleting = true;
+                      removeWorkBookTask(task);
+                    } finally {
+                      isDeleting = false;
+                    }
+                  }
+                }}
+                disabled={isDeleting}
+              >
+                <Trash2 class="w-5 h-5 xs:w-6 xs:h-6" />
+                <span class="sr-only">削除</span>
+              </button>
+            </TableBodyCell>
+          </TableBodyRow>
+        {/each}
+      </TableBody>
+    </Table>
+  </div>
 {/if}
 
 <style>

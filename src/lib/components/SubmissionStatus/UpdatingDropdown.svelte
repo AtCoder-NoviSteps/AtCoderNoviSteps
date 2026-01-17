@@ -12,36 +12,23 @@
   }
 
   let { taskResult, isLoggedIn, onupdate = () => {} }: Props = $props();
-
-  let updatingDropdown: UpdatingDropdown;
 </script>
 
 
 // Component
-<button
-  type="button"
-  onclick={(event) => updatingDropdown.toggle(event)} // Open / close the dropdown.
->
-
-<UpdatingDropdown bind:this={updatingDropdown} {taskResult} {isLoggedIn} {onupdate} />
+<UpdatingDropdown {taskResult} {isLoggedIn} {onupdate} />
 -->
 <script lang="ts">
-  import { getStores } from '$app/stores';
   import { enhance } from '$app/forms';
-  import { browser } from '$app/environment';
 
-  import { Dropdown, DropdownUl, DropdownLi, uiHelpers } from 'svelte-5-ui-lib';
+  import { Dropdown, DropdownItem, DropdownDivider } from 'flowbite-svelte';
   import Check from '@lucide/svelte/icons/check';
+  import ChevronDown from '@lucide/svelte/icons/chevron-down';
 
   import type { TaskResult } from '$lib/types/task';
 
   import InputFieldWrapper from '$lib/components/InputFieldWrapper.svelte';
 
-  import {
-    handleDropdownBehavior,
-    calculateDropdownPosition,
-    toggleDropdown,
-  } from '$lib/actions/handle_dropdown';
   import { submission_statuses } from '$lib/services/submission_status';
   import { errorMessageStore } from '$lib/stores/error_message';
 
@@ -55,60 +42,27 @@
 
   let { taskResult, isLoggedIn, onupdate }: Props = $props();
 
-  const { page } = getStores();
-  let activeUrl = $state($page.url.pathname);
-
-  let dropdown = uiHelpers();
-  let dropdownStatus = $state(false);
-  let closeDropdown = dropdown.close;
-
-  let dropdownPosition = $state({ x: 0, y: 0, isInBottomHalf: false });
   const componentId = Math.random().toString(36).substring(2);
+  let isInBottomHalf = $state(false);
+
+  function calculateDropdownPlacement(trigger: HTMLElement): void {
+    const rect = trigger.getBoundingClientRect();
+    const windowHeight = window.innerHeight;
+    // Placement near the bottom of the viewport places it above
+    isInBottomHalf = rect.top > windowHeight / 2;
+  }
 
   $effect(() => {
-    activeUrl = $page.url.pathname;
-    dropdownStatus = dropdown.isOpen;
+    const triggerElement = document.getElementById(`update-dropdown-trigger-${componentId}`);
 
-    if (dropdownStatus) {
-      document.documentElement.style.setProperty('--dropdown-x', `${dropdownPosition.x}px`);
-      document.documentElement.style.setProperty('--dropdown-y', `${dropdownPosition.y}px`);
+    if (triggerElement) {
+      calculateDropdownPlacement(triggerElement);
+      // Recalculate on window resize
+      const handleResize = () => calculateDropdownPlacement(triggerElement);
+      window.addEventListener('resize', handleResize);
+      return () => window.removeEventListener('resize', handleResize);
     }
   });
-
-  export function toggle(event?: MouseEvent): void {
-    toggleDropdown(event, {
-      dropdownId: componentId,
-      toggle: dropdown.toggle,
-      getPosition: updateDropdownPosition,
-    });
-  }
-
-  // Required for the dropdown to open at the correct position.
-  function updateDropdownPosition(event: MouseEvent): void {
-    const position = calculateDropdownPosition(event);
-    updatePositionInComponent(position.x, position.y, position.isInBottomHalf);
-  }
-
-  function updatePositionInComponent(x: number, y: number, isInBottomHalf: boolean) {
-    dropdownPosition = { x, y, isInBottomHalf };
-
-    if (browser) {
-      document.documentElement.style.setProperty('--dropdown-x', `${x}px`);
-      document.documentElement.style.setProperty('--dropdown-y', `${y}px`);
-    }
-  }
-
-  function getDropdownClasses(isInBottomHalf: boolean): string {
-    let classes =
-      'absolute w-32 z-[999] shadow-lg pointer-events-auto left-[var(--dropdown-x)] transform -translate-x-full ';
-
-    if (isInBottomHalf) {
-      classes += 'bottom-[calc(100vh-var(--dropdown-y))] mb-5';
-    } else {
-      classes += 'top-[var(--dropdown-y)] mt-1';
-    }
-    return classes;
-  }
 
   let selectedSubmissionStatus = $state<SubmissionStatus>();
   let showForm = $state(false);
@@ -192,7 +146,6 @@
   }
 
   function resetDropdown(): void {
-    closeDropdown();
     showForm = false;
   }
 
@@ -221,55 +174,50 @@
   });
 </script>
 
-<div
-  class="fixed inset-0 pointer-events-none z-50 w-full h-full"
-  use:handleDropdownBehavior={{
-    dropdownId: componentId,
-    isOpen: dropdownStatus,
-    closeDropdown,
-    onStatusChange: (status: boolean) => {
-      dropdownStatus = status;
-    },
-    updatePosition: updatePositionInComponent,
-  }}
->
-  <Dropdown
-    {activeUrl}
-    {dropdownStatus}
-    {closeDropdown}
-    class={getDropdownClasses(dropdownPosition.isInBottomHalf)}
+<!-- Trigger Button -->
+<div class="flex items-center gap-1">
+  <div
+    id={`update-dropdown-trigger-${componentId}`}
+    class="shrink-0 w-6 ml-auto cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700 rounded-sm p-1 transition text-gray-700 dark:text-gray-400"
+    role="button"
+    tabindex="0"
+    aria-label="Update submission status"
   >
-    <DropdownUl class="border rounded-lg shadow">
-      {#if isLoggedIn}
-        {#each submissionStatusOptions as submissionStatus}
-          {@render dropdownListForSubmissionStatus(taskResult, submissionStatus)}
-        {/each}
-      {:else}
-        <DropdownLi href={SIGNUP_PAGE}>アカウント作成</DropdownLi>
-        <DropdownLi href={LOGIN_PAGE}>ログイン</DropdownLi>
-      {/if}
-    </DropdownUl>
-  </Dropdown>
-
-  {#if showForm && selectedSubmissionStatus}
-    {@render submissionStatusForm(taskResult, selectedSubmissionStatus)}
-  {/if}
+    <ChevronDown class="w-4 h-4 mx-auto" />
+  </div>
 </div>
 
-{#snippet dropdownListForSubmissionStatus(
-  taskResult: TaskResult,
-  submissionStatus: SubmissionStatus,
-)}
-  <DropdownLi href="javascript:void(0)" onclick={() => handleClick(submissionStatus)}>
-    <div class="flex items-center justify-between">
-      {submissionStatus.labelName}
+<!-- Dropdown Menu -->
+<!-- Note: Split outside div for better control, auto-linked with triggeredBy -->
+<Dropdown
+  triggeredBy={`#update-dropdown-trigger-${componentId}`}
+  placement={isInBottomHalf ? 'top-end' : 'bottom-end'}
+  simple
+  class="w-32 z-50 border border-gray-200 dark:border-gray-100"
+>
+  {#if isLoggedIn}
+    {#each submissionStatusOptions as submissionStatus}
+      <DropdownItem onclick={() => handleClick(submissionStatus)} class="rounded-md">
+        <div
+          class="flex items-center justify-between w-full text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white"
+        >
+          <span>{submissionStatus.labelName}</span>
+          {#if taskResult.status_name === submissionStatus.innerName}
+            <Check class="w-4 h-4 text-primary-600 dark:text-gray-300" strokeWidth={3} />
+          {/if}
+        </div>
+      </DropdownItem>
+    {/each}
+  {:else}
+    <DropdownItem href={SIGNUP_PAGE} class="rounded-md">アカウント作成</DropdownItem>
+    <DropdownDivider />
+    <DropdownItem href={LOGIN_PAGE} class="rounded-md">ログイン</DropdownItem>
+  {/if}
+</Dropdown>
 
-      {#if taskResult.status_name === submissionStatus.innerName}
-        <Check class="w-4 h-4 text-primary-600 dark:text-gray-300" strokeWidth={3} />
-      {/if}
-    </div>
-  </DropdownLi>
-{/snippet}
+{#if showForm && selectedSubmissionStatus}
+  {@render submissionStatusForm(taskResult, selectedSubmissionStatus)}
+{/if}
 
 {#snippet submissionStatusForm(selectedTaskResult: TaskResult, submissionStatus: SubmissionStatus)}
   <form

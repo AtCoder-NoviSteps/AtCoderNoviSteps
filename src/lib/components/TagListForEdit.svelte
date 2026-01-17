@@ -7,8 +7,7 @@
     TableHead,
     TableHeadCell,
     Label,
-  } from 'svelte-5-ui-lib';
-
+  } from 'flowbite-svelte';
   import type { Tag } from '$lib/types/tag';
   //import { ATCODER_BASE_CONTEST_URL } from '$lib/constants/urls';
   import { newline } from '$lib/utils/newline';
@@ -35,7 +34,7 @@
     <TableHeadCell class="w-1/8">公開中</TableHeadCell>
     <TableHeadCell class="w-1/8"></TableHeadCell>
   </TableHead>
-  <TableBody class="divide-y">
+  <TableBody class="divide-y divide-gray-200 dark:divide-gray-700">
     {#each tags as tag}
       <TableBodyRow>
         <TableBodyCell class="p-3">

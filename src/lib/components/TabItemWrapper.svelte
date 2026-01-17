@@ -1,7 +1,7 @@
 <script lang="ts">
   import { type Snippet, onMount } from 'svelte';
 
-  import { TabItem, Tooltip } from 'svelte-5-ui-lib';
+  import { TabItem, Tooltip } from 'flowbite-svelte';
   import CircleHelp from '@lucide/svelte/icons/circle-help';
 
   import { WorkBookType } from '$lib/types/workbook';
@@ -52,21 +52,17 @@
 </script>
 
 <!-- See: -->
-<!-- https://svelte-5-ui-lib.codewithshin.com/components/tooltip -->
+<!-- https://flowbite-svelte.com/docs/components/tooltip -->
 <div>
   {#if tooltipContent !== '' && titleId !== ''}
-    <Tooltip
-      showOn="hover"
-      triggeredBy={`#${titleId}`}
-      class={`max-w-[200px] ${TOOLTIP_CLASS_BASE}`}
-    >
+    <Tooltip type="auto" triggeredBy={`#${titleId}`} class={`max-w-[200px] ${TOOLTIP_CLASS_BASE}`}>
       {tooltipContent}
     </Tooltip>
   {/if}
 </div>
 
 <!-- See: -->
-<!-- https://svelte-5-ui-lib.codewithshin.com/components/tabs -->
+<!-- https://flowbite-svelte.com/docs/components/tabs -->
 <TabItem open={isOpen} onclick={() => handleClick(workbookType, activeProblemList)}>
   {#snippet titleSlot()}
     <span class="text-lg" id={titleId}>

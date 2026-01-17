@@ -6,6 +6,9 @@ const config: PlaywrightTestConfig = {
     port: 4173,
     timeout: 10000 * 1000,
   },
+  use: {
+    baseURL: process.env.BASE_URL ?? 'http://localhost:4173',
+  },
   testDir: 'tests',
   projects: [
     //{

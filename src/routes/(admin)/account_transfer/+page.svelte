@@ -11,7 +11,7 @@
     Label,
     Input,
     Button,
-  } from 'svelte-5-ui-lib';
+  } from 'flowbite-svelte';
   import BadgeCheck from '@lucide/svelte/icons/badge-check';
   import Ban from '@lucide/svelte/icons/ban';
 
@@ -60,58 +60,60 @@
   });
 </script>
 
-<HeadingOne title="アカウント移行" />
-
 <ContainerWrapper>
-  <form method="POST" class="space-y-4" action={formAction} use:enhance>
+  <HeadingOne title="アカウント移行" />
+
+  <form method="POST" class="flex flex-col gap-4" action={formAction} use:enhance>
     <div class="dark:text-gray-300">
       新しく作成された空のアカウントに、旧アカウントの回答データをコピーできます。
     </div>
 
     <MessageHelperWrapper message={$message} />
 
-    <Table shadow hoverable={true} class="text-md">
-      <TableBody class="divide-y">
-        <TableBodyRow>
-          <TableBodyCell>
-            <Label>
-              <p>旧アカウント名</p>
-            </Label>
-          </TableBodyCell>
-          <TableBodyCell>
-            <Input
-              id="source_user_name"
-              name="sourceUserName"
-              bind:value={$form.sourceUserName}
-              required
-              aria-label="旧アカウント名"
-            />
+    <div class="rounded-md border border-gray-200 dark:border-gray-700 overflow-hidden">
+      <Table shadow hoverable={true} class="text-md">
+        <TableBody class="divide-y divide-gray-200 dark:divide-gray-700">
+          <TableBodyRow>
+            <TableBodyCell>
+              <Label>
+                <p>旧アカウント名</p>
+              </Label>
+            </TableBodyCell>
+            <TableBodyCell>
+              <Input
+                id="source_user_name"
+                name="sourceUserName"
+                bind:value={$form.sourceUserName}
+                required
+                aria-label="旧アカウント名"
+              />
 
-            <!-- エラーメッセージがあれば表示 -->
-            <MessageHelperWrapper message={$errors.sourceUserName} />
-          </TableBodyCell>
-        </TableBodyRow>
-        <TableBodyRow>
-          <TableBodyCell>
-            <Label>
-              <p>新アカウント名</p>
-            </Label>
-          </TableBodyCell>
-          <TableBodyCell>
-            <Input
-              id="destination_user_name"
-              name="destinationUserName"
-              bind:value={$form.destinationUserName}
-              required
-              aria-label="新アカウント名"
-            />
+              <!-- エラーメッセージがあれば表示 -->
+              <MessageHelperWrapper message={$errors.sourceUserName} />
+            </TableBodyCell>
+          </TableBodyRow>
+          <TableBodyRow>
+            <TableBodyCell>
+              <Label>
+                <p>新アカウント名</p>
+              </Label>
+            </TableBodyCell>
+            <TableBodyCell>
+              <Input
+                id="destination_user_name"
+                name="destinationUserName"
+                bind:value={$form.destinationUserName}
+                required
+                aria-label="新アカウント名"
+              />
 
-            <!-- エラーメッセージがあれば表示 -->
-            <MessageHelperWrapper message={$errors.destinationUserName} />
-          </TableBodyCell>
-        </TableBodyRow>
-      </TableBody>
-    </Table>
+              <!-- エラーメッセージがあれば表示 -->
+              <MessageHelperWrapper message={$errors.destinationUserName} />
+            </TableBodyCell>
+          </TableBodyRow>
+        </TableBody>
+      </Table>
+    </div>
 
     <div class="flex justify-center">
       <Button type="submit" class="w-full sm:w-5/6 m-4" disabled={$submitting}>

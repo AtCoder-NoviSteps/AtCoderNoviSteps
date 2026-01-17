@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Img } from 'svelte-5-ui-lib';
+  import { Img } from 'flowbite-svelte';
   import ChevronDown from '@lucide/svelte/icons/chevron-down';
 
   import type { TaskResult } from '$lib/types/task';
@@ -22,7 +22,7 @@
   });
 </script>
 
-<Img src={imagePath} alt={imageAlt} imgClass="h-7 w-7 xs:h-8 xs:w-8" />
+<Img src={imagePath} alt={imageAlt} class="h-7 w-7 xs:h-8 xs:w-8" />
 
 <!-- TODO: Redirect to login screen when user is not logged in -->
 {#if isLoggedIn}

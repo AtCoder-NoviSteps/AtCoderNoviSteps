@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Li, List } from 'svelte-5-ui-lib';
+  import { Li, List } from 'flowbite-svelte';
 </script>
 
 <p class="font-medium">以下の内容が削除されます (データの復元は困難です)</p>

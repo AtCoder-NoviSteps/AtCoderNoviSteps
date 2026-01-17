@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Heading, Card, Alert, Button, List, Li } from 'svelte-5-ui-lib';
+  import { Heading, Card, Alert, Button, List, Li } from 'flowbite-svelte';
 
   import HeadingOne from '$lib/components/HeadingOne.svelte';
 
@@ -12,7 +12,7 @@
 
 <!-- See: -->
 <!-- https://github.com/lucia-auth/example-sveltekit-email-password-2fa/blob/main/src/routes/forgot-password/%2Bpage.svelte -->
-<!-- https://svelte-5-ui-lib.codewithshin.com/components/card -->
+<!-- https://flowbite-svelte.com/docs/components/card -->
 <div class="container mx-auto md:w-4/5 lg:w-2/3 py-4 md:py-8 px-3 md:px-0">
   <HeadingOne title="パスワードを忘れた場合の対応について" />
 
@@ -21,7 +21,7 @@
 </div>
 
 {#snippet passwordResetSection()}
-  <Card size="xl" class="mb-5" padding="sm">
+  <Card size="xl" class="mb-5 p-4">
     <Heading tag="h2" class="text-xl mb-2 text-gray-900 dark:text-white">
       パスワードリセット機能
     </Heading>
@@ -33,7 +33,7 @@
 {/snippet}
 
 {#snippet accountMigrationGuideSection()}
-  <Card size="xl" padding="sm">
+  <Card size="xl" class="p-4">
     <!-- Header -->
     <Heading tag="h2" class="text-xl mb-2 text-gray-900 dark:text-white">
       アカウント移行のご案内

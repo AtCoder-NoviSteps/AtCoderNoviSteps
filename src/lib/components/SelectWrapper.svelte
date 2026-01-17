@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Label, Select } from 'svelte-5-ui-lib';
+  import { Label, Select } from 'flowbite-svelte';
 
   interface Props {
     labelClass?: string;
@@ -13,7 +13,7 @@
   }
 
   let {
-    labelClass = 'space-y-2',
+    labelClass = 'flex flex-col gap-2',
     labelName = '',
     innerName,
     items,

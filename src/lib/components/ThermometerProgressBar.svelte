@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Tooltip } from 'svelte-5-ui-lib';
+  import { Tooltip } from 'flowbite-svelte';
 
   import type { WorkBookTaskBase } from '$lib/types/workbook';
   import type { TaskResult, TaskResults } from '$lib/types/task';
@@ -71,7 +71,7 @@
   });
 </script>
 
-<!-- HACK: svelte-5-ui-lib にある Progressbar では 回答状況に合わせた内訳を表示できないので、HTML + tailwindcss で実装 -->
+<!-- HACK: Flowbite Svelte にある Progressbar では 回答状況に合わせた内訳を表示できないので、HTML + tailwindcss で実装 -->
 <!-- See: -->
 <!-- https://blog.canopas.com/designing-stunning-progress-bars-made-easy-with-tailwind-css-ae620ba7b4be -->
 <!-- https://www.creative-tim.com/learning-lab/tailwind-starter-kit/documentation/css/progressbars -->
@@ -91,9 +91,9 @@
 </div>
 
 <Tooltip
-  showOn="hover"
+  type="auto"
   triggeredBy={`#${progressBarId}`}
-  position="top-start"
+  placement="top-start"
   class={`max-w-[200px] ${TOOLTIP_CLASS_BASE}`}
 >
   {#each submissionCounts as submissionCount}

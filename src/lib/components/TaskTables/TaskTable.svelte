@@ -1,7 +1,6 @@
 <script lang="ts">
   import {
     Heading,
-    ButtonGroup,
     Button,
     Table,
     TableBody,
@@ -9,8 +8,7 @@
     TableBodyRow,
     TableHead,
     TableHeadCell,
-  } from 'svelte-5-ui-lib';
-
+  } from 'flowbite-svelte';
   import type { TaskResults, TaskResult } from '$lib/types/task';
   import type {
     ContestTableProvider,
@@ -170,15 +168,17 @@
 </script>
 
 <!-- See: -->
-<!-- https://flowbite-svelte.com/docs/components/button-group -->
+<!-- https://flowbite-svelte.com/docs/components/buttons -->
 <div class="flex justify-center md:justify-start m-4">
-  <ButtonGroup class="flex flex-wrap justify-start gap-1 shadow-none">
+  <div class="flex flex-wrap justify-start gap-1 shadow-none">
     {#each Object.entries(contestTableProviderGroups) as [type, config]}
       <Button
         onclick={() => updateActiveContestType(type as ContestTableProviderGroups)}
-        class={`rounded-lg ${
+        color="alternative"
+        size="sm"
+        class={`rounded-lg dark:text-white ${
           activeContestType === (type as ContestTableProviderGroups)
-            ? 'active-button-class text-primary-700 dark:!text-primary-500'
+            ? 'active-button-class text-primary-700 dark:text-primary-500!'
             : ''
         }`}
         aria-label={config.getMetadata().ariaLabel}
@@ -186,7 +186,7 @@
         {config.getMetadata().buttonLabel}
       </Button>
     {/each}
-  </ButtonGroup>
+  </div>
 </div>
 
 <!-- TODO: ページネーションを実装 -->
@@ -204,7 +204,7 @@
   </Heading>
 
   <div
-    class="container w-full rounded-md border border-gray-200 dark:border-gray-100 shadow-sm mb-6 overflow-hidden"
+    class="container w-full rounded-md border border-gray-200 dark:border-gray-100 shadow-xs mb-6 overflow-hidden"
   >
     <!-- Table header -->
     {#if contestTable && contestTable.displayConfig.isShownHeader}

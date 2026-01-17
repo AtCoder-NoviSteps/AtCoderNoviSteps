@@ -4,7 +4,7 @@
   @prop {any} [size=12] - The size of the spinner in pixels
 -->
 <script lang="ts">
-  import Spinner from 'svelte-5-ui-lib/Spinner.svelte';
+  import { Spinner } from 'flowbite-svelte';
 
   interface Props {
     // Spinner component type is any, so we have no choice but to use it.

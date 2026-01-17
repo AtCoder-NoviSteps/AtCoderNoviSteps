@@ -9,10 +9,9 @@
     Button,
     Label,
     Input,
-  } from 'svelte-5-ui-lib';
+  } from 'flowbite-svelte';
 
   import type { Contests } from '$lib/types/contest';
-
   import { getContestNameLabel } from '$lib/utils/contest';
   import { newline } from '$lib/utils/newline';
 
@@ -37,7 +36,7 @@
     <TableHeadCell class="w-1/3">問題名</TableHeadCell>
     <TableHeadCell class="w-1/8"></TableHeadCell>
   </TableHead>
-  <TableBody class="divide-y">
+  <TableBody class="divide-y divide-gray-200 dark:divide-gray-700">
     {#each importContests as importContest}
       {#if importContest.tasks.length > 0}
         <TableBodyRow>

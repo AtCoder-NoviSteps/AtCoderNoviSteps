@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Label, Tooltip } from 'svelte-5-ui-lib';
+  import { Label, Tooltip } from 'flowbite-svelte';
   import CircleHelp from '@lucide/svelte/icons/circle-help';
 
   import { TOOLTIP_CLASS_BASE } from '$lib/constants/tailwind-helper';
@@ -18,9 +18,9 @@
   <div class="flex items-center space-x-2">
     <span>{labelName}</span>
     <Tooltip
-      showOn="hover"
+      type="auto"
       triggeredBy="#{tooltipId}"
-      class={`max-w-[${tooltipWidth}px] ${TOOLTIP_CLASS_BASE}`}
+      class={`[--tooltip-width:${tooltipWidth}px] max-w-[var(--tooltip-width)] ${TOOLTIP_CLASS_BASE}`}
     >
       {#if typeof tooltipContents === 'string'}
         {tooltipContents}

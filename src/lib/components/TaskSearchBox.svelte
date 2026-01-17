@@ -1,7 +1,7 @@
 <!-- See: -->
 <!-- https://github.com/kenkoooo/AtCoderProblems/blob/master/atcoder-problems-frontend/src/components/ProblemSearchBox.tsx -->
 <script lang="ts">
-  import { Input, Listgroup } from 'svelte-5-ui-lib';
+  import { Input, Listgroup } from 'flowbite-svelte';
 
   import SelectWrapper from '$lib/components/SelectWrapper.svelte';
   import LabelWithTooltips from '$lib/components/LabelWithTooltips.svelte';
@@ -87,7 +87,7 @@
   });
 </script>
 
-<div class="flex flex-col md:flex-row items-start md:items-center justify-between md:space-x-4">
+<div class="flex flex-col md:flex-row items-start md:items-center justify-between md:gap-4">
   <!-- 問題を検索・追加 -->
   <div class="w-full md:w-5/6 space-y-2 mb-2 md:mb-0">
     <LabelWithTooltips
@@ -170,7 +170,7 @@
   <Listgroup>
     {#each filteredTasks as task, index}
       <!-- See: -->
-      <!-- WHY: svelte-5-ui-lib の ListgroupItem だと、フォーカスした問題の <li> 要素が消えてスタイルが崩れるため -->
+      <!-- WHY: Use a custom <li> element with conditional classes for highlighting, due not to be able to find attribute. -->
       <li
         data-name={task.task_id}
         class="cursor-pointer truncate md:truncate-none px-4 pt-3 pb-1 border-b border-gray-200 dark:border-gray-600 first:rounded-tl-lg first:rounded-tr-lg last:rounded-bl-lg last:rounded-br-lg {index ===
