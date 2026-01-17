@@ -288,7 +288,7 @@
   - [ ] 期待時期: フェーズ1-4 完了後
 
 - [ ] visual regression テスト（手動確認）
-  - [ ] space-y-_ / space-x-_ セレクタ変更による layout shift 確認
+  - [ ] `space-y-_` / `space-x-_` セレクタ変更による layout shift 確認
   - [ ] divide-y / divide-x による table border 変更確認
   - [ ] デフォルト値変更（border color, ring size）の visual 確認
 
