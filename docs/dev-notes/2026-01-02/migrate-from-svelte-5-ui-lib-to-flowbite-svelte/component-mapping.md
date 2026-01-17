@@ -1,12 +1,33 @@
-# コンポーネント対応マトリクス
+# コンポーネント対応表・実装参考資料
 
-svelte-5-ui-lib → Flowbite Svelte 移行時の各コンポーネント難易度と対応方法。
+**作成日**: 2026-01-02
+
+**最終更新:** 2026-01-04
+
+**用途**: svelte-5-ui-lib → Flowbite Svelte 移行時の実装参考資料
 
 ---
 
 ## 概要
 
-コンポーネントを以下の4カテゴリに分類。各カテゴリの対応手数と注意点を記載。
+本ドキュメントは、svelte-5-ui-lib から Flowbite Svelte への移行時に、各コンポーネントの対応方法を示す実装参考資料です。
+
+コンポーネントを以下の4カテゴリに分類し、対応手数と注意点を記載しています：
+
+1. **カテゴリ1**: ライブラリ名置き換えのみ（難易度低）
+2. **カテゴリ2**: 置き換え + 属性調整（難易度中）
+3. **カテゴリ3**: 外部ライブラリからの復帰（難易度中）
+4. **カテゴリ4**: 抜本的な書き直し（難易度高）
+
+実装時は、[README-plan.md](./README-plan.md) のチェックリストと照らし合わせて実施してください。
+
+---
+
+## 関連ドキュメント
+
+- [README-plan.md](./README-plan.md) - 実行計画・フェーズチェックリスト・教訓
+- [testing-strategy.md](./testing-strategy.md) - テスト戦略・実装例
+- [investigation.md](./investigation.md) - Breaking Changes 詳細分析
 
 ---
 
@@ -831,11 +852,3 @@ import { Carousel, Controls, CarouselIndicators } from 'flowbite-svelte';
 - **API 設計の違いを理解することの重要性**: Plugin-based と Prop-based では柔軟性が異なる
 - **ドキュメント不足時はソースコード確認が必須**: alt属性の自動適用はドキュメント未記載だったが GitHub で確認可能
 - **Canonical CSS classes の使用**: Tailwind v4 では `min-h-[300px]` 形式が推奨される（VSCode拡張で警告あり）
-
----
-
-**作成日:** 2026-01-02
-
-**最終更新:** 2026-01-04
-
-**ステータス:** カテゴリ3 実装完了、ドキュメント更新完了
