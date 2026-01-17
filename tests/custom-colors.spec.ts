@@ -53,7 +53,7 @@ test.describe('Custom colors for TailwindCSS v4 configuration', () => {
     expect(css).toContain('bg-atcoder');
   });
 
-  test('xs breakpoint is available (or custom breakpoints)', () => {
+  test('xs breakpoint media queries are generated in CSS', () => {
     const cssDir = resolve('.svelte-kit/output/client/_app/immutable/assets');
     const cssFiles = readdirSync(cssDir)
       .filter((f: string) => f.endsWith('.css'))
@@ -62,14 +62,13 @@ test.describe('Custom colors for TailwindCSS v4 configuration', () => {
 
     expect(cssFiles.length).toBeGreaterThan(0);
 
-    // Verify total CSS size from multiple files
-    const totalCssSize = cssFiles.slice(0, 5).reduce((acc, f) => {
-      const cssPath = resolve(cssDir, f);
-      const css = readFileSync(cssPath, 'utf-8');
-      return acc + css.length;
-    }, 0);
+    // Merge all CSS files to verify xs breakpoint
+    const allCss = cssFiles
+      .map((f: string) => readFileSync(resolve(cssDir, f), 'utf-8'))
+      .join('\n');
 
-    // Verify CSS is generated properly (single file size may be small due to multiple files)
-    expect(totalCssSize).toBeGreaterThan(5000);
+    // Verify xs breakpoint media query is generated (26.25rem = 420px)
+    // @media(min-width:26.25rem) confirms the xs breakpoint is defined correctly
+    expect(allCss).toMatch(/@media\(min-width:26\.25rem\)/);
   });
 });
