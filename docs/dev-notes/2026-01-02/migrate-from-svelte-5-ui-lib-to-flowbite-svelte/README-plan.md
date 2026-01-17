@@ -177,6 +177,7 @@
 - **State 管理の簡潔化**: svelte-5-ui-lib の独自 state（`navStatus`, `toggleNav`, `closeNav`）を Flowbite Svelte 内部管理に委譲 → コード削減
 - **Props 名の確認重要**: `aClass`（svelte-5-ui-lib 固有）→ `activeClass`（Flowbite Svelte 標準）への変更は、GitHub の NavLi 定義を確認して初めて気づく
 - **$app/stores の必須性**: Flowbite docs は client-only デモで `$app/state` を使うが、SSR 環境では `$app/stores` が必須
+- **Tailwind CSS の動的クラス生成の制限**: テンプレートリテラル内での変数補間（例：`max-w-[${width}px]`）は Tailwind のビルド時スキャンで認識されず、CSS が生成されない。動的値にはArbitrary propertyで CSS変数を使う（例：`[--tooltip-width:${width}px]` + `max-w-[var(--tooltip-width)]`）か、CSSカスタムプロパティ＋インラインスタイルを併用すること
 
 ---
 
