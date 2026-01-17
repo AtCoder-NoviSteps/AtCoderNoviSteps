@@ -3,7 +3,7 @@ import { readFileSync } from 'fs';
 import { resolve } from 'path';
 import { readdirSync } from 'fs';
 
-test.describe('TailwindCSS v3 configuration', () => {
+test.describe('Custom colors for TailwindCSS v4 configuration', () => {
   /**
    * Verify that custom colors are generated in build output
    * (.svelte-kit/output/client/_app/immutable/assets/0.*.css)
