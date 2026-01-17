@@ -132,7 +132,7 @@
 
 ```typescript
 import { test, expect } from '@playwright/test';
-import { readFileSync } from 'fs';
+import { readFileSync, readdirSync } from 'fs';
 import { resolve } from 'path';
 
 test.describe('TailwindCSS v4 configuration', () => {
@@ -145,9 +145,20 @@ test.describe('TailwindCSS v4 configuration', () => {
 
   test('primary color is generated in CSS', () => {
     const cssDir = resolve('.svelte-kit/output/client/_app/immutable/assets');
-    const cssFiles = require('fs')
-      .readdirSync(cssDir)
-      .filter((f: string) => f.startsWith('0.') && f.endsWith('.css'));
+    let cssFiles: string[] = [];
+
+    try {
+      const allCssFiles = readdirSync(cssDir).filter((f: string) => f.endsWith('.css'));
+      cssFiles = allCssFiles.filter((f: string) => f.startsWith('0.'));
+
+      // Fallback: use any CSS file if no 0.*.css files found
+      if (cssFiles.length === 0) {
+        cssFiles = allCssFiles;
+      }
+    } catch (e) {
+      // True error: directory not found or inaccessible
+      throw new Error(`CSS directory not found: ${cssDir}`);
+    }
 
     expect(cssFiles.length).toBeGreaterThan(0);
 
@@ -171,7 +182,7 @@ test.describe('TailwindCSS v4 configuration', () => {
     expect(css).toMatch(/\.bg-atcoder-/);
   });
 
-  test('xs breakpoint is available', () => {
+  test('xs breakpoint media queries are generated in CSS', () => {
     const cssDir = resolve('.svelte-kit/output/client/_app/immutable/assets');
     const cssFiles = require('fs')
       .readdirSync(cssDir)
@@ -179,8 +190,9 @@ test.describe('TailwindCSS v4 configuration', () => {
     const cssPath = resolve(cssDir, cssFiles[0]);
     const css = readFileSync(cssPath, 'utf-8');
 
-    // CSS が正常に生成されているか（サイズ確認）
-    expect(css.length).toBeGreaterThan(10000);
+    // xs: プレフィックス付きクラスが CSS に含まれているか確認
+    // TailwindCSS v4 では @media クエリで xs breakpoint が定義される
+    expect(allCss).toMatch(/@media\(min-width:26\.25rem\)/);
   });
 });
 ```
@@ -197,7 +209,7 @@ pnpm playwright test tests/custom-colors.spec.ts
 
 - ✅ primary color classes が CSS に含まれている
 - ✅ atcoder color classes が CSS に含まれている
-- ✅ ビルド出力が正常に生成されている
+- ✅ xs: プレフィックス付きクラスが CSS に含まれている（breakpoint 生成確認）
 
 ---
 

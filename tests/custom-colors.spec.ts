@@ -18,12 +18,16 @@ test.describe('Custom colors for TailwindCSS v4 configuration', () => {
     let cssFiles: string[] = [];
 
     try {
-      cssFiles = readdirSync(cssDir).filter(
-        (f: string) => f.startsWith('0.') && f.endsWith('.css'),
-      );
+      const allCssFiles = readdirSync(cssDir).filter((f: string) => f.endsWith('.css'));
+      cssFiles = allCssFiles.filter((f: string) => f.startsWith('0.'));
+
+      // Fallback: use any CSS file if no 0.*.css files found
+      if (cssFiles.length === 0) {
+        cssFiles = allCssFiles;
+      }
     } catch (e) {
-      // Fallback: search for all .css files
-      cssFiles = readdirSync(cssDir).filter((f: string) => f.endsWith('.css'));
+      // True error: directory not found or inaccessible
+      throw new Error(`Not found CSS directory: ${cssDir}`);
     }
 
     expect(cssFiles.length).toBeGreaterThan(0);
