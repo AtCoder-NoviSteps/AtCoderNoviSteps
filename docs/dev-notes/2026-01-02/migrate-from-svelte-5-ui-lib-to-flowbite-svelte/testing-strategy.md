@@ -67,7 +67,7 @@
 ### 前提条件確認の流れ
 
 1. `pnpm dev` で開発サーバ起動
-2. ブラウザで http://localhost:5174/ にアクセス
+2. ブラウザで [http://localhost:5174/](http://localhost:5174/) にアクセス
 3. Developer Tools で以下を確認
 
 ### 確認項目
