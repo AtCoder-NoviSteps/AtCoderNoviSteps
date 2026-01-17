@@ -20,7 +20,7 @@
     <Tooltip
       type="auto"
       triggeredBy="#{tooltipId}"
-      class={`max-w-[${tooltipWidth}px] ${TOOLTIP_CLASS_BASE}`}
+      class={`[--tooltip-width:${tooltipWidth}px] max-w-[var(--tooltip-width)] ${TOOLTIP_CLASS_BASE}`}
     >
       {#if typeof tooltipContents === 'string'}
         {tooltipContents}
