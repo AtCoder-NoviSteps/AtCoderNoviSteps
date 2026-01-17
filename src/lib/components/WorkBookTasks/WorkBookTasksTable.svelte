@@ -161,7 +161,7 @@
           一言（50文字以下）
         </TableHeadCell>
         <TableHeadCell class="w-12 xs:w-16 text-center">
-          <span class="sr-only">編集</span>
+          <span class="sr-only">削除</span>
         </TableHeadCell>
       </TableHead>
 
