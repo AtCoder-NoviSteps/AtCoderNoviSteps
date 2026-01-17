@@ -2,7 +2,7 @@
 
 **作成日**: 2026-01-02
 
-**最終更新:** 2026-01-04
+**最終更新:** 2026-01-17
 
 **用途**: svelte-5-ui-lib → Flowbite Svelte 移行時の実装参考資料
 
@@ -68,7 +68,7 @@ import { Heading, Button, Label } from 'flowbite-svelte';
 
 **テスト:** Vitest snapshot または Playwright (コンポーネント render 確認)
 
-**参考:** [Flowbite Svelte Components](https://flowbite-svelte.com/docs/components/)
+**参考:** [Flowbite Svelte Components](https://flowbite-svelte.com/docs/components/accordion)
 
 ---
 
@@ -358,7 +358,7 @@ import { Carousel, Controls, CarouselIndicators } from 'flowbite-svelte';
 
 <button
   type="button"
-  class="flex-shrink-0 w-6 ml-auto"
+  class="shrink-0 w-6 ml-auto"
   onclick={(event) => updatingDropdown.toggle(event)}
 >
   <ChevronDown class="w-4 h-4 mx-auto" />
@@ -737,19 +737,19 @@ import { Carousel, Controls, CarouselIndicators } from 'flowbite-svelte';
 
 ### Flowbite Svelte 公式ドキュメント
 
-- [Components Overview](https://flowbite-svelte.com/docs/components/)
+- [Components Overview](https://flowbite-svelte.com/docs/components/accordion)
 - [TypeScript API Reference](https://flowbite-svelte.com/docs/pages/typescript)
 - [GitHub Repository](https://github.com/themesberg/flowbite-svelte)
 
 ### Svelte 関連
 
-- [Svelte 5 Runes Guide](https://svelte.dev/docs/svelte-5-migration-guide)
+- [svelte 5 runes guide](https://svelte.dev/docs/svelte/v5-migration-guide)
 - [Svelte 5 API Reference](https://svelte.dev/docs)
 
 ### 移行ガイド
 
 - [メイン計画ドキュメント](./plan.md)
-- [Smoke Tests ガイド](./smoke-tests.md)
+- [テスト戦略](./testing-strategy.md)
 
 ---
 
