@@ -280,7 +280,7 @@
     - [ ] mobile (375px) での動作 ⏭️ SKIP（`test.fixme()`でマーク）
       - 原因: Flowbite-Svelte v1.31.0 の navbar `breakpoint` prop が Svelte 5 Context API 実装の不具合で機能しない
       - 対応: v2.0 リリース待機推奨
-      - GitHub Issue: https://github.com/themesberg/flowbite-svelte/issues/1710
+      - [GitHub Issue #1710](https://github.com/themesberg/flowbite-svelte/issues/1710)
 
 - [ ] logout テスト失敗の調査・修正
   - [ ] 原因: navbar header dropdown の実装・状態確認
