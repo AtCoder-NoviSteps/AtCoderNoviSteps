@@ -1206,3 +1206,28 @@ div.w-full { max-width: 528px; } /* specificity: 0,2,0 - 上書き */
 Flowbite-Svelte v1.31.0 は **Svelte 5 と Tailwind CSS v4 への対応が不完全** であり、navbar の `breakpoint` と `fluid` props は ドキュメント通りに動作しない。
 
 これはユーザーの実装ミスではなく、**ライブラリの既知のバグ** 。v2.0 のリリースを待つか、workaround を検討する必要がある。
+
+---
+
+## テスト管理の教訓：修正内容と知見（2026-01-17）
+
+### 対応内容
+
+**Mobile navbar 回帰テストを `test.fixme()` でマーク**
+
+- `tests/navbar.spec.ts` 修正
+- GitHub Issue: https://github.com/themesberg/flowbite-svelte/issues/1710
+- 背景: flowbite-svelte v1.31 移行時に発生した不具合、v2.x で修正される見込み
+
+### 教訓：テストの skip / fixme 方法論
+
+**❌ 避けるべき:** `test.skip()` のみ
+
+- スキップ理由が不明瞭
+- メジャーアップデート後の修正忘れリスク高い
+
+**✅ 推奨:** `test.fixme()` + Annotation
+
+- 「修正予定」という意図が明確
+- HTML 報告書に背景・Issue リンクが表示可能
+- メジャーアップデート時に「fixme リスト」を集中対応可能
