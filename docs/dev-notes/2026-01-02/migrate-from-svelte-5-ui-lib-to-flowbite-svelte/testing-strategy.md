@@ -184,11 +184,17 @@ test.describe('TailwindCSS v4 configuration', () => {
 
   test('xs breakpoint media queries are generated in CSS', () => {
     const cssDir = resolve('.svelte-kit/output/client/_app/immutable/assets');
-    const cssFiles = require('fs')
-      .readdirSync(cssDir)
-      .filter((f: string) => f.startsWith('0.') && f.endsWith('.css'));
-    const cssPath = resolve(cssDir, cssFiles[0]);
-    const css = readFileSync(cssPath, 'utf-8');
+    const cssFiles = readdirSync(cssDir)
+      .filter((f: string) => f.endsWith('.css'))
+      .sort()
+      .reverse();
+
+    expect(cssFiles.length).toBeGreaterThan(0);
+
+    // xs ブレークポイントを確認するため、全ての CSS ファイルをまとめる
+    const allCss = cssFiles
+      .map((f: string) => readFileSync(resolve(cssDir, f), 'utf-8'))
+      .join('\n');
 
     // xs: プレフィックス付きクラスが CSS に含まれているか確認
     // TailwindCSS v4 では @media クエリで xs breakpoint が定義される
