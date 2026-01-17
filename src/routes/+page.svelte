@@ -8,7 +8,7 @@
 
   import { PRODUCT_CATCH_PHRASE } from '$lib/constants/product-info';
   import { ATCODER_BASE_URL } from '$lib/constants/urls';
-  import { WORKBOOKS_PAGE, ABOUT_PAGE, PROBLEMS_PAGE } from '$lib/constants/navbar-links';
+  import { WORKBOOKS_PAGE, PROBLEMS_PAGE, ABOUT_PAGE } from '$lib/constants/navbar-links';
 
   const problemImages = [
     {
@@ -44,6 +44,7 @@
 
     <div class="flex flex-wrap justify-center items-center">
       <Button href={WORKBOOKS_PAGE} class="w-full sm:w-5/6 md:w-1/3 m-2">問題集へ</Button>
+      <Button outline href={PROBLEMS_PAGE} class="w-full sm:w-5/6 md:w-1/3 m-2">一覧表へ</Button>
       <Button
         color="alternative"
         href={ABOUT_PAGE}
