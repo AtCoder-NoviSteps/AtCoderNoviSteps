@@ -445,7 +445,7 @@ Run npm run preview to preview your production build locally.
 
 ### E2E テスト
 
-```
+```terminal
 $ pnpm test:integration
 ...
 Running 18 tests using 1 worker
