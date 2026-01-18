@@ -1,7 +1,9 @@
 # pnpm v10.27 メモリリーク問題の調査と解決
 
 **日付:** 2026-01-02
+
 **根本原因:** pnpm v10.27.0 のグローバルストア構造変更
+
 **状態:** ✅ 解決
 
 ## 問題の症状
@@ -53,17 +55,30 @@ NODE_OPTIONS=--max-old-space-size=8192 pnpm dev  # 失敗（4096 でも失敗）
 - ローカルの `node_modules` キャッシュが古い構造を参照して不整合
 - Vite + SvelteKit の開発サーバ起動時に、watch モード初期化でメモリを過剰消費
 
-## 解決方法
+## 解決方法（v10.28.0 へのアップグレード）
 
-**pnpm をダウングレード：v10.27.0 → v10.26.2**
+**状態:** ✅ 2026-01-18 に検証完了
+
+pnpm v10.28.0 で v10.27.0 の問題が修正されました。
+
+### v10.28.0 での修正内容
+
+[pnpm v10.28.0 Release Notes](https://github.com/pnpm/pnpm/releases/tag/v10.28.0) のパッチ `#10411` にて以下が修正されました：
+
+> Do not add a symlink to the project into the store's project registry if the store is in a subdirectory of the project
+
+**影響:** Docker + OrbStack 環境でのストア位置管理の問題を解決
+
+### アップグレード手順
 
 [package.json](../../../package.json) の devDependencies を変更：
 
 ```json
 {
   "devDependencies": {
-    "pnpm": "10.26.2"
-  }
+    "pnpm": "10.28.0"
+  },
+  "packageManager": "pnpm@10.28.0"
 }
 ```
 
@@ -73,7 +88,13 @@ NODE_OPTIONS=--max-old-space-size=8192 pnpm dev  # 失敗（4096 でも失敗）
 pnpm install --no-frozen-lockfile
 ```
 
-## 結果
+### 動作確認結果
+
+- ✅ `pnpm dev` - 正常に起動、メモリリークなし
+- ✅ `pnpm test:unit` - 正常に実行、watch モード安定動作
+- ✅ `pnpm build` - 正常にビルド完了
+
+## 結果（従来の方法）
 
 ✅ `pnpm dev` が正常に起動
 
@@ -93,37 +114,6 @@ pnpm install --no-frozen-lockfile
 - **プロジェクト登録メカニズムの変更** (symlinks in `{storeDir}/v10/projects/`)
 
 これらが相互作用して、ローカル環境でメモリ問題を引き起こした可能性がある。
-
-### 根本原因の確実性と環境固有性
-
-**確実な事実:**
-
-- pnpm v10.27.0 へのアップデート直後に問題が発生
-- v10.26.2 へのダウングレードで即座に解決
-- v10.27.0 は 2025年12月末リリース
-
-**推測される部分（高確度だが確定ではない）:**
-
-- Vite の Pre-bundling キャッシュ無効化メカニズムが影響
-- Watch モード中の累積メモリ消費
-- **環境固有の問題である可能性が高い** ⚠️
-
-**環境固有である理由:**
-
-- GitHub issues に同様の報告がない（pnpm 10.27.0 は pnpm の最新版）
-- このプロジェクト特有の設定の可能性：
-  - Docker コンテナ環境 + OrbStack での実行
-  - `compose.yaml` での `volumes: cached` 設定
-  - ホスト macOS との ファイルシステム監視の相互作用
-- **「pnpm 10.27.0 + Docker/OrbStack + Vite watch」の組み合わせに限定される可能性**
-
-つまり、pnpm 10.27.0 自体が不具合をもたらしたというより、**このプロジェクトの開発環境における相互作用が問題を引き起こした**可能性が高い。
-
-### 将来への対応
-
-- pnpm 10.27.1 以降で修正される可能性は低い（報告がないため）
-- 次のメジャーアップデートまで v10.26.2 を維持することを推奨
-- または、Docker 内での watch 設定やボリュームマウント設定を最適化してから検証する
 
 ### 参考リンク
 
