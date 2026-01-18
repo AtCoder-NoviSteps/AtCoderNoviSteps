@@ -55,33 +55,9 @@ NODE_OPTIONS=--max-old-space-size=8192 pnpm dev  # 失敗（4096 でも失敗）
 - ローカルの `node_modules` キャッシュが古い構造を参照して不整合
 - Vite + SvelteKit の開発サーバ起動時に、watch モード初期化でメモリを過剰消費
 
-## 解決方法（従来の方法）
+## 解決方法（v10.28.0 へのアップグレード）
 
-**pnpm をダウングレード：v10.27.0 → v10.26.2**
-
-[package.json](../../../package.json) の devDependencies を変更：
-
-```json
-{
-  "devDependencies": {
-    "pnpm": "10.26.2"
-  }
-}
-```
-
-実行コマンド：
-
-```bash
-pnpm install --no-frozen-lockfile
-```
-
-### 結果
-
-✅ `pnpm dev` が正常に起動
-
-## 推奨解決方法（v10.28.0 へのアップグレード）
-
-**状態:** ✅ **2026-01-18 で検証完了 - 推奨**
+**状態:** ✅ 2026-01-18 に検証完了
 
 pnpm v10.28.0 で v10.27.0 の問題が修正されました。
 
