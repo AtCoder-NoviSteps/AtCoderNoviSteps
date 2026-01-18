@@ -463,5 +463,4 @@ Running 18 tests using 1 worker
 
 ## 推奨アクション（次フェーズ）
 
-1. **logout テストの修正**: navbar ユーザーリンク取得の調査
-2. **Vercel デプロイ**: 本番環境で確認前テスト
+1. **Vercel デプロイ**: 本番環境で確認前テスト
