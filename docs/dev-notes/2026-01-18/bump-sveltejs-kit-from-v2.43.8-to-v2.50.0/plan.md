@@ -252,7 +252,7 @@ const result = await form.validate();
 
 **エラー内容**:
 
-```
+```terminal
 Test timeout of 30000ms exceeded.
 Error: locator.click: Test timeout of 30000ms exceeded.
 Call log:
