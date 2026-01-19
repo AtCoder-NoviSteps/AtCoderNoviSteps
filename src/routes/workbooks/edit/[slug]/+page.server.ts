@@ -14,6 +14,10 @@ import { workBookSchema } from '$lib/zod/schema';
 import * as tasksCrud from '$lib/services/tasks';
 import * as workBooksCrud from '$lib/services/workbooks';
 
+/**
+ * Loads workbook and author data, initializes a validation form and task lookups, and enforces edit permissions for the current user.
+ *
+ * @returns An object containing the initialized `form` (prefilled with the workbook), `loggedInAsAdmin` flag, the workbook with author data, `tasks`, and `tasksMapByIds`. If a logged-in user exists but is not authorized to edit the workbook, the returned object includes `status: FORBIDDEN` and a `message` describing the access restriction. */
 export async function load({ locals, params }) {
   const loggedInUser = await getLoggedInUser(locals);
   const loggedInAsAdmin = isAdmin(loggedInUser?.role as Roles);

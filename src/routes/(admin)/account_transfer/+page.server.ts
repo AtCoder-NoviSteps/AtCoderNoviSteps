@@ -16,6 +16,13 @@ import { Roles } from '$lib/types/user';
 
 let accountTransferMessages: FloatingMessage[] = [];
 
+/**
+ * Prepare data for the account transfer page by validating the current session, enforcing admin access, and constructing the transfer form.
+ *
+ * @param locals - SvelteKit locals providing `auth` for session validation and services used to fetch user data.
+ * @returns An object with `success: true`, `form`: the validated account transfer form with its `message` cleared, and `accountTransferMessages`: the module-level messages array related to account transfers.
+ * @throws Redirects to the login page when the session is missing or the authenticated user is not an admin.
+ */
 export async function load({ locals }) {
   const session = await locals.auth.validate();
 
