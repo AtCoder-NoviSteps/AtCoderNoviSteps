@@ -21,7 +21,7 @@ vi.mock('sveltekit-superforms/server', () => ({
 }));
 
 vi.mock('sveltekit-superforms/adapters', () => ({
-  zod: vi.fn(),
+  zod4: vi.fn(),
 }));
 
 vi.mock('$lib/zod/schema', () => ({
@@ -45,7 +45,7 @@ vi.mock('$lib/constants/navbar-links', () => ({
 // Import AFTER mocking
 import { redirect } from '@sveltejs/kit';
 import { superValidate } from 'sveltekit-superforms/server';
-import { zod } from 'sveltekit-superforms/adapters';
+import { zod4 } from 'sveltekit-superforms/adapters';
 
 import {
   initializeAuthForm,
@@ -137,7 +137,7 @@ describe('auth_forms', () => {
       } as unknown as SuperValidated<Record<string, string>, string>;
     });
 
-    vi.mocked(zod).mockImplementation((schema: unknown) => schema as any);
+    vi.mocked(zod4).mockImplementation((schema: unknown) => schema as any);
   });
 
   afterEach(() => {

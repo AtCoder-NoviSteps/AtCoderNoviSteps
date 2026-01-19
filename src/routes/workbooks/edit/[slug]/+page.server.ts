@@ -1,6 +1,6 @@
 import { redirect, fail } from '@sveltejs/kit';
 import { superValidate } from 'sveltekit-superforms/server';
-import { zod } from 'sveltekit-superforms/adapters';
+import { zod4 } from 'sveltekit-superforms/adapters';
 
 import { getLoggedInUser, canEdit, isAdmin } from '$lib/utils/authorship';
 import { Roles } from '$lib/types/user';
@@ -20,7 +20,7 @@ export async function load({ locals, params }) {
   const slug = params.slug.toLowerCase();
   const workBookWithAuthor = await getWorkbookWithAuthor(slug);
 
-  const form = await superValidate(null, zod(workBookSchema));
+  const form = await superValidate(null, zod4(workBookSchema));
   const workBook = {
     ...workBookWithAuthor.workBook,
     urlSlug: workBookWithAuthor.workBook.urlSlug ?? undefined,
@@ -65,7 +65,7 @@ export async function load({ locals, params }) {
 export const actions = {
   default: async ({ request, params }) => {
     console.log('form -> actions -> update');
-    const form = await superValidate(request, zod(workBookSchema));
+    const form = await superValidate(request, zod4(workBookSchema));
 
     if (!form.valid) {
       return {

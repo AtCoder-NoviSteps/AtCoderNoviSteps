@@ -13,23 +13,23 @@ const ONLY_SINGLE_BYTE_ALPHANUMERIC_CHARACTERS_AND_ = '半角英数字と_のみ
 export const authSchema = z.object({
   username: z
     .string()
-    .min(3, { message: INPUT_AT_LEAST_3_CHARACTERS })
-    .max(24, { message: DELETE_UNTIL_24_CHARACTERS_ARE_LEFT })
-    .regex(/^[\w]*$/, { message: ONLY_SINGLE_BYTE_ALPHANUMERIC_CHARACTERS_AND_ }),
+    .min(3, { error: INPUT_AT_LEAST_3_CHARACTERS })
+    .max(24, { error: DELETE_UNTIL_24_CHARACTERS_ARE_LEFT })
+    .regex(/^[\w]*$/, { error: ONLY_SINGLE_BYTE_ALPHANUMERIC_CHARACTERS_AND_ }),
   password: z
     .string()
-    .min(8, { message: '8文字以上入力してください' })
-    .max(128, { message: '128文字になるまで削除してください' })
+    .min(8, { error: '8文字以上入力してください' })
+    .max(128, { error: '128文字になるまで削除してください' })
     .regex(/^(?=.*?[a-z])(?=.*?[A-Z])(?=.*?\d)[a-zA-Z\d]{8,128}$/, {
-      message: '半角英文字(小・大)・数字をそれぞれ1文字以上含めてください',
+      error: '半角英文字(小・大)・数字をそれぞれ1文字以上含めてください',
     }),
 });
 
 export const accountSchema = z
   .string()
-  .min(3, { message: INPUT_AT_LEAST_3_CHARACTERS })
-  .max(24, { message: DELETE_UNTIL_24_CHARACTERS_ARE_LEFT })
-  .regex(/^[\w]*$/, { message: ONLY_SINGLE_BYTE_ALPHANUMERIC_CHARACTERS_AND_ });
+  .min(3, { error: INPUT_AT_LEAST_3_CHARACTERS })
+  .max(24, { error: DELETE_UNTIL_24_CHARACTERS_ARE_LEFT })
+  .regex(/^[\w]*$/, { error: ONLY_SINGLE_BYTE_ALPHANUMERIC_CHARACTERS_AND_ });
 
 export const accountTransferSchema = z
   .object({
@@ -37,7 +37,7 @@ export const accountTransferSchema = z
     destinationUserName: accountSchema,
   })
   .refine((data) => data.sourceUserName !== data.destinationUserName, {
-    message: '新アカウント名は、旧アカウント名とは異なるものを指定してください',
+    error: '新アカウント名は、旧アカウント名とは異なるものを指定してください',
     path: ['destinationUserName'],
   });
 
@@ -45,27 +45,24 @@ const workBookTaskSchema = z.object({
   workBookId: z.number().nonnegative().optional(),
   taskId: z.string(),
   priority: z.number().positive(),
-  comment: z
-    .string()
-    .min(0, { message: '' })
-    .max(50, { message: '50文字になるまで削除してください' }), // FIXME: 上限は暫定値。
+  comment: z.string().min(0, { error: '' }).max(50, { error: '50文字になるまで削除してください' }), // FIXME: 上限は暫定値。
 });
 
 export const workBookSchema = z.object({
   authorId: z.string(),
   title: z
     .string()
-    .min(3, { message: '3文字以上入力してください' })
-    .max(200, { message: '200文字になるまで削除してください' }),
+    .min(3, { error: '3文字以上入力してください' })
+    .max(200, { error: '200文字になるまで削除してください' }),
   description: z
     .string()
-    .min(0, { message: '' })
-    .max(300, { message: '300文字になるまで削除してください' }),
+    .min(0, { error: '' })
+    .max(300, { error: '300文字になるまで削除してください' }),
   editorialUrl: z
     .string()
-    .min(0, { message: '' })
-    .max(300, { message: '300文字になるまで削除してください' })
-    .refine(isValidUrl, { message: 'URLを再入力してください' }), // カリキュラムのトピック解説用のURL。HACK: 「ユーザ作成」の場合も利用できるようにするかは要検討。
+    .min(0, { error: '' })
+    .max(300, { error: '300文字になるまで削除してください' })
+    .refine(isValidUrl, { error: 'URLを再入力してください' }), // カリキュラムのトピック解説用のURL。HACK: 「ユーザ作成」の場合も利用できるようにするかは要検討。
   isPublished: z.boolean(),
   isOfficial: z.boolean(),
   isReplenished: z.boolean(), // カリキュラムの【補充】を識別するために使用
@@ -82,16 +79,16 @@ export const workBookSchema = z.object({
         }
         return value.length <= 30;
       },
-      { message: '30文字以下になるまで削除してください' },
+      { error: '30文字以下になるまで削除してください' },
     )
     .transform((value) =>
       value === '' || value === null || value === undefined ? undefined : value.toLowerCase(),
     )
     .refine((value) => value === undefined || isValidUrlSlug(value), {
-      message: '半角英小文字、半角数字、ハイフンのみ使用できます（数字のみは不可）',
+      error: '半角英小文字、半角数字、ハイフンのみ使用できます（数字のみは不可）',
     }),
   workBookTasks: z
     .array(workBookTaskSchema)
-    .min(1, { message: '1問以上登録してください' })
-    .max(200, { message: '200問以下になるまで削除してください' }),
+    .min(1, { error: '1問以上登録してください' })
+    .max(200, { error: '200問以下になるまで削除してください' }),
 });

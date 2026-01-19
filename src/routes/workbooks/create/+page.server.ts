@@ -1,6 +1,6 @@
 import { error, fail, redirect } from '@sveltejs/kit';
 import { superValidate } from 'sveltekit-superforms/server';
-import { zod } from 'sveltekit-superforms/adapters';
+import { zod4 } from 'sveltekit-superforms/adapters';
 
 import { workBookSchema } from '$lib/zod/schema';
 
@@ -24,7 +24,7 @@ export const load = async ({ locals }) => {
     redirect(TEMPORARY_REDIRECT, '/login');
   }
 
-  const form = await superValidate(null, zod(workBookSchema));
+  const form = await superValidate(null, zod4(workBookSchema));
   const author = locals.user;
   const isAdmin = author.role === Roles.ADMIN;
 
@@ -52,7 +52,7 @@ export const actions = {
       return fail(FORBIDDEN, { message: '管理者のみ問題集を作成できます。' });
     }
 
-    const form = await superValidate(request, zod(workBookSchema));
+    const form = await superValidate(request, zod4(workBookSchema));
 
     if (!form.valid) {
       return fail(BAD_REQUEST, {

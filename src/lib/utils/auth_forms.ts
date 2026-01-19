@@ -1,7 +1,7 @@
 import { redirect } from '@sveltejs/kit';
 
 import { superValidate } from 'sveltekit-superforms/server';
-import { zod } from 'sveltekit-superforms/adapters';
+import { zod4 } from 'sveltekit-superforms/adapters';
 
 import type {
   AuthForm,
@@ -65,7 +65,7 @@ const formCreationStrategies: AuthFormCreationStrategies = [
   {
     name: '(Basic case) Use standard superValidate',
     async run() {
-      const form = await superValidate(zod(authSchema));
+      const form = await superValidate(zod4(authSchema));
       return { form: { ...form, message: '' } };
     },
   },
@@ -118,7 +118,7 @@ const formValidationStrategies: AuthFormValidationStrategies = [
   {
     name: '(Basic Case) Use standard superValidate with request',
     async run(request: Request) {
-      const form = await superValidate(request, zod(authSchema));
+      const form = await superValidate(request, zod4(authSchema));
       return { form: { ...form, message: '' } };
     },
   },
