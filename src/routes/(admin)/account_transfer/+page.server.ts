@@ -2,7 +2,7 @@
 // https://superforms.rocks/get-started
 import { redirect, type Actions } from '@sveltejs/kit';
 import { superValidate } from 'sveltekit-superforms/server';
-import { zod } from 'sveltekit-superforms/adapters';
+import { zod4 } from 'sveltekit-superforms/adapters';
 
 import * as userService from '$lib/services/users';
 import * as taskResultService from '$lib/services/task_results';
@@ -29,7 +29,7 @@ export async function load({ locals }) {
     throw redirect(TEMPORARY_REDIRECT, LOGIN_PAGE);
   }
 
-  const form = await superValidate(null, zod(accountTransferSchema));
+  const form = await superValidate(null, zod4(accountTransferSchema));
 
   // HACK: accountTransferMessagesは、アカウント移行に関するメッセージを確実に表示するために必要。
   // 原因: form送信後にload関数が呼び出されているため。
@@ -46,7 +46,7 @@ export async function load({ locals }) {
 export const actions: Actions = {
   default: async ({ request }) => {
     try {
-      const form = await superValidate(request, zod(accountTransferSchema));
+      const form = await superValidate(request, zod4(accountTransferSchema));
 
       if (!form.valid) {
         return {
