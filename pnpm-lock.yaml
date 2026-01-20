@@ -54,8 +54,8 @@ importers:
         specifier: 2.6.0
         version: 2.6.0
       vercel:
-        specifier: 50.4.6
-        version: 50.4.6(rollup@4.53.4)(typescript@5.9.3)
+        specifier: 50.4.7
+        version: 50.4.7(rollup@4.53.4)(typescript@5.9.3)
       xss:
         specifier: 1.0.15
         version: 1.0.15
@@ -1965,8 +1965,8 @@ packages:
   '@vercel/node@5.5.24':
     resolution: {integrity: sha512-VA7I1sW+CwN4HJw/FbCtKWgk9/Le8pHwtM777LRlgIT8XZVo55eW8XxKYibf89HfGMVA/KyN9A2fSF6Z58dBhA==}
 
-  '@vercel/python@6.1.6':
-    resolution: {integrity: sha512-4N9doC1i97rx6nh8h05GiDWfnAIRZLVjKKg+hJmxBO5aVWr8uyXrM337KFC4NF6rxutMHsXAp5DBe/M+dOJDKg==}
+  '@vercel/python@6.2.0':
+    resolution: {integrity: sha512-6tpM45PV9rJJGrdEm7+te8FIzNHz61vR6EJ7j1f1EFYlQWvZb61REA/C5x+hzPNXGYGyMPMgejh7U85Z6b9abA==}
 
   '@vercel/redwood@2.4.9':
     resolution: {integrity: sha512-U7bYIuWfMEFMIcKKbX7lTT8pFNjig9Q3vLeCYRYQUrKVP8xLoUBXSEfW3ijtWJBUV8GmbZCDI30A16uUfNhN+g==}
@@ -2740,8 +2740,8 @@ packages:
   didyoumean@1.2.2:
     resolution: {integrity: sha512-gxtyfqMg7GKyhQmb056K7M3xszy/myH8w+B4RT+QXBQsvAOdc3XymqDDPHx1BgPgsdAA5SIifona89YtRATDzw==}
 
-  diff@4.0.2:
-    resolution: {integrity: sha512-58lmxKSA4BNyLz+HHMUzlOEpg09FV+ev6ZMe3vJihgdxzgcwZ8VoEEPmALCZG9LmqfVoNMMKpttIYTVG6uDY7A==}
+  diff@4.0.4:
+    resolution: {integrity: sha512-X07nttJQkwkfKfvTPG/KSnE2OMdcUCao6+eXF3wmnIQRn2aPAHH3VxDbDOdegkd6JbPsXqShpvEOHfAT+nCNwQ==}
     engines: {node: '>=0.3.1'}
 
   directory-tree@3.5.2:
@@ -4693,10 +4693,9 @@ packages:
     engines: {node: '>=10'}
     deprecated: Old versions of tar are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exhorbitant rates) by contacting i@izs.me
 
-  tar@7.5.3:
-    resolution: {integrity: sha512-ENg5JUHUm2rDD7IvKNFGzyElLXNjachNLp6RaGf4+JOgxXHkqA+gq81ZAMCUmtMtqBsoU62lcp6S27g1LCYGGQ==}
+  tar@7.5.4:
+    resolution: {integrity: sha512-AN04xbWGrSTDmVwlI4/GTlIIwMFk/XEv7uL8aa57zuvRy6s4hdBed+lVq2fAZ89XDa7Us3ANXcE3Tvqvja1kTA==}
     engines: {node: '>=18'}
-    deprecated: Old versions of tar are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exhorbitant rates) by contacting i@izs.me
 
   text-decoder@1.2.3:
     resolution: {integrity: sha512-3/o9z3X0X0fTupwsYvR03pJ/DjWuqqrfwBgTQzdWDiQSm9KitAyz/9WqsT2JQW7KV2m+bC2ol/zqpW37NHxLaA==}
@@ -4926,8 +4925,8 @@ packages:
     resolution: {integrity: sha512-spH26xU080ydGggxRyR1Yhcbgx+j3y5jbNXk/8L+iRvdIEQ4uTRH2Sgf2dokud6Q4oAtsbNvJ1Ft+9xmm6IZcA==}
     engines: {node: '>= 0.10'}
 
-  vercel@50.4.6:
-    resolution: {integrity: sha512-rSi2XzKbNu0VBM5qUxydFuQxWdsSvs8tnkmLLbuoZpPGA3c08n50SxMCfWijt7abvvkGgALSvxpkQZI3r2rpKA==}
+  vercel@50.4.7:
+    resolution: {integrity: sha512-Vy9c8dtakJkb6rNKJTUx5BPpXQ8S7aW5ip9RTaKqj9oldWmEziJJbX1sWsCtVsbAabsiTMjoP2pmLdGHX/UCsw==}
     engines: {node: '>= 18'}
     hasBin: true
 
@@ -5790,7 +5789,7 @@ snapshots:
       node-fetch: 2.7.0
       nopt: 8.1.0
       semver: 7.7.3
-      tar: 7.5.3
+      tar: 7.5.4
     transitivePeerDependencies:
       - encoding
       - supports-color
@@ -6952,7 +6951,7 @@ snapshots:
       - rollup
       - supports-color
 
-  '@vercel/python@6.1.6': {}
+  '@vercel/python@6.2.0': {}
 
   '@vercel/redwood@2.4.9(rollup@4.53.4)':
     dependencies:
@@ -7782,7 +7781,7 @@ snapshots:
 
   didyoumean@1.2.2: {}
 
-  diff@4.0.2: {}
+  diff@4.0.4: {}
 
   directory-tree@3.5.2:
     dependencies:
@@ -9833,7 +9832,7 @@ snapshots:
       mkdirp: 1.0.4
       yallist: 4.0.0
 
-  tar@7.5.3:
+  tar@7.5.4:
     dependencies:
       '@isaacs/fs-minipass': 4.0.1
       chownr: 3.0.0
@@ -9942,7 +9941,7 @@ snapshots:
       acorn-walk: 8.3.4
       arg: 4.1.3
       create-require: 1.1.1
-      diff: 4.0.2
+      diff: 4.0.4
       make-error: 1.3.6
       typescript: 4.9.5
       v8-compile-cache-lib: 3.0.1
@@ -9960,7 +9959,7 @@ snapshots:
       acorn-walk: 8.3.4
       arg: 4.1.3
       create-require: 1.1.1
-      diff: 4.0.2
+      diff: 4.0.4
       make-error: 1.3.6
       typescript: 5.9.3
       v8-compile-cache-lib: 3.0.1
@@ -10048,7 +10047,7 @@ snapshots:
   validator@13.15.26:
     optional: true
 
-  vercel@50.4.6(rollup@4.53.4)(typescript@5.9.3):
+  vercel@50.4.7(rollup@4.53.4)(typescript@5.9.3):
     dependencies:
       '@vercel/backends': 0.0.22(rollup@4.53.4)(typescript@5.9.3)
       '@vercel/blob': 1.0.2
@@ -10066,7 +10065,7 @@ snapshots:
       '@vercel/nestjs': 0.2.27(rollup@4.53.4)
       '@vercel/next': 4.15.15(rollup@4.53.4)
       '@vercel/node': 5.5.24(rollup@4.53.4)
-      '@vercel/python': 6.1.6
+      '@vercel/python': 6.2.0
       '@vercel/redwood': 2.4.9(rollup@4.53.4)
       '@vercel/remix-builder': 5.5.9(rollup@4.53.4)
       '@vercel/ruby': 2.2.4
