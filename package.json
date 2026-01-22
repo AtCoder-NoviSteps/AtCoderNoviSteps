@@ -75,7 +75,7 @@
     "@prisma/client": "5.22.0",
     "@testing-library/svelte": "5.3.1",
     "@types/jest": "30.0.0",
-    "@types/node": "25.0.9",
+    "@types/node": "25.0.10",
     "debug": "4.4.3",
     "lucia": "2.7.7",
     "p-queue": "9.1.0",
