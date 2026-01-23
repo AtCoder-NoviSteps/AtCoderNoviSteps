@@ -25,7 +25,7 @@
   "devDependencies": {
     "@eslint/eslintrc": "3.3.3",
     "@eslint/js": "9.39.2",
-    "@playwright/test": "1.57.0",
+    "@playwright/test": "1.58.0",
     "@quramy/prisma-fabbrica": "2.3.3",
     "@sveltejs/adapter-vercel": "6.3.1",
     "@sveltejs/kit": "2.50.1",
@@ -69,7 +69,7 @@
   "type": "module",
   "dependencies": {
     "@lucia-auth/adapter-prisma": "3.0.2",
-    "@lucide/svelte": "0.562.0",
+    "@lucide/svelte": "0.563.1",
     "@mermaid-js/mermaid-cli": "11.12.0",
     "@popperjs/core": "2.11.8",
     "@prisma/client": "5.22.0",
@@ -79,11 +79,11 @@
     "debug": "4.4.3",
     "lucia": "2.7.7",
     "p-queue": "9.1.0",
-    "playwright": "1.57.0",
+    "playwright": "1.58.0",
     "prisma-erd-generator": "2.4.2",
     "svelte-eslint-parser": "1.4.1",
     "tailwind-merge": "2.6.0",
-    "vercel": "50.4.10",
+    "vercel": "50.4.11",
     "xss": "1.0.15"
   },
   "packageManager": "pnpm@10.28.0",
