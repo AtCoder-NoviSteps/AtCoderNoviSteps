@@ -692,7 +692,7 @@ describe('CustomProvider with unique displayConfig', () => {
 - [#2776](https://github.com/AtCoder-NoviSteps/AtCoderNoviSteps/issues/2776) - TessokuBookProvider
 - [#2785](https://github.com/AtCoder-NoviSteps/AtCoderNoviSteps/issues/2785) - MathAndAlgorithmProvider
 - [#2797](https://github.com/AtCoder-NoviSteps/AtCoderNoviSteps/issues/2797) - FPS24Provider
-- [#2962](https://github.com/AtCoder-NoviSteps/AtCoderNoviSteps/issues/2962) - ACLPracticeProvider
+- [#2920](https://github.com/AtCoder-NoviSteps/AtCoderNoviSteps/issues/2920) - ACLPracticeProvider
 
 ### 実装ファイル
 
