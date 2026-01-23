@@ -79,7 +79,7 @@
     "debug": "4.4.3",
     "lucia": "2.7.7",
     "p-queue": "9.1.0",
-    "playwright": "1.57.0",
+    "playwright": "1.58.0",
     "prisma-erd-generator": "2.4.2",
     "svelte-eslint-parser": "1.4.1",
     "tailwind-merge": "2.6.0",
