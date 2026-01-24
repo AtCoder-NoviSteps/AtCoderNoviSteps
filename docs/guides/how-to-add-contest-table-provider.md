@@ -111,7 +111,7 @@ export const contestTableProviderGroups: Record<ProviderKey, ContestTableProvide
 - `setFilterCondition()`: 条件関数を返すメソッド
 - `getMetadata()`: `title`、`abbreviationName` を返す
 - `getDisplayConfig()`: 表示設定を返す
-- `getContestRoundLabel()`: ラウンドラベルを返す
+- `getContestRoundLabel(contestId)`: ラウンドラベルを返す
 
 **例**:
 
@@ -170,13 +170,15 @@ pnpm test:unit src/test/lib/utils/contest_table_provider.test.ts
 
 ```typescript
 class ABC001ToABC041Provider extends ContestTableProviderBase {
-  protected contestType = ContestType.ABC;
+  protected setFilterCondition(): (taskResult: TaskResult) => boolean {
+    return (taskResult: TaskResult) => {
+      if (classifyContest(taskResult.contest_id) !== this.contestType) {
+        return false;
+      }
 
-  filter(tasks: TaskResults): TaskResults | null {
-    return tasks.filter((task) => {
-      const round = this.extractRound(task.contest_id, 'abc');
-      return round >= 1 && round <= 41;
-    });
+      const contestRound = parseContestRound(taskResult.contest_id, 'abc');
+      return contestRound >= 1 && contestRound <= 41;
+    };
   }
 
   getMetadata(): ContestTableMetaData {
@@ -222,15 +224,19 @@ class ABC001ToABC041Provider extends ContestTableProviderBase {
 
 ```typescript
 class EDPCProvider extends ContestTableProviderBase {
-  protected contestType = ContestType.EDPC;
+  protected setFilterCondition(): (taskResult: TaskResult) => boolean {
+    return (taskResult: TaskResult) => {
+      if (classifyContest(taskResult.contest_id) !== this.contestType) {
+        return false;
+      }
 
-  filter(tasks: TaskResults): TaskResults | null {
-    return tasks.filter((task) => task.contest_id === 'dp');
+      return taskResult.contest_id === 'dp';
+    };
   }
 
   getMetadata(): ContestTableMetaData {
     return {
-      title: 'AtCoder Educational DP Contest',
+      title: 'Educational DP Contest / DP まとめコンテスト',
       abbreviationName: 'edpc',
     };
   }
@@ -269,10 +275,10 @@ class EDPCProvider extends ContestTableProviderBase {
 
 ```typescript
 class ABSProvider extends ContestTableProviderBase {
-  protected contestType = ContestType.ABS;
-
-  filter(tasks: TaskResults): TaskResults | null {
-    return tasks.filter((task) => task.contest_id === 'abs');
+  protected setFilterCondition(): (taskResult: TaskResult) => boolean {
+    return (taskResult: TaskResult) => {
+      return classifyContest(taskResult.contest_id) === this.contestType;
+    };
   }
 
   getMetadata(): ContestTableMetaData {
