@@ -48,7 +48,7 @@
     "lefthook": "2.0.15",
     "jsdom": "27.4.0",
     "nock": "14.0.10",
-    "pnpm": "10.28.1",
+    "pnpm": "10.28.2",
     "prettier": "3.8.1",
     "prettier-plugin-svelte": "3.4.1",
     "prettier-plugin-tailwindcss": "0.6.14",
