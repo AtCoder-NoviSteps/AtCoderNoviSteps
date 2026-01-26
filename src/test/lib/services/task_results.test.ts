@@ -291,9 +291,9 @@ vi.mock('$lib/services/tasks', () => {
     {
       id: '24',
       contest_id: 'jsc2025advance-final',
-      task_id: 'abc422_h',
+      task_id: 'abc422_g',
       contest_type: 'ABC_LIKE' as const,
-      task_table_index: 'H',
+      task_table_index: 'G',
       title: 'Balls and Boxes',
       grade: 'D3' as const,
     },
