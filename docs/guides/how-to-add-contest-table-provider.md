@@ -33,9 +33,7 @@
 
 ### 利点
 
-- **要件の明確化**: テスト設計時点で仕様が固まる
-- **品質保証**: 実装中にテストで即座に検証
-- **保守性**: テストが仕様書として機能
+テストを先行することで要件が固まり、実装中に即座に検証でき、テストコード自体が仕様書の役割を果たします。
 
 ### 実装フェーズ詳細
 
@@ -49,28 +47,28 @@
 - `protected contestType` を指定
 - 抽象メソッドは暫定実装（テストが実行可能な状態まで）
 
-**例**:
+**例（Step1 用の空実装）**:
 
 ```typescript
 export class MyNewProvider extends ContestTableProviderBase {
   protected contestType = ContestType.MY_NEW;
 
   protected setFilterCondition(): (taskResult: TaskResult) => boolean {
-    return () => true; // 暫定実装
+    return () => true; // モックテストを通すための簡易実装
   }
 
   getMetadata(): ContestTableMetaData {
-    return { title: '', abbreviationName: '' }; // 暫定実装
+    return { title: '', abbreviationName: '' }; // 仮のまま
   }
 
   getDisplayConfig(): ContestTableDisplayConfig {
     return {
-      /* 暫定実装 */
+      /* 未定義の表示構成 */
     };
   }
 
   getContestRoundLabel(): string {
-    return ''; // 暫定実装
+    return ''; // ラベルも仮
   }
 }
 ```
@@ -113,7 +111,7 @@ export const contestTableProviderGroups: Record<ProviderKey, ContestTableProvide
 - `getDisplayConfig()`: 表示設定を返す
 - `getContestRoundLabel(contestId)`: ラウンドラベルを返す
 
-**例**:
+**例（Step3 用の本実装）**:
 
 ```typescript
 export class MyNewProvider extends ContestTableProviderBase {
@@ -141,7 +139,7 @@ export class MyNewProvider extends ContestTableProviderBase {
   }
 
   getContestRoundLabel(contestId: string): string {
-    return '';
+    return ''; // 必要に応じてラウンド名を生成
   }
 }
 ```
@@ -301,102 +299,51 @@ class ABSProvider extends ContestTableProviderBase {
   getContestRoundLabel(contestId: string): string {
     return '';
   }
-
-  getHeaderIdsForTask(tasks: TaskResults): string[] {
-    return (
-      this.filter(tasks)
-        ?.map((task) => task.task_table_index)
-        .sort() ?? []
-    );
-  }
 }
 ```
 
 **Tessoku Book（セクション分割あり）**:
 
+Tessoku Book は `TessokuBookProvider` を基底にし、`task_table_index` の先頭文字（A / B / C）でセクションを切り替えるだけで各サブセットを表現できます。タイトルや abbreviationName はセクションに応じて変え、setFilterCondition ではセクションに対応する prefix をチェックするパターンが共通です。たとえば次のように共通基盤を用意しておけば、セクション固有クラスを作る必要はありません。
+
 ```typescript
-// 基底クラス: TessokuBookProvider
-export class TessokuBookProvider extends ContestTableProviderBase {
-  protected setFilterCondition(): (taskResult: TaskResult) => boolean {
-    return (taskResult: TaskResult) => {
-      return classifyContest(taskResult.contest_id) === this.contestType;
-    };
-  }
-
-  getMetadata(): ContestTableMetaData {
-    return {
-      title: '競技プログラミングの鉄則',
-      abbreviationName: 'tessoku-book',
-    };
-  }
-}
-
-// 例題: A01～A77
-export class TessokuBookForExamplesProvider extends TessokuBookProvider {
-  constructor(contestType: ContestType) {
-    super(contestType, 'examples');
+class TessokuBookSectionProvider extends TessokuBookProvider {
+  constructor(
+    contestType: ContestType,
+    private sectionPrefix: 'A' | 'B' | 'C',
+  ) {
+    super(
+      contestType,
+      sectionPrefix === 'A' ? 'examples' : sectionPrefix === 'B' ? 'practicals' : 'challenges',
+    );
   }
 
   protected setFilterCondition(): (taskResult: TaskResult) => boolean {
     return (taskResult: TaskResult) => {
       return (
         classifyContest(taskResult.contest_id) === this.contestType &&
-        taskResult.task_table_index.startsWith('A')
+        taskResult.task_table_index.startsWith(this.sectionPrefix)
       );
     };
   }
 
   getMetadata(): ContestTableMetaData {
-    return {
-      title: '競技プログラミングの鉄則（A. 例題）',
-      abbreviationName: 'tessoku-book-for-examples',
+    const titles: Record<'A' | 'B' | 'C', ContestTableMetaData> = {
+      A: {
+        title: '競技プログラミングの鉄則（A. 例題）',
+        abbreviationName: 'tessoku-book-for-examples',
+      },
+      B: {
+        title: '競技プログラミングの鉄則（B. 応用問題）',
+        abbreviationName: 'tessoku-book-for-practicals',
+      },
+      C: {
+        title: '競技プログラミングの鉄則（C. 力試し問題）',
+        abbreviationName: 'tessoku-book-for-challenges',
+      },
     };
-  }
-}
 
-// 応用: B01～B69
-export class TessokuBookForPracticalsProvider extends TessokuBookProvider {
-  constructor(contestType: ContestType) {
-    super(contestType, 'practicals');
-  }
-
-  protected setFilterCondition(): (taskResult: TaskResult) => boolean {
-    return (taskResult: TaskResult) => {
-      return (
-        classifyContest(taskResult.contest_id) === this.contestType &&
-        taskResult.task_table_index.startsWith('B')
-      );
-    };
-  }
-
-  getMetadata(): ContestTableMetaData {
-    return {
-      title: '競技プログラミングの鉄則（B. 応用問題）',
-      abbreviationName: 'tessoku-book-for-practicals',
-    };
-  }
-}
-
-// 力試し: C01～C20
-export class TessokuBookForChallengesProvider extends TessokuBookProvider {
-  constructor(contestType: ContestType) {
-    super(contestType, 'challenges');
-  }
-
-  protected setFilterCondition(): (taskResult: TaskResult) => boolean {
-    return (taskResult: TaskResult) => {
-      return (
-        classifyContest(taskResult.contest_id) === this.contestType &&
-        taskResult.task_table_index.startsWith('C')
-      );
-    };
-  }
-
-  getMetadata(): ContestTableMetaData {
-    return {
-      title: '競技プログラミングの鉄則（C. 力試し問題）',
-      abbreviationName: 'tessoku-book-for-challenges',
-    };
+    return titles[this.sectionPrefix];
   }
 }
 ```
@@ -589,9 +536,7 @@ describe('NewProvider', () => {
 
 ## テストデータ参考ファイル
 
-- [prisma/contest_task_pairs.ts](../../prisma/contest_task_pairs.ts) - 複合ソース型の task_id 参照を確認
-- [prisma/tasks.ts](../../prisma/tasks.ts) - 各コンテストの task_id フォーマットを確認
-- [prisma/schema.prisma](../../prisma/schema.prisma) - task_table_index フィールドのフォーマットを確認
+必要な Prisma ファイルは「ステップ1: データソース確認」で挙げた `prisma/contest_task_pairs.ts`、`prisma/tasks.ts`、`prisma/schema.prisma` です。
 
 ---
 
