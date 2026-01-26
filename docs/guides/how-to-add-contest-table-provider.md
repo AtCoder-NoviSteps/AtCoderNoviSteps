@@ -703,6 +703,42 @@ describe('CustomProvider with unique displayConfig', () => {
 });
 ```
 
+### 6. **getDisplayConfig() での属性漏れ**
+
+**問題**: `getDisplayConfig()` で `roundLabelWidth` と `tableBodyCellsWidth` だけを定義し、`isShownHeader`, `isShownRoundLabel`, `isShownTaskIndex` を未定義にすると、ベースクラスのデフォルト値が適用されて想定と異なる表示になる
+
+**対策**:
+
+- `ContestTableDisplayConfig` の **全属性を明示的に定義** すること
+- 一部だけカスタマイズする場合でも、他の属性は必ず記述
+
+```typescript
+getDisplayConfig() {
+  return {
+    isShownHeader: true,                    // 必ず指定
+    isShownRoundLabel: true,                // 必ず指定
+    roundLabelWidth: 'xl:w-16',
+    tableBodyCellsWidth: 'w-8 h-8 px-1 py-1',
+    isShownTaskIndex: false,                // 必ず指定
+  };
+}
+```
+
+### 7. **モックデータの title フィールドの設定**
+
+**問題**: テストデータの `mockTasksData` で title を `"Problem A"`, `"Problem B"` のような汎用的な名前にすると、実装の検証が不正確になる
+
+**対策**:
+
+- title は `prisma/tasks.ts` に登録されている実際のエントリを参照する
+- 形式: `"問題番号. 問題タイトル"` (例: `"G. Balls and Boxes"`, `"A. Stage Clear"`)
+
+```typescript
+// prisma/tasks.ts から参照
+{ contest_id: 'ABC422', task_id: 'abc422_g', task_table_index: G, title: 'G. Balls and Boxes' },
+{ contest_id: 'ABC421', task_id: 'abc421_a', task_table_index: A, title: 'A. Stage Clear' },
+```
+
 ---
 
 ## 実装完了後
@@ -741,4 +777,4 @@ describe('CustomProvider with unique displayConfig', () => {
 
 ---
 
-**最終更新**: 2026-01-25
+**最終更新**: 2026-01-26
