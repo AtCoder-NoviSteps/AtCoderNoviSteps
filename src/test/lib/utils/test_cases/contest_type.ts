@@ -257,8 +257,20 @@ export const abcLike = [
 ];
 
 export const arcLike = [
+  createTestCaseForContestType('Tenka1 2017')({
+    contestId: 'tenka1-2017',
+    expected: ContestType.ARC_LIKE,
+  }),
   createTestCaseForContestType('Tenka1 2018')({
     contestId: 'tenka1-2018',
+    expected: ContestType.ARC_LIKE,
+  }),
+  createTestCaseForContestType('Tenka1 2019')({
+    contestId: 'tenka1-2019',
+    expected: ContestType.ARC_LIKE,
+  }),
+  createTestCaseForContestType('CADDi 2018')({
+    contestId: 'caddi2018',
     expected: ContestType.ARC_LIKE,
   }),
   createTestCaseForContestType('DWACON 5TH PRELIMS')({

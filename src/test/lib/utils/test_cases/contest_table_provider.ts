@@ -707,3 +707,110 @@ export const taskResultsForACLPracticeProvider: TaskResults = [
   practice2_k,
   practice2_l,
 ];
+
+// ABC-Like Contests: Multiple contest types combined
+const [tenka1_2017_beginner_a, tenka1_2017_beginner_b, tenka1_2017_beginner_c] = createContestTasks(
+  'tenka1-2017-beginner',
+  [
+    { taskTableIndex: 'A', statusName: AC },
+    { taskTableIndex: 'B', statusName: AC_WITH_EDITORIAL },
+    { taskId: 'tenka1_2017_c', taskTableIndex: 'C', statusName: TRYING },
+  ],
+);
+const [tenka1_2017_c] = createContestTasks('tenka1-2017', [
+  { taskId: 'tenka1_2017_c', taskTableIndex: 'C', statusName: AC },
+]);
+
+const [abl_a, abl_b, abl_f] = createContestTasks('abl', [
+  { taskTableIndex: 'A', statusName: AC },
+  { taskTableIndex: 'B', statusName: TRYING },
+  { taskTableIndex: 'F', statusName: PENDING },
+]);
+
+const [caddi2018b_a, caddi2018b_d] = createContestTasks('caddi2018b', [
+  { taskTableIndex: 'A', statusName: AC },
+  { taskTableIndex: 'D', statusName: AC_WITH_EDITORIAL },
+]);
+
+const [soundhound2018_a] = createContestTasks('soundhound2018-summer-qual', [
+  { taskTableIndex: 'A', statusName: AC },
+]);
+
+const [aising2019_a, aising2019_e] = createContestTasks('aising2019', [
+  { taskTableIndex: 'A', statusName: AC },
+  { taskTableIndex: 'E', statusName: TRYING },
+]);
+
+const [aising2020_a, aising2020_f] = createContestTasks('aising2020', [
+  { taskTableIndex: 'A', statusName: AC },
+  { taskTableIndex: 'F', statusName: PENDING },
+]);
+
+const [hhkb2020_a] = createContestTasks('hhkb2020', [{ taskTableIndex: 'A', statusName: AC }]);
+
+const [m_solutions2020_a] = createContestTasks('m-solutions2020', [
+  { taskTableIndex: 'A', statusName: AC },
+]);
+
+const [panasonic2020_a] = createContestTasks('panasonic2020', [
+  { taskTableIndex: 'A', statusName: AC },
+]);
+
+const [jsc2021_a, jsc2021_h] = createContestTasks('jsc2021', [
+  { taskTableIndex: 'A', statusName: AC },
+  { taskTableIndex: 'H', statusName: TRYING },
+]);
+
+const [zone2021_a] = createContestTasks('zone2021', [{ taskTableIndex: 'A', statusName: AC }]);
+
+const [sumitrust2019_a] = createContestTasks('sumitrust2019', [
+  { taskTableIndex: 'A', statusName: AC },
+]);
+
+// jsc2025advance-final references ABC422 task_id
+const [jsc2025advance_final_a, jsc2025advance_final_h] = createContestTasks(
+  'jsc2025advance-final',
+  [
+    { taskId: 'abc422_a', taskTableIndex: 'A', statusName: AC },
+    { taskId: 'abc422_h', taskTableIndex: 'H', statusName: PENDING },
+  ],
+);
+
+export const taskResultsForABCLikeProvider: TaskResults = [
+  // tenka1-2017-beginner (shared C with tenka1-2017)
+  tenka1_2017_beginner_a,
+  tenka1_2017_beginner_b,
+  tenka1_2017_beginner_c,
+  tenka1_2017_c,
+  // ABL (6 problems: A-F)
+  abl_a,
+  abl_b,
+  abl_f,
+  // CADDI2018B (4 problems: A-D)
+  caddi2018b_a,
+  caddi2018b_d,
+  // SoundHound2018 (5 problems: A-E)
+  soundhound2018_a,
+  // Aising2019 (5 problems: A-E)
+  aising2019_a,
+  aising2019_e,
+  // Aising2020 (6 problems: A-F)
+  aising2020_a,
+  aising2020_f,
+  // HHKB2020 (6 problems: A-F)
+  hhkb2020_a,
+  // M-Solutions2020 (6 problems: A-F)
+  m_solutions2020_a,
+  // Panasonic2020 (6 problems: A-F)
+  panasonic2020_a,
+  // JSC2021 (8 problems: A-H)
+  jsc2021_a,
+  jsc2021_h,
+  // Zone2021 (6 problems: A-F)
+  zone2021_a,
+  // Sumitrust2019 (6 problems: A-F)
+  sumitrust2019_a,
+  // JSC2025Advance-Final (references ABC422 task_id)
+  jsc2025advance_final_a,
+  jsc2025advance_final_h,
+];

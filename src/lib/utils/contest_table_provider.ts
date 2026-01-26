@@ -465,6 +465,35 @@ export class AGC001OnwardsProvider extends ContestTableProviderBase {
   }
 }
 
+export class ABCLikeProvider extends ContestTableProviderBase {
+  protected setFilterCondition(): (taskResult: TaskResult) => boolean {
+    return (taskResult: TaskResult) => {
+      return classifyContest(taskResult.contest_id) === this.contestType;
+    };
+  }
+
+  getMetadata(): ContestTableMetaData {
+    return {
+      title: 'ABC-Like Contest',
+      abbreviationName: 'abcLike',
+    };
+  }
+
+  getDisplayConfig(): ContestTableDisplayConfig {
+    return {
+      isShownHeader: true,
+      isShownRoundLabel: true,
+      roundLabelWidth: 'xl:w-28',
+      tableBodyCellsWidth: 'w-1/2 xs:w-1/3 sm:w-1/4 md:w-1/5 lg:w-1/6 px-1 py-1',
+      isShownTaskIndex: false,
+    };
+  }
+
+  getContestRoundLabel(contestId: string): string {
+    return contestId.toUpperCase();
+  }
+}
+
 function parseContestRound(contestId: string, prefix: string): number {
   const withoutPrefix = contestId.replace(prefix, '');
 
@@ -1123,6 +1152,15 @@ export const prepareContestProviderPresets = () => {
       }).addProvider(new AGC001OnwardsProvider(ContestType.AGC)),
 
     /**
+     * Single group for ABC-Like Contests
+     */
+    ABCLike: () =>
+      new ContestTableProviderGroup('ABC-Like', {
+        buttonLabel: 'ABC-Like',
+        ariaLabel: 'Filter contests from ABC-Like',
+      }).addProvider(new ABCLikeProvider(ContestType.ABC_LIKE)),
+
+    /**
      * Single group for Typical 90 Problems
      */
     Typical90: () =>
@@ -1204,6 +1242,7 @@ export const contestTableProviderGroups = {
   arc104Onwards: prepareContestProviderPresets().ARC104Onwards(),
   fromArc058ToArc103: prepareContestProviderPresets().ARC058ToARC103(),
   agc001Onwards: prepareContestProviderPresets().AGC001Onwards(),
+  abcLike: prepareContestProviderPresets().ABCLike(),
   fromAbc001ToAbc041: prepareContestProviderPresets().ABC001ToABC041(),
   fromArc001ToArc057: prepareContestProviderPresets().ARC001ToARC057(),
   typical90: prepareContestProviderPresets().Typical90(),

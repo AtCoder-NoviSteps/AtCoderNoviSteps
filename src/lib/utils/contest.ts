@@ -118,7 +118,10 @@ const ABC_LIKE: ContestPrefix = {
 const abcLikePrefixes = new Set(getContestPrefixes(ABC_LIKE));
 
 const ARC_LIKE: ContestPrefix = {
+  'tenka1-2017': 'Tenka1 Programmer Contest 2017',
   'tenka1-2018': 'Tenka1 Programmer Contest 2018',
+  'tenka1-2019': 'Tenka1 Programmer Contest 2019',
+  caddi2018: 'CADDi 2018',
   'dwacon5th-prelims': '第5回 ドワンゴからの挑戦状 予選',
   'dwacon6th-prelims': '第6回 ドワンゴからの挑戦状 予選',
   diverta2019: 'diverta 2019 Programming Contest',
