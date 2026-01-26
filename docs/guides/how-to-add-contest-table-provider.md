@@ -430,11 +430,23 @@ export class TessokuBookForChallengesProvider extends TessokuBookProvider {
 
 ### 複合ソース型
 
-| コンテスト         | contest_id             | 問題数 | セクション範囲               | フォーマット       | セクション分割 | 複数コンテスト | ヘッダー表示 | インデックス表示 | 特有の注意           |
-| ------------------ | ---------------------- | ------ | ---------------------------- | ------------------ | -------------- | -------------- | ------------ | ---------------- | -------------------- |
-| ABS                | `'abs'`                | 11問   | A～K                         | A, B, ..., K       | なし           | あり（11個）   | なし         | なし             | task_idが複雑        |
-| TESSOKU_BOOK       | `'tessoku-book'`       | 166問  | A(01-77), B(01-69), C(01-20) | A01, A77, B63, C20 | あり           | あり           | なし         | あり             | セクション判定が複雑 |
-| MATH_AND_ALGORITHM | `'math-and-algorithm'` | 104問  | 001～104                     | 001, 028, 104      | なし           | あり           | なし         | あり             | 範囲内に欠損あり     |
+| コンテスト         | contest_id             | 問題数 | セクション範囲               | フォーマット       | セクション分割 | 複数コンテスト | ヘッダー表示 | インデックス表示 | 特有の注意                                                                   |
+| ------------------ | ---------------------- | ------ | ---------------------------- | ------------------ | -------------- | -------------- | ------------ | ---------------- | ---------------------------------------------------------------------------- |
+| ABS                | `'abs'`                | 11問   | A～K                         | A, B, ..., K       | なし           | あり（11個）   | なし         | なし             | task_idが複雑                                                                |
+| ABC-Like           | 計15コンテスト         | 2～8問 | A～H                         | A, B, ..., H       | なし           | あり（15個）   | なし         | なし             | tenka1-201x-beginner: C,Dはtenka-201xを参照 / jsc2025adv-final: ABC422を参照 |
+| TESSOKU_BOOK       | `'tessoku-book'`       | 166問  | A(01-77), B(01-69), C(01-20) | A01, A77, B63, C20 | あり           | あり           | なし         | あり             | セクション判定が複雑                                                         |
+| MATH_AND_ALGORITHM | `'math-and-algorithm'` | 104問  | 001～104                     | 001, 028, 104      | なし           | あり           | なし         | あり             | 範囲内に欠損あり                                                             |
+
+---
+
+### 複合型コンテストの実装パターン
+
+複数の異なる contest_id から同じ task_id を参照する場合（例：jsc2025advance-final → ABC422、tenka1-beginner → tenka1）、以下の処理で自動解決されます：
+
+- **`getMergedTasksMap()`**: 複数コンテスト由来の task_id 参照を統合
+- **`setFilterCondition()`**: ContestType でフィルタリングのみで十分（参照解決は自動）
+
+テストデータは [prisma/contest_task_pairs.ts](../../prisma/contest_task_pairs.ts) を参照して構築してください。
 
 ---
 
@@ -459,7 +471,7 @@ export class TessokuBookForChallengesProvider extends TessokuBookProvider {
 - **範囲フィルタ型**: 範囲境界値（最小値、最大値、範囲外）の検証、共有問題がないか確認
 - **複合ソース型**: 複数 contest_id の混在検証、セクション分割ロジック（該当する場合）
 
-### モックデータの準備と確認事項
+### モックデータの準備
 
 #### ステップ1: データソース確認
 
@@ -575,6 +587,14 @@ describe('NewProvider', () => {
 
 ---
 
+## テストデータ参考ファイル
+
+- [prisma/contest_task_pairs.ts](../../prisma/contest_task_pairs.ts) - 複合ソース型の task_id 参照を確認
+- [prisma/tasks.ts](../../prisma/tasks.ts) - 各コンテストの task_id フォーマットを確認
+- [prisma/schema.prisma](../../prisma/schema.prisma) - task_table_index フィールドのフォーマットを確認
+
+---
+
 ## 教訓: よくあるミス
 
 ### 1. **モック定義の漏れ**（最頻出）
@@ -685,6 +705,18 @@ describe('CustomProvider with unique displayConfig', () => {
 
 ---
 
+## 実装完了後
+
+### ドキュメント更新チェックリスト
+
+- [ ] 各コンテスト種別テーブル に新規 Provider の行を追加
+- [ ] 複合型参照情報がある場合は複合型コンテストの実装パターン に追加
+- [ ] テストデータ参考ファイル に新規ファイルがあれば追加
+- [ ] GitHub Issues に当該 Provider のリンクを追加
+- [ ] 最終更新日を現在日付に変更
+
+---
+
 ## 参考資料
 
 ### GitHub Issues
@@ -695,6 +727,7 @@ describe('CustomProvider with unique displayConfig', () => {
 - [#2835](https://github.com/AtCoder-NoviSteps/AtCoderNoviSteps/issues/2835) - ARC104OnwardsProvider
 - [#2837](https://github.com/AtCoder-NoviSteps/AtCoderNoviSteps/issues/2837) - AGC001OnwardsProvider
 - [#2838](https://github.com/AtCoder-NoviSteps/AtCoderNoviSteps/issues/2838) - ABC001～041 & ARC001～057
+- [#2840](https://github.com/AtCoder-NoviSteps/AtCoderNoviSteps/issues/2840) - ABCLikeProvider
 - [#2776](https://github.com/AtCoder-NoviSteps/AtCoderNoviSteps/issues/2776) - TessokuBookProvider
 - [#2785](https://github.com/AtCoder-NoviSteps/AtCoderNoviSteps/issues/2785) - MathAndAlgorithmProvider
 - [#2797](https://github.com/AtCoder-NoviSteps/AtCoderNoviSteps/issues/2797) - FPS24Provider
@@ -708,4 +741,4 @@ describe('CustomProvider with unique displayConfig', () => {
 
 ---
 
-**最終更新**: 2026-01-23
+**最終更新**: 2026-01-25

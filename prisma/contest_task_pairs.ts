@@ -950,6 +950,71 @@ export const contest_task_pairs = [
     problem_index: 'C',
   },
   {
+    contest_id: 'jsc2025advance-final',
+    problem_id: 'abc422_g',
+    problem_index: 'G',
+  },
+  {
+    contest_id: 'jsc2025advance-final',
+    problem_id: 'abc422_f',
+    problem_index: 'F',
+  },
+  {
+    contest_id: 'jsc2025advance-final',
+    problem_id: 'abc422_e',
+    problem_index: 'E',
+  },
+  {
+    contest_id: 'jsc2025advance-final',
+    problem_id: 'abc422_d',
+    problem_index: 'D',
+  },
+  {
+    contest_id: 'jsc2025advance-final',
+    problem_id: 'abc422_c',
+    problem_index: 'C',
+  },
+  {
+    contest_id: 'jsc2025advance-final',
+    problem_id: 'abc422_b',
+    problem_index: 'B',
+  },
+  {
+    contest_id: 'jsc2025advance-final',
+    problem_id: 'abc422_a',
+    problem_index: 'A',
+  },
+  {
+    contest_id: 'tenka1-2019-beginner',
+    problem_id: 'tenka1_2019_d',
+    problem_index: 'D',
+  },
+  {
+    contest_id: 'tenka1-2019-beginner',
+    problem_id: 'tenka1_2019_c',
+    problem_index: 'C',
+  },
+  {
+    contest_id: 'tenka1-2018-beginner',
+    problem_id: 'tenka1_2018_d',
+    problem_index: 'D',
+  },
+  {
+    contest_id: 'tenka1-2018-beginner',
+    problem_id: 'tenka1_2018_c',
+    problem_index: 'C',
+  },
+  {
+    contest_id: 'tenka1-2017-beginner',
+    problem_id: 'tenka1_2017_d',
+    problem_index: 'D',
+  },
+  {
+    contest_id: 'tenka1-2017-beginner',
+    problem_id: 'tenka1_2017_c',
+    problem_index: 'C',
+  },
+  {
     contest_id: 'tessoku-book',
     problem_id: 'typical90_s',
     problem_index: 'C18',
