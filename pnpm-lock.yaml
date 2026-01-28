@@ -54,8 +54,8 @@ importers:
         specifier: 2.6.0
         version: 2.6.0
       vercel:
-        specifier: 50.7.0
-        version: 50.7.0(rollup@4.53.4)(typescript@5.9.3)
+        specifier: 50.7.1
+        version: 50.7.1(rollup@4.53.4)(typescript@5.9.3)
       xss:
         specifier: 1.0.15
         version: 1.0.15
@@ -4702,8 +4702,8 @@ packages:
     engines: {node: '>=10'}
     deprecated: Old versions of tar are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exhorbitant rates) by contacting i@izs.me
 
-  tar@7.5.6:
-    resolution: {integrity: sha512-xqUeu2JAIJpXyvskvU3uvQW8PAmHrtXp2KDuMJwQqW8Sqq0CaZBAQ+dKS3RBXVhU4wC5NjAdKrmh84241gO9cA==}
+  tar@7.5.7:
+    resolution: {integrity: sha512-fov56fJiRuThVFXD6o6/Q354S7pnWMJIVlDBYijsTNx6jKSE4pvrDTs6lUnmGvNyfJwFQQwWy3owKz1ucIhveQ==}
     engines: {node: '>=18'}
 
   text-decoder@1.2.3:
@@ -4937,8 +4937,8 @@ packages:
     resolution: {integrity: sha512-spH26xU080ydGggxRyR1Yhcbgx+j3y5jbNXk/8L+iRvdIEQ4uTRH2Sgf2dokud6Q4oAtsbNvJ1Ft+9xmm6IZcA==}
     engines: {node: '>= 0.10'}
 
-  vercel@50.7.0:
-    resolution: {integrity: sha512-0UN3ETJMogpzjDUqLFJFjyvhuWhBmqYRGjgG0lPgmSAsgVlQ4mAkn7+r/gXXcZ3Ux7Zc0Yy5nUl8pi/V/7TalA==}
+  vercel@50.7.1:
+    resolution: {integrity: sha512-lEna+0MQw1OUwCW3hq5+LNRjKGCS0hHoogJMVbxeR0169hIhwMBMCHNXvpSyivJTUubCLujf3vXZPc+cxskqyw==}
     engines: {node: '>= 18'}
     hasBin: true
 
@@ -5801,7 +5801,7 @@ snapshots:
       node-fetch: 2.7.0
       nopt: 8.1.0
       semver: 7.7.3
-      tar: 7.5.6
+      tar: 7.5.7
     transitivePeerDependencies:
       - encoding
       - supports-color
@@ -9867,7 +9867,7 @@ snapshots:
       mkdirp: 1.0.4
       yallist: 4.0.0
 
-  tar@7.5.6:
+  tar@7.5.7:
     dependencies:
       '@isaacs/fs-minipass': 4.0.1
       chownr: 3.0.0
@@ -10084,7 +10084,7 @@ snapshots:
   validator@13.15.26:
     optional: true
 
-  vercel@50.7.0(rollup@4.53.4)(typescript@5.9.3):
+  vercel@50.7.1(rollup@4.53.4)(typescript@5.9.3):
     dependencies:
       '@vercel/backends': 0.0.23(rollup@4.53.4)(typescript@5.9.3)
       '@vercel/blob': 1.0.2
