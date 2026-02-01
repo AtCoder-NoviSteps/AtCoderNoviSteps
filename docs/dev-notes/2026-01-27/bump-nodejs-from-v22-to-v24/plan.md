@@ -162,23 +162,13 @@ node-version: 24  # 22 → 24
 
 ```json
 "engines": {
-  "node": ">=22.0.0"  # >=20.0.0 → >=22.0.0
-}
-```
-
-**影響範囲**: 最小 Node.js バージョン制約（オプション）
-
-### 5. package.json - engines フィールド
-
-```json
-"engines": {
-  "node": "24.x"  # >=22.0.0 → 24.x（固定）
+  "node": "24.x"  # >=20.0.0 → 24.x（固定）
 }
 ```
 
 **影響範囲**: Node.js バージョン要件
 
-### 6. Vercel 設定
+### 5. Vercel 設定
 
 **構成**: Vercel Dashboard > Project Settings > Build and Deployment > Node.js Version を `24` に設定
 
