@@ -814,3 +814,24 @@ export const taskResultsForABCLikeProvider: TaskResults = [
   jsc2025advance_final_a,
   jsc2025advance_final_h,
 ];
+
+// ACL Contest 1: 6 tasks (A～F)
+const [acl1_a, acl1_b, acl1_c, acl1_d, acl1_e, acl1_f] = createContestTasks('acl1', [
+  { taskTableIndex: 'A', statusName: AC },
+  { taskTableIndex: 'B', statusName: AC },
+  { taskTableIndex: 'C', statusName: AC_WITH_EDITORIAL },
+  { taskTableIndex: 'D', statusName: TRYING },
+  { taskTableIndex: 'E', statusName: PENDING },
+  { taskTableIndex: 'F', statusName: PENDING },
+]);
+
+export const taskResultsForACLBeginnerProvider: TaskResults = [abl_a, abl_b, abl_f];
+
+export const taskResultsForACLProvider: TaskResults = [
+  acl1_a,
+  acl1_b,
+  acl1_c,
+  acl1_d,
+  acl1_e,
+  acl1_f,
+];

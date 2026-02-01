@@ -130,6 +130,7 @@ const ARC_LIKE: ContestPrefix = {
   keyence2021: 'キーエンス プログラミング コンテスト 2021',
   'jsc2019-qual': '第一回日本最強プログラマー学生選手権-予選-',
   'nikkei2019-qual': '全国統一プログラミング王決定戦予選',
+  acl1: 'ACL Contest 1',
 } as const;
 const arcLikePrefixes = new Set(getContestPrefixes(ARC_LIKE));
 

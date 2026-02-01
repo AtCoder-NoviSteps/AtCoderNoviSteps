@@ -10,6 +10,48 @@
 
 ---
 
+## 0. 実装前確認フェーズ
+
+新しい Provider を実装する前に、必ず以下の事項を確認してください。
+
+### 事前確認チェックリスト
+
+- [ ] **ContestType の選択**
+  - 新規追加が必要か？ → `src/lib/types/contest.ts` を確認
+  - 既存の `ContestType` で対応できないか？ → 「各コンテスト種別の特有仕様」を参照
+  - 判断基準: 複数の異なる contest_id を統一表示するなら「複合型」の可能性
+
+- [ ] **データ存在確認**
+  - `prisma/tasks.ts` に該当 `contest_id` のタスクが存在するか確認
+  - 複合型の場合は `prisma/contest_task_pairs.ts` で共有問題を確認
+
+- [ ] **実装パターン判定**
+  - **パターン1（範囲フィルタ型）**: ABC 001～041、ARC 058～103 など → 数値範囲でフィルタ
+  - **パターン2（単一ソース型）**: EDPC、TDPC、ACL_PRACTICE など → 単一 contest_id のみ
+  - **パターン3（複合ソース型）**: ABS、ABC-Like など → 複数 contest_id を統一表示
+  - 対応セクション: [実装パターン](#実装パターン)
+
+- [ ] **ガイドの実装例の確認**
+  - 判定したパターンの実装例を確認してテンプレート理解
+  - モック設定時に必要な `classifyContest()` の戻り値を確認
+
+### 記入例
+
+```markdown
+**新規 Provider 名**: ACLBeginnerProvider
+
+事前確認結果:
+
+- ContestType: ABC_LIKE（既存流用）
+- contest_id: abl（prisma/tasks.ts に 6 つのタスク存在確認）
+- パターン: パターン2（単一ソース型）
+- テンプレート: EDPC と同一構造
+
+→ 実装フェーズ開始
+```
+
+---
+
 ## Test Driven Development (TDD) 設計ガイド
 
 新しい Provider を実装する際は、**テストファースト** のアプローチを推奨します。
@@ -207,12 +249,16 @@ class TessokuBookSectionProvider extends TessokuBookProvider {
 
 ### 単一ソース型
 
-| コンテスト   | contest_id    | セクション | フォーマット |
-| ------------ | ------------- | ---------- | ------------ |
-| EDPC         | `'dp'`        | 26問       | A～Z         |
-| TDPC         | `'tdpc'`      | 26問       | A～Z         |
-| FPS_24       | `'fps-24'`    | 24問       | A～X         |
-| ACL_PRACTICE | `'practice2'` | 12問       | A～L         |
+| コンテスト     | contest_id    | セクション | フォーマット |
+| -------------- | ------------- | ---------- | ------------ |
+| EDPC           | `'dp'`        | 26問       | A～Z         |
+| TDPC           | `'tdpc'`      | 26問       | A～Z         |
+| FPS_24         | `'fps-24'`    | 24問       | A～X         |
+| ACL_PRACTICE   | `'practice2'` | 12問       | A～L         |
+| ACL_BEGINNER\* | `'abl'`       | 6問        | A～F         |
+| ACL_CONTEST1\* | `'acl1'`      | 6問        | A～F         |
+
+\*注: ACL_PRACTICE、ACL_BEGINNER、ACL_CONTEST1 は `Acl` グループの下で 3 つのコンテストが統一管理されています。
 
 ### 複合ソース型
 
@@ -419,11 +465,11 @@ describe('CustomProvider with unique config', () => {
 - [#2835](https://github.com/AtCoder-NoviSteps/AtCoderNoviSteps/issues/2835) - ARC104OnwardsProvider
 - [#2837](https://github.com/AtCoder-NoviSteps/AtCoderNoviSteps/issues/2837) - AGC001OnwardsProvider
 - [#2838](https://github.com/AtCoder-NoviSteps/AtCoderNoviSteps/issues/2838) - ABC001～041 & ARC001～057
-- [#2840](https://github.com/AtCoder-NoviSteps/AtCoderNoviSteps/issues/2840) - ABCLikeProvider
+- [#2840](https://github.com/AtCoder-NoviSteps/AtCoderNoviSteps/issues/2840)、[#3108](https://github.com/AtCoder-NoviSteps/AtCoderNoviSteps/issues/3108) - ABCLikeProvider
 - [#2776](https://github.com/AtCoder-NoviSteps/AtCoderNoviSteps/issues/2776) - TessokuBookProvider
 - [#2785](https://github.com/AtCoder-NoviSteps/AtCoderNoviSteps/issues/2785) - MathAndAlgorithmProvider
 - [#2797](https://github.com/AtCoder-NoviSteps/AtCoderNoviSteps/issues/2797) - FPS24Provider
-- [#2920](https://github.com/AtCoder-NoviSteps/AtCoderNoviSteps/issues/2920) - ACLPracticeProvider
+- [#2920](https://github.com/AtCoder-NoviSteps/AtCoderNoviSteps/issues/2920)、[#3120](https://github.com/AtCoder-NoviSteps/AtCoderNoviSteps/issues/3120) - ACLPracticeProvider、ACLBeginnerProvider、ACLProvider
 
 ### 実装ファイル
 
@@ -433,4 +479,4 @@ describe('CustomProvider with unique config', () => {
 
 ---
 
-**最終更新**: 2026-01-26
+**最終更新**: 2026-02-01
