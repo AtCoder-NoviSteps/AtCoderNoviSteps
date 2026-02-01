@@ -7,7 +7,7 @@
 - Node.js: v22.x → v24.x (LTS)
 - pnpm: v10.28.2（互換性あり）
 
-**ステータス**: 🔄 実装予定
+**ステータス**: ✅ 完了
 
 ---
 
@@ -168,16 +168,23 @@ node-version: 24  # 22 → 24
 
 **影響範囲**: 最小 Node.js バージョン制約（オプション）
 
-### 5. svelte.config.js - Vercel Runtime
+### 5. package.json - engines フィールド
 
-```javascript
-adapter: adapter({
-  runtime: 'nodejs24.x',  # nodejs22.x → nodejs24.x
-  // ...
-})
+```json
+"engines": {
+  "node": "24.x"  # >=22.0.0 → 24.x（固定）
+}
 ```
 
-**状態**: ✅ Vercel v24 対応確認済み
+**影響範囲**: Node.js バージョン要件
+
+### 6. Vercel 設定
+
+**構成**: Vercel Dashboard > Project Settings > Build and Deployment > Node.js Version を `24` に設定
+
+**注**: `svelte.config.js` の `runtime` オプションは deprecated のため削除
+
+**状態**: ✅ Vercel v24 対応確認済み（Dashboard 設定）
 **影響範囲**: 本番環境デプロイ
 
 ---
@@ -317,6 +324,16 @@ onlyBuiltDependencies:
    - 複数ファイルの更新は必ず一度すべて洗い出す必要がある
    - CI/CD 設定は見落としやすいため特に注意
 
+5. **SvelteKit Vercel Adapter API 設定確認** ✅ ⭐ **重要**
+   - `@sveltejs/adapter-vercel` v6.3.1 の `runtime` オプションは deprecated
+   - `nodejs24.x` は無効な値（v6.3.1 では `nodejs20.x`, `nodejs22.x` のみ有効）
+   - **正しい方法**: `package.json` の `engines.node` と Vercel Dashboard で Node.js バージョンを指定
+   - **修正内容**:
+     - `package.json`: `"engines": { "node": "24.x" }` で v24 を明示的に固定
+     - `svelte.config.js`: `runtime` オプションを完全削除
+     - Vercel Dashboard: Project Settings > Node.js Version = 24 で設定
+   - **推奨事項**: SvelteKit/フレームワーク整合性確認は公式 API ドキュメント最優先
+
 ### 遭遇した問題と対応
 
 1. **CI/CD 設定の見落とし**
@@ -329,16 +346,25 @@ onlyBuiltDependencies:
    - `pnpm exec playwright install` で解決
    - システム依存関係も同時にインストール
 
-3. **Svelte v5 互換性警告**
+3. **SvelteKit Adapter Vercel v6.3.1 の非対応値**
+   - `runtime: 'nodejs24.x'` 指定後にテスト実行を試みたが未検証
+   - **実査**: `@sveltejs/adapter-vercel` v6.3.1 では `nodejs24.x` が無効値
+   - **問題**: Deprecated オプションを使用 + 無効値を指定
+   - **根本原因**: 公式 API ドキュメント（NPM ページ）未読
+   - **対応**: オプション削除 + package.json engines で v24 固定 + Dashboard 設定に委譲
+   - **学習**: フレームワーク設定は必ず公式 README/API ドキュメント確認必須
+
+4. **Svelte v5 互換性警告**
    - Runes mode の状態参照に関する警告
    - **機能的問題なし** → 無視して問題なし
    - 次の Svelte バージョンで修正予定
 
 ### 推奨アクション（今後）
 
-- ✅ 本番環境へデプロイ: Vercel v24 対応確認済み
+- ✅ 本番環境へデプロイ: Vercel v24 対応確認済み（Dashboard 設定済み）
 - 📋 Svelte コンポーネント: `$derived` 等への段階的移行検討
 - 📋 pnpm v11 移行: `onlyBuiltDependencies` → `allowBuilds` の検討
+- 📋 SvelteKit/Adapter: v7 リリース時に deprecated オプション削除の正式廃止確認
 
 ---
 
