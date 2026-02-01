@@ -16,6 +16,8 @@ import {
   AGC001OnwardsProvider,
   ABCLikeProvider,
   ACLPracticeProvider,
+  ACLBeginnerProvider,
+  ACLProvider,
   EDPCProvider,
   TDPCProvider,
   FPS24Provider,
@@ -40,6 +42,8 @@ import {
   taskResultsForARC104OnwardsProvider,
   taskResultsForAGC001OnwardsProvider,
   taskResultsForACLPracticeProvider,
+  taskResultsForACLBeginnerProvider,
+  taskResultsForACLProvider,
   taskResultsForABCLikeProvider,
 } from './test_cases/contest_table_provider';
 
@@ -70,6 +74,10 @@ vi.mock('$lib/utils/contest', () => ({
       return ContestType.MATH_AND_ALGORITHM;
     } else if (contestId === 'practice2') {
       return ContestType.ACL_PRACTICE;
+    } else if (contestId === 'abl') {
+      return ContestType.ABC_LIKE;
+    } else if (contestId === 'acl1') {
+      return ContestType.ARC_LIKE;
     } else if (
       [
         'tenka1-2017-beginner',
@@ -137,6 +145,8 @@ vi.mock('$lib/utils/contest', () => ({
       }
     } else if (contestId === 'abl') {
       return 'ACL Beginner Contest';
+    } else if (contestId === 'acl1') {
+      return 'ACL Contest 1';
     } else if (contestId === 'tenka1-2017-beginner') {
       return 'Tenka1 2017 Beginner';
     } else if (contestId === 'tenka1-2018-beginner') {
@@ -2239,6 +2249,116 @@ describe('ContestTableProviderBase and implementations', () => {
       const filtered = provider.filter([] as TaskResults);
 
       expect(filtered).toEqual([] as TaskResults);
+    });
+  });
+
+  describe('ACL Beginner Provider', () => {
+    test('filters tasks by contest_id (abl)', () => {
+      const provider = new ACLBeginnerProvider(ContestType.ABC_LIKE);
+      const filtered = provider.filter(taskResultsForACLBeginnerProvider);
+
+      expect(filtered).toBeDefined();
+      expect(filtered?.length).toBe(3);
+      expect(filtered?.every((task) => task.contest_id === 'abl')).toBe(true);
+    });
+
+    test('returns correct metadata', () => {
+      const provider = new ACLBeginnerProvider(ContestType.ABC_LIKE);
+      const metadata = provider.getMetadata();
+
+      expect(metadata.title).toBe('ACL Beginner Contest');
+      expect(metadata.abbreviationName).toBe('ABL');
+    });
+
+    test('returns correct display config', () => {
+      const provider = new ACLBeginnerProvider(ContestType.ABC_LIKE);
+      const config = provider.getDisplayConfig();
+
+      expect(config.isShownHeader).toBe(false);
+      expect(config.isShownRoundLabel).toBe(false);
+      expect(config.isShownTaskIndex).toBe(true);
+      expect(config.tableBodyCellsWidth).toBe(
+        'w-1/2 xs:w-1/3 sm:w-1/4 md:w-1/5 lg:w-1/6 px-1 py-2',
+      );
+    });
+
+    test('getContestRoundLabel returns empty string', () => {
+      const provider = new ACLBeginnerProvider(ContestType.ABC_LIKE);
+      const label = provider.getContestRoundLabel('abl_a');
+
+      expect(label).toBe('');
+    });
+
+    test('generates correct table structure', () => {
+      const provider = new ACLBeginnerProvider(ContestType.ABC_LIKE);
+      const filtered = provider.filter(taskResultsForACLBeginnerProvider);
+      const table = provider.generateTable(filtered!);
+
+      expect(table).toBeDefined();
+      expect(table).not.toBeNull();
+    });
+
+    test('does not include tasks with different contest_id', () => {
+      const provider = new ACLBeginnerProvider(ContestType.ABC_LIKE);
+      const allTasks = [...taskResultsForACLBeginnerProvider, ...taskResultsForACLProvider];
+      const filtered = provider.filter(allTasks);
+
+      expect(filtered?.every((task) => task.contest_id === 'abl')).toBe(true);
+    });
+  });
+
+  describe('ACL Provider', () => {
+    test('filters tasks by contest_id (acl1)', () => {
+      const provider = new ACLProvider(ContestType.ARC_LIKE);
+      const filtered = provider.filter(taskResultsForACLProvider);
+
+      expect(filtered).toBeDefined();
+      expect(filtered?.length).toBe(6);
+      expect(filtered?.every((t) => t.contest_id === 'acl1')).toBe(true);
+    });
+
+    test('returns correct metadata', () => {
+      const provider = new ACLProvider(ContestType.ARC_LIKE);
+      const metadata = provider.getMetadata();
+
+      expect(metadata.title).toBe('ACL Contest 1');
+      expect(metadata.abbreviationName).toBe('ACL');
+    });
+
+    test('returns correct display config', () => {
+      const provider = new ACLProvider(ContestType.ARC_LIKE);
+      const config = provider.getDisplayConfig();
+
+      expect(config.isShownHeader).toBe(false);
+      expect(config.isShownRoundLabel).toBe(false);
+      expect(config.isShownTaskIndex).toBe(true);
+      expect(config.tableBodyCellsWidth).toBe(
+        'w-1/2 xs:w-1/3 sm:w-1/4 md:w-1/5 lg:w-1/6 px-1 py-2',
+      );
+    });
+
+    test('getContestRoundLabel returns empty string', () => {
+      const provider = new ACLProvider(ContestType.ARC_LIKE);
+      const label = provider.getContestRoundLabel('acl1_a');
+
+      expect(label).toBe('');
+    });
+
+    test('generates correct table structure', () => {
+      const provider = new ACLProvider(ContestType.ARC_LIKE);
+      const filtered = provider.filter(taskResultsForACLProvider);
+      const table = provider.generateTable(filtered!);
+
+      expect(table).toBeDefined();
+      expect(table).not.toBeNull();
+    });
+
+    test('does not include tasks with different contest_id', () => {
+      const provider = new ACLProvider(ContestType.ARC_LIKE);
+      const allTasks = [...taskResultsForACLBeginnerProvider, ...taskResultsForACLProvider];
+      const filtered = provider.filter(allTasks);
+
+      expect(filtered?.every((task) => task.contest_id === 'acl1')).toBe(true);
     });
   });
 

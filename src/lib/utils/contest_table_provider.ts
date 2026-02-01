@@ -796,6 +796,70 @@ export class ACLPracticeProvider extends ContestTableProviderBase {
   }
 }
 
+export class ACLBeginnerProvider extends ContestTableProviderBase {
+  protected setFilterCondition(): (taskResult: TaskResult) => boolean {
+    return (taskResult: TaskResult) => {
+      if (classifyContest(taskResult.contest_id) !== this.contestType) {
+        return false;
+      }
+      return taskResult.contest_id === 'abl';
+    };
+  }
+
+  getMetadata(): ContestTableMetaData {
+    return {
+      title: 'ACL Beginner Contest',
+      abbreviationName: 'ABL',
+    };
+  }
+
+  getDisplayConfig(): ContestTableDisplayConfig {
+    return {
+      isShownHeader: false,
+      isShownRoundLabel: false,
+      roundLabelWidth: '',
+      tableBodyCellsWidth: 'w-1/2 xs:w-1/3 sm:w-1/4 md:w-1/5 lg:w-1/6 px-1 py-2',
+      isShownTaskIndex: true,
+    };
+  }
+
+  getContestRoundLabel(_contestId: string): string {
+    return '';
+  }
+}
+
+export class ACLProvider extends ContestTableProviderBase {
+  protected setFilterCondition(): (taskResult: TaskResult) => boolean {
+    return (taskResult: TaskResult) => {
+      if (classifyContest(taskResult.contest_id) !== this.contestType) {
+        return false;
+      }
+      return taskResult.contest_id === 'acl1';
+    };
+  }
+
+  getMetadata(): ContestTableMetaData {
+    return {
+      title: 'ACL Contest 1',
+      abbreviationName: 'ACL',
+    };
+  }
+
+  getDisplayConfig(): ContestTableDisplayConfig {
+    return {
+      isShownHeader: false,
+      isShownRoundLabel: false,
+      roundLabelWidth: '',
+      tableBodyCellsWidth: 'w-1/2 xs:w-1/3 sm:w-1/4 md:w-1/5 lg:w-1/6 px-1 py-2',
+      isShownTaskIndex: true,
+    };
+  }
+
+  getContestRoundLabel(_contestId: string): string {
+    return '';
+  }
+}
+
 const regexForJoiFirstQualRound = /^(joi)(\d{4})(yo1)(a|b|c)$/i;
 
 export class JOIFirstQualRoundProvider extends ContestTableProviderBase {
@@ -1209,13 +1273,18 @@ export const prepareContestProviderPresets = () => {
       ),
 
     /**
-     * Single group for ACL Practice Contest
+     * Group for AtCoder Library Contests (ACL)
+     * Includes ACL Practice, ACL Beginner, and ACL Contest 1
      */
-    AclPractice: () =>
-      new ContestTableProviderGroup(`AtCoder Library Practice Contest`, {
-        buttonLabel: 'ACL Practice',
-        ariaLabel: 'Filter ACL Practice Contest',
-      }).addProvider(new ACLPracticeProvider(ContestType.ACL_PRACTICE)),
+    Acl: () =>
+      new ContestTableProviderGroup(`AtCoder Library Contests`, {
+        buttonLabel: 'ACL',
+        ariaLabel: 'Filter ACL Contests',
+      }).addProviders(
+        new ACLPracticeProvider(ContestType.ACL_PRACTICE),
+        new ACLBeginnerProvider(ContestType.ABC_LIKE),
+        new ACLProvider(ContestType.ARC_LIKE),
+      ),
 
     JOIFirstQualRound: () =>
       new ContestTableProviderGroup(`JOI 一次予選`, {
@@ -1251,7 +1320,7 @@ export const contestTableProviderGroups = {
   tessokuBook: prepareContestProviderPresets().TessokuBook(),
   mathAndAlgorithm: prepareContestProviderPresets().MathAndAlgorithm(),
   dps: prepareContestProviderPresets().dps(), // Dynamic Programming (DP) Contests
-  aclPractice: prepareContestProviderPresets().AclPractice(),
+  acl: prepareContestProviderPresets().Acl(),
   joiFirstQualRound: prepareContestProviderPresets().JOIFirstQualRound(),
   joiSecondQualAndSemiFinalRound: prepareContestProviderPresets().JOISecondQualAndSemiFinalRound(),
 };
