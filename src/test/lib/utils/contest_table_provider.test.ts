@@ -1508,9 +1508,9 @@ describe('ContestTableProviderBase and implementations', () => {
 
     test('expects to format contest ID as round label', () => {
       const provider = new ABCLikeProvider(ContestType.ABC_LIKE);
-      const label = provider.getContestRoundLabel('abl');
+      const label = provider.getContestRoundLabel('jsc2021');
 
-      expect(label).toBe('ABL');
+      expect(label).toBe('JSC2021');
     });
 
     test('expects to generate table with multiple contests', () => {
@@ -1519,7 +1519,6 @@ describe('ContestTableProviderBase and implementations', () => {
       const table = provider.generateTable(filtered);
 
       expect(Object.keys(table).length).toBeGreaterThan(0);
-      expect(table).toHaveProperty('abl');
       expect(table).toHaveProperty('jsc2021');
       expect(table).toHaveProperty('jsc2025advance-final');
     });
@@ -1557,11 +1556,11 @@ describe('ContestTableProviderBase and implementations', () => {
       const provider = new ABCLikeProvider(ContestType.ABC_LIKE);
       const filtered = provider.filter(taskResultsForABCLikeProvider);
 
-      const ablTasks = filtered.filter((task) => task.contest_id === 'abl');
+      const zone2021Tasks = filtered.filter((task) => task.contest_id === 'zone2021');
       const jsc2021Tasks = filtered.filter((task) => task.contest_id === 'jsc2021');
 
-      // ABL: A-F
-      expect(ablTasks.some((task) => task.task_table_index === 'F')).toBe(true);
+      // Zone2021: A-F
+      expect(zone2021Tasks.some((task) => task.task_table_index === 'F')).toBe(true);
       // JSC2021: A-H
       expect(jsc2021Tasks.some((task) => task.task_table_index === 'H')).toBe(true);
     });

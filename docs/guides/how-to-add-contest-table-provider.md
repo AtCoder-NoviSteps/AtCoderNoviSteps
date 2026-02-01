@@ -216,12 +216,12 @@ class TessokuBookSectionProvider extends TessokuBookProvider {
 
 ### 複合ソース型
 
-| コンテスト         | contest_id             | 問題数 | セクション   | 分割 | 複数コンテスト |
-| ------------------ | ---------------------- | ------ | ------------ | ---- | -------------- |
-| ABS                | `'abs'`                | 11問   | A～K         | なし | あり（11個）   |
-| ABC-Like           | 計15コンテスト         | 2～8問 | A～H         | なし | あり（15個）   |
-| TESSOKU_BOOK       | `'tessoku-book'`       | 166問  | A(01-77)/B/C | あり | あり           |
-| MATH_AND_ALGORITHM | `'math-and-algorithm'` | 104問  | 001～104     | なし | あり           |
+| コンテスト         | contest_id             | 問題数 | セクション   | 分割 | 複数コンテスト                            |
+| ------------------ | ---------------------- | ------ | ------------ | ---- | ----------------------------------------- |
+| ABS                | `'abs'`                | 11問   | A～K         | なし | あり（11個）                              |
+| ABC-Like           | 計14コンテスト         | 2～8問 | A～H         | なし | あり（14個）、ABL は ACL と同じ区分で表示 |
+| TESSOKU_BOOK       | `'tessoku-book'`       | 166問  | A(01-77)/B/C | あり | あり                                      |
+| MATH_AND_ALGORITHM | `'math-and-algorithm'` | 104問  | 001～104     | なし | あり                                      |
 
 **複合型の参照解決**: `getMergedTasksMap()` が複数コンテスト由来の task_id を自動統合。テストデータは [prisma/contest_task_pairs.ts](../../prisma/contest_task_pairs.ts) を参照。
 
