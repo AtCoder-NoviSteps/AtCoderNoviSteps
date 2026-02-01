@@ -24,7 +24,7 @@
 - 開発言語
   - [TypeScript](https://www.typescriptlang.org/)
 - JavaScriptのランタイム
-  - [Node.js](https://nodejs.org): v22.x
+  - [Node.js](https://nodejs.org): v24.x
 - 汎用フレームワーク
   - [Svelte](https://svelte.dev/): v5.x。Runes mode で運用中
   - [SvelteKit](https://svelte.dev/): v2.x

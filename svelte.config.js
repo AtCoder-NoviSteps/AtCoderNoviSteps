@@ -12,7 +12,7 @@ const config = {
     // See:
     // https://svelte.dev/docs/kit/adapter-vercel
     adapter: adapter({
-      runtime: 'nodejs22.x',
+      runtime: 'nodejs24.x',
       regions: ['hnd1'], // Tokyo, Japan.
       memory: 3008, // To avoid OOM errors on /workbooks/{slug}
       maxDuration: 30,
