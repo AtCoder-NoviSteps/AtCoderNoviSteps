@@ -264,8 +264,7 @@ onlyBuiltDependencies:
 - ✅ Dockerfile: `NODE_VERSION=22` → `NODE_VERSION=24`
 - ✅ CONTRIBUTING.md: Node.js v22.x → v24.x
 - ✅ `.github/workflows/ci.yml`: build, preview, production jobs で v24 に統一
-- ✅ package.json engines: `>=20.0.0` → `>=22.0.0`
-- ✅ svelte.config.js: `nodejs22.x` → `nodejs24.x`
+- ✅ package.json engines: `>=20.0.0` → `24.x`
 
 ### Phase 2: ビルド・テスト検証
 
@@ -379,11 +378,6 @@ onlyBuiltDependencies:
 ---
 
 ## 補足
-
-### Vercel Deployment
-
-- `svelte.config.js` の `nodejs24.x` 指定は Vercel で v24 対応確認済み
-- 本計画完了後、本番環境へのデプロイが可能
 
 ### 将来の検討事項
 
