@@ -468,7 +468,9 @@ export class AGC001OnwardsProvider extends ContestTableProviderBase {
 export class ABCLikeProvider extends ContestTableProviderBase {
   protected setFilterCondition(): (taskResult: TaskResult) => boolean {
     return (taskResult: TaskResult) => {
-      return classifyContest(taskResult.contest_id) === this.contestType;
+      const contestId = taskResult.contest_id;
+      // Note: ACL Beginner Contest (ABL) will be shown in ACL provider, so exclude it here.
+      return classifyContest(contestId) === this.contestType && contestId !== 'abl';
     };
   }
 

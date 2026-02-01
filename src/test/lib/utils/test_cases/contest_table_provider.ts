@@ -761,7 +761,10 @@ const [jsc2021_a, jsc2021_h] = createContestTasks('jsc2021', [
   { taskTableIndex: 'H', statusName: TRYING },
 ]);
 
-const [zone2021_a] = createContestTasks('zone2021', [{ taskTableIndex: 'A', statusName: AC }]);
+const [zone2021_a, zone2021_f] = createContestTasks('zone2021', [
+  { taskTableIndex: 'A', statusName: AC },
+  { taskTableIndex: 'F', statusName: TRYING },
+]);
 
 const [sumitrust2019_a] = createContestTasks('sumitrust2019', [
   { taskTableIndex: 'A', statusName: AC },
@@ -782,10 +785,6 @@ export const taskResultsForABCLikeProvider: TaskResults = [
   tenka1_2017_beginner_b,
   tenka1_2017_beginner_c,
   tenka1_2017_c,
-  // ABL (6 problems: A-F)
-  abl_a,
-  abl_b,
-  abl_f,
   // CADDI2018B (4 problems: A-D)
   caddi2018b_a,
   caddi2018b_d,
@@ -808,6 +807,7 @@ export const taskResultsForABCLikeProvider: TaskResults = [
   jsc2021_h,
   // Zone2021 (6 problems: A-F)
   zone2021_a,
+  zone2021_f,
   // Sumitrust2019 (6 problems: A-F)
   sumitrust2019_a,
   // JSC2025Advance-Final (references ABC422 task_id)
