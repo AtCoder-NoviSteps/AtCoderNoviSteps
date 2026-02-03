@@ -151,8 +151,8 @@ importers:
         specifier: 5.22.0
         version: 5.22.0
       super-sitemap:
-        specifier: 1.0.6
-        version: 1.0.6(svelte@5.49.1)
+        specifier: 1.0.7
+        version: 1.0.7(svelte@5.49.1)
       svelte:
         specifier: 5.49.1
         version: 5.49.1
@@ -2876,8 +2876,8 @@ packages:
     resolution: {integrity: sha512-X07nttJQkwkfKfvTPG/KSnE2OMdcUCao6+eXF3wmnIQRn2aPAHH3VxDbDOdegkd6JbPsXqShpvEOHfAT+nCNwQ==}
     engines: {node: '>=0.3.1'}
 
-  directory-tree@3.5.2:
-    resolution: {integrity: sha512-DsOqeZEHkZnZrVOJG3mE/J9M6J8PulImiC6I1ZpoprVlfno8GvLOPDMkxiJihklLK7B9aVudG463L1+S/kzjiw==}
+  directory-tree@3.6.0:
+    resolution: {integrity: sha512-rTMWs+zxr0QEbzQKRfwV6SeEy+zIHFkorskI4bhG2o7ayr82c+FC7yWg3yLpurgp6Hs2NGy1NWrKIaDodr2r8A==}
     engines: {node: '>=10.0'}
     hasBin: true
 
@@ -3142,8 +3142,8 @@ packages:
     resolution: {integrity: sha512-dwsoQlS7h9hMeYUq1W++23NDcBLV4KqONnITDV9DjfS3q1SgDGVrBdvvTLUotWtPSD7asWDV9/CmsZPy8Hf70A==}
     engines: {node: '>=6'}
 
-  fast-xml-parser@4.5.3:
-    resolution: {integrity: sha512-RKihhV+SHsIUGXObeVy9AXiBbFwkVk7Syp8XgwN5U3JV416+Gwp/GO9i0JYKmikykgz/UHRrrV4ROuZEo/T0ig==}
+  fast-xml-parser@5.3.4:
+    resolution: {integrity: sha512-EFd6afGmXlCx8H8WTZHhAoDaWaGyuIBoZJ2mknrNxug+aZKjkp0a0dlars9Izl+jF+7Gu1/5f/2h68cQpe0IiA==}
     hasBin: true
 
   fastq@1.20.1:
@@ -4715,8 +4715,8 @@ packages:
     resolution: {integrity: sha512-6fPc+R4ihwqP6N/aIv2f1gMH8lOVtWQHoqC4yK6oSDVVocumAsfCqjkXnqiYMhmMwS/mEHLp7Vehlt3ql6lEig==}
     engines: {node: '>=8'}
 
-  strnum@1.1.2:
-    resolution: {integrity: sha512-vrN+B7DBIoTTZjnPNewwhx6cBA/H+IS7rfW68n7XxC1y7uoiGQBxaKzqucGUgavX15dJgiGztLJ8vxuEzwqBdA==}
+  strnum@2.1.2:
+    resolution: {integrity: sha512-l63NF9y/cLROq/yqKXSLtcMeeyOfnSQlfMSlzFt/K73oIaD8DGaQWd7Z34X9GPiKqP5rbSh84Hl4bOlLcjiSrQ==}
 
   stylis@4.3.6:
     resolution: {integrity: sha512-yQ3rwFWRfwNUY7H5vpU0wfdkNSnvnJinhF9830Swlaxl03zsOjCfmX0ugac+3LtK0lYSgwL/KXc8oYL3mG4YFQ==}
@@ -4726,8 +4726,8 @@ packages:
     engines: {node: '>=16 || 14 >=14.17'}
     hasBin: true
 
-  super-sitemap@1.0.6:
-    resolution: {integrity: sha512-YqG86J7B94mIPyOoTMwolfxor/c5ytIw74catN6r0kWYRgJZ9PvXufCHjAkqHnnVRrKGePLh3zJsOImGS439tw==}
+  super-sitemap@1.0.7:
+    resolution: {integrity: sha512-fXUphLw0Tss29/SFP2irhWLNUCRbBNMf/XSsncvKpEM++CThfaPT8Bis3973RIb7KatiJAVfJtFH7xPyCp1AYw==}
     peerDependencies:
       svelte: '>=4.0.0 <6.0.0'
 
@@ -8026,7 +8026,7 @@ snapshots:
 
   diff@4.0.4: {}
 
-  directory-tree@3.5.2:
+  directory-tree@3.6.0:
     dependencies:
       command-line-args: 5.2.1
       command-line-usage: 6.1.3
@@ -8409,9 +8409,9 @@ snapshots:
 
   fast-redact@3.5.0: {}
 
-  fast-xml-parser@4.5.3:
+  fast-xml-parser@5.3.4:
     dependencies:
-      strnum: 1.1.2
+      strnum: 2.1.2
 
   fastq@1.20.1:
     dependencies:
@@ -9905,7 +9905,7 @@ snapshots:
 
   strip-json-comments@3.1.1: {}
 
-  strnum@1.1.2: {}
+  strnum@2.1.2: {}
 
   stylis@4.3.6: {}
 
@@ -9919,10 +9919,10 @@ snapshots:
       tinyglobby: 0.2.15
       ts-interface-checker: 0.1.13
 
-  super-sitemap@1.0.6(svelte@5.49.1):
+  super-sitemap@1.0.7(svelte@5.49.1):
     dependencies:
-      directory-tree: 3.5.2
-      fast-xml-parser: 4.5.3
+      directory-tree: 3.6.0
+      fast-xml-parser: 5.3.4
       svelte: 5.49.1
 
   superstruct@2.0.2:
