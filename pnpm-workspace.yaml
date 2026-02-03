@@ -5,3 +5,20 @@ onlyBuiltDependencies:
   - lefthook
   - prisma
   - puppeteer
+
+# Security configuration: supply chain attack mitigation
+# Delay the adoption of newly released packages to allow detection of malicious code
+
+# Minimum release age (minutes): Only install versions that are 1 day (1440 minutes) old
+minimumReleaseAge: 1440
+
+# Packages excluded from the above restrictions (always install the latest version)
+minimumReleaseAgeExclude:
+  # Prisma: Schema synchronization is critical, so early adoption of latest versions is effective
+  - prisma
+  - '@prisma/client'
+  # tsx: For development script execution. Required for frequent updates in validation environments
+  - tsx
+
+# Prevent transitive dependencies from Git/Tarball sources (enhanced security)
+blockExoticSubdeps: true
