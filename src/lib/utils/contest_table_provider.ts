@@ -1278,7 +1278,7 @@ export const prepareContestProviderPresets = () => {
      */
     Acl: () =>
       new ContestTableProviderGroup(`AtCoder Library Contests`, {
-        buttonLabel: 'ACL',
+        buttonLabel: 'AtCoder Library (ACL)',
         ariaLabel: 'Filter ACL Contests',
       }).addProviders(
         new ACLPracticeProvider(ContestType.ACL_PRACTICE),
@@ -1293,8 +1293,8 @@ export const prepareContestProviderPresets = () => {
       }).addProvider(new JOIFirstQualRoundProvider(ContestType.JOI)),
 
     JOISecondQualAndSemiFinalRound: () =>
-      new ContestTableProviderGroup(`JOI 二次予選・予選（旧形式）・本選`, {
-        buttonLabel: 'JOI 二次予選・予選（旧形式）・本選',
+      new ContestTableProviderGroup(`JOI 二次予選・本選`, {
+        buttonLabel: 'JOI 二次予選・本選',
         ariaLabel: 'Filter JOI Second Qual Round',
       }).addProviders(
         new JOISecondQualRound2020OnwardsProvider(ContestType.JOI),

@@ -324,6 +324,59 @@ describe('MyNewProvider', () => {
 });
 ```
 
+### prepareContestProviderPresets() のテスト
+
+Provider クラスのテスト完了後、`prepareContestProviderPresets()` から返されるグループ（`ContestTableProviderGroup`）の動作を検証します。
+
+**テスト項目**:
+
+1. **グループ名の確認**
+
+   ```typescript
+   const group = prepareContestProviderPresets().MyNewProvider();
+   expect(group.getGroupName()).toBe('Expected Group Name');
+   ```
+
+2. **グループメタデータの確認**（`buttonLabel`、`ariaLabel`）
+
+   ```typescript
+   expect(group.getMetadata()).toEqual({
+     buttonLabel: 'Button Label',
+     ariaLabel: 'ARIA Label',
+   });
+   ```
+
+3. **プロバイダー数の確認**
+   - **単一プロバイダーグループ**: `getSize()` が 1 を返す
+   - **複数プロバイダーグループ**: `getSize()` が複数を返す（例：ACL は 3）
+
+4. **プロバイダーインスタンス型の確認**
+   - **単一プロバイダー**:
+     ```typescript
+     expect(group.getProvider(ContestType.MY_NEW)).toBeInstanceOf(MyNewProvider);
+     ```
+   - **複数プロバイダー**（セクション指定あり）:
+     ```typescript
+     expect(group.getProvider(ContestType.TESSOKU_BOOK, 'examples')).toBeInstanceOf(
+       TessokuBookForExamplesProvider,
+     );
+     expect(group.getProvider(ContestType.TESSOKU_BOOK, 'practicals')).toBeInstanceOf(
+       TessokuBookForPracticalsProvider,
+     );
+     ```
+
+**セクション識別子の指定**:
+
+複数プロバイダーを含むグループでは、`getProvider()` の第2引数にセクション識別子を渡します。セクション定数は `src/lib/types/contest_table_provider.ts` で定義されています：
+
+- `TESSOKU_SECTIONS`: `examples`、`practicals`、`challenges`
+- `JOI_SECOND_QUAL_ROUND_SECTIONS`: `'2020Onwards'`、`from2006To2019`
+- `JOI_FINAL_ROUND_SECTIONS`: `semiFinal`
+
+詳細な実装例は [単体テストファイル](../src/test/lib/utils/contest_table_provider.test.ts) を参照してください。
+
+---
+
 ### モックデータ準備
 
 **ステップ1: データソース確認**
@@ -479,4 +532,4 @@ describe('CustomProvider with unique config', () => {
 
 ---
 
-**最終更新**: 2026-02-01
+**最終更新**: 2026-02-05
