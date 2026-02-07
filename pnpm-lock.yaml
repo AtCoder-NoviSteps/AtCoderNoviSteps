@@ -42,8 +42,8 @@ importers:
         specifier: 9.1.0
         version: 9.1.0
       playwright:
-        specifier: 1.58.1
-        version: 1.58.1
+        specifier: 1.58.2
+        version: 1.58.2
       prisma-erd-generator:
         specifier: 2.4.2
         version: 2.4.2(@prisma/client@5.22.0(prisma@5.22.0))(puppeteer@23.11.1(typescript@5.9.3))(tsx@4.21.0)(yaml@2.8.1)
@@ -4219,8 +4219,18 @@ packages:
     engines: {node: '>=18'}
     hasBin: true
 
+  playwright-core@1.58.2:
+    resolution: {integrity: sha512-yZkEtftgwS8CsfYo7nm0KE8jsvm6i/PTgVtB8DL726wNf6H2IMsDuxCpJj59KDaxCtSnrWan2AeDqM7JBaultg==}
+    engines: {node: '>=18'}
+    hasBin: true
+
   playwright@1.58.1:
     resolution: {integrity: sha512-+2uTZHxSCcxjvGc5C891LrS1/NlxglGxzrC4seZiVjcYVQfUa87wBL6rTDqzGjuoWNjnBzRqKmF6zRYGMvQUaQ==}
+    engines: {node: '>=18'}
+    hasBin: true
+
+  playwright@1.58.2:
+    resolution: {integrity: sha512-vA30H8Nvkq/cPBnNw4Q8TWz1EJyqgpuinBcHET0YVJVFldr8JDNiU9LaWAE1KqSkRYazuaBhTpB5ZzShOezQ6A==}
     engines: {node: '>=18'}
     hasBin: true
 
@@ -9453,9 +9463,17 @@ snapshots:
 
   playwright-core@1.58.1: {}
 
+  playwright-core@1.58.2: {}
+
   playwright@1.58.1:
     dependencies:
       playwright-core: 1.58.1
+    optionalDependencies:
+      fsevents: 2.3.2
+
+  playwright@1.58.2:
+    dependencies:
+      playwright-core: 1.58.2
     optionalDependencies:
       fsevents: 2.3.2
 
