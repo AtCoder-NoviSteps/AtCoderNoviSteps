@@ -6,7 +6,10 @@
   "workspaceFolder": "/usr/src/app",
   // Use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
   "dockerComposeFile": ["../compose.yaml"],
-  "mounts": ["source=${localEnv:HOME}/.ssh,target=/home/node/.ssh,type=bind,consistency=cached"],
+  "mounts": [
+    "source=${localEnv:HOME}/.ssh,target=/home/node/.ssh,type=bind,consistency=cached",
+    "source=${localEnv:HOME}/.claude,target=/home/node/.claude,type=bind,consistency=cached"
+  ],
   // Features to add to the dev container. More info: https://containers.dev/features.
   // "features": {},
   //
@@ -18,8 +21,11 @@
   ],
   // "shutdownAction": "none",
   //
+  // Use 'initializeCommand' to run commands before the container is created.
+  "initializeCommand": "mkdir -p ~/.claude",
+  //
   // Use 'postCreateCommand' to run commands after the container is created.
-  // "postCreateCommand": "yarn install",
+  "postCreateCommand": "npm install -g @anthropic-ai/claude-code && pnpm install",
   //
   // Configure tool-specific properties.
   "customizations": {
@@ -72,6 +78,7 @@
         "svelte.enable-ts-plugin": true
       },
       "extensions": [
+        "anthropic.claude-code",
         "bradlc.vscode-tailwindcss",
         "christian-kohler.path-intellisense",
         "csstools.postcss",
@@ -85,6 +92,10 @@
         "vscode-icons-team.vscode-icons"
       ]
     }
+  },
+  "containerEnv": {
+    "NODE_OPTIONS": "--max-old-space-size=4096 --dns-result-order=ipv4first",
+    "CLAUDE_CONFIG_DIR": "/home/node/.claude"
   }
   //
   // Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
