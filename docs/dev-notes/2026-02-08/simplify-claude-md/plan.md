@@ -18,7 +18,7 @@
 
 ## 最終構成
 
-```
+```text
 AGENTS.md                    # メイン（約50行）- Codex/Claude 共通
 CLAUDE.md                    # @AGENTS.md を import（約10行）
 .claude/
