@@ -14,6 +14,7 @@ pnpm build            # Build for production
 pnpm test             # Run all tests
 pnpm test:unit        # Vitest unit tests
 pnpm test:integration # Playwright E2E tests
+pnpm coverage         # Report test coverage
 pnpm lint             # ESLint check
 pnpm format           # Prettier format
 pnpm check            # Svelte type check
