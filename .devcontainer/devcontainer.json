@@ -21,6 +21,9 @@
   ],
   // "shutdownAction": "none",
   //
+  // Use 'initializeCommand' to run commands before the container is created.
+  "initializeCommand": "mkdir -p ~/.claude",
+  //
   // Use 'postCreateCommand' to run commands after the container is created.
   "postCreateCommand": "npm install -g @anthropic-ai/claude-code && pnpm install",
   //
