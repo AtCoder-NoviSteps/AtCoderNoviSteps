@@ -11,11 +11,11 @@ globs:
 
 ## Test Types
 
-| Type        | Tool       | Location           | Run Command             |
-| ----------- | ---------- | ------------------ | ----------------------- |
-| Unit        | Vitest     | `src/**/*.test.ts` | `pnpm test:unit`        |
-| Integration | Vitest     | `src/test/`        | `pnpm test:unit`        |
-| E2E         | Playwright | `tests/*.test.ts`  | `pnpm test:integration` |
+| Type        | Tool       | Location                | Run Command             |
+| ----------- | ---------- | ----------------------- | ----------------------- |
+| Unit        | Vitest     | `src/test/**/*.test.ts` | `pnpm test:unit`        |
+| Integration | Vitest     | `src/test/`             | `pnpm test:unit`        |
+| E2E         | Playwright | `tests/*.test.ts`       | `pnpm test:integration` |
 
 ## Unit Tests
 
