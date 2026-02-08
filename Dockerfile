@@ -12,6 +12,6 @@ RUN apt-get update \
 ENV NODE_PATH=/node_modules
 ENV PATH=$PATH:/node_modules/.bin
 
-RUN pnpm install --frozen-lockfile
+RUN pnpm install
 
 CMD ["pnpm", "dev"]
