@@ -98,7 +98,7 @@ CLAUDE.md                    # @AGENTS.md を import（約10行）
 
 instructions に記載の認証フロー:
 
-```
+```text
 A[ユーザー登録] → B[AtCoder認証コード生成] → C[AtCoder側でコード確認]
 → D[認証ステータス更新] → E[セッション作成] → F[ログイン完了]
 ```
