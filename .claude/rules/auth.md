@@ -1,7 +1,7 @@
 ---
 description: Authentication rules
 globs:
-  - 'src/lib/server/auth/**'
+  - 'src/lib/server/auth.ts'
   - 'src/routes/(auth)/**'
   - 'src/hooks.server.ts'
 ---
