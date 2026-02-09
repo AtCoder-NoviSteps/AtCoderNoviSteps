@@ -19,7 +19,7 @@ minimumReleaseAgeExclude:
   - '@prisma/client'
   # tsx: For development script execution. Required for frequent updates in validation environments
   - tsx
-  # Vercel: To Use in a CI/CD environment
+  # Vercel: To use in a CI/CD environment
   - vercel
 
 # Prevent transitive dependencies from Git/Tarball sources (enhanced security)
