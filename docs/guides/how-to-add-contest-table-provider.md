@@ -118,7 +118,7 @@ const presets = prepareContestProviderPresets();
 
 export const contestTableProviderGroups: Record<ProviderKey, ContestTableProviderGroup> = {
   // ... 既存のコード
-  myNewProvider: presets().myNewProvider(),
+  myNewProvider: presets.myNewProvider(),
 };
 ```
 
