@@ -156,7 +156,7 @@ features/workbooks/services/
 
 ### Vitest 設定
 
-`vitest.config.ts` の `include` パターンを更新する:
+`vite.config.ts` の `include` パターンを更新する:
 
 ```ts
 include: [
