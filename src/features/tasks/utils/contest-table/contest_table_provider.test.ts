@@ -35,8 +35,8 @@ import {
   ContestTableProviderBase,
   ContestTableProviderGroup,
   prepareContestProviderPresets,
-} from '$lib/utils/contest_table_provider';
-import { TESSOKU_SECTIONS } from '$lib/types/contest_table_provider';
+} from '$features/tasks/utils/contest-table/contest_table_provider';
+import { TESSOKU_SECTIONS } from '$features/tasks/types/contest-table/contest_table_provider';
 import {
   taskResultsForContestTableProvider,
   taskResultsForABS,
@@ -47,7 +47,7 @@ import {
   taskResultsForACLProvider,
   taskResultsForABCLikeProvider,
   taskResultsForAWC0001OnwardsProvider,
-} from './test_cases/contest_table_provider';
+} from '$features/tasks/fixtures/contest-table/contest_table_provider';
 
 // Mock the imported functions
 vi.mock('$lib/utils/contest', () => ({

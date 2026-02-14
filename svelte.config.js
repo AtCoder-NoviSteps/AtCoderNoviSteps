@@ -22,6 +22,8 @@ const config = {
       '@': resolve('./src'),
       $lib: resolve('./src/lib'),
       '$lib/*': resolve('./src/lib/*'),
+      $features: resolve('./src/features'),
+      '$features/*': resolve('./src/features/*'),
     },
   },
 

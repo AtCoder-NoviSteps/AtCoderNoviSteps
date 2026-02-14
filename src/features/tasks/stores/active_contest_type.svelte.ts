@@ -2,7 +2,7 @@ import { useLocalStorage } from '$lib/stores/local_storage_helper.svelte';
 import {
   type ContestTableProviderGroups,
   contestTableProviderGroups,
-} from '$lib/utils/contest_table_provider';
+} from '$features/tasks/utils/contest-table/contest_table_provider';
 
 /**
  * Store that manages the active contest type selection.

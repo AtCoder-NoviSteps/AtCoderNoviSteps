@@ -57,3 +57,4 @@ prisma/schema.prisma # Database schema
 - See `package.json` for versions and scripts
 - See `prisma/schema.prisma` for database models
 - See `docs/guides/` for detailed documentation
+- See `docs/guides/architecture.md` for directory structure and colocation guide

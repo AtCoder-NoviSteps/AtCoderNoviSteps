@@ -8,7 +8,7 @@ import {
   TESSOKU_SECTIONS,
   JOI_SECOND_QUAL_ROUND_SECTIONS,
   JOI_FINAL_ROUND_SECTIONS,
-} from '$lib/types/contest_table_provider';
+} from '$features/tasks/types/contest-table/contest_table_provider';
 import { ContestType } from '$lib/types/contest';
 import type { TaskResults, TaskResult } from '$lib/types/task';
 
