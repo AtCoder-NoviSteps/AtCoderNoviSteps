@@ -25,29 +25,6 @@
 
 ---
 
-## 検証
-
-1. `pnpm test:unit` でテストが全て通ること
-2. `pnpm check` で型エラーがないこと
-3. `pnpm build` でビルドが通ること
-4. `/problems` ページで TaskTable が正常に表示されること（開発サーバー確認）
-
----
-
-## 教訓
-
-1. **`git mv` でファイルを移動する**: `cp` + `rm` より git 履歴が追跡しやすい。`Write` ツールで新規作成しない。
-
-2. **`$features` エイリアスを先に設定してからインポートを書く**: エイリアス未設定のまま移動ファイルを参照すると型チェックが壊れる。設定ファイル変更 → ファイル移動 → import 修正の順が安全。
-
-3. **共有 test_cases は使用元を grep で確認してから移動判断する**: `contest_name_and_task_index.ts` 等は `contest.test.ts` からも参照されており、フィクスチャに移動すると `src/test/lib` 残存テストが壊れる。
-
-4. **同一ディレクトリ内の相対 import は `./` を使う**: `TaskTable.svelte` → `TaskTableBodyCell.svelte` のように同じディレクトリに移動したコンポーネントは `$features/...` より `./` の方が明確。
-
-5. **`pnpm check` の既存エラーは事前に把握しておく**: リファクタ起因か既存問題かを切り分けるために、作業前の状態を確認しておくとよい。
-
----
-
 # ファイル分割リファクタリング (第二段階)
 
 ## Context
@@ -301,3 +278,30 @@ import { classifyContest } from '$lib/utils/contest'; // no mock needed
 - `pnpm lint` — ESLint エラーなし
 - `pnpm build` — ビルド成功
 - ブラウザで `/problems` ページの表示確認
+
+## 実装から得た教訓
+
+1. **`git mv` でファイルを移動する**: `cp` + `rm` より git 履歴が追跡しやすい。`Write` ツールで新規作成しない。
+
+2. **`$features` エイリアスを先に設定してからインポートを書く**: エイリアス未設定のまま移動ファイルを参照すると型チェックが壊れる。設定ファイル変更 → ファイル移動 → import 修正の順が安全。
+
+3. **共有 test_cases は使用元を grep で確認してから移動判断する**: `contest_name_and_task_index.ts` 等は `contest.test.ts` からも参照されており、フィクスチャに移動すると `src/test/lib` 残存テストが壊れる。
+
+4. **同一ディレクトリ内の相対 import は `./` を使う**: `TaskTable.svelte` → `TaskTableBodyCell.svelte` のように同じディレクトリに移動したコンポーネントは `$features/...` より `./` の方が明確。
+
+5. **`pnpm check` の既存エラーは事前に把握しておく**: リファクタ起因か既存問題かを切り分けるために、作業前の状態を確認しておくとよい。
+
+6. vi.mock 廃止で発見されたバグ
+
+旧テストでは `classifyContest` や `getContestNameLabel` を mock していたため、実装との乖離が隠れていた。mock を外して直接 import に切り替えたことで以下が発覚：
+
+- **Tessoku sub-provider のメタデータ不一致**: テストでは `"力試し問題"` 等を期待していたが、実装は `"C. 力試し問題"` のように接頭辞付き。`abbreviationName` も `tessoku-book-examples` ではなく `tessoku-book-for-examples`（`for-` 接頭辞）が正しかった。
+- **JOI の無効 ID ラベル**: mock では小文字パススルーを期待、実装は `toUpperCase()` で `'INVALID-ID'` を返す。部分一致するパターン（`joi2024yo1d`）では想定外の `'2024d'` が返る。
+
+→ **mock は実装との一致を保証しない。純粋関数は直接テストすべき。**
+
+### 分割の実用的な効果
+
+- 1ファイル 100〜300 行に抑えられ、変更時の影響範囲が明確になった
+- テスト実行時間が短縮（vitest の並列実行が効く）
+- 新規 provider 追加時に既存ファイルを触る必要がほぼなくなった
