@@ -175,6 +175,7 @@ describe('prepareContestProviderPresets', () => {
     expect(typeof presets.ARC058ToARC103).toBe('function');
     expect(typeof presets.AGC001Onwards).toBe('function');
     expect(typeof presets.ABCLike).toBe('function');
+    expect(typeof presets.AWC0001Onwards).toBe('function');
     expect(typeof presets.ABC001ToABC041).toBe('function');
     expect(typeof presets.ARC001ToARC057).toBe('function');
     expect(typeof presets.Typical90).toBe('function');
