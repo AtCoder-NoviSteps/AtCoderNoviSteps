@@ -9,7 +9,7 @@
 
   import HeadingOne from '$lib/components/HeadingOne.svelte';
   import TabItemWrapper from '$lib/components/TabItemWrapper.svelte';
-  import TaskTable from '$lib/components/TaskTables/TaskTable.svelte';
+  import TaskTable from '$features/tasks/components/contest-table/TaskTable.svelte';
   import TaskGradeList from '$lib/components/TaskGradeList.svelte';
   import GradeGuidelineTable from '$lib/components/TaskGrades/GradeGuidelineTable.svelte';
 

@@ -13,17 +13,17 @@
   import type {
     ContestTableProvider,
     ContestTableDisplayConfig,
-  } from '$lib/types/contest_table_provider';
+  } from '$features/tasks/types/contest-table/contest_table_provider';
   import type { ContestTaskPairKey } from '$lib/types/contest_task_pair';
 
-  import TaskTableBodyCell from '$lib/components/TaskTables/TaskTableBodyCell.svelte';
+  import TaskTableBodyCell from './TaskTableBodyCell.svelte';
 
-  import { activeContestTypeStore } from '$lib/stores/active_contest_type.svelte';
+  import { activeContestTypeStore } from '$features/tasks/stores/active_contest_type.svelte';
   import {
     contestTableProviderGroups,
     type ContestTableProviderGroup,
     type ContestTableProviderGroups,
-  } from '$lib/utils/contest_table_provider';
+  } from '$features/tasks/utils/contest-table/contest_table_provider';
 
   import { getBackgroundColorFrom } from '$lib/services/submission_status';
   import { createContestTaskPairKey } from '$lib/utils/contest_task_pair';

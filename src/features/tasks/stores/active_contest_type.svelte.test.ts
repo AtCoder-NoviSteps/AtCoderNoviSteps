@@ -1,10 +1,10 @@
 import { describe, test, expect, vi, beforeEach, afterEach } from 'vitest';
 
-import type { ContestTableProviderGroups } from '$lib/utils/contest_table_provider';
+import type { ContestTableProviderGroups } from '$features/tasks/utils/contest-table/contest_table_provider';
 import {
   activeContestTypeStore,
   ActiveContestTypeStore,
-} from '$lib/stores/active_contest_type.svelte';
+} from '$features/tasks/stores/active_contest_type.svelte';
 
 vi.mock('$app/environment', () => ({
   browser: true,
