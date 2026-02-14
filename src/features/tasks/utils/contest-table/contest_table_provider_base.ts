@@ -15,7 +15,7 @@ export abstract class ContestTableProviderBase implements ContestTableProvider {
   protected readonly section?: string;
 
   /**
-   * Creates a new TaskTableGenerator instance.
+   * Creates a new ContestTableProviderBase instance.
    *
    * @param {ContestType} contestType - The type of contest associated with these tasks.
    * @param {string} [section] - Optional section identifier (e.g., 'examples', 'practicals', 'challenges').
