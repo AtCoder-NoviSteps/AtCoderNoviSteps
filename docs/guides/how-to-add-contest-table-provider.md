@@ -115,9 +115,11 @@ function prepareContestProviderPresets() {
   };
 }
 
+const presets = prepareContestProviderPresets();
+
 export const contestTableProviderGroups: Record<ProviderKey, ContestTableProviderGroup> = {
   // ... 既存のコード
-  myNewProvider: prepareContestProviderPresets().myNewProvider(),
+  myNewProvider: presets().myNewProvider(),
 };
 ```
 

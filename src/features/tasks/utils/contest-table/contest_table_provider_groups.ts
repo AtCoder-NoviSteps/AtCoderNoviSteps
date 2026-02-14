@@ -226,26 +226,28 @@ export const prepareContestProviderPresets = () => {
   };
 };
 
+const presets = prepareContestProviderPresets();
+
 export const contestTableProviderGroups = {
-  abs: prepareContestProviderPresets().ABS(),
-  abc319Onwards: prepareContestProviderPresets().ABC319Onwards(),
-  fromAbc212ToAbc318: prepareContestProviderPresets().ABC212ToABC318(),
-  fromAbc126ToAbc211: prepareContestProviderPresets().ABC126ToABC211(),
-  fromAbc042ToAbc125: prepareContestProviderPresets().ABC042ToABC125(),
-  arc104Onwards: prepareContestProviderPresets().ARC104Onwards(),
-  fromArc058ToArc103: prepareContestProviderPresets().ARC058ToARC103(),
-  agc001Onwards: prepareContestProviderPresets().AGC001Onwards(),
-  abcLike: prepareContestProviderPresets().ABCLike(),
-  awc0001Onwards: prepareContestProviderPresets().AWC0001Onwards(),
-  fromAbc001ToAbc041: prepareContestProviderPresets().ABC001ToABC041(),
-  fromArc001ToArc057: prepareContestProviderPresets().ARC001ToARC057(),
-  typical90: prepareContestProviderPresets().Typical90(),
-  tessokuBook: prepareContestProviderPresets().TessokuBook(),
-  mathAndAlgorithm: prepareContestProviderPresets().MathAndAlgorithm(),
-  dps: prepareContestProviderPresets().dps(), // Dynamic Programming (DP) Contests
-  acl: prepareContestProviderPresets().Acl(),
-  joiFirstQualRound: prepareContestProviderPresets().JOIFirstQualRound(),
-  joiSecondQualAndSemiFinalRound: prepareContestProviderPresets().JOISecondQualAndSemiFinalRound(),
+  abs: presets.ABS(),
+  abc319Onwards: presets.ABC319Onwards(),
+  fromAbc212ToAbc318: presets.ABC212ToABC318(),
+  fromAbc126ToAbc211: presets.ABC126ToABC211(),
+  fromAbc042ToAbc125: presets.ABC042ToABC125(),
+  arc104Onwards: presets.ARC104Onwards(),
+  fromArc058ToArc103: presets.ARC058ToARC103(),
+  agc001Onwards: presets.AGC001Onwards(),
+  abcLike: presets.ABCLike(),
+  awc0001Onwards: presets.AWC0001Onwards(),
+  fromAbc001ToAbc041: presets.ABC001ToABC041(),
+  fromArc001ToArc057: presets.ARC001ToARC057(),
+  typical90: presets.Typical90(),
+  tessokuBook: presets.TessokuBook(),
+  mathAndAlgorithm: presets.MathAndAlgorithm(),
+  dps: presets.dps(), // Dynamic Programming (DP) Contests
+  acl: presets.Acl(),
+  joiFirstQualRound: presets.JOIFirstQualRound(),
+  joiSecondQualAndSemiFinalRound: presets.JOISecondQualAndSemiFinalRound(),
 };
 
 export type ContestTableProviderGroups = keyof typeof contestTableProviderGroups;
