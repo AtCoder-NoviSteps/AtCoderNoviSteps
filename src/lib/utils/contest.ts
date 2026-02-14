@@ -16,6 +16,10 @@ export const classifyContest = (contest_id: string) => {
     return ContestType.AGC;
   }
 
+  if (/^awc\d{4}$/.exec(contest_id)) {
+    return ContestType.AWC;
+  }
+
   if (contest_id.startsWith('APG4b')) {
     return ContestType.APG4B;
   }
@@ -242,10 +246,10 @@ export function getContestPrefixes(contestPrefixes: Record<string, string>) {
  * Contest type priorities (0 = Highest, 21 = Lowest)
  *
  * Priority assignment rationale:
- * - Educational contests (0-10): ABS, ABC, APG4B, etc.
+ * - Educational contests (0-10, 16): ABS, ABC, APG4B and AWC etc.
  * - Contests for genius (11-15): ARC, AGC, and their variants
- * - Special contests (16-18): UNIVERSITY, FPS_24, OTHERS
- * - External platforms (19-21): AOJ_COURSES, AOJ_PCK, AOJ_JAG
+ * - Special contests (17-19): UNIVERSITY, FPS_24, OTHERS
+ * - External platforms (20-22): AOJ_COURSES, AOJ_PCK, AOJ_JAG
  *
  * @remarks
  * HACK: The priorities for ARC, AGC, UNIVERSITY, AOJ_COURSES, and AOJ_PCK are temporary
@@ -271,12 +275,13 @@ export const contestTypePriorities: Map<ContestType, number> = new Map([
   [ContestType.ABC_LIKE, 13],
   [ContestType.ARC_LIKE, 14],
   [ContestType.AGC_LIKE, 15],
-  [ContestType.UNIVERSITY, 16],
-  [ContestType.FPS_24, 17],
-  [ContestType.OTHERS, 18], // AtCoder (その他)
-  [ContestType.AOJ_COURSES, 19],
-  [ContestType.AOJ_PCK, 20],
-  [ContestType.AOJ_JAG, 21],
+  [ContestType.AWC, 16],
+  [ContestType.UNIVERSITY, 17],
+  [ContestType.FPS_24, 18],
+  [ContestType.OTHERS, 19], // AtCoder (その他)
+  [ContestType.AOJ_COURSES, 20],
+  [ContestType.AOJ_PCK, 21],
+  [ContestType.AOJ_JAG, 22],
 ]);
 
 export function getContestPriority(contestId: string): number {
@@ -297,20 +302,24 @@ export function getContestPriority(contestId: string): number {
  * - "abc"
  * - "arc"
  * - "agc"
+ * - "awc"
  *
- * followed by exactly three digits. The matching is case-insensitive.
+ * followed by exactly three or four digits. The matching is case-insensitive.
  *
  * Example matches:
  * - "abc376"
  * - "ARC128"
  * - "agc045"
+ * - "awc0001"
  *
  * Example non-matches:
  * - "xyz123"
  * - "abc12"
  * - "abc1234"
+ * - "awc12345"
  */
 const regexForAxc = /^(abc|arc|agc)(\d{3})/i;
+const regexForAwc = /^(awc)(\d{4})/i;
 
 /**
  * Regular expression to match AtCoder University contest identifiers.
@@ -334,6 +343,13 @@ export const getContestNameLabel = (contestId: string) => {
   if (regexForAxc.exec(contestId)) {
     return contestId.replace(
       regexForAxc,
+      (_, contestType, contestNumber) => `${contestType.toUpperCase()} ${contestNumber}`,
+    );
+  }
+
+  if (regexForAwc.exec(contestId)) {
+    return contestId.replace(
+      regexForAwc,
       (_, contestType, contestNumber) => `${contestType.toUpperCase()} ${contestNumber}`,
     );
   }

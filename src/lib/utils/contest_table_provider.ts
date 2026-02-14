@@ -496,6 +496,42 @@ export class ABCLikeProvider extends ContestTableProviderBase {
   }
 }
 
+// AWC0001 〜 (2026/02/09 〜 )
+// 5 tasks per contest
+export class AWC0001OnwardsProvider extends ContestTableProviderBase {
+  protected setFilterCondition(): (taskResult: TaskResult) => boolean {
+    return (taskResult: TaskResult) => {
+      if (classifyContest(taskResult.contest_id) !== this.contestType) {
+        return false;
+      }
+      const contestRound = parseContestRound(taskResult.contest_id, 'awc');
+      return contestRound >= 1 && contestRound <= 9999;
+    };
+  }
+
+  getMetadata(): ContestTableMetaData {
+    return {
+      title: 'AtCoder Weekday Contest 0001 〜 ',
+      abbreviationName: 'awc0001Onwards',
+    };
+  }
+
+  getDisplayConfig(): ContestTableDisplayConfig {
+    return {
+      isShownHeader: true,
+      isShownRoundLabel: true,
+      roundLabelWidth: 'xl:w-16', // Default width for task index column
+      tableBodyCellsWidth: 'w-1/2 sm:w-1/3 md:w-1/4 lg:w-1/5 px-1 py-1', // Default width for table body cells
+      isShownTaskIndex: false,
+    };
+  }
+
+  getContestRoundLabel(contestId: string): string {
+    const contestNameLabel = getContestNameLabel(contestId);
+    return contestNameLabel.replace('AWC ', '');
+  }
+}
+
 function parseContestRound(contestId: string, prefix: string): number {
   const withoutPrefix = contestId.replace(prefix, '');
 
@@ -1227,6 +1263,15 @@ export const prepareContestProviderPresets = () => {
       }).addProvider(new ABCLikeProvider(ContestType.ABC_LIKE)),
 
     /**
+     * Single group for AWC 0001 onwards
+     */
+    AWC0001Onwards: () =>
+      new ContestTableProviderGroup(`AWC 0001 Onwards`, {
+        buttonLabel: 'AWC 0001 〜 ',
+        ariaLabel: 'Filter contests from AWC 0001 onwards',
+      }).addProvider(new AWC0001OnwardsProvider(ContestType.AWC)),
+
+    /**
      * Single group for Typical 90 Problems
      */
     Typical90: () =>
@@ -1314,6 +1359,7 @@ export const contestTableProviderGroups = {
   fromArc058ToArc103: prepareContestProviderPresets().ARC058ToARC103(),
   agc001Onwards: prepareContestProviderPresets().AGC001Onwards(),
   abcLike: prepareContestProviderPresets().ABCLike(),
+  awc0001Onwards: prepareContestProviderPresets().AWC0001Onwards(),
   fromAbc001ToAbc041: prepareContestProviderPresets().ABC001ToABC041(),
   fromArc001ToArc057: prepareContestProviderPresets().ARC001ToARC057(),
   typical90: prepareContestProviderPresets().Typical90(),

@@ -25,6 +25,7 @@ AGC AGC
 ABC_LIKE ABC_LIKE
 ARC_LIKE ARC_LIKE
 AGC_LIKE AGC_LIKE
+AWC AWC
 UNIVERSITY UNIVERSITY
 FPS_24 FPS_24
 OTHERS OTHERS
@@ -205,28 +206,19 @@ OTHERS OTHERS
     DateTime updatedAt 
     }
   
-    "user" o|--|| "Roles" : "enum:role"
-    "user" o{--}o "session" : ""
-    "user" o{--}o "key" : ""
-    "user" o{--}o "taskanswer" : ""
-    "user" o{--}o "workbook" : ""
-    "session" o|--|| "user" : "user"
-    "key" o|--|| "user" : "user"
-    "task" o|--|| "ContestType" : "enum:contest_type"
-    "task" o|--|| "TaskGrade" : "enum:grade"
-    "task" o|--|| "AtcoderProblemsDifficulty" : "enum:atcoder_problems_difficulty"
-    "task" o{--}o "tasktag" : ""
-    "task" o{--}o "taskanswer" : ""
-    "task" o{--}o "workbooktask" : ""
-    "tag" o{--}o "tasktag" : ""
-    "tasktag" o|--|o "task" : "task"
-    "tasktag" o|--|o "tag" : "tag"
-    "taskanswer" o|--|o "task" : "task"
-    "taskanswer" o|--|o "user" : "user"
-    "taskanswer" o|--|o "submissionstatus" : "status"
-    "workbook" o|--|| "WorkBookType" : "enum:workBookType"
-    "workbook" o|--|| "user" : "user"
-    "workbook" o{--}o "workbooktask" : ""
-    "workbooktask" o|--|| "workbook" : "workBook"
-    "workbooktask" o|--|| "task" : "task"
+    "user" |o--|| "Roles" : "enum:role"
+    "session" }o--|| user : "user"
+    "key" }o--|| user : "user"
+    "task" |o--|| "ContestType" : "enum:contest_type"
+    "task" |o--|| "TaskGrade" : "enum:grade"
+    "task" |o--|| "AtcoderProblemsDifficulty" : "enum:atcoder_problems_difficulty"
+    "tasktag" }o--|o task : "task"
+    "tasktag" }o--|o tag : "tag"
+    "taskanswer" }o--|o task : "task"
+    "taskanswer" }o--|o user : "user"
+    "taskanswer" }o--|o submissionstatus : "status"
+    "workbook" |o--|| "WorkBookType" : "enum:workBookType"
+    "workbook" }o--|| user : "user"
+    "workbooktask" }o--|| workbook : "workBook"
+    "workbooktask" }o--|| task : "task"
 ```

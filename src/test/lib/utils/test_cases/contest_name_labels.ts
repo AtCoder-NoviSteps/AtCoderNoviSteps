@@ -46,6 +46,21 @@ export const mathAndAlgorithm = [
   }),
 ];
 
+export const awc = [
+  createTestCaseForContestNameLabel('AWC 0001')({
+    contestId: 'awc0001',
+    expected: 'AWC 0001',
+  }),
+  createTestCaseForContestNameLabel('AWC 0002')({
+    contestId: 'awc0002',
+    expected: 'AWC 0002',
+  }),
+  createTestCaseForContestNameLabel('AWC 9999')({
+    contestId: 'awc9999',
+    expected: 'AWC 9999',
+  }),
+];
+
 export const fps24 = [
   createTestCaseForContestNameLabel('FPS 24')({
     contestId: 'fps-24',

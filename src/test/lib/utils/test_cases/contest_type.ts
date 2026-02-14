@@ -338,6 +338,15 @@ export const agcLike = [
   }),
 ];
 
+const awcContestIds = ['awc0001', 'awc0002', 'awc9999'];
+
+export const awc = awcContestIds.map((contestId) =>
+  createTestCaseForContestType(contestId.toUpperCase())({
+    contestId,
+    expected: ContestType.AWC,
+  }),
+);
+
 // Note:
 // KUPC contests on AtCoder: 2012-2021 and 2024- (not held during 2022-2023)
 // QUPC contests on AtCoder: 2014, 2018 (not held during 2015-2017, 2019-)
