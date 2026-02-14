@@ -109,24 +109,30 @@ describe('AGC001OnwardsProvider', () => {
 
   test('expects to handle 5-problem contest pattern (AGC009, AGC074)', () => {
     const provider = new AGC001OnwardsProvider(ContestType.AGC);
-    const agc009Tasks = taskResultsForAGC001OnwardsProvider.filter(
-      (task) => task.contest_id === 'agc009',
-    );
-    const headerIds = provider.getHeaderIdsForTask(agc009Tasks as TaskResults);
 
-    expect(agc009Tasks).toHaveLength(5);
-    expect(headerIds).toEqual(['A', 'B', 'C', 'D', 'E']);
+    ['agc009', 'agc074'].forEach((contestId) => {
+      const agcTasks = taskResultsForAGC001OnwardsProvider.filter(
+        (task) => task.contest_id === contestId,
+      );
+      const headerIds = provider.getHeaderIdsForTask(agcTasks as TaskResults);
+
+      expect(agcTasks).toHaveLength(5);
+      expect(headerIds).toEqual(['A', 'B', 'C', 'D', 'E']);
+    });
   });
 
   test('expects to handle 6-problem contest pattern (AGC001, AGC002)', () => {
     const provider = new AGC001OnwardsProvider(ContestType.AGC);
-    const agc001Tasks = taskResultsForAGC001OnwardsProvider.filter(
-      (task) => task.contest_id === 'agc001',
-    );
-    const headerIds = provider.getHeaderIdsForTask(agc001Tasks as TaskResults);
 
-    expect(agc001Tasks).toHaveLength(6);
-    expect(headerIds).toEqual(['A', 'B', 'C', 'D', 'E', 'F']);
+    ['agc001', 'agc002'].forEach((contestId) => {
+      const agc001Tasks = taskResultsForAGC001OnwardsProvider.filter(
+        (task) => task.contest_id === contestId,
+      );
+      const headerIds = provider.getHeaderIdsForTask(agc001Tasks as TaskResults);
+
+      expect(agc001Tasks).toHaveLength(6);
+      expect(headerIds).toEqual(['A', 'B', 'C', 'D', 'E', 'F']);
+    });
   });
 
   test('expects to handle 7-problem contest pattern with F2 (AGC028)', () => {
