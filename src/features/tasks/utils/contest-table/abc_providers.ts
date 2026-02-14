@@ -174,4 +174,3 @@ export class ABC001ToABC041Provider extends ContestTableProviderBase {
     return contestNameLabel.replace('ABC ', '');
   }
 }
-

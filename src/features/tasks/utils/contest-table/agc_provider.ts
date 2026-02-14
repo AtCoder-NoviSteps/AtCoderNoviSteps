@@ -1,6 +1,4 @@
-import {
-  type ContestTableMetaData,
-} from '$features/tasks/types/contest-table/contest_table_provider';
+import { type ContestTableMetaData } from '$features/tasks/types/contest-table/contest_table_provider';
 import type { TaskResult } from '$lib/types/task';
 
 import { classifyContest, getContestNameLabel } from '$lib/utils/contest';
