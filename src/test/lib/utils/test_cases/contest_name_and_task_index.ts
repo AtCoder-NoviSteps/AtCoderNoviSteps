@@ -348,6 +348,34 @@ export const mathAndAlgorithm = [
   }),
 ];
 
+export const awc = [
+  createTestCaseForContestNameAndTaskIndex('AWC 0001, task A')({
+    contestId: 'awc0001',
+    taskTableIndex: 'A',
+    expected: 'AWC 0001 - A',
+  }),
+  createTestCaseForContestNameAndTaskIndex('AWC 0001, task E')({
+    contestId: 'awc0001',
+    taskTableIndex: 'E',
+    expected: 'AWC 0001 - E',
+  }),
+  createTestCaseForContestNameAndTaskIndex('AWC 0002, task A')({
+    contestId: 'awc0002',
+    taskTableIndex: 'A',
+    expected: 'AWC 0002 - A',
+  }),
+  createTestCaseForContestNameAndTaskIndex('AWC 0002, task E')({
+    contestId: 'awc0002',
+    taskTableIndex: 'E',
+    expected: 'AWC 0002 - E',
+  }),
+  createTestCaseForContestNameAndTaskIndex('AWC 9999, task E')({
+    contestId: 'awc9999',
+    taskTableIndex: 'E',
+    expected: 'AWC 9999 - E',
+  }),
+];
+
 const generateArcTestCases = (
   contestIds: string[],
   taskIndices: string[],

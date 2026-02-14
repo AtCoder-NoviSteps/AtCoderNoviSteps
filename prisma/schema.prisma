@@ -237,6 +237,7 @@ enum ContestType {
   ABC_LIKE // AtCoder Beginner Contest (ABC) 相当のコンテスト
   ARC_LIKE // AtCoder Regular Contest (ARC) 相当のコンテスト
   AGC_LIKE // AtCoder Grand Contest (AGC) 相当のコンテスト
+  AWC // AtCoder Weekday Contest
   UNIVERSITY // University Programming Contests in AtCoder (e.g., UTPC)
   FPS_24 // 24 Problems on Formal Power Series
   OTHERS // AtCoder (その他)

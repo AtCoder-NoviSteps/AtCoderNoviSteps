@@ -44,6 +44,7 @@ export const ContestType: { [key in ContestTypeOrigin]: key } = {
   ABC_LIKE: 'ABC_LIKE', // AtCoder Beginner Contest (ABC) 相当のコンテスト
   ARC_LIKE: 'ARC_LIKE', // AtCoder Regular Contest (ARC) 相当のコンテスト
   AGC_LIKE: 'AGC_LIKE', // AtCoder Grand Contest (AGC) 相当のコンテスト
+  AWC: 'AWC', // AtCoder Weekday Contest
   UNIVERSITY: 'UNIVERSITY', // University Programming Contests in AtCoder (e.g., UTPC)
   FPS_24: 'FPS_24', // 24 Problems on Formal Power Series
   OTHERS: 'OTHERS', // AtCoder (その他)
