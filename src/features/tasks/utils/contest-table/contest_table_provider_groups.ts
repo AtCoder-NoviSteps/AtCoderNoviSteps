@@ -217,7 +217,7 @@ export const prepareContestProviderPresets = () => {
     JOISecondQualAndSemiFinalRound: () =>
       new ContestTableProviderGroup(`JOI 二次予選・本選`, {
         buttonLabel: 'JOI 二次予選・本選',
-        ariaLabel: 'Filter JOI Second Qual Round',
+        ariaLabel: 'Filter JOI Second Qual and Semi-Final Round',
       }).addProviders(
         new JOISecondQualRound2020OnwardsProvider(ContestType.JOI),
         new JOIQualRoundFrom2006To2019Provider(ContestType.JOI),

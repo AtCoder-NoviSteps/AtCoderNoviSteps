@@ -149,7 +149,7 @@ describe('prepareContestProviderPresets', () => {
     expect(group.getGroupName()).toBe('JOI 二次予選・本選');
     expect(group.getMetadata()).toEqual({
       buttonLabel: 'JOI 二次予選・本選',
-      ariaLabel: 'Filter JOI Second Qual Round',
+      ariaLabel: 'Filter JOI Second Qual and Semi-Final Round',
     });
     expect(group.getSize()).toBe(3);
     expect(group.getProvider(ContestType.JOI, '2020Onwards')).toBeInstanceOf(
