@@ -4,18 +4,8 @@ import { ContestType } from '$lib/types/contest';
 import type { TaskResults } from '$lib/types/task';
 
 import { AGC001OnwardsProvider } from './agc_provider';
+import { parseContestRound } from './contest_table_provider_base';
 import { taskResultsForAGC001OnwardsProvider } from '$features/tasks/fixtures/contest-table/contest_table_provider';
-
-const getContestRound = (contestId: string): number => {
-  const roundString = contestId.replace(/^\D+/, '');
-  const round = parseInt(roundString, 10);
-
-  if (isNaN(round)) {
-    throw new Error(`Invalid contest ID format: ${contestId}`);
-  }
-
-  return round;
-};
 
 describe('AGC001OnwardsProvider', () => {
   test('expects to filter tasks to include only AGC001 and later', () => {
@@ -25,7 +15,7 @@ describe('AGC001OnwardsProvider', () => {
     expect(filtered.every((task) => task.contest_id.startsWith('agc'))).toBe(true);
     expect(
       filtered.every((task) => {
-        const round = getContestRound(task.contest_id);
+        const round = parseContestRound(task.contest_id, 'agc');
         return round >= 1 && round <= 999;
       }),
     ).toBe(true);
@@ -186,7 +176,7 @@ describe('AGC001OnwardsProvider', () => {
     expect(filtered).toHaveLength(3);
     expect(
       filtered.every((task) => {
-        const round = getContestRound(task.contest_id);
+        const round = parseContestRound(task.contest_id, 'agc');
         return round >= 1 && round <= 999;
       }),
     ).toBe(true);

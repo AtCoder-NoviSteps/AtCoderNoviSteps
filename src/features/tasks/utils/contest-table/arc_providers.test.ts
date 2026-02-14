@@ -8,18 +8,8 @@ import {
   ARC058ToARC103Provider,
   ARC001ToARC057Provider,
 } from './arc_providers';
+import { parseContestRound } from './contest_table_provider_base';
 import { taskResultsForARC104OnwardsProvider } from '$features/tasks/fixtures/contest-table/contest_table_provider';
-
-const getContestRound = (contestId: string): number => {
-  const roundString = contestId.replace(/^\D+/, '');
-  const round = parseInt(roundString, 10);
-
-  if (isNaN(round)) {
-    throw new Error(`Invalid contest ID format: ${contestId}`);
-  }
-
-  return round;
-};
 
 describe('ARC providers', () => {
   // ARC 104 Onwards only
@@ -31,7 +21,7 @@ describe('ARC providers', () => {
       expect(filtered.every((task) => task.contest_id.startsWith('arc'))).toBe(true);
       expect(
         filtered.every((task) => {
-          const round = getContestRound(task.contest_id);
+          const round = parseContestRound(task.contest_id, 'arc');
           return round >= 104 && round <= 999;
         }),
       ).toBe(true);
@@ -162,7 +152,7 @@ describe('ARC providers', () => {
       expect(filtered).toHaveLength(2);
       expect(
         filtered.every((task) => {
-          const round = getContestRound(task.contest_id);
+          const round = parseContestRound(task.contest_id, 'arc');
           return round >= 104;
         }),
       ).toBe(true);

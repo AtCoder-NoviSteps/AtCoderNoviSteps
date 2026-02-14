@@ -10,18 +10,8 @@ import {
   ABC042ToABC125Provider,
   ABC001ToABC041Provider,
 } from './abc_providers';
+import { parseContestRound } from './contest_table_provider_base';
 import { taskResultsForContestTableProvider } from '$features/tasks/fixtures/contest-table/contest_table_provider';
-
-const getContestRound = (contestId: string): number => {
-  const roundString = contestId.replace(/^\D+/, '');
-  const round = parseInt(roundString, 10);
-
-  if (isNaN(round)) {
-    throw new Error(`Invalid contest ID format: ${contestId}`);
-  }
-
-  return round;
-};
 
 describe('ABC providers', () => {
   const mockTaskResults: TaskResults = taskResultsForContestTableProvider;
@@ -116,7 +106,7 @@ describe('ABC providers', () => {
       expect(filtered.every((task) => task.contest_id.startsWith('abc'))).toBe(true);
       expect(
         filtered.every((task) => {
-          const round = getContestRound(task.contest_id);
+          const round = parseContestRound(task.contest_id, 'abc');
           return round >= 319 && round <= 999;
         }),
       ).toBe(true);
@@ -143,7 +133,7 @@ describe('ABC providers', () => {
       expect(filtered.every((task) => task.contest_id.startsWith('abc'))).toBe(true);
       expect(
         filtered.every((task) => {
-          const round = getContestRound(task.contest_id);
+          const round = parseContestRound(task.contest_id, 'abc');
           return round >= 319;
         }),
       ).toBe(true);
@@ -159,7 +149,7 @@ describe('ABC providers', () => {
       expect(filtered.every((task) => task.contest_id.startsWith('abc'))).toBe(true);
       expect(
         filtered.every((task) => {
-          const round = getContestRound(task.contest_id);
+          const round = parseContestRound(task.contest_id, 'abc');
           return round >= 212 && round <= 318;
         }),
       ).toBe(true);
@@ -187,7 +177,7 @@ describe('ABC providers', () => {
       expect(filtered.every((task) => task.contest_id.startsWith('abc'))).toBe(true);
       expect(
         filtered.every((task) => {
-          const round = getContestRound(task.contest_id);
+          const round = parseContestRound(task.contest_id, 'abc');
           return round >= 212 && round <= 318;
         }),
       ).toBe(true);
@@ -203,7 +193,7 @@ describe('ABC providers', () => {
       expect(filtered.every((task) => task.contest_id.startsWith('abc'))).toBe(true);
       expect(
         filtered.every((task) => {
-          const round = getContestRound(task.contest_id);
+          const round = parseContestRound(task.contest_id, 'abc');
           return round >= 126 && round <= 211;
         }),
       ).toBe(true);
@@ -241,7 +231,7 @@ describe('ABC providers', () => {
       expect(filtered.every((task) => task.contest_id.startsWith('abc'))).toBe(true);
       expect(
         filtered.every((task) => {
-          const round = getContestRound(task.contest_id);
+          const round = parseContestRound(task.contest_id, 'abc');
           return round >= 126 && round <= 211;
         }),
       ).toBe(true);
