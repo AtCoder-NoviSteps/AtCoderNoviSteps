@@ -19,7 +19,7 @@ describe('Typical90Provider', () => {
     const filtered = provider.filter(mixedTaskResults as TaskResults);
 
     expect(filtered?.every((task) => task.contest_id === 'typical90')).toBe(true);
-    expect(filtered?.length).toBe(filtered.length);
+    expect(filtered?.length).toBe(6);
     expect(filtered).not.toContainEqual(expect.objectContaining({ contest_id: 'abc123' }));
     expect(filtered).not.toContainEqual(expect.objectContaining({ contest_id: 'dp' }));
   });
