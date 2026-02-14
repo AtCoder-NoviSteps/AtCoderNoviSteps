@@ -31,6 +31,11 @@
   - **パターン3（複合ソース型）**: ABS、ABC-Like など → 複数 contest_id を統一表示
   - 対応セクション: [実装パターン](#実装パターン)
 
+- [ ] **コンテスト分類テスト確認**
+  - `classifyContest()` で新規 `ContestType.NewType` が正しく分類されているか確認
+  - 既存の競合するパターン（同じ contest_id 形式、重複する正規表現など）がないか確認
+  - 他のコンテスト型との分離テストケース：正しく分類されているか確認
+
 - [ ] **ガイドの実装例の確認**
   - 判定したパターンの実装例を確認してテンプレート理解
   - モック設定時に必要な `classifyContest()` の戻り値を確認
@@ -246,6 +251,7 @@ class TessokuBookSectionProvider extends TessokuBookProvider {
 | ARC 058-103 | 058～103 | 058, 103     | C～F       | あり   | 共有問題(ABC) |
 | ARC 104-    | 104～    | 104          | 4～6問     | あり   | -             |
 | AGC 001-    | 001～    | 001          | 4～7問     | あり   | -             |
+| AWC 0001-   | 0001～   | 0001         | A～E       | あり   | -             |
 
 ### 単一ソース型
 
@@ -500,11 +506,12 @@ describe('CustomProvider with unique config', () => {
 
 ### ドキュメント更新チェックリスト
 
-- [ ] 各コンテスト種別テーブル に新規 Provider の行を追加
-- [ ] 複合型参照情報がある場合は複合型コンテストの実装パターン に追加
-- [ ] テストデータ参考ファイル に新規ファイルがあれば追加
-- [ ] GitHub Issues に当該 Provider のリンクを追加
-- [ ] 最終更新日を現在日付に変更
+- [ ] **実装例・テスト結果の報告** — dev-notes に実装教訓を記載
+- [ ] **各コンテスト種別テーブル** — 新規 Provider の行を追加（範囲フィルタ型 / 単一ソース型 / 複合ソース型）
+- [ ] **実装パターン説明** — 複合型参照情報がある場合は該当セクション に追加
+- [ ] **このガイド（how-to-add-contest-table-provider.md）** — 「事前確認チェックリスト」に新規学習項目を追加
+- [ ] **参考資料** — GitHub Issues に当該 Provider (#xxxx) のリンクを追加
+- [ ] **最終更新日** — 現在日付に変更
 
 ---
 
@@ -519,6 +526,7 @@ describe('CustomProvider with unique config', () => {
 - [#2837](https://github.com/AtCoder-NoviSteps/AtCoderNoviSteps/issues/2837) - AGC001OnwardsProvider
 - [#2838](https://github.com/AtCoder-NoviSteps/AtCoderNoviSteps/issues/2838) - ABC001～041 & ARC001～057
 - [#2840](https://github.com/AtCoder-NoviSteps/AtCoderNoviSteps/issues/2840)、[#3108](https://github.com/AtCoder-NoviSteps/AtCoderNoviSteps/issues/3108) - ABCLikeProvider
+- [#3153](https://github.com/AtCoder-NoviSteps/AtCoderNoviSteps/issues/3153) - AWC0001OnwardsProvider
 - [#2776](https://github.com/AtCoder-NoviSteps/AtCoderNoviSteps/issues/2776) - TessokuBookProvider
 - [#2785](https://github.com/AtCoder-NoviSteps/AtCoderNoviSteps/issues/2785) - MathAndAlgorithmProvider
 - [#2797](https://github.com/AtCoder-NoviSteps/AtCoderNoviSteps/issues/2797) - FPS24Provider
@@ -532,4 +540,4 @@ describe('CustomProvider with unique config', () => {
 
 ---
 
-**最終更新**: 2026-02-05
+**最終更新**: 2026-02-14
