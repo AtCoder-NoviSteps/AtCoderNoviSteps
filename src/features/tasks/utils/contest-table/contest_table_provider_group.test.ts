@@ -95,10 +95,10 @@ describe('ContestTableProviderGroup', () => {
       buttonLabel: 'コンテストテーブルに関する統計情報',
       ariaLabel: 'Statistics for contest table',
     });
-    const abcProvider = new ABSProvider(ContestType.ABC);
+    const absProvider = new ABSProvider(ContestType.ABS);
     const edpcProvider = new EDPCProvider(ContestType.EDPC);
 
-    group.addProvider(abcProvider);
+    group.addProvider(absProvider);
     group.addProvider(edpcProvider);
 
     const stats = group.getStats();
