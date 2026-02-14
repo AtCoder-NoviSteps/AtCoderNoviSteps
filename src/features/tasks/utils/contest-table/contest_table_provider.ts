@@ -1,5 +1,6 @@
 export * from './contest_table_provider_base';
 export * from './contest_table_provider_group';
+export * from './contest_table_provider_groups';
 export * from './abs_provider';
 export * from './abc_providers';
 export * from './arc_providers';
@@ -13,4 +14,3 @@ export * from './dp_providers';
 export * from './fps24_provider';
 export * from './acl_providers';
 export * from './joi_providers';
-export * from './contest_table_provider_groups';
