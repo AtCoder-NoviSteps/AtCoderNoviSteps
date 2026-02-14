@@ -4,7 +4,7 @@
 
 コードの配置先を **routes / features / lib** の3層で判断する。
 
-```
+```text
 src/
 ├── routes/      # ルート定義。薄く保つ
 ├── features/    # 機能スコープのコード（1つの機能ドメインに閉じるもの）
@@ -13,7 +13,7 @@ src/
 
 ### 判定基準
 
-```
+```text
 このコードはどの機能ドメインで使われるか？
 │
 ├── 1つの機能ドメインに属する
@@ -38,7 +38,7 @@ src/
 
 feature ディレクトリの内部は技術スタックベースで整理する。`components/` はページ単位でサブディレクトリに分割し、テストはファイル隣接で配置する。
 
-```
+```text
 src/features/
 ├── workbooks/
 │   ├── components/
@@ -116,7 +116,7 @@ src/features/
 
 2つ以上の feature から使われるコードのみ配置する。
 
-```
+```text
 src/lib/
 ├── actions/        # SvelteKit アクション
 ├── clients/        # 外部 API クライアント（AtCoder Problems, AOJ）
@@ -142,7 +142,7 @@ src/lib/
 
 テストは対象ファイルの隣に置く。変更時にテストが目に入り、更新忘れを防ぐ。
 
-```
+```text
 features/workbooks/services/
 ├── workbooks.ts
 └── workbooks.test.ts       ← 隣接
