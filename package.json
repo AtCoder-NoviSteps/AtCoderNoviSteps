@@ -55,7 +55,7 @@
     "prisma": "5.22.0",
     "super-sitemap": "1.0.7",
     "svelte": "5.50.0",
-    "svelte-check": "4.3.6",
+    "svelte-check": "4.4.0",
     "svelte-meta-tags": "4.5.0",
     "sveltekit-superforms": "2.29.1",
     "tailwindcss": "4.1.18",
