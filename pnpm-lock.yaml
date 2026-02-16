@@ -51,8 +51,8 @@ importers:
         specifier: 1.4.1
         version: 1.4.1(svelte@5.51.2)
       tailwind-merge:
-        specifier: 2.6.0
-        version: 2.6.0
+        specifier: 3.4.1
+        version: 3.4.1
       vercel:
         specifier: 50.17.1
         version: 50.17.1(@vercel/go@3.4.0)(@vercel/hydrogen@1.3.5)(@vercel/next@4.15.28(rollup@4.53.4))(@vercel/redwood@2.4.9(rollup@4.53.4))(@vercel/remix-builder@5.5.10(rollup@4.53.4))(@vercel/ruby@2.3.0)(@vercel/rust@1.0.5)
@@ -4477,14 +4477,8 @@ packages:
     resolution: {integrity: sha512-qd/R7n5rQTRFi+Zf2sk5XVVd9UQl6ZkduPFC3S7WEGJAmetDTjY3qPN50eSKzwuzEyQKy5TN2TiZdkIjos2L6A==}
     engines: {node: '>=8.0.0'}
 
-  tailwind-merge@2.6.0:
-    resolution: {integrity: sha512-P+Vu1qXfzediirmHOC3xKGAYeZtPcV9g76X+xg2FD4tYgR71ewMA35Y3sCz3zhiN/dwefRpJX0yBcgwi1fXNQA==}
-
-  tailwind-merge@3.3.1:
-    resolution: {integrity: sha512-gBXpgUm/3rp1lMZZrM/w7D8GKqshif0zAymAhbCyIt8KMe+0v9DQ7cdYLR4FHH/cKpdTXb+A/tKKU3eolfsI+g==}
-
-  tailwind-merge@3.4.0:
-    resolution: {integrity: sha512-uSaO4gnW+b3Y2aWoWfFpX62vn2sR3skfhbjsEnaBI81WD1wBLlHZe5sWf0AqjksNdYTbGBEd0UasQMT3SNV15g==}
+  tailwind-merge@3.4.1:
+    resolution: {integrity: sha512-2OA0rFqWOkITEAOFWSBSApYkDeH9t2B3XSJuI4YztKBzK3mX0737A2qtxDZ7xkw9Zfh0bWl+r34sF3HXV+Ig7Q==}
 
   tailwind-variants@3.2.2:
     resolution: {integrity: sha512-Mi4kHeMTLvKlM98XPnK+7HoBPmf4gygdFmqQPaDivc3DpYS6aIY6KiG/PgThrGvii5YZJqRsPz0aPyhoFzmZgg==}
@@ -6781,7 +6775,7 @@ snapshots:
       ramda: 0.28.0
       react: 19.2.0
       react-dom: 19.2.0(react@19.2.0)
-      tailwind-merge: 3.3.1
+      tailwind-merge: 3.4.1
       tailwindcss: 3.4.19(tsx@4.21.0)(yaml@2.8.1)
     transitivePeerDependencies:
       - '@babel/core'
@@ -7887,8 +7881,8 @@ snapshots:
       esm-env: 1.2.2
       flowbite: 3.1.2(rollup@4.53.4)
       svelte: 5.51.2
-      tailwind-merge: 3.4.0
-      tailwind-variants: 3.2.2(tailwind-merge@3.4.0)(tailwindcss@4.1.18)
+      tailwind-merge: 3.4.1
+      tailwind-variants: 3.2.2(tailwind-merge@3.4.1)(tailwindcss@4.1.18)
       tailwindcss: 4.1.18
     transitivePeerDependencies:
       - rollup
@@ -9417,17 +9411,13 @@ snapshots:
       typical: 5.2.0
       wordwrapjs: 4.0.1
 
-  tailwind-merge@2.6.0: {}
+  tailwind-merge@3.4.1: {}
 
-  tailwind-merge@3.3.1: {}
-
-  tailwind-merge@3.4.0: {}
-
-  tailwind-variants@3.2.2(tailwind-merge@3.4.0)(tailwindcss@4.1.18):
+  tailwind-variants@3.2.2(tailwind-merge@3.4.1)(tailwindcss@4.1.18):
     dependencies:
       tailwindcss: 4.1.18
     optionalDependencies:
-      tailwind-merge: 3.4.0
+      tailwind-merge: 3.4.1
 
   tailwindcss@3.4.19(tsx@4.21.0)(yaml@2.8.1):
     dependencies:
