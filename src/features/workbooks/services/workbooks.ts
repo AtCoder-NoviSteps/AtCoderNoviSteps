@@ -1,6 +1,17 @@
 import { default as db } from '$lib/server/database';
-import type { WorkBook, WorkBooks, WorkBookTasksBase, WorkBookType } from '$lib/types/workbook';
-import { getWorkBookTasks, validateRequiredFields } from '$lib/services/workbook_tasks';
+
+import {
+  getWorkBookTasks,
+  validateRequiredFields,
+} from '$features/workbooks/services/workbook_tasks';
+
+import type {
+  WorkBook,
+  WorkBooks,
+  WorkBookTasksBase,
+  WorkBookType,
+} from '$features/workbooks/types/workbook';
+
 import { sanitizeUrl } from '$lib/utils/url';
 
 export async function getWorkBooks(): Promise<WorkBooks> {

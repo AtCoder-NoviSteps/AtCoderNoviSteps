@@ -1,4 +1,8 @@
-import type { WorkBook, WorkBookTaskBase, WorkBookTasksBase } from '$lib/types/workbook';
+import type {
+  WorkBook,
+  WorkBookTaskBase,
+  WorkBookTasksBase,
+} from '$features/workbooks/types/workbook';
 
 export async function getWorkBookTasks(workBook: Omit<WorkBook, 'id'>): Promise<WorkBookTasksBase> {
   const workBookTasks: WorkBookTasksBase = await Promise.all(

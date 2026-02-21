@@ -1,8 +1,8 @@
 import { get } from 'svelte/store';
 import { expect, test } from 'vitest';
 
-import { activeWorkbookTabStore } from '$lib/stores/active_workbook_tab';
-import { WorkBookType } from '$lib/types/workbook';
+import { activeWorkbookTabStore } from '$features/workbooks/stores/active_workbook_tab';
+import { WorkBookType } from '$features/workbooks/types/workbook';
 
 type InitialState = {
   workBookType: WorkBookType;

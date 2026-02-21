@@ -2,17 +2,20 @@ import { redirect, fail } from '@sveltejs/kit';
 import { superValidate } from 'sveltekit-superforms/server';
 import { zod4 } from 'sveltekit-superforms/adapters';
 
-import { getLoggedInUser, canEdit, isAdmin } from '$lib/utils/authorship';
 import { Roles } from '$lib/types/user';
+import { workBookSchema } from '$features/workbooks/zod/schema';
+
+import * as tasksCrud from '$lib/services/tasks';
+import * as workBooksCrud from '$features/workbooks/services/workbooks';
+
+import { getLoggedInUser, canEdit, isAdmin } from '$lib/utils/authorship';
+import { getWorkbookWithAuthor } from '$features/workbooks/utils/workbook';
+
 import {
   FORBIDDEN,
   TEMPORARY_REDIRECT,
   INTERNAL_SERVER_ERROR,
 } from '$lib/constants/http-response-status-codes';
-import { getWorkbookWithAuthor } from '$lib/utils/workbook';
-import { workBookSchema } from '$lib/zod/schema';
-import * as tasksCrud from '$lib/services/tasks';
-import * as workBooksCrud from '$lib/services/workbooks';
 
 export async function load({ locals, params }) {
   const loggedInUser = await getLoggedInUser(locals);

@@ -24,7 +24,7 @@
     WorkBookTaskCreate,
     WorkBookTasksEdit,
     WorkBookTaskEdit,
-  } from '$lib/types/workbook';
+  } from '$features/workbooks/types/workbook';
   import type { Task } from '$lib/types/task';
 
   interface Props {

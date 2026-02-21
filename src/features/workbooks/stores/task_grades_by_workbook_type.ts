@@ -1,7 +1,7 @@
 import { get, writable } from 'svelte/store';
 
-import { WorkBookType } from '$lib/types/workbook';
 import { TaskGrade } from '$lib/types/task';
+import { WorkBookType } from '$features/workbooks/types/workbook';
 
 const workBookTypes = Object.values(WorkBookType) as Array<WorkBookType>;
 const initialValues = new Map<WorkBookType, TaskGrade>(

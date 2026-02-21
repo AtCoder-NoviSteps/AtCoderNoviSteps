@@ -1,6 +1,6 @@
 import { expect, test, vi } from 'vitest';
 
-import { replenishmentWorkBooksStore } from '$lib/stores/replenishment_workbook.svelte';
+import { replenishmentWorkBooksStore } from '$features/workbooks/stores/replenishment_workbook.svelte';
 
 vi.mock('$app/environment', () => ({
   browser: true,

@@ -2,7 +2,7 @@
   import MessageHelperWrapper from '$lib/components/MessageHelperWrapper.svelte';
   import InputFieldWrapper from '$lib/components/InputFieldWrapper.svelte';
   import SelectWrapper from '$lib/components/SelectWrapper.svelte';
-  import { WorkBookType } from '$lib/types/workbook';
+  import { WorkBookType } from '$features/workbooks/types/workbook';
 
   interface Props {
     // FIXME: 引数がとても多いので、コンポーネントに渡す引数を減らす方法を調べて実装。

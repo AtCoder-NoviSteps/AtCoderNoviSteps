@@ -1,5 +1,5 @@
 import { Roles } from '$lib/types/user';
-import type { WorkBook, WorkbookList } from '$lib/types/workbook';
+import type { WorkBook, WorkbookList } from '$features/workbooks/types/workbook';
 
 import { isAdmin } from '$lib/utils/authorship';
 

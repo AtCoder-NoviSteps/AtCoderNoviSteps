@@ -7,7 +7,7 @@ import * as taskResultsCrud from '$lib/services/task_results';
 import * as action from '$lib/actions/update_task_result';
 
 import { getLoggedInUser, isAdmin, canRead } from '$lib/utils/authorship';
-import { getWorkbookWithAuthor } from '$lib/utils/workbook';
+import { getWorkbookWithAuthor } from '$features/workbooks/utils/workbook';
 import { FORBIDDEN } from '$lib/constants/http-response-status-codes';
 
 export async function load({ locals, params }) {

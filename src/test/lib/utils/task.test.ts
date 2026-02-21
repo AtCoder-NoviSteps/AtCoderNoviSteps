@@ -12,6 +12,11 @@ import {
   tasksForVerificationOfOrder,
 } from './test_cases/task_results';
 import { taskResultsForTaskTableHeaderName } from './test_cases/task_table_header_name';
+
+import { ContestType } from '$lib/types/contest';
+import { type TaskResult, type TaskResults } from '$lib/types/task';
+import type { WorkBookTaskBase } from '$features/workbooks/types/workbook';
+
 import {
   getTaskUrl,
   countAcceptedTasks,
@@ -21,9 +26,6 @@ import {
   removeTaskIndexFromTitle,
   getTaskTableHeaderName,
 } from '$lib/utils/task';
-import type { WorkBookTaskBase } from '$lib/types/workbook';
-import { ContestType } from '$lib/types/contest';
-import { type TaskResult, type TaskResults } from '$lib/types/task';
 
 type TestCaseForTaskResults = {
   taskResults: TaskResults;

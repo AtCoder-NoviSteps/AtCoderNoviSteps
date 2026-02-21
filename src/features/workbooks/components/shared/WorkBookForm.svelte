@@ -2,8 +2,8 @@
   import { Breadcrumb, BreadcrumbItem } from 'flowbite-svelte';
 
   import HeadingOne from '$lib/components/HeadingOne.svelte';
-  import WorkBookInputFields from '$lib/components/WorkBook/WorkBookInputFields.svelte';
-  import WorkBookTasksTable from '$lib/components/WorkBookTasks/WorkBookTasksTable.svelte';
+  import WorkBookInputFields from '$features/workbooks/components/shared/WorkBookInputFields.svelte';
+  import WorkBookTasksTable from '$features/workbooks/components/detail/WorkBookTasksTable.svelte';
   import TaskSearchBox from '$lib/components/TaskSearchBox.svelte';
   import InputFieldWrapper from '$lib/components/InputFieldWrapper.svelte';
   import SubmissionButton from '$lib/components/SubmissionButton.svelte';
@@ -16,7 +16,7 @@
     WorkBookTasksCreate,
     WorkBookTaskEdit,
     WorkBookTasksEdit,
-  } from '$lib/types/workbook';
+  } from '$features/workbooks/types/workbook';
 
   interface Props {
     pageTitle: string;

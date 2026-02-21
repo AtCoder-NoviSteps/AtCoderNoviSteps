@@ -1,8 +1,8 @@
 import { expect, test } from 'vitest';
-import { ZodSchema } from 'zod';
+import { type ZodSchema } from 'zod';
 
-import { workBookSchema } from '$lib/zod/schema';
-import { WorkBookType, type WorkBookTasks } from '$lib/types/workbook';
+import { workBookSchema } from '$features/workbooks/zod/schema';
+import { WorkBookType, type WorkBookTasks } from '$features/workbooks/types/workbook';
 
 type WorkBook = {
   authorId: string;

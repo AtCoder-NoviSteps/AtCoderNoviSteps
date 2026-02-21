@@ -1,8 +1,8 @@
 import { expect, test } from 'vitest';
 
-import { canViewWorkBook, getUrlSlugFrom } from '$lib/utils/workbooks';
+import { canViewWorkBook, getUrlSlugFrom } from '$features/workbooks/utils/workbooks';
 import { Roles } from '$lib/types/user';
-import { type WorkbookList, WorkBookType } from '$lib/types/workbook';
+import { type WorkbookList, WorkBookType } from '$features/workbooks/types/workbook';
 
 function createWorkBookListBase(overrides: Partial<WorkbookList> = {}): WorkbookList {
   return {

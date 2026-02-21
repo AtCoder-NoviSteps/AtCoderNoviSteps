@@ -1,8 +1,8 @@
 <script lang="ts">
   import { Img } from 'flowbite-svelte';
 
-  import type { WorkBookTaskBase } from '$lib/types/workbook';
   import type { TaskResults } from '$lib/types/task';
+  import type { WorkBookTaskBase } from '$features/workbooks/types/workbook';
 
   import { areAllTasksAccepted } from '$lib/utils/task';
 

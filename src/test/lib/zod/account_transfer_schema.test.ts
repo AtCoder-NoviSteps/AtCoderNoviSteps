@@ -1,5 +1,5 @@
 import { expect, test } from 'vitest';
-import { ZodSchema } from 'zod';
+import { type ZodSchema } from 'zod';
 
 import { accountTransferSchema } from '$lib/zod/schema';
 

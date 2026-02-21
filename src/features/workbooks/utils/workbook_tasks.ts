@@ -1,3 +1,4 @@
+import type { Task } from '$lib/types/task';
 import type {
   WorkBookTaskBase,
   WorkBookTasksBase,
@@ -5,8 +6,7 @@ import type {
   WorkBookTasksCreate,
   WorkBookTaskEdit,
   WorkBookTasksEdit,
-} from '$lib/types/workbook';
-import type { Task } from '$lib/types/task';
+} from '$features/workbooks/types/workbook';
 
 // Note: アプリの表示上、内部処理とも0-indexed
 export function generateWorkBookTaskOrders(workBookTaskCount: number) {

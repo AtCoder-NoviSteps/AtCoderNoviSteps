@@ -10,22 +10,22 @@
     TableBodyRow,
   } from 'flowbite-svelte';
 
-  import PublicationStatusLabel from '$lib/components/WorkBooks/PublicationStatusLabel.svelte';
   import CompletedTasks from '$lib/components/Trophies/CompletedTasks.svelte';
   import HeadingOne from '$lib/components/HeadingOne.svelte';
   import UpdatingModal from '$lib/components/SubmissionStatus/UpdatingModal.svelte';
   import SubmissionStatusImage from '$lib/components/SubmissionStatus/SubmissionStatusImage.svelte';
   import GradeLabel from '$lib/components/GradeLabel.svelte';
   import ExternalLinkWrapper from '$lib/components/ExternalLinkWrapper.svelte';
-  import CommentAndHint from '$lib/components/WorkBook/CommentAndHint.svelte';
+  import PublicationStatusLabel from '$features/workbooks/components/shared/PublicationStatusLabel.svelte';
+  import CommentAndHint from '$features/workbooks/components/detail/CommentAndHint.svelte';
 
   import { getBackgroundColorFrom } from '$lib/services/submission_status';
 
-  import { getTaskUrl, removeTaskIndexFromTitle } from '$lib/utils/task';
   import { addContestNameToTaskIndex } from '$lib/utils/contest';
+  import { getTaskUrl, removeTaskIndexFromTitle } from '$lib/utils/task';
 
-  import type { WorkBookTaskBase } from '$lib/types/workbook';
   import type { TaskResult, TaskGrade } from '$lib/types/task';
+  import type { WorkBookTaskBase } from '$features/workbooks/types/workbook';
 
   let { data } = $props();
 

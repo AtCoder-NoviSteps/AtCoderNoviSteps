@@ -1,5 +1,5 @@
 import { expect, test } from 'vitest';
-import { parseWorkBookId, parseWorkBookUrlSlug } from '$lib/utils/workbook';
+import { parseWorkBookId, parseWorkBookUrlSlug } from '$features/workbooks/utils/workbook';
 
 type TestCase = {
   slug: string;

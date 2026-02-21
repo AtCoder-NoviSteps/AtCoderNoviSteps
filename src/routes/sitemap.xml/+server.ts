@@ -10,9 +10,9 @@ import { error } from '@sveltejs/kit';
 import type { RequestHandler } from '@sveltejs/kit';
 import * as sitemap from 'super-sitemap';
 
-import * as workBooksCrud from '$lib/services/workbooks';
+import * as workBooksCrud from '$features/workbooks/services/workbooks';
 
-import { getUrlSlugFrom } from '$lib/utils/workbooks';
+import { getUrlSlugFrom } from '$features/workbooks/utils/workbooks';
 import { INTERNAL_SERVER_ERROR } from '$lib/constants/http-response-status-codes';
 
 /**

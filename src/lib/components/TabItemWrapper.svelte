@@ -4,12 +4,13 @@
   import { TabItem, Tooltip } from 'flowbite-svelte';
   import CircleHelp from '@lucide/svelte/icons/circle-help';
 
-  import { WorkBookType } from '$lib/types/workbook';
-  import { activeWorkbookTabStore } from '$lib/stores/active_workbook_tab';
+  import { WorkBookType } from '$features/workbooks/types/workbook';
+
   import {
     activeProblemListTabStore,
     type ActiveProblemListTab,
   } from '$lib/stores/active_problem_list_tab.svelte';
+  import { activeWorkbookTabStore } from '$features/workbooks/stores/active_workbook_tab';
 
   import { TOOLTIP_CLASS_BASE } from '$lib/constants/tailwind-helper';
 

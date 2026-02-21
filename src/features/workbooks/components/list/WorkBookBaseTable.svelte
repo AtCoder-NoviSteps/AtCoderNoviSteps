@@ -9,19 +9,20 @@
     TableHead,
     TableHeadCell,
   } from 'flowbite-svelte';
-  import { WorkBookType, type WorkbooksList } from '$lib/types/workbook';
-  import { TaskGrade, type TaskResults } from '$lib/types/task';
-  import type { Roles } from '$lib/types/user';
 
-  import TitleTableHeadCell from '$lib/components/WorkBooks/TitleTableHeadCell.svelte';
-  import TitleTableBodyCell from '$lib/components/WorkBooks/TitleTableBodyCell.svelte';
+  import type { Roles } from '$lib/types/user';
+  import { TaskGrade, type TaskResults } from '$lib/types/task';
+  import { WorkBookType, type WorkbooksList } from '$features/workbooks/types/workbook';
+
   import GradeLabel from '$lib/components/GradeLabel.svelte';
   import CompletedTasks from '$lib/components/Trophies/CompletedTasks.svelte';
   import ThermometerProgressBar from '$lib/components/ThermometerProgressBar.svelte';
   import AcceptedCounter from '$lib/components/SubmissionStatus/AcceptedCounter.svelte';
+  import TitleTableHeadCell from '$features/workbooks/components/list/TitleTableHeadCell.svelte';
+  import TitleTableBodyCell from '$features/workbooks/components/list/TitleTableBodyCell.svelte';
 
   import { canRead, canEdit, canDelete } from '$lib/utils/authorship';
-  import { getUrlSlugFrom } from '$lib/utils/workbooks';
+  import { getUrlSlugFrom } from '$features/workbooks/utils/workbooks';
 
   interface Props {
     workbookType: WorkBookType;

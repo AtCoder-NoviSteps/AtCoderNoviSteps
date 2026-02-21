@@ -1,9 +1,9 @@
 import { error } from '@sveltejs/kit';
 
-import type { WorkBook } from '$lib/types/workbook';
+import type { WorkBook } from '$features/workbooks/types/workbook';
 
 import * as userCrud from '$lib/services/users';
-import * as workBookCrud from '$lib/services/workbooks';
+import * as workBookCrud from '$features/workbooks/services/workbooks';
 
 import { isValidUrlSlug } from '$lib/utils/url';
 import { BAD_REQUEST, NOT_FOUND } from '$lib/constants/http-response-status-codes';

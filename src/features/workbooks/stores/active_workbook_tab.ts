@@ -1,6 +1,6 @@
 import { writable } from 'svelte/store';
 
-import { WorkBookType } from '$lib/types/workbook';
+import { WorkBookType } from '$features/workbooks/types/workbook';
 
 const workBookTypes = Object.values(WorkBookType) as Array<WorkBookType>;
 // Map<WorkBookType, IsActiveWorkBookTab>

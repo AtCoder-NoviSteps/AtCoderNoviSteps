@@ -1,11 +1,13 @@
 import { error } from '@sveltejs/kit';
 
-import * as workBooksCrud from '$lib/services/workbooks';
+import * as workBooksCrud from '$features/workbooks/services/workbooks';
 import * as taskCrud from '$lib/services/tasks';
 import * as taskResultsCrud from '$lib/services/task_results';
 import * as userCrud from '$lib/services/users';
+
 import { getLoggedInUser, canDelete } from '$lib/utils/authorship';
-import { parseWorkBookId } from '$lib/utils/workbook';
+import { parseWorkBookId } from '$features/workbooks/utils/workbook';
+
 import {
   BAD_REQUEST,
   FORBIDDEN,

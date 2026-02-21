@@ -1,6 +1,7 @@
 <script lang="ts">
-  import type { WorkBookTaskBase } from '$lib/types/workbook';
   import type { TaskResults } from '$lib/types/task';
+  import type { WorkBookTaskBase } from '$features/workbooks/types/workbook';
+
   import { countAcceptedTasks, countAllTasks } from '$lib/utils/task';
 
   interface Props {

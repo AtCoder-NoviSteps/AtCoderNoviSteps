@@ -3,18 +3,23 @@
 
   import { ButtonGroup, Button, Toggle } from 'flowbite-svelte';
 
-  import { taskGradesByWorkBookTypeStore } from '$lib/stores/task_grades_by_workbook_type';
-  import { replenishmentWorkBooksStore } from '$lib/stores/replenishment_workbook.svelte';
-  import { canRead } from '$lib/utils/authorship';
-  import { WorkBookType, type WorkbookList, type WorkbooksList } from '$lib/types/workbook';
-  import { getTaskGradeLabel } from '$lib/utils/task';
-
-  import { TaskGrade, type TaskResults } from '$lib/types/task';
   import type { Roles } from '$lib/types/user';
+  import { TaskGrade, type TaskResults } from '$lib/types/task';
+  import {
+    WorkBookType,
+    type WorkbookList,
+    type WorkbooksList,
+  } from '$features/workbooks/types/workbook';
+
+  import { taskGradesByWorkBookTypeStore } from '$features/workbooks/stores/task_grades_by_workbook_type';
+  import { replenishmentWorkBooksStore } from '$features/workbooks/stores/replenishment_workbook.svelte';
+
+  import { getTaskGradeLabel } from '$lib/utils/task';
+  import { canRead } from '$lib/utils/authorship';
 
   import TooltipWrapper from '$lib/components/TooltipWrapper.svelte';
   import LabelWithTooltips from '$lib/components/LabelWithTooltips.svelte';
-  import WorkBookBaseTable from '$lib/components/WorkBooks/WorkBookBaseTable.svelte';
+  import WorkBookBaseTable from '$features/workbooks/components/list/WorkBookBaseTable.svelte';
 
   interface Props {
     workbookType: WorkBookType;

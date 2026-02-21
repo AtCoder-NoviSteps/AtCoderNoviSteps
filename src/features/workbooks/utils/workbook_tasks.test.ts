@@ -1,19 +1,19 @@
 import { expect, test } from 'vitest';
 
+import type { Task, Tasks } from '$lib/types/task';
+import { TaskGrade } from '$lib/types/task';
 import type {
   WorkBookTasksBase,
   WorkBookTasksCreate,
   WorkBookTasksEdit,
-} from '$lib/types/workbook';
-import type { Task, Tasks } from '$lib/types/task';
-import { TaskGrade } from '$lib/types/task';
+} from '$features/workbooks/types/workbook';
 
 import {
   generateWorkBookTaskOrders,
   addTaskToWorkBook,
   updateWorkBookTasks,
   updateWorkBookTaskForTable,
-} from '$lib/utils/workbook_tasks';
+} from '$features/workbooks/utils/workbook_tasks';
 
 type TestCaseForWorkBookTaskOrders = {
   workBookTaskCount: number;

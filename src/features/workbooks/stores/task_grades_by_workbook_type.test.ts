@@ -1,8 +1,9 @@
 import { expect, test } from 'vitest';
 
-import { taskGradesByWorkBookTypeStore } from '$lib/stores/task_grades_by_workbook_type';
-import { WorkBookType } from '$lib/types/workbook';
 import { TaskGrade } from '$lib/types/task';
+import { WorkBookType } from '$features/workbooks/types/workbook';
+
+import { taskGradesByWorkBookTypeStore } from '$features/workbooks/stores/task_grades_by_workbook_type';
 
 type InitialState = {
   workBookType: WorkBookType;
