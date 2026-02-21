@@ -25,7 +25,7 @@ GitHub issue #3193「[Refactor] 問題集機能に関するファイルをfeatur
 
 ### 完成したディレクトリ構造
 
-```
+```text
 src/features/workbooks/
 ├── components/
 │   ├── list/          # 一覧ページ (4ファイル)
