@@ -50,9 +50,9 @@ src/features/
 │   │   │   ├── CommentAndHint.svelte
 │   │   │   └── PublicationStatusLabel.svelte
 │   │   └── shared/                  # feature 内で複数ページから使うもの
-│   │   │   ├── WorkBookForm.svelte
-│   │   │   ├── WorkBookForm.test.ts
-│   │   │   └── WorkBookInputFields.svelte
+│   │       ├── WorkBookForm.svelte
+│   │       ├── WorkBookForm.test.ts
+│   │       └── WorkBookInputFields.svelte
 │   ├── fixtures/                    # テスト用データ
 │   ├── services/
 │   │   ├── workbooks.ts
