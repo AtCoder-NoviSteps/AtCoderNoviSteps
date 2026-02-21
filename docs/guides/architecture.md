@@ -49,11 +49,10 @@ src/features/
 │   │   ├── detail/                  # 詳細ページ
 │   │   │   ├── CommentAndHint.svelte
 │   │   │   └── PublicationStatusLabel.svelte
-│   │   ├── form/                    # 作成・編集ページ
+│   │   └── shared/                  # feature 内で複数ページから使うもの
 │   │   │   ├── WorkBookForm.svelte
 │   │   │   ├── WorkBookForm.test.ts
 │   │   │   └── WorkBookInputFields.svelte
-│   │   └── shared/                  # feature 内で複数ページから使うもの
 │   ├── fixtures/                    # テスト用データ
 │   ├── services/
 │   │   ├── workbooks.ts
@@ -61,7 +60,7 @@ src/features/
 │   ├── stores/
 │   │   └── active_workbook_tab.ts
 │   ├── types/
-│   │   └── workbook_form.ts
+│   │   └── workbook.ts
 │   └── utils/
 │       ├── workbook.ts
 │       └── workbook.test.ts
