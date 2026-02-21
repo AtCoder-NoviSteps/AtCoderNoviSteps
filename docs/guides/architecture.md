@@ -96,7 +96,6 @@ src/features/
 
 | Feature          | 抽出対象                                                                                                                                             |
 | ---------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **workbooks**    | `WorkBook/*`, `WorkBooks/*`, `services/workbooks.ts`, `utils/workbook*.ts`, `stores/active_workbook_tab.ts`                                          |
 | **tasks**        | `TaskTables/*`, `TaskGrades/*`, `stores/active_problem_list_tab.svelte.ts`（※ `TaskGradeList`, `TaskList` 等は複数ドメインで使うため `lib/` に残す） |
 | **admin**        | `TagForm`, `TagListForEdit`, `TaskForm`, `TaskListForEdit`, `services/tags.ts`, `services/task_tags.ts`                                              |
 | **auth**         | `AuthForm`, `utils/auth_forms.ts`, `types/auth_forms.ts`                                                                                             |
