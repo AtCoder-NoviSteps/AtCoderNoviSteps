@@ -4,52 +4,23 @@
   import { TabItem, Tooltip } from 'flowbite-svelte';
   import CircleHelp from '@lucide/svelte/icons/circle-help';
 
-  import { WorkBookType } from '$features/workbooks/types/workbook';
-
-  import {
-    activeProblemListTabStore,
-    type ActiveProblemListTab,
-  } from '$lib/stores/active_problem_list_tab.svelte';
-  import { activeWorkbookTabStore } from '$features/workbooks/stores/active_workbook_tab';
-
   import { TOOLTIP_CLASS_BASE } from '$lib/constants/tailwind-helper';
 
   interface Props {
-    workbookType?: WorkBookType | null;
-    activeProblemList?: ActiveProblemListTab | null;
     isOpen?: boolean;
     title: string;
     tooltipContent?: string;
+    onclick?: () => void;
     children?: Snippet;
   }
 
-  let {
-    workbookType = null,
-    activeProblemList = null,
-    isOpen = false,
-    title,
-    tooltipContent = '',
-    children,
-  }: Props = $props();
+  let { isOpen = false, title, tooltipContent = '', onclick, children }: Props = $props();
 
   let titleId = $state('');
 
   onMount(() => {
     titleId = `title-${Math.floor(Math.random() * 10000)}`;
   });
-
-  function handleClick(
-    workBookType: WorkBookType | null,
-    activeProblemList: ActiveProblemListTab | null,
-  ): void {
-    if (workBookType !== null) {
-      activeWorkbookTabStore.setActiveWorkbookTab(workBookType);
-    }
-
-    if (activeProblemList !== null) {
-      activeProblemListTabStore.set(activeProblemList);
-    }
-  }
 </script>
 
 <!-- See: -->
@@ -64,7 +35,7 @@
 
 <!-- See: -->
 <!-- https://flowbite-svelte.com/docs/components/tabs -->
-<TabItem open={isOpen} onclick={() => handleClick(workbookType, activeProblemList)}>
+<TabItem open={isOpen} {onclick}>
   {#snippet titleSlot()}
     <span class="text-lg" id={titleId}>
       <div class="flex items-center space-x-2">

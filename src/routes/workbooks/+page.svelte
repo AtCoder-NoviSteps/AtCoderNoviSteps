@@ -20,7 +20,7 @@
   import { activeWorkbookTabStore } from '$features/workbooks/stores/active_workbook_tab';
 
   import HeadingOne from '$lib/components/HeadingOne.svelte';
-  import TabItemWrapper from '$lib/components/TabItemWrapper.svelte';
+  import WorkbookTabItem from '$features/workbooks/components/list/WorkbookTabItem.svelte';
   import WorkBookList from '$features/workbooks/components/list/WorkBookList.svelte';
 
   import { calcGradeMode } from '$lib/utils/task';
@@ -142,7 +142,7 @@
     >
       {#each workBookTabs as workBookTab}
         {#if loggedInUser && canViewWorkBook(role, workBookTab.canUsersView)}
-          <TabItemWrapper
+          <WorkbookTabItem
             workbookType={workBookTab.workBookType}
             isOpen={getActiveWorkBookTab(workBookTab.workBookType)}
             title={workBookTab.title}
@@ -160,7 +160,7 @@
                 {loggedInUser}
               />
             </div>
-          </TabItemWrapper>
+          </WorkbookTabItem>
         {/if}
       {/each}
     </Tabs>

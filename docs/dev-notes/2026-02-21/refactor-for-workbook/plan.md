@@ -20,6 +20,7 @@ GitHub issue #3193「[Refactor] 問題集機能に関するファイルをfeatur
 
 ✅ **完了**: 29ファイルを移動し、21+ファイルの import パスを更新
 ✅ **完了**: `getWorkbookWithAuthor` を `utils/workbook.ts` から `services/workbooks.ts` に移動
+✅ **完了**: `TabItemWrapper` の責務分離（共通UI抽出 + ドメイン別薄いラッパー）
 
 ### コミット
 
@@ -52,14 +53,21 @@ src/features/workbooks/
 3. **utils と services の責務分離**: DB アクセスを含む関数は `utils/` に置かない。誤って client から import されると SvelteKit のビルドエラーになる
 4. **features 間の依存禁止**: `features/workbooks/` から他の features への参照は NG。共通化が必要なら `lib/` に移す
 
+### コンポーネント設計
+
+5. **排他的 props は責務混在のサイン**: 片方が必ず null になる props が存在する場合、コンポーネントが複数のドメインを担当している証拠
+6. **テンプレート重複は共通化の根拠**: 「コンポーネントが小さいから重複してもよい」は誤り。重複行数ではなく、変更が波及するファイル数で判断する
+7. **純粋UIと状態管理の分離**: UI構造（Tooltip・Icon・TabItem）は `onclick` prop を受け取る純粋UIとして切り出し、store への依存はドメイン別ラッパーに閉じ込める
+8. **ディレクトリ名は機能で付ける**: `Tabs/` のようにコンセプト名を使うことで `TabItemWrapper/TabItemWrapper.svelte` のような冗長な重複を避けられる
+
 ### 実装プロセス
 
-5. **依存関係順序が重要**: types → utils → zod → services → stores → components の順で移動することで、途中での型エラーを最小化できた
-6. **テスト有無の事前確認**: 移動対象関数のテストが存在するか確認してから着手すると、作業範囲が明確になる
-7. **段階的コミット**: Phase ごとにコミットすることで、問題発生時のロールバックが容易になった
-8. **既存エラーの把握**: 事前に既知のエラー（AuthForm 関連、state_referenced_locally 警告）を把握しておくことで、リファクタリング起因のエラーと区別できた
-9. **検証の重要性**: 型チェック・ビルド・テスト・Lint を実行することで、リファクタリングの成功を確認できた
+9. **依存関係順序が重要**: types → utils → zod → services → stores → components の順で移動することで、途中での型エラーを最小化できた
+10. **テスト有無の事前確認**: 移動対象関数のテストが存在するか確認してから着手すると、作業範囲が明確になる
+11. **段階的コミット**: Phase ごとにコミットすることで、問題発生時のロールバックが容易になった
+12. **既存エラーの把握**: 事前に既知のエラー（AuthForm 関連、state_referenced_locally 警告）を把握しておくことで、リファクタリング起因のエラーと区別できた
+13. **検証の重要性**: 型チェック・ビルド・テスト・Lint を実行することで、リファクタリングの成功を確認できた
 
 ### ツール活用
 
-10. **Task tool で一括更新**: import パスの更新は Task tool（general-purpose agent）を使うことで効率化できた
+14. **Task tool で一括更新**: import パスの更新は Task tool（general-purpose agent）を使うことで効率化できた
