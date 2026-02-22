@@ -49,11 +49,10 @@ src/features/
 │   │   ├── detail/                  # 詳細ページ
 │   │   │   ├── CommentAndHint.svelte
 │   │   │   └── PublicationStatusLabel.svelte
-│   │   ├── form/                    # 作成・編集ページ
-│   │   │   ├── WorkBookForm.svelte
-│   │   │   ├── WorkBookForm.test.ts
-│   │   │   └── WorkBookInputFields.svelte
 │   │   └── shared/                  # feature 内で複数ページから使うもの
+│   │       ├── WorkBookForm.svelte
+│   │       ├── WorkBookForm.test.ts
+│   │       └── WorkBookInputFields.svelte
 │   ├── fixtures/                    # テスト用データ
 │   ├── services/
 │   │   ├── workbooks.ts
@@ -61,7 +60,7 @@ src/features/
 │   ├── stores/
 │   │   └── active_workbook_tab.ts
 │   ├── types/
-│   │   └── workbook_form.ts
+│   │   └── workbook.ts
 │   └── utils/
 │       ├── workbook.ts
 │       └── workbook.test.ts
@@ -88,7 +87,6 @@ src/features/
 
 - `list/` — 一覧ページ用コンポーネント
 - `detail/` — 詳細ページ用コンポーネント
-- `form/` — 作成・編集フォーム用コンポーネント
 - `shared/` — feature 内で複数ページから使うコンポーネント
 
 ### Feature 分割案
@@ -97,7 +95,6 @@ src/features/
 
 | Feature          | 抽出対象                                                                                                                                             |
 | ---------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **workbooks**    | `WorkBook/*`, `WorkBooks/*`, `services/workbooks.ts`, `utils/workbook*.ts`, `stores/active_workbook_tab.ts`                                          |
 | **tasks**        | `TaskTables/*`, `TaskGrades/*`, `stores/active_problem_list_tab.svelte.ts`（※ `TaskGradeList`, `TaskList` 等は複数ドメインで使うため `lib/` に残す） |
 | **admin**        | `TagForm`, `TagListForEdit`, `TaskForm`, `TaskListForEdit`, `services/tags.ts`, `services/task_tags.ts`                                              |
 | **auth**         | `AuthForm`, `utils/auth_forms.ts`, `types/auth_forms.ts`                                                                                             |

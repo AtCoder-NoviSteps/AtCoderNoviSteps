@@ -1,10 +1,10 @@
 <script lang="ts">
   import { superForm } from 'sveltekit-superforms/client';
 
-  import WorkBookForm from '$lib/components/WorkBook/WorkBookForm.svelte';
-
-  import { WorkBookType, type WorkBookTasksBase } from '$lib/types/workbook';
   import type { Task } from '$lib/types/task';
+  import { WorkBookType, type WorkBookTasksBase } from '$features/workbooks/types/workbook';
+
+  import WorkBookForm from '$features/workbooks/components/shared/WorkBookForm.svelte';
 
   let { data } = $props();
 

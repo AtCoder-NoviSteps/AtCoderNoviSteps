@@ -15,16 +15,16 @@
     type WorkbooksList,
     type WorkBookTaskBase,
     WorkBookType,
-  } from '$lib/types/workbook';
+  } from '$features/workbooks/types/workbook';
 
-  import { activeWorkbookTabStore } from '$lib/stores/active_workbook_tab';
+  import { activeWorkbookTabStore } from '$features/workbooks/stores/active_workbook_tab';
 
   import HeadingOne from '$lib/components/HeadingOne.svelte';
-  import TabItemWrapper from '$lib/components/TabItemWrapper.svelte';
-  import WorkBookList from '$lib/components/WorkBooks/WorkBookList.svelte';
+  import WorkbookTabItem from '$features/workbooks/components/list/WorkbookTabItem.svelte';
+  import WorkBookList from '$features/workbooks/components/list/WorkBookList.svelte';
 
   import { calcGradeMode } from '$lib/utils/task';
-  import { canViewWorkBook } from '$lib/utils/workbooks';
+  import { canViewWorkBook } from '$features/workbooks/utils/workbooks';
 
   let { data } = $props();
 
@@ -142,7 +142,7 @@
     >
       {#each workBookTabs as workBookTab}
         {#if loggedInUser && canViewWorkBook(role, workBookTab.canUsersView)}
-          <TabItemWrapper
+          <WorkbookTabItem
             workbookType={workBookTab.workBookType}
             isOpen={getActiveWorkBookTab(workBookTab.workBookType)}
             title={workBookTab.title}
@@ -160,7 +160,7 @@
                 {loggedInUser}
               />
             </div>
-          </TabItemWrapper>
+          </WorkbookTabItem>
         {/if}
       {/each}
     </Tabs>

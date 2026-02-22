@@ -2,10 +2,10 @@ import { error, fail, redirect } from '@sveltejs/kit';
 import { superValidate } from 'sveltekit-superforms/server';
 import { zod4 } from 'sveltekit-superforms/adapters';
 
-import { workBookSchema } from '$lib/zod/schema';
+import { workBookSchema } from '$features/workbooks/zod/schema';
 
-import * as workBooksCrud from '$lib/services/workbooks';
 import * as tasksCrud from '$lib/services/tasks';
+import * as workBooksCrud from '$features/workbooks/services/workbooks';
 
 import { Roles } from '$lib/types/user';
 

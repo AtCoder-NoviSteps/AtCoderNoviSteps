@@ -2,15 +2,15 @@ import { error } from '@sveltejs/kit';
 
 import { default as db } from '$lib/server/database';
 import {
-  getSubmissionStatusMapWithId,
-  getSubmissionStatusMapWithName,
-} from '$lib/services/submission_status';
-import {
   getTasks,
   getMergedTasksMap,
   getTasksWithSelectedTaskIds,
   getTask,
 } from '$lib/services/tasks';
+import {
+  getSubmissionStatusMapWithId,
+  getSubmissionStatusMapWithName,
+} from '$lib/services/submission_status';
 import { getUser } from '$lib/services/users';
 import * as answer_crud from '$lib/services/answers';
 
@@ -21,11 +21,10 @@ import {
 } from '$lib/utils/account_transfer';
 
 import type { User } from '@prisma/client';
+import type { TaskResult, TaskResults, Task, Tasks } from '$lib/types/task';
 import type { TaskAnswer } from '$lib/types/answer';
-import type { Task } from '$lib/types/task';
-import type { TaskResult, TaskResults, Tasks } from '$lib/types/task';
-import type { WorkBookTasksBase } from '$lib/types/workbook';
 import type { FloatingMessages } from '$lib/types/floating_message';
+import type { WorkBookTasksBase } from '$features/workbooks/types/workbook';
 
 import { NOT_FOUND } from '$lib/constants/http-response-status-codes';
 

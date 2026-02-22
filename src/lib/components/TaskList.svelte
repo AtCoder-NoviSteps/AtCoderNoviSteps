@@ -22,7 +22,12 @@
   import { getBackgroundColorFrom } from '$lib/services/submission_status';
 
   import { addContestNameToTaskIndex } from '$lib/utils/contest';
-  import { getTaskUrl, removeTaskIndexFromTitle } from '$lib/utils/task';
+  import {
+    countAcceptedTasks,
+    countAllTasks,
+    getTaskUrl,
+    removeTaskIndexFromTitle,
+  } from '$lib/utils/task';
 
   interface Props {
     grade: string;
@@ -63,7 +68,10 @@
         </div>
 
         <div class="hidden sm:flex justify-center">
-          <AcceptedCounter {taskResults} />
+          <AcceptedCounter
+            acceptedCount={countAcceptedTasks(taskResults)}
+            allTaskCount={countAllTasks(taskResults)}
+          />
         </div>
       </span>
     {/snippet}

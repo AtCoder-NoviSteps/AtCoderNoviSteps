@@ -1,9 +1,9 @@
 <script lang="ts">
   import { Tooltip } from 'flowbite-svelte';
 
-  import type { WorkBookTaskBase } from '$lib/types/workbook';
   import type { TaskResult, TaskResults } from '$lib/types/task';
   import type { SubmissionRatios, SubmissionCounts } from '$lib/types/submission';
+  import type { WorkBookTaskBase } from '$features/workbooks/types/workbook';
 
   import { submission_statuses } from '$lib/services/submission_status';
 

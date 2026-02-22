@@ -8,7 +8,7 @@
   import { compareByContestIdAndTaskId } from '$lib/utils/task';
 
   import HeadingOne from '$lib/components/HeadingOne.svelte';
-  import TabItemWrapper from '$lib/components/TabItemWrapper.svelte';
+  import ProblemListTabItem from '$lib/components/Tabs/ProblemListTabItem.svelte';
   import TaskTable from '$features/tasks/components/contest-table/TaskTable.svelte';
   import TaskGradeList from '$lib/components/TaskGradeList.svelte';
   import GradeGuidelineTable from '$lib/components/TaskGrades/GradeGuidelineTable.svelte';
@@ -53,9 +53,9 @@
 </div>
 
 {#snippet problemListTab(title: string, tab: ActiveProblemListTab, children: Snippet)}
-  <TabItemWrapper {title} activeProblemList={tab} isOpen={isActiveTab(tab)}>
+  <ProblemListTabItem {title} activeProblemList={tab} isOpen={isActiveTab(tab)}>
     {@render children()}
-  </TabItemWrapper>
+  </ProblemListTabItem>
 {/snippet}
 
 {#snippet contestTable()}

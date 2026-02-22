@@ -28,7 +28,7 @@ import { classifyContest } from '../src/lib/utils/contest';
 import { users, USER_PASSWORD_FOR_SEED } from './users';
 import { tasks } from './tasks';
 import { contest_task_pairs } from './contest_task_pairs';
-import { workbooks } from './workbooks';
+import { workbooks } from '../src/features/workbooks/fixtures/workbooks';
 import { tags } from './tags';
 import { task_tags } from './task_tags';
 import { answers } from './answers';

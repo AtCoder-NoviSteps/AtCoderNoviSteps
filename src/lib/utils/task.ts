@@ -1,7 +1,9 @@
-import type { UrlGenerator, UrlGenerators } from '$lib/types/url';
 import { ContestType } from '$lib/types/contest';
 import { type TaskResult, type TaskResults, TaskGrade, type TaskGrades } from '$lib/types/task';
-import { type WorkBookTaskBase } from '$lib/types/workbook';
+import type { UrlGenerator, UrlGenerators } from '$lib/types/url';
+
+import { type WorkBookTaskBase } from '$features/workbooks/types/workbook';
+
 import { ATCODER_BASE_CONTEST_URL, AOJ_TASKS_URL } from '$lib/constants/urls';
 import { getPrefixForAojCourses, getContestPriority } from '$lib/utils/contest';
 

@@ -7,19 +7,19 @@
   import LabelWithTooltips from '$lib/components/LabelWithTooltips.svelte';
   import GradeLabel from '$lib/components/GradeLabel.svelte';
 
+  import type { Task, Tasks } from '$lib/types/task';
   import type {
     WorkBookTasksBase,
     WorkBookTasksCreate,
     WorkBookTasksEdit,
-  } from '$lib/types/workbook';
-  import type { Task, Tasks } from '$lib/types/task';
+  } from '$features/workbooks/types/workbook';
 
+  import { getTaskUrl } from '$lib/utils/task';
   import {
     generateWorkBookTaskOrders,
     addTaskToWorkBook,
     PENDING,
-  } from '$lib/utils/workbook_tasks';
-  import { getTaskUrl } from '$lib/utils/task';
+  } from '$features/workbooks/utils/workbook_tasks';
 
   interface Props {
     tasks?: Tasks;

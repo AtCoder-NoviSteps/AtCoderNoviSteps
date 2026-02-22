@@ -1,5 +1,5 @@
-import type { WorkBookTaskBase } from '$lib/types/workbook';
 import type { TaskResult, TaskResults } from '$lib/types/task';
+import type { WorkBookTaskBase } from '$features/workbooks/types/workbook';
 
 const userId2 = '2';
 const userId3 = '3';
