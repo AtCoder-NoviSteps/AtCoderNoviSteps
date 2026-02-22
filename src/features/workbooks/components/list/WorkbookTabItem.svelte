@@ -3,7 +3,7 @@
 
   import TabItemWrapper from '$lib/components/Tabs/TabItemWrapper.svelte';
 
-  import { WorkBookType } from '$features/workbooks/types/workbook';
+  import type { WorkBookType } from '$features/workbooks/types/workbook';
   import { activeWorkbookTabStore } from '$features/workbooks/stores/active_workbook_tab';
 
   interface Props {
