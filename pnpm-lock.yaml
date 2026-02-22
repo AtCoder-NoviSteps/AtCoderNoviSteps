@@ -51,8 +51,8 @@ importers:
         specifier: 1.4.1
         version: 1.4.1(svelte@5.53.2)
       tailwind-merge:
-        specifier: 2.6.0
-        version: 2.6.0
+        specifier: 3.5.0
+        version: 3.5.0
       vercel:
         specifier: 50.22.1
         version: 50.22.1(rollup@4.53.4)(typescript@5.9.3)
@@ -4887,14 +4887,8 @@ packages:
     resolution: {integrity: sha512-qd/R7n5rQTRFi+Zf2sk5XVVd9UQl6ZkduPFC3S7WEGJAmetDTjY3qPN50eSKzwuzEyQKy5TN2TiZdkIjos2L6A==}
     engines: {node: '>=8.0.0'}
 
-  tailwind-merge@2.6.0:
-    resolution: {integrity: sha512-P+Vu1qXfzediirmHOC3xKGAYeZtPcV9g76X+xg2FD4tYgR71ewMA35Y3sCz3zhiN/dwefRpJX0yBcgwi1fXNQA==}
-
-  tailwind-merge@3.3.1:
-    resolution: {integrity: sha512-gBXpgUm/3rp1lMZZrM/w7D8GKqshif0zAymAhbCyIt8KMe+0v9DQ7cdYLR4FHH/cKpdTXb+A/tKKU3eolfsI+g==}
-
-  tailwind-merge@3.4.0:
-    resolution: {integrity: sha512-uSaO4gnW+b3Y2aWoWfFpX62vn2sR3skfhbjsEnaBI81WD1wBLlHZe5sWf0AqjksNdYTbGBEd0UasQMT3SNV15g==}
+  tailwind-merge@3.5.0:
+    resolution: {integrity: sha512-I8K9wewnVDkL1NTGoqWmVEIlUcB9gFriAEkXkfCjX5ib8ezGxtR3xD7iZIxrfArjEsH7F1CHD4RFUtxefdqV/A==}
 
   tailwind-variants@3.2.2:
     resolution: {integrity: sha512-Mi4kHeMTLvKlM98XPnK+7HoBPmf4gygdFmqQPaDivc3DpYS6aIY6KiG/PgThrGvii5YZJqRsPz0aPyhoFzmZgg==}
@@ -7465,7 +7459,7 @@ snapshots:
       ramda: 0.28.0
       react: 19.2.0
       react-dom: 19.2.0(react@19.2.0)
-      tailwind-merge: 3.3.1
+      tailwind-merge: 3.5.0
       tailwindcss: 3.4.19(tsx@4.21.0)(yaml@2.8.1)
     transitivePeerDependencies:
       - '@babel/core'
@@ -8610,8 +8604,8 @@ snapshots:
       esm-env: 1.2.2
       flowbite: 3.1.2(rollup@4.53.4)
       svelte: 5.53.2
-      tailwind-merge: 3.4.0
-      tailwind-variants: 3.2.2(tailwind-merge@3.4.0)(tailwindcss@4.1.18)
+      tailwind-merge: 3.5.0
+      tailwind-variants: 3.2.2(tailwind-merge@3.5.0)(tailwindcss@4.1.18)
       tailwindcss: 4.1.18
     transitivePeerDependencies:
       - rollup
@@ -10200,17 +10194,13 @@ snapshots:
       typical: 5.2.0
       wordwrapjs: 4.0.1
 
-  tailwind-merge@2.6.0: {}
+  tailwind-merge@3.5.0: {}
 
-  tailwind-merge@3.3.1: {}
-
-  tailwind-merge@3.4.0: {}
-
-  tailwind-variants@3.2.2(tailwind-merge@3.4.0)(tailwindcss@4.1.18):
+  tailwind-variants@3.2.2(tailwind-merge@3.5.0)(tailwindcss@4.1.18):
     dependencies:
       tailwindcss: 4.1.18
     optionalDependencies:
-      tailwind-merge: 3.4.0
+      tailwind-merge: 3.5.0
 
   tailwindcss@3.4.19(tsx@4.21.0)(yaml@2.8.1):
     dependencies:

@@ -82,7 +82,7 @@
     "playwright": "1.58.2",
     "prisma-erd-generator": "2.4.2",
     "svelte-eslint-parser": "1.4.1",
-    "tailwind-merge": "2.6.0",
+    "tailwind-merge": "3.5.0",
     "vercel": "50.22.1",
     "xss": "1.0.15"
   },
