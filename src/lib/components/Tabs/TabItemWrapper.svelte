@@ -10,6 +10,7 @@
     isOpen?: boolean;
     title: string;
     tooltipContent?: string;
+    /** Called when the tab is clicked. Intended for updating external store state. */
     onclick?: () => void;
     children?: Snippet;
   }
