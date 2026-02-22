@@ -392,6 +392,14 @@ describe('workbook schema', () => {
       validateWorkBookSchema(workBookSchema, workbook);
     });
 
+    test('when a zero value is given as the workbook id', () => {
+      const workBookTasks = [{ workBookId: 0, taskId: 'abc322_d', priority: 1, comment: '' }];
+      const workbook: WorkBook = createWorkBookBase({
+        workBookTasks: workBookTasks,
+      });
+      validateWorkBookSchema(workBookSchema, workbook);
+    });
+
     test('when a negative value is given as the priority', () => {
       const workBookTasks = [{ workBookId: 1, taskId: 'abc322_d', priority: -1, comment: '' }];
       const workbook: WorkBook = createWorkBookBase({

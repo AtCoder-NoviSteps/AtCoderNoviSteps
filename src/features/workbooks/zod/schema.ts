@@ -7,7 +7,7 @@ import { WorkBookType } from '$features/workbooks/types/workbook';
 import { isValidUrl, isValidUrlSlug } from '$lib/utils/url';
 
 const workBookTaskSchema = z.object({
-  workBookId: z.number().nonnegative().optional(),
+  workBookId: z.number().positive().optional(),
   taskId: z.string(),
   priority: z.number().positive(),
   comment: z.string().min(0, { error: '' }).max(50, { error: '50文字になるまで削除してください' }), // FIXME: 上限は暫定値。
