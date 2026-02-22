@@ -9,7 +9,6 @@ import * as tasksCrud from '$lib/services/tasks';
 import * as workBooksCrud from '$features/workbooks/services/workbooks';
 
 import { getLoggedInUser, canEdit, isAdmin } from '$lib/utils/authorship';
-import { getWorkbookWithAuthor } from '$features/workbooks/utils/workbook';
 
 import {
   FORBIDDEN,
@@ -21,7 +20,7 @@ export async function load({ locals, params }) {
   const loggedInUser = await getLoggedInUser(locals);
   const loggedInAsAdmin = isAdmin(loggedInUser?.role as Roles);
   const slug = params.slug.toLowerCase();
-  const workBookWithAuthor = await getWorkbookWithAuthor(slug);
+  const workBookWithAuthor = await workBooksCrud.getWorkbookWithAuthor(slug);
 
   const form = await superValidate(null, zod4(workBookSchema));
   const workBook = {
@@ -82,7 +81,7 @@ export const actions = {
 
     const workBook = form.data;
     const slug = params.slug.toLowerCase();
-    const workBookWithAuthor = await getWorkbookWithAuthor(slug);
+    const workBookWithAuthor = await workBooksCrud.getWorkbookWithAuthor(slug);
     const workBookId = workBookWithAuthor.workBook.id;
 
     try {

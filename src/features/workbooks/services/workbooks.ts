@@ -1,9 +1,5 @@
+import { error } from '@sveltejs/kit';
 import { default as db } from '$lib/server/database';
-
-import {
-  getWorkBookTasks,
-  validateRequiredFields,
-} from '$features/workbooks/services/workbook_tasks';
 
 import type {
   WorkBook,
@@ -12,7 +8,15 @@ import type {
   WorkBookType,
 } from '$features/workbooks/types/workbook';
 
+import {
+  getWorkBookTasks,
+  validateRequiredFields,
+} from '$features/workbooks/services/workbook_tasks';
+import * as userCrud from '$lib/services/users';
+
 import { sanitizeUrl } from '$lib/utils/url';
+import { parseWorkBookId, parseWorkBookUrlSlug } from '$features/workbooks/utils/workbook';
+import { BAD_REQUEST, NOT_FOUND } from '$lib/constants/http-response-status-codes';
 
 export async function getWorkBooks(): Promise<WorkBooks> {
   const workbooks = await db.workBook.findMany({
@@ -70,6 +74,35 @@ export async function getWorkBookByUrlSlug(urlSlug: string): Promise<WorkBook | 
   });
 
   return workBook;
+}
+
+export async function getWorkbookWithAuthor(
+  slug: string,
+): Promise<{ workBook: WorkBook; isExistingAuthor: boolean }> {
+  const workBookId = parseWorkBookId(slug);
+  const workBookUrlSlug = parseWorkBookUrlSlug(slug);
+
+  if (workBookId === null && workBookUrlSlug === null) {
+    error(BAD_REQUEST, '不正な問題集idです。');
+  }
+
+  let workBook: WorkBook | null = null;
+
+  if (workBookId) {
+    workBook = await getWorkBook(workBookId);
+  } else if (workBookUrlSlug) {
+    workBook = await getWorkBookByUrlSlug(workBookUrlSlug);
+  }
+
+  if (workBook === null) {
+    error(NOT_FOUND, `問題集id: ${slug} は見つかりませんでした。`);
+  }
+
+  // Validate if the author of the workbook exists after the workbook has been created.
+  const workbookAuthor = await userCrud.getUserById(workBook.authorId);
+  const isExistingAuthor = !!workbookAuthor;
+
+  return { workBook: workBook, isExistingAuthor: isExistingAuthor };
 }
 
 // See:

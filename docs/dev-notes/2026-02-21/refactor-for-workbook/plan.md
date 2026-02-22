@@ -13,9 +13,51 @@ GitHub issue #3193「[Refactor] 問題集機能に関するファイルをfeatur
 - テストはファイル隣接配置に移行
 - ファイルの内部構造は変更せず、パスの修正のみ実施
 
+## `getWorkbookWithAuthor` をサービス層へ移動
+
+### コンテキスト
+
+`getWorkbookWithAuthor` は DB アクセスを含む複合クエリ（ワークブック取得 + 著者存在確認）であり、サーバーサイド専用の処理にもかかわらず `utils/workbook.ts` に置かれている。クライアントから誤って import されてビルドエラーが発生した実例もある。`services/workbooks.ts` に移動することで、構造的に誤用を防ぐ。
+
+### 対象ファイル
+
+| ファイル                                           | 変更内容                                                 |
+| -------------------------------------------------- | -------------------------------------------------------- |
+| `src/features/workbooks/utils/workbook.ts`         | `getWorkbookWithAuthor` を削除                           |
+| `src/features/workbooks/services/workbooks.ts`     | `getWorkbookWithAuthor` を追記                           |
+| `src/features/workbooks/utils/workbook.test.ts`    | `getWorkbookWithAuthor` のテストが存在すれば移動先へ移動 |
+| `src/routes/workbooks/[slug]/+page.server.ts`      | import 元を `services/workbooks` に変更                  |
+| `src/routes/workbooks/edit/[slug]/+page.server.ts` | import 元を `services/workbooks` に変更                  |
+
+### 実装手順
+
+1. **`services/workbooks.ts` に関数を追加**
+   - `getWorkBook()` / `getWorkBookByUrlSlug()` は同ファイル内にあるため追加 import 不要
+   - `parseWorkBookId` / `parseWorkBookUrlSlug` は引き続き `utils/workbook.ts` から import
+   - 著者確認の `prisma.user.findUnique()` はそのまま移植
+
+2. **`utils/workbook.ts` から関数を削除**
+   - `parseWorkBookId` / `parseWorkBookUrlSlug` は純粋関数のため `utils/` に残す
+
+3. **テストの移動**
+   - 移動先: `src/features/workbooks/services/workbooks.test.ts`（存在すれば追記、なければ新規作成）
+
+4. **呼び出し元の import パスを修正**
+
+### 検証
+
+```bash
+pnpm check
+pnpm test:unit
+pnpm build
+```
+
+---
+
 ## 実装結果
 
 ✅ **完了**: 29ファイルを移動し、21+ファイルの import パスを更新
+✅ **完了**: `getWorkbookWithAuthor` を `utils/workbook.ts` から `services/workbooks.ts` に移動
 
 ### コミット
 
@@ -41,25 +83,21 @@ src/features/workbooks/
 
 ## 教訓
 
-### アーキテクチャ
+### アーキテクチャ原則
 
 1. **ページベース構造が有効**: components/ を list/detail/shared で分けることで、用途が明確になり、コードの見通しが良くなった
-2. **テスト隣接配置**: `src/test/` から移動し、対象ファイルの隣に配置することで、変更時にテストが目に入りやすくなった
-3. **依存関係順序が重要**: types → utils → zod → services → stores → components の順で移動することで、途中での型エラーを最小化できた
+2. **テスト隣接配置**: 対象ファイルの隣に配置することで、変更時にテストが目に入りやすくなった
+3. **utils と services の責務分離**: DB アクセスを含む関数は `utils/` に置かない。誤って client から import されると SvelteKit のビルドエラーになる
+4. **features 間の依存禁止**: `features/workbooks/` から他の features への参照は NG。共通化が必要なら `lib/` に移す
 
-### 技術的ポイント
+### 実装プロセス
 
-4. **zod スキーマの分離**: `src/lib/zod/schema.ts` から workbook 関連スキーマのみを抽出。他のスキーマ（auth, account）は残す
-5. **fixtures の移動**: `prisma/workbooks.ts` を `src/features/workbooks/fixtures/` に移動し、`prisma/seed.ts` のパスを更新
-6. **空ディレクトリ**: git は空ディレクトリを追跡しないため、削除してもコミットには含まれない
-
-### 実装効率化
-
-7. **Task tool で一括更新**: import パスの更新は Task tool（general-purpose agent）を使うことで効率化できた
-8. **段階的コミット**: Phase ごとにコミットすることで、変更内容が明確になり、問題発生時のロールバックが容易になった
+5. **依存関係順序が重要**: types → utils → zod → services → stores → components の順で移動することで、途中での型エラーを最小化できた
+6. **テスト有無の事前確認**: 移動対象関数のテストが存在するか確認してから着手すると、作業範囲が明確になる
+7. **段階的コミット**: Phase ごとにコミットすることで、問題発生時のロールバックが容易になった
+8. **既存エラーの把握**: 事前に既知のエラー（AuthForm 関連、state_referenced_locally 警告）を把握しておくことで、リファクタリング起因のエラーと区別できた
 9. **検証の重要性**: 型チェック・ビルド・テスト・Lint を実行することで、リファクタリングの成功を確認できた
 
-### 次回への示唆
+### ツール活用
 
-10. **features 間の依存禁止**: `features/workbooks/` から他の features への参照は NG。共通化が必要なら `lib/` に移す
-11. **既存エラーの把握**: 事前に既知のエラー（AuthForm関連、state_referenced_locally警告）を把握しておくことで、リファクタリング起因のエラーと区別できた
+10. **Task tool で一括更新**: import パスの更新は Task tool（general-purpose agent）を使うことで効率化できた
