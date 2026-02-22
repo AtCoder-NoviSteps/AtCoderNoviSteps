@@ -17,7 +17,7 @@
   import GradeLabel from '$lib/components/GradeLabel.svelte';
   import CompletedTasks from '$lib/components/Trophies/CompletedTasks.svelte';
   import ThermometerProgressBar from '$lib/components/ThermometerProgressBar.svelte';
-  import AcceptedCounter from '$lib/components/SubmissionStatus/AcceptedCounter.svelte';
+  import AcceptedCounter from '$features/workbooks/components/list/AcceptedCounter.svelte';
   import TitleTableHeadCell from '$features/workbooks/components/list/TitleTableHeadCell.svelte';
   import TitleTableBodyCell from '$features/workbooks/components/list/TitleTableBodyCell.svelte';
 

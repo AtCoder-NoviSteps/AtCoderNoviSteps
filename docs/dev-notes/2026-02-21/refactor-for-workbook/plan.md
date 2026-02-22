@@ -21,12 +21,7 @@ GitHub issue #3193「[Refactor] 問題集機能に関するファイルをfeatur
 ✅ **完了**: 29ファイルを移動し、21+ファイルの import パスを更新
 ✅ **完了**: `getWorkbookWithAuthor` を `utils/workbook.ts` から `services/workbooks.ts` に移動
 ✅ **完了**: `TabItemWrapper` の責務分離（共通UI抽出 + ドメイン別薄いラッパー）
-
-### コミット
-
-- `db8c0ff1` - refactor: Move files to features/workbooks (#3193)
-- `1e263a92` - refactor: Move and reconfigure workbooks to features (#3193)
-- `e9135703` - docs: Remove completed workbooks from feature split plan (#3193)
+✅ **完了**: `AcceptedCounter` の責務分離（純粋UI + WorkBook ドメインラッパー）
 
 ### 完成したディレクトリ構造
 
@@ -59,6 +54,7 @@ src/features/workbooks/
 6. **テンプレート重複は共通化の根拠**: 「コンポーネントが小さいから重複してもよい」は誤り。重複行数ではなく、変更が波及するファイル数で判断する
 7. **純粋UIと状態管理の分離**: UI構造（Tooltip・Icon・TabItem）は `onclick` prop を受け取る純粋UIとして切り出し、store への依存はドメイン別ラッパーに閉じ込める
 8. **ディレクトリ名は機能で付ける**: `Tabs/` のようにコンセプト名を使うことで `TabItemWrapper/TabItemWrapper.svelte` のような冗長な重複を避けられる
+9. **ストア依存がなくても optional prop はリファクタリングが必要な兆候**: store 混在がなくても「特定の文脈でのみ使う optional prop」はドメイン分離の根拠になる。ただし union 型をユーティリティ関数が吸収している場合（CompletedTasks）は分離不要 — パターンを機械的に適用しない
 
 ### 実装プロセス
 

@@ -1,25 +1,12 @@
 <script lang="ts">
-  import type { TaskResults } from '$lib/types/task';
-  import type { WorkBookTaskBase } from '$features/workbooks/types/workbook';
-
-  import { countAcceptedTasks, countAllTasks } from '$lib/utils/task';
-
   interface Props {
-    workBookTasks?: WorkBookTaskBase[];
-    taskResults: TaskResults | [];
+    acceptedCount: number;
+    allTaskCount: number;
   }
 
-  let { workBookTasks = [], taskResults }: Props = $props();
+  let { acceptedCount, allTaskCount }: Props = $props();
 
-  let acceptedCount: number = $state(0);
-  let allTaskCount: number = $state(0);
-  let acceptedRatioPercent: number = $state(0);
-
-  $effect(() => {
-    acceptedCount = countAcceptedTasks(taskResults);
-    allTaskCount = countAllTasks(workBookTasks) || countAllTasks(taskResults);
-    acceptedRatioPercent = allTaskCount ? (acceptedCount / allTaskCount) * 100 : 0;
-  });
+  const acceptedRatioPercent = $derived(allTaskCount ? (acceptedCount / allTaskCount) * 100 : 0);
 </script>
 
 <!-- See: -->
