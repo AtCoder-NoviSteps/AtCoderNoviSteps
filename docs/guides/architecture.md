@@ -70,12 +70,12 @@ src/features/
 │   │   ├── grade-list/              # グレード別
 │   │   ├── detail/
 │   │   │   ├── statistics/          # AtCoder Problems の difficulty、JOI 難易度、AC人数 など
-│   │   │   ├── votes/               # AtCoder NoviSteps の難易度、タグを投票
 │   │   │   └── comments/            # (要確認) 管理者: 解説、一般ユーザ: コメント
 │   │   └── shared/
+├── votes/                           # AtCoder NoviSteps における難易度、タグを投票
 ├── admin/
 │   ├── components/
-│   │   ├── account_transfer/
+│   │   ├── account-transfer/
 │   │   ├── tasks-for-import/
 │   │   └── shared/
 │   ...
@@ -93,12 +93,12 @@ src/features/
 
 現在の `src/lib/` からの抽出候補:
 
-| Feature          | 抽出対象                                                                                                                                             |
-| ---------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **tasks**        | `TaskTables/*`, `TaskGrades/*`, `stores/active_problem_list_tab.svelte.ts`（※ `TaskGradeList`, `TaskList` 等は複数ドメインで使うため `lib/` に残す） |
-| **admin**        | `TagForm`, `TagListForEdit`, `TaskForm`, `TaskListForEdit`, `services/tags.ts`, `services/task_tags.ts`                                              |
-| **auth**         | `AuthForm`, `utils/auth_forms.ts`, `types/auth_forms.ts`                                                                                             |
-| **user-profile** | `UserProfile`, `UserAccountDeletionForm`                                                                                                             |
+| Feature          | 抽出対象                                                                                                                             |
+| ---------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| **tasks**        | `TaskGrades/*`, `stores/active_problem_list_tab.svelte.ts`（※ `TaskGradeList`, `TaskList` 等は複数ドメインで使うため `lib/` に残す） |
+| **admin**        | `TagForm`, `TagListForEdit`, `TaskForm`, `TaskListForEdit`, `services/tags.ts`, `services/task_tags.ts`                              |
+| **auth**         | `AuthForm`, `utils/auth_forms.ts`, `types/auth_forms.ts`                                                                             |
+| **user-profile** | `UserProfile`, `UserAccountDeletionForm`                                                                                             |
 
 ### Feature 間の依存ルール
 
