@@ -4,7 +4,7 @@ A web service for tracking submissions on AtCoder and other competitive programm
 
 ## Guidelines
 
-Always prefer simplicity over pathological correctness. YAGNI, KISS, DRY. No backward-compatshims or fallback paths unless they come free without adding cyclomatic complexity.
+Always prefer simplicity over pathological correctness. YAGNI, KISS, DRY. No backward-compat shims or fallback paths unless they come free without adding cyclomatic complexity.
 
 ## Tech Stack
 
