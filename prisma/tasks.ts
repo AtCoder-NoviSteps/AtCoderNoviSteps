@@ -7084,8 +7084,8 @@ export const tasks = [
     id: 'joi2026_semifinal_d',
     contest_id: 'joi2026sf',
     problem_index: 'D',
-    name: '川下り(River Rafting) ',
-    title: 'D. 川下り(River Rafting) ',
+    name: '川下り(River Rafting)',
+    title: 'D. 川下り(River Rafting)',
   },
   {
     id: 'joi2026_semifinal_c',
