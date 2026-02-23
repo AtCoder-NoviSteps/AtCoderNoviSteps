@@ -252,11 +252,11 @@
 
    例:
 
-   `git commit -m ":sparkles: Add hoge feature (#998244353)"`
+   `git commit -m "feat: Add new feature (#998244353)"`
 
-   `git commit -m ":books: Update README (#1333)"`
+   `git commit -m "docs: Update README (#1333)"`
 
-   `git commit -m ":pencil2: Fix typo (#10007)"`
+   `git commit -m "chore: Fix typo (#10007)"`
 
 4. プルリクエストを作成する前に、加筆・修正した内容を確認します。
 
