@@ -127,8 +127,10 @@ export class JOIQualRoundFrom2006To2019Provider extends ContestTableProviderBase
   }
 }
 
-const regexForJoiSemiFinalRound = /^(joi)(\d{4})(ho)$/i;
+const regexForJoiSemiFinalRound = /^(joi)(\d{4})(ho|sf)$/i;
 
+// Note: The JOI semi-final stage, which was renamed from the final round starting in 2026, is essentially the same as the final round in terms of its role in the competition.
+// Therefore, we can use the same provider for both the final round and the semi-final stage, as they share the same structure and purpose in the contest.
 export class JOISemiFinalRoundProvider extends ContestTableProviderBase {
   constructor(contestType: ContestType) {
     super(contestType, JOI_FINAL_ROUND_SECTIONS.semiFinal);
@@ -163,6 +165,6 @@ export class JOISemiFinalRoundProvider extends ContestTableProviderBase {
 
   getContestRoundLabel(contestId: string): string {
     const contestNameLabel = getContestNameLabel(contestId);
-    return contestNameLabel.replace('JOI 本選 ', '');
+    return contestNameLabel.replace('JOI 本選 ', '').replace('JOI セミファイナルステージ ', '');
   }
 }

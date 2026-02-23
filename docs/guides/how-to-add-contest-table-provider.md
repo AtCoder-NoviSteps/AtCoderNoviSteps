@@ -35,6 +35,12 @@
   - **パターン3（複合ソース型）**: ABS、ABC-Like など → 複数 contest_id を統一表示
   - 対応セクション: [実装パターン](#実装パターン)
 
+- [ ] **JOI の contest_id サフィックス変更の確認**
+  - JOI 本選は 2026 年より `joi{YYYY}ho` → `joi{YYYY}sf` にサフィックスが変更された
+  - `JOISemiFinalRoundProvider` の regex は `(ho|sf)` にマッチするよう対応済み
+  - `getJoiContestLabel()` は `sf` → `'セミファイナルステージ'` を返す
+  - テーブルの行ラベル (`getContestRoundLabel()`) は `sf` でも年のみ返す
+
 - [ ] **ガイドの実装例の確認**
   - 判定したパターンの実装例を確認してテンプレート理解
 
@@ -525,6 +531,7 @@ describe('CustomProvider with unique config', () => {
 - [#2785](https://github.com/AtCoder-NoviSteps/AtCoderNoviSteps/issues/2785) - MathAndAlgorithmProvider
 - [#2797](https://github.com/AtCoder-NoviSteps/AtCoderNoviSteps/issues/2797) - FPS24Provider
 - [#2920](https://github.com/AtCoder-NoviSteps/AtCoderNoviSteps/issues/2920)、[#3120](https://github.com/AtCoder-NoviSteps/AtCoderNoviSteps/issues/3120) - ACLPracticeProvider、ACLBeginnerProvider、ACLProvider
+- [#3152](https://github.com/AtCoder-NoviSteps/AtCoderNoviSteps/issues/3152) - JOISemiFinalRoundProvider（本選 → セミファイナルステージ への対応）
 
 ### 実装ファイル
 
@@ -534,4 +541,4 @@ describe('CustomProvider with unique config', () => {
 
 ---
 
-**最終更新**: 2026-02-14
+**最終更新**: 2026-02-22

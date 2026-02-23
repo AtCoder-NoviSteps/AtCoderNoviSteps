@@ -338,4 +338,46 @@ describe('JOISemiFinalRoundProvider', () => {
 
     expect(filtered).toEqual([]);
   });
+
+  test('expects to filter joi{YYYY}sf tasks (new format from 2026)', () => {
+    const provider = new JOISemiFinalRoundProvider(ContestType.JOI);
+    const mockJOITasks = [
+      { contest_id: 'joi2026sf', task_id: 'joi2026_semifinal_a' },
+      { contest_id: 'joi2026sf', task_id: 'joi2026_semifinal_b' },
+      { contest_id: 'joi2024ho', task_id: 'joi2024ho_a' },
+      { contest_id: 'joi2024yo2', task_id: 'joi2024yo2_a' },
+      { contest_id: 'joi2024yo1a', task_id: 'joi2024yo1a_a' },
+      { contest_id: 'abc123', task_id: 'abc123_a' },
+    ];
+
+    const filtered = provider.filter(mockJOITasks as any);
+
+    expect(filtered?.length).toBe(3);
+    expect(filtered?.some((task) => task.contest_id === 'joi2026sf')).toBe(true);
+    expect(filtered?.some((task) => task.contest_id === 'joi2024ho')).toBe(true);
+    expect(filtered?.every((task) => task.contest_id.startsWith('joi'))).toBe(true);
+  });
+
+  test('expects to get contest round label for joi{YYYY}sf', () => {
+    const provider = new JOISemiFinalRoundProvider(ContestType.JOI);
+
+    expect(provider.getContestRoundLabel('joi2026sf')).toBe('2026');
+  });
+
+  test('expects to generate correct table structure including joi{YYYY}sf', () => {
+    const provider = new JOISemiFinalRoundProvider(ContestType.JOI);
+    const mockJOITasks = [
+      { contest_id: 'joi2026sf', task_id: 'joi2026_semifinal_a', task_table_index: 'A' },
+      { contest_id: 'joi2026sf', task_id: 'joi2026_semifinal_b', task_table_index: 'B' },
+      { contest_id: 'joi2024ho', task_id: 'joi2024ho_a', task_table_index: 'A' },
+    ];
+
+    const table = provider.generateTable(mockJOITasks as any);
+
+    expect(table).toHaveProperty('joi2026sf');
+    expect(table).toHaveProperty('joi2024ho');
+    expect(table.joi2026sf).toHaveProperty('A');
+    expect(table.joi2026sf).toHaveProperty('B');
+    expect(table.joi2024ho).toHaveProperty('A');
+  });
 });
