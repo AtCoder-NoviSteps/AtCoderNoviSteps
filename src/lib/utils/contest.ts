@@ -506,8 +506,9 @@ export function getPastContestLabel(
  * - "joisc2024" (matches)
  * - "joisp2022" (matches)
  * - "joi24yo3d" (does not match)
+ * - "joi2026sf" (matches)
  */
-const regexForJoi = /^(joi)(g|open)*(\d{4})*(yo|ho|sc|sp)*(\d{4})*(1|2)*(a|b|c)*/i;
+const regexForJoi = /^(joi)(g|open)*(\d{4})*(yo|ho|sc|sp|sf)*(\d{4})*(1|2)*(a|b|c)*/i;
 
 /**
  * Transforms a contest ID into a formatted contest label.
@@ -572,6 +573,8 @@ function addJoiDivisionNameIfNeeds(division: string, qual: string): string {
     }
   } else if (division === 'ho') {
     return '本選';
+  } else if (division === 'sf') {
+    return 'セミファイナルステージ';
   } else if (division === 'sc' || division === 'sp') {
     return '春合宿';
   }

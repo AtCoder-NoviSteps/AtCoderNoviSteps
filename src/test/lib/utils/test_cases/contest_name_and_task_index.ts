@@ -212,6 +212,10 @@ const JOI_TEST_DATA = {
     contestId: 'joi2024ho',
     tasks: ['A', 'B', 'E'],
   },
+  joi2026sf: {
+    contestId: 'joi2026sf',
+    tasks: ['A', 'B', 'F'],
+  },
   joisc2007: {
     contestId: 'joisc2007',
     tasks: ['anagra', 'buildi', 'salt', 'score'],
