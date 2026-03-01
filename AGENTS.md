@@ -52,7 +52,7 @@ prisma/schema.prisma # Database schema
 - **Svelte 5 Runes**: Use `$props()`, `$state()`, `$derived()` in all new components
 - **Server data**: `+page.server.ts` → `+page.svelte` via `data` prop
 - **Forms**: Superforms + Zod validation
-- **Tests**: Factories via `@quramy/prisma-fabbrica`, HTTP mocking via Nock
+- **Tests**: Write tests before implementation (TDD). Use `@quramy/prisma-fabbrica` for factories, Nock for HTTP mocking
 - **Naming**: `camelCase` variables, `PascalCase` types/components, `snake_case` files/routes, `kebab-case` directories
 - **Pre-commit**: Lefthook runs Prettier + ESLint (bypass: `LEFTHOOK=0 git commit`)
 
