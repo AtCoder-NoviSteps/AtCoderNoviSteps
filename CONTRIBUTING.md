@@ -31,6 +31,7 @@
 - UIライブラリ
   - [Flowbite Svelte](https://flowbite-svelte.com/) - コンポーネントライブラリ
     - [Flowbite](https://flowbite.com/)も利用可能
+    - [@dnd-kit/svelte](https://dndkit.com/svelte) - Svelte 5 ネイティブ対応のドラッグ&ドロップライブラリ（管理者向け: 問題集の並び順を管理するカンバンボードで使用。Flowbite Svelte では、同一のパネル内での並び替えができないことが判明したため）
   - [Lucide](https://github.com/lucide-icons/lucide) - アイコンライブラリ
 - テスティングフレームワーク
   - [Vitest](https://vitest.dev/): 単体テスト (ユーティリティ、コンポーネント)
