@@ -56,7 +56,9 @@ src/features/
 │   ├── fixtures/                    # テスト用データ
 │   ├── services/
 │   │   ├── workbooks.ts
-│   │   └── workbooks.test.ts
+│   │   ├── workbooks.test.ts
+│   │   ├── workbook_placements.ts   # WorkBookPlacement の取得・更新・新規の問題集を追加
+│   │   └── workbook_placements.test.ts
 │   ├── stores/
 │   │   └── active_workbook_tab.ts
 │   ├── types/
