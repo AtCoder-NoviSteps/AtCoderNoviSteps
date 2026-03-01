@@ -23,6 +23,8 @@
     "coverage": "vitest run --coverage"
   },
   "devDependencies": {
+    "@dnd-kit/abstract": "0.3.2",
+    "@dnd-kit/dom": "0.3.2",
     "@eslint/eslintrc": "3.3.4",
     "@eslint/js": "9.39.3",
     "@playwright/test": "1.58.2",
@@ -45,8 +47,8 @@
     "flowbite": "3.1.2",
     "flowbite-svelte": "1.31.0",
     "globals": "17.3.0",
-    "lefthook": "2.1.1",
     "jsdom": "28.1.0",
+    "lefthook": "2.1.1",
     "nock": "14.0.11",
     "pnpm": "10.30.3",
     "prettier": "3.8.1",
@@ -68,6 +70,8 @@
   },
   "type": "module",
   "dependencies": {
+    "@dnd-kit/helpers": "0.3.2",
+    "@dnd-kit/svelte": "0.3.2",
     "@lucia-auth/adapter-prisma": "3.0.2",
     "@lucide/svelte": "0.575.0",
     "@mermaid-js/mermaid-cli": "11.12.0",
