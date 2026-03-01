@@ -81,3 +81,21 @@ pnpm test:unit   # テストが通ること
 pnpm check       # TypeScript 型チェック
 pnpm lint        # ESLint チェック
 ```
+
+## 注意事項
+
+### AOJ API に存在しない問題 + タイトルの重複による id 衝突
+
+AOJ の `/problems?size=N` エンドポイントは、実際には存在しない（ページが not found になる）問題を返すことがある。例えば `CGL_4_D` は AOJ 上では存在しない + API レスポンスに `CGL_2_B` と `CGL_7_A` と同じタイトルの場合がある。
+
+現在のタスク `id` 生成ロジックは `sha256(contest_id + task.title)` であるため、同一コース内でタイトルが重複すると `Task.id` の一意制約違反（P2002）が発生する。
+
+- **影響**: CGL コースのインポート時に `PrismaClientKnownRequestError: Unique constraint failed on the fields: (\`id\`)` が発生する
+- **根本原因**: `sha256(contest_id + title)` は title の重複に弱い。`task.id`（API のユニーク識別子）を使うべき
+- **暫定対処**: 該当コースの存在する問題のみインポート
+
+## 実装後の教訓
+
+- `AOJ_COURSES` はデータ駆動設計になっており、新コース追加は定数オブジェクトに1行足すだけで、呼び出し側コードの変更は不要だった。
+- テストデータも同様に、既存パターンをそのまま踏襲して追記するだけで済む。
+- プランの「変更不要なもの」セクションを事前に確認しておくと、余計な調査を省ける。
