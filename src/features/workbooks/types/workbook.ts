@@ -60,6 +60,7 @@ export const WorkBookType: { [key in WorkBookTypeOrigin]: key } = {
 // Re-exporting the original type with the original name.
 export type WorkBookType = WorkBookTypeOrigin;
 
+// Categories for solution placement.
 export const SolutionCategory: { [key in SolutionCategoryOrigin]: key } = {
   PENDING: 'PENDING',
   SEARCH_SIMULATION: 'SEARCH_SIMULATION',
