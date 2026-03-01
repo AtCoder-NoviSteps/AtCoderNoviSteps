@@ -87,6 +87,26 @@ THEME THEME
 OTHERS OTHERS
         }
     
+
+
+        SolutionCategory {
+            PENDING PENDING
+SEARCH_SIMULATION SEARCH_SIMULATION
+DYNAMIC_PROGRAMMING DYNAMIC_PROGRAMMING
+DATA_STRUCTURE DATA_STRUCTURE
+GRAPH GRAPH
+TREE TREE
+NUMBER_THEORY NUMBER_THEORY
+ALGEBRA ALGEBRA
+COMBINATORICS COMBINATORICS
+GAME GAME
+STRING STRING
+GEOMETRY GEOMETRY
+OPTIMIZATION OPTIMIZATION
+OTHERS OTHERS
+ANALYSIS ANALYSIS
+        }
+    
   "user" {
     String id "🗝️"
     String username 
@@ -196,6 +216,17 @@ OTHERS OTHERS
     }
   
 
+  "workbookplacement" {
+    Int id "🗝️"
+    Int workBookId 
+    TaskGrade taskGrade "❓"
+    SolutionCategory solutionCategory "❓"
+    Int priority 
+    DateTime createdAt 
+    DateTime updatedAt 
+    }
+  
+
   "workbooktask" {
     String id "🗝️"
     Int workBookId 
@@ -219,6 +250,9 @@ OTHERS OTHERS
     "taskanswer" }o--|o submissionstatus : "status"
     "workbook" |o--|| "WorkBookType" : "enum:workBookType"
     "workbook" }o--|| user : "user"
+    "workbookplacement" |o--|o "TaskGrade" : "enum:taskGrade"
+    "workbookplacement" |o--|o "SolutionCategory" : "enum:solutionCategory"
+    "workbookplacement" |o--|| workbook : "workBook"
     "workbooktask" }o--|| workbook : "workBook"
     "workbooktask" }o--|| task : "task"
 ```

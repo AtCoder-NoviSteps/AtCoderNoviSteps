@@ -201,8 +201,24 @@ model WorkBook {
   user User @relation(references: [id], fields: [authorId])
 
   workBookTasks WorkBookTask[]
+  placement     WorkBookPlacement?
 
   @@map("workbook")
+}
+
+// Note: 問題集（カリキュラム、解法別）の並び替えで使用
+model WorkBookPlacement {
+  id               Int               @id @default(autoincrement())
+  workBookId       Int               @unique
+  taskGrade        TaskGrade? // CURRICULUM 用（SOLUTION は null）
+  solutionCategory SolutionCategory? // SOLUTION 用（CURRICULUM は null）
+  priority         Int // 1以上。1に近いほど上側に表示
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+
+  workBook WorkBook @relation(references: [id], fields: [workBookId], onDelete: Cascade)
+
+  @@map("workbookplacement")
 }
 
 model WorkBookTask {
@@ -293,4 +309,22 @@ enum WorkBookType {
   GENRE // (Deprecated) ジャンル別: 考察なしで問題文から読み取れる内容に基づいてまとめている。ネタバレなし
   THEME // (Deprecated) テーマ別: さまざまな解法 (解法別より狭義) を横断し得るものをまとめている
   OTHERS // (Deprecated) 上記以外
+}
+
+enum SolutionCategory {
+  PENDING // 未分類
+  SEARCH_SIMULATION // 探索・シミュレーション・実装
+  DYNAMIC_PROGRAMMING // 動的計画法
+  DATA_STRUCTURE // データ構造
+  GRAPH // グラフ
+  TREE // 木
+  NUMBER_THEORY // 数学（整数論）
+  ALGEBRA // 数学（代数）
+  COMBINATORICS // 数え上げ・確率・期待値
+  GAME // ゲーム
+  STRING // 文字列
+  GEOMETRY // 幾何
+  OPTIMIZATION // 最適化
+  OTHERS // その他
+  ANALYSIS // 考察テクニック
 }
