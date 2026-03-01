@@ -593,6 +593,10 @@ export const agc = generateAgcTestCases(
  * - ALDS1: Algorithms and Data Structures I
  * - ITP2: Introduction to Programming II
  * - DPL: Discrete Optimization Problems
+ * - GRL: Graph Algorithms
+ * - DSL: Data Set and Queries
+ * - CGL: Computational Geometry
+ * - NTL: Number Theory
  */
 const AOJ_COURSES_TEST_DATA = {
   ITP1: {
