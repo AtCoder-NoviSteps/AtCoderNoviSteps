@@ -114,7 +114,7 @@ const courses = [
   },
   {
     contestId: 'NTL',
-    tasks: ['1_a', '1_E', '2_F'],
+    tasks: ['1_A', '1_E', '2_F'],
   },
 ];
 
