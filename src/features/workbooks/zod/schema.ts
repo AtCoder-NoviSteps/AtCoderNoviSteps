@@ -3,7 +3,10 @@
 // https://regex101.com/
 // https://qiita.com/mpyw/items/886218e7b418dfed254b
 import { z } from 'zod';
-import { WorkBookType } from '$features/workbooks/types/workbook';
+
+import { TaskGrade } from '$lib/types/task';
+import { WorkBookType, SolutionCategory } from '$features/workbooks/types/workbook';
+
 import { isValidUrl, isValidUrlSlug } from '$lib/utils/url';
 
 const workBookTaskSchema = z.object({
@@ -56,4 +59,22 @@ export const workBookSchema = z.object({
     .array(workBookTaskSchema)
     .min(1, { error: '1問以上登録してください' })
     .max(200, { error: '200問以下になるまで削除してください' }),
+});
+
+export const workBookPlacementSchema = z
+  .object({
+    id: z.number().positive(),
+    priority: z.number().positive(),
+    taskGrade: z.nativeEnum(TaskGrade).nullable(),
+    solutionCategory: z.nativeEnum(SolutionCategory).nullable(),
+  })
+  .refine(
+    (value) =>
+      (value.taskGrade !== null && value.solutionCategory === null) ||
+      (value.taskGrade === null && value.solutionCategory !== null),
+    { error: 'taskGrade と solutionCategory は片方のみ設定できます' },
+  );
+
+export const updatePlacementsSchema = z.object({
+  updates: z.array(workBookPlacementSchema),
 });
