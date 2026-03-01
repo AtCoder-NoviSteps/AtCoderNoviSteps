@@ -225,6 +225,9 @@ export const AOJ_COURSES: ContestPrefix = {
   ITP2: 'プログラミング応用',
   DPL: '組み合わせ最適化',
   GRL: 'グラフ',
+  DSL: 'データ構造',
+  CGL: '計算幾何学',
+  NTL: '整数論',
 } as const;
 
 export function getPrefixForAojCourses() {
