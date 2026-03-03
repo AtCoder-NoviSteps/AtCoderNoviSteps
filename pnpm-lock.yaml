@@ -12,8 +12,8 @@ importers:
         specifier: 3.0.2
         version: 3.0.2(@prisma/client@5.22.0(prisma@5.22.0))(lucia@2.7.7)
       '@lucide/svelte':
-        specifier: 0.575.0
-        version: 0.575.0(svelte@5.53.6)
+        specifier: 0.576.0
+        version: 0.576.0(svelte@5.53.6)
       '@mermaid-js/mermaid-cli':
         specifier: 11.12.0
         version: 11.12.0(puppeteer@23.11.1(typescript@5.9.3))(tsx@4.21.0)(yaml@2.8.1)
@@ -1020,8 +1020,8 @@ packages:
       '@prisma/client': ^4.2.0 || ^5.0.0
       lucia: ^2.0.0
 
-  '@lucide/svelte@0.575.0':
-    resolution: {integrity: sha512-FEFp/0McZwsjBqh1Dn8H+UBm1yHFQYk+utuVMFDw57155+wz2XMoc1pw027ylCPzs+bi14UEXYKbekFhuJKtnw==}
+  '@lucide/svelte@0.576.0':
+    resolution: {integrity: sha512-/xO9QPnPj5F5hvmPVdos+f9TeDQm0DntBdD7SpNPG9ZB7hOjzl8qUbfR6RsMik3yHvNlT4rUKE/ZMqzoBoiFDQ==}
     peerDependencies:
       svelte: ^5
 
@@ -2654,8 +2654,8 @@ packages:
   cose-base@2.2.0:
     resolution: {integrity: sha512-AzlgcsCbUMymkADOJtQm3wO9S3ltPfYOFD5033keQn9NJzIbtnZj+UdBJe7DYml/8TdbtHJW3j58SOnKhWY/5g==}
 
-  cosmiconfig@9.0.0:
-    resolution: {integrity: sha512-itvL5h8RETACmOTFc4UfIyB2RfEHi71Ax6E/PivVxq9NseKbOWpeyHEOIbmAw1rs8Ak0VursQNww7lf7YtUwzg==}
+  cosmiconfig@9.0.1:
+    resolution: {integrity: sha512-hr4ihw+DBqcvrsEDioRO31Z17x71pUYoNe/4h6Z0wB72p7MU7/9gH8Q3s12NFhHPfYBBOV3qyfUxmr/Yn3shnQ==}
     engines: {node: '>=14'}
     peerDependencies:
       typescript: '>=4.9.5'
@@ -6024,7 +6024,7 @@ snapshots:
       '@prisma/client': 5.22.0(prisma@5.22.0)
       lucia: 2.7.7
 
-  '@lucide/svelte@0.575.0(svelte@5.53.6)':
+  '@lucide/svelte@0.576.0(svelte@5.53.6)':
     dependencies:
       svelte: 5.53.6
 
@@ -7867,7 +7867,7 @@ snapshots:
     dependencies:
       layout-base: 2.0.1
 
-  cosmiconfig@9.0.0(typescript@5.9.3):
+  cosmiconfig@9.0.1(typescript@5.9.3):
     dependencies:
       env-paths: 2.2.1
       import-fresh: 3.3.1
@@ -9761,7 +9761,7 @@ snapshots:
     dependencies:
       '@puppeteer/browsers': 2.6.1
       chromium-bidi: 0.11.0(devtools-protocol@0.0.1367902)
-      cosmiconfig: 9.0.0(typescript@5.9.3)
+      cosmiconfig: 9.0.1(typescript@5.9.3)
       devtools-protocol: 0.0.1367902
       puppeteer-core: 23.11.1
       typed-query-selector: 2.12.1
