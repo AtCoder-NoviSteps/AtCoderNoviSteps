@@ -104,6 +104,18 @@ const courses = [
     contestId: 'GRL',
     tasks: ['1_A', '1_C', '6_B', '7_A'],
   },
+  {
+    contestId: 'DSL',
+    tasks: ['1_A', '1_B', '2_I', '5_B'],
+  },
+  {
+    contestId: 'CGL',
+    tasks: ['1_A', '1_C', '7_I'],
+  },
+  {
+    contestId: 'NTL',
+    tasks: ['1_A', '1_E', '2_F'],
+  },
 ];
 
 export const aojCourses = courses.flatMap((course) =>
