@@ -15,7 +15,10 @@ async function loginAsAdmin(page: Page): Promise<void> {
 }
 
 function getColumn(page: Page, label: string) {
-  return page.locator('div').filter({ has: page.getByRole('heading', { name: label }) }).first();
+  return page
+    .locator('div')
+    .filter({ has: page.getByRole('heading', { name: label }) })
+    .first();
 }
 
 async function getCardsInColumn(
@@ -37,7 +40,12 @@ async function getCardsInColumn(
 
 async function postUpdates(
   page: Page,
-  updates: { id: number; priority: number; solutionCategory: string | null; taskGrade: string | null }[],
+  updates: {
+    id: number;
+    priority: number;
+    solutionCategory: string | null;
+    taskGrade: string | null;
+  }[],
 ): Promise<void> {
   const status = await page.evaluate(
     async ({ url, body }) => {
