@@ -31,7 +31,7 @@
 
 <div
   use:attachSortable
-  data-testid="kanban-card"
+  data-placement-id={placementId}
   class="bg-white dark:bg-gray-700 shadow-sm border border-gray-200 dark:border-gray-600 rounded-lg p-3 cursor-grab hover:border-blue-400 touch-none select-none"
   class:opacity-50={sortable.isDragging}
 >

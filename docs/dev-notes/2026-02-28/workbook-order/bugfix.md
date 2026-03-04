@@ -66,9 +66,9 @@ DB検証はリロード後のUI確認で代替（Playwright から直接DBアク
 - [x] Step 2: `+server.ts` 新規作成
 - [x] Step 3: `+page.server.ts` から `updatePlacements` アクション削除
 - [x] Step 4: `KanbanBoard.svelte` 修正（fetch URL + タブ切り替えリセット）
-- [ ] Step 5: E2E テストがパスすることを確認
+- [x] Step 5: E2E テストがパスすることを確認
   - テスト 4-5（URLパラメータ系）: ✅ パス済み
-  - テスト 1-3（DnD 保存系）: ❌ 失敗中 → Bug 3 の修正が必要
+  - テスト 1-3（DnD 保存系）: ✅ パス済み（Bug 3 修正 + `buildInitialCards` priority ソート追加で解決）
 
 ## Bug 3: `move()` がカードのカラム割り当てを更新しない
 
@@ -116,12 +116,12 @@ if (activeTab === 'solution') {
 
 ### TODO（Bug 3 対応）
 
-- [ ] `KanbanBoard.svelte` の `onDragEnd` でカラム割り当てを明示的に更新
-- [ ] `data-testid` をプロダクションコードから削除（KanbanColumn, KanbanCard）
-- [ ] E2E テスト名を英語に変更
-- [ ] E2E テスト 1-3 を `page.request.post()` による API 直接呼び出しに変更
-- [ ] E2E テストのセレクタを `getByRole` / `getByText` に変更
-- [ ] E2E テスト全5件がパスすることを確認
+- [x] `KanbanBoard.svelte` の `onDragEnd` でカラム割り当てを明示的に更新
+- [x] `data-testid` をプロダクションコードから削除（KanbanColumn, KanbanCard）
+- [x] E2E テスト名を英語に変更
+- [x] E2E テスト 1-3 を `page.evaluate` + `fetch` による API 直接呼び出しに変更
+- [x] E2E テストのセレクタを `getByRole` / `getByText` に変更
+- [x] E2E テスト全5件がパスすることを確認
 
 ---
 
@@ -210,6 +210,18 @@ Playwright 公式のロケータ優先順位:
 今回は DnD テストを fetch 直接呼び出しに変更するため `boundingBox` 取得が不要になり、
 タブ・カラム・カードは `getByRole` / `getByText` で十分特定可能。
 そのため `data-testid` は削除する。
+
+---
+
+## 教訓
+
+1. **DnD ライブラリが更新するのは配列順序のみ**。`move()` はアイテムのプロパティ（カラム）を変えない。クロスカラム移動では `onDragEnd` で明示的にプロパティを更新する必要がある。
+
+2. **初期表示は `priority` でソートすること**。`load()` がサーバー側で `workBook.id` 昇順を返しても、`priority` は別の値になりうる。`buildInitialCards` で `priority` ソートを行わないと DnD 永続化の確認ができない。
+
+3. **Playwright の `page.request.post()` は SvelteKit の `+server.ts` に届かない**。`page.request` はブラウザのクッキーを共有するが、SvelteKit のルーティングでフォームアクションに落ちて 415 になるケースがあった。`page.evaluate(() => fetch(...))` でブラウザコンテキストから呼ぶと回避できる。
+
+4. **`data-testid` は DnD の `boundingBox` 取得が必要な場合にのみ使う**。API 直接呼び出しに切り替えれば `getByRole` / `getByText` で十分なため、`data-testid` をプロダクションコードに残す必要はない。
 
 ---
 

@@ -35,7 +35,6 @@
 
 <div
   use:attachDroppable
-  data-testid="kanban-column"
   class="min-w-64 w-64 shrink-0 rounded-lg p-3 flex flex-col gap-2"
   class:bg-gray-100={!droppable.isDropTarget}
   class:dark:bg-gray-800={true}

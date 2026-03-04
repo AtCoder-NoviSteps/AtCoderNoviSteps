@@ -120,6 +120,7 @@
     isPublished: boolean;
     solutionCategory: string | null;
     taskGrade: string | null;
+    priority: number;
   };
 
   function buildInitialCards(): CardData[] {
@@ -132,7 +133,9 @@
         isPublished: wb.isPublished,
         solutionCategory: wb.placement!.solutionCategory,
         taskGrade: wb.placement!.taskGrade,
-      }));
+        priority: wb.placement!.priority,
+      }))
+      .sort((a, b) => a.priority - b.priority);
   }
 
   let items = $state<CardData[]>(buildInitialCards());
@@ -153,17 +156,26 @@
     const target = event.operation?.target;
     if (!source || !target) return;
 
+    // ドラッグされたカードのカラム割り当てを更新
+    const srcCard = items.find((c) => c.id === source.id);
+
+    if (srcCard && typeof target.id === 'string') {
+      if (activeTab === 'solution') {
+        srcCard.solutionCategory = target.id;
+      } else {
+        srcCard.taskGrade = target.id;
+      }
+    }
+
     // 移動元・移動先カラムを特定して priority 再計算
     const affectedCategories = new Set<string | null>();
     const affectedGrades = new Set<string | null>();
 
     if (activeTab === 'solution') {
-      const srcCard = items.find((c) => c.id === source.id);
       if (srcCard) affectedCategories.add(srcCard.solutionCategory);
       // target が column id (string) の場合
       if (typeof target.id === 'string') affectedCategories.add(target.id);
     } else {
-      const srcCard = items.find((c) => c.id === source.id);
       if (srcCard) affectedGrades.add(srcCard.taskGrade);
       if (typeof target.id === 'string') affectedGrades.add(target.id);
     }
