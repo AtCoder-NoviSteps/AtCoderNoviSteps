@@ -50,7 +50,11 @@ async function dragCard(page: Page, sourceTitle: string, targetTitle: string): P
   await page.waitForTimeout(500);
 }
 
-async function dragCardToColumn(page: Page, sourceTitle: string, columnLabel: string): Promise<void> {
+async function dragCardToColumn(
+  page: Page,
+  sourceTitle: string,
+  columnLabel: string,
+): Promise<void> {
   const source = page.locator('[data-testid="kanban-card"]').filter({ hasText: sourceTitle });
   const targetCol = page.locator('[data-testid="kanban-column"]').filter({ hasText: columnLabel });
 
@@ -138,14 +142,20 @@ test.describe('workbook order page', () => {
 
     // Verify card moved to GRAPH column
     const graphCol = page.locator('[data-testid="kanban-column"]').filter({ hasText: 'グラフ' });
-    await expect(graphCol.locator('[data-testid="kanban-card"]').filter({ hasText: cardTitle })).toBeVisible();
+    await expect(
+      graphCol.locator('[data-testid="kanban-card"]').filter({ hasText: cardTitle }),
+    ).toBeVisible();
 
     // Reload and verify persisted
     await page.reload();
     await page.waitForSelector('[data-testid="kanban-column"]', { timeout: TIMEOUT });
 
-    const graphColAfter = page.locator('[data-testid="kanban-column"]').filter({ hasText: 'グラフ' });
-    await expect(graphColAfter.locator('[data-testid="kanban-card"]').filter({ hasText: cardTitle })).toBeVisible();
+    const graphColAfter = page
+      .locator('[data-testid="kanban-column"]')
+      .filter({ hasText: 'グラフ' });
+    await expect(
+      graphColAfter.locator('[data-testid="kanban-card"]').filter({ hasText: cardTitle }),
+    ).toBeVisible();
 
     // Restore: move back to PENDING
     await dragCardToColumn(page, cardTitle, '未分類');

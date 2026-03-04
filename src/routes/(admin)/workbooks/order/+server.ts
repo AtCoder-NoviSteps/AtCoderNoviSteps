@@ -52,14 +52,11 @@ export async function POST({ request, locals }: RequestEvent) {
       existing.workBook.workBookType === 'SOLUTION' && update.taskGrade !== null;
 
     if (isCurriculumToSolution || isSolutionToCurriculum) {
-      return json(
-        { error: 'CURRICULUM と SOLUTION 間の移動は禁止されています' },
-        { status: 400 },
-      );
+      return json({ error: 'CURRICULUM と SOLUTION 間の移動は禁止されています' }, { status: 400 });
     }
   }
 
   await upsertWorkBookPlacements(parsed.data.updates);
 
   return json({ success: true });
-};
+}
