@@ -1,6 +1,4 @@
-import { redirect, fail, type Actions } from '@sveltejs/kit';
-import { superValidate } from 'sveltekit-superforms/server';
-import { zod4 } from 'sveltekit-superforms/adapters';
+import { redirect, type Actions } from '@sveltejs/kit';
 
 import { Roles } from '$lib/types/user';
 import { isAdmin } from '$lib/utils/authorship';
@@ -12,10 +10,7 @@ import * as userService from '$lib/services/users';
 import {
   initializeCurriculumPlacements,
   initializeSolutionPlacements,
-  upsertWorkBookPlacements,
 } from '$features/workbooks/services/workbook_placements';
-import { calcWorkBookGradeModes } from '$features/workbooks/utils/workbooks';
-import { updatePlacementsSchema } from '$features/workbooks/zod/schema';
 import type { Task } from '$lib/types/task';
 
 async function validateAdminAccess(locals: App.Locals): Promise<void> {
@@ -46,9 +41,7 @@ export async function load({ locals }) {
 
   const hasUnplacedWorkbooks = workbooks.some((workbook) => !workbook.placement);
 
-  const form = await superValidate(null, zod4(updatePlacementsSchema));
-
-  return { workbooks, hasUnplacedWorkbooks, form };
+  return { workbooks, hasUnplacedWorkbooks };
 }
 
 export const actions: Actions = {
@@ -114,43 +107,5 @@ export const actions: Actions = {
     });
 
     return { success: true };
-  },
-
-  updatePlacements: async ({ request, locals }) => {
-    await validateAdminAccess(locals);
-
-    const form = await superValidate(request, zod4(updatePlacementsSchema));
-
-    if (!form.valid) {
-      return fail(400, { form });
-    }
-
-    // サーバー側バリデーション: CURRICULUM↔SOLUTION 間移動禁止
-    for (const update of form.data.updates) {
-      const existing = await prisma.workBookPlacement.findUnique({
-        where: { id: update.id },
-        include: { workBook: { select: { workBookType: true } } },
-      });
-
-      if (!existing) {
-        return fail(400, { form, error: `placement id=${update.id} が存在しません` });
-      }
-
-      const isCurriculumToSolution =
-        existing.workBook.workBookType === 'CURRICULUM' && update.solutionCategory !== null;
-      const isSolutionToCurriculum =
-        existing.workBook.workBookType === 'SOLUTION' && update.taskGrade !== null;
-
-      if (isCurriculumToSolution || isSolutionToCurriculum) {
-        return fail(400, {
-          form,
-          error: 'CURRICULUM と SOLUTION 間の移動は禁止されています',
-        });
-      }
-    }
-
-    await upsertWorkBookPlacements(form.data.updates);
-
-    return { form };
   },
 };

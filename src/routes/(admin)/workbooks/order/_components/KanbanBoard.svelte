@@ -102,8 +102,13 @@
   function updateUrl() {
     const url = new URL($page.url);
     url.searchParams.set('tab', activeTab);
-    url.searchParams.set('cols', selectedSolutionCols.join(','));
-    url.searchParams.set('grades', selectedGrades.join(','));
+    if (activeTab === 'solution') {
+      url.searchParams.set('cols', selectedSolutionCols.join(','));
+      url.searchParams.delete('grades');
+    } else {
+      url.searchParams.set('grades', selectedGrades.join(','));
+      url.searchParams.delete('cols');
+    }
     replaceState(url, {});
   }
 
@@ -190,7 +195,7 @@
     if (updates.length === 0) return;
 
     try {
-      const res = await fetch('?/updatePlacements', {
+      const res = await fetch('/workbooks/order', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ updates }),
