@@ -1,8 +1,8 @@
-import type { TaskGrade } from '$lib/types/task';
 import type {
-  WorkBookType as WorkBookTypeOrigin,
   SolutionCategory as SolutionCategoryOrigin,
+  WorkBookType as WorkBookTypeOrigin,
 } from '@prisma/client';
+import type { TaskGrade } from '$lib/types/task';
 
 export type WorkBookBase = {
   title: string;
@@ -37,6 +37,7 @@ export interface WorkbookList extends WorkBookBase {
 
 export type WorkbooksList = WorkbookList[];
 
+// TODO: Extract other file as workbook placement.
 // Admin only: Used for ordering of workbooks (curriculums and solution)
 export type WorkBookPlacement = {
   id: number;
@@ -45,6 +46,8 @@ export type WorkBookPlacement = {
   solutionCategory: SolutionCategory | null;
   priority: number;
 };
+
+export type WorkBookPlacements = WorkBookPlacement[];
 
 // HACK: enumを使うときは毎回書いているので、もっと簡略化できないか?
 export const WorkBookType: { [key in WorkBookTypeOrigin]: key } = {
