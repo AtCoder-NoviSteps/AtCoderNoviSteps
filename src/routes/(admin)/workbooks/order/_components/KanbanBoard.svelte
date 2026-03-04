@@ -89,7 +89,7 @@
 
   let activeTab = $state(getParam('tab') === 'curriculum' ? 'curriculum' : 'solution');
   let selectedSolutionCols = $state(
-    (getParam('cols')?.split(',').filter(Boolean) ?? ['PENDING', 'GRAPH']).filter(
+    (getParam('categories')?.split(',').filter(Boolean) ?? ['PENDING', 'GRAPH']).filter(
       (c) => c in SolutionCategory,
     ),
   );
@@ -103,11 +103,11 @@
     const url = new URL($page.url);
     url.searchParams.set('tab', activeTab);
     if (activeTab === 'solution') {
-      url.searchParams.set('cols', selectedSolutionCols.join(','));
+      url.searchParams.set('categories', selectedSolutionCols.join(','));
       url.searchParams.delete('grades');
     } else {
       url.searchParams.set('grades', selectedGrades.join(','));
-      url.searchParams.delete('cols');
+      url.searchParams.delete('categories');
     }
     replaceState(url, {});
   }

@@ -125,16 +125,18 @@ if (activeTab === 'solution') {
 
 ---
 
-## Future Tasks（別PR）
+## Future Tasks
 
-- `validateAdminAccess` を `_utils/auth.ts` などに共通化（現在 `+page.server.ts` と `+server.ts` で重複）
-- `+page.server.ts` の `initializePlacements` をサービス層に移動
-- KanbanBoard の CURRICULUM/SOLUTION 重複ロジックを DRY に
-- テストに実際のシードデータを使用
-- 管理メニューに「問題集 (並び替え)」リンク追加
-- コメントを英語に統一
-- URL クエリパラメータ `cols` を `categories` にリネーム（可読性改善）
-- 空のカンバンカラムに「ここに問題集をドロップできます」等のプレースホルダーメッセージを表示（UX改善）
+- [ ] パネルの途中のカードに追加できるようにする
+- [ ] パネル内のカードが多い場合は、スクロールバーを追加
+- [x] URL クエリパラメータ `cols` を `categories` にリネーム（可読性改善）
+- [ ] `validateAdminAccess` を `_utils/auth.ts` などに共通化（現在 `+page.server.ts` と `+server.ts` で重複）
+- [ ] `+page.server.ts` の `initializePlacements` をサービス層に移動
+- [ ] KanbanBoard の CURRICULUM/SOLUTION 重複ロジックを DRY に
+- [ ] テストに実際のシードデータを使用
+- [ ] 管理メニューに「問題集 (並び替え)」リンク追加
+- [ ] コメントを英語に統一
+- [ ] 空のカンバンカラムに「ここに問題集をドロップできます」等のプレースホルダーメッセージを表示（UX改善）
 
 詳細は [refactor.md](./refactor.md) を参照。
 

@@ -67,7 +67,7 @@ test.describe('workbook order page', () => {
   });
 
   test('reordering within the same column persists after reload', async ({ page }) => {
-    await page.goto(`${ORDER_URL}?tab=solution&cols=PENDING`);
+    await page.goto(`${ORDER_URL}?tab=solution&categories=PENDING`);
     await expect(page.getByRole('heading', { name: '未分類' })).toBeVisible({ timeout: TIMEOUT });
 
     const cards = await getCardsInColumn(page, '未分類');
@@ -99,7 +99,7 @@ test.describe('workbook order page', () => {
   });
 
   test('moving a card to a different column persists after reload', async ({ page }) => {
-    await page.goto(`${ORDER_URL}?tab=solution&cols=PENDING,GRAPH`);
+    await page.goto(`${ORDER_URL}?tab=solution&categories=PENDING,GRAPH`);
     await expect(page.getByRole('heading', { name: '未分類' })).toBeVisible({ timeout: TIMEOUT });
 
     const pendingCards = await getCardsInColumn(page, '未分類');
@@ -159,19 +159,19 @@ test.describe('workbook order page', () => {
     ]);
   });
 
-  test('switching from solution to curriculum tab removes cols from URL', async ({ page }) => {
-    await page.goto(`${ORDER_URL}?tab=solution&cols=PENDING,GRAPH&grades=Q10,Q9`);
+  test('switching from solution to curriculum tab removes categories from URL', async ({ page }) => {
+    await page.goto(`${ORDER_URL}?tab=solution&categories=PENDING,GRAPH&grades=Q10,Q9`);
     await expect(page.getByRole('heading', { name: '未分類' })).toBeVisible({ timeout: TIMEOUT });
 
     await page.getByRole('tab', { name: 'カリキュラム' }).click();
 
     const url = new URL(page.url());
-    expect(url.searchParams.has('cols')).toBe(false);
+    expect(url.searchParams.has('categories')).toBe(false);
     expect(url.searchParams.get('tab')).toBe('curriculum');
   });
 
   test('switching from curriculum to solution tab removes grades from URL', async ({ page }) => {
-    await page.goto(`${ORDER_URL}?tab=curriculum&cols=PENDING,GRAPH&grades=Q10,Q9`);
+    await page.goto(`${ORDER_URL}?tab=curriculum&categories=PENDING,GRAPH&grades=Q10,Q9`);
     await expect(page.getByRole('heading', { name: '10Q' })).toBeVisible({ timeout: TIMEOUT });
 
     await page.getByRole('tab', { name: '解法別' }).click();
