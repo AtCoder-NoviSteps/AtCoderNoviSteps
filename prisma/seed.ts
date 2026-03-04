@@ -29,6 +29,12 @@ import { users, USER_PASSWORD_FOR_SEED } from './users';
 import { tasks } from './tasks';
 import { contest_task_pairs } from './contest_task_pairs';
 import { workbooks } from '../src/features/workbooks/fixtures/workbooks';
+import { solutionCategoryMap } from '../src/features/workbooks/fixtures/solution_category_map';
+import {
+  initializeCurriculumPlacements,
+  initializeSolutionPlacements,
+} from '../src/features/workbooks/services/workbook_placements';
+import type { Task } from '../src/lib/types/task';
 import { tags } from './tags';
 import { task_tags } from './task_tags';
 import { answers } from './answers';
@@ -64,6 +70,7 @@ async function main() {
     await addTasks();
     await addContestTaskPairs();
     await addWorkBooks();
+    await addWorkBookPlacements();
     await addTags();
     await addTaskTags();
     await addSubmissionStatuses();
@@ -302,6 +309,67 @@ async function addWorkBooks() {
   }
 
   console.log('Finished adding workbooks.');
+}
+
+async function addWorkBookPlacements() {
+  console.log('Start adding workbook placements...');
+
+  // CURRICULUM: 未配置分のみ初期化
+  const unplacedCurriculum = await prisma.workBook.findMany({
+    where: { workBookType: 'CURRICULUM', placement: null },
+    include: {
+      workBookTasks: { include: { task: { select: { task_id: true, grade: true } } } },
+    },
+    orderBy: { id: 'asc' },
+  });
+
+  if (unplacedCurriculum.length > 0) {
+    const tasksByTaskId = new Map<string, Task>();
+    for (const wb of unplacedCurriculum) {
+      for (const wbt of wb.workBookTasks) {
+        if (wbt.task) {
+          tasksByTaskId.set(wbt.task.task_id, {
+            task_id: wbt.task.task_id,
+            contest_id: '',
+            task_table_index: '',
+            title: '',
+            grade: wbt.task.grade,
+          });
+        }
+      }
+    }
+
+    const workbooksForInit = unplacedCurriculum.map((wb) => ({
+      id: wb.id,
+      workBookTasks: wb.workBookTasks.map((t) => ({
+        taskId: t.task?.task_id ?? '',
+        priority: 0,
+        comment: '',
+      })),
+    }));
+
+    const placements = initializeCurriculumPlacements(workbooksForInit as never, tasksByTaskId);
+    await prisma.workBookPlacement.createMany({ data: placements });
+    console.log(`Added ${placements.length} curriculum placements.`);
+  }
+
+  // SOLUTION: 未配置分のみ初期化（solutionCategoryMap で分類、未記載は PENDING）
+  const unplacedSolution = await prisma.workBook.findMany({
+    where: { workBookType: 'SOLUTION', placement: null },
+    orderBy: { id: 'asc' },
+  });
+
+  if (unplacedSolution.length > 0) {
+    const placements = initializeSolutionPlacements(unplacedSolution).map((p, _i) => {
+      const wb = unplacedSolution.find((w) => w.id === p.workBookId);
+      const category = wb?.urlSlug ? solutionCategoryMap[wb.urlSlug] : undefined;
+      return { ...p, solutionCategory: category ?? 'PENDING' };
+    });
+    await prisma.workBookPlacement.createMany({ data: placements });
+    console.log(`Added ${placements.length} solution placements.`);
+  }
+
+  console.log('Finished adding workbook placements.');
 }
 
 async function addWorkBook(

@@ -3,13 +3,7 @@
   import { Button, Tabs } from 'flowbite-svelte';
 
   import { Roles } from '$lib/types/user';
-  import {
-    type Task,
-    TaskGrade,
-    type TaskGrades,
-    type TaskResult,
-    type TaskResults,
-  } from '$lib/types/task';
+  import { type Task, type TaskResult, type TaskResults } from '$lib/types/task';
   import {
     type WorkbookList,
     type WorkbooksList,
@@ -23,8 +17,7 @@
   import WorkbookTabItem from '$features/workbooks/components/list/WorkbookTabItem.svelte';
   import WorkBookList from '$features/workbooks/components/list/WorkBookList.svelte';
 
-  import { calcGradeMode } from '$lib/utils/task';
-  import { canViewWorkBook } from '$features/workbooks/utils/workbooks';
+  import { canViewWorkBook, calcWorkBookGradeModes } from '$features/workbooks/utils/workbooks';
 
   let { data } = $props();
 
@@ -69,31 +62,7 @@
   const tasksByTaskId: Map<string, Task> = data.tasksByTaskId;
   let taskResultsByTaskId = data.taskResultsByTaskId as Map<string, TaskResult>;
 
-  // 計算量: 問題集の数をN、各問題集の問題の平均値をMとすると、O(N * M * log(M))
-  const getWorkBookGradeModes = (workbooks: WorkbooksList): Map<number, TaskGrade> => {
-    const gradeModes: Map<number, TaskGrade> = new Map();
-
-    workbooks.forEach((workbook: WorkbookList) => {
-      const taskGrades = workbook.workBookTasks.reduce(
-        (results: TaskGrades, workBookTask: WorkBookTaskBase) => {
-          const task = tasksByTaskId.get(workBookTask.taskId);
-
-          if (task && task.grade !== TaskGrade.PENDING) {
-            results.push(task.grade as TaskGrade);
-          }
-          return results;
-        },
-        [],
-      );
-
-      const gradeMode = calcGradeMode(taskGrades as TaskGrades);
-      gradeModes.set(workbook.id, gradeMode);
-    });
-
-    return gradeModes;
-  };
-
-  const workbookGradeModes = getWorkBookGradeModes(data.workbooks as WorkbooksList);
+  const workbookGradeModes = calcWorkBookGradeModes(data.workbooks as WorkbooksList, tasksByTaskId);
 
   // 計算量: 問題集の数をN、各問題集の問題の平均値をMとすると、O(N * M)
   function fetchTaskResultsWithWorkBookId(workbooks: WorkbooksList, workBookType: WorkBookType) {
