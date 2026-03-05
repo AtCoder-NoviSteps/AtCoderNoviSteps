@@ -159,7 +159,9 @@ test.describe('workbook order page', () => {
     ]);
   });
 
-  test('switching from solution to curriculum tab removes categories from URL', async ({ page }) => {
+  test('switching from solution to curriculum tab removes categories from URL', async ({
+    page,
+  }) => {
     await page.goto(`${ORDER_URL}?tab=solution&categories=PENDING,GRAPH&grades=Q10,Q9`);
     await expect(page.getByRole('heading', { name: '未分類' })).toBeVisible({ timeout: TIMEOUT });
 
