@@ -324,8 +324,8 @@ export function getContestPriority(contestId: string): number {
  * - "atc1234"
  * - "awc12345"
  */
-const regexForAxc = /^(abc|arc|agc|atc)(\d{3})/i;
-const regexForAwc = /^(awc)(\d{4})/i;
+const regexForAxc = /^(abc|arc|agc|atc)(\d{3})$/i;
+const regexForAwc = /^(awc)(\d{4})$/i;
 
 /**
  * Regular expression to match AtCoder University contest identifiers.
