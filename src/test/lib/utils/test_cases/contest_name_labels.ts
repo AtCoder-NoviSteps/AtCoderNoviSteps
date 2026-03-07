@@ -37,6 +37,10 @@ export const atCoderOthers = [
     contestId: 'chokudai_S002',
     expected: 'Chokudai SpeedRun 002',
   }),
+  createTestCaseForContestNameLabel('AtCoder Typical Contest 001')({
+    contestId: 'atc001',
+    expected: 'ATC 001',
+  }),
 ];
 
 export const mathAndAlgorithm = [
