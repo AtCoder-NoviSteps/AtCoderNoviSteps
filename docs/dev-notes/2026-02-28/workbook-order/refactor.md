@@ -14,7 +14,7 @@
 Phase 1 〜 6 までのリファクタリングで判明した新たな修正点
 
 - [ ] ボタンや文字色は、`text-primary-700  dark:text-primary-500` を使う
-- [ ] #943 で、依然として省略した変数が使われているので、意味のある命名をする
+- [ ] #943 で、依然として省略した変数が使われているので禁止。意味のある命名をする
 - [ ] src/routes/(admin)/workbooks/order/\_types/kanban.ts
   - [ ] CardData は Card に、CardData[] は Cards 型 にリネーム
 - [ ] この他にも、配列のデータは複数形の型を定義して使用
