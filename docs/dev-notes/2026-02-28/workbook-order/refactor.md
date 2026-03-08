@@ -92,21 +92,21 @@
 
 手順:
 
-- [ ] `items` の状態を `CardData[]` → `Record<string, CardData[]>`（カラムキー）に変更
-- [ ] `buildInitialCards()` を `solutionCategory` または `taskGrade` でグループ化した Record を返すように変更
-- [ ] `solutionItems` と `curriculumItems` を別々の Record として管理
-- [ ] `onDragOver`: 適切な Record を `move()` に渡すように更新
-- [ ] `onDragEnd` を簡素化: 手動の `srcCard.solutionCategory = target.id` ロジックを削除（move() が処理）
-- [ ] `getCardsForSolutionCol()` / `getCardsForGradeCol()` を削除 — Record のキーアクセスで代替
-- [ ] priority 再計算: Record の各カラム値をイテレート
-- [ ] `snapshot` / ロールバックを Record 対応に更新
+- [x] `items` の状態を `CardData[]` → `Record<string, CardData[]>`（カラムキー）に変更
+- [x] `buildInitialCards()` を `solutionCategory` または `taskGrade` でグループ化した Record を返すように変更
+- [x] `solutionItems` と `curriculumItems` を別々の Record として管理
+- [x] `onDragOver`: 適切な Record を `move()` に渡すように更新
+- [x] `onDragEnd` を簡素化: 手動の `srcCard.solutionCategory = target.id` ロジックを削除（move() が処理）
+- [x] `getCardsForSolutionCol()` / `getCardsForGradeCol()` を削除 — Record のキーアクセスで代替
+- [x] priority 再計算: Record の各カラム値をイテレート
+- [x] `snapshot` / ロールバックを Record 対応に更新
 
 ### 3.2 DragDropProvider テンプレートの DRY 化
 
 3.1 の後、solution タブと curriculum タブは同一のテンプレート構造（Record をイテレートして KanbanColumn を描画）になる。
 
-- [ ] `{#snippet kanbanColumns(items, labelFn, group)}` を抽出して重複を排除
-- [ ] snippet が約30行を超える場合は `KanbanTab.svelte` コンポーネントとして抽出
+- [x] `{#snippet kanbanColumns(columns, items, labelFn, group)}` を抽出して重複を排除
+- [x] snippet は5行で収まったため、コンポーネント抽出は不要
 
 **snippet vs コンポーネントの判断軸:**
 
@@ -125,9 +125,9 @@ snippet を第一選択とする理由:
 
 3.1 の後、`onDragEnd` は以下のように簡素化される:
 
-- [ ] Record 構造から影響カラムを読み取り（`affectedCategories`/`affectedGrades` の Set が不要に）
-- [ ] `activeTab === 'solution'` の分岐を可能な限り削除（Record キーが抽象化）
-- [ ] priority 再計算を Record エントリへの単一ループに統合
+- [x] Record 構造から影響カラムを読み取り（`affectedCategories`/`affectedGrades` の Set が不要に）
+- [x] `activeTab === 'solution'` の分岐を大幅に削減（onDragOver/onDragEnd で共通ロジック化）
+- [x] priority 再計算を Record エントリへの単一ループに統合（snapshot 比較で差分検出）
 
 ---
 
@@ -256,7 +256,7 @@ snippet を第一選択とする理由:
 
 ---
 
-## 教訓（Phase 1-2 完了時点）
+## 教訓（Phase 1-3 完了時点）
 
 ### Prisma enum と アプリ enum の型不一致
 
@@ -273,6 +273,32 @@ Svelte の `{#each}` ブロック内で `opt.value` を `selected.includes(opt.v
 ### enum を型ガードに使う場合の注意
 
 `g in GRADE_LABELS`（Record）から `grade in TaskGrade` へ移行する際、TaskGrade には `PENDING` が含まれるため `grade !== 'PENDING'` の追加フィルタが必要。
+
+### `@dnd-kit/helpers` の `move()` は `Record<string, Items>` をネイティブサポート
+
+`move(items, event)` に `Record<string, CardData[]>` を渡すと、自動的にカラム間移動を処理する（ソースカラムから削除 → ターゲットカラムに挿入）。フラット配列のときに必要だった手動カラム割り当て（`srcCard.solutionCategory = target.id`）や `sort(() => 0)` ワークアラウンドが不要になる。
+
+Record キーは `createDroppable` の `id` と一致する必要がある。空カラムへのドロップ時、`move()` は `target.id in items` でカラムを特定する。
+
+### `createSortable` の `group` vs `type` の使い分け
+
+- `group`: `move()` が Record のどのキーにアイテムが属するかを判定するために使用。Record キー（カラム ID）を設定する。
+- `type`: `createDroppable` の `accept` とマッチングするコリジョンフィルタ用。「solution」「curriculum」のようなグループ種別を設定する。
+
+この2つを混同すると、Record ベースの `move()` が正しく動作しない。
+
+### Record ベースの状態管理での `CardData` 簡素化
+
+フラット配列では `solutionCategory`、`taskGrade`、`priority` を CardData に持つ必要があった。Record ベースでは:
+- カラム割り当て = Record キー（暗黙的）
+- 優先度 = 配列インデックス（暗黙的）
+- サーバ更新時のカラム情報 = Record エントリのイテレーションで取得
+
+結果、CardData は表示に必要なフィールド（`id`, `workBookId`, `title`, `isPublished`）のみになり、KanbanColumn の `PlacementCard` インターフェースと統合できた。
+
+### snapshot 比較による差分検出
+
+`onDragEnd` で `affectedCategories`/`affectedGrades` の Set を手動管理する代わりに、ドラッグ開始時の snapshot と現在の Record を比較して変更カラムを検出するアプローチが簡潔。`cards.some((card, i) => card.id !== snapCards[i]?.id)` で順序変更も検出できる。
 
 ---
 

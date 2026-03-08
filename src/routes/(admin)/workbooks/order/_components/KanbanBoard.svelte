@@ -27,6 +27,8 @@
 
   import { getTaskGradeLabel } from '$lib/utils/task';
 
+  type KanbanItems = Record<string, CardData[]>;
+
   const SOLUTION_CATEGORY_OPTIONS = Object.entries(SolutionCategory)
     .filter(([category]) => category !== 'PENDING')
     .map(([category]) => ({ value: category, label: SOLUTION_LABELS[category] ?? category }));
@@ -60,7 +62,9 @@
 
   function updateUrl() {
     const url = new URL($page.url);
+
     url.searchParams.set('tab', activeTab);
+
     if (activeTab === 'solution') {
       url.searchParams.set('categories', selectedSolutionCols.join(','));
       url.searchParams.delete('grades');
@@ -68,36 +72,74 @@
       url.searchParams.set('grades', selectedGrades.join(','));
       url.searchParams.delete('categories');
     }
+
     replaceState(url, {});
   }
 
-  // Placement state
-  function buildInitialCards(): CardData[] {
-    return workbooks
-      .filter((wb) => wb.placement !== null)
-      .map((wb) => ({
-        id: wb.placement!.id,
-        workBookId: wb.id,
-        title: wb.title,
-        isPublished: wb.isPublished,
-        solutionCategory: wb.placement!.solutionCategory,
-        taskGrade: wb.placement!.taskGrade,
-        priority: wb.placement!.priority,
-      }))
-      .sort((a, b) => a.priority - b.priority);
+  // Build Record-based items grouped by column key
+  function buildSolutionItems(): KanbanItems {
+    const record: KanbanItems = {};
+
+    for (const key of Object.keys(SolutionCategory)) {
+      record[key] = [];
+    }
+
+    workbooks
+      .filter((wb) => wb.placement !== null && wb.placement.solutionCategory !== null)
+      .sort((a, b) => a.placement!.priority - b.placement!.priority)
+      .forEach((wb) => {
+        const col = wb.placement!.solutionCategory!;
+        record[col].push({
+          id: wb.placement!.id,
+          workBookId: wb.id,
+          title: wb.title,
+          isPublished: wb.isPublished,
+        });
+      });
+
+    return record;
   }
 
-  let items = $state<CardData[]>(buildInitialCards());
-  let snapshot: CardData[] | null = null;
+  function buildCurriculumItems(): KanbanItems {
+    const record: KanbanItems = {};
+
+    for (const key of Object.keys(TaskGrade)) {
+      record[key] = [];
+    }
+
+    workbooks
+      .filter((wb) => wb.placement !== null && wb.placement.taskGrade !== null)
+      .sort((a, b) => a.placement!.priority - b.placement!.priority)
+      .forEach((wb) => {
+        const col = wb.placement!.taskGrade!;
+        record[col].push({
+          id: wb.placement!.id,
+          workBookId: wb.id,
+          title: wb.title,
+          isPublished: wb.isPublished,
+        });
+      });
+
+    return record;
+  }
+
+  let solutionItems = $state<KanbanItems>(buildSolutionItems());
+  let curriculumItems = $state<KanbanItems>(buildCurriculumItems());
+  let snapshot: KanbanItems | null = null;
   let errorMessage = $state<string | null>(null);
 
   // Drag-and-drop handlers
   function onDragStart() {
+    const items = activeTab === 'solution' ? solutionItems : curriculumItems;
     snapshot = structuredClone($state.snapshot(items));
   }
 
   function onDragOver(event: DragOverEventArg) {
-    items = move(items, event);
+    if (activeTab === 'solution') {
+      solutionItems = move(solutionItems, event);
+    } else {
+      curriculumItems = move(curriculumItems, event);
+    }
   }
 
   async function onDragEnd(event: DragEndEventArg) {
@@ -105,30 +147,9 @@
     const target = event.operation?.target;
     if (!source || !target) return;
 
-    // Update the dragged card's column assignment
-    const srcCard = items.find((card) => card.id === source.id);
+    const currentItems = activeTab === 'solution' ? solutionItems : curriculumItems;
 
-    if (srcCard && typeof target.id === 'string') {
-      if (activeTab === 'solution') {
-        srcCard.solutionCategory = target.id;
-      } else {
-        srcCard.taskGrade = target.id;
-      }
-    }
-
-    // Determine source and destination columns for priority recalculation
-    const affectedCategories = new Set<string | null>();
-    const affectedGrades = new Set<string | null>();
-
-    if (activeTab === 'solution') {
-      if (srcCard) affectedCategories.add(srcCard.solutionCategory);
-      if (typeof target.id === 'string') affectedCategories.add(target.id);
-    } else {
-      if (srcCard) affectedGrades.add(srcCard.taskGrade);
-      if (typeof target.id === 'string') affectedGrades.add(target.id);
-    }
-
-    // Reassign sequential priorities
+    // Build updates for affected columns by comparing with snapshot
     const updates: Array<{
       id: number;
       priority: number;
@@ -136,18 +157,21 @@
       taskGrade: string | null;
     }> = [];
 
-    if (activeTab === 'solution') {
-      for (const cat of affectedCategories) {
-        const inCol = items.filter((card) => card.solutionCategory === cat);
-        inCol.forEach((card, i) => {
-          updates.push({ id: card.id, priority: i + 1, solutionCategory: cat, taskGrade: null });
-        });
-      }
-    } else {
-      for (const grade of affectedGrades) {
-        const inCol = items.filter((card) => card.taskGrade === grade);
-        inCol.forEach((card, i) => {
-          updates.push({ id: card.id, priority: i + 1, solutionCategory: null, taskGrade: grade });
+    for (const [columnId, cards] of Object.entries(currentItems)) {
+      const snapCards = snapshot?.[columnId];
+      const changed =
+        !snapCards ||
+        cards.length !== snapCards.length ||
+        cards.some((card, i) => card.id !== snapCards[i]?.id);
+
+      if (changed) {
+        cards.forEach((card, i) => {
+          updates.push({
+            id: card.id,
+            priority: i + 1,
+            solutionCategory: activeTab === 'solution' ? columnId : null,
+            taskGrade: activeTab === 'curriculum' ? columnId : null,
+          });
         });
       }
     }
@@ -167,7 +191,11 @@
     } catch {
       // Roll back on error
       if (snapshot) {
-        items = snapshot;
+        if (activeTab === 'solution') {
+          solutionItems = snapshot;
+        } else {
+          curriculumItems = snapshot;
+        }
       }
       errorMessage = '保存に失敗しました';
     } finally {
@@ -175,21 +203,29 @@
     }
   }
 
-  // Cards by column
-  function getCardsForSolutionCol(cat: string): CardData[] {
-    return items.filter((card) => card.solutionCategory === cat).sort(() => 0); // Preserve items order
-  }
-
-  function getCardsForGradeCol(grade: string): CardData[] {
-    return items.filter((card) => card.taskGrade === grade).sort(() => 0);
-  }
-
   // PENDING is always shown, so keep it separate from the selectable columns
   let displayedSolutionCols = $derived([
     'PENDING',
     ...selectedSolutionCols.filter((category) => category !== 'PENDING'),
   ]);
+
+  function getSolutionLabel(column: string): string {
+    return SOLUTION_LABELS[column] ?? column;
+  }
 </script>
+
+{#snippet kanbanColumns(
+  columns: string[],
+  items: KanbanItems,
+  labelFn: (column: string) => string,
+  group: string,
+)}
+  <div class="flex gap-3 overflow-x-auto pb-4">
+    {#each columns as column}
+      <KanbanColumn columnId={column} label={labelFn(column)} cards={items[column] ?? []} {group} />
+    {/each}
+  </div>
+{/snippet}
 
 {#if errorMessage}
   <Toast color="red" class="mb-4" onclose={() => (errorMessage = null)}>
@@ -223,21 +259,7 @@
         />
       </div>
 
-      <div class="flex gap-3 overflow-x-auto pb-4">
-        {#each displayedSolutionCols as cat}
-          <KanbanColumn
-            columnId={cat}
-            label={SOLUTION_LABELS[cat] ?? cat}
-            cards={getCardsForSolutionCol(cat).map((card) => ({
-              id: card.id,
-              workBookId: card.workBookId,
-              title: card.title,
-              isPublished: card.isPublished,
-            }))}
-            group="solution"
-          />
-        {/each}
-      </div>
+      {@render kanbanColumns(displayedSolutionCols, solutionItems, getSolutionLabel, 'solution')}
     </TabItem>
 
     <TabItem
@@ -260,21 +282,7 @@
         />
       </div>
 
-      <div class="flex gap-3 overflow-x-auto pb-4">
-        {#each selectedGrades as grade}
-          <KanbanColumn
-            columnId={grade}
-            label={getTaskGradeLabel(grade)}
-            cards={getCardsForGradeCol(grade).map((card) => ({
-              id: card.id,
-              workBookId: card.workBookId,
-              title: card.title,
-              isPublished: card.isPublished,
-            }))}
-            group="curriculum"
-          />
-        {/each}
-      </div>
+      {@render kanbanColumns(selectedGrades, curriculumItems, getTaskGradeLabel, 'curriculum')}
     </TabItem>
   </Tabs>
 </DragDropProvider>

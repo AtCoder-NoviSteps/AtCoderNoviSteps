@@ -7,10 +7,11 @@
     index: number;
     title: string;
     isPublished: boolean;
+    columnId: string;
     group: string;
   }
 
-  let { placementId, index, title, isPublished, group }: Props = $props();
+  let { placementId, index, title, isPublished, columnId, group }: Props = $props();
 
   const sortable = createSortable({
     get id() {
@@ -19,7 +20,7 @@
     get index() {
       return index;
     },
-    group,
+    group: columnId,
     type: group,
   });
 

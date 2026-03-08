@@ -1,18 +1,14 @@
 <script lang="ts">
   import { createDroppable } from '@dnd-kit/svelte';
+
   import KanbanCard from './KanbanCard.svelte';
 
-  interface PlacementCard {
-    id: number;
-    workBookId: number;
-    title: string;
-    isPublished: boolean;
-  }
+  import type { CardData } from '../_types/kanban';
 
   interface Props {
     columnId: string;
     label: string;
-    cards: PlacementCard[];
+    cards: CardData[];
     group: string;
   }
 
@@ -51,6 +47,7 @@
         index={i}
         title={card.title}
         isPublished={card.isPublished}
+        {columnId}
         {group}
       />
     {/each}
