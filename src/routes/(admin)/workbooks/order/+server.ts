@@ -1,29 +1,12 @@
-import { json, redirect } from '@sveltejs/kit';
+import { json } from '@sveltejs/kit';
 import type { RequestEvent } from '@sveltejs/kit';
 
-import { Roles } from '$lib/types/user';
-import { isAdmin } from '$lib/utils/authorship';
-import { LOGIN_PAGE } from '$lib/constants/navbar-links';
-import { TEMPORARY_REDIRECT } from '$lib/constants/http-response-status-codes';
-
 import prisma from '$lib/server/database';
-import * as userService from '$lib/services/users';
 import { upsertWorkBookPlacements } from '$features/workbooks/services/workbook_placements';
+
 import { updatePlacementsSchema } from '$features/workbooks/zod/schema';
 
-async function validateAdminAccess(locals: App.Locals): Promise<void> {
-  const session = await locals.auth.validate();
-
-  if (!session) {
-    redirect(TEMPORARY_REDIRECT, LOGIN_PAGE);
-  }
-
-  const user = await userService.getUser(session.user.username);
-
-  if (!user || !isAdmin(user.role as Roles)) {
-    redirect(TEMPORARY_REDIRECT, LOGIN_PAGE);
-  }
-}
+import { validateAdminAccess } from '../../_utils/auth';
 
 export async function POST({ request, locals }: RequestEvent) {
   await validateAdminAccess(locals);

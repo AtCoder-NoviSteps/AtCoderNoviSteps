@@ -31,10 +31,11 @@ import { contest_task_pairs } from './contest_task_pairs';
 import { workbooks } from '../src/features/workbooks/fixtures/workbooks';
 import { solutionCategoryMap } from '../src/features/workbooks/fixtures/solution_category_map';
 import {
+  buildTasksByTaskId,
+  buildCurriculumWorkbooksForInit,
   initializeCurriculumPlacements,
   initializeSolutionPlacements,
 } from '../src/features/workbooks/services/workbook_placements';
-import type { Task } from '../src/lib/types/task';
 import { tags } from './tags';
 import { task_tags } from './task_tags';
 import { answers } from './answers';
@@ -314,62 +315,55 @@ async function addWorkBooks() {
 async function addWorkBookPlacements() {
   console.log('Start adding workbook placements...');
 
-  // CURRICULUM: 未配置分のみ初期化
-  const unplacedCurriculum = await prisma.workBook.findMany({
-    where: { workBookType: 'CURRICULUM', placement: null },
-    include: {
-      workBookTasks: { include: { task: { select: { task_id: true, grade: true } } } },
-    },
-    orderBy: { id: 'asc' },
-  });
+  const [unplacedCurriculum, unplacedSolution] = await Promise.all([
+    prisma.workBook.findMany({
+      where: { workBookType: 'CURRICULUM', placement: null },
+      include: {
+        workBookTasks: { include: { task: { select: { task_id: true, grade: true } } } },
+      },
+      orderBy: { id: 'asc' },
+    }),
+    prisma.workBook.findMany({
+      where: { workBookType: 'SOLUTION', placement: null },
+      orderBy: { id: 'asc' },
+    }),
+  ]);
 
-  if (unplacedCurriculum.length > 0) {
-    const tasksByTaskId = new Map<string, Task>();
-    for (const wb of unplacedCurriculum) {
-      for (const wbt of wb.workBookTasks) {
-        if (wbt.task) {
-          tasksByTaskId.set(wbt.task.task_id, {
-            task_id: wbt.task.task_id,
-            contest_id: '',
-            task_table_index: '',
-            title: '',
-            grade: wbt.task.grade,
-          });
-        }
-      }
-    }
-
-    const workbooksForInit = unplacedCurriculum.map((wb) => ({
-      id: wb.id,
-      workBookTasks: wb.workBookTasks.map((t) => ({
-        taskId: t.task?.task_id ?? '',
-        priority: 0,
-        comment: '',
-      })),
-    }));
-
-    const placements = initializeCurriculumPlacements(workbooksForInit as never, tasksByTaskId);
-    await prisma.workBookPlacement.createMany({ data: placements });
-    console.log(`Added ${placements.length} curriculum placements.`);
-  }
-
-  // SOLUTION: 未配置分のみ初期化（solutionCategoryMap で分類、未記載は PENDING）
-  const unplacedSolution = await prisma.workBook.findMany({
-    where: { workBookType: 'SOLUTION', placement: null },
-    orderBy: { id: 'asc' },
-  });
-
-  if (unplacedSolution.length > 0) {
-    const placements = initializeSolutionPlacements(unplacedSolution).map((p, _i) => {
-      const wb = unplacedSolution.find((w) => w.id === p.workBookId);
-      const category = wb?.urlSlug ? solutionCategoryMap[wb.urlSlug] : undefined;
-      return { ...p, solutionCategory: category ?? 'PENDING' };
-    });
-    await prisma.workBookPlacement.createMany({ data: placements });
-    console.log(`Added ${placements.length} solution placements.`);
-  }
+  await addCurriculumPlacements(unplacedCurriculum);
+  await addSolutionPlacements(unplacedSolution);
 
   console.log('Finished adding workbook placements.');
+}
+
+async function addCurriculumPlacements(
+  unplacedCurriculum: Parameters<typeof buildTasksByTaskId>[0],
+) {
+  if (unplacedCurriculum.length === 0) {
+    return;
+  }
+
+  const tasksByTaskId = buildTasksByTaskId(unplacedCurriculum);
+  const workbooksForInit = buildCurriculumWorkbooksForInit(unplacedCurriculum);
+  const placements = initializeCurriculumPlacements(workbooksForInit, tasksByTaskId);
+
+  await prisma.workBookPlacement.createMany({ data: placements });
+  console.log(`Added ${placements.length} curriculum placements.`);
+}
+
+async function addSolutionPlacements(unplacedSolution: { id: number; urlSlug: string | null }[]) {
+  if (unplacedSolution.length === 0) {
+    return;
+  }
+
+  // Apply solutionCategoryMap overrides; workbooks not listed default to PENDING.
+  const placements = initializeSolutionPlacements(unplacedSolution).map((placement) => {
+    const workbooks = unplacedSolution.find((workbook) => workbook.id === placement.workBookId);
+    const category = workbooks?.urlSlug ? solutionCategoryMap[workbooks.urlSlug] : undefined;
+    return { ...placement, solutionCategory: category ?? 'PENDING' };
+  });
+
+  await prisma.workBookPlacement.createMany({ data: placements });
+  console.log(`Added ${placements.length} solution placements.`);
 }
 
 async function addWorkBook(

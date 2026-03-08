@@ -135,34 +135,35 @@ snippet を第一選択とする理由:
 
 ### 4.1 `validateAdminAccess` を `src/routes/(admin)/_utils/auth.ts` に抽出
 
-- [ ] `src/routes/(admin)/_utils/auth.ts` を作成
-- [ ] `+page.server.ts` から `validateAdminAccess` を移動
-- [ ] `+page.server.ts` と `+server.ts` の import を更新
-- [ ] `+server.ts` 内の重複を削除
+- [x] `src/routes/(admin)/_utils/auth.ts` を作成
+- [x] `+page.server.ts` から `validateAdminAccess` を移動
+- [x] `+page.server.ts` と `+server.ts` の import を更新
+- [x] `+server.ts` 内の重複を削除
 
 ### 4.2 `initializePlacements` ロジックを service 層に移動
 
-- [ ] `+page.server.ts` action 内の DB クエリ（未配置ワークブックの取得）+ スタブ Task 構築を `workbook_placements.ts` service に抽出
-- [ ] `prisma/seed.ts` の `addWorkBookPlacements` との重複ロジックを統合（同じ `tasksByTaskId` Map 構築）
-- [ ] `+page.server.ts` の action は薄いラッパーに: バリデーション → service 呼び出し → return
+- [x] `+page.server.ts` action 内の DB クエリ + スタブ Task 構築を `workbook_placements.ts` service に抽出（`createInitialPlacements`）
+- [x] `prisma/seed.ts` の `addWorkBookPlacements` との重複ロジックを統合（`buildTasksByTaskId` / `buildCurriculumWorkbooksForInit` ヘルパーで DRY 化）
+- [x] `+page.server.ts` の action は薄いラッパーに: バリデーション → service 呼び出し → return
 
 ### 4.3 Seed: `addWorkBookPlacements` を他モデルと同じ粒度に分割
 
 他モデル（`addWorkBooks` → `addWorkBook`）のパターンに合わせる:
 
-- [ ] `addCurriculumPlacements(unplacedCurriculum)` を抽出 — CURRICULUM の単一責務
-- [ ] `addSolutionPlacements(unplacedSolution)` を抽出 — SOLUTION の単一責務
-- [ ] `addWorkBookPlacements` は両者を呼び出すオーケストレータに
-- [ ] 4.2 で作成した service 層のメソッドを再利用（スタブ Task 構築、`initializeCurriculumPlacements`）
-- [ ] `as never` 型アサーション（351行目）を削除 — service 関数シグネチャの整合で不要に
+- [x] `addCurriculumPlacements(unplacedCurriculum)` を抽出 — CURRICULUM の単一責務
+- [x] `addSolutionPlacements(unplacedSolution)` を抽出 — SOLUTION の単一責務
+- [x] `addWorkBookPlacements` は両者を呼び出すオーケストレータに
+- [x] 4.2 で作成した service 層のメソッドを再利用（`buildTasksByTaskId`、`buildCurriculumWorkbooksForInit`、`initializeCurriculumPlacements`）
+- [x] `as never` 型アサーション（旧 351 行目）を削除 — service 関数シグネチャの整合で不要に
 
 ### 4.4 Service 層のクリーンアップ
 
-- [ ] `workbook_placements.ts`: 型定義を `types/workbook_placement.ts` に移動（Phase 2.1）
-- [ ] ハードコードされた文字列を `TaskGrade` / `SolutionCategory` 定数で置換
-- [ ] `initializeCurriculumPlacements()` を責務ごとに分割（複数の関心事がある場合）
-- [ ] 全エクスポート関数に明示的な戻り値の型を追加
-- [ ] 公開 API 関数に JSDoc を追加
+- [x] `workbook_placements.ts`: 型定義（`PlacementInput`、`WorkBookWithTasks`、`PlacementCreate`）を `types/workbook_placement.ts` に移動
+- [x] `initializeCurriculumPlacements()` を責務ごとに分割 — `buildTasksByTaskId` / `buildCurriculumWorkbooksForInit` に抽出
+- [x] 全エクスポート関数に明示的な戻り値の型を追加
+- [x] 公開 API 関数に JSDoc を追加
+- [x] `calcWorkBookGradeModes` の引数型を `WorkBookWithTasks` が直接渡せる最小型に変更（`as WorkbooksList` キャスト除去）
+- [ ] ハードコードされた `'CURRICULUM'` / `'SOLUTION'` 文字列を `WorkBookType` 定数で置換（型制約で安全なため優先度低）
 
 ---
 
@@ -256,7 +257,7 @@ snippet を第一選択とする理由:
 
 ---
 
-## 教訓（Phase 1-3 完了時点）
+## 教訓（Phase 1-4 完了時点）
 
 ### Prisma enum と アプリ enum の型不一致
 
@@ -291,7 +292,6 @@ Record キーは `createDroppable` の `id` と一致する必要がある。空
 
 フラット配列では `solutionCategory`、`taskGrade`、`priority` を CardData に持つ必要があった。Record ベースでは:
 
-
 - カラム割り当て = Record キー（暗黙的）
 - 優先度 = 配列インデックス（暗黙的）
 - サーバ更新時のカラム情報 = Record エントリのイテレーションで取得
@@ -301,6 +301,18 @@ Record キーは `createDroppable` の `id` と一致する必要がある。空
 ### snapshot 比較による差分検出
 
 `onDragEnd` で `affectedCategories`/`affectedGrades` の Set を手動管理する代わりに、ドラッグ開始時の snapshot と現在の Record を比較して変更カラムを検出するアプローチが簡潔。`cards.some((card, i) => card.id !== snapCards[i]?.id)` で順序変更も検出できる。
+
+### ユーティリティ関数の引数型は使う最小型に絞る
+
+`calcWorkBookGradeModes` は `WorkbooksList`（多くのフィールドを含む広い型）を受け取っていたが、実際に使うのは `id` と `workBookTasks` のみ。引数型を `{ id: number; workBookTasks: WorkBookTaskBase[] }[]` に絞ることで、`WorkBookWithTasks` を `as WorkbooksList` キャストなしに直接渡せるようになった。広い型を要求する関数は呼び出し元で不要なキャストを強いる。
+
+### seed 固有ロジックは service に持ち込まない
+
+`solutionCategoryMap`（URL スラッグ → カテゴリ のマッピング）はシードデータ固有の知識であり、service 層に漏らすべきでない。service は PENDING で初期化し、seed 側でオーバーライドするパターンを維持することで関心分離を保った。
+
+### `Parameters<typeof fn>[0]` で型の重複を避ける
+
+seed 側で `addCurriculumPlacements` の引数型を明示的に書くと、service 側の `UnplacedCurriculumRow` と二重管理になる。`Parameters<typeof buildTasksByTaskId>[0]` を使うと service の型定義に追従でき、型の整合性が自動的に保たれる。
 
 ---
 

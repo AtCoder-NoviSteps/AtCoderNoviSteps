@@ -1,31 +1,26 @@
 import prisma from '$lib/server/database';
 
 import { type Task, type TaskGrade } from '$lib/types/task';
-import type { WorkbooksList } from '$features/workbooks/types/workbook';
 import {
   SolutionCategory,
   type WorkBookPlacement,
   type WorkBookPlacements,
+  type PlacementInput,
+  type WorkBookWithTasks,
+  type PlacementCreate,
 } from '$features/workbooks/types/workbook_placement';
 
 import { calcWorkBookGradeModes } from '$features/workbooks/utils/workbooks';
 
-// TODO: Extract to types/workbook_placement.ts
-type PlacementInput = Pick<WorkBookPlacement, 'id' | 'priority' | 'taskGrade' | 'solutionCategory'>;
-
-// TODO: Use WorkBookTaskBase for workBookTasks
-type WorkBookWithTasks = {
+/** @internal Shape of a workbook row from the DB query for unplaced curriculum workbooks. */
+type UnplacedCurriculumRow = {
   id: number;
-  workBookTasks: { taskId: string; priority: number; comment: string }[];
+  workBookTasks: { task: { task_id: string; grade: TaskGrade } | null }[];
 };
 
-type PlacementCreate = {
-  workBookId: number;
-  taskGrade: TaskGrade | null;
-  solutionCategory: (typeof SolutionCategory)[keyof typeof SolutionCategory] | null;
-  priority: number;
-};
-
+/**
+ * Returns all placements for workbooks of the given type, ordered by priority.
+ */
 export async function getWorkBookPlacements(
   workBookType: 'CURRICULUM' | 'SOLUTION',
 ): Promise<WorkBookPlacements> {
@@ -35,6 +30,10 @@ export async function getWorkBookPlacements(
   });
 }
 
+/**
+ * Updates existing placements in a single transaction.
+ * No-op when given an empty array.
+ */
 export async function upsertWorkBookPlacements(updatedPlacements: PlacementInput[]): Promise<void> {
   if (updatedPlacements.length === 0) {
     return;
@@ -54,6 +53,50 @@ export async function upsertWorkBookPlacements(updatedPlacements: PlacementInput
   );
 }
 
+/**
+ * Builds a task lookup map from unplaced curriculum workbook rows.
+ * Stub tasks include only task_id and grade; other fields are left empty.
+ */
+export function buildTasksByTaskId(workbooks: UnplacedCurriculumRow[]): Map<string, Task> {
+  const tasksByTaskId = new Map<string, Task>();
+
+  for (const workbook of workbooks) {
+    for (const workBookTask of workbook.workBookTasks) {
+      if (workBookTask.task) {
+        tasksByTaskId.set(workBookTask.task.task_id, {
+          task_id: workBookTask.task.task_id,
+          contest_id: '',
+          task_table_index: '',
+          title: '',
+          grade: workBookTask.task.grade,
+        });
+      }
+    }
+  }
+
+  return tasksByTaskId;
+}
+
+/**
+ * Converts unplaced curriculum DB rows into the shape expected by initializeCurriculumPlacements.
+ */
+export function buildCurriculumWorkbooksForInit(
+  workbooks: UnplacedCurriculumRow[],
+): WorkBookWithTasks[] {
+  return workbooks.map((workbook) => ({
+    id: workbook.id,
+    workBookTasks: workbook.workBookTasks.map((workBookTask) => ({
+      taskId: workBookTask.task?.task_id ?? '',
+      priority: 0,
+      comment: '',
+    })),
+  }));
+}
+
+/**
+ * Returns initial placement records for unplaced SOLUTION workbooks.
+ * All are placed in the PENDING category with sequential priority.
+ */
 export function initializeSolutionPlacements(workbooks: { id: number }[]): PlacementCreate[] {
   return workbooks.map((workBook, i) => ({
     workBookId: workBook.id,
@@ -63,16 +106,18 @@ export function initializeSolutionPlacements(workbooks: { id: number }[]): Place
   }));
 }
 
-// TODO: Extract into sub-methods for clarity.
+/**
+ * Returns initial placement records for unplaced CURRICULUM workbooks.
+ * Each workbook is assigned the mode grade of its tasks, with priority
+ * determined by ascending workbook ID within each grade group.
+ */
 export function initializeCurriculumPlacements(
   workbooks: WorkBookWithTasks[],
   tasksByTaskId: Map<string, Task>,
 ): PlacementCreate[] {
-  const gradeModes = calcWorkBookGradeModes(workbooks as WorkbooksList, tasksByTaskId);
+  const gradeModes = calcWorkBookGradeModes(workbooks, tasksByTaskId);
 
-  // Note: Group by grade and sort by workbook.id in ascending order.
-  // This is to ensure that the priority is assigned based on the grade, and within the same grade, it is assigned based on the workbook ID in ascending order.
-  // This way, if there are multiple workbooks with the same grade, they will be ordered by their ID, which is a stable and deterministic way to assign priorities.
+  // Group by grade and sort by workbook ID ascending for deterministic priority assignment.
   const byGrade = new Map<TaskGrade, number[]>();
 
   for (const workbook of workbooks) {
@@ -101,3 +146,46 @@ export function initializeCurriculumPlacements(
 
   return result;
 }
+
+/**
+ * Queries all unplaced CURRICULUM and SOLUTION workbooks, computes their initial
+ * placements, and writes them to the database in a single createMany call.
+ * No-op when all workbooks are already placed.
+ */
+export async function createInitialPlacements(): Promise<void> {
+  const [unplacedCurriculum, unplacedSolution] = await Promise.all([
+    prisma.workBook.findMany({
+      where: { workBookType: 'CURRICULUM', placement: null },
+      include: {
+        workBookTasks: {
+          include: { task: { select: { task_id: true, grade: true } } },
+        },
+      },
+      orderBy: { id: 'asc' },
+    }),
+    prisma.workBook.findMany({
+      where: { workBookType: 'SOLUTION', placement: null },
+      orderBy: { id: 'asc' },
+    }),
+  ]);
+
+  if (unplacedCurriculum.length === 0 && unplacedSolution.length === 0) {
+    return;
+  }
+
+  const tasksByTaskId = buildTasksByTaskId(unplacedCurriculum);
+  const curriculumWorkbooksForInit = buildCurriculumWorkbooksForInit(unplacedCurriculum);
+
+  const curriculumPlacements = initializeCurriculumPlacements(
+    curriculumWorkbooksForInit,
+    tasksByTaskId,
+  );
+  const solutionPlacements = initializeSolutionPlacements(unplacedSolution);
+
+  await prisma.workBookPlacement.createMany({
+    data: [...curriculumPlacements, ...solutionPlacements],
+  });
+}
+
+// Re-export for consumers that only need the placement type (e.g. +server.ts upsert).
+export type { WorkBookPlacement };

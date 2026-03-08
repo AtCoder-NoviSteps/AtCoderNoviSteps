@@ -1,5 +1,6 @@
 import type { SolutionCategory as SolutionCategoryOrigin } from '@prisma/client';
 import type { TaskGrade } from '$lib/types/task';
+import type { WorkBookTaskBase } from '$features/workbooks/types/workbook';
 
 // Categories for solution placement.
 export const SolutionCategory: { [key in SolutionCategoryOrigin]: key } = {
@@ -22,17 +23,6 @@ export const SolutionCategory: { [key in SolutionCategoryOrigin]: key } = {
 
 export type SolutionCategory = SolutionCategoryOrigin;
 
-// Admin only: Used for ordering of workbooks (curriculums and solution)
-export type WorkBookPlacement = {
-  id: number;
-  workBookId: number;
-  taskGrade: TaskGrade | null;
-  solutionCategory: SolutionCategory | null;
-  priority: number;
-};
-
-export type WorkBookPlacements = WorkBookPlacement[];
-
 // Japanese labels for solution categories (used in admin UI)
 export const SOLUTION_LABELS: Record<string, string> = {
   PENDING: '未分類',
@@ -50,6 +40,37 @@ export const SOLUTION_LABELS: Record<string, string> = {
   OPTIMIZATION: '最適化',
   OTHERS: 'その他',
   ANALYSIS: '考察テクニック',
+};
+
+// Admin only: Used for ordering of workbooks (curriculums and solution)
+export type WorkBookPlacement = {
+  id: number;
+  workBookId: number;
+  taskGrade: TaskGrade | null;
+  solutionCategory: SolutionCategory | null;
+  priority: number;
+};
+
+export type WorkBookPlacements = WorkBookPlacement[];
+
+// Input type for updating placements (id + fields to update)
+export type PlacementInput = Pick<
+  WorkBookPlacement,
+  'id' | 'taskGrade' | 'solutionCategory' | 'priority'
+>;
+
+// Shape of a placement record to be created in the database
+export type PlacementCreate = {
+  workBookId: number;
+  taskGrade: TaskGrade | null;
+  solutionCategory: SolutionCategory | null;
+  priority: number;
+};
+
+// Workbook shape required by initializeCurriculumPlacements
+export type WorkBookWithTasks = {
+  id: number;
+  workBookTasks: WorkBookTaskBase[];
 };
 
 // Shape of workbooks returned from the load function for use in KanbanBoard
