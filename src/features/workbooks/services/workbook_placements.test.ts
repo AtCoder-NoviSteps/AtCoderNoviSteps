@@ -51,7 +51,13 @@ describe('getWorkBookPlacements', () => {
 
   test('returns placements of type SOLUTION', async () => {
     const mockPlacements: WorkBookPlacements = [
-      { id: 3, workBookId: 3, taskGrade: null, solutionCategory: SolutionCategory.GRAPH, priority: 1 },
+      {
+        id: 3,
+        workBookId: 3,
+        taskGrade: null,
+        solutionCategory: SolutionCategory.GRAPH,
+        priority: 1,
+      },
     ];
     vi.mocked(prisma.workBookPlacement.findMany).mockResolvedValue(
       mockPlacements as unknown as Awaited<ReturnType<typeof prisma.workBookPlacement.findMany>>,
@@ -89,10 +95,7 @@ describe('upsertWorkBookPlacements', () => {
 
 describe('initializeSolutionPlacements', () => {
   test('initializes all workbooks with PENDING', () => {
-    const workbooks = [
-      { id: 1 },
-      { id: 2 },
-    ];
+    const workbooks = [{ id: 1 }, { id: 2 }];
     const result = initializeSolutionPlacements(workbooks);
 
     expect(result).toHaveLength(2);

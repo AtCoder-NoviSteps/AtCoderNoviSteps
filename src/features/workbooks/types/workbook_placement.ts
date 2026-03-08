@@ -1,6 +1,4 @@
-import type {
-  SolutionCategory as SolutionCategoryOrigin,
-} from '@prisma/client';
+import type { SolutionCategory as SolutionCategoryOrigin } from '@prisma/client';
 import type { TaskGrade } from '$lib/types/task';
 
 // Categories for solution placement.

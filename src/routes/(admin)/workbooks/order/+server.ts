@@ -52,7 +52,10 @@ export async function POST({ request, locals }: RequestEvent) {
       existing.workBook.workBookType === 'SOLUTION' && update.taskGrade !== null;
 
     if (isCurriculumToSolution || isSolutionToCurriculum) {
-      return json({ error: 'Moving between CURRICULUM and SOLUTION is not allowed' }, { status: 400 });
+      return json(
+        { error: 'Moving between CURRICULUM and SOLUTION is not allowed' },
+        { status: 400 },
+      );
     }
   }
 
