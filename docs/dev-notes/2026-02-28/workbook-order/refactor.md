@@ -11,39 +11,138 @@
 
 ---
 
-Phase 1 〜 6 までのリファクタリングで判明した新たな修正点
+Phase 1 〜 6 までのリファクタリングで判明した新たな修正点（難易度順）
 
-- [ ] ボタンや文字色は、`text-primary-700  dark:text-primary-500` を使う
-- [ ] #943 で、依然として省略した変数が使われているので禁止。意味のある命名をする
-- [ ] src/routes/(admin)/workbooks/order/\_types/kanban.ts
-  - [ ] CardData は Card に、CardData[] は Cards 型 にリネーム
-- [ ] この他にも、配列のデータは複数形の型を定義して使用
-- [ ] src/routes/(admin)/workbooks/order/\_components/KanbanBoard.svelte などでは、まだ if 文の分岐が複数あるので、interface などを使って分岐地獄を減らす
-- [ ] 上記のファイルでは、まだ重複した記述があるので、snippet として括り出す
-- [ ] .svelte 定義されている型宣言や汎用処理は、\_types や \_utils に切り出し、単体テストを追加
-- [ ] +server.ts で未だに CRUD 処理が直書きされているので、services 層に切り出し、モックを使ったテストを書く
-  - [ ] src/routes/(admin)/workbooks/order/+server.ts
-    - [ ] POST で色々処理しているのでメソッドを分割
-  - [ ] src/routes/(admin)/workbooks/order/+page.server.ts
-- [ ] service 層で未だに巨大メソッドが分割されていないので、適切な粒度で切り出す
-  - [ ] initializeCurriculumPlacements
-- [ ] カテゴリやグレードのボタンとパネルの間の隙間をもう少し空ける
-- [ ] 問題のリンクで、既存のコンポーネントを使うようにして、下線が引かれた状態にする
-- [ ] 横幅が、問題集ページなどと同じになるように広げる（現状、若干狭い）
-- [ ] タブが潰れて余白がないので、「問題集」ページと同様にスタイルを合わせる
-- [ ] 未公開のラベルは、既存のコンポーネントを使う
-- [ ] HTTPレスポンスコードは、src/libの定数を使う
-- [ ] src/routes/(admin)/workbooks/order/+page.svelte で formの処理は snippet と切り出すのはどうか? 妥当性を判断して、必要なら実施
-- [ ] src/routes/(admin)/workbooks/order/\_components/KanbanCard.svelte の型定義が汚いので、責務の分割で小さな型を作って組み合わせる
-- [ ] src/routes/(admin)/workbooks/order/\_components/KanbanBoard.svelte
-  - [ ] コンポーネントがかなり肥大化しているので、責務の分割が必須
-  - [ ] type は /types へ移動してインポート
-  - [ ] buildSolutionItems と buildCurriculumItems がほぼ同じなので、共通化できる部分はメソッドとして切り出す
-  - [ ] onDragEnd が未だに巨大メソッドなので、責務の単位で分割 + /\_utils に切り出して単体テストを追加
-  - [ ] 上記以外にも、ts セクションで、/utils に切り出せるものは同様に
-  - [ ] TabItem と、ColumnSelector の 上にある <div class="mb-3"> は重複しているので、スニペットとして切り出す
-- [ ] seed.ts の addWorkBookPlacements() で 未だに CRUD が直書きされているので、service 層に移動させて、テストを追加
-- [ ] service 層以外では、CRUD 処理の直書きは禁止
+## Phase 7: 定数・表記・色（最小リスク）
+
+### 7.1 HTTP レスポンスコードを定数化
+
+- [ ] `+server.ts` — `status: 400` が 3箇所 → `src/lib/constants/http-response-status-codes.ts` の `BAD_REQUEST` に置換
+
+### 7.2 未公開ラベルを既存コンポーネントに統一
+
+- [ ] `KanbanCard.svelte` — `<Badge color="red">未公開</Badge>` → `PublicationStatusLabel.svelte` に置き換え（表記が「未公開」→「非公開」に変わる）
+
+### 7.3 色を `primary` 系に統一
+
+- [ ] `KanbanCard.svelte` — `hover:border-green-400` → `hover:border-primary-400`
+- [ ] `KanbanCard.svelte` — リンクホバー `hover:text-green-*` → `text-primary-700 dark:text-primary-500`
+- [ ] `KanbanBoard.svelte` — アクティブタブ `text-green-600 border-green-600` → `text-primary-700 dark:text-primary-500`
+- [ ] `+page.svelte`, `KanbanBoard.svelte` — ボタン背景 `bg-green-600 hover:bg-green-700` → `bg-primary-600 hover:bg-primary-700`
+
+### 7.4 型のリネーム
+
+- [ ] `_types/kanban.ts` — `CardData` → `Card`、`CardData[]` の型エイリアス `Cards` を定義
+- [ ] `_types/kanban.ts` — `KanbanItems` → `KanbanColumns` にリネーム
+- [ ] 呼び出し元全体（`KanbanBoard.svelte`, `KanbanColumn.svelte` 等）のインポートを更新
+
+---
+
+## Phase 8: 型・命名（局所的な構造変更）
+
+### 8.1 省略変数の確認と修正
+
+- [ ] `KanbanBoard.svelte` を精査し、1文字変数（`a`, `b` 等）が残っていれば修正（Phase 1.2 で対処済みの場合はスキップ）
+
+### 8.2 KanbanCard Props を分解
+
+- [ ] `_types/kanban.ts` に `SortableProps { columnId: string; group: string; index: number }` を定義
+- [ ] `KanbanCard.svelte` の Props を `Card & SortableProps` として合成するよう変更
+
+### 8.3 KanbanBoard のインライン型を `_types/kanban.ts` に移動
+
+- [ ] `DragOverEventArg`, `DragEndEventArg` 等の型エイリアスを `_types/kanban.ts` へ移動
+- [ ] インポートを更新
+
+### 8.4 複数形の型エイリアスを追加・`.svelte` 内の型宣言を移動
+
+- [ ] `.svelte` ファイル内に残っている型宣言を `_types/` に移動
+- [ ] 配列型は複数形の型エイリアスを定義して使用（例: `WorkbookWithPlacements`）
+
+### 8.5 `WorkbookLink.svelte` を新規作成
+
+- [ ] `src/features/workbooks/components/shared/WorkbookLink.svelte` を作成
+  - Props: `workBookId: number`, `title: string`
+  - CSS: `text-primary-600 hover:underline dark:text-primary-500`
+  - `flex-1`, `truncate`, サイズ指定はレイアウト固有のため含めない
+- [ ] `KanbanCard.svelte` のインライン `<a>` を `WorkbookLink` に置き換え
+
+---
+
+## Phase 9: UI スタイル調整（視覚的変更）
+
+### 9.1 タブの余白調整
+
+- [ ] `KanbanBoard.svelte` — TabItem のスタイルを「問題集」ページ (`/workbooks`) と合わせる
+
+### 9.2 カテゴリ/グレードボタンとパネルの隙間を空ける
+
+- [ ] `KanbanBoard.svelte` — ColumnSelector とカンバン列パネルの間のマージンを追加
+
+### 9.3 横幅を問題集ページと合わせる
+
+- [ ] `+page.svelte` または `KanbanBoard.svelte` — 問題集ページのレイアウトと比較して調整
+
+### 9.4 `<div class="mb-3">` の重複を snippet 化
+
+- [ ] `KanbanBoard.svelte` — `TabItem` 上と `ColumnSelector` 上に重複している `<div class="mb-3">` を `{#snippet tabHeader()}` として切り出す
+
+---
+
+## Phase 10: コード DRY 化（構造的変更）
+
+### 10.1 `buildSolutionItems` / `buildCurriculumItems` を共通化
+
+- [ ] 共通ロジックを `buildKanbanItems(workbooks, getColumnKey, getCategory)` として抽出
+- [ ] `_utils/kanban.ts` に配置し、単体テストを追加
+- [ ] `KanbanBoard.svelte` 内の両関数を `buildKanbanItems` 呼び出しに置き換え
+
+### 10.2 `if (activeTab === 'solution')` 分岐を `TabConfig` で排除
+
+- [ ] `_types/kanban.ts` に `TabConfig { items: KanbanColumns; labelFn: (col: string) => string; group: string }` を定義
+- [ ] `const tabConfigs: Record<ActiveTab, TabConfig>` の Record に統合し、if 分岐を撤廃
+
+### 10.3 `+page.svelte` の form snippet 化（評価）
+
+- [ ] ~~`+page.svelte` は 25 行と小さいため、snippet 化の恩恵が薄い → スキップ~~
+
+### 10.4 `onDragEnd` を責務単位で分割
+
+- [ ] `calcPriorityUpdates(before: KanbanColumns, after: KanbanColumns): PlacementUpdate[]` を抽出
+- [ ] `saveUpdates(updates: PlacementUpdate[]): Promise<void>` を抽出
+- [ ] `_utils/kanban.ts` に配置し、単体テストを追加
+
+---
+
+## Phase 11: サービス層・テスト（最高難度）
+
+### 11.1 `+page.server.ts` の CRUD を service 層に移動
+
+- [ ] `load()` 内の `prisma.workBook.findMany(...)` を `getWorkbooksWithPlacements()` として `workbook_placements.ts` に抽出
+- [ ] `+page.server.ts` の `load()` は薄いラッパーに
+
+### 11.2 `+server.ts` のバリデーション + CRUD を service 層に移動
+
+- [ ] `prisma.workBookPlacement.findUnique(...)` と cross-type バリデーションロジックを `validateAndUpdatePlacements(updates)` として `workbook_placements.ts` に抽出
+- [ ] POST ハンドラはバリデーション呼び出し → service 呼び出しのみに
+- [ ] モックを使ったテストを追加
+
+### 11.3 `initializeCurriculumPlacements` を分割
+
+- [ ] `groupWorkbooksByGrade(workbooks, gradeModes): Map<TaskGrade, number[]>` を抽出
+- [ ] `buildPlacementsFromGroups(workbooks, gradeModes, byGrade): PlacementCreate[]` を抽出
+- [ ] 分割後に単体テストを追加
+
+### 11.4 `seed.ts` の CRUD を service 層に移動
+
+- [ ] `addWorkBookPlacements()` 内の直接 Prisma 呼び出しを service 層のメソッドを使う形に置き換え
+- [ ] service 層以外では CRUD 処理の直書きを禁止（ルールを明記）
+- [ ] テストを追加
+
+### 11.5 KanbanBoard のコンポーネント分割
+
+- [ ] `KanbanTabBar.svelte`（タブ切替 + ColumnSelector）を切り出す
+- [ ] Phase 10.1, 10.2 完了後に実施（依存関係あり）
 
 ---
 
