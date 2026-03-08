@@ -193,6 +193,7 @@ const atCoderUniversityPrefixes = getContestPrefixes(ATCODER_UNIVERSITIES);
  */
 const ATCODER_OTHERS: ContestPrefix = {
   chokudai_S: 'Chokudai SpeedRun',
+  atc001: 'AtCoder Typical Contest 001',
   'code-festival-2014-quala': 'Code Festival 2014 予選 A',
   'code-festival-2014-qualb': 'Code Festival 2014 予選 B',
   'code-festival-2014-final': 'Code Festival 2014 決勝',
@@ -313,16 +314,18 @@ export function getContestPriority(contestId: string): number {
  * - "abc376"
  * - "ARC128"
  * - "agc045"
+ * - "atc001"
  * - "awc0001"
  *
  * Example non-matches:
  * - "xyz123"
  * - "abc12"
  * - "abc1234"
+ * - "atc1234"
  * - "awc12345"
  */
-const regexForAxc = /^(abc|arc|agc)(\d{3})/i;
-const regexForAwc = /^(awc)(\d{4})/i;
+const regexForAxc = /^(abc|arc|agc|atc)(\d{3})$/i;
+const regexForAwc = /^(awc)(\d{4})$/i;
 
 /**
  * Regular expression to match AtCoder University contest identifiers.
