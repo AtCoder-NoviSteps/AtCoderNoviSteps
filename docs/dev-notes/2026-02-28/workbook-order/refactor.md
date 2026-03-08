@@ -58,7 +58,7 @@
     - [ ] ContainerWrapper を使用する
     - [ ] ページのタイトルを「問題集（並び替え）」にする
     - [ ] 青系統 → 緑系統（default）に変更
-    - [ ] 「ボードに問題集を追加」を配置を左寄せに
+    - [ ] 「ボードに問題集を追加」を配置を左寄せにして、タイトルの下に移動させる
 
 - src/routes/(admin)/workbooks/order/\_components/KanbanBoard.svelte
   - 警告の解消
@@ -74,6 +74,7 @@
     - [ ] ボタン
       - [ ] 青系統 → 緑系統（default）に変更
       - [ ] ホバーしたときは背景色を変える
+    - [ ] パネル間同士の移動で、カードとカードの間にも移動できるようにする
   - コンポーネントのスリム化
     - [ ] SOLUTION_LABELS: 該当ファイルに移動
     - [ ] GRADE_LABELS: src/lib/types/task.ts の getTaskGrade() を使用
@@ -92,6 +93,8 @@
     - [ ] 文字サイズを一回り拡大
       - [ ] ラベル
       - [ ] カードの数
+    - [ ] ダークモードで、パネルの背景が識別できるようにする
+    - [ ] カードの数が多いときは、縦方向のスクロールバーを表示
 
 - [ ] src/routes/(admin)/workbooks/order/\_components/KanbanCard.svelte
   - [ ] UI の改善
