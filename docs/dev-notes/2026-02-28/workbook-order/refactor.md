@@ -205,9 +205,9 @@ snippet を第一選択とする理由:
 
 - [x] `as never` を適切な型付きテストデータに置換（Phase 2.3 で実施）
 - [x] `taskGrade` に文字列リテラルではなく `TaskGrade` 列挙を使用
-- [ ] モックデータを `prisma/seed.ts` のフィクスチャに基づくより意味のある値に拡充
-- [ ] `taskGrade` と `solutionCategory` が混在するシナリオのテストを追加
-- [ ] `solutionCategory` 固有のテストを追加
+- [x] モックデータを `prisma/seed.ts` のフィクスチャに基づくより意味のある値に拡充
+- [x] `taskGrade` と `solutionCategory` が混在するシナリオのテストを追加
+- [x] `solutionCategory` 固有のテストを追加
 
 ### 6.2 E2E テスト — 新規シナリオ
 
@@ -215,27 +215,27 @@ snippet を第一選択とする理由:
 
 **アクセス制御:**
 
-- [ ] 非 admin ユーザ → `/login` にリダイレクト
+- [x] 非 admin ユーザ → `/login` にリダイレクト
 
 **「問題集を追加」ボタン:**
 
-- [ ] 未配置の問題集がある場合にボタンが表示される
-- [ ] クリック後、ボタンが消える（全問題集が配置済み）
+- [ ] 未配置の問題集がある場合にボタンが表示される（シード状態依存のためスキップ）
+- [ ] クリック後、ボタンが消える（全問題集が配置済み）（同上）
 
 **カラムセレクタ + URL:**
 
-- [ ] カテゴリ/グレードボタンをクリック → カラムの表示/非表示
-- [ ] URL に選択中のカテゴリ/グレードが反映される
-- [ ] クエリ文字列なしでアクセス時のデフォルトパラメータ（tab=solution, categories=PENDING,GRAPH）
+- [x] カテゴリ/グレードボタンをクリック → カラムの表示/非表示
+- [x] URL に選択中のカテゴリ/グレードが反映される
+- [x] クエリ文字列なしでアクセス時のデフォルト表示（tab=solution, PENDING・GRAPH カラムが表示される）
 
 **Cross-type 移動拒否（API）:**
 
-- [ ] CURRICULUM↔SOLUTION 間の移動を POST → 400 レスポンス
+- [x] CURRICULUM↔SOLUTION 間の移動を POST → 400 レスポンス
 
 **エラーハンドリング（API レベルのみ、DnD UI テストは Playwright mouse + @dnd-kit が不安定なため除外）:**
 
-- [ ] 存在しない placement ID で POST → 400
-- [ ] 不正なリクエストボディで POST → 400
+- [x] 存在しない placement ID で POST → 400
+- [x] 不正なリクエストボディで POST → 400
 
 ---
 
@@ -331,6 +331,22 @@ seed 側で `addCurriculumPlacements` の引数型を明示的に書くと、ser
 ### ContainerWrapper はカンバン等の全幅レイアウトに `defaultWidth="w-full"` が必要
 
 デフォルトは `w-5/6 lg:w-3/4` で幅が制限される。カンバンボードのように横スクロールが必要なページでは `defaultWidth="w-full"` を渡す。
+
+### フィクスチャベースのテストデータは「実在する値」を使う
+
+`initializeCurriculumPlacements` のテストでは抽象的な `'t1'`/`'t2'` ではなく、実際の fixture に存在するタスク ID（`math_and_algorithm_a`、`tessoku_book_bz` など）とそのグレードを使うことで、仕様変更時にテストが実際のデータとの整合性をチェックできるようになる。
+
+### `minRequired` を意識したカラムトグルのテスト設計
+
+`ColumnSelector` の `minRequired={1}` により、選択中の非 PENDING カラムが 1 枚のみの場合はそれを非選択にできない。トグルのテストでは「最初から複数カラムを選択した状態（GRAPH + DATA_STRUCTURE）で一方を外す」ことで、この制約を回避しながら正常系を検証できる。
+
+### URL 同期は初回ロード時には起こらない
+
+`KanbanBoard.svelte` は `$effect` による `replaceState` でコンポーネントの状態変化を URL に反映するが、ページ初回ロード時（変化なし）は URL を書き換えない。そのため「クエリ文字列なしでアクセスしたときの URL パラメータ」を検証するより、「表示されるべきカラムが実際に表示されている」という UI 状態で検証する方が正確。
+
+### E2E の beforeEach でページを必要最小限のパスに goto する
+
+API エラーハンドリングのテストでは、`page.evaluate` で fetch を発行するためにセッション Cookie が必要。`beforeEach` でページを一度 goto してセッションを確立してから fetch するパターンが、`loginAsAdmin` 後に個別に goto するより効率的。
 
 ## 出典
 
