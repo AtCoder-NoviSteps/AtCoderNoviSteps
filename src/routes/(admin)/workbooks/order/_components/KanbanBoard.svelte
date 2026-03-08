@@ -241,6 +241,8 @@
     <TabItem
       open={activeTab === 'solution'}
       title="解法別"
+      activeClass="text-base font-semibold text-green-600 border-b-2 border-green-600"
+      inactiveClass="text-base font-semibold text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
       onclick={() => {
         activeTab = 'solution';
         updateUrl();
@@ -265,6 +267,8 @@
     <TabItem
       open={activeTab === 'curriculum'}
       title="カリキュラム"
+      activeClass="text-base font-semibold text-green-600 border-b-2 border-green-600"
+      inactiveClass="text-base font-semibold text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
       onclick={() => {
         activeTab = 'curriculum';
         updateUrl();

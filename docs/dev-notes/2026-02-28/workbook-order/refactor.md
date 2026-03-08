@@ -171,31 +171,31 @@ snippet を第一選択とする理由:
 
 ### 5.1 ページレイアウト（`+page.svelte`）
 
-- [ ] `ContainerWrapper` で囲む
-- [ ] ページタイトルを「問題集（並び替え）」に変更
-- [ ] 「ボードに問題集を追加」ボタン: 左寄せ、タイトル直下に配置
+- [x] `ContainerWrapper` で囲む
+- [x] ページタイトルを「問題集（並び替え）」に変更
+- [x] 「ボードに問題集を追加」ボタン: 左寄せ、タイトル直下に配置
 
 ### 5.2 KanbanBoard の UI
 
-- [ ] タブ: ライトモードで背景色の塗りつぶしを除去
-- [ ] フォントサイズ拡大: タブラベル（解法別 / カリキュラム）、カテゴリ/グレードボタン
-- [ ] ボタン: 緑系統 + ホバー時に背景色を変更
+- [x] タブ: ライトモードで背景色の塗りつぶしを除去
+- [x] フォントサイズ拡大: タブラベル（解法別 / カリキュラム）、カテゴリ/グレードボタン
+- [x] ボタン: 緑系統 + ホバー時に背景色を変更
 
 ### 5.3 KanbanColumn の UI
 
-- [ ] フォントサイズ拡大: カラムラベル、カード数
-- [ ] ダークモード: カラム背景を識別可能にする
-- [ ] カード数が多い場合に縦方向スクロールバーを表示
+- [x] フォントサイズ拡大: カラムラベル、カード数
+- [x] ダークモード: カラム背景を識別可能にする
+- [x] カード数が多い場合に縦方向スクロールバーを表示
 
 ### 5.4 KanbanCard の UI
 
-- [ ] 問題集詳細ページへのリンクを追加（`/workbooks` と同様、既存リンクコンポーネントを使用）
-- [ ] 「未公開」バッジ → 赤色に変更
-- [ ] ホバー時: 枠線を緑系統に
+- [x] 問題集詳細ページへのリンクを追加（`/workbooks/{workBookId}` — ID で直接アクセス可能）
+- [x] 「未公開」バッジ → 赤色に変更
+- [x] ホバー時: 枠線を緑系統に
 
 ### 5.5 管理画面ナビゲーション
 
-- [ ] `navbar-links.ts` の「問題集」の下に「問題集（並び替え）」リンクを追加
+- [x] `navbar-links.ts` の「問題集」の下に「問題集（並び替え）」リンクを追加
 
 ---
 
@@ -315,6 +315,22 @@ Record キーは `createDroppable` の `id` と一致する必要がある。空
 seed 側で `addCurriculumPlacements` の引数型を明示的に書くと、service 側の `UnplacedCurriculumRow` と二重管理になる。`Parameters<typeof buildTasksByTaskId>[0]` を使うと service の型定義に追従でき、型の整合性が自動的に保たれる。
 
 ---
+
+### Flowbite Svelte の TabItem: `activeClass` / `inactiveClass`（単数形）
+
+`activeClasses` / `inactiveClasses`（複数形）は存在しない。正しいプロップ名は `activeClass` / `inactiveClass`。型エラーで即座に検出できるため、`pnpm check` を先に走らせてから続行するとよい。
+
+### `workbooks/[slug]` は整数 ID でも解決できる
+
+`getWorkbookWithAuthor(slug)` は `parseWorkBookId(slug)` でパースするため、数値 ID を文字列として渡せば `urlSlug` なしでも動作する。カンバンカードのリンクは `/workbooks/{workBookId}` で十分であり、`urlSlug` を `CardData` に追加する必要はなかった。
+
+### KanbanCard のリンクとドラッグの干渉を防ぐ
+
+`<a>` タグを DnD カード内に置くと、クリックイベントがドラッグに誤って伝播する場合がある。`onclick={(e) => e.stopPropagation()}` でリンクのクリックをカード側に伝えないことで干渉を防ぐ。
+
+### ContainerWrapper はカンバン等の全幅レイアウトに `defaultWidth="w-full"` が必要
+
+デフォルトは `w-5/6 lg:w-3/4` で幅が制限される。カンバンボードのように横スクロールが必要なページでは `defaultWidth="w-full"` を渡す。
 
 ## 出典
 

@@ -33,17 +33,19 @@
   use:attachDroppable
   class="min-w-64 w-64 shrink-0 rounded-lg p-3 flex flex-col gap-2"
   class:bg-gray-100={!droppable.isDropTarget}
-  class:dark:bg-gray-800={true}
+  class:dark:bg-gray-700={!droppable.isDropTarget}
   class:bg-gray-200={droppable.isDropTarget}
+  class:dark:bg-gray-600={droppable.isDropTarget}
 >
-  <h3 class="text-sm font-semibold text-gray-700 dark:text-gray-300 sticky top-0 pb-1">
+  <h3 class="text-base font-semibold text-gray-700 dark:text-gray-300 sticky top-0 pb-1">
     {label}
-    <span class="text-xs font-normal text-gray-500">({cards.length})</span>
+    <span class="text-sm font-normal text-gray-500">({cards.length})</span>
   </h3>
-  <div class="flex flex-col gap-2 min-h-12">
+  <div class="flex flex-col gap-2 min-h-12 overflow-y-auto max-h-[60vh]">
     {#each cards as card, i (card.id)}
       <KanbanCard
         placementId={card.id}
+        workBookId={card.workBookId}
         index={i}
         title={card.title}
         isPublished={card.isPublished}

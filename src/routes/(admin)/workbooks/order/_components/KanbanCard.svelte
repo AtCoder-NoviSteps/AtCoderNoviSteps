@@ -4,6 +4,7 @@
 
   interface Props {
     placementId: number;
+    workBookId: number;
     index: number;
     title: string;
     isPublished: boolean;
@@ -11,7 +12,7 @@
     group: string;
   }
 
-  let { placementId, index, title, isPublished, columnId, group }: Props = $props();
+  let { placementId, workBookId, index, title, isPublished, columnId, group }: Props = $props();
 
   const sortable = createSortable({
     get id() {
@@ -37,7 +38,14 @@
   class:opacity-50={sortable.isDragging}
 >
   {#if !isPublished}
-    <Badge color="gray" class="mb-1">未公開</Badge>
+    <Badge color="red" class="mb-1">未公開</Badge>
   {/if}
-  <p class="text-sm text-gray-900 dark:text-white font-medium">{title}</p>
+
+  <a
+    href="/workbooks/{workBookId}"
+    class="text-sm text-gray-900 dark:text-white font-medium hover:text-green-600 dark:hover:text-green-400"
+    onclick={(e) => e.stopPropagation()}
+  >
+    {title}
+  </a>
 </div>
