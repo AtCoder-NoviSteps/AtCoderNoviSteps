@@ -11,6 +11,42 @@
 
 ---
 
+Phase 1 〜 6 までのリファクタリングで判明した新たな修正点
+
+- [ ] ボタンや文字色は、`text-primary-700  dark:text-primary-500` を使う
+- [ ] #943 で、依然として省略した変数が使われているので、意味のある命名をする
+- [ ] src/routes/(admin)/workbooks/order/\_types/kanban.ts
+  - [ ] CardData は Card に、CardData[] は Cards 型 にリネーム
+- [ ] この他にも、配列のデータは複数形の型を定義して使用
+- [ ] src/routes/(admin)/workbooks/order/\_components/KanbanBoard.svelte などでは、まだ if 文の分岐が複数あるので、interface などを使って分岐地獄を減らす
+- [ ] 上記のファイルでは、まだ重複した記述があるので、snippet として括り出す
+- [ ] .svelte 定義されている型宣言や汎用処理は、\_types や \_utils に切り出し、単体テストを追加
+- [ ] +server.ts で未だに CRUD 処理が直書きされているので、services 層に切り出し、モックを使ったテストを書く
+  - [ ] src/routes/(admin)/workbooks/order/+server.ts
+    - [ ] POST で色々処理しているのでメソッドを分割
+  - [ ] src/routes/(admin)/workbooks/order/+page.server.ts
+- [ ] service 層で未だに巨大メソッドが分割されていないので、適切な粒度で切り出す
+  - [ ] initializeCurriculumPlacements
+- [ ] カテゴリやグレードのボタンとパネルの間の隙間をもう少し空ける
+- [ ] 問題のリンクで、既存のコンポーネントを使うようにして、下線が引かれた状態にする
+- [ ] 横幅が、問題集ページなどと同じになるように広げる（現状、若干狭い）
+- [ ] タブが潰れて余白がないので、「問題集」ページと同様にスタイルを合わせる
+- [ ] 未公開のラベルは、既存のコンポーネントを使う
+- [ ] HTTPレスポンスコードは、src/libの定数を使う
+- [ ] src/routes/(admin)/workbooks/order/+page.svelte で formの処理は snippet と切り出すのはどうか? 妥当性を判断して、必要なら実施
+- [ ] src/routes/(admin)/workbooks/order/\_components/KanbanCard.svelte の型定義が汚いので、責務の分割で小さな型を作って組み合わせる
+- [ ] src/routes/(admin)/workbooks/order/\_components/KanbanBoard.svelte
+  - [ ] コンポーネントがかなり肥大化しているので、責務の分割が必須
+  - [ ] type は /types へ移動してインポート
+  - [ ] buildSolutionItems と buildCurriculumItems がほぼ同じなので、共通化できる部分はメソッドとして切り出す
+  - [ ] onDragEnd が未だに巨大メソッドなので、責務の単位で分割 + /\_utils に切り出して単体テストを追加
+  - [ ] 上記以外にも、ts セクションで、/utils に切り出せるものは同様に
+  - [ ] TabItem と、ColumnSelector の 上にある <div class="mb-3"> は重複しているので、スニペットとして切り出す
+- [ ] seed.ts の addWorkBookPlacements() で 未だに CRUD が直書きされているので、service 層に移動させて、テストを追加
+- [ ] service 層以外では、CRUD 処理の直書きは禁止
+
+---
+
 ## Phase 1: 即効性のある修正（局所的・低リスク）
 
 ### 1.1 コメントを英語に統一
