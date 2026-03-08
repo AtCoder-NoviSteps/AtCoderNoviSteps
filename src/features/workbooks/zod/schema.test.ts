@@ -2,11 +2,8 @@ import { expect, test } from 'vitest';
 import { type ZodSchema } from 'zod';
 
 import { TaskGrade } from '$lib/types/task';
-import {
-  WorkBookType,
-  type WorkBookTasks,
-  SolutionCategory,
-} from '$features/workbooks/types/workbook';
+import { WorkBookType, type WorkBookTasks } from '$features/workbooks/types/workbook';
+import { SolutionCategory } from '$features/workbooks/types/workbook_placement';
 
 import { workBookSchema, workBookPlacementSchema } from '$features/workbooks/zod/schema';
 

@@ -1,8 +1,4 @@
-import type {
-  SolutionCategory as SolutionCategoryOrigin,
-  WorkBookType as WorkBookTypeOrigin,
-} from '@prisma/client';
-import type { TaskGrade } from '$lib/types/task';
+import type { WorkBookType as WorkBookTypeOrigin } from '@prisma/client';
 
 export type WorkBookBase = {
   title: string;
@@ -37,18 +33,6 @@ export interface WorkbookList extends WorkBookBase {
 
 export type WorkbooksList = WorkbookList[];
 
-// TODO: Extract other file as workbook placement.
-// Admin only: Used for ordering of workbooks (curriculums and solution)
-export type WorkBookPlacement = {
-  id: number;
-  workBookId: number;
-  taskGrade: TaskGrade | null;
-  solutionCategory: SolutionCategory | null;
-  priority: number;
-};
-
-export type WorkBookPlacements = WorkBookPlacement[];
-
 // HACK: enumを使うときは毎回書いているので、もっと簡略化できないか?
 export const WorkBookType: { [key in WorkBookTypeOrigin]: key } = {
   CREATED_BY_USER: 'CREATED_BY_USER', // (デフォルト) ユーザ作成: サービスの利用者がさまざまなコンセプトで作成
@@ -62,27 +46,6 @@ export const WorkBookType: { [key in WorkBookTypeOrigin]: key } = {
 
 // Re-exporting the original type with the original name.
 export type WorkBookType = WorkBookTypeOrigin;
-
-// Categories for solution placement.
-export const SolutionCategory: { [key in SolutionCategoryOrigin]: key } = {
-  PENDING: 'PENDING',
-  SEARCH_SIMULATION: 'SEARCH_SIMULATION',
-  DYNAMIC_PROGRAMMING: 'DYNAMIC_PROGRAMMING',
-  DATA_STRUCTURE: 'DATA_STRUCTURE',
-  GRAPH: 'GRAPH',
-  TREE: 'TREE',
-  NUMBER_THEORY: 'NUMBER_THEORY',
-  ALGEBRA: 'ALGEBRA',
-  COMBINATORICS: 'COMBINATORICS',
-  GAME: 'GAME',
-  STRING: 'STRING',
-  GEOMETRY: 'GEOMETRY',
-  OPTIMIZATION: 'OPTIMIZATION',
-  OTHERS: 'OTHERS',
-  ANALYSIS: 'ANALYSIS',
-} as const;
-
-export type SolutionCategory = SolutionCategoryOrigin;
 
 export type WorkBookTaskBase = {
   taskId: string;

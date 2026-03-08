@@ -18,9 +18,9 @@ async function validateAdminAccess(locals: App.Locals): Promise<void> {
     redirect(TEMPORARY_REDIRECT, LOGIN_PAGE);
   }
 
-  const user = await userService.getUser(session.user.username as string);
+  const user = await userService.getUser(session.user.username);
 
-  if (!isAdmin(user?.role as Roles)) {
+  if (!user || !isAdmin(user.role as Roles)) {
     redirect(TEMPORARY_REDIRECT, LOGIN_PAGE);
   }
 }
@@ -35,7 +35,7 @@ export async function POST({ request, locals }: RequestEvent) {
     return json({ error: 'Invalid request body' }, { status: 400 });
   }
 
-  // サーバー側バリデーション: CURRICULUM↔SOLUTION 間移動禁止
+  // Server-side validation: prevent cross-type movement between CURRICULUM and SOLUTION
   for (const update of parsed.data.updates) {
     const existing = await prisma.workBookPlacement.findUnique({
       where: { id: update.id },
@@ -43,7 +43,7 @@ export async function POST({ request, locals }: RequestEvent) {
     });
 
     if (!existing) {
-      return json({ error: `placement id=${update.id} が存在しません` }, { status: 400 });
+      return json({ error: `placement id=${update.id} does not exist` }, { status: 400 });
     }
 
     const isCurriculumToSolution =
@@ -52,7 +52,7 @@ export async function POST({ request, locals }: RequestEvent) {
       existing.workBook.workBookType === 'SOLUTION' && update.taskGrade !== null;
 
     if (isCurriculumToSolution || isSolutionToCurriculum) {
-      return json({ error: 'CURRICULUM と SOLUTION 間の移動は禁止されています' }, { status: 400 });
+      return json({ error: 'Moving between CURRICULUM and SOLUTION is not allowed' }, { status: 400 });
     }
   }
 

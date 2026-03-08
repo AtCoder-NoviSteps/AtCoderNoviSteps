@@ -5,7 +5,8 @@
 import { z } from 'zod';
 
 import { TaskGrade } from '$lib/types/task';
-import { WorkBookType, SolutionCategory } from '$features/workbooks/types/workbook';
+import { WorkBookType } from '$features/workbooks/types/workbook';
+import { SolutionCategory } from '$features/workbooks/types/workbook_placement';
 
 import { isValidUrl, isValidUrlSlug } from '$lib/utils/url';
 

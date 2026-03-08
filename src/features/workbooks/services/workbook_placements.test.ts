@@ -1,7 +1,10 @@
 import { describe, test, expect, vi, beforeEach } from 'vitest';
 
 import { TaskGrade } from '$lib/types/task';
-import { SolutionCategory } from '$features/workbooks/types/workbook';
+import {
+  SolutionCategory,
+  type WorkBookPlacements,
+} from '$features/workbooks/types/workbook_placement';
 
 import {
   getWorkBookPlacements,
@@ -28,11 +31,13 @@ beforeEach(() => {
 
 describe('getWorkBookPlacements', () => {
   test('returns placements of type CURRICULUM', async () => {
-    const mockPlacements = [
-      { id: 1, workBookId: 1, taskGrade: 'Q10', solutionCategory: null, priority: 1 },
-      { id: 2, workBookId: 2, taskGrade: 'Q9', solutionCategory: null, priority: 1 },
+    const mockPlacements: WorkBookPlacements = [
+      { id: 1, workBookId: 1, taskGrade: TaskGrade.Q10, solutionCategory: null, priority: 1 },
+      { id: 2, workBookId: 2, taskGrade: TaskGrade.Q9, solutionCategory: null, priority: 1 },
     ];
-    vi.mocked(prisma.workBookPlacement.findMany).mockResolvedValue(mockPlacements as never);
+    vi.mocked(prisma.workBookPlacement.findMany).mockResolvedValue(
+      mockPlacements as unknown as Awaited<ReturnType<typeof prisma.workBookPlacement.findMany>>,
+    );
 
     const result = await getWorkBookPlacements('CURRICULUM');
 
@@ -45,10 +50,12 @@ describe('getWorkBookPlacements', () => {
   });
 
   test('returns placements of type SOLUTION', async () => {
-    const mockPlacements = [
-      { id: 3, workBookId: 3, taskGrade: null, solutionCategory: 'GRAPH', priority: 1 },
+    const mockPlacements: WorkBookPlacements = [
+      { id: 3, workBookId: 3, taskGrade: null, solutionCategory: SolutionCategory.GRAPH, priority: 1 },
     ];
-    vi.mocked(prisma.workBookPlacement.findMany).mockResolvedValue(mockPlacements as never);
+    vi.mocked(prisma.workBookPlacement.findMany).mockResolvedValue(
+      mockPlacements as unknown as Awaited<ReturnType<typeof prisma.workBookPlacement.findMany>>,
+    );
 
     const result = await getWorkBookPlacements('SOLUTION');
 
@@ -83,10 +90,10 @@ describe('upsertWorkBookPlacements', () => {
 describe('initializeSolutionPlacements', () => {
   test('initializes all workbooks with PENDING', () => {
     const workbooks = [
-      { id: 1, title: '解法別A' },
-      { id: 2, title: '解法別B' },
+      { id: 1 },
+      { id: 2 },
     ];
-    const result = initializeSolutionPlacements(workbooks as never);
+    const result = initializeSolutionPlacements(workbooks);
 
     expect(result).toHaveLength(2);
     expect(result[0]).toMatchObject({
@@ -160,7 +167,7 @@ describe('initializeCurriculumPlacements', () => {
       },
     ];
 
-    const result = initializeCurriculumPlacements(workbooks as never, tasksByTaskId as never);
+    const result = initializeCurriculumPlacements(workbooks, tasksByTaskId);
 
     // id:5 → Q9 priority:1, id:7 → Q10 priority:1, id:10 → Q10 priority:2
     const byWorkBookId = new Map(result.map((r) => [r.workBookId, r]));
@@ -172,7 +179,7 @@ describe('initializeCurriculumPlacements', () => {
   test('initializes workbook with no tasks as PENDING', () => {
     const tasksByTaskId = new Map();
     const workbooks = [{ id: 1, workBookTasks: [] }];
-    const result = initializeCurriculumPlacements(workbooks as never, tasksByTaskId as never);
+    const result = initializeCurriculumPlacements(workbooks, tasksByTaskId);
     expect(result[0]).toMatchObject({ workBookId: 1, taskGrade: TaskGrade.PENDING, priority: 1 });
   });
 

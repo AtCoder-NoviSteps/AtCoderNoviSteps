@@ -8,7 +8,7 @@ import type {
   WorkBookTasksEdit,
 } from '$features/workbooks/types/workbook';
 
-// Note: アプリの表示上、内部処理とも0-indexed
+// Note: 0-indexed for both display and internal use
 export function generateWorkBookTaskOrders(workBookTaskCount: number) {
   return Array.from({ length: workBookTaskCount + 1 }, (_, index) => ({
     name: index,
@@ -18,7 +18,7 @@ export function generateWorkBookTaskOrders(workBookTaskCount: number) {
 
 export const PENDING = -1;
 
-// Note: 初期値として、便宜的に割り当てている。随時、変更可能。
+// Note: Convenience default value; can be changed at any time.
 export const NO_COMMENT = '';
 
 export function addTaskToWorkBook(
@@ -27,14 +27,14 @@ export function addTaskToWorkBook(
   workBookTasksForTable: WorkBookTasksCreate | WorkBookTasksEdit,
   newWorkBookTaskIndex: number,
 ) {
-  // データベース用
+  // For database
   const updatedWorkBookTasks = updateWorkBookTasks(
     workBookTasks,
     newWorkBookTaskIndex,
     selectedTask,
   );
 
-  // アプリの表示用
+  // For display
   const updatedWorkBookTasksForTable: WorkBookTasksCreate | WorkBookTasksEdit =
     updateWorkBookTaskForTable(workBookTasksForTable, newWorkBookTaskIndex, selectedTask);
 
@@ -48,7 +48,7 @@ export function updateWorkBookTasks(
 ): WorkBookTasksBase {
   const newWorkBookTask: WorkBookTaskBase = {
     taskId: selectedTask.task_id,
-    priority: PENDING, // 1に近いほど優先度が高い
+    priority: PENDING, // Lower value = higher priority
     comment: NO_COMMENT,
   };
   let updatedWorkBookTasks: WorkBookTasksBase = insertTaskToWorkBook(
@@ -73,7 +73,7 @@ export function updateWorkBookTaskForTable(
     priority: PENDING,
     comment: NO_COMMENT,
   };
-  // HACK: オーバーロードを定義しているにもかかわらず戻り値の型がWorkBookTasksBaseになってしまうため、やむを得ずキャスト
+  // HACK: Cast required despite overloads - TypeScript infers WorkBookTasksBase as the return type
   let updatedWorkBookTasksForTable: WorkBookTasksCreate | WorkBookTasksEdit = insertTaskToWorkBook(
     workBookTasksForTable,
     selectedIndex,
@@ -86,7 +86,7 @@ export function updateWorkBookTaskForTable(
   return updatedWorkBookTasksForTable;
 }
 
-// 関数のオーバーロードを定義
+// Function overloads
 function insertTaskToWorkBook(
   workBookTasks: WorkBookTasksBase,
   selectedIndex: number,
@@ -107,9 +107,7 @@ function insertTaskToWorkBook(
   selectedIndex: number,
   newWorkBookTask: WorkBookTaskBase | WorkBookTaskCreate | WorkBookTaskEdit,
 ): WorkBookTasksBase | WorkBookTasksCreate | WorkBookTasksEdit {
-  // 範囲外のインデックスを指定された場合の仕様
-  // 負の値: 先頭に追加
-  // 元の配列よりも大きな値: 末尾に追加
+  // Out-of-bounds behavior: negative index → prepend; index > length → append
   if (selectedIndex < 0) {
     selectedIndex = 0;
   } else if (selectedIndex > workBookTasks.length) {

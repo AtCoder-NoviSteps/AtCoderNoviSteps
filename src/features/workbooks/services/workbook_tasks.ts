@@ -1,21 +1,11 @@
-import type {
-  WorkBook,
-  WorkBookTaskBase,
-  WorkBookTasksBase,
-} from '$features/workbooks/types/workbook';
+import type { WorkBook, WorkBookTasksBase } from '$features/workbooks/types/workbook';
 
-export async function getWorkBookTasks(workBook: Omit<WorkBook, 'id'>): Promise<WorkBookTasksBase> {
-  const workBookTasks: WorkBookTasksBase = await Promise.all(
-    workBook.workBookTasks.map(async (workBookTask: WorkBookTaskBase) => {
-      return {
-        taskId: workBookTask.taskId,
-        priority: workBookTask.priority,
-        comment: workBookTask.comment,
-      };
-    }),
-  );
-
-  return workBookTasks;
+export function getWorkBookTasks(workBook: Omit<WorkBook, 'id'>): WorkBookTasksBase {
+  return workBook.workBookTasks.map((workBookTask) => ({
+    taskId: workBookTask.taskId,
+    priority: workBookTask.priority,
+    comment: workBookTask.comment,
+  }));
 }
 
 export function validateRequiredFields(workBookTasks: WorkBookTasksBase): void {

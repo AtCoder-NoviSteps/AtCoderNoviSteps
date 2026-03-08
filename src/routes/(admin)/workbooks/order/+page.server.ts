@@ -20,9 +20,9 @@ async function validateAdminAccess(locals: App.Locals): Promise<void> {
     redirect(TEMPORARY_REDIRECT, LOGIN_PAGE);
   }
 
-  const user = await userService.getUser(session?.user.username as string);
+  const user = await userService.getUser(session.user.username);
 
-  if (!isAdmin(user?.role as Roles)) {
+  if (!user || !isAdmin(user.role as Roles)) {
     redirect(TEMPORARY_REDIRECT, LOGIN_PAGE);
   }
 }
@@ -48,8 +48,7 @@ export const actions: Actions = {
   initializePlacements: async ({ locals }) => {
     await validateAdminAccess(locals);
 
-    // FIXME: Move to service layer or extract method for easier understanding.
-    // 未配置の workbook を type 別に取得
+    // TODO: Move to service layer.
     const unplacedCurriculum = await prisma.workBook.findMany({
       where: { workBookType: 'CURRICULUM', placement: null },
       include: {
@@ -60,7 +59,6 @@ export const actions: Actions = {
       orderBy: { id: 'asc' },
     });
 
-    // TODO: Move service layer or extract method for easier understanding.
     const unplacedSolution = await prisma.workBook.findMany({
       where: { workBookType: 'SOLUTION', placement: null },
       orderBy: { id: 'asc' },
@@ -70,7 +68,7 @@ export const actions: Actions = {
       return { success: true };
     }
 
-    // CURRICULUM: タスクの最頻値グレードで初期配置
+    // CURRICULUM: Assign initial grade placement based on the mode grade of tasks
     const tasksByTaskId = new Map<string, Task>();
 
     for (const wb of unplacedCurriculum) {

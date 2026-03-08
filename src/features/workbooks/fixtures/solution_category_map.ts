@@ -1,4 +1,4 @@
-import type { SolutionCategory } from '$features/workbooks/types/workbook';
+import type { SolutionCategory } from '$features/workbooks/types/workbook_placement';
 
 /**
  * urlSlug → SolutionCategory マッピング（シードデータ用）

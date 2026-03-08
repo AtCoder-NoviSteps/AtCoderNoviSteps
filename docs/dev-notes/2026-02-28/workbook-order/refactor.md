@@ -15,39 +15,39 @@
 
 ### 1.1 コメントを英語に統一
 
-- [ ] `KanbanBoard.svelte`: 日本語コメントをすべて英語化
-- [ ] `+page.server.ts`: 同上
-- [ ] `+server.ts`: コメントとエラーメッセージを英語化（管理者専用画面のため英語のみで十分）
-- [ ] `workbook_placements.ts`（service）: 残存する日本語コメント
-- [ ] `workbook_tasks.ts`（utils）: 日本語コメント
+- [x] `KanbanBoard.svelte`: 日本語コメントをすべて英語化
+- [x] `+page.server.ts`: 同上
+- [x] `+server.ts`: コメントとエラーメッセージを英語化（管理者専用画面のため英語のみで十分）
+- [x] `workbook_placements.ts`（service）: 残存する日本語コメント
+- [x] `workbook_tasks.ts`（utils）: 日本語コメント
 
 ### 1.2 省略された変数名 → 明示的な命名
 
-- [ ] `KanbanBoard.svelte`: `([k]) =>` → `([category]) =>`、`(c) =>` → `(card) =>` など
-- [ ] `ColumnSelector.svelte`: `(v) =>` → `(value) =>`、`opt` → `option`
-- [ ] `selectedSolutionCols` の filter `(c)` → `(category)`、`selectedGrades` の filter `(g)` → `(grade)`
+- [x] `KanbanBoard.svelte`: `([k]) =>` → `([category]) =>`、`(c) =>` → `(card) =>` など
+- [x] `ColumnSelector.svelte`: `(v) =>` → `(item) =>`、`opt` → `option`
+- [x] `selectedSolutionCols` の filter `(c)` → `(category)`、`selectedGrades` の filter `(g)` → `(grade)`
 
 ### 1.3 デバッグコードの削除
 
-- [ ] `src/features/workbooks/services/workbooks.ts:183` — `console.log(await getWorkBook(workBookId))` を削除
+- [x] `src/features/workbooks/services/workbooks.ts:183` — `console.log(await getWorkBook(workBookId))` を削除
 
 ### 1.4 不要な async の除去
 
-- [ ] `src/features/workbooks/services/workbook_tasks.ts` — `getWorkBookTasks` から `async` / `await Promise.all` を除去（同期的な map のみで async 処理なし）
-- [ ] 呼び出し元 `workbooks.ts:118` と `workbooks.ts:162` から `await` を除去
+- [x] `src/features/workbooks/services/workbook_tasks.ts` — `getWorkBookTasks` から `async` / `await Promise.all` を除去（同期的な map のみで async 処理なし）
+- [x] 呼び出し元 `workbooks.ts:118` と `workbooks.ts:162` から `await` を除去
 
 ### 1.5 配色: 青系統 → 緑系統（default）
 
-- [ ] `+page.svelte`: `bg-blue-600 hover:bg-blue-700` → 緑系統
-- [ ] `KanbanCard.svelte`: `hover:border-blue-400` → 緑系統
-- [ ] `ColumnSelector.svelte`: `bg-blue-600 border-blue-600` → 緑系統
+- [x] `+page.svelte`: `bg-blue-600 hover:bg-blue-700` → 緑系統
+- [x] `KanbanCard.svelte`: `hover:border-blue-400` → 緑系統
+- [x] `ColumnSelector.svelte`: `bg-blue-600 border-blue-600` → 緑系統
 
 ### 1.6 ColumnSelector の改善
 
-- [ ] `minSelect` → `minRequired` にリネーム（意図が明確になる）
-- [ ] 下限の設定根拠を英語コメントで明記: "Minimum columns required for drag-and-drop to function"
-- [ ] button の `class` 属性を簡潔に記述
-- [ ] `{@const}` で `option.value` の繰り返し参照を削減できるか評価 → 有効なら適用
+- [x] `minSelect` → `minRequired` にリネーム（意図が明確になる）
+- [x] 下限の設定根拠を英語コメントで明記: "Minimum columns required for drag-and-drop to function"
+- [x] button の `class` 属性を簡潔に記述（`{@const isSelected}` + 三項演算子 class 文字列に統合）
+- [x] `{@const}` で `option.value` の繰り返し参照を削減 → `isSelected` に適用
 
 ---
 
@@ -55,29 +55,28 @@
 
 ### 2.1 `src/features/workbooks/types/workbook_placement.ts` を作成
 
-- [ ] `workbook.ts` から `WorkBookPlacement` 関連の型を抽出
-- [ ] `SolutionCategory` 定数 + 型をこのファイルに移動
-- [ ] `SOLUTION_LABELS` を `KanbanBoard.svelte` からこのファイルに移動（日本語ラベルはそのまま）
-- [ ] `WorkBookPlacements`（配列型）を定義し、service/コンポーネントで使用
-- [ ] 全 import パスを更新
+- [x] `workbook.ts` から `WorkBookPlacement` 関連の型を抽出
+- [x] `SolutionCategory` 定数 + 型をこのファイルに移動
+- [x] `SOLUTION_LABELS` を `KanbanBoard.svelte` からこのファイルに移動（日本語ラベルはそのまま）
+- [x] `WorkBookPlacements`（配列型）を定義し、service/コンポーネントで使用
+- [x] 全 import パスを更新（6ファイル: services, zod, fixtures, test, KanbanBoard）
 
 ### 2.2 `GRADE_LABELS` を `getTaskGradeLabel()` で置換
 
-- [ ] `KanbanBoard.svelte`: `GRADE_LABELS` オブジェクトを削除し、`$lib/utils/task.ts` の `getTaskGradeLabel()` を使用
-- [ ] `GRADE_OPTIONS` を `TaskGrade` + `getTaskGradeLabel()` から動的に生成
+- [x] `KanbanBoard.svelte`: `GRADE_LABELS` オブジェクトを削除し、`$lib/utils/task.ts` の `getTaskGradeLabel()` を使用
+- [x] `GRADE_OPTIONS` を `TaskGrade` + `getTaskGradeLabel()` から動的に生成
 
 ### 2.3 `as never` / 型アサーションの排除
 
-- [ ] `workbook_placements.test.ts`: `as never` を seed データパターンに基づく適切な型付きモックデータに置換
-- [ ] `+page.server.ts`: `session?.user.username as string` → null チェック後にナロイング
-- [ ] `+server.ts`: 同上
-- [ ] service 層: 関数シグネチャを整合させ、呼び出し側で `as never` が不要になるようにする
+- [x] `workbook_placements.test.ts`: `as never` を `WorkBookPlacements` 型付きモックデータに置換
+- [x] `+page.server.ts`: `session?.user.username as string` → null チェック後にナロイング + `as string` 削除
+- [x] `+server.ts`: 同上
+- [x] テスト: `initializeSolutionPlacements(workbooks as never)` → キャスト削除（型が構造的に互換）
 
 ### 2.4 インライン型 → 共有型へ移動
 
-- [ ] `KanbanBoard.svelte` の `CardData`, `WorkbookWithPlacement` を適切な場所に移動
-  - `CardData`: カンバン固有 → `_types/kanban.ts`
-  - `WorkbookWithPlacement`: `+page.server.ts` の load でも使用 → `workbook_placements.ts`
+- [x] `KanbanBoard.svelte` の `CardData` を `_types/kanban.ts` に移動
+- [x] `WorkbookWithPlacement` を `workbook_placement.ts` に追加、KanbanBoard.svelte から削除
 
 ---
 
@@ -203,9 +202,9 @@ snippet を第一選択とする理由:
 
 ### 6.1 単体テストの修正（`workbook_placements.test.ts`）
 
-- [ ] モックデータを `prisma/seed.ts` のフィクスチャに基づく意味のある値に置換
-- [ ] `as never` を適切な型付きテストデータに置換
-- [ ] `taskGrade` に文字列リテラルではなく `TaskGrade` 列挙を使用
+- [x] `as never` を適切な型付きテストデータに置換（Phase 2.3 で実施）
+- [x] `taskGrade` に文字列リテラルではなく `TaskGrade` 列挙を使用
+- [ ] モックデータを `prisma/seed.ts` のフィクスチャに基づくより意味のある値に拡充
 - [ ] `taskGrade` と `solutionCategory` が混在するシナリオのテストを追加
 - [ ] `solutionCategory` 固有のテストを追加
 
@@ -247,16 +246,33 @@ snippet を第一選択とする理由:
 
 ### 7.2 教訓
 
-- [ ] このリファクタリングで得た知見を記録（実装中に加筆）
-  - dnd-kit のフラット配列 vs Record によるカラム間ソートの違い
-  - validateAdminAccess 共有ガードパターン
-  - seed / service 層の重複排除
+- [x] このリファクタリングで得た知見を記録（下記「教訓」セクションを参照）
 
 ### 7.3 Claude Code の自律的な修正に向けた基盤作り（保留 — rules/subagents/skills/custom commands の調査待ち）
 
 - [ ] Claude Code の拡張ポイントを調査: `.claude/rules/`, subagents, custom commands, skills
 - [ ] それぞれの適切な抽象度を判定
 - [ ] このリファクタリングで特定された繰り返しパターンに対する rules/自動化を作成
+
+---
+
+## 教訓（Phase 1-2 完了時点）
+
+### Prisma enum と アプリ enum の型不一致
+
+`user.role` は Prisma 生成型 (`$Enums.Roles`)、`isAdmin()` は `$lib/types/user` の `Roles` enum を期待する。構造が同じでも TypeScript は別型として扱う。null ガードで `as Roles` キャストを除去できても enum 同士の不一致は残るため、キャストが必要な箇所は残した。
+
+### `as never` の正しい置換方法
+
+Prisma の `findMany` 戻り値型は複雑で、アプリ内の単純な型とは一致しない。`as never` の代替として `as unknown as Awaited<ReturnType<typeof prisma.xxx.findMany>>` を使うと型安全性が上がる。関数引数の `as never` は構造的部分型付けで除去できることが多い（余剰プロパティは変数経由なら許容される）。
+
+### `{@const}` で repeated expression を削減
+
+Svelte の `{#each}` ブロック内で `opt.value` を `selected.includes(opt.value)` などで複数回参照する場合、`{@const isSelected = selected.includes(option.value)}` で単一評価にまとめると DRY になる。さらに class 属性を三項演算子の文字列で記述すると `class:xxx=` ディレクティブの羅列より簡潔になる。
+
+### enum を型ガードに使う場合の注意
+
+`g in GRADE_LABELS`（Record）から `grade in TaskGrade` へ移行する際、TaskGrade には `PENDING` が含まれるため `grade !== 'PENDING'` の追加フィルタが必要。
 
 ---
 

@@ -8,40 +8,34 @@
     options: Option[];
     selected: string[];
     onchange: (selected: string[]) => void;
-    minSelect?: number;
+    minRequired?: number;
   }
 
-  let { options, selected, onchange, minSelect = 2 }: Props = $props();
+  // Minimum columns required for drag-and-drop to function
+  let { options, selected, onchange, minRequired = 2 }: Props = $props();
 
   function toggle(value: string) {
     const next = selected.includes(value)
-      ? selected.filter((v) => v !== value)
+      ? selected.filter((item) => item !== value)
       : [...selected, value];
 
-    // 下限制約: minSelect 未満にはさせない
-    if (next.length < minSelect) return;
+    if (next.length < minRequired) return;
 
     onchange(next);
   }
 </script>
 
 <div class="flex flex-wrap gap-2">
-  {#each options as opt}
+  {#each options as option}
+    {@const isSelected = selected.includes(option.value)}
     <button
       type="button"
-      onclick={() => toggle(opt.value)}
-      class="px-3 py-1 rounded-full text-xs font-medium border transition-colors"
-      class:bg-blue-600={selected.includes(opt.value)}
-      class:text-white={selected.includes(opt.value)}
-      class:border-blue-600={selected.includes(opt.value)}
-      class:bg-white={!selected.includes(opt.value)}
-      class:dark:bg-gray-700={!selected.includes(opt.value)}
-      class:text-gray-700={!selected.includes(opt.value)}
-      class:dark:text-gray-300={!selected.includes(opt.value)}
-      class:border-gray-300={!selected.includes(opt.value)}
-      class:dark:border-gray-600={!selected.includes(opt.value)}
+      onclick={() => toggle(option.value)}
+      class="px-3 py-1 rounded-full text-xs font-medium border transition-colors {isSelected
+        ? 'bg-green-600 text-white border-green-600'
+        : 'bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 border-gray-300 dark:border-gray-600'}"
     >
-      {opt.label}
+      {option.label}
     </button>
   {/each}
 </div>

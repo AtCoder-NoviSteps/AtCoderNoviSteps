@@ -1,19 +1,19 @@
 import prisma from '$lib/server/database';
 
 import { type Task, type TaskGrade } from '$lib/types/task';
+import type { WorkbooksList } from '$features/workbooks/types/workbook';
 import {
   SolutionCategory,
   type WorkBookPlacement,
   type WorkBookPlacements,
-  type WorkbooksList,
-} from '$features/workbooks/types/workbook';
+} from '$features/workbooks/types/workbook_placement';
 
 import { calcWorkBookGradeModes } from '$features/workbooks/utils/workbooks';
 
-// TODO: Extract types as other file as workbook placement.
+// TODO: Extract to types/workbook_placement.ts
 type PlacementInput = Pick<WorkBookPlacement, 'id' | 'priority' | 'taskGrade' | 'solutionCategory'>;
 
-// TODO: Use WorkBookTaskBase as workBookTasks
+// TODO: Use WorkBookTaskBase for workBookTasks
 type WorkBookWithTasks = {
   id: number;
   workBookTasks: { taskId: string; priority: number; comment: string }[];
@@ -63,7 +63,7 @@ export function initializeSolutionPlacements(workbooks: { id: number }[]): Place
   }));
 }
 
-// TODO: Extract sub methods to understand easier.
+// TODO: Extract into sub-methods for clarity.
 export function initializeCurriculumPlacements(
   workbooks: WorkBookWithTasks[],
   tasksByTaskId: Map<string, Task>,
