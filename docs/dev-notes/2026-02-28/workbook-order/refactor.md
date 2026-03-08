@@ -290,6 +290,8 @@ Record キーは `createDroppable` の `id` と一致する必要がある。空
 ### Record ベースの状態管理での `CardData` 簡素化
 
 フラット配列では `solutionCategory`、`taskGrade`、`priority` を CardData に持つ必要があった。Record ベースでは:
+
+
 - カラム割り当て = Record キー（暗黙的）
 - 優先度 = 配列インデックス（暗黙的）
 - サーバ更新時のカラム情報 = Record エントリのイテレーションで取得
