@@ -7,6 +7,15 @@ type DndEvents = DragDropEvents<Draggable, Droppable, DragDropManager>;
 export type DragOverEventArg = Parameters<DndEvents['dragover']>[0];
 export type DragEndEventArg = Parameters<DndEvents['dragend']>[0];
 
+export type ActiveTab = 'solution' | 'curriculum';
+
+// Static per-tab configuration used to eliminate activeTab === 'solution' if-branches
+export type TabConfig = {
+  labelFn: (column: string) => string;
+  group: string;
+  columnKey: 'solutionCategory' | 'taskGrade';
+};
+
 export type KanbanColumns = Record<string, Cards>;
 
 // Placement update sent to the server after a drag-and-drop operation

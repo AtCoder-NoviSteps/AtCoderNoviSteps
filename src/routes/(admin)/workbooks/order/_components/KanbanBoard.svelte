@@ -1,6 +1,7 @@
 <script lang="ts">
   import { page } from '$app/stores';
   import { replaceState } from '$app/navigation';
+  import { untrack } from 'svelte';
 
   import type { Snippet } from 'svelte';
 
@@ -20,13 +21,15 @@
     KanbanColumns,
     DragOverEventArg,
     DragEndEventArg,
-    PlacementUpdate,
+    ActiveTab,
+    TabConfig,
   } from '../_types/kanban';
 
   import KanbanColumn from './KanbanColumn.svelte';
   import ColumnSelector from './ColumnSelector.svelte';
 
   import { getTaskGradeLabel } from '$lib/utils/task';
+  import { buildKanbanItems, calcPriorityUpdates, saveUpdates } from '../_utils/kanban';
 
   const SOLUTION_CATEGORY_OPTIONS = Object.entries(SolutionCategory)
     .filter(([category]) => category !== 'PENDING')
@@ -47,7 +50,7 @@
     return $page.url.searchParams.get(key);
   }
 
-  let activeTab = $state(getParam('tab') === 'curriculum' ? 'curriculum' : 'solution');
+  let activeTab = $state<ActiveTab>(getParam('tab') === 'curriculum' ? 'curriculum' : 'solution');
   let selectedSolutionCols = $state(
     (getParam('categories')?.split(',').filter(Boolean) ?? ['PENDING', 'GRAPH']).filter(
       (category) => category in SolutionCategory,
@@ -75,126 +78,66 @@
     replaceState(url, {});
   }
 
-  // Build Record-based items grouped by column key
-  function buildSolutionItems(): KanbanColumns {
-    const record: KanbanColumns = {};
+  // Per-tab static configuration; eliminates activeTab === 'solution' branches in DnD handlers
+  const tabConfigs: Record<string, TabConfig> = {
+    solution: {
+      labelFn: (column) => SOLUTION_LABELS[column] ?? column,
+      group: 'solution',
+      columnKey: 'solutionCategory',
+    },
+    curriculum: {
+      labelFn: getTaskGradeLabel,
+      group: 'curriculum',
+      columnKey: 'taskGrade',
+    },
+  };
 
-    for (const key of Object.keys(SolutionCategory)) {
-      record[key] = [];
-    }
+  let allItems = $state<Record<string, KanbanColumns>>(
+    untrack(() => ({
+      solution: buildKanbanItems(
+        workbooks,
+        Object.keys(SolutionCategory),
+        (workbook) => workbook.placement?.solutionCategory ?? null,
+      ),
+      curriculum: buildKanbanItems(
+        workbooks,
+        Object.keys(TaskGrade),
+        (workbook) => workbook.placement?.taskGrade ?? null,
+      ),
+    })),
+  );
 
-    workbooks
-      .filter(
-        (workbook) => workbook.placement !== null && workbook.placement.solutionCategory !== null,
-      )
-      .sort((workbookA, workbookB) => workbookA.placement!.priority - workbookB.placement!.priority)
-      .forEach((workbook) => {
-        const col = workbook.placement!.solutionCategory!;
-        record[col].push({
-          id: workbook.placement!.id,
-          workBookId: workbook.id,
-          title: workbook.title,
-          isPublished: workbook.isPublished,
-        });
-      });
-
-    return record;
-  }
-
-  function buildCurriculumItems(): KanbanColumns {
-    const record: KanbanColumns = {};
-
-    for (const key of Object.keys(TaskGrade)) {
-      record[key] = [];
-    }
-
-    workbooks
-      .filter((workbook) => workbook.placement !== null && workbook.placement.taskGrade !== null)
-      .sort((workbookA, workbookB) => workbookA.placement!.priority - workbookB.placement!.priority)
-      .forEach((workbook) => {
-        const col = workbook.placement!.taskGrade!;
-        record[col].push({
-          id: workbook.placement!.id,
-          workBookId: workbook.id,
-          title: workbook.title,
-          isPublished: workbook.isPublished,
-        });
-      });
-
-    return record;
-  }
-
-  let solutionItems = $state<KanbanColumns>(buildSolutionItems());
-  let curriculumItems = $state<KanbanColumns>(buildCurriculumItems());
   let snapshot: KanbanColumns | null = null;
   let errorMessage = $state<string | null>(null);
 
   // Drag-and-drop handlers
   function onDragStart() {
-    const items = activeTab === 'solution' ? solutionItems : curriculumItems;
-    snapshot = structuredClone($state.snapshot(items));
+    snapshot = structuredClone($state.snapshot(allItems[activeTab]));
   }
 
   function onDragOver(event: DragOverEventArg) {
-    if (activeTab === 'solution') {
-      solutionItems = move(solutionItems, event);
-    } else {
-      curriculumItems = move(curriculumItems, event);
-    }
+    allItems[activeTab] = move(allItems[activeTab], event);
   }
 
   async function onDragEnd(event: DragEndEventArg) {
-    const source = event.operation?.source;
-    const target = event.operation?.target;
-    if (!source || !target) return;
-
-    const currentItems = activeTab === 'solution' ? solutionItems : curriculumItems;
-
-    // Build updates for affected columns by comparing with snapshot
-    const updates: PlacementUpdate[] = [];
-
-    for (const [columnId, cards] of Object.entries(currentItems)) {
-      const snapCards = snapshot?.[columnId];
-      const changed =
-        !snapCards ||
-        cards.length !== snapCards.length ||
-        cards.some((card, i) => card.id !== snapCards[i]?.id);
-
-      if (changed) {
-        cards.forEach((card, i) => {
-          updates.push({
-            id: card.id,
-            priority: i + 1,
-            solutionCategory: activeTab === 'solution' ? columnId : null,
-            taskGrade: activeTab === 'curriculum' ? columnId : null,
-          });
-        });
-      }
+    if (!event.operation?.source || !event.operation?.target) {
+      return;
     }
+
+    const updates = calcPriorityUpdates(
+      snapshot ?? {},
+      allItems[activeTab],
+      tabConfigs[activeTab].columnKey,
+    );
 
     if (updates.length === 0) {
       return;
     }
 
     try {
-      const res = await fetch('/workbooks/order', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ updates }),
-      });
-
-      if (!res.ok) {
-        throw new Error('Failed to save');
-      }
+      await saveUpdates(updates);
     } catch {
-      // Roll back on error
-      if (snapshot) {
-        if (activeTab === 'solution') {
-          solutionItems = snapshot;
-        } else {
-          curriculumItems = snapshot;
-        }
-      }
+      if (snapshot) allItems[activeTab] = snapshot;
       errorMessage = '保存に失敗しました';
     } finally {
       snapshot = null;
@@ -206,10 +149,6 @@
     'PENDING',
     ...selectedSolutionCols.filter((category) => category !== 'PENDING'),
   ]);
-
-  function getSolutionLabel(column: string): string {
-    return SOLUTION_LABELS[column] ?? column;
-  }
 </script>
 
 {#if errorMessage}
@@ -235,7 +174,7 @@
     activeClass="text-lg font-semibold text-primary-700 border-b-2 border-primary-700 dark:text-primary-500 dark:border-primary-500"
     inactiveClass="text-lg font-semibold text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
     onclick={() => {
-      activeTab = key;
+      activeTab = key as ActiveTab;
       updateUrl();
     }}
   >
@@ -255,7 +194,12 @@
     1,
   )}
 
-  {@render kanbanColumns(displayedSolutionCols, solutionItems, getSolutionLabel, 'solution')}
+  {@render kanbanColumns(
+    displayedSolutionCols,
+    allItems['solution'],
+    tabConfigs['solution'].labelFn,
+    'solution',
+  )}
 {/snippet}
 
 {#snippet curriculumContent()}
@@ -264,7 +208,12 @@
     updateUrl();
   })}
 
-  {@render kanbanColumns(selectedGrades, curriculumItems, getTaskGradeLabel, 'curriculum')}
+  {@render kanbanColumns(
+    selectedGrades,
+    allItems['curriculum'],
+    tabConfigs['curriculum'].labelFn,
+    'curriculum',
+  )}
 {/snippet}
 
 {#snippet tabHeader(
