@@ -1,19 +1,20 @@
 <script lang="ts">
   import { createSortable } from '@dnd-kit/svelte/sortable';
 
+  import type { Card, SortableProps } from '../_types/kanban';
+
   import PublicationStatusLabel from '$features/workbooks/components/shared/PublicationStatusLabel.svelte';
+  import WorkbookLink from '$features/workbooks/components/shared/WorkbookLink.svelte';
 
-  interface Props {
-    placementId: number;
-    workBookId: number;
-    index: number;
-    title: string;
-    isPublished: boolean;
-    columnId: string;
-    group: string;
-  }
-
-  let { placementId, workBookId, index, title, isPublished, columnId, group }: Props = $props();
+  let {
+    id: placementId,
+    workBookId,
+    title,
+    isPublished,
+    columnId,
+    group,
+    index,
+  }: Card & SortableProps = $props();
 
   const sortable = createSortable({
     get id() {
@@ -40,11 +41,5 @@
 >
   <PublicationStatusLabel {isPublished} />
 
-  <a
-    href="/workbooks/{workBookId}"
-    class="text-sm font-medium text-primary-700 dark:text-primary-500"
-    onclick={(e) => e.stopPropagation()}
-  >
-    {title}
-  </a>
+  <WorkbookLink {workBookId} {title} />
 </div>

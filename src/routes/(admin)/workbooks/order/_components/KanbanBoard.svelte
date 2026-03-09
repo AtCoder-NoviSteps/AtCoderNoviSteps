@@ -1,29 +1,28 @@
 <script lang="ts">
-  import { DragDropProvider } from '@dnd-kit/svelte';
-  import { move } from '@dnd-kit/helpers';
-  import type { DragDropManager, Draggable, Droppable } from '@dnd-kit/dom';
-  import type { DragDropEvents } from '@dnd-kit/abstract';
-
-  type DndEvents = DragDropEvents<Draggable, Droppable, DragDropManager>;
-  type DragOverEventArg = Parameters<DndEvents['dragover']>[0];
-  type DragEndEventArg = Parameters<DndEvents['dragend']>[0];
-
   import { page } from '$app/stores';
   import { replaceState } from '$app/navigation';
 
   import { TabItem, Tabs, Toast } from 'flowbite-svelte';
   import CircleX from '@lucide/svelte/icons/circle-x';
 
-  import KanbanColumn from './KanbanColumn.svelte';
-  import ColumnSelector from './ColumnSelector.svelte';
+  import { DragDropProvider } from '@dnd-kit/svelte';
+  import { move } from '@dnd-kit/helpers';
 
+  import { TaskGrade } from '$lib/types/task';
   import {
     SolutionCategory,
     SOLUTION_LABELS,
-    type WorkbookWithPlacement,
+    type WorkbooksWithPlacement,
   } from '$features/workbooks/types/workbook_placement';
-  import { TaskGrade } from '$lib/types/task';
-  import type { KanbanColumns } from '../_types/kanban';
+  import type {
+    KanbanColumns,
+    DragOverEventArg,
+    DragEndEventArg,
+    PlacementUpdate,
+  } from '../_types/kanban';
+
+  import KanbanColumn from './KanbanColumn.svelte';
+  import ColumnSelector from './ColumnSelector.svelte';
 
   import { getTaskGradeLabel } from '$lib/utils/task';
 
@@ -36,7 +35,7 @@
     .map((key) => ({ value: key, label: getTaskGradeLabel(key) }));
 
   interface Props {
-    workbooks: WorkbookWithPlacement[];
+    workbooks: WorkbooksWithPlacement;
   }
 
   let { workbooks }: Props = $props();
@@ -83,15 +82,17 @@
     }
 
     workbooks
-      .filter((wb) => wb.placement !== null && wb.placement.solutionCategory !== null)
-      .sort((a, b) => a.placement!.priority - b.placement!.priority)
-      .forEach((wb) => {
-        const col = wb.placement!.solutionCategory!;
+      .filter(
+        (workbook) => workbook.placement !== null && workbook.placement.solutionCategory !== null,
+      )
+      .sort((workbookA, workbookB) => workbookA.placement!.priority - workbookB.placement!.priority)
+      .forEach((workbook) => {
+        const col = workbook.placement!.solutionCategory!;
         record[col].push({
-          id: wb.placement!.id,
-          workBookId: wb.id,
-          title: wb.title,
-          isPublished: wb.isPublished,
+          id: workbook.placement!.id,
+          workBookId: workbook.id,
+          title: workbook.title,
+          isPublished: workbook.isPublished,
         });
       });
 
@@ -106,15 +107,15 @@
     }
 
     workbooks
-      .filter((wb) => wb.placement !== null && wb.placement.taskGrade !== null)
-      .sort((a, b) => a.placement!.priority - b.placement!.priority)
-      .forEach((wb) => {
-        const col = wb.placement!.taskGrade!;
+      .filter((workbook) => workbook.placement !== null && workbook.placement.taskGrade !== null)
+      .sort((workbookA, workbookB) => workbookA.placement!.priority - workbookB.placement!.priority)
+      .forEach((workbook) => {
+        const col = workbook.placement!.taskGrade!;
         record[col].push({
-          id: wb.placement!.id,
-          workBookId: wb.id,
-          title: wb.title,
-          isPublished: wb.isPublished,
+          id: workbook.placement!.id,
+          workBookId: workbook.id,
+          title: workbook.title,
+          isPublished: workbook.isPublished,
         });
       });
 
@@ -148,12 +149,7 @@
     const currentItems = activeTab === 'solution' ? solutionItems : curriculumItems;
 
     // Build updates for affected columns by comparing with snapshot
-    const updates: Array<{
-      id: number;
-      priority: number;
-      solutionCategory: string | null;
-      taskGrade: string | null;
-    }> = [];
+    const updates: PlacementUpdate[] = [];
 
     for (const [columnId, cards] of Object.entries(currentItems)) {
       const snapCards = snapshot?.[columnId];

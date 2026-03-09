@@ -43,15 +43,7 @@
   </h3>
   <div class="flex flex-col gap-2 min-h-12 overflow-y-auto max-h-[60vh]">
     {#each cards as card, i (card.id)}
-      <KanbanCard
-        placementId={card.id}
-        workBookId={card.workBookId}
-        index={i}
-        title={card.title}
-        isPublished={card.isPublished}
-        {columnId}
-        {group}
-      />
+      <KanbanCard {...card} index={i} {columnId} {group} />
     {/each}
   </div>
 </div>

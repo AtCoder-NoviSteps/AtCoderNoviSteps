@@ -81,3 +81,5 @@ export type WorkbookWithPlacement = {
   workBookType: string;
   placement: WorkBookPlacement | null;
 };
+
+export type WorkbooksWithPlacement = WorkbookWithPlacement[];
