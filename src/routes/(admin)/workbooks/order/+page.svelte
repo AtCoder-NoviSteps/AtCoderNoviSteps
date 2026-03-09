@@ -5,7 +5,7 @@
   let { data } = $props();
 </script>
 
-<ContainerWrapper defaultWidth="w-full">
+<ContainerWrapper defaultWidth="w-full" lgWidth="lg:w-full">
   <div class="w-full p-6">
     <h2 class="text-2xl font-extrabold dark:text-white mb-3">問題集（並び替え）</h2>
 

@@ -2,6 +2,8 @@
   import { page } from '$app/stores';
   import { replaceState } from '$app/navigation';
 
+  import type { Snippet } from 'svelte';
+
   import { TabItem, Tabs, Toast } from 'flowbite-svelte';
   import CircleX from '@lucide/svelte/icons/circle-x';
 
@@ -170,7 +172,9 @@
       }
     }
 
-    if (updates.length === 0) return;
+    if (updates.length === 0) {
+      return;
+    }
 
     try {
       const res = await fetch('/workbooks/order', {
@@ -208,6 +212,74 @@
   }
 </script>
 
+{#if errorMessage}
+  <Toast color="red" class="mb-4" onclose={() => (errorMessage = null)}>
+    {#snippet icon()}
+      <CircleX class="w-5 h-5" />
+    {/snippet}
+    {errorMessage}
+  </Toast>
+{/if}
+
+<DragDropProvider {onDragStart} {onDragOver} {onDragEnd}>
+  <Tabs style="underline" class="mb-4" contentClass="">
+    {@render tabItem('解法別', 'solution', solutionContent)}
+    {@render tabItem('カリキュラム', 'curriculum', curriculumContent)}
+  </Tabs>
+</DragDropProvider>
+
+{#snippet tabItem(title: string, key: string, content: Snippet)}
+  <TabItem
+    open={activeTab === key}
+    {title}
+    activeClass="text-lg font-semibold text-primary-700 border-b-2 border-primary-700 dark:text-primary-500 dark:border-primary-500"
+    inactiveClass="text-lg font-semibold text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+    onclick={() => {
+      activeTab = key;
+      updateUrl();
+    }}
+  >
+    {@render content()}
+  </TabItem>
+{/snippet}
+
+{#snippet solutionContent()}
+  {@render tabHeader(
+    '表示カテゴリ（2つ以上選択）:',
+    SOLUTION_CATEGORY_OPTIONS,
+    selectedSolutionCols.filter((category) => category !== 'PENDING'),
+    (selected) => {
+      selectedSolutionCols = selected;
+      updateUrl();
+    },
+    1,
+  )}
+
+  {@render kanbanColumns(displayedSolutionCols, solutionItems, getSolutionLabel, 'solution')}
+{/snippet}
+
+{#snippet curriculumContent()}
+  {@render tabHeader('表示グレード（2つ以上選択）:', GRADE_OPTIONS, selectedGrades, (selected) => {
+    selectedGrades = selected;
+    updateUrl();
+  })}
+
+  {@render kanbanColumns(selectedGrades, curriculumItems, getTaskGradeLabel, 'curriculum')}
+{/snippet}
+
+{#snippet tabHeader(
+  label: string,
+  options: { value: string; label: string }[],
+  selected: string[],
+  onchange: (selected: string[]) => void,
+  minRequired?: number,
+)}
+  <div class="mb-4">
+    <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">{label}</p>
+    <ColumnSelector {options} {selected} {onchange} {minRequired} />
+  </div>
+{/snippet}
+
 {#snippet kanbanColumns(
   columns: string[],
   items: KanbanColumns,
@@ -220,67 +292,3 @@
     {/each}
   </div>
 {/snippet}
-
-{#if errorMessage}
-  <Toast color="red" class="mb-4" onclose={() => (errorMessage = null)}>
-    {#snippet icon()}
-      <CircleX class="w-5 h-5" />
-    {/snippet}
-    {errorMessage}
-  </Toast>
-{/if}
-
-<DragDropProvider {onDragStart} {onDragOver} {onDragEnd}>
-  <Tabs style="underline" class="mb-4">
-    <TabItem
-      open={activeTab === 'solution'}
-      title="解法別"
-      activeClass="text-base font-semibold text-primary-700 border-b-2 border-primary-700 dark:text-primary-500 dark:border-primary-500"
-      inactiveClass="text-base font-semibold text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
-      onclick={() => {
-        activeTab = 'solution';
-        updateUrl();
-      }}
-    >
-      <div class="mb-3">
-        <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">表示カテゴリ（2つ以上選択）:</p>
-        <ColumnSelector
-          options={SOLUTION_CATEGORY_OPTIONS}
-          selected={selectedSolutionCols.filter((category) => category !== 'PENDING')}
-          onchange={(sel) => {
-            selectedSolutionCols = sel;
-            updateUrl();
-          }}
-          minRequired={1}
-        />
-      </div>
-
-      {@render kanbanColumns(displayedSolutionCols, solutionItems, getSolutionLabel, 'solution')}
-    </TabItem>
-
-    <TabItem
-      open={activeTab === 'curriculum'}
-      title="カリキュラム"
-      activeClass="text-base font-semibold text-primary-700 border-b-2 border-primary-700 dark:text-primary-500 dark:border-primary-500"
-      inactiveClass="text-base font-semibold text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
-      onclick={() => {
-        activeTab = 'curriculum';
-        updateUrl();
-      }}
-    >
-      <div class="mb-3">
-        <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">表示グレード（2つ以上選択）:</p>
-        <ColumnSelector
-          options={GRADE_OPTIONS}
-          selected={selectedGrades}
-          onchange={(sel) => {
-            selectedGrades = sel;
-            updateUrl();
-          }}
-        />
-      </div>
-
-      {@render kanbanColumns(selectedGrades, curriculumItems, getTaskGradeLabel, 'curriculum')}
-    </TabItem>
-  </Tabs>
-</DragDropProvider>
