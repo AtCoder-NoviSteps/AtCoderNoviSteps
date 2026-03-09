@@ -17,24 +17,24 @@ Phase 1 〜 6 までのリファクタリングで判明した新たな修正点
 
 ### 7.1 HTTP レスポンスコードを定数化
 
-- [ ] `+server.ts` — `status: 400` が 3箇所 → `src/lib/constants/http-response-status-codes.ts` の `BAD_REQUEST` に置換
+- [x] `+server.ts` — `status: 400` が 3箇所 → `src/lib/constants/http-response-status-codes.ts` の `BAD_REQUEST` に置換
 
 ### 7.2 未公開ラベルを既存コンポーネントに統一
 
-- [ ] `KanbanCard.svelte` — `<Badge color="red">未公開</Badge>` → `PublicationStatusLabel.svelte` に置き換え（表記が「未公開」→「非公開」に変わる）
+- [x] `KanbanCard.svelte` — `<Badge color="red">未公開</Badge>` → `PublicationStatusLabel.svelte` に置き換え（表記が「未公開」→「非公開」に変わる）
 
 ### 7.3 色を `primary` 系に統一
 
-- [ ] `KanbanCard.svelte` — `hover:border-green-400` → `hover:border-primary-400`
-- [ ] `KanbanCard.svelte` — リンクホバー `hover:text-green-*` → `text-primary-700 dark:text-primary-500`
-- [ ] `KanbanBoard.svelte` — アクティブタブ `text-green-600 border-green-600` → `text-primary-700 dark:text-primary-500`
-- [ ] `+page.svelte`, `KanbanBoard.svelte` — ボタン背景 `bg-green-600 hover:bg-green-700` → `bg-primary-600 hover:bg-primary-700`
+- [x] `KanbanCard.svelte` — `hover:border-green-400` → `hover:border-primary-400`
+- [x] `KanbanCard.svelte` — リンクホバー `hover:text-green-*` → `text-primary-700 dark:text-primary-500`（競合する `text-gray-900 dark:text-white` も削除）
+- [x] `KanbanBoard.svelte` — アクティブタブ `text-green-600 border-green-600` → `text-primary-700 border-primary-700 dark:text-primary-500 dark:border-primary-500`
+- [x] `+page.svelte` — ボタン背景 `bg-green-600 hover:bg-green-700` → `bg-primary-600 hover:bg-primary-700`
 
 ### 7.4 型のリネーム
 
-- [ ] `_types/kanban.ts` — `CardData` → `Card`、`CardData[]` の型エイリアス `Cards` を定義
-- [ ] `_types/kanban.ts` — `KanbanItems` → `KanbanColumns` にリネーム
-- [ ] 呼び出し元全体（`KanbanBoard.svelte`, `KanbanColumn.svelte` 等）のインポートを更新
+- [x] `_types/kanban.ts` — `CardData` → `Card`、`Card[]` の型エイリアス `Cards` を定義
+- [x] `_types/kanban.ts` — インライン `KanbanItems` を `KanbanColumns` として定義・エクスポート
+- [x] 呼び出し元全体（`KanbanBoard.svelte`, `KanbanColumn.svelte`）のインポートを更新
 
 ---
 
@@ -482,6 +482,18 @@ seed 側で `addCurriculumPlacements` の引数型を明示的に書くと、ser
 ### E2E の beforeEach でページを必要最小限のパスに goto する
 
 API エラーハンドリングのテストでは、`page.evaluate` で fetch を発行するためにセッション Cookie が必要。`beforeEach` でページを一度 goto してセッションを確立してから fetch するパターンが、`loginAsAdmin` 後に個別に goto するより効率的。
+
+### Tailwind `color` ユーティリティの競合に注意
+
+`hover:text-green-600` を `text-primary-700` に置き換える際、既存の `text-gray-900` が残ると同じ CSS プロパティを重複指定する警告が出る。VSCode の cssConflict 診断がリアルタイムで検出するので、置換後すぐに確認する。競合するクラスは両方を削除して意図するクラスだけを残す。
+
+### コンポーネント内部で `#if` を持つ場合は呼び出し元を簡素化できる
+
+`PublicationStatusLabel` は `{#if !isPublished}` を内包しているため、呼び出し元では `{#if !isPublished}` のラッパーが不要になる。単純に `<PublicationStatusLabel {isPublished} />` と書けばよい。
+
+### 型のインライン定義を型ファイルに移す際は呼び出し元を全検索する
+
+`type KanbanItems = Record<string, CardData[]>` はコンポーネントローカルで定義されていたが、`KanbanColumn.svelte` が `CardData` を直接インポートしていた。型ファイルの変更だけでは不十分で、`Grep` で全参照ファイルを確認してからリネームする。
 
 ## 出典
 

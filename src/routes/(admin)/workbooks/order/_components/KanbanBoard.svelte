@@ -23,11 +23,9 @@
     type WorkbookWithPlacement,
   } from '$features/workbooks/types/workbook_placement';
   import { TaskGrade } from '$lib/types/task';
-  import type { CardData } from '../_types/kanban';
+  import type { KanbanColumns } from '../_types/kanban';
 
   import { getTaskGradeLabel } from '$lib/utils/task';
-
-  type KanbanItems = Record<string, CardData[]>;
 
   const SOLUTION_CATEGORY_OPTIONS = Object.entries(SolutionCategory)
     .filter(([category]) => category !== 'PENDING')
@@ -77,8 +75,8 @@
   }
 
   // Build Record-based items grouped by column key
-  function buildSolutionItems(): KanbanItems {
-    const record: KanbanItems = {};
+  function buildSolutionItems(): KanbanColumns {
+    const record: KanbanColumns = {};
 
     for (const key of Object.keys(SolutionCategory)) {
       record[key] = [];
@@ -100,8 +98,8 @@
     return record;
   }
 
-  function buildCurriculumItems(): KanbanItems {
-    const record: KanbanItems = {};
+  function buildCurriculumItems(): KanbanColumns {
+    const record: KanbanColumns = {};
 
     for (const key of Object.keys(TaskGrade)) {
       record[key] = [];
@@ -123,9 +121,9 @@
     return record;
   }
 
-  let solutionItems = $state<KanbanItems>(buildSolutionItems());
-  let curriculumItems = $state<KanbanItems>(buildCurriculumItems());
-  let snapshot: KanbanItems | null = null;
+  let solutionItems = $state<KanbanColumns>(buildSolutionItems());
+  let curriculumItems = $state<KanbanColumns>(buildCurriculumItems());
+  let snapshot: KanbanColumns | null = null;
   let errorMessage = $state<string | null>(null);
 
   // Drag-and-drop handlers
@@ -216,7 +214,7 @@
 
 {#snippet kanbanColumns(
   columns: string[],
-  items: KanbanItems,
+  items: KanbanColumns,
   labelFn: (column: string) => string,
   group: string,
 )}
@@ -241,7 +239,7 @@
     <TabItem
       open={activeTab === 'solution'}
       title="解法別"
-      activeClass="text-base font-semibold text-green-600 border-b-2 border-green-600"
+      activeClass="text-base font-semibold text-primary-700 border-b-2 border-primary-700 dark:text-primary-500 dark:border-primary-500"
       inactiveClass="text-base font-semibold text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
       onclick={() => {
         activeTab = 'solution';
@@ -267,7 +265,7 @@
     <TabItem
       open={activeTab === 'curriculum'}
       title="カリキュラム"
-      activeClass="text-base font-semibold text-green-600 border-b-2 border-green-600"
+      activeClass="text-base font-semibold text-primary-700 border-b-2 border-primary-700 dark:text-primary-500 dark:border-primary-500"
       inactiveClass="text-base font-semibold text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
       onclick={() => {
         activeTab = 'curriculum';

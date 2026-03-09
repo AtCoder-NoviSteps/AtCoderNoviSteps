@@ -3,12 +3,12 @@
 
   import KanbanCard from './KanbanCard.svelte';
 
-  import type { CardData } from '../_types/kanban';
+  import type { Cards } from '../_types/kanban';
 
   interface Props {
     columnId: string;
     label: string;
-    cards: CardData[];
+    cards: Cards;
     group: string;
   }
 

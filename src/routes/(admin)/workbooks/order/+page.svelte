@@ -13,7 +13,7 @@
       <form method="POST" action="?/initializePlacements" class="mb-6">
         <button
           type="submit"
-          class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 font-medium text-sm"
+          class="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 font-medium text-sm"
         >
           ボードに問題集を追加
         </button>

@@ -1,6 +1,7 @@
 <script lang="ts">
   import { createSortable } from '@dnd-kit/svelte/sortable';
-  import { Badge } from 'flowbite-svelte';
+
+  import PublicationStatusLabel from '$features/workbooks/components/shared/PublicationStatusLabel.svelte';
 
   interface Props {
     placementId: number;
@@ -34,16 +35,14 @@
 <div
   use:attachSortable
   data-placement-id={placementId}
-  class="bg-white dark:bg-gray-700 shadow-sm border border-gray-200 dark:border-gray-600 rounded-lg p-3 cursor-grab hover:border-green-400 touch-none select-none"
+  class="bg-white dark:bg-gray-700 shadow-sm border border-gray-200 dark:border-gray-600 rounded-lg p-3 cursor-grab hover:border-primary-400 touch-none select-none"
   class:opacity-50={sortable.isDragging}
 >
-  {#if !isPublished}
-    <Badge color="red" class="mb-1">未公開</Badge>
-  {/if}
+  <PublicationStatusLabel {isPublished} />
 
   <a
     href="/workbooks/{workBookId}"
-    class="text-sm text-gray-900 dark:text-white font-medium hover:text-green-600 dark:hover:text-green-400"
+    class="text-sm font-medium text-primary-700 dark:text-primary-500"
     onclick={(e) => e.stopPropagation()}
   >
     {title}

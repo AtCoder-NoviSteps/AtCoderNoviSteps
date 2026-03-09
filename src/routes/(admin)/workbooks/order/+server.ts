@@ -8,6 +8,8 @@ import { updatePlacementsSchema } from '$features/workbooks/zod/schema';
 
 import { validateAdminAccess } from '../../_utils/auth';
 
+import { BAD_REQUEST } from '$lib/constants/http-response-status-codes';
+
 export async function POST({ request, locals }: RequestEvent) {
   await validateAdminAccess(locals);
 
@@ -15,7 +17,7 @@ export async function POST({ request, locals }: RequestEvent) {
   const parsed = updatePlacementsSchema.safeParse(body);
 
   if (!parsed.success) {
-    return json({ error: 'Invalid request body' }, { status: 400 });
+    return json({ error: 'Invalid request body' }, { status: BAD_REQUEST });
   }
 
   // Server-side validation: prevent cross-type movement between CURRICULUM and SOLUTION
@@ -26,7 +28,7 @@ export async function POST({ request, locals }: RequestEvent) {
     });
 
     if (!existing) {
-      return json({ error: `placement id=${update.id} does not exist` }, { status: 400 });
+      return json({ error: `placement id=${update.id} does not exist` }, { status: BAD_REQUEST });
     }
 
     const isCurriculumToSolution =
@@ -37,7 +39,7 @@ export async function POST({ request, locals }: RequestEvent) {
     if (isCurriculumToSolution || isSolutionToCurriculum) {
       return json(
         { error: 'Moving between CURRICULUM and SOLUTION is not allowed' },
-        { status: 400 },
+        { status: BAD_REQUEST },
       );
     }
   }
