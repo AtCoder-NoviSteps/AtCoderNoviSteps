@@ -5,6 +5,7 @@ import {
   SolutionCategory,
   type WorkBookPlacement,
   type WorkBookPlacements,
+  type WorkbooksWithPlacement,
   type PlacementInput,
   type WorkBookWithTasks,
   type PlacementCreate,
@@ -17,6 +18,17 @@ type UnplacedCurriculumRow = {
   id: number;
   workBookTasks: { task: { task_id: string; grade: TaskGrade } | null }[];
 };
+
+/**
+ * Returns all CURRICULUM and SOLUTION workbooks with their placements, ordered by id.
+ */
+export async function getWorkbooksWithPlacements(): Promise<WorkbooksWithPlacement> {
+  return prisma.workBook.findMany({
+    where: { workBookType: { in: ['CURRICULUM', 'SOLUTION'] } },
+    include: { placement: true },
+    orderBy: { id: 'asc' },
+  });
+}
 
 /**
  * Returns all placements for workbooks of the given type, ordered by priority.
@@ -107,17 +119,12 @@ export function initializeSolutionPlacements(workbooks: { id: number }[]): Place
 }
 
 /**
- * Returns initial placement records for unplaced CURRICULUM workbooks.
- * Each workbook is assigned the mode grade of its tasks, with priority
- * determined by ascending workbook ID within each grade group.
+ * Groups workbooks by their mode grade, sorted by workbook ID ascending within each group.
  */
-export function initializeCurriculumPlacements(
+export function groupWorkbooksByGrade(
   workbooks: WorkBookWithTasks[],
-  tasksByTaskId: Map<string, Task>,
-): PlacementCreate[] {
-  const gradeModes = calcWorkBookGradeModes(workbooks, tasksByTaskId);
-
-  // Group by grade and sort by workbook ID ascending for deterministic priority assignment.
+  gradeModes: Map<number, TaskGrade>,
+): Map<TaskGrade, number[]> {
   const byGrade = new Map<TaskGrade, number[]>();
 
   for (const workbook of workbooks) {
@@ -134,17 +141,38 @@ export function initializeCurriculumPlacements(
     ids.sort((a, b) => a - b);
   }
 
-  const result: PlacementCreate[] = [];
+  return byGrade;
+}
 
-  for (const workbook of workbooks) {
+/**
+ * Builds PlacementCreate records from pre-grouped grade data.
+ * Priority is the 1-based index within each grade group (sorted by workbook ID).
+ */
+export function buildPlacementsFromGroups(
+  workbooks: WorkBookWithTasks[],
+  gradeModes: Map<number, TaskGrade>,
+  byGrade: Map<TaskGrade, number[]>,
+): PlacementCreate[] {
+  return workbooks.map((workbook) => {
     const grade = gradeModes.get(workbook.id)!;
     const ids = byGrade.get(grade)!;
     const priority = ids.indexOf(workbook.id) + 1;
+    return { workBookId: workbook.id, taskGrade: grade, solutionCategory: null, priority };
+  });
+}
 
-    result.push({ workBookId: workbook.id, taskGrade: grade, solutionCategory: null, priority });
-  }
-
-  return result;
+/**
+ * Returns initial placement records for unplaced CURRICULUM workbooks.
+ * Each workbook is assigned the mode grade of its tasks, with priority
+ * determined by ascending workbook ID within each grade group.
+ */
+export function initializeCurriculumPlacements(
+  workbooks: WorkBookWithTasks[],
+  tasksByTaskId: Map<string, Task>,
+): PlacementCreate[] {
+  const gradeModes = calcWorkBookGradeModes(workbooks, tasksByTaskId);
+  const byGrade = groupWorkbooksByGrade(workbooks, gradeModes);
+  return buildPlacementsFromGroups(workbooks, gradeModes, byGrade);
 }
 
 /**
@@ -185,6 +213,48 @@ export async function createInitialPlacements(): Promise<void> {
   await prisma.workBookPlacement.createMany({
     data: [...curriculumPlacements, ...solutionPlacements],
   });
+}
+
+/**
+ * Validates that no update crosses CURRICULUM/SOLUTION boundary, then upserts.
+ * Returns { error } on validation failure, null on success.
+ */
+export async function validateAndUpdatePlacements(
+  updates: PlacementInput[],
+): Promise<{ error: string } | null> {
+  for (const update of updates) {
+    const existing = await prisma.workBookPlacement.findUnique({
+      where: { id: update.id },
+      include: { workBook: { select: { workBookType: true } } },
+    });
+
+    if (!existing) {
+      return { error: `placement id=${update.id} does not exist` };
+    }
+
+    const isCurriculumToSolution =
+      existing.workBook.workBookType === 'CURRICULUM' && update.solutionCategory !== null;
+    const isSolutionToCurriculum =
+      existing.workBook.workBookType === 'SOLUTION' && update.taskGrade !== null;
+
+    if (isCurriculumToSolution || isSolutionToCurriculum) {
+      return { error: 'Moving between CURRICULUM and SOLUTION is not allowed' };
+    }
+  }
+
+  await upsertWorkBookPlacements(updates);
+  return null;
+}
+
+/**
+ * Persists an array of new placement records to the database.
+ */
+export async function createWorkBookPlacements(placements: PlacementCreate[]): Promise<void> {
+  if (placements.length === 0) {
+    return;
+  }
+
+  await prisma.workBookPlacement.createMany({ data: placements });
 }
 
 // Re-export for consumers that only need the placement type (e.g. +server.ts upsert).

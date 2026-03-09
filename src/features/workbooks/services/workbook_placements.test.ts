@@ -9,14 +9,18 @@ import {
 import {
   getWorkBookPlacements,
   upsertWorkBookPlacements,
+  validateAndUpdatePlacements,
   initializeCurriculumPlacements,
   initializeSolutionPlacements,
+  groupWorkbooksByGrade,
+  buildPlacementsFromGroups,
 } from '$features/workbooks/services/workbook_placements';
 
 vi.mock('$lib/server/database', () => ({
   default: {
     workBookPlacement: {
       findMany: vi.fn(),
+      findUnique: vi.fn(),
       update: vi.fn(),
     },
     $transaction: vi.fn(),
@@ -340,6 +344,142 @@ describe('solutionCategory-specific scenarios', () => {
     });
     // All must have taskGrade === null
     expect(result.every((placement) => placement.taskGrade === null)).toBe(true);
+  });
+});
+
+describe('validateAndUpdatePlacements', () => {
+  const curriculumPlacement = {
+    id: 1,
+    workBookId: 1,
+    priority: 1,
+    taskGrade: 'Q10',
+    solutionCategory: null,
+    workBook: { workBookType: 'CURRICULUM' },
+  };
+  const solutionPlacement = {
+    id: 2,
+    workBookId: 2,
+    priority: 1,
+    taskGrade: null,
+    solutionCategory: 'GRAPH',
+    workBook: { workBookType: 'SOLUTION' },
+  };
+
+  test('returns null and calls upsert when all updates are valid', async () => {
+    vi.mocked(prisma.workBookPlacement.findUnique).mockResolvedValueOnce(
+      curriculumPlacement as unknown as Awaited<
+        ReturnType<typeof prisma.workBookPlacement.findUnique>
+      >,
+    );
+    vi.mocked(prisma.$transaction).mockResolvedValue([]);
+
+    const result = await validateAndUpdatePlacements([
+      { id: 1, priority: 2, taskGrade: TaskGrade.Q10, solutionCategory: null },
+    ]);
+
+    expect(result).toBeNull();
+    expect(prisma.$transaction).toHaveBeenCalledTimes(1);
+  });
+
+  test('returns error when placement id does not exist', async () => {
+    vi.mocked(prisma.workBookPlacement.findUnique).mockResolvedValue(null);
+
+    const result = await validateAndUpdatePlacements([
+      { id: 999, priority: 1, taskGrade: null, solutionCategory: SolutionCategory.GRAPH },
+    ]);
+
+    expect(result).toMatchObject({ error: expect.stringContaining('999') });
+    expect(prisma.$transaction).not.toHaveBeenCalled();
+  });
+
+  test('returns error for CURRICULUM→SOLUTION cross-type movement', async () => {
+    vi.mocked(prisma.workBookPlacement.findUnique).mockResolvedValue(
+      curriculumPlacement as unknown as Awaited<
+        ReturnType<typeof prisma.workBookPlacement.findUnique>
+      >,
+    );
+
+    const result = await validateAndUpdatePlacements([
+      { id: 1, priority: 1, taskGrade: null, solutionCategory: SolutionCategory.GRAPH },
+    ]);
+
+    expect(result).toMatchObject({ error: expect.stringContaining('not allowed') });
+    expect(prisma.$transaction).not.toHaveBeenCalled();
+  });
+
+  test('returns error for SOLUTION→CURRICULUM cross-type movement', async () => {
+    vi.mocked(prisma.workBookPlacement.findUnique).mockResolvedValue(
+      solutionPlacement as unknown as Awaited<
+        ReturnType<typeof prisma.workBookPlacement.findUnique>
+      >,
+    );
+
+    const result = await validateAndUpdatePlacements([
+      { id: 2, priority: 1, taskGrade: TaskGrade.Q10, solutionCategory: null },
+    ]);
+
+    expect(result).toMatchObject({ error: expect.stringContaining('not allowed') });
+    expect(prisma.$transaction).not.toHaveBeenCalled();
+  });
+});
+
+describe('groupWorkbooksByGrade', () => {
+  test('groups workbooks by their mode grade and sorts IDs ascending', () => {
+    const workbooks = [
+      { id: 10, workBookTasks: [] },
+      { id: 5, workBookTasks: [] },
+      { id: 7, workBookTasks: [] },
+    ];
+    const gradeModes = new Map([
+      [10, TaskGrade.Q10],
+      [5, TaskGrade.Q9],
+      [7, TaskGrade.Q10],
+    ]);
+
+    const result = groupWorkbooksByGrade(workbooks, gradeModes);
+
+    expect(result.get(TaskGrade.Q10)).toEqual([7, 10]);
+    expect(result.get(TaskGrade.Q9)).toEqual([5]);
+  });
+
+  test('returns empty map for empty input', () => {
+    expect(groupWorkbooksByGrade([], new Map()).size).toBe(0);
+  });
+});
+
+describe('buildPlacementsFromGroups', () => {
+  test('assigns priority based on ID order within each grade group', () => {
+    const workbooks = [
+      { id: 10, workBookTasks: [] },
+      { id: 5, workBookTasks: [] },
+      { id: 7, workBookTasks: [] },
+    ];
+    const gradeModes = new Map([
+      [10, TaskGrade.Q10],
+      [5, TaskGrade.Q9],
+      [7, TaskGrade.Q10],
+    ]);
+    const byGrade = new Map([
+      [TaskGrade.Q10, [7, 10]],
+      [TaskGrade.Q9, [5]],
+    ]);
+
+    const result = buildPlacementsFromGroups(workbooks, gradeModes, byGrade);
+    const byId = new Map(result.map((r) => [r.workBookId, r]));
+
+    expect(byId.get(7)).toMatchObject({ taskGrade: TaskGrade.Q10, priority: 1 });
+    expect(byId.get(10)).toMatchObject({ taskGrade: TaskGrade.Q10, priority: 2 });
+    expect(byId.get(5)).toMatchObject({ taskGrade: TaskGrade.Q9, priority: 1 });
+  });
+
+  test('sets solutionCategory to null for all records', () => {
+    const workbooks = [{ id: 1, workBookTasks: [] }];
+    const gradeModes = new Map([[1, TaskGrade.Q10]]);
+    const byGrade = new Map([[TaskGrade.Q10, [1]]]);
+
+    const result = buildPlacementsFromGroups(workbooks, gradeModes, byGrade);
+
+    expect(result[0].solutionCategory).toBeNull();
   });
 });
 

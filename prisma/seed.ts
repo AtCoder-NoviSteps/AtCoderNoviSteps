@@ -35,6 +35,7 @@ import {
   buildCurriculumWorkbooksForInit,
   initializeCurriculumPlacements,
   initializeSolutionPlacements,
+  createWorkBookPlacements,
 } from '../src/features/workbooks/services/workbook_placements';
 import { tags } from './tags';
 import { task_tags } from './task_tags';
@@ -346,7 +347,7 @@ async function addCurriculumPlacements(
   const workbooksForInit = buildCurriculumWorkbooksForInit(unplacedCurriculum);
   const placements = initializeCurriculumPlacements(workbooksForInit, tasksByTaskId);
 
-  await prisma.workBookPlacement.createMany({ data: placements });
+  await createWorkBookPlacements(placements);
   console.log(`Added ${placements.length} curriculum placements.`);
 }
 
@@ -362,7 +363,7 @@ async function addSolutionPlacements(unplacedSolution: { id: number; urlSlug: st
     return { ...placement, solutionCategory: category ?? 'PENDING' };
   });
 
-  await prisma.workBookPlacement.createMany({ data: placements });
+  await createWorkBookPlacements(placements);
   console.log(`Added ${placements.length} solution placements.`);
 }
 

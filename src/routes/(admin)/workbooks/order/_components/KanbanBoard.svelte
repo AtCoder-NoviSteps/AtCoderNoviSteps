@@ -3,9 +3,7 @@
   import { replaceState } from '$app/navigation';
   import { untrack } from 'svelte';
 
-  import type { Snippet } from 'svelte';
-
-  import { TabItem, Tabs, Toast } from 'flowbite-svelte';
+  import { Toast } from 'flowbite-svelte';
   import CircleX from '@lucide/svelte/icons/circle-x';
 
   import { DragDropProvider } from '@dnd-kit/svelte';
@@ -25,19 +23,11 @@
     TabConfig,
   } from '../_types/kanban';
 
+  import KanbanTabBar from './KanbanTabBar.svelte';
   import KanbanColumn from './KanbanColumn.svelte';
-  import ColumnSelector from './ColumnSelector.svelte';
 
   import { getTaskGradeLabel } from '$lib/utils/task';
   import { buildKanbanItems, calcPriorityUpdates, saveUpdates } from '../_utils/kanban';
-
-  const SOLUTION_CATEGORY_OPTIONS = Object.entries(SolutionCategory)
-    .filter(([category]) => category !== 'PENDING')
-    .map(([category]) => ({ value: category, label: SOLUTION_LABELS[category] ?? category }));
-
-  const GRADE_OPTIONS = Object.keys(TaskGrade)
-    .filter((key) => key !== 'PENDING')
-    .map((key) => ({ value: key, label: getTaskGradeLabel(key) }));
 
   interface Props {
     workbooks: WorkbooksWithPlacement;
@@ -161,83 +151,47 @@
 {/if}
 
 <DragDropProvider {onDragStart} {onDragOver} {onDragEnd}>
-  <Tabs style="underline" class="mb-4" contentClass="">
-    {@render tabItem('解法別', 'solution', solutionContent)}
-    {@render tabItem('カリキュラム', 'curriculum', curriculumContent)}
-  </Tabs>
-</DragDropProvider>
-
-{#snippet tabItem(title: string, key: string, content: Snippet)}
-  <TabItem
-    open={activeTab === key}
-    {title}
-    activeClass="text-lg font-semibold text-primary-700 border-b-2 border-primary-700 dark:text-primary-500 dark:border-primary-500"
-    inactiveClass="text-lg font-semibold text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
-    onclick={() => {
-      activeTab = key as ActiveTab;
+  <KanbanTabBar
+    {activeTab}
+    {selectedSolutionCols}
+    {selectedGrades}
+    onTabChange={(tab) => {
+      activeTab = tab;
+      updateUrl();
+    }}
+    onSolutionColsChange={(columns) => {
+      selectedSolutionCols = columns;
+      updateUrl();
+    }}
+    onGradesChange={(grades) => {
+      selectedGrades = grades;
       updateUrl();
     }}
   >
-    {@render content()}
-  </TabItem>
-{/snippet}
+    {#snippet solutionBoard()}
+      <div class="flex gap-3 overflow-x-auto pb-4">
+        {#each displayedSolutionCols as column}
+          <KanbanColumn
+            columnId={column}
+            label={tabConfigs['solution'].labelFn(column)}
+            cards={allItems['solution'][column] ?? []}
+            group="solution"
+          />
+        {/each}
+      </div>
+    {/snippet}
 
-{#snippet solutionContent()}
-  {@render tabHeader(
-    '表示カテゴリ（2つ以上選択）:',
-    SOLUTION_CATEGORY_OPTIONS,
-    selectedSolutionCols.filter((category) => category !== 'PENDING'),
-    (selected) => {
-      selectedSolutionCols = selected;
-      updateUrl();
-    },
-    1,
-  )}
-
-  {@render kanbanColumns(
-    displayedSolutionCols,
-    allItems['solution'],
-    tabConfigs['solution'].labelFn,
-    'solution',
-  )}
-{/snippet}
-
-{#snippet curriculumContent()}
-  {@render tabHeader('表示グレード（2つ以上選択）:', GRADE_OPTIONS, selectedGrades, (selected) => {
-    selectedGrades = selected;
-    updateUrl();
-  })}
-
-  {@render kanbanColumns(
-    selectedGrades,
-    allItems['curriculum'],
-    tabConfigs['curriculum'].labelFn,
-    'curriculum',
-  )}
-{/snippet}
-
-{#snippet tabHeader(
-  label: string,
-  options: { value: string; label: string }[],
-  selected: string[],
-  onchange: (selected: string[]) => void,
-  minRequired?: number,
-)}
-  <div class="mb-4">
-    <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">{label}</p>
-    <ColumnSelector {options} {selected} {onchange} {minRequired} />
-  </div>
-{/snippet}
-
-{#snippet kanbanColumns(
-  columns: string[],
-  items: KanbanColumns,
-  labelFn: (column: string) => string,
-  group: string,
-)}
-  <div class="flex gap-3 overflow-x-auto pb-4">
-    {#each columns as column}
-      <KanbanColumn columnId={column} label={labelFn(column)} cards={items[column] ?? []} {group} />
-    {/each}
-  </div>
-{/snippet}
+    {#snippet curriculumBoard()}
+      <div class="flex gap-3 overflow-x-auto pb-4">
+        {#each selectedGrades as column}
+          <KanbanColumn
+            columnId={column}
+            label={tabConfigs['curriculum'].labelFn(column)}
+            cards={allItems['curriculum'][column] ?? []}
+            group="curriculum"
+          />
+        {/each}
+      </div>
+    {/snippet}
+  </KanbanTabBar>
+</DragDropProvider>

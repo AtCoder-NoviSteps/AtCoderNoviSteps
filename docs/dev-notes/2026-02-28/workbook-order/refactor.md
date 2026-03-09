@@ -121,31 +121,31 @@ Phase 1 〜 6 までのリファクタリングで判明した新たな修正点
 
 ### 11.1 `+page.server.ts` の CRUD を service 層に移動
 
-- [ ] `load()` 内の `prisma.workBook.findMany(...)` を `getWorkbooksWithPlacements()` として `workbook_placements.ts` に抽出
-- [ ] `+page.server.ts` の `load()` は薄いラッパーに
+- [x] `load()` 内の `prisma.workBook.findMany(...)` を `getWorkbooksWithPlacements()` として `workbook_placements.ts` に抽出
+- [x] `+page.server.ts` の `load()` は薄いラッパーに
 
 ### 11.2 `+server.ts` のバリデーション + CRUD を service 層に移動
 
-- [ ] `prisma.workBookPlacement.findUnique(...)` と cross-type バリデーションロジックを `validateAndUpdatePlacements(updates)` として `workbook_placements.ts` に抽出
-- [ ] POST ハンドラはバリデーション呼び出し → service 呼び出しのみに
-- [ ] モックを使ったテストを追加
+- [x] `prisma.workBookPlacement.findUnique(...)` と cross-type バリデーションロジックを `validateAndUpdatePlacements(updates)` として `workbook_placements.ts` に抽出
+- [x] POST ハンドラはバリデーション呼び出し → service 呼び出しのみに
+- [x] モックを使ったテストを追加
 
 ### 11.3 `initializeCurriculumPlacements` を分割
 
-- [ ] `groupWorkbooksByGrade(workbooks, gradeModes): Map<TaskGrade, number[]>` を抽出
-- [ ] `buildPlacementsFromGroups(workbooks, gradeModes, byGrade): PlacementCreate[]` を抽出
-- [ ] 分割後に単体テストを追加
+- [x] `groupWorkbooksByGrade(workbooks, gradeModes): Map<TaskGrade, number[]>` を抽出
+- [x] `buildPlacementsFromGroups(workbooks, gradeModes, byGrade): PlacementCreate[]` を抽出
+- [x] 分割後に単体テストを追加
 
 ### 11.4 `seed.ts` の CRUD を service 層に移動
 
-- [ ] `addWorkBookPlacements()` 内の直接 Prisma 呼び出しを service 層のメソッドを使う形に置き換え
+- [x] `addWorkBookPlacements()` 内の直接 Prisma 呼び出しを `createWorkBookPlacements()` service メソッドに置き換え
 - [ ] service 層以外では CRUD 処理の直書きを禁止（ルールを明記）
-- [ ] テストを追加
+- [ ] ~~テストを追加~~ seed は統合テスト相当のため単体テスト対象外
 
 ### 11.5 KanbanBoard のコンポーネント分割
 
-- [ ] `KanbanTabBar.svelte`（タブ切替 + ColumnSelector）を切り出す
-- [ ] Phase 10.1, 10.2 完了後に実施（依存関係あり）
+- [x] `KanbanTabBar.svelte`（タブ切替 + ColumnSelector）を切り出す
+- [x] Phase 10.1, 10.2 完了後に実施（依存関係あり）
 
 ---
 
@@ -535,6 +535,18 @@ DnD ハンドラで tab ごとに変わる設定（`columnKey`, `labelFn`, `grou
 ### `buildKanbanItems` の `enumKeys` は「存在するキー」を列挙する
 
 `buildKanbanItems` はまず `enumKeys` 全体で空配列を初期化するため、`getColumnKey` が返すキーは必ず `enumKeys` に含まれている必要がある。一部のキーだけを渡したテストでは `record[col].push(...)` が undefined エラーになる。テストでは「実際に使うすべてのキー」か「テスト対象のワークブックが属するキーのみ」を確実に渡すこと。
+
+### `{#snippet}` はコンポーネントタグの外に定義する
+
+Flowbite Svelte の `<Tabs>` など props に snippet を受け取るコンポーネントに `{#snippet name(...)}` をタグ内に書くと、そのコンポーネントの named slot として解釈されて型エラーになる。ローカルで定義して `{@render}` で呼び出す snippet は必ずタグの外（コンポーネントのトップレベル）に定義する。
+
+### `validateAndUpdatePlacements` の戻り値は `{ error } | null`
+
+HTTP 層（`+server.ts`）のエラー処理をサービス層で引き取る際は、`Response` や `json()` をサービスに持ち込まず `{ error: string } | null` の純粋な値を返す設計にすること。ハンドラ側は `if (result) return json(result, { status: BAD_REQUEST })` の一行で済む。
+
+### service 以外での直接 Prisma 呼び出しを避ける
+
+`seed.ts` の `addCurriculumPlacements` / `addSolutionPlacements` が `prisma.workBookPlacement.createMany` を直書きしていたが、`createWorkBookPlacements(placements)` をサービスに追加して置き換えた。DB への書き込みはサービス層に集約し、seed・ルートハンドラは service を呼ぶだけにすることで変更の局所化とテスト容易性が上がる。
 
 ## 出典
 
