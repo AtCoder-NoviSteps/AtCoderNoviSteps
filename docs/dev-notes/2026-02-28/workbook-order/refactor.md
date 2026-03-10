@@ -1,5 +1,13 @@
 # リファクタリング
 
+## TODO
+
+- [ ] `docs/guides/architecture.md` に `_types/`, `_utils/` ディレクトリの規約を追記
+- [ ] service 層以外での CRUD 直書きを禁止するルール（`.claude/rules/` など）を明記
+- [ ] Claude Code の拡張ポイント（`.claude/rules/`, subagents, custom commands, skills）を調査し、このリファクタリングで特定された繰り返しパターンに対する rules/自動化を作成
+
+---
+
 ## 方針・指針
 
 ### フェーズ設計
@@ -72,14 +80,6 @@ snippet を第一選択とする条件:
 
 - 同じ CSS プロパティを複数クラスで指定すると競合警告が出る。置換後は VSCode の cssConflict 診断で即時確認する
 - 競合するクラスは片方だけでなく両方を削除して、意図するクラスだけを残す
-
----
-
-## TODO
-
-- [ ] `docs/guides/architecture.md` に `_types/`, `_utils/` ディレクトリの規約を追記
-- [ ] service 層以外での CRUD 直書きを禁止するルール（`.claude/rules/` など）を明記
-- [ ] Claude Code の拡張ポイント（`.claude/rules/`, subagents, custom commands, skills）を調査し、このリファクタリングで特定された繰り返しパターンに対する rules/自動化を作成
 
 ---
 
