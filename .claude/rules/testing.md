@@ -1,6 +1,6 @@
 ---
 description: Testing rules and patterns
-globs:
+paths:
   - '**/*.test.ts'
   - '**/*.spec.ts'
   - 'tests/**'
@@ -42,6 +42,16 @@ describe('functionName', () => {
   });
 });
 ```
+
+## Assertions
+
+- Use `toBe(true)` / `toBe(false)` instead of `toBeTruthy()` / `toBeFalsy()` for boolean checks
+- Be explicit about expected values
+
+## Test Data
+
+- Use realistic values from actual fixtures (e.g., real task IDs, grade names) instead of abstract placeholders like `'t1'`, `'t2'`
+- This ensures test data stays consistent with production data and catches spec changes early
 
 ## Coverage
 

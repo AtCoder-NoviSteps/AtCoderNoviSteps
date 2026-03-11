@@ -1,6 +1,6 @@
 ---
 description: Svelte component development rules
-globs:
+paths:
   - 'src/**/*.svelte'
   - 'src/lib/components/**'
   - 'src/lib/stores/**/*.svelte.ts'

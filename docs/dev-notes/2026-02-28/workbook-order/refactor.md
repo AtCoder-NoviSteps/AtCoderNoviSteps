@@ -4,17 +4,17 @@
 
 ### Phase 0: ルール整備（以降の全フェーズで自動適用される前提）
 
-- [ ] `.claude/rules/` にコーディングルールを英語で追加
-  - [ ] 1文 `if () return` 禁止 → 必ず `if () { return }` と書く
-  - [ ] ラムダ引数の1文字変数禁止（イテレータ index `i` は許容）
-  - [ ] 一般的でない省略形禁止（例: `res` → `response`, `SolutionCols` → `SolutionCategories`）
-  - [ ] `Hoge[]` ではなく複数形の型エイリアスを定義して使う
-  - [ ] service 層以外での CRUD 直書き禁止
-  - [ ] テストでは `toBeTruthy()` ではなく `toBe(true)` を使う
-  - [ ] テストデータは実際の fixture を参照する（抽象的な `'t1'`, `'t2'` は禁止）
-  - [ ] .claude/rules/prisma-db.md に src/features の service 層も追加
-- [ ] `AGENTS.md` に `src/features/` ディレクトリを追記
-- [ ] `docs/guides/architecture.md` に `_types/`, `_utils/` ディレクトリの規約を追記
+- [x] `.claude/rules/` にコーディングルールを英語で追加
+  - [x] 1文 `if () return` 禁止 → 必ず `if () { return }` と書く
+  - [x] ラムダ引数の1文字変数禁止（イテレータ index `i` は許容）
+  - [x] 一般的でない省略形禁止（例: `res` → `response`, `SolutionCols` → `SolutionCategories`）
+  - [x] `Hoge[]` ではなく複数形の型エイリアスを定義して使う
+  - [x] service 層以外での CRUD 直書き禁止
+  - [x] テストでは `toBeTruthy()` ではなく `toBe(true)` を使う
+  - [x] テストデータは実際の fixture を参照する（抽象的な `'t1'`, `'t2'` は禁止）
+  - [x] .claude/rules/prisma-db.md に src/features の service 層も追加
+- [x] `AGENTS.md` に `src/features/` ディレクトリを追記
+- [x] `docs/guides/architecture.md` に `_types/`, `_utils/` ディレクトリの規約を日本語で追記
 
 ### Phase 1: 機械的な単一箇所修正（リスク最小・依存なし）
 
@@ -191,6 +191,12 @@ snippet を第一選択とする条件:
 
 - seed 固有の知識は service 層に持ち込まない
 - service は汎用的な初期値で初期化し、seed 側でオーバーライドするパターンで関心の分離を保つ
+
+### ルール管理
+
+- `.claude/rules/` のフロントマター属性は `globs` ではなく `paths` を使う（`globs` は非推奨）
+- ルールは「関心の分離」で既存ファイルへの追記と新規ファイル作成を使い分ける：コーディングスタイル（言語レベル）、DB/サービス層（アーキテクチャレベル）、テスト（品質レベル）
+- ルールファイルの `paths` でスコープを絞ることで、関係ないファイル編集時にノイズにならない
 
 ### CSS / Tailwind
 

@@ -1,9 +1,10 @@
 ---
 description: Prisma and database rules
-globs:
+paths:
   - 'prisma/**'
   - 'src/lib/server/**'
   - 'src/lib/services/**'
+  - 'src/features/**/services/**'
 ---
 
 # Prisma & Database
@@ -33,6 +34,12 @@ globs:
 - Import database client only in `src/lib/server/`
 - Use `$lib/server/database` for Prisma client access
 - Never import server code in client components
+
+## Service Layer
+
+- All CRUD operations must go through the service layer (`src/lib/services/` or `src/features/**/services/`)
+- Route handlers (`+server.ts`, `+page.server.ts`) and `prisma/seed.ts` should call service methods, not use Prisma directly
+- Service functions return pure values (e.g., `{ error: string } | null`), never HTTP-specific objects (`Response`, `json()`)
 
 ## Transactions
 

@@ -42,6 +42,14 @@ src/lib/
 ├── types/ # TypeScript types
 ├── utils/ # Pure utility functions
 └── zod/ # Validation schemas
+src/features/ # Feature-scoped code (single domain)
+├── {feature}/
+│   ├── components/ # Feature UI (list/, detail/, shared/)
+│   ├── fixtures/ # Test data
+│   ├── services/ # Feature business logic (CRUD via Prisma)
+│   ├── stores/ # Feature stores
+│   ├── types/ # Feature types
+│   └── utils/ # Feature utilities
 src/test/ # Unit tests (mirrors src/lib/)
 tests/ # E2E tests (Playwright)
 prisma/schema.prisma # Database schema

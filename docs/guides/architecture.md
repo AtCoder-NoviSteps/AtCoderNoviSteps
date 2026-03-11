@@ -91,6 +91,32 @@ src/features/
 - `detail/` — 詳細ページ用コンポーネント
 - `shared/` — feature 内で複数ページから使うコンポーネント
 
+### ルート固有の `_types/` / `_utils/` ディレクトリ
+
+SvelteKit のルートディレクトリ内で、そのページ専用の型やユーティリティを colocate するために `_types/` と `_utils/` を使う。アンダースコアプレフィックスにより SvelteKit のルーティング対象外となる。
+
+```text
+src/routes/(admin)/workbooks/order/
+├── +page.svelte
+├── +page.server.ts
+├── +server.ts
+├── _components/        # ページ専用コンポーネント
+│   ├── KanbanBoard.svelte
+│   └── ...
+├── _types/             # ページ専用の型定義
+│   └── kanban.ts
+└── _utils/             # ページ専用のユーティリティ（純粋関数）
+    ├── kanban.ts
+    └── kanban.test.ts  # ユーティリティにはテストを隣接配置
+```
+
+**ルール:**
+
+- `_types/` には型定義のみ置く。ランタイムコードは含めない
+- `_utils/` には純粋関数のみ置く。副作用やサーバー専用コードは含めない
+- `_utils/` の関数には単体テストを隣接配置する
+- 他のルートから参照する場合は `features/` または `lib/` に昇格させる
+
 ### Feature 分割案
 
 現在の `src/lib/` からの抽出候補:

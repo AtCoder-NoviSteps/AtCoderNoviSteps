@@ -1,6 +1,6 @@
 ---
 description: Authentication rules
-globs:
+paths:
   - 'src/lib/server/auth.ts'
   - 'src/routes/(auth)/**'
   - 'src/hooks.server.ts'
