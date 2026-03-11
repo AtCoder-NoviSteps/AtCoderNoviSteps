@@ -146,6 +146,7 @@
     {#snippet icon()}
       <CircleX class="w-5 h-5" />
     {/snippet}
+
     {errorMessage}
   </Toast>
 {/if}

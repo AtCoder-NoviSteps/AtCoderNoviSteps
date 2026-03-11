@@ -69,6 +69,7 @@
       minRequired={1}
     />
   </div>
+
   {@render solutionBoard()}
 {/snippet}
 
@@ -77,5 +78,6 @@
     <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">表示グレード（2つ以上選択）:</p>
     <ColumnSelector options={GRADE_OPTIONS} selected={selectedGrades} onchange={onGradesChange} />
   </div>
+
   {@render curriculumBoard()}
 {/snippet}

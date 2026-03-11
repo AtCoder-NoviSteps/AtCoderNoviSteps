@@ -41,6 +41,7 @@
     {label}
     <span class="text-sm font-normal text-gray-500">({cards.length})</span>
   </h3>
+
   <div class="flex flex-col gap-2 min-h-12 overflow-y-auto max-h-[60vh]">
     {#each cards as card, i (card.id)}
       <KanbanCard {...card} index={i} {columnId} {group} />

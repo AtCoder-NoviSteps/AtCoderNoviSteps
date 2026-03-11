@@ -33,7 +33,7 @@ export type SortableProps = {
   index: number;
 };
 
-// Card data used in the Kanban board (one card = one WorkBookPlacement)
+// Card used in the Kanban board (one card = one WorkBookPlacement)
 // Column assignment is implicit in the Record key, not stored on the card.
 export type Card = {
   id: number; // placement.id
