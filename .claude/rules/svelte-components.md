@@ -64,3 +64,42 @@ Promote to a component when:
 - Business logic, type definitions, and pure utility functions belong in `_types/` and `_utils/`, not inside component `<script>` blocks
 - Static configuration (e.g., tab configs) → `_utils/` constants
 - Pure computation (e.g., URL building, priority calculation) → `_utils/` pure functions with adjacent tests
+
+## Pure Functions and Side Effect Separation
+
+When a function mixes side effects (URL updates, fetch, DB access) with business logic, extract the logic as a pure function to `_utils/`:
+
+- The pure function receives its dependencies as arguments (no direct access to `$page`, stores, etc.)
+- Side effects stay in the caller
+- This makes the logic independently testable
+
+```ts
+// Before: untestable
+function updateUrl() {
+  const url = new URL($page.url);
+  url.searchParams.set('tab', activeTab);
+  replaceState(url, {});
+}
+
+// After: pure function in _utils/, side effect in caller
+export function buildUpdatedUrl(url: URL, activeTab: ActiveTab): URL { ... }
+// Caller: replaceState(buildUpdatedUrl($page.url, activeTab), {})
+```
+
+## Eliminate Branching with Records
+
+Replace `if (activeTab === '...')` chains with `Record<ActiveTab, T>`:
+
+```ts
+// Before
+const label = activeTab === 'curriculum' ? 'Curriculum' : 'Solution';
+
+// After
+const TAB_CONFIGS: Record<ActiveTab, TabConfig> = {
+  curriculum: { label: 'Curriculum', ... },
+  solution:   { label: 'Solution',   ... },
+};
+const label = TAB_CONFIGS[activeTab].label;
+```
+
+Use the enum type (e.g., `ActiveTab`) as the key type, not `string`.
