@@ -27,7 +27,7 @@
   import KanbanColumn from './KanbanColumn.svelte';
 
   import { getTaskGradeLabel } from '$lib/utils/task';
-  import { buildKanbanItems, calcPriorityUpdates, saveUpdates } from '../_utils/kanban';
+  import { buildKanbanItems, reCalcPriorities, saveUpdates } from '../_utils/kanban';
 
   interface Props {
     workbooks: WorkbooksWithPlacement;
@@ -41,7 +41,7 @@
   }
 
   let activeTab = $state<ActiveTab>(getParam('tab') === 'curriculum' ? 'curriculum' : 'solution');
-  let selectedSolutionCols = $state(
+  let selectedSolutionCategories = $state(
     (getParam('categories')?.split(',').filter(Boolean) ?? ['PENDING', 'GRAPH']).filter(
       (category) => category in SolutionCategory,
     ),
@@ -58,7 +58,7 @@
     url.searchParams.set('tab', activeTab);
 
     if (activeTab === 'solution') {
-      url.searchParams.set('categories', selectedSolutionCols.join(','));
+      url.searchParams.set('categories', selectedSolutionCategories.join(','));
       url.searchParams.delete('grades');
     } else {
       url.searchParams.set('grades', selectedGrades.join(','));
@@ -114,7 +114,7 @@
       return;
     }
 
-    const updates = calcPriorityUpdates(
+    const updates = reCalcPriorities(
       snapshot ?? {},
       allItems[activeTab],
       tabConfigs[activeTab].columnKey,
@@ -135,9 +135,9 @@
   }
 
   // PENDING is always shown, so keep it separate from the selectable columns
-  let displayedSolutionCols = $derived([
+  let displayedSolutionCategories = $derived([
     'PENDING',
-    ...selectedSolutionCols.filter((category) => category !== 'PENDING'),
+    ...selectedSolutionCategories.filter((category) => category !== 'PENDING'),
   ]);
 </script>
 
@@ -154,14 +154,14 @@
 <DragDropProvider {onDragStart} {onDragOver} {onDragEnd}>
   <KanbanTabBar
     {activeTab}
-    {selectedSolutionCols}
+    {selectedSolutionCategories}
     {selectedGrades}
     onTabChange={(tab) => {
       activeTab = tab;
       updateUrl();
     }}
-    onSolutionColsChange={(columns) => {
-      selectedSolutionCols = columns;
+    onSolutionCategoriesChange={(columns) => {
+      selectedSolutionCategories = columns;
       updateUrl();
     }}
     onGradesChange={(grades) => {
@@ -171,7 +171,7 @@
   >
     {#snippet solutionBoard()}
       <div class="flex gap-3 overflow-x-auto pb-4">
-        {#each displayedSolutionCols as column}
+        {#each displayedSolutionCategories as column}
           <KanbanColumn
             columnId={column}
             label={tabConfigs['solution'].labelFn(column)}

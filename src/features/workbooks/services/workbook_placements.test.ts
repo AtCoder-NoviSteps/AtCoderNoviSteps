@@ -6,8 +6,10 @@ import {
   type WorkBookPlacements,
 } from '$features/workbooks/types/workbook_placement';
 
+import { WorkBookType } from '$features/workbooks/types/workbook';
+
 import {
-  getWorkBookPlacements,
+  getPlacementsByWorkBookType,
   upsertWorkBookPlacements,
   validateAndUpdatePlacements,
   initializeCurriculumPlacements,
@@ -33,7 +35,7 @@ beforeEach(() => {
   vi.clearAllMocks();
 });
 
-describe('getWorkBookPlacements', () => {
+describe('getPlacementsByWorkBookType', () => {
   test('returns placements of type CURRICULUM', async () => {
     const mockPlacements: WorkBookPlacements = [
       { id: 1, workBookId: 1, taskGrade: TaskGrade.Q10, solutionCategory: null, priority: 1 },
@@ -43,12 +45,12 @@ describe('getWorkBookPlacements', () => {
       mockPlacements as unknown as Awaited<ReturnType<typeof prisma.workBookPlacement.findMany>>,
     );
 
-    const result = await getWorkBookPlacements('CURRICULUM');
+    const result = await getPlacementsByWorkBookType('CURRICULUM');
 
     expect(result).toEqual(mockPlacements);
     expect(prisma.workBookPlacement.findMany).toHaveBeenCalledWith(
       expect.objectContaining({
-        where: expect.objectContaining({ workBook: { workBookType: 'CURRICULUM' } }),
+        where: expect.objectContaining({ workBook: { workBookType: WorkBookType.CURRICULUM } }),
       }),
     );
   });
@@ -67,12 +69,12 @@ describe('getWorkBookPlacements', () => {
       mockPlacements as unknown as Awaited<ReturnType<typeof prisma.workBookPlacement.findMany>>,
     );
 
-    const result = await getWorkBookPlacements('SOLUTION');
+    const result = await getPlacementsByWorkBookType('SOLUTION');
 
     expect(result).toEqual(mockPlacements);
     expect(prisma.workBookPlacement.findMany).toHaveBeenCalledWith(
       expect.objectContaining({
-        where: expect.objectContaining({ workBook: { workBookType: 'SOLUTION' } }),
+        where: expect.objectContaining({ workBook: { workBookType: WorkBookType.SOLUTION } }),
       }),
     );
   });
@@ -177,7 +179,7 @@ describe('initializeCurriculumPlacements', () => {
     const result = initializeCurriculumPlacements(workbooks, tasksByTaskId);
 
     // id:5 → Q9 priority:1, id:7 → Q10 priority:1, id:10 → Q10 priority:2
-    const byWorkBookId = new Map(result.map((r) => [r.workBookId, r]));
+    const byWorkBookId = new Map(result.map((placement) => [placement.workBookId, placement]));
     expect(byWorkBookId.get(5)).toMatchObject({ taskGrade: TaskGrade.Q9, priority: 1 });
     expect(byWorkBookId.get(7)).toMatchObject({ taskGrade: TaskGrade.Q10, priority: 1 });
     expect(byWorkBookId.get(10)).toMatchObject({ taskGrade: TaskGrade.Q10, priority: 2 });
@@ -203,7 +205,7 @@ describe('cross-type movement between CURRICULUM and SOLUTION (server-side valid
         (u.taskGrade !== null && u.solutionCategory === null) ||
         (u.taskGrade === null && u.solutionCategory !== null),
     );
-    expect(isValid).toBeTruthy();
+    expect(isValid).toBe(true);
   });
 
   test('detects CURRICULUM→SOLUTION mix as XOR violation', () => {
@@ -215,7 +217,7 @@ describe('cross-type movement between CURRICULUM and SOLUTION (server-side valid
     };
     const isXorViolation =
       invalidUpdate.taskGrade !== null && invalidUpdate.solutionCategory !== null;
-    expect(isXorViolation).toBeTruthy();
+    expect(isXorViolation).toBe(true);
   });
 
   test('processes a batch containing both CURRICULUM and SOLUTION placements', async () => {
@@ -249,7 +251,7 @@ describe('cross-type movement between CURRICULUM and SOLUTION (server-side valid
 });
 
 describe('solutionCategory-specific scenarios', () => {
-  test('getWorkBookPlacements returns placements with multiple distinct solutionCategory values', async () => {
+  test('getPlacementsByWorkBookType returns placements with multiple distinct solutionCategory values', async () => {
     // Reflects the solutionCategoryMap fixture:
     //   stack, potentialized-union-find, priority-queue, map-dict, ordered-set → DATA_STRUCTURE
     //   bitmask-brute-force-search, greedy-method, recursive-function → SEARCH_SIMULATION
@@ -295,7 +297,7 @@ describe('solutionCategory-specific scenarios', () => {
       mockPlacements as unknown as Awaited<ReturnType<typeof prisma.workBookPlacement.findMany>>,
     );
 
-    const result = await getWorkBookPlacements('SOLUTION');
+    const result = await getPlacementsByWorkBookType('SOLUTION');
     expect(result).toHaveLength(5);
 
     const categories = result.map((placement) => placement.solutionCategory);
@@ -354,7 +356,7 @@ describe('validateAndUpdatePlacements', () => {
     priority: 1,
     taskGrade: 'Q10',
     solutionCategory: null,
-    workBook: { workBookType: 'CURRICULUM' },
+    workBook: { workBookType: WorkBookType.CURRICULUM },
   };
   const solutionPlacement = {
     id: 2,
@@ -362,7 +364,7 @@ describe('validateAndUpdatePlacements', () => {
     priority: 1,
     taskGrade: null,
     solutionCategory: 'GRAPH',
-    workBook: { workBookType: 'SOLUTION' },
+    workBook: { workBookType: WorkBookType.SOLUTION },
   };
 
   test('returns null and calls upsert when all updates are valid', async () => {
@@ -465,7 +467,7 @@ describe('buildPlacementsFromGroups', () => {
     ]);
 
     const result = buildPlacementsFromGroups(workbooks, gradeModes, byGrade);
-    const byId = new Map(result.map((r) => [r.workBookId, r]));
+    const byId = new Map(result.map((placement) => [placement.workBookId, placement]));
 
     expect(byId.get(7)).toMatchObject({ taskGrade: TaskGrade.Q10, priority: 1 });
     expect(byId.get(10)).toMatchObject({ taskGrade: TaskGrade.Q10, priority: 2 });
@@ -562,7 +564,7 @@ describe('initializeCurriculumPlacements with fixture-based task data', () => {
     ];
 
     const result = initializeCurriculumPlacements(workbooks, tasksByTaskId);
-    const byId = new Map(result.map((r) => [r.workBookId, r]));
+    const byId = new Map(result.map((placement) => [placement.workBookId, placement]));
 
     expect(byId.get(1)).toMatchObject({
       taskGrade: TaskGrade.Q10,
@@ -612,7 +614,7 @@ describe('initializeCurriculumPlacements with fixture-based task data', () => {
     ];
 
     const result = initializeCurriculumPlacements(workbooks, tasksByTaskId);
-    const byId = new Map(result.map((r) => [r.workBookId, r]));
+    const byId = new Map(result.map((placement) => [placement.workBookId, placement]));
 
     expect(byId.get(1)).toMatchObject({ taskGrade: TaskGrade.Q10, priority: 1 });
     expect(byId.get(7)).toMatchObject({ taskGrade: TaskGrade.Q10, priority: 2 });

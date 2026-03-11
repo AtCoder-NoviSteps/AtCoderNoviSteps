@@ -18,10 +18,10 @@ export async function POST({ request, locals }: RequestEvent) {
     return json({ error: 'Invalid request body' }, { status: BAD_REQUEST });
   }
 
-  const result = await validateAndUpdatePlacements(parsed.data.updates);
+  const validationError = await validateAndUpdatePlacements(parsed.data.updates);
 
-  if (result) {
-    return json(result, { status: BAD_REQUEST });
+  if (validationError) {
+    return json(validationError, { status: BAD_REQUEST });
   }
 
   return json({ success: true });

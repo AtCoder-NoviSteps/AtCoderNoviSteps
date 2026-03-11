@@ -7,13 +7,15 @@ type DndEvents = DragDropEvents<Draggable, Droppable, DragDropManager>;
 export type DragOverEventArg = Parameters<DndEvents['dragover']>[0];
 export type DragEndEventArg = Parameters<DndEvents['dragend']>[0];
 
+export type ColumnKey = 'solutionCategory' | 'taskGrade';
+
 export type ActiveTab = 'solution' | 'curriculum';
 
 // Static per-tab configuration used to eliminate activeTab === 'solution' if-branches
 export type TabConfig = {
   labelFn: (column: string) => string;
   group: string;
-  columnKey: 'solutionCategory' | 'taskGrade';
+  columnKey: ColumnKey;
 };
 
 export type KanbanColumns = Record<string, Cards>;
@@ -26,11 +28,13 @@ export type PlacementUpdate = {
   taskGrade: string | null;
 };
 
+export type PlacementUpdates = PlacementUpdate[];
+
 // Props required for dnd-kit sortable positioning
 export type SortableProps = {
-  columnId: string;
-  group: string;
-  index: number;
+  columnId: string; // droppable zone ID (the column this card belongs to)
+  group: string; // dnd-kit type that restricts drop targets to the same board
+  index: number; // position within the column (required by dnd-kit sortable)
 };
 
 // Card used in the Kanban board (one card = one WorkBookPlacement)

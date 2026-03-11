@@ -59,6 +59,8 @@ export type PlacementInput = Pick<
   'id' | 'taskGrade' | 'solutionCategory' | 'priority'
 >;
 
+export type PlacementInputs = PlacementInput[];
+
 // Shape of a placement record to be created in the database
 export type PlacementCreate = {
   workBookId: number;
@@ -72,6 +74,14 @@ export type WorkBookWithTasks = {
   id: number;
   workBookTasks: WorkBookTaskBase[];
 };
+
+// Shape of a curriculum workbook row queried for placement initialization
+export type UnplacedCurriculumRow = {
+  id: number;
+  workBookTasks: { task: { task_id: string; grade: TaskGrade } | null }[];
+};
+
+export type UnplacedCurriculumRows = UnplacedCurriculumRow[];
 
 // Shape of workbooks returned from the load function for use in KanbanBoard
 export type WorkbookWithPlacement = {

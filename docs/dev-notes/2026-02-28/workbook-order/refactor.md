@@ -18,36 +18,36 @@
 
 ### Phase 1: 機械的な単一箇所修正（リスク最小・依存なし）
 
-- [ ] `+server.ts`: `result` → `validationError` にリネーム
-- [ ] `+page.svelte`: `<h2>` → `<HeadingOne title="..." />` に置換
-- [ ] `_utils/kanban.ts`: `res` → `response` にリネーム
-- [ ] `_utils/kanban.ts`: `enumKeys` → `columnKeys` にリネーム
-- [ ] `KanbanBoard.svelte`: `SolutionCols` → `SolutionCategories` にリネーム
-- [ ] `KanbanCard.svelte`: `PublicationStatusLabel` と `WorkbookLink` を別の行に分ける
-- [ ] `ColumnSelector.svelte`: L22 の1行 return にブレースを追加
-- [ ] `ColumnSelector.svelte`: ボタンの色を `green` → `primary` に変更
-- [ ] `ColumnSelector.svelte`: 最小値2の理由をコメントで英語明記（DnD にはカード移動先として最低2パネル必要）
-- [ ] テストファイル: `toBeTruthy()` → `toBe(true)` に置換
-- [ ] テストファイル: ラムダ引数の1文字変数（`r` 等）を意味のある名前に修正
+- [x] `+server.ts`: `result` → `validationError` にリネーム
+- [x] `+page.svelte`: `<h2>` → `<HeadingOne title="..." />` に置換
+- [x] `_utils/kanban.ts`: `res` → `response` にリネーム
+- [x] `_utils/kanban.ts`: `enumKeys` → `columnKeys` にリネーム
+- [x] `KanbanBoard.svelte`: `SolutionCols` → `SolutionCategories` にリネーム
+- [x] `KanbanCard.svelte`: `PublicationStatusLabel` と `WorkbookLink` を別の行に分ける
+- [x] `ColumnSelector.svelte`: L22 の1行 return にブレースを追加
+- [x] `ColumnSelector.svelte`: ボタンの色を `green` → `primary` に変更
+- [x] `ColumnSelector.svelte`: 最小値2の理由をコメントで英語明記（DnD にはカード移動先として最低2パネル必要）
+- [x] テストファイル: `toBeTruthy()` → `toBe(true)` に置換
+- [x] テストファイル: ラムダ引数の1文字変数（`r` 等）を意味のある名前に修正
 
 ### Phase 2: 型定義の整理（Phase 3 以降の前提）
 
-- [ ] `_types/kanban.ts`: `columnKey` のハードコード → `TabConfig` の `columnKey` に型を定義（`'solutionCategory' | 'taskGrade'` を `ColumnKey` 型として抽出）
-- [ ] `_types/kanban.ts`: `PlacementUpdates` 型を定義（`PlacementUpdate[]` の代替）
-- [ ] `_types/kanban.ts`: `SortableProps` の属性の違いをコメントで明記、または明示的な名前に変更
-- [ ] `workbook_placement.ts`: `PlacementInputs` 型を定義（`PlacementInput[]` の代替）
-- [ ] `workbook_placement.ts`: `UnplacedCurriculumRows` 型を定義
-- [ ] `workbook_placements.ts`（service）: `workBookType` ハードコード → `WorkBookType` を使用
-- [ ] `workbook_placements.ts`（service）: 他の `Hoge[]` も複数形の型を定義・使用
-- [ ] テストファイル: ハードコード値 → `TaskGrade`, `SolutionCategory`, `WorkBookType` 型を使用
+- [x] `_types/kanban.ts`: `columnKey` のハードコード → `TabConfig` の `columnKey` に型を定義（`'solutionCategory' | 'taskGrade'` を `ColumnKey` 型として抽出）
+- [x] `_types/kanban.ts`: `PlacementUpdates` 型を定義（`PlacementUpdate[]` の代替）
+- [x] `_types/kanban.ts`: `SortableProps` の属性の違いをコメントで明記、または明示的な名前に変更
+- [x] `workbook_placement.ts`: `PlacementInputs` 型を定義（`PlacementInput[]` の代替）
+- [x] `workbook_placement.ts`: `UnplacedCurriculumRows` 型を定義
+- [x] `workbook_placements.ts`（service）: `workBookType` ハードコード → `WorkBookType` を使用
+- [x] `workbook_placements.ts`（service）: 他の `Hoge[]` も複数形の型を定義・使用
+- [x] テストファイル: ハードコード値 → `TaskGrade`, `SolutionCategory`, `WorkBookType` 型を使用
 
 ### Phase 3: 命名・リネーム（型定義に依存）
 
-- [ ] `calcPriorityUpdates` → `reCalcPriorities` 等に改名（英語的に自然な名前へ）
-- [ ] `getWorkBookPlacements` → 問題集の種類を指定していることが分かる命名に変更
-- [ ] `buildTasksByTaskId` → unplaced curriculum workbook rows であることが分かる命名に変更
-- [ ] `KanbanColumn.svelte`: Props を意味のある単位で並び替え
-- [ ] `KanbanColumn.svelte`: カラム内カード数を右寄せ + 数字を大きく
+- [x] `calcPriorityUpdates` → `reCalcPriorities` に改名
+- [x] `getWorkBookPlacements` → `getPlacementsByWorkBookType` に改名
+- [x] `buildTasksByTaskId` → `buildTaskMapFromCurriculumRows` に改名
+- [x] `KanbanColumn.svelte`: Props を意味のある単位で並び替え
+- [x] `KanbanColumn.svelte`: カラム内カード数を右寄せ + 数字を大きく
 
 ### Phase 4: UI スタイル修正
 

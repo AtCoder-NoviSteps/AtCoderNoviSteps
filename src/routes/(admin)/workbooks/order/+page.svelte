@@ -1,13 +1,14 @@
 <script lang="ts">
   import ContainerWrapper from '$lib/components/ContainerWrapper.svelte';
+  import HeadingOne from '$lib/components/HeadingOne.svelte';
   import KanbanBoard from './_components/KanbanBoard.svelte';
 
   let { data } = $props();
 </script>
 
 <ContainerWrapper defaultWidth="w-full" lgWidth="lg:w-full">
-  <div class="w-full p-6">
-    <h2 class="text-2xl font-extrabold dark:text-white mb-3">問題集（並び替え）</h2>
+  <div class="w-full lg:pl-6">
+    <HeadingOne title="問題集（並び替え）" />
 
     {#if data.hasUnplacedWorkbooks}
       <form method="POST" action="?/initializePlacements" class="mb-6">

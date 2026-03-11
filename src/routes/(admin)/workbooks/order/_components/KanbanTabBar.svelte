@@ -21,10 +21,10 @@
 
   interface Props {
     activeTab: ActiveTab;
-    selectedSolutionCols: string[];
+    selectedSolutionCategories: string[];
     selectedGrades: string[];
     onTabChange: (tab: ActiveTab) => void;
-    onSolutionColsChange: (cols: string[]) => void;
+    onSolutionCategoriesChange: (cols: string[]) => void;
     onGradesChange: (grades: string[]) => void;
     solutionBoard: Snippet;
     curriculumBoard: Snippet;
@@ -32,10 +32,10 @@
 
   let {
     activeTab,
-    selectedSolutionCols,
+    selectedSolutionCategories,
     selectedGrades,
     onTabChange,
-    onSolutionColsChange,
+    onSolutionCategoriesChange,
     onGradesChange,
     solutionBoard,
     curriculumBoard,
@@ -64,8 +64,8 @@
     <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">表示カテゴリ（2つ以上選択）:</p>
     <ColumnSelector
       options={SOLUTION_CATEGORY_OPTIONS}
-      selected={selectedSolutionCols.filter((category) => category !== 'PENDING')}
-      onchange={onSolutionColsChange}
+      selected={selectedSolutionCategories.filter((category) => category !== 'PENDING')}
+      onchange={onSolutionCategoriesChange}
       minRequired={1}
     />
   </div>

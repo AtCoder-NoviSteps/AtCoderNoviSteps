@@ -2,7 +2,7 @@ import type {
   WorkbooksWithPlacement,
   WorkbookWithPlacement,
 } from '$features/workbooks/types/workbook_placement';
-import type { KanbanColumns, PlacementUpdate } from '../_types/kanban';
+import type { KanbanColumns, ColumnKey, PlacementUpdate, PlacementUpdates } from '../_types/kanban';
 
 /**
  * Builds a KanbanColumns record from a list of workbooks.
@@ -15,12 +15,12 @@ import type { KanbanColumns, PlacementUpdate } from '../_types/kanban';
  */
 export function buildKanbanItems(
   workbooks: WorkbooksWithPlacement,
-  enumKeys: string[],
+  columnKeys: string[],
   getColumnKey: (workbook: WorkbookWithPlacement) => string | null,
 ): KanbanColumns {
   const record: KanbanColumns = {};
 
-  for (const key of enumKeys) {
+  for (const key of columnKeys) {
     record[key] = [];
   }
 
@@ -49,12 +49,12 @@ export function buildKanbanItems(
  * @param after - Current state after the drag operation
  * @param columnKey - Which placement field ('solutionCategory' | 'taskGrade') to set
  */
-export function calcPriorityUpdates(
+export function reCalcPriorities(
   before: KanbanColumns,
   after: KanbanColumns,
-  columnKey: 'solutionCategory' | 'taskGrade',
-): PlacementUpdate[] {
-  const updates: PlacementUpdate[] = [];
+  columnKey: ColumnKey,
+): PlacementUpdates {
+  const updates: PlacementUpdates = [];
 
   for (const [columnId, cards] of Object.entries(after)) {
     const snapCards = before[columnId];
@@ -84,11 +84,11 @@ export function calcPriorityUpdates(
  * Throws if the response is not OK.
  */
 export async function saveUpdates(updates: PlacementUpdate[]): Promise<void> {
-  const res = await fetch('/workbooks/order', {
+  const response = await fetch('/workbooks/order', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ updates }),
   });
 
-  if (!res.ok) throw new Error('Failed to save');
+  if (!response.ok) throw new Error('Failed to save');
 }

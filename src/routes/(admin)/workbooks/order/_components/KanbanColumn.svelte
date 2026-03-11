@@ -6,13 +6,13 @@
   import type { Cards } from '../_types/kanban';
 
   interface Props {
-    columnId: string;
+    columnId: string; // droppable zone ID
+    group: string; // dnd-kit type for restricting drops
     label: string;
     cards: Cards;
-    group: string;
   }
 
-  let { columnId, label, cards, group }: Props = $props();
+  let { columnId, group, label, cards }: Props = $props();
 
   const droppable = createDroppable({
     get id() {
@@ -37,10 +37,10 @@
   class:bg-gray-200={droppable.isDropTarget}
   class:dark:bg-gray-600={droppable.isDropTarget}
 >
-  <h3 class="text-base font-semibold text-gray-700 dark:text-gray-300 sticky top-0 pb-1">
-    {label}
-    <span class="text-sm font-normal text-gray-500">({cards.length})</span>
-  </h3>
+  <div class="flex items-center justify-between sticky top-0 pb-1">
+    <h3 class="text-base font-semibold text-gray-700 dark:text-gray-300">{label}</h3>
+    <span class="text-base font-semibold text-gray-500">{cards.length}</span>
+  </div>
 
   <div class="flex flex-col gap-2 min-h-12 overflow-y-auto max-h-[60vh]">
     {#each cards as card, i (card.id)}

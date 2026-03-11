@@ -2,7 +2,7 @@ import { describe, test, expect } from 'vitest';
 
 import {
   buildKanbanItems,
-  calcPriorityUpdates,
+  reCalcPriorities,
 } from '../../../../../../routes/(admin)/workbooks/order/_utils/kanban';
 import type { WorkbooksWithPlacement } from '$features/workbooks/types/workbook_placement';
 
@@ -154,7 +154,7 @@ describe('buildKanbanItems', () => {
   });
 });
 
-describe('calcPriorityUpdates', () => {
+describe('reCalcPriorities', () => {
   const before = {
     GRAPH: [
       { id: 101, workBookId: 1, title: 'Graph Basics', isPublished: true },
@@ -165,7 +165,7 @@ describe('calcPriorityUpdates', () => {
 
   test('returns empty array when nothing changed', () => {
     const after = structuredClone(before);
-    expect(calcPriorityUpdates(before, after, 'solutionCategory')).toEqual([]);
+    expect(reCalcPriorities(before, after, 'solutionCategory')).toEqual([]);
   });
 
   test('returns updates for reordered cards within a column', () => {
@@ -174,7 +174,7 @@ describe('calcPriorityUpdates', () => {
       GRAPH: [before.GRAPH[1], before.GRAPH[0]], // swapped
     };
 
-    const updates = calcPriorityUpdates(before, after, 'solutionCategory');
+    const updates = reCalcPriorities(before, after, 'solutionCategory');
     expect(updates).toHaveLength(2);
     expect(updates[0]).toMatchObject({
       id: 102,
@@ -196,7 +196,7 @@ describe('calcPriorityUpdates', () => {
       PENDING: before.PENDING, // unchanged
     };
 
-    const updates = calcPriorityUpdates(before, after, 'solutionCategory');
+    const updates = reCalcPriorities(before, after, 'solutionCategory');
     const updatedIds = updates.map((update) => update.id);
     expect(updatedIds).not.toContain(103);
     expect(updatedIds).toContain(101);
@@ -213,7 +213,7 @@ describe('calcPriorityUpdates', () => {
       Q9: [{ id: 201, workBookId: 4, title: 'Q10 Book', isPublished: true }],
     };
 
-    const updates = calcPriorityUpdates(gradeBefore, gradeAfter, 'taskGrade');
+    const updates = reCalcPriorities(gradeBefore, gradeAfter, 'taskGrade');
     expect(updates.every((update) => update.solutionCategory === null)).toBe(true);
     expect(updates.find((update) => update.id === 202)).toMatchObject({
       taskGrade: 'Q10',
@@ -222,7 +222,7 @@ describe('calcPriorityUpdates', () => {
   });
 
   test('returns updates for columns missing from before (new column)', () => {
-    const updates = calcPriorityUpdates(
+    const updates = reCalcPriorities(
       {},
       { GRAPH: [{ id: 101, workBookId: 1, title: 'Test', isPublished: true }] },
       'solutionCategory',

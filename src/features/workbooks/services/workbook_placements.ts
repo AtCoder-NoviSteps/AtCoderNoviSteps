@@ -6,25 +6,23 @@ import {
   type WorkBookPlacement,
   type WorkBookPlacements,
   type WorkbooksWithPlacement,
-  type PlacementInput,
+  type PlacementInputs,
   type WorkBookWithTasks,
   type PlacementCreate,
+  type UnplacedCurriculumRow,
+  type UnplacedCurriculumRows,
 } from '$features/workbooks/types/workbook_placement';
 
-import { calcWorkBookGradeModes } from '$features/workbooks/utils/workbooks';
+import { WorkBookType } from '$features/workbooks/types/workbook';
 
-/** @internal Shape of a workbook row from the DB query for unplaced curriculum workbooks. */
-type UnplacedCurriculumRow = {
-  id: number;
-  workBookTasks: { task: { task_id: string; grade: TaskGrade } | null }[];
-};
+import { calcWorkBookGradeModes } from '$features/workbooks/utils/workbooks';
 
 /**
  * Returns all CURRICULUM and SOLUTION workbooks with their placements, ordered by id.
  */
 export async function getWorkbooksWithPlacements(): Promise<WorkbooksWithPlacement> {
   return prisma.workBook.findMany({
-    where: { workBookType: { in: ['CURRICULUM', 'SOLUTION'] } },
+    where: { workBookType: { in: [WorkBookType.CURRICULUM, WorkBookType.SOLUTION] } },
     include: { placement: true },
     orderBy: { id: 'asc' },
   });
@@ -33,8 +31,8 @@ export async function getWorkbooksWithPlacements(): Promise<WorkbooksWithPlaceme
 /**
  * Returns all placements for workbooks of the given type, ordered by priority.
  */
-export async function getWorkBookPlacements(
-  workBookType: 'CURRICULUM' | 'SOLUTION',
+export async function getPlacementsByWorkBookType(
+  workBookType: typeof WorkBookType.CURRICULUM | typeof WorkBookType.SOLUTION,
 ): Promise<WorkBookPlacements> {
   return prisma.workBookPlacement.findMany({
     where: { workBook: { workBookType } },
@@ -46,7 +44,7 @@ export async function getWorkBookPlacements(
  * Updates existing placements in a single transaction.
  * No-op when given an empty array.
  */
-export async function upsertWorkBookPlacements(updatedPlacements: PlacementInput[]): Promise<void> {
+export async function upsertWorkBookPlacements(updatedPlacements: PlacementInputs): Promise<void> {
   if (updatedPlacements.length === 0) {
     return;
   }
@@ -69,7 +67,9 @@ export async function upsertWorkBookPlacements(updatedPlacements: PlacementInput
  * Builds a task lookup map from unplaced curriculum workbook rows.
  * Stub tasks include only task_id and grade; other fields are left empty.
  */
-export function buildTasksByTaskId(workbooks: UnplacedCurriculumRow[]): Map<string, Task> {
+export function buildTaskMapFromCurriculumRows(
+  workbooks: UnplacedCurriculumRows,
+): Map<string, Task> {
   const tasksByTaskId = new Map<string, Task>();
 
   for (const workbook of workbooks) {
@@ -201,7 +201,7 @@ export async function createInitialPlacements(): Promise<void> {
     return;
   }
 
-  const tasksByTaskId = buildTasksByTaskId(unplacedCurriculum);
+  const tasksByTaskId = buildTaskMapFromCurriculumRows(unplacedCurriculum);
   const curriculumWorkbooksForInit = buildCurriculumWorkbooksForInit(unplacedCurriculum);
 
   const curriculumPlacements = initializeCurriculumPlacements(
@@ -220,7 +220,7 @@ export async function createInitialPlacements(): Promise<void> {
  * Returns { error } on validation failure, null on success.
  */
 export async function validateAndUpdatePlacements(
-  updates: PlacementInput[],
+  updates: PlacementInputs,
 ): Promise<{ error: string } | null> {
   for (const update of updates) {
     const existing = await prisma.workBookPlacement.findUnique({
