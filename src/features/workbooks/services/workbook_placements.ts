@@ -7,15 +7,16 @@ import {
   type WorkBookPlacements,
   type WorkbooksWithPlacement,
   type PlacementInputs,
-  type WorkBookWithTasks,
-  type PlacementCreate,
-  type UnplacedCurriculumRow,
+  type WorkBooksWithTasks,
+  type PlacementCreates,
   type UnplacedCurriculumRows,
 } from '$features/workbooks/types/workbook_placement';
 
 import { WorkBookType } from '$features/workbooks/types/workbook';
 
 import { calcWorkBookGradeModes } from '$features/workbooks/utils/workbooks';
+
+// --- 1. Basic CRUD operations for placements ---
 
 /**
  * Returns all CURRICULUM and SOLUTION workbooks with their placements, ordered by id.
@@ -63,6 +64,54 @@ export async function upsertWorkBookPlacements(updatedPlacements: PlacementInput
   );
 }
 
+// --- 2. Curriculum-specific initialization ---
+
+/**
+ * Queries all unplaced CURRICULUM and SOLUTION workbooks, computes their initial
+ * placements, and writes them to the database in a single createMany call.
+ * No-op when all workbooks are already placed.
+ */
+export async function createInitialPlacements(): Promise<void> {
+  const { unplacedCurriculum, unplacedSolution } = await fetchUnplacedWorkbooks();
+
+  if (unplacedCurriculum.length === 0 && unplacedSolution.length === 0) {
+    return;
+  }
+
+  const tasksByTaskId = buildTaskMapFromCurriculumRows(unplacedCurriculum);
+  const curriculumWorkbooksForInit = buildCurriculumWorkbooksForInit(unplacedCurriculum);
+
+  const curriculumPlacements = initializeCurriculumPlacements(
+    curriculumWorkbooksForInit,
+    tasksByTaskId,
+  );
+  const solutionPlacements = initializeSolutionPlacements(unplacedSolution);
+
+  await prisma.workBookPlacement.createMany({
+    data: [...curriculumPlacements, ...solutionPlacements],
+  });
+}
+
+async function fetchUnplacedWorkbooks() {
+  const [unplacedCurriculum, unplacedSolution] = await Promise.all([
+    prisma.workBook.findMany({
+      where: { workBookType: WorkBookType.CURRICULUM, placement: null },
+      include: {
+        workBookTasks: {
+          include: { task: { select: { task_id: true, grade: true } } },
+        },
+      },
+      orderBy: { id: 'asc' },
+    }),
+    prisma.workBook.findMany({
+      where: { workBookType: WorkBookType.SOLUTION, placement: null },
+      orderBy: { id: 'asc' },
+    }),
+  ]);
+
+  return { unplacedCurriculum, unplacedSolution };
+}
+
 /**
  * Builds a task lookup map from unplaced curriculum workbook rows.
  * Stub tasks include only task_id and grade; other fields are left empty.
@@ -91,8 +140,8 @@ export function buildTaskMapFromCurriculumRows(
  * Converts unplaced curriculum DB rows into the shape expected by initializeCurriculumPlacements.
  */
 export function buildCurriculumWorkbooksForInit(
-  workbooks: UnplacedCurriculumRow[],
-): WorkBookWithTasks[] {
+  workbooks: UnplacedCurriculumRows,
+): WorkBooksWithTasks {
   return workbooks.map((workbook) => ({
     id: workbook.id,
     workBookTasks: workbook.workBookTasks.map((workBookTask) => ({
@@ -104,23 +153,24 @@ export function buildCurriculumWorkbooksForInit(
 }
 
 /**
- * Returns initial placement records for unplaced SOLUTION workbooks.
- * All are placed in the PENDING category with sequential priority.
+ * Returns initial placement records for unplaced CURRICULUM workbooks.
+ * Each workbook is assigned the mode grade of its tasks, with priority
+ * determined by ascending workbook ID within each grade group.
  */
-export function initializeSolutionPlacements(workbooks: { id: number }[]): PlacementCreate[] {
-  return workbooks.map((workBook, i) => ({
-    workBookId: workBook.id,
-    taskGrade: null,
-    solutionCategory: SolutionCategory.PENDING,
-    priority: i + 1,
-  }));
+export function initializeCurriculumPlacements(
+  workbooks: WorkBooksWithTasks,
+  tasksByTaskId: Map<string, Task>,
+): PlacementCreates {
+  const gradeModes = calcWorkBookGradeModes(workbooks, tasksByTaskId);
+  const byGrade = groupWorkbooksByGrade(workbooks, gradeModes);
+  return buildPlacementsFromGroups(workbooks, gradeModes, byGrade);
 }
 
 /**
  * Groups workbooks by their mode grade, sorted by workbook ID ascending within each group.
  */
 export function groupWorkbooksByGrade(
-  workbooks: WorkBookWithTasks[],
+  workbooks: WorkBooksWithTasks,
   gradeModes: Map<number, TaskGrade>,
 ): Map<TaskGrade, number[]> {
   return workbooks.reduce((byGrade, workbook) => {
@@ -135,10 +185,10 @@ export function groupWorkbooksByGrade(
  * Priority is the 1-based index within each grade group (sorted by workbook ID).
  */
 export function buildPlacementsFromGroups(
-  workbooks: WorkBookWithTasks[],
+  workbooks: WorkBooksWithTasks,
   gradeModes: Map<number, TaskGrade>,
   byGrade: Map<TaskGrade, number[]>,
-): PlacementCreate[] {
+): PlacementCreates {
   return workbooks.map((workbook) => {
     const grade = gradeModes.get(workbook.id)!;
     const ids = byGrade.get(grade)!;
@@ -147,59 +197,22 @@ export function buildPlacementsFromGroups(
   });
 }
 
-/**
- * Returns initial placement records for unplaced CURRICULUM workbooks.
- * Each workbook is assigned the mode grade of its tasks, with priority
- * determined by ascending workbook ID within each grade group.
- */
-export function initializeCurriculumPlacements(
-  workbooks: WorkBookWithTasks[],
-  tasksByTaskId: Map<string, Task>,
-): PlacementCreate[] {
-  const gradeModes = calcWorkBookGradeModes(workbooks, tasksByTaskId);
-  const byGrade = groupWorkbooksByGrade(workbooks, gradeModes);
-  return buildPlacementsFromGroups(workbooks, gradeModes, byGrade);
-}
+// --- 3. Solution-specific initialization ---
 
 /**
- * Queries all unplaced CURRICULUM and SOLUTION workbooks, computes their initial
- * placements, and writes them to the database in a single createMany call.
- * No-op when all workbooks are already placed.
+ * Returns initial placement records for unplaced SOLUTION workbooks.
+ * All are placed in the PENDING category with sequential priority.
  */
-export async function createInitialPlacements(): Promise<void> {
-  const [unplacedCurriculum, unplacedSolution] = await Promise.all([
-    prisma.workBook.findMany({
-      where: { workBookType: 'CURRICULUM', placement: null },
-      include: {
-        workBookTasks: {
-          include: { task: { select: { task_id: true, grade: true } } },
-        },
-      },
-      orderBy: { id: 'asc' },
-    }),
-    prisma.workBook.findMany({
-      where: { workBookType: 'SOLUTION', placement: null },
-      orderBy: { id: 'asc' },
-    }),
-  ]);
-
-  if (unplacedCurriculum.length === 0 && unplacedSolution.length === 0) {
-    return;
-  }
-
-  const tasksByTaskId = buildTaskMapFromCurriculumRows(unplacedCurriculum);
-  const curriculumWorkbooksForInit = buildCurriculumWorkbooksForInit(unplacedCurriculum);
-
-  const curriculumPlacements = initializeCurriculumPlacements(
-    curriculumWorkbooksForInit,
-    tasksByTaskId,
-  );
-  const solutionPlacements = initializeSolutionPlacements(unplacedSolution);
-
-  await prisma.workBookPlacement.createMany({
-    data: [...curriculumPlacements, ...solutionPlacements],
-  });
+export function initializeSolutionPlacements(workbooks: { id: number }[]): PlacementCreates {
+  return workbooks.map((workBook, i) => ({
+    workBookId: workBook.id,
+    taskGrade: null,
+    solutionCategory: SolutionCategory.PENDING,
+    priority: i + 1,
+  }));
 }
+
+// --- 4. Common logic for both curriculum and solution ---
 
 /**
  * Validates that no update crosses CURRICULUM/SOLUTION boundary, then upserts.
@@ -208,6 +221,18 @@ export async function createInitialPlacements(): Promise<void> {
 export async function validateAndUpdatePlacements(
   updates: PlacementInputs,
 ): Promise<{ error: string } | null> {
+  const validationError = await validatePlacements(updates);
+
+  if (validationError) {
+    return validationError;
+  }
+
+  await upsertWorkBookPlacements(updates);
+
+  return null;
+}
+
+async function validatePlacements(updates: PlacementInputs): Promise<{ error: string } | null> {
   for (const update of updates) {
     const existing = await prisma.workBookPlacement.findUnique({
       where: { id: update.id },
@@ -215,27 +240,29 @@ export async function validateAndUpdatePlacements(
     });
 
     if (!existing) {
-      return { error: `placement id=${update.id} does not exist` };
+      return { error: `Not found placement id=${update.id}` };
     }
 
     const isCurriculumToSolution =
-      existing.workBook.workBookType === 'CURRICULUM' && update.solutionCategory !== null;
+      existing.workBook.workBookType === WorkBookType.CURRICULUM &&
+      update.solutionCategory !== null;
     const isSolutionToCurriculum =
-      existing.workBook.workBookType === 'SOLUTION' && update.taskGrade !== null;
+      existing.workBook.workBookType === WorkBookType.SOLUTION && update.taskGrade !== null;
 
     if (isCurriculumToSolution || isSolutionToCurriculum) {
       return { error: 'Moving between CURRICULUM and SOLUTION is not allowed' };
     }
   }
 
-  await upsertWorkBookPlacements(updates);
   return null;
 }
+
+// --- 5. Only used for seeding initial placements, not exposed to runtime code ---
 
 /**
  * Persists an array of new placement records to the database.
  */
-export async function createWorkBookPlacements(placements: PlacementCreate[]): Promise<void> {
+export async function createWorkBookPlacements(placements: PlacementCreates): Promise<void> {
   if (placements.length === 0) {
     return;
   }

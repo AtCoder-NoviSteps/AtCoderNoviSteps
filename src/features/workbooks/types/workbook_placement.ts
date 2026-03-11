@@ -69,11 +69,15 @@ export type PlacementCreate = {
   priority: number;
 };
 
+export type PlacementCreates = PlacementCreate[];
+
 // Workbook shape required by initializeCurriculumPlacements
 export type WorkBookWithTasks = {
   id: number;
   workBookTasks: WorkBookTaskBase[];
 };
+
+export type WorkBooksWithTasks = WorkBookWithTasks[];
 
 // Shape of a curriculum workbook row queried for placement initialization
 export type UnplacedCurriculumRow = {
