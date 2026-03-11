@@ -102,13 +102,13 @@
 
 ### Phase 8: テストの整備
 
-- [ ] `src/features/workbooks/fixtures/workbook_placements.ts` を新設し、テストデータを移動
-- [ ] テストデータを `prisma/tasks.ts` や `fixtures/workbooks.ts` の実データに基づくものに置換
-- [ ] `mockResolvedValue` の重複キャストパターン → ヘルパー関数に抽出（vitest の制約なら理由をコメント）
-- [ ] 冗長な `expect(result).toEqual(mockPlacements)` → 直後の assert でカバーされていれば削除
-- [ ] テスト順序をサービスのメソッド順序に合わせて並べ替え（Phase 6 Step 2 に依存）
-- [ ] 不足しているテストケースを追加
-- [ ] `+page.server.ts`: `createInitialPlacements()` のエラーハンドリング漏れを調査 → 失敗時に `success: true` が返る問題を修正
+- [x] `src/features/workbooks/fixtures/workbook_placements.ts` を新設し、テストデータを移動
+- [x] テストデータを `prisma/tasks.ts` や `fixtures/workbooks.ts` の実データに基づくものに置換
+- [x] `mockResolvedValue` の重複キャストパターン → `mockFindMany` / `mockFindUnique` ヘルパー関数に抽出
+- [x] 冗長な `expect(result).toEqual(mockPlacements)` → fixture 参照に統一、独立した assert と統合
+- [x] テスト順序をサービスのメソッド順序に合わせて並べ替え（Phase 6 Step 2 に依存）
+- [x] 不足しているテストケースを追加（`buildTaskMapFromCurriculumRows`, `buildCurriculumWorkbooksForInit`）
+- [x] `+page.server.ts`: `createInitialPlacements()` のエラーハンドリング漏れを調査 → throw 時は SvelteKit が 500 として扱うため現状維持で問題なし（`success: true` には到達しない）
 
 ### Phase 9: kanban.ts の単体テスト補強
 
@@ -228,6 +228,15 @@ snippet を第一選択とする条件:
 - バリデーションループを独立した関数（例: `validatePlacements`）に抽出すると、オーケストレーター関数が「validate → upsert」の 2 ステップだけになり意図が明確になる
 - `export` を付けないことでプライベートであることを型として表現できる（TypeScript の慣習として `private` キーワードより明示的な場合がある）
 - ファイル内のセクションをコメント（`// --- 1. 基本的な CRUD ---` 等）で区切ることで、大きいファイルでもナビゲーションコストを下げられる
+
+### テスト設計
+
+- `vi.mocked(prisma.xxx.findMany).mockResolvedValue(value as unknown as Awaited<ReturnType<typeof prisma.xxx.findMany>>)` の重複キャストはテストファイル内のヘルパー関数（`mockFindMany`, `mockFindUnique`）に抽出することで、各テストケースを 1 行で記述できる
+- テストデータを fixture ファイルに分離すると、仕様変更時に fixture だけ更新すれば全テストが追随する。インライン定義より保守コストが低い
+- 「サービス関数を呼ばずインラインロジックだけ検証する」テストは削除してよい。サービスの動作を確認しないテストは仕様変更時に誤って削除されやすく、誤検知のリスクが高い
+- `fail()` vs `error()` の選択: `fail()` はページに留まってフォーム結果を返す。`error()` または uncaught throw はエラーページに遷移する。フォームに `form.error` 表示 UI がない場合は throw させるだけで十分（`fail()` は意味をなさない）
+- fixture から `filter` でサブセットを作る場合、フィルタ後のデータの中身をよく確認すること。同じ id でも fixture が更新されると別のタスク/グレードを指す可能性がある（今回: workBook 6 が Q10 ではなく Q8 になっていた）
+- `Promise.all` で同一 mock 関数を複数回呼ぶ場合、`mockResolvedValueOnce` を呼び出し順に積み上げれば対応できる。`createInitialPlacements` のように内部で `Promise.all([findMany, findMany])` を使う関数も同様にテスト可能
 
 ### CSS / Tailwind
 
