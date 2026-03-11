@@ -112,7 +112,11 @@
 
 ### Phase 9: kanban.ts の単体テスト補強
 
-- [ ] `_utils/kanban.ts` の正常系・異常系・境界値テストを追加（既存の `kanban.test.ts` を拡充）
+- [x] `_utils/kanban.ts` の正常系・異常系・境界値テストを追加（既存の `kanban.test.ts` を拡充）
+  - `buildUpdatedUrl`: solution/curriculum タブ切替、空配列、既存パラメータ上書き、元 URL の非破壊を追加
+  - `reCalcPriorities`: クロスカラム移動（両カラムが変更対象）、空→空のケースを追加
+  - `buildKanbanItems`: `placement=null` 除外の明示的アサーションを追加
+  - 既存の `(wb) =>` → `(workbook) =>` に修正（コーディングルール違反）
 
 ### Phase 10: ドキュメント更新（上記が全て完了したら実行）
 
@@ -178,6 +182,7 @@ snippet を第一選択とする条件:
 - seed は統合テスト相当のため単体テスト対象外
 - DnD UI の Playwright テストは mouse + @dnd-kit が不安定なため除外
 - 型制約で安全なハードコード定数の置換は優先度を下げる
+- `saveUpdates` の単体テストは不要: ロジックが `if (!response.ok) throw` の1行のみで、fetch モックのセットアップコストがテスト価値を上回る。E2E テストが HTTP 通信をカバーする
 
 ---
 
@@ -232,11 +237,17 @@ snippet を第一選択とする条件:
 ### テスト設計
 
 - `vi.mocked(prisma.xxx.findMany).mockResolvedValue(value as unknown as Awaited<ReturnType<typeof prisma.xxx.findMany>>)` の重複キャストはテストファイル内のヘルパー関数（`mockFindMany`, `mockFindUnique`）に抽出することで、各テストケースを 1 行で記述できる
-- テストデータを fixture ファイルに分離すると、仕様変更時に fixture だけ更新すれば全テストが追随する。インライン定義より保守コストが低い
+- テストデータを fixture ファイルに分離すると、仕様変更時に fixture だけ更新すれば全テストが追随する。インライン定義より保守コストが低い。切り出す判断軸は「複数のテストケースで共有されるか」であり、`_utils` への切り出しとは無関係。単一テスト専用のデータはインラインのままで十分
 - 「サービス関数を呼ばずインラインロジックだけ検証する」テストは削除してよい。サービスの動作を確認しないテストは仕様変更時に誤って削除されやすく、誤検知のリスクが高い
 - `fail()` vs `error()` の選択: `fail()` はページに留まってフォーム結果を返す。`error()` または uncaught throw はエラーページに遷移する。フォームに `form.error` 表示 UI がない場合は throw させるだけで十分（`fail()` は意味をなさない）
 - fixture から `filter` でサブセットを作る場合、フィルタ後のデータの中身をよく確認すること。同じ id でも fixture が更新されると別のタスク/グレードを指す可能性がある（今回: workBook 6 が Q10 ではなく Q8 になっていた）
 - `Promise.all` で同一 mock 関数を複数回呼ぶ場合、`mockResolvedValueOnce` を呼び出し順に積み上げれば対応できる。`createInitialPlacements` のように内部で `Promise.all([findMany, findMany])` を使う関数も同様にテスト可能
+
+### テスト補強パターン
+
+- 純粋関数として `_utils` に抽出した関数（例: `buildUpdatedUrl`）は、抽出直後にテストを書かないと「テスト可能なはずなのに未テスト」の状態が続く。抽出と同時にテストを追加するか、テスト補強フェーズで必ず対象に含める
+- URL 操作テストでは「元 URL が変更されないこと（非破壊）」を必ずアサートする。`new URL(url)` でコピーを作っている意図が保たれているかの検証になる
+- クロスカラム移動（カードが A カラムから B カラムへ）では、A・B 両方のカラムが「変更あり」と判定されて `reCalcPriorities` に含まれる。移動先カラムだけでなく移動元カラムのアサーションも書くこと
 
 ### CSS / Tailwind
 
