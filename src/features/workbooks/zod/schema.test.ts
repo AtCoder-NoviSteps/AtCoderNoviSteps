@@ -460,92 +460,6 @@ describe('workbook schema', () => {
     }
   });
 
-  describe('workBookPlacementSchema', () => {
-    describe('a correct workbook placement is given', () => {
-      test('only taskGrade is non-null (CURRICULUM)', () => {
-        const result = workBookPlacementSchema.safeParse({
-          id: 1,
-          priority: 1,
-          taskGrade: TaskGrade.Q10,
-          solutionCategory: null,
-        });
-        expect(result.success).toBe(true);
-      });
-
-      test('only solutionCategory is non-null (SOLUTION)', () => {
-        const result = workBookPlacementSchema.safeParse({
-          id: 1,
-          priority: 1,
-          taskGrade: null,
-          solutionCategory: SolutionCategory.GRAPH,
-        });
-        expect(result.success).toBe(true);
-      });
-    });
-
-    describe('an incorrect workbook placement is given', () => {
-      test('both null', () => {
-        const result = workBookPlacementSchema.safeParse({
-          id: 1,
-          priority: 1,
-          taskGrade: null,
-          solutionCategory: null,
-        });
-        expect(result.success).toBe(false);
-      });
-
-      test('both non-null', () => {
-        const result = workBookPlacementSchema.safeParse({
-          id: 1,
-          priority: 1,
-          taskGrade: TaskGrade.Q10,
-          solutionCategory: SolutionCategory.GRAPH,
-        });
-        expect(result.success).toBe(false);
-      });
-
-      test('invalid taskGrade', () => {
-        const result = workBookPlacementSchema.safeParse({
-          id: 1,
-          priority: 1,
-          taskGrade: 'INVALID' as TaskGrade,
-          solutionCategory: null,
-        });
-        expect(result.success).toBe(false);
-      });
-
-      test('invalid solutionCategory', () => {
-        const result = workBookPlacementSchema.safeParse({
-          id: 1,
-          priority: 1,
-          taskGrade: null,
-          solutionCategory: 'INVALID' as SolutionCategory,
-        });
-        expect(result.success).toBe(false);
-      });
-
-      test('priority of 0', () => {
-        const result = workBookPlacementSchema.safeParse({
-          id: 1,
-          priority: 0,
-          taskGrade: TaskGrade.Q10,
-          solutionCategory: null,
-        });
-        expect(result.success).toBe(false);
-      });
-
-      test('negative priority', () => {
-        const result = workBookPlacementSchema.safeParse({
-          id: 1,
-          priority: -1,
-          taskGrade: null,
-          solutionCategory: SolutionCategory.GRAPH,
-        });
-        expect(result.success).toBe(false);
-      });
-    });
-  });
-
   // abcXXX_Y
   function generateRandomTaskId(): string {
     // Note: A random 3-digit number, prefixed with 0 if it is less than or equal to 2 digits.
@@ -556,4 +470,90 @@ describe('workbook schema', () => {
 
     return 'abc' + randomNumber + '_' + letters[randomIndex];
   }
+});
+
+describe('workBookPlacementSchema', () => {
+  describe('a correct workbook placement is given', () => {
+    test('only taskGrade is non-null (CURRICULUM)', () => {
+      const result = workBookPlacementSchema.safeParse({
+        id: 1,
+        priority: 1,
+        taskGrade: TaskGrade.Q10,
+        solutionCategory: null,
+      });
+      expect(result.success).toBe(true);
+    });
+
+    test('only solutionCategory is non-null (SOLUTION)', () => {
+      const result = workBookPlacementSchema.safeParse({
+        id: 1,
+        priority: 1,
+        taskGrade: null,
+        solutionCategory: SolutionCategory.GRAPH,
+      });
+      expect(result.success).toBe(true);
+    });
+  });
+
+  describe('an incorrect workbook placement is given', () => {
+    test('both null', () => {
+      const result = workBookPlacementSchema.safeParse({
+        id: 1,
+        priority: 1,
+        taskGrade: null,
+        solutionCategory: null,
+      });
+      expect(result.success).toBe(false);
+    });
+
+    test('both non-null', () => {
+      const result = workBookPlacementSchema.safeParse({
+        id: 1,
+        priority: 1,
+        taskGrade: TaskGrade.Q10,
+        solutionCategory: SolutionCategory.GRAPH,
+      });
+      expect(result.success).toBe(false);
+    });
+
+    test('invalid taskGrade', () => {
+      const result = workBookPlacementSchema.safeParse({
+        id: 1,
+        priority: 1,
+        taskGrade: 'INVALID' as TaskGrade,
+        solutionCategory: null,
+      });
+      expect(result.success).toBe(false);
+    });
+
+    test('invalid solutionCategory', () => {
+      const result = workBookPlacementSchema.safeParse({
+        id: 1,
+        priority: 1,
+        taskGrade: null,
+        solutionCategory: 'INVALID' as SolutionCategory,
+      });
+      expect(result.success).toBe(false);
+    });
+
+    test('priority of 0', () => {
+      const result = workBookPlacementSchema.safeParse({
+        id: 1,
+        priority: 0,
+        taskGrade: TaskGrade.Q10,
+        solutionCategory: null,
+      });
+      expect(result.success).toBe(false);
+    });
+
+    test('negative priority', () => {
+      const result = workBookPlacementSchema.safeParse({
+        id: 1,
+        priority: -1,
+        taskGrade: null,
+        solutionCategory: SolutionCategory.GRAPH,
+      });
+      expect(result.success).toBe(false);
+    });
+  });
 });

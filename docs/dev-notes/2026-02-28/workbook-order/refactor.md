@@ -51,17 +51,17 @@
 
 ### Phase 4: UI スタイル修正
 
-- [ ] `KanbanTabBar.svelte`: タブの padding/margin を `/workbooks`（`WorkbookTabItem` / `TabItemWrapper`）と合わせる
-- [ ] `KanbanTabBar.svelte`: 表示カテゴリ・グレードのボタン色をタブの配色と合わせる + ライトモードホバー時は緑系テキストハイライト
-- [ ] `KanbanTabBar.svelte`: `'PENDING'` ハードコード → `SolutionCategory` 型を使用
+- [x] `KanbanTabBar.svelte`: タブの padding/margin を `/workbooks`（`WorkbookTabItem` / `TabItemWrapper`）と合わせる
+- [x] `KanbanTabBar.svelte`: 表示カテゴリ・グレードのボタン色をタブの配色と合わせる + ライトモードホバー時は緑系テキストハイライト
+- [x] `KanbanTabBar.svelte`: `'PENDING'` ハードコード → `SolutionCategory` 型を使用
 
 ### Phase 5: 関数リファクタリング（純粋関数 → テスト容易）
 
-- [ ] `_utils/kanban.ts` の `calcPriorityUpdates`: `isChanged` 時の null 埋めが DB で両方 null 違反を起こさないか調査 → 問題あれば修正
-- [ ] `_utils/kanban.ts` の `calcPriorityUpdates`: for 文 → 関数型（map/filter）に書き直し
-- [ ] `workbook_placements.ts`: `buildTasksByTaskId` の二重 for 文 → `flatMap` 等で関数型に書き直し
-- [ ] `workbook_placements.ts`: `groupWorkbooksByGrade` → 関数型でシンプルに書き直し
-- [ ] `zod/schema.test.ts`: `workBookPlacementSchema` を workbook schema の外側に配置
+- [x] `_utils/kanban.ts` の `reCalcPriorities`: `isChanged` 時の null 埋めが DB で両方 null 違反を起こさないか調査 → 問題なし（`[columnKey]: columnId` が常に片方を上書きするため）、コメントで明記
+- [x] `_utils/kanban.ts` の `reCalcPriorities`: for 文 → 関数型（flatMap）に書き直し
+- [x] `workbook_placements.ts`: `buildTaskMapFromCurriculumRows` の二重 for 文 → `flatMap` + `new Map(...)` で関数型に書き直し
+- [x] `workbook_placements.ts`: `groupWorkbooksByGrade` → `reduce` で関数型に書き直し
+- [x] `zod/schema.test.ts`: `workBookPlacementSchema` を workbook schema の外側に配置
 
 ### Phase 6: サービス層の構造改善（段階的に実施）
 
@@ -202,6 +202,17 @@ snippet を第一選択とする条件:
 
 - 同じ CSS プロパティを複数クラスで指定すると競合警告が出る。置換後は VSCode の cssConflict 診断で即時確認する
 - 競合するクラスは片方だけでなく両方を削除して、意図するクラスだけを残す
+
+### 命令型 → 関数型変換
+
+- 二重ループで `Map` を構築する処理は `flatMap(...).filter(...).map(...)` + `new Map(entries)` で書き直せる
+- for-of ループで `Map` に追加する処理は `reduce((map, item) => map.set(key, value), new Map())` に置き換えられる
+- `flatMap` で変更があるカラムだけ展開し、変更がない場合は `[]` を返すことで `filter + flatMap` の連鎖を1ステップに統合できる
+- `{ a: null, b: null, [key]: value }` のように先に null で初期化して後から computed key で上書きするパターンは意図が明確。ただし「なぜ両方 null でも DB 違反にならないか」はコメントで明記すること
+
+### コンポーネント再利用
+
+- 複数ページで同じタブスタイルを使いたい場合は共通ラッパーコンポーネント（例: `TabItemWrapper`）に集約しておく。直接 `TabItem` にカスタム `activeClass`/`inactiveClass` を書くとページ間でスタイルが乖離しやすい
 
 ---
 

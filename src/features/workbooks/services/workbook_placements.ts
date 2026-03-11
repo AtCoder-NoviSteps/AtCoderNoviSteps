@@ -70,23 +70,21 @@ export async function upsertWorkBookPlacements(updatedPlacements: PlacementInput
 export function buildTaskMapFromCurriculumRows(
   workbooks: UnplacedCurriculumRows,
 ): Map<string, Task> {
-  const tasksByTaskId = new Map<string, Task>();
-
-  for (const workbook of workbooks) {
-    for (const workBookTask of workbook.workBookTasks) {
-      if (workBookTask.task) {
-        tasksByTaskId.set(workBookTask.task.task_id, {
-          task_id: workBookTask.task.task_id,
+  return new Map(
+    workbooks
+      .flatMap((workbook) => workbook.workBookTasks)
+      .filter((workBookTask) => workBookTask.task !== null)
+      .map((workBookTask) => [
+        workBookTask.task!.task_id,
+        {
+          task_id: workBookTask.task!.task_id,
           contest_id: '',
           task_table_index: '',
           title: '',
-          grade: workBookTask.task.grade,
-        });
-      }
-    }
-  }
-
-  return tasksByTaskId;
+          grade: workBookTask.task!.grade,
+        },
+      ]),
+  );
 }
 
 /**
@@ -125,23 +123,11 @@ export function groupWorkbooksByGrade(
   workbooks: WorkBookWithTasks[],
   gradeModes: Map<number, TaskGrade>,
 ): Map<TaskGrade, number[]> {
-  const byGrade = new Map<TaskGrade, number[]>();
-
-  for (const workbook of workbooks) {
+  return workbooks.reduce((byGrade, workbook) => {
     const grade = gradeModes.get(workbook.id)!;
-
-    if (!byGrade.has(grade)) {
-      byGrade.set(grade, []);
-    }
-
-    byGrade.get(grade)!.push(workbook.id);
-  }
-
-  for (const ids of byGrade.values()) {
-    ids.sort((a, b) => a - b);
-  }
-
-  return byGrade;
+    const ids = [...(byGrade.get(grade) ?? []), workbook.id].sort((a, b) => a - b);
+    return byGrade.set(grade, ids);
+  }, new Map<TaskGrade, number[]>());
 }
 
 /**

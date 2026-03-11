@@ -36,7 +36,7 @@
       onclick={() => toggle(option.value)}
       class="px-3 py-1 rounded-full text-sm font-medium border transition-colors {isSelected
         ? 'bg-primary-600 hover:bg-primary-700 text-white border-primary-600'
-        : 'bg-white hover:bg-gray-50 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 border-gray-300 dark:border-gray-600'}"
+        : 'bg-white hover:bg-gray-50 hover:text-primary-700 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 border-gray-300 dark:border-gray-600'}"
     >
       {option.label}
     </button>

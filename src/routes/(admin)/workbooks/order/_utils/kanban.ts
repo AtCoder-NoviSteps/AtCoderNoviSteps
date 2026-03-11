@@ -54,29 +54,29 @@ export function reCalcPriorities(
   after: KanbanColumns,
   columnKey: ColumnKey,
 ): PlacementUpdates {
-  const updates: PlacementUpdates = [];
-
-  for (const [columnId, cards] of Object.entries(after)) {
+  // The object literal sets both fields to null, then [columnKey]: columnId overrides one.
+  // JavaScript evaluates the object as a single expression, so the final value always has
+  // exactly one field set to columnId. workBookPlacementSchema also enforces this invariant
+  // at the API boundary before any DB write occurs.
+  return Object.entries(after).flatMap(([columnId, cards]) => {
     const snapCards = before[columnId];
-    const isChanged =
+    const isUpdated =
       !snapCards ||
       cards.length !== snapCards.length ||
       cards.some((card, i) => card.id !== snapCards[i]?.id);
 
-    if (isChanged) {
-      cards.forEach((card, i) => {
-        updates.push({
-          id: card.id,
-          priority: i + 1,
-          solutionCategory: null,
-          taskGrade: null,
-          [columnKey]: columnId,
-        });
-      });
+    if (!isUpdated) {
+      return [];
     }
-  }
 
-  return updates;
+    return cards.map((card, i) => ({
+      id: card.id,
+      priority: i + 1,
+      solutionCategory: null,
+      taskGrade: null,
+      [columnKey]: columnId,
+    }));
+  });
 }
 
 /**
