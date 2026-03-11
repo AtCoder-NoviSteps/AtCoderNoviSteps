@@ -83,14 +83,22 @@
 
 以下はまず調査し、困難と判断したら理由をコメントに残してスキップする:
 
-- [ ] 調査: `KanbanTabBar.svelte` の Props 肥大化 → 意味ある単位で型定義すべきか?
-- [ ] 調査: `KanbanCard.svelte` の Props 肥大化 → 同上
-- [ ] 調査: `solutionBoard` / `curriculumBoard` snippet を `KanbanTabBar` に移動可能か?
-- [ ] 調査: `updateUrl` を `_utils` に分離可能か?（`$page.url` を引数にすれば可能では?）
-- [ ] 調査: `auth.ts` の単体テスト追加の可否（redirect の副作用がテスト困難か?）
-- [ ] `KanbanBoard.svelte`: state のハードコード → 型定義を使用
-- [ ] `KanbanBoard.svelte`: `tabConfigs` を定数ファイルまたは `_utils` に移動
-- [ ] `saveUpdates` の配置: `_utils` のままでよいか検討（`_utils` が不自然に感じる原因の特定）
+- [x] 調査: `KanbanTabBar.svelte` の Props 肥大化 → 意味ある単位で型定義すべきか?
+  - 結論: 8 props は Svelte 5 の flat props モデルで許容範囲。変更なし
+- [x] 調査: `KanbanCard.svelte` の Props 肥大化 → 同上
+  - 結論: `Card & SortableProps` 交差型が既に整理済み。変更なし
+- [x] 調査: `solutionBoard` / `curriculumBoard` snippet を `KanbanTabBar` に移動可能か?
+  - 結論: snippet が `allItems`, `TAB_CONFIGS`, `displayedSolutionCategories` など親の状態に依存するため移動不可。snippet は親スコープへのアクセスが強みであり、それを活かすべき
+- [x] 調査: `updateUrl` を `_utils` に分離可能か?
+  - 結論: `buildUpdatedUrl(url, activeTab, selectedSolutionCategories, selectedGrades): URL` として `_utils/kanban.ts` に純粋関数として抽出。`replaceState` の副作用は呼び出し元に残す
+- [x] 調査: `auth.ts` の単体テスト追加の可否（redirect の副作用がテスト困難か?）
+  - 結論: Lucia 設定のみで副作用なし・テスタブルなロジックがないため対象外
+- [x] `KanbanBoard.svelte`: state のハードコード → 型定義を使用
+  - `'PENDING'` → `SolutionCategory.PENDING`、`'GRAPH'` → `SolutionCategory.GRAPH`、`'Q10'`/`'Q9'` → `TaskGrade.Q10`/`TaskGrade.Q9`
+- [x] `KanbanBoard.svelte`: `tabConfigs` を定数ファイルまたは `_utils` に移動
+  - `TAB_CONFIGS` として `_utils/kanban.ts` に移動
+- [x] `saveUpdates` の配置: `_utils` のままでよいか検討（`_utils` が不自然に感じる原因の特定）
+  - 結論: HTTP fetch はサービス層（サーバー側 DB アクセス）ではなくクライアント側の処理。`_utils` はフィーチャースコープのユーティリティとして適切
 
 ### Phase 8: テストの整備
 
@@ -130,6 +138,21 @@
 
 - 変更リスクの低い順（局所的・最小リスク → 構造的・広範囲）にフェーズを並べる
 - 各フェーズの依存関係を明示し、後続フェーズの前提条件を明確にする
+
+### 純粋関数の抽出と副作用の分離
+
+- URL 更新処理（`updateUrl`）のように副作用（`replaceState`）を含む関数は、URL 構築ロジックを純粋関数（`buildUpdatedUrl`）として `_utils` に抽出することでテスト可能になる。副作用は呼び出し元に残す
+- `_utils` に移動する純粋関数は、引数で依存を明示する（`$page.url` の直接参照ではなく `url: URL` として受け取る）
+
+### snippet の親スコープ依存
+
+- snippet の強みは親スコープの `$state` に直接アクセスできること。コンポーネント化すると props が膨大になる場合は snippet に留める
+- snippet を別コンポーネントの props として渡すパターンは、snippet が参照する変数が多いほど「移動」ではなく「props を増やすだけ」になる
+
+### 静的設定定数の配置
+
+- タブごとの静的設定（`TAB_CONFIGS`）は使用コンポーネントの script ではなく `_utils` に移動することで、コンポーネントが「状態管理」に集中できる
+- 静的設定（`Record<ActiveTab, TabConfig>`）には `ActiveTab` をキー型として使い、文字列インデックスよりも型安全にする
 
 ### snippet vs コンポーネントの判断軸
 

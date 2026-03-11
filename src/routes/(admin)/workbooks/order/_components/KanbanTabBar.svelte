@@ -25,7 +25,7 @@
     selectedSolutionCategories: string[];
     selectedGrades: string[];
     onTabChange: (tab: ActiveTab) => void;
-    onSolutionCategoriesChange: (cols: string[]) => void;
+    onSolutionCategoriesChange: (columns: string[]) => void;
     onGradesChange: (grades: string[]) => void;
     solutionBoard: Snippet;
     curriculumBoard: Snippet;

@@ -12,7 +12,6 @@
   import { TaskGrade } from '$lib/types/task';
   import {
     SolutionCategory,
-    SOLUTION_LABELS,
     type WorkbooksWithPlacement,
   } from '$features/workbooks/types/workbook_placement';
   import type {
@@ -20,14 +19,18 @@
     DragOverEventArg,
     DragEndEventArg,
     ActiveTab,
-    TabConfig,
   } from '../_types/kanban';
 
   import KanbanTabBar from './KanbanTabBar.svelte';
   import KanbanColumn from './KanbanColumn.svelte';
 
-  import { getTaskGradeLabel } from '$lib/utils/task';
-  import { buildKanbanItems, reCalcPriorities, saveUpdates } from '../_utils/kanban';
+  import {
+    buildKanbanItems,
+    reCalcPriorities,
+    saveUpdates,
+    TAB_CONFIGS,
+    buildUpdatedUrl,
+  } from '../_utils/kanban';
 
   interface Props {
     workbooks: WorkbooksWithPlacement;
@@ -42,45 +45,25 @@
 
   let activeTab = $state<ActiveTab>(getParam('tab') === 'curriculum' ? 'curriculum' : 'solution');
   let selectedSolutionCategories = $state(
-    (getParam('categories')?.split(',').filter(Boolean) ?? ['PENDING', 'GRAPH']).filter(
-      (category) => category in SolutionCategory,
-    ),
+    (
+      getParam('categories')?.split(',').filter(Boolean) ?? [
+        SolutionCategory.PENDING,
+        SolutionCategory.GRAPH,
+      ]
+    ).filter((category) => category in SolutionCategory),
   );
   let selectedGrades = $state(
-    (getParam('grades')?.split(',').filter(Boolean) ?? ['Q10', 'Q9']).filter(
-      (grade) => grade in TaskGrade && grade !== 'PENDING',
+    (getParam('grades')?.split(',').filter(Boolean) ?? [TaskGrade.Q10, TaskGrade.Q9]).filter(
+      (grade) => grade in TaskGrade && grade !== TaskGrade.PENDING,
     ),
   );
 
   function updateUrl() {
-    const url = new URL($page.url);
-
-    url.searchParams.set('tab', activeTab);
-
-    if (activeTab === 'solution') {
-      url.searchParams.set('categories', selectedSolutionCategories.join(','));
-      url.searchParams.delete('grades');
-    } else {
-      url.searchParams.set('grades', selectedGrades.join(','));
-      url.searchParams.delete('categories');
-    }
-
-    replaceState(url, {});
+    replaceState(
+      buildUpdatedUrl($page.url, activeTab, selectedSolutionCategories, selectedGrades),
+      {},
+    );
   }
-
-  // Per-tab static configuration; eliminates activeTab === 'solution' branches in DnD handlers
-  const tabConfigs: Record<string, TabConfig> = {
-    solution: {
-      labelFn: (column) => SOLUTION_LABELS[column] ?? column,
-      group: 'solution',
-      columnKey: 'solutionCategory',
-    },
-    curriculum: {
-      labelFn: getTaskGradeLabel,
-      group: 'curriculum',
-      columnKey: 'taskGrade',
-    },
-  };
 
   let allItems = $state<Record<string, KanbanColumns>>(
     untrack(() => ({
@@ -117,7 +100,7 @@
     const updates = reCalcPriorities(
       snapshot ?? {},
       allItems[activeTab],
-      tabConfigs[activeTab].columnKey,
+      TAB_CONFIGS[activeTab].columnKey,
     );
 
     if (updates.length === 0) {
@@ -136,8 +119,8 @@
 
   // PENDING is always shown, so keep it separate from the selectable columns
   let displayedSolutionCategories = $derived([
-    'PENDING',
-    ...selectedSolutionCategories.filter((category) => category !== 'PENDING'),
+    SolutionCategory.PENDING,
+    ...selectedSolutionCategories.filter((category) => category !== SolutionCategory.PENDING),
   ]);
 </script>
 
@@ -174,7 +157,7 @@
         {#each displayedSolutionCategories as column}
           <KanbanColumn
             columnId={column}
-            label={tabConfigs['solution'].labelFn(column)}
+            label={TAB_CONFIGS['solution'].labelFn(column)}
             cards={allItems['solution'][column] ?? []}
             group="solution"
           />
@@ -187,7 +170,7 @@
         {#each selectedGrades as column}
           <KanbanColumn
             columnId={column}
-            label={tabConfigs['curriculum'].labelFn(column)}
+            label={TAB_CONFIGS['curriculum'].labelFn(column)}
             cards={allItems['curriculum'][column] ?? []}
             group="curriculum"
           />

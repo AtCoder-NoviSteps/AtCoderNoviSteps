@@ -1,8 +1,55 @@
-import type {
-  WorkbooksWithPlacement,
-  WorkbookWithPlacement,
+import {
+  SOLUTION_LABELS,
+  type WorkbooksWithPlacement,
+  type WorkbookWithPlacement,
 } from '$features/workbooks/types/workbook_placement';
-import type { KanbanColumns, ColumnKey, PlacementUpdate, PlacementUpdates } from '../_types/kanban';
+import type {
+  ActiveTab,
+  KanbanColumns,
+  ColumnKey,
+  PlacementUpdates,
+  TabConfig,
+} from '../_types/kanban';
+
+import { getTaskGradeLabel } from '$lib/utils/task';
+
+// Per-tab static configuration; eliminates activeTab === 'solution' branches in DnD handlers
+export const TAB_CONFIGS: Record<ActiveTab, TabConfig> = {
+  solution: {
+    labelFn: (column) => SOLUTION_LABELS[column] ?? column,
+    group: 'solution',
+    columnKey: 'solutionCategory',
+  },
+  curriculum: {
+    labelFn: getTaskGradeLabel,
+    group: 'curriculum',
+    columnKey: 'taskGrade',
+  },
+};
+
+/**
+ * Returns a new URL with tab/category/grade search params updated.
+ * Pure function — does not call replaceState.
+ */
+export function buildUpdatedUrl(
+  url: URL,
+  activeTab: ActiveTab,
+  selectedSolutionCategories: string[],
+  selectedGrades: string[],
+): URL {
+  const updatedUrl = new URL(url);
+  updatedUrl.searchParams.set('tab', activeTab);
+
+  if (activeTab === 'solution') {
+    updatedUrl.searchParams.set('categories', selectedSolutionCategories.join(','));
+    updatedUrl.searchParams.delete('grades');
+  } else {
+    updatedUrl.searchParams.set('grades', selectedGrades.join(','));
+    updatedUrl.searchParams.delete('categories');
+  }
+
+  return updatedUrl;
+}
 
 /**
  * Builds a KanbanColumns record from a list of workbooks.
@@ -83,12 +130,14 @@ export function reCalcPriorities(
  * Sends placement updates to the server.
  * Throws if the response is not OK.
  */
-export async function saveUpdates(updates: PlacementUpdate[]): Promise<void> {
+export async function saveUpdates(updates: PlacementUpdates): Promise<void> {
   const response = await fetch('/workbooks/order', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ updates }),
   });
 
-  if (!response.ok) throw new Error('Failed to save');
+  if (!response.ok) {
+    throw new Error('Failed to save');
+  }
 }
