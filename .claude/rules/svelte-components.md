@@ -44,3 +44,23 @@ paths:
 
 - Components: `PascalCase.svelte`
 - Stores: `snake_case.svelte.ts`
+
+## Snippet vs Component
+
+Prefer `{#snippet}` when:
+
+1. The template needs direct access to parent `$state` (componentizing would require many props)
+2. No independent state or lifecycle needed — pure display logic
+3. DRY within the same file only (not reused across files)
+
+Promote to a component when:
+
+- Independent state management or lifecycle is needed
+- Exceeds ~30 lines (cognitive load threshold)
+- Reused in other files
+
+## Keep Components Thin
+
+- Business logic, type definitions, and pure utility functions belong in `_types/` and `_utils/`, not inside component `<script>` blocks
+- Static configuration (e.g., tab configs) → `_utils/` constants
+- Pure computation (e.g., URL building, priority calculation) → `_utils/` pure functions with adjacent tests

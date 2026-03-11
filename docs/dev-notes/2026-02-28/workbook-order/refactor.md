@@ -120,14 +120,16 @@
 
 ### Phase 10: ドキュメント更新（上記が全て完了したら実行）
 
-- [ ] `docs/guides/architecture.md` の最終更新（Phase 0 で追記した内容の確認・補完）
-- [ ] コンポーネントは薄くし、型宣言・汎用処理は `_types/` / `_utils/` に分離する規約を明記
-- [ ] 汎用処理には単体テストを書く規約を明記
-- [ ] 毎回指示している内容を規約に明記して確実に実行されるようにする
-  - [ ] 忖度せずに批判的な観点からレビューする
-  - [ ] plan.md では TODO リストを作る
-  - [ ] プロダクションコードとテストを実装 → テスト通過 → TODO 更新 → 教訓を再利用可能な形でまとめる → 古い TODO や 計画を 破棄
-- [ ] Claude Code の拡張ポイント（`.claude/rules/`, subagents, custom commands, skills, hooks 等）を調査し、繰り返しパターンに対して次回以降は自律的に修正できるようにする
+- [x] `docs/guides/architecture.md` の最終更新（Phase 0 で追記した内容の確認・補完）
+  - \_types//\_utils// の規約・コンポーネントを薄く保つ方針は既に記載済み
+- [x] コンポーネントは薄くし、型宣言・汎用処理は `_types/` / `_utils/` に分離する規約を明記
+  - `.claude/rules/svelte-components.md` に「Keep Components Thin」「Snippet vs Component」を追記
+- [x] 汎用処理には単体テストを書く規約を明記
+  - `.claude/rules/testing.md` に「Testing Extracted Utilities」セクションを追記
+- [x] 毎回指示している内容を規約に明記
+  - `AGENTS.md` の Guidelines に実装フロー（計画 → 実装 → 批判的レビュー → 教訓整理 → クリーンアップ）を追記
+- [x] Claude Code の拡張ポイント（`.claude/rules/`, skills, hooks 等）を調査・整理
+  - `docs/guides/claude-code.md` を新規作成（機能の使い分け・作業フロー規約）
 
 ### 解決済み
 
@@ -188,11 +190,12 @@ snippet を第一選択とする条件:
 
 ## 技術的教訓
 
+> 次回以降も有用な教訓のみ残す。詳細なパターンは各 `.claude/rules/` ファイルを参照。
+
 ### TypeScript
 
 - Prisma enum とアプリ enum は構造が同じでも TypeScript は別型として扱う。キャストが必要な箇所は残すこと
 - `as never` の代替: `as unknown as Awaited<ReturnType<typeof prisma.xxx.findMany>>`
-- 関数引数の `as never` は構造的部分型付けで除去できることが多い（余剰プロパティは変数経由なら許容）
 - ユーティリティ関数の引数型は「実際に使うフィールドの最小型」に絞る → 呼び出し元のキャストが不要になる
 - `Parameters<typeof fn>[0]` で型定義の二重管理を避ける
 
@@ -200,70 +203,35 @@ snippet を第一選択とする条件:
 
 - `$state()` の初期化式で `$props()` の値を参照すると「This reference only captures the initial value」警告が出る。意図的な場合は `untrack(() => ...)` でラップする
 - `{#snippet}` はコンポーネントタグの外（トップレベル）に定義する。タグ内に書くと named slot として解釈されて型エラーになる
-- `{#each}` 内で同じ式を複数回参照する場合は `{@const}` で単一評価にまとめる
-- コンポーネントが内部で `{#if}` を持つ場合、呼び出し元でのラッパーは不要
+- snippet vs コンポーネントの判断軸 → `.claude/rules/svelte-components.md` 参照
 
 ### 状態管理
 
-- タブ系の状態は `Record<string, T>` に統合すると `if (activeTab === '...')` 分岐が消える
-- タブごとに変わる「純粋な設定値（state でないもの）」は `TabConfig` に集約し、プロパティアクセスで分岐を排除する
-- `onDragEnd` 等で影響範囲を手動管理する代わりに、ドラッグ開始時の snapshot と現在の Record を比較して変更箇所を検出する
-
-### テスト
-
-- テストデータには抽象的な値（`'t1'`, `'t2'`）より実際の fixture に存在する値を使う。仕様変更時に整合性チェックになる
-- URL 同期は初回ロード時には発生しないため、URL パラメータより UI 状態（表示されるべき要素の存在）で検証する
-- E2E でセッション Cookie が必要な fetch テストは、`beforeEach` でページを goto してセッションを確立してから発行する
-
-### seed
-
-- seed 固有の知識は service 層に持ち込まない
-- service は汎用的な初期値で初期化し、seed 側でオーバーライドするパターンで関心の分離を保つ
-
-### ルール管理
-
-- `.claude/rules/` のフロントマター属性は `globs` ではなく `paths` を使う（`globs` は非推奨）
-- ルールは「関心の分離」で既存ファイルへの追記と新規ファイル作成を使い分ける：コーディングスタイル（言語レベル）、DB/サービス層（アーキテクチャレベル）、テスト（品質レベル）
-- ルールファイルの `paths` でスコープを絞ることで、関係ないファイル編集時にノイズにならない
+- タブ系の状態は `Record<ActiveTab, T>` に統合すると `if (activeTab === '...')` 分岐が消える
+- 純粋な設定値（state ではない）は `TabConfig` に集約してプロパティアクセスで分岐を排除する
+- ドラッグ操作の変更検出: 手動追跡より「開始時の snapshot と現在の Record を比較」が安全
 
 ### サービス層の構造設計
 
-- メインメソッド（公開エントリーポイント）をファイルの先頭に置き、プライベートなサブ関数を直後に配置する。これにより「何をするか」が先に目に入り、「どのようにするか」は後から読める
-- メソッド分割の基準: DB クエリ・ビジネスロジック・DB 書き込みが混在している場合は「DB クエリを担当するプライベート関数」を抽出して 1 関数 1 責務に保つ
-- バリデーションループを独立した関数（例: `validatePlacements`）に抽出すると、オーケストレーター関数が「validate → upsert」の 2 ステップだけになり意図が明確になる
-- `export` を付けないことでプライベートであることを型として表現できる（TypeScript の慣習として `private` キーワードより明示的な場合がある）
-- ファイル内のセクションをコメント（`// --- 1. 基本的な CRUD ---` 等）で区切ることで、大きいファイルでもナビゲーションコストを下げられる
+→ `prisma-db.md` に反映済み。以下は補足:
+
+- メインメソッド（公開 API）をファイル先頭に置き、プライベートなサブ関数を直後に配置する
+- バリデーションループを独立した関数に抽出するとオーケストレーターが「validate → upsert」の 2 ステップになり意図が明確になる
+- `export` を付けないことでプライベートを表現（TypeScript の慣習）
+- ファイル内セクションをコメントで区切ると大きいファイルでもナビゲーションコストを下げられる
 
 ### テスト設計
 
-- `vi.mocked(prisma.xxx.findMany).mockResolvedValue(value as unknown as Awaited<ReturnType<typeof prisma.xxx.findMany>>)` の重複キャストはテストファイル内のヘルパー関数（`mockFindMany`, `mockFindUnique`）に抽出することで、各テストケースを 1 行で記述できる
-- テストデータを fixture ファイルに分離すると、仕様変更時に fixture だけ更新すれば全テストが追随する。インライン定義より保守コストが低い。切り出す判断軸は「複数のテストケースで共有されるか」であり、`_utils` への切り出しとは無関係。単一テスト専用のデータはインラインのままで十分
-- 「サービス関数を呼ばずインラインロジックだけ検証する」テストは削除してよい。サービスの動作を確認しないテストは仕様変更時に誤って削除されやすく、誤検知のリスクが高い
-- `fail()` vs `error()` の選択: `fail()` はページに留まってフォーム結果を返す。`error()` または uncaught throw はエラーページに遷移する。フォームに `form.error` 表示 UI がない場合は throw させるだけで十分（`fail()` は意味をなさない）
-- fixture から `filter` でサブセットを作る場合、フィルタ後のデータの中身をよく確認すること。同じ id でも fixture が更新されると別のタスク/グレードを指す可能性がある（今回: workBook 6 が Q10 ではなく Q8 になっていた）
-- `Promise.all` で同一 mock 関数を複数回呼ぶ場合、`mockResolvedValueOnce` を呼び出し順に積み上げれば対応できる。`createInitialPlacements` のように内部で `Promise.all([findMany, findMany])` を使う関数も同様にテスト可能
+→ `.claude/rules/testing.md` に反映済み。以下は補足:
 
-### テスト補強パターン
-
-- 純粋関数として `_utils` に抽出した関数（例: `buildUpdatedUrl`）は、抽出直後にテストを書かないと「テスト可能なはずなのに未テスト」の状態が続く。抽出と同時にテストを追加するか、テスト補強フェーズで必ず対象に含める
-- URL 操作テストでは「元 URL が変更されないこと（非破壊）」を必ずアサートする。`new URL(url)` でコピーを作っている意図が保たれているかの検証になる
-- クロスカラム移動（カードが A カラムから B カラムへ）では、A・B 両方のカラムが「変更あり」と判定されて `reCalcPriorities` に含まれる。移動先カラムだけでなく移動元カラムのアサーションも書くこと
-
-### CSS / Tailwind
-
-- 同じ CSS プロパティを複数クラスで指定すると競合警告が出る。置換後は VSCode の cssConflict 診断で即時確認する
-- 競合するクラスは片方だけでなく両方を削除して、意図するクラスだけを残す
+- `Promise.all` で同一 mock 関数を複数回呼ぶ場合、`mockResolvedValueOnce` を呼び出し順に積み上げれば対応できる
+- `fail()` vs `error()`: `fail()` はページに留まる。フォームに `form.error` 表示 UI がない場合は throw だけで十分
+- 「サービス関数を呼ばずインラインロジックだけ検証する」テストは削除してよい
 
 ### 命令型 → 関数型変換
 
-- 二重ループで `Map` を構築する処理は `flatMap(...).filter(...).map(...)` + `new Map(entries)` で書き直せる
-- for-of ループで `Map` に追加する処理は `reduce((map, item) => map.set(key, value), new Map())` に置き換えられる
-- `flatMap` で変更があるカラムだけ展開し、変更がない場合は `[]` を返すことで `filter + flatMap` の連鎖を1ステップに統合できる
-- `{ a: null, b: null, [key]: value }` のように先に null で初期化して後から computed key で上書きするパターンは意図が明確。ただし「なぜ両方 null でも DB 違反にならないか」はコメントで明記すること
-
-### コンポーネント再利用
-
-- 複数ページで同じタブスタイルを使いたい場合は共通ラッパーコンポーネント（例: `TabItemWrapper`）に集約しておく。直接 `TabItem` にカスタム `activeClass`/`inactiveClass` を書くとページ間でスタイルが乖離しやすい
+- 二重ループで `Map` を構築する処理は `flatMap(...).map(...)` + `new Map(entries)` で書き直せる
+- `flatMap` で変更があるカラムだけ展開し、変更がない場合は `[]` を返すことで `filter + flatMap` を 1 ステップに統合できる
 
 ---
 
