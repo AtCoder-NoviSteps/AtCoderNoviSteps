@@ -12,6 +12,7 @@
   - [ ] service 層以外での CRUD 直書き禁止
   - [ ] テストでは `toBeTruthy()` ではなく `toBe(true)` を使う
   - [ ] テストデータは実際の fixture を参照する（抽象的な `'t1'`, `'t2'` は禁止）
+  - [ ] .claude/rules/prisma-db.md に src/features の service 層も追加
 - [ ] `AGENTS.md` に `src/features/` ディレクトリを追記
 - [ ] `docs/guides/architecture.md` に `_types/`, `_utils/` ディレクトリの規約を追記
 
