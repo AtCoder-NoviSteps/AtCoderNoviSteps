@@ -236,6 +236,44 @@ model WorkBookTask {
   @@map("workbooktask")
 }
 
+model VoteGrade {
+  id         String   @id @default(uuid())
+  userId     String
+  taskId     String
+  grade      TaskGrade
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  user User @relation(references: [id], fields: [userId])
+  task Task @relation(references: [task_id], fields: [taskId])
+
+  @@unique([userId, taskId])
+  @@map("votegrade")
+}
+
+model VotedGradeCounter {
+  id         String   @id @default(uuid())
+  taskId     String
+  grade      TaskGrade
+  count      Int
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@map("votedgradecounter")
+}
+
+model VotedGradeStatistics {
+  id             String   @id @default(uuid())
+  taskId         String
+  grade          TaskGrade
+  isExperimental Boolean @default(false)
+  isApproved     Boolean @default(true)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@map("votedgradestatistics")
+}
+
 enum ContestType {
   ABC // AtCoder Beginner Contest
   APG4B // C++入門 AtCoder Programming Guide for beginners
