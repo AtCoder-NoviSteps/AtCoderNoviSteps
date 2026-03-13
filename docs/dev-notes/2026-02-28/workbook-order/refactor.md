@@ -60,7 +60,7 @@ workbook order 機能のリファクタリング記録。
 - **`WorkBookGradeModeSource` 型エイリアスの抽出**: `calcWorkBookGradeModes` の引数 `{ id: number; workBookTasks: WorkBookTaskBase[] }[]` を名前付き型に抽出。1箇所のみなので YAGNI に近い。
 - **開発ノートのクエリパラメータ例**: `?tab=solution&cols=PENDING,GRAPH` → `?tab=solution&categories=PENDING,GRAPH` に修正。
 - **`/refactor-plan` スキルに `--comments` フラグ欠如**: `gh issue view $ARGUMENTS` → `gh issue view $ARGUMENTS --comments` に修正しないと issue のコメントが取得できない。
-- **`AGENTS.md` に `src/features/**/` のテスト配置規約の記載欠如**: コロケーションパターンの説明を追記。
+- **`AGENTS.md` に `src/features/**/` のテスト配置規約の記載欠如\*\*: コロケーションパターンの説明を追記。
 - **`CONTRIBUTING.md` の `@dnd-kit/svelte` のネスト誤り**: Flowbite Svelte のサブ項目になっているが、独立したピア依存として並列に記載すべき。
 - **`.claude/rules/auth.md` にパスが未記載**: 新しい admin auth ヘルパーとルートサブツリーのパスを追記。
 
