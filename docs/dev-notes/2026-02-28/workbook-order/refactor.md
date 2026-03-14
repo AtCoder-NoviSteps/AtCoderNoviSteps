@@ -26,7 +26,15 @@ workbook order 機能のリファクタリング記録。
 
 ### 対処が必要なもの
 
-1. **N+1 クエリ（`validatePlacements`）**
+1. **`ColumnSelector` のラベルと `minRequired` の不一致**
+   `KanbanTabBar.svelte:66` のラベルは「2つ以上選択」だが、`minRequired={1}` を渡しており実際は1つ以上で機能する。
+   PENDING はセレクタから除外されたうえで常に先頭列として表示されるため（`KanbanTabBar.svelte:69-71`）、セレクタで選択した列が1つでも合計2列になるのが意図。
+   修正方針はどちらか一方：
+   - ラベルを「1つ以上選択（PENDING は常に表示）」に変更してPENDINGが暗黙の列であることを明示する
+   - あるいはラベルを「2つ以上選択」のまま維持し `minRequired={2}` に戻す（PENDINGを含めて2列 = セレクタで1つ以上選択に相当するため意味的には同じ）
+   `curriculumContent`（`KanbanTabBar.svelte:82`）は `minRequired` デフォルト2 のままでラベルと一致しているが、こちらも同じ文言であるため両タブの一貫性を合わせて確認すること。
+
+2. **N+1 クエリ（`validatePlacements`）**
    `validatePlacements()` でループ内に `findUnique` を毎回発行。`findMany({ where: { id: { in: [...] } } })` でバッチ化が必要。
 
 2. **API エンドポイントでの `redirect()` 使用**
@@ -53,6 +61,13 @@ workbook order 機能のリファクタリング記録。
 9. **`+page.svelte` の `PageData` 型アノテーション欠如**
    `data` prop に `PageData` 型が未指定。型安全性の観点から明示が必要。
 
+10. **E2E テストのcleanupが `finally` でない**（`tests/workbook_order.test.ts`）
+    各reorder/moveテストのRestoreは `// Restore` コメント後の `postUpdates` で行っているが、アサーションが失敗するとcleanupがスキップされ後続テストが汚染されたDBで動く。`try/finally` にすることで失敗時も必ず復元される。
+    さらに「moving a card」テスト（108行目）はRestoreで `solutionCategory: 'PENDING'` を決め打ちしているが、移動前の実際の値をスナップショットして使うべき。reorderテストも `priority: 1 / 2` がシード値と一致している前提であり、冒頭で取得した `first.priority` / `second.priority` を使うよう修正が必要。
+
+11. **E2E `getColumn()` のセレクタが祖先divを掴む可能性**（`tests/workbook_order.test.ts:17`）
+    `page.locator('div').filter({ has: heading }).first()` はheadingを子孫に含む全祖先divにマッチするため、`.first()` が列要素ではなく外側のラッパーを返すことがある。その場合 `getCardsInColumn()` が複数列のカードを全て拾い、並び替え/移動のアサーションが偽陽性になる。修正方針：列要素に `data-testid` 等の専用セレクタを付与し `page.locator('[data-testid="column-{label}"]')` で直接取得する。
+
 ### 任意対応（軽微・ドキュメント系）
 
 - **DB の `priority > 0` 制約欠如**: migration に `CHECK (priority > 0)` を追加すればアプリ層バイパス時の防御になるが、Zod + 既存 XOR 制約で十分なため優先度は低い。
@@ -69,6 +84,7 @@ workbook order 機能のリファクタリング記録。
 - **`@dnd-kit/abstract` / `@dnd-kit/dom` の devDependencies 配置**: `import type` のみ使用しているためコンパイル時に消える。devDependencies で正しい。
 - **DB の `priority > 0` 制約欠如**: Zod + 既存 XOR チェック制約で十分。migration 追加のコスト対効果が低い。
 - **`gradeModes.get(workbook.id)!` の非null アサーション**: Map の構築元と参照元が同じ workbooks 配列のため安全。
+- **`+server.ts` の `request.json()` で不正JSON時に500**: 呼び出し元は同アプリのクライアントコード（`saveUpdates`）のみで、管理者専用の内部APIに外部から不正JSONを送るシナリオは現実的でない。500が返っても実害なし。try-catch 追加はYAGNI。
 - **フィクスチャの ID 99 の「不整合」**: `solutionPlacements`（placement 行）と `workbooksWithPlacements`（workbook+placement 結合）は別テスト用フィクスチャであり意図的な設計。
 
 ---
