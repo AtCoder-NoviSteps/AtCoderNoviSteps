@@ -89,6 +89,7 @@ export async function createInitialPlacements(): Promise<void> {
 
   await prisma.workBookPlacement.createMany({
     data: [...curriculumPlacements, ...solutionPlacements],
+    skipDuplicates: true,
   });
 }
 

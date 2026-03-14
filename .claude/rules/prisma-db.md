@@ -45,3 +45,24 @@ paths:
 
 - Use `prisma.$transaction()` for multi-step operations
 - Handle errors with try-catch and proper rollback
+
+## Idempotent Writes
+
+- Prefer `createMany({ skipDuplicates: true })` over try-catching P2002 when a unique constraint violation is expected (e.g., double-submit race condition). It maps to `INSERT ... ON CONFLICT DO NOTHING` and keeps intent clear.
+- Constraints: top-level `createMany` only (not nested); PostgreSQL, CockroachDB, SQLite only.
+
+## Validate Constraints
+
+Prisma does not support `@@check` in `schema.prisma`. To add a validate constraint:
+
+1. Run `pnpm exec prisma migrate dev --create-only --name <description>` to generate the migration file without applying it
+2. Edit the generated `migration.sql` to add the validate constraint manually
+3. Run `pnpm exec prisma migrate dev` to apply
+
+After adding a validate constraint, add a comment to `docs/erd.md` under the relevant entity:
+
+```
+%% XOR constraint: workbookplacement_xor_grade_category — exactly one of taskGrade or solutionCategory must be non-null
+```
+
+This is the only place validate constraints are visible, since Prisma omits them from `schema.prisma`.

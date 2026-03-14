@@ -214,6 +214,17 @@ describe('createInitialPlacements', () => {
     const callArg = vi.mocked(prisma.workBookPlacement.createMany).mock.calls[0][0];
     expect(callArg?.data).toHaveLength(4); // 2 curriculum + 2 solution
   });
+
+  test('calls createMany with skipDuplicates to tolerate concurrent double-submit', async () => {
+    mockWorkBookFindManyOnce(unplacedCurriculumRows);
+    mockWorkBookFindManyOnce(unplacedSolutionWorkbooks);
+    vi.mocked(prisma.workBookPlacement.createMany).mockResolvedValue({ count: 4 });
+
+    await createInitialPlacements();
+
+    const callArg = vi.mocked(prisma.workBookPlacement.createMany).mock.calls[0][0];
+    expect(callArg?.skipDuplicates).toBe(true);
+  });
 });
 
 describe('buildTaskMapFromCurriculumRows', () => {
