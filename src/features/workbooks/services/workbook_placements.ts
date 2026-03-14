@@ -44,6 +44,9 @@ export async function getPlacementsByWorkBookType(
 /**
  * Updates existing placements in a single transaction.
  * No-op when given an empty array.
+ *
+ * Intentional N+1: one UPDATE per row. Acceptable for an infrequent admin-only
+ * operation; raw SQL bulk updates are not worth the type-safety trade-off here.
  */
 export async function updateWorkBookPlacements(updatedPlacements: PlacementInputs): Promise<void> {
   if (updatedPlacements.length === 0) {

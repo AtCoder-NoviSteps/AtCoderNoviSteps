@@ -25,17 +25,6 @@
 
 ## 非自明な実装上の決定
 
-### ドロップ時 N+1 UPDATE（意図的選択）
-
-`prisma.$transaction()` 内で最大200回の個別 `update` を発行するのは N+1 パターンだが、以下の理由で許容：
-
-- PostgreSQL は PK インデックスヒットの単純 UPDATE を高速処理（200件で 50-200ms 程度）
-- 行レベルロックのためブロックなし
-- 管理者1人が数分に1回の操作 → DDoS とは性質が異なる
-- Raw SQL は数千件以上のバルク操作でないと型安全性・保守性の犠牲に見合わない
-
-**将来の閾値**: 500件超になったら `UPDATE ... SET priority = CASE WHEN ...` への切替を検討。
-
 ### `@@unique([taskGrade, priority])` を採用しない理由
 
 `prisma.$transaction()` 内での順次 UPDATE は中間状態で UNIQUE 制約違反が発生する（PostgreSQL はトランザクション内でも各 SQL 文ごとに即時チェック）。管理者のみが操作するため同時実行が発生せず、DB レベルの複合ユニーク制約は不要。
