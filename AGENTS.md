@@ -9,7 +9,7 @@ Always prefer simplicity over pathological correctness. YAGNI, KISS, DRY. No bac
 **When implementing:**
 
 1. Plan with a phased TODO list before starting (lower risk → higher risk order)
-2. Implement production code → tests → verify with `pnpm test:unit`
+2. Write tests first, then implement production code, then verify with `pnpm test:unit`
 3. Review critically after implementing: flag YAGNI violations, over-abstraction, missing tests
 4. Record reusable insights in `.claude/rules/` or `docs/guides/` after the session
 5. Discard or summarize completed plans; don't leave stale TODOs
