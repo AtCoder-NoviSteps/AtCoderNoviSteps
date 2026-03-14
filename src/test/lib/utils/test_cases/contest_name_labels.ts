@@ -41,6 +41,10 @@ export const atCoderOthers = [
     contestId: 'atc001',
     expected: 'ATC 001',
   }),
+  createTestCaseForContestNameLabel('square869120Contest #4')({
+    contestId: 's8pc-4',
+    expected: 'square869120Contest #4',
+  }),
 ];
 
 export const mathAndAlgorithm = [

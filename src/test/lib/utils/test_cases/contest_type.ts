@@ -402,6 +402,10 @@ export const atCoderOthers = [
     contestId: 'atc001',
     expected: ContestType.OTHERS,
   }),
+  createTestCaseForContestType('square869120Contest #4')({
+    contestId: 's8pc-4',
+    expected: ContestType.OTHERS,
+  }),
   createTestCaseForContestType('CODE FESTIVAL 2014 qual A')({
     contestId: 'code-festival-2014-quala',
     expected: ContestType.OTHERS,

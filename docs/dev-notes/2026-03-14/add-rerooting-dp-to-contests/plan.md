@@ -1,79 +1,27 @@
 # 全方位木DPの問題追加 (Issue #3264)
 
-[Issue #3264](https://github.com/AtCoder-NoviSteps/AtCoderNoviSteps/issues/3264) で、s8pc-4 (square869120Contest #4) の問題 D を追加する。PR #3243 (atc001 追加) と同じパターン。
+[Issue #3264](https://github.com/AtCoder-NoviSteps/AtCoderNoviSteps/issues/3264) で、s8pc-4 (square869120Contest #4) の問題 D を追加。
 
-## 変更対象
+## 変更概要
 
-### 1. `src/lib/utils/contest.ts`
+- `ATCODER_OTHERS` に `'s8pc-4': 'square869120Contest #4'` を追加
+- `getContestNameLabel` に辞書ルックアップを追加（`regexForAtCoderUniversity` の直後、`chokudai_S` の直前）
+- テストケースを `contest_type.ts` と `contest_name_labels.ts` に追加
+- `prisma/tasks.ts` に `s8pc_4_d`（Driving on a Tree、grade なし）を追加
 
-**`ATCODER_OTHERS` に追加**:
+## 教訓
 
-```ts
-'s8pc-4': 'square869120Contest #4',
-```
+### `ATCODER_OTHERS` は分類辞書であり、ラベル辞書でもある
 
-**`getContestNameLabel` を汎用化**:
+変更前は `getContestNameLabel` が `ATCODER_OTHERS` を参照しておらず、辞書登録済みのコンテストでも `toUpperCase()` のフォールバックに落ちていた。今回の汎用化で辞書1本が「分類」と「表示名解決」を兼ねるようになった。**新コンテストは辞書に1エントリ追加するだけで両方が自動的に有効になる。**
 
-`ATCODER_OTHERS` の辞書を完全一致でルックアップし、登録済みならその名前を返す。既存の `chokudai_S` はプレフィックス一致（`chokudai_S001` のような ID）のため辞書には存在せず、この汎用処理と競合しない。`chokudai_S` の専用分岐はそのまま残す。
+### ルックアップの挿入位置が正確性を決める
 
-追加箇所は `regexForAtCoderUniversity` の直後、`chokudai_S` の直前:
+`getContestNameLabel` は上から順に評価する if チェーンであるため、挿入位置が重要。
 
-```ts
-const othersLabel = ATCODER_OTHERS[contestId as keyof typeof ATCODER_OTHERS];
-if (othersLabel) {
-  return othersLabel;
-}
-```
+- `chokudai_S` はプレフィックス一致（`chokudai_S001` 等）で辞書キーと完全一致しない → 専用ブランチを辞書ルックアップの**後**に残す
+- `atc001` は `regexForAxc`（`/^(abc|arc|agc|atc)\d{3}$/i`）に**先に**マッチするため辞書ルックアップに到達しない → 既存の表示 `'ATC 001'` は維持される
 
-これにより `atc001` など既存の ATCODER_OTHERS 登録コンテストも自動でラベルが返るようになる（現状はフォールバックの `toUpperCase()` に落ちていたものを正式に対応）。
+### 一般化できる知見
 
-### 2. テストケース
-
-**`src/test/lib/utils/test_cases/contest_type.ts`** の `atCoderOthers` 配列に追加:
-
-```ts
-createTestCaseForContestType('square869120Contest #4')({
-  contestId: 's8pc-4',
-  expected: ContestType.OTHERS,
-}),
-```
-
-**`src/test/lib/utils/test_cases/contest_name_labels.ts`** の `atCoderOthers` 配列に追加:
-
-```ts
-createTestCaseForContestNameLabel('square869120Contest #4')({
-  contestId: 's8pc-4',
-  expected: 'square869120Contest #4',
-}),
-```
-
-### 3. `prisma/tasks.ts`
-
-末尾に追加:
-
-```ts
-{
-  id: 's8pc_4_d',
-  contest_id: 's8pc-4',
-  problem_index: 'D',
-  name: 'Driving on a Tree',
-  title: 'D. Driving on a Tree',
-},
-```
-
-`grade` はなし（`PENDING` のまま）。
-
-## 変更しないもの
-
-- `prisma/schema.prisma` — `ContestType.OTHERS` を使うため変更不要
-- `contest_task_pairs.ts` — 共有問題なし
-- コンテストテーブル表示用コンポーネント — OTHERS として既存の表示に乗る
-
-## 作業順序
-
-1. `contest.ts` の `ATCODER_OTHERS` に `'s8pc-4'` を追加
-2. `getContestNameLabel` を汎用化（辞書ルックアップ追加）
-3. テストケースを追加
-4. `prisma/tasks.ts` にタスクを追加
-5. `pnpm test:unit` でテスト通過を確認
-6. `pnpm format` を実行
+新コンテストを追加する際は、分類ロジック（`classifyContest`）と表示名ロジック（`getContestNameLabel`）の**両方**への反映が必要かを確認する。共通辞書で両方を賄える場合はそうする。プレフィックス一致が必要な場合のみ専用ブランチを追加する。
