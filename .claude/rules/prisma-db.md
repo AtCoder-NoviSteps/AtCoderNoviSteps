@@ -42,6 +42,10 @@ paths:
 - Prefer `createMany({ skipDuplicates: true })` over try-catching P2002 when a unique constraint violation is expected (e.g., double-submit race condition). It maps to `INSERT ... ON CONFLICT DO NOTHING` and keeps intent clear.
 - Constraints: top-level `createMany` only (not nested); PostgreSQL, CockroachDB, SQLite only.
 
+## Zod Schema for Int Fields
+
+`z.number().positive()` allows decimals (`1.5`). For Prisma `Int` fields, always use `z.number().int().positive()`.
+
 ## Validate Constraints
 
 Prisma does not support `@@check` in `schema.prisma`. To add a validate constraint:

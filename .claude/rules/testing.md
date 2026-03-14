@@ -11,15 +11,13 @@ paths:
 
 ## Test Types
 
-| Type        | Tool       | Location                | Run Command             |
-| ----------- | ---------- | ----------------------- | ----------------------- |
-| Unit        | Vitest     | `src/test/**/*.test.ts` | `pnpm test:unit`        |
-| Integration | Vitest     | `src/test/`             | `pnpm test:unit`        |
-| E2E         | Playwright | `tests/*.test.ts`       | `pnpm test:integration` |
+| Type | Tool       | Location                                                          | Run Command             |
+| ---- | ---------- | ----------------------------------------------------------------- | ----------------------- |
+| Unit | Vitest     | `src/test/` (mirrors `src/lib/`) or co-located in `src/features/` | `pnpm test:unit`        |
+| E2E  | Playwright | `tests/`                                                          | `pnpm test:integration` |
 
 ## Unit Tests
 
-- Place tests in `src/test/` mirroring `src/lib/` structure
 - Use `@quramy/prisma-fabbrica` for test data factories
 - Mock external APIs with Nock
 
@@ -61,10 +59,6 @@ try {
   await restoreState();
 }
 ```
-
-## Zod Integer Validation
-
-`z.number().positive()` allows decimals (`1.5`). For Prisma `Int` fields, always use `z.number().int().positive()`.
 
 ## Test Data
 
