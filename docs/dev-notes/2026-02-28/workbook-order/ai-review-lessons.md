@@ -126,10 +126,10 @@ migration に `workbookplacement_xor_grade_category` CHECK 制約があるが ER
 
 ## rules / AGENTS.md への一般化状況
 
-| 教訓 | 一般化先 | ステータス |
-|------|----------|------------|
-| `redirect()` vs `error()` の使い分け | `.claude/rules/auth.md` Key Files | 実装済み |
-| features テスト配置コロケーション | `AGENTS.md` Project Structure | 実装済み |
-| DB CHECK 制約 → ERD.md コメント | `.claude/rules/prisma-db.md` | 検討中 |
-| E2E セレクタは `data-testid` を使う | `.claude/rules/testing.md` | 検討中 |
-| スキル作成チェックリスト | `.claude/rules/` 新規 | 検討中 |
+| 教訓                                 | 一般化先                          | ステータス |
+| ------------------------------------ | --------------------------------- | ---------- |
+| `redirect()` vs `error()` の使い分け | `.claude/rules/auth.md` Key Files | 実装済み   |
+| features テスト配置コロケーション    | `AGENTS.md` Project Structure     | 実装済み   |
+| DB CHECK 制約 → ERD.md コメント      | `.claude/rules/prisma-db.md`      | 検討中     |
+| E2E セレクタは `data-testid` を使う  | `.claude/rules/testing.md`        | 検討中     |
+| スキル作成チェックリスト             | `.claude/rules/` 新規             | 検討中     |
