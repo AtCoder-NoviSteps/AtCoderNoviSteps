@@ -56,6 +56,7 @@ Scan the target code in this order (lowest risk first). List every concrete find
 ## When to Skip Tests
 
 Skip unit tests when:
+
 - The function has no logic (e.g., `if (!res.ok) throw`)
 - The target is `seed.ts` (integration-level scope)
 - Testing requires mocking the entire framework (auth redirects, DnD events)
