@@ -59,10 +59,10 @@
     return get(activeWorkbookTabStore).get(workBookType);
   };
 
-  const tasksByTaskId: Map<string, Task> = data.tasksByTaskId;
+  const tasksMapByIds: Map<string, Task> = data.tasksMapByIds;
   let taskResultsByTaskId = data.taskResultsByTaskId as Map<string, TaskResult>;
 
-  const workbookGradeModes = calcWorkBookGradeModes(data.workbooks as WorkbooksList, tasksByTaskId);
+  const workbookGradeModes = calcWorkBookGradeModes(data.workbooks as WorkbooksList, tasksMapByIds);
 
   // 計算量: 問題集の数をN、各問題集の問題の平均値をMとすると、O(N * M)
   function fetchTaskResultsWithWorkBookId(workbooks: WorkbooksList, workBookType: WorkBookType) {

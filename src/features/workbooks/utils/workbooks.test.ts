@@ -85,7 +85,7 @@ describe('Workbooks', () => {
 
   describe('calcWorkBookGradeModes', () => {
     test('returns most frequent grade for each workbook', () => {
-      const tasksByTaskId: Map<string, Task> = new Map([
+      const tasksMapByIds: Map<string, Task> = new Map([
         ['abc322_d', createTask('abc322_d', TaskGrade.Q1)],
         ['abc347_c', createTask('abc347_c', TaskGrade.Q1)],
         ['abc307_c', createTask('abc307_c', TaskGrade.Q2)],
@@ -100,19 +100,19 @@ describe('Workbooks', () => {
           ],
         }),
       ];
-      const result = calcWorkBookGradeModes(workbooks, tasksByTaskId);
+      const result = calcWorkBookGradeModes(workbooks, tasksMapByIds);
       expect(result.get(1)).toBe(TaskGrade.Q1);
     });
 
     test('returns PENDING for workbook without tasks', () => {
-      const tasksByTaskId: Map<string, Task> = new Map();
+      const tasksMapByIds: Map<string, Task> = new Map();
       const workbooks = [createWorkBookListBase({ id: 1, workBookTasks: [] })];
-      const result = calcWorkBookGradeModes(workbooks, tasksByTaskId);
+      const result = calcWorkBookGradeModes(workbooks, tasksMapByIds);
       expect(result.get(1)).toBe(TaskGrade.PENDING);
     });
 
     test('returns PENDING for workbook with all PENDING tasks', () => {
-      const tasksByTaskId: Map<string, Task> = new Map([
+      const tasksMapByIds: Map<string, Task> = new Map([
         ['abc322_d', createTask('abc322_d', TaskGrade.PENDING)],
         ['abc347_c', createTask('abc347_c', TaskGrade.PENDING)],
         ['abc307_c', createTask('abc307_c', TaskGrade.PENDING)],
@@ -127,18 +127,18 @@ describe('Workbooks', () => {
           ],
         }),
       ];
-      const result = calcWorkBookGradeModes(workbooks, tasksByTaskId);
+      const result = calcWorkBookGradeModes(workbooks, tasksMapByIds);
       expect(result.get(1)).toBe(TaskGrade.PENDING);
     });
 
     test('returns empty map for empty workbooks array', () => {
-      const tasksByTaskId: Map<string, Task> = new Map();
-      const result = calcWorkBookGradeModes([], tasksByTaskId);
+      const tasksMapByIds: Map<string, Task> = new Map();
+      const result = calcWorkBookGradeModes([], tasksMapByIds);
       expect(result.size).toBe(0);
     });
 
-    test('ignores tasks not found in tasksByTaskId', () => {
-      const tasksByTaskId: Map<string, Task> = new Map([
+    test('ignores tasks not found in tasksMapByIds', () => {
+      const tasksMapByIds: Map<string, Task> = new Map([
         ['abc322_d', createTask('abc322_d', TaskGrade.Q9)],
       ]);
       const workbooks = [
@@ -150,12 +150,12 @@ describe('Workbooks', () => {
           ],
         }),
       ];
-      const result = calcWorkBookGradeModes(workbooks, tasksByTaskId);
+      const result = calcWorkBookGradeModes(workbooks, tasksMapByIds);
       expect(result.get(1)).toBe(TaskGrade.Q9);
     });
 
     test('handles multiple workbooks independently', () => {
-      const tasksByTaskId: Map<string, Task> = new Map([
+      const tasksMapByIds: Map<string, Task> = new Map([
         ['abc440_a', createTask('abc440_a', TaskGrade.Q8)],
         ['abc425_a', createTask('abc425_a', TaskGrade.Q7)],
       ]);
@@ -169,7 +169,7 @@ describe('Workbooks', () => {
           workBookTasks: [{ taskId: 'abc425_a', priority: 1, comment: '' }],
         }),
       ];
-      const result = calcWorkBookGradeModes(workbooks, tasksByTaskId);
+      const result = calcWorkBookGradeModes(workbooks, tasksMapByIds);
       expect(result.get(10)).toBe(TaskGrade.Q8);
       expect(result.get(20)).toBe(TaskGrade.Q7);
     });

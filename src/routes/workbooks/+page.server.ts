@@ -36,7 +36,7 @@ export async function load({ locals }) {
 
   try {
     // 問題集を構成する問題のグレードの最頻値を取得するために使用
-    const tasksByTaskId = await taskCrud.getTasksByTaskId();
+    const tasksMapByIds = await taskCrud.getTasksByTaskId();
     // ユーザの回答状況を表示するために使用
     const taskResultsByTaskId = await taskResultsCrud.getTaskResultsOnlyResultExists(
       loggedInUser?.id as string,
@@ -45,7 +45,7 @@ export async function load({ locals }) {
 
     return {
       workbooks: workbooksWithAuthors,
-      tasksByTaskId: tasksByTaskId,
+      tasksMapByIds: tasksMapByIds,
       taskResultsByTaskId: taskResultsByTaskId,
       loggedInUser: loggedInUser,
     };

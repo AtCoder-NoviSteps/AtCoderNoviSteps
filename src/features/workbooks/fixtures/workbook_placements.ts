@@ -106,7 +106,7 @@ export const solutionPlacementRow = {
 // Task IDs match those in fixtures/workbooks.ts CURRICULUM/SOLUTION workbooks
 // ---------------------------------------------------------------------------
 
-export const tasksByTaskId = new Map<string, Task>([
+export const tasksMapByIds = new Map<string, Task>([
   [
     'math_and_algorithm_a',
     {

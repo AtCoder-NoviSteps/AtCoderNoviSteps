@@ -81,12 +81,12 @@ export async function createInitialPlacements(): Promise<void> {
     return;
   }
 
-  const tasksByTaskId = buildTaskMapFromCurriculumRows(unplacedCurriculum);
+  const tasksMapByIds = buildTaskMapFromCurriculumRows(unplacedCurriculum);
   const curriculumWorkbooksForInit = buildCurriculumWorkbooksForInit(unplacedCurriculum);
 
   const curriculumPlacements = initializeCurriculumPlacements(
     curriculumWorkbooksForInit,
-    tasksByTaskId,
+    tasksMapByIds,
   );
   const solutionPlacements = initializeSolutionPlacements(unplacedSolution);
 
@@ -163,9 +163,9 @@ export function buildCurriculumWorkbooksForInit(
  */
 export function initializeCurriculumPlacements(
   workbooks: WorkBooksWithTasks,
-  tasksByTaskId: Map<string, Task>,
+  tasksMapByIds: Map<string, Task>,
 ): PlacementCreates {
-  const gradeModes = calcWorkBookGradeModes(workbooks, tasksByTaskId);
+  const gradeModes = calcWorkBookGradeModes(workbooks, tasksMapByIds);
   const byGrade = groupWorkbooksByGrade(workbooks, gradeModes);
   return buildPlacementsFromGroups(workbooks, gradeModes, byGrade);
 }

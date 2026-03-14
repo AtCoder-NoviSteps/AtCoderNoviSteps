@@ -31,7 +31,7 @@ import { contest_task_pairs } from './contest_task_pairs';
 import { workbooks } from '../src/features/workbooks/fixtures/workbooks';
 import { solutionCategoryMap } from '../src/features/workbooks/fixtures/solution_category_map';
 import {
-  buildTasksByTaskId,
+  buildTaskMapFromCurriculumRows,
   buildCurriculumWorkbooksForInit,
   initializeCurriculumPlacements,
   initializeSolutionPlacements,
@@ -337,15 +337,15 @@ async function addWorkBookPlacements() {
 }
 
 async function addCurriculumPlacements(
-  unplacedCurriculum: Parameters<typeof buildTasksByTaskId>[0],
+  unplacedCurriculum: Parameters<typeof buildTaskMapFromCurriculumRows>[0],
 ) {
   if (unplacedCurriculum.length === 0) {
     return;
   }
 
-  const tasksByTaskId = buildTasksByTaskId(unplacedCurriculum);
+  const tasksMapByIds = buildTaskMapFromCurriculumRows(unplacedCurriculum);
   const workbooksForInit = buildCurriculumWorkbooksForInit(unplacedCurriculum);
-  const placements = initializeCurriculumPlacements(workbooksForInit, tasksByTaskId);
+  const placements = initializeCurriculumPlacements(workbooksForInit, tasksMapByIds);
 
   await createWorkBookPlacements(placements);
   console.log(`Added ${placements.length} curriculum placements.`);

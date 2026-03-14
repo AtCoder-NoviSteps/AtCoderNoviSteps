@@ -29,7 +29,7 @@ import {
   workbooksWithPlacements,
   curriculumPlacementRow,
   solutionPlacementRow,
-  tasksByTaskId,
+  tasksMapByIds,
   curriculumWorkbooksForInit,
   unplacedCurriculumRows,
   unplacedSolutionWorkbooks,
@@ -313,7 +313,7 @@ describe('initializeCurriculumPlacements', () => {
       [1, 2, 7].includes(workbook.id),
     );
 
-    const result = initializeCurriculumPlacements(workbooks, tasksByTaskId);
+    const result = initializeCurriculumPlacements(workbooks, tasksMapByIds);
     const byId = new Map(result.map((placement) => [placement.workBookId, placement]));
 
     expect(byId.get(1)).toMatchObject({ taskGrade: TaskGrade.Q10, priority: 1 });
@@ -340,7 +340,7 @@ describe('initializeCurriculumPlacements', () => {
       [1, 2, 6].includes(workbook.id),
     );
 
-    const result = initializeCurriculumPlacements(workbooks, tasksByTaskId);
+    const result = initializeCurriculumPlacements(workbooks, tasksMapByIds);
     const byId = new Map(result.map((placement) => [placement.workBookId, placement]));
 
     expect(byId.get(1)).toMatchObject({
@@ -365,7 +365,7 @@ describe('initializeCurriculumPlacements', () => {
     // id=1 should get priority:1, id=7 should get priority:2
     const workbooks = curriculumWorkbooksForInit.filter((workbook) => [1, 7].includes(workbook.id));
 
-    const result = initializeCurriculumPlacements(workbooks, tasksByTaskId);
+    const result = initializeCurriculumPlacements(workbooks, tasksMapByIds);
     const byId = new Map(result.map((placement) => [placement.workBookId, placement]));
 
     expect(byId.get(1)).toMatchObject({ taskGrade: TaskGrade.Q10, priority: 1 });
