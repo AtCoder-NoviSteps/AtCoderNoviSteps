@@ -8501,4 +8501,11 @@ export const tasks = [
     name: 'お菓子',
     title: 'A. お菓子',
   },
+  {
+    id: 's8pc_4_d',
+    contest_id: 's8pc-4',
+    problem_index: 'D',
+    name: 'Driving on a Tree',
+    title: 'D. Driving on a Tree',
+  },
 ];
