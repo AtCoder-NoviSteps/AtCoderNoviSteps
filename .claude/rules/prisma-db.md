@@ -59,9 +59,9 @@ Prisma does not support `@@check` in `schema.prisma`. To add a validate constrai
 2. Edit the generated `migration.sql` to add the validate constraint manually
 3. Run `pnpm exec prisma migrate dev` to apply
 
-After adding a validate constraint, add a comment to `docs/erd.md` under the relevant entity:
+After adding a validate constraint, add a comment to `prisma/ERD.md` under the relevant entity:
 
-```
+```mermaid
 %% XOR constraint: workbookplacement_xor_grade_category — exactly one of taskGrade or solutionCategory must be non-null
 ```
 
