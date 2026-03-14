@@ -1,17 +1,17 @@
-import type { SolutionCategory } from '$features/workbooks/types/workbook_placement';
+import { SolutionCategory } from '$features/workbooks/types/workbook_placement';
 
 /**
- * urlSlug → SolutionCategory マッピング（シードデータ用）
- * 未記載の SOLUTION workbook は PENDING として初期配置される
+ * Maps urlSlug → SolutionCategory for seeding.
+ * SOLUTION workbooks not listed here are initially placed as PENDING.
  */
 export const solutionCategoryMap: Record<string, SolutionCategory> = {
-  stack: 'DATA_STRUCTURE',
-  'potentialized-union-find': 'DATA_STRUCTURE',
-  'priority-queue': 'DATA_STRUCTURE',
-  'map-dict': 'DATA_STRUCTURE',
-  'ordered-set': 'DATA_STRUCTURE',
-  'bitmask-brute-force-search': 'SEARCH_SIMULATION',
-  'greedy-method': 'SEARCH_SIMULATION',
-  'recursive-function': 'SEARCH_SIMULATION',
-  'number-theory-search': 'NUMBER_THEORY',
+  'greedy-method': SolutionCategory.SEARCH_SIMULATION,
+  'recursive-function': SolutionCategory.SEARCH_SIMULATION,
+  'bitmask-brute-force-search': SolutionCategory.SEARCH_SIMULATION,
+  'map-dict': SolutionCategory.DATA_STRUCTURE,
+  stack: SolutionCategory.DATA_STRUCTURE,
+  'ordered-set': SolutionCategory.DATA_STRUCTURE,
+  'priority-queue': SolutionCategory.DATA_STRUCTURE,
+  'potentialized-union-find': SolutionCategory.GRAPH,
+  'number-theory-search': SolutionCategory.NUMBER_THEORY,
 };
