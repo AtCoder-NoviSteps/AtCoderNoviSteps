@@ -555,5 +555,25 @@ describe('workBookPlacementSchema', () => {
       });
       expect(result.success).toBe(false);
     });
+
+    test('fractional priority is rejected', () => {
+      const result = workBookPlacementSchema.safeParse({
+        id: 1,
+        priority: 1.5,
+        taskGrade: TaskGrade.Q10,
+        solutionCategory: null,
+      });
+      expect(result.success).toBe(false);
+    });
+
+    test('fractional id is rejected', () => {
+      const result = workBookPlacementSchema.safeParse({
+        id: 1.5,
+        priority: 1,
+        taskGrade: null,
+        solutionCategory: SolutionCategory.GRAPH,
+      });
+      expect(result.success).toBe(false);
+    });
   });
 });

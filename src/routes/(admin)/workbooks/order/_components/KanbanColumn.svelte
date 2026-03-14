@@ -31,6 +31,7 @@
 
 <div
   use:attachDroppable
+  data-testid="column-{columnId}"
   class="min-w-64 w-64 shrink-0 rounded-lg p-3 flex flex-col gap-2"
   class:bg-gray-100={!droppable.isDropTarget}
   class:dark:bg-gray-700={!droppable.isDropTarget}

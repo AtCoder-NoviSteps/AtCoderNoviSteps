@@ -8,7 +8,7 @@ argument-hint: '[issue-number | file-path]'
 Produce a refactoring plan for: $ARGUMENTS
 
 1. **Gather context**
-   - If the argument is a number: run `gh issue view $ARGUMENTS` to read the issue title, body, and comments
+   - If the argument is a number: run `gh issue view $ARGUMENTS --comments` to read the issue title, body, and comments
    - If the argument is a path: read the source files under that path
 
 2. **Investigate**

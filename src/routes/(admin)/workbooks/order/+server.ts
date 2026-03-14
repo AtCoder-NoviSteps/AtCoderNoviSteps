@@ -4,12 +4,12 @@ import { validateAndUpdatePlacements } from '$features/workbooks/services/workbo
 
 import { updatePlacementsSchema } from '$features/workbooks/zod/schema';
 
-import { validateAdminAccess } from '../../_utils/auth';
+import { validateAdminAccessForApi } from '../../_utils/auth';
 
 import { BAD_REQUEST } from '$lib/constants/http-response-status-codes';
 
 export async function POST({ request, locals }: RequestEvent) {
-  await validateAdminAccess(locals);
+  await validateAdminAccessForApi(locals);
 
   const body = await request.json();
   const parsed = updatePlacementsSchema.safeParse(body);

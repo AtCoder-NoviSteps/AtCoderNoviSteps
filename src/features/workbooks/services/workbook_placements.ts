@@ -45,7 +45,7 @@ export async function getPlacementsByWorkBookType(
  * Updates existing placements in a single transaction.
  * No-op when given an empty array.
  */
-export async function upsertWorkBookPlacements(updatedPlacements: PlacementInputs): Promise<void> {
+export async function updateWorkBookPlacements(updatedPlacements: PlacementInputs): Promise<void> {
   if (updatedPlacements.length === 0) {
     return;
   }
@@ -227,17 +227,22 @@ export async function validateAndUpdatePlacements(
     return validationError;
   }
 
-  await upsertWorkBookPlacements(updates);
+  await updateWorkBookPlacements(updates);
 
   return null;
 }
 
 async function validatePlacements(updates: PlacementInputs): Promise<{ error: string } | null> {
+  const ids = updates.map((update) => update.id);
+  const existingPlacements = await prisma.workBookPlacement.findMany({
+    where: { id: { in: ids } },
+    include: { workBook: { select: { workBookType: true } } },
+  });
+
+  const existingById = new Map(existingPlacements.map((placement) => [placement.id, placement]));
+
   for (const update of updates) {
-    const existing = await prisma.workBookPlacement.findUnique({
-      where: { id: update.id },
-      include: { workBook: { select: { workBookType: true } } },
-    });
+    const existing = existingById.get(update.id);
 
     if (!existing) {
       return { error: `Not found placement id=${update.id}` };

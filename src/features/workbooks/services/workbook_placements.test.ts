@@ -11,7 +11,7 @@ import {
 import {
   getWorkbooksWithPlacements,
   getPlacementsByWorkBookType,
-  upsertWorkBookPlacements,
+  updateWorkBookPlacements,
   createInitialPlacements,
   buildTaskMapFromCurriculumRows,
   buildCurriculumWorkbooksForInit,
@@ -42,7 +42,6 @@ vi.mock('$lib/server/database', () => ({
     },
     workBookPlacement: {
       findMany: vi.fn(),
-      findUnique: vi.fn(),
       update: vi.fn(),
       createMany: vi.fn(),
     },
@@ -62,9 +61,9 @@ function mockFindMany(placements: WorkBookPlacements) {
   );
 }
 
-function mockFindUnique(placement: unknown) {
-  vi.mocked(prisma.workBookPlacement.findUnique).mockResolvedValueOnce(
-    placement as unknown as Awaited<ReturnType<typeof prisma.workBookPlacement.findUnique>>,
+function mockPlacementFindManyOnce(placements: unknown[]) {
+  vi.mocked(prisma.workBookPlacement.findMany).mockResolvedValueOnce(
+    placements as unknown as Awaited<ReturnType<typeof prisma.workBookPlacement.findMany>>,
   );
 }
 
@@ -102,6 +101,7 @@ describe('getPlacementsByWorkBookType', () => {
     expect(prisma.workBookPlacement.findMany).toHaveBeenCalledWith(
       expect.objectContaining({
         where: expect.objectContaining({ workBook: { workBookType: WorkBookType.CURRICULUM } }),
+        orderBy: { priority: 'asc' },
       }),
     );
   });
@@ -115,6 +115,7 @@ describe('getPlacementsByWorkBookType', () => {
     expect(prisma.workBookPlacement.findMany).toHaveBeenCalledWith(
       expect.objectContaining({
         where: expect.objectContaining({ workBook: { workBookType: WorkBookType.SOLUTION } }),
+        orderBy: { priority: 'asc' },
       }),
     );
   });
@@ -137,7 +138,7 @@ describe('getPlacementsByWorkBookType', () => {
   });
 });
 
-describe('upsertWorkBookPlacements', () => {
+describe('updateWorkBookPlacements', () => {
   test('updates multiple placements within a transaction', async () => {
     vi.mocked(prisma.$transaction).mockResolvedValue([]);
 
@@ -145,13 +146,13 @@ describe('upsertWorkBookPlacements', () => {
       { id: 1, priority: 1, taskGrade: TaskGrade.Q10, solutionCategory: null },
       { id: 2, priority: 2, taskGrade: TaskGrade.Q9, solutionCategory: null },
     ];
-    await upsertWorkBookPlacements(updates);
+    await updateWorkBookPlacements(updates);
 
     expect(prisma.$transaction).toHaveBeenCalledTimes(1);
   });
 
   test('does not call transaction when given an empty array', async () => {
-    await upsertWorkBookPlacements([]);
+    await updateWorkBookPlacements([]);
     expect(prisma.$transaction).not.toHaveBeenCalled();
   });
 
@@ -169,7 +170,7 @@ describe('upsertWorkBookPlacements', () => {
         solutionCategory: SolutionCategory.SEARCH_SIMULATION,
       },
     ];
-    await upsertWorkBookPlacements(updates);
+    await updateWorkBookPlacements(updates);
 
     expect(prisma.$transaction).toHaveBeenCalledTimes(1);
     const callArg = vi.mocked(prisma.$transaction).mock.calls[0][0];
@@ -184,7 +185,7 @@ describe('upsertWorkBookPlacements', () => {
     const updates = [
       { id: 104, priority: 3, taskGrade: null, solutionCategory: SolutionCategory.DATA_STRUCTURE },
     ];
-    await upsertWorkBookPlacements(updates);
+    await updateWorkBookPlacements(updates);
 
     expect(prisma.$transaction).toHaveBeenCalledTimes(1);
   });
@@ -459,7 +460,7 @@ describe('initializeSolutionPlacements', () => {
 
 describe('validateAndUpdatePlacements', () => {
   test('returns null and calls upsert when all updates are valid', async () => {
-    mockFindUnique(curriculumPlacementRow);
+    mockPlacementFindManyOnce([curriculumPlacementRow]);
     vi.mocked(prisma.$transaction).mockResolvedValue([]);
 
     const result = await validateAndUpdatePlacements([
@@ -471,7 +472,7 @@ describe('validateAndUpdatePlacements', () => {
   });
 
   test('returns error when placement id does not exist', async () => {
-    vi.mocked(prisma.workBookPlacement.findUnique).mockResolvedValue(null);
+    mockPlacementFindManyOnce([]);
 
     const result = await validateAndUpdatePlacements([
       { id: 999, priority: 1, taskGrade: null, solutionCategory: SolutionCategory.GRAPH },
@@ -482,7 +483,7 @@ describe('validateAndUpdatePlacements', () => {
   });
 
   test('returns error for CURRICULUM → SOLUTION cross-type movement', async () => {
-    mockFindUnique(curriculumPlacementRow);
+    mockPlacementFindManyOnce([curriculumPlacementRow]);
 
     const result = await validateAndUpdatePlacements([
       { id: 1, priority: 1, taskGrade: null, solutionCategory: SolutionCategory.GRAPH },
@@ -493,7 +494,7 @@ describe('validateAndUpdatePlacements', () => {
   });
 
   test('returns error for SOLUTION → CURRICULUM cross-type movement', async () => {
-    mockFindUnique(solutionPlacementRow);
+    mockPlacementFindManyOnce([solutionPlacementRow]);
 
     const result = await validateAndUpdatePlacements([
       { id: 101, priority: 1, taskGrade: TaskGrade.Q10, solutionCategory: null },

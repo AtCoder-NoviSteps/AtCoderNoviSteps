@@ -50,11 +50,11 @@
         SolutionCategory.PENDING,
         SolutionCategory.GRAPH,
       ]
-    ).filter((category) => category in SolutionCategory),
+    ).filter((category) => Object.hasOwn(SolutionCategory, category)),
   );
   let selectedGrades = $state(
     (getParam('grades')?.split(',').filter(Boolean) ?? [TaskGrade.Q10, TaskGrade.Q9]).filter(
-      (grade) => grade in TaskGrade && grade !== TaskGrade.PENDING,
+      (grade) => Object.hasOwn(TaskGrade, grade) && grade !== TaskGrade.PENDING,
     ),
   );
 
@@ -97,20 +97,27 @@
       return;
     }
 
+    const capturedTab = activeTab;
+    const capturedSnapshot = snapshot;
+
     const updates = reCalcPriorities(
-      snapshot ?? {},
-      allItems[activeTab],
-      TAB_CONFIGS[activeTab].columnKey,
+      capturedSnapshot ?? {},
+      allItems[capturedTab],
+      TAB_CONFIGS[capturedTab].columnKey,
     );
 
     if (updates.length === 0) {
+      snapshot = null;
       return;
     }
 
     try {
       await saveUpdates(updates);
     } catch {
-      if (snapshot) allItems[activeTab] = snapshot;
+      if (capturedSnapshot) {
+        allItems[capturedTab] = capturedSnapshot;
+      }
+
       errorMessage = '保存に失敗しました';
     } finally {
       snapshot = null;

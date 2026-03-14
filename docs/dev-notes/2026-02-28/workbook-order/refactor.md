@@ -73,7 +73,7 @@ workbook order 機能のリファクタリング記録。
 - **DB の `priority > 0` 制約欠如**: migration に `CHECK (priority > 0)` を追加すればアプリ層バイパス時の防御になるが、Zod + 既存 XOR 制約で十分なため優先度は低い。
 - **ERD に XOR 制約の記載欠如**: migration には `workbookplacement_xor_grade_category` 制約が既にある。ERD 図への追記のみ。
 - **`WorkBookGradeModeSource` 型エイリアスの抽出**: `calcWorkBookGradeModes` の引数 `{ id: number; workBookTasks: WorkBookTaskBase[] }[]` を名前付き型に抽出。1箇所のみなので YAGNI に近い。
-- **開発ノートのクエリパラメータ例**: `?tab=solution&cols=PENDING,GRAPH` → `?tab=solution&categories=PENDING,GRAPH` に修正。
+- **開発ノートのクエリパラメータ例**: `?tab=solution&categories=PENDING,GRAPH` に修正済み（旧: `cols=`）。
 - **`/refactor-plan` スキルに `--comments` フラグ欠如**: `gh issue view $ARGUMENTS` → `gh issue view $ARGUMENTS --comments` に修正しないと issue のコメントが取得できない。
 - **`AGENTS.md` に `src/features/**/` のテスト配置規約の記載欠如\*\*: コロケーションパターンの説明を追記。
 - **`CONTRIBUTING.md` の `@dnd-kit/svelte` のネスト誤り**: Flowbite Svelte のサブ項目になっているが、独立したピア依存として並列に記載すべき。

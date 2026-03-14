@@ -63,7 +63,9 @@
 
 {#snippet solutionContent()}
   <div class="mb-4">
-    <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">表示カテゴリ（2つ以上選択）:</p>
+    <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">
+      表示カテゴリ（1つ以上選択。「未分類」は常に表示）:
+    </p>
     <ColumnSelector
       options={SOLUTION_CATEGORY_OPTIONS}
       selected={selectedSolutionCategories.filter(

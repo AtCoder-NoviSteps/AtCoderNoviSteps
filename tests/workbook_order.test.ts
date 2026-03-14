@@ -14,19 +14,16 @@ async function loginAsAdmin(page: Page): Promise<void> {
   await expect(page).toHaveURL('/', { timeout: TIMEOUT });
 }
 
-function getColumn(page: Page, label: string) {
-  return page
-    .locator('div')
-    .filter({ has: page.getByRole('heading', { name: label }) })
-    .first();
+function getColumn(page: Page, columnId: string) {
+  return page.locator(`[data-testid="column-${columnId}"]`);
 }
 
 async function getCardsInColumn(
   page: Page,
-  label: string,
+  columnId: string,
 ): Promise<{ title: string; placementId: number }[]> {
-  const col = getColumn(page, label);
-  const cards = col.locator('[data-placement-id]');
+  const column = getColumn(page, columnId);
+  const cards = column.locator('[data-placement-id]');
   const count = await cards.count();
   const result: { title: string; placementId: number }[] = [];
   for (let i = 0; i < count; i++) {
@@ -77,7 +74,8 @@ test.describe('workbook order page', () => {
     await page.goto(`${ORDER_URL}?tab=solution&categories=PENDING`);
     await expect(page.getByRole('heading', { name: '未分類' })).toBeVisible({ timeout: TIMEOUT });
 
-    const cards = await getCardsInColumn(page, '未分類');
+    const cards = await getCardsInColumn(page, 'PENDING');
+
     if (cards.length < 2) {
       test.skip();
       return;
@@ -91,25 +89,27 @@ test.describe('workbook order page', () => {
       { id: second.placementId, priority: 1, solutionCategory: 'PENDING', taskGrade: null },
     ]);
 
-    await page.reload();
-    await expect(page.getByRole('heading', { name: '未分類' })).toBeVisible({ timeout: TIMEOUT });
+    try {
+      await page.reload();
+      await expect(page.getByRole('heading', { name: '未分類' })).toBeVisible({ timeout: TIMEOUT });
 
-    const reloaded = await getCardsInColumn(page, '未分類');
-    expect(reloaded[0].placementId).toBe(second.placementId);
-    expect(reloaded[1].placementId).toBe(first.placementId);
-
-    // Restore
-    await postUpdates(page, [
-      { id: first.placementId, priority: 1, solutionCategory: 'PENDING', taskGrade: null },
-      { id: second.placementId, priority: 2, solutionCategory: 'PENDING', taskGrade: null },
-    ]);
+      const reloaded = await getCardsInColumn(page, 'PENDING');
+      expect(reloaded[0].placementId).toBe(second.placementId);
+      expect(reloaded[1].placementId).toBe(first.placementId);
+    } finally {
+      // Restore
+      await postUpdates(page, [
+        { id: first.placementId, priority: 1, solutionCategory: 'PENDING', taskGrade: null },
+        { id: second.placementId, priority: 2, solutionCategory: 'PENDING', taskGrade: null },
+      ]);
+    }
   });
 
   test('moving a card to a different column persists after reload', async ({ page }) => {
     await page.goto(`${ORDER_URL}?tab=solution&categories=PENDING,GRAPH`);
     await expect(page.getByRole('heading', { name: '未分類' })).toBeVisible({ timeout: TIMEOUT });
 
-    const pendingCards = await getCardsInColumn(page, '未分類');
+    const pendingCards = await getCardsInColumn(page, 'PENDING');
     if (pendingCards.length === 0) {
       test.skip();
       return;
@@ -122,23 +122,26 @@ test.describe('workbook order page', () => {
       { id: card.placementId, priority: 1, solutionCategory: 'GRAPH', taskGrade: null },
     ]);
 
-    await page.reload();
-    await expect(page.getByRole('heading', { name: 'グラフ' })).toBeVisible({ timeout: TIMEOUT });
+    try {
+      await page.reload();
+      await expect(page.getByRole('heading', { name: 'グラフ' })).toBeVisible({ timeout: TIMEOUT });
 
-    const graphCards = await getCardsInColumn(page, 'グラフ');
-    expect(graphCards.some((c) => c.placementId === card.placementId)).toBe(true);
-
-    // Restore
-    await postUpdates(page, [
-      { id: card.placementId, priority: 1, solutionCategory: 'PENDING', taskGrade: null },
-    ]);
+      const graphCards = await getCardsInColumn(page, 'GRAPH');
+      expect(graphCards.some((c) => c.placementId === card.placementId)).toBe(true);
+    } finally {
+      // Restore to original PENDING column
+      await postUpdates(page, [
+        { id: card.placementId, priority: 1, solutionCategory: 'PENDING', taskGrade: null },
+      ]);
+    }
   });
 
   test('reordering in curriculum tab persists after reload', async ({ page }) => {
     await page.goto(`${ORDER_URL}?tab=curriculum&grades=Q10,Q9`);
     await expect(page.getByRole('heading', { name: '10Q' })).toBeVisible({ timeout: TIMEOUT });
 
-    const cards = await getCardsInColumn(page, '10Q');
+    const cards = await getCardsInColumn(page, 'Q10');
+
     if (cards.length < 2) {
       test.skip();
       return;
@@ -152,18 +155,20 @@ test.describe('workbook order page', () => {
       { id: second.placementId, priority: 1, solutionCategory: null, taskGrade: 'Q10' },
     ]);
 
-    await page.reload();
-    await expect(page.getByRole('heading', { name: '10Q' })).toBeVisible({ timeout: TIMEOUT });
+    try {
+      await page.reload();
+      await expect(page.getByRole('heading', { name: '10Q' })).toBeVisible({ timeout: TIMEOUT });
 
-    const reloaded = await getCardsInColumn(page, '10Q');
-    expect(reloaded[0].placementId).toBe(second.placementId);
-    expect(reloaded[1].placementId).toBe(first.placementId);
-
-    // Restore
-    await postUpdates(page, [
-      { id: first.placementId, priority: 1, solutionCategory: null, taskGrade: 'Q10' },
-      { id: second.placementId, priority: 2, solutionCategory: null, taskGrade: 'Q10' },
-    ]);
+      const reloaded = await getCardsInColumn(page, 'Q10');
+      expect(reloaded[0].placementId).toBe(second.placementId);
+      expect(reloaded[1].placementId).toBe(first.placementId);
+    } finally {
+      // Restore
+      await postUpdates(page, [
+        { id: first.placementId, priority: 1, solutionCategory: null, taskGrade: 'Q10' },
+        { id: second.placementId, priority: 2, solutionCategory: null, taskGrade: 'Q10' },
+      ]);
+    }
   });
 
   test('switching from solution to curriculum tab removes categories from URL', async ({
@@ -264,7 +269,8 @@ test.describe('API error handling', () => {
     await page.goto(`${ORDER_URL}?tab=curriculum&grades=Q10`);
     await expect(page.getByRole('heading', { name: '10Q' })).toBeVisible({ timeout: TIMEOUT });
 
-    const cards = await getCardsInColumn(page, '10Q');
+    const cards = await getCardsInColumn(page, 'Q10');
+
     if (cards.length === 0) {
       test.skip();
       return;

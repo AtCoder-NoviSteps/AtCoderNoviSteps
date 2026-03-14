@@ -55,9 +55,11 @@ src/features/ # Feature-scoped code (single domain)
 │ ├── components/ # Feature UI (list/, detail/, shared/)
 │ ├── fixtures/ # Test data
 │ ├── services/ # Feature business logic (CRUD via Prisma)
+│ │ └── *.test.ts # Tests co-located next to source (not in src/test/)
 │ ├── stores/ # Feature stores
 │ ├── types/ # Feature types
 │ └── utils/ # Feature utilities
+│   └── *.test.ts # Tests co-located next to source
 src/test/ # Unit tests (mirrors src/lib/)
 tests/ # E2E tests (Playwright)
 prisma/schema.prisma # Database schema

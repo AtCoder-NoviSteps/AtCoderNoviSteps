@@ -1,9 +1,11 @@
 <script lang="ts">
+  import type { PageData } from './$types';
+
   import ContainerWrapper from '$lib/components/ContainerWrapper.svelte';
   import HeadingOne from '$lib/components/HeadingOne.svelte';
   import KanbanBoard from './_components/KanbanBoard.svelte';
 
-  let { data } = $props();
+  let { data }: { data: PageData } = $props();
 </script>
 
 <ContainerWrapper defaultWidth="w-full" lgWidth="lg:w-full">

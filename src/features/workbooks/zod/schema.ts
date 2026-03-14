@@ -64,8 +64,8 @@ export const workBookSchema = z.object({
 
 export const workBookPlacementSchema = z
   .object({
-    id: z.number().positive(),
-    priority: z.number().positive(),
+    id: z.number().int().positive(),
+    priority: z.number().int().positive(),
     taskGrade: z.nativeEnum(TaskGrade).nullable(),
     solutionCategory: z.nativeEnum(SolutionCategory).nullable(),
   })
