@@ -16,6 +16,8 @@
     index,
   }: Card & SortableProps = $props();
 
+  // See:
+  // https://dndkit.com/svelte/primitives/create-sortable#createsortable
   const sortable = createSortable({
     get id() {
       return placementId;
@@ -23,8 +25,12 @@
     get index() {
       return index;
     },
-    group: columnId,
-    type: group,
+    get group() {
+      return columnId;
+    },
+    get type() {
+      return group;
+    },
   });
 
   function attachSortable(node: HTMLElement): { destroy: () => void } {
