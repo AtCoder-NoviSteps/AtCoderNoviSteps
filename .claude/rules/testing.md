@@ -47,6 +47,24 @@ describe('functionName', () => {
 
 - Use `toBe(true)` / `toBe(false)` instead of `toBeTruthy()` / `toBeFalsy()` for boolean checks
 - Be explicit about expected values
+- For DB query tests, assert not only `where` but also `orderBy`, `include`, and other functionally significant parameters using `expect.objectContaining`
+
+## Cleanup in Tests
+
+Wrap DB-mutating test cleanup in `try/finally`. Without it, a failing assertion skips cleanup and contaminates subsequent tests:
+
+```typescript
+try {
+  await doSomething();
+  expect(result).toBe(expected);
+} finally {
+  await restoreState();
+}
+```
+
+## Zod Integer Validation
+
+`z.number().positive()` allows decimals (`1.5`). For Prisma `Int` fields, always use `z.number().int().positive()`.
 
 ## Test Data
 

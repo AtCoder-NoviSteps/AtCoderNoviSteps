@@ -18,6 +18,12 @@ Avoid non-standard abbreviations. Write out full names for clarity.
 
 When in doubt, spell it out.
 
+## Markdown Code Blocks
+
+Always specify a language identifier on every fenced code block. Never write bare ` ``` `.
+
+Common identifiers: `typescript`, `svelte`, `sql`, `bash`, `mermaid`, `json`, `prisma`, `html`, `css`.
+
 ## Plural Type Aliases
 
 Define plural type aliases instead of using `Hoge[]` directly. Use the plural form in function signatures and variables.
