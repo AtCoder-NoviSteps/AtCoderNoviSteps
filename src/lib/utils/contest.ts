@@ -194,6 +194,7 @@ const atCoderUniversityPrefixes = getContestPrefixes(ATCODER_UNIVERSITIES);
 const ATCODER_OTHERS: ContestPrefix = {
   chokudai_S: 'Chokudai SpeedRun',
   atc001: 'AtCoder Typical Contest 001',
+  's8pc-4': 'square869120Contest #4',
   'code-festival-2014-quala': 'Code Festival 2014 予選 A',
   'code-festival-2014-qualb': 'Code Festival 2014 予選 B',
   'code-festival-2014-final': 'Code Festival 2014 決勝',
@@ -402,6 +403,12 @@ export const getContestNameLabel = (contestId: string) => {
 
   if (regexForAtCoderUniversity.exec(contestId)) {
     return getAtCoderUniversityContestLabel(contestId);
+  }
+
+  const othersLabel = ATCODER_OTHERS[contestId as keyof typeof ATCODER_OTHERS];
+
+  if (othersLabel) {
+    return othersLabel;
   }
 
   if (contestId.startsWith('chokudai_S')) {
