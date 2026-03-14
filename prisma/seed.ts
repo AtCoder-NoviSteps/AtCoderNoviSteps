@@ -22,6 +22,7 @@ import PQueue from 'p-queue';
 import { generateLuciaPasswordHash } from 'lucia/utils';
 
 import { getTaskGrade } from '../src/lib/types/task';
+import type { PlacementCreate } from '../src/features/workbooks/types/workbook_placement';
 
 import { classifyContest } from '../src/lib/utils/contest';
 
@@ -357,11 +358,13 @@ async function addSolutionPlacements(unplacedSolution: { id: number; urlSlug: st
   }
 
   // Apply solutionCategoryMap overrides; workbooks not listed default to PENDING.
-  const placements = initializeSolutionPlacements(unplacedSolution).map((placement) => {
-    const workbooks = unplacedSolution.find((workbook) => workbook.id === placement.workBookId);
-    const category = workbooks?.urlSlug ? solutionCategoryMap[workbooks.urlSlug] : undefined;
-    return { ...placement, solutionCategory: category ?? 'PENDING' };
-  });
+  const placements = initializeSolutionPlacements(unplacedSolution).map(
+    (placement: PlacementCreate) => {
+      const workbooks = unplacedSolution.find((workbook) => workbook.id === placement.workBookId);
+      const category = workbooks?.urlSlug ? solutionCategoryMap[workbooks.urlSlug] : undefined;
+      return { ...placement, solutionCategory: category ?? 'PENDING' };
+    },
+  );
 
   await createWorkBookPlacements(placements);
   console.log(`Added ${placements.length} solution placements.`);
