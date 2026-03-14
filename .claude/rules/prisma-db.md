@@ -12,22 +12,13 @@ paths:
 ## Schema Changes
 
 1. Edit `prisma/schema.prisma`
-2. Run `pnpm exec prisma migrate dev --name <description>` to create migration
-3. Run `pnpm exec prisma generate` to update client (auto-runs after migrate)
+2. Run `pnpm exec prisma migrate dev --name <description>` to create migration (`<description>` must be `snake_case`, e.g., `add_role_to_user`)
 
 ## Naming
 
 - Model names: `PascalCase` (e.g., `User`, `TaskAnswer`)
 - Field names: `camelCase` (preferred) or `snake_case` (legacy)
 - Relation fields: Descriptive names matching the relation
-
-## Key Models
-
-- `User`: User accounts with AtCoder validation status
-- `Task`: Tasks with difficulty grades (Q11-D6)
-- `TaskAnswer`: User submission status per task
-- `WorkBook`: task collections
-- `Tag` / `TaskTag`: task categorization
 
 ## Server-Only Code
 
@@ -38,7 +29,7 @@ paths:
 ## Service Layer
 
 - All CRUD operations must go through the service layer (`src/lib/services/` or `src/features/**/services/`)
-- Route handlers (`+server.ts`, `+page.server.ts`) and `prisma/seed.ts` should call service methods, not use Prisma directly
+- Route handlers (`+server.ts`, `+page.server.ts`) should call service methods, not use Prisma directly
 - Service functions return pure values (e.g., `{ error: string } | null`), never HTTP-specific objects (`Response`, `json()`)
 
 ## Transactions
@@ -55,7 +46,7 @@ paths:
 
 Prisma does not support `@@check` in `schema.prisma`. To add a validate constraint:
 
-1. Run `pnpm exec prisma migrate dev --create-only --name <description>` to generate the migration file without applying it
+1. Run `pnpm exec prisma migrate dev --create-only --name <description>` to generate the migration file without applying it (`<description>` must be `snake_case`)
 2. Edit the generated `migration.sql` to add the validate constraint manually
 3. Run `pnpm exec prisma migrate dev` to apply
 
