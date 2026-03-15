@@ -1,4 +1,6 @@
+import { TaskGrade } from '$lib/types/task';
 import {
+  SolutionCategory,
   SOLUTION_LABELS,
   type WorkbooksWithPlacement,
   type WorkbookWithPlacement,
@@ -26,6 +28,52 @@ export const TAB_CONFIGS: Record<ActiveTab, TabConfig> = {
     columnKey: 'taskGrade',
   },
 };
+
+/**
+ * Parses the `tab` search param into a valid {@link ActiveTab}.
+ *
+ * @param param - Raw value of the `tab` search param, or `null` if absent.
+ * @returns The matching `ActiveTab`, or `'solution'` for unknown/missing values.
+ */
+export function parseTab(param: string | null): ActiveTab {
+  if (param !== null && Object.hasOwn(TAB_CONFIGS, param)) {
+    return param as ActiveTab;
+  }
+
+  return 'solution';
+}
+
+// Default columns shown when no 'categories' param is present in the URL.
+const DEFAULT_SOLUTION_CATEGORIES: string[] = [SolutionCategory.PENDING, SolutionCategory.GRAPH];
+
+/**
+ * Parses the `categories` search param into a validated list of {@link SolutionCategory} keys.
+ *
+ * @param params - The URL search params to read from.
+ * @returns Validated category keys. Falls back to `DEFAULT_SOLUTION_CATEGORIES` when the param is
+ *   absent; invalid values are silently dropped.
+ */
+export function parseInitialCategories(params: URLSearchParams): string[] {
+  return (
+    params.get('categories')?.split(',').filter(Boolean) ?? DEFAULT_SOLUTION_CATEGORIES
+  ).filter((category) => Object.hasOwn(SolutionCategory, category));
+}
+
+// Default grades shown when no 'grades' param is present in the URL.
+const DEFAULT_GRADES: string[] = [TaskGrade.Q10, TaskGrade.Q9];
+
+/**
+ * Parses the `grades` search param into a validated list of {@link TaskGrade} keys.
+ *
+ * @param params - The URL search params to read from.
+ * @returns Validated grade keys. Falls back to `DEFAULT_GRADES` when the param is absent;
+ *   `PENDING` and invalid values are silently dropped.
+ */
+export function parseInitialGrades(params: URLSearchParams): string[] {
+  return (params.get('grades')?.split(',').filter(Boolean) ?? DEFAULT_GRADES).filter(
+    (grade) => Object.hasOwn(TaskGrade, grade) && grade !== TaskGrade.PENDING,
+  );
+}
 
 /**
  * Returns a new URL with tab/category/grade search params updated.

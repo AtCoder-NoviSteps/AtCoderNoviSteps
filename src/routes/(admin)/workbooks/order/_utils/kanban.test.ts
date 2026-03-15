@@ -4,7 +4,92 @@ import { SolutionCategory } from '$features/workbooks/types/workbook_placement';
 import { TaskGrade } from '$lib/types/task';
 
 import { workbooks, solutionColumnsBefore } from '../_fixtures/kanban';
-import { buildKanbanItems, buildUpdatedUrl, reCalcPriorities } from './kanban';
+import {
+  buildKanbanItems,
+  buildUpdatedUrl,
+  parseInitialCategories,
+  parseInitialGrades,
+  parseTab,
+  reCalcPriorities,
+} from './kanban';
+
+describe('parseTab', () => {
+  test('returns the param when it is a valid tab key', () => {
+    expect(parseTab('solution')).toBe('solution');
+    expect(parseTab('curriculum')).toBe('curriculum');
+  });
+
+  test('falls back to solution for null', () => {
+    expect(parseTab(null)).toBe('solution');
+  });
+
+  test('falls back to solution for an unknown string', () => {
+    expect(parseTab('unknown')).toBe('solution');
+    expect(parseTab('')).toBe('solution');
+  });
+});
+
+describe('parseInitialCategories', () => {
+  test('returns parsed categories when param is present', () => {
+    const params = new URLSearchParams(
+      `categories=${SolutionCategory.GRAPH},${SolutionCategory.DYNAMIC_PROGRAMMING}`,
+    );
+    expect(parseInitialCategories(params)).toEqual([
+      SolutionCategory.GRAPH,
+      SolutionCategory.DYNAMIC_PROGRAMMING,
+    ]);
+  });
+
+  test('returns default categories when param is absent', () => {
+    const params = new URLSearchParams();
+    expect(parseInitialCategories(params)).toEqual([
+      SolutionCategory.PENDING,
+      SolutionCategory.GRAPH,
+    ]);
+  });
+
+  test('drops invalid category values', () => {
+    const params = new URLSearchParams(`categories=${SolutionCategory.GRAPH},INVALID`);
+    expect(parseInitialCategories(params)).toEqual([SolutionCategory.GRAPH]);
+  });
+
+  test('returns empty array when all values are invalid', () => {
+    const params = new URLSearchParams('categories=INVALID');
+    expect(parseInitialCategories(params)).toEqual([]);
+  });
+
+  test('ignores empty strings from trailing commas', () => {
+    const params = new URLSearchParams(`categories=${SolutionCategory.GRAPH},`);
+    expect(parseInitialCategories(params)).toEqual([SolutionCategory.GRAPH]);
+  });
+});
+
+describe('parseInitialGrades', () => {
+  test('returns parsed grades when param is present', () => {
+    const params = new URLSearchParams(`grades=${TaskGrade.Q10},${TaskGrade.Q9}`);
+    expect(parseInitialGrades(params)).toEqual([TaskGrade.Q10, TaskGrade.Q9]);
+  });
+
+  test('returns default grades when param is absent', () => {
+    const params = new URLSearchParams();
+    expect(parseInitialGrades(params)).toEqual([TaskGrade.Q10, TaskGrade.Q9]);
+  });
+
+  test('drops PENDING even when explicitly included', () => {
+    const params = new URLSearchParams(`grades=${TaskGrade.PENDING},${TaskGrade.Q10}`);
+    expect(parseInitialGrades(params)).toEqual([TaskGrade.Q10]);
+  });
+
+  test('drops invalid grade values', () => {
+    const params = new URLSearchParams(`grades=${TaskGrade.Q10},INVALID`);
+    expect(parseInitialGrades(params)).toEqual([TaskGrade.Q10]);
+  });
+
+  test('returns empty array when all values are invalid or PENDING', () => {
+    const params = new URLSearchParams(`grades=${TaskGrade.PENDING},INVALID`);
+    expect(parseInitialGrades(params)).toEqual([]);
+  });
+});
 
 describe('buildUpdatedUrl', () => {
   const baseUrl = new URL('https://example.com/workbooks/order');

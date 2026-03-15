@@ -9,11 +9,11 @@
   import { DragDropProvider } from '@dnd-kit/svelte';
   import { move } from '@dnd-kit/helpers';
 
-  import { TaskGrade } from '$lib/types/task';
   import {
     SolutionCategory,
     type WorkbooksWithPlacement,
   } from '$features/workbooks/types/workbook_placement';
+  import { TaskGrade } from '$lib/types/task';
   import type {
     KanbanColumns,
     DragOverEventArg,
@@ -26,10 +26,13 @@
 
   import {
     buildKanbanItems,
+    buildUpdatedUrl,
+    parseInitialCategories,
+    parseInitialGrades,
+    parseTab,
     reCalcPriorities,
     saveUpdates,
     TAB_CONFIGS,
-    buildUpdatedUrl,
   } from '../_utils/kanban';
 
   interface Props {
@@ -38,25 +41,9 @@
 
   let { workbooks }: Props = $props();
 
-  // URL parameter state management
-  function getParam(key: string) {
-    return $page.url.searchParams.get(key);
-  }
-
-  let activeTab = $state<ActiveTab>(getParam('tab') === 'curriculum' ? 'curriculum' : 'solution');
-  let selectedSolutionCategories = $state(
-    (
-      getParam('categories')?.split(',').filter(Boolean) ?? [
-        SolutionCategory.PENDING,
-        SolutionCategory.GRAPH,
-      ]
-    ).filter((category) => Object.hasOwn(SolutionCategory, category)),
-  );
-  let selectedGrades = $state(
-    (getParam('grades')?.split(',').filter(Boolean) ?? [TaskGrade.Q10, TaskGrade.Q9]).filter(
-      (grade) => Object.hasOwn(TaskGrade, grade) && grade !== TaskGrade.PENDING,
-    ),
-  );
+  let activeTab = $state<ActiveTab>(parseTab($page.url.searchParams.get('tab')));
+  let selectedSolutionCategories = $state(parseInitialCategories($page.url.searchParams));
+  let selectedGrades = $state(parseInitialGrades($page.url.searchParams));
 
   function updateUrl() {
     replaceState(
