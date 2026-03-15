@@ -94,7 +94,7 @@ describe('getPlacementsByWorkBookType', () => {
   test('returns CURRICULUM placements ordered by priority', async () => {
     mockFindMany(curriculumPlacements);
 
-    const result = await getPlacementsByWorkBookType('CURRICULUM');
+    const result = await getPlacementsByWorkBookType(WorkBookType.CURRICULUM);
 
     // Verifies the function returns the DB result without transformation
     expect(result).toEqual(curriculumPlacements);
@@ -109,7 +109,7 @@ describe('getPlacementsByWorkBookType', () => {
   test('returns SOLUTION placements ordered by priority', async () => {
     mockFindMany(solutionPlacements);
 
-    const result = await getPlacementsByWorkBookType('SOLUTION');
+    const result = await getPlacementsByWorkBookType(WorkBookType.SOLUTION);
 
     expect(result).toEqual(solutionPlacements);
     expect(prisma.workBookPlacement.findMany).toHaveBeenCalledWith(
@@ -127,7 +127,7 @@ describe('getPlacementsByWorkBookType', () => {
     //   number-theory-search → NUMBER_THEORY
     mockFindMany(solutionPlacements);
 
-    const result = await getPlacementsByWorkBookType('SOLUTION');
+    const result = await getPlacementsByWorkBookType(WorkBookType.SOLUTION);
     const categories = result.map((placement) => placement.solutionCategory);
 
     expect(categories).toContain(SolutionCategory.DATA_STRUCTURE);
