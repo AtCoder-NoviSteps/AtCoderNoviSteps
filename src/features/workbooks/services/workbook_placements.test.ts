@@ -293,7 +293,6 @@ describe('buildCurriculumWorkbooksForInit', () => {
 
   test('maps null task to empty string taskId', () => {
     const rows: UnplacedCurriculumRows = [{ id: 1, workBookTasks: [{ task: null }] }];
-
     const result = buildCurriculumWorkbooksForInit(rows);
 
     expect(result[0].workBookTasks[0]).toEqual({ taskId: '', priority: 0, comment: '' });
