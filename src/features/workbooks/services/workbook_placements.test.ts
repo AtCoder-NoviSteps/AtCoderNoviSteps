@@ -61,13 +61,13 @@ function mockFindMany(placements: WorkBookPlacements) {
   );
 }
 
-function mockPlacementFindManyOnce(placements: unknown[]) {
+function mockPlacementFindManyOnce(placements: WorkBookPlacements) {
   vi.mocked(prisma.workBookPlacement.findMany).mockResolvedValueOnce(
     placements as unknown as Awaited<ReturnType<typeof prisma.workBookPlacement.findMany>>,
   );
 }
 
-function mockWorkBookFindManyOnce(result: unknown[]) {
+function mockWorkBookFindManyOnce(result: { id: number }[]) {
   vi.mocked(prisma.workBook.findMany).mockResolvedValueOnce(
     result as unknown as Awaited<ReturnType<typeof prisma.workBook.findMany>>,
   );
