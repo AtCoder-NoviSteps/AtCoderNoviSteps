@@ -41,9 +41,10 @@
 
   let { workbooks }: Props = $props();
 
-  let activeTab = $state<ActiveTab>(parseTab($page.url.searchParams.get('tab')));
-  let selectedSolutionCategories = $state(parseInitialCategories($page.url.searchParams));
-  let selectedGrades = $state(parseInitialGrades($page.url.searchParams));
+  const { searchParams } = $page.url;
+  let activeTab = $state<ActiveTab>(parseTab(searchParams.get('tab')));
+  let selectedSolutionCategories = $state(parseInitialCategories(searchParams));
+  let selectedGrades = $state(parseInitialGrades(searchParams));
 
   function updateUrl() {
     replaceState(
