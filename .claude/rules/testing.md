@@ -16,40 +16,15 @@ paths:
 | Unit | Vitest     | `src/test/` (mirrors `src/lib/`) or co-located in `src/features/` | `pnpm test:unit`        |
 | E2E  | Playwright | `tests/`                                                          | `pnpm test:integration` |
 
-## Unit Tests
-
-- Use `@quramy/prisma-fabbrica` for test data factories
-- Mock external APIs with Nock
-
-## E2E Tests
-
-- Place in `tests/` directory
-- Use Playwright test utilities
-- Test user flows, not implementation details
-
-## Patterns
-
-```typescript
-import { describe, test, expect, vi } from 'vitest';
-
-describe('functionName', () => {
-  test('expects to do something', () => {
-    // Arrange
-    // Act
-    // Assert
-  });
-});
-```
-
 ## Assertions
 
-- Use `toBe(true)` / `toBe(false)` instead of `toBeTruthy()` / `toBeFalsy()` for boolean checks
-- Be explicit about expected values
-- For DB query tests, assert not only `where` but also `orderBy`, `include`, and other functionally significant parameters using `expect.objectContaining`
+- Use `toBe(true)` / `toBe(false)` over `toBeTruthy()` / `toBeFalsy()`
+- For DB query tests, assert `orderBy`, `include`, and other significant parameters with `expect.objectContaining` — not just `where`
+- Enum membership: `in` traverses the prototype chain; use `Object.hasOwn(Enum, value)` instead
 
 ## Cleanup in Tests
 
-Wrap DB-mutating test cleanup in `try/finally`. Without it, a failing assertion skips cleanup and contaminates subsequent tests:
+Wrap DB-mutating cleanup in `try/finally` — a failing assertion skips cleanup and contaminates later tests:
 
 ```typescript
 try {
@@ -62,14 +37,13 @@ try {
 
 ## Test Data
 
-- Use realistic values from actual fixtures (e.g., real task IDs, grade names) instead of abstract placeholders like `'t1'`, `'t2'`
-- This ensures test data stays consistent with production data and catches spec changes early
-- Extract test data into fixture files when shared across multiple test cases. Inline data is fine for single-use cases
-- When filtering fixture subsets with `.filter()`, verify the actual contents after filtering — the same ID may refer to a different entity if the fixture is updated
+- Use realistic fixture values (real task IDs, grade names) instead of placeholders like `'t1'`
+- Extract shared data into fixture files; inline is fine for single-use cases
+- After `.filter()` on fixtures, verify actual contents — same ID may refer to a different entity after fixture updates
 
 ## Mock Helpers
 
-When the same mock pattern (e.g., `vi.mocked(prisma.xxx.findMany).mockResolvedValue(...)`) appears across multiple tests, extract it into a helper function in the test file:
+Extract repeated mock patterns into a helper in the test file:
 
 ```typescript
 function mockFindMany(value: WorkBookPlacements) {
@@ -81,9 +55,9 @@ function mockFindMany(value: WorkBookPlacements) {
 
 ## Testing Extracted Utilities
 
-- When a function is extracted to `_utils/` to make it testable, add tests at extraction time — not later
-- For URL manipulation tests, always assert that the original URL is not mutated (non-destructive)
-- For multi-column operations (e.g., drag-and-drop between columns), assert both source and destination columns
+- Add tests at extraction time, not later
+- For URL manipulation: assert the original URL is not mutated
+- For multi-column operations (e.g., DnD): assert both source and destination columns
 
 ## Coverage
 
@@ -92,5 +66,4 @@ function mockFindMany(value: WorkBookPlacements) {
 
 ## HTTP Mocking
 
-- Use Nock for mocking external HTTP calls
-- See `src/test/lib/clients/` for examples
+Use Nock for external HTTP calls. See `src/test/lib/clients/` for examples.

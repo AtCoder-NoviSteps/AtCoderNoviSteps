@@ -12,52 +12,58 @@ paths:
 ## Schema Changes
 
 1. Edit `prisma/schema.prisma`
-2. Run `pnpm exec prisma migrate dev --name <description>` to create migration (`<description>` must be `snake_case`, e.g., `add_role_to_user`)
+2. Run `pnpm exec prisma migrate dev --name <snake_case_description>`
 
 ## Naming
 
-- Model names: `PascalCase` (e.g., `User`, `TaskAnswer`)
-- Field names: `camelCase` (preferred) or `snake_case` (legacy)
-- Relation fields: Descriptive names matching the relation
+- Models: `PascalCase` | Fields: `camelCase` (preferred) or `snake_case` (legacy)
 
 ## Server-Only Code
 
-- Import database client only in `src/lib/server/`
-- Use `$lib/server/database` for Prisma client access
+- Import DB client only in `src/lib/server/` via `$lib/server/database`
 - Never import server code in client components
 
 ## Service Layer
 
-- All CRUD operations must go through the service layer (`src/lib/services/` or `src/features/**/services/`)
-- Route handlers (`+server.ts`, `+page.server.ts`) should call service methods, not use Prisma directly
-- Service functions return pure values (e.g., `{ error: string } | null`), never HTTP-specific objects (`Response`, `json()`)
+- All CRUD through the service layer (`src/lib/services/` or `src/features/**/services/`)
+- Route handlers call service methods — no direct Prisma in `+server.ts` / `+page.server.ts`
+- Service functions return pure values (`{ error: string } | null`), never `Response` / `json()`
 
 ## Transactions
 
-- Use `prisma.$transaction()` for multi-step operations
-- Handle errors with try-catch and proper rollback
+Use `prisma.$transaction()` for multi-step operations.
+
+## N+1 Queries
+
+Replace per-item DB calls in loops with a bulk fetch + `Map`:
+
+```typescript
+const records = await prisma.foo.findMany({ where: { id: { in: ids } } });
+const map = new Map(records.map((r) => [r.id, r]));
+```
+
+## Enum Types
+
+Prisma-generated enums and app-defined enums are distinct TypeScript types even with identical members. Keep explicit casts at the boundary — do not remove them as "redundant".
 
 ## Idempotent Writes
 
-- Prefer `createMany({ skipDuplicates: true })` over try-catching P2002 when a unique constraint violation is expected (e.g., double-submit race condition). It maps to `INSERT ... ON CONFLICT DO NOTHING` and keeps intent clear.
-- Constraints: top-level `createMany` only (not nested); PostgreSQL, CockroachDB, SQLite only.
+Prefer `createMany({ skipDuplicates: true })` over catching P2002 for expected unique violations (e.g., double-submit). Maps to `INSERT ... ON CONFLICT DO NOTHING`. Top-level only (not nested); PostgreSQL/CockroachDB/SQLite only.
 
 ## Zod Schema for Int Fields
 
-`z.number().positive()` allows decimals (`1.5`). For Prisma `Int` fields, always use `z.number().int().positive()`.
+`z.number().positive()` passes decimals. For Prisma `Int` fields use `z.number().int().positive()`.
 
 ## Validate Constraints
 
-Prisma does not support `@@check` in `schema.prisma`. To add a validate constraint:
+Prisma does not support `@@check`. To add one:
 
-1. Run `pnpm exec prisma migrate dev --create-only --name <description>` to generate the migration file without applying it (`<description>` must be `snake_case`)
-2. Edit the generated `migration.sql` to add the validate constraint manually
-3. Run `pnpm exec prisma migrate dev` to apply
+1. `pnpm exec prisma migrate dev --create-only --name <description>` — generate migration without applying
+2. Edit the generated `migration.sql` to add the CHECK constraint manually
+3. `pnpm exec prisma migrate dev` — apply
 
-After adding a validate constraint, add a comment to `prisma/ERD.md` under the relevant entity:
+Document the constraint in `prisma/ERD.md` (the only place it's visible):
 
 ```mermaid
 %% XOR constraint: workbookplacement_xor_grade_category — exactly one of taskGrade or solutionCategory must be non-null
 ```
-
-This is the only place validate constraints are visible, since Prisma omits them from `schema.prisma`.
