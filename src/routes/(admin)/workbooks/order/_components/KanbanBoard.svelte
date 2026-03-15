@@ -46,6 +46,12 @@
   let selectedSolutionCategories = $state(parseInitialCategories(searchParams));
   let selectedGrades = $state(parseInitialGrades(searchParams));
 
+  // PENDING is always shown, so keep it separate from the selectable columns
+  let displayedSolutionCategories = $derived([
+    SolutionCategory.PENDING,
+    ...selectedSolutionCategories.filter((category) => category !== SolutionCategory.PENDING),
+  ]);
+
   function updateUrl() {
     replaceState(
       buildUpdatedUrl($page.url, activeTab, selectedSolutionCategories, selectedGrades),
@@ -111,12 +117,6 @@
       snapshot = null;
     }
   }
-
-  // PENDING is always shown, so keep it separate from the selectable columns
-  let displayedSolutionCategories = $derived([
-    SolutionCategory.PENDING,
-    ...selectedSolutionCategories.filter((category) => category !== SolutionCategory.PENDING),
-  ]);
 </script>
 
 {#if errorMessage}
