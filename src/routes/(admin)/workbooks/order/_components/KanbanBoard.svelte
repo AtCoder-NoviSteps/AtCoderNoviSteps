@@ -147,6 +147,7 @@
       updateUrl();
     }}
   >
+    <!-- Note: Snippets are intentional: extracting these as components would require passing too many props. -->
     {#snippet solutionBoard()}
       <div class="flex gap-3 overflow-x-auto pb-4">
         {#each displayedSolutionCategories as column}
