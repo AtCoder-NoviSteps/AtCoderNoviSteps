@@ -1,6 +1,9 @@
 // See:
 // https://developer.mozilla.org/en-US/docs/Web/HTTP/Status
 
+// Successful responses
+export const OK = 200;
+
 // Redirection messages
 export const FOUND = 302;
 export const SEE_OTHER = 303;
