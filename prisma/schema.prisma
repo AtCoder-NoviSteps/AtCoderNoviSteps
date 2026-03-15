@@ -55,6 +55,7 @@ model User {
   key          Key[]
   taskAnswer   TaskAnswer[]
   workBooks    WorkBook[]
+  voteGrade    VoteGrade[]
 
   @@map("user")
 }
@@ -104,6 +105,7 @@ model Task {
   tags          TaskTag[]
   task_answers  TaskAnswer[]
   workBookTasks WorkBookTask[]
+  voteGrade     VoteGrade[]
 
   @@map("task")
 }
