@@ -22,6 +22,7 @@ import PQueue from 'p-queue';
 import { generateLuciaPasswordHash } from 'lucia/utils';
 
 import { getTaskGrade } from '../src/lib/types/task';
+import type { PlacementCreate } from '../src/features/workbooks/types/workbook_placement';
 
 import { classifyContest } from '../src/lib/utils/contest';
 
@@ -29,6 +30,14 @@ import { users, USER_PASSWORD_FOR_SEED } from './users';
 import { tasks } from './tasks';
 import { contest_task_pairs } from './contest_task_pairs';
 import { workbooks } from '../src/features/workbooks/fixtures/workbooks';
+import { solutionCategoryMap } from '../src/features/workbooks/fixtures/solution_category_map';
+import {
+  buildTaskMapFromCurriculumRows,
+  buildCurriculumWorkbooksForInit,
+  initializeCurriculumPlacements,
+  initializeSolutionPlacements,
+} from '../src/features/workbooks/services/workbook_placements/initializers';
+import { createWorkBookPlacements } from '../src/features/workbooks/services/workbook_placements/crud';
 import { tags } from './tags';
 import { task_tags } from './task_tags';
 import { answers } from './answers';
@@ -64,6 +73,7 @@ async function main() {
     await addTasks();
     await addContestTaskPairs();
     await addWorkBooks();
+    await addWorkBookPlacements();
     await addTags();
     await addTaskTags();
     await addSubmissionStatuses();
@@ -302,6 +312,62 @@ async function addWorkBooks() {
   }
 
   console.log('Finished adding workbooks.');
+}
+
+async function addWorkBookPlacements() {
+  console.log('Start adding workbook placements...');
+
+  const [unplacedCurriculum, unplacedSolution] = await Promise.all([
+    prisma.workBook.findMany({
+      where: { workBookType: 'CURRICULUM', placement: null },
+      include: {
+        workBookTasks: { include: { task: { select: { task_id: true, grade: true } } } },
+      },
+      orderBy: { id: 'asc' },
+    }),
+    prisma.workBook.findMany({
+      where: { workBookType: 'SOLUTION', placement: null },
+      orderBy: { id: 'asc' },
+    }),
+  ]);
+
+  await addCurriculumPlacements(unplacedCurriculum);
+  await addSolutionPlacements(unplacedSolution);
+
+  console.log('Finished adding workbook placements.');
+}
+
+async function addCurriculumPlacements(
+  unplacedCurriculum: Parameters<typeof buildTaskMapFromCurriculumRows>[0],
+) {
+  if (unplacedCurriculum.length === 0) {
+    return;
+  }
+
+  const tasksMapByIds = buildTaskMapFromCurriculumRows(unplacedCurriculum);
+  const workbooksForInit = buildCurriculumWorkbooksForInit(unplacedCurriculum);
+  const placements = initializeCurriculumPlacements(workbooksForInit, tasksMapByIds);
+
+  await createWorkBookPlacements(placements);
+  console.log(`Added ${placements.length} curriculum placements.`);
+}
+
+async function addSolutionPlacements(unplacedSolution: { id: number; urlSlug: string | null }[]) {
+  if (unplacedSolution.length === 0) {
+    return;
+  }
+
+  // Apply solutionCategoryMap overrides; workbooks not listed default to PENDING.
+  const placements = initializeSolutionPlacements(unplacedSolution).map(
+    (placement: PlacementCreate) => {
+      const workbooks = unplacedSolution.find((workbook) => workbook.id === placement.workBookId);
+      const category = workbooks?.urlSlug ? solutionCategoryMap[workbooks.urlSlug] : undefined;
+      return { ...placement, solutionCategory: category ?? 'PENDING' };
+    },
+  );
+
+  await createWorkBookPlacements(placements);
+  console.log(`Added ${placements.length} solution placements.`);
 }
 
 async function addWorkBook(

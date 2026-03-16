@@ -3,7 +3,11 @@
 // https://regex101.com/
 // https://qiita.com/mpyw/items/886218e7b418dfed254b
 import { z } from 'zod';
+
+import { TaskGrade } from '$lib/types/task';
 import { WorkBookType } from '$features/workbooks/types/workbook';
+import { SolutionCategory } from '$features/workbooks/types/workbook_placement';
+
 import { isValidUrl, isValidUrlSlug } from '$lib/utils/url';
 
 const workBookTaskSchema = z.object({
@@ -56,4 +60,24 @@ export const workBookSchema = z.object({
     .array(workBookTaskSchema)
     .min(1, { error: '1問以上登録してください' })
     .max(200, { error: '200問以下になるまで削除してください' }),
+});
+
+export const workBookPlacementSchema = z
+  .object({
+    id: z.number().int().positive(),
+    priority: z.number().int().positive(),
+    taskGrade: z.nativeEnum(TaskGrade).nullable(),
+    solutionCategory: z.nativeEnum(SolutionCategory).nullable(),
+  })
+  // Note: XOR constraint: dual enforcement via Zod (early validation) and a CHECK in migration.sql (last line of defence).
+  // Prisma lacks @@check, so the SQL constraint is maintained manually. Keep both in sync.
+  .refine(
+    (value) =>
+      (value.taskGrade !== null && value.solutionCategory === null) ||
+      (value.taskGrade === null && value.solutionCategory !== null),
+    { error: 'taskGrade と solutionCategory は片方のみ設定できます' },
+  );
+
+export const updatePlacementsSchema = z.object({
+  updates: z.array(workBookPlacementSchema),
 });

@@ -6,6 +6,15 @@ A web service for tracking submissions on AtCoder and other competitive programm
 
 Always prefer simplicity over pathological correctness. YAGNI, KISS, DRY. No backward-compat shims or fallback paths unless they come free without adding cyclomatic complexity.
 
+**When implementing:**
+
+1. Plan with a phased TODO list before starting (lower risk → higher risk order)
+2. Before writing a new function, search `src/lib/utils/`, `src/lib/services/`, `src/features/*/utils/` and `src/features/*/services/` for existing implementations; extract shared logic there when it appears in 2+ places
+3. Write tests first, then implement production code, then verify with `pnpm test:unit`
+4. Review critically after implementing: flag YAGNI violations, over-abstraction, missing tests
+5. Record reusable insights in `.claude/rules/` or `docs/guides/` after the session
+6. Discard or summarize completed plans; don't leave stale TODOs
+
 ## Tech Stack
 
 SvelteKit 2 + Svelte 5 (Runes) + TypeScript | PostgreSQL + Prisma | Flowbite Svelte + Tailwind 4 | Vitest + Playwright
@@ -42,6 +51,16 @@ src/lib/
 ├── types/ # TypeScript types
 ├── utils/ # Pure utility functions
 └── zod/ # Validation schemas
+src/features/ # Feature-scoped code (single domain)
+├── {feature}/
+│ ├── components/ # Feature UI (list/, detail/, shared/)
+│ ├── fixtures/ # Test data
+│ ├── services/ # Feature business logic (CRUD via Prisma)
+│ │ └── _.test.ts # Tests co-located next to source (not in src/test/)
+│ ├── stores/ # Feature stores
+│ ├── types/ # Feature types
+│ └── utils/ # Feature utilities
+│ └── _.test.ts # Tests co-located next to source
 src/test/ # Unit tests (mirrors src/lib/)
 tests/ # E2E tests (Playwright)
 prisma/schema.prisma # Database schema
@@ -52,7 +71,7 @@ prisma/schema.prisma # Database schema
 - **Svelte 5 Runes**: Use `$props()`, `$state()`, `$derived()` in all new components
 - **Server data**: `+page.server.ts` → `+page.svelte` via `data` prop
 - **Forms**: Superforms + Zod validation
-- **Tests**: Factories via `@quramy/prisma-fabbrica`, HTTP mocking via Nock
+- **Tests**: Write tests before implementation (TDD). Use `@quramy/prisma-fabbrica` for factories, Nock for HTTP mocking
 - **Naming**: `camelCase` variables, `PascalCase` types/components, `snake_case` files/routes, `kebab-case` directories
 - **Pre-commit**: Lefthook runs Prettier + ESLint (bypass: `LEFTHOOK=0 git commit`)
 

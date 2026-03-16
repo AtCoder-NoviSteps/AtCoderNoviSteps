@@ -1,8 +1,11 @@
 import { expect, test } from 'vitest';
 import { type ZodSchema } from 'zod';
 
-import { workBookSchema } from '$features/workbooks/zod/schema';
+import { TaskGrade } from '$lib/types/task';
 import { WorkBookType, type WorkBookTasks } from '$features/workbooks/types/workbook';
+import { SolutionCategory } from '$features/workbooks/types/workbook_placement';
+
+import { workBookSchema, workBookPlacementSchema } from '$features/workbooks/zod/schema';
 
 type WorkBook = {
   authorId: string;
@@ -453,7 +456,7 @@ describe('workbook schema', () => {
     function validateWorkBookSchema(schema: ZodSchema<unknown>, workbook: WorkBook) {
       const result = schema.safeParse(workbook);
 
-      expect(result.success).toBeFalsy();
+      expect(result.success).toBe(false);
     }
   });
 
@@ -467,4 +470,110 @@ describe('workbook schema', () => {
 
     return 'abc' + randomNumber + '_' + letters[randomIndex];
   }
+});
+
+describe('workBookPlacementSchema', () => {
+  describe('a correct workbook placement is given', () => {
+    test('only taskGrade is non-null (CURRICULUM)', () => {
+      const result = workBookPlacementSchema.safeParse({
+        id: 1,
+        priority: 1,
+        taskGrade: TaskGrade.Q10,
+        solutionCategory: null,
+      });
+      expect(result.success).toBe(true);
+    });
+
+    test('only solutionCategory is non-null (SOLUTION)', () => {
+      const result = workBookPlacementSchema.safeParse({
+        id: 1,
+        priority: 1,
+        taskGrade: null,
+        solutionCategory: SolutionCategory.GRAPH,
+      });
+      expect(result.success).toBe(true);
+    });
+  });
+
+  describe('an incorrect workbook placement is given', () => {
+    test('both null', () => {
+      const result = workBookPlacementSchema.safeParse({
+        id: 1,
+        priority: 1,
+        taskGrade: null,
+        solutionCategory: null,
+      });
+      expect(result.success).toBe(false);
+    });
+
+    test('both non-null', () => {
+      const result = workBookPlacementSchema.safeParse({
+        id: 1,
+        priority: 1,
+        taskGrade: TaskGrade.Q10,
+        solutionCategory: SolutionCategory.GRAPH,
+      });
+      expect(result.success).toBe(false);
+    });
+
+    test('invalid taskGrade', () => {
+      const result = workBookPlacementSchema.safeParse({
+        id: 1,
+        priority: 1,
+        taskGrade: 'INVALID' as TaskGrade,
+        solutionCategory: null,
+      });
+      expect(result.success).toBe(false);
+    });
+
+    test('invalid solutionCategory', () => {
+      const result = workBookPlacementSchema.safeParse({
+        id: 1,
+        priority: 1,
+        taskGrade: null,
+        solutionCategory: 'INVALID' as SolutionCategory,
+      });
+      expect(result.success).toBe(false);
+    });
+
+    test('priority of 0', () => {
+      const result = workBookPlacementSchema.safeParse({
+        id: 1,
+        priority: 0,
+        taskGrade: TaskGrade.Q10,
+        solutionCategory: null,
+      });
+      expect(result.success).toBe(false);
+    });
+
+    test('negative priority', () => {
+      const result = workBookPlacementSchema.safeParse({
+        id: 1,
+        priority: -1,
+        taskGrade: null,
+        solutionCategory: SolutionCategory.GRAPH,
+      });
+      expect(result.success).toBe(false);
+    });
+
+    test('fractional priority is rejected', () => {
+      const result = workBookPlacementSchema.safeParse({
+        id: 1,
+        priority: 1.5,
+        taskGrade: TaskGrade.Q10,
+        solutionCategory: null,
+      });
+      expect(result.success).toBe(false);
+    });
+
+    test('fractional id is rejected', () => {
+      const result = workBookPlacementSchema.safeParse({
+        id: 1.5,
+        priority: 1,
+        taskGrade: null,
+        solutionCategory: SolutionCategory.GRAPH,
+      });
+      expect(result.success).toBe(false);
+    });
+  });
 });

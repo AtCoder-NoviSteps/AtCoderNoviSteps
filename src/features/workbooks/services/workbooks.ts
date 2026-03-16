@@ -115,7 +115,7 @@ export async function createWorkBook(workBook: Omit<WorkBook, 'id'>): Promise<vo
   }
 
   const sanitizedUrl = sanitizeUrl(workBook.editorialUrl);
-  const newWorkBookTasks: WorkBookTasksBase = await getWorkBookTasks(workBook);
+  const newWorkBookTasks: WorkBookTasksBase = getWorkBookTasks(workBook);
 
   const newWorkBook = await db.workBook.create({
     data: {
@@ -159,7 +159,7 @@ export async function updateWorkBook(workBookId: number, workBook: WorkBook): Pr
     throw new Error(`Not found WorkBook with id ${workBookId}.`);
   }
 
-  const newWorkBookTasks: WorkBookTasksBase = await getWorkBookTasks(workBook);
+  const newWorkBookTasks: WorkBookTasksBase = getWorkBookTasks(workBook);
 
   validateRequiredFields(newWorkBookTasks);
 
@@ -179,8 +179,6 @@ export async function updateWorkBook(workBookId: number, workBook: WorkBook): Pr
         },
       }),
     ]);
-
-    console.log(await getWorkBook(workBookId));
   } catch (error) {
     console.error(
       `Failed to update WorkBook with id ${workBookId} and title ${workBook.title}:`,
