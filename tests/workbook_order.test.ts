@@ -88,12 +88,12 @@ test.describe('workbook order page', () => {
       return;
     }
 
-    const card = pendingCards[0];
+    const pendingCard = pendingCards[0];
 
     // Move card to GRAPH via API
     await postUpdates(page, [
       {
-        id: card.placementId,
+        id: pendingCard.placementId,
         priority: 1,
         solutionCategory: SolutionCategory.GRAPH,
         taskGrade: null,
@@ -105,12 +105,12 @@ test.describe('workbook order page', () => {
       await expect(page.getByRole('heading', { name: 'グラフ' })).toBeVisible({ timeout: TIMEOUT });
 
       const graphCards = await getCardsInColumn(page, SolutionCategory.GRAPH);
-      expect(graphCards.some((c) => c.placementId === card.placementId)).toBe(true);
+      expect(graphCards.some((card) => card.placementId === pendingCard.placementId)).toBe(true);
     } finally {
       // Restore to original PENDING column
       await postUpdates(page, [
         {
-          id: card.placementId,
+          id: pendingCard.placementId,
           priority: 1,
           solutionCategory: SolutionCategory.PENDING,
           taskGrade: null,
@@ -214,20 +214,6 @@ test.describe('workbook order page', () => {
     expect(categories.split(',')).toContain(SolutionCategory.GRAPH);
   });
 });
-
-async function postRaw(page: Page, body: unknown): Promise<number> {
-  return page.evaluate(
-    async ({ url, body }) => {
-      const response = await fetch(url, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body),
-      });
-      return response.status;
-    },
-    { url: ORDER_URL, body },
-  );
-}
 
 test.describe('API error handling', () => {
   test.beforeEach(async ({ page }) => {
@@ -340,4 +326,19 @@ async function postUpdates(
     { url: ORDER_URL, body: { updates } },
   );
   expect(status).toBe(OK);
+}
+
+async function postRaw(page: Page, body: unknown): Promise<number> {
+  return page.evaluate(
+    async ({ url, body }) => {
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
+      });
+
+      return response.status;
+    },
+    { url: ORDER_URL, body },
+  );
 }
