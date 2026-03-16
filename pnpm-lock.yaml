@@ -13,7 +13,7 @@ importers:
         version: 0.3.2
       '@dnd-kit/svelte':
         specifier: 0.3.2
-        version: 0.3.2(svelte@5.53.11)
+        version: 0.3.2(svelte@5.53.12)
       '@lucia-auth/adapter-prisma':
         specifier: 3.0.2
         version: 3.0.2(@prisma/client@5.22.0(prisma@5.22.0))(lucia@2.7.7)
@@ -5622,12 +5622,12 @@ snapshots:
       '@preact/signals-core': 1.13.0
       tslib: 2.8.1
 
-  '@dnd-kit/svelte@0.3.2(svelte@5.53.11)':
+  '@dnd-kit/svelte@0.3.2(svelte@5.53.12)':
     dependencies:
       '@dnd-kit/abstract': 0.3.2
       '@dnd-kit/dom': 0.3.2
       '@dnd-kit/state': 0.3.2
-      svelte: 5.53.11
+      svelte: 5.53.12
       tslib: 2.8.1
 
   '@edge-runtime/format@2.2.1': {}
