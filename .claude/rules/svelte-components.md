@@ -25,7 +25,7 @@ Use `$props()`, `$state()`, `$derived()`, `$effect()` in all components. Props p
 ## File Naming
 
 - Components: `PascalCase.svelte`
-- Stores: `snake_case.svelte.ts` in `src/lib/stores/`, class-based with `$state()`, export singleton
+- Stores: `snake_case.svelte.ts` in `src/lib/stores/`, class-based with `$state()`, export singleton. Pre-Runes stores (using `writable()`, `.ts` extension) must be migrated to this pattern before adding features or extending them.
 
 ## Flowbite Svelte
 

@@ -22,7 +22,7 @@ Common identifiers: `typescript`, `svelte`, `sql`, `bash`, `mermaid`, `json`, `p
 ## SvelteKit: Routes vs API Endpoints
 
 - Page routes (`+page.server.ts`): use `redirect()` to navigate
-- API routes (`+server.ts`): use `error()` — throwing `redirect()` causes `fetch` clients to receive HTML instead of a JSON error
+- API routes (`+server.ts`): use `error()` — throwing `redirect()` returns a 3xx response; `fetch` follows it by default and receives the HTML page at the redirect target instead of a JSON error
 
 ## Dual-Enforcement Constraints
 
