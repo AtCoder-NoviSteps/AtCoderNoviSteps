@@ -9,6 +9,11 @@ paths:
 
 # Testing
 
+## Test Integrity
+
+- Never delete, comment out, or weaken assertions (e.g. `toEqual` → `toBeDefined`) to make tests pass
+- Fix the implementation, not the test; if the test itself is wrong, explain why in a comment or commit message
+
 ## Test Types
 
 | Type | Tool       | Location                                                          | Run Command             |

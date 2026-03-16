@@ -57,16 +57,19 @@ Define snippets at the **top level**, outside component tags. Inside a tag = nam
 Prefer `{#snippet}` when: (1) needs direct `$state` access, (2) pure display only, (3) same-file DRY.
 Promote to component when: independent state/lifecycle needed, exceeds ~30 lines, or reused across files.
 
+## Component Boundaries
+
+- One component, one responsibility: don't mix display, state management, and data fetching
+- Extract `$derived`/`$effect` logic exceeding ~5 lines to a custom store
+- Extract repeated UI patterns (2+ uses) to a snippet or component (see Snippet vs Component)
+
 ## Keep Components Thin
 
-Business logic and pure utilities belong in `_types/` and `_utils/`, not in `<script>` blocks:
-
-- Static config → `_utils/` constants
-- Pure computation → `_utils/` functions with adjacent tests
+Business logic and pure utilities belong outside `<script>` blocks — in the nearest `utils/` (or `_utils/` for routes), with adjacent unit tests. See `docs/guides/architecture.md` for layer-specific placement.
 
 ## Pure Functions and Side Effect Separation
 
-Extract business logic as pure functions to `_utils/`; keep side effects in the caller:
+Extract business logic as pure functions to `utils/` (or `_utils/` for routes); keep side effects in the caller:
 
 ```typescript
 // Before: untestable
