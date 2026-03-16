@@ -76,7 +76,7 @@ Extract business logic as pure functions to `utils/` (or `_utils/` for routes); 
 function updateUrl() {
   const url = new URL($page.url);
   url.searchParams.set('tab', activeTab);
-  replaceState(url);
+  replaceState(url, {});
 }
 
 // After: pure function in _utils/, side effect in caller
