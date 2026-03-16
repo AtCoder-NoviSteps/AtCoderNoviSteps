@@ -269,7 +269,6 @@ test.describe('API error handling', () => {
 });
 
 // Helper functions
-
 async function loginAsAdmin(page: Page): Promise<void> {
   const ADMIN_USERNAME = 'admin';
   const ADMIN_PASSWORD = 'Ch0kuda1';
@@ -286,8 +285,7 @@ async function getCardsInColumn(
   page: Page,
   columnId: string,
 ): Promise<{ title: string; placementId: number }[]> {
-  const column = getColumn(page, columnId);
-  const cards = column.locator('[data-placement-id]');
+  const cards = page.locator(`[data-testid="column-${columnId}"] [data-placement-id]`);
   const count = await cards.count();
   const result: { title: string; placementId: number }[] = [];
 
@@ -299,10 +297,6 @@ async function getCardsInColumn(
   }
 
   return result;
-}
-
-function getColumn(page: Page, columnId: string) {
-  return page.locator(`[data-testid="column-${columnId}"]`);
 }
 
 async function postUpdates(
