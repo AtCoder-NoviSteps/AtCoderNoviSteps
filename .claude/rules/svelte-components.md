@@ -72,8 +72,12 @@ Business logic and pure utilities belong outside `<script>` blocks — in the ne
 Extract business logic as pure functions to `utils/` (or `_utils/` for routes); keep side effects in the caller:
 
 ```typescript
-// Before: untestable
-function updateUrl() { replaceState(new URL($page.url).searchParams.set('tab', activeTab)); }
+// Before: untestable — mixes URL construction (pure logic) with replaceState() (side effect)
+function updateUrl() {
+  const url = new URL($page.url);
+  url.searchParams.set('tab', activeTab);
+  replaceState(url);
+}
 
 // After: pure function in _utils/, side effect in caller
 export function buildUpdatedUrl(url: URL, activeTab: ActiveTab): URL { ... }
