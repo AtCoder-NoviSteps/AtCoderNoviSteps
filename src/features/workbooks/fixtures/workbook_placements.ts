@@ -26,7 +26,7 @@ export const curriculumPlacements: WorkBookPlacements = [
 //   stack (workBook 31) → DATA_STRUCTURE
 //   bitmask-brute-force-search (workBook 33) → SEARCH_SIMULATION
 //   number-theory-search (workBook 40) → NUMBER_THEORY
-//   unlisted workbook (workBook 99) → PENDING (initial state before admin categorizes)
+//   unlisted workbook (workBook 99) → PENDING (state after createInitialPlacements runs; placement: null means not yet initialized)
 export const solutionPlacements: WorkBookPlacements = [
   {
     id: 101,
