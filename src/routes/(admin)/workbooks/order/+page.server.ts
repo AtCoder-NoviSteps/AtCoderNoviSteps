@@ -3,7 +3,7 @@ import { type Actions } from '@sveltejs/kit';
 import {
   getWorkbooksWithPlacements,
   createInitialPlacements,
-} from '$features/workbooks/services/workbook_placements';
+} from '$features/workbooks/services/workbook_placements/crud';
 
 import { validateAdminAccess } from '../../_utils/auth';
 

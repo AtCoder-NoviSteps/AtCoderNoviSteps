@@ -36,8 +36,8 @@ import {
   buildCurriculumWorkbooksForInit,
   initializeCurriculumPlacements,
   initializeSolutionPlacements,
-  createWorkBookPlacements,
-} from '../src/features/workbooks/services/workbook_placements';
+} from '../src/features/workbooks/services/workbook_placements/initializers';
+import { createWorkBookPlacements } from '../src/features/workbooks/services/workbook_placements/crud';
 import { tags } from './tags';
 import { task_tags } from './task_tags';
 import { answers } from './answers';

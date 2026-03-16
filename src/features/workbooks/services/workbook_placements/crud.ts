@@ -1,22 +1,23 @@
 import prisma from '$lib/server/database';
 
-import { type Task, type TaskGrade } from '$lib/types/task';
 import {
-  SolutionCategory,
   type WorkBookPlacement,
   type WorkBookPlacements,
   type WorkbooksWithPlacement,
   type PlacementInputs,
-  type WorkBooksWithTasks,
   type PlacementCreates,
-  type UnplacedCurriculumRows,
 } from '$features/workbooks/types/workbook_placement';
 
 import { WorkBookType } from '$features/workbooks/types/workbook';
 
-import { calcWorkBookGradeModes } from '$features/workbooks/utils/workbooks';
+import {
+  buildTaskMapFromCurriculumRows,
+  buildCurriculumWorkbooksForInit,
+  initializeCurriculumPlacements,
+  initializeSolutionPlacements,
+} from './initializers';
 
-// --- 1. Basic CRUD operations for placements ---
+// --- Basic CRUD operations for placements ---
 
 /**
  * Returns all CURRICULUM and SOLUTION workbooks with their placements, ordered by id.
@@ -67,8 +68,6 @@ export async function updateWorkBookPlacements(updatedPlacements: PlacementInput
   );
 }
 
-// --- 2. Curriculum-specific initialization ---
-
 /**
  * Queries all unplaced CURRICULUM and SOLUTION workbooks, computes their initial
  * placements, and writes them to the database in a single createMany call.
@@ -115,108 +114,6 @@ async function fetchUnplacedWorkbooks() {
 
   return { unplacedCurriculum, unplacedSolution };
 }
-
-/**
- * Builds a task lookup map from unplaced curriculum workbook rows.
- * Stub tasks include only task_id and grade; other fields are left empty.
- */
-export function buildTaskMapFromCurriculumRows(
-  workbooks: UnplacedCurriculumRows,
-): Map<string, Task> {
-  return new Map(
-    workbooks
-      .flatMap((workbook) => workbook.workBookTasks)
-      .filter((workBookTask) => workBookTask.task !== null)
-      .map((workBookTask) => [
-        workBookTask.task!.task_id,
-        {
-          task_id: workBookTask.task!.task_id,
-          contest_id: '',
-          task_table_index: '',
-          title: '',
-          grade: workBookTask.task!.grade,
-        },
-      ]),
-  );
-}
-
-/**
- * Converts unplaced curriculum DB rows into the shape expected by initializeCurriculumPlacements.
- */
-export function buildCurriculumWorkbooksForInit(
-  workbooks: UnplacedCurriculumRows,
-): WorkBooksWithTasks {
-  return workbooks.map((workbook) => ({
-    id: workbook.id,
-    workBookTasks: workbook.workBookTasks.map((workBookTask) => ({
-      taskId: workBookTask.task?.task_id ?? '',
-      priority: 0,
-      comment: '',
-    })),
-  }));
-}
-
-/**
- * Returns initial placement records for unplaced CURRICULUM workbooks.
- * Each workbook is assigned the mode grade of its tasks, with priority
- * determined by ascending workbook ID within each grade group.
- */
-export function initializeCurriculumPlacements(
-  workbooks: WorkBooksWithTasks,
-  tasksMapByIds: Map<string, Task>,
-): PlacementCreates {
-  const gradeModes = calcWorkBookGradeModes(workbooks, tasksMapByIds);
-  const byGrade = groupWorkbooksByGrade(workbooks, gradeModes);
-  return buildPlacementsFromGroups(workbooks, gradeModes, byGrade);
-}
-
-/**
- * Groups workbooks by their mode grade, sorted by workbook ID ascending within each group.
- */
-export function groupWorkbooksByGrade(
-  workbooks: WorkBooksWithTasks,
-  gradeModes: Map<number, TaskGrade>,
-): Map<TaskGrade, number[]> {
-  return workbooks.reduce((byGrade, workbook) => {
-    const grade = gradeModes.get(workbook.id)!;
-    const ids = [...(byGrade.get(grade) ?? []), workbook.id].sort((a, b) => a - b);
-    return byGrade.set(grade, ids);
-  }, new Map<TaskGrade, number[]>());
-}
-
-/**
- * Builds PlacementCreate records from pre-grouped grade data.
- * Priority is the 1-based index within each grade group (sorted by workbook ID).
- */
-export function buildPlacementsFromGroups(
-  workbooks: WorkBooksWithTasks,
-  gradeModes: Map<number, TaskGrade>,
-  byGrade: Map<TaskGrade, number[]>,
-): PlacementCreates {
-  return workbooks.map((workbook) => {
-    const grade = gradeModes.get(workbook.id)!;
-    const ids = byGrade.get(grade)!;
-    const priority = ids.indexOf(workbook.id) + 1;
-    return { workBookId: workbook.id, taskGrade: grade, solutionCategory: null, priority };
-  });
-}
-
-// --- 3. Solution-specific initialization ---
-
-/**
- * Returns initial placement records for unplaced SOLUTION workbooks.
- * All are placed in the PENDING category with sequential priority.
- */
-export function initializeSolutionPlacements(workbooks: { id: number }[]): PlacementCreates {
-  return workbooks.map((workBook, i) => ({
-    workBookId: workBook.id,
-    taskGrade: null,
-    solutionCategory: SolutionCategory.PENDING,
-    priority: i + 1,
-  }));
-}
-
-// --- 4. Common logic for both curriculum and solution ---
 
 /**
  * Validates that no update crosses CURRICULUM/SOLUTION boundary, then upserts.
@@ -266,7 +163,7 @@ async function validatePlacements(updates: PlacementInputs): Promise<{ error: st
   return null;
 }
 
-// --- 5. Only used for seeding initial placements, not exposed to runtime code ---
+// --- Only used for seeding initial placements, not exposed to runtime code ---
 
 /**
  * Persists an array of new placement records to the database.

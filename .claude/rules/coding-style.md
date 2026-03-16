@@ -24,6 +24,16 @@ Common identifiers: `typescript`, `svelte`, `sql`, `bash`, `mermaid`, `json`, `p
 - Page routes (`+page.server.ts`): use `redirect()` to navigate
 - API routes (`+server.ts`): use `error()` — throwing `redirect()` causes `fetch` clients to receive HTML instead of a JSON error
 
+## Dual-Enforcement Constraints
+
+When the same constraint is enforced in two layers (e.g. Zod validation + SQL `CHECK`), add an inline comment stating each layer's role and the obligation to keep them in sync:
+
+```typescript
+// XOR constraint: dual enforcement via Zod (early validation) and a CHECK in migration.sql (last line of defence).
+// Prisma lacks @@check, so the SQL constraint is maintained manually. Keep both in sync.
+.refine(...)
+```
+
 ## Async Rollback: Capture State Before `await`
 
 Capture `$state` values before the first `await` for safe rollback. A concurrent update can overwrite the variable while awaiting:

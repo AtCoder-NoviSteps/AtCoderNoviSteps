@@ -69,6 +69,8 @@ export const workBookPlacementSchema = z
     taskGrade: z.nativeEnum(TaskGrade).nullable(),
     solutionCategory: z.nativeEnum(SolutionCategory).nullable(),
   })
+  // Note: XOR constraint: dual enforcement via Zod (early validation) and a CHECK in migration.sql (last line of defence).
+  // Prisma lacks @@check, so the SQL constraint is maintained manually. Keep both in sync.
   .refine(
     (value) =>
       (value.taskGrade !== null && value.solutionCategory === null) ||

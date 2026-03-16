@@ -1,6 +1,6 @@
 import { json, type RequestEvent } from '@sveltejs/kit';
 
-import { validateAndUpdatePlacements } from '$features/workbooks/services/workbook_placements';
+import { validateAndUpdatePlacements } from '$features/workbooks/services/workbook_placements/crud';
 
 import { updatePlacementsSchema } from '$features/workbooks/zod/schema';
 

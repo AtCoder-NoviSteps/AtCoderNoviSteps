@@ -69,6 +69,15 @@ function mockFindMany(value: WorkBookPlacements) {
 - Run `pnpm coverage` for coverage report
 - Target: 80% lines, 70% branches
 
+## Service Layer Split for Testability
+
+When a service file mixes DB operations and pure functions, split it into two files:
+
+- `crud.ts` — DB operations (`getXxx`, `updateXxx`, `createXxx`); tests need Prisma mocks
+- `initializers.ts` — pure computation (grade grouping, priority assignment); tests need no mocks
+
+Stop the split if internal helpers (e.g. `fetchUnplacedWorkbooks`) would be fragmented across files — cohesion matters more than the split itself.
+
 ## HTTP Mocking
 
 Use Nock for external HTTP calls. See `src/test/lib/clients/` for examples.

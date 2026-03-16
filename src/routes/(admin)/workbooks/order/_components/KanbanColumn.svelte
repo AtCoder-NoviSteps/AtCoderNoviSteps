@@ -46,6 +46,8 @@
   <div class="flex flex-col gap-2 min-h-12 overflow-y-auto max-h-[60vh]">
     {#each cards as card, i (card.id)}
       <KanbanCard {...card} index={i} {columnId} {group} />
+    {:else}
+      <p class="text-sm text-gray-400 dark:text-gray-500 text-center py-3">問題集をドロップ</p>
     {/each}
   </div>
 </div>

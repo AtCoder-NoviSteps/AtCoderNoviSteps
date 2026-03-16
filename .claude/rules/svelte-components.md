@@ -84,6 +84,18 @@ export function buildUpdatedUrl(url: URL, activeTab: ActiveTab): URL { ... }
 // Caller: replaceState(buildUpdatedUrl($page.url, activeTab), {})
 ```
 
+## Empty-list Fallback in `{#each}`
+
+Use `{:else}` to render a placeholder when the list is empty — no wrapper conditional needed:
+
+```svelte
+{#each items as item (item.id)}
+  <Card {item} />
+{:else}
+  <p>No items yet.</p>
+{/each}
+```
+
 ## Eliminate Branching with Records
 
 Replace `if`/ternary chains with `Record<EnumType, T>`:
