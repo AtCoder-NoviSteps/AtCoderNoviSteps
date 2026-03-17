@@ -158,7 +158,9 @@
       status_name: submissionStatus.innerName,
       status_id: submissionStatus.innerId,
       submission_status_label_name: submissionStatus.labelName,
-      is_ac: submissionStatus.innerName === 'ac',
+      is_ac:
+        submission_statuses.find((status) => status.status_name === submissionStatus.innerName)
+          ?.is_AC ?? false,
       updated_at: new Date(),
     };
   }

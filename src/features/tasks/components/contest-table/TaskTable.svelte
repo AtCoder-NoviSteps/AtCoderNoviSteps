@@ -26,6 +26,7 @@
   } from '$features/tasks/utils/contest-table/contest_table_provider';
 
   import { getBackgroundColorFrom } from '$lib/services/submission_status';
+  import { areAllTasksAccepted } from '$lib/utils/task';
   import { createContestTaskPairKey } from '$lib/utils/contest_task_pair';
 
   interface Props {
@@ -103,6 +104,16 @@
   // More than 8 columns will wrap to the next line to align with ABC212 〜 ABC318 (8 tasks per contest).
   function getBodyRowClasses(totalColumns: number): string {
     return totalColumns > 8 ? 'flex flex-wrap' : 'flex flex-wrap xl:table-row';
+  }
+
+  function getRoundLabelClasses(contestTable: ProviderData, contestId: string): string {
+    const tasks = Object.values(contestTable.innerTaskTable[contestId]);
+    const bgColor =
+      isLoggedIn && areAllTasksAccepted(tasks, tasks)
+        ? getBackgroundColorFrom('ac')
+        : 'bg-gray-50 dark:bg-gray-800';
+
+    return `w-full ${contestTable.displayConfig.roundLabelWidth} truncate px-2 py-2 text-center ${bgColor}`;
   }
 
   function getBodyCellClasses(taskResult: TaskResult, tableBodyCellWidth: string): string {
@@ -240,10 +251,7 @@
             {#each contestTable.contestIds as contestId (contestId)}
               <TableBodyRow class={getBodyRowClasses(totalColumns)}>
                 {#if contestTable.displayConfig.isShownRoundLabel}
-                  <TableBodyCell
-                    class="w-full {contestTable.displayConfig
-                      .roundLabelWidth} truncate px-2 py-2 text-center bg-gray-50 dark:bg-gray-800"
-                  >
+                  <TableBodyCell class={getRoundLabelClasses(contestTable, contestId)}>
                     {getContestRoundLabel(provider, contestId)}
                   </TableBodyCell>
                 {/if}
