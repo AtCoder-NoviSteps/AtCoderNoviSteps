@@ -110,7 +110,7 @@
     const tasks = Object.values(contestTable.innerTaskTable[contestId]);
     const bgColor = getRoundLabelBgColor(tasks);
 
-    return `w-full ${contestTable.displayConfig.roundLabelWidth} truncate px-2 py-2 text-center ${bgColor}`;
+    return `w-full ${contestTable.displayConfig.roundLabelWidth} truncate px-2 py-2 text-center dark:text-gray-300 ${bgColor}`;
   }
 
   // Note: If any task is ac_with_editorial, that color takes priority over AC (Accepted).
