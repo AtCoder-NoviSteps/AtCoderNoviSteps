@@ -113,6 +113,7 @@
     return `w-full ${contestTable.displayConfig.roundLabelWidth} truncate px-2 py-2 text-center ${bgColor}`;
   }
 
+  // Note: If any task is ac_with_editorial, that color takes priority over AC (Accepted).
   function getRoundLabelBgColor(tasks: TaskResults): string {
     if (!isLoggedIn || !areAllTasksAccepted(tasks, tasks)) {
       return 'bg-gray-50 dark:bg-gray-800';
