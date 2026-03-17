@@ -34,6 +34,15 @@ When the same constraint is enforced in two layers (e.g. Zod validation + SQL `C
 .refine(...)
 ```
 
+## Optimistic Updates
+
+Derive computed fields (flags, labels, etc.) from the canonical data source — don't
+re-implement the derivation inline. Divergence causes a "works after reload" bug where
+the server state is correct but the client-side update is wrong.
+
+**Diagnostic**: "Not reflected live, but fixed after reload" → suspect the optimistic
+update payload, not the reactivity system.
+
 ## Async Rollback: Capture State Before `await`
 
 Capture `$state` values before the first `await` for safe rollback. A concurrent update can overwrite the variable while awaiting:
