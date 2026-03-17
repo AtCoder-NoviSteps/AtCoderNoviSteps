@@ -108,12 +108,19 @@
 
   function getRoundLabelClasses(contestTable: ProviderData, contestId: string): string {
     const tasks = Object.values(contestTable.innerTaskTable[contestId]);
-    const bgColor =
-      isLoggedIn && areAllTasksAccepted(tasks, tasks)
-        ? getBackgroundColorFrom('ac')
-        : 'bg-gray-50 dark:bg-gray-800';
+    const bgColor = getRoundLabelBgColor(tasks);
 
     return `w-full ${contestTable.displayConfig.roundLabelWidth} truncate px-2 py-2 text-center ${bgColor}`;
+  }
+
+  function getRoundLabelBgColor(tasks: TaskResults): string {
+    if (!isLoggedIn || !areAllTasksAccepted(tasks, tasks)) {
+      return 'bg-gray-50 dark:bg-gray-800';
+    }
+
+    const hasEditorial = tasks.some((task) => task.status_name === 'ac_with_editorial');
+
+    return getBackgroundColorFrom(hasEditorial ? 'ac_with_editorial' : 'ac');
   }
 
   function getBodyCellClasses(taskResult: TaskResult, tableBodyCellWidth: string): string {

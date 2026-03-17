@@ -7,11 +7,11 @@ Issue: https://github.com/AtCoder-NoviSteps/AtCoderNoviSteps/issues/3270
 コンテストテーブルの Round ラベルセルについて、そのコンテスト行の全問が AC 系（`is_ac === true`）の場合に
 ステータスの内訳に応じて背景色を変更する。
 
-| 条件 | 背景色 |
-|------|--------|
+| 条件                                                   | 背景色                                                                                                     |
+| ------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------- |
 | 全問 `is_ac === true` かつ 1問以上 `ac_with_editorial` | 解説AC背景色 (`bg-atcoder-ac-with_editorial-background dark:bg-atcoder-ac-with_editorial-background_dark`) |
-| 全問 `is_ac === true` かつ 全問 `ac` | AC背景色（緑）(`bg-atcoder-ac-background dark:bg-atcoder-ac-background_dark`) |
-| それ以外（未AC あり、または未ログイン） | グレー (`bg-gray-50 dark:bg-gray-800`) |
+| 全問 `is_ac === true` かつ 全問 `ac`                   | AC背景色（緑）(`bg-atcoder-ac-background dark:bg-atcoder-ac-background_dark`)                              |
+| それ以外（未AC あり、または未ログイン）                | グレー (`bg-gray-50 dark:bg-gray-800`)                                                                     |
 
 ## 前提
 
@@ -98,7 +98,7 @@ is_ac:
 
 ### 修正ファイル
 
-- `src/lib/components/SubmissionStatus/UpdatingDropdown.svelte`（line 161）
+- `src/lib/components/SubmissionStatus/UpdatingDropdown.svelte`（line 161）✅ 修正済み
 
 ---
 
@@ -108,12 +108,13 @@ is_ac:
   - [x] `areAllTasksAccepted` を `$lib/utils/task` から import に追加
   - [x] `getRoundLabelClasses(contestTable, contestId)` ヘルパー関数を追加（`getBodyCellClasses` の隣）
   - [x] `TableBodyCell`（Round ラベル）の `class` を `getRoundLabelClasses(contestTable, contestId)` に差し替え
-- [ ] 仕様変更: 解説AC混在時の背景色分岐
-  - [ ] `getRoundLabelClasses` 内の分岐を `getRoundLabelBgColor` ヘルパーに切り出す
-  - [ ] 全問 AC かつ解説ACあり → `getBackgroundColorFrom('ac_with_editorial')` に変更
-  - [ ] 全問 AC かつ解説ACなし → `getBackgroundColorFrom('ac')` を維持
-- [ ] 動作確認
-  - [ ] ログインユーザーで全問AC済み（AC のみ）のコンテスト行のラベルが緑背景になること
-  - [ ] ログインユーザーで全問AC済み（解説ACあり）のコンテスト行のラベルが解説AC背景色になること
-  - [ ] 未AC・未ログインでは従来色（グレー）のままであること
-- [ ] `pnpm format` を実行してコミット
+- [x] 仕様変更: 解説AC混在時の背景色分岐
+  - [x] `getRoundLabelClasses` 内の分岐を `getRoundLabelBgColor` ヘルパーに切り出す
+  - [x] 全問 AC かつ解説ACあり → `getBackgroundColorFrom('ac_with_editorial')` に変更
+  - [x] 全問 AC かつ解説ACなし → `getBackgroundColorFrom('ac')` を維持
+- [x] 動作確認
+  - [x] ログインユーザーで全問AC済み（AC のみ）のコンテスト行のラベルが緑背景になること
+  - [x] ログインユーザーで全問AC済み（解説ACあり）のコンテスト行のラベルが解説AC背景色になること
+  - [x] 未AC・未ログインでは従来色（グレー）のままであること
+- [x] `pnpm format` を実行（変更なし）
+- [x] `pnpm test:unit` — 1908/1909 passed（失敗1件は既存フレイキーテスト: `expects to handle large arrays efficiently`、今回の変更と無関係）
