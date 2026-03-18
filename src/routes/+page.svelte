@@ -44,12 +44,8 @@
 
     <div class="flex flex-wrap justify-center items-center">
       <Button href={WORKBOOKS_PAGE} class="w-full sm:w-5/6 md:w-1/3 m-2">問題集へ</Button>
-      <Button outline href={PROBLEMS_PAGE} class="w-full sm:w-5/6 md:w-1/3 m-2">一覧表へ</Button>
-      <Button
-        color="alternative"
-        href={ABOUT_PAGE}
-        class="w-full sm:w-5/6 md:w-1/3 m-2 dark:hover:bg-gray-700"
-      >
+      <Button href={PROBLEMS_PAGE} class="w-full sm:w-5/6 md:w-1/3 m-2">一覧表へ</Button>
+      <Button outline href={ABOUT_PAGE} class="w-full sm:w-5/6 md:w-1/3 m-2">
         使い方を見る
         <ArrowRight class="w-4 h-4 ml-2" />
       </Button>
