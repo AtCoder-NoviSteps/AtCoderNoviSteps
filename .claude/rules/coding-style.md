@@ -52,6 +52,20 @@ the server state is correct but the client-side update is wrong.
 **Diagnostic**: "Not reflected live, but fixed after reload" → suspect the optimistic
 update payload, not the reactivity system.
 
+## Server-side Logging
+
+Do not log user-identifiable or content data (titles, names, IDs that map to users) in server-side `console.log`. Use generic messages instead:
+
+```typescript
+// Bad: leaks content and user identity
+console.log(`Created workbook "${workBook.title}" by user ${author.id}`);
+
+// Good
+console.log('Workbook created successfully');
+```
+
+Prefer placing the single authoritative log in the service layer; remove duplicate logs in route handlers that cover the same event.
+
 ## Async Rollback: Capture State Before `await`
 
 Capture `$state` values before the first `await` for safe rollback. A concurrent update can overwrite the variable while awaiting:

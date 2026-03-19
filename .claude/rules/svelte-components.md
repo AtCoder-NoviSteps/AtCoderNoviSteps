@@ -105,7 +105,17 @@ export function buildUpdatedUrl(url: URL, activeTab: ActiveTab): URL { ... }
 replaceState(buildUpdatedUrl($page.url, activeTab), {});
 ```
 
-## Empty-list Fallback in `{#each}`
+## `{#each}` — Keys and Empty-list Fallback
+
+Always provide a key expression when the list or its items may change dynamically. This is especially critical when the block contains an inner `{#if}` — without a key, Svelte reuses DOM nodes by position, so filtering can silently bind data to the wrong element:
+
+```svelte
+{#each workbooks as workbook (workbook.id)}
+  {#if canRead(workbook)}
+    <Row {workbook} />
+  {/if}
+{/each}
+```
 
 Use `{:else}` to render a placeholder when the list is empty — no wrapper conditional needed:
 

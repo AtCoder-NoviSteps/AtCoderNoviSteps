@@ -30,6 +30,7 @@ Write all test titles in English. Use descriptive sentences that state the expec
 - Use `toBe(true)` / `toBe(false)` over `toBeTruthy()` / `toBeFalsy()`
 - For DB query tests, assert `orderBy`, `include`, and other significant parameters with `expect.objectContaining` — not just `where`
 - Enum membership: `in` traverses the prototype chain; use `Object.hasOwn(Enum, value)` instead
+- **E2E state transitions**: after an interaction that changes element state (active tab, toggle, selection), assert the _new_ state — not just that the element is visible, which may have been true before the interaction. Assert an active CSS class, `aria-selected`, or similar attribute instead of `toBeVisible()`
 
 ## Cleanup in Tests
 
@@ -49,6 +50,7 @@ try {
 - Use realistic fixture values (real task IDs, grade names) instead of placeholders like `'t1'`
 - Extract shared data into fixture files; inline is fine for single-use cases
 - After `.filter()` on fixtures, verify actual contents — same ID may refer to a different entity after fixture updates
+- **Description ↔ code path alignment**: when a test name describes a specific scenario (e.g. "tie-break"), verify the fixture actually exercises that code path. A test that passes without reaching the branch it claims to cover gives false confidence
 
 ## Mock Helpers
 
