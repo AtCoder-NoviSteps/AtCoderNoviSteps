@@ -278,6 +278,10 @@ describe('Workbooks', () => {
         ['abc300_f', createTask('abc300_f', TaskGrade.Q7)],
         ['abc300_g', createTask('abc300_g', TaskGrade.Q7)],
         ['abc300_h', createTask('abc300_h', TaskGrade.Q6)],
+        ['abc301_a', createTask('abc301_a', TaskGrade.Q6)],
+        ['abc301_b', createTask('abc301_b', TaskGrade.Q6)],
+        ['abc301_c', createTask('abc301_c', TaskGrade.Q6)],
+        ['abc301_d', createTask('abc301_d', TaskGrade.Q6)],
       ]);
       const workbooks = [
         createWorkBookListBase({
@@ -291,6 +295,10 @@ describe('Workbooks', () => {
             { taskId: 'abc300_f', priority: 6, comment: '' },
             { taskId: 'abc300_g', priority: 7, comment: '' },
             { taskId: 'abc300_h', priority: 8, comment: '' },
+            { taskId: 'abc301_a', priority: 9, comment: '' },
+            { taskId: 'abc301_b', priority: 10, comment: '' },
+            { taskId: 'abc301_c', priority: 11, comment: '' },
+            { taskId: 'abc301_d', priority: 12, comment: '' },
           ],
         }),
       ];

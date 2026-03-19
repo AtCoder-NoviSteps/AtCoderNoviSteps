@@ -124,10 +124,12 @@ export function countReadableWorkbooks(workbooks: WorkbooksList, userId: string)
   }, 0);
 }
 
+const EMPTY_TASK_RESULTS: TaskResults = [];
+
 /** Returns the task results for a workbook, falling back to an empty array when not found in the map. */
 export function getTaskResult(
   workbookId: number,
   taskResults: Map<number, TaskResults>,
 ): TaskResults {
-  return taskResults.get(workbookId) ?? [];
+  return taskResults.get(workbookId) ?? EMPTY_TASK_RESULTS;
 }

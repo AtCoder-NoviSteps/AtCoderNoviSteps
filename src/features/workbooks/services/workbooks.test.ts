@@ -5,6 +5,7 @@ import { WorkBookType, type WorkBook } from '$features/workbooks/types/workbook'
 import {
   getWorkBook,
   getWorkBooksWithAuthors,
+  getWorkbookWithAuthor,
   createWorkBook,
   updateWorkBook,
   deleteWorkBook,
@@ -32,6 +33,7 @@ vi.mock('$lib/services/users', () => ({
 }));
 
 import prisma from '$lib/server/database';
+import * as usersCrud from '$lib/services/users';
 
 beforeEach(() => {
   vi.clearAllMocks();
@@ -135,6 +137,43 @@ describe('getWorkBooksWithAuthors', () => {
     const result = await getWorkBooksWithAuthors();
 
     expect(result[0].authorName).toBe('unknown');
+  });
+});
+
+describe('getWorkbookWithAuthor', () => {
+  function mockGetUserById(value: { id: string } | null) {
+    vi.mocked(usersCrud.getUserById).mockResolvedValue(value as never);
+  }
+
+  test('returns null when workbook is not found', async () => {
+    mockFindUnique(null);
+
+    const result = await getWorkbookWithAuthor('999');
+
+    expect(result).toBeNull();
+  });
+
+  test('returns workbook with isExistingAuthor true when author exists', async () => {
+    const workBook = prepareWorkBook({ id: 1, authorId: '1' });
+    mockFindUnique(asPrismaWorkBook(workBook));
+    mockGetUserById({ id: '1' });
+
+    const result = await getWorkbookWithAuthor('1');
+
+    expect(result).not.toBeNull();
+    expect(result!.workBook).toMatchObject({ id: 1 });
+    expect(result!.isExistingAuthor).toBe(true);
+  });
+
+  test('returns workbook with isExistingAuthor false when author is deleted', async () => {
+    const workBook = prepareWorkBook({ id: 1, authorId: '1' });
+    mockFindUnique(asPrismaWorkBook(workBook));
+    mockGetUserById(null);
+
+    const result = await getWorkbookWithAuthor('1');
+
+    expect(result).not.toBeNull();
+    expect(result!.isExistingAuthor).toBe(false);
   });
 });
 

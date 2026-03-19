@@ -68,7 +68,6 @@ export const actions = {
 
     try {
       await workBooksCrud.createWorkBook(workBook);
-      console.log(`Created workbook "${workBook.title}" by user ${author.id}`);
     } catch (e) {
       console.error('Failed to create a workbook', e);
       return fail(BAD_REQUEST, {

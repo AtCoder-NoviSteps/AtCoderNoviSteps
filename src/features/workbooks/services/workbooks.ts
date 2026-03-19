@@ -135,7 +135,7 @@ export async function createWorkBook(workBook: Omit<WorkBook, 'id'>): Promise<vo
   const sanitizedUrl = sanitizeUrl(workBook.editorialUrl);
   const newWorkBookTasks: WorkBookTasksBase = getWorkBookTasks(workBook);
 
-  const newWorkBook = await db.workBook.create({
+  await db.workBook.create({
     data: {
       authorId: workBook.authorId,
       title: workBook.title,
@@ -155,7 +155,7 @@ export async function createWorkBook(workBook: Omit<WorkBook, 'id'>): Promise<vo
     },
   });
 
-  console.log(`Created workbook with title: ${newWorkBook.title}`);
+  console.log('Workbook created successfully');
 }
 
 async function isExistingUrlSlug(slug: string): Promise<boolean> {

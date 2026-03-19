@@ -49,7 +49,7 @@ Present a concrete diff proposal for each issue. Do not apply without confirmati
 
 ## Step 5: Detect Repeated User Instructions
 
-Scan the conversation history for instructions the user gave more than once across this or prior sessions (visible in memory or chat context). Categories each as:
+Scan the conversation history for instructions the user gave more than once across this or prior sessions (visible in memory or chat context). Categorize each as:
 
 | Pattern                                | Suggested fix                             |
 | -------------------------------------- | ----------------------------------------- |

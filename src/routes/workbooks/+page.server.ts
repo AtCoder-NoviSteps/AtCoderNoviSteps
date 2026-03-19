@@ -28,10 +28,10 @@ export async function load({ locals }) {
     ]);
 
     return {
-      workbooks: workbooks,
-      tasksMapByIds: tasksMapByIds,
-      taskResultsByTaskId: taskResultsByTaskId,
-      loggedInUser: loggedInUser,
+      workbooks,
+      tasksMapByIds,
+      taskResultsByTaskId,
+      loggedInUser,
     };
   } catch (e) {
     console.error('Failed to fetch workbooks, tasks or task results: ', e);

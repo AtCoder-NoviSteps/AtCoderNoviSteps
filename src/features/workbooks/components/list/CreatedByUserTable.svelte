@@ -33,14 +33,14 @@
     <TableHead class="text-sm bg-gray-100">
       <TableHeadCell>作者</TableHeadCell>
       <TitleTableHeadCell />
-      <TableHeadCell class="ext-left min-w-[240px] max-w-[1440px] px-0">回答状況</TableHeadCell>
+      <TableHeadCell class="text-left min-w-[240px] max-w-[1440px] px-0">回答状況</TableHeadCell>
       <TableHeadCell></TableHeadCell>
       <TableHeadCell class="text-center px-0">修了</TableHeadCell>
       <TableHeadCell></TableHeadCell>
     </TableHead>
 
     <TableBody class="divide-y divide-gray-200 dark:divide-gray-700">
-      {#each workbooks as workbook}
+      {#each workbooks as workbook (workbook.id)}
         {#if canRead(workbook.isPublished, userId, workbook.authorId)}
           <TableBodyRow>
             <TableBodyCell>

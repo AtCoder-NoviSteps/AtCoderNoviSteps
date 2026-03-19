@@ -39,6 +39,22 @@ Referencing `$props()` inside `$state()` initializer triggers "This reference on
 let count = $state(untrack(() => initialCount)); // intentional: prop is initial seed only
 ```
 
+## `$effect` — Store Reading
+
+Inside `$effect`, use `$store` syntax, not `get(store)`. `get()` bypasses the signal graph — the effect will not re-run when the store updates:
+
+```svelte
+// Bad: get() takes a snapshot; effect won't react to store changes
+$effect(() => {
+  const grade = get(myStore).get(key) ?? fallback;
+});
+
+// Good: $store subscribes and re-runs the effect on updates
+$effect(() => {
+  const grade = $myStore.get(key) ?? fallback;
+});
+```
+
 ## `$derived` — No Arrow Wrapper
 
 Use `$derived(expr)`, not `$derived(() => expr)`. The arrow form makes the derived value a _function_, not a reactive value — dependencies may not be tracked and the template call site is confusing.

@@ -39,8 +39,10 @@ test.describe('logged-in user (general)', () => {
     // 10Q is selected by default; click 9Q
     await page.getByRole('button', { name: '9Q' }).click();
 
-    // The active grade should now be 9Q — confirmed by a re-render (no navigation occurs)
-    await expect(page.getByRole('button', { name: '9Q' })).toBeVisible({ timeout: TIMEOUT });
+    // The active grade should now be 9Q — confirmed by the active class applied in CurriculumWorkBookList
+    await expect(page.getByRole('button', { name: '9Q' })).toHaveClass(/text-primary-700/, {
+      timeout: TIMEOUT,
+    });
   });
 
   test('toggling replenishment workbooks shows/hides the section when it exists', async ({

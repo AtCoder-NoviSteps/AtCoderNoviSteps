@@ -18,6 +18,6 @@ async function loginAs(page: Page, username: string): Promise<void> {
   await expect(page).toHaveURL('/login', { timeout: TIMEOUT });
   await page.locator('input[name="username"]').fill(username);
   await page.locator('input[name="password"]').fill(SHARED_PASSWORD);
-  await page.getByRole('button', { name: 'ログイン' }).nth(1).click();
+  await page.getByRole('button', { name: 'ログイン', exact: true }).click();
   await expect(page).toHaveURL('/', { timeout: TIMEOUT });
 }

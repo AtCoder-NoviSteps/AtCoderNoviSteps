@@ -57,7 +57,7 @@
   }
 
   $effect(() => {
-    const grade = get(taskGradesByWorkBookTypeStore).get(WorkBookType.CURRICULUM) || TaskGrade.Q10;
+    const grade = $taskGradesByWorkBookTypeStore.get(WorkBookType.CURRICULUM) ?? TaskGrade.Q10;
 
     if (grade) {
       selectedGrade = grade;
