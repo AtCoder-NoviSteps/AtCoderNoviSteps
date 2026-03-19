@@ -160,6 +160,7 @@
 
 {#if readableMainWorkbooksCount}
   {@const TableComponent = tableComponents[workbookType]}
+
   <div>
     {#if workbookType === WorkBookType.CURRICULUM}
       <div class="text-2xl pb-4 dark:text-white">手引き</div>

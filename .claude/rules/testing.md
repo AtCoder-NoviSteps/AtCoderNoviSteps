@@ -9,6 +9,10 @@ paths:
 
 # Testing
 
+## Test Titles
+
+Write all test titles in English. Use descriptive sentences that state the expected behavior (e.g., `'returns empty array when workbooks is empty'`). Japanese is only acceptable in inline comments or fixture strings that represent real user-facing content.
+
 ## Test Integrity
 
 - Never delete, comment out, or weaken assertions (e.g. `toEqual` → `toBeDefined`) to make tests pass
@@ -81,3 +85,17 @@ Stop the split if internal helpers (e.g. `fetchUnplacedWorkbooks`) would be frag
 ## HTTP Mocking
 
 Use Nock for external HTTP calls. See `src/test/lib/clients/` for examples.
+
+## Flowbite Toggle in E2E Tests
+
+Flowbite's `Toggle` renders an `sr-only` `<input type="checkbox">` inside a `<label>`. Clicking the input directly fails because the visual `<span>` sibling intercepts pointer events. Click the label wrapper instead:
+
+```typescript
+const toggleInput = page.locator('input[aria-label="<aria-label value>"]');
+const toggleLabel = page.locator('label:has(input[aria-label="<aria-label value>"])');
+
+await toggleLabel.click();
+await expect(toggleInput).toBeChecked({ checked: true });
+```
+
+The same pattern applies to any Flowbite component that visually overlays its native input (e.g. `Checkbox`, `Radio`).

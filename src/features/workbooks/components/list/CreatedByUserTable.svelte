@@ -1,6 +1,4 @@
 <script lang="ts">
-  import { enhance } from '$app/forms';
-
   import {
     Table,
     TableBody,
@@ -10,32 +8,24 @@
     TableHeadCell,
   } from 'flowbite-svelte';
 
-  import type { Roles } from '$lib/types/user';
-  import { TaskGrade, type TaskResults } from '$lib/types/task';
-  import type { WorkbooksList } from '$features/workbooks/types/workbook';
+  import type { WorkbookTableProps } from '$features/workbooks/types/workbook';
 
-  import CompletedTasks from '$lib/components/Trophies/CompletedTasks.svelte';
-  import ThermometerProgressBar from '$lib/components/ThermometerProgressBar.svelte';
-  import AcceptedCounter from '$features/workbooks/components/list/AcceptedCounter.svelte';
   import TitleTableHeadCell from '$features/workbooks/components/list/TitleTableHeadCell.svelte';
   import TitleTableBodyCell from '$features/workbooks/components/list/TitleTableBodyCell.svelte';
+  import WorkbookProgressCell from '$features/workbooks/components/list/WorkbookProgressCell.svelte';
+  import WorkbookCompletionCell from '$features/workbooks/components/list/WorkbookCompletionCell.svelte';
+  import WorkbookAuthorActionsCell from '$features/workbooks/components/list/WorkbookAuthorActionsCell.svelte';
 
-  import { canRead, canEdit, canDelete } from '$lib/utils/authorship';
-  import { getUrlSlugFrom } from '$features/workbooks/utils/workbooks';
+  import { canRead } from '$lib/utils/authorship';
+  import { getTaskResult } from '$features/workbooks/utils/workbooks';
 
-  interface Props {
-    workbooks: WorkbooksList;
-    workbookGradeModes: Map<number, TaskGrade>;
-    userId: string;
-    role: Roles;
-    taskResults: Map<number, TaskResults>;
-  }
-
-  let { workbooks, workbookGradeModes: _, userId, role, taskResults }: Props = $props();
-
-  function getTaskResult(workbookId: number): TaskResults {
-    return taskResults?.get(workbookId) ?? [];
-  }
+  let {
+    workbooks,
+    workbookGradeModes: _,
+    userId,
+    role,
+    taskResults,
+  }: WorkbookTableProps = $props();
 </script>
 
 <div class="overflow-auto rounded-md border border-gray-200 dark:border-gray-100">
@@ -53,54 +43,25 @@
       {#each workbooks as workbook}
         {#if canRead(workbook.isPublished, userId, workbook.authorId)}
           <TableBodyRow>
-            <!-- 作者名 -->
             <TableBodyCell>
               <div class="truncate min-w-[96px] max-w-[120px]">
                 {workbook.authorName}
               </div>
             </TableBodyCell>
 
-            <!-- タイトル -->
             <TitleTableBodyCell {workbook} />
 
-            <TableBodyCell class="min-w-[240px] max-w-[1440px] px-0">
-              <ThermometerProgressBar
-                workBookTasks={workbook.workBookTasks}
-                taskResults={getTaskResult(workbook.id)}
-                width="w-full"
-              />
-            </TableBodyCell>
-            <TableBodyCell class="justify-center w-24 px-1">
-              <div class="min-w-[48px] max-w-[96px]">
-                <AcceptedCounter
-                  workBookTasks={workbook.workBookTasks}
-                  taskResults={getTaskResult(workbook.id)}
-                />
-              </div>
-            </TableBodyCell>
-            <TableBodyCell class="justify-center items-center min-w-[54px] max-w-[54px] px-0">
-              <div class="flex justify-center items-center">
-                <CompletedTasks
-                  taskResults={getTaskResult(workbook.id)}
-                  allTasks={workbook.workBookTasks}
-                />
-              </div>
-            </TableBodyCell>
-            <TableBodyCell class="justify-center w-24 px-0">
-              <div
-                class="flex justify-center items-center space-x-3 min-w-[96px] max-w-[120px] text-gray-700 dark:text-gray-300"
-              >
-                {#if canEdit(userId, workbook.authorId, role, workbook.isPublished)}
-                  <a href="/workbooks/edit/{getUrlSlugFrom(workbook)}">編集</a>
-                {/if}
+            <WorkbookProgressCell
+              workBookTasks={workbook.workBookTasks}
+              taskResults={getTaskResult(workbook.id, taskResults)}
+            />
 
-                {#if canDelete(userId, workbook.authorId)}
-                  <form method="POST" action="?/delete&slug={workbook.id}" use:enhance>
-                    <button>削除</button>
-                  </form>
-                {/if}
-              </div>
-            </TableBodyCell>
+            <WorkbookCompletionCell
+              workBookTasks={workbook.workBookTasks}
+              taskResults={getTaskResult(workbook.id, taskResults)}
+            />
+
+            <WorkbookAuthorActionsCell {workbook} {userId} {role} />
           </TableBodyRow>
         {/if}
       {/each}

@@ -17,7 +17,20 @@ import type {
 import { isAdmin } from '$lib/utils/authorship';
 import { calcGradeMode } from '$lib/utils/task';
 
-// 管理者 + ユーザ向けに公開されている場合
+/** Returns the grade mode for a workbook, falling back to PENDING when not found in the map. */
+export function getGradeMode(workbookId: number, gradeModes: Map<number, TaskGrade>): TaskGrade {
+  return gradeModes.get(workbookId) ?? TaskGrade.PENDING;
+}
+
+/** Returns the task results for a workbook, falling back to an empty array when not found in the map. */
+export function getTaskResult(
+  workbookId: number,
+  taskResults: Map<number, TaskResults>,
+): TaskResults {
+  return taskResults.get(workbookId) ?? [];
+}
+
+/** Returns true when the user can view the workbook: admins always can; others only when published. */
 export function canViewWorkBook(role: Roles, isPublished: boolean) {
   return isAdmin(role) || isPublished;
 }

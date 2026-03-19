@@ -1,7 +1,9 @@
-import { test, expect, Page } from '@playwright/test';
+import { test, expect, type Page } from '@playwright/test';
 
-import { SolutionCategory } from '../src/features/workbooks/types/workbook_placement';
+import { loginAsAdmin } from './helpers/auth';
+
 import { TaskGrade } from '../src/lib/types/task';
+import { SolutionCategory } from '../src/features/workbooks/types/workbook_placement';
 
 import { BAD_REQUEST, OK } from '../src/lib/constants/http-response-status-codes';
 
@@ -269,18 +271,6 @@ test.describe('API error handling', () => {
 });
 
 // Helper functions
-async function loginAsAdmin(page: Page): Promise<void> {
-  const ADMIN_USERNAME = 'admin';
-  const ADMIN_PASSWORD = 'Ch0kuda1';
-
-  await page.goto('/login');
-  await expect(page).toHaveURL('/login', { timeout: TIMEOUT });
-  await page.locator('input[name="username"]').fill(ADMIN_USERNAME);
-  await page.locator('input[name="password"]').fill(ADMIN_PASSWORD);
-  await page.getByRole('button', { name: 'ログイン' }).nth(1).click();
-  await expect(page).toHaveURL('/', { timeout: TIMEOUT });
-}
-
 async function getCardsInColumn(
   page: Page,
   columnId: string,

@@ -1,4 +1,6 @@
 import type { WorkBookType as WorkBookTypeOrigin } from '@prisma/client';
+import type { Roles } from '$lib/types/user';
+import type { TaskGrade, TaskResults } from '$lib/types/task';
 
 export type WorkBookBase = {
   title: string;
@@ -49,6 +51,15 @@ export const WorkBookType: { [key in WorkBookTypeOrigin]: key } = {
 
 // Re-exporting the original type with the original name.
 export type WorkBookType = WorkBookTypeOrigin;
+
+// Imported by table components — avoids repeating the same Props definition in three places.
+export type WorkbookTableProps = {
+  workbooks: WorkbooksList;
+  workbookGradeModes: Map<number, TaskGrade>;
+  userId: string;
+  role: Roles;
+  taskResults: Map<number, TaskResults>;
+};
 
 export type WorkBookTaskBase = {
   taskId: string;

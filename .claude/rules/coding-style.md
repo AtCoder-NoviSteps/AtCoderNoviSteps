@@ -8,6 +8,15 @@
 - **`any`**: before using `any`, check the value's origin — adding a missing `@types/*` or `devDependency` often provides the correct type.
 - **UI labels**: if a label does not match actual behavior, update it or add an inline comment explaining the intentional mismatch.
 
+## TSDoc
+
+Add TSDoc comments to every exported function, type, and class. The minimum required fields are `@param` (for non-obvious parameters) and `@returns` (when the return value is not evident from the type). One-liner `/** ... */` is sufficient for simple cases; use multi-line only when behaviour needs explanation.
+
+```typescript
+/** Returns the URL slug for a workbook, falling back to the workbook ID. */
+export function getUrlSlugFrom(workbook: WorkbookList): string { ... }
+```
+
 ## Syntax
 
 - **Braces**: always use braces for single-statement `if` blocks. Never `if () return;` — write `if () { return; }`.

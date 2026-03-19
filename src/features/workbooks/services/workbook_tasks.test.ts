@@ -28,7 +28,7 @@ function createWorkBook(overrides: Partial<Omit<WorkBook, 'id'>> = {}): Omit<Wor
 }
 
 describe('getWorkBookTasks', () => {
-  test('taskId / priority / comment を含むタスク配列を返す', () => {
+  test('returns tasks with taskId, priority, and comment', () => {
     const workBook = createWorkBook({
       workBookTasks: [
         { taskId: 'abc300_a', priority: 1, comment: 'コメント' },
@@ -41,11 +41,11 @@ describe('getWorkBookTasks', () => {
     ]);
   });
 
-  test('workBookTasks が空の場合は空配列を返す', () => {
+  test('returns empty array when workBookTasks is empty', () => {
     expect(getWorkBookTasks(createWorkBook({ workBookTasks: [] }))).toEqual([]);
   });
 
-  test('comment が空文字列でも含めて返す', () => {
+  test('includes tasks with empty comment string', () => {
     const workBook = createWorkBook({
       workBookTasks: [{ taskId: 'abc300_a', priority: 1, comment: '' }],
     });
@@ -54,69 +54,73 @@ describe('getWorkBookTasks', () => {
 });
 
 describe('validateRequiredFields', () => {
-  test('正常ケース: 全フィールドが揃っている場合はエラーを投げない', () => {
-    const tasks: WorkBookTasksBase = [{ taskId: 'abc300_a', priority: 1, comment: '' }];
-    expect(() => validateRequiredFields(tasks)).not.toThrow();
+  describe('valid inputs', () => {
+    test('does not throw when all fields are present', () => {
+      const tasks: WorkBookTasksBase = [{ taskId: 'abc300_a', priority: 1, comment: '' }];
+      expect(() => validateRequiredFields(tasks)).not.toThrow();
+    });
+
+    test('does not throw for empty array', () => {
+      expect(() => validateRequiredFields([])).not.toThrow();
+    });
+
+    // Negative and decimal values are truthy so they pass validation (documented behaviour)
+    test('does not throw when priority is negative (truthy)', () => {
+      const tasks: WorkBookTasksBase = [{ taskId: 'abc300_a', priority: -1, comment: '' }];
+      expect(() => validateRequiredFields(tasks)).not.toThrow();
+    });
+
+    test('does not throw when priority is a decimal (truthy)', () => {
+      const tasks: WorkBookTasksBase = [{ taskId: 'abc300_a', priority: 1.5, comment: '' }];
+      expect(() => validateRequiredFields(tasks)).not.toThrow();
+    });
   });
 
-  test('空配列の場合はエラーを投げない', () => {
-    expect(() => validateRequiredFields([])).not.toThrow();
-  });
+  describe('invalid inputs', () => {
+    test('throws when taskId is empty string at index 0', () => {
+      const tasks: WorkBookTasksBase = [{ taskId: '', priority: 1, comment: '' }];
+      expect(() => validateRequiredFields(tasks)).toThrow('index 0');
+    });
 
-  test('taskId が空文字列の場合にエラーを投げる（index 0）', () => {
-    const tasks: WorkBookTasksBase = [{ taskId: '', priority: 1, comment: '' }];
-    expect(() => validateRequiredFields(tasks)).toThrow('index 0');
-  });
+    test('throws when taskId is empty string at a middle index', () => {
+      const tasks: WorkBookTasksBase = [
+        { taskId: 'abc300_a', priority: 1, comment: '' },
+        { taskId: '', priority: 2, comment: '' },
+        { taskId: 'abc300_c', priority: 3, comment: '' },
+      ];
+      expect(() => validateRequiredFields(tasks)).toThrow('index 1');
+    });
 
-  test('taskId が空文字列の場合にエラーを投げる（中間タスク）', () => {
-    const tasks: WorkBookTasksBase = [
-      { taskId: 'abc300_a', priority: 1, comment: '' },
-      { taskId: '', priority: 2, comment: '' },
-      { taskId: 'abc300_c', priority: 3, comment: '' },
-    ];
-    expect(() => validateRequiredFields(tasks)).toThrow('index 1');
-  });
+    test('throws when taskId is empty string at the last index', () => {
+      const tasks: WorkBookTasksBase = [
+        { taskId: 'abc300_a', priority: 1, comment: '' },
+        { taskId: '', priority: 2, comment: '' },
+      ];
+      expect(() => validateRequiredFields(tasks)).toThrow('index 1');
+    });
 
-  test('taskId が空文字列の場合にエラーを投げる（最後のタスク）', () => {
-    const tasks: WorkBookTasksBase = [
-      { taskId: 'abc300_a', priority: 1, comment: '' },
-      { taskId: '', priority: 2, comment: '' },
-    ];
-    expect(() => validateRequiredFields(tasks)).toThrow('index 1');
-  });
+    // NOTE: !task.priority treats priority === 0 as falsy, so 0 triggers an error.
+    // priority is expected to be a positive integer (>= 1) in practice.
+    test('throws when priority is 0 at index 0', () => {
+      const tasks: WorkBookTasksBase = [{ taskId: 'abc300_a', priority: 0, comment: '' }];
+      expect(() => validateRequiredFields(tasks)).toThrow('index 0');
+    });
 
-  // NOTE: !task.priority は priority === 0 を falsy として扱うためエラーになる。
-  // priority は実際には 1 以上の整数で設定されるため、0 は使用されない想定。
-  test('priority が 0 の場合にエラーを投げる（index 0）', () => {
-    const tasks: WorkBookTasksBase = [{ taskId: 'abc300_a', priority: 0, comment: '' }];
-    expect(() => validateRequiredFields(tasks)).toThrow('index 0');
-  });
+    test('throws when priority is 0 at a middle index', () => {
+      const tasks: WorkBookTasksBase = [
+        { taskId: 'abc300_a', priority: 1, comment: '' },
+        { taskId: 'abc300_b', priority: 0, comment: '' },
+        { taskId: 'abc300_c', priority: 3, comment: '' },
+      ];
+      expect(() => validateRequiredFields(tasks)).toThrow('index 1');
+    });
 
-  test('priority が 0 の場合にエラーを投げる（中間タスク）', () => {
-    const tasks: WorkBookTasksBase = [
-      { taskId: 'abc300_a', priority: 1, comment: '' },
-      { taskId: 'abc300_b', priority: 0, comment: '' },
-      { taskId: 'abc300_c', priority: 3, comment: '' },
-    ];
-    expect(() => validateRequiredFields(tasks)).toThrow('index 1');
-  });
-
-  test('priority が 0 の場合にエラーを投げる（最後のタスク）', () => {
-    const tasks: WorkBookTasksBase = [
-      { taskId: 'abc300_a', priority: 1, comment: '' },
-      { taskId: 'abc300_b', priority: 0, comment: '' },
-    ];
-    expect(() => validateRequiredFields(tasks)).toThrow('index 1');
-  });
-
-  // 負数・小数は truthy なのでエラーにならない（ドキュメント目的）
-  test('priority が負数の場合はエラーを投げない（truthy 扱い）', () => {
-    const tasks: WorkBookTasksBase = [{ taskId: 'abc300_a', priority: -1, comment: '' }];
-    expect(() => validateRequiredFields(tasks)).not.toThrow();
-  });
-
-  test('priority が小数の場合はエラーを投げない（truthy 扱い）', () => {
-    const tasks: WorkBookTasksBase = [{ taskId: 'abc300_a', priority: 1.5, comment: '' }];
-    expect(() => validateRequiredFields(tasks)).not.toThrow();
+    test('throws when priority is 0 at the last index', () => {
+      const tasks: WorkBookTasksBase = [
+        { taskId: 'abc300_a', priority: 1, comment: '' },
+        { taskId: 'abc300_b', priority: 0, comment: '' },
+      ];
+      expect(() => validateRequiredFields(tasks)).toThrow('index 1');
+    });
   });
 });
