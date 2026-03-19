@@ -40,7 +40,6 @@ export const load = async ({ locals }) => {
 
 export const actions = {
   default: async ({ locals, request }) => {
-    console.log('form -> actions -> create');
     const author = await getLoggedInUser(locals);
 
     if (!author) {

@@ -71,7 +71,10 @@ export default [
         },
       ],
       // Add TypeScript ESLint rules manually
-      '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
+      '@typescript-eslint/no-unused-vars': [
+        'error',
+        { argsIgnorePattern: '^_', varsIgnorePattern: '^_' },
+      ],
       '@typescript-eslint/no-explicit-any': 'warn',
       // Disable some strict Svelte rules that are too aggressive
       'svelte/require-each-key': 'warn',

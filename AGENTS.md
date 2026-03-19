@@ -12,8 +12,7 @@ Always prefer simplicity over pathological correctness. YAGNI, KISS, DRY. No bac
 2. Before writing a new function, search `src/lib/utils/`, `src/lib/services/`, `src/features/*/utils/` and `src/features/*/services/` for existing implementations; extract shared logic there when it appears in 2+ places
 3. Write tests first, then implement production code, then verify with `pnpm test:unit`
 4. Review critically after implementing: flag YAGNI violations, over-abstraction, missing tests
-5. Record reusable insights in `.claude/rules/` or `docs/guides/` after the session
-6. Discard or summarize completed plans; don't leave stale TODOs
+5. Run `/session-close` at the end of each session: updates plan checklist, proposes rule/skill additions, checks for bloat, and detects repeated instructions
 
 ## Tech Stack
 
@@ -69,9 +68,10 @@ prisma/schema.prisma # Database schema
 ## Key Conventions
 
 - **Svelte 5 Runes**: Use `$props()`, `$state()`, `$derived()` in all new components
+- **Service layer**: Services return data or `null`; never call `error()` or `redirect()`. HTTP error translation belongs in the route handler — the service must stay framework-agnostic and unit-testable.
 - **Server data**: `+page.server.ts` → `+page.svelte` via `data` prop
 - **Forms**: Superforms + Zod validation
-- **Tests**: Write tests before implementation (TDD). Use `@quramy/prisma-fabbrica` for factories, Nock for HTTP mocking
+- **Tests**: Write tests before implementation (TDD). Use `@quramy/prisma-fabbrica` for factories only in `prisma/seed.ts` and Playwright global setup (`tests/global-setup.ts`). For service-layer unit tests, mock the DB with `vi.mock('$lib/server/database', ...)` — do not use fabbrica there. Use Nock for HTTP mocking
 - **Naming**: `camelCase` variables, `PascalCase` types/components, `snake_case` files/routes, `kebab-case` directories
 - **Pre-commit**: Lefthook runs Prettier + ESLint (bypass: `LEFTHOOK=0 git commit`)
 

@@ -1,9 +1,9 @@
-import { error } from '@sveltejs/kit';
 import { default as db } from '$lib/server/database';
 
 import type {
   WorkBook,
   WorkBooks,
+  WorkbooksWithAuthors,
   WorkBookTasksBase,
   WorkBookType,
 } from '$features/workbooks/types/workbook';
@@ -16,7 +16,6 @@ import * as userCrud from '$lib/services/users';
 
 import { sanitizeUrl } from '$lib/utils/url';
 import { parseWorkBookId, parseWorkBookUrlSlug } from '$features/workbooks/utils/workbook';
-import { BAD_REQUEST, NOT_FOUND } from '$lib/constants/http-response-status-codes';
 
 export async function getWorkBooks(): Promise<WorkBooks> {
   const workbooks = await db.workBook.findMany({
@@ -33,6 +32,29 @@ export async function getWorkBooks(): Promise<WorkBooks> {
   });
 
   return workbooks;
+}
+
+export async function getWorkBooksWithAuthors(): Promise<WorkbooksWithAuthors> {
+  const workbooks = await db.workBook.findMany({
+    orderBy: {
+      id: 'asc',
+    },
+    include: {
+      user: {
+        select: { username: true },
+      },
+      workBookTasks: {
+        orderBy: {
+          priority: 'asc',
+        },
+      },
+    },
+  });
+
+  return workbooks.map((workbook) => ({
+    ...workbook,
+    authorName: workbook.user?.username ?? 'unknown',
+  }));
 }
 
 export async function getWorkBook(workBookId: number): Promise<WorkBook | null> {
@@ -78,13 +100,9 @@ export async function getWorkBookByUrlSlug(urlSlug: string): Promise<WorkBook | 
 
 export async function getWorkbookWithAuthor(
   slug: string,
-): Promise<{ workBook: WorkBook; isExistingAuthor: boolean }> {
+): Promise<{ workBook: WorkBook; isExistingAuthor: boolean } | null> {
   const workBookId = parseWorkBookId(slug);
   const workBookUrlSlug = parseWorkBookUrlSlug(slug);
-
-  if (workBookId === null && workBookUrlSlug === null) {
-    error(BAD_REQUEST, '不正な問題集idです。');
-  }
 
   let workBook: WorkBook | null = null;
 
@@ -95,7 +113,7 @@ export async function getWorkbookWithAuthor(
   }
 
   if (workBook === null) {
-    error(NOT_FOUND, `問題集id: ${slug} は見つかりませんでした。`);
+    return null;
   }
 
   // Validate if the author of the workbook exists after the workbook has been created.
@@ -117,7 +135,7 @@ export async function createWorkBook(workBook: Omit<WorkBook, 'id'>): Promise<vo
   const sanitizedUrl = sanitizeUrl(workBook.editorialUrl);
   const newWorkBookTasks: WorkBookTasksBase = getWorkBookTasks(workBook);
 
-  const newWorkBook = await db.workBook.create({
+  await db.workBook.create({
     data: {
       authorId: workBook.authorId,
       title: workBook.title,
@@ -137,7 +155,7 @@ export async function createWorkBook(workBook: Omit<WorkBook, 'id'>): Promise<vo
     },
   });
 
-  console.log(`Created workbook with title: ${newWorkBook.title}`);
+  console.log('Workbook created successfully');
 }
 
 async function isExistingUrlSlug(slug: string): Promise<boolean> {
@@ -145,13 +163,7 @@ async function isExistingUrlSlug(slug: string): Promise<boolean> {
 }
 
 async function isExistingWorkBook(workBookId: number): Promise<boolean> {
-  const workBook = await getWorkBook(workBookId);
-
-  if (workBook) {
-    return true;
-  } else {
-    return false;
-  }
+  return (await db.workBook.count({ where: { id: workBookId } })) > 0;
 }
 
 export async function updateWorkBook(workBookId: number, workBook: WorkBook): Promise<void> {

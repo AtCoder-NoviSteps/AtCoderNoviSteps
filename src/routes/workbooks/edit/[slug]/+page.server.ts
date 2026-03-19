@@ -1,4 +1,4 @@
-import { redirect, fail } from '@sveltejs/kit';
+import { error, redirect, fail } from '@sveltejs/kit';
 import { superValidate } from 'sveltekit-superforms/server';
 import { zod4 } from 'sveltekit-superforms/adapters';
 
@@ -9,9 +9,12 @@ import * as tasksCrud from '$lib/services/tasks';
 import * as workBooksCrud from '$features/workbooks/services/workbooks';
 
 import { getLoggedInUser, canEdit, isAdmin } from '$lib/utils/authorship';
+import { parseWorkBookId, parseWorkBookUrlSlug } from '$features/workbooks/utils/workbook';
 
 import {
+  BAD_REQUEST,
   FORBIDDEN,
+  NOT_FOUND,
   TEMPORARY_REDIRECT,
   INTERNAL_SERVER_ERROR,
 } from '$lib/constants/http-response-status-codes';
@@ -20,7 +23,16 @@ export async function load({ locals, params }) {
   const loggedInUser = await getLoggedInUser(locals);
   const loggedInAsAdmin = isAdmin(loggedInUser?.role as Roles);
   const slug = params.slug.toLowerCase();
+
+  if (!parseWorkBookId(slug) && !parseWorkBookUrlSlug(slug)) {
+    error(BAD_REQUEST, '不正な問題集idです。');
+  }
+
   const workBookWithAuthor = await workBooksCrud.getWorkbookWithAuthor(slug);
+
+  if (!workBookWithAuthor) {
+    error(NOT_FOUND, `問題集id: ${slug} は見つかりませんでした。`);
+  }
 
   const form = await superValidate(null, zod4(workBookSchema));
   const workBook = {
@@ -66,7 +78,6 @@ export async function load({ locals, params }) {
 
 export const actions = {
   default: async ({ request, params }) => {
-    console.log('form -> actions -> update');
     const form = await superValidate(request, zod4(workBookSchema));
 
     if (!form.valid) {
@@ -82,10 +93,16 @@ export const actions = {
     const workBook = form.data;
     const slug = params.slug.toLowerCase();
     const workBookWithAuthor = await workBooksCrud.getWorkbookWithAuthor(slug);
+
+    if (!workBookWithAuthor) {
+      error(NOT_FOUND, `問題集id: ${slug} は見つかりませんでした。`);
+    }
+
     const workBookId = workBookWithAuthor.workBook.id;
 
     try {
       await workBooksCrud.updateWorkBook(workBookId, { ...workBook, id: workBookId });
+      console.log(`Updated workbook ${workBookId}`);
     } catch (e) {
       console.error(`Failed to update WorkBook with id ${workBookId}:`, e);
 

@@ -8,6 +8,15 @@
 - **`any`**: before using `any`, check the value's origin — adding a missing `@types/*` or `devDependency` often provides the correct type.
 - **UI labels**: if a label does not match actual behavior, update it or add an inline comment explaining the intentional mismatch.
 
+## TSDoc
+
+Add TSDoc comments to every exported function, type, and class. The minimum required fields are `@param` (for non-obvious parameters) and `@returns` (when the return value is not evident from the type). One-liner `/** ... */` is sufficient for simple cases; use multi-line only when behaviour needs explanation.
+
+```typescript
+/** Returns the URL slug for a workbook, falling back to the workbook ID. */
+export function getUrlSlugFrom(workbook: WorkbookList): string { ... }
+```
+
 ## Syntax
 
 - **Braces**: always use braces for single-statement `if` blocks. Never `if () return;` — write `if () { return; }`.
@@ -42,6 +51,20 @@ the server state is correct but the client-side update is wrong.
 
 **Diagnostic**: "Not reflected live, but fixed after reload" → suspect the optimistic
 update payload, not the reactivity system.
+
+## Server-side Logging
+
+Do not log user-identifiable or content data (titles, names, IDs that map to users) in server-side `console.log`. Use generic messages instead:
+
+```typescript
+// Bad: leaks content and user identity
+console.log(`Created workbook "${workBook.title}" by user ${author.id}`);
+
+// Good
+console.log('Workbook created successfully');
+```
+
+Prefer placing the single authoritative log in the service layer; remove duplicate logs in route handlers that cover the same event.
 
 ## Async Rollback: Capture State Before `await`
 

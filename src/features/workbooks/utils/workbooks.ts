@@ -1,11 +1,23 @@
 import { Roles } from '$lib/types/user';
-import { TaskGrade, type Task, type TaskGrades } from '$lib/types/task';
-import type { WorkBook, WorkbookList, WorkBookTaskBase } from '$features/workbooks/types/workbook';
+import {
+  TaskGrade,
+  type Task,
+  type TaskGrades,
+  type TaskResult,
+  type TaskResults,
+} from '$lib/types/task';
+import type {
+  WorkBook,
+  WorkbookList,
+  WorkbooksList,
+  WorkBookTaskBase,
+  WorkBookType,
+} from '$features/workbooks/types/workbook';
 
-import { isAdmin } from '$lib/utils/authorship';
+import { isAdmin, canRead } from '$lib/utils/authorship';
 import { calcGradeMode } from '$lib/utils/task';
 
-// 管理者 + ユーザ向けに公開されている場合
+/** Returns true when the user can view the workbook: admins always can; others only when published. */
 export function canViewWorkBook(role: Roles, isPublished: boolean) {
   return isAdmin(role) || isPublished;
 }
@@ -20,6 +32,48 @@ export function getUrlSlugFrom(workbook: WorkbookList | WorkBook): string {
   const slug = workbook.urlSlug;
 
   return slug ? slug : workbook.id.toString();
+}
+
+/**
+ * Filters workbooks by type.
+ */
+export function getWorkBooksByType(
+  workbooks: WorkbooksList,
+  workBookType: WorkBookType,
+): WorkbooksList {
+  return workbooks.filter((workbook: WorkbookList) => workbook.workBookType === workBookType);
+}
+
+/**
+ * Builds a map from workbook ID to the task results for that workbook's tasks.
+ * Workbooks with no matching task results are omitted from the map.
+ */
+export function buildTaskResultsByWorkBookId(
+  workbooks: WorkbooksList,
+  taskResultsByTaskId: Map<string, TaskResult>,
+): Map<number, TaskResults> {
+  const taskResultsWithWorkBookId = new Map<number, TaskResults>();
+
+  workbooks.forEach((workbook: WorkbookList) => {
+    const taskResults: TaskResults = workbook.workBookTasks.reduce(
+      (array: TaskResults, workBookTask: WorkBookTaskBase) => {
+        const taskResult = taskResultsByTaskId.get(workBookTask.taskId);
+
+        if (taskResult !== undefined) {
+          array.push(taskResult);
+        }
+
+        return array;
+      },
+      [],
+    );
+
+    if (taskResults.length > 0) {
+      taskResultsWithWorkBookId.set(workbook.id, taskResults);
+    }
+  });
+
+  return taskResultsWithWorkBookId;
 }
 
 /**
@@ -55,4 +109,27 @@ export function calcWorkBookGradeModes(
   });
 
   return gradeModes;
+}
+
+/** Returns the grade mode for a workbook, falling back to PENDING when not found in the map. */
+export function getGradeMode(workbookId: number, gradeModes: Map<number, TaskGrade>): TaskGrade {
+  return gradeModes.get(workbookId) ?? TaskGrade.PENDING;
+}
+
+/** Returns the number of workbooks the given user can read. */
+export function countReadableWorkbooks(workbooks: WorkbooksList, userId: string): number {
+  return workbooks.reduce((count, workbook) => {
+    const hasReadPermission = canRead(workbook.isPublished, userId, workbook.authorId);
+    return count + (hasReadPermission ? 1 : 0);
+  }, 0);
+}
+
+const EMPTY_TASK_RESULTS: TaskResults = [];
+
+/** Returns the task results for a workbook, falling back to an empty array when not found in the map. */
+export function getTaskResult(
+  workbookId: number,
+  taskResults: Map<number, TaskResults>,
+): TaskResults {
+  return taskResults.get(workbookId) ?? EMPTY_TASK_RESULTS;
 }

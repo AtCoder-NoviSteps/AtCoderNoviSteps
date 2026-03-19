@@ -39,6 +39,30 @@ Referencing `$props()` inside `$state()` initializer triggers "This reference on
 let count = $state(untrack(() => initialCount)); // intentional: prop is initial seed only
 ```
 
+## `$effect` — Store Reading
+
+Inside `$effect`, use `$store` syntax, not `get(store)`. `get()` bypasses the signal graph — the effect will not re-run when the store updates:
+
+```svelte
+// Bad: get() takes a snapshot; effect won't react to store changes
+$effect(() => {
+  const grade = get(myStore).get(key) ?? fallback;
+});
+
+// Good: $store subscribes and re-runs the effect on updates
+$effect(() => {
+  const grade = $myStore.get(key) ?? fallback;
+});
+```
+
+## `$derived` — No Arrow Wrapper
+
+Use `$derived(expr)`, not `$derived(() => expr)`. The arrow form makes the derived value a _function_, not a reactive value — dependencies may not be tracked and the template call site is confusing.
+
+## `{@const}` Placement
+
+`{@const}` must be an **immediate child** of a block statement (`{#if}`, `{#each}`, `{:else}`, `{#snippet}`, etc.). Placing it inside an HTML element is a compile error:
+
 ## `{#snippet}` Placement
 
 Define snippets at the **top level**, outside component tags. Inside a tag = named slot = type error:
@@ -56,6 +80,8 @@ Define snippets at the **top level**, outside component tags. Inside a tag = nam
 
 Prefer `{#snippet}` when: (1) needs direct `$state` access, (2) pure display only, (3) same-file DRY.
 Promote to component when: independent state/lifecycle needed, exceeds ~30 lines, or reused across files.
+
+**Sibling consistency** — when one sibling block warrants snippet extraction, extract its parallel siblings too, even if they are short. A parent template that mixes inline markup with `{@render}` calls is harder to scan than one where every top-level section is a named snippet.
 
 ## Component Boundaries
 
@@ -79,7 +105,17 @@ export function buildUpdatedUrl(url: URL, activeTab: ActiveTab): URL { ... }
 replaceState(buildUpdatedUrl($page.url, activeTab), {});
 ```
 
-## Empty-list Fallback in `{#each}`
+## `{#each}` — Keys and Empty-list Fallback
+
+Always provide a key expression when the list or its items may change dynamically. This is especially critical when the block contains an inner `{#if}` — without a key, Svelte reuses DOM nodes by position, so filtering can silently bind data to the wrong element:
+
+```svelte
+{#each workbooks as workbook (workbook.id)}
+  {#if canRead(workbook)}
+    <Row {workbook} />
+  {/if}
+{/each}
+```
 
 Use `{:else}` to render a placeholder when the list is empty — no wrapper conditional needed:
 
@@ -90,6 +126,10 @@ Use `{:else}` to render a placeholder when the list is empty — no wrapper cond
   <p>No items yet.</p>
 {/each}
 ```
+
+## Directory Structure: `list/` Subdirectories
+
+Consider introducing a `list/` subdirectory (or other domain-scoped subdirectory) when the component count in a directory starts to feel unwieldy — roughly 20 files is a reasonable prompt to reconsider. Below that threshold, flat organization is preferred — subdirectories add navigation cost without proportional benefit.
 
 ## Eliminate Branching with Records
 
@@ -103,3 +143,17 @@ const TAB_CONFIGS: Record<ActiveTab, TabConfig> = {
 ```
 
 Use the enum type as the key type, not `string`.
+
+When not all enum keys need an entry, use `Partial<Record<K, V>>` as a **type annotation** — not `satisfies`. `as const satisfies Partial<Record<K, V>>` preserves the narrowed literal type, so indexing with other enum values causes a type error:
+
+```typescript
+// NG: satisfies narrows the type — obj[key] errors for keys not in the literal
+const map = { [WorkBookType.SOLUTION]: SolutionTable }
+  as const satisfies Partial<Record<WorkBookType, Component<Props>>>;
+
+// OK: type annotation makes map[key] return Component<Props> | undefined
+const map: Partial<Record<WorkBookType, Component<Props>>> = {
+  [WorkBookType.SOLUTION]: SolutionTable,
+};
+// Safe to guard with: {#if map[type]} or if (map[type])
+```
