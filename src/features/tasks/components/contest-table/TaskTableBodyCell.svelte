@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { TaskResult } from '$lib/types/task';
 
-  import GradeLabel from '$lib/components/GradeLabel.svelte';
+  import VotableGrade from '$features/tasks/components/contest-table/VotableGrade.svelte';
   import ExternalLinkWrapper from '$lib/components/ExternalLinkWrapper.svelte';
   import UpdatingDropdown from '$lib/components/SubmissionStatus/UpdatingDropdown.svelte';
 
@@ -29,14 +29,7 @@
 </div>
 
 {#snippet taskGradeLabel(taskResult: TaskResult)}
-  <div class="shrink-0">
-    <GradeLabel
-      taskGrade={taskResult.grade}
-      defaultPadding={0.25}
-      defaultWidth={6}
-      reducedWidth={6}
-    />
-  </div>
+  <VotableGrade grade={taskResult.grade} {isLoggedIn} />
 {/snippet}
 
 {#snippet taskTitleAndExternalLink(taskResult: TaskResult, isShownTaskIndex: boolean)}
