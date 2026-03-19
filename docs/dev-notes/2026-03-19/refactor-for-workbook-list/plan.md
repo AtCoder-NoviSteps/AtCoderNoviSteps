@@ -10,160 +10,71 @@ Issue #3269（管理者指定の並び順で問題集を表示）をスムーズ
 
 ## Findings
 
-### テスト欠落（最優先）
+### テスト
 
-- `services/workbooks.ts` (202行) — テストなし
-- `services/workbook_tasks.ts` (18行) — テストなし
+- テストタイトルが日本語 → 英語で統一する（`testing.md` でルール化）
+- 正常系・異常系が同一 `describe` に混在 → `valid inputs` / `invalid inputs` で分割する
+- テストの並び順が実装の関数順と不一致 → 実装順に揃える
 
-### +page.server.ts
+### ドキュメント
 
-- **N+1クエリ**: `getWorkBooks()` → ループ内で `getUserById()` (N回) → `include: { user }` で1クエリ化可能
-- try/catch が `workbooksWithAuthors` を囲っていない（著者取得失敗時も 500 が返らない）
-- `console.log('form -> actions -> delete')` デバッグログ残留
+- エクスポートされた関数・型に TSDoc なし → `coding-style.md` で必須化する
 
-### +page.svelte
+### コンポーネント設計
 
-- `getWorkBooksByType()` — TODO コメントあり、utils に移すべき純粋関数
-- `fetchTaskResultsWithWorkBookId()` — 複雑なロジックがコンポーネント内に埋め込まれている
-
-### services/workbooks.ts
-
-- `getWorkbookWithAuthor()` がサービス層で SvelteKit の `error()` を呼ぶ（テスト不能、責務混在）
-- `isExistingWorkBook()` が存在確認のために全フィールドを `findUnique` している（`count` で十分）
-
-### WorkBookList.svelte
-
-- `loggedInUser: any` — 型安全性の欠如（使用フィールドは `.id` と `.role` のみ）
-- `$derived(() => countReadableWorkbooks(...))` — Svelte 5 の誤用、`$derived(countReadableWorkbooks(...))` が正しい
-
-### WorkBookBaseTable.svelte
-
-- FIXME コメント: 「問題集の種類別にコンポーネントを分ける」
-- CURRICULUM / SOLUTION / CREATED_BY_USER でヘッダー・ボディ両方に if 分岐が散在
-
-### utils/workbooks.ts テストギャップ
-
-- `calcWorkBookGradeModes` のタイブレーク動作（同頻度グレードの場合）が未テスト
+- 複数コンポーネント間で Props 型・ヘルパー関数・テンプレートブロックが重複 → 共通セルコンポーネントに抽出する
+- コンポーネント内のヘルパー関数が純粋関数 → `utils/` に移動してテスト可能にする
 
 ---
 
 ## 実装フェーズ
 
-### Phase 0: 未テストサービスへのテスト追加（純粋追加、リスクなし）✅
+### Phase A: ルール更新（リスクなし）
 
-- [x] `services/workbook_tasks.test.ts` を新規作成
-  - `getWorkBookTasks`: 通常ケース、空配列、comment フィールドの取り扱い
-  - `validateRequiredFields`: 正常ケース、taskId 欠損、priority 欠損（index 0/中/末/負/小数）、空配列
-  - `priority === 0` は `!task.priority` で falsy になりエラーとなる動作を確認・文書化。priority は実際 1 以上なので意図的動作として許容。
+- [ ] `testing.md`: テストタイトルは英語で書く旨を追記
+- [ ] `coding-style.md`: エクスポート対象（関数・型・クラス）には TSDoc を必須とする旨を追記
+- [ ] `AGENTS.md`: `@quramy/prisma-fabbrica` の用途を明確化（seed / E2E グローバルセットアップ専用。service 層ユニットテストは `vi.mock` を使う）
 
-### Phase 1: +page.svelte から utils へ純粋関数を抽出（低リスク）✅
+### Phase B: テスト修正（低リスク）
 
-- [x] `utils/workbooks.ts` に `getWorkBooksByType(workbooks, type)` を追加（TODO コメント対応）
-  - テスト追加（通常フィルタ、空配列、type が一致しない場合）
-- [x] `utils/workbooks.ts` に `buildTaskResultsByWorkBookId(workbooks, taskResultsByTaskId)` を追加
-  - 現在 +page.svelte の `fetchTaskResultsWithWorkBookId()` に相当
-  - テスト追加（task 結果あり/なし、空配列）
-- [x] `+page.svelte` を更新: 両関数を import に置き換え
+_Phase A 完了後_
 
-### Phase 2: +page.server.ts の N+1 修正とクリーンアップ（中リスク）✅
+- [ ] `workbook_tasks.test.ts`: テストタイトルを英語に変換
+- [ ] `workbook_tasks.test.ts`: `describe('validateRequiredFields')` を `valid inputs` / `invalid inputs` に分割
+- [ ] `workbooks.test.ts`: テストタイトルを英語に変換
+- [ ] `workbooks.test.ts`: `describe` 順序を実装順（`getWorkBooksByType` → `buildTaskResultsByWorkBookId` → `calcWorkBookGradeModes`）に変更
+- [ ] `workbooks.ts`: `canViewWorkBook` に TSDoc 追加
+- [ ] `workbook_tasks.ts`: `getWorkBookTasks` / `validateRequiredFields` に TSDoc 追加
 
-- [x] `services/workbooks.ts` に `getWorkBooksWithAuthors()` を追加
-  - `include: { user: { select: { username: true } }, workBookTasks: { orderBy: { priority: 'asc' } } }` を使用
-  - 戻り値型 `WorkbooksWithAuthors` を `types/workbook.ts` に追加（`authorName: string` を含む）
-  - 著者削除済みの場合は `user?.username ?? 'unknown'` で対応
-- [x] `+page.server.ts` の `load()` を更新:
-  - `getWorkBooks()` + N+1 ループ → `getWorkBooksWithAuthors()` に置き換え
-  - try/catch の範囲を拡大（workbooks 取得も含める）
-- [x] CRUD アクションのログを「受信時」→「成功後」に移動（3ファイル）
+### Phase C: テーブルコンポーネントのリファクタリング（中リスク）
 
-**判断根拠**: 現在の `console.log('form -> actions -> ...')` はバリデーション**前**（アクション受信時）に発火するため、不正なリクエストでも記録される。また「どのリソースを誰が操作したか」が分からず本番デバッグに役立たない。成功を確認できる位置に移動し、識別情報を含めることで意味のあるログにする。
+_Phase B と独立して実施可能。完了後に `pnpm check` で確認。_
 
-```ts
-// Before（受信時、情報量が低い）
-console.log('form -> actions -> delete');
-// ... バリデーション ...
-await workBooksCrud.deleteWorkBook(workBookId);
+- [ ] `utils/workbooks.ts` に `getGradeMode(id, map)` / `getTaskResult(id, map)` を追加（テスト付き）
+- [ ] `types/workbook.ts` に `WorkbookTableProps` を定義（3テーブル共通 Props）
+- [ ] `GradeTableBodyCell.svelte` を作成（GradeLabel ラッパー、CurriculumTable 専用）
+- [ ] `WorkbookProgressCell.svelte` を作成（ThermometerProgressBar + AcceptedCounter）
+- [ ] `WorkbookCompletionCell.svelte` を作成（CompletedTasks トロフィー）
+- [ ] `WorkbookAuthorActionsCell.svelte` を作成（編集/削除フォーム）
 
-// After（操作成功後、識別情報を含む）
-await workBooksCrud.deleteWorkBook(workBookId);
-console.log(`Deleted workbook ${workBookId} by user ${loggedInUser?.id}`);
-```
+**命名の判断根拠**
 
-対象ファイルと成功後ログの内容:
+- `GradeTableBodyCell` — 既存の `TitleTableBodyCell` パターンに合わせる
+- `WorkbookProgressCell` と `WorkbookCompletionCell` を分割した理由: ThermometerProgressBar + AcceptedCounter は「現在の進捗」、CompletedTasks トロフィーは「全タスク完了という達成」で意味が異なるため責務を分ける
+- `WorkbookAuthorActionsCell` — 編集（`canEdit`）・削除（`canDelete`）はいずれも著者または管理者権限を要する操作。`ManageCell`（曖昧）・`CrudCell`（実装手段の露出）・`AdminActionsCell`（管理者専用に見える）を退けた
+- [ ] 3テーブルコンポーネントを更新して上記を import
+- [ ] `pnpm check && pnpm dev` で3タブの表示を確認
 
-| ファイル                                       | ログ内容                                                                           |
-| ---------------------------------------------- | ---------------------------------------------------------------------------------- |
-| `routes/workbooks/+page.server.ts` (delete)    | `Deleted workbook ${workBookId} by user ${loggedInUser?.id}`                       |
-| `routes/workbooks/create/+page.server.ts`      | `Created workbook "${workBook.title}" by user ${author.id}`                        |
-| `routes/workbooks/edit/[slug]/+page.server.ts` | `Updated workbook ${workBookId}`（edit action に `locals` がなくユーザー情報なし） |
+### Phase 4: services/workbooks.ts の統合テスト追加
 
-### Phase 3: サービス層から SvelteKit error() を除去（中リスク）
+_Phase C と独立して実施可能。_
 
-`getWorkbookWithAuthor()` の error() 移動 — 方針:
-
-- スラッグバリデーション（`parseWorkBookId/parseWorkBookUrlSlug`）は**入力バリデーション = ルートの責務**
-- サービスは DB アクセスのみ、存在しない場合は `null` を返す
-- 2種類のエラー（BAD_REQUEST vs NOT_FOUND）をルートが区別できる構造にする
-
-```
-// Before: サービスが error() を直接呼ぶ
-export async function getWorkbookWithAuthor(slug) {
-  if (workBookId === null && workBookUrlSlug === null) {
-    error(BAD_REQUEST, '...');   // ← SvelteKit 依存
-  }
-  if (workBook === null) {
-    error(NOT_FOUND, '...');     // ← SvelteKit 依存
-  }
-}
-
-// After: ルートが責務を持つ
-// service: null を返すだけ
-// route: slug バリデーション → null チェック → error() 呼び出し
-const workBookId = parseWorkBookId(slug);
-if (!workBookId) { error(BAD_REQUEST, '...'); }
-const workbook = await getWorkbookWithAuthor(slug);
-if (!workbook) { error(NOT_FOUND, '...'); }
-```
-
-- [x] `getWorkbookWithAuthor()` から `error()` 呼び出しを削除、`null` を返すように変更
-- [x] 呼び出し元のルートハンドラーを更新（`src/routes/workbooks/[slug]/+page.server.ts` 等）:
-  - slug バリデーションを呼び出し元に移動
-  - null チェック後に `error(BAD_REQUEST/NOT_FOUND, ...)` を呼び出す
-- [x] `isExistingWorkBook()` を `db.workBook.count({ where: { id } }) > 0` に変更
-
-### Phase 4: services/workbooks.ts の統合テスト追加（Phase 3 後）
-
-- [ ] `services/workbooks.test.ts` を新規作成（`@quramy/prisma-fabbrica` ファクトリー使用）
-  - `getWorkBook`: 存在する/しない
-  - `getWorkBooksWithAuthors`: 著者あり/著者削除済み
-  - `createWorkBook`: 正常、重複スラッグ
-  - `updateWorkBook`: 正常、存在しない ID
-  - `deleteWorkBook`: 正常、存在しない ID
-
-### Phase 5: WorkBookList.svelte 型修正と Svelte 5 パターン修正（低リスク）✅
-
-- [x] `loggedInUser: any` → `interface LoggedInUser { id: string; role: Roles }` を定義（インライン）
-  - `$lib/types/user.ts` の `User` は `userId` フィールドで不一致のため、最小 interface をコンポーネント内に定義
-  - `+page.svelte` から渡す際に `as { id: string; role: Roles }` キャスト（Prisma Roles vs $lib Roles の型差異）
-- [x] `$derived(() => countReadableWorkbooks(...))` を `$derived(countReadableWorkbooks(...))` に修正（2箇所）
-
-### Phase 6: WorkBookBaseTable.svelte を3種コンポーネントに分割（中リスク）✅
-
-- [x] 各コンポーネントに同じ `interface Props` を定義（`workbooks`, `workbookGradeModes`, `userId`, `role`, `taskResults`）
-- [x] 3コンポーネントを作成:
-  - `CurriculumTable.svelte` — グレード + タイトル列
-  - `SolutionTable.svelte` — タイトル列（padding 広め）
-  - `CreatedByUserTable.svelte` — 作者 + タイトル列
-- [x] `WorkBookList.svelte` を更新: `Record<WorkBookType, Component>` ルックアップで切り替え
-  - `{@const TableComponent}` は `{#if}` の直接の子として配置（HTML 要素内では使用不可）
-  - 廃止型（TEXTBOOK/GENRE/THEME/OTHERS）は近似の既存コンポーネントにフォールバック
-- [x] `WorkBookBaseTable.svelte` を削除
-
-### Phase 7: コーナーケーステストの強化（純粋追加）✅
-
-- [x] `utils/workbooks.ts` `calcWorkBookGradeModes`:
-  - タイブレーク: 同頻度グレードが2つある場合は最も易しいグレードを返す（7Q vs 6Q → 7Q、Q2 vs Q1 → Q2）
-- [x] 既存テストの `toBeTruthy()`/`toBeFalsy()` を `toBe(true)`/`toBe(false)` に置き換え（coding-style.md 準拠）
+- [ ] `services/workbooks.test.ts` を新規作成（`crud.test.ts` と同じモック方式: `vi.mock('$lib/server/database', ...)`）
+  - `getWorkBook`: found / not found
+  - `getWorkBooksWithAuthors`: with author / deleted author (`'unknown'` fallback)
+  - `createWorkBook`: success, duplicate slug
+  - `updateWorkBook`: success, not found id
+  - `deleteWorkBook`: success, not found id
 
 ### Phase 8: E2E テスト追加（純粋追加）
 
@@ -187,45 +98,3 @@ if (!workbook) { error(NOT_FOUND, '...'); }
 - [ ] 問題集行に「編集」リンクと「削除」ボタンが表示される
 
 **補足**: グレードラベルの文字列（`10Q` 等）は `getTaskGradeLabel()` の戻り値に依存するため、実装時に `workbook_order.test.ts` の既存セレクター（`{ name: '10Q' }`）と一致していることを確認すること。
-
----
-
-## 変更ファイル一覧
-
-### 新規作成
-
-- `src/features/workbooks/services/workbook_tasks.test.ts`
-- `src/features/workbooks/services/workbooks.test.ts`
-- `src/features/workbooks/components/list/CurriculumTable.svelte`
-- `src/features/workbooks/components/list/SolutionTable.svelte`
-- `src/features/workbooks/components/list/CreatedByUserTable.svelte`
-- `tests/workbooks_list.test.ts`
-
-### 変更
-
-- `src/features/workbooks/services/workbooks.ts` — `getWorkBooksWithAuthors()` 追加、`isExistingWorkBook()` 修正、`getWorkbookWithAuthor()` から error() 除去
-- `src/features/workbooks/types/workbook.ts` — `WorkbooksWithAuthors` 型追加
-- `src/features/workbooks/utils/workbooks.ts` — `getWorkBooksByType()`, `buildTaskResultsByWorkBookId()` 追加
-- `src/features/workbooks/utils/workbooks.test.ts` — 追加テスト
-- `src/features/workbooks/components/list/WorkBookList.svelte` — 型修正・Svelte 5 パターン修正・3コンポーネント使用
-- `src/routes/workbooks/+page.svelte` — 関数 import 化
-- `src/routes/workbooks/+page.server.ts` — N+1 修正・ログを成功後に移動
-- `src/routes/workbooks/create/+page.server.ts` — ログを成功後に移動
-- `src/routes/workbooks/edit/[slug]/+page.server.ts` — ログを成功後に移動
-- `src/routes/workbooks/[slug]/+page.server.ts` 等 — error() 呼び出し元更新
-
-### 削除
-
-- `src/features/workbooks/components/list/WorkBookBaseTable.svelte`（Phase 6 後）
-
----
-
-## 検証方法
-
-```bash
-pnpm test:unit        # Phase 0, 4, 7 のテスト確認
-pnpm check            # Svelte 型チェック（Phase 5, 6）
-pnpm lint             # ESLint チェック
-pnpm test:integration # Phase 8 の E2E テスト確認
-pnpm dev              # ローカルで3タブ（カリキュラム/解法別/ユーザ作成）が正常表示されること
-```
