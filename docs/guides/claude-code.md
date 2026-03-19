@@ -70,6 +70,12 @@ paths:
 | `/refactor-plan` | Issue 番号またはパスを渡してリファクタリング計画を出力（実装はしない）                                       |
 | `/session-close` | セッション終了時のルーティン：テスト確認 → plan.md 更新 → rules 候補提示 → 肥大化チェック → 繰り返し指示検出 |
 
+**プロジェクトローカルスキルと `Skill` ツールの違い:**
+
+- `Skill` ツール（Claude 内部のツール）はシステムプロンプトに列挙されたビルトインスキルのみ対象
+- `.claude/skills/` のプロジェクトローカルスキルは `/skill-name` スラッシュコマンドでのみ起動（Claude Code CLI が直接読み込む）
+- `/session-close` などを Claude に `Skill` ツール経由で呼ばせようとしても動作しない
+
 ### Hooks
 
 - `PreToolUse` / `PostToolUse` 等のイベントで自動実行されるシェルコマンド
