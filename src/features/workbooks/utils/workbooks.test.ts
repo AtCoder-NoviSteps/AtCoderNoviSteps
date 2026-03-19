@@ -12,6 +12,7 @@ import {
   calcWorkBookGradeModes,
   getGradeMode,
   getTaskResult,
+  countReadableWorkbooks,
 } from '$features/workbooks/utils/workbooks';
 
 function createTask(taskId: string, grade: TaskGrade): Task {
@@ -327,6 +328,36 @@ describe('Workbooks', () => {
     test('returns PENDING when the workbook id is not in the map', () => {
       const map = new Map<number, TaskGrade>();
       expect(getGradeMode(99, map)).toBe(TaskGrade.PENDING);
+    });
+  });
+
+  describe('countReadableWorkbooks', () => {
+    const userId = '1';
+    const authorId = '1';
+    const otherUserId = '2';
+
+    test('counts published workbooks regardless of author', () => {
+      const workbooks = [
+        createWorkBookListBase({ id: 1, isPublished: true, authorId: otherUserId }),
+        createWorkBookListBase({ id: 2, isPublished: true, authorId: otherUserId }),
+      ];
+      expect(countReadableWorkbooks(workbooks, userId)).toBe(2);
+    });
+
+    test('counts unpublished workbooks owned by the user', () => {
+      const workbooks = [createWorkBookListBase({ id: 1, isPublished: false, authorId })];
+      expect(countReadableWorkbooks(workbooks, userId)).toBe(1);
+    });
+
+    test('excludes unpublished workbooks owned by other users', () => {
+      const workbooks = [
+        createWorkBookListBase({ id: 1, isPublished: false, authorId: otherUserId }),
+      ];
+      expect(countReadableWorkbooks(workbooks, userId)).toBe(0);
+    });
+
+    test('returns 0 for empty list', () => {
+      expect(countReadableWorkbooks([], userId)).toBe(0);
     });
   });
 

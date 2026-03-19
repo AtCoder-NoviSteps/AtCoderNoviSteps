@@ -14,7 +14,7 @@ import type {
   WorkBookType,
 } from '$features/workbooks/types/workbook';
 
-import { isAdmin } from '$lib/utils/authorship';
+import { isAdmin, canRead } from '$lib/utils/authorship';
 import { calcGradeMode } from '$lib/utils/task';
 
 /** Returns true when the user can view the workbook: admins always can; others only when published. */
@@ -114,6 +114,14 @@ export function calcWorkBookGradeModes(
 /** Returns the grade mode for a workbook, falling back to PENDING when not found in the map. */
 export function getGradeMode(workbookId: number, gradeModes: Map<number, TaskGrade>): TaskGrade {
   return gradeModes.get(workbookId) ?? TaskGrade.PENDING;
+}
+
+/** Returns the number of workbooks the given user can read. */
+export function countReadableWorkbooks(workbooks: WorkbooksList, userId: string): number {
+  return workbooks.reduce((count, workbook) => {
+    const hasReadPermission = canRead(workbook.isPublished, userId, workbook.authorId);
+    return count + (hasReadPermission ? 1 : 0);
+  }, 0);
 }
 
 /** Returns the task results for a workbook, falling back to an empty array when not found in the map. */

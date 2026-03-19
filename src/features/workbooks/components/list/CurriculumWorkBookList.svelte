@@ -15,11 +15,12 @@
   import { replenishmentWorkBooksStore } from '$features/workbooks/stores/replenishment_workbook.svelte';
 
   import { getTaskGradeLabel } from '$lib/utils/task';
-  import { canRead } from '$lib/utils/authorship';
+  import { countReadableWorkbooks, getGradeMode } from '$features/workbooks/utils/workbooks';
 
   import TooltipWrapper from '$lib/components/TooltipWrapper.svelte';
   import LabelWithTooltips from '$lib/components/LabelWithTooltips.svelte';
   import CurriculumTable from '$features/workbooks/components/list/CurriculumTable.svelte';
+  import EmptyWorkbookList from '$features/workbooks/components/list/EmptyWorkbookList.svelte';
 
   interface Props {
     workbooks: WorkbooksList;
@@ -50,10 +51,6 @@
     replenishmentWorkBooksStore.toggleView();
   }
 
-  function getGradeMode(workbookId: number): TaskGrade {
-    return workbookGradeModes.get(workbookId) ?? TaskGrade.PENDING;
-  }
-
   function filterByGradeMode(grade: TaskGrade) {
     selectedGrade = grade;
     taskGradesByWorkBookTypeStore.updateTaskGrade(WorkBookType.CURRICULUM, grade);
@@ -69,27 +66,22 @@
 
   let mainWorkbooks: WorkbooksList = $derived(
     workbooks.filter((workbook: WorkbookList) => {
-      const gradeMode = getGradeMode(workbook.id);
+      const gradeMode = getGradeMode(workbook.id, workbookGradeModes);
       return gradeMode === selectedGrade && !workbook.isReplenished;
     }),
   );
 
   let replenishedWorkbooks: WorkbooksList = $derived(
     workbooks.filter((workbook: WorkbookList) => {
-      const gradeMode = getGradeMode(workbook.id);
+      const gradeMode = getGradeMode(workbook.id, workbookGradeModes);
       return gradeMode === selectedGrade && workbook.isReplenished;
     }),
   );
 
-  function countReadableWorkbooks(wbs: WorkbooksList): number {
-    return wbs.reduce((count, workbook: WorkbookList) => {
-      const hasReadPermission = canRead(workbook.isPublished, userId, workbook.authorId);
-      return count + (hasReadPermission ? 1 : 0);
-    }, 0);
-  }
-
-  let readableMainWorkbooksCount = $derived(countReadableWorkbooks(mainWorkbooks));
-  let readableReplenishedWorkbooksCount = $derived(countReadableWorkbooks(replenishedWorkbooks));
+  let readableMainWorkbooksCount = $derived(countReadableWorkbooks(mainWorkbooks, userId));
+  let readableReplenishedWorkbooksCount = $derived(
+    countReadableWorkbooks(replenishedWorkbooks, userId),
+  );
 </script>
 
 <!-- TODO: 5Q〜1Qにも対応 -->
@@ -115,6 +107,16 @@
 </div>
 
 {#if readableMainWorkbooksCount}
+  {@render mainSection()}
+
+  {#if readableReplenishedWorkbooksCount}
+    {@render replenishedSection()}
+  {/if}
+{:else}
+  <EmptyWorkbookList />
+{/if}
+
+{#snippet mainSection()}
   <div>
     <div class="text-2xl pb-4 dark:text-white">手引き</div>
 
@@ -126,49 +128,44 @@
       taskResults={taskResultsWithWorkBookId}
     />
   </div>
+{/snippet}
 
-  {#if readableReplenishedWorkbooksCount}
-    <div class="mt-12">
-      <div class="flex flex-col md:flex-row items-start md:items-center md:space-x-6">
-        <div class="flex items-center space-x-1 pb-0 md:pb-4">
-          <div class="text-2xl dark:text-white">補充</div>
+{#snippet replenishedSection()}
+  <div class="mt-12">
+    <div class="flex flex-col md:flex-row items-start md:items-center md:space-x-6">
+      <div class="flex items-center space-x-1 pb-0 md:pb-4">
+        <div class="text-2xl dark:text-white">補充</div>
 
-          <LabelWithTooltips
-            labelName=""
-            tooltipId="tooltip-for-replenished-workbooks"
-            tooltipContents={[
-              '（任意）',
-              '特定の課題（数学的素養や実装力など）を持つ人向けの問題集です。',
-              '苦手意識があれば、挑戦してみましょう。',
-            ]}
-          />
-        </div>
-
-        <div class="mt-4 md:mt-0 pb-4">
-          <Toggle
-            checked={showReplenishmentWorkbooks}
-            onchange={handleReplenishmentWorkbooks}
-            aria-label="Toggle visibility of replenishment workbooks for curriculum"
-          >
-            問題集を表示
-          </Toggle>
-        </div>
+        <LabelWithTooltips
+          labelName=""
+          tooltipId="tooltip-for-replenished-workbooks"
+          tooltipContents={[
+            '（任意）',
+            '特定の課題（数学的素養や実装力など）を持つ人向けの問題集です。',
+            '苦手意識があれば、挑戦してみましょう。',
+          ]}
+        />
       </div>
 
-      {#if showReplenishmentWorkbooks}
-        <CurriculumTable
-          workbooks={replenishedWorkbooks}
-          {workbookGradeModes}
-          {userId}
-          {role}
-          taskResults={taskResultsWithWorkBookId}
-        />
-      {/if}
+      <div class="mt-4 md:mt-0 pb-4">
+        <Toggle
+          checked={showReplenishmentWorkbooks}
+          onchange={handleReplenishmentWorkbooks}
+          aria-label="Toggle visibility of replenishment workbooks for curriculum"
+        >
+          問題集を表示
+        </Toggle>
+      </div>
     </div>
-  {/if}
-{:else}
-  <div class="dark:text-gray-300">
-    <div>該当する問題集は見つかりませんでした。</div>
-    <div>新しい問題集が追加されるまで、しばらくお待ちください。</div>
+
+    {#if showReplenishmentWorkbooks}
+      <CurriculumTable
+        workbooks={replenishedWorkbooks}
+        {workbookGradeModes}
+        {userId}
+        {role}
+        taskResults={taskResultsWithWorkBookId}
+      />
+    {/if}
   </div>
-{/if}
+{/snippet}

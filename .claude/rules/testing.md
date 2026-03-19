@@ -73,7 +73,16 @@ function mockCount(value: number) {
 }
 ```
 
-Extract `mockFindUnique`, `mockFindMany`, and `mockCount` as the standard trio for service tests that touch a single Prisma model.
+Extract `mockFindUnique`, `mockFindMany`, and `mockCount` as the standard trio for service tests that touch a single Prisma model. Add `mockCreate`, `mockTransaction`, and `mockDelete` when those operations are also tested.
+
+## Component Vitest Unit Tests
+
+Omit Vitest unit tests for a Svelte component when **both** conditions hold:
+
+1. The component is template-only (no logic beyond prop bindings and basic conditionals)
+2. The component is covered by E2E tests
+
+When a component contains extracted logic (e.g. derived values, event handlers, utility calls), add unit tests for that logic in the nearest `utils/` file instead of testing the component directly.
 
 ## Testing Extracted Utilities
 

@@ -84,6 +84,18 @@ function mockCount(value: number) {
   vi.mocked(prisma.workBook.count).mockResolvedValue(value);
 }
 
+function mockCreate(value: NonNullable<PrismaWorkBook>) {
+  vi.mocked(prisma.workBook.create).mockResolvedValue(value);
+}
+
+function mockTransaction(value: unknown[] = []) {
+  vi.mocked(prisma.$transaction).mockResolvedValue(value);
+}
+
+function mockDelete(value: NonNullable<PrismaWorkBook>) {
+  vi.mocked(prisma.workBook.delete).mockResolvedValue(value);
+}
+
 describe('getWorkBook', () => {
   test('returns workbook when found', async () => {
     const workBook = prepareWorkBook({ id: 42 });
@@ -130,9 +142,7 @@ describe('createWorkBook', () => {
   test('creates workbook successfully', async () => {
     const workBook = prepareWorkBook({ urlSlug: null });
     mockFindUnique(null); // slug not taken
-    vi.mocked(prisma.workBook.create).mockResolvedValue(
-      asPrismaWorkBook(workBook) as NonNullable<PrismaWorkBook>,
-    );
+    mockCreate(asPrismaWorkBook(workBook) as NonNullable<PrismaWorkBook>);
 
     await expect(createWorkBook(workBook)).resolves.toBeUndefined();
     expect(prisma.workBook.create).toHaveBeenCalledTimes(1);
@@ -153,7 +163,7 @@ describe('updateWorkBook', () => {
   test('updates workbook successfully', async () => {
     const workBook = prepareWorkBook({ id: 1 });
     mockCount(1);
-    vi.mocked(prisma.$transaction).mockResolvedValue([]);
+    mockTransaction();
 
     await expect(updateWorkBook(1, workBook)).resolves.toBeUndefined();
     expect(prisma.$transaction).toHaveBeenCalledTimes(1);
@@ -170,9 +180,7 @@ describe('updateWorkBook', () => {
 describe('deleteWorkBook', () => {
   test('deletes workbook successfully', async () => {
     mockCount(1);
-    vi.mocked(prisma.workBook.delete).mockResolvedValue(
-      asPrismaWorkBook(prepareWorkBook()) as NonNullable<PrismaWorkBook>,
-    );
+    mockDelete(asPrismaWorkBook(prepareWorkBook()) as NonNullable<PrismaWorkBook>);
 
     await expect(deleteWorkBook(1)).resolves.toBeUndefined();
     expect(prisma.workBook.delete).toHaveBeenCalledWith(

@@ -65,6 +65,8 @@ Define snippets at the **top level**, outside component tags. Inside a tag = nam
 Prefer `{#snippet}` when: (1) needs direct `$state` access, (2) pure display only, (3) same-file DRY.
 Promote to component when: independent state/lifecycle needed, exceeds ~30 lines, or reused across files.
 
+**Sibling consistency** — when one sibling block warrants snippet extraction, extract its parallel siblings too, even if they are short. A parent template that mixes inline markup with `{@render}` calls is harder to scan than one where every top-level section is a named snippet.
+
 ## Component Boundaries
 
 - One component, one responsibility: don't mix display, state management, and data fetching
@@ -98,6 +100,10 @@ Use `{:else}` to render a placeholder when the list is empty — no wrapper cond
   <p>No items yet.</p>
 {/each}
 ```
+
+## Directory Structure: `list/` Subdirectories
+
+Consider introducing a `list/` subdirectory (or other domain-scoped subdirectory) when the component count in a directory starts to feel unwieldy — roughly 20 files is a reasonable prompt to reconsider. Below that threshold, flat organization is preferred — subdirectories add navigation cost without proportional benefit.
 
 ## Eliminate Branching with Records
 

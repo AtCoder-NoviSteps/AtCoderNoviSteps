@@ -8,30 +8,6 @@ Issue #3269（管理者指定の並び順で問題集を表示）をスムーズ
 
 ---
 
-## 残作業
-
-### ユーティリティ整理（低リスク）
-
-- [ ] `countReadableWorkbooks` を `workbooks.ts` に移動し単体テストを追加
-  - `WorkBookList.svelte` / `CurriculumWorkBookList.svelte` の重複解消
-  - 両コンポーネントの `wbs` 省略形を `workbooks` に修正（coding-style 違反）
-- [ ] `CurriculumWorkBookList.svelte` の `getGradeMode` ローカルラッパーを削除し、`workbooks.ts` の `getGradeMode(id, map)` を直接使用
-
-### コンポーネント整理（低リスク）
-
-- [ ] empty state markup を `EmptyWorkbookList.svelte` として抽出（`WorkBookList.svelte` / `CurriculumWorkBookList.svelte` の重複解消）
-
-### テスト整理（低リスク）
-
-- [ ] `services/workbooks.test.ts`: インライン `vi.mocked` を `mockCreate` / `mockTransaction` / `mockDelete` ヘルパーとして抽出
-
-### rules 更新（低リスク）
-
-- [ ] `testing.md`: コンポーネントの Vitest 単体テスト省略条件を追記（テンプレートのみ・E2E カバー済みの場合）
-- [ ] `svelte-components.md`: `list/` サブディレクトリ化の閾値（20 ファイル超）を追記
-
----
-
 ## やらないと決めたこと
 
 | 案                                                                                               | 判断              | 理由                                                                                          |
