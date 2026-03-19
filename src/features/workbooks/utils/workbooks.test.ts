@@ -59,44 +59,6 @@ function createWorkBookListBase(overrides: Partial<WorkbookList> = {}): Workbook
   };
 }
 
-describe('getGradeMode', () => {
-  test('returns the grade mode for the given workbook id', () => {
-    const map = new Map([[1, TaskGrade.Q5]]);
-    expect(getGradeMode(1, map)).toBe(TaskGrade.Q5);
-  });
-
-  test('returns PENDING when the workbook id is not in the map', () => {
-    const map = new Map<number, TaskGrade>();
-    expect(getGradeMode(99, map)).toBe(TaskGrade.PENDING);
-  });
-});
-
-describe('getTaskResult', () => {
-  test('returns task results for the given workbook id', () => {
-    const taskResult = {
-      task_id: 'abc300_a',
-      contest_id: 'abc300',
-      task_table_index: 'A',
-      title: '',
-      grade: TaskGrade.Q10,
-      user_id: '1',
-      status_name: 'AC',
-      status_id: '1',
-      submission_status_image_path: '',
-      submission_status_label_name: 'AC',
-      is_ac: true,
-      updated_at: new Date(),
-    };
-    const map = new Map([[1, [taskResult]]]);
-    expect(getTaskResult(1, map)).toEqual([taskResult]);
-  });
-
-  test('returns empty array when the workbook id is not in the map', () => {
-    const map = new Map<number, TaskResult[]>();
-    expect(getTaskResult(99, map)).toEqual([]);
-  });
-});
-
 describe('Workbooks', () => {
   describe('can view workbooks', () => {
     describe('when the user is admin', () => {
@@ -353,6 +315,44 @@ describe('Workbooks', () => {
       // Q2 and Q1 with same frequency → return easier Q2
       const result = calcWorkBookGradeModes(workbooks, tasksMapByIds);
       expect(result.get(1)).toBe(TaskGrade.Q2);
+    });
+  });
+
+  describe('getGradeMode', () => {
+    test('returns the grade mode for the given workbook id', () => {
+      const map = new Map([[1, TaskGrade.Q5]]);
+      expect(getGradeMode(1, map)).toBe(TaskGrade.Q5);
+    });
+
+    test('returns PENDING when the workbook id is not in the map', () => {
+      const map = new Map<number, TaskGrade>();
+      expect(getGradeMode(99, map)).toBe(TaskGrade.PENDING);
+    });
+  });
+
+  describe('getTaskResult', () => {
+    test('returns task results for the given workbook id', () => {
+      const taskResult = {
+        task_id: 'abc300_a',
+        contest_id: 'abc300',
+        task_table_index: 'A',
+        title: '',
+        grade: TaskGrade.Q10,
+        user_id: '1',
+        status_name: 'AC',
+        status_id: '1',
+        submission_status_image_path: '',
+        submission_status_label_name: 'AC',
+        is_ac: true,
+        updated_at: new Date(),
+      };
+      const map = new Map([[1, [taskResult]]]);
+      expect(getTaskResult(1, map)).toEqual([taskResult]);
+    });
+
+    test('returns empty array when the workbook id is not in the map', () => {
+      const map = new Map<number, TaskResult[]>();
+      expect(getTaskResult(99, map)).toEqual([]);
     });
   });
 });

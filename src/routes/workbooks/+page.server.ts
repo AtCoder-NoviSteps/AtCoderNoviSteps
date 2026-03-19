@@ -18,14 +18,14 @@ export async function load({ locals }) {
   const loggedInUser = await getLoggedInUser(locals);
 
   try {
-    const workbooks = await workBooksCrud.getWorkBooksWithAuthors();
-    // 問題集を構成する問題のグレードの最頻値を取得するために使用
-    const tasksMapByIds = await taskCrud.getTasksByTaskId();
-    // ユーザの回答状況を表示するために使用
-    const taskResultsByTaskId = await taskResultsCrud.getTaskResultsOnlyResultExists(
-      loggedInUser?.id as string,
-      true,
-    );
+    // Each query is independent, so we execute them in parallel with Promise.all
+    const [workbooks, tasksMapByIds, taskResultsByTaskId] = await Promise.all([
+      workBooksCrud.getWorkBooksWithAuthors(),
+      // Used to get the most frequent grade of the tasks that make up the workbook
+      taskCrud.getTasksByTaskId(),
+      // Used to display the user's answer status
+      taskResultsCrud.getTaskResultsOnlyResultExists(loggedInUser?.id as string, true),
+    ]);
 
     return {
       workbooks: workbooks,

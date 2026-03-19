@@ -70,10 +70,24 @@ function asPrismaWorkBookWithUser(
   return { ...workBook, user } as unknown as PrismaWorkBookWithUser;
 }
 
+function mockFindUnique(value: PrismaWorkBook) {
+  vi.mocked(prisma.workBook.findUnique).mockResolvedValue(value);
+}
+
+function mockFindMany(value: PrismaWorkBookWithUser[]) {
+  vi.mocked(prisma.workBook.findMany).mockResolvedValue(
+    value as unknown as Awaited<ReturnType<typeof prisma.workBook.findMany>>,
+  );
+}
+
+function mockCount(value: number) {
+  vi.mocked(prisma.workBook.count).mockResolvedValue(value);
+}
+
 describe('getWorkBook', () => {
   test('returns workbook when found', async () => {
     const workBook = prepareWorkBook({ id: 42 });
-    vi.mocked(prisma.workBook.findUnique).mockResolvedValue(asPrismaWorkBook(workBook));
+    mockFindUnique(asPrismaWorkBook(workBook));
 
     const result = await getWorkBook(42);
 
@@ -84,7 +98,7 @@ describe('getWorkBook', () => {
   });
 
   test('returns null when not found', async () => {
-    vi.mocked(prisma.workBook.findUnique).mockResolvedValue(null);
+    mockFindUnique(null);
 
     const result = await getWorkBook(999);
 
@@ -95,9 +109,7 @@ describe('getWorkBook', () => {
 describe('getWorkBooksWithAuthors', () => {
   test('maps username to authorName', async () => {
     const workBook = prepareWorkBook({ id: 1 });
-    vi.mocked(prisma.workBook.findMany).mockResolvedValue([
-      asPrismaWorkBookWithUser(workBook, { username: 'alice' }),
-    ] as Awaited<ReturnType<typeof prisma.workBook.findMany>>);
+    mockFindMany([asPrismaWorkBookWithUser(workBook, { username: 'alice' })]);
 
     const result = await getWorkBooksWithAuthors();
 
@@ -106,9 +118,7 @@ describe('getWorkBooksWithAuthors', () => {
 
   test('uses "unknown" as authorName when author is deleted', async () => {
     const workBook = prepareWorkBook({ id: 2 });
-    vi.mocked(prisma.workBook.findMany).mockResolvedValue([
-      asPrismaWorkBookWithUser(workBook, null),
-    ] as Awaited<ReturnType<typeof prisma.workBook.findMany>>);
+    mockFindMany([asPrismaWorkBookWithUser(workBook, null)]);
 
     const result = await getWorkBooksWithAuthors();
 
@@ -119,7 +129,7 @@ describe('getWorkBooksWithAuthors', () => {
 describe('createWorkBook', () => {
   test('creates workbook successfully', async () => {
     const workBook = prepareWorkBook({ urlSlug: null });
-    vi.mocked(prisma.workBook.findUnique).mockResolvedValue(null); // slug not taken
+    mockFindUnique(null); // slug not taken
     vi.mocked(prisma.workBook.create).mockResolvedValue(
       asPrismaWorkBook(workBook) as NonNullable<PrismaWorkBook>,
     );
@@ -130,7 +140,7 @@ describe('createWorkBook', () => {
 
   test('throws when urlSlug is already in use', async () => {
     const workBook = prepareWorkBook({ urlSlug: 'bfs' });
-    vi.mocked(prisma.workBook.findUnique).mockResolvedValue(
+    mockFindUnique(
       asPrismaWorkBook(prepareWorkBook({ urlSlug: 'bfs' })) as NonNullable<PrismaWorkBook>,
     );
 
@@ -142,7 +152,7 @@ describe('createWorkBook', () => {
 describe('updateWorkBook', () => {
   test('updates workbook successfully', async () => {
     const workBook = prepareWorkBook({ id: 1 });
-    vi.mocked(prisma.workBook.count).mockResolvedValue(1);
+    mockCount(1);
     vi.mocked(prisma.$transaction).mockResolvedValue([]);
 
     await expect(updateWorkBook(1, workBook)).resolves.toBeUndefined();
@@ -150,7 +160,7 @@ describe('updateWorkBook', () => {
   });
 
   test('throws when workbook id does not exist', async () => {
-    vi.mocked(prisma.workBook.count).mockResolvedValue(0);
+    mockCount(0);
 
     await expect(updateWorkBook(999, prepareWorkBook({ id: 999 }))).rejects.toThrow('999');
     expect(prisma.$transaction).not.toHaveBeenCalled();
@@ -159,7 +169,7 @@ describe('updateWorkBook', () => {
 
 describe('deleteWorkBook', () => {
   test('deletes workbook successfully', async () => {
-    vi.mocked(prisma.workBook.count).mockResolvedValue(1);
+    mockCount(1);
     vi.mocked(prisma.workBook.delete).mockResolvedValue(
       asPrismaWorkBook(prepareWorkBook()) as NonNullable<PrismaWorkBook>,
     );
@@ -171,7 +181,7 @@ describe('deleteWorkBook', () => {
   });
 
   test('throws when workbook id does not exist', async () => {
-    vi.mocked(prisma.workBook.count).mockResolvedValue(0);
+    mockCount(0);
 
     await expect(deleteWorkBook(999)).rejects.toThrow('999');
     expect(prisma.workBook.delete).not.toHaveBeenCalled();

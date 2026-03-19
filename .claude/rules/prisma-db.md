@@ -33,6 +33,26 @@ paths:
 
 Use `prisma.$transaction()` for multi-step operations.
 
+## Parallel Queries
+
+When `+page.server.ts` `load` makes multiple independent queries, run them concurrently with `Promise.all` to reduce page load latency:
+
+```typescript
+// NG: sequential — each awaits the previous
+const workbooks = await getWorkBooksWithAuthors();
+const tasks = await getTasksByTaskId();
+const results = await getTaskResultsOnlyResultExists(userId, true);
+
+// OK: all three fire at once
+const [workbooks, tasks, results] = await Promise.all([
+  getWorkBooksWithAuthors(),
+  getTasksByTaskId(),
+  getTaskResultsOnlyResultExists(userId, true),
+]);
+```
+
+Only applies when queries are **independent** (no output of one used as input to another).
+
 ## N+1 Queries
 
 Replace per-item DB calls in loops with a bulk fetch + `Map`:

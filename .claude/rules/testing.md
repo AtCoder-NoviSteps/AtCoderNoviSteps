@@ -52,15 +52,28 @@ try {
 
 ## Mock Helpers
 
-Extract repeated mock patterns into a helper in the test file:
+Extract repeated mock patterns into helpers in the test file. For Prisma service tests, define the return type alias once and use it across all helpers:
 
 ```typescript
-function mockFindMany(value: WorkBookPlacements) {
-  vi.mocked(prisma.workBookPlacement.findMany).mockResolvedValue(
-    value as unknown as Awaited<ReturnType<typeof prisma.workBookPlacement.findMany>>,
+type PrismaWorkBook = Awaited<ReturnType<typeof prisma.workBook.findUnique>>;
+type PrismaWorkBookRow = Awaited<ReturnType<typeof prisma.workBook.findMany>>[number];
+
+function mockFindUnique(value: PrismaWorkBook) {
+  vi.mocked(prisma.workBook.findUnique).mockResolvedValue(value);
+}
+
+function mockFindMany(value: PrismaWorkBookRow[]) {
+  vi.mocked(prisma.workBook.findMany).mockResolvedValue(
+    value as unknown as Awaited<ReturnType<typeof prisma.workBook.findMany>>,
   );
 }
+
+function mockCount(value: number) {
+  vi.mocked(prisma.workBook.count).mockResolvedValue(value);
+}
 ```
+
+Extract `mockFindUnique`, `mockFindMany`, and `mockCount` as the standard trio for service tests that touch a single Prisma model.
 
 ## Testing Extracted Utilities
 

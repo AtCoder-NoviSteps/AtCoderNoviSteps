@@ -111,3 +111,17 @@ const TAB_CONFIGS: Record<ActiveTab, TabConfig> = {
 ```
 
 Use the enum type as the key type, not `string`.
+
+When not all enum keys need an entry, use `Partial<Record<K, V>>` as a **type annotation** — not `satisfies`. `as const satisfies Partial<Record<K, V>>` preserves the narrowed literal type, so indexing with other enum values causes a type error:
+
+```typescript
+// NG: satisfies narrows the type — obj[key] errors for keys not in the literal
+const map = { [WorkBookType.SOLUTION]: SolutionTable }
+  as const satisfies Partial<Record<WorkBookType, Component<Props>>>;
+
+// OK: type annotation makes map[key] return Component<Props> | undefined
+const map: Partial<Record<WorkBookType, Component<Props>>> = {
+  [WorkBookType.SOLUTION]: SolutionTable,
+};
+// Safe to guard with: {#if map[type]} or if (map[type])
+```
