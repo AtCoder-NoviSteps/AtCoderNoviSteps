@@ -10,83 +10,64 @@ Issue #3269（管理者指定の並び順で問題集を表示）をスムーズ
 
 ## Findings
 
-### テスト
-
-- テストタイトルが日本語 → 英語で統一する（`testing.md` でルール化）
-- 正常系・異常系が同一 `describe` に混在 → `valid inputs` / `invalid inputs` で分割する
-- テストの並び順が実装の関数順と不一致 → 実装順に揃える
-
-### ドキュメント
-
-- エクスポートされた関数・型に TSDoc なし → `coding-style.md` で必須化する
-
 ### コンポーネント設計
 
-- 複数コンポーネント間で Props 型・ヘルパー関数・テンプレートブロックが重複 → 共通セルコンポーネントに抽出する
-- コンポーネント内のヘルパー関数が純粋関数 → `utils/` に移動してテスト可能にする
+- `WorkBookList.svelte` L117–123 に `type WorkbookTableProps` のローカル定義がある。
+  `types/workbook.ts` に同一型を既にエクスポートしているため重複。削除して import に置き換える。
+
+- `WorkBookList.svelte` の `tableComponents` に Deprecated な WorkBookType（`TEXTBOOK` / `GENRE` / `THEME` / `OTHERS`）が残っている。
+  削除時は `satisfies Record<...>` → `satisfies Partial<Record<...>>` への変更と、参照箇所の `{#if TableComponent}` ガードが必要。
+
+### ユーティリティ
+
+- `workbooks.ts` のメソッド順序が広い→狭い（影響範囲の大→小）になっていない。
+  `getGradeMode` / `getTaskResult` はヘルパー（単一要素のMap lookup）なのに先頭に置かれている。
+  推奨順: `canViewWorkBook` → `getUrlSlugFrom` → `getWorkBooksByType` → `buildTaskResultsByWorkBookId` → `calcWorkBookGradeModes` → `getGradeMode` → `getTaskResult`
+
+- `workbooks.test.ts` が `testing.md` の Mock Helpers ルール未適用。
+  `vi.mocked(prisma.workBook.xxx).mockResolvedValue(asPrismaWorkBook(...))` を直接書いており、`crud.test.ts` の `mockFindMany()` パターンに揃えるべき。
+
+### サーバー
+
+- `+page.server.ts` の `load` 関数内で3クエリ（`getWorkBooksWithAuthors` / `getTasksByTaskId` / `getTaskResultsOnlyResultExists`）を逐次実行しているが、互いに独立なので `Promise.all` で並列化できる。
 
 ---
 
-## 実装フェーズ
+## 残作業
 
-### Phase A: ルール更新（リスクなし） ✅
+### workbooks ユーティリティ整理（低リスク）
 
-- [x] `testing.md`: テストタイトルは英語で書く旨を追記
-- [x] `coding-style.md`: エクスポート対象（関数・型・クラス）には TSDoc を必須とする旨を追記
-- [x] `AGENTS.md`: `@quramy/prisma-fabbrica` の用途を明確化（seed / E2E グローバルセットアップ専用。service 層ユニットテストは `vi.mock` を使う）
+- [ ] `workbooks.ts`: メソッドを広い→狭い順に並び替え
+- [ ] `workbooks.test.ts`: 実装の並び順に合わせて describe 順を変更 + vi.mocked ヘルパー関数を追加
 
-### Phase B: テスト修正（低リスク） ✅
+### WorkBookList コンポーネント整理（低リスク）
 
-_Phase A 完了後_
+- [ ] `WorkBookList.svelte`: ローカルの `type WorkbookTableProps` を削除し、`types/workbook.ts` から import
+- [ ] `WorkBookList.svelte`: `tableComponents` から Deprecated エントリ（TEXTBOOK / GENRE / THEME / OTHERS）を削除
+  - `satisfies Record<WorkBookType, ...>` → `satisfies Partial<Record<WorkBookType, ...>>` に変更
+  - 参照箇所に `{#if TableComponent}` ガードを追加
 
-- [x] `workbook_tasks.test.ts`: テストタイトルを英語に変換
-- [x] `workbook_tasks.test.ts`: `describe('validateRequiredFields')` を `valid inputs` / `invalid inputs` に分割
-- [x] `workbooks.test.ts`: テストタイトルを英語に変換
-- [x] `workbooks.test.ts`: `describe` 順序を実装順（`getWorkBooksByType` → `buildTaskResultsByWorkBookId` → `calcWorkBookGradeModes`）に変更
-- [x] `workbooks.ts`: `canViewWorkBook` に TSDoc 追加
-- [x] `workbook_tasks.ts`: `getWorkBookTasks` / `validateRequiredFields` に TSDoc 追加
+### +page.server.ts 改善（低リスク）
 
-### Phase C: テーブルコンポーネントのリファクタリング（中リスク） ✅
+- [ ] `load` 内の3クエリを `Promise.all` で並列化
 
-_Phase B と独立して実施可能。完了後に `pnpm check` で確認。_
+### WorkBookList CURRICULUM分岐の切り出し（中リスク）
 
-- [x] `utils/workbooks.ts` に `getGradeMode(id, map)` / `getTaskResult(id, map)` を追加（テスト付き）
-- [x] `types/workbook.ts` に `WorkbookTableProps` を定義（3テーブル共通 Props）
-- [x] `GradeTableBodyCell.svelte` を作成（GradeLabel ラッパー、CurriculumTable 専用）
-- [x] `WorkbookProgressCell.svelte` を作成（ThermometerProgressBar + AcceptedCounter）
-- [x] `WorkbookCompletionCell.svelte` を作成（CompletedTasks トロフィー）
-- [x] `WorkbookAuthorActionsCell.svelte` を作成（編集/削除フォーム）
-- [x] 3テーブルコンポーネントを更新して上記を import
-- [x] `pnpm check` で型エラーなし（既存 2 件は login/signup の pre-existing エラーで無関係）
+`WorkBookList.svelte` に CURRICULUM 専用ロジックが混在している。
+次PRで Solution にも同様の ButtonGroup を追加するため、今回のPRで切り出しておかないと次PRが「機能追加＋リファクタリング」になる。
 
-### Phase 4: services/workbooks.ts の統合テスト追加 ✅
+- [ ] `CurriculumWorkBookList.svelte` を新規作成
+  - 切り出し範囲: `selectedGrade` 状態 + `filterByGradeMode` + `AVAILABLE_GRADES` + 関連 `$effect` + `mainWorkbooks` / `replenishedWorkbooks` の `$derived` + ButtonGroup + 補充セクション全体
+  - `WorkBookList.svelte` は薄いディスパッチャとして残す（`workbookType` に応じたコンポーネント切り替えのみ）
+  - 完了後 `pnpm check` で確認
 
-_Phase C と独立して実施可能。_
+---
 
-- [x] `services/workbooks.test.ts` を新規作成（`crud.test.ts` と同じモック方式: `vi.mock('$lib/server/database', ...)`）
-  - `getWorkBook`: found / not found
-  - `getWorkBooksWithAuthors`: with author / deleted author (`'unknown'` fallback)
-  - `createWorkBook`: success, duplicate slug
-  - `updateWorkBook`: success, not found id
-  - `deleteWorkBook`: success, not found id
+## やらないと決めたこと
 
-### Phase 8: E2E テスト追加（純粋追加） ✅
-
-新規ファイル `tests/workbooks_list.test.ts` を作成。`loginAsAdmin` / `loginAsUser` を `tests/helpers/auth.ts` に抽出し、`workbook_order.test.ts` も移行済み。
-
-**アクセス制御**
-
-- [x] 未ログインで `/workbooks` にアクセスすると `/login` にリダイレクトされる
-
-**ログインユーザー（一般）**
-
-- [x] カリキュラム・解法別タブが表示される
-- [x] ユーザ作成タブは非管理者には表示されない
-- [x] カリキュラムタブでグレードフィルター（`10Q` → `9Q`）をクリックするとリストが切り替わる
-- [x] 補充問題集が存在するグレードでトグル（`aria-label="Toggle visibility of replenishment workbooks for curriculum"`）をクリックすると補充セクションが表示/非表示になる
-
-**管理者**
-
-- [x] 「新規作成」ボタンが表示される
-- [x] ユーザ作成タブが表示される
-- [x] 問題集行に「編集」リンクと「削除」ボタンが表示される
+| 案 | 判断 | 理由 |
+|---|---|---|
+| `TableHeadCell` のコンポーネント化（「回答状況」「修了」列） | ❌ 不要 | 静的テキストのみで props なし。コンポーネントにしても可読性は上がらずファイルだけ増える |
+| `list/` のサブディレクトリ化（curriculum / solution / created_by_user / shared） | ❌ 不要（YAGNI） | 現状 12 ファイルで許容範囲。インポートパスが深くなるデメリットの方が大きい。20 ファイル超えたら再検討 |
+| `CreatedByUserTable` の `authorName` セルをコンポーネント化 | ❌ 不要 | 1 箇所のみ使用。他テーブルへの転用予定なし |
+| `list/` コンポーネントへの Vitest 単体テスト追加 | ❌ 現時点では不要 | E2E（`tests/workbooks_list.test.ts`）でアクセス制御・グレードフィルター・補充トグルをカバー済み。コンポーネントはほぼテンプレートのみでロジックが薄く、`@testing-library/svelte` の設定コストに見合わない。コンポーネントにビジネスロジックが入ったら再検討 |
