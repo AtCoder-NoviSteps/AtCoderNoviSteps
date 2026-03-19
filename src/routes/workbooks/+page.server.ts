@@ -3,7 +3,6 @@ import { error } from '@sveltejs/kit';
 import * as workBooksCrud from '$features/workbooks/services/workbooks';
 import * as taskCrud from '$lib/services/tasks';
 import * as taskResultsCrud from '$lib/services/task_results';
-import * as userCrud from '$lib/services/users';
 
 import { getLoggedInUser, canDelete } from '$lib/utils/authorship';
 import { parseWorkBookId } from '$features/workbooks/utils/workbook';
@@ -15,26 +14,11 @@ import {
   INTERNAL_SERVER_ERROR,
 } from '$lib/constants/http-response-status-codes';
 
-// See:
-// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map
 export async function load({ locals }) {
   const loggedInUser = await getLoggedInUser(locals);
 
-  const workbooks = await workBooksCrud.getWorkBooks();
-  const workbooksWithAuthors = await Promise.all(
-    workbooks.map(async (workbook) => {
-      const workbookAuthor = await userCrud.getUserById(workbook.authorId);
-
-      if (workbookAuthor) {
-        return { ...workbook, authorName: workbookAuthor.username };
-      } else {
-        // ユーザが問題集を作成したあとに、アカウントを削除した場合
-        return { ...workbook, authorName: 'unknown' };
-      }
-    }),
-  );
-
   try {
+    const workbooks = await workBooksCrud.getWorkBooksWithAuthors();
     // 問題集を構成する問題のグレードの最頻値を取得するために使用
     const tasksMapByIds = await taskCrud.getTasksByTaskId();
     // ユーザの回答状況を表示するために使用
@@ -44,13 +28,13 @@ export async function load({ locals }) {
     );
 
     return {
-      workbooks: workbooksWithAuthors,
+      workbooks: workbooks,
       tasksMapByIds: tasksMapByIds,
       taskResultsByTaskId: taskResultsByTaskId,
       loggedInUser: loggedInUser,
     };
   } catch (e) {
-    console.error('Failed to fetch tasks or task results: ', e);
+    console.error('Failed to fetch workbooks, tasks or task results: ', e);
     error(
       INTERNAL_SERVER_ERROR,
       '問題もしくは回答の取得に失敗しました。しばらくしてから、もう一度試してください。',
@@ -60,7 +44,6 @@ export async function load({ locals }) {
 
 export const actions = {
   delete: async ({ locals, request }) => {
-    console.log('form -> actions -> delete');
     const loggedInUser = await getLoggedInUser(locals);
 
     const url = new URL(request.url);
@@ -82,6 +65,7 @@ export const actions = {
 
     try {
       await workBooksCrud.deleteWorkBook(workBookId);
+      console.log(`Deleted workbook ${workBookId} by user ${loggedInUser?.id}`);
     } catch (e) {
       console.error(`Failed to delete WorkBook with id ${workBookId}:`, e);
       error(

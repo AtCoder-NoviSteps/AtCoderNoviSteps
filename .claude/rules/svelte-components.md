@@ -39,6 +39,14 @@ Referencing `$props()` inside `$state()` initializer triggers "This reference on
 let count = $state(untrack(() => initialCount)); // intentional: prop is initial seed only
 ```
 
+## `$derived` — No Arrow Wrapper
+
+Use `$derived(expr)`, not `$derived(() => expr)`. The arrow form makes the derived value a _function_, not a reactive value — dependencies may not be tracked and the template call site is confusing.
+
+## `{@const}` Placement
+
+`{@const}` must be an **immediate child** of a block statement (`{#if}`, `{#each}`, `{:else}`, `{#snippet}`, etc.). Placing it inside an HTML element is a compile error:
+
 ## `{#snippet}` Placement
 
 Define snippets at the **top level**, outside component tags. Inside a tag = named slot = type error:

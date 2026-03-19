@@ -1,6 +1,18 @@
 import { Roles } from '$lib/types/user';
-import { TaskGrade, type Task, type TaskGrades } from '$lib/types/task';
-import type { WorkBook, WorkbookList, WorkBookTaskBase } from '$features/workbooks/types/workbook';
+import {
+  TaskGrade,
+  type Task,
+  type TaskGrades,
+  type TaskResult,
+  type TaskResults,
+} from '$lib/types/task';
+import type {
+  WorkBook,
+  WorkbookList,
+  WorkbooksList,
+  WorkBookTaskBase,
+  WorkBookType,
+} from '$features/workbooks/types/workbook';
 
 import { isAdmin } from '$lib/utils/authorship';
 import { calcGradeMode } from '$lib/utils/task';
@@ -20,6 +32,48 @@ export function getUrlSlugFrom(workbook: WorkbookList | WorkBook): string {
   const slug = workbook.urlSlug;
 
   return slug ? slug : workbook.id.toString();
+}
+
+/**
+ * Filters workbooks by type.
+ */
+export function getWorkBooksByType(
+  workbooks: WorkbooksList,
+  workBookType: WorkBookType,
+): WorkbooksList {
+  return workbooks.filter((workbook: WorkbookList) => workbook.workBookType === workBookType);
+}
+
+/**
+ * Builds a map from workbook ID to the task results for that workbook's tasks.
+ * Workbooks with no matching task results are omitted from the map.
+ */
+export function buildTaskResultsByWorkBookId(
+  workbooks: WorkbooksList,
+  taskResultsByTaskId: Map<string, TaskResult>,
+): Map<number, TaskResults> {
+  const taskResultsWithWorkBookId = new Map<number, TaskResults>();
+
+  workbooks.forEach((workbook: WorkbookList) => {
+    const taskResults: TaskResults = workbook.workBookTasks.reduce(
+      (array: TaskResults, workBookTask: WorkBookTaskBase) => {
+        const taskResult = taskResultsByTaskId.get(workBookTask.taskId);
+
+        if (taskResult !== undefined) {
+          array.push(taskResult);
+        }
+
+        return array;
+      },
+      [],
+    );
+
+    if (taskResults.length > 0) {
+      taskResultsWithWorkBookId.set(workbook.id, taskResults);
+    }
+  });
+
+  return taskResultsWithWorkBookId;
 }
 
 /**

@@ -3,13 +3,8 @@
   import { Button, Tabs } from 'flowbite-svelte';
 
   import { Roles } from '$lib/types/user';
-  import { type Task, type TaskResult, type TaskResults } from '$lib/types/task';
-  import {
-    type WorkbookList,
-    type WorkbooksList,
-    type WorkBookTaskBase,
-    WorkBookType,
-  } from '$features/workbooks/types/workbook';
+  import { type Task, type TaskResult } from '$lib/types/task';
+  import { type WorkbooksList, WorkBookType } from '$features/workbooks/types/workbook';
 
   import { activeWorkbookTabStore } from '$features/workbooks/stores/active_workbook_tab';
 
@@ -17,7 +12,12 @@
   import WorkbookTabItem from '$features/workbooks/components/list/WorkbookTabItem.svelte';
   import WorkBookList from '$features/workbooks/components/list/WorkBookList.svelte';
 
-  import { canViewWorkBook, calcWorkBookGradeModes } from '$features/workbooks/utils/workbooks';
+  import {
+    canViewWorkBook,
+    calcWorkBookGradeModes,
+    getWorkBooksByType,
+    buildTaskResultsByWorkBookId,
+  } from '$features/workbooks/utils/workbooks';
 
   let { data } = $props();
 
@@ -25,14 +25,6 @@
   let loggedInUser = data.loggedInUser;
   // HACK: loggedInUser.roleで比較すると、@prisma/clientと型が異なるため、やむを得ずasでキャスト
   let role = loggedInUser?.role as Roles;
-
-  // TODO: 単体テストをしやすくするため、utilsに移動させる + インポート
-  const getWorkBooksByType = (workbooks: WorkbooksList, workBookType: WorkBookType) => {
-    const filteredWorkbooks = workbooks.filter(
-      (workbook: WorkbookList) => workbook.workBookType === workBookType,
-    );
-    return filteredWorkbooks;
-  };
 
   const workBookTabs = [
     {
@@ -63,33 +55,6 @@
   let taskResultsByTaskId = data.taskResultsByTaskId as Map<string, TaskResult>;
 
   const workbookGradeModes = calcWorkBookGradeModes(data.workbooks as WorkbooksList, tasksMapByIds);
-
-  // 計算量: 問題集の数をN、各問題集の問題の平均値をMとすると、O(N * M)
-  function fetchTaskResultsWithWorkBookId(workbooks: WorkbooksList, workBookType: WorkBookType) {
-    const workbooksByType = getWorkBooksByType(workbooks, workBookType);
-    const taskResultsWithWorkBookId = new Map();
-
-    workbooksByType.forEach((workbook: WorkbookList) => {
-      const taskResults: TaskResults = workbook.workBookTasks.reduce(
-        (array: TaskResults, workBookTask: WorkBookTaskBase) => {
-          const taskResult = taskResultsByTaskId.get(workBookTask.taskId);
-
-          if (taskResult !== undefined) {
-            array.push(taskResult);
-          }
-
-          return array;
-        },
-        [],
-      );
-
-      if (taskResults.length > 0) {
-        taskResultsWithWorkBookId.set(workbook.id, taskResults);
-      }
-    });
-
-    return taskResultsWithWorkBookId;
-  }
 </script>
 
 <div class="container mx-auto w-5/6">
@@ -122,11 +87,11 @@
                 workbookType={workBookTab.workBookType}
                 workbooks={getWorkBooksByType(workbooks, workBookTab.workBookType)}
                 {workbookGradeModes}
-                taskResultsWithWorkBookId={fetchTaskResultsWithWorkBookId(
-                  workbooks,
-                  workBookTab.workBookType,
+                taskResultsWithWorkBookId={buildTaskResultsByWorkBookId(
+                  getWorkBooksByType(workbooks, workBookTab.workBookType),
+                  taskResultsByTaskId,
                 )}
-                {loggedInUser}
+                loggedInUser={loggedInUser as { id: string; role: Roles }}
               />
             </div>
           </WorkbookTabItem>

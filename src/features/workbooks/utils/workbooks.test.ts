@@ -1,13 +1,15 @@
 import { expect, test } from 'vitest';
 
 import { Roles } from '$lib/types/user';
-import { TaskGrade, type Task } from '$lib/types/task';
+import { TaskGrade, type Task, type TaskResult } from '$lib/types/task';
 import { type WorkbookList, WorkBookType } from '$features/workbooks/types/workbook';
 
 import {
   canViewWorkBook,
   getUrlSlugFrom,
   calcWorkBookGradeModes,
+  getWorkBooksByType,
+  buildTaskResultsByWorkBookId,
 } from '$features/workbooks/utils/workbooks';
 
 function createTask(taskId: string, grade: TaskGrade): Task {
@@ -17,6 +19,23 @@ function createTask(taskId: string, grade: TaskGrade): Task {
     task_table_index: '',
     title: '',
     grade,
+  };
+}
+
+function createTaskResult(taskId: string): TaskResult {
+  return {
+    task_id: taskId,
+    contest_id: 'abc300',
+    task_table_index: 'A',
+    title: '',
+    grade: TaskGrade.Q10,
+    user_id: '1',
+    status_name: 'AC',
+    status_id: '1',
+    submission_status_image_path: '',
+    submission_status_label_name: 'AC',
+    is_ac: true,
+    updated_at: new Date(),
   };
 }
 
@@ -42,21 +61,21 @@ describe('Workbooks', () => {
   describe('can view workbooks', () => {
     describe('when the user is admin', () => {
       test('admin can view published workbooks', () => {
-        expect(canViewWorkBook(Roles.ADMIN, true)).toBeTruthy();
+        expect(canViewWorkBook(Roles.ADMIN, true)).toBe(true);
       });
 
       test('admin can view workbooks privately', () => {
-        expect(canViewWorkBook(Roles.ADMIN, false)).toBeTruthy();
+        expect(canViewWorkBook(Roles.ADMIN, false)).toBe(true);
       });
     });
 
     describe('when the user is not admin', () => {
       test('the user can view published workbooks', () => {
-        expect(canViewWorkBook(Roles.USER, true)).toBeTruthy();
+        expect(canViewWorkBook(Roles.USER, true)).toBe(true);
       });
 
       test('the user can not view workbooks privately', () => {
-        expect(canViewWorkBook(Roles.USER, false)).toBeFalsy();
+        expect(canViewWorkBook(Roles.USER, false)).toBe(false);
       });
     });
   });
@@ -172,6 +191,128 @@ describe('Workbooks', () => {
       const result = calcWorkBookGradeModes(workbooks, tasksMapByIds);
       expect(result.get(10)).toBe(TaskGrade.Q8);
       expect(result.get(20)).toBe(TaskGrade.Q7);
+    });
+
+    // タイブレーク: 同頻度グレードが2つある場合は最も易しいグレードを返す
+    // コメント例: 8Q: 2問、7Q: 5問、6Q: 5問 => 7Q
+    test('同頻度のグレードが2つある場合は最も易しいグレードを返す（7Q と 6Q → 7Q）', () => {
+      const tasksMapByIds: Map<string, Task> = new Map([
+        ['abc300_a', createTask('abc300_a', TaskGrade.Q8)],
+        ['abc300_b', createTask('abc300_b', TaskGrade.Q8)],
+        ['abc300_c', createTask('abc300_c', TaskGrade.Q7)],
+        ['abc300_d', createTask('abc300_d', TaskGrade.Q7)],
+        ['abc300_e', createTask('abc300_e', TaskGrade.Q7)],
+        ['abc300_f', createTask('abc300_f', TaskGrade.Q7)],
+        ['abc300_g', createTask('abc300_g', TaskGrade.Q7)],
+        ['abc300_h', createTask('abc300_h', TaskGrade.Q6)],
+      ]);
+      const workbooks = [
+        createWorkBookListBase({
+          id: 1,
+          workBookTasks: [
+            { taskId: 'abc300_a', priority: 1, comment: '' },
+            { taskId: 'abc300_b', priority: 2, comment: '' },
+            { taskId: 'abc300_c', priority: 3, comment: '' },
+            { taskId: 'abc300_d', priority: 4, comment: '' },
+            { taskId: 'abc300_e', priority: 5, comment: '' },
+            { taskId: 'abc300_f', priority: 6, comment: '' },
+            { taskId: 'abc300_g', priority: 7, comment: '' },
+            { taskId: 'abc300_h', priority: 8, comment: '' },
+          ],
+        }),
+      ];
+      // Q7: 5問, Q6: 5問 で同頻度 → 易しい方の Q7 を返す
+      const result = calcWorkBookGradeModes(workbooks, tasksMapByIds);
+      expect(result.get(1)).toBe(TaskGrade.Q7);
+    });
+
+    test('同頻度のグレードが2つある場合は最も易しいグレードを返す（Q2 と Q1 → Q2）', () => {
+      const tasksMapByIds: Map<string, Task> = new Map([
+        ['abc300_a', createTask('abc300_a', TaskGrade.Q2)],
+        ['abc300_b', createTask('abc300_b', TaskGrade.Q1)],
+      ]);
+      const workbooks = [
+        createWorkBookListBase({
+          id: 1,
+          workBookTasks: [
+            { taskId: 'abc300_a', priority: 1, comment: '' },
+            { taskId: 'abc300_b', priority: 2, comment: '' },
+          ],
+        }),
+      ];
+      // Q2 と Q1 で同頻度 → 易しい方の Q2 を返す
+      const result = calcWorkBookGradeModes(workbooks, tasksMapByIds);
+      expect(result.get(1)).toBe(TaskGrade.Q2);
+    });
+  });
+
+  describe('getWorkBooksByType', () => {
+    test('指定タイプのみを返す', () => {
+      const workbooks = [
+        createWorkBookListBase({ id: 1, workBookType: WorkBookType.CURRICULUM }),
+        createWorkBookListBase({ id: 2, workBookType: WorkBookType.SOLUTION }),
+        createWorkBookListBase({ id: 3, workBookType: WorkBookType.CURRICULUM }),
+      ];
+      const result = getWorkBooksByType(workbooks, WorkBookType.CURRICULUM);
+      expect(result.map((workbook) => workbook.id)).toEqual([1, 3]);
+    });
+
+    test('空配列を渡すと空配列を返す', () => {
+      expect(getWorkBooksByType([], WorkBookType.CURRICULUM)).toEqual([]);
+    });
+
+    test('一致するタイプがない場合は空配列を返す', () => {
+      const workbooks = [createWorkBookListBase({ id: 1, workBookType: WorkBookType.SOLUTION })];
+      expect(getWorkBooksByType(workbooks, WorkBookType.CURRICULUM)).toEqual([]);
+    });
+  });
+
+  describe('buildTaskResultsByWorkBookId', () => {
+    test('タスク結果が存在する問題集は Map に含まれる', () => {
+      const taskResult = createTaskResult('abc300_a');
+      const taskResultsByTaskId = new Map([['abc300_a', taskResult]]);
+      const workbooks = [
+        createWorkBookListBase({
+          id: 1,
+          workBookTasks: [{ taskId: 'abc300_a', priority: 1, comment: '' }],
+        }),
+      ];
+      const result = buildTaskResultsByWorkBookId(workbooks, taskResultsByTaskId);
+      expect(result.get(1)).toEqual([taskResult]);
+    });
+
+    test('タスク結果が存在しない問題集は Map から除外される', () => {
+      const taskResultsByTaskId = new Map<string, TaskResult>();
+      const workbooks = [
+        createWorkBookListBase({
+          id: 1,
+          workBookTasks: [{ taskId: 'abc300_a', priority: 1, comment: '' }],
+        }),
+      ];
+      const result = buildTaskResultsByWorkBookId(workbooks, taskResultsByTaskId);
+      expect(result.has(1)).toBe(false);
+    });
+
+    test('空の workbooks を渡すと空の Map を返す', () => {
+      const taskResultsByTaskId = new Map<string, TaskResult>();
+      const result = buildTaskResultsByWorkBookId([], taskResultsByTaskId);
+      expect(result.size).toBe(0);
+    });
+
+    test('複数タスクのうち一部のみ結果がある場合、存在するものだけ含まれる', () => {
+      const taskResult = createTaskResult('abc300_a');
+      const taskResultsByTaskId = new Map([['abc300_a', taskResult]]);
+      const workbooks = [
+        createWorkBookListBase({
+          id: 1,
+          workBookTasks: [
+            { taskId: 'abc300_a', priority: 1, comment: '' },
+            { taskId: 'abc300_b', priority: 2, comment: '' },
+          ],
+        }),
+      ];
+      const result = buildTaskResultsByWorkBookId(workbooks, taskResultsByTaskId);
+      expect(result.get(1)).toEqual([taskResult]);
     });
   });
 });

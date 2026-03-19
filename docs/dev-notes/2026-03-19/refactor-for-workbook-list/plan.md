@@ -49,32 +49,32 @@ Issue #3269（管理者指定の並び順で問題集を表示）をスムーズ
 
 ## 実装フェーズ
 
-### Phase 0: 未テストサービスへのテスト追加（純粋追加、リスクなし）
+### Phase 0: 未テストサービスへのテスト追加（純粋追加、リスクなし）✅
 
-- [ ] `services/workbook_tasks.test.ts` を新規作成
+- [x] `services/workbook_tasks.test.ts` を新規作成
   - `getWorkBookTasks`: 通常ケース、空配列、comment フィールドの取り扱い
   - `validateRequiredFields`: 正常ケース、taskId 欠損、priority 欠損（index 0/中/末/負/小数）、空配列
-  - **注意**: `validateRequiredFields` は `!task.priority` を使用しているが `priority === 0` は `false` になる潜在バグ → テストで明確化してから修正を判断
+  - `priority === 0` は `!task.priority` で falsy になりエラーとなる動作を確認・文書化。priority は実際 1 以上なので意図的動作として許容。
 
-### Phase 1: +page.svelte から utils へ純粋関数を抽出（低リスク）
+### Phase 1: +page.svelte から utils へ純粋関数を抽出（低リスク）✅
 
-- [ ] `utils/workbooks.ts` に `getWorkBooksByType(workbooks, type)` を追加（TODO コメント対応）
+- [x] `utils/workbooks.ts` に `getWorkBooksByType(workbooks, type)` を追加（TODO コメント対応）
   - テスト追加（通常フィルタ、空配列、type が一致しない場合）
-- [ ] `utils/workbooks.ts` に `buildTaskResultsByWorkBookId(workbooks, taskResultsByTaskId)` を追加
+- [x] `utils/workbooks.ts` に `buildTaskResultsByWorkBookId(workbooks, taskResultsByTaskId)` を追加
   - 現在 +page.svelte の `fetchTaskResultsWithWorkBookId()` に相当
   - テスト追加（task 結果あり/なし、空配列）
-- [ ] `+page.svelte` を更新: 両関数を import に置き換え
+- [x] `+page.svelte` を更新: 両関数を import に置き換え
 
-### Phase 2: +page.server.ts の N+1 修正とクリーンアップ（中リスク）
+### Phase 2: +page.server.ts の N+1 修正とクリーンアップ（中リスク）✅
 
-- [ ] `services/workbooks.ts` に `getWorkBooksWithAuthors()` を追加
+- [x] `services/workbooks.ts` に `getWorkBooksWithAuthors()` を追加
   - `include: { user: { select: { username: true } }, workBookTasks: { orderBy: { priority: 'asc' } } }` を使用
   - 戻り値型 `WorkbooksWithAuthors` を `types/workbook.ts` に追加（`authorName: string` を含む）
   - 著者削除済みの場合は `user?.username ?? 'unknown'` で対応
-- [ ] `+page.server.ts` の `load()` を更新:
+- [x] `+page.server.ts` の `load()` を更新:
   - `getWorkBooks()` + N+1 ループ → `getWorkBooksWithAuthors()` に置き換え
   - try/catch の範囲を拡大（workbooks 取得も含める）
-- [ ] CRUD アクションのログを「受信時」→「成功後」に移動（3ファイル）
+- [x] CRUD アクションのログを「受信時」→「成功後」に移動（3ファイル）
 
 **判断根拠**: 現在の `console.log('form -> actions -> ...')` はバリデーション**前**（アクション受信時）に発火するため、不正なリクエストでも記録される。また「どのリソースを誰が操作したか」が分からず本番デバッグに役立たない。成功を確認できる位置に移動し、識別情報を含めることで意味のあるログにする。
 
@@ -91,10 +91,10 @@ console.log(`Deleted workbook ${workBookId} by user ${loggedInUser?.id}`);
 
 対象ファイルと成功後ログの内容:
 
-| ファイル | ログ内容 |
-|----------|---------|
-| `routes/workbooks/+page.server.ts` (delete) | `Deleted workbook ${workBookId} by user ${loggedInUser?.id}` |
-| `routes/workbooks/create/+page.server.ts` | `Created workbook "${workBook.title}" by user ${author.id}` |
+| ファイル                                       | ログ内容                                                                           |
+| ---------------------------------------------- | ---------------------------------------------------------------------------------- |
+| `routes/workbooks/+page.server.ts` (delete)    | `Deleted workbook ${workBookId} by user ${loggedInUser?.id}`                       |
+| `routes/workbooks/create/+page.server.ts`      | `Created workbook "${workBook.title}" by user ${author.id}`                        |
 | `routes/workbooks/edit/[slug]/+page.server.ts` | `Updated workbook ${workBookId}`（edit action に `locals` がなくユーザー情報なし） |
 
 ### Phase 3: サービス層から SvelteKit error() を除去（中リスク）
@@ -125,11 +125,11 @@ const workbook = await getWorkbookWithAuthor(slug);
 if (!workbook) { error(NOT_FOUND, '...'); }
 ```
 
-- [ ] `getWorkbookWithAuthor()` から `error()` 呼び出しを削除、`null` を返すように変更
-- [ ] 呼び出し元のルートハンドラーを更新（`src/routes/workbooks/[slug]/+page.server.ts` 等）:
+- [x] `getWorkbookWithAuthor()` から `error()` 呼び出しを削除、`null` を返すように変更
+- [x] 呼び出し元のルートハンドラーを更新（`src/routes/workbooks/[slug]/+page.server.ts` 等）:
   - slug バリデーションを呼び出し元に移動
   - null チェック後に `error(BAD_REQUEST/NOT_FOUND, ...)` を呼び出す
-- [ ] `isExistingWorkBook()` を `db.workBook.count({ where: { id } }) > 0` に変更
+- [x] `isExistingWorkBook()` を `db.workBook.count({ where: { id } }) > 0` に変更
 
 ### Phase 4: services/workbooks.ts の統合テスト追加（Phase 3 後）
 
@@ -140,76 +140,30 @@ if (!workbook) { error(NOT_FOUND, '...'); }
   - `updateWorkBook`: 正常、存在しない ID
   - `deleteWorkBook`: 正常、存在しない ID
 
-### Phase 5: WorkBookList.svelte 型修正と Svelte 5 パターン修正（低リスク）
+### Phase 5: WorkBookList.svelte 型修正と Svelte 5 パターン修正（低リスク）✅
 
-- [ ] `loggedInUser: any` → 使用フィールド（`id: string`, `role: Roles`）の最小 interface を定義
-  - `$lib/types/user.ts` の既存型を確認して再利用
-- [ ] `$derived(() => countReadableWorkbooks(...))` を `$derived(countReadableWorkbooks(...))` に修正（2箇所）
+- [x] `loggedInUser: any` → `interface LoggedInUser { id: string; role: Roles }` を定義（インライン）
+  - `$lib/types/user.ts` の `User` は `userId` フィールドで不一致のため、最小 interface をコンポーネント内に定義
+  - `+page.svelte` から渡す際に `as { id: string; role: Roles }` キャスト（Prisma Roles vs $lib Roles の型差異）
+- [x] `$derived(() => countReadableWorkbooks(...))` を `$derived(countReadableWorkbooks(...))` に修正（2箇所）
 
-### Phase 6: WorkBookBaseTable.svelte を3種コンポーネントに分割（中リスク）
+### Phase 6: WorkBookBaseTable.svelte を3種コンポーネントに分割（中リスク）✅
 
-ユーザー方針: 「3種類コンポーネントをベースに、if 文のところは interface で分岐をなくす」
-
-**設計判断: 完全分離 vs 基底+差分**
-
-`WorkBookBaseTable.svelte` を「共通の基底コンポーネント」として残す案もあるが、**完全分離を採用する**。
-
-| 方針                 | メリット                                 | デメリット                                      |
-| -------------------- | ---------------------------------------- | ----------------------------------------------- |
-| **完全分離（採用）** | 各ファイルが自己完結、開けば全体が見える | `<Table>` 等のテンプレート構造が3箇所に存在     |
-| 基底 + 差分          | テンプレートの行数が少ない               | 「共通はどこ？差分はどこ？」と2層読み回しが必要 |
-
-分割後の1ファイルは概算 50〜70行。共通の**ロジック**（`AcceptedCounter`, `ThermometerProgressBar` 等）は import で共有するため実質的な重複はなく、重複するのはテンプレート構造だけ → 許容範囲。`WorkBookBaseTable.svelte` はリネームせず削除する。
-
-**命名判断: `WorkBook` プレフィックスを省略する**
-
-同ディレクトリの `WorkBookList.svelte` や `WorkbookTabItem.svelte` は routes 側（`+page.svelte`）からもインポートされるため、`WorkBook` プレフィックスが文脈の補足として機能する。一方、3分割コンポーネントは workbooks feature 内でしか使われず、`src/features/workbooks/components/list/` というパスがすでに "workbook" の文脈を提供している。プレフィックスは冗長になるため省略する。
-
-```
-// 省略なし（冗長）
-import CurriculumWorkbookTable from '.../workbooks/components/list/CurriculumWorkbookTable.svelte'
-
-// 省略あり（採用）
-import CurriculumTable from '.../workbooks/components/list/CurriculumTable.svelte'
-```
-
-- [ ] 共通 `interface WorkbookTableProps` を定義（3コンポーネントが同じシグネチャを持つ）
-  - `workbooks`, `workbookGradeModes`, `userId`, `role`, `taskResults` を共通 props に
-- [ ] 3コンポーネントを作成（全て `WorkbookTableProps` を実装）:
+- [x] 各コンポーネントに同じ `interface Props` を定義（`workbooks`, `workbookGradeModes`, `userId`, `role`, `taskResults`）
+- [x] 3コンポーネントを作成:
   - `CurriculumTable.svelte` — グレード + タイトル列
   - `SolutionTable.svelte` — タイトル列（padding 広め）
   - `CreatedByUserTable.svelte` — 作者 + タイトル列
-  - 各コンポーネントは同じ `interface Props` を持ち、内部に WorkBookType の if 分岐なし
-  - 共通列（ProgressBar、AcceptedCounter、CompletedTasks、編集/削除ボタン）は既存コンポーネントをそのまま利用
-- [ ] `WorkBookList.svelte` を更新: `Record<WorkBookType, Component>` ルックアップで切り替え
+- [x] `WorkBookList.svelte` を更新: `Record<WorkBookType, Component>` ルックアップで切り替え
+  - `{@const TableComponent}` は `{#if}` の直接の子として配置（HTML 要素内では使用不可）
+  - 廃止型（TEXTBOOK/GENRE/THEME/OTHERS）は近似の既存コンポーネントにフォールバック
+- [x] `WorkBookBaseTable.svelte` を削除
 
-```svelte
-<!-- WorkBookList.svelte -->
-<script>
-  const tableComponents = {
-    [WorkBookType.CURRICULUM]: CurriculumTable,
-    [WorkBookType.SOLUTION]: SolutionTable,
-    [WorkBookType.CREATED_BY_USER]: CreatedByUserTable,
-  } as const satisfies Record<WorkBookType, Component<WorkbookTableProps>>;
-</script>
+### Phase 7: コーナーケーステストの強化（純粋追加）✅
 
-{@const TableComponent = tableComponents[workbookType]}
-<TableComponent
-  {workbooks}
-  {workbookGradeModes}
-  {userId}
-  {role}
-  taskResults={taskResultsWithWorkBookId}
-/>
-```
-
-- [ ] `WorkBookBaseTable.svelte` を削除
-
-### Phase 7: コーナーケーステストの強化（純粋追加）
-
-- [ ] `utils/workbooks.ts` `calcWorkBookGradeModes`:
-  - タイブレーク動作のテスト（同頻度グレードが2つある場合、`calcGradeMode` の動作を確認して文書化）
-- [ ] 既存テストの `toBeTruthy()`/`toBeFalsy()` を `toBe(true)`/`toBe(false)` に置き換え（coding-style.md 準拠）
+- [x] `utils/workbooks.ts` `calcWorkBookGradeModes`:
+  - タイブレーク: 同頻度グレードが2つある場合は最も易しいグレードを返す（7Q vs 6Q → 7Q、Q2 vs Q1 → Q2）
+- [x] 既存テストの `toBeTruthy()`/`toBeFalsy()` を `toBe(true)`/`toBe(false)` に置き換え（coding-style.md 準拠）
 
 ### Phase 8: E2E テスト追加（純粋追加）
 

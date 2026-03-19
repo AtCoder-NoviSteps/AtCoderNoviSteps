@@ -69,6 +69,7 @@ prisma/schema.prisma # Database schema
 ## Key Conventions
 
 - **Svelte 5 Runes**: Use `$props()`, `$state()`, `$derived()` in all new components
+- **Service layer**: Services return data or `null`; never call `error()` or `redirect()`. HTTP error translation belongs in the route handler — the service must stay framework-agnostic and unit-testable.
 - **Server data**: `+page.server.ts` → `+page.svelte` via `data` prop
 - **Forms**: Superforms + Zod validation
 - **Tests**: Write tests before implementation (TDD). Use `@quramy/prisma-fabbrica` for factories, Nock for HTTP mocking

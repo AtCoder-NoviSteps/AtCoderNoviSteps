@@ -33,6 +33,9 @@ export interface WorkbookList extends WorkBookBase {
 
 export type WorkbooksList = WorkbookList[];
 
+// Alias used as the return type of getWorkBooksWithAuthors().
+export type WorkbooksWithAuthors = WorkbooksList;
+
 // HACK: enumを使うときは毎回書いているので、もっと簡略化できないか?
 export const WorkBookType: { [key in WorkBookTypeOrigin]: key } = {
   CREATED_BY_USER: 'CREATED_BY_USER', // (デフォルト) ユーザ作成: サービスの利用者がさまざまなコンセプトで作成

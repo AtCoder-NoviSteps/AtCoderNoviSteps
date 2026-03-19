@@ -1,5 +1,6 @@
 <script lang="ts">
   import { get } from 'svelte/store';
+  import type { Component } from 'svelte';
 
   import { ButtonGroup, Button, Toggle } from 'flowbite-svelte';
 
@@ -19,15 +20,21 @@
 
   import TooltipWrapper from '$lib/components/TooltipWrapper.svelte';
   import LabelWithTooltips from '$lib/components/LabelWithTooltips.svelte';
-  import WorkBookBaseTable from '$features/workbooks/components/list/WorkBookBaseTable.svelte';
+  import CurriculumTable from '$features/workbooks/components/list/CurriculumTable.svelte';
+  import SolutionTable from '$features/workbooks/components/list/SolutionTable.svelte';
+  import CreatedByUserTable from '$features/workbooks/components/list/CreatedByUserTable.svelte';
+
+  interface LoggedInUser {
+    id: string;
+    role: Roles;
+  }
 
   interface Props {
     workbookType: WorkBookType;
     workbooks: WorkbooksList;
     workbookGradeModes: Map<number, TaskGrade>;
     taskResultsWithWorkBookId: Map<number, TaskResults>;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    loggedInUser: any;
+    loggedInUser: LoggedInUser;
   }
 
   let {
@@ -104,10 +111,26 @@
     }
   });
 
-  let readableMainWorkbooksCount = $derived(() => countReadableWorkbooks(mainWorkbooks));
-  let readableReplenishedWorkbooksCount = $derived(() =>
-    countReadableWorkbooks(replenishedWorkbooks),
-  );
+  let readableMainWorkbooksCount = $derived(countReadableWorkbooks(mainWorkbooks));
+  let readableReplenishedWorkbooksCount = $derived(countReadableWorkbooks(replenishedWorkbooks));
+
+  type WorkbookTableProps = {
+    workbooks: WorkbooksList;
+    workbookGradeModes: Map<number, TaskGrade>;
+    userId: string;
+    role: Roles;
+    taskResults: Map<number, TaskResults>;
+  };
+
+  const tableComponents = {
+    [WorkBookType.CURRICULUM]: CurriculumTable,
+    [WorkBookType.SOLUTION]: SolutionTable,
+    [WorkBookType.CREATED_BY_USER]: CreatedByUserTable,
+    [WorkBookType.TEXTBOOK]: CurriculumTable,
+    [WorkBookType.GENRE]: SolutionTable,
+    [WorkBookType.THEME]: SolutionTable,
+    [WorkBookType.OTHERS]: SolutionTable,
+  } as const satisfies Record<WorkBookType, Component<WorkbookTableProps>>;
 </script>
 
 <!-- TODO: 5Q〜1Qにも対応 -->
@@ -135,14 +158,14 @@
   </div>
 {/if}
 
-{#if readableMainWorkbooksCount()}
+{#if readableMainWorkbooksCount}
+  {@const TableComponent = tableComponents[workbookType]}
   <div>
     {#if workbookType === WorkBookType.CURRICULUM}
       <div class="text-2xl pb-4 dark:text-white">手引き</div>
     {/if}
 
-    <WorkBookBaseTable
-      {workbookType}
+    <TableComponent
       workbooks={mainWorkbooks}
       {workbookGradeModes}
       {userId}
@@ -152,7 +175,7 @@
   </div>
 
   <!-- カリキュラム、かつ、公開されている【補充】問題集があるときのみ -->
-  {#if workbookType === WorkBookType.CURRICULUM && readableReplenishedWorkbooksCount()}
+  {#if workbookType === WorkBookType.CURRICULUM && readableReplenishedWorkbooksCount}
     <div class="mt-12">
       <!-- 見出しと説明文、表示の切り替え用ボタンを常に表示 -->
       <div class="flex flex-col md:flex-row items-start md:items-center md:space-x-6">
@@ -182,8 +205,7 @@
       </div>
 
       {#if showReplenishmentWorkbooks}
-        <WorkBookBaseTable
-          {workbookType}
+        <TableComponent
           workbooks={replenishedWorkbooks}
           {workbookGradeModes}
           {userId}
