@@ -3,7 +3,7 @@ description: Testing rules and patterns
 paths:
   - '**/*.test.ts'
   - '**/*.spec.ts'
-  - 'tests/**'
+  - 'e2e/**'
   - 'src/test/**'
 ---
 
@@ -20,10 +20,12 @@ Write all test titles in English. Use descriptive sentences that state the expec
 
 ## Test Types
 
-| Type | Tool       | Location                                                          | Run Command             |
-| ---- | ---------- | ----------------------------------------------------------------- | ----------------------- |
-| Unit | Vitest     | `src/test/` (mirrors `src/lib/`) or co-located in `src/features/` | `pnpm test:unit`        |
-| E2E  | Playwright | `tests/`                                                          | `pnpm test:integration` |
+| Type | Tool       | Location                                                          | Run Command      |
+| ---- | ---------- | ----------------------------------------------------------------- | ---------------- |
+| Unit | Vitest     | `src/test/` (mirrors `src/lib/`) or co-located in `src/features/` | `pnpm test:unit` |
+| E2E  | Playwright | `e2e/`                                                            | `pnpm test:e2e`  |
+
+E2E test files must use the `.spec.ts` extension. `playwright.config.ts` matches only `*.spec.ts`, so `.test.ts` files will not be detected.
 
 ## Assertions
 

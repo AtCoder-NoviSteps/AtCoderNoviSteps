@@ -177,7 +177,7 @@ features/workbooks/services/
 
 - テストファクトリ（`@quramy/prisma-fabbrica`）
 - テストヘルパー・フィクスチャ
-- E2E テスト（`tests/`）
+- E2E テスト（`e2e/`）
 
 ### Vitest 設定
 

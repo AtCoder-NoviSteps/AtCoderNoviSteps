@@ -64,7 +64,7 @@ jobs:
 
       # TODO: Run integration test
       # - name: Integration test
-      #   run: pnpm test:integration
+      #   run: pnpm test:e2e
 
   preview:
     if: ${{ github.ref != 'refs/heads/main' }}
