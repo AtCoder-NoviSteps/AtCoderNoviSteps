@@ -45,12 +45,12 @@
 
 
 <!-- Dropdown Menu -->
-<Dropdown
-  triggeredBy={`#update-grade-dropdown-trigger-${componentId}`}
-  simple
-  class="h-48 w-20 z-50 border border-gray-200 dark:border-gray-100 overflow-y-auto"
->
-  {#if isLoggedIn}
+{#if isLoggedIn}
+  <Dropdown
+    triggeredBy={`#update-grade-dropdown-trigger-${componentId}`}
+    simple
+    class="h-48 w-20 z-50 border border-gray-200 dark:border-gray-100 overflow-y-auto"
+  >
     {#each nonPendingGradeNames as grade}
       <DropdownItem class="rounded-md">
         <div
@@ -60,9 +60,15 @@
         </div>
       </DropdownItem>
     {/each}
-  {:else}
-    <DropdownItem href={SIGNUP_PAGE} class="rounded-md">アカウント作成</DropdownItem>
-    <DropdownDivider />
-    <DropdownItem href={LOGIN_PAGE} class="rounded-md">ログイン</DropdownItem>
-  {/if}
-</Dropdown>
+  </Dropdown>
+{:else}
+  <Dropdown
+    triggeredBy={`#update-grade-dropdown-trigger-${componentId}`}
+    simple
+    class="w-32 z-50 border border-gray-200 dark:border-gray-100"
+  >
+      <DropdownItem href={SIGNUP_PAGE} class="rounded-md">アカウント作成</DropdownItem>
+      <DropdownDivider />
+      <DropdownItem href={LOGIN_PAGE} class="rounded-md">ログイン</DropdownItem>
+  </Dropdown>
+{/if}
