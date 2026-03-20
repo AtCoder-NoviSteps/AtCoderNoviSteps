@@ -45,7 +45,7 @@ paths:
 | ファイル               | スコープ                                                 |
 | ---------------------- | -------------------------------------------------------- |
 | `coding-style.md`      | 言語レベルの記述スタイル（ブレース・命名・型エイリアス） |
-| `testing.md`           | `*.test.ts`, `e2e/**` のテストパターン                   |
+| `testing.md`           | `*.test.ts`, `*.spec.ts`, `e2e/**` のテストパターン      |
 | `svelte-components.md` | `*.svelte` コンポーネント設計方針                        |
 | `prisma-db.md`         | `prisma/**`, `src/lib/server/**` の DB・サービス層規約   |
 | `auth.md`              | 認証関連                                                 |
