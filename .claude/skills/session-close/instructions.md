@@ -6,7 +6,7 @@ Run both checks and fix any failures before proceeding:
 
 ```bash
 pnpm test:unit
-pnpm test:integration
+pnpm test:e2e
 pnpm check
 ```
 

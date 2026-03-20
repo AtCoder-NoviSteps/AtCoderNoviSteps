@@ -25,7 +25,7 @@ pnpm dev              # Start dev server (localhost:5174)
 pnpm build            # Build for production
 pnpm test             # Run all tests
 pnpm test:unit        # Vitest unit tests
-pnpm test:integration # Playwright E2E tests
+pnpm test:e2e         # Playwright E2E tests
 pnpm coverage         # Report test coverage
 pnpm lint             # ESLint check
 pnpm format           # Prettier format
@@ -61,7 +61,7 @@ src/features/ # Feature-scoped code (single domain)
 │ └── utils/ # Feature utilities
 │ └── _.test.ts # Tests co-located next to source
 src/test/ # Unit tests (mirrors src/lib/)
-tests/ # E2E tests (Playwright)
+e2e/ # E2E tests (Playwright)
 prisma/schema.prisma # Database schema
 ```
 
@@ -71,7 +71,7 @@ prisma/schema.prisma # Database schema
 - **Service layer**: Services return data or `null`; never call `error()` or `redirect()`. HTTP error translation belongs in the route handler — the service must stay framework-agnostic and unit-testable.
 - **Server data**: `+page.server.ts` → `+page.svelte` via `data` prop
 - **Forms**: Superforms + Zod validation
-- **Tests**: Write tests before implementation (TDD). Use `@quramy/prisma-fabbrica` for factories only in `prisma/seed.ts` and Playwright global setup (`tests/global-setup.ts`). For service-layer unit tests, mock the DB with `vi.mock('$lib/server/database', ...)` — do not use fabbrica there. Use Nock for HTTP mocking
+- **Tests**: Write tests before implementation (TDD). Use `@quramy/prisma-fabbrica` for factories only in `prisma/seed.ts`. For service-layer unit tests, mock the DB with `vi.mock('$lib/server/database', ...)` — do not use fabbrica there. Use Nock for HTTP mocking
 - **Naming**: `camelCase` variables, `PascalCase` types/components, `snake_case` files/routes, `kebab-case` directories
 - **Pre-commit**: Lefthook runs Prettier + ESLint (bypass: `LEFTHOOK=0 git commit`)
 
