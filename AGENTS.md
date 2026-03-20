@@ -8,7 +8,11 @@ Always prefer simplicity over pathological correctness. YAGNI, KISS, DRY. No bac
 
 **When implementing:**
 
-1. Plan with a phased TODO list before starting (lower risk → higher risk order)
+1. Use `/writing-plans` to generate a phased plan (2–5-min tasks, lower risk → higher risk order). Verify each task before starting:
+   - Which layer? (prisma / server / zod / types / fixtures / services / utils / stores / routes / components) — split if 2+ layers
+   - Single responsibility: one purpose per task
+   - Existing util/service/type? Search before creating
+   - Test name: state it in the task description
 2. Before writing a new function, search `src/lib/utils/`, `src/lib/services/`, `src/features/*/utils/` and `src/features/*/services/` for existing implementations; extract shared logic there when it appears in 2+ places
 3. Write tests first, then implement production code, then verify with `pnpm test:unit`
 4. Review critically after implementing: flag YAGNI violations, over-abstraction, missing tests

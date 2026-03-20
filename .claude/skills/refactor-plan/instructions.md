@@ -52,6 +52,8 @@ Scan the target code in this order (lowest risk first). List every concrete find
 - Order phases by risk: isolated mechanical changes first, structural changes last
 - State inter-phase dependencies explicitly
 - For uncertain changes, add an **investigation sub-step** before the implementation task
+- Each task must have single responsibility — verify it touches exactly one layer (prisma / server / zod / types / fixtures / services / utils / stores / routes / components)
+- "Implementation + test + commit" should fit within one task; if not, split further
 
 ## When to Skip Tests
 

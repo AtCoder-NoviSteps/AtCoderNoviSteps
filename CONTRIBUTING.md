@@ -65,6 +65,14 @@
 - [Visual Studio Code (VS Code)](https://code.visualstudio.com/)
 - [Visual Studio Code Dev Containers](https://code.visualstudio.com/docs/remote/containers)
 
+### AI 支援ツール
+
+- [Claude Code](https://docs.anthropic.com/en/docs/claude-code) - AI コーディングアシスタント（VS Code 拡張: `anthropic.claude-code`）
+  - [superpowers plugin](https://github.com/obra/superpowers) - `/writing-plans` スキルによる実装前の詳細計画生成
+- [CodeRabbit](https://coderabbit.ai/) - AI コードレビュー
+  - CodeRabbit CLI (`coderabbit review --plain`) — milestone 区切りでのローカルレビュー
+  - CodeRabbit CI — PR 作成後の自動レビュー（最終品質ゲート）
+
 ### ホスティング、CI・CD関連
 
 - [Vercel](https://vercel.com/)

@@ -63,12 +63,18 @@ paths:
 | `/commit`   | git コミット作成ワークフロー       |
 | `/simplify` | 変更済みコードの品質レビュー・改善 |
 
-**本プロジェクトの skills（`.claude/skills/`）:**
+**本プロジェクトの skills（`.claude/skills/` および superpowers plugin）:**
 
 | スキル           | 用途                                                                                                         |
 | ---------------- | ------------------------------------------------------------------------------------------------------------ |
+| `/writing-plans` | 新機能・追加実装の詳細計画を生成（2-5分単位のタスク分解）。superpowers plugin 提供                           |
 | `/refactor-plan` | Issue 番号またはパスを渡してリファクタリング計画を出力（実装はしない）                                       |
 | `/session-close` | セッション終了時のルーティン：テスト確認 → plan.md 更新 → rules 候補提示 → 肥大化チェック → 繰り返し指示検出 |
+
+**`/writing-plans` と `/refactor-plan` の使い分け:**
+
+- `/writing-plans`: 新機能・追加実装の実装前の詳細計画生成（2-5分単位のタスク分解）
+- `/refactor-plan`: リファクタリング調査チェックリスト（実装はしない）
 
 **プロジェクトローカルスキルと `Skill` ツールの違い:**
 
@@ -107,12 +113,40 @@ paths:
 
 Claude Code を使ってリファクタリング・機能追加を行う際の標準フロー:
 
-1. **計画**: `plan.md`（またはドキュメントの TODO セクション）にフェーズ分けした TODO リストを作成する
+1. **計画**: `/writing-plans` で 2-5 分単位のフェーズ分け TODO を生成する
 2. **実装**: プロダクションコード → テスト → `pnpm test:unit` で確認
 3. **TODO 更新**: 完了タスクにチェックを入れる
-4. **レビュー**: 実装後に批判的な観点でレビューする（忖度しない。YAGNI / KISS / DRY 違反、過剰な抽象化を指摘する）
-5. **教訓整理**: 次回以降も有用な知見を `.claude/rules/` または `docs/guides/` などに記録する
-6. **クリーンアップ**: 完了した計画書・古い TODO は削除または要約する
+4. **milestone レビュー**: Phase の区切りで `coderabbit review --plain` を実行し、critical/high のみ対応する
+5. **レビュー**: 実装後に批判的な観点でレビューする（忖度しない。YAGNI / KISS / DRY 違反、過剰な抽象化を指摘する）
+6. **教訓整理**: 次回以降も有用な知見を `.claude/rules/` または `docs/guides/` などに記録する
+7. **クリーンアップ**: 完了した計画書・古い TODO は削除または要約する
+
+## レビューチェーン
+
+```text
+/writing-plans で plan 生成（2-5 分タスク単位）
+  → 実装
+  → Phase 区切りで coderabbit review --plain（milestone レビュー）
+  → PR 作成後に CodeRabbit CI（最終ゲート）
+```
+
+| レイヤー            | タイミング        | 対応コスト | 目的                           |
+| ------------------- | ----------------- | ---------- | ------------------------------ |
+| `/writing-plans`    | 実装前            | 低         | アーキテクチャ違反を事前に防ぐ |
+| `coderabbit review` | Phase 区切り      | 中         | critical/high を早期に潰す     |
+| CodeRabbit CI       | PR 作成後（自動） | 高         | 最終品質ゲート                 |
+
+**milestone タスクのテンプレート（writing-plans で Phase を締めるとき）:**
+
+```markdown
+## Milestone: Phase N complete
+
+- [ ] Run `coderabbit review --plain` on changed files
+- [ ] Address critical/high severity issues before next phase
+- [ ] Log CodeRabbit comment count (for metrics)
+```
+
+> low/info は次の Phase で判断する。毎コミット実行は不要。
 
 ## 参考
 
