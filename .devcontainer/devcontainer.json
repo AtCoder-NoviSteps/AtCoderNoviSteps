@@ -25,7 +25,7 @@
   "initializeCommand": "mkdir -p ~/.claude",
   //
   // Use 'postCreateCommand' to run commands after the container is created.
-  "postCreateCommand": "npm install -g @anthropic-ai/claude-code && curl -fsSL https://cli.coderabbit.ai/install.sh | sh && pnpm install",
+  "postCreateCommand": "npm install -g @anthropic-ai/claude-code && (curl -fsSL https://cli.coderabbit.ai/install.sh | sh || echo 'CodeRabbit CLI installation failed, continuing...') && pnpm install",
   //
   // Configure tool-specific properties.
   "customizations": {
