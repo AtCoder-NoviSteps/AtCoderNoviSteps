@@ -31,7 +31,8 @@ Before writing new logic, decide which layer it belongs to. Run this check at pl
 - **New files**: before naming a new file or directory, grep the relevant `src/` directory to confirm existing conventions. Confirm at plan time, not during implementation:
   - Custom files in routes (utilities, helpers, etc.): `snake_case` (e.g., `user_profile.ts`)
   - SvelteKit special files: follow framework conventions (`+page.svelte`, `+page.server.ts`, `+server.ts`)
-  - Directories: `kebab-case` (e.g., `user-profile/`)
+  - Helper directories inside `src/routes/`: underscore-prefixed (`_utils/`, `_types/`, `_fixtures/`, `_components/`)
+  - Other directories: `kebab-case` (e.g., `contest-table/`)
 
 ### Syntax
 
