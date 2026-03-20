@@ -66,6 +66,47 @@ console.log('Workbook created successfully');
 
 Prefer placing the single authoritative log in the service layer; remove duplicate logs in route handlers that cover the same event.
 
+## No Hard-Coded Values
+
+Extract magic numbers and strings to named constants. Never embed literal values whose meaning is not self-evident from the type or immediate context.
+
+```typescript
+// Bad
+if (grade >= 11) { ... }
+
+const url = '/api/workbooks/submit';
+
+// Good
+const MIN_GRADE = 11;
+
+if (grade >= MIN_GRADE) { ... }
+
+const SUBMIT_URL = '/api/workbooks/submit';
+```
+
+Place constants at the top of the file, or in a dedicated `constants/` module when shared across files.
+
+## Function Ordering
+
+Within a file, order declarations as follows:
+
+1. Exported functions and classes (public API first)
+2. Internal helper functions (supporting the exports above)
+
+Group functions by concern — helpers should appear immediately after the exported function they support, not at the end of the file. This makes the call graph readable top-to-bottom.
+
+## Svelte 5: Prefer Official Docs Over Training Knowledge
+
+When Svelte 5 behavior is unclear, fetch the official docs directly via WebFetch instead of relying on training knowledge.
+
+URL pattern: `https://svelte.dev/docs/svelte/{section}`
+
+Examples:
+
+- `$effect` behavior → `https://svelte.dev/docs/svelte/$effect`
+- Stores usage → `https://svelte.dev/docs/svelte/stores`
+- Runes overview → `https://svelte.dev/docs/svelte/what-are-runes`
+
 ## Async Rollback: Capture State Before `await`
 
 Capture `$state` values before the first `await` for safe rollback. A concurrent update can overwrite the variable while awaiting:
