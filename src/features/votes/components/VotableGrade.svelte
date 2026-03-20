@@ -3,7 +3,7 @@
 
   import { Dropdown, DropdownItem, DropdownDivider } from 'flowbite-svelte';
 
-  import { taskGradeValues, TaskGrade, type TaskResult } from '$lib/types/task';
+  import { taskGradeValues, TaskGrade, getTaskGrade, type TaskResult } from '$lib/types/task';
   import { getTaskGradeLabel } from '$lib/utils/task';
   import { SIGNUP_PAGE, LOGIN_PAGE } from '$lib/constants/navbar-links';
   import { errorMessageStore } from '$lib/stores/error_message';
@@ -20,13 +20,12 @@
 
   const componentId = Math.random().toString(36).substring(2);
   const nonPendingGrades = taskGradeValues.filter((g) => g !== TaskGrade.PENDING);
-  const nonPendingGradeNames = nonPendingGrades.map((g) => getTaskGradeLabel(g));
 
-  let selectedVoteGrade = $state<string>();
+  let selectedVoteGrade = $state<TaskGrade>();
   let showForm = $state(false);
 
   function handleClick(voteGrade: string): void {
-    selectedVoteGrade = voteGrade;
+    selectedVoteGrade = getTaskGrade(voteGrade);
     showForm = true;
 
     // Submit after the form is rendered.
@@ -113,12 +112,12 @@
     simple
     class="h-48 w-20 z-50 border border-gray-200 dark:border-gray-100 overflow-y-auto"
   >
-    {#each nonPendingGradeNames as grade}
+    {#each nonPendingGrades as grade}
       <DropdownItem onclick={() => handleClick(grade)} class="rounded-md">
         <div
           class="flex items-center justify-between w-full text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white"
         >
-          <span>{grade}</span>
+          <span>{getTaskGradeLabel(grade)}</span>
         </div>
       </DropdownItem>
     {/each}
@@ -139,7 +138,7 @@
   {@render voteGradeForm(taskResult, selectedVoteGrade)}
 {/if}
 
-{#snippet voteGradeForm(selectedTaskResult: TaskResult, voteGrade: string)}
+{#snippet voteGradeForm(selectedTaskResult: TaskResult, voteGrade: TaskGrade)}
   <form
     id="voteGradeForm"
     method="POST"

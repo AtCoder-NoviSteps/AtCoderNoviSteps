@@ -239,9 +239,9 @@ ANALYSIS ANALYSIS
   
 
   "votegrade" {
-    String id "🗝️"
-    String userId 
-    String taskId 
+    String id 
+    String userId "🗝️"
+    String taskId "🗝️"
     TaskGrade grade 
     DateTime createdAt 
     DateTime updatedAt 

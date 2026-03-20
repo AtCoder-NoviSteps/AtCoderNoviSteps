@@ -3,7 +3,8 @@ import { type Actions } from '@sveltejs/kit';
 import * as crud from '$lib/services/task_results';
 import type { TaskResults } from '$lib/types/task';
 import { Roles } from '$lib/types/user';
-import * as action from '$lib/actions/update_task_result';
+import { updateTaskResult } from '$lib/actions/update_task_result';
+import { updateAbsoluteVoteResult } from '@/features/votes/actions/update_absolute_vote_result';
 
 // 一覧表ページは、ログインしていなくても閲覧できるようにする
 export async function load({ locals, url }) {
@@ -33,11 +34,10 @@ export async function load({ locals, url }) {
 export const actions = {
   update: async ({ request, locals }) => {
     const operationLog = 'problems -> actions -> update';
-    return await action.updateTaskResult({ request, locals }, operationLog);
+    return await updateTaskResult({ request, locals }, operationLog);
   },
-  voteAbsoluteGrade: async ({request}) => {
-    const data = await request.formData();
-    await console.log(`taskId: ${data.get('taskId')}`);
-		console.log(`grade: ${data.get('grade')}`);
+  voteAbsoluteGrade: async ({request, locals}) => {
+    const operationLog = 'problems -> actions -> voteAbsoluteGrade';
+    return await updateAbsoluteVoteResult({ request, locals }, operationLog);
   },
 } satisfies Actions;

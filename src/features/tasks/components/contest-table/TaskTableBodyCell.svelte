@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { TaskResult } from '$lib/types/task';
 
-  import VotableGrade from '$features/tasks/components/contest-table/VotableGrade.svelte';
+  import VotableGrade from '@/features/votes/components/VotableGrade.svelte';
   import ExternalLinkWrapper from '$lib/components/ExternalLinkWrapper.svelte';
   import UpdatingDropdown from '$lib/components/SubmissionStatus/UpdatingDropdown.svelte';
 

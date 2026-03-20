@@ -239,7 +239,7 @@ model WorkBookTask {
 }
 
 model VoteGrade {
-  id         String   @id @default(uuid())
+  id         String   @unique
   userId     String
   taskId     String
   grade      TaskGrade
@@ -249,6 +249,7 @@ model VoteGrade {
   user User @relation(references: [id], fields: [userId])
   task Task @relation(references: [task_id], fields: [taskId])
 
+  @@id([userId, taskId])
   @@unique([userId, taskId])
   @@map("votegrade")
 }
