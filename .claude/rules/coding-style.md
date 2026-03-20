@@ -93,7 +93,7 @@ Within a file, order declarations as follows:
 1. Exported functions and classes (public API first)
 2. Internal helper functions (supporting the exports above)
 
-Group functions by concern — helpers should appear immediately after the exported function they support, not at the end of the file. This makes the call graph readable top-to-bottom.
+Shared helper functions (used by two or more exports) should be grouped at the end of the file.
 
 ## Svelte 5: Prefer Official Docs Over Training Knowledge
 
