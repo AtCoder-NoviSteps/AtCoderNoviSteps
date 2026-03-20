@@ -29,7 +29,7 @@
 </div>
 
 {#snippet taskGradeLabel(taskResult: TaskResult)}
-  <VotableGrade grade={taskResult.grade} {isLoggedIn} />
+  <VotableGrade {taskResult} {isLoggedIn} />
 {/snippet}
 
 {#snippet taskTitleAndExternalLink(taskResult: TaskResult, isShownTaskIndex: boolean)}

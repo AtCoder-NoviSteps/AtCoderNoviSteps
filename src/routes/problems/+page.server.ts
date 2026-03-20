@@ -35,4 +35,9 @@ export const actions = {
     const operationLog = 'problems -> actions -> update';
     return await action.updateTaskResult({ request, locals }, operationLog);
   },
+  voteAbsoluteGrade: async ({request}) => {
+    const data = await request.formData();
+    await console.log(`taskId: ${data.get('taskId')}`);
+		console.log(`grade: ${data.get('grade')}`);
+  },
 } satisfies Actions;
