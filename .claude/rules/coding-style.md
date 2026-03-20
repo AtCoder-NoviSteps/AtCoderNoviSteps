@@ -4,18 +4,18 @@
 
 Before writing new logic, decide which layer it belongs to. Run this check at plan time, before writing any code:
 
-| Layer          | Directory                                          | Key constraints                                              |
-| -------------- | -------------------------------------------------- | ------------------------------------------------------------ |
-| DB schema      | `prisma/`                                          | Migrations are immutable after apply                         |
-| DB access      | `src/lib/server/`                                  | Server-only; never import in client code                     |
-| Validation     | `src/**/zod/`                                      | `.int()` for Int fields; comment dual-enforcement with SQL CHECK |
-| Domain types   | `src/**/types/` (`_types/` inside `src/routes/`)   | Plural aliases; TSDoc on every export; no `any`              |
-| Test data      | `src/**/fixtures/` (`_fixtures/` inside `src/routes/`) | Write before implementation (TDD); use realistic values  |
-| Business logic | `src/**/services/`                                 | Return pure values or `null`; no `Response`/`json()`         |
-| Pure utilities | `src/**/utils/` (`_utils/` inside `src/routes/`)   | No side effects; adjacent unit test required                 |
-| State          | `src/**/stores/`                                   | `.svelte.ts`; class + `$state()`; singleton export           |
-| Route handlers | `src/routes/`                                      | Page: `redirect()`; API: `error()`                           |
-| UI components  | `src/**/*.svelte`                                  | Svelte 5 Runes; business logic → `utils/`                    |
+| Layer          | Directory                                              | Key constraints                                                  |
+| -------------- | ------------------------------------------------------ | ---------------------------------------------------------------- |
+| DB schema      | `prisma/`                                              | Migrations are immutable after apply                             |
+| DB access      | `src/lib/server/`                                      | Server-only; never import in client code                         |
+| Validation     | `src/**/zod/`                                          | `.int()` for Int fields; comment dual-enforcement with SQL CHECK |
+| Domain types   | `src/**/types/` (`_types/` inside `src/routes/`)       | Plural aliases; TSDoc on every export; no `any`                  |
+| Test data      | `src/**/fixtures/` (`_fixtures/` inside `src/routes/`) | Write before implementation (TDD); use realistic values          |
+| Business logic | `src/**/services/`                                     | Return pure values or `null`; no `Response`/`json()`             |
+| Pure utilities | `src/**/utils/` (`_utils/` inside `src/routes/`)       | No side effects; adjacent unit test required                     |
+| State          | `src/**/stores/`                                       | `.svelte.ts`; class + `$state()`; singleton export               |
+| Route handlers | `src/routes/`                                          | Page: `redirect()`; API: `error()`                               |
+| UI components  | `src/**/*.svelte`                                      | Svelte 5 Runes; business logic → `utils/`                        |
 
 ## Naming
 
@@ -139,4 +139,3 @@ try {
   items = previous;
 }
 ```
-
