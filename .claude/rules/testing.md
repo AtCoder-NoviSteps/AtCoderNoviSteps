@@ -13,6 +13,12 @@ paths:
 
 Write all test titles in English. Use descriptive sentences that state the expected behavior (e.g., `'returns empty array when workbooks is empty'`). Japanese is only acceptable in inline comments or fixture strings that represent real user-facing content.
 
+## Tests Ship with the Implementation
+
+Tests must be included in the same commit as the implementation they cover. "Add tests later" is not acceptable — a feature or fix is not done until its tests pass.
+
+If a task description does not mention tests, add them anyway for any non-trivial logic.
+
 ## Test Integrity
 
 - Never delete, comment out, or weaken assertions (e.g. `toEqual` → `toBeDefined`) to make tests pass
