@@ -13,6 +13,7 @@ import {
   getGradeMode,
   getTaskResult,
   countReadableWorkbooks,
+  partitionWorkbooksAsMainAndReplenished,
 } from '$features/workbooks/utils/workbooks';
 
 function createTask(taskId: string, grade: TaskGrade): Task {
@@ -366,6 +367,28 @@ describe('Workbooks', () => {
 
     test('returns 0 for empty list', () => {
       expect(countReadableWorkbooks([], userId)).toBe(0);
+    });
+  });
+
+  describe('partitionWorkbooksAsMainAndReplenished', () => {
+    test('main contains non-replenished workbooks', () => {
+      const main = createWorkBookListBase({ id: 1, isReplenished: false });
+      const replenished = createWorkBookListBase({ id: 2, isReplenished: true });
+      const result = partitionWorkbooksAsMainAndReplenished([main, replenished]);
+      expect(result.main).toEqual([main]);
+    });
+
+    test('replenished contains replenished workbooks', () => {
+      const main = createWorkBookListBase({ id: 1, isReplenished: false });
+      const replenished = createWorkBookListBase({ id: 2, isReplenished: true });
+      const result = partitionWorkbooksAsMainAndReplenished([main, replenished]);
+      expect(result.replenished).toEqual([replenished]);
+    });
+
+    test('empty input returns empty arrays', () => {
+      const result = partitionWorkbooksAsMainAndReplenished([]);
+      expect(result.main).toEqual([]);
+      expect(result.replenished).toEqual([]);
     });
   });
 

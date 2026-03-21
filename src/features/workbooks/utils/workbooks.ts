@@ -133,3 +133,19 @@ export function getTaskResult(
 ): TaskResults {
   return taskResults.get(workbookId) ?? EMPTY_TASK_RESULTS;
 }
+
+/**
+ * Partitions workbooks into main and replenished groups.
+ *
+ * @param workbooks - Full list to partition
+ * @returns Object with `main` (isReplenished=false) and `replenished` (isReplenished=true) arrays
+ */
+export function partitionWorkbooksAsMainAndReplenished(workbooks: WorkbooksList): {
+  main: WorkbooksList;
+  replenished: WorkbooksList;
+} {
+  return {
+    main: workbooks.filter((workbook) => !workbook.isReplenished),
+    replenished: workbooks.filter((workbook) => workbook.isReplenished),
+  };
+}
