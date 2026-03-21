@@ -1,27 +1,18 @@
 <script lang="ts">
   import type { Snippet } from 'svelte';
-
   import TabItemWrapper from '$lib/components/Tabs/TabItemWrapper.svelte';
 
-  import type { WorkBookType } from '$features/workbooks/types/workbook';
-  import { activeWorkbookTabStore } from '$features/workbooks/stores/active_workbook_tab';
-
   interface Props {
-    workbookType: WorkBookType;
     isOpen?: boolean;
     title: string;
     tooltipContent?: string;
     children?: Snippet;
+    onclick?: () => void;
   }
 
-  let { workbookType, isOpen = false, title, tooltipContent = '', children }: Props = $props();
+  let { isOpen = false, title, tooltipContent = '', children, onclick }: Props = $props();
 </script>
 
-<TabItemWrapper
-  {isOpen}
-  {title}
-  {tooltipContent}
-  onclick={() => activeWorkbookTabStore.setActiveWorkbookTab(workbookType)}
->
+<TabItemWrapper {isOpen} {title} {tooltipContent} {onclick}>
   {@render children?.()}
 </TabItemWrapper>
