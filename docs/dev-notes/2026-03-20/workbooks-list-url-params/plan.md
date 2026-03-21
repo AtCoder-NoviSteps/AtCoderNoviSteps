@@ -110,7 +110,7 @@
 - [x] `pnpm format` — フォーマット適用済み
 - [ ] 手動確認（`pnpm dev`）:
   - `/workbooks` → カリキュラム Q10 が表示
-  - グレードボタンクリック → 画面リロードなしで URL・コンテンツ更新
+  - グレードボタンクリック → ブラウザリロードなしで URL・コンテンツ更新（`goto()` はクライアントサイドナビゲーション。ただし `+layout.svelte` の `$navigating` によりデータ取得中はページ全体がスピナーに置き換わる）
   - 解法別タブクリック → `?tab=solution&categories=SEARCH_SIMULATION`
   - カテゴリボタンクリック → URL・コンテンツ更新
   - 問題集が存在しないカテゴリのボタンが非表示
@@ -165,3 +165,5 @@
 | 24  | 実装品質 | 類似した条件ロジックの重複を計画段階で気づかなかった                                             | `parseWorkBookGrade` と `parseWorkBookCategory` で「null チェック + 有効値確認 + PENDING 除外」が重複。計画段階で「同バリデーションロジックが複数現れるか」を確認し、`isValidNonPending<T>()` のような汎用サブ関数を早期に設計する                                          |
 | 25  | 型設計   | 型の再エクスポート後、消費側の `Record<T, V>` が新しい値キーを要求するようになることを見落とした | `export type { WorkBookTab as ActiveTab }` と計画したが、`Record<ActiveTab, TabConfig>` が `created_by_user` を要求してエラー。型エイリアスを再エクスポートする前に「消費側で `Record<T, *>` として使われているか」を確認し、そうであれば `Exclude<T, 未使用値>` で絞り込む |
 | 26  | 実装調査 | E2E テストで `$lib` / `$features` パスエイリアスが使えないことを見落とした                       | `e2e/` ディレクトリは SvelteKit のパスエイリアスを解決しない。E2E テスト内では型のインポートを避け、URL 文字列値は `const TAB_CURRICULUM = 'curriculum'` のようにローカル定数として定義する                                                                                 |
+| 27  | 実装理解 | `goto()` による遷移を「画面リロードなし」と表現したが、体感的にはリロードに近い                  | `goto()` はブラウザリロードではない（`window.location` は変化しない）が、`+layout.svelte` が `{#if $navigating}` でページ全体をスピナーに置き換えるため、UX 的にはリロードに近い見た目になる。`$navigating` はサーバーから新しいデータが返るまで truthy のまま継続する      |
+| 28  | 技術負債 | `+layout.svelte` が deprecated な `$app/stores` の `navigating` を使っている                     | SvelteKit 2.12+ では `$app/state` の `navigating` を使うことが推奨されている（公式ドキュメント確認済み）。`$app/stores` 版は非推奨。本タスクのスコープ外だが、将来的に `import { navigating } from '$app/state'` へ移行すること                                             |
