@@ -1,37 +1,68 @@
-import { error } from '@sveltejs/kit';
+import { error, redirect } from '@sveltejs/kit';
 
-import * as workBooksCrud from '$features/workbooks/services/workbooks';
 import * as taskCrud from '$lib/services/tasks';
 import * as taskResultsCrud from '$lib/services/task_results';
+import * as workBooksCrud from '$features/workbooks/services/workbooks';
 
-import { getLoggedInUser, canDelete } from '$lib/utils/authorship';
+import { Roles } from '$lib/types/user';
+import {
+  WorkBookTab,
+  type WorkBookTab as WorkBookTabType,
+} from '$features/workbooks/types/workbook';
+import {
+  type PlacementQuery,
+  getPublishedWorkbooksByPlacement,
+  getWorkBooksCreatedByUsers,
+  getAvailableSolutionCategories,
+} from '$features/workbooks/services/workbooks';
+import { isAdmin, getLoggedInUser, canDelete } from '$lib/utils/authorship';
+import {
+  parseWorkBookTab,
+  parseWorkBookGrade,
+  parseWorkBookCategory,
+} from '$features/workbooks/utils/workbook_url_params';
 import { parseWorkBookId } from '$features/workbooks/utils/workbook';
+import { WorkBookType } from '$features/workbooks/types/workbook';
 
 import {
   BAD_REQUEST,
   FORBIDDEN,
+  FOUND,
   NOT_FOUND,
   INTERNAL_SERVER_ERROR,
 } from '$lib/constants/http-response-status-codes';
 
-export async function load({ locals }) {
+export async function load({ locals, url }) {
   const loggedInUser = await getLoggedInUser(locals);
+  const params = url.searchParams;
+
+  const tab = parseWorkBookTab(params);
+
+  // CREATED_BY_USER tab is admin-only
+  if (tab === WorkBookTab.CREATED_BY_USER && !isAdmin(loggedInUser?.role as Roles)) {
+    redirect(FOUND, '/workbooks');
+  }
+
+  const selectedGrade = parseWorkBookGrade(params);
+  const selectedCategory = parseWorkBookCategory(params);
 
   try {
-    // Each query is independent, so we execute them in parallel with Promise.all
-    const [workbooks, tasksMapByIds, taskResultsByTaskId] = await Promise.all([
-      workBooksCrud.getWorkBooksWithAuthors(),
-      // Used to get the most frequent grade of the tasks that make up the workbook
+    const [workbooks, availableCategories, tasksMapByIds, taskResultsByTaskId] = await Promise.all([
+      fetchWorkbooksByTab(tab, selectedGrade, selectedCategory),
+      getAvailableSolutionCategories(),
       taskCrud.getTasksByTaskId(),
-      // Used to display the user's answer status
       taskResultsCrud.getTaskResultsOnlyResultExists(loggedInUser?.id as string, true),
     ]);
 
     return {
       workbooks,
+      availableCategories,
       tasksMapByIds,
       taskResultsByTaskId,
       loggedInUser,
+      tab,
+      selectedGrade,
+      selectedCategory,
     };
   } catch (e) {
     console.error('Failed to fetch workbooks, tasks or task results: ', e);
@@ -75,3 +106,27 @@ export const actions = {
     }
   },
 };
+
+function fetchWorkbooksByTab(
+  tab: WorkBookTabType,
+  grade: ReturnType<typeof parseWorkBookGrade>,
+  category: ReturnType<typeof parseWorkBookCategory>,
+) {
+  if (tab === WorkBookTab.CREATED_BY_USER) {
+    return getWorkBooksCreatedByUsers();
+  }
+
+  return getPublishedWorkbooksByPlacement(buildPlacementQuery(tab, grade, category));
+}
+
+function buildPlacementQuery(
+  tab: WorkBookTabType,
+  grade: ReturnType<typeof parseWorkBookGrade>,
+  category: ReturnType<typeof parseWorkBookCategory>,
+): PlacementQuery {
+  if (tab === WorkBookTab.CURRICULUM) {
+    return { workBookType: WorkBookType.CURRICULUM, taskGrade: grade };
+  }
+
+  return { workBookType: WorkBookType.SOLUTION, solutionCategory: category };
+}
