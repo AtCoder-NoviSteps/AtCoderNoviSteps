@@ -4,6 +4,12 @@
 
 `+page.server.ts` での解析と `+page.svelte` での URL 組み立てを担う純粋関数群。order ページの `parseInitialCategories(params: URLSearchParams)` パターンに倣い、引数は `URLSearchParams` を直接受け取る（`string | null` ではない）。
 
+**設計方針:**
+
+- tab 値の比較は `WorkBookTab.CURRICULUM` 等の定数を使い、ハードコード文字列は禁止
+- `isValidEnumValue<T>()` サブ関数で `grades`/`categories` の共通検証ロジックを切り出す
+- テスト内の `new URLSearchParams('...')` は `toParams()` ヘルパーで共通化する
+
 ---
 
 ## Task 2-A: 失敗するテストを書く
@@ -18,6 +24,7 @@
 import { describe, test, expect } from 'vitest';
 import { TaskGrade } from '$lib/types/task';
 import { SolutionCategory } from '$features/workbooks/types/workbook_placement';
+import { WorkBookTab } from '$features/workbooks/types/workbook';
 import {
   parseWorkBookTab,
   parseWorkBookGrade,
@@ -25,71 +32,78 @@ import {
   buildWorkbooksUrl,
 } from './workbook_url_params';
 
+/** テスト用ヘルパー: クエリ文字列から URLSearchParams を生成する */
+function toParams(query: string): URLSearchParams {
+  return new URLSearchParams(query);
+}
+
 describe('parseWorkBookTab', () => {
   test('returns curriculum for tab=curriculum', () => {
-    expect(parseWorkBookTab(new URLSearchParams('tab=curriculum'))).toBe('curriculum');
+    expect(parseWorkBookTab(toParams('tab=curriculum'))).toBe(WorkBookTab.CURRICULUM);
   });
 
   test('returns solution for tab=solution', () => {
-    expect(parseWorkBookTab(new URLSearchParams('tab=solution'))).toBe('solution');
+    expect(parseWorkBookTab(toParams('tab=solution'))).toBe(WorkBookTab.SOLUTION);
+  });
+
+  test('returns created_by_user for tab=created_by_user', () => {
+    expect(parseWorkBookTab(toParams('tab=created_by_user'))).toBe(WorkBookTab.CREATED_BY_USER);
   });
 
   test('returns curriculum (default) when tab is absent', () => {
-    expect(parseWorkBookTab(new URLSearchParams())).toBe('curriculum');
+    expect(parseWorkBookTab(toParams(''))).toBe(WorkBookTab.CURRICULUM);
   });
 
   test('returns curriculum (default) for invalid tab value', () => {
-    expect(parseWorkBookTab(new URLSearchParams('tab=created_by_user'))).toBe('curriculum');
+    expect(parseWorkBookTab(toParams('tab=invalid'))).toBe(WorkBookTab.CURRICULUM);
   });
 });
 
 describe('parseWorkBookGrade', () => {
   test('returns Q10 for grades=Q10', () => {
-    expect(parseWorkBookGrade(new URLSearchParams('grades=Q10'))).toBe(TaskGrade.Q10);
+    expect(parseWorkBookGrade(toParams('grades=Q10'))).toBe(TaskGrade.Q10);
   });
 
   test('returns Q9 for grades=Q9', () => {
-    expect(parseWorkBookGrade(new URLSearchParams('grades=Q9'))).toBe(TaskGrade.Q9);
+    expect(parseWorkBookGrade(toParams('grades=Q9'))).toBe(TaskGrade.Q9);
   });
 
   test('returns Q10 (default) when grades is absent', () => {
-    expect(parseWorkBookGrade(new URLSearchParams())).toBe(TaskGrade.Q10);
+    expect(parseWorkBookGrade(toParams(''))).toBe(TaskGrade.Q10);
   });
 
   test('returns Q10 (default) for PENDING', () => {
-    expect(parseWorkBookGrade(new URLSearchParams('grades=PENDING'))).toBe(TaskGrade.Q10);
+    expect(parseWorkBookGrade(toParams('grades=PENDING'))).toBe(TaskGrade.Q10);
   });
 
   test('returns Q10 (default) for invalid value', () => {
-    expect(parseWorkBookGrade(new URLSearchParams('grades=Z99'))).toBe(TaskGrade.Q10);
+    expect(parseWorkBookGrade(toParams('grades=Z99'))).toBe(TaskGrade.Q10);
   });
 });
 
 describe('parseWorkBookCategory', () => {
   test('returns SEARCH_SIMULATION for categories=SEARCH_SIMULATION', () => {
-    expect(parseWorkBookCategory(new URLSearchParams('categories=SEARCH_SIMULATION'))).toBe(
+    expect(parseWorkBookCategory(toParams('categories=SEARCH_SIMULATION'))).toBe(
       SolutionCategory.SEARCH_SIMULATION,
     );
   });
 
   test('returns GRAPH for categories=GRAPH', () => {
-    expect(parseWorkBookCategory(new URLSearchParams('categories=GRAPH'))).toBe(
-      SolutionCategory.GRAPH,
-    );
+    expect(parseWorkBookCategory(toParams('categories=GRAPH'))).toBe(SolutionCategory.GRAPH);
   });
 
   test('returns SEARCH_SIMULATION (default) when categories is absent', () => {
-    expect(parseWorkBookCategory(new URLSearchParams())).toBe(SolutionCategory.SEARCH_SIMULATION);
+    expect(parseWorkBookCategory(toParams(''))).toBe(SolutionCategory.SEARCH_SIMULATION);
   });
 
   test('returns SEARCH_SIMULATION (default) for PENDING', () => {
-    expect(parseWorkBookCategory(new URLSearchParams('categories=PENDING'))).toBe(
+    expect(parseWorkBookCategory(toParams('categories=PENDING'))).toBe(
       SolutionCategory.SEARCH_SIMULATION,
     );
   });
 
   test('returns SEARCH_SIMULATION (default) for invalid value', () => {
-    expect(parseWorkBookCategory(new URLSearchParams('categories=FLYING_FISH'))).toBe(
+    expect(parseWorkBookCategory(toParams('categories=FLYING_FISH'))).toBe(
       SolutionCategory.SEARCH_SIMULATION,
     );
   });
@@ -97,19 +111,23 @@ describe('parseWorkBookCategory', () => {
 
 describe('buildWorkbooksUrl', () => {
   test('curriculum tab with grade produces correct URL', () => {
-    expect(buildWorkbooksUrl('curriculum', TaskGrade.Q9)).toBe(
+    expect(buildWorkbooksUrl(WorkBookTab.CURRICULUM, TaskGrade.Q9)).toBe(
       '/workbooks?tab=curriculum&grades=Q9',
     );
   });
 
   test('solution tab with category produces correct URL', () => {
-    expect(buildWorkbooksUrl('solution', undefined, SolutionCategory.GRAPH)).toBe(
+    expect(buildWorkbooksUrl(WorkBookTab.SOLUTION, undefined, SolutionCategory.GRAPH)).toBe(
       '/workbooks?tab=solution&categories=GRAPH',
     );
   });
 
   test('curriculum tab without grade produces URL with tab only', () => {
-    expect(buildWorkbooksUrl('curriculum')).toBe('/workbooks?tab=curriculum');
+    expect(buildWorkbooksUrl(WorkBookTab.CURRICULUM)).toBe('/workbooks?tab=curriculum');
+  });
+
+  test('created_by_user tab produces URL with tab only', () => {
+    expect(buildWorkbooksUrl(WorkBookTab.CREATED_BY_USER)).toBe('/workbooks?tab=created_by_user');
   });
 });
 ```
@@ -134,11 +152,23 @@ pnpm test:unit -- workbook_url_params
 ```typescript
 import { TaskGrade } from '$lib/types/task';
 import { SolutionCategory } from '$features/workbooks/types/workbook_placement';
-import { type WorkBookTab, DEFAULT_WORKBOOK_TAB } from '$features/workbooks/types/workbook';
+import { WorkBookTab, DEFAULT_WORKBOOK_TAB } from '$features/workbooks/types/workbook';
 
 const DEFAULT_CURRICULUM_GRADE = TaskGrade.Q10;
 const DEFAULT_SOLUTION_CATEGORY = SolutionCategory.SEARCH_SIMULATION;
-const VALID_TABS = new Set<string>(['curriculum', 'solution']);
+const VALID_TABS = new Set<string>(Object.values(WorkBookTab));
+
+/**
+ * Returns true when `param` is a valid enum value excluding PENDING.
+ * Extracted to avoid repeating the same three-condition check for grades and categories.
+ */
+function isValidNonPending<T extends string>(
+  param: string | null,
+  values: T[],
+  pending: T,
+): param is T {
+  return param !== null && (values as string[]).includes(param) && param !== pending;
+}
 
 /**
  * Parses the `?tab=` URL parameter into a WorkBookTab.
@@ -161,12 +191,8 @@ export function parseWorkBookTab(params: URLSearchParams): WorkBookTab {
 export function parseWorkBookGrade(params: URLSearchParams): TaskGrade {
   const param = params.get('grades');
 
-  if (
-    param !== null &&
-    Object.values(TaskGrade).includes(param as TaskGrade) &&
-    param !== TaskGrade.PENDING
-  ) {
-    return param as TaskGrade;
+  if (isValidNonPending(param, Object.values(TaskGrade), TaskGrade.PENDING)) {
+    return param;
   }
 
   return DEFAULT_CURRICULUM_GRADE;
@@ -179,12 +205,8 @@ export function parseWorkBookGrade(params: URLSearchParams): TaskGrade {
 export function parseWorkBookCategory(params: URLSearchParams): SolutionCategory {
   const param = params.get('categories');
 
-  if (
-    param !== null &&
-    Object.values(SolutionCategory).includes(param as SolutionCategory) &&
-    param !== SolutionCategory.PENDING
-  ) {
-    return param as SolutionCategory;
+  if (isValidNonPending(param, Object.values(SolutionCategory), SolutionCategory.PENDING)) {
+    return param;
   }
 
   return DEFAULT_SOLUTION_CATEGORY;
@@ -192,10 +214,11 @@ export function parseWorkBookCategory(params: URLSearchParams): SolutionCategory
 
 /**
  * Builds the `/workbooks` URL with the given tab, grade, and category as query parameters.
+ * CREATED_BY_USER tab does not append additional params.
  *
- * @param tab - Active tab ('curriculum' or 'solution')
- * @param grade - Selected grade (only appended when tab === 'curriculum')
- * @param category - Selected category (only appended when tab === 'solution')
+ * @param tab - Active tab
+ * @param grade - Selected grade (only appended when tab === CURRICULUM)
+ * @param category - Selected category (only appended when tab === SOLUTION)
  * @returns URL string suitable for use with goto()
  */
 export function buildWorkbooksUrl(
@@ -206,9 +229,9 @@ export function buildWorkbooksUrl(
   const params = new URLSearchParams();
   params.set('tab', tab);
 
-  if (tab === 'curriculum' && grade) {
+  if (tab === WorkBookTab.CURRICULUM && grade) {
     params.set('grades', grade);
-  } else if (tab === 'solution' && category) {
+  } else if (tab === WorkBookTab.SOLUTION && category) {
     params.set('categories', category);
   }
 
@@ -220,7 +243,7 @@ export function buildWorkbooksUrl(
 
 ```bash
 pnpm test:unit -- workbook_url_params
-# PASS: 14 tests
+# PASS: 17 tests
 ```
 
 - [ ] **Step 3: コミット**

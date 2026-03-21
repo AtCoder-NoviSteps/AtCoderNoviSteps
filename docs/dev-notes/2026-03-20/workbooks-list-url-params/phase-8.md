@@ -2,9 +2,17 @@
 
 **レイヤー:** `src/routes/workbooks/` + `src/features/workbooks/components/list/` | **リスク:** 中-高
 
+**設計方針:**
+
+- `WorkBookList.svelte` の Props は discriminated union に変更する。optional props + `?? fallback` は型安全でない
+- Svelte 5 では `let props: Props = $props()` として使い、`{#if props.workbookType === ...}` ブロックで TypeScript 型ナローイングを活用する（destructure すると narrowing が効かない）
+- `workbookGradeModes` は CURRICULUM ブランチのみに配置（SOLUTION/CREATED_BY_USER では不要）。グレードフィルタリングはサーバーサイドに移るが、`CurriculumTable` のグレード列表示（`<GradeTableBodyCell>`）で引き続き使われるため削除しない（参照: phase-6 注記）
+- `CREATED_BY_USER` タブは URL ドリブン（`isCreatedByUserTabOpen` ローカル `$state` は不要）
+- `userCreatedWorkbooks` は廃止。全タブとも `data.workbooks` を使用する
+
 ---
 
-## Task 8-A: `WorkBookList.svelte` に SOLUTION ルーティングを追加
+## Task 8-A: `WorkBookList.svelte` に discriminated union Props と SOLUTION ルーティングを追加
 
 **Files:**
 
@@ -12,40 +20,70 @@
 
 - [ ] **Step 1: ファイルを読んで現在の Props / ルーティングを確認**
 
-- [ ] **Step 2: 新しい Props を追加**
+- [ ] **Step 2: Props を discriminated union に変更し SOLUTION 分岐を追加**
 
 ```typescript
 import { type SolutionCategory } from '$features/workbooks/types/workbook_placement';
+import { WorkBookTab, WorkBookType } from '$features/workbooks/types/workbook';
 import SolutionWorkBookList from './SolutionWorkBookList.svelte';
 
-interface Props {
-  // 既存 props はそのまま
-  workbookType: WorkBookType;
+type CommonProps = {
   workbooks: WorkbooksList;
-  workbookGradeModes: Map<number, TaskGrade>;
   taskResultsWithWorkBookId: Map<number, TaskResults>;
   loggedInUser: { id: string; role: Roles } | null;
-  // 追加
-  currentGrade?: TaskGrade;
-  onGradeChange?: (grade: TaskGrade) => void;
-  currentCategory?: SolutionCategory;
-  onCategoryChange?: (category: SolutionCategory) => void;
-}
+};
+
+type SpecificProps =
+  | {
+      workbookType: typeof WorkBookType.CURRICULUM;
+      workbookGradeModes: Map<number, TaskGrade>;
+      currentGrade: TaskGrade;
+      onGradeChange: (grade: TaskGrade) => void;
+    }
+  | {
+      workbookType: typeof WorkBookType.SOLUTION;
+      currentCategory: SolutionCategory;
+      availableCategories: SolutionCategory[];
+      onCategoryChange: (category: SolutionCategory) => void;
+    }
+  | { workbookType: typeof WorkBookType.CREATED_BY_USER };
+
+type Props = CommonProps & SpecificProps;
+
+let props: Props = $props();
 ```
 
-- [ ] **Step 3: SOLUTION 分岐を追加**
+- [ ] **Step 3: テンプレートを discriminated union に対応させる**
 
 ```svelte
-{:else if workbookType === WorkBookType.SOLUTION}
-  <SolutionWorkBookList
-    {workbooks}
-    {workbookGradeModes}
-    {taskResultsWithWorkBookId}
-    userId={loggedInUser?.id ?? ''}
-    role={loggedInUser?.role as Roles}
-    currentCategory={currentCategory ?? SolutionCategory.SEARCH_SIMULATION}
-    onCategoryChange={onCategoryChange ?? (() => {})}
+{#if props.workbookType === WorkBookType.CURRICULUM}
+  <CurriculumWorkBookList
+    workbooks={props.workbooks}
+    workbookGradeModes={props.workbookGradeModes}
+    taskResultsWithWorkBookId={props.taskResultsWithWorkBookId}
+    userId={props.loggedInUser?.id ?? ''}
+    role={props.loggedInUser?.role as Roles}
+    currentGrade={props.currentGrade}
+    onGradeChange={props.onGradeChange}
   />
+{:else if props.workbookType === WorkBookType.SOLUTION}
+  <SolutionWorkBookList
+    workbooks={props.workbooks}
+    taskResultsWithWorkBookId={props.taskResultsWithWorkBookId}
+    userId={props.loggedInUser?.id ?? ''}
+    role={props.loggedInUser?.role as Roles}
+    availableCategories={props.availableCategories}
+    currentCategory={props.currentCategory}
+    onCategoryChange={props.onCategoryChange}
+  />
+{:else}
+  <CreatedByUserTable
+    workbooks={props.workbooks}
+    taskResultsWithWorkBookId={props.taskResultsWithWorkBookId}
+    userId={props.loggedInUser?.id ?? ''}
+    role={props.loggedInUser?.role as Roles}
+  />
+{/if}
 ```
 
 - [ ] **Step 4: 型チェック**
@@ -58,7 +96,7 @@ pnpm check
 
 ```bash
 git add src/features/workbooks/components/list/WorkBookList.svelte
-git commit -m "feat(workbooks/components): WorkBookList routes SOLUTION to SolutionWorkBookList"
+git commit -m "refactor(workbooks/components): WorkBookList uses discriminated union Props, routes SOLUTION to SolutionWorkBookList"
 ```
 
 ---
@@ -82,7 +120,7 @@ git commit -m "feat(workbooks/components): WorkBookList routes SOLUTION to Solut
   import {
     type WorkbooksList,
     WorkBookType,
-    type WorkBookTab,
+    WorkBookTab,
   } from '$features/workbooks/types/workbook';
   import { type SolutionCategory } from '$features/workbooks/types/workbook_placement';
 
@@ -99,40 +137,30 @@ git commit -m "feat(workbooks/components): WorkBookList routes SOLUTION to Solut
   let { data } = $props();
 
   let workbooks = $derived(data.workbooks as WorkbooksList);
-  let userCreatedWorkbooks = $derived(data.userCreatedWorkbooks as WorkbooksList);
   let loggedInUser = data.loggedInUser;
   let role = loggedInUser?.role as Roles;
 
   const tasksMapByIds: Map<string, Task> = data.tasksMapByIds;
   let taskResultsByTaskId = data.taskResultsByTaskId as Map<string, TaskResult>;
 
-  // CREATED_BY_USER workbooks も含めてグレードモードを計算する
-  const allWorkbooks = $derived([...workbooks, ...userCreatedWorkbooks] as WorkbooksList);
-  const workbookGradeModes = $derived(calcWorkBookGradeModes(allWorkbooks, tasksMapByIds));
+  const workbookGradeModes = $derived(calcWorkBookGradeModes(workbooks, tasksMapByIds));
 
-  // CREATED_BY_USER タブは URL を変えずローカル状態で管理
-  let isCreatedByUserTabOpen = $state(false);
-
-  function handleTabChange(tab: WorkBookTab) {
-    isCreatedByUserTabOpen = false;
-
-    if (tab === 'curriculum') {
-      goto(buildWorkbooksUrl('curriculum', data.selectedGrade));
+  function handleTabChange(tab: (typeof WorkBookTab)[keyof typeof WorkBookTab]) {
+    if (tab === WorkBookTab.CURRICULUM) {
+      goto(buildWorkbooksUrl(WorkBookTab.CURRICULUM, data.selectedGrade));
+    } else if (tab === WorkBookTab.SOLUTION) {
+      goto(buildWorkbooksUrl(WorkBookTab.SOLUTION, undefined, data.selectedCategory));
     } else {
-      goto(buildWorkbooksUrl('solution', undefined, data.selectedCategory));
+      goto(buildWorkbooksUrl(WorkBookTab.CREATED_BY_USER));
     }
   }
 
   function handleGradeChange(grade: TaskGrade) {
-    goto(buildWorkbooksUrl('curriculum', grade));
+    goto(buildWorkbooksUrl(WorkBookTab.CURRICULUM, grade));
   }
 
   function handleCategoryChange(category: SolutionCategory) {
-    goto(buildWorkbooksUrl('solution', undefined, category));
-  }
-
-  function handleCreatedByUserTabClick() {
-    isCreatedByUserTabOpen = true;
+    goto(buildWorkbooksUrl(WorkBookTab.SOLUTION, undefined, category));
   }
 </script>
 ```
@@ -159,10 +187,10 @@ git commit -m "feat(workbooks/components): WorkBookList routes SOLUTION to Solut
     >
       {#if loggedInUser}
         <WorkbookTabItem
-          isOpen={data.tab === 'curriculum'}
+          isOpen={data.tab === WorkBookTab.CURRICULUM}
           title="カリキュラム"
           tooltipContent="問題を解くのに必要な知識を一つずつ学ぶことができます。問題集を順番に取り組むことも、興味があるトピックを優先することもできます。"
-          onclick={() => handleTabChange('curriculum')}
+          onclick={() => handleTabChange(WorkBookTab.CURRICULUM)}
         >
           <div class="mt-6">
             <WorkBookList
@@ -178,18 +206,18 @@ git commit -m "feat(workbooks/components): WorkBookList routes SOLUTION to Solut
         </WorkbookTabItem>
 
         <WorkbookTabItem
-          isOpen={data.tab === 'solution'}
+          isOpen={data.tab === WorkBookTab.SOLUTION}
           title="解法別"
           tooltipContent="特定のアルゴリズム・データ構造の基礎から応用問題まで挑戦できます。"
-          onclick={() => handleTabChange('solution')}
+          onclick={() => handleTabChange(WorkBookTab.SOLUTION)}
         >
           <div class="mt-6">
             <WorkBookList
               workbookType={WorkBookType.SOLUTION}
               {workbooks}
-              {workbookGradeModes}
               taskResultsWithWorkBookId={buildTaskResultsByWorkBookId(workbooks, taskResultsByTaskId)}
               loggedInUser={loggedInUser as { id: string; role: Roles }}
+              availableCategories={data.availableCategories}
               currentCategory={data.selectedCategory}
               onCategoryChange={handleCategoryChange}
             />
@@ -198,17 +226,16 @@ git commit -m "feat(workbooks/components): WorkBookList routes SOLUTION to Solut
 
         {#if isAdmin(role)}
           <WorkbookTabItem
-            isOpen={isCreatedByUserTabOpen}
+            isOpen={data.tab === WorkBookTab.CREATED_BY_USER}
             title="ユーザ作成"
-            onclick={handleCreatedByUserTabClick}
+            onclick={() => handleTabChange(WorkBookTab.CREATED_BY_USER)}
           >
             <div class="mt-6">
               <WorkBookList
                 workbookType={WorkBookType.CREATED_BY_USER}
-                workbooks={userCreatedWorkbooks}
-                {workbookGradeModes}
+                {workbooks}
                 taskResultsWithWorkBookId={buildTaskResultsByWorkBookId(
-                  userCreatedWorkbooks,
+                  workbooks,
                   taskResultsByTaskId,
                 )}
                 loggedInUser={loggedInUser as { id: string; role: Roles }}
@@ -238,9 +265,10 @@ pnpm dev
 # - グレードボタンクリック → URL が ?tab=curriculum&grades=Q9 に変わる（画面リロードなし）
 # - 解法別タブクリック → URL が ?tab=solution&categories=SEARCH_SIMULATION に変わる
 # - カテゴリボタンクリック → URL 更新・対応する問題集が表示される
+# - 問題集が存在しないカテゴリのボタンが非表示
 # - /workbooks?tab=solution&categories=GRAPH に直アクセス → 正しく表示
-# - 管理者: ユーザ作成タブが表示される（URL 変更なし）
-# - 一般ユーザ: ユーザ作成タブが表示されない
+# - 管理者: /workbooks?tab=created_by_user → ユーザ作成タブが表示
+# - 一般ユーザ: /workbooks?tab=created_by_user → /workbooks にリダイレクト
 # - 補充教材トグルが引き続き動作する
 ```
 
@@ -248,5 +276,39 @@ pnpm dev
 
 ```bash
 git add src/routes/workbooks/+page.svelte
-git commit -m "feat(workbooks): URL-driven tab/filter navigation with admin-only CREATED_BY_USER tab"
+git commit -m "feat(workbooks): URL-driven tab/filter navigation including CREATED_BY_USER tab for admins"
+```
+
+---
+
+## Task 8-C: `workbookGradeModes` → `gradeModesEachWorkbook` リネーム
+
+**Files:**
+
+- Modify: `src/routes/workbooks/+page.svelte`
+- Modify: `src/features/workbooks/components/list/WorkBookList.svelte`
+- Modify: `src/features/workbooks/components/list/CurriculumWorkBookList.svelte`
+- Modify: `src/features/workbooks/components/list/CurriculumTable.svelte`
+- Modify: `src/features/workbooks/types/workbook.ts`
+
+- [ ] **Step 1: 一括リネーム**
+
+```bash
+# 影響ファイルを確認
+grep -r "workbookGradeModes" src/
+```
+
+`workbookGradeModes` をすべて `gradeModesEachWorkbook` に置換する。
+
+- [ ] **Step 2: 型チェック**
+
+```bash
+pnpm check
+```
+
+- [ ] **Step 3: コミット**
+
+```bash
+git add -p
+git commit -m "refactor(workbooks): rename workbookGradeModes to gradeModesEachWorkbook"
 ```

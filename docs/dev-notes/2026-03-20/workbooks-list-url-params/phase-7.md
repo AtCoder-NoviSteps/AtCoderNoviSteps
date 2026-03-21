@@ -4,6 +4,9 @@
 
 `workbookType` prop と `activeWorkbookTabStore` への依存を除去し、タブクリック時の動作を `onclick` prop として親に委譲する。
 
+> **ストア削除の根拠（Phase 9 への前置き）:**
+> `active_workbook_tab.ts` と `task_grades_by_workbook_type.ts` はいずれも Svelte v4 の `writable()` を使った **in-memory ストアのみ**（localStorage への永続化なし）。これらは URL パラメータに置き換えられるため Phase 9 で安全に削除できる。`replenishmentWorkBooksStore` のみが localStorage を使用しており、そちらは対象外。
+
 ---
 
 **Files:**

@@ -1,8 +1,10 @@
-# Phase 1: `splitWorkbooksByReplenishment()` ユーティリティ
+# Phase 1: `partitionWorkbooksAsMainAndReplenished()` ユーティリティ
 
 **レイヤー:** `src/features/workbooks/utils/` | **リスク:** 極低（純粋関数）
 
 サーバー側でグレードフィルタリングを行った後、クライアント側では `isReplenished` による分割のみが必要になる。現在 `CurriculumWorkBookList.svelte` に inline で書かれているフィルタを純粋関数として抽出する。
+
+> **命名根拠:** `main`（非補充）と `replenished`（補充）の両方が名前に現れる。`splitWorkbooksByReplenishment` は main 側の存在が不明だった。
 
 ---
 
@@ -15,10 +17,10 @@
 - [ ] **Step 1: テストを追記**
 
 ```typescript
-import { splitWorkbooksByReplenishment } from './workbooks';
+import { partitionWorkbooksAsMainAndReplenished } from './workbooks';
 // 既存 import に追加
 
-describe('splitWorkbooksByReplenishment', () => {
+describe('partitionWorkbooksAsMainAndReplenished', () => {
   const base = {
     id: 1,
     title: '',
@@ -38,19 +40,19 @@ describe('splitWorkbooksByReplenishment', () => {
   test('main contains non-replenished workbooks', () => {
     const main = { ...base, id: 1, isReplenished: false };
     const replenished = { ...base, id: 2, isReplenished: true };
-    const result = splitWorkbooksByReplenishment([main, replenished]);
+    const result = partitionWorkbooksAsMainAndReplenished([main, replenished]);
     expect(result.main).toEqual([main]);
   });
 
   test('replenished contains replenished workbooks', () => {
     const main = { ...base, id: 1, isReplenished: false };
     const replenished = { ...base, id: 2, isReplenished: true };
-    const result = splitWorkbooksByReplenishment([main, replenished]);
+    const result = partitionWorkbooksAsMainAndReplenished([main, replenished]);
     expect(result.replenished).toEqual([replenished]);
   });
 
   test('empty input returns empty arrays', () => {
-    const result = splitWorkbooksByReplenishment([]);
+    const result = partitionWorkbooksAsMainAndReplenished([]);
     expect(result.main).toEqual([]);
     expect(result.replenished).toEqual([]);
   });
@@ -61,7 +63,7 @@ describe('splitWorkbooksByReplenishment', () => {
 
 ```bash
 pnpm test:unit -- workbooks.test
-# FAIL: splitWorkbooksByReplenishment is not a function
+# FAIL: partitionWorkbooksAsMainAndReplenished is not a function
 ```
 
 ---
@@ -76,12 +78,12 @@ pnpm test:unit -- workbooks.test
 
 ```typescript
 /**
- * Splits workbooks into main and replenished groups.
+ * Partitions workbooks into main and replenished groups.
  *
- * @param workbooks - Full list to split
+ * @param workbooks - Full list to partition
  * @returns Object with `main` (isReplenished=false) and `replenished` (isReplenished=true) arrays
  */
-export function splitWorkbooksByReplenishment(workbooks: WorkbooksList): {
+export function partitionWorkbooksAsMainAndReplenished(workbooks: WorkbooksList): {
   main: WorkbooksList;
   replenished: WorkbooksList;
 } {
@@ -104,5 +106,5 @@ pnpm test:unit -- workbooks.test
 ```bash
 git add src/features/workbooks/utils/workbooks.ts \
         src/features/workbooks/utils/workbooks.test.ts
-git commit -m "feat(workbooks/utils): Add splitWorkbooksByReplenishment utility"
+git commit -m "feat(workbooks/utils): Add partitionWorkbooksAsMainAndReplenished utility"
 ```
