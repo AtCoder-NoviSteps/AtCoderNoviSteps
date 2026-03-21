@@ -32,6 +32,9 @@
   let taskResultsByTaskId = data.taskResultsByTaskId as Map<string, TaskResult>;
 
   const gradeModesEachWorkbook = $derived(calcWorkBookGradeModes(workbooks, tasksMapByIds));
+  const taskResultsWithWorkBookId = $derived(
+    buildTaskResultsByWorkBookId(workbooks, taskResultsByTaskId),
+  );
 
   function handleTabChange(tab: (typeof WorkBookTab)[keyof typeof WorkBookTab]) {
     if (tab === WorkBookTab.CURRICULUM) {
@@ -81,10 +84,7 @@
               workbookType={WorkBookType.CURRICULUM}
               {workbooks}
               {gradeModesEachWorkbook}
-              taskResultsWithWorkBookId={buildTaskResultsByWorkBookId(
-                workbooks,
-                taskResultsByTaskId,
-              )}
+              {taskResultsWithWorkBookId}
               loggedInUser={loggedInUser as { id: string; role: Roles }}
               currentGrade={data.selectedGrade}
               onGradeChange={handleGradeChange}
@@ -102,10 +102,7 @@
             <WorkBookList
               workbookType={WorkBookType.SOLUTION}
               {workbooks}
-              taskResultsWithWorkBookId={buildTaskResultsByWorkBookId(
-                workbooks,
-                taskResultsByTaskId,
-              )}
+              {taskResultsWithWorkBookId}
               loggedInUser={loggedInUser as { id: string; role: Roles }}
               availableCategories={data.availableCategories}
               currentCategory={data.selectedCategory}
@@ -124,10 +121,7 @@
               <WorkBookList
                 workbookType={WorkBookType.CREATED_BY_USER}
                 {workbooks}
-                taskResultsWithWorkBookId={buildTaskResultsByWorkBookId(
-                  workbooks,
-                  taskResultsByTaskId,
-                )}
+                {taskResultsWithWorkBookId}
                 loggedInUser={loggedInUser as { id: string; role: Roles }}
               />
             </div>
