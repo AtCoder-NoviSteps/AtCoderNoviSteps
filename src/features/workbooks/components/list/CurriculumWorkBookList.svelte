@@ -20,7 +20,7 @@
 
   interface Props {
     workbooks: WorkbooksList;
-    workbookGradeModes: Map<number, TaskGrade>;
+    gradeModesEachWorkbook: Map<number, TaskGrade>;
     taskResultsWithWorkBookId: Map<number, TaskResults>;
     userId: string;
     role: Roles;
@@ -30,7 +30,7 @@
 
   let {
     workbooks,
-    workbookGradeModes,
+    gradeModesEachWorkbook,
     taskResultsWithWorkBookId,
     userId,
     role,
@@ -106,7 +106,7 @@
 
     <CurriculumTable
       workbooks={mainWorkbooks}
-      {workbookGradeModes}
+      {gradeModesEachWorkbook}
       {userId}
       {role}
       taskResults={taskResultsWithWorkBookId}
@@ -145,7 +145,7 @@
     {#if showReplenishmentWorkbooks}
       <CurriculumTable
         workbooks={replenishedWorkbooks}
-        {workbookGradeModes}
+        {gradeModesEachWorkbook}
         {userId}
         {role}
         taskResults={taskResultsWithWorkBookId}

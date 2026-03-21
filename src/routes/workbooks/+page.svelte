@@ -1,60 +1,55 @@
 <script lang="ts">
-  import { get } from 'svelte/store';
+  import { goto } from '$app/navigation';
   import { Button, Tabs } from 'flowbite-svelte';
 
   import { Roles } from '$lib/types/user';
-  import { type Task, type TaskResult } from '$lib/types/task';
-  import { type WorkbooksList, WorkBookType } from '$features/workbooks/types/workbook';
-
-  import { activeWorkbookTabStore } from '$features/workbooks/stores/active_workbook_tab';
+  import { isAdmin } from '$lib/utils/authorship';
+  import { type Task, TaskGrade, type TaskResult } from '$lib/types/task';
+  import {
+    type WorkbooksList,
+    WorkBookType,
+    WorkBookTab,
+  } from '$features/workbooks/types/workbook';
+  import { type SolutionCategory } from '$features/workbooks/types/workbook_placement';
 
   import HeadingOne from '$lib/components/HeadingOne.svelte';
   import WorkbookTabItem from '$features/workbooks/components/list/WorkbookTabItem.svelte';
   import WorkBookList from '$features/workbooks/components/list/WorkBookList.svelte';
 
   import {
-    canViewWorkBook,
     calcWorkBookGradeModes,
-    getWorkBooksByType,
     buildTaskResultsByWorkBookId,
   } from '$features/workbooks/utils/workbooks';
+  import { buildWorkbooksUrl } from '$features/workbooks/utils/workbook_url_params';
 
   let { data } = $props();
 
   let workbooks = $derived(data.workbooks as WorkbooksList);
   let loggedInUser = data.loggedInUser;
-  // HACK: loggedInUser.roleで比較すると、@prisma/clientと型が異なるため、やむを得ずasでキャスト
   let role = loggedInUser?.role as Roles;
-
-  const workBookTabs = [
-    {
-      title: 'カリキュラム',
-      workBookType: WorkBookType.CURRICULUM,
-      tooltipContent:
-        '問題を解くのに必要な知識を一つずつ学ぶことができます。問題集を順番に取り組むことも、興味があるトピックを優先することもできます。',
-      canUsersView: true,
-    },
-    {
-      title: '解法別',
-      workBookType: WorkBookType.SOLUTION,
-      tooltipContent: '特定のアルゴリズム・データ構造の基礎から応用問題まで挑戦できます。',
-      canUsersView: true,
-    },
-    {
-      title: 'ユーザ作成',
-      workBookType: WorkBookType.CREATED_BY_USER,
-      canUsersView: false,
-    },
-  ];
-
-  const getActiveWorkBookTab = (workBookType: WorkBookType) => {
-    return get(activeWorkbookTabStore).get(workBookType);
-  };
 
   const tasksMapByIds: Map<string, Task> = data.tasksMapByIds;
   let taskResultsByTaskId = data.taskResultsByTaskId as Map<string, TaskResult>;
 
-  const workbookGradeModes = calcWorkBookGradeModes(data.workbooks as WorkbooksList, tasksMapByIds);
+  const gradeModesEachWorkbook = $derived(calcWorkBookGradeModes(workbooks, tasksMapByIds));
+
+  function handleTabChange(tab: (typeof WorkBookTab)[keyof typeof WorkBookTab]) {
+    if (tab === WorkBookTab.CURRICULUM) {
+      goto(buildWorkbooksUrl(WorkBookTab.CURRICULUM, data.selectedGrade));
+    } else if (tab === WorkBookTab.SOLUTION) {
+      goto(buildWorkbooksUrl(WorkBookTab.SOLUTION, undefined, data.selectedCategory));
+    } else {
+      goto(buildWorkbooksUrl(WorkBookTab.CREATED_BY_USER));
+    }
+  }
+
+  function handleGradeChange(grade: TaskGrade) {
+    goto(buildWorkbooksUrl(WorkBookTab.CURRICULUM, grade));
+  }
+
+  function handleCategoryChange(category: SolutionCategory) {
+    goto(buildWorkbooksUrl(WorkBookTab.SOLUTION, undefined, category));
+  }
 </script>
 
 <div class="container mx-auto w-5/6">
@@ -74,21 +69,57 @@
       contentClass="bg-white dark:bg-gray-800 mt-0 p-0"
       ulClass="flex flex-wrap md:flex-nowrap md:gap-2 rtl:space-x-reverse items-start"
     >
-      {#each workBookTabs as workBookTab}
-        {#if loggedInUser && canViewWorkBook(role, workBookTab.canUsersView)}
+      {#if loggedInUser}
+        <WorkbookTabItem
+          isOpen={data.tab === WorkBookTab.CURRICULUM}
+          title="カリキュラム"
+          tooltipContent="問題を解くのに必要な知識を一つずつ学ぶことができます。問題集を順番に取り組むことも、興味があるトピックを優先することもできます。"
+          onclick={() => handleTabChange(WorkBookTab.CURRICULUM)}
+        >
+          <div class="mt-6">
+            <WorkBookList
+              workbookType={WorkBookType.CURRICULUM}
+              {workbooks}
+              {gradeModesEachWorkbook}
+              taskResultsWithWorkBookId={buildTaskResultsByWorkBookId(workbooks, taskResultsByTaskId)}
+              loggedInUser={loggedInUser as { id: string; role: Roles }}
+              currentGrade={data.selectedGrade}
+              onGradeChange={handleGradeChange}
+            />
+          </div>
+        </WorkbookTabItem>
+
+        <WorkbookTabItem
+          isOpen={data.tab === WorkBookTab.SOLUTION}
+          title="解法別"
+          tooltipContent="特定のアルゴリズム・データ構造の基礎から応用問題まで挑戦できます。"
+          onclick={() => handleTabChange(WorkBookTab.SOLUTION)}
+        >
+          <div class="mt-6">
+            <WorkBookList
+              workbookType={WorkBookType.SOLUTION}
+              {workbooks}
+              taskResultsWithWorkBookId={buildTaskResultsByWorkBookId(workbooks, taskResultsByTaskId)}
+              loggedInUser={loggedInUser as { id: string; role: Roles }}
+              availableCategories={data.availableCategories}
+              currentCategory={data.selectedCategory}
+              onCategoryChange={handleCategoryChange}
+            />
+          </div>
+        </WorkbookTabItem>
+
+        {#if isAdmin(role)}
           <WorkbookTabItem
-            workbookType={workBookTab.workBookType}
-            isOpen={getActiveWorkBookTab(workBookTab.workBookType)}
-            title={workBookTab.title}
-            tooltipContent={workBookTab.tooltipContent}
+            isOpen={data.tab === WorkBookTab.CREATED_BY_USER}
+            title="ユーザ作成"
+            onclick={() => handleTabChange(WorkBookTab.CREATED_BY_USER)}
           >
             <div class="mt-6">
               <WorkBookList
-                workbookType={workBookTab.workBookType}
-                workbooks={getWorkBooksByType(workbooks, workBookTab.workBookType)}
-                {workbookGradeModes}
+                workbookType={WorkBookType.CREATED_BY_USER}
+                {workbooks}
                 taskResultsWithWorkBookId={buildTaskResultsByWorkBookId(
-                  getWorkBooksByType(workbooks, workBookTab.workBookType),
+                  workbooks,
                   taskResultsByTaskId,
                 )}
                 loggedInUser={loggedInUser as { id: string; role: Roles }}
@@ -96,7 +127,7 @@
             </div>
           </WorkbookTabItem>
         {/if}
-      {/each}
+      {/if}
     </Tabs>
   </div>
 </div>

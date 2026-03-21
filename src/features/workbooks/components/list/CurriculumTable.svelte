@@ -13,7 +13,7 @@
   import { canRead } from '$lib/utils/authorship';
   import { getGradeMode, getTaskResult } from '$features/workbooks/utils/workbooks';
 
-  let { workbooks, workbookGradeModes, userId, role, taskResults }: WorkbookTableProps = $props();
+  let { workbooks, gradeModesEachWorkbook, userId, role, taskResults }: WorkbookTableProps = $props();
 </script>
 
 <div class="overflow-auto rounded-md border border-gray-200 dark:border-gray-100">
@@ -33,7 +33,7 @@
       {#each workbooks as workbook (workbook.id)}
         {#if canRead(workbook.isPublished, userId, workbook.authorId)}
           <TableBodyRow>
-            <GradeTableBodyCell taskGrade={getGradeMode(workbook.id, workbookGradeModes)} />
+            <GradeTableBodyCell taskGrade={getGradeMode(workbook.id, gradeModesEachWorkbook)} />
 
             <TitleTableBodyCell {workbook} />
 

@@ -21,7 +21,7 @@
 
   let {
     workbooks,
-    workbookGradeModes: _,
+    gradeModesEachWorkbook: _,
     userId,
     role,
     taskResults,

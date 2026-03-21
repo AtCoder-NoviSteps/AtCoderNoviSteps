@@ -55,14 +55,14 @@ export type WorkBookType = WorkBookTypeOrigin;
 // Imported by table components — avoids repeating the same Props definition in three places.
 export type WorkbookTableProps = {
   workbooks: WorkbooksList;
-  workbookGradeModes: Map<number, TaskGrade>;
+  gradeModesEachWorkbook: Map<number, TaskGrade>;
   userId: string;
   role: Roles;
   taskResults: Map<number, TaskResults>;
 };
 
-// Imported by SolutionTable — excludes workbookGradeModes which is unused in the solution tab.
-export type SolutionTableProps = Omit<WorkbookTableProps, 'workbookGradeModes'>;
+// Imported by SolutionTable — excludes gradeModesEachWorkbook which is unused in the solution tab.
+export type SolutionTableProps = Omit<WorkbookTableProps, 'gradeModesEachWorkbook'>;
 
 export type WorkBookTaskBase = {
   taskId: string;
