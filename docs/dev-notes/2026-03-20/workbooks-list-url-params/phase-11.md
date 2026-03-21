@@ -62,20 +62,20 @@ coderabbit review --plain
 
 ### 実施結果（#6〜17）
 
-| #   | ファイル                             | 対応           | 備考                                                                                                            |
-| --- | ------------------------------------ | -------------- | --------------------------------------------------------------------------------------------------------------- |
-| 6   | `WorkBookList.svelte:43-44`          | ✅ 修正        | `as Roles` → `?? Roles.USER`（`import type` → `import` に変更）                                                |
-| 7   | `workbook_url_params.ts:78-93`       | ⏭️ 差し戻し    | `Exclude<TaskGrade, PENDING>` が全呼び出し元に型エラーを連鎖。parse 関数の戻り値型から変えるべき大きな変更になる |
-| 8   | `WorkBookList.svelte:61`             | ✅ 修正        | `CreatedByUserTable` を `SolutionTableProps` に変更し `gradeModesEachWorkbook={new Map()}` を削除               |
-| 9   | `phase-4.md:60-62`                   | ✅ 修正        | docs コード例を最新実装（null チェック分離）に合わせた                                                          |
-| 10  | `e2e/workbooks_list.spec.ts:119-124` | ✅ 修正        | `VISIBILITY_CHECK_TIMEOUT = 3000` 定数を追加し全箇所を置き換え                                                  |
-| 11  | `services/workbooks.ts:129-142`      | ⏭️ 差し戻し    | フィルタ削除でテスト "excludes null solutionCategory entries" が失敗。mock は WHERE 句を無視するため防御的フィルタが必要 |
-| 12  | `utils/workbooks.ts:143-151`         | ✅ 修正        | `filter` 2 回 → `reduce` 1 パスに変更                                                                          |
-| 13  | `workbooks.test.ts:263-267`          | ✅ 修正        | `mockWorkbookFindMany` 削除・`mockFindMany` に統合（引数型を `object[]` に緩和）                                |
-| 14  | `phase-9.md:42-44`                   | ✅ 修正        | `git add -A` → `git add -u src/features/workbooks/stores/`                                                     |
-| 15  | `phase-9.md:18-22`                   | ✅ 修正        | grep に `--exclude` を追加し削除対象ファイル自身がヒットしないよう修正                                          |
-| 16  | `phase-8.md:196-205`                 | ✅ 修正        | インライン `buildTaskResultsByWorkBookId(...)` → `{taskResultsWithWorkBookId}` に更新                          |
-| 17  | `.gitignore:157-159`                 | ✅ 修正        | VS Code セクション（145 行目）に統合し重複行を削除                                                              |
+| #   | ファイル                             | 対応        | 備考                                                                                                                     |
+| --- | ------------------------------------ | ----------- | ------------------------------------------------------------------------------------------------------------------------ |
+| 6   | `WorkBookList.svelte:43-44`          | ✅ 修正     | `as Roles` → `?? Roles.USER`（`import type` → `import` に変更）                                                          |
+| 7   | `workbook_url_params.ts:78-93`       | ⏭️ 差し戻し | `Exclude<TaskGrade, PENDING>` が全呼び出し元に型エラーを連鎖。parse 関数の戻り値型から変えるべき大きな変更になる         |
+| 8   | `WorkBookList.svelte:61`             | ✅ 修正     | `CreatedByUserTable` を `SolutionTableProps` に変更し `gradeModesEachWorkbook={new Map()}` を削除                        |
+| 9   | `phase-4.md:60-62`                   | ✅ 修正     | docs コード例を最新実装（null チェック分離）に合わせた                                                                   |
+| 10  | `e2e/workbooks_list.spec.ts:119-124` | ✅ 修正     | `VISIBILITY_CHECK_TIMEOUT = 3000` 定数を追加し全箇所を置き換え                                                           |
+| 11  | `services/workbooks.ts:129-142`      | ⏭️ 差し戻し | フィルタ削除でテスト "excludes null solutionCategory entries" が失敗。mock は WHERE 句を無視するため防御的フィルタが必要 |
+| 12  | `utils/workbooks.ts:143-151`         | ✅ 修正     | `filter` 2 回 → `reduce` 1 パスに変更                                                                                    |
+| 13  | `workbooks.test.ts:263-267`          | ✅ 修正     | `mockWorkbookFindMany` 削除・`mockFindMany` に統合（引数型を `object[]` に緩和）                                         |
+| 14  | `phase-9.md:42-44`                   | ✅ 修正     | `git add -A` → `git add -u src/features/workbooks/stores/`                                                               |
+| 15  | `phase-9.md:18-22`                   | ✅ 修正     | grep に `--exclude` を追加し削除対象ファイル自身がヒットしないよう修正                                                   |
+| 16  | `phase-8.md:196-205`                 | ✅ 修正     | インライン `buildTaskResultsByWorkBookId(...)` → `{taskResultsWithWorkBookId}` に更新                                    |
+| 17  | `.gitignore:157-159`                 | ✅ 修正     | VS Code セクション（145 行目）に統合し重複行を削除                                                                       |
 
 コミット: `abecf45b` `fix(workbooks): address CodeRabbit findings from Phase 11 review`
 
