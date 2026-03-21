@@ -11,7 +11,7 @@ import {
 } from '$features/workbooks/types/workbook';
 import {
   type PlacementQuery,
-  getPublishedWorkbooksByPlacement,
+  getWorkbooksByPlacement,
   getWorkBooksCreatedByUsers,
   getAvailableSolutionCategories,
 } from '$features/workbooks/services/workbooks';
@@ -48,10 +48,11 @@ export async function load({ locals, url }) {
 
   const selectedGrade = parseWorkBookGrade(params);
   const selectedCategory = parseWorkBookCategory(params);
+  const adminUser = loggedInUser && isAdmin(loggedInUser.role as Roles);
 
   try {
     const [workbooks, availableCategories, tasksMapByIds, taskResultsByTaskId] = await Promise.all([
-      fetchWorkbooksByTab(tab, selectedGrade, selectedCategory),
+      fetchWorkbooksByTab(tab, selectedGrade, selectedCategory, !!adminUser),
       getAvailableSolutionCategories(),
       taskCrud.getTasksByTaskId(),
       loggedInUser
@@ -116,12 +117,13 @@ function fetchWorkbooksByTab(
   tab: WorkBookTabType,
   grade: ReturnType<typeof parseWorkBookGrade>,
   category: ReturnType<typeof parseWorkBookCategory>,
+  includeUnpublished: boolean,
 ) {
   if (tab === WorkBookTab.CREATED_BY_USER) {
     return getWorkBooksCreatedByUsers();
   }
 
-  return getPublishedWorkbooksByPlacement(buildPlacementQuery(tab, grade, category));
+  return getWorkbooksByPlacement(buildPlacementQuery(tab, grade, category), includeUnpublished);
 }
 
 function buildPlacementQuery(

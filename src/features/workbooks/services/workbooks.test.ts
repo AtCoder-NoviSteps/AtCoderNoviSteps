@@ -9,7 +9,7 @@ import {
   createWorkBook,
   updateWorkBook,
   deleteWorkBook,
-  getPublishedWorkbooksByPlacement,
+  getWorkbooksByPlacement,
   getWorkBooksCreatedByUsers,
   getAvailableSolutionCategories,
 } from './workbooks';
@@ -259,11 +259,11 @@ const MOCK_WORKBOOK_BASE = {
   user: { username: 'author1' },
 };
 
-describe('getPublishedWorkbooksByPlacement', () => {
+describe('getWorkbooksByPlacement', () => {
   test('filters CURRICULUM workbooks by taskGrade with priority asc order', async () => {
     mockFindMany([{ ...MOCK_WORKBOOK_BASE, workBookType: WorkBookType.CURRICULUM }]);
 
-    const result = await getPublishedWorkbooksByPlacement({
+    const result = await getWorkbooksByPlacement({
       workBookType: WorkBookType.CURRICULUM,
       taskGrade: TaskGrade.Q10,
     });
@@ -281,10 +281,37 @@ describe('getPublishedWorkbooksByPlacement', () => {
     expect(result[0].authorName).toBe('author1');
   });
 
+  test('excludes unpublished workbooks by default (includeUnpublished = false)', async () => {
+    mockFindMany([{ ...MOCK_WORKBOOK_BASE, workBookType: WorkBookType.CURRICULUM }]);
+
+    await getWorkbooksByPlacement(
+      { workBookType: WorkBookType.CURRICULUM, taskGrade: TaskGrade.Q10 },
+      false,
+    );
+
+    expect(prisma.workBook.findMany).toHaveBeenCalledWith(
+      expect.objectContaining({
+        where: expect.objectContaining({ isPublished: true }),
+      }),
+    );
+  });
+
+  test('includes unpublished workbooks when includeUnpublished = true', async () => {
+    mockFindMany([{ ...MOCK_WORKBOOK_BASE, workBookType: WorkBookType.CURRICULUM }]);
+
+    await getWorkbooksByPlacement(
+      { workBookType: WorkBookType.CURRICULUM, taskGrade: TaskGrade.Q10 },
+      true,
+    );
+
+    const callArg = vi.mocked(prisma.workBook.findMany).mock.calls[0][0];
+    expect(callArg?.where).not.toHaveProperty('isPublished');
+  });
+
   test('filters SOLUTION workbooks by solutionCategory', async () => {
     mockFindMany([{ ...MOCK_WORKBOOK_BASE, workBookType: WorkBookType.SOLUTION }]);
 
-    await getPublishedWorkbooksByPlacement({
+    await getWorkbooksByPlacement({
       workBookType: WorkBookType.SOLUTION,
       solutionCategory: SolutionCategory.GRAPH,
     });
@@ -302,7 +329,7 @@ describe('getPublishedWorkbooksByPlacement', () => {
   test('maps null user to authorName "unknown"', async () => {
     mockFindMany([{ ...MOCK_WORKBOOK_BASE, workBookType: WorkBookType.CURRICULUM, user: null }]);
 
-    const result = await getPublishedWorkbooksByPlacement({
+    const result = await getWorkbooksByPlacement({
       workBookType: WorkBookType.CURRICULUM,
       taskGrade: TaskGrade.Q10,
     });

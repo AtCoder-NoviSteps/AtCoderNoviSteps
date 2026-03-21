@@ -130,6 +130,31 @@ test.describe('logged-in user (general)', () => {
     });
   }
 
+  test('navigating away and back via nav link restores saved URL filter state', async ({
+    page,
+  }) => {
+    const targetUrl = `${WORKBOOK_LIST_URL}?tab=${TAB_SOLUTION}&categories=${CATEGORY_GRAPH}`;
+    await page.goto(targetUrl);
+    await expect(page.getByRole('tab', { name: '解法別' })).toHaveAttribute(
+      'aria-selected',
+      'true',
+      {
+        timeout: TIMEOUT,
+      },
+    );
+
+    // Navigate to another page
+    await page.goto('/');
+    await expect(page).toHaveURL('/', { timeout: TIMEOUT });
+
+    // Return to /workbooks via nav link (no params)
+    await page.goto(WORKBOOK_LIST_URL);
+
+    // URL should be restored to the saved filter state
+    await expect(page).toHaveURL(new RegExp(`tab=${TAB_SOLUTION}`), { timeout: TIMEOUT });
+    await expect(page).toHaveURL(new RegExp(`categories=${CATEGORY_GRAPH}`), { timeout: TIMEOUT });
+  });
+
   test('toggling replenishment workbooks shows/hides the section when it exists', async ({
     page,
   }) => {

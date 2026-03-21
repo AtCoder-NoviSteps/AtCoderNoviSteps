@@ -66,13 +66,15 @@ export type PlacementQuery =
   | { workBookType: typeof WorkBookTypeConst.SOLUTION; solutionCategory: SolutionCategory };
 
 /**
- * Returns published workbooks filtered by WorkBookPlacement, ordered by priority ASC.
+ * Returns workbooks filtered by WorkBookPlacement, ordered by priority ASC.
  * Workbooks without a placement record are automatically excluded by Prisma's nested where filter.
  *
  * @param query - Discriminated union: CURRICULUM uses taskGrade; SOLUTION uses solutionCategory
+ * @param includeUnpublished - When true, unpublished workbooks are included (admin use)
  */
-export async function getPublishedWorkbooksByPlacement(
+export async function getWorkbooksByPlacement(
   query: PlacementQuery,
+  includeUnpublished = false,
 ): Promise<WorkbooksWithAuthors> {
   const placementFilter =
     query.workBookType === WorkBookTypeConst.CURRICULUM
@@ -82,7 +84,7 @@ export async function getPublishedWorkbooksByPlacement(
   const workbooks = await db.workBook.findMany({
     where: {
       workBookType: query.workBookType,
-      isPublished: true,
+      ...(includeUnpublished ? {} : { isPublished: true }),
       placement: placementFilter,
     },
     orderBy: {

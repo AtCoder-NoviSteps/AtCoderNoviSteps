@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { onMount } from 'svelte';
   import { goto } from '$app/navigation';
   import { Button, Tabs } from 'flowbite-svelte';
 
@@ -22,6 +23,8 @@
   } from '$features/workbooks/utils/workbooks';
   import { buildWorkbooksUrl } from '$features/workbooks/utils/workbook_url_params';
 
+  const WORKBOOKS_URL_KEY = 'workbooks-last-url';
+
   let { data } = $props();
 
   let workbooks = $derived(data.workbooks as WorkbooksList);
@@ -35,6 +38,21 @@
   const taskResultsWithWorkBookId = $derived(
     buildTaskResultsByWorkBookId(workbooks, taskResultsByTaskId),
   );
+
+  onMount(() => {
+    if (window.location.search) {
+      return;
+    }
+    const saved = sessionStorage.getItem(WORKBOOKS_URL_KEY);
+    if (saved) {
+      goto(saved, { replaceState: true });
+    }
+  });
+
+  $effect(() => {
+    const url = buildWorkbooksUrl(data.tab, data.selectedGrade, data.selectedCategory);
+    sessionStorage.setItem(WORKBOOKS_URL_KEY, url);
+  });
 
   function handleTabChange(tab: (typeof WorkBookTab)[keyof typeof WorkBookTab]) {
     if (tab === WorkBookTab.CURRICULUM) {
