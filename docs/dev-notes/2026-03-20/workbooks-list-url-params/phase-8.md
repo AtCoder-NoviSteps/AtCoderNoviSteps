@@ -137,13 +137,16 @@ git commit -m "refactor(workbooks/components): WorkBookList uses discriminated u
   let { data } = $props();
 
   let workbooks = $derived(data.workbooks as WorkbooksList);
-  let loggedInUser = data.loggedInUser;
-  let role = loggedInUser?.role as Roles;
+  let loggedInUser = $derived(data.loggedInUser);
+  let role = $derived(loggedInUser?.role as Roles);
 
-  const tasksMapByIds: Map<string, Task> = data.tasksMapByIds;
-  let taskResultsByTaskId = data.taskResultsByTaskId as Map<string, TaskResult>;
+  const tasksMapByIds = $derived(data.tasksMapByIds as Map<string, Task>);
+  let taskResultsByTaskId = $derived(data.taskResultsByTaskId as Map<string, TaskResult>);
 
-  const workbookGradeModes = $derived(calcWorkBookGradeModes(workbooks, tasksMapByIds));
+  const gradeModesEachWorkbook = $derived(calcWorkBookGradeModes(workbooks, tasksMapByIds));
+  const taskResultsWithWorkBookId = $derived(
+    buildTaskResultsByWorkBookId(workbooks, taskResultsByTaskId),
+  );
 
   function handleTabChange(tab: (typeof WorkBookTab)[keyof typeof WorkBookTab]) {
     if (tab === WorkBookTab.CURRICULUM) {
@@ -197,7 +200,7 @@ git commit -m "refactor(workbooks/components): WorkBookList uses discriminated u
               workbookType={WorkBookType.CURRICULUM}
               {workbooks}
               {workbookGradeModes}
-              taskResultsWithWorkBookId={buildTaskResultsByWorkBookId(workbooks, taskResultsByTaskId)}
+              {taskResultsWithWorkBookId}
               loggedInUser={loggedInUser as { id: string; role: Roles }}
               currentGrade={data.selectedGrade}
               onGradeChange={handleGradeChange}
@@ -215,7 +218,7 @@ git commit -m "refactor(workbooks/components): WorkBookList uses discriminated u
             <WorkBookList
               workbookType={WorkBookType.SOLUTION}
               {workbooks}
-              taskResultsWithWorkBookId={buildTaskResultsByWorkBookId(workbooks, taskResultsByTaskId)}
+              {taskResultsWithWorkBookId}
               loggedInUser={loggedInUser as { id: string; role: Roles }}
               availableCategories={data.availableCategories}
               currentCategory={data.selectedCategory}
@@ -234,10 +237,7 @@ git commit -m "refactor(workbooks/components): WorkBookList uses discriminated u
               <WorkBookList
                 workbookType={WorkBookType.CREATED_BY_USER}
                 {workbooks}
-                taskResultsWithWorkBookId={buildTaskResultsByWorkBookId(
-                  workbooks,
-                  taskResultsByTaskId,
-                )}
+                {taskResultsWithWorkBookId}
                 loggedInUser={loggedInUser as { id: string; role: Roles }}
               />
             </div>

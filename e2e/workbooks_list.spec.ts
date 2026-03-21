@@ -3,6 +3,8 @@ import { test, expect } from '@playwright/test';
 import { loginAsAdmin, loginAsUser } from './helpers/auth';
 
 const TIMEOUT = 60 * 1000;
+// Short timeout used only for optional visibility checks (to decide skip, not to assert).
+const VISIBILITY_CHECK_TIMEOUT = 3000;
 const WORKBOOK_LIST_URL = '/workbooks';
 
 // Tab URL parameter values (must match WorkBookTab const in src/features/workbooks/types/workbook.ts)
@@ -117,7 +119,7 @@ test.describe('logged-in user (general)', () => {
       await expect(page.getByRole('tab', { name: '解法別' })).toBeVisible({ timeout: TIMEOUT });
 
       const button = page.getByRole('button', { name: label });
-      if (!(await button.isVisible({ timeout: 3000 }).catch(() => false))) {
+      if (!(await button.isVisible({ timeout: VISIBILITY_CHECK_TIMEOUT }).catch(() => false))) {
         // No workbooks for this category → button is hidden by availableCategories filter
         test.skip();
         return;
@@ -143,7 +145,7 @@ test.describe('logged-in user (general)', () => {
       'label:has(input[aria-label="Toggle visibility of replenishment workbooks for curriculum"])',
     );
 
-    if (!(await toggleInput.isVisible({ timeout: 3000 }).catch(() => false))) {
+    if (!(await toggleInput.isVisible({ timeout: VISIBILITY_CHECK_TIMEOUT }).catch(() => false))) {
       // No replenishment workbooks exist for the current grade → skip
       test.skip();
       return;

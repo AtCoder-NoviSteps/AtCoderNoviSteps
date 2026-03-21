@@ -25,11 +25,11 @@
   let { data } = $props();
 
   let workbooks = $derived(data.workbooks as WorkbooksList);
-  let loggedInUser = data.loggedInUser;
-  let role = loggedInUser?.role as Roles;
+  let loggedInUser = $derived(data.loggedInUser);
+  let role = $derived(loggedInUser?.role as Roles);
 
-  const tasksMapByIds: Map<string, Task> = data.tasksMapByIds;
-  let taskResultsByTaskId = data.taskResultsByTaskId as Map<string, TaskResult>;
+  const tasksMapByIds = $derived(data.tasksMapByIds as Map<string, Task>);
+  let taskResultsByTaskId = $derived(data.taskResultsByTaskId as Map<string, TaskResult>);
 
   const gradeModesEachWorkbook = $derived(calcWorkBookGradeModes(workbooks, tasksMapByIds));
   const taskResultsWithWorkBookId = $derived(

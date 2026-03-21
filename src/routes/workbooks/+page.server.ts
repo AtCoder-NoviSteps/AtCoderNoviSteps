@@ -39,7 +39,7 @@ export async function load({ locals, url }) {
   const tab = parseWorkBookTab(params);
 
   // CREATED_BY_USER tab is admin-only
-  if (tab === WorkBookTab.CREATED_BY_USER && !isAdmin(loggedInUser?.role as Roles)) {
+  if (tab === WorkBookTab.CREATED_BY_USER && (!loggedInUser || !isAdmin(loggedInUser.role as Roles))) {
     redirect(FOUND, '/workbooks');
   }
 
@@ -51,7 +51,9 @@ export async function load({ locals, url }) {
       fetchWorkbooksByTab(tab, selectedGrade, selectedCategory),
       getAvailableSolutionCategories(),
       taskCrud.getTasksByTaskId(),
-      taskResultsCrud.getTaskResultsOnlyResultExists(loggedInUser?.id as string, true),
+      loggedInUser
+        ? taskResultsCrud.getTaskResultsOnlyResultExists(loggedInUser.id, true)
+        : Promise.resolve(new Map()),
     ]);
 
     return {

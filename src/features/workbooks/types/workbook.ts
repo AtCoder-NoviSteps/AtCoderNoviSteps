@@ -61,7 +61,7 @@ export type WorkbookTableProps = {
   taskResults: Map<number, TaskResults>;
 };
 
-// Imported by SolutionTable — excludes gradeModesEachWorkbook which is unused in the solution tab.
+/** Imported by SolutionTable and CreatedByUserTable — excludes gradeModesEachWorkbook which is unused in those tabs. */
 export type SolutionTableProps = Omit<WorkbookTableProps, 'gradeModesEachWorkbook'>;
 
 export type WorkBookTaskBase = {

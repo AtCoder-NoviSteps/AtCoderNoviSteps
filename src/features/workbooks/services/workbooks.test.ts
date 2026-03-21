@@ -84,7 +84,7 @@ function mockFindUnique(value: PrismaWorkBook) {
   vi.mocked(prisma.workBook.findUnique).mockResolvedValue(value);
 }
 
-function mockFindMany(value: PrismaWorkBookWithUser[]) {
+function mockFindMany(value: object[]) {
   vi.mocked(prisma.workBook.findMany).mockResolvedValue(
     value as unknown as Awaited<ReturnType<typeof prisma.workBook.findMany>>,
   );
@@ -259,16 +259,10 @@ const MOCK_WORKBOOK_BASE = {
   user: { username: 'author1' },
 };
 
-/** Sets up prisma.workBook.findMany to resolve with the given workbooks. */
-function mockWorkbookFindMany(workbooks: object[]) {
-  vi.mocked(prisma.workBook.findMany).mockResolvedValue(
-    workbooks as unknown as Awaited<ReturnType<typeof prisma.workBook.findMany>>,
-  );
-}
 
 describe('getPublishedWorkbooksByPlacement', () => {
   test('filters CURRICULUM workbooks by taskGrade with priority asc order', async () => {
-    mockWorkbookFindMany([{ ...MOCK_WORKBOOK_BASE, workBookType: WorkBookType.CURRICULUM }]);
+    mockFindMany([{ ...MOCK_WORKBOOK_BASE, workBookType: WorkBookType.CURRICULUM }]);
 
     const result = await getPublishedWorkbooksByPlacement({
       workBookType: WorkBookType.CURRICULUM,
@@ -289,7 +283,7 @@ describe('getPublishedWorkbooksByPlacement', () => {
   });
 
   test('filters SOLUTION workbooks by solutionCategory', async () => {
-    mockWorkbookFindMany([{ ...MOCK_WORKBOOK_BASE, workBookType: WorkBookType.SOLUTION }]);
+    mockFindMany([{ ...MOCK_WORKBOOK_BASE, workBookType: WorkBookType.SOLUTION }]);
 
     await getPublishedWorkbooksByPlacement({
       workBookType: WorkBookType.SOLUTION,
@@ -307,7 +301,7 @@ describe('getPublishedWorkbooksByPlacement', () => {
   });
 
   test('maps null user to authorName "unknown"', async () => {
-    mockWorkbookFindMany([
+    mockFindMany([
       { ...MOCK_WORKBOOK_BASE, workBookType: WorkBookType.CURRICULUM, user: null },
     ]);
 
@@ -322,7 +316,7 @@ describe('getPublishedWorkbooksByPlacement', () => {
 
 describe('getWorkBooksCreatedByUsers', () => {
   test('queries only CREATED_BY_USER type workbooks ordered by id asc', async () => {
-    mockWorkbookFindMany([{ ...MOCK_WORKBOOK_BASE, workBookType: WorkBookType.CREATED_BY_USER }]);
+    mockFindMany([{ ...MOCK_WORKBOOK_BASE, workBookType: WorkBookType.CREATED_BY_USER }]);
 
     await getWorkBooksCreatedByUsers();
 
@@ -335,7 +329,7 @@ describe('getWorkBooksCreatedByUsers', () => {
   });
 
   test('maps null user to authorName "unknown"', async () => {
-    mockWorkbookFindMany([
+    mockFindMany([
       { ...MOCK_WORKBOOK_BASE, workBookType: WorkBookType.CREATED_BY_USER, user: null },
     ]);
 

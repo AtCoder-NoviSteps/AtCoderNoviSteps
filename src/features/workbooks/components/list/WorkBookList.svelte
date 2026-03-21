@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { Roles } from '$lib/types/user';
+  import { Roles } from '$lib/types/user';
   import { TaskGrade, type TaskResults } from '$lib/types/task';
   import { WorkBookType, type WorkbooksList } from '$features/workbooks/types/workbook';
   import { type SolutionCategory } from '$features/workbooks/types/workbook_placement';
@@ -41,7 +41,7 @@
     gradeModesEachWorkbook={props.gradeModesEachWorkbook}
     taskResultsWithWorkBookId={props.taskResultsWithWorkBookId}
     userId={props.loggedInUser?.id ?? ''}
-    role={props.loggedInUser?.role as Roles}
+    role={props.loggedInUser?.role ?? Roles.USER}
     currentGrade={props.currentGrade}
     onGradeChange={props.onGradeChange}
   />
@@ -50,7 +50,7 @@
     workbooks={props.workbooks}
     taskResultsWithWorkBookId={props.taskResultsWithWorkBookId}
     userId={props.loggedInUser?.id ?? ''}
-    role={props.loggedInUser?.role as Roles}
+    role={props.loggedInUser?.role ?? Roles.USER}
     availableCategories={props.availableCategories}
     currentCategory={props.currentCategory}
     onCategoryChange={props.onCategoryChange}
@@ -58,9 +58,8 @@
 {:else}
   <CreatedByUserTable
     workbooks={props.workbooks}
-    gradeModesEachWorkbook={new Map()}
     taskResults={props.taskResultsWithWorkBookId}
     userId={props.loggedInUser?.id ?? ''}
-    role={props.loggedInUser?.role as Roles}
+    role={props.loggedInUser?.role ?? Roles.USER}
   />
 {/if}

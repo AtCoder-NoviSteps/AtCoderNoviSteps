@@ -57,7 +57,7 @@ export async function load({ locals, url }) {
   const tab = parseWorkBookTab(params);
 
   // CREATED_BY_USER は管理者専用
-  if (tab === WorkBookTab.CREATED_BY_USER && !isAdmin(loggedInUser?.role as Roles)) {
+  if (tab === WorkBookTab.CREATED_BY_USER && (!loggedInUser || !isAdmin(loggedInUser.role as Roles))) {
     redirect(FOUND, '/workbooks');
   }
 

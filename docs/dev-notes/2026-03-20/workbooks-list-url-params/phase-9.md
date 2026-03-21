@@ -17,8 +17,12 @@
 
 ```bash
 grep -r "task_grades_by_workbook_type\|active_workbook_tab" \
-  src/ --include="*.ts" --include="*.svelte"
-# 結果ゼロを確認してから次へ進む
+  src/ --include="*.ts" --include="*.svelte" \
+  --exclude="task_grades_by_workbook_type.ts" \
+  --exclude="task_grades_by_workbook_type.test.ts" \
+  --exclude="active_workbook_tab.ts" \
+  --exclude="active_workbook_tab.test.ts"
+# 削除対象 4 ファイル以外の参照がゼロであることを確認してから次へ進む
 ```
 
 - [ ] **Step 2: ファイル削除**
@@ -40,6 +44,6 @@ pnpm test:unit
 - [ ] **Step 4: コミット**
 
 ```bash
-git add -A
+git add -u src/features/workbooks/stores/
 git commit -m "chore(workbooks): Remove stores replaced by URL params and local state"
 ```

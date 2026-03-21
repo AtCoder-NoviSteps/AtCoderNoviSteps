@@ -33,8 +33,10 @@
 
   // PENDING (unclassified) is admin-only and must not appear on the public page.
   // Further filtered to availableCategories (server-side: only categories with at least one workbook).
-  const AVAILABLE_CATEGORIES = Object.values(SolutionCategory).filter(
-    (category) => category !== SolutionCategory.PENDING && availableCategories.includes(category),
+  let AVAILABLE_CATEGORIES = $derived(
+    Object.values(SolutionCategory).filter(
+      (category) => category !== SolutionCategory.PENDING && availableCategories.includes(category),
+    ),
   );
 
   let readableCount = $derived(countReadableWorkbooks(workbooks, userId));
