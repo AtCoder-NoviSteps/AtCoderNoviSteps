@@ -7,6 +7,9 @@ import type {
   WorkBookTasksBase,
   WorkBookType,
 } from '$features/workbooks/types/workbook';
+import { WorkBookType as WorkBookTypeConst } from '$features/workbooks/types/workbook';
+import { TaskGrade } from '$lib/types/task';
+import { SolutionCategory } from '$features/workbooks/types/workbook_placement';
 
 import {
   getWorkBookTasks,
@@ -51,10 +54,91 @@ export async function getWorkBooksWithAuthors(): Promise<WorkbooksWithAuthors> {
     },
   });
 
-  return workbooks.map((workbook) => ({
-    ...workbook,
-    authorName: workbook.user?.username ?? 'unknown',
-  }));
+  return mapWithAuthorName(workbooks);
+}
+
+/**
+ * Discriminated union representing a placement-based filter query.
+ * CURRICULUM filters by taskGrade; SOLUTION filters by solutionCategory.
+ */
+export type PlacementQuery =
+  | { workBookType: typeof WorkBookTypeConst.CURRICULUM; taskGrade: TaskGrade }
+  | { workBookType: typeof WorkBookTypeConst.SOLUTION; solutionCategory: SolutionCategory };
+
+/**
+ * Returns published workbooks filtered by WorkBookPlacement, ordered by priority ASC.
+ * Workbooks without a placement record are automatically excluded by Prisma's nested where filter.
+ *
+ * @param query - Discriminated union: CURRICULUM uses taskGrade; SOLUTION uses solutionCategory
+ */
+export async function getPublishedWorkbooksByPlacement(
+  query: PlacementQuery,
+): Promise<WorkbooksWithAuthors> {
+  const placementFilter =
+    query.workBookType === WorkBookTypeConst.CURRICULUM
+      ? { taskGrade: query.taskGrade }
+      : { solutionCategory: query.solutionCategory };
+
+  const workbooks = await db.workBook.findMany({
+    where: {
+      workBookType: query.workBookType,
+      isPublished: true,
+      placement: placementFilter,
+    },
+    orderBy: {
+      placement: { priority: 'asc' },
+    },
+    include: {
+      user: {
+        select: { username: true },
+      },
+      workBookTasks: {
+        orderBy: { priority: 'asc' },
+      },
+    },
+  });
+
+  return mapWithAuthorName(workbooks);
+}
+
+/**
+ * Returns all CREATED_BY_USER workbooks with author names, ordered by id ASC.
+ * Intended for admin-only display on the workbooks list page.
+ */
+export async function getWorkBooksCreatedByUsers(): Promise<WorkbooksWithAuthors> {
+  const workbooks = await db.workBook.findMany({
+    where: { workBookType: WorkBookTypeConst.CREATED_BY_USER },
+    orderBy: { id: 'asc' },
+    include: {
+      user: {
+        select: { username: true },
+      },
+      workBookTasks: {
+        orderBy: { priority: 'asc' },
+      },
+    },
+  });
+
+  return mapWithAuthorName(workbooks);
+}
+
+/**
+ * Returns the list of SolutionCategory values that have at least one published
+ * SOLUTION workbook with a placement record.
+ */
+export async function getAvailableSolutionCategories(): Promise<SolutionCategory[]> {
+  const placements = await db.workBookPlacement.findMany({
+    where: {
+      workBook: { isPublished: true, workBookType: WorkBookTypeConst.SOLUTION },
+      solutionCategory: { not: null },
+    },
+    select: { solutionCategory: true },
+    distinct: ['solutionCategory'],
+  });
+
+  return placements
+    .map((placement) => placement.solutionCategory)
+    .filter((category): category is SolutionCategory => category !== null);
 }
 
 export async function getWorkBook(workBookId: number): Promise<WorkBook | null> {
@@ -210,4 +294,15 @@ export async function deleteWorkBook(workBookId: number): Promise<void> {
       id: workBookId,
     },
   });
+}
+
+// ---- Private helpers ----
+
+function mapWithAuthorName<T extends { user: { username: string } | null }>(
+  workbooks: T[],
+): (T & { authorName: string })[] {
+  return workbooks.map((workbook) => ({
+    ...workbook,
+    authorName: workbook.user?.username ?? 'unknown',
+  }));
 }
