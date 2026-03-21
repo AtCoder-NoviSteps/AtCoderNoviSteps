@@ -8,11 +8,11 @@
 
 - Modify: `e2e/workbooks_list.spec.ts`
 
-- [ ] **Step 1: ファイルを読んで削除対象を確認**
+- [x] **Step 1: ファイルを読んで削除対象を確認**
 
 `activeWorkbookTabStore` / `task_grades_by_workbook_type` を前提としたテストを特定して削除する。
 
-- [ ] **Step 2: URLパラメータ関連テストと `created_by_user` テストを追加**
+- [x] **Step 2: URLパラメータ関連テストと `created_by_user` テストを追加**
 
 > ラベル文字列（`'10Q'`, `'グラフ'` など）は `GRADE_LABELS` / `SOLUTION_LABELS` 定数と一致させること。実装前に `src/lib/types/task.ts` と `src/features/workbooks/types/workbook_placement.ts` を確認すること。
 
@@ -109,13 +109,13 @@ test('created_by_user tab is not visible to non-admin users', async ({ page }) =
 });
 ```
 
-- [ ] **Step 3: E2Eテスト実行**
+- [x] **Step 3: E2Eテスト実行**
 
 ```bash
 pnpm test:e2e -- --grep "workbooks"
 ```
 
-- [ ] **Step 4: コミット**
+- [x] **Step 4: コミット**
 
 ```bash
 git add e2e/workbooks_list.spec.ts
