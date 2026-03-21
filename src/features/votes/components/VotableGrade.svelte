@@ -2,7 +2,8 @@
   import { enhance } from '$app/forms';
 
   import { Dropdown, DropdownItem, DropdownDivider } from 'flowbite-svelte';
-
+  import Check from '@lucide/svelte/icons/check';
+  
   import { taskGradeValues, TaskGrade, getTaskGrade, type TaskResult } from '$lib/types/task';
   import { getTaskGradeLabel } from '$lib/utils/task';
   import { SIGNUP_PAGE, LOGIN_PAGE } from '$lib/constants/navbar-links';
@@ -23,6 +24,29 @@
 
   let selectedVoteGrade = $state<TaskGrade>();
   let showForm = $state(false);
+
+  let isOpening = $state(false);
+  let votedGrade = $state<TaskGrade | null>(null);
+
+  async function onTriggerClick() {
+    if (isOpening) return;
+    isOpening = true;
+    try {
+      // ここで先にやりたい処理（例: getMyVote フェッチ）
+      const res = await fetch(`/problems/getMyVote?taskId=${encodeURIComponent(taskResult.task_id)}`, {
+        headers: { Accept: 'application/json' }
+      });
+      if (res.ok) {
+        const data = await res.json();
+        votedGrade = data.grade;
+        console.dir(data);
+      }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      isOpening = false;
+    }
+  }
 
   function handleClick(voteGrade: string): void {
     selectedVoteGrade = getTaskGrade(voteGrade);
@@ -63,7 +87,6 @@
           Accept: 'application/json',
         },
       })
-        .then((response) => response.json())
         .catch((error) => {
           console.error('Failed to update submission status: ', error);
           errorMessageStore.setAndClearAfterTimeout(FAILED_TO_UPDATE_VOTE_STATUS, 10000);
@@ -83,12 +106,13 @@
 </script>
 
 <!-- Grade Icon -->
-<div
+<button
   id={`update-grade-dropdown-trigger-${componentId}`}
   class="relative group shrink-0 cursor-pointer"
-  role="button"
+  type="button"
   tabindex="0"
   aria-label="Vote grade"
+  onclick={() => onTriggerClick()}
 >
   <GradeLabel
     taskGrade={taskResult.grade}
@@ -102,7 +126,7 @@
     aria-hidden="true"
     class="pointer-events-none absolute inset-0 rounded-lg bg-gray-200 dark:bg-gray-700 mix-blend-multiply opacity-0 transition-opacity duration-150 group-hover:opacity-100"
   ></span>
-</div>
+</button>
 
 
 <!-- Dropdown Menu -->
@@ -110,7 +134,7 @@
   <Dropdown
     triggeredBy={`#update-grade-dropdown-trigger-${componentId}`}
     simple
-    class="h-48 w-20 z-50 border border-gray-200 dark:border-gray-100 overflow-y-auto"
+    class="h-48 w-25 z-50 border border-gray-200 dark:border-gray-100 overflow-y-auto"
   >
     {#each nonPendingGrades as grade}
       <DropdownItem onclick={() => handleClick(grade)} class="rounded-md">
@@ -118,6 +142,9 @@
           class="flex items-center justify-between w-full text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white"
         >
           <span>{getTaskGradeLabel(grade)}</span>
+          {#if votedGrade === grade}
+            <Check class="w-4 h-4 text-primary-600 dark:text-gray-300" strokeWidth={3} />
+          {/if}
         </div>
       </DropdownItem>
     {/each}

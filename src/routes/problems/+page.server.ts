@@ -4,7 +4,7 @@ import * as crud from '$lib/services/task_results';
 import type { TaskResults } from '$lib/types/task';
 import { Roles } from '$lib/types/user';
 import { updateTaskResult } from '$lib/actions/update_task_result';
-import { updateAbsoluteVoteResult } from '@/features/votes/actions/update_absolute_vote_result';
+import { voteAbsoluteGrade } from '@/features/votes/actions/vote_actions';
 
 // 一覧表ページは、ログインしていなくても閲覧できるようにする
 export async function load({ locals, url }) {
@@ -38,6 +38,6 @@ export const actions = {
   },
   voteAbsoluteGrade: async ({request, locals}) => {
     const operationLog = 'problems -> actions -> voteAbsoluteGrade';
-    return await updateAbsoluteVoteResult({ request, locals }, operationLog);
+    await voteAbsoluteGrade({ request, locals }, operationLog);
   },
 } satisfies Actions;

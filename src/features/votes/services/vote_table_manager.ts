@@ -2,7 +2,25 @@ import { default as prisma } from '$lib/server/database';
 import { TaskGrade, type VoteGrade } from '@prisma/client';
 import { sha256 } from '$lib/utils/hash';
 
-export async function upsertVoteGrade(taskId: string, userId: string, grade: string) {
+export async function getVoteGrade(userId: string, taskId: string) {
+  const res = await prisma.voteGrade.findUnique({
+    where: {
+      userId_taskId: { userId: userId, taskId: taskId },
+    },
+  });
+  let voted = false;
+  let grade = null;
+  if(res !== null){
+    voted = true;
+    grade = res.grade;
+  }
+  return {
+    voted: voted,
+    grade: grade,
+  };
+}
+
+export async function upsertVoteGrade(userId: string, taskId: string, grade: string) {
   try {
     const id = await sha256(taskId + userId);
     const newVoteGrade: VoteGrade = {

@@ -1,9 +1,9 @@
 import { fail } from '@sveltejs/kit';
 
-import * as crud from '$features/votes/services/absolute_vote_results';
+import * as crud from '@/features/votes/services/vote_table_manager';
 import { BAD_REQUEST, UNAUTHORIZED } from '$lib/constants/http-response-status-codes';
 
-export const updateAbsoluteVoteResult = async (
+export const voteAbsoluteGrade = async (
   { request, locals }: { request: Request; locals: App.Locals },
   operationLog: string,
 ) => {
@@ -22,7 +22,7 @@ export const updateAbsoluteVoteResult = async (
   const grade = response.get('grade') as string;
 
   try {
-    await crud.updateAbsoluteVoteResult(taskId, grade, userId);
+    await crud.upsertVoteGrade(userId, taskId, grade);
   } catch (error) {
     console.error('Failed to vote absolute grade: ', error);
     return fail(BAD_REQUEST);
