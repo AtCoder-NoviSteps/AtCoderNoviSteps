@@ -153,3 +153,7 @@ prisma/.fabbrica
 
 # Directory for playwright test results
 test-results
+
+# Local editor and tool settings
+.vscode/
+.claude/settings.local.json
