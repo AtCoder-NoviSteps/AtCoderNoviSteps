@@ -67,9 +67,7 @@ test.describe('logged-in user (general)', () => {
   });
 
   test('direct URL access to solution tab selects the solution tab', async ({ page }) => {
-    await page.goto(
-      `${WORKBOOK_LIST_URL}?tab=${TAB_SOLUTION}&categories=${CATEGORY_GRAPH}`,
-    );
+    await page.goto(`${WORKBOOK_LIST_URL}?tab=${TAB_SOLUTION}&categories=${CATEGORY_GRAPH}`);
     await expect(page.getByRole('tab', { name: '解法別' })).toHaveAttribute(
       'aria-selected',
       'true',
