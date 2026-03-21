@@ -39,7 +39,10 @@ export async function load({ locals, url }) {
   const tab = parseWorkBookTab(params);
 
   // CREATED_BY_USER tab is admin-only
-  if (tab === WorkBookTab.CREATED_BY_USER && (!loggedInUser || !isAdmin(loggedInUser.role as Roles))) {
+  if (
+    tab === WorkBookTab.CREATED_BY_USER &&
+    (!loggedInUser || !isAdmin(loggedInUser.role as Roles))
+  ) {
     redirect(FOUND, '/workbooks');
   }
 

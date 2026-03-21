@@ -259,7 +259,6 @@ const MOCK_WORKBOOK_BASE = {
   user: { username: 'author1' },
 };
 
-
 describe('getPublishedWorkbooksByPlacement', () => {
   test('filters CURRICULUM workbooks by taskGrade with priority asc order', async () => {
     mockFindMany([{ ...MOCK_WORKBOOK_BASE, workBookType: WorkBookType.CURRICULUM }]);
@@ -301,9 +300,7 @@ describe('getPublishedWorkbooksByPlacement', () => {
   });
 
   test('maps null user to authorName "unknown"', async () => {
-    mockFindMany([
-      { ...MOCK_WORKBOOK_BASE, workBookType: WorkBookType.CURRICULUM, user: null },
-    ]);
+    mockFindMany([{ ...MOCK_WORKBOOK_BASE, workBookType: WorkBookType.CURRICULUM, user: null }]);
 
     const result = await getPublishedWorkbooksByPlacement({
       workBookType: WorkBookType.CURRICULUM,

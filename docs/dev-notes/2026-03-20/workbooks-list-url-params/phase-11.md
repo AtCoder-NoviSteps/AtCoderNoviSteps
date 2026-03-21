@@ -52,33 +52,32 @@ coderabbit review --plain
 
 ### 即時修正対象（potential_issue 5 件）
 
-| # | ファイル | 内容 | 性質 |
-|---|---------|------|------|
-| 1 | `src/routes/workbooks/+page.svelte:28-32` | `loggedInUser`・`role`・`tasksMapByIds`・`taskResultsByTaskId` が `data` の初期値しか取らない | **潜在バグ**。現状の grade/category 切替では実害は少ないが、form action 後など `data` が更新された場合に古い値が表示され続ける可能性がある。Svelte 5 Runes のベストプラクティス違反でもある（`pnpm check` も WARNING を出力済み）。`$derived` に変更する |
-| 2 | `src/routes/workbooks/+page.server.ts:42` | `loggedInUser?.role as Roles` が unsafe | **型安全性の問題**。認証ガード（SvelteKit hooks）が先に動くため実際は `null` にならないが、TypeScript はそれを知らない。`(!loggedInUser \|\| !isAdmin(loggedInUser.role))` に変更 |
-| 3 | `src/routes/workbooks/+page.server.ts:54` | `loggedInUser?.id as string` が unsafe | **型安全性の問題**（2 と同じ背景）。`loggedInUser ? ... : Promise.resolve(new Map())` に変更 |
-| 4 | `src/features/workbooks/components/list/SolutionWorkBookList.svelte:36-38` | `AVAILABLE_CATEGORIES` が `const` のため props 変化時に再計算されない | **リアクティビティバグ**。SvelteKit のナビゲーション時に `availableCategories` prop が変わっても画面が更新されない。`$derived` に変更 |
-| 5 | `src/features/workbooks/types/workbook.ts:64` | `SolutionTableProps` のコメントが `//` | **コーディング規約違反**。エクスポート型には TSDoc（`/** */`）が必須 |
+| #   | ファイル                                                                   | 内容                                                                                          | 性質                                                                                                                                                                                                                                                     |
+| --- | -------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | `src/routes/workbooks/+page.svelte:28-32`                                  | `loggedInUser`・`role`・`tasksMapByIds`・`taskResultsByTaskId` が `data` の初期値しか取らない | **潜在バグ**。現状の grade/category 切替では実害は少ないが、form action 後など `data` が更新された場合に古い値が表示され続ける可能性がある。Svelte 5 Runes のベストプラクティス違反でもある（`pnpm check` も WARNING を出力済み）。`$derived` に変更する |
+| 2   | `src/routes/workbooks/+page.server.ts:42`                                  | `loggedInUser?.role as Roles` が unsafe                                                       | **型安全性の問題**。認証ガード（SvelteKit hooks）が先に動くため実際は `null` にならないが、TypeScript はそれを知らない。`(!loggedInUser \|\| !isAdmin(loggedInUser.role))` に変更                                                                        |
+| 3   | `src/routes/workbooks/+page.server.ts:54`                                  | `loggedInUser?.id as string` が unsafe                                                        | **型安全性の問題**（2 と同じ背景）。`loggedInUser ? ... : Promise.resolve(new Map())` に変更                                                                                                                                                             |
+| 4   | `src/features/workbooks/components/list/SolutionWorkBookList.svelte:36-38` | `AVAILABLE_CATEGORIES` が `const` のため props 変化時に再計算されない                         | **リアクティビティバグ**。SvelteKit のナビゲーション時に `availableCategories` prop が変わっても画面が更新されない。`$derived` に変更                                                                                                                    |
+| 5   | `src/features/workbooks/types/workbook.ts:64`                              | `SolutionTableProps` のコメントが `//`                                                        | **コーディング規約違反**。エクスポート型には TSDoc（`/** */`）が必須                                                                                                                                                                                     |
 
-### スキップ（defer）
+### 実施結果（#6〜17）
 
-| # | ファイル | 内容 | 理由 |
-|---|---------|------|------|
-| 6 | `WorkBookList.svelte:43-44` | `as Roles` キャスト | 親 `{#if loggedInUser}` で保護済み |
-| 7 | `workbook_url_params.ts:78-93` | PENDING が `buildWorkbooksUrl` に渡せる | 呼び出し元はパース済み値のみ渡す設計。YAGNI |
-| 8 | `WorkBookList.svelte:61` | `gradeModesEachWorkbook={new Map()}` — `CreatedByUserTable` がこの prop を使わないなら props 定義から削除を検討 | 既存仕様の範囲外・影響なし |
-| 9 | `phase-4.md:60-62` | ドキュメントのコード例にも `loggedInUser?.role as Roles` の unsafe cast が残っている | docs のみ、実装には影響なし |
-| 10 | `e2e/workbooks_list.spec.ts:119-124` | `isVisible({ timeout: 3000 })` がハードコード → `VISIBILITY_CHECK_TIMEOUT` 等の定数化を検討 | 意図的に短いタイムアウトのため許容 |
-| 11 | `services/workbooks.ts:129-142` | `getAvailableSolutionCategories` の `.filter(c => c !== null)` が冗長（Prisma クエリで `{ not: null }` 済み） | TypeScript 型ガードとして機能しており防御的コーディングとして許容 |
-| 12 | `utils/workbooks.ts:143-151` | `partitionWorkbooksAsMainAndReplenished` が `filter` を 2 回実行（O(2N)）→ `reduce` で 1 パスに | 問題集リストは小規模。マイクロ最適化 |
-| 13 | `workbooks.test.ts:263-267` | `mockWorkbookFindMany` が既存の `mockFindMany` とほぼ同一で重複 | テストコードのみ |
-| 14 | `phase-9.md:42-44` | `git add -A` は無関係なファイルも含む可能性 → `git add -u src/features/workbooks/stores/` 推奨 | 過去の手順ドキュメントのみ |
-| 15 | `phase-9.md:18-22` | 削除前の grep が削除対象ファイル自身にヒットするため「結果ゼロ」の確認にならない | 過去の手順ドキュメントのみ |
-| 16 | `phase-8.md:196-205` | ドキュメントの WorkBookList 例がインライン呼び出しのまま（実装は `$derived` で事前計算済みに変更されている） | 過去の手順ドキュメントのみ |
-| 17 | `.gitignore:157-159` | VS Code 関連の除外パターンが 145 行目と 157 行目に分散 → 145 行目のセクションに統合推奨 | 機能への影響なし |
+| #   | ファイル                             | 対応           | 備考                                                                                                            |
+| --- | ------------------------------------ | -------------- | --------------------------------------------------------------------------------------------------------------- |
+| 6   | `WorkBookList.svelte:43-44`          | ✅ 修正        | `as Roles` → `?? Roles.USER`（`import type` → `import` に変更）                                                |
+| 7   | `workbook_url_params.ts:78-93`       | ⏭️ 差し戻し    | `Exclude<TaskGrade, PENDING>` が全呼び出し元に型エラーを連鎖。parse 関数の戻り値型から変えるべき大きな変更になる |
+| 8   | `WorkBookList.svelte:61`             | ✅ 修正        | `CreatedByUserTable` を `SolutionTableProps` に変更し `gradeModesEachWorkbook={new Map()}` を削除               |
+| 9   | `phase-4.md:60-62`                   | ✅ 修正        | docs コード例を最新実装（null チェック分離）に合わせた                                                          |
+| 10  | `e2e/workbooks_list.spec.ts:119-124` | ✅ 修正        | `VISIBILITY_CHECK_TIMEOUT = 3000` 定数を追加し全箇所を置き換え                                                  |
+| 11  | `services/workbooks.ts:129-142`      | ⏭️ 差し戻し    | フィルタ削除でテスト "excludes null solutionCategory entries" が失敗。mock は WHERE 句を無視するため防御的フィルタが必要 |
+| 12  | `utils/workbooks.ts:143-151`         | ✅ 修正        | `filter` 2 回 → `reduce` 1 パスに変更                                                                          |
+| 13  | `workbooks.test.ts:263-267`          | ✅ 修正        | `mockWorkbookFindMany` 削除・`mockFindMany` に統合（引数型を `object[]` に緩和）                                |
+| 14  | `phase-9.md:42-44`                   | ✅ 修正        | `git add -A` → `git add -u src/features/workbooks/stores/`                                                     |
+| 15  | `phase-9.md:18-22`                   | ✅ 修正        | grep に `--exclude` を追加し削除対象ファイル自身がヒットしないよう修正                                          |
+| 16  | `phase-8.md:196-205`                 | ✅ 修正        | インライン `buildTaskResultsByWorkBookId(...)` → `{taskResultsWithWorkBookId}` に更新                          |
+| 17  | `.gitignore:157-159`                 | ✅ 修正        | VS Code セクション（145 行目）に統合し重複行を削除                                                              |
 
-- **critical / high**: 次のフェーズ開始前に修正する
-- **low / info**: 内容を確認し、セキュリティ・リグレッション関連なら即修正、それ以外は最終 PR レビュー時に対応
+コミット: `abecf45b` `fix(workbooks): address CodeRabbit findings from Phase 11 review`
 
 ---
 
