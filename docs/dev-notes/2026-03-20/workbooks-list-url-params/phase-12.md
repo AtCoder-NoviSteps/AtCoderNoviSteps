@@ -166,3 +166,42 @@ pnpm test:unit   # 12-A のサービステストが通ること
 pnpm check       # 型エラーなし
 pnpm test:e2e    # 12-C の URL 復元テストが通ること
 ```
+
+---
+
+## 微修正: WorkBookList のボタン折り返し・スタイル統一
+
+**対象レイヤー:** component | **リスク:** 最低
+
+### 変更ファイル
+
+- `src/features/workbooks/components/list/SolutionWorkBookList.svelte`
+- `src/features/workbooks/components/list/CurriculumWorkBookList.svelte`
+
+### 背景
+
+1. 狭い画面で `ButtonGroup` 内のボタンが折り返せず縦に潰れる
+2. `ButtonGroup` 除去後に `color` prop を指定しなかったため Flowbite のデフォルト（塗りつぶし）が適用され視認性が最悪になった
+3. カリキュラムのボタン余白が `TaskTable.svelte` と比べて大きく野暮ったかった
+
+### 実装（`TaskTable.svelte:194-207` のパターンに統一）
+
+両コンポーネントの `ButtonGroup` import とラッパーを除去し、`<div class="flex flex-wrap gap-1">` に置き換え。
+
+各 `Button` に付与したプロパティ:
+
+| prop / class                              | 役割                                  | 両コンポーネント共通             |
+| ----------------------------------------- | ------------------------------------- | -------------------------------- |
+| `color="alternative"`                     | outlined スタイル（塗りつぶしを防ぐ） | 共通                             |
+| `size="sm"`                               | 余白をコンパクトに                    | CurriculumのみTaskTable に揃える |
+| `rounded-lg`                              | 角丸                                  | 共通                             |
+| `dark:text-white`                         | ダークモード基本色                    | 共通                             |
+| `text-primary-700 dark:text-primary-500!` | アクティブ状態の強調色                | 共通                             |
+
+`CurriculumWorkBookList` は外側の `flex items-center space-x-4`（TooltipWrapper との横並び）はそのまま維持し、内側の `ButtonGroup` のみ置き換える。
+
+### 動作確認
+
+- 狭い画面幅でボタンが左に折り返すことを確認
+- ボタンが outlined スタイル（塗りつぶしなし）で表示されることを確認
+- `pnpm check` で今回の変更ファイルにエラーなし（`login`/`signup` の `AuthForm` 型エラーは既存の未解決問題）

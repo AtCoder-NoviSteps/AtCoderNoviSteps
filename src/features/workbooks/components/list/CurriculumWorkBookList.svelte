@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { ButtonGroup, Button, Toggle } from 'flowbite-svelte';
+  import { Button, Toggle } from 'flowbite-svelte';
 
   import type { Roles } from '$lib/types/user';
   import { TaskGrade, type TaskResults } from '$lib/types/task';
@@ -71,18 +71,18 @@
 <!-- TODO: 5Q〜1Qにも対応 -->
 <div class="mb-6">
   <div class="flex items-center space-x-4">
-    <ButtonGroup>
+    <div class="flex flex-wrap gap-1">
       {#each AVAILABLE_GRADES as grade}
         <Button
           onclick={() => filterByGradeMode(grade)}
-          class={currentGrade === grade
-            ? 'text-primary-700  dark:!text-primary-500'
-            : 'text-gray-900'}
+          color="alternative"
+          size="sm"
+          class={`rounded-lg dark:text-white ${currentGrade === grade ? 'text-primary-700 dark:text-primary-500!' : ''}`}
         >
           {getTaskGradeLabel(grade)}
         </Button>
       {/each}
-    </ButtonGroup>
+    </div>
 
     <TooltipWrapper
       tooltipContent="問題集のグレードを指定します（最頻値。2つ以上ある場合は、最も易しいグレードに掲載）"

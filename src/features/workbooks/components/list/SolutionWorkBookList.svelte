@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { ButtonGroup, Button } from 'flowbite-svelte';
+  import { Button } from 'flowbite-svelte';
 
   import type { Roles } from '$lib/types/user';
   import type { TaskResults } from '$lib/types/task';
@@ -42,19 +42,16 @@
   let readableCount = $derived(countReadableWorkbooks(workbooks, userId));
 </script>
 
-<div class="mb-6">
-  <ButtonGroup>
-    {#each AVAILABLE_CATEGORIES as category}
-      <Button
-        onclick={() => onCategoryChange(category)}
-        class={currentCategory === category
-          ? 'text-primary-700 dark:text-primary-500!'
-          : 'text-gray-900'}
-      >
-        {SOLUTION_LABELS[category]}
-      </Button>
-    {/each}
-  </ButtonGroup>
+<div class="mb-6 flex flex-wrap gap-1">
+  {#each AVAILABLE_CATEGORIES as category}
+    <Button
+      onclick={() => onCategoryChange(category)}
+      color="alternative"
+      class={`rounded-lg dark:text-white ${currentCategory === category ? 'text-primary-700 dark:text-primary-500!' : ''}`}
+    >
+      {SOLUTION_LABELS[category]}
+    </Button>
+  {/each}
 </div>
 
 {#if readableCount}
