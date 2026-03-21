@@ -268,9 +268,7 @@ function mockWorkbookFindMany(workbooks: object[]) {
 
 describe('getPublishedWorkbooksByPlacement', () => {
   test('filters CURRICULUM workbooks by taskGrade with priority asc order', async () => {
-    mockWorkbookFindMany([
-      { ...MOCK_WORKBOOK_BASE, workBookType: WorkBookType.CURRICULUM },
-    ]);
+    mockWorkbookFindMany([{ ...MOCK_WORKBOOK_BASE, workBookType: WorkBookType.CURRICULUM }]);
 
     const result = await getPublishedWorkbooksByPlacement({
       workBookType: WorkBookType.CURRICULUM,
@@ -291,9 +289,7 @@ describe('getPublishedWorkbooksByPlacement', () => {
   });
 
   test('filters SOLUTION workbooks by solutionCategory', async () => {
-    mockWorkbookFindMany([
-      { ...MOCK_WORKBOOK_BASE, workBookType: WorkBookType.SOLUTION },
-    ]);
+    mockWorkbookFindMany([{ ...MOCK_WORKBOOK_BASE, workBookType: WorkBookType.SOLUTION }]);
 
     await getPublishedWorkbooksByPlacement({
       workBookType: WorkBookType.SOLUTION,

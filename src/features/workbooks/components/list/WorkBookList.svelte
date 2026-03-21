@@ -1,10 +1,7 @@
 <script lang="ts">
   import type { Roles } from '$lib/types/user';
   import { TaskGrade, type TaskResults } from '$lib/types/task';
-  import {
-    WorkBookType,
-    type WorkbooksList,
-  } from '$features/workbooks/types/workbook';
+  import { WorkBookType, type WorkbooksList } from '$features/workbooks/types/workbook';
   import { type SolutionCategory } from '$features/workbooks/types/workbook_placement';
 
   import CurriculumWorkBookList from '$features/workbooks/components/list/CurriculumWorkBookList.svelte';

@@ -81,7 +81,10 @@
               workbookType={WorkBookType.CURRICULUM}
               {workbooks}
               {gradeModesEachWorkbook}
-              taskResultsWithWorkBookId={buildTaskResultsByWorkBookId(workbooks, taskResultsByTaskId)}
+              taskResultsWithWorkBookId={buildTaskResultsByWorkBookId(
+                workbooks,
+                taskResultsByTaskId,
+              )}
               loggedInUser={loggedInUser as { id: string; role: Roles }}
               currentGrade={data.selectedGrade}
               onGradeChange={handleGradeChange}
@@ -99,7 +102,10 @@
             <WorkBookList
               workbookType={WorkBookType.SOLUTION}
               {workbooks}
-              taskResultsWithWorkBookId={buildTaskResultsByWorkBookId(workbooks, taskResultsByTaskId)}
+              taskResultsWithWorkBookId={buildTaskResultsByWorkBookId(
+                workbooks,
+                taskResultsByTaskId,
+              )}
               loggedInUser={loggedInUser as { id: string; role: Roles }}
               availableCategories={data.availableCategories}
               currentCategory={data.selectedCategory}

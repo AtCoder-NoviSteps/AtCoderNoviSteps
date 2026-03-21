@@ -16,7 +16,7 @@
 
 - Modify: `src/features/workbooks/services/workbooks.test.ts`
 
-- [ ] **Step 1: インポートと `describe` ブロックを追記**
+- [x] **Step 1: インポートと `describe` ブロックを追記**
 
 既存の `vi.mock('$lib/server/database', ...)` とモック変数（`prisma`）を再利用する。
 
@@ -172,7 +172,7 @@ describe('getAvailableSolutionCategories', () => {
 });
 ```
 
-- [ ] **Step 2: テストが失敗することを確認**
+- [x] **Step 2: テストが失敗することを確認**
 
 ```bash
 pnpm test:unit -- workbooks.test
@@ -187,14 +187,14 @@ pnpm test:unit -- workbooks.test
 
 - Modify: `src/features/workbooks/services/workbooks.ts`
 
-- [ ] **Step 1: インポートを追加**
+- [x] **Step 1: インポートを追加**
 
 ```typescript
 import { TaskGrade } from '$lib/types/task';
 import { SolutionCategory } from '$features/workbooks/types/workbook_placement';
 ```
 
-- [ ] **Step 2: `getWorkBooksWithAuthors()` の直後に型・プライベートヘルパー・関数を追加**
+- [x] **Step 2: `getWorkBooksWithAuthors()` の直後に型・プライベートヘルパー・関数を追加**
 
 ```typescript
 /**
@@ -293,14 +293,14 @@ function mapWithAuthorName<T extends { user: { username: string } | null }>(
 }
 ```
 
-- [ ] **Step 3: テストが通ることを確認**
+- [x] **Step 3: テストが通ることを確認**
 
 ```bash
 pnpm test:unit -- workbooks.test
 # PASS
 ```
 
-- [ ] **Step 4: コミット**
+- [x] **Step 4: コミット**
 
 ```bash
 git add src/features/workbooks/services/workbooks.ts \

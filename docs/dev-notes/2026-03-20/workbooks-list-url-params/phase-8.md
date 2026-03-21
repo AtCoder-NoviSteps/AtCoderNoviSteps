@@ -18,9 +18,9 @@
 
 - Modify: `src/features/workbooks/components/list/WorkBookList.svelte`
 
-- [ ] **Step 1: ファイルを読んで現在の Props / ルーティングを確認**
+- [x] **Step 1: ファイルを読んで現在の Props / ルーティングを確認**
 
-- [ ] **Step 2: Props を discriminated union に変更し SOLUTION 分岐を追加**
+- [x] **Step 2: Props を discriminated union に変更し SOLUTION 分岐を追加**
 
 ```typescript
 import { type SolutionCategory } from '$features/workbooks/types/workbook_placement';
@@ -53,7 +53,7 @@ type Props = CommonProps & SpecificProps;
 let props: Props = $props();
 ```
 
-- [ ] **Step 3: テンプレートを discriminated union に対応させる**
+- [x] **Step 3: テンプレートを discriminated union に対応させる**
 
 ```svelte
 {#if props.workbookType === WorkBookType.CURRICULUM}
@@ -86,13 +86,13 @@ let props: Props = $props();
 {/if}
 ```
 
-- [ ] **Step 4: 型チェック**
+- [x] **Step 4: 型チェック**
 
 ```bash
 pnpm check
 ```
 
-- [ ] **Step 5: コミット**
+- [x] **Step 5: コミット**
 
 ```bash
 git add src/features/workbooks/components/list/WorkBookList.svelte
@@ -107,7 +107,7 @@ git commit -m "refactor(workbooks/components): WorkBookList uses discriminated u
 
 - Modify: `src/routes/workbooks/+page.svelte`
 
-- [ ] **Step 1: スクリプトブロックを書き換え**
+- [x] **Step 1: スクリプトブロックを書き換え**
 
 ```svelte
 <script lang="ts">
@@ -165,7 +165,7 @@ git commit -m "refactor(workbooks/components): WorkBookList uses discriminated u
 </script>
 ```
 
-- [ ] **Step 2: テンプレートブロックを書き換え**
+- [x] **Step 2: テンプレートブロックを書き換え**
 
 ```svelte
 <div class="container mx-auto w-5/6">
@@ -249,14 +249,14 @@ git commit -m "refactor(workbooks/components): WorkBookList uses discriminated u
 </div>
 ```
 
-- [ ] **Step 3: 型チェック**
+- [x] **Step 3: 型チェック**
 
 ```bash
 pnpm check
 # エラーゼロを確認
 ```
 
-- [ ] **Step 4: 開発サーバーで動作確認**
+- [x] **Step 4: 開発サーバーで動作確認**
 
 ```bash
 pnpm dev
@@ -272,7 +272,7 @@ pnpm dev
 # - 補充教材トグルが引き続き動作する
 ```
 
-- [ ] **Step 5: コミット**
+- [x] **Step 5: コミット**
 
 ```bash
 git add src/routes/workbooks/+page.svelte
@@ -291,7 +291,7 @@ git commit -m "feat(workbooks): URL-driven tab/filter navigation including CREAT
 - Modify: `src/features/workbooks/components/list/CurriculumTable.svelte`
 - Modify: `src/features/workbooks/types/workbook.ts`
 
-- [ ] **Step 1: 一括リネーム**
+- [x] **Step 1: 一括リネーム**
 
 ```bash
 # 影響ファイルを確認
@@ -300,13 +300,13 @@ grep -r "workbookGradeModes" src/
 
 `workbookGradeModes` をすべて `gradeModesEachWorkbook` に置換する。
 
-- [ ] **Step 2: 型チェック**
+- [x] **Step 2: 型チェック**
 
 ```bash
 pnpm check
 ```
 
-- [ ] **Step 3: コミット**
+- [x] **Step 3: コミット**
 
 ```bash
 git add -p

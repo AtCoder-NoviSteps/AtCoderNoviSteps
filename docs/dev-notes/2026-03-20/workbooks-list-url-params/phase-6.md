@@ -12,7 +12,7 @@
 
 - Modify: `src/features/workbooks/components/list/CurriculumWorkBookList.svelte`
 
-- [ ] **Step 1: ファイルを読んで現在の構造を確認**
+- [x] **Step 1: ファイルを読んで現在の構造を確認**
 
 削除対象となる行を特定する:
 
@@ -23,7 +23,7 @@
 - `$effect()` ブロック全体（ストアとの同期）
 - `taskGradesByWorkBookTypeStore.updateTaskGrade(...)` の呼び出し行
 
-- [ ] **Step 2: Props インターフェースを更新**
+- [x] **Step 2: Props インターフェースを更新**
 
 ```typescript
 interface Props {
@@ -47,7 +47,7 @@ let {
 }: Props = $props();
 ```
 
-- [ ] **Step 3: `filterByGradeMode` をコールバック委譲に変更**
+- [x] **Step 3: `filterByGradeMode` をコールバック委譲に変更**
 
 ```typescript
 function filterByGradeMode(grade: TaskGrade) {
@@ -55,7 +55,7 @@ function filterByGradeMode(grade: TaskGrade) {
 }
 ```
 
-- [ ] **Step 4: `$derived` のグレードフィルタを `splitWorkbooksByReplenishment` に置き換え**
+- [x] **Step 4: `$derived` のグレードフィルタを `splitWorkbooksByReplenishment` に置き換え**
 
 ```typescript
 import { splitWorkbooksByReplenishment, ... } from '$features/workbooks/utils/workbooks';
@@ -74,20 +74,20 @@ let { main: mainWorkbooks, replenished: replenishedWorkbooks } = $derived(
 );
 ```
 
-- [ ] **Step 5: ButtonGroup のアクティブ判定を `currentGrade` に変更**
+- [x] **Step 5: ButtonGroup のアクティブ判定を `currentGrade` に変更**
 
 ```svelte
 class={currentGrade === grade ? 'text-primary-700 dark:text-primary-500!' : 'text-gray-900'}
 ```
 
-- [ ] **Step 6: 型チェック・ユニットテスト**
+- [x] **Step 6: 型チェック・ユニットテスト**
 
 ```bash
 pnpm check
 pnpm test:unit
 ```
 
-- [ ] **Step 7: コミット**
+- [x] **Step 7: コミット**
 
 ```bash
 git add src/features/workbooks/components/list/CurriculumWorkBookList.svelte

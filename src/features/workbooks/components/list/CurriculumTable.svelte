@@ -13,7 +13,8 @@
   import { canRead } from '$lib/utils/authorship';
   import { getGradeMode, getTaskResult } from '$features/workbooks/utils/workbooks';
 
-  let { workbooks, gradeModesEachWorkbook, userId, role, taskResults }: WorkbookTableProps = $props();
+  let { workbooks, gradeModesEachWorkbook, userId, role, taskResults }: WorkbookTableProps =
+    $props();
 </script>
 
 <div class="overflow-auto rounded-md border border-gray-200 dark:border-gray-100">

@@ -18,7 +18,7 @@
 
 - Create: `src/features/workbooks/utils/workbook_url_params.test.ts`
 
-- [ ] **Step 1: テストファイルを作成**
+- [x] **Step 1: テストファイルを作成**
 
 ```typescript
 import { describe, test, expect } from 'vitest';
@@ -132,7 +132,7 @@ describe('buildWorkbooksUrl', () => {
 });
 ```
 
-- [ ] **Step 2: テストが失敗することを確認**
+- [x] **Step 2: テストが失敗することを確認**
 
 ```bash
 pnpm test:unit -- workbook_url_params
@@ -147,7 +147,7 @@ pnpm test:unit -- workbook_url_params
 
 - Create: `src/features/workbooks/utils/workbook_url_params.ts`
 
-- [ ] **Step 1: ファイルを作成**
+- [x] **Step 1: ファイルを作成**
 
 ```typescript
 import { TaskGrade } from '$lib/types/task';
@@ -239,14 +239,14 @@ export function buildWorkbooksUrl(
 }
 ```
 
-- [ ] **Step 2: テストが通ることを確認**
+- [x] **Step 2: テストが通ることを確認**
 
 ```bash
 pnpm test:unit -- workbook_url_params
 # PASS: 17 tests
 ```
 
-- [ ] **Step 3: コミット**
+- [x] **Step 3: コミット**
 
 ```bash
 git add src/features/workbooks/utils/workbook_url_params.ts \

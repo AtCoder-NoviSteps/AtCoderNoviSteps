@@ -1,0 +1,5 @@
+{
+  "permissions": {
+    "allow": ["Bash(pnpm format:*)", "Bash(git mv:*)", "WebFetch(domain:github.com)"]
+  }
+}

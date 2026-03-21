@@ -14,7 +14,7 @@
 
 - Modify: `src/features/workbooks/utils/workbooks.test.ts`
 
-- [ ] **Step 1: テストを追記**
+- [x] **Step 1: テストを追記**
 
 ```typescript
 import { partitionWorkbooksAsMainAndReplenished } from './workbooks';
@@ -59,7 +59,7 @@ describe('partitionWorkbooksAsMainAndReplenished', () => {
 });
 ```
 
-- [ ] **Step 2: テストが失敗することを確認**
+- [x] **Step 2: テストが失敗することを確認**
 
 ```bash
 pnpm test:unit -- workbooks.test
@@ -74,7 +74,7 @@ pnpm test:unit -- workbooks.test
 
 - Modify: `src/features/workbooks/utils/workbooks.ts`
 
-- [ ] **Step 1: 関数を追加（既存エクスポートの末尾）**
+- [x] **Step 1: 関数を追加（既存エクスポートの末尾）**
 
 ```typescript
 /**
@@ -94,14 +94,14 @@ export function partitionWorkbooksAsMainAndReplenished(workbooks: WorkbooksList)
 }
 ```
 
-- [ ] **Step 2: テストが通ることを確認**
+- [x] **Step 2: テストが通ることを確認**
 
 ```bash
 pnpm test:unit -- workbooks.test
 # PASS
 ```
 
-- [ ] **Step 3: コミット**
+- [x] **Step 3: コミット**
 
 ```bash
 git add src/features/workbooks/utils/workbooks.ts \

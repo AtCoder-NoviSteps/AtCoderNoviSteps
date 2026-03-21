@@ -21,20 +21,20 @@
 
 - Modify: `src/features/workbooks/types/workbook.ts`
 
-- [ ] **Step 1: `WorkbookTableProps` の直後に追加**
+- [x] **Step 1: `WorkbookTableProps` の直後に追加**
 
 ```typescript
 // Imported by SolutionTable — excludes workbookGradeModes which is unused in the solution tab.
 export type SolutionTableProps = Omit<WorkbookTableProps, 'workbookGradeModes'>;
 ```
 
-- [ ] **Step 2: 型チェック**
+- [x] **Step 2: 型チェック**
 
 ```bash
 pnpm check
 ```
 
-- [ ] **Step 3: コミット**
+- [x] **Step 3: コミット**
 
 ```bash
 git add src/features/workbooks/types/workbook.ts
@@ -49,7 +49,7 @@ git commit -m "feat(workbooks/types): Add SolutionTableProps excluding workbookG
 
 - Modify: `src/features/workbooks/components/list/SolutionTable.svelte`
 
-- [ ] **Step 1: `WorkbookTableProps` → `SolutionTableProps` に変更**
+- [x] **Step 1: `WorkbookTableProps` → `SolutionTableProps` に変更**
 
 ```svelte
 <script lang="ts">
@@ -62,13 +62,13 @@ git commit -m "feat(workbooks/types): Add SolutionTableProps excluding workbookG
 
 `workbookGradeModes: _` の行を削除する。
 
-- [ ] **Step 2: 型チェック**
+- [x] **Step 2: 型チェック**
 
 ```bash
 pnpm check
 ```
 
-- [ ] **Step 3: コミット**
+- [x] **Step 3: コミット**
 
 ```bash
 git add src/features/workbooks/components/list/SolutionTable.svelte
@@ -83,7 +83,7 @@ git commit -m "refactor(workbooks/components): SolutionTable uses SolutionTableP
 
 - Create: `src/features/workbooks/components/list/SolutionWorkBookList.svelte`
 
-- [ ] **Step 1: コンポーネントを作成**
+- [x] **Step 1: コンポーネントを作成**
 
 ```svelte
 <script lang="ts">
@@ -150,13 +150,13 @@ git commit -m "refactor(workbooks/components): SolutionTable uses SolutionTableP
 {/if}
 ```
 
-- [ ] **Step 2: 型チェック**
+- [x] **Step 2: 型チェック**
 
 ```bash
 pnpm check
 ```
 
-- [ ] **Step 3: コミット**
+- [x] **Step 3: コミット**
 
 ```bash
 git add src/features/workbooks/components/list/SolutionWorkBookList.svelte

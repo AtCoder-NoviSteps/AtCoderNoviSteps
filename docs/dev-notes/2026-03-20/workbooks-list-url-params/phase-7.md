@@ -13,7 +13,7 @@
 
 - Modify: `src/features/workbooks/components/list/WorkbookTabItem.svelte`
 
-- [ ] **Step 1: ファイル全体を以下に置き換え**
+- [x] **Step 1: ファイル全体を以下に置き換え**
 
 ```svelte
 <script lang="ts">
@@ -38,13 +38,13 @@
 
 削除: `workbookType` prop、`activeWorkbookTabStore` インポートと呼び出し
 
-- [ ] **Step 2: 型チェック**
+- [x] **Step 2: 型チェック**
 
 ```bash
 pnpm check
 ```
 
-- [ ] **Step 3: コミット**
+- [x] **Step 3: コミット**
 
 ```bash
 git add src/features/workbooks/components/list/WorkbookTabItem.svelte

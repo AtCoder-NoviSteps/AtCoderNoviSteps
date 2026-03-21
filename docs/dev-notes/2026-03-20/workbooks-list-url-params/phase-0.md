@@ -12,7 +12,7 @@ order ページで定義されている `ActiveTab = 'solution' | 'curriculum'` 
 
 - Modify: `src/features/workbooks/types/workbook.ts`
 
-- [ ] **Step 1: ファイル末尾に追加**
+- [x] **Step 1: ファイル末尾に追加**
 
 ```typescript
 /** /workbooks ページの URL パラメータ `?tab=` に対応する有効値 */
@@ -28,13 +28,13 @@ export type WorkBookTab = (typeof WorkBookTab)[keyof typeof WorkBookTab];
 export const DEFAULT_WORKBOOK_TAB: WorkBookTab = WorkBookTab.CURRICULUM;
 ```
 
-- [ ] **Step 2: 型チェック**
+- [x] **Step 2: 型チェック**
 
 ```bash
 pnpm check
 ```
 
-- [ ] **Step 3: コミット**
+- [x] **Step 3: コミット**
 
 ```bash
 git add src/features/workbooks/types/workbook.ts
@@ -49,7 +49,7 @@ git commit -m "feat(workbooks/types): Add WorkBookTab const object with CURRICUL
 
 - Modify: `src/routes/(admin)/workbooks/order/_types/kanban.ts`
 
-- [ ] **Step 1: `ActiveTab` の定義を再エクスポートに置き換え**
+- [x] **Step 1: `ActiveTab` の定義を再エクスポートに置き換え**
 
 ```typescript
 // 変更前
@@ -61,13 +61,13 @@ export type { WorkBookTab as ActiveTab } from '$features/workbooks/types/workboo
 
 > **注意:** order ページは `CREATED_BY_USER` を使わないため、型の値が増えても既存ロジックには影響しない。
 
-- [ ] **Step 2: 型チェック（order ページの既存コードが壊れていないことを確認）**
+- [x] **Step 2: 型チェック（order ページの既存コードが壊れていないことを確認）**
 
 ```bash
 pnpm check
 ```
 
-- [ ] **Step 3: コミット**
+- [x] **Step 3: コミット**
 
 ```bash
 git add src/routes/(admin)/workbooks/order/_types/kanban.ts
