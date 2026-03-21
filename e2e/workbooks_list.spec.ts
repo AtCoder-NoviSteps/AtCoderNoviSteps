@@ -5,6 +5,21 @@ import { loginAsAdmin, loginAsUser } from './helpers/auth';
 const TIMEOUT = 60 * 1000;
 const WORKBOOK_LIST_URL = '/workbooks';
 
+// Tab URL parameter values (must match WorkBookTab const in src/features/workbooks/types/workbook.ts)
+const TAB_CURRICULUM = 'curriculum';
+const TAB_SOLUTION = 'solution';
+const TAB_CREATED_BY_USER = 'created_by_user';
+
+// Grade URL parameter values (must match TaskGrade in src/lib/types/task.ts)
+const GRADE_Q10 = 'Q10';
+const GRADE_Q9 = 'Q9';
+const GRADE_Q8 = 'Q8';
+
+// Category URL parameter values (must match SolutionCategory in src/features/workbooks/types/workbook_placement.ts)
+const CATEGORY_GRAPH = 'GRAPH';
+const CATEGORY_DP = 'DYNAMIC_PROGRAMMING';
+const CATEGORY_SEARCH = 'SEARCH_SIMULATION';
+
 // Access control
 test.describe('access control', () => {
   test('unauthenticated user is redirected to /login', async ({ page }) => {
@@ -19,6 +34,15 @@ test.describe('logged-in user (general)', () => {
     await loginAsUser(page);
   });
 
+  test('defaults to curriculum tab', async ({ page }) => {
+    await page.goto(WORKBOOK_LIST_URL);
+    await expect(page.getByRole('tab', { name: 'カリキュラム' })).toHaveAttribute(
+      'aria-selected',
+      'true',
+      { timeout: TIMEOUT },
+    );
+  });
+
   test('curriculum and solution tabs are visible', async ({ page }) => {
     await page.goto(WORKBOOK_LIST_URL);
     await expect(page.getByRole('tab', { name: 'カリキュラム' })).toBeVisible({ timeout: TIMEOUT });
@@ -30,20 +54,81 @@ test.describe('logged-in user (general)', () => {
     await expect(page.getByRole('tab', { name: 'ユーザ作成' })).not.toBeVisible();
   });
 
-  test('clicking a grade filter on the curriculum tab switches the workbook list', async ({
-    page,
-  }) => {
+  test('non-admin accessing created_by_user tab is redirected to /workbooks', async ({ page }) => {
+    await page.goto(`${WORKBOOK_LIST_URL}?tab=${TAB_CREATED_BY_USER}`);
+    await expect(page).toHaveURL(WORKBOOK_LIST_URL, { timeout: TIMEOUT });
+  });
+
+  test('clicking solution tab updates URL to tab=solution', async ({ page }) => {
     await page.goto(WORKBOOK_LIST_URL);
     await expect(page.getByRole('tab', { name: 'カリキュラム' })).toBeVisible({ timeout: TIMEOUT });
-
-    // 10Q is selected by default; click 9Q
-    await page.getByRole('button', { name: '9Q' }).click();
-
-    // The active grade should now be 9Q — confirmed by the active class applied in CurriculumWorkBookList
-    await expect(page.getByRole('button', { name: '9Q' })).toHaveClass(/text-primary-700/, {
-      timeout: TIMEOUT,
-    });
+    await page.getByRole('tab', { name: '解法別' }).click();
+    await expect(page).toHaveURL(new RegExp(`tab=${TAB_SOLUTION}`), { timeout: TIMEOUT });
   });
+
+  test('direct URL access to solution tab selects the solution tab', async ({ page }) => {
+    await page.goto(
+      `${WORKBOOK_LIST_URL}?tab=${TAB_SOLUTION}&categories=${CATEGORY_GRAPH}`,
+    );
+    await expect(page.getByRole('tab', { name: '解法別' })).toHaveAttribute(
+      'aria-selected',
+      'true',
+      { timeout: TIMEOUT },
+    );
+  });
+
+  test('invalid tab param falls back to curriculum tab', async ({ page }) => {
+    await page.goto(`${WORKBOOK_LIST_URL}?tab=invalid`);
+    await expect(page.getByRole('tab', { name: 'カリキュラム' })).toHaveAttribute(
+      'aria-selected',
+      'true',
+      { timeout: TIMEOUT },
+    );
+  });
+
+  // Grade buttons → URL update
+  const CURRICULUM_GRADE_CASES = [
+    { grade: GRADE_Q10, label: '10Q' },
+    { grade: GRADE_Q9, label: '9Q' },
+    { grade: GRADE_Q8, label: '8Q' },
+  ];
+
+  for (const { grade, label } of CURRICULUM_GRADE_CASES) {
+    test(`curriculum grade button "${label}" updates URL to grades=${grade}`, async ({ page }) => {
+      await page.goto(`${WORKBOOK_LIST_URL}?tab=${TAB_CURRICULUM}`);
+      await expect(page.getByRole('tab', { name: 'カリキュラム' })).toBeVisible({
+        timeout: TIMEOUT,
+      });
+      await page.getByRole('button', { name: label }).click();
+      await expect(page).toHaveURL(new RegExp(`grades=${grade}`), { timeout: TIMEOUT });
+    });
+  }
+
+  // Solution category buttons → URL update
+  const SOLUTION_CATEGORY_CASES = [
+    { category: CATEGORY_GRAPH, label: 'グラフ' },
+    { category: CATEGORY_DP, label: '動的計画法' },
+    { category: CATEGORY_SEARCH, label: '探索・シミュレーション・実装' },
+  ];
+
+  for (const { category, label } of SOLUTION_CATEGORY_CASES) {
+    test(`solution category button "${label}" updates URL to categories=${category}`, async ({
+      page,
+    }) => {
+      await page.goto(`${WORKBOOK_LIST_URL}?tab=${TAB_SOLUTION}`);
+      await expect(page.getByRole('tab', { name: '解法別' })).toBeVisible({ timeout: TIMEOUT });
+
+      const button = page.getByRole('button', { name: label });
+      if (!(await button.isVisible({ timeout: 3000 }).catch(() => false))) {
+        // No workbooks for this category → button is hidden by availableCategories filter
+        test.skip();
+        return;
+      }
+
+      await button.click();
+      await expect(page).toHaveURL(new RegExp(`categories=${category}`), { timeout: TIMEOUT });
+    });
+  }
 
   test('toggling replenishment workbooks shows/hides the section when it exists', async ({
     page,
@@ -86,6 +171,15 @@ test.describe('admin user', () => {
   test('user-created tab is visible to admin', async ({ page }) => {
     await page.goto(WORKBOOK_LIST_URL);
     await expect(page.getByRole('tab', { name: 'ユーザ作成' })).toBeVisible({ timeout: TIMEOUT });
+  });
+
+  test('admin can access created_by_user tab via URL', async ({ page }) => {
+    await page.goto(`${WORKBOOK_LIST_URL}?tab=${TAB_CREATED_BY_USER}`);
+    await expect(page.getByRole('tab', { name: 'ユーザ作成' })).toHaveAttribute(
+      'aria-selected',
+      'true',
+      { timeout: TIMEOUT },
+    );
   });
 
   test('workbook rows show edit link and delete button', async ({ page }) => {
