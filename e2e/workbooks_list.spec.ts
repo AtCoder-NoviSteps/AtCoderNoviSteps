@@ -132,6 +132,7 @@ test.describe('logged-in user (general)', () => {
         await expect(page.getByRole('tab', { name: '解法別' })).toBeVisible({ timeout: TIMEOUT });
 
         const button = page.getByRole('button', { name: label });
+
         if (!(await button.isVisible({ timeout: VISIBILITY_CHECK_TIMEOUT }).catch(() => false))) {
           // No workbooks for this category → button is hidden by availableCategories filter
           test.skip();
