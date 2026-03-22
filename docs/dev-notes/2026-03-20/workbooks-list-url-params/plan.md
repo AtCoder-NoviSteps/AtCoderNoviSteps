@@ -2,7 +2,7 @@
 
 **Goal:** `/workbooks` ページで `WorkBookPlacement.priority` 順に問題集を表示し、URLパラメータ（`?tab=curriculum&grades=Q10` / `?tab=solution&categories=GRAPH` / `?tab=created_by_user`）でサーバーサイドフィルタリングを行う
 
-**Architecture:** `+page.server.ts` でURLパラメータを解析し、タブに応じてサービス関数を呼び分ける。`CURRICULUM`/`SOLUTION` は `getWorkbooksByPlacement(query)` が `WorkBookPlacement` レコードで絞り込み・`priority ASC` ソートして返す。`CREATED_BY_USER` は `getWorkBooksCreatedByUsers()` を呼ぶ（管理者専用・非管理者は `FOUND` リダイレクト）。全タブとも単一 `workbooks` を返す。クライアントサイドのグレードフィルタリングを削除し、`goto()` + `buildWorkbooksUrl()` による SvelteKit クライアントサイドナビゲーションに置き換える。
+**Architecture:** `+page.server.ts` でURLパラメータを解析し、タブに応じてサービス関数を呼び分ける。`CURRICULUM`/`SOLUTION` は `getWorkbooksByPlacement(query)`（新規追加）が `WorkBookPlacement` レコードで絞り込み・`priority ASC` ソートして返す。`CREATED_BY_USER` は `getWorkBooksCreatedByUsers()` を呼ぶ（管理者専用・非管理者は `FOUND` リダイレクト）。全タブとも単一 `workbooks` を返す。クライアントサイドのグレードフィルタリングを削除し、`goto()` + `buildWorkbooksUrl()` による SvelteKit クライアントサイドナビゲーションに置き換える。
 
 ---
 
@@ -14,12 +14,12 @@
 
 **決定済みの仕様:**
 
-- placement レコードがない問題集は表示しない（Prisma のネスト where フィルタが IS NOT NULL を暗黙的に含む）
+- placement レコードがない問題集は表示しない（Prisma のリレーションフィールドへの where は INNER JOIN になるため、placement レコードがない行は自動的に除外される）
 - `isReplenished` トグルはクライアントサイドのままで維持
 - `CREATED_BY_USER` タブは管理者のみ閲覧可能（`?tab=created_by_user` URL パラメータ管理・非管理者は `redirect(FOUND, '/workbooks')` でリダイレクト）
 - グレード/カテゴリ ボタンクリック → `buildWorkbooksUrl()` で URL 組み立て → `goto()` で SvelteKit クライアントナビゲーション
 - URLパラメータなし時のデフォルト: カリキュラム Q10 / 解法別 SEARCH_SIMULATION
-- 問題集が存在しないカテゴリはカテゴリボタンに表示しない（`getAvailableSolutionCategories()` でサーバーサイド判定）
+- 問題集が存在しないカテゴリはカテゴリボタンに表示しない（`getAvailableSolutionCategories()`（新規追加）でサーバーサイド判定）
 
 ---
 
@@ -27,7 +27,7 @@
 
 | #   | 方針                                                                                    | 理由                                                                                                                                                         |
 | --- | --------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| 1   | `WorkBookTab` は `WorkBookType` と同パターンの const オブジェクト                       | tab 値の比較にハードコード文字列を使うと変更に弱い。`WorkBookTab.CURRICULUM` 等の定数を使う                                                                  |
+| 1   | `WorkBookTab`（新規追加）は `WorkBookType` と同パターンの const オブジェクト            | tab 値の比較にハードコード文字列を使うと変更に弱い。`WorkBookTab.CURRICULUM` 等の定数を使う                                                                  |
 | 2   | `CREATED_BY_USER` は URL パラメータ管理（サーバーサイドフィルタリング）                 | ローカル `$state` での管理は URL の再現性がなく、URL 共有・直アクセスができない                                                                              |
 | 3   | 非管理者が `?tab=created_by_user` にアクセスした場合は `redirect(FOUND, '/workbooks')`  | 空データを返すより明示的なリダイレクトの方が UX として正しい                                                                                                 |
 | 4   | `workbooks` / `userCreatedWorkbooks` を統合し単一 `workbooks` に                        | 両方を常に fetch するのはパフォーマンス上の無駄。タブに応じて1回だけ呼ぶ                                                                                     |
@@ -101,13 +101,13 @@
 ## 最終検証
 
 - [x] `pnpm test:unit` — 全ユニットテスト通過（1952 passed, 1 skipped）
-- [ ] `pnpm test:e2e -- --grep "workbooks"` — E2Eテスト通過（手動実行要）
+- [x] `pnpm test:e2e -- --grep "workbooks"` — E2Eテスト通過（手動実行要）
 - [x] `pnpm check` — 型エラーなし（既存の auth 2件のみ）
 - [x] `pnpm lint` — Lintエラーなし（警告のみ）
 - [x] `pnpm format` — フォーマット適用済み
 - [x] `coderabbit review --plain` — 22件、全て nitpick/potential_issue。critical/high なし
-- [ ] `/session-close`
-- [ ] 手動確認（`pnpm dev`）:
+- [x] `/session-close`
+- [x] 手動確認（`pnpm dev`）:
   - `/workbooks` → カリキュラム Q10 が表示
   - グレードボタンクリック → URL・コンテンツ更新
   - 解法別タブクリック → `?tab=solution&categories=SEARCH_SIMULATION`
@@ -117,3 +117,5 @@
   - 管理者: `/workbooks?tab=created_by_user` → ユーザ作成タブが表示
   - 一般ユーザ: `/workbooks?tab=created_by_user` → `/workbooks` にリダイレクト
   - 補充教材トグルが引き続き動作する
+
+**完了** — 2026-03-22 全検証通過・PR 準備完了。

@@ -1,5 +1,6 @@
 import type { DragDropManager, Draggable, Droppable } from '@dnd-kit/dom';
 import type { DragDropEvents } from '@dnd-kit/abstract';
+
 import type { WorkBookTab } from '$features/workbooks/types/workbook';
 
 // DnD event types derived from dnd-kit abstractions
