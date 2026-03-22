@@ -1,22 +1,10 @@
 import { TaskGrade } from '$lib/types/task';
-import { SolutionCategory } from '$features/workbooks/types/workbook_placement';
 import { WorkBookTab, DEFAULT_WORKBOOK_TAB } from '$features/workbooks/types/workbook';
+import { SolutionCategory } from '$features/workbooks/types/workbook_placement';
 
 const DEFAULT_CURRICULUM_GRADE = TaskGrade.Q10;
 const DEFAULT_SOLUTION_CATEGORY = SolutionCategory.SEARCH_SIMULATION;
-const VALID_TABS = new Set<string>(Object.values(WorkBookTab));
-
-/**
- * Returns true when `param` is a valid enum value excluding PENDING.
- * Extracted to avoid repeating the same three-condition check for grades and categories.
- */
-function isValidNonPending<T extends string>(
-  param: string | null,
-  values: T[],
-  pending: T,
-): param is T {
-  return param !== null && (values as string[]).includes(param) && param !== pending;
-}
+const EXISTING_TABS = new Set<string>(Object.values(WorkBookTab));
 
 /**
  * Parses the `?tab=` URL parameter into a WorkBookTab.
@@ -27,7 +15,7 @@ function isValidNonPending<T extends string>(
 export function parseWorkBookTab(params: URLSearchParams): WorkBookTab {
   const param = params.get('tab');
 
-  if (param !== null && VALID_TABS.has(param)) {
+  if (param !== null && EXISTING_TABS.has(param)) {
     return param as WorkBookTab;
   }
 
@@ -90,4 +78,16 @@ export function buildWorkbooksUrl(
   }
 
   return `/workbooks?${params}`;
+}
+
+/**
+ * Returns true when `param` is a valid enum value excluding PENDING.
+ * Extracted to avoid repeating the same three-condition check for grades and categories.
+ */
+function isValidNonPending<T extends string>(
+  param: string | null,
+  values: T[],
+  pending: T,
+): param is T {
+  return param !== null && (values as string[]).includes(param) && param !== pending;
 }

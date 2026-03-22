@@ -43,7 +43,9 @@
     if (window.location.search) {
       return;
     }
+
     const saved = sessionStorage.getItem(WORKBOOKS_URL_KEY);
+
     if (saved) {
       goto(saved, { replaceState: true });
     }

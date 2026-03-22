@@ -64,7 +64,7 @@ export async function getWorkBooksWithAuthors(): Promise<WorkbooksWithAuthors> {
  * Workbooks without a placement record are automatically excluded by Prisma's nested where filter.
  *
  * @param query - Discriminated union: CURRICULUM uses taskGrade; SOLUTION uses solutionCategory
- * @param includeUnpublished - When true, unpublished workbooks are included (admin use)
+ * @param includeUnpublished - When true, unpublished workbooks are included (admin use). Defaults to false.
  */
 export async function getWorkbooksByPlacement(
   query: PlacementQuery,

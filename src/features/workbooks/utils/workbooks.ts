@@ -145,9 +145,9 @@ export function partitionWorkbooksAsMainAndReplenished(workbooks: WorkbooksList)
   replenished: WorkbooksList;
 } {
   return workbooks.reduce(
-    (acc, workbook) => {
-      (workbook.isReplenished ? acc.replenished : acc.main).push(workbook);
-      return acc;
+    (partition, workbook) => {
+      (workbook.isReplenished ? partition.replenished : partition.main).push(workbook);
+      return partition;
     },
     { main: [] as WorkbooksList, replenished: [] as WorkbooksList },
   );
