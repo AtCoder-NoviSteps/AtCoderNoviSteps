@@ -45,6 +45,18 @@ describe('parseWorkBookGrade', () => {
     expect(parseWorkBookGrade(toParams('grades=Q9'))).toBe(TaskGrade.Q9);
   });
 
+  test('returns Q1 for grades=Q1', () => {
+    expect(parseWorkBookGrade(toParams('grades=Q1'))).toBe(TaskGrade.Q1);
+  });
+
+  test('returns D1 for grades=D1', () => {
+    expect(parseWorkBookGrade(toParams('grades=D1'))).toBe(TaskGrade.D1);
+  });
+
+  test('returns D6 for grades=D6', () => {
+    expect(parseWorkBookGrade(toParams('grades=D6'))).toBe(TaskGrade.D6);
+  });
+
   test('returns Q10 (default) when grades is absent', () => {
     expect(parseWorkBookGrade(toParams(''))).toBe(TaskGrade.Q10);
   });
@@ -67,6 +79,18 @@ describe('parseWorkBookCategory', () => {
 
   test('returns GRAPH for categories=GRAPH', () => {
     expect(parseWorkBookCategory(toParams('categories=GRAPH'))).toBe(SolutionCategory.GRAPH);
+  });
+
+  test('returns DYNAMIC_PROGRAMMING for categories=DYNAMIC_PROGRAMMING', () => {
+    expect(parseWorkBookCategory(toParams('categories=DYNAMIC_PROGRAMMING'))).toBe(
+      SolutionCategory.DYNAMIC_PROGRAMMING,
+    );
+  });
+
+  test('returns DATA_STRUCTURE for categories=DATA_STRUCTURE', () => {
+    expect(parseWorkBookCategory(toParams('categories=DATA_STRUCTURE'))).toBe(
+      SolutionCategory.DATA_STRUCTURE,
+    );
   });
 
   test('returns SEARCH_SIMULATION (default) when categories is absent', () => {
