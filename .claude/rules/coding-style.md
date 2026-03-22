@@ -70,6 +70,10 @@ Shared helper functions (used by two or more exports) should be grouped at the e
 
 ## Documentation
 
+### Language Policy
+
+Write all project documentation (plans, dev-notes, guides, refactor notes) in Japanese. Write all source code comments, TSDoc, commit messages, and test titles in English. This keeps documentation readable for the team while keeping code comments universally accessible and searchable.
+
 ### TSDoc
 
 Add TSDoc comments to every exported function, type, and class. The minimum required fields are `@param` (for non-obvious parameters) and `@returns` (when the return value is not evident from the type). One-liner `/** ... */` is sufficient for simple cases; use multi-line only when behavior needs explanation.
@@ -158,9 +162,12 @@ update payload, not the reactivity system.
 
 ### CodeRabbit Review: Severity Triage
 
-When running `coderabbit review --plain` at a Phase milestone:
+Run `coderabbit review --plain` once after all phases are complete (not on every commit).
 
-- **critical / high**: fix before starting the next Phase
-- **low / info**: review before the next Phase starts; fix immediately only if security- or regression-related; otherwise defer to final PR review (alongside CodeRabbit CI comments)
+**Triage by severity:**
 
-Run once per Phase boundary — not on every commit.
+- **critical / high**: Must fix before opening the PR.
+- **potential_issue (medium)**: Write all findings verbatim to a `## CodeRabbit Findings` section in `refactor.md`. The user decides which to fix; do not fix medium findings unilaterally.
+- **nitpick / info**: Defer to PR CI — CodeRabbit will re-comment on the open PR.
+
+Writing medium findings to `refactor.md` serves a dual purpose: it gives the user full visibility for a fix/defer decision, and it builds the implementer's understanding of recurring quality issues.

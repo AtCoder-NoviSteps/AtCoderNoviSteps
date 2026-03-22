@@ -8,7 +8,7 @@ Always prefer simplicity over pathological correctness. YAGNI, KISS, DRY. No bac
 
 **When implementing:**
 
-1. Use `/writing-plans` to generate a phased plan (2–5-min tasks, lower risk → higher risk order). Verify each task before starting:
+1. Use `/writing-plans` to generate a phased plan (2–5-min tasks, lower risk → higher risk order). Store the plan at `docs/dev-notes/YYYY-MM-DD/{task-name-en}/plan.md`. Split into `phase-N.md` files when the plan exceeds 200 lines or has 5+ phases. Each plan must include: overview, design rationale, rejected alternatives, and a per-phase summary. Write plans in Japanese; source code comments in English. Verify each task before starting:
    - Which layer? (prisma / server / zod / types / fixtures / services / utils / stores / routes / components) — split if 2+ layers
    - Single responsibility: one purpose per task
    - Existing util/service/type? Search before creating
@@ -16,7 +16,8 @@ Always prefer simplicity over pathological correctness. YAGNI, KISS, DRY. No bac
 2. Before writing a new function, search `src/lib/utils/`, `src/lib/services/`, `src/features/*/utils/` and `src/features/*/services/` for existing implementations; extract shared logic there when it appears in 2+ places
 3. Write tests first, then implement production code, then verify with `pnpm test:unit`
 4. Review critically after implementing: flag YAGNI violations, over-abstraction, missing tests
-5. Run `/session-close` at the end of each session: updates plan checklist, proposes rule/skill additions, checks for bloat, and detects repeated instructions
+5. After all phases complete (feature and refactor branches only — not hotfixes or dependency bumps): run a mandatory refactor cycle. Produce `refactor.md` in the same directory as the plan, documenting: design decisions made, changes explicitly rejected and why, remaining tasks, and per-phase lessons. Transfer all lessons to `refactor.md`, then discard `phase-N.md` files. Run `coderabbit review --plain`; write all `potential_issue` (medium) and above findings to a `## CodeRabbit Findings` section in `refactor.md` — the user decides which to fix before opening a PR. `nitpick` findings defer to PR CI.
+6. Run `/session-close` at the end of each session: updates plan checklist, proposes rule/skill additions, checks for bloat, and detects repeated instructions
 
 ## Tech Stack
 
