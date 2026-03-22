@@ -206,8 +206,8 @@ test.describe('admin user', () => {
 - [x] `pnpm check` — 型エラーなし（pre-existing の login/signup 2件のみ）
 - [x] `pnpm lint` — Lint エラーなし（warnings は pre-existing）
 - [x] `pnpm format` — フォーマット適用済み
-- [ ] `coderabbit review --plain` — critical/high は即修正、low/info は最終 PR レビューで対応
-  - [ ] 1回目
-  - [ ] 2回目
-  - [ ] 3回目
+- [x] `coderabbit review --plain` — critical/high は即修正、low/info は最終 PR レビューで対応
+  - [x] 1回目: 22件、全て nitpick/potential_issue (low/info)。critical/high なし → 追加レビュー不要
+  - [ ] 2回目（critical/high があった場合のみ）
+  - [ ] 3回目（critical/high があった場合のみ）
 - [ ] `/session-close` — plan チェックリスト更新・rule/skill 追加提案・bloat チェック
