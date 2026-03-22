@@ -24,6 +24,7 @@ export const SolutionCategory: { [key in SolutionCategoryOrigin]: key } = {
 
 export type SolutionCategory = SolutionCategoryOrigin;
 
+/** Ordered list of solution categories used to filter SOLUTION workbooks. */
 export type SolutionCategories = SolutionCategory[];
 
 // Japanese labels for solution categories (used in admin UI)
