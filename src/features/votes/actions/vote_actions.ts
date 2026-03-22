@@ -22,7 +22,7 @@ export const voteAbsoluteGrade = async (
   const grade = response.get('grade') as string;
 
   try {
-    await crud.upsertVoteGrade(userId, taskId, grade);
+    await crud.upsertVoteGradeTables(userId, taskId, grade);
   } catch (error) {
     console.error('Failed to vote absolute grade: ', error);
     return fail(BAD_REQUEST);

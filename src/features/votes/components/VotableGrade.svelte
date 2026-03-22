@@ -39,7 +39,6 @@
       if (res.ok) {
         const data = await res.json();
         votedGrade = data.grade;
-        console.dir(data);
       }
     } catch (err) {
       console.error(err);

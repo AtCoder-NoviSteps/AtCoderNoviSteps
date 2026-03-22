@@ -249,9 +249,9 @@ ANALYSIS ANALYSIS
   
 
   "votedgradecounter" {
-    String id "🗝️"
-    String taskId 
-    TaskGrade grade 
+    String id 
+    String taskId "🗝️"
+    TaskGrade grade "🗝️"
     Int count 
     DateTime createdAt 
     DateTime updatedAt 
