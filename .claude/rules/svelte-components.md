@@ -127,15 +127,29 @@ replaceState(buildUpdatedUrl($page.url, activeTab), {});
 
 ## `{#each}` — Keys and Empty-list Fallback
 
-Always provide a key expression when the list or its items may change dynamically. This is especially critical when the block contains an inner `{#if}` — without a key, Svelte reuses DOM nodes by position, so filtering can silently bind data to the wrong element:
+Always provide a key expression when the list or its items may change dynamically.
+
+**Filter before `{#each}`, not inside it.** When visibility depends on a predicate (e.g. `canRead`), derive a filtered list once and iterate over it — never repeat the predicate inside a `{#if}` within the loop. This avoids computing the condition twice and keeps the template clean:
 
 ```svelte
-{#each workbooks as workbook (workbook.id)}
-  {#if canRead(workbook)}
-    <Row {workbook} />
+<!-- Bad: canRead computed twice — once for count, once in template -->
+let visibleCount = $derived(items.filter((i) => canRead(i)).length);
+
+{#each items as item (item.id)}
+  {#if canRead(item)}
+    <Row {item} />
   {/if}
 {/each}
+
+<!-- Good: filter once, iterate over the result -->
+let visibleItems = $derived(items.filter((i) => canRead(i)));
+
+{#each visibleItems as item (item.id)}
+  <Row {item} />
+{/each}
 ```
+
+An inner `{#if}` inside `{#each}` is still valid for conditions unrelated to list membership (e.g. feature flags, role checks that don't affect count).
 
 Use `{:else}` to render a placeholder when the list is empty — no wrapper conditional needed:
 

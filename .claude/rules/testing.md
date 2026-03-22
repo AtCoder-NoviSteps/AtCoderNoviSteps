@@ -36,7 +36,7 @@ E2E test files must use the `.spec.ts` extension. `playwright.config.ts` matches
 ## Assertions
 
 - Use `toBe(true)` / `toBe(false)` over `toBeTruthy()` / `toBeFalsy()`
-- For DB query tests, assert `orderBy`, `include`, and other significant parameters with `expect.objectContaining` — not just `where`
+- For DB query tests, assert `orderBy`, `include`, and other significant parameters with `expect.objectContaining` — not just `where`. When a returned field (e.g. `authorName`) depends on an `include` relation, that `include` clause must be part of the assertion, or a regression in the query shape will go undetected
 - Enum membership: `in` traverses the prototype chain; use `Object.hasOwn(Enum, value)` instead
 - **E2E state transitions**: after an interaction that changes element state (active tab, toggle, selection), assert the _new_ state — not just that the element is visible, which may have been true before the interaction. Assert an active CSS class, `aria-selected`, or similar attribute instead of `toBeVisible()`
 

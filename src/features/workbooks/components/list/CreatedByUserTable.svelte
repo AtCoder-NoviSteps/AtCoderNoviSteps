@@ -22,14 +22,12 @@
 
   let { workbooks, userId, role, taskResults }: SolutionTableProps = $props();
 
-  let visibleCount = $derived(
-    workbooks.filter((workbook) => canRead(workbook.isPublished, userId, workbook.authorId)).length,
+  let visibleWorkbooks = $derived(
+    workbooks.filter((workbook) => canRead(workbook.isPublished, userId, workbook.authorId)),
   );
 </script>
 
-{#if visibleCount === 0}
-  <EmptyWorkbookList />
-{:else}
+{#if visibleWorkbooks.length >= 1}
   <div class="overflow-auto rounded-md border border-gray-200 dark:border-gray-100">
     <Table shadow class="text-md">
       <TableHead class="text-sm bg-gray-100">
@@ -42,32 +40,32 @@
       </TableHead>
 
       <TableBody class="divide-y divide-gray-200 dark:divide-gray-700">
-        {#each workbooks as workbook (workbook.id)}
-          {#if canRead(workbook.isPublished, userId, workbook.authorId)}
-            <TableBodyRow>
-              <TableBodyCell>
-                <div class="truncate min-w-[96px] max-w-[120px]">
-                  {workbook.authorName}
-                </div>
-              </TableBodyCell>
+        {#each visibleWorkbooks as workbook (workbook.id)}
+          <TableBodyRow>
+            <TableBodyCell>
+              <div class="truncate min-w-[96px] max-w-[120px]">
+                {workbook.authorName}
+              </div>
+            </TableBodyCell>
 
-              <TitleTableBodyCell {workbook} />
+            <TitleTableBodyCell {workbook} />
 
-              <WorkbookProgressCell
-                workBookTasks={workbook.workBookTasks}
-                taskResults={getTaskResult(workbook.id, taskResults)}
-              />
+            <WorkbookProgressCell
+              workBookTasks={workbook.workBookTasks}
+              taskResults={getTaskResult(workbook.id, taskResults)}
+            />
 
-              <WorkbookCompletionCell
-                workBookTasks={workbook.workBookTasks}
-                taskResults={getTaskResult(workbook.id, taskResults)}
-              />
+            <WorkbookCompletionCell
+              workBookTasks={workbook.workBookTasks}
+              taskResults={getTaskResult(workbook.id, taskResults)}
+            />
 
-              <WorkbookAuthorActionsCell {workbook} {userId} {role} />
-            </TableBodyRow>
-          {/if}
+            <WorkbookAuthorActionsCell {workbook} {userId} {role} />
+          </TableBodyRow>
         {/each}
       </TableBody>
     </Table>
   </div>
+{:else}
+  <EmptyWorkbookList />
 {/if}

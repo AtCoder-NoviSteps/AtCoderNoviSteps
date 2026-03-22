@@ -171,7 +171,7 @@ Run `coderabbit review --plain` once after all phases are complete (not on every
 
 **Triage by severity:**
 
-- **potential_issue (medium) and above (including critical / high)**: Write all findings verbatim to a `## CodeRabbit Findings` section in `refactor.md`. The user decides which to fix before opening the PR. Do not fix any of these findings unilaterally.
+- **critical / high / potential_issue (medium)**: Write all findings verbatim to a `## CodeRabbit Findings` section in `refactor.md`. The user decides which to fix before opening the PR. Do not fix any of these findings unilaterally.
 - **nitpick / info**: Defer to PR CI — CodeRabbit will re-comment on the open PR.
 
 Writing medium-and-above findings to `refactor.md` serves a dual purpose: it gives the user full visibility for a fix/defer decision, and it builds the implementer's understanding of recurring quality issues.

@@ -158,6 +158,10 @@ describe('getWorkbooksByPlacement', () => {
           placement: { taskGrade: TaskGrade.Q10 },
         }),
         orderBy: { placement: { priority: 'asc' } },
+        include: {
+          user: { select: { username: true } },
+          workBookTasks: { orderBy: { priority: 'asc' } },
+        },
       }),
     );
     expect(result[0].authorName).toBe('author1');
@@ -230,6 +234,10 @@ describe('getWorkBooksCreatedByUsers', () => {
       expect.objectContaining({
         where: { workBookType: WorkBookType.CREATED_BY_USER },
         orderBy: { id: 'asc' },
+        include: {
+          user: { select: { username: true } },
+          workBookTasks: { orderBy: { priority: 'asc' } },
+        },
       }),
     );
   });
