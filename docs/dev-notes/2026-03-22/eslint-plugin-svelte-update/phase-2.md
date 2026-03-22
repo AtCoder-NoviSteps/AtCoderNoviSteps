@@ -16,7 +16,7 @@
 
 - [ ] ファイルを読み込んで現在の `rel` 属性を確認
 - [ ] `rel="noreferrer"` → `rel="noreferrer external"` に変更
-  （`noreferrer` はセキュリティのため維持。`external` を追加してリンターに外部リンクであることを示す）
+      （`noreferrer` はセキュリティのため維持。`external` を追加してリンターに外部リンクであることを示す）
 
 ### Task 2-2: TagForm.svelte（AtCoder外部リンク）
 

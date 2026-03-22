@@ -6,6 +6,7 @@
 各ファイルに `import { resolve } from '$app/paths'` を追加し、内部パス文字列を `resolve(...)` でラップする。
 
 **変換パターン:**
+
 - `href="/foo"` → `href={resolve('/foo')}`
 - `href="/foo/{var}"` → `href={resolve(`/foo/${var}`)}`
 - `href={CONST_PATH}` → `href={resolve(CONST_PATH)}`
@@ -17,6 +18,7 @@
 ### Task 3-1: workbook 関連コンポーネント（3ファイル）
 
 **対象ファイル:**
+
 - `src/features/workbooks/components/list/TitleTableBodyCell.svelte` (23行目)
 - `src/features/workbooks/components/list/WorkbookAuthorActionsCell.svelte` (25行目)
 - `src/features/workbooks/components/shared/WorkbookLink.svelte` (11行目)
@@ -55,6 +57,7 @@
 ### Task 3-5: TaskList.svelte / TaskListSorted.svelte
 
 **対象ファイル:**
+
 - `src/lib/components/TaskList.svelte` (131行目)
 - `src/lib/components/TaskListSorted.svelte` (46行目)
 

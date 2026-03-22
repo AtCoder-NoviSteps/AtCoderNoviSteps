@@ -6,6 +6,7 @@
 `$state` + `$effect` で値を計算しているパターンを `$derived` に書き換える。
 
 **変換パターン:**
+
 ```typescript
 // Before
 let value = $state(initialValue);

@@ -5,6 +5,7 @@
 `svelte/require-each-key` 警告に対応する。各 `{#each items as item}` ブロックに `(key)` 式を追加する。
 
 **キーの選択基準（優先順）:**
+
 1. `.id` — エンティティID（ワークブック、タグ等）
 2. `.task_id` / `.contest_id` — タスク系
 3. `.path` / `.value` — ナビゲーションリンク、選択肢
@@ -12,6 +13,7 @@
 5. インデックス `i` — 最終手段（固有IDがない静的リスト等）
 
 **変換パターン:**
+
 ```svelte
 {#each items as item}        →  {#each items as item (item.id)}
 {#each items as item, i}     →  {#each items as item, i (item.id)}
