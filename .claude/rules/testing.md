@@ -118,6 +118,21 @@ Stop the split if internal helpers (e.g. `fetchUnplacedWorkbooks`) would be frag
 
 Use Nock for external HTTP calls. See `src/test/lib/clients/` for examples.
 
+## E2E Tests: No Path Aliases
+
+The `e2e/` directory is outside SvelteKit's build pipeline — `$lib`, `$features`, and other path aliases are not resolved. Define URL string values as local constants with a reference comment:
+
+```typescript
+// Mirrors WorkBookTab.SOLUTION from $features/workbooks/types/workbook
+const TAB_SOLUTION = 'solution';
+```
+
+Avoid importing types from `src/` in E2E test files.
+
+## Test Order Mirrors Source Order
+
+Order `describe` blocks in service and utils test files to match the declaration order of functions in the source file. Misalignment makes it harder to cross-reference tests and implementation.
+
 ## Flowbite Toggle in E2E Tests
 
 Flowbite's `Toggle` renders an `sr-only` `<input type="checkbox">` inside a `<label>`. Clicking the input directly fails because the visual `<span>` sibling intercepts pointer events. Click the label wrapper instead:

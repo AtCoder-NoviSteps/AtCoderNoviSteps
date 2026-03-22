@@ -29,7 +29,25 @@ Use `$props()`, `$state()`, `$derived()`, `$effect()` in all components. Props p
 
 ## Flowbite Svelte
 
-Import from `flowbite-svelte`. Use Tailwind CSS v4 utility classes. Dark mode: `dark:` prefix.
+Import from `flowbite-svelte`. Use Tailwind CSS v4 utility classes. Dark mode: `dark:` prefix. Important modifier: `dark:text-xxx!` (v4 syntax) — the v3 form `dark:!text-xxx` is invalid.
+
+### ButtonGroup: No Responsive Wrapping
+
+`ButtonGroup` uses `flex` internally — buttons do not wrap on narrow screens. When wrapping is needed, use `<div class="flex flex-wrap gap-1">` with individual `Button` components (reference: `TaskTable.svelte`).
+
+When copying button styles from a reference component, always check all three axes: `color`, `size`, and `class`. Omitting `color` applies Flowbite's default (filled blue).
+
+## `let`/`const` — Reactive Data Requires `$derived`
+
+Plain `let` or `const` in Svelte 5 component `<script>` executes once at component creation. Values derived from props or server data must use `$derived()`:
+
+```svelte
+// Bad: captures only the initial value — won't update when data reloads let user =
+data.loggedInUser; const categories = availableCategories.filter(...); // Good let user =
+$derived(data.loggedInUser); let categories = $derived(availableCategories.filter(...));
+```
+
+`pnpm check` warns: "This reference only captures the initial value."
 
 ## `$state()` Initialization with `$props()`
 
