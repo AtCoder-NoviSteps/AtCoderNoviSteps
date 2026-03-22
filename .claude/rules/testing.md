@@ -153,7 +153,10 @@ test.describe('logged-in user', () => {
 Playwright has no native `test.each`. Use `for...of` loops — the official recommended pattern:
 
 ```typescript
-for (const grade of [TaskGrade.Q10, TaskGrade.Q9, TaskGrade.Q8]) {
+// Mirrors TaskGrade from $lib/types/task — do not import from src/ in E2E files
+const GRADES = ['Q10', 'Q9', 'Q8'] as const;
+
+for (const grade of GRADES) {
   await gradeButton(grade).click();
   await expect(page).toHaveURL(`?grades=${grade}`);
 }

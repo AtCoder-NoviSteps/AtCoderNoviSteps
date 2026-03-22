@@ -47,7 +47,7 @@
 </script>
 
 <div class="mb-6 flex flex-wrap gap-1">
-  {#each AVAILABLE_CATEGORIES as category}
+  {#each AVAILABLE_CATEGORIES as category (category)}
     <Button
       onclick={() => onCategoryChange(category)}
       color="alternative"

@@ -120,13 +120,20 @@ export async function getWorkBooksCreatedByUsers(): Promise<WorkbooksWithAuthors
 }
 
 /**
- * Returns the list of SolutionCategory values that have at least one published
- * SOLUTION workbook with a placement record.
+ * Returns the list of SolutionCategory values that have at least one SOLUTION
+ * workbook with a placement record.
+ *
+ * @param includeUnpublished - When true, includes categories from unpublished workbooks. Defaults to false.
  */
-export async function getAvailableSolutionCategories(): Promise<SolutionCategories> {
+export async function getAvailableSolutionCategories(
+  includeUnpublished = false,
+): Promise<SolutionCategories> {
   const placements = await db.workBookPlacement.findMany({
     where: {
-      workBook: { isPublished: true, workBookType: WorkBookTypeConst.SOLUTION },
+      workBook: {
+        ...(includeUnpublished ? {} : { isPublished: true }),
+        workBookType: WorkBookTypeConst.SOLUTION,
+      },
       solutionCategory: { not: null },
     },
     select: { solutionCategory: true },

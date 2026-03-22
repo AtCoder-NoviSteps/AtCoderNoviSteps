@@ -163,8 +163,8 @@ test.describe('logged-in user (general)', () => {
       await page.goto('/');
       await expect(page).toHaveURL('/', { timeout: TIMEOUT });
 
-      // Return to /workbooks via nav link (no params)
-      await page.goto(WORKBOOK_LIST_URL);
+      // Return to /workbooks by clicking the nav link (no params)
+      await page.getByRole('link', { name: '問題集', exact: true }).click();
 
       // URL should be restored to the saved filter state
       await expect(page).toHaveURL(new RegExp(`tab=${TAB_SOLUTION}`), { timeout: TIMEOUT });

@@ -21,9 +21,13 @@
   import { getTaskResult } from '$features/workbooks/utils/workbooks';
 
   let { workbooks, userId, role, taskResults }: SolutionTableProps = $props();
+
+  let visibleCount = $derived(
+    workbooks.filter((workbook) => canRead(workbook.isPublished, userId, workbook.authorId)).length,
+  );
 </script>
 
-{#if workbooks.length === 0}
+{#if visibleCount === 0}
   <EmptyWorkbookList />
 {:else}
   <div class="overflow-auto rounded-md border border-gray-200 dark:border-gray-100">

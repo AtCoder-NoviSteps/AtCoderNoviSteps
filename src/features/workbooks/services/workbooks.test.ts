@@ -267,6 +267,37 @@ describe('getAvailableSolutionCategories', () => {
 
     expect(result).toEqual([SolutionCategory.GRAPH]);
   });
+
+  test('passes isPublished: true filter by default', async () => {
+    vi.mocked(prisma.workBookPlacement.findMany).mockResolvedValue([]);
+
+    await getAvailableSolutionCategories();
+
+    expect(prisma.workBookPlacement.findMany).toHaveBeenCalledWith(
+      expect.objectContaining({
+        where: expect.objectContaining({
+          workBook: expect.objectContaining({ isPublished: true }),
+        }),
+      }),
+    );
+  });
+
+  test('omits isPublished filter when includeUnpublished is true', async () => {
+    vi.mocked(prisma.workBookPlacement.findMany).mockResolvedValue([
+      { solutionCategory: SolutionCategory.GRAPH },
+    ] as unknown as Awaited<ReturnType<typeof prisma.workBookPlacement.findMany>>);
+
+    const result = await getAvailableSolutionCategories(true);
+
+    expect(result).toEqual([SolutionCategory.GRAPH]);
+    expect(prisma.workBookPlacement.findMany).toHaveBeenCalledWith(
+      expect.objectContaining({
+        where: expect.objectContaining({
+          workBook: expect.not.objectContaining({ isPublished: expect.anything() }),
+        }),
+      }),
+    );
+  });
 });
 
 describe('getWorkBook', () => {

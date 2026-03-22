@@ -55,7 +55,9 @@ export async function load({ locals, url }) {
   try {
     const [workbooks, availableCategories, tasksMapByIds, taskResultsByTaskId] = await Promise.all([
       fetchWorkbooksByTab(tab, selectedGrade, selectedCategory, !!adminUser),
-      getAvailableSolutionCategories(),
+      tab === WorkBookTab.SOLUTION
+        ? getAvailableSolutionCategories(!!adminUser)
+        : Promise.resolve([]),
       taskCrud.getTasksByTaskId(),
       loggedInUser
         ? taskResultsCrud.getTaskResultsOnlyResultExists(loggedInUser.id, true)

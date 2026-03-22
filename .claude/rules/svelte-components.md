@@ -41,10 +41,12 @@ When copying button styles from a reference component, always check all three ax
 
 Plain `let` or `const` in Svelte 5 component `<script>` executes once at component creation. Values derived from props or server data must use `$derived()`:
 
-```svelte
-// Bad: captures only the initial value — won't update when data reloads let user =
-data.loggedInUser; const categories = availableCategories.filter(...); // Good let user =
-$derived(data.loggedInUser); let categories = $derived(availableCategories.filter(...));
+```md
+// Bad: captures only the initial value — won't update when data reloads
+let user = data.loggedInUser; const categories = availableCategories.filter(...);
+
+// Good
+let user = $derived(data.loggedInUser); let categories = $derived(availableCategories.filter(...));
 ```
 
 `pnpm check` warns: "This reference only captures the initial value."

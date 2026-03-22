@@ -75,6 +75,8 @@ Shared helper functions (used by two or more exports) should be grouped at the e
 
 Write all project documentation (plans, dev-notes, guides, refactor notes) in Japanese. Write all source code comments, TSDoc, commit messages, and test titles in English. This keeps documentation readable for the team while keeping code comments universally accessible and searchable.
 
+**Exception**: The `## CodeRabbit Findings` section in `refactor.md` must quote findings verbatim in their original language (English). Do not translate CodeRabbit output.
+
 ### TSDoc
 
 Add TSDoc comments to every exported function, type, and class. The minimum required fields are `@param` (for non-obvious parameters) and `@returns` (when the return value is not evident from the type). One-liner `/** ... */` is sufficient for simple cases; use multi-line only when behavior needs explanation.

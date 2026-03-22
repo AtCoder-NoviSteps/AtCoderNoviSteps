@@ -72,7 +72,7 @@
 <div class="mb-6">
   <div class="flex items-center space-x-4">
     <div class="flex flex-wrap gap-1">
-      {#each AVAILABLE_GRADES as grade}
+      {#each AVAILABLE_GRADES as grade (grade)}
         <Button
           onclick={() => filterByGradeMode(grade)}
           color="alternative"
