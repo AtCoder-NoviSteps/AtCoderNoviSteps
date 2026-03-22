@@ -52,6 +52,7 @@
 | R4  | `fetchWorkbooksByTab` を `async` に変更                                            | `async` は `await` を使う場合のみ必要。Promise をそのまま返す設計は意図通り                                          |
 | R5  | E2E テスト: `for...of` を `test.each` 化                                           | Playwright にネイティブの `test.each` は存在しない。`for...of` ループが公式推奨のパラメータ化テストパターン          |
 | R6  | E2E テスト: 定数を `$features/` からインポート                                     | `e2e/` は SvelteKit のパスエイリアスを解決しない（後述）。ローカル定数＋参照コメントが正解                           |
+| R7  | ESLint `padding-line-between-statements` を追加し `if`/`for` 前後の空行を強制      | linter ルール追加はプロジェクト全体への設定変更。特定箇所のみのスタイル問題は手動修正にとどめ、スコープを局所化する  |
 
 ---
 
@@ -90,6 +91,10 @@
 | 19  | Svelte   | Discriminated union Props の narrowing は `let props: Props = $props()` でアクセスする場合に効く。ただし共通フィールドだけ destructure し残りを `...restProps` に集めた場合も TypeScript は `restProps` を discriminated union として正しく推論する（`{ common1, common2, ...restProps }: Props = $props()`）。全フィールドを destructure すると narrowing が失われるので注意                                                                                                        |
 | 20  | 実装品質 | 同じ派生計算（`buildTaskResultsByWorkBookId()` 等）がテンプレートや関数内で複数回呼ばれていないか、実装後に grep で確認する。計画段階で「同じ関数が2回以上現れるか」を見越して単一の `$derived` に集約する設計にする（phase-11 simplify: 3箇所での重複呼び出しを `$derived` に統合）                                                                                                                                                                                                 |
 | 21  | 仕様確認 | sessionStorage で URL を復元するときは `goto(url, { replaceState: true })` を使い、ブラウザ履歴を汚染しない。`replaceState: false`（デフォルト）だと復元のたびに履歴エントリが増え、Back キーの挙動が壊れる                                                                                                                                                                                                                                                                          |
+| 22  | テスト   | E2E の `describe` をユーザーロールだけで区切ると巨大化する。テストが増えたら「タブ可視性 / URL パラメータ処理 / ナビゲーション操作 / セッション状態」等の振る舞い次元で `describe` 階層を整理する                                                                                                                                                                                                                                                                                    |
+| 23  | 命名     | 定数名はその「内容（何が入っているか）」を反映する。「用途（何に使うか）」は反映しない。例: enum に存在する全タブ値を保持する集合は `VALID_TABS`（用途）より `EXISTING_TABS`（内容）が適切                                                                                                                                                                                                                                                                                           |
+| 24  | 実装品質 | TSDoc `@param` で省略可能かつデフォルト値がある引数は `Defaults to false.` のように明示する。デフォルト値は呼び出し側の挙動に直結する重要情報                                                                                                                                                                                                                                                                                                                                        |
+| 25  | 実装品質 | ESLint/linter のルール設定追加はプロジェクト全体に影響する。特定箇所のみのスタイル問題は config 変更でなく手動修正にとどめ、スコープを局所化する                                                                                                                                                                                                                                                                                                                                     |
 
 ---
 
