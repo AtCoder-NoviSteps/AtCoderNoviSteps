@@ -10,11 +10,11 @@ import {
   type WorkBookTab as WorkBookTabType,
 } from '$features/workbooks/types/workbook';
 import {
-  type PlacementQuery,
   getWorkbooksByPlacement,
   getWorkBooksCreatedByUsers,
   getAvailableSolutionCategories,
 } from '$features/workbooks/services/workbooks';
+import { type PlacementQuery } from '$features/workbooks/types/workbook_placement';
 import { isAdmin, getLoggedInUser, canDelete } from '$lib/utils/authorship';
 import {
   parseWorkBookTab,

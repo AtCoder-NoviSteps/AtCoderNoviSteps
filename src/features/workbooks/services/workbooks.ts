@@ -8,8 +8,10 @@ import type {
   WorkBookType,
 } from '$features/workbooks/types/workbook';
 import { WorkBookType as WorkBookTypeConst } from '$features/workbooks/types/workbook';
-import { TaskGrade } from '$lib/types/task';
-import { SolutionCategory } from '$features/workbooks/types/workbook_placement';
+import {
+  type PlacementQuery,
+  SolutionCategory,
+} from '$features/workbooks/types/workbook_placement';
 
 import {
   getWorkBookTasks,
@@ -56,14 +58,6 @@ export async function getWorkBooksWithAuthors(): Promise<WorkbooksWithAuthors> {
 
   return mapWithAuthorName(workbooks);
 }
-
-/**
- * Discriminated union representing a placement-based filter query.
- * CURRICULUM filters by taskGrade; SOLUTION filters by solutionCategory.
- */
-export type PlacementQuery =
-  | { workBookType: typeof WorkBookTypeConst.CURRICULUM; taskGrade: TaskGrade }
-  | { workBookType: typeof WorkBookTypeConst.SOLUTION; solutionCategory: SolutionCategory };
 
 /**
  * Returns workbooks filtered by WorkBookPlacement, ordered by priority ASC.
