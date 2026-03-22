@@ -34,35 +34,35 @@
 
   type Props = CommonProps & SpecificProps;
 
-  let props: Props = $props();
+  let { workbooks, taskResultsWithWorkBookId, loggedInUser, ...restProps }: Props = $props();
 </script>
 
 <!-- TODO: 「ユーザ作成」の問題集には、検索機能を追加 -->
-{#if props.workbookType === WorkBookType.CURRICULUM}
+{#if restProps.workbookType === WorkBookType.CURRICULUM}
   <CurriculumWorkBookList
-    workbooks={props.workbooks}
-    gradeModesEachWorkbook={props.gradeModesEachWorkbook}
-    taskResultsWithWorkBookId={props.taskResultsWithWorkBookId}
-    userId={props.loggedInUser?.id ?? ''}
-    role={props.loggedInUser?.role ?? Roles.USER}
-    currentGrade={props.currentGrade}
-    onGradeChange={props.onGradeChange}
+    {workbooks}
+    gradeModesEachWorkbook={restProps.gradeModesEachWorkbook}
+    {taskResultsWithWorkBookId}
+    userId={loggedInUser?.id ?? ''}
+    role={loggedInUser?.role ?? Roles.USER}
+    currentGrade={restProps.currentGrade}
+    onGradeChange={restProps.onGradeChange}
   />
-{:else if props.workbookType === WorkBookType.SOLUTION}
+{:else if restProps.workbookType === WorkBookType.SOLUTION}
   <SolutionWorkBookList
-    workbooks={props.workbooks}
-    taskResultsWithWorkBookId={props.taskResultsWithWorkBookId}
-    userId={props.loggedInUser?.id ?? ''}
-    role={props.loggedInUser?.role ?? Roles.USER}
-    availableCategories={props.availableCategories}
-    currentCategory={props.currentCategory}
-    onCategoryChange={props.onCategoryChange}
+    {workbooks}
+    {taskResultsWithWorkBookId}
+    userId={loggedInUser?.id ?? ''}
+    role={loggedInUser?.role ?? Roles.USER}
+    availableCategories={restProps.availableCategories}
+    currentCategory={restProps.currentCategory}
+    onCategoryChange={restProps.onCategoryChange}
   />
 {:else}
   <CreatedByUserTable
-    workbooks={props.workbooks}
-    taskResults={props.taskResultsWithWorkBookId}
-    userId={props.loggedInUser?.id ?? ''}
-    role={props.loggedInUser?.role ?? Roles.USER}
+    {workbooks}
+    taskResults={taskResultsWithWorkBookId}
+    userId={loggedInUser?.id ?? ''}
+    role={loggedInUser?.role ?? Roles.USER}
   />
 {/if}

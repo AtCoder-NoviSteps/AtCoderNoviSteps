@@ -56,14 +56,16 @@
     sessionStorage.setItem(WORKBOOKS_URL_KEY, url);
   });
 
-  function handleTabChange(tab: (typeof WorkBookTab)[keyof typeof WorkBookTab]) {
-    if (tab === WorkBookTab.CURRICULUM) {
-      goto(buildWorkbooksUrl(WorkBookTab.CURRICULUM, data.selectedGrade));
-    } else if (tab === WorkBookTab.SOLUTION) {
-      goto(buildWorkbooksUrl(WorkBookTab.SOLUTION, undefined, data.selectedCategory));
-    } else {
-      goto(buildWorkbooksUrl(WorkBookTab.CREATED_BY_USER));
-    }
+  // Each lambda closes over the reactive `data` binding at call time
+  const TAB_URL_BUILDERS: Record<WorkBookTab, () => string> = {
+    [WorkBookTab.CURRICULUM]: () => buildWorkbooksUrl(WorkBookTab.CURRICULUM, data.selectedGrade),
+    [WorkBookTab.SOLUTION]: () =>
+      buildWorkbooksUrl(WorkBookTab.SOLUTION, undefined, data.selectedCategory),
+    [WorkBookTab.CREATED_BY_USER]: () => buildWorkbooksUrl(WorkBookTab.CREATED_BY_USER),
+  };
+
+  function handleTabChange(tab: WorkBookTab) {
+    goto(TAB_URL_BUILDERS[tab]());
   }
 
   function handleGradeChange(grade: TaskGrade) {
