@@ -2,7 +2,10 @@
   import { Roles } from '$lib/types/user';
   import { TaskGrade, type TaskResults } from '$lib/types/task';
   import { WorkBookType, type WorkbooksList } from '$features/workbooks/types/workbook';
-  import { type SolutionCategory } from '$features/workbooks/types/workbook_placement';
+  import {
+    type SolutionCategory,
+    type SolutionCategories,
+  } from '$features/workbooks/types/workbook_placement';
 
   import CurriculumWorkBookList from '$features/workbooks/components/list/CurriculumWorkBookList.svelte';
   import SolutionWorkBookList from '$features/workbooks/components/list/SolutionWorkBookList.svelte';
@@ -24,7 +27,7 @@
     | {
         workbookType: typeof WorkBookType.SOLUTION;
         currentCategory: SolutionCategory;
-        availableCategories: SolutionCategory[];
+        availableCategories: SolutionCategories;
         onCategoryChange: (category: SolutionCategory) => void;
       }
     | { workbookType: typeof WorkBookType.CREATED_BY_USER };

@@ -4,7 +4,11 @@
   import type { Roles } from '$lib/types/user';
   import type { TaskResults } from '$lib/types/task';
   import type { WorkbooksList } from '$features/workbooks/types/workbook';
-  import { SolutionCategory, SOLUTION_LABELS } from '$features/workbooks/types/workbook_placement';
+  import {
+    SolutionCategory,
+    SolutionCategories,
+    SOLUTION_LABELS,
+  } from '$features/workbooks/types/workbook_placement';
 
   import { countReadableWorkbooks } from '$features/workbooks/utils/workbooks';
 
@@ -16,7 +20,7 @@
     taskResultsWithWorkBookId: Map<number, TaskResults>;
     userId: string;
     role: Roles;
-    availableCategories: SolutionCategory[];
+    availableCategories: SolutionCategories;
     currentCategory: SolutionCategory;
     onCategoryChange: (category: SolutionCategory) => void;
   }

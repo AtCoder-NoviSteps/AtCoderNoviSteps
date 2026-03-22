@@ -1,7 +1,5 @@
 import { describe, test, expect, vi, beforeEach } from 'vitest';
 
-import { WorkBookType, type WorkBook } from '$features/workbooks/types/workbook';
-
 import {
   getWorkBook,
   getWorkBooksWithAuthors,
@@ -14,6 +12,7 @@ import {
   getAvailableSolutionCategories,
 } from './workbooks';
 import { TaskGrade } from '$lib/types/task';
+import { WorkBookType, type WorkBook } from '$features/workbooks/types/workbook';
 import { SolutionCategory } from '$features/workbooks/types/workbook_placement';
 
 vi.mock('$lib/server/database', () => ({

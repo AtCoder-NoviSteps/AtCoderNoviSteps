@@ -11,6 +11,7 @@ import { WorkBookType as WorkBookTypeConst } from '$features/workbooks/types/wor
 import {
   type PlacementQuery,
   SolutionCategory,
+  type SolutionCategories,
 } from '$features/workbooks/types/workbook_placement';
 
 import {
@@ -122,7 +123,7 @@ export async function getWorkBooksCreatedByUsers(): Promise<WorkbooksWithAuthors
  * Returns the list of SolutionCategory values that have at least one published
  * SOLUTION workbook with a placement record.
  */
-export async function getAvailableSolutionCategories(): Promise<SolutionCategory[]> {
+export async function getAvailableSolutionCategories(): Promise<SolutionCategories> {
   const placements = await db.workBookPlacement.findMany({
     where: {
       workBook: { isPublished: true, workBookType: WorkBookTypeConst.SOLUTION },

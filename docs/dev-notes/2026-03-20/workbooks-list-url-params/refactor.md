@@ -207,4 +207,7 @@ test.describe('admin user', () => {
 - [ ] `pnpm lint` — Lint エラーなし
 - [ ] `pnpm format` — フォーマット適用済み
 - [ ] `coderabbit review --plain` — critical/high は即修正、low/info は最終 PR レビューで対応
+  - [ ] 1回目
+  - [ ] 2回目
+  - [ ] 3回目
 - [ ] `/session-close` — plan チェックリスト更新・rule/skill 追加提案・bloat チェック

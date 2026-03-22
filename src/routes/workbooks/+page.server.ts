@@ -8,13 +8,16 @@ import { Roles } from '$lib/types/user';
 import {
   WorkBookTab,
   type WorkBookTab as WorkBookTabType,
+  WorkBookType,
 } from '$features/workbooks/types/workbook';
+import { type PlacementQuery } from '$features/workbooks/types/workbook_placement';
+
 import {
   getWorkbooksByPlacement,
   getWorkBooksCreatedByUsers,
   getAvailableSolutionCategories,
 } from '$features/workbooks/services/workbooks';
-import { type PlacementQuery } from '$features/workbooks/types/workbook_placement';
+
 import { isAdmin, getLoggedInUser, canDelete } from '$lib/utils/authorship';
 import {
   parseWorkBookTab,
@@ -22,7 +25,6 @@ import {
   parseWorkBookCategory,
 } from '$features/workbooks/utils/workbook_url_params';
 import { parseWorkBookId } from '$features/workbooks/utils/workbook';
-import { WorkBookType } from '$features/workbooks/types/workbook';
 
 import {
   BAD_REQUEST,
