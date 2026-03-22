@@ -1,12 +1,8 @@
 # 問題集一覧 URLパラメータフィルタリング 実装計画
 
-> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
-
 **Goal:** `/workbooks` ページで `WorkBookPlacement.priority` 順に問題集を表示し、URLパラメータ（`?tab=curriculum&grades=Q10` / `?tab=solution&categories=GRAPH` / `?tab=created_by_user`）でサーバーサイドフィルタリングを行う
 
-**Architecture:** `+page.server.ts` でURLパラメータを解析し、タブに応じてサービス関数を呼び分ける。`CURRICULUM`/`SOLUTION` は `getPublishedWorkbooksByPlacement(query)` が `WorkBookPlacement` レコードで絞り込み・`priority ASC` ソートして返す。`CREATED_BY_USER` は `getWorkBooksCreatedByUsers()` を呼ぶ（管理者専用・非管理者は `FOUND` リダイレクト）。全タブとも単一 `workbooks` を返し、`userCreatedWorkbooks` は廃止。クライアントサイドのグレードフィルタリングを削除し、`goto()` + `buildWorkbooksUrl()` による SvelteKit クライアントサイドナビゲーションに置き換える。
-
-**Tech Stack:** SvelteKit 2 + Svelte 5 Runes + TypeScript | Prisma (PostgreSQL) | Flowbite Svelte (ButtonGroup) | Vitest + Playwright
+**Architecture:** `+page.server.ts` でURLパラメータを解析し、タブに応じてサービス関数を呼び分ける。`CURRICULUM`/`SOLUTION` は `getWorkbooksByPlacement(query)` が `WorkBookPlacement` レコードで絞り込み・`priority ASC` ソートして返す。`CREATED_BY_USER` は `getWorkBooksCreatedByUsers()` を呼ぶ（管理者専用・非管理者は `FOUND` リダイレクト）。全タブとも単一 `workbooks` を返す。クライアントサイドのグレードフィルタリングを削除し、`goto()` + `buildWorkbooksUrl()` による SvelteKit クライアントサイドナビゲーションに置き換える。
 
 ---
 
@@ -35,83 +31,80 @@
 | 2   | `CREATED_BY_USER` は URL パラメータ管理（サーバーサイドフィルタリング）                   | ローカル `$state` での管理は URL の再現性がなく、URL 共有・直アクセスができない                                                                   |
 | 3   | 非管理者が `?tab=created_by_user` にアクセスした場合は `redirect(FOUND, '/workbooks')`    | 空データを返すより明示的なリダイレクトの方が UX として正しい                                                                                      |
 | 4   | `workbooks` / `userCreatedWorkbooks` を統合し単一 `workbooks` に                          | 両方を常に fetch するのはパフォーマンス上の無駄。タブに応じて1回だけ呼ぶ                                                                          |
-| 5   | タブ分岐は if/else を維持（strategy pattern / interface は使わない）                      | 3タブに対して strategy pattern は YAGNI                                                                                                           |
+| 5   | タブ分岐は `Record<WorkBookTab, () => string>` ルックアップ（if-else を廃止）             | 方針策定時は「if-else を維持」としたが refactor で撤回。各ラムダが call time にリアクティブな `data` を閉じ込めるため、`undefined` 非対称も解消    |
 | 6   | `buildPlacementQuery()` は `+page.server.ts` 内のプライベートヘルパーとして維持           | 重複なし・1箇所のみ使用。utils への移動は過剰                                                                                                     |
-| 7   | `WorkBookList.svelte` Props は discriminated union に変更                                 | optional props + `?? fallback` は型安全でない。Svelte 5 では `let props: Props = $props()` で使い、`{#if}` ブロック内で TypeScript 型ナローイング |
+| 7   | `WorkBookList.svelte` Props は discriminated union に変更                                 | optional props + `?? fallback` は型安全でない。Svelte 5 では `let props: Props = $props()` または rest spread + `...restProps` で discriminated union を維持 |
 | 8   | `workbookGradeModes` は discriminated union の CURRICULUM ブランチのみに配置              | `SolutionTable` は `workbookGradeModes: _` で破棄している。SOLUTION/CREATED_BY_USER では不要                                                      |
 | 9   | `AVAILABLE_CATEGORIES` はサーバーサイドで `getAvailableSolutionCategories()` により判定   | クライアント側は現在選択中のカテゴリの問題集しか持たないため、他カテゴリの存在を知れない                                                          |
 | 10  | `partitionWorkbooksAsMainAndReplenished` に改名                                           | `splitWorkbooksByReplenishment` は main の存在が不明。両端（main/replenished）が名前に現れる方が直感的                                            |
-| 11  | テスト内の `prisma.workBook.findMany.mockResolvedValue(...)` はヘルパー関数として切り出す | プロジェクト規約。類似パターンの重複を防ぐ                                                                                                        |
+| 11  | テスト内の mock パターンを `mockWorkbookFindMany()` 等のヘルパーとして切り出す            | プロジェクト規約（testing.md §Mock Helpers）。類似パターンの重複を防ぐ                                                                            |
 | 12  | `mapWithAuthorName()` をプライベート関数として切り出す                                    | `getPublishedWorkbooksByPlacement` / `getWorkBooksCreatedByUsers` で同一の `map()` が重複                                                         |
 
 ---
 
-## ファイル構成
+## 却下した設計
 
-### 新規作成
-
-| ファイル                                                             | 役割                                           |
-| -------------------------------------------------------------------- | ---------------------------------------------- |
-| `src/features/workbooks/utils/workbook_url_params.ts`                | URLパラメータ解析・URL組み立てユーティリティ   |
-| `src/features/workbooks/utils/workbook_url_params.test.ts`           | 上記のユニットテスト                           |
-| `src/features/workbooks/components/list/SolutionWorkBookList.svelte` | 解法別カテゴリ選択 ButtonGroup + SolutionTable |
-
-### 修正
-
-| ファイル                                                               | 変更内容                                                                                                                             |
-| ---------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
-| `src/features/workbooks/types/workbook.ts`                             | `WorkBookTab` const オブジェクト追加（`CURRICULUM`/`SOLUTION`/`CREATED_BY_USER`）・`SolutionTableProps` 追加                         |
-| `src/routes/(admin)/workbooks/order/_types/kanban.ts`                  | `ActiveTab` を `WorkBookTab` の再エクスポートに変更                                                                                  |
-| `src/features/workbooks/utils/workbooks.ts`                            | `partitionWorkbooksAsMainAndReplenished()` 追加                                                                                      |
-| `src/features/workbooks/utils/workbooks.test.ts`                       | 上記テスト追加                                                                                                                       |
-| `src/features/workbooks/services/workbooks.ts`                         | `PlacementQuery` 型・`getPublishedWorkbooksByPlacement()` / `getWorkBooksCreatedByUsers()` / `getAvailableSolutionCategories()` 追加 |
-| `src/features/workbooks/services/workbooks.test.ts`                    | 上記テスト追加                                                                                                                       |
-| `src/routes/workbooks/+page.server.ts`                                 | URLパラメータ解析・タブ別サービス呼び出し・`CREATED_BY_USER` の admin ガード追加                                                     |
-| `src/features/workbooks/components/list/CurriculumWorkBookList.svelte` | ストア削除・`currentGrade` prop 化・`partitionWorkbooksAsMainAndReplenished` 使用                                                    |
-| `src/features/workbooks/components/list/WorkbookTabItem.svelte`        | `workbookType` prop 削除・`onclick` prop 化                                                                                          |
-| `src/features/workbooks/components/list/WorkBookList.svelte`           | discriminated union Props・SOLUTION → SolutionWorkBookList ルーティング追加                                                          |
-| `src/routes/workbooks/+page.svelte`                                    | URL駆動タブ/フィルタ・CREATED_BY_USER も URL 管理                                                                                    |
-| `e2e/workbooks_list.spec.ts`                                           | E2Eテスト更新                                                                                                                        |
-
-### 削除（Phase 9）
-
-| ファイル                                                               | 理由                              |
-| ---------------------------------------------------------------------- | --------------------------------- |
-| `src/features/workbooks/stores/task_grades_by_workbook_type.ts` + test | URLパラメータに置き換え           |
-| `src/features/workbooks/stores/active_workbook_tab.ts` + test          | ローカル状態不要（URL管理に移行） |
+| #   | 案                                                                          | 却下理由                                                                                                               |
+| --- | --------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
+| R1  | `getWorkBooks()` を削除                                                     | `src/routes/sitemap.xml/+server.ts` で使用中。削除不可                                                                 |
+| R2  | `<Tabs>` 以降の各タブを `{#snippet}` で切り出す                             | YAGNI。各タブはすでに `WorkBookList` コンポーネントに委譲済み。snippet 化は indirection を追加するだけ                 |
+| R3  | `CurriculumWorkBookList.svelte` / `SolutionWorkBookList.svelte` をコンポーネント化 | 細部の差異（`size="sm"` の有無・ラベル取得関数・active 判定ロジック）があり、抽象化コストが 2 箇所のメリットを上回る   |
+| R4  | `fetchWorkbooksByTab` を `async` に変更                                     | `async` は `await` を使う場合のみ必要。Promise をそのまま返す設計は意図通り                                            |
+| R5  | E2E テスト: `for...of` を `test.each` 化                                    | Playwright にネイティブの `test.each` は存在しない。`for...of` ループが公式推奨のパラメータ化テストパターン            |
+| R6  | E2E テスト: 定数を `$features/` からインポート                              | `e2e/` は SvelteKit のパスエイリアスを解決しない（後述）。ローカル定数＋参照コメントが正解                              |
 
 ---
 
-## Phase 一覧
+## 補足: SvelteKit `goto()` について
 
-| Phase | ファイル                     | 内容                                                                               | リスク |
-| ----- | ---------------------------- | ---------------------------------------------------------------------------------- | ------ |
-| 0     | [phase-0.md](./phase-0.md)   | `WorkBookTab` 型を feature types に追加・統一                                      | 極低   |
-| 1     | [phase-1.md](./phase-1.md)   | `partitionWorkbooksAsMainAndReplenished()` ユーティリティ                          | 極低   |
-| 2     | [phase-2.md](./phase-2.md)   | `workbook_url_params.ts` 解析・URL組み立て                                         | 極低   |
-| 3     | [phase-3.md](./phase-3.md)   | `getPublishedWorkbooksByPlacement()` / `getAvailableSolutionCategories()` サービス | 中     |
-| 4     | [phase-4.md](./phase-4.md)   | `+page.server.ts` URLパラメータ対応                                                | 中     |
-| 5     | [phase-5.md](./phase-5.md)   | `SolutionWorkBookList.svelte` 新規作成                                             | 低-中  |
-| 6     | [phase-6.md](./phase-6.md)   | `CurriculumWorkBookList.svelte` リファクタリング                                   | 中     |
-| 7     | [phase-7.md](./phase-7.md)   | `WorkbookTabItem.svelte` 簡素化                                                    | 低     |
-| 8     | [phase-8.md](./phase-8.md)   | `WorkBookList.svelte` + `+page.svelte` 改修                                        | 中-高  |
-| 9     | [phase-9.md](./phase-9.md)   | 不要ストア削除                                                                     | 低     |
-| 10    | [phase-10.md](./phase-10.md) | E2Eテスト更新                                                                      | 低     |
-| 11    | [phase-11.md](./phase-11.md) | `/refactor-plan` → `/session-close`                                                | 低     |
-| 12    | [phase-12.md](./phase-12.md) | admin非公開閲覧・URLフィルター状態保持・ユーザ作成空状態表示                       | 低〜中 |
+`$app/navigation` の `goto()` は Vue Router の `router.push()` に相当するクライアントサイドナビゲーション関数。`window.location` の変化（ブラウザリロード）は発生しないが、`+layout.svelte` が `{#if $navigating}` でスピナー表示するため UX 的にはリロード類似に見える。`$navigating` はサーバーから新しいデータが返るまで truthy のまま継続する。
+
+**技術負債:** `+layout.svelte` が deprecated な `$app/stores` の `navigating` を使用中。SvelteKit 2.12+ では `$app/state` の `navigating` が推奨（本タスクのスコープ外）。
+
+---
+
+## 教訓・意思決定記録
+
+> 「分類」は発見のきっかけになりやすいカテゴリ。同じ分類でミスが続く場合は該当カテゴリの確認を計画レビューに組み込むこと。
+
+| #   | 分類     | 教訓                                                                                                                                                                                                                                                          |
+| --- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | 仕様確認 | 既存機能を「削除」として計画する前に「管理者のみに制限」という選択肢を確認する。「既存ユーザー向けに残す機能か」を確認してから削除を決める                                                                                                                     |
+| 2   | 実装調査 | ストアの実装（localStorage vs in-memory）は仮定でなく実コードを読んで確認する。`task_grades_by_workbook_type` は in-memory の Svelte `writable()` のみ。localStorage を使うのは `replenishmentWorkBooksStore` だけ                                            |
+| 3   | 型設計   | SvelteKit では URLSearchParams を直接渡すパターンが標準。`string \| null` の引数型より `parseXxx(params: URLSearchParams)` の方がキャスト不要で安全（order ページの `parseInitialCategories(params)` が先例）                                                  |
+| 4   | 型設計   | サービス引数の分岐は discriminated union（`PlacementQuery`）で型レベルに閉じ込める。optional + fallback は呼び出し側に条件分岐を散らばらせる                                                                                                                   |
+| 5   | 仕様確認 | 管理者専用タブでも URL パラメータで状態管理する。URL の再現性・直アクセスのためには役割を問わず URL 駆動が正しい                                                                                                                                               |
+| 6   | 型設計   | optional props + `?? fallback` より discriminated union Props が型安全。`let { common1, common2, ...restProps }: Props = $props()` の rest spread で TypeScript の discriminated union narrowing が維持される                                                  |
+| 7   | 型設計   | Props 設計前に使用先コンポーネントのソースを読む。`SolutionTable` が `workbookGradeModes: _` で破棄していることを見落とし、不要な prop を含めるミスを防ぐ                                                                                                      |
+| 8   | 型設計   | 型エイリアスを再エクスポートする前に消費側で `Record<T, *>` として使われていないか確認する。`export type { WorkBookTab as ActiveTab }` と計画したが `Record<ActiveTab, TabConfig>` が `created_by_user` を要求してエラー。必要なら `Exclude<T, 未使用値>` で絞り込む |
+| 9   | スコープ | 実装コストが低く（サービス関数1つの追加）UX 価値が高い機能を安易にスコープ外にしない。「単に filtering するだけ」レベルの機能は同フェーズに含める                                                                                                              |
+| 10  | 実装調査 | `e2e/` ディレクトリは SvelteKit のパスエイリアス（`$lib`、`$features`）を解決しない。E2E テスト内では URL 文字列値を `const TAB_CURRICULUM = 'curriculum'` のようにローカル定数として定義し、型インポートは避ける                                               |
+| 11  | 仕様確認 | アクセス制御（タブ表示）とデータ可視性（非公開データの見え方）は別の仕様軸。アクセス制御を実装したら「見えるデータの範囲は何か」も明示的に確認する                                                                                                              |
+| 12  | 仕様確認 | URL パラメータでフィルター状態を実装したら「どこから戻ってくるか」を列挙する。ブラウザ Back は URL を復元するが、サイト内ナビリンクは `/workbooks`（パラメータなし）に遷移する                                                                                  |
+| 13  | 実装品質 | UI パターン（空状態・ローディング等）を追加したら全タブ・全テーブルに適用されているか横断確認する。CURRICULUM/SOLUTION に `EmptyWorkbookList` を追加して CREATED_BY_USER を漏らしたミスから                                                                    |
+| 14  | テスト   | `includeUnpublished = true` のテストで「キーが存在しない」ことを `expect(callArg?.where).not.toHaveProperty('isPublished')` で確認する。`toHaveBeenCalledWith` でキーを含まないことの確認は「キーは存在するが値が違う場合」を見落とす                          |
+| 15  | 仕様確認 | sessionStorage 復元は「パラメータなし URL への遷移」のみに適用する（`window.location.search` が空のときだけ復元）。直アクセス（`?tab=curriculum`）やブラウザ Back（URL 復元済み）と衝突しない。復元ロジックを追加するたびに「どの遷移パターンが対象か・対象外か」を列挙すること |
+| 16  | UI実装   | Flowbite `ButtonGroup` はレスポンシブ折り返し非対応（内部的に `flex`）。折り返しが必要な場合は `<div class="flex flex-wrap gap-1">` + 個別 `Button` に切り替える（`TaskTable.svelte` が先例）                                                                  |
+| 17  | UI実装   | Tailwind v4 の important 修飾子は `dark:text-primary-500!`（v4形式）。v3 形式の `dark:!text-primary-500` は NG。IDE の `suggestCanonicalClasses` 警告で気づける                                                                                               |
+| 18  | Svelte   | Svelte 5 コンポーネントの `<script>` 内で `let x = data.y` や `const x = expr(props.y)` は初期値しか取らない。props や server data から派生する値は必ず `$derived(expr)` を使う。`pnpm check` が "This reference only captures the initial value" と警告する（phase-11 finding #1: `loggedInUser`/`role`/`tasksMapByIds` が `data` 更新後に古い値を保持していたバグ。phase-5 finding: `AVAILABLE_CATEGORIES` が `const` のため `availableCategories` prop 変化に反応しなかったバグ）                                         |
+| 19  | Svelte   | Discriminated union Props の narrowing は `let props: Props = $props()` でアクセスする場合に効く。ただし共通フィールドだけ destructure し残りを `...restProps` に集めた場合も TypeScript は `restProps` を discriminated union として正しく推論する（`{ common1, common2, ...restProps }: Props = $props()`）。全フィールドを destructure すると narrowing が失われるので注意                                                              |
+| 20  | 実装品質 | 同じ派生計算（`buildTaskResultsByWorkBookId()` 等）がテンプレートや関数内で複数回呼ばれていないか、実装後に grep で確認する。計画段階で「同じ関数が2回以上現れるか」を見越して単一の `$derived` に集約する設計にする（phase-11 simplify: 3箇所での重複呼び出しを `$derived` に統合）                                                                              |
+| 21  | 仕様確認 | sessionStorage で URL を復元するときは `goto(url, { replaceState: true })` を使い、ブラウザ履歴を汚染しない。`replaceState: false`（デフォルト）だと復元のたびに履歴エントリが増え、Back キーの挙動が壊れる                                                      |
 
 ---
 
 ## 最終検証
 
-- [x] `pnpm test:unit` — 全ユニットテスト通過
+- [x] `pnpm test:unit` — 全ユニットテスト通過（1952 passed, 1 skipped）
 - [ ] `pnpm test:e2e -- --grep "workbooks"` — E2Eテスト通過（手動実行要）
 - [x] `pnpm check` — 型エラーなし（既存の auth 2件のみ）
 - [x] `pnpm lint` — Lintエラーなし（警告のみ）
 - [x] `pnpm format` — フォーマット適用済み
+- [x] `coderabbit review --plain` — 22件、全て nitpick/potential_issue。critical/high なし
+- [ ] `/session-close`
 - [ ] 手動確認（`pnpm dev`）:
   - `/workbooks` → カリキュラム Q10 が表示
-  - グレードボタンクリック → ブラウザリロードなしで URL・コンテンツ更新（`goto()` はクライアントサイドナビゲーション。ただし `+layout.svelte` の `$navigating` によりデータ取得中はページ全体がスピナーに置き換わる）
+  - グレードボタンクリック → URL・コンテンツ更新
   - 解法別タブクリック → `?tab=solution&categories=SEARCH_SIMULATION`
   - カテゴリボタンクリック → URL・コンテンツ更新
   - 問題集が存在しないカテゴリのボタンが非表示
@@ -119,62 +112,3 @@
   - 管理者: `/workbooks?tab=created_by_user` → ユーザ作成タブが表示
   - 一般ユーザ: `/workbooks?tab=created_by_user` → `/workbooks` にリダイレクト
   - 補充教材トグルが引き続き動作する
-
----
-
-## 影響範囲まとめ
-
-| ファイル                                                           | 変更種別     | 理由                                                             |
-| ------------------------------------------------------------------ | ------------ | ---------------------------------------------------------------- |
-| `src/routes/sitemap.xml/+server.ts`                                | **変更なし** | `/workbooks/[slug]` 個別 URL を生成するのみ。一覧ページは対象外  |
-| `src/routes/workbooks/+page.server.ts` (delete action)             | **変更なし** | フォーム送信後の再ロードも URL パラメータを引き継ぐ              |
-| `src/routes/(admin)/workbooks/order/`                              | **変更なし** | 管理者専用の独立ルート（`ActiveTab` 型のみ再エクスポートに変更） |
-| `src/features/workbooks/components/list/WorkBookList.svelte`       | **修正**     | discriminated union Props・SOLUTION ルーティング追加             |
-| `src/features/workbooks/components/list/CreatedByUserTable.svelte` | **修正**     | 空状態表示（Phase 12-B）                                         |
-| `src/routes/workbooks/+page.svelte`                                | **修正**     | sessionStorage URLフィルター状態保持（Phase 12-C）               |
-
----
-
-## 計画中の教訓・誤解
-
-> 「分類」は発見のきっかけになりやすいカテゴリ。同じ分類でミスが続く場合は該当カテゴリの確認を計画レビューに組み込むこと。
-
-| #   | 分類     | 誤解・ミス                                                                                         | 正しい判断                                                                                                                                                                                                                                                                  |
-| --- | -------- | -------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 1   | 仕様確認 | `CREATED_BY_USER` タブを「完全削除」と計画した                                                     | 「管理者のみ閲覧可能として維持」が正しい仕様。削除前に「既存ユーザー向けに残す機能か」を確認すること                                                                                                                                                                        |
-| 2   | 命名     | `workbook_list_params.ts` と命名した                                                               | 何の params か不明。`workbook_url_params.ts` のように対象を明示する                                                                                                                                                                                                         |
-| 3   | 実装調査 | ストアが localStorage を使っていると誤解した                                                       | `task_grades_by_workbook_type` と `active_workbook_tab` は in-memory の Svelte `writable()` のみ。localStorage を使うのは `replenishmentWorkBooksStore` だけ                                                                                                                |
-| 4   | 仕様確認 | `WorkBookList.svelte` を削除対象に含めた                                                           | ルーティングコンポーネントは既存の責務を持つ。削除前に「他で代替できるか」を確認すること                                                                                                                                                                                    |
-| 5   | 型設計   | `WorkBookTab` を新規定義しようとした                                                               | order ページに同一の `ActiveTab = 'solution' \| 'curriculum'` が既存。重複前に `grep` で型の存在を確認すること                                                                                                                                                              |
-| 6   | 型設計   | parse 関数の引数を `string \| null` にした                                                         | SvelteKit では `URLSearchParams` を直接渡すパターンが標準（order ページの `parseInitialCategories(params)` が先例）。既存コードのパターンを先に調べること                                                                                                                   |
-| 7   | 型設計   | サービス引数をオプショナル `taskGrade?` で設計した                                                 | `tab === 'curriculum'` の条件分岐が呼び出し側に散らばる。discriminated union (`PlacementQuery`) で型レベルに閉じ込める                                                                                                                                                      |
-| 8   | テスト   | テストに `it` と日本語テスト名を使った                                                             | このプロジェクトは `test` + 英語テスト名が規約。既存テストのスタイルを先に確認すること                                                                                                                                                                                      |
-| 9   | テスト   | テストでハードコード文字列を直書きした                                                             | 定数（`TaskGrade.Q10` など）を使う。文字列が変わってもテストが壊れない                                                                                                                                                                                                      |
-| 10  | 実装品質 | URL 組み立てをインライン文字列テンプレートで書いた                                                 | URL 組み立ては純粋関数 `buildWorkbooksUrl()` に集約する。order ページの `buildUpdatedUrl()` が先例                                                                                                                                                                          |
-| 11  | 実装品質 | `url.searchParams.get('tab')` を3回繰り返した                                                      | `const params = url.searchParams` で変数に切り出す                                                                                                                                                                                                                          |
-| 12  | テスト   | E2E テストのグレード・カテゴリケースが1件のみだった                                                | URL パラメータのバリエーションを `for...of` ループで複数カバーする                                                                                                                                                                                                          |
-| 13  | 計画構造 | 計画を単一ファイルに書き続けた（1000行超）                                                         | plan.md は全体俯瞰（goal / 構成 / phase 一覧 / 検証）に留め、詳細タスクは `phase-N.md` に分割する。コンテキスト圧迫を防ぎ、phase 単位での参照・更新が容易になる                                                                                                             |
-| 14  | 仕様確認 | `CREATED_BY_USER` をローカル `$state` で管理した                                                   | URL パラメータで管理する方が URL の再現性・直アクセスが可能になる。管理者向けでも URL ドリブンが正しい                                                                                                                                                                      |
-| 15  | 実装品質 | `workbooks` / `userCreatedWorkbooks` を両方 fetch した                                             | タブに応じてどちらか一方だけ fetch すれば十分。両方返す設計はパフォーマンス上の無駄                                                                                                                                                                                         |
-| 16  | 型設計   | optional props + `?? fallback` で WorkBookList を設計した                                          | discriminated union Props の方が型安全。Svelte 5 では `let props: Props = $props()` + `{#if}` ナローイングで実現可能                                                                                                                                                        |
-| 17  | 型設計   | Props を設計する前に使用先コンポーネントのソースを読んでいなかった                                 | `SolutionTable` が `workbookGradeModes: _` で破棄していることを見落とし、不要な prop を Props に含めた。型設計前に必ず使用先の実装を Read/grep で確認すること                                                                                                               |
-| 18  | 命名     | バイナリ分割関数の名前が片方の概念しか示していなかった                                             | `splitWorkbooksByReplenishment` は「補充側」しか表現しない。`partitionWorkbooksAsMainAndReplenished` のように **両端の概念を名前に含める**                                                                                                                                  |
-| 19  | テスト   | テスト内の `new URLSearchParams('...')` 繰り返しを計画段階で気づかなかった                         | テスト設計時に「同パターンが2回以上現れるか」を確認し、`toParams()` のようなヘルパーを計画に含める                                                                                                                                                                          |
-| 20  | テスト   | Prisma mock の `mockResolvedValue(...)` 繰り返しを計画段階で気づかなかった                         | テストケースが2つ以上あり同じモックパターンを使う場合は、`mockWorkbookFindMany()` のようなヘルパーを計画段階から明示すること（プロジェクト規約でもある）                                                                                                                    |
-| 21  | 実装品質 | 複数の service 関数に同一の `.map()` 変換処理が現れることを見落とした                              | `mapWithAuthorName()` のような抽出を計画時から意識する。「2つ以上の関数が同じ変換をする」は計画レビューで検出できる                                                                                                                                                         |
-| 22  | スコープ | `AVAILABLE_CATEGORIES` のフィルタリングを「スコープ外」と早期に判断した                            | 実装コストが低く（サービス関数1つの追加）、UX 価値が高い機能を安易にスコープ外にしない。「単に filtering するだけ」レベルの機能は同フェーズに含める                                                                                                                         |
-| 23  | 型設計   | 新しい列挙型を string literal union で設計した                                                     | `WorkBookType` が const object パターンを使っているにもかかわらず `WorkBookTab` を string literal union で設計した。新しい列挙型を作るときは既存の型定義を先に確認し、プロジェクト内パターンに揃える                                                                        |
-| 24  | 実装品質 | 類似した条件ロジックの重複を計画段階で気づかなかった                                               | `parseWorkBookGrade` と `parseWorkBookCategory` で「null チェック + 有効値確認 + PENDING 除外」が重複。計画段階で「同バリデーションロジックが複数現れるか」を確認し、`isValidNonPending<T>()` のような汎用サブ関数を早期に設計する                                          |
-| 25  | 型設計   | 型の再エクスポート後、消費側の `Record<T, V>` が新しい値キーを要求するようになることを見落とした   | `export type { WorkBookTab as ActiveTab }` と計画したが、`Record<ActiveTab, TabConfig>` が `created_by_user` を要求してエラー。型エイリアスを再エクスポートする前に「消費側で `Record<T, *>` として使われているか」を確認し、そうであれば `Exclude<T, 未使用値>` で絞り込む |
-| 26  | 実装調査 | E2E テストで `$lib` / `$features` パスエイリアスが使えないことを見落とした                         | `e2e/` ディレクトリは SvelteKit のパスエイリアスを解決しない。E2E テスト内では型のインポートを避け、URL 文字列値は `const TAB_CURRICULUM = 'curriculum'` のようにローカル定数として定義する                                                                                 |
-| 27  | 実装理解 | `goto()` による遷移を「画面リロードなし」と表現したが、体感的にはリロードに近い                    | `goto()` はブラウザリロードではない（`window.location` は変化しない）が、`+layout.svelte` が `{#if $navigating}` でページ全体をスピナーに置き換えるため、UX 的にはリロードに近い見た目になる。`$navigating` はサーバーから新しいデータが返るまで truthy のまま継続する      |
-| 28  | 技術負債 | `+layout.svelte` が deprecated な `$app/stores` の `navigating` を使っている                       | SvelteKit 2.12+ では `$app/state` の `navigating` を使うことが推奨されている（公式ドキュメント確認済み）。`$app/stores` 版は非推奨。本タスクのスコープ外だが、将来的に `import { navigating } from '$app/state'` へ移行すること                                             |
-| 29  | 仕様確認 | アクセス制御（タブ表示）とデータ可視性（非公開の見え方）を同一仕様として扱っていた                 | 「タブを admin 専用にする」と「非公開データを admin に見せる」は別の仕様軸。アクセス制御を実装したら「見えるデータの範囲は何か」も明示的に確認すること（Phase 12-A で発覚）                                                                                                 |
-| 30  | 仕様確認 | URL パラメータでフィルター状態を実装したが、「別ページへ遷移して戻る」ユースケースを検討しなかった | ブラウザ Back は URL を復元するが、サイト内ナビリンクは `/workbooks`（パラメータなし）に遷移する。URL 駆動の状態管理を実装したら「どこから戻ってくるか」を列挙すること（Phase 12-C で発覚）                                                                                 |
-| 31  | 実装品質 | 空状態コンポーネントを一部タブにしか適用しなかった                                                 | `EmptyWorkbookList` を CURRICULUM/SOLUTION に追加したが CREATED_BY_USER を漏らした。UI パターン（空状態・ローディング等）を追加したら全タブ・全テーブルに適用されているか横断確認すること（Phase 12-B で発覚）                                                              |
-| 32  | 実装品質 | 関数リネーム時に呼び出し側のインポートを更新し忘れることがある                                     | 関数名を変更したら `grep` で呼び出し元を全列挙してから更新する。今回は `+page.server.ts` のインポートが旧名のままだった（`getPublishedWorkbooksByPlacement` → `getWorkbooksByPlacement`）                                                                                   |
-| 33  | テスト   | `includeUnpublished = true` のテストで「キーが存在しない」ことを明示的に検証する                   | `expect(callArg?.where).not.toHaveProperty('isPublished')` でキーの不在を確認する。`toHaveBeenCalledWith` で `isPublished` を含まないことの確認は「キーが存在するが値が違う場合」を見落とすリスクがある                                                                     |
-| 34  | 仕様確認 | sessionStorage 復元は「パラメータなし URL への遷移」のみに適用する                                 | `window.location.search` が空のときだけ復元することで、直アクセス（`?tab=curriculum`）やブラウザ Back（URL 復元済み）と衝突しない。復元ロジックを追加するたびに「どの遷移パターンが対象か・対象外か」を列挙すること                                                         |
-| 35  | UI実装   | Flowbite `ButtonGroup` はレスポンシブ折り返しをサポートしない                                      | `ButtonGroup` は内部的に `flex`（折り返しなし）。狭い画面でボタンが潰れる。折り返しが必要な場合は `<div class="flex flex-wrap gap-1">` + 個別 `Button` に切り替える（`TaskTable.svelte` が先例）                                                                            |
-| 36  | UI実装   | 参照コンポーネントのボタンスタイルを「レイアウトだけ」コピーしてスタイルを漏らした                 | `color="alternative"` を省略したためデフォルト（塗りつぶし青）が適用され視認性が最悪になった。ボタンのスタイルは `color` / `size` / `class` の3軸すべてを参照元と照合してから実装すること                                                                                   |
-| 37  | UI実装   | Tailwind important 修飾子の記法が v4 と v3 で異なる                                                | `dark:!text-primary-500`（v3形式）は `dark:text-primary-500!`（v4形式）に統一する。IDE が `suggestCanonicalClasses` 警告を出すので気づきやすい                                                                                                                              |
