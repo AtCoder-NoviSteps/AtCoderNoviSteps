@@ -118,7 +118,13 @@ Stop the split if internal helpers (e.g. `fetchUnplacedWorkbooks`) would be frag
 
 Use Nock for external HTTP calls. See `src/test/lib/clients/` for examples.
 
-## E2E Tests: No Path Aliases
+## Test Order Mirrors Source Order
+
+Order `describe` blocks in service and utils test files to match the declaration order of functions in the source file. Misalignment makes it harder to cross-reference tests and implementation.
+
+## E2E Tests
+
+### No Path Aliases
 
 The `e2e/` directory is outside SvelteKit's build pipeline — `$lib`, `$features`, and other path aliases are not resolved. Define URL string values as local constants with a reference comment:
 
@@ -129,11 +135,31 @@ const TAB_SOLUTION = 'solution';
 
 Avoid importing types from `src/` in E2E test files.
 
-## Test Order Mirrors Source Order
+### Describe Hierarchy
 
-Order `describe` blocks in service and utils test files to match the declaration order of functions in the source file. Misalignment makes it harder to cross-reference tests and implementation.
+When a `describe` block for a user role grows large, split it by behavioral dimension rather than adding more flat `test()` calls:
 
-## Flowbite Toggle in E2E Tests
+```typescript
+test.describe('logged-in user', () => {
+  test.describe('tab visibility', () => { ... });
+  test.describe('URL parameter handling', () => { ... });
+  test.describe('navigation interactions', () => { ... });
+  test.describe('session state', () => { ... });
+});
+```
+
+### Parameterized Tests
+
+Playwright has no native `test.each`. Use `for...of` loops — the official recommended pattern:
+
+```typescript
+for (const grade of [TaskGrade.Q10, TaskGrade.Q9, TaskGrade.Q8]) {
+  await gradeButton(grade).click();
+  await expect(page).toHaveURL(`?grades=${grade}`);
+}
+```
+
+### Flowbite Toggle
 
 Flowbite's `Toggle` renders an `sr-only` `<input type="checkbox">` inside a `<label>`. Clicking the input directly fails because the visual `<span>` sibling intercepts pointer events. Click the label wrapper instead:
 

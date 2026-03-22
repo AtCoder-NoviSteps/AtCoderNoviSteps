@@ -28,6 +28,7 @@ Before writing new logic, decide which layer it belongs to. Run this check at pl
 - **`upsert`**: only use when the implementation performs both insert and update. For insert-only, use `initialize`, `seed`, or another accurate verb.
 - **`any`**: before using `any`, check the value's origin — adding a missing `@types/*` or `devDependency` often provides the correct type.
 - **UI labels**: if a label does not match actual behavior, update it or add an inline comment explaining the intentional mismatch.
+- **Constant names**: reflect what the value IS (content), not what it is used for (purpose). e.g., a set holding all enum tab values is `EXISTING_TABS`, not `VALID_TABS`.
 - **New files**: before naming a new file or directory, grep the relevant `src/` directory to confirm existing conventions. Confirm at plan time, not during implementation:
   - Custom files in routes (utilities, helpers, etc.): `snake_case` (e.g., `user_profile.ts`)
   - SvelteKit special files: follow framework conventions (`+page.svelte`, `+page.server.ts`, `+server.ts`)
@@ -77,6 +78,8 @@ Write all project documentation (plans, dev-notes, guides, refactor notes) in Ja
 ### TSDoc
 
 Add TSDoc comments to every exported function, type, and class. The minimum required fields are `@param` (for non-obvious parameters) and `@returns` (when the return value is not evident from the type). One-liner `/** ... */` is sufficient for simple cases; use multi-line only when behavior needs explanation.
+
+For optional parameters with a default, state it explicitly in `@param`: `Defaults to false.`
 
 ```typescript
 /** Returns the URL slug for a workbook, falling back to the workbook ID. */
