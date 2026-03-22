@@ -127,52 +127,55 @@ describe('Workbooks', () => {
     });
   });
 
-  describe('buildTaskResultsByWorkBookId', () => {
-    test('includes workbook in map when task results exist', () => {
-      const taskResult = createTaskResult('abc300_a');
-      const taskResultsByTaskId = new Map([['abc300_a', taskResult]]);
-      const workbooks = [
-        createWorkBookListBase({
-          id: 1,
-          workBookTasks: [{ taskId: 'abc300_a', priority: 1, comment: '' }],
-        }),
-      ];
-      const result = buildTaskResultsByWorkBookId(workbooks, taskResultsByTaskId);
-      expect(result.get(1)).toEqual([taskResult]);
+  describe('partitionWorkbooksAsMainAndReplenished', () => {
+    test('main contains non-replenished workbooks', () => {
+      const main = createWorkBookListBase({ id: 1, isReplenished: false });
+      const replenished = createWorkBookListBase({ id: 2, isReplenished: true });
+      const result = partitionWorkbooksAsMainAndReplenished([main, replenished]);
+      expect(result.main).toEqual([main]);
     });
 
-    test('excludes workbook from map when no task results exist', () => {
-      const taskResultsByTaskId = new Map<string, TaskResult>();
-      const workbooks = [
-        createWorkBookListBase({
-          id: 1,
-          workBookTasks: [{ taskId: 'abc300_a', priority: 1, comment: '' }],
-        }),
-      ];
-      const result = buildTaskResultsByWorkBookId(workbooks, taskResultsByTaskId);
-      expect(result.has(1)).toBe(false);
+    test('replenished contains replenished workbooks', () => {
+      const main = createWorkBookListBase({ id: 1, isReplenished: false });
+      const replenished = createWorkBookListBase({ id: 2, isReplenished: true });
+      const result = partitionWorkbooksAsMainAndReplenished([main, replenished]);
+      expect(result.replenished).toEqual([replenished]);
     });
 
-    test('returns empty map when given empty workbooks array', () => {
-      const taskResultsByTaskId = new Map<string, TaskResult>();
-      const result = buildTaskResultsByWorkBookId([], taskResultsByTaskId);
-      expect(result.size).toBe(0);
+    test('empty input returns empty arrays', () => {
+      const result = partitionWorkbooksAsMainAndReplenished([]);
+      expect(result.main).toEqual([]);
+      expect(result.replenished).toEqual([]);
+    });
+  });
+
+  describe('countReadableWorkbooks', () => {
+    const userId = '1';
+    const authorId = '1';
+    const otherUserId = '2';
+
+    test('counts published workbooks regardless of author', () => {
+      const workbooks = [
+        createWorkBookListBase({ id: 1, isPublished: true, authorId: otherUserId }),
+        createWorkBookListBase({ id: 2, isPublished: true, authorId: otherUserId }),
+      ];
+      expect(countReadableWorkbooks(workbooks, userId)).toBe(2);
     });
 
-    test('includes only tasks with existing results when workbook has partial results', () => {
-      const taskResult = createTaskResult('abc300_a');
-      const taskResultsByTaskId = new Map([['abc300_a', taskResult]]);
+    test('counts unpublished workbooks owned by the user', () => {
+      const workbooks = [createWorkBookListBase({ id: 1, isPublished: false, authorId })];
+      expect(countReadableWorkbooks(workbooks, userId)).toBe(1);
+    });
+
+    test('excludes unpublished workbooks owned by other users', () => {
       const workbooks = [
-        createWorkBookListBase({
-          id: 1,
-          workBookTasks: [
-            { taskId: 'abc300_a', priority: 1, comment: '' },
-            { taskId: 'abc300_b', priority: 2, comment: '' },
-          ],
-        }),
+        createWorkBookListBase({ id: 1, isPublished: false, authorId: otherUserId }),
       ];
-      const result = buildTaskResultsByWorkBookId(workbooks, taskResultsByTaskId);
-      expect(result.get(1)).toEqual([taskResult]);
+      expect(countReadableWorkbooks(workbooks, userId)).toBe(0);
+    });
+
+    test('returns 0 for empty list', () => {
+      expect(countReadableWorkbooks([], userId)).toBe(0);
     });
   });
 
@@ -340,55 +343,52 @@ describe('Workbooks', () => {
     });
   });
 
-  describe('countReadableWorkbooks', () => {
-    const userId = '1';
-    const authorId = '1';
-    const otherUserId = '2';
-
-    test('counts published workbooks regardless of author', () => {
+  describe('buildTaskResultsByWorkBookId', () => {
+    test('includes workbook in map when task results exist', () => {
+      const taskResult = createTaskResult('abc300_a');
+      const taskResultsByTaskId = new Map([['abc300_a', taskResult]]);
       const workbooks = [
-        createWorkBookListBase({ id: 1, isPublished: true, authorId: otherUserId }),
-        createWorkBookListBase({ id: 2, isPublished: true, authorId: otherUserId }),
+        createWorkBookListBase({
+          id: 1,
+          workBookTasks: [{ taskId: 'abc300_a', priority: 1, comment: '' }],
+        }),
       ];
-      expect(countReadableWorkbooks(workbooks, userId)).toBe(2);
+      const result = buildTaskResultsByWorkBookId(workbooks, taskResultsByTaskId);
+      expect(result.get(1)).toEqual([taskResult]);
     });
 
-    test('counts unpublished workbooks owned by the user', () => {
-      const workbooks = [createWorkBookListBase({ id: 1, isPublished: false, authorId })];
-      expect(countReadableWorkbooks(workbooks, userId)).toBe(1);
-    });
-
-    test('excludes unpublished workbooks owned by other users', () => {
+    test('excludes workbook from map when no task results exist', () => {
+      const taskResultsByTaskId = new Map<string, TaskResult>();
       const workbooks = [
-        createWorkBookListBase({ id: 1, isPublished: false, authorId: otherUserId }),
+        createWorkBookListBase({
+          id: 1,
+          workBookTasks: [{ taskId: 'abc300_a', priority: 1, comment: '' }],
+        }),
       ];
-      expect(countReadableWorkbooks(workbooks, userId)).toBe(0);
+      const result = buildTaskResultsByWorkBookId(workbooks, taskResultsByTaskId);
+      expect(result.has(1)).toBe(false);
     });
 
-    test('returns 0 for empty list', () => {
-      expect(countReadableWorkbooks([], userId)).toBe(0);
-    });
-  });
-
-  describe('partitionWorkbooksAsMainAndReplenished', () => {
-    test('main contains non-replenished workbooks', () => {
-      const main = createWorkBookListBase({ id: 1, isReplenished: false });
-      const replenished = createWorkBookListBase({ id: 2, isReplenished: true });
-      const result = partitionWorkbooksAsMainAndReplenished([main, replenished]);
-      expect(result.main).toEqual([main]);
+    test('returns empty map when given empty workbooks array', () => {
+      const taskResultsByTaskId = new Map<string, TaskResult>();
+      const result = buildTaskResultsByWorkBookId([], taskResultsByTaskId);
+      expect(result.size).toBe(0);
     });
 
-    test('replenished contains replenished workbooks', () => {
-      const main = createWorkBookListBase({ id: 1, isReplenished: false });
-      const replenished = createWorkBookListBase({ id: 2, isReplenished: true });
-      const result = partitionWorkbooksAsMainAndReplenished([main, replenished]);
-      expect(result.replenished).toEqual([replenished]);
-    });
-
-    test('empty input returns empty arrays', () => {
-      const result = partitionWorkbooksAsMainAndReplenished([]);
-      expect(result.main).toEqual([]);
-      expect(result.replenished).toEqual([]);
+    test('includes only tasks with existing results when workbook has partial results', () => {
+      const taskResult = createTaskResult('abc300_a');
+      const taskResultsByTaskId = new Map([['abc300_a', taskResult]]);
+      const workbooks = [
+        createWorkBookListBase({
+          id: 1,
+          workBookTasks: [
+            { taskId: 'abc300_a', priority: 1, comment: '' },
+            { taskId: 'abc300_b', priority: 2, comment: '' },
+          ],
+        }),
+      ];
+      const result = buildTaskResultsByWorkBookId(workbooks, taskResultsByTaskId);
+      expect(result.get(1)).toEqual([taskResult]);
     });
   });
 
