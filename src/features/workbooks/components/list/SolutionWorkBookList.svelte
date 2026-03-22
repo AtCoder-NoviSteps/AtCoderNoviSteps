@@ -6,7 +6,7 @@
   import type { WorkbooksList } from '$features/workbooks/types/workbook';
   import {
     SolutionCategory,
-    SolutionCategories,
+    type SolutionCategories,
     SOLUTION_LABELS,
   } from '$features/workbooks/types/workbook_placement';
 
