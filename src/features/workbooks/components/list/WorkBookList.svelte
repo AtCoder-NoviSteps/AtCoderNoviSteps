@@ -1,74 +1,68 @@
 <script lang="ts">
-  import type { Component } from 'svelte';
-
-  import type { Roles } from '$lib/types/user';
+  import { Roles } from '$lib/types/user';
   import { TaskGrade, type TaskResults } from '$lib/types/task';
+  import { WorkBookType, type WorkbooksList } from '$features/workbooks/types/workbook';
   import {
-    WorkBookType,
-    type WorkbooksList,
-    type WorkbookTableProps,
-  } from '$features/workbooks/types/workbook';
-
-  import { countReadableWorkbooks } from '$features/workbooks/utils/workbooks';
+    type SolutionCategory,
+    type SolutionCategories,
+  } from '$features/workbooks/types/workbook_placement';
 
   import CurriculumWorkBookList from '$features/workbooks/components/list/CurriculumWorkBookList.svelte';
-  import SolutionTable from '$features/workbooks/components/list/SolutionTable.svelte';
+  import SolutionWorkBookList from '$features/workbooks/components/list/SolutionWorkBookList.svelte';
   import CreatedByUserTable from '$features/workbooks/components/list/CreatedByUserTable.svelte';
-  import EmptyWorkbookList from '$features/workbooks/components/list/EmptyWorkbookList.svelte';
 
-  interface LoggedInUser {
-    id: string;
-    role: Roles;
-  }
-
-  interface Props {
-    workbookType: WorkBookType;
+  type CommonProps = {
     workbooks: WorkbooksList;
-    workbookGradeModes: Map<number, TaskGrade>;
     taskResultsWithWorkBookId: Map<number, TaskResults>;
-    loggedInUser: LoggedInUser;
-  }
-
-  let {
-    workbookType,
-    workbooks,
-    workbookGradeModes,
-    taskResultsWithWorkBookId,
-    loggedInUser,
-  }: Props = $props();
-
-  let userId = loggedInUser.id;
-  let role: Roles = loggedInUser.role;
-
-  const tableComponents: Partial<Record<WorkBookType, Component<WorkbookTableProps>>> = {
-    [WorkBookType.SOLUTION]: SolutionTable,
-    [WorkBookType.CREATED_BY_USER]: CreatedByUserTable,
+    loggedInUser: { id: string; role: Roles } | null;
   };
 
-  let readableCount = $derived(countReadableWorkbooks(workbooks, userId));
+  type SpecificProps =
+    | {
+        workbookType: typeof WorkBookType.CURRICULUM;
+        gradeModesEachWorkbook: Map<number, TaskGrade>;
+        currentGrade: TaskGrade;
+        onGradeChange: (grade: TaskGrade) => void;
+      }
+    | {
+        workbookType: typeof WorkBookType.SOLUTION;
+        currentCategory: SolutionCategory;
+        availableCategories: SolutionCategories;
+        onCategoryChange: (category: SolutionCategory) => void;
+      }
+    | { workbookType: typeof WorkBookType.CREATED_BY_USER };
+
+  type Props = CommonProps & SpecificProps;
+
+  let { workbooks, taskResultsWithWorkBookId, loggedInUser, ...restProps }: Props = $props();
 </script>
 
 <!-- TODO: 「ユーザ作成」の問題集には、検索機能を追加 -->
-{#if workbookType === WorkBookType.CURRICULUM}
+{#if restProps.workbookType === WorkBookType.CURRICULUM}
   <CurriculumWorkBookList
     {workbooks}
-    {workbookGradeModes}
+    gradeModesEachWorkbook={restProps.gradeModesEachWorkbook}
     {taskResultsWithWorkBookId}
-    {userId}
-    {role}
+    userId={loggedInUser?.id ?? ''}
+    role={loggedInUser?.role ?? Roles.USER}
+    currentGrade={restProps.currentGrade}
+    onGradeChange={restProps.onGradeChange}
+  />
+{:else if restProps.workbookType === WorkBookType.SOLUTION}
+  <SolutionWorkBookList
+    {workbooks}
+    {taskResultsWithWorkBookId}
+    userId={loggedInUser?.id ?? ''}
+    role={loggedInUser?.role ?? Roles.USER}
+    availableCategories={restProps.availableCategories}
+    currentCategory={restProps.currentCategory}
+    onCategoryChange={restProps.onCategoryChange}
   />
 {:else}
-  {@const TableComponent = tableComponents[workbookType]}
-
-  {#if readableCount && TableComponent}
-    <TableComponent
-      {workbooks}
-      {workbookGradeModes}
-      {userId}
-      {role}
-      taskResults={taskResultsWithWorkBookId}
-    />
-  {:else}
-    <EmptyWorkbookList />
-  {/if}
+  <CreatedByUserTable
+    {workbooks}
+    taskResults={taskResultsWithWorkBookId}
+    userId={loggedInUser?.id ?? ''}
+    role={loggedInUser?.role ?? Roles.USER}
+  />
 {/if}

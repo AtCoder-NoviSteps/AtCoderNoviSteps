@@ -45,35 +45,30 @@ export function getWorkBooksByType(
 }
 
 /**
- * Builds a map from workbook ID to the task results for that workbook's tasks.
- * Workbooks with no matching task results are omitted from the map.
+ * Partitions workbooks into main and replenished groups.
+ *
+ * @param workbooks - Full list to partition
+ * @returns Object with `main` (isReplenished=false) and `replenished` (isReplenished=true) arrays
  */
-export function buildTaskResultsByWorkBookId(
-  workbooks: WorkbooksList,
-  taskResultsByTaskId: Map<string, TaskResult>,
-): Map<number, TaskResults> {
-  const taskResultsWithWorkBookId = new Map<number, TaskResults>();
+export function partitionWorkbooksAsMainAndReplenished(workbooks: WorkbooksList): {
+  main: WorkbooksList;
+  replenished: WorkbooksList;
+} {
+  return workbooks.reduce(
+    (partition, workbook) => {
+      (workbook.isReplenished ? partition.replenished : partition.main).push(workbook);
+      return partition;
+    },
+    { main: [] as WorkbooksList, replenished: [] as WorkbooksList },
+  );
+}
 
-  workbooks.forEach((workbook: WorkbookList) => {
-    const taskResults: TaskResults = workbook.workBookTasks.reduce(
-      (array: TaskResults, workBookTask: WorkBookTaskBase) => {
-        const taskResult = taskResultsByTaskId.get(workBookTask.taskId);
-
-        if (taskResult !== undefined) {
-          array.push(taskResult);
-        }
-
-        return array;
-      },
-      [],
-    );
-
-    if (taskResults.length > 0) {
-      taskResultsWithWorkBookId.set(workbook.id, taskResults);
-    }
-  });
-
-  return taskResultsWithWorkBookId;
+/** Returns the number of workbooks the given user can read. */
+export function countReadableWorkbooks(workbooks: WorkbooksList, userId: string): number {
+  return workbooks.reduce((count, workbook) => {
+    const hasReadPermission = canRead(workbook.isPublished, userId, workbook.authorId);
+    return count + (hasReadPermission ? 1 : 0);
+  }, 0);
 }
 
 /**
@@ -116,12 +111,36 @@ export function getGradeMode(workbookId: number, gradeModes: Map<number, TaskGra
   return gradeModes.get(workbookId) ?? TaskGrade.PENDING;
 }
 
-/** Returns the number of workbooks the given user can read. */
-export function countReadableWorkbooks(workbooks: WorkbooksList, userId: string): number {
-  return workbooks.reduce((count, workbook) => {
-    const hasReadPermission = canRead(workbook.isPublished, userId, workbook.authorId);
-    return count + (hasReadPermission ? 1 : 0);
-  }, 0);
+/**
+ * Builds a map from workbook ID to the task results for that workbook's tasks.
+ * Workbooks with no matching task results are omitted from the map.
+ */
+export function buildTaskResultsByWorkBookId(
+  workbooks: WorkbooksList,
+  taskResultsByTaskId: Map<string, TaskResult>,
+): Map<number, TaskResults> {
+  const taskResultsWithWorkBookId = new Map<number, TaskResults>();
+
+  workbooks.forEach((workbook: WorkbookList) => {
+    const taskResults: TaskResults = workbook.workBookTasks.reduce(
+      (array: TaskResults, workBookTask: WorkBookTaskBase) => {
+        const taskResult = taskResultsByTaskId.get(workBookTask.taskId);
+
+        if (taskResult !== undefined) {
+          array.push(taskResult);
+        }
+
+        return array;
+      },
+      [],
+    );
+
+    if (taskResults.length > 0) {
+      taskResultsWithWorkBookId.set(workbook.id, taskResults);
+    }
+  });
+
+  return taskResultsWithWorkBookId;
 }
 
 const EMPTY_TASK_RESULTS: TaskResults = [];

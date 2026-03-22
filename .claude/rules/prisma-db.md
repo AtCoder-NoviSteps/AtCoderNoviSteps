@@ -74,6 +74,15 @@ Prefer `createMany({ skipDuplicates: true })` over catching P2002 for expected u
 
 `z.number().positive()` passes decimals. For Prisma `Int` fields use `z.number().int().positive()`.
 
+## Relation Filter Exclusion
+
+Filtering on a relation field (e.g. `where: { placement: { type: 'CURRICULUM' } }`)
+performs an INNER JOIN internally — rows without a matching relation record are
+automatically excluded. This is not an IS NOT NULL check; the mechanism is the JOIN.
+
+When documenting this behavior, write "excluded by INNER JOIN" rather than
+"implicitly includes IS NOT NULL".
+
 ## Validate Constraints
 
 Prisma does not support `@@check`. To add one:

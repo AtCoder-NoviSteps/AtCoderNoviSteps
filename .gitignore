@@ -144,6 +144,10 @@ vite.config.ts.timestamp-*
 
 # VS Code
 .history
+.vscode/
+
+# Local AI tool settings
+.claude/settings.local.json
 
 # Vercel
 .vercel
@@ -153,3 +157,4 @@ prisma/.fabbrica
 
 # Directory for playwright test results
 test-results
+

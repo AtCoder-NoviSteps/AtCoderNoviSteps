@@ -1,21 +1,17 @@
 <script lang="ts">
-  import { get } from 'svelte/store';
-
-  import { ButtonGroup, Button, Toggle } from 'flowbite-svelte';
+  import { Button, Toggle } from 'flowbite-svelte';
 
   import type { Roles } from '$lib/types/user';
   import { TaskGrade, type TaskResults } from '$lib/types/task';
-  import {
-    WorkBookType,
-    type WorkbookList,
-    type WorkbooksList,
-  } from '$features/workbooks/types/workbook';
+  import { type WorkbooksList } from '$features/workbooks/types/workbook';
 
-  import { taskGradesByWorkBookTypeStore } from '$features/workbooks/stores/task_grades_by_workbook_type';
   import { replenishmentWorkBooksStore } from '$features/workbooks/stores/replenishment_workbook.svelte';
 
   import { getTaskGradeLabel } from '$lib/utils/task';
-  import { countReadableWorkbooks, getGradeMode } from '$features/workbooks/utils/workbooks';
+  import {
+    countReadableWorkbooks,
+    partitionWorkbooksAsMainAndReplenished,
+  } from '$features/workbooks/utils/workbooks';
 
   import TooltipWrapper from '$lib/components/TooltipWrapper.svelte';
   import LabelWithTooltips from '$lib/components/LabelWithTooltips.svelte';
@@ -24,13 +20,23 @@
 
   interface Props {
     workbooks: WorkbooksList;
-    workbookGradeModes: Map<number, TaskGrade>;
+    gradeModesEachWorkbook: Map<number, TaskGrade>;
     taskResultsWithWorkBookId: Map<number, TaskResults>;
     userId: string;
     role: Roles;
+    currentGrade: TaskGrade;
+    onGradeChange: (grade: TaskGrade) => void;
   }
 
-  let { workbooks, workbookGradeModes, taskResultsWithWorkBookId, userId, role }: Props = $props();
+  let {
+    workbooks,
+    gradeModesEachWorkbook,
+    taskResultsWithWorkBookId,
+    userId,
+    role,
+    currentGrade,
+    onGradeChange,
+  }: Props = $props();
 
   const AVAILABLE_GRADES = [
     TaskGrade.Q10,
@@ -40,10 +46,6 @@
     TaskGrade.Q6,
   ] as const;
 
-  let selectedGrade: TaskGrade = $state(
-    get(taskGradesByWorkBookTypeStore).get(WorkBookType.CURRICULUM) || TaskGrade.Q10,
-  );
-
   let showReplenishmentWorkbooks = $state(replenishmentWorkBooksStore.canView());
 
   function handleReplenishmentWorkbooks() {
@@ -52,30 +54,12 @@
   }
 
   function filterByGradeMode(grade: TaskGrade) {
-    selectedGrade = grade;
-    taskGradesByWorkBookTypeStore.updateTaskGrade(WorkBookType.CURRICULUM, grade);
+    onGradeChange(grade);
   }
 
-  $effect(() => {
-    const grade = $taskGradesByWorkBookTypeStore.get(WorkBookType.CURRICULUM) ?? TaskGrade.Q10;
-
-    if (grade) {
-      selectedGrade = grade;
-    }
-  });
-
-  let mainWorkbooks: WorkbooksList = $derived(
-    workbooks.filter((workbook: WorkbookList) => {
-      const gradeMode = getGradeMode(workbook.id, workbookGradeModes);
-      return gradeMode === selectedGrade && !workbook.isReplenished;
-    }),
-  );
-
-  let replenishedWorkbooks: WorkbooksList = $derived(
-    workbooks.filter((workbook: WorkbookList) => {
-      const gradeMode = getGradeMode(workbook.id, workbookGradeModes);
-      return gradeMode === selectedGrade && workbook.isReplenished;
-    }),
+  // Server-side already filters by grade; partition by isReplenished only.
+  let { main: mainWorkbooks, replenished: replenishedWorkbooks } = $derived(
+    partitionWorkbooksAsMainAndReplenished(workbooks),
   );
 
   let readableMainWorkbooksCount = $derived(countReadableWorkbooks(mainWorkbooks, userId));
@@ -87,18 +71,18 @@
 <!-- TODO: 5Q〜1Qにも対応 -->
 <div class="mb-6">
   <div class="flex items-center space-x-4">
-    <ButtonGroup>
-      {#each AVAILABLE_GRADES as grade}
+    <div class="flex flex-wrap gap-1">
+      {#each AVAILABLE_GRADES as grade (grade)}
         <Button
           onclick={() => filterByGradeMode(grade)}
-          class={selectedGrade === grade
-            ? 'text-primary-700  dark:!text-primary-500'
-            : 'text-gray-900'}
+          color="alternative"
+          size="sm"
+          class={`rounded-lg dark:text-white ${currentGrade === grade ? 'text-primary-700 dark:text-primary-500!' : ''}`}
         >
           {getTaskGradeLabel(grade)}
         </Button>
       {/each}
-    </ButtonGroup>
+    </div>
 
     <TooltipWrapper
       tooltipContent="問題集のグレードを指定します（最頻値。2つ以上ある場合は、最も易しいグレードに掲載）"
@@ -122,7 +106,7 @@
 
     <CurriculumTable
       workbooks={mainWorkbooks}
-      {workbookGradeModes}
+      {gradeModesEachWorkbook}
       {userId}
       {role}
       taskResults={taskResultsWithWorkBookId}
@@ -161,7 +145,7 @@
     {#if showReplenishmentWorkbooks}
       <CurriculumTable
         workbooks={replenishedWorkbooks}
-        {workbookGradeModes}
+        {gradeModesEachWorkbook}
         {userId}
         {role}
         taskResults={taskResultsWithWorkBookId}

@@ -1,7 +1,7 @@
 <script lang="ts">
   import { Table, TableBody, TableBodyRow, TableHead, TableHeadCell } from 'flowbite-svelte';
 
-  import type { WorkbookTableProps } from '$features/workbooks/types/workbook';
+  import type { SolutionTableProps } from '$features/workbooks/types/workbook';
 
   import TitleTableHeadCell from '$features/workbooks/components/list/TitleTableHeadCell.svelte';
   import TitleTableBodyCell from '$features/workbooks/components/list/TitleTableBodyCell.svelte';
@@ -12,13 +12,7 @@
   import { canRead } from '$lib/utils/authorship';
   import { getTaskResult } from '$features/workbooks/utils/workbooks';
 
-  let {
-    workbooks,
-    workbookGradeModes: _,
-    userId,
-    role,
-    taskResults,
-  }: WorkbookTableProps = $props();
+  let { workbooks, userId, role, taskResults }: SolutionTableProps = $props();
 </script>
 
 <div class="overflow-auto rounded-md border border-gray-200 dark:border-gray-100">

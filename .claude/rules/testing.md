@@ -36,7 +36,7 @@ E2E test files must use the `.spec.ts` extension. `playwright.config.ts` matches
 ## Assertions
 
 - Use `toBe(true)` / `toBe(false)` over `toBeTruthy()` / `toBeFalsy()`
-- For DB query tests, assert `orderBy`, `include`, and other significant parameters with `expect.objectContaining` — not just `where`
+- For DB query tests, assert `orderBy`, `include`, and other significant parameters with `expect.objectContaining` — not just `where`. When a returned field (e.g. `authorName`) depends on an `include` relation, that `include` clause must be part of the assertion, or a regression in the query shape will go undetected
 - Enum membership: `in` traverses the prototype chain; use `Object.hasOwn(Enum, value)` instead
 - **E2E state transitions**: after an interaction that changes element state (active tab, toggle, selection), assert the _new_ state — not just that the element is visible, which may have been true before the interaction. Assert an active CSS class, `aria-selected`, or similar attribute instead of `toBeVisible()`
 
@@ -118,7 +118,51 @@ Stop the split if internal helpers (e.g. `fetchUnplacedWorkbooks`) would be frag
 
 Use Nock for external HTTP calls. See `src/test/lib/clients/` for examples.
 
-## Flowbite Toggle in E2E Tests
+## Test Order Mirrors Source Order
+
+Order `describe` blocks in service and utils test files to match the declaration order of functions in the source file. Misalignment makes it harder to cross-reference tests and implementation.
+
+## E2E Tests
+
+### No Path Aliases
+
+The `e2e/` directory is outside SvelteKit's build pipeline — `$lib`, `$features`, and other path aliases are not resolved. Define URL string values as local constants with a reference comment:
+
+```typescript
+// Mirrors WorkBookTab.SOLUTION from $features/workbooks/types/workbook
+const TAB_SOLUTION = 'solution';
+```
+
+Avoid importing types from `src/` in E2E test files.
+
+### Describe Hierarchy
+
+When a `describe` block for a user role grows large, split it by behavioral dimension rather than adding more flat `test()` calls:
+
+```typescript
+test.describe('logged-in user', () => {
+  test.describe('tab visibility', () => { ... });
+  test.describe('URL parameter handling', () => { ... });
+  test.describe('navigation interactions', () => { ... });
+  test.describe('session state', () => { ... });
+});
+```
+
+### Parameterized Tests
+
+Playwright has no native `test.each`. Use `for...of` loops — the official recommended pattern:
+
+```typescript
+// Mirrors TaskGrade from $lib/types/task — do not import from src/ in E2E files
+const GRADES = ['Q10', 'Q9', 'Q8'] as const;
+
+for (const grade of GRADES) {
+  await gradeButton(grade).click();
+  await expect(page).toHaveURL(`?grades=${grade}`);
+}
+```
+
+### Flowbite Toggle
 
 Flowbite's `Toggle` renders an `sr-only` `<input type="checkbox">` inside a `<label>`. Clicking the input directly fails because the visual `<span>` sibling intercepts pointer events. Click the label wrapper instead:
 

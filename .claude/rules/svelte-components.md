@@ -29,7 +29,27 @@ Use `$props()`, `$state()`, `$derived()`, `$effect()` in all components. Props p
 
 ## Flowbite Svelte
 
-Import from `flowbite-svelte`. Use Tailwind CSS v4 utility classes. Dark mode: `dark:` prefix.
+Import from `flowbite-svelte`. Use Tailwind CSS v4 utility classes. Dark mode: `dark:` prefix. Important modifier: `dark:text-xxx!` (v4 syntax) — the v3 form `dark:!text-xxx` is invalid.
+
+### ButtonGroup: No Responsive Wrapping
+
+`ButtonGroup` uses `flex` internally — buttons do not wrap on narrow screens. When wrapping is needed, use `<div class="flex flex-wrap gap-1">` with individual `Button` components (reference: `TaskTable.svelte`).
+
+When copying button styles from a reference component, always check all three axes: `color`, `size`, and `class`. Omitting `color` applies Flowbite's default (filled blue).
+
+## `let`/`const` — Reactive Data Requires `$derived`
+
+Plain `let` or `const` in Svelte 5 component `<script>` executes once at component creation. Values derived from props or server data must use `$derived()`:
+
+```md
+// Bad: captures only the initial value — won't update when data reloads
+let user = data.loggedInUser; const categories = availableCategories.filter(...);
+
+// Good
+let user = $derived(data.loggedInUser); let categories = $derived(availableCategories.filter(...));
+```
+
+`pnpm check` warns: "This reference only captures the initial value."
 
 ## `$state()` Initialization with `$props()`
 
@@ -107,15 +127,29 @@ replaceState(buildUpdatedUrl($page.url, activeTab), {});
 
 ## `{#each}` — Keys and Empty-list Fallback
 
-Always provide a key expression when the list or its items may change dynamically. This is especially critical when the block contains an inner `{#if}` — without a key, Svelte reuses DOM nodes by position, so filtering can silently bind data to the wrong element:
+Always provide a key expression when the list or its items may change dynamically.
+
+**Filter before `{#each}`, not inside it.** When visibility depends on a predicate (e.g. `canRead`), derive a filtered list once and iterate over it — never repeat the predicate inside a `{#if}` within the loop. This avoids computing the condition twice and keeps the template clean:
 
 ```svelte
-{#each workbooks as workbook (workbook.id)}
-  {#if canRead(workbook)}
-    <Row {workbook} />
+<!-- Bad: canRead computed twice — once for count, once in template -->
+let visibleCount = $derived(items.filter((i) => canRead(i)).length);
+
+{#each items as item (item.id)}
+  {#if canRead(item)}
+    <Row {item} />
   {/if}
 {/each}
+
+<!-- Good: filter once, iterate over the result -->
+let visibleItems = $derived(items.filter((i) => canRead(i)));
+
+{#each visibleItems as item (item.id)}
+  <Row {item} />
+{/each}
 ```
+
+An inner `{#if}` inside `{#each}` is still valid for conditions unrelated to list membership (e.g. feature flags, role checks that don't affect count).
 
 Use `{:else}` to render a placeholder when the list is empty — no wrapper conditional needed:
 

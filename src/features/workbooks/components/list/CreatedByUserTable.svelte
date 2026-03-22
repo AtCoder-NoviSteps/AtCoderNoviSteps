@@ -8,40 +8,39 @@
     TableHeadCell,
   } from 'flowbite-svelte';
 
-  import type { WorkbookTableProps } from '$features/workbooks/types/workbook';
+  import type { SolutionTableProps } from '$features/workbooks/types/workbook';
 
   import TitleTableHeadCell from '$features/workbooks/components/list/TitleTableHeadCell.svelte';
   import TitleTableBodyCell from '$features/workbooks/components/list/TitleTableBodyCell.svelte';
   import WorkbookProgressCell from '$features/workbooks/components/list/WorkbookProgressCell.svelte';
   import WorkbookCompletionCell from '$features/workbooks/components/list/WorkbookCompletionCell.svelte';
   import WorkbookAuthorActionsCell from '$features/workbooks/components/list/WorkbookAuthorActionsCell.svelte';
+  import EmptyWorkbookList from '$features/workbooks/components/list/EmptyWorkbookList.svelte';
 
   import { canRead } from '$lib/utils/authorship';
   import { getTaskResult } from '$features/workbooks/utils/workbooks';
 
-  let {
-    workbooks,
-    workbookGradeModes: _,
-    userId,
-    role,
-    taskResults,
-  }: WorkbookTableProps = $props();
+  let { workbooks, userId, role, taskResults }: SolutionTableProps = $props();
+
+  let visibleWorkbooks = $derived(
+    workbooks.filter((workbook) => canRead(workbook.isPublished, userId, workbook.authorId)),
+  );
 </script>
 
-<div class="overflow-auto rounded-md border border-gray-200 dark:border-gray-100">
-  <Table shadow class="text-md">
-    <TableHead class="text-sm bg-gray-100">
-      <TableHeadCell>作者</TableHeadCell>
-      <TitleTableHeadCell />
-      <TableHeadCell class="text-left min-w-[240px] max-w-[1440px] px-0">回答状況</TableHeadCell>
-      <TableHeadCell></TableHeadCell>
-      <TableHeadCell class="text-center px-0">修了</TableHeadCell>
-      <TableHeadCell></TableHeadCell>
-    </TableHead>
+{#if visibleWorkbooks.length >= 1}
+  <div class="overflow-auto rounded-md border border-gray-200 dark:border-gray-100">
+    <Table shadow class="text-md">
+      <TableHead class="text-sm bg-gray-100">
+        <TableHeadCell>作者</TableHeadCell>
+        <TitleTableHeadCell />
+        <TableHeadCell class="text-left min-w-[240px] max-w-[1440px] px-0">回答状況</TableHeadCell>
+        <TableHeadCell></TableHeadCell>
+        <TableHeadCell class="text-center px-0">修了</TableHeadCell>
+        <TableHeadCell></TableHeadCell>
+      </TableHead>
 
-    <TableBody class="divide-y divide-gray-200 dark:divide-gray-700">
-      {#each workbooks as workbook (workbook.id)}
-        {#if canRead(workbook.isPublished, userId, workbook.authorId)}
+      <TableBody class="divide-y divide-gray-200 dark:divide-gray-700">
+        {#each visibleWorkbooks as workbook (workbook.id)}
           <TableBodyRow>
             <TableBodyCell>
               <div class="truncate min-w-[96px] max-w-[120px]">
@@ -63,8 +62,10 @@
 
             <WorkbookAuthorActionsCell {workbook} {userId} {role} />
           </TableBodyRow>
-        {/if}
-      {/each}
-    </TableBody>
-  </Table>
-</div>
+        {/each}
+      </TableBody>
+    </Table>
+  </div>
+{:else}
+  <EmptyWorkbookList />
+{/if}

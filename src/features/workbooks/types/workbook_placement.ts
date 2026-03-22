@@ -1,6 +1,7 @@
 import type { SolutionCategory as SolutionCategoryOrigin } from '@prisma/client';
 import type { TaskGrade } from '$lib/types/task';
 import type { WorkBookTaskBase } from '$features/workbooks/types/workbook';
+import { WorkBookType as WorkBookTypeConst } from '$features/workbooks/types/workbook';
 
 // Categories for solution placement.
 export const SolutionCategory: { [key in SolutionCategoryOrigin]: key } = {
@@ -22,6 +23,9 @@ export const SolutionCategory: { [key in SolutionCategoryOrigin]: key } = {
 } as const;
 
 export type SolutionCategory = SolutionCategoryOrigin;
+
+/** Ordered list of solution categories used to filter SOLUTION workbooks. */
+export type SolutionCategories = SolutionCategory[];
 
 // Japanese labels for solution categories (used in admin UI)
 export const SOLUTION_LABELS: Record<string, string> = {
@@ -86,6 +90,14 @@ export type UnplacedCurriculumRow = {
 };
 
 export type UnplacedCurriculumRows = UnplacedCurriculumRow[];
+
+/**
+ * Discriminated union representing a placement-based filter query.
+ * CURRICULUM filters by taskGrade; SOLUTION filters by solutionCategory.
+ */
+export type PlacementQuery =
+  | { workBookType: typeof WorkBookTypeConst.CURRICULUM; taskGrade: TaskGrade }
+  | { workBookType: typeof WorkBookTypeConst.SOLUTION; solutionCategory: SolutionCategory };
 
 // Shape of workbooks returned from the load function for use in KanbanBoard
 export type WorkbookWithPlacement = {

@@ -1,6 +1,8 @@
 import type { DragDropManager, Draggable, Droppable } from '@dnd-kit/dom';
 import type { DragDropEvents } from '@dnd-kit/abstract';
 
+import type { WorkBookTab } from '$features/workbooks/types/workbook';
+
 // DnD event types derived from dnd-kit abstractions
 type DndEvents = DragDropEvents<Draggable, Droppable, DragDropManager>;
 
@@ -9,7 +11,8 @@ export type DragEndEventArg = Parameters<DndEvents['dragend']>[0];
 
 export type ColumnKey = 'solutionCategory' | 'taskGrade';
 
-export type ActiveTab = 'solution' | 'curriculum';
+/** Tabs available on the admin order page — excludes CREATED_BY_USER which has no placement config. */
+export type ActiveTab = Exclude<WorkBookTab, 'created_by_user'>;
 
 // Static per-tab configuration used to eliminate activeTab === 'solution' if-branches
 export type TabConfig = {

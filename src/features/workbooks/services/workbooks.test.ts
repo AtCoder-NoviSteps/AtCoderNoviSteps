@@ -1,7 +1,5 @@
 import { describe, test, expect, vi, beforeEach } from 'vitest';
 
-import { WorkBookType, type WorkBook } from '$features/workbooks/types/workbook';
-
 import {
   getWorkBook,
   getWorkBooksWithAuthors,
@@ -9,7 +7,13 @@ import {
   createWorkBook,
   updateWorkBook,
   deleteWorkBook,
+  getWorkbooksByPlacement,
+  getWorkBooksCreatedByUsers,
+  getAvailableSolutionCategories,
 } from './workbooks';
+import { TaskGrade } from '$lib/types/task';
+import { WorkBookType, type WorkBook } from '$features/workbooks/types/workbook';
+import { SolutionCategory } from '$features/workbooks/types/workbook_placement';
 
 vi.mock('$lib/server/database', () => ({
   default: {
@@ -23,6 +27,9 @@ vi.mock('$lib/server/database', () => ({
     },
     workBookTask: {
       deleteMany: vi.fn(),
+    },
+    workBookPlacement: {
+      findMany: vi.fn(),
     },
     $transaction: vi.fn(),
   },
@@ -76,7 +83,7 @@ function mockFindUnique(value: PrismaWorkBook) {
   vi.mocked(prisma.workBook.findUnique).mockResolvedValue(value);
 }
 
-function mockFindMany(value: PrismaWorkBookWithUser[]) {
+function mockFindMany(value: object[]) {
   vi.mocked(prisma.workBook.findMany).mockResolvedValue(
     value as unknown as Awaited<ReturnType<typeof prisma.workBook.findMany>>,
   );
@@ -98,6 +105,209 @@ function mockDelete(value: NonNullable<PrismaWorkBook>) {
   vi.mocked(prisma.workBook.delete).mockResolvedValue(value);
 }
 
+describe('getWorkBooksWithAuthors', () => {
+  test('maps username to authorName', async () => {
+    const workBook = prepareWorkBook({ id: 1 });
+    mockFindMany([asPrismaWorkBookWithUser(workBook, { username: 'alice' })]);
+
+    const result = await getWorkBooksWithAuthors();
+
+    expect(result[0].authorName).toBe('alice');
+  });
+
+  test('uses "unknown" as authorName when author is deleted', async () => {
+    const workBook = prepareWorkBook({ id: 2 });
+    mockFindMany([asPrismaWorkBookWithUser(workBook, null)]);
+
+    const result = await getWorkBooksWithAuthors();
+
+    expect(result[0].authorName).toBe('unknown');
+  });
+});
+
+const MOCK_WORKBOOK_BASE = {
+  id: 1,
+  title: 'Test workbook',
+  isPublished: true,
+  isReplenished: false,
+  isOfficial: true,
+  authorId: 'user1',
+  description: '',
+  editorialUrl: '',
+  urlSlug: null,
+  createdAt: new Date(),
+  updatedAt: new Date(),
+  workBookTasks: [],
+  user: { username: 'author1' },
+};
+
+describe('getWorkbooksByPlacement', () => {
+  test('filters CURRICULUM workbooks by taskGrade with priority asc order', async () => {
+    mockFindMany([{ ...MOCK_WORKBOOK_BASE, workBookType: WorkBookType.CURRICULUM }]);
+
+    const result = await getWorkbooksByPlacement({
+      workBookType: WorkBookType.CURRICULUM,
+      taskGrade: TaskGrade.Q10,
+    });
+
+    expect(prisma.workBook.findMany).toHaveBeenCalledWith(
+      expect.objectContaining({
+        where: expect.objectContaining({
+          workBookType: WorkBookType.CURRICULUM,
+          isPublished: true,
+          placement: { taskGrade: TaskGrade.Q10 },
+        }),
+        orderBy: { placement: { priority: 'asc' } },
+        include: {
+          user: { select: { username: true } },
+          workBookTasks: { orderBy: { priority: 'asc' } },
+        },
+      }),
+    );
+    expect(result[0].authorName).toBe('author1');
+  });
+
+  test('excludes unpublished workbooks by default (includeUnpublished = false)', async () => {
+    mockFindMany([{ ...MOCK_WORKBOOK_BASE, workBookType: WorkBookType.CURRICULUM }]);
+
+    await getWorkbooksByPlacement(
+      { workBookType: WorkBookType.CURRICULUM, taskGrade: TaskGrade.Q10 },
+      false,
+    );
+
+    expect(prisma.workBook.findMany).toHaveBeenCalledWith(
+      expect.objectContaining({
+        where: expect.objectContaining({ isPublished: true }),
+      }),
+    );
+  });
+
+  test('includes unpublished workbooks when includeUnpublished = true', async () => {
+    mockFindMany([{ ...MOCK_WORKBOOK_BASE, workBookType: WorkBookType.CURRICULUM }]);
+
+    await getWorkbooksByPlacement(
+      { workBookType: WorkBookType.CURRICULUM, taskGrade: TaskGrade.Q10 },
+      true,
+    );
+
+    const callArg = vi.mocked(prisma.workBook.findMany).mock.calls[0][0];
+    expect(callArg?.where).not.toHaveProperty('isPublished');
+  });
+
+  test('filters SOLUTION workbooks by solutionCategory', async () => {
+    mockFindMany([{ ...MOCK_WORKBOOK_BASE, workBookType: WorkBookType.SOLUTION }]);
+
+    await getWorkbooksByPlacement({
+      workBookType: WorkBookType.SOLUTION,
+      solutionCategory: SolutionCategory.GRAPH,
+    });
+
+    expect(prisma.workBook.findMany).toHaveBeenCalledWith(
+      expect.objectContaining({
+        where: expect.objectContaining({
+          workBookType: WorkBookType.SOLUTION,
+          placement: { solutionCategory: SolutionCategory.GRAPH },
+        }),
+      }),
+    );
+  });
+
+  test('maps null user to authorName "unknown"', async () => {
+    mockFindMany([{ ...MOCK_WORKBOOK_BASE, workBookType: WorkBookType.CURRICULUM, user: null }]);
+
+    const result = await getWorkbooksByPlacement({
+      workBookType: WorkBookType.CURRICULUM,
+      taskGrade: TaskGrade.Q10,
+    });
+
+    expect(result[0].authorName).toBe('unknown');
+  });
+});
+
+describe('getWorkBooksCreatedByUsers', () => {
+  test('queries only CREATED_BY_USER type workbooks ordered by id asc', async () => {
+    mockFindMany([{ ...MOCK_WORKBOOK_BASE, workBookType: WorkBookType.CREATED_BY_USER }]);
+
+    await getWorkBooksCreatedByUsers();
+
+    expect(prisma.workBook.findMany).toHaveBeenCalledWith(
+      expect.objectContaining({
+        where: { workBookType: WorkBookType.CREATED_BY_USER },
+        orderBy: { id: 'asc' },
+        include: {
+          user: { select: { username: true } },
+          workBookTasks: { orderBy: { priority: 'asc' } },
+        },
+      }),
+    );
+  });
+
+  test('maps null user to authorName "unknown"', async () => {
+    mockFindMany([
+      { ...MOCK_WORKBOOK_BASE, workBookType: WorkBookType.CREATED_BY_USER, user: null },
+    ]);
+
+    const result = await getWorkBooksCreatedByUsers();
+
+    expect(result[0].authorName).toBe('unknown');
+  });
+});
+
+describe('getAvailableSolutionCategories', () => {
+  test('returns distinct non-null solutionCategory values', async () => {
+    vi.mocked(prisma.workBookPlacement.findMany).mockResolvedValue([
+      { solutionCategory: SolutionCategory.GRAPH },
+      { solutionCategory: SolutionCategory.DYNAMIC_PROGRAMMING },
+    ] as unknown as Awaited<ReturnType<typeof prisma.workBookPlacement.findMany>>);
+
+    const result = await getAvailableSolutionCategories();
+
+    expect(result).toEqual([SolutionCategory.GRAPH, SolutionCategory.DYNAMIC_PROGRAMMING]);
+  });
+
+  test('excludes null solutionCategory entries', async () => {
+    vi.mocked(prisma.workBookPlacement.findMany).mockResolvedValue([
+      { solutionCategory: SolutionCategory.GRAPH },
+      { solutionCategory: null },
+    ] as unknown as Awaited<ReturnType<typeof prisma.workBookPlacement.findMany>>);
+
+    const result = await getAvailableSolutionCategories();
+
+    expect(result).toEqual([SolutionCategory.GRAPH]);
+  });
+
+  test('passes isPublished: true filter by default', async () => {
+    vi.mocked(prisma.workBookPlacement.findMany).mockResolvedValue([]);
+
+    await getAvailableSolutionCategories();
+
+    expect(prisma.workBookPlacement.findMany).toHaveBeenCalledWith(
+      expect.objectContaining({
+        where: expect.objectContaining({
+          workBook: expect.objectContaining({ isPublished: true }),
+        }),
+      }),
+    );
+  });
+
+  test('omits isPublished filter when includeUnpublished is true', async () => {
+    vi.mocked(prisma.workBookPlacement.findMany).mockResolvedValue([
+      { solutionCategory: SolutionCategory.GRAPH },
+    ] as unknown as Awaited<ReturnType<typeof prisma.workBookPlacement.findMany>>);
+
+    const result = await getAvailableSolutionCategories(true);
+
+    expect(result).toEqual([SolutionCategory.GRAPH]);
+    expect(prisma.workBookPlacement.findMany).toHaveBeenCalledWith(
+      expect.objectContaining({
+        where: expect.objectContaining({
+          workBook: expect.not.objectContaining({ isPublished: expect.anything() }),
+        }),
+      }),
+    );
+  });
+});
+
 describe('getWorkBook', () => {
   test('returns workbook when found', async () => {
     const workBook = prepareWorkBook({ id: 42 });
@@ -117,26 +327,6 @@ describe('getWorkBook', () => {
     const result = await getWorkBook(999);
 
     expect(result).toBeNull();
-  });
-});
-
-describe('getWorkBooksWithAuthors', () => {
-  test('maps username to authorName', async () => {
-    const workBook = prepareWorkBook({ id: 1 });
-    mockFindMany([asPrismaWorkBookWithUser(workBook, { username: 'alice' })]);
-
-    const result = await getWorkBooksWithAuthors();
-
-    expect(result[0].authorName).toBe('alice');
-  });
-
-  test('uses "unknown" as authorName when author is deleted', async () => {
-    const workBook = prepareWorkBook({ id: 2 });
-    mockFindMany([asPrismaWorkBookWithUser(workBook, null)]);
-
-    const result = await getWorkBooksWithAuthors();
-
-    expect(result[0].authorName).toBe('unknown');
   });
 });
 

@@ -55,11 +55,14 @@ export type WorkBookType = WorkBookTypeOrigin;
 // Imported by table components — avoids repeating the same Props definition in three places.
 export type WorkbookTableProps = {
   workbooks: WorkbooksList;
-  workbookGradeModes: Map<number, TaskGrade>;
+  gradeModesEachWorkbook: Map<number, TaskGrade>;
   userId: string;
   role: Roles;
   taskResults: Map<number, TaskResults>;
 };
+
+/** Imported by SolutionTable and CreatedByUserTable — excludes gradeModesEachWorkbook which is unused in those tabs. */
+export type SolutionTableProps = Omit<WorkbookTableProps, 'gradeModesEachWorkbook'>;
 
 export type WorkBookTaskBase = {
   taskId: string;
@@ -85,3 +88,15 @@ export type WorkBookTasksCreate = WorkBookTaskCreate[];
 export type WorkBookTaskEdit = WorkBookTaskCreate;
 
 export type WorkBookTasksEdit = WorkBookTaskEdit[];
+
+/** Valid values for the `?tab=` URL parameter on the /workbooks page. */
+export const WorkBookTab = {
+  CURRICULUM: 'curriculum',
+  SOLUTION: 'solution',
+  CREATED_BY_USER: 'created_by_user',
+} as const;
+
+export type WorkBookTab = (typeof WorkBookTab)[keyof typeof WorkBookTab];
+
+/** Default tab when the URL parameter is absent. */
+export const DEFAULT_WORKBOOK_TAB: WorkBookTab = WorkBookTab.CURRICULUM;
