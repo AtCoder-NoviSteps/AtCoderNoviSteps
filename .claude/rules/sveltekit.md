@@ -32,9 +32,17 @@ const homeHref = resolve('/');
 
 **External links** — add `rel="noreferrer external"` instead of wrapping with `resolve()`.
 
-**Do not pass query strings to `resolve()`** — `resolve()` accepts route patterns only (e.g. `'/workbooks'`). A path like `'/workbooks?tab=foo'` is not a valid route pattern and causes a type error. Split path and search before passing: `resolve(url.pathname) + url.search`.
+**With query string or hash** — `svelte/no-navigation-without-resolve` (eslint-plugin-svelte 3.16.0+) requires the _entire_ first argument to be a direct `resolve()` call. Concatenating `resolve(path) + search` is now rejected. Pass path, search, and hash as a single concatenated string inside `resolve()`:
 
-**Do not apply `resolve()` to URLs derived from `$page.url`** — `$page.url` is the actual browser URL with the base path already applied. Wrapping a value derived from it with `resolve()` double-applies the base path. Pass the `URL` object directly to `replaceState` or extract `.pathname + .search` without `resolve()`.
+```typescript
+// Bad — rejected by eslint-plugin-svelte 3.16.0+
+goto(resolve(url.pathname) + url.search);
+replaceState(resolve(url.pathname) + url.search + url.hash, state);
+
+// Good
+goto(resolve(url.pathname + url.search));
+replaceState(resolve(url.pathname + url.search + url.hash), state);
+```
 
 ## Page Component Props
 

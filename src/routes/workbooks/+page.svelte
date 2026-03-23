@@ -51,7 +51,7 @@
     if (saved) {
       const savedUrl = new URL(saved, window.location.origin);
       // @ts-expect-error svelte-check TS2554: AppTypes declaration merging causes RouteId to resolve as string, requiring params. Runtime behavior is correct.
-      goto(resolve(savedUrl.pathname) + savedUrl.search, { replaceState: true });
+      goto(resolve(savedUrl.pathname + savedUrl.search), { replaceState: true });
     }
   });
 

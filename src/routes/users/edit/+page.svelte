@@ -22,10 +22,13 @@
       message_type: string;
       message: string;
     };
-    status?: string;
   }
 
-  let { data, status = $bindable('nothing') }: Props = $props();
+  let { data }: Props = $props();
+  // TODO: Restore when AtCoderUserValidationForm is re-enabled (svelte/valid-prop-names-in-kit-pages requires $bindable props to be declared in Props):
+  //   interface Props { ...; status?: string; }
+  //   let { data, status = $bindable('nothing') }: Props = $props();
+  // let status = $state('nothing');
 
   let role = data.role;
   let username = data.username;
@@ -35,12 +38,12 @@
   let message = data.message;
   let message_type = data.message_type;
 
-  if (data.is_validated) {
-    status = 'validated';
-  }
-  if (data.atcoder_username.length > 0 && data.atcoder_validationcode.length > 0) {
-    status = 'generated';
-  }
+  // if (data.is_validated) {
+  //   status = 'validated';
+  // }
+  // if (data.atcoder_username.length > 0 && data.atcoder_validationcode.length > 0) {
+  //   status = 'generated';
+  // }
 
   const isGeneralUser = (userRole: Roles, userName: string) => {
     return userRole === Roles.USER && userName !== 'guest';

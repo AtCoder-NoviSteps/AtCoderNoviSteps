@@ -61,7 +61,7 @@
       selectedGrades,
     );
     // @ts-expect-error svelte-check TS2554: AppTypes declaration merging causes RouteId to resolve as string, requiring params. Runtime behavior is correct.
-    replaceState(resolve(updatedUrl.pathname) + updatedUrl.search + updatedUrl.hash, $page.state);
+    replaceState(resolve(updatedUrl.pathname + updatedUrl.search + updatedUrl.hash), $page.state);
   }
 
   let allItems = $state<Record<string, KanbanColumns>>(
