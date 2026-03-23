@@ -41,7 +41,7 @@
     </TableHead>
 
     <TableBody class="divide-y divide-gray-200 dark:divide-gray-700">
-      {#each gradeGuidelineTableData as { point, task, lowerGrade, upperGrade }}
+      {#each gradeGuidelineTableData as { point, task, lowerGrade, upperGrade } (point)}
         <TableBodyRow>
           <TableBodyCell class="text-sm xs:text-md text-center py-3">{point}</TableBodyCell>
           <TableBodyCell class="text-center py-3 hidden sm:table-cell">{task}</TableBodyCell>

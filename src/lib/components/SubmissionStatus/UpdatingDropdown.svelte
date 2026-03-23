@@ -20,6 +20,7 @@
 -->
 <script lang="ts">
   import { enhance } from '$app/forms';
+  import { resolve } from '$app/paths';
 
   import { Dropdown, DropdownItem, DropdownDivider } from 'flowbite-svelte';
   import Check from '@lucide/svelte/icons/check';
@@ -41,6 +42,11 @@
   }
 
   let { taskResult, isLoggedIn, onupdate }: Props = $props();
+
+  // @ts-expect-error svelte-check TS2554: AppTypes declaration merging causes RouteId to resolve as string, requiring params. Runtime behavior is correct.
+  const signupHref = resolve(SIGNUP_PAGE);
+  // @ts-expect-error svelte-check TS2554: AppTypes declaration merging causes RouteId to resolve as string, requiring params. Runtime behavior is correct.
+  const loginHref = resolve(LOGIN_PAGE);
 
   const componentId = Math.random().toString(36).substring(2);
   let isInBottomHalf = $state(false);
@@ -198,7 +204,7 @@
   class="w-32 z-50 border border-gray-200 dark:border-gray-100"
 >
   {#if isLoggedIn}
-    {#each submissionStatusOptions as submissionStatus}
+    {#each submissionStatusOptions as submissionStatus (submissionStatus.innerName)}
       <DropdownItem onclick={() => handleClick(submissionStatus)} class="rounded-md">
         <div
           class="flex items-center justify-between w-full text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white"
@@ -211,9 +217,9 @@
       </DropdownItem>
     {/each}
   {:else}
-    <DropdownItem href={SIGNUP_PAGE} class="rounded-md">アカウント作成</DropdownItem>
+    <DropdownItem href={signupHref} class="rounded-md">アカウント作成</DropdownItem>
     <DropdownDivider />
-    <DropdownItem href={LOGIN_PAGE} class="rounded-md">ログイン</DropdownItem>
+    <DropdownItem href={loginHref} class="rounded-md">ログイン</DropdownItem>
   {/if}
 </Dropdown>
 

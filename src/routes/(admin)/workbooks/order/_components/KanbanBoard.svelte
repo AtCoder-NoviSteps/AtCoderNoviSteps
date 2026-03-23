@@ -53,10 +53,13 @@
   ]);
 
   function updateUrl() {
-    replaceState(
-      buildUpdatedUrl($page.url, activeTab, selectedSolutionCategories, selectedGrades),
-      {},
+    const updatedUrl = buildUpdatedUrl(
+      $page.url,
+      activeTab,
+      selectedSolutionCategories,
+      selectedGrades,
     );
+    replaceState(updatedUrl, {});
   }
 
   let allItems = $state<Record<string, KanbanColumns>>(
@@ -150,7 +153,7 @@
     <!-- Note: Snippets are intentional: extracting these as components would require passing too many props. -->
     {#snippet solutionBoard()}
       <div class="flex gap-3 overflow-x-auto pb-4">
-        {#each displayedSolutionCategories as column}
+        {#each displayedSolutionCategories as column (column)}
           <KanbanColumn
             columnId={column}
             label={TAB_CONFIGS['solution'].labelFn(column)}
@@ -163,7 +166,7 @@
 
     {#snippet curriculumBoard()}
       <div class="flex gap-3 overflow-x-auto pb-4">
-        {#each selectedGrades as column}
+        {#each selectedGrades as column (column)}
           <KanbanColumn
             columnId={column}
             label={TAB_CONFIGS['curriculum'].labelFn(column)}

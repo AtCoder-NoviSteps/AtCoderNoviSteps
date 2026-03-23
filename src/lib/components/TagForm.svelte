@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { resolve } from '$app/paths';
+
   import {
     Table,
     TableBody,
@@ -26,11 +28,14 @@
   let name: string = $state(tag.name);
 
   //export const isAdmin: boolean; // Admin権限がある場合は、編集リンクを表示する
+
+  // @ts-expect-error svelte-check TS2554: AppTypes declaration merging causes RouteId to resolve as string, requiring params. Runtime behavior is correct.
+  const tagsHref = resolve('/(admin)/tags');
 </script>
 
 <!-- TODO: レスポンシブ対応 -->
 <!-- TODO: Tagを修正するためのフォームを用意する -->
-<a href="/tags"> タグ一覧へもどる（パンくずリストにしたい） </a>
+<a href={tagsHref}> タグ一覧へもどる（パンくずリストにしたい） </a>
 <br />
 Edit Tag
 <form method="POST" action="/tags?/update">
@@ -83,21 +88,21 @@ Edit Tag
   </TableHead>
 
   <TableBody class="divide-y divide-gray-200 dark:divide-gray-700">
-    {#each tasks as task}
+    {#each tasks as task (task.task_id)}
       <TableBodyRow>
         <TableBodyCell>
           <a
             href="{ATCODER_BASE_CONTEST_URL}/{task.contest_id}"
             class="font-medium text-primary-600 hover:underline dark:text-primary-500"
             target="_blank"
-            rel="noreferrer"
+            rel="noreferrer external"
           >
             {getContestNameLabel(task.contest_id)}
           </a>
         </TableBodyCell>
         <TableBodyCell>
           <a
-            href="/problems/{task.task_id}"
+            href={resolve('/problems/[slug]', { slug: task.task_id })}
             class="font-medium text-primary-600 hover:underline dark:text-primary-500"
           >
             {task.title}
@@ -105,7 +110,7 @@ Edit Tag
         </TableBodyCell>
         <TableBodyCell>
           <a
-            href="/tasks/{task.task_id}"
+            href={resolve('/(admin)/tasks/[task_id]', { task_id: task.task_id })}
             class="font-medium text-primary-600 hover:underline dark:text-primary-500"
           >
             編集

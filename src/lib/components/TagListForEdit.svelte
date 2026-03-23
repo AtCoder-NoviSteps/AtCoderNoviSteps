@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { resolve } from '$app/paths';
+
   import {
     Table,
     TableBody,
@@ -10,6 +12,7 @@
   } from 'flowbite-svelte';
   import type { Tag } from '$lib/types/tag';
   //import { ATCODER_BASE_CONTEST_URL } from '$lib/constants/urls';
+
   import { newline } from '$lib/utils/newline';
   //import { tasks } from '../server/sample_data';
 
@@ -35,11 +38,11 @@
     <TableHeadCell class="w-1/8"></TableHeadCell>
   </TableHead>
   <TableBody class="divide-y divide-gray-200 dark:divide-gray-700">
-    {#each tags as tag}
+    {#each tags as tag (tag.id)}
       <TableBodyRow>
         <TableBodyCell class="p-3">
           <Label>
-            {#each newline(tag.name, 10) as line}
+            {#each newline(tag.name, 10) as line, i (i)}
               {line}<br />
             {/each}
           </Label>
@@ -57,7 +60,7 @@
         </TableBodyCell>
         <TableBodyCell>
           {#if tag.id !== 'undefined'}
-            <a href="/tags/{tag.id}">編集</a>
+            <a href={resolve('/(admin)/tags/[tag_id]', { tag_id: tag.id })}>編集</a>
           {:else}
             未登録
           {/if}

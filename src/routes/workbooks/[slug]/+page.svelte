@@ -31,11 +31,7 @@
 
   let workBook = data.workBook;
   let workBookTasks: WorkBookTaskBase[] = $state([]);
-  let taskResults: Map<string, TaskResult> = $state(new Map());
-
-  $effect(() => {
-    taskResults = data.taskResults;
-  });
+  let taskResults: Map<string, TaskResult> = $derived(data.taskResults);
 
   let isLoggedIn = data.isLoggedIn;
 
@@ -159,7 +155,7 @@
           <TableHeadCell class="w-14 text-center px-0.5">一言</TableHeadCell>
         </TableHead>
         <TableBody class="divide-y divide-gray-200 dark:divide-gray-700">
-          {#each workBookTasks as workBookTask}
+          {#each workBookTasks as workBookTask (workBookTask.taskId)}
             <TableBodyRow
               id={getUniqueIdUsing(workBookTask.taskId)}
               class={getBackgroundColorFrom(getTaskResult(workBookTask.taskId).status_name)}

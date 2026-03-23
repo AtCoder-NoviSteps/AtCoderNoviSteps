@@ -75,7 +75,7 @@ Shared helper functions (used by two or more exports) should be grouped at the e
 
 Write all project documentation (plans, dev-notes, guides, refactor notes) in Japanese. Write all source code comments, TSDoc, commit messages, and test titles in English. This keeps documentation readable for the team while keeping code comments universally accessible and searchable.
 
-**Exception**: The `## CodeRabbit Findings` section in `refactor.md` must quote findings verbatim in their original language (English). Do not translate CodeRabbit output.
+**Exception**: The `## CodeRabbit Findings` section in `plan.md` must quote findings verbatim in their original language (English). Do not translate CodeRabbit output.
 
 ### TSDoc
 
@@ -106,23 +106,6 @@ Examples:
 - Stores usage → `https://svelte.dev/docs/svelte/stores`
 - Runes overview → `https://svelte.dev/docs/svelte/what-are-runes`
 
-## SvelteKit Patterns
-
-### Routes vs API Endpoints
-
-- Page routes (`+page.server.ts`): use `redirect()` to navigate
-- API routes (`+server.ts`): use `error()` — throwing `redirect()` returns a 3xx response; `fetch` follows it by default and receives the HTML page at the redirect target instead of a JSON error
-
-### Dual-Enforcement Constraints
-
-When the same constraint is enforced in two layers (e.g. Zod validation + SQL `CHECK`), add an inline comment stating each layer's role and the obligation to keep them in sync:
-
-```typescript
-// XOR constraint: dual enforcement via Zod (early validation) and a CHECK in migration.sql (last line of defense).
-// Prisma lacks @@check, so the SQL constraint is maintained manually. Keep both in sync.
-.refine(...)
-```
-
 ## Security
 
 ### Server-side Logging
@@ -139,30 +122,6 @@ console.log('Workbook created successfully');
 
 Prefer placing the single authoritative log in the service layer; remove duplicate logs in route handlers that cover the same event.
 
-## Svelte Patterns
-
-### Async Rollback: Capture State Before `await`
-
-Capture `$state` values before the first `await` for safe rollback. A concurrent update can overwrite the variable while awaiting:
-
-```typescript
-const previous = items; // capture before await
-try {
-  await saveToServer(items);
-} catch {
-  items = previous;
-}
-```
-
-### Optimistic Updates
-
-Derive computed fields (flags, labels, etc.) from the canonical data source — don't
-re-implement the derivation inline. Divergence causes a "works after reload" bug where
-the server state is correct but the client-side update is wrong.
-
-**Diagnostic**: "Not reflected live, but fixed after reload" → suspect the optimistic
-update payload, not the reactivity system.
-
 ## Code Review
 
 ### CodeRabbit Review: Severity Triage
@@ -171,7 +130,7 @@ Run `coderabbit review --plain` once after all phases are complete (not on every
 
 **Triage by severity:**
 
-- **critical / high / potential_issue (medium)**: Write all findings verbatim to a `## CodeRabbit Findings` section in `refactor.md`. The user decides which to fix before opening the PR. Do not fix any of these findings unilaterally.
+- **critical / high / potential_issue (medium)**: Write all findings verbatim to a `## CodeRabbit Findings` section in `plan.md`. The user decides which to fix before opening the PR. Do not fix any of these findings unilaterally.
 - **nitpick / info**: Defer to PR CI — CodeRabbit will re-comment on the open PR.
 
-Writing medium-and-above findings to `refactor.md` serves a dual purpose: it gives the user full visibility for a fix/defer decision, and it builds the implementer's understanding of recurring quality issues.
+Writing medium-and-above findings to `plan.md` serves a dual purpose: it gives the user full visibility for a fix/defer decision, and it builds the implementer's understanding of recurring quality issues.

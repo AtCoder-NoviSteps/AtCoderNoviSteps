@@ -50,7 +50,7 @@
       {@render navLiForDropdown('nav-dashboard', '管理画面')}
 
       <Dropdown triggeredBy="#nav-dashboard" simple class="w-48 z-20">
-        {#each navbarDashboardLinks as navbarDashboardLink}
+        {#each navbarDashboardLinks as navbarDashboardLink (navbarDashboardLink.path)}
           <DropdownItem href={navbarDashboardLink.path}>
             {navbarDashboardLink.title}
           </DropdownItem>
@@ -59,7 +59,7 @@
     {/if}
 
     <!-- Internal Links -->
-    {#each navbarLinks as navbarLink}
+    {#each navbarLinks as navbarLink (navbarLink.path)}
       <NavLi
         href={navbarLink.path}
         class="flex items-center"
@@ -107,7 +107,7 @@
     {@render navLiForDropdown('nav-external-links', '外部リンク')}
 
     <Dropdown triggeredBy="#nav-external-links" simple class="w-48 z-20">
-      {#each externalLinks as externalLink}
+      {#each externalLinks as externalLink (externalLink.path)}
         <DropdownItem href={externalLink.path} target="_blank">
           {externalLink.title}
         </DropdownItem>

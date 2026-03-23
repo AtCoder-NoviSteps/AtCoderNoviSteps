@@ -35,7 +35,7 @@
 <!-- TODO: Split files if needs. -->
 {#snippet coreFeatures()}
   <List tag="ul" class="text-gray-800 dark:text-gray-300 ml-6 space-y-1">
-    {#each features as feature}
+    {#each features as feature (feature.description)}
       <Li>{feature.description}</Li>
     {/each}
   </List>
@@ -137,7 +137,7 @@
 
 {#snippet developmentMembers()}
   <List tag="ul" class="text-gray-800 dark:text-gray-300 ml-6 space-y-1">
-    {#each members as member}
+    {#each members as member (member.account)}
       <Li>
         <ExternalLinkWrapper url={member.account} description={member.name} />
       </Li>

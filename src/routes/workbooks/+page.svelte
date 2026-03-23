@@ -1,6 +1,8 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import { goto } from '$app/navigation';
+  import { resolve } from '$app/paths';
+
   import { Button, Tabs } from 'flowbite-svelte';
 
   import { Roles } from '$lib/types/user';
@@ -47,7 +49,9 @@
     const saved = sessionStorage.getItem(WORKBOOKS_URL_KEY);
 
     if (saved) {
-      goto(saved, { replaceState: true });
+      const savedUrl = new URL(saved, window.location.origin);
+      // @ts-expect-error svelte-check TS2554: AppTypes declaration merging causes RouteId to resolve as string, requiring params. Runtime behavior is correct.
+      goto(resolve(savedUrl.pathname) + savedUrl.search, { replaceState: true });
     }
   });
 
@@ -65,15 +69,18 @@
   };
 
   function handleTabChange(tab: WorkBookTab) {
-    goto(TAB_URL_BUILDERS[tab]());
+    // @ts-expect-error svelte-check TS2554: same declaration merging issue
+    goto(resolve(TAB_URL_BUILDERS[tab]()));
   }
 
   function handleGradeChange(grade: TaskGrade) {
-    goto(buildWorkbooksUrl(WorkBookTab.CURRICULUM, grade));
+    // @ts-expect-error svelte-check TS2554: same declaration merging issue
+    goto(resolve(buildWorkbooksUrl(WorkBookTab.CURRICULUM, grade)));
   }
 
   function handleCategoryChange(category: SolutionCategory) {
-    goto(buildWorkbooksUrl(WorkBookTab.SOLUTION, undefined, category));
+    // @ts-expect-error svelte-check TS2554: same declaration merging issue
+    goto(resolve(buildWorkbooksUrl(WorkBookTab.SOLUTION, undefined, category)));
   }
 </script>
 

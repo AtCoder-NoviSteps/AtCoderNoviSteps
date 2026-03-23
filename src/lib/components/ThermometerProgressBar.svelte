@@ -17,8 +17,6 @@
 
   let { workBookTasks = [], taskResults, width = 'w-7/12 md:w-8/12 lg:w-9/12' }: Props = $props();
 
-  let submissionRatios: SubmissionRatios = $state([]);
-  let submissionCounts: SubmissionCounts = $state([]);
   let progressBarId = `progress-bar-${Math.floor(Math.random() * 10000)}`;
 
   const filteredStatuses = submission_statuses.filter((status) => status.status_name !== 'ns');
@@ -44,8 +42,8 @@
     'shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center';
 
   // TODO: ユーザの設定に応じて、ACかどうかの判定を変更できるようにする
-  $effect(() => {
-    submissionRatios = filteredStatuses.map((status) => {
+  let submissionRatios: SubmissionRatios = $derived(
+    filteredStatuses.map((status) => {
       const name = status.status_name;
       const ratioPercent = getRatioPercent(taskResults, name);
 
@@ -54,10 +52,10 @@
         ratioPercent: ratioPercent,
         color: status.background_color,
       };
-    });
-  });
-  $effect(() => {
-    submissionCounts = filteredStatuses.map((status) => {
+    }),
+  );
+  let submissionCounts: SubmissionCounts = $derived(
+    filteredStatuses.map((status) => {
       const name = status.status_name;
       const taskCount = getTaskCount(taskResults, name);
       const ratioPercent = getRatioPercent(taskResults, name);
@@ -67,8 +65,8 @@
         count: taskCount,
         ratioPercent: ratioPercent,
       };
-    });
-  });
+    }),
+  );
 </script>
 
 <!-- HACK: Flowbite Svelte にある Progressbar では 回答状況に合わせた内訳を表示できないので、HTML + tailwindcss で実装 -->
@@ -79,7 +77,7 @@
   <div class="rounded-full h-6">
     <span id={progressBarId}>
       <div class="overflow-hidden h-6 flex rounded-full bg-white dark:bg-gray-800">
-        {#each submissionRatios as submissionRatio}
+        {#each submissionRatios as submissionRatio (submissionRatio.name)}
           <div
             style="width: {submissionRatio.ratioPercent}%"
             class={`${baseAttributes} ${submissionRatio.color}`}
@@ -96,7 +94,7 @@
   placement="top-start"
   class={`max-w-[200px] ${TOOLTIP_CLASS_BASE}`}
 >
-  {#each submissionCounts as submissionCount}
+  {#each submissionCounts as submissionCount (submissionCount.name)}
     <div class="flex">
       <span class="w-14">{submissionCount.name}</span>
       <span class="w-2">: </span>

@@ -1,6 +1,4 @@
 <script lang="ts">
-  import { run } from 'svelte/legacy';
-
   import TaskList from '$lib/components/TaskList.svelte';
 
   import type { TaskResults, TaskResult } from '$lib/types/task';
@@ -15,22 +13,17 @@
   let { taskResults, isAdmin, isLoggedIn }: Props = $props();
 
   // TODO: 共通する内容はutilsに移動させる。
-  let taskResultsForEachGrade = $state(new Map());
-
-  // HACK: $effectだと更新されないため、やむなくrunを使用。
-  run(() => {
-    taskResultsForEachGrade = new Map();
-
-    taskGradeValues.map((grade) => {
-      taskResultsForEachGrade.set(
+  const taskResultsForEachGrade = $derived(
+    new Map(
+      taskGradeValues.map((grade): [TaskGrade, TaskResults] => [
         grade,
         taskResults.filter((taskResult: TaskResult) => taskResult.grade === grade),
-      );
-    });
-  });
+      ]),
+    ),
+  );
 
   const countTasks = (taskGrade: TaskGrade) => {
-    return taskResultsForEachGrade.get(taskGrade).length;
+    return taskResultsForEachGrade.get(taskGrade)?.length ?? 0;
   };
 
   const isShowTaskList = (isAdmin: boolean, taskGrade: TaskGrade): boolean => {
@@ -46,13 +39,13 @@
   };
 </script>
 
-{#each taskGradeValues as taskGrade}
+{#each taskGradeValues as taskGrade (taskGrade)}
   <!-- Pendingは、Adminのみ表示。-->
   <!-- HACK: Svelteでcontinueに相当する構文は確認できず(2024年1月時点)。 -->
   {#if countTasks(taskGrade) && isShowTaskList(isAdmin, taskGrade)}
     <TaskList
       grade={taskGrade}
-      taskResults={taskResultsForEachGrade.get(taskGrade)}
+      taskResults={taskResultsForEachGrade.get(taskGrade)!}
       {isAdmin}
       {isLoggedIn}
     />

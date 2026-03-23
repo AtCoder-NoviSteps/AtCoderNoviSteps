@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { resolve } from '$app/paths';
+
   import {
     AccordionItem,
     Accordion,
@@ -95,7 +97,7 @@
         </TableHead>
 
         <TableBody class="divide-y divide-gray-200 dark:divide-gray-700">
-          {#each taskResults as taskResult}
+          {#each taskResults as taskResult (taskResult.task_id)}
             <TableBodyRow
               id={taskResult.contest_id + '-' + taskResult.task_id}
               class={getBackgroundColorFrom(taskResult.status_name)}
@@ -128,7 +130,7 @@
                 {#if isAdmin}
                   <div class="flex justify-center items-center px-0">
                     <a
-                      href="/tasks/{taskResult.task_id}"
+                      href={resolve('/(admin)/tasks/[task_id]', { task_id: taskResult.task_id })}
                       class="font-medium text-primary-600 hover:underline dark:text-gray-300"
                     >
                       編集

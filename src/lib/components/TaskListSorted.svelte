@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { resolve } from '$app/paths';
+
   import {
     Img,
     Table,
@@ -32,7 +34,7 @@
     </TableHead>
 
     <TableBody class="divide-y divide-gray-200 dark:divide-gray-700">
-      {#each taskResults as taskResult}
+      {#each taskResults as taskResult (taskResult.task_id)}
         <TableBodyRow>
           <TableBodyCell class="p-3">
             <Img
@@ -43,7 +45,7 @@
           </TableBodyCell>
           <TableBodyCell>
             <a
-              href="/problems/{taskResult.task_id}"
+              href={resolve('/problems/[slug]', { slug: taskResult.task_id })}
               class="font-medium text-primary-600 hover:underline dark:text-primary-500"
             >
               {removeTaskIndexFromTitle(taskResult.title, taskResult.task_table_index)}

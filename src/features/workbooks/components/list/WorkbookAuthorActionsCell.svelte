@@ -1,5 +1,7 @@
 <script lang="ts">
+  import { resolve } from '$app/paths';
   import { enhance } from '$app/forms';
+
   import { TableBodyCell } from 'flowbite-svelte';
 
   import type { Roles } from '$lib/types/user';
@@ -22,7 +24,7 @@
     class="flex justify-center items-center space-x-3 min-w-[96px] max-w-[120px] text-gray-700 dark:text-gray-300"
   >
     {#if canEdit(userId, workbook.authorId, role, workbook.isPublished)}
-      <a href="/workbooks/edit/{getUrlSlugFrom(workbook)}">編集</a>
+      <a href={resolve('/workbooks/edit/[slug]', { slug: getUrlSlugFrom(workbook) })}>編集</a>
     {/if}
 
     {#if canDelete(userId, workbook.authorId)}

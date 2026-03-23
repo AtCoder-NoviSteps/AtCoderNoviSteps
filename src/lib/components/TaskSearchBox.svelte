@@ -168,7 +168,7 @@
 
 {#if filteredTasks.length}
   <Listgroup>
-    {#each filteredTasks as task, index}
+    {#each filteredTasks as task, index (task.task_id)}
       <!-- See: -->
       <!-- WHY: Use a custom <li> element with conditional classes for highlighting, due not to be able to find attribute. -->
       <li

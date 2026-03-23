@@ -25,7 +25,7 @@
       {#if typeof tooltipContents === 'string'}
         {tooltipContents}
       {:else}
-        {#each tooltipContents as tooltipContent}
+        {#each tooltipContents as tooltipContent, i (i)}
           {tooltipContent}<br />
         {/each}
       {/if}

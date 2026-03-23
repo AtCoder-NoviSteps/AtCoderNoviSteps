@@ -166,7 +166,7 @@
       </TableHead>
 
       <TableBody class="divide-y divide-gray-200 dark:divide-gray-700">
-        {#each workBookTasksForTable as task, index}
+        {#each workBookTasksForTable as task, index (task.taskId)}
           <TableBodyRow>
             <!-- ID -->
             <TableBodyCell class="xs:text-lg text-gray-700 dark:text-gray-300 truncate pl-6 pr-3">

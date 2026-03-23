@@ -29,7 +29,7 @@
   class={`${useInlineFlex ? 'inline-flex' : ''} items-center font-medium ${textSize} text-primary-600 hover:underline ${textColorInDarkMode}`}
   aria-label={ariaLabel}
   target="_blank"
-  rel="noreferrer"
+  rel="noreferrer external"
 >
   <span class={`${textOverflow} truncate`}>
     {description}
