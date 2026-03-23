@@ -127,8 +127,8 @@ importers:
         specifier: 10.1.8
         version: 10.1.8(eslint@9.39.2(jiti@1.21.7))
       eslint-plugin-svelte:
-        specifier: 3.10.1
-        version: 3.10.1(eslint@9.39.2(jiti@1.21.7))(svelte@5.54.1)(ts-node@10.9.1(@types/node@25.5.0)(typescript@5.9.3))
+        specifier: 3.16.0
+        version: 3.16.0(eslint@9.39.2(jiti@1.21.7))(svelte@5.54.1)(ts-node@10.9.1(@types/node@25.5.0)(typescript@5.9.3))
       flowbite:
         specifier: 3.1.2
         version: 3.1.2(rollup@4.53.4)
@@ -3107,11 +3107,11 @@ packages:
     peerDependencies:
       eslint: '>=7.0.0'
 
-  eslint-plugin-svelte@3.10.1:
-    resolution: {integrity: sha512-csCh2x0ge/DugXC7dCANh46Igi7bjMZEy6rHZCdS13AoGVJSu7a90Kru3I8oMYLGEemPRE1hQXadxvRPVMAAXQ==}
+  eslint-plugin-svelte@3.16.0:
+    resolution: {integrity: sha512-DJXxqpYZUxcE0SfYo8EJzV2ZC+zAD7fJp1n1HwcEMRR1cOEUYvjT9GuzJeNghMjgb7uxuK3IJAzI+x6zzUxO5A==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
     peerDependencies:
-      eslint: ^8.57.1 || ^9.0.0
+      eslint: ^8.57.1 || ^9.0.0 || ^10.0.0
       svelte: ^3.37.0 || ^4.0.0 || ^5.0.0
     peerDependenciesMeta:
       svelte:
@@ -4698,11 +4698,6 @@ packages:
     engines: {node: '>=10'}
     hasBin: true
 
-  semver@7.7.3:
-    resolution: {integrity: sha512-SdsKMrI9TdgjdweUSR9MweHA4EJ8YxHn8DFaDisvhVlUOe4BF1tLD7GAj0lIqWVl+dPb/rExr0Btby5loQm20Q==}
-    engines: {node: '>=10'}
-    hasBin: true
-
   semver@7.7.4:
     resolution: {integrity: sha512-vFKC2IEtQnVhpT78h1Yp8wzwrf8CM+MzKMHGJZfBtzhZNycRFnXsHk6E5TxIkkMsgNS7mdX3AGB7x2QM2di4lA==}
     engines: {node: '>=10'}
@@ -5390,8 +5385,8 @@ packages:
     resolution: {integrity: sha512-YgvUTfwqyc7UXVMrB+SImsVYSmTS8X/tSrtdNZMImM+n7+QTriRXyXim0mBrTXNeqzVF0KWGgHPeiyViFFrNDw==}
     engines: {node: '>=18'}
 
-  yaml@1.10.2:
-    resolution: {integrity: sha512-r3vXyErRCYJ7wg28yvBY5VSoAF8ZvlcW9/BwUzEtUsjvX/DKs24dIkuwjtuprwJJHsbyUbLApepYTR1BN4uHrg==}
+  yaml@1.10.3:
+    resolution: {integrity: sha512-vIYeF1u3CjlhAFekPPAk2h/Kv4T3mAkMox5OymRiJQB0spDP10LHvt+K7G9Ny6NuuMAb25/6n1qyUjAcGNf/AA==}
     engines: {node: '>= 6'}
 
   yaml@2.8.1:
@@ -8401,18 +8396,18 @@ snapshots:
     dependencies:
       eslint: 9.39.2(jiti@1.21.7)
 
-  eslint-plugin-svelte@3.10.1(eslint@9.39.2(jiti@1.21.7))(svelte@5.54.1)(ts-node@10.9.1(@types/node@25.5.0)(typescript@5.9.3)):
+  eslint-plugin-svelte@3.16.0(eslint@9.39.2(jiti@1.21.7))(svelte@5.54.1)(ts-node@10.9.1(@types/node@25.5.0)(typescript@5.9.3)):
     dependencies:
-      '@eslint-community/eslint-utils': 4.9.0(eslint@9.39.2(jiti@1.21.7))
+      '@eslint-community/eslint-utils': 4.9.1(eslint@9.39.2(jiti@1.21.7))
       '@jridgewell/sourcemap-codec': 1.5.5
       eslint: 9.39.2(jiti@1.21.7)
       esutils: 2.0.3
       globals: 16.5.0
       known-css-properties: 0.37.0
-      postcss: 8.5.6
-      postcss-load-config: 3.1.4(postcss@8.5.6)(ts-node@10.9.1(@types/node@25.5.0)(typescript@5.9.3))
-      postcss-safe-parser: 7.0.1(postcss@8.5.6)
-      semver: 7.7.3
+      postcss: 8.5.8
+      postcss-load-config: 3.1.4(postcss@8.5.8)(ts-node@10.9.1(@types/node@25.5.0)(typescript@5.9.3))
+      postcss-safe-parser: 7.0.1(postcss@8.5.8)
+      semver: 7.7.4
       svelte-eslint-parser: 1.6.0(svelte@5.54.1)
     optionalDependencies:
       svelte: 5.54.1
@@ -9621,12 +9616,12 @@ snapshots:
       camelcase-css: 2.0.1
       postcss: 8.5.8
 
-  postcss-load-config@3.1.4(postcss@8.5.6)(ts-node@10.9.1(@types/node@25.5.0)(typescript@5.9.3)):
+  postcss-load-config@3.1.4(postcss@8.5.8)(ts-node@10.9.1(@types/node@25.5.0)(typescript@5.9.3)):
     dependencies:
       lilconfig: 2.1.0
-      yaml: 1.10.2
+      yaml: 1.10.3
     optionalDependencies:
-      postcss: 8.5.6
+      postcss: 8.5.8
       ts-node: 10.9.1(@types/node@25.5.0)(typescript@5.9.3)
 
   postcss-load-config@6.0.1(jiti@1.21.7)(postcss@8.5.8)(tsx@4.21.0)(yaml@2.8.1):
@@ -9643,9 +9638,9 @@ snapshots:
       postcss: 8.5.8
       postcss-selector-parser: 6.1.2
 
-  postcss-safe-parser@7.0.1(postcss@8.5.6):
+  postcss-safe-parser@7.0.1(postcss@8.5.8):
     dependencies:
-      postcss: 8.5.6
+      postcss: 8.5.8
 
   postcss-scss@4.0.9(postcss@8.5.8):
     dependencies:
@@ -9982,8 +9977,6 @@ snapshots:
   semver@7.5.4:
     dependencies:
       lru-cache: 6.0.0
-
-  semver@7.7.3: {}
 
   semver@7.7.4: {}
 
@@ -10694,7 +10687,7 @@ snapshots:
 
   yallist@5.0.0: {}
 
-  yaml@1.10.2: {}
+  yaml@1.10.3: {}
 
   yaml@2.8.1:
     optional: true
