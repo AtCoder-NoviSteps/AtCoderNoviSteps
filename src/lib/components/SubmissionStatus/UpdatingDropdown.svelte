@@ -198,7 +198,7 @@
   class="w-32 z-50 border border-gray-200 dark:border-gray-100"
 >
   {#if isLoggedIn}
-    {#each submissionStatusOptions as submissionStatus}
+    {#each submissionStatusOptions as submissionStatus (submissionStatus.innerName)}
       <DropdownItem onclick={() => handleClick(submissionStatus)} class="rounded-md">
         <div
           class="flex items-center justify-between w-full text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white"

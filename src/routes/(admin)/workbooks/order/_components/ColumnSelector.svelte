@@ -28,7 +28,7 @@
 </script>
 
 <div class="flex flex-wrap gap-2">
-  {#each options as option}
+  {#each options as option (option.value)}
     {@const isSelected = selected.includes(option.value)}
 
     <button

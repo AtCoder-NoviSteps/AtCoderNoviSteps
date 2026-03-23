@@ -22,7 +22,6 @@
       message_type: string;
       message: string;
     };
-    status?: string;
   }
 
   let { data, status = $bindable('nothing') }: Props = $props();

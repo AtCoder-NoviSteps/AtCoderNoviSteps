@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { resolve } from '$app/paths';
+
   interface Props {
     workBookId: number;
     title: string;
@@ -8,7 +10,7 @@
 </script>
 
 <a
-  href="/workbooks/{workBookId}"
+  href={resolve('/workbooks/[slug]', { slug: String(workBookId) })}
   class="text-sm font-medium text-primary-600 hover:underline dark:text-primary-500"
   onclick={(e) => e.stopPropagation()}
   onpointerdown={(e) => e.stopPropagation()}

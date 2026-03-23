@@ -22,12 +22,13 @@
   import type { FloatingMessages } from '$lib/types/floating_message';
 
   interface Props {
-    formAction?: string;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     data: any;
   }
 
-  let { formAction = 'account_transfer', data }: Props = $props();
+  let { data }: Props = $props();
+
+  let formAction = $state('account_transfer');
 
   const { form, errors, message, submitting, enhance } = superForm(data.form);
 
@@ -124,7 +125,7 @@
 
   <!-- ステータス表示 -->
   <div class="p-4 space-y-4 dark:text-gray-300">
-    {#each accountTransferMessages as accountTransferMessage}
+    {#each accountTransferMessages as accountTransferMessage, i (i)}
       <div class="flex items-center space-x-2">
         {#if accountTransferMessage.status}
           <!-- 成功時のアイコン -->

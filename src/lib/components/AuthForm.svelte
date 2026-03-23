@@ -1,6 +1,7 @@
 <script lang="ts">
   import { tick } from 'svelte';
   import { goto } from '$app/navigation';
+  import { resolve } from '$app/paths';
 
   import { Card, Button, Label, Input, Hr } from 'flowbite-svelte';
 
@@ -17,7 +18,7 @@
     // GUEST_USER_PASSWORD_FOR_LOCAL,
     LOGIN_LABEL,
   } from '$lib/constants/forms';
-  import { HOME_PAGE, LOGIN_PAGE, FORGOT_PASSWORD_PAGE } from '$lib/constants/navbar-links';
+  import { HOME_PAGE, FORGOT_PASSWORD_PAGE, LOGIN_PAGE } from '$lib/constants/navbar-links';
 
   interface Props {
     // FIXME: 構造体に相当するものを利用した方が拡張・修正がしやすくなるかもしれせまん
@@ -40,6 +41,13 @@
   }: Props = $props();
 
   const { form, message, errors, submitting, enhance } = formProperties;
+
+  // @ts-expect-error svelte-check TS2554: AppTypes declaration merging causes RouteId to resolve as string, requiring params. Runtime behavior is correct.
+  const homeHref = resolve(HOME_PAGE);
+  // @ts-expect-error svelte-check TS2554: same declaration merging issue
+  const forgotPasswordHref = resolve(FORGOT_PASSWORD_PAGE);
+  // @ts-expect-error svelte-check TS2554: same declaration merging issue
+  const alternativeHref = $derived(resolve(alternativePageLink as '/login'));
 
   let isSubmitting = $state(false);
 
@@ -80,7 +88,7 @@
       }
 
       // FIXME: ログイン前のページに戻れるようにする
-      await goto(HOME_PAGE);
+      await goto(homeHref);
     } catch (error) {
       console.error('Failed to login as a guest: ', error);
     } finally {
@@ -202,7 +210,7 @@
           <!-- <Checkbox>Remember me</Checkbox> -->
 
           <a
-            href={FORGOT_PASSWORD_PAGE}
+            href={forgotPasswordHref}
             class="ml-auto text-sm text-primary-700 hover:underline dark:text-primary-500"
           >
             パスワードを忘れましたか?
@@ -216,10 +224,7 @@
 
       <div class="text-sm font-medium text-gray-500 dark:text-gray-300">
         {confirmationMessage}
-        <a
-          href={alternativePageLink}
-          class="text-primary-700 hover:underline dark:text-primary-500"
-        >
+        <a href={alternativeHref} class="text-primary-700 hover:underline dark:text-primary-500">
           {alternativePageName}
         </a>
       </div>

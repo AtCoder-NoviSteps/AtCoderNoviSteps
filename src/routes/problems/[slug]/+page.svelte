@@ -33,7 +33,7 @@
   <a
     href={getTaskUrl(taskResult.contest_id, taskResult.task_id)}
     target="_blank"
-    rel="noreferrer"
+    rel="noreferrer external"
     class="flex flex-col items-center
     {getBackgroundColorFrom(taskResult.status_name)}
     border border-gray-200 rounded-lg max-w-lg mt-8 mb-8 mx-auto shadow md:flex-row md:max-w-xl dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700"
@@ -61,7 +61,7 @@
   <!-- See: https://tailwindcss.com/docs/align-items -->
   <!-- See: https://bobbyhadz.com/blog/typescript-type-string-is-not-assignable-to-type -->
   <form method="post" class="flex flex-col items-center" use:enhance>
-    {#each buttons as button}
+    {#each buttons as button (button.status_name)}
       <SubmissionStatusButton
         value={button.status_name}
         textColor={button.text_color}

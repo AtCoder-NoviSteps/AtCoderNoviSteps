@@ -1,6 +1,7 @@
 <script lang="ts">
   import { page } from '$app/stores';
   import { replaceState } from '$app/navigation';
+  import { resolve } from '$app/paths';
   import { untrack } from 'svelte';
 
   import { Toast } from 'flowbite-svelte';
@@ -53,10 +54,14 @@
   ]);
 
   function updateUrl() {
-    replaceState(
-      buildUpdatedUrl($page.url, activeTab, selectedSolutionCategories, selectedGrades),
-      {},
+    const updatedUrl = buildUpdatedUrl(
+      $page.url,
+      activeTab,
+      selectedSolutionCategories,
+      selectedGrades,
     );
+    // @ts-expect-error svelte-check TS2554: AppTypes declaration merging causes RouteId to resolve as string, requiring params. Runtime behavior is correct.
+    replaceState(resolve(updatedUrl.pathname + updatedUrl.search), {});
   }
 
   let allItems = $state<Record<string, KanbanColumns>>(
@@ -150,7 +155,7 @@
     <!-- Note: Snippets are intentional: extracting these as components would require passing too many props. -->
     {#snippet solutionBoard()}
       <div class="flex gap-3 overflow-x-auto pb-4">
-        {#each displayedSolutionCategories as column}
+        {#each displayedSolutionCategories as column (column)}
           <KanbanColumn
             columnId={column}
             label={TAB_CONFIGS['solution'].labelFn(column)}
@@ -163,7 +168,7 @@
 
     {#snippet curriculumBoard()}
       <div class="flex gap-3 overflow-x-auto pb-4">
-        {#each selectedGrades as column}
+        {#each selectedGrades as column (column)}
           <KanbanColumn
             columnId={column}
             label={TAB_CONFIGS['curriculum'].labelFn(column)}

@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { SvelteMap } from 'svelte/reactivity';
+
   import {
     Heading,
     Button,
@@ -9,10 +11,12 @@
     TableHead,
     TableHeadCell,
   } from 'flowbite-svelte';
+
   import type { TaskResults, TaskResult } from '$lib/types/task';
   import type {
     ContestTableProvider,
     ContestTableDisplayConfig,
+    ContestTableMetaData,
   } from '$features/tasks/types/contest-table/contest_table_provider';
   import type { ContestTaskPairKey } from '$lib/types/contest_task_pair';
 
@@ -55,14 +59,14 @@
     innerTaskTable: Record<string, Record<string, TaskResult>>;
     headerIds: Array<string>;
     contestIds: Array<string>;
-    metadata: any;
+    metadata: ContestTableMetaData;
     displayConfig: ContestTableDisplayConfig;
   }
 
   let contestTableMaps = $derived(() => prepareContestTablesMap(providers));
 
   function prepareContestTablesMap(providers: ContestTableProvider[]): Map<string, ProviderData> {
-    const map = new Map<string, ProviderData>();
+    const map = new SvelteMap<string, ProviderData>();
 
     for (const provider of providers) {
       const abbreviationName = provider.getMetadata().abbreviationName;
@@ -144,7 +148,7 @@
   // Computational complexity of preparation table: O(N), where N is the number of task results.
   let taskResultsMap = $derived(() => {
     return taskResults.reduce(
-      (map: Map<ContestTaskPairKey, TaskResult>, taskResult: TaskResult) => {
+      (map: SvelteMap<ContestTaskPairKey, TaskResult>, taskResult: TaskResult) => {
         const key = createContestTaskPairKey(taskResult.contest_id, taskResult.task_id);
 
         if (!map.has(key)) {
@@ -153,7 +157,7 @@
 
         return map;
       },
-      new Map<ContestTaskPairKey, TaskResult>(),
+      new SvelteMap<ContestTaskPairKey, TaskResult>(),
     );
   });
 
@@ -190,7 +194,7 @@
 <!-- https://flowbite-svelte.com/docs/components/buttons -->
 <div class="flex justify-center md:justify-start m-4">
   <div class="flex flex-wrap justify-start gap-1 shadow-none">
-    {#each Object.entries(contestTableProviderGroups) as [type, config]}
+    {#each Object.entries(contestTableProviderGroups) as [type, config] (type)}
       <Button
         onclick={() => updateActiveContestType(type as ContestTableProviderGroups)}
         color="alternative"

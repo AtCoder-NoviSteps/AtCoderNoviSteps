@@ -37,26 +37,26 @@
     <TableHeadCell class="w-1/8"></TableHeadCell>
   </TableHead>
   <TableBody class="divide-y divide-gray-200 dark:divide-gray-700">
-    {#each importContests as importContest}
+    {#each importContests as importContest (importContest.id)}
       {#if importContest.tasks.length > 0}
         <TableBodyRow>
           <TableBodyCell class="p-3">
             <Label>
-              {#each newline(getContestNameLabel(importContest.id), 10) as line}
+              {#each newline(getContestNameLabel(importContest.id), 10) as line, i (i)}
                 {line}<br />
               {/each}
             </Label>
           </TableBodyCell>
           <TableBodyCell>
             <Label>
-              {#each newline(importContest.title, 28) as line}
+              {#each newline(importContest.title, 28) as line, i (i)}
                 {line}<br />
               {/each}
             </Label>
           </TableBodyCell>
 
           <TableBodyCell>
-            {#each importContest.tasks as importTask}
+            {#each importContest.tasks as importTask (importTask.task_id)}
               <li>{importTask.title}</li>
             {/each}
           </TableBodyCell>
