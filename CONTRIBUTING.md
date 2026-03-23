@@ -47,7 +47,8 @@
 - パッケージマネージャ
   - [pnpm](https://pnpm.io/ja/)
 - 文法およびフォーマットチェッカー
-  - [ESLint](https://eslint.org/)
+  - [oxlint](https://oxc.rs/docs/guide/usage/linter.html): JS/TS ファイルの高速リンター（50–100x 高速）
+  - [ESLint](https://eslint.org/): Svelte ファイル専用リンター（eslint-plugin-svelte）
   - [Prettier](https://prettier.io/)
   - [lefthook](https://github.com/evilmartians/lefthook): Git hooks 管理ツール（コミット前の自動フォーマット・リント）
 - Search Engine Optimization (SEO) 対策
@@ -283,7 +284,8 @@
 
 - **Pre-commit Hook**: ステージ済みファイルのみに対して以下を実行
   - `prettier --write`: コード書式の自動修正（JavaScript、TypeScript、Markdown、Svelte）
-  - `eslint`: リント（JavaScript、TypeScript、Svelte）
+  - `oxlint`: JS/TS ファイルのリント（JavaScript、TypeScript）
+  - `eslint`: Svelte ファイルのリント（.svelte のみ）
 
 Hook は自動的にセットアップされるため、特別な操作は不要です。
 
