@@ -21,8 +21,26 @@ v3.10.1 → v3.16.0 で追加・変更されたルール:
 SvelteKit 2.55.0 で実装済み。`resolveRoute` は deprecated となり `resolve` に統一された。
 ベースパスをパスに付与する純粋な関数。除外条件: 絶対URL、`rel="external"` 属性、空文字列、hash fragment。
 
+**導入背景:** SvelteKit はルートパス以外（例: `example.com/my-app/`）へのデプロイをサポートするが、`<a href="/foo">` や `goto('/foo')` のようにパスをハードコードすると base path が加味されずナビゲーションが壊れる。`resolve()` は base path を実行時に付与する純粋関数としてこれを解決する。JS のモジュール解決（webpack alias 等）と概念は近いが、モジュール解決がビルド時に静的確定するのに対し、`resolve()` は base path がデプロイ設定に依存して実行時まで確定しないため、明示的な関数呼び出しとして設計されている。`eslint-plugin-svelte` v3.12.0 でルール化された。
+
+**メリット:** base path が変わってもコードの修正不要 / `resolve('/blog/[slug]', { slug })` 形式でルートパラメータをコンパイル時に型検査できる / 全内部ナビゲーションが一貫した経路を通るため挙動が予測しやすい。
+
+**デメリット:** 全コンポーネントに import が必要でボイラープレートが増加 / base path を使わないプロジェクトでは恩恵が見えにくく冗長に感じる / 既存コードへの適用コストが高い（本件がまさにそれ）。
+
+> 出典: [$app/paths — SvelteKit 公式ドキュメント](https://svelte.dev/docs/kit/$app-paths) / [no-navigation-without-resolve — eslint-plugin-svelte](https://github.com/sveltejs/eslint-plugin-svelte/blob/main/docs/rules/no-navigation-without-resolve.md)
+
 **`SvelteMap` の実体:** `import { SvelteMap } from 'svelte/reactivity'`
 Svelte 5 でリアクティブな Map として提供。ミュータブルな操作（`.set()`, `.clear()` 等）をトリガーとする。
+
+**導入背景:** Svelte 5 のリアクティビティはプロキシベースで動作するが、`Map` / `Set` / `Date` などのネイティブ組み込みオブジェクトはエンジン内部実装のためプロキシが透過的にトラップできない。そのため `$state(new Map())` としても `.set()` などの変更が `$derived` / `$effect` に伝播しない。`SvelteMap` は `Map` のサブクラスとして全メソッドをオーバーライドし、Svelte のリアクティブシグナルと連携させることでこの制約を解消している。なお、値の深いリアクティビティ（ネストオブジェクトのプロパティ変更）は対象外（shallow のみ）。
+
+リアクティビティの仕組みは**読み取りと書き込みの2方向**で成立する。読み取り側（`$derived` / `$effect` 内での `.get()` / `.size` / イテレーション）が依存を登録し、書き込み側（`.set()` / `.delete()` / `.clear()`）がその依存を無効化・再実行させる。「ミュータブルな操作をトリガーとする」とはこの書き込み側の通知発火を指す。
+
+> 出典: [svelte/reactivity — Svelte 公式ドキュメント](https://svelte.dev/docs/svelte/svelte-reactivity)
+
+**`prefer-writable-derived` の背景:** Runes の役割分担は `$state`（変更可能な真実の源泉）/ `$derived`（他の state から計算される値）/ `$effect`（副作用 — DOM 操作・API 呼び出し等）と明確に分かれており、`$effect` を計算に使うのはアンチパターン。加えて `$effect` は DOM 更新サイクル後に非同期実行されるため、`$state + $effect` で派生値を更新すると一瞬だけ古い値が残る不整合が生じる。`$derived` は参照時に同期・遅延評価されるため常に一致する。
+
+本プロジェクトでは Svelte v4 で実装を始め 2025年2月に v5 へ移行した経緯があり、当時は生成 AI の Svelte 5 学習データが少なく、v4 の `writable + subscribe` パターンを Runes に機械的に置き換えた `$state + $effect` が定着したと考えられる。今回のルール追加はその移行時の技術的負債を ESLint が炙り出している。
 
 ## 設計方針
 
