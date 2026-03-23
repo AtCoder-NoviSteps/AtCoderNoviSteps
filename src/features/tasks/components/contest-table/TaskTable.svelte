@@ -146,9 +146,9 @@
 
   // Update task results dynamically.
   // Computational complexity of preparation table: O(N), where N is the number of task results.
-  let taskResultsMap = $derived(() => {
+  let taskResultsMap = $derived.by(() => {
     return taskResults.reduce(
-      (map: SvelteMap<ContestTaskPairKey, TaskResult>, taskResult: TaskResult) => {
+      (map: Map<ContestTaskPairKey, TaskResult>, taskResult: TaskResult) => {
         const key = createContestTaskPairKey(taskResult.contest_id, taskResult.task_id);
 
         if (!map.has(key)) {
@@ -161,7 +161,7 @@
     );
   });
 
-  let taskIndicesMap = $derived(() => {
+  let taskIndicesMap = $derived.by(() => {
     const indices = new Map<ContestTaskPairKey, number>();
 
     taskResults.forEach((task, index) => {
@@ -174,13 +174,12 @@
 
   function handleUpdateTaskResult(updatedTask: TaskResult): void {
     const key = createContestTaskPairKey(updatedTask.contest_id, updatedTask.task_id);
-    const map = taskResultsMap();
 
-    if (map.has(key)) {
-      map.set(key, updatedTask);
+    if (taskResultsMap.has(key)) {
+      taskResultsMap.set(key, updatedTask);
     }
 
-    const index = taskIndicesMap().get(key);
+    const index = taskIndicesMap.get(key);
 
     if (index !== undefined) {
       const newTaskResults = [...taskResults];
