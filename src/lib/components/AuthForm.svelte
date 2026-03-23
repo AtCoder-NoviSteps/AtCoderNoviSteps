@@ -224,6 +224,7 @@
 
       <div class="text-sm font-medium text-gray-500 dark:text-gray-300">
         {confirmationMessage}
+        <!-- eslint-disable-next-line svelte/no-navigation-without-resolve -->
         <a href={alternativeHref} class="text-primary-700 hover:underline dark:text-primary-500">
           {alternativePageName}
         </a>

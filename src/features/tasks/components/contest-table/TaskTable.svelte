@@ -66,7 +66,7 @@
   let contestTableMaps = $derived(prepareContestTablesMap(providers));
 
   function prepareContestTablesMap(providers: ContestTableProvider[]): Map<string, ProviderData> {
-    const map = new Map<string, ProviderData>();
+    const map = new SvelteMap<string, ProviderData>();
 
     for (const provider of providers) {
       const abbreviationName = provider.getMetadata().abbreviationName;
@@ -162,7 +162,7 @@
   });
 
   let taskIndicesMap = $derived.by(() => {
-    const indices = new Map<ContestTaskPairKey, number>();
+    const indices = new SvelteMap<ContestTaskPairKey, number>();
 
     taskResults.forEach((task, index) => {
       const key = createContestTaskPairKey(task.contest_id, task.task_id);
