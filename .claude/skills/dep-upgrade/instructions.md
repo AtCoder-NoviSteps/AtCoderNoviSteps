@@ -63,7 +63,7 @@ Write `docs/dev-notes/YYYY-MM-DD/{package}-upgrade/plan.md` in Japanese:
 pnpm install
 pnpm lint
 pnpm check
-pnpm test
+pnpm test:unit
 ```
 
 > **`pnpm check` tip:** If type errors appear, run `git stash && pnpm check 2>&1 | tail -5`

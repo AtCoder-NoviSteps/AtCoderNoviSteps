@@ -74,7 +74,7 @@ paths:
 
 **`/dep-upgrade` の使い方:**
 
-```
+```bash
 /dep-upgrade <package-name> <old-major> <new-major>
 例: /dep-upgrade eslint 9 10
 ```
