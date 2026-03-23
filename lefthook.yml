@@ -7,6 +7,10 @@ pre-commit:
       run: pnpm exec prettier --write {staged_files}
       glob: '**/*.{js,jsx,ts,tsx,md,svelte}'
 
+    - name: oxlint
+      run: pnpm exec oxlint {staged_files}
+      glob: '**/*.{js,jsx,ts,tsx}'
+
     - name: eslint
       run: pnpm exec eslint {staged_files}
-      glob: '**/*.{js,jsx,ts,tsx,svelte}'
+      glob: '**/*.svelte'

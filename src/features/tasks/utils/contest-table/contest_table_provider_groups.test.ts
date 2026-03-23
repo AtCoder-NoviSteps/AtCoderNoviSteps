@@ -188,7 +188,9 @@ describe('prepareContestProviderPresets', () => {
       ariaLabel: 'Filter Math and Algorithm',
     });
     expect(group.getSize()).toBe(1);
-    expect(group.getProvider(ContestType.MATH_AND_ALGORITHM)).toBeInstanceOf(MathAndAlgorithmProvider);
+    expect(group.getProvider(ContestType.MATH_AND_ALGORITHM)).toBeInstanceOf(
+      MathAndAlgorithmProvider,
+    );
   });
 
   test('expects to create Typical90 preset correctly', () => {
