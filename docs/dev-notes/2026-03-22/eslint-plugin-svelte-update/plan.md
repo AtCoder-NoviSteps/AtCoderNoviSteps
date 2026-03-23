@@ -29,18 +29,9 @@ SvelteKit 2.55.0 で実装済み。`resolveRoute` は deprecated となり `reso
 
 > 出典: [$app/paths — SvelteKit 公式ドキュメント](https://svelte.dev/docs/kit/$app-paths) / [no-navigation-without-resolve — eslint-plugin-svelte](https://github.com/sveltejs/eslint-plugin-svelte/blob/main/docs/rules/no-navigation-without-resolve.md)
 
-**`SvelteMap` の実体:** `import { SvelteMap } from 'svelte/reactivity'`
-Svelte 5 でリアクティブな Map として提供。ミュータブルな操作（`.set()`, `.clear()` 等）をトリガーとする。
+**`SvelteMap` の実体:** `import { SvelteMap } from 'svelte/reactivity'` — Svelte 5 でリアクティブな `Map` として提供。`.set()` / `.clear()` 等の変更を `$derived` / `$effect` に伝播する。`$state` ラッパーは不要。
 
-**導入背景:** Svelte 5 のリアクティビティはプロキシベースで動作するが、`Map` / `Set` / `Date` などのネイティブ組み込みオブジェクトはエンジン内部実装のためプロキシが透過的にトラップできない。そのため `$state(new Map())` としても `.set()` などの変更が `$derived` / `$effect` に伝播しない。`SvelteMap` は `Map` のサブクラスとして全メソッドをオーバーライドし、Svelte のリアクティブシグナルと連携させることでこの制約を解消している。なお、値の深いリアクティビティ（ネストオブジェクトのプロパティ変更）は対象外（shallow のみ）。
-
-リアクティビティの仕組みは**読み取りと書き込みの2方向**で成立する。読み取り側（`$derived` / `$effect` 内での `.get()` / `.size` / イテレーション）が依存を登録し、書き込み側（`.set()` / `.delete()` / `.clear()`）がその依存を無効化・再実行させる。「ミュータブルな操作をトリガーとする」とはこの書き込み側の通知発火を指す。
-
-> 出典: [svelte/reactivity — Svelte 公式ドキュメント](https://svelte.dev/docs/svelte/svelte-reactivity)
-
-**`prefer-writable-derived` の背景:** Runes の役割分担は `$state`（変更可能な真実の源泉）/ `$derived`（他の state から計算される値）/ `$effect`（副作用 — DOM 操作・API 呼び出し等）と明確に分かれており、`$effect` を計算に使うのはアンチパターン。加えて `$effect` は DOM 更新サイクル後に非同期実行されるため、`$state + $effect` で派生値を更新すると一瞬だけ古い値が残る不整合が生じる。`$derived` は参照時に同期・遅延評価されるため常に一致する。
-
-本プロジェクトでは Svelte v4 で実装を始め 2025年2月に v5 へ移行した経緯があり、当時は生成 AI の Svelte 5 学習データが少なく、v4 の `writable + subscribe` パターンを Runes に機械的に置き換えた `$state + $effect` が定着したと考えられる。今回のルール追加はその移行時の技術的負債を ESLint が炙り出している。
+**導入背景:** Svelte 5 のリアクティビティはプロキシベースだが、`Map` 等のネイティブ組み込み型はエンジン内部実装のためプロキシでトラップできない（`$state(new Map())` では `.set()` が伝播しない）。`SvelteMap` はメソッドをオーバーライドしてシグナルと連携することで解決。本プロジェクトは v4 から v5 へ移行した経緯があり、`writable + subscribe` を機械的に置き換えた `$state + $effect` が残存していた。今回のルール追加はその技術的負債を検出したもの。
 
 ## 設計方針
 
@@ -58,76 +49,10 @@ Svelte 5 でリアクティブな Map として提供。ミュータブルな操
 | `SvelteMap` を `Map` の型エイリアスで代替            | ルールは型ではなくコンストラクタ呼び出しを検出するため回避不可                 |
 | PR を revert して別途対応                            | アップデート内容自体は問題なく、lint 修正のみで対応可能                        |
 
-## 影響ファイル
+全 8 フェーズ完了。`pnpm lint` 0 errors・0 warnings、`pnpm check` 既存の 2 件のみ、`pnpm test:unit` 45 ファイル 1954 件全パス。
 
-### エラー修正対象
+## 残課題
 
-| ファイル                                                                  | ルール                        | 件数 |
-| ------------------------------------------------------------------------- | ----------------------------- | ---- |
-| `src/features/tasks/components/contest-table/TaskTable.svelte`            | prefer-svelte-reactivity      | 2    |
-| `src/lib/components/TaskGradeList.svelte`                                 | prefer-svelte-reactivity      | 1    |
-| `src/lib/components/ExternalLinkWrapper.svelte`                           | no-navigation-without-resolve | 1    |
-| `src/lib/components/TagForm.svelte`                                       | no-navigation-without-resolve | 4    |
-| `src/routes/problems/[slug]/+page.svelte`                                 | no-navigation-without-resolve | 1    |
-| `src/features/workbooks/components/list/TitleTableBodyCell.svelte`        | no-navigation-without-resolve | 1    |
-| `src/features/workbooks/components/list/WorkbookAuthorActionsCell.svelte` | no-navigation-without-resolve | 1    |
-| `src/features/workbooks/components/shared/WorkbookLink.svelte`            | no-navigation-without-resolve | 1    |
-| `src/lib/components/AuthForm.svelte`                                      | no-navigation-without-resolve | 3    |
-| `src/lib/components/TagListForEdit.svelte`                                | no-navigation-without-resolve | 1    |
-| `src/lib/components/TaskList.svelte`                                      | no-navigation-without-resolve | 1    |
-| `src/lib/components/TaskListSorted.svelte`                                | no-navigation-without-resolve | 1    |
-| `src/routes/users/[username]/+page.svelte`                                | no-navigation-without-resolve | 1    |
-| `src/routes/workbooks/+page.svelte`                                       | no-navigation-without-resolve | 4    |
-| `src/routes/(admin)/workbooks/order/_components/KanbanBoard.svelte`       | no-navigation-without-resolve | 1    |
+**`users/edit/+page.svelte` — AtCoder 認証機能の再公開**
 
-### 警告修正対象（20ファイル超、require-each-key が大半）
-
-詳細は各 phase ファイルを参照。
-
-## フェーズ一覧
-
-| Phase                   | 内容                                            | 種別    | リスク              |
-| ----------------------- | ----------------------------------------------- | ------- | ------------------- |
-| [Phase 1](./phase-1.md) | `SvelteMap` 置き換え                            | error   | 低                  |
-| [Phase 2](./phase-2.md) | 外部リンクに `rel="external"` 追加              | error   | 低                  |
-| [Phase 3](./phase-3.md) | 内部 href に `resolve()` 適用                   | error   | 低                  |
-| [Phase 4](./phase-4.md) | `goto()` / `replaceState()` に `resolve()` 適用 | error   | 中（動的URL要確認） |
-| [Phase 5](./phase-5.md) | `{#each}` ブロックへのキー追加                  | warning | 低                  |
-| [Phase 6](./phase-6.md) | `$derived` リファクタリング                     | warning | 低                  |
-| [Phase 7](./phase-7.md) | `any` 型の解消                                  | warning | 低                  |
-| [Phase 8](./phase-8.md) | `valid-prop-names-in-kit-pages` 調査・修正      | warning | 中（要コード調査）  |
-
-## 検証方法
-
-```bash
-pnpm lint       # 0 errors、warning 最小化
-pnpm check      # Svelte 型エラーなし
-pnpm test:unit  # 既存テスト全パス
-```
-
-## 実装結果・学び
-
-全 8 フェーズ完了。`pnpm lint` 0 errors・0 warnings、`pnpm check` 既存の 2 件のみ、`pnpm test:unit` 45 ファイル 1954 件全パス。詳細は `refactor.md` を参照。
-
-### `resolve()` の TypeScript 型エラー（宣言マージ問題）
-
-`pnpm check` で "Expected 2 arguments, but got 1." が報告された。根本原因は TypeScript の interface declaration merging: `@sveltejs/kit/types/index.d.ts` の基底 `RouteId(): string` 宣言が最後にマージされるため `ReturnType<AppTypes['RouteId']>` が `string` となり、`RouteParams<string> = Record<string, string>` として全ルートで 2 引数が要求される。
-
-- **動的パラメータ付きルート**: `resolve('/workbooks/[slug]', { slug })` の形式（型安全）
-- **静的ルート・動的文字列**: `// @ts-expect-error svelte-check TS2554: AppTypes declaration merging causes RouteId to resolve as string, requiring params. Runtime behavior is correct.` で抑制
-
-### `SvelteMap<K, V>` 型パラメータ
-
-型パラメータなしだと `.get()` が `unknown` を返す。常に `new SvelteMap<K, V>()` と明示する。
-
-### `valid-prop-names-in-kit-pages` とコメントアウト済みコード
-
-SvelteKit ページコンポーネントは `data`/`form` のみ有効。コメントアウト済みコードが参照するプロップが lint 違反の場合でも、機能コード自体は保持する（未公開 ≠ 不要）。違反プロップのみ削除し、機能を再公開する際に Props 設計を再検討すること。
-
-### `{#each}` キー
-
-Svelte 5 の `{#each}` は全ブロックにキーが必要。ユニークなフィールドを優先し、なければインデックス `(i)` を使用。
-
-### `$derived` vs `$state + $effect`
-
-`$state([]) + $effect(() => { var = expr; })` → `$derived(expr)` に変換できる。`$derived(expr)` と `$derived(() => expr)` は等価。
+コメントアウト済みの AtCoder ID 認証・バリデーションフォームは未公開状態のまま保持。`status` プロップは `valid-prop-names-in-kit-pages` 制約のため削除済みのため、再公開時は Props 設計（`data` prop への一本化等）を合わせて再検討すること。

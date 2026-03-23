@@ -83,6 +83,16 @@ automatically excluded. This is not an IS NOT NULL check; the mechanism is the J
 When documenting this behavior, write "excluded by INNER JOIN" rather than
 "implicitly includes IS NOT NULL".
 
+## Dual-Enforcement Constraints
+
+When the same constraint is enforced in both Zod (early validation) and SQL `CHECK` (last line of defense), add an inline comment stating each layer's role and the obligation to keep them in sync:
+
+```typescript
+// XOR constraint: dual enforcement via Zod (early validation) and a CHECK in migration.sql (last line of defense).
+// Prisma lacks @@check, so the SQL constraint is maintained manually. Keep both in sync.
+.refine(...)
+```
+
 ## Validate Constraints
 
 Prisma does not support `@@check`. To add one:
