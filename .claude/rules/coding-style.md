@@ -113,6 +113,26 @@ Examples:
 - Page routes (`+page.server.ts`): use `redirect()` to navigate
 - API routes (`+server.ts`): use `error()` — throwing `redirect()` returns a 3xx response; `fetch` follows it by default and receives the HTML page at the redirect target instead of a JSON error
 
+### Internal Navigation: `resolve()` Wrapping
+
+`svelte/no-navigation-without-resolve` requires all internal navigation to use `resolve()` from `$app/paths`. Two patterns apply:
+
+**Parameterized routes** — type-safe, preferred:
+
+```typescript
+import { resolve } from '$app/paths';
+resolve('/workbooks/[slug]', { slug: workbook.slug });
+```
+
+**Static routes and computed string paths** — TypeScript declaration merging makes `AppTypes['RouteId']` resolve as `string` (the base overload), which requires 2 arguments for every route. Suppress with a description, and pre-compute in `<script>` when used in templates (where `@ts-expect-error` cannot be placed inline):
+
+```typescript
+// @ts-expect-error svelte-check TS2554: AppTypes declaration merging causes RouteId to resolve as string, requiring params. Runtime behavior is correct.
+const homeHref = resolve('/');
+```
+
+**External links** — add `rel="noreferrer external"` instead of wrapping with `resolve()`.
+
 ### Dual-Enforcement Constraints
 
 When the same constraint is enforced in two layers (e.g. Zod validation + SQL `CHECK`), add an inline comment stating each layer's role and the obligation to keep them in sync:

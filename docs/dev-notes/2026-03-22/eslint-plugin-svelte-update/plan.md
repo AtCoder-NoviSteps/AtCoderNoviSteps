@@ -104,3 +104,30 @@ pnpm lint       # 0 errors、warning 最小化
 pnpm check      # Svelte 型エラーなし
 pnpm test:unit  # 既存テスト全パス
 ```
+
+## 実装結果・学び
+
+全 8 フェーズ完了。`pnpm lint` 0 errors・0 warnings、`pnpm check` 既存の 2 件のみ、`pnpm test:unit` 45 ファイル 1954 件全パス。詳細は `refactor.md` を参照。
+
+### `resolve()` の TypeScript 型エラー（宣言マージ問題）
+
+`pnpm check` で "Expected 2 arguments, but got 1." が報告された。根本原因は TypeScript の interface declaration merging: `@sveltejs/kit/types/index.d.ts` の基底 `RouteId(): string` 宣言が最後にマージされるため `ReturnType<AppTypes['RouteId']>` が `string` となり、`RouteParams<string> = Record<string, string>` として全ルートで 2 引数が要求される。
+
+- **動的パラメータ付きルート**: `resolve('/workbooks/[slug]', { slug })` の形式（型安全）
+- **静的ルート・動的文字列**: `// @ts-expect-error svelte-check TS2554: AppTypes declaration merging causes RouteId to resolve as string, requiring params. Runtime behavior is correct.` で抑制
+
+### `SvelteMap<K, V>` 型パラメータ
+
+型パラメータなしだと `.get()` が `unknown` を返す。常に `new SvelteMap<K, V>()` と明示する。
+
+### `valid-prop-names-in-kit-pages` とコメントアウト済みコード
+
+SvelteKit ページコンポーネントは `data`/`form` のみ有効。コメントアウト済みコードが参照するプロップが lint 違反の場合でも、機能コード自体は保持する（未公開 ≠ 不要）。違反プロップのみ削除し、機能を再公開する際に Props 設計を再検討すること。
+
+### `{#each}` キー
+
+Svelte 5 の `{#each}` は全ブロックにキーが必要。ユニークなフィールドを優先し、なければインデックス `(i)` を使用。
+
+### `$derived` vs `$state + $effect`
+
+`$state([]) + $effect(() => { var = expr; })` → `$derived(expr)` に変換できる。`$derived(expr)` と `$derived(() => expr)` は等価。

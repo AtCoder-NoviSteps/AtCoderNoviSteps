@@ -37,6 +37,20 @@ Import from `flowbite-svelte`. Use Tailwind CSS v4 utility classes. Dark mode: `
 
 When copying button styles from a reference component, always check all three axes: `color`, `size`, and `class`. Omitting `color` applies Flowbite's default (filled blue).
 
+## `SvelteMap<K, V>` — Always Provide Type Parameters
+
+`SvelteMap` without type parameters makes `.get()` return `unknown`. Always declare with explicit types:
+
+```typescript
+// Bad: .get() returns unknown — causes type errors at call sites
+const map = new SvelteMap();
+
+// Good: .get() returns TaskResults | undefined
+const map = new SvelteMap<TaskGrade, TaskResults>();
+```
+
+`$state()` wrapping is unnecessary — `SvelteMap` is already reactive (`svelte/no-unnecessary-state-wrap`). Reset with `.clear()` rather than reassigning.
+
 ## `let`/`const` — Reactive Data Requires `$derived`
 
 Plain `let` or `const` in Svelte 5 component `<script>` executes once at component creation. Values derived from props or server data must use `$derived()`:
@@ -75,9 +89,22 @@ $effect(() => {
 });
 ```
 
-## `$derived` — No Arrow Wrapper
+## `$derived` — Prefer Over `$state` + `$effect`
 
-Use `$derived(expr)`, not `$derived(() => expr)`. The arrow form makes the derived value a _function_, not a reactive value — dependencies may not be tracked and the template call site is confusing.
+When a value is purely computed from other state, use `$derived` instead of initializing with `$state` and updating in `$effect`:
+
+```typescript
+// Bad: unnecessary mutation via $effect
+let items = $state<Item[]>([]);
+$effect(() => {
+  items = source.filter(isActive);
+});
+
+// Good: $derived — reactive, no mutation needed
+let items = $derived(source.filter(isActive));
+```
+
+`$derived(expr)` and `$derived(() => expr)` are equivalent — use the shorter form without the arrow wrapper. The arrow form makes the derived value a _function_, not a reactive value — dependencies may not be tracked and the template call site is confusing.
 
 ## `{@const}` Placement
 
@@ -127,7 +154,12 @@ replaceState(buildUpdatedUrl($page.url, activeTab), {});
 
 ## `{#each}` — Keys and Empty-list Fallback
 
-Always provide a key expression when the list or its items may change dynamically.
+Always provide a key expression on every `{#each}` block. Prefer a unique field (`id`, `name`, etc.); fall back to the index `(i)` only when no unique field exists.
+
+```svelte
+{#each items as item (item.id)}   <!-- unique field preferred -->
+{#each labels as label (i)}        <!-- index fallback -->
+```
 
 **Filter before `{#each}`, not inside it.** When visibility depends on a predicate (e.g. `canRead`), derive a filtered list once and iterate over it — never repeat the predicate inside a `{#if}` within the loop. This avoids computing the condition twice and keeps the template clean:
 

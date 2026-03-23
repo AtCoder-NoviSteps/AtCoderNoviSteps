@@ -31,7 +31,7 @@
   });
 
   const countTasks = (taskGrade: TaskGrade) => {
-    return taskResultsForEachGrade.get(taskGrade)!.length;
+    return taskResultsForEachGrade.get(taskGrade)?.length ?? 0;
   };
 
   const isShowTaskList = (isAdmin: boolean, taskGrade: TaskGrade): boolean => {
