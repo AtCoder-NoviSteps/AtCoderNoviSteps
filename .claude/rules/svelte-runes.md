@@ -75,7 +75,7 @@ $effect(() => {
 let items = $derived(source.filter(isActive));
 ```
 
-`$derived(expr)` and `$derived(() => expr)` are equivalent — use the shorter form without the arrow wrapper. The arrow form makes the derived value a _function_, not a reactive value — dependencies may not be tracked and the template call site is confusing.
+**Do not pass an arrow function to `$derived`**: `$derived(() => fn(x))` stores the arrow function itself as the derived value — `fn` is never called and `x` is not tracked as a dependency. Use `$derived(fn(x))` for single expressions, or `$derived.by(() => { ... })` when multiple statements are needed. `$derived(expr)` is equivalent to `$derived.by(() => expr)` — the `.by` variant exists solely to allow a multi-statement function body.
 
 ## Async Rollback: Capture State Before `await`
 

@@ -63,7 +63,7 @@
     displayConfig: ContestTableDisplayConfig;
   }
 
-  let contestTableMaps = $derived(() => prepareContestTablesMap(providers));
+  let contestTableMaps = $derived(prepareContestTablesMap(providers));
 
   function prepareContestTablesMap(providers: ContestTableProvider[]): Map<string, ProviderData> {
     const map = new SvelteMap<string, ProviderData>();
@@ -98,7 +98,7 @@
   }
 
   function getTaskTable(abbreviationName: string) {
-    return contestTableMaps().get(abbreviationName);
+    return contestTableMaps.get(abbreviationName);
   }
 
   function getContestRoundLabel(provider: ContestTableProvider, contestId: string): string {

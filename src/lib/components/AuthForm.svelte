@@ -28,7 +28,7 @@
     submitButtonLabel: string;
     confirmationMessage: string;
     alternativePageName: string;
-    alternativePageLink: string;
+    alternativePageLink: '/login' | '/signup';
   }
 
   let {
@@ -46,8 +46,8 @@
   const homeHref = resolve(HOME_PAGE);
   // @ts-expect-error svelte-check TS2554: same declaration merging issue
   const forgotPasswordHref = resolve(FORGOT_PASSWORD_PAGE);
-  // @ts-expect-error svelte-check TS2554: same declaration merging issue
-  const alternativeHref = $derived(resolve(alternativePageLink as '/login'));
+  // @ts-expect-error svelte-check TS2554: AppTypes declaration merging causes RouteId to resolve as string, requiring params. Runtime behavior is correct.
+  const alternativeHref = $derived(resolve(alternativePageLink));
 
   let isSubmitting = $state(false);
 

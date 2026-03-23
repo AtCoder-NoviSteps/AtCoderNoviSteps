@@ -28,7 +28,7 @@
 
   let { data }: Props = $props();
 
-  let formAction = $state('account_transfer');
+  const ACCOUNT_TRANSFER_ACTION = '?/account_transfer';
 
   const { form, errors, message, submitting, enhance } = superForm(data.form);
 
@@ -64,7 +64,7 @@
 <ContainerWrapper>
   <HeadingOne title="アカウント移行" />
 
-  <form method="POST" class="flex flex-col gap-4" action={formAction} use:enhance>
+  <form method="POST" class="flex flex-col gap-4" action={ACCOUNT_TRANSFER_ACTION} use:enhance>
     <div class="dark:text-gray-300">
       新しく作成された空のアカウントに、旧アカウントの回答データをコピーできます。
     </div>

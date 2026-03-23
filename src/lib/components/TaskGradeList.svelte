@@ -1,7 +1,4 @@
 <script lang="ts">
-  import { run } from 'svelte/legacy';
-  import { SvelteMap } from 'svelte/reactivity';
-
   import TaskList from '$lib/components/TaskList.svelte';
 
   import type { TaskResults, TaskResult } from '$lib/types/task';
@@ -16,19 +13,14 @@
   let { taskResults, isAdmin, isLoggedIn }: Props = $props();
 
   // TODO: 共通する内容はutilsに移動させる。
-  let taskResultsForEachGrade = new SvelteMap<TaskGrade, TaskResults>();
-
-  // HACK: $effectだと更新されないため、やむなくrunを使用。
-  run(() => {
-    taskResultsForEachGrade.clear();
-
-    taskGradeValues.map((grade) => {
-      taskResultsForEachGrade.set(
+  const taskResultsForEachGrade = $derived(
+    new Map(
+      taskGradeValues.map((grade): [TaskGrade, TaskResults] => [
         grade,
         taskResults.filter((taskResult: TaskResult) => taskResult.grade === grade),
-      );
-    });
-  });
+      ]),
+    ),
+  );
 
   const countTasks = (taskGrade: TaskGrade) => {
     return taskResultsForEachGrade.get(taskGrade)?.length ?? 0;

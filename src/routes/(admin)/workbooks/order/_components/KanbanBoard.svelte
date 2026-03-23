@@ -1,7 +1,6 @@
 <script lang="ts">
   import { page } from '$app/stores';
   import { replaceState } from '$app/navigation';
-  import { resolve } from '$app/paths';
   import { untrack } from 'svelte';
 
   import { Toast } from 'flowbite-svelte';
@@ -60,8 +59,7 @@
       selectedSolutionCategories,
       selectedGrades,
     );
-    // @ts-expect-error svelte-check TS2554: AppTypes declaration merging causes RouteId to resolve as string, requiring params. Runtime behavior is correct.
-    replaceState(resolve(updatedUrl.pathname + updatedUrl.search), {});
+    replaceState(updatedUrl, {});
   }
 
   let allItems = $state<Record<string, KanbanColumns>>(

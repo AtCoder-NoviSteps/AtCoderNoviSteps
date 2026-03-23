@@ -32,6 +32,10 @@ const homeHref = resolve('/');
 
 **External links** — add `rel="noreferrer external"` instead of wrapping with `resolve()`.
 
+**Do not pass query strings to `resolve()`** — `resolve()` accepts route patterns only (e.g. `'/workbooks'`). A path like `'/workbooks?tab=foo'` is not a valid route pattern and causes a type error. Split path and search before passing: `resolve(url.pathname) + url.search`.
+
+**Do not apply `resolve()` to URLs derived from `$page.url`** — `$page.url` is the actual browser URL with the base path already applied. Wrapping a value derived from it with `resolve()` double-applies the base path. Pass the `URL` object directly to `replaceState` or extract `.pathname + .search` without `resolve()`.
+
 ## Page Component Props
 
 SvelteKit page components (`+page.svelte`) accept only `data` and `form` as props (`svelte/valid-prop-names-in-kit-pages`). Commented-out features that reference other props are not "dead code" — remove only the violating prop declaration, preserve the feature code.
