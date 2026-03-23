@@ -61,19 +61,23 @@ SvelteKit 2.55.0 で実装済み。`resolveRoute` は deprecated となり `reso
 
 ### 修正した項目と判断
 
-| ファイル                        | 変更内容                                                          | 判断軸                                                                                                       |
-| ------------------------------- | ----------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------ |
-| `TaskTable.svelte`              | `$derived(() => fn)` → `$derived(fn)` + 呼び出し側 `()` 除去      | `$derived` に arrow function を渡すと関数オブジェクトを値として保持するバグ。→ rules 参照                    |
-| `account_transfer/+page.svelte` | `'account_transfer'` → `'?/account_transfer'`                     | SvelteKit named action は `?/` 必須。なければ URL 文字列として扱われフォームが動かない                       |
-| `workbooks/+page.svelte`        | `resolve(saved)` → `resolve(savedUrl.pathname) + savedUrl.search` | `resolve()` は route pattern のみ受け付ける。query string を含む文字列は型エラー・意味的に不正。→ rules 参照 |
-| `UpdatingDropdown.svelte`       | `/signup`・`/login` href を `resolve()` でラップ                  | `no-navigation-without-resolve` ルール準拠。現状 no-op だが base path 設定時に必要                           |
-| `KanbanBoard.svelte`            | `replaceState(resolve(...))` → `replaceState(updatedUrl)`         | `$page.url` 由来の URL は base path 込み。`resolve()` を適用すると二重適用になる。→ rules 参照               |
-| `AuthForm.svelte`               | `alternativePageLink: string` → `'/login' \| '/signup'`           | 型を絞ることで `as` キャストを除去し exhaustive check を有効化                                               |
-| `TaskGradeList.svelte`          | `run()` (svelte/legacy) → `$derived(new Map(...))`                | `run()` は Svelte 4→5 移行。単純な変換なので `$derived` で置き換え可能                                       |
+| ファイル                        | 変更内容                                                                    | 判断軸                                                                                                                                                                             |
+| ------------------------------- | --------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `TaskTable.svelte`              | `$derived(() => fn)` → `$derived(fn)` + 呼び出し側 `()` 除去                | `$derived` に arrow function を渡すと関数オブジェクトを値として保持するバグ。→ rules 参照                                                                                          |
+| `account_transfer/+page.svelte` | `'account_transfer'` → `'?/account_transfer'`                               | SvelteKit named action は `?/` 必須。なければ URL 文字列として扱われフォームが動かない                                                                                             |
+| `workbooks/+page.svelte`        | `resolve(saved)` → `resolve(savedUrl.pathname) + savedUrl.search`           | `resolve()` は route pattern のみ受け付ける。query string を含む文字列は型エラー・意味的に不正。→ rules 参照                                                                       |
+| `UpdatingDropdown.svelte`       | `/signup`・`/login` href を `resolve()` でラップ                            | `no-navigation-without-resolve` ルール準拠。現状 no-op だが base path 設定時に必要                                                                                                 |
+| `KanbanBoard.svelte`            | `replaceState(resolve(...))` → `replaceState(updatedUrl)`                   | `$page.url` 由来の URL は base path 込み。`resolve()` を適用すると二重適用になる。→ rules 参照                                                                                     |
+| `AuthForm.svelte`               | `alternativePageLink: string` → `'/login' \| '/signup'`                     | 型を絞ることで `as` キャストを除去し exhaustive check を有効化                                                                                                                     |
+| `TaskGradeList.svelte`          | `run()` (svelte/legacy) → `$derived(new Map(...))`                          | `run()` は Svelte 4→5 移行。単純な変換なので `$derived` で置き換え可能                                                                                                             |
+| `TaskTable.svelte`              | `prepareContestTablesMap` 内 `new SvelteMap()` → `new Map()`                | `svelte/prefer-svelte-reactivity` は `$derived` 内の `new Map()` を対象外と確認。戻り型 `Map` と実体が一致。`SvelteMap` import は別箇所（`taskResultsMap` reduce）で必要なため維持 |
+| `account_transfer/+page.svelte` | `action` 属性と `ACCOUNT_TRANSFER_ACTION` 定数を削除（default action 使用） | PR #3298 で named action が `default:` に変更されたことによる 404 の修正。action 属性を外すのが最小変更                                                                            |
 
 ### 採用しなかった指摘
 
-| 指摘                                                                     | 不採用理由                                                                            |
-| ------------------------------------------------------------------------ | ------------------------------------------------------------------------------------- |
-| `TagForm.svelte`: `resolve('/(admin)/tags')` → `resolve('/tags')` に変更 | `/(admin)/tags` が正しいルートID。`/tags` は別ルートになる                            |
-| `users/[username]/+page.svelte`: `resolve(PROBLEMS_PAGE)` 除去           | `<a href>` への静的パスは base path 設定時に `resolve()` が必要。除去すると将来壊れる |
+| 指摘                                                                     | 不採用理由                                                                                                                                 |
+| ------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| `TagForm.svelte`: `resolve('/(admin)/tags')` → `resolve('/tags')` に変更 | `/(admin)/tags` が正しいルートID。`/tags` は別ルートになる                                                                                 |
+| `users/[username]/+page.svelte`: `resolve(PROBLEMS_PAGE)` 除去           | `<a href>` への静的パスは base path 設定時に `resolve()` が必要。除去すると将来壊れる                                                      |
+| `UpdatingDropdown.svelte`: `#each` キーを `innerId` に                   | `submission_statuses` はハードコード定数。`innerName` は一意・安定。DB 化 TODO があるが発生時に対処すれば十分（YAGNI）                     |
+| `TaskGradeList.svelte`: `!` → `?? []`                                    | Map は `taskGradeValues.map()` で全グレードを網羅初期化しており `!` は安全。`?? []` は「undefined の可能性あり」という誤ったシグナルになる |

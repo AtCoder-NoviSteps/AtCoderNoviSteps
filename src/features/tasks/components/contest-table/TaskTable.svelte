@@ -66,7 +66,7 @@
   let contestTableMaps = $derived(prepareContestTablesMap(providers));
 
   function prepareContestTablesMap(providers: ContestTableProvider[]): Map<string, ProviderData> {
-    const map = new SvelteMap<string, ProviderData>();
+    const map = new Map<string, ProviderData>();
 
     for (const provider of providers) {
       const abbreviationName = provider.getMetadata().abbreviationName;

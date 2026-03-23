@@ -22,6 +22,8 @@ const map = new SvelteMap<TaskGrade, TaskResults>();
 
 `$state()` wrapping is unnecessary — `SvelteMap` is already reactive (`svelte/no-unnecessary-state-wrap`). Reset with `.clear()` rather than reassigning.
 
+`svelte/prefer-svelte-reactivity` targets only `$state` contexts. Inside `$derived`, a plain `new Map()` is sufficient — the reactive dependency is tracked at the `$derived` level, not via `SvelteMap` mutation signals. Do not introduce `SvelteMap` inside `$derived` solely to satisfy this rule.
+
 ## `let`/`const` — Reactive Data Requires `$derived`
 
 Plain `let` or `const` in Svelte 5 component `<script>` executes once at component creation. Values derived from props or server data must use `$derived()`:
