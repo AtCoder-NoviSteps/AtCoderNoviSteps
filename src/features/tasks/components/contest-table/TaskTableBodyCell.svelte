@@ -11,10 +11,19 @@
     taskResult: TaskResult;
     isLoggedIn: boolean;
     isShownTaskIndex: boolean;
+    voteResults: Map<string, { grade: string }>;
     onupdate?: (updatedTask: TaskResult) => void; // Ensure to update task result in parent component.
   }
 
-  let { taskResult, isLoggedIn, isShownTaskIndex, onupdate = () => {} }: Props = $props();
+  let {
+    taskResult,
+    isLoggedIn,
+    isShownTaskIndex,
+    voteResults,
+    onupdate = () => {},
+  }: Props = $props();
+
+  let estimatedGrade = $derived(voteResults.get(taskResult.task_id)?.grade);
 </script>
 
 <div
@@ -29,7 +38,7 @@
 </div>
 
 {#snippet taskGradeLabel(taskResult: TaskResult)}
-  <VotableGrade {taskResult} {isLoggedIn} />
+  <VotableGrade {taskResult} {isLoggedIn} {estimatedGrade} />
 {/snippet}
 
 {#snippet taskTitleAndExternalLink(taskResult: TaskResult, isShownTaskIndex: boolean)}

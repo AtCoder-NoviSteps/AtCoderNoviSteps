@@ -1,6 +1,6 @@
 import { fail } from '@sveltejs/kit';
 
-import * as crud from '@/features/votes/services/vote_table_manager';
+import * as crud from '@/features/votes/services/vote_crud';
 import { BAD_REQUEST, UNAUTHORIZED } from '$lib/constants/http-response-status-codes';
 
 export const voteAbsoluteGrade = async (

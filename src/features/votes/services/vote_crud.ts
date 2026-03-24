@@ -32,7 +32,7 @@ export async function getVoteGrade(userId: string, taskId: string) {
   });
   let voted = false;
   let grade = null;
-  if(res !== null){
+  if (res !== null) {
     voted = true;
     grade = res.grade;
   }
@@ -40,6 +40,16 @@ export async function getVoteGrade(userId: string, taskId: string) {
     voted: voted,
     grade: grade,
   };
+}
+
+export async function getVoteGradeStatistics() {
+  const all_data = prisma.votedGradeStatistics.findMany();
+  const gradesMap = new Map();
+
+  (await all_data).map((data) => {
+    gradesMap.set(data.taskId, data);
+  });
+  return gradesMap;
 }
 
 // 概念実装（読み込み→処理を同一トランザクション内で行う）
@@ -89,7 +99,7 @@ export async function upsertVoteGradeTables(userId: string, taskId: string, grad
         updatedAt: new Date(),
       },
     });
-    
+
     // Recompute median for this task and update VotedGradeStatistics
     const counters = await tx.votedGradeCounter.findMany({
       where: { taskId },
@@ -97,7 +107,7 @@ export async function upsertVoteGradeTables(userId: string, taskId: string, grad
     });
 
     const total = counters.reduce((s, c) => s + c.count, 0);
-    if (total > 0) {
+    if (total >= 3) {
       let median = 0;
 
       const getGradeOrderAtPosition = (target: number): number => {
@@ -110,13 +120,14 @@ export async function upsertVoteGradeTables(userId: string, taskId: string, grad
         return taskGradeOrderInfinity;
       };
 
-      if(total % 2){
+      if (total % 2) {
         const target = Math.ceil(total / 2);
         median = getGradeOrderAtPosition(target);
-      }
-      else{
+      } else {
         const target = total / 2;
-        median = Math.round((getGradeOrderAtPosition(target) + getGradeOrderAtPosition(target + 1)) / 2);
+        median = Math.round(
+          (getGradeOrderAtPosition(target) + getGradeOrderAtPosition(target + 1)) / 2,
+        );
       }
 
       let medianGrade: TaskGrade = OrderToTaskGrade.get(median) as TaskGrade;
