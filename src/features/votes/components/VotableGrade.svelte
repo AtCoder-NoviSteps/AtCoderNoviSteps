@@ -6,7 +6,7 @@
 
   import { taskGradeValues, TaskGrade, getTaskGrade, type TaskResult } from '$lib/types/task';
   import { getTaskGradeLabel } from '$lib/utils/task';
-  import { SIGNUP_PAGE, LOGIN_PAGE } from '$lib/constants/navbar-links';
+  import { SIGNUP_PAGE, LOGIN_PAGE, VOTES_PAGE } from '$lib/constants/navbar-links';
   import { errorMessageStore } from '$lib/stores/error_message';
 
   import GradeLabel from '$lib/components/GradeLabel.svelte';
@@ -178,6 +178,10 @@
           </div>
         </DropdownItem>
       {/each}
+      <DropdownDivider />
+      <DropdownItem href="{VOTES_PAGE}/{taskResult.task_id}" class="rounded-md">
+        詳細・統計を見る
+      </DropdownItem>
     </Dropdown>
   {:else}
     <Dropdown
