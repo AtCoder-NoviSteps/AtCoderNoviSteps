@@ -180,7 +180,7 @@
       {/each}
       <DropdownDivider />
       <DropdownItem href="{VOTES_PAGE}/{taskResult.task_id}" class="rounded-md">
-        詳細・統計を見る
+        詳細
       </DropdownItem>
     </Dropdown>
   {:else}

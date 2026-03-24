@@ -7,8 +7,8 @@
   import GradeLabel from '$lib/components/GradeLabel.svelte';
   import ExternalLinkWrapper from '$lib/components/ExternalLinkWrapper.svelte';
 
-  import { taskGradeValues, TaskGrade, getTaskGrade } from '$lib/types/task';
-  import { getTaskGradeLabel, getTaskUrl } from '$lib/utils/task';
+  import { taskGradeValues, TaskGrade } from '$lib/types/task';
+  import { getTaskGradeLabel, getTaskUrl, getTaskGradeColor, toChangeTextColorIfNeeds } from '$lib/utils/task';
   import { SIGNUP_PAGE, LOGIN_PAGE } from '$lib/constants/navbar-links';
 
   let { data } = $props();
@@ -64,7 +64,7 @@
     <div class="mb-6">
       <p class="flex items-center gap-2 text-green-600 dark:text-green-400 font-medium mb-4">
         <Check class="w-5 h-5" strokeWidth={3} />
-        投票済み：{getTaskGradeLabel(data.myVote.grade)}
+        投票済み：{getTaskGradeLabel(data.myVote.grade as TaskGrade)}
       </p>
 
       {#if data.stats}
@@ -135,10 +135,14 @@
           name="grade"
           value={grade}
           type="submit"
-          class="px-3 py-1.5 rounded-md text-sm font-medium border transition-colors
-            {data.myVote?.grade === grade
-            ? 'bg-primary-600 text-white border-primary-600'
-            : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700'}"
+          class="px-3 py-1.5 rounded-md text-sm font-medium border transition-opacity
+            {grade === TaskGrade.D6
+              ? 'text-white shadow-md shadow-amber-900/80 ring-2 ring-amber-300/50 font-bold drop-shadow relative overflow-hidden'
+              : toChangeTextColorIfNeeds(getTaskGradeLabel(grade))}
+            {data.myVote?.grade === grade ? 'ring-2 ring-offset-1 ring-gray-600 dark:ring-gray-300' : 'opacity-80 hover:opacity-100'}"
+          style={grade === TaskGrade.D6
+            ? 'background-image: linear-gradient(to bottom right, var(--color-atcoder-D6), rgb(120, 113, 108), rgb(217, 119, 6)); border-color: var(--color-atcoder-D6);'
+            : `background-color: ${getTaskGradeColor(grade)}; border-color: ${getTaskGradeColor(grade)};`}
         >
           {getTaskGradeLabel(grade)}
         </button>
