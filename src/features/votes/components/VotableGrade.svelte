@@ -20,9 +20,12 @@
 
   let { taskResult, isLoggedIn, estimatedGrade }: Props = $props();
 
+  // PENDING（未確定）の問題のみ投票可能。公式グレード付与済みは投票不可。
+  const isVotable = taskResult.grade === TaskGrade.PENDING;
+
   // 表示用のグレード（投票後に画面リロードなしで差し替えるためのローカル状態）
-  // estimatedGrade（集計済み中央値）があればそれを優先表示
-  const initialGrade = estimatedGrade ?? taskResult.grade;
+  // PENDING かつ estimatedGrade（集計済み中央値）があればそれを優先表示
+  const initialGrade = isVotable ? (estimatedGrade ?? taskResult.grade) : taskResult.grade;
   let displayGrade = $state<TaskGrade | string>(initialGrade);
 
   const componentId = Math.random().toString(36).substring(2);
@@ -132,58 +135,65 @@
   }
 </script>
 
-<!-- Grade Icon -->
-<button
-  id={`update-grade-dropdown-trigger-${componentId}`}
-  class="relative group shrink-0 cursor-pointer"
-  type="button"
-  tabindex="0"
-  aria-label="Vote grade"
-  onclick={() => onTriggerClick()}
->
-  <GradeLabel taskGrade={displayGrade} defaultPadding={0.25} defaultWidth={6} reducedWidth={6} />
-
-  <!-- Overlay -->
-  <span
-    aria-hidden="true"
-    class="pointer-events-none absolute inset-0 rounded-lg bg-gray-200 dark:bg-gray-700 mix-blend-multiply opacity-0 transition-opacity duration-150 group-hover:opacity-100"
-  ></span>
-</button>
-
-<!-- Dropdown Menu -->
-{#if isLoggedIn}
-  <Dropdown
-    triggeredBy={`#update-grade-dropdown-trigger-${componentId}`}
-    simple
-    class="h-48 w-25 z-50 border border-gray-200 dark:border-gray-100 overflow-y-auto"
-  >
-    {#each nonPendingGrades as grade}
-      <DropdownItem onclick={() => handleClick(grade)} class="rounded-md">
-        <div
-          class="flex items-center justify-between w-full text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white"
-        >
-          <span>{getTaskGradeLabel(grade)}</span>
-          {#if votedGrade === grade}
-            <Check class="w-4 h-4 text-primary-600 dark:text-gray-300" strokeWidth={3} />
-          {/if}
-        </div>
-      </DropdownItem>
-    {/each}
-  </Dropdown>
+<!-- 公式グレード付与済みの問題は静的ラベルのみ表示（投票不可） -->
+{#if !isVotable}
+  <div class="shrink-0">
+    <GradeLabel taskGrade={displayGrade} defaultPadding={0.25} defaultWidth={6} reducedWidth={6} />
+  </div>
 {:else}
-  <Dropdown
-    triggeredBy={`#update-grade-dropdown-trigger-${componentId}`}
-    simple
-    class="w-32 z-50 border border-gray-200 dark:border-gray-100"
+  <!-- Grade Icon（PENDING問題のみ投票ドロップダウンを表示） -->
+  <button
+    id={`update-grade-dropdown-trigger-${componentId}`}
+    class="relative group shrink-0 cursor-pointer"
+    type="button"
+    tabindex="0"
+    aria-label="Vote grade"
+    onclick={() => onTriggerClick()}
   >
-    <DropdownItem href={SIGNUP_PAGE} class="rounded-md">アカウント作成</DropdownItem>
-    <DropdownDivider />
-    <DropdownItem href={LOGIN_PAGE} class="rounded-md">ログイン</DropdownItem>
-  </Dropdown>
-{/if}
+    <GradeLabel taskGrade={displayGrade} defaultPadding={0.25} defaultWidth={6} reducedWidth={6} />
 
-{#if showForm && selectedVoteGrade}
-  {@render voteGradeForm(taskResult, selectedVoteGrade)}
+    <!-- Overlay -->
+    <span
+      aria-hidden="true"
+      class="pointer-events-none absolute inset-0 rounded-lg bg-gray-200 dark:bg-gray-700 mix-blend-multiply opacity-0 transition-opacity duration-150 group-hover:opacity-100"
+    ></span>
+  </button>
+
+  <!-- Dropdown Menu -->
+  {#if isLoggedIn}
+    <Dropdown
+      triggeredBy={`#update-grade-dropdown-trigger-${componentId}`}
+      simple
+      class="h-48 w-25 z-50 border border-gray-200 dark:border-gray-100 overflow-y-auto"
+    >
+      {#each nonPendingGrades as grade}
+        <DropdownItem onclick={() => handleClick(grade)} class="rounded-md">
+          <div
+            class="flex items-center justify-between w-full text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white"
+          >
+            <span>{getTaskGradeLabel(grade)}</span>
+            {#if votedGrade === grade}
+              <Check class="w-4 h-4 text-primary-600 dark:text-gray-300" strokeWidth={3} />
+            {/if}
+          </div>
+        </DropdownItem>
+      {/each}
+    </Dropdown>
+  {:else}
+    <Dropdown
+      triggeredBy={`#update-grade-dropdown-trigger-${componentId}`}
+      simple
+      class="w-32 z-50 border border-gray-200 dark:border-gray-100"
+    >
+      <DropdownItem href={SIGNUP_PAGE} class="rounded-md">アカウント作成</DropdownItem>
+      <DropdownDivider />
+      <DropdownItem href={LOGIN_PAGE} class="rounded-md">ログイン</DropdownItem>
+    </Dropdown>
+  {/if}
+
+  {#if showForm && selectedVoteGrade}
+    {@render voteGradeForm(taskResult, selectedVoteGrade)}
+  {/if}
 {/if}
 
 {#snippet voteGradeForm(selectedTaskResult: TaskResult, voteGrade: TaskGrade)}
