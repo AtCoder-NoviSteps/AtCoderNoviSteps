@@ -3,11 +3,10 @@ import { expect, test, describe, vi, afterEach } from 'vitest';
 // Mock modules
 vi.mock('@sveltejs/kit', () => {
   const redirectImpl = (status: number, location: string) => {
-    const error = new Error('Redirect');
-
-    (error as any).name = 'Redirect';
-    (error as any).status = status;
-    (error as any).location = location;
+    const error = new Error('Redirect') as Error & { status: number; location: string };
+    error.name = 'Redirect';
+    error.status = status;
+    error.location = location;
 
     throw error;
   };

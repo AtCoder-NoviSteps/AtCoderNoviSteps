@@ -439,7 +439,7 @@ function createMergedTaskResults(
       setupAnswers();
     });
 
-    testCases.forEach(({ contest_id, task_id }: any) => {
+    testCases.forEach(({ contest_id, task_id }) => {
       test(`expects to preserve contest_id and task_id${testNameSuffix} for ${contest_id}:${task_id}`, async () => {
         const taskResults = await getTaskResults('user_123');
         const taskResult = taskResults.find(

@@ -1,6 +1,7 @@
 import { describe, test, expect } from 'vitest';
 
 import { ContestType } from '$lib/types/contest';
+import type { TaskResults } from '$lib/types/task';
 
 import {
   JOIFirstQualRoundProvider,
@@ -21,7 +22,7 @@ describe('JOIFirstQualRoundProvider', () => {
       { contest_id: 'abc123', task_id: 'abc123_a' },
     ];
 
-    const filtered = provider.filter(mockJOITasks as any);
+    const filtered = provider.filter(mockJOITasks as unknown as TaskResults);
 
     expect(filtered?.every((task) => task.contest_id.startsWith('joi'))).toBe(true);
     expect(filtered?.length).toBe(4);
@@ -39,7 +40,7 @@ describe('JOIFirstQualRoundProvider', () => {
       { contest_id: 'joi2022yo1a', task_id: 'joi2022yo1a_c' },
     ];
 
-    const filtered = provider.filter(mockJOITasks as any);
+    const filtered = provider.filter(mockJOITasks as unknown as TaskResults);
 
     expect(filtered?.length).toBe(6);
     expect(filtered?.filter((task) => task.contest_id.includes('2024')).length).toBe(3);
@@ -93,7 +94,7 @@ describe('JOIFirstQualRoundProvider', () => {
       { contest_id: 'joi2024yo1c', task_id: 'joi2024yo1c_c', task_table_index: 'C' },
     ];
 
-    const table = provider.generateTable(mockJOITasks as any);
+    const table = provider.generateTable(mockJOITasks as unknown as TaskResults);
 
     expect(table).toHaveProperty('joi2024yo1a');
     expect(table).toHaveProperty('joi2024yo1b');
@@ -115,7 +116,7 @@ describe('JOIFirstQualRoundProvider', () => {
       { contest_id: 'joi2023yo1c', task_id: 'joi2023yo1c_a' },
     ];
 
-    const roundIds = provider.getContestRoundIds(mockJOITasks as any);
+    const roundIds = provider.getContestRoundIds(mockJOITasks as unknown as TaskResults);
 
     expect(roundIds).toContain('joi2024yo1a');
     expect(roundIds).toContain('joi2024yo1b');
@@ -139,7 +140,7 @@ describe('JOISecondQualRound2020OnwardsProvider', () => {
       { contest_id: 'abc123', task_id: 'abc123_a' },
     ];
 
-    const filtered = provider.filter(mockJOITasks as any);
+    const filtered = provider.filter(mockJOITasks as unknown as TaskResults);
 
     expect(filtered?.every((task) => task.contest_id.startsWith('joi'))).toBe(true);
     expect(filtered?.length).toBe(3);
@@ -155,7 +156,7 @@ describe('JOISecondQualRound2020OnwardsProvider', () => {
       { contest_id: 'joi2022yo2', task_id: 'joi2022yo2_a' },
     ];
 
-    const filtered = provider.filter(mockJOITasks as any);
+    const filtered = provider.filter(mockJOITasks as unknown as TaskResults);
 
     expect(filtered?.length).toBe(4);
     expect(filtered?.filter((task) => task.contest_id.includes('2024')).length).toBe(2);
@@ -193,7 +194,7 @@ describe('JOISecondQualRound2020OnwardsProvider', () => {
 
   test('expects to handle empty task results', () => {
     const provider = new JOISecondQualRound2020OnwardsProvider(ContestType.JOI);
-    const filtered = provider.filter([] as any);
+    const filtered = provider.filter([] as TaskResults);
 
     expect(filtered).toEqual([]);
   });
@@ -212,7 +213,7 @@ describe('JOIQualRoundFrom2006To2019Provider', () => {
       { contest_id: 'abc123', task_id: 'abc123_a' },
     ];
 
-    const filtered = provider.filter(mockJOITasks as any);
+    const filtered = provider.filter(mockJOITasks as unknown as TaskResults);
 
     expect(filtered?.every((task) => task.contest_id.startsWith('joi'))).toBe(true);
     expect(filtered?.length).toBe(3);
@@ -227,7 +228,7 @@ describe('JOIQualRoundFrom2006To2019Provider', () => {
       { contest_id: 'joi2024yo2', task_id: 'joi2024yo2_a' },
     ];
 
-    const filtered = provider.filter(mockJOITasks as any);
+    const filtered = provider.filter(mockJOITasks as unknown as TaskResults);
 
     expect(filtered?.length).toBe(1);
     expect(filtered?.[0].contest_id).toBe('joi2019yo');
@@ -263,7 +264,7 @@ describe('JOIQualRoundFrom2006To2019Provider', () => {
 
   test('expects to handle empty task results', () => {
     const provider = new JOIQualRoundFrom2006To2019Provider(ContestType.JOI);
-    const filtered = provider.filter([] as any);
+    const filtered = provider.filter([] as TaskResults);
 
     expect(filtered).toEqual([]);
   });
@@ -282,7 +283,7 @@ describe('JOISemiFinalRoundProvider', () => {
       { contest_id: 'abc123', task_id: 'abc123_a' },
     ];
 
-    const filtered = provider.filter(mockJOITasks as any);
+    const filtered = provider.filter(mockJOITasks as unknown as TaskResults);
 
     expect(filtered?.every((task) => task.contest_id.startsWith('joi'))).toBe(true);
     expect(filtered?.length).toBe(3);
@@ -298,7 +299,7 @@ describe('JOISemiFinalRoundProvider', () => {
       { contest_id: 'joi2022ho', task_id: 'joi2022ho_a' },
     ];
 
-    const filtered = provider.filter(mockJOITasks as any);
+    const filtered = provider.filter(mockJOITasks as unknown as TaskResults);
 
     expect(filtered?.length).toBe(4);
     expect(filtered?.filter((task) => task.contest_id.includes('2024')).length).toBe(2);
@@ -334,7 +335,7 @@ describe('JOISemiFinalRoundProvider', () => {
 
   test('expects to handle empty task results', () => {
     const provider = new JOISemiFinalRoundProvider(ContestType.JOI);
-    const filtered = provider.filter([] as any);
+    const filtered = provider.filter([] as TaskResults);
 
     expect(filtered).toEqual([]);
   });
@@ -350,7 +351,7 @@ describe('JOISemiFinalRoundProvider', () => {
       { contest_id: 'abc123', task_id: 'abc123_a' },
     ];
 
-    const filtered = provider.filter(mockJOITasks as any);
+    const filtered = provider.filter(mockJOITasks as unknown as TaskResults);
 
     expect(filtered?.length).toBe(3);
     expect(filtered?.some((task) => task.contest_id === 'joi2026sf')).toBe(true);
@@ -372,7 +373,7 @@ describe('JOISemiFinalRoundProvider', () => {
       { contest_id: 'joi2024ho', task_id: 'joi2024ho_a', task_table_index: 'A' },
     ];
 
-    const table = provider.generateTable(mockJOITasks as any);
+    const table = provider.generateTable(mockJOITasks as unknown as TaskResults);
 
     expect(table).toHaveProperty('joi2026sf');
     expect(table).toHaveProperty('joi2024ho');

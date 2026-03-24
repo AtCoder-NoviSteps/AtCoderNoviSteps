@@ -4,11 +4,10 @@ import type { SuperValidated } from 'sveltekit-superforms';
 // Mock external dependencies BEFORE importing the module under test
 vi.mock('@sveltejs/kit', () => {
   const redirectImpl = (status: number, location: string) => {
-    const error = new Error('Redirect');
-
-    (error as any).name = 'Redirect';
-    (error as any).status = status;
-    (error as any).location = location;
+    const error = new Error('Redirect') as Error & { status: number; location: string };
+    error.name = 'Redirect';
+    error.status = status;
+    error.location = location;
 
     throw error;
   };
@@ -137,7 +136,7 @@ describe('auth_forms', () => {
       } as unknown as SuperValidated<Record<string, string>, string>;
     });
 
-    vi.mocked(zod4).mockImplementation((schema: unknown) => schema as any);
+    vi.mocked(zod4).mockImplementation((schema: unknown) => schema as ReturnType<typeof zod4>);
   });
 
   afterEach(() => {
