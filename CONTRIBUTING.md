@@ -48,7 +48,7 @@
   - [pnpm](https://pnpm.io/ja/)
 - 文法およびフォーマットチェッカー
   - [oxlint](https://oxc.rs/docs/guide/usage/linter.html): JS/TS ファイルの高速リンター（50–100x 高速）
-  - [ESLint](https://eslint.org/): Svelte ファイル専用リンター（eslint-plugin-svelte）
+  - [ESLint](https://eslint.org/): Svelte ファイル専用リンター（eslint-plugin-svelte）のみ使用
   - [Prettier](https://prettier.io/)
   - [lefthook](https://github.com/evilmartians/lefthook): Git hooks 管理ツール（コミット前の自動フォーマット・リント）
 - Search Engine Optimization (SEO) 対策
