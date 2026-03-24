@@ -1,6 +1,14 @@
 import { ContestType } from '$lib/types/contest';
 import { TaskGrade } from '$lib/types/task';
 
+type MockedSubmissionStatus = {
+  id: string;
+  status_name: string;
+  image_path: string;
+  label_name: string;
+  is_ac: boolean;
+};
+
 export const MOCK_TASKS_DATA = [
   {
     id: '1',
@@ -84,7 +92,7 @@ export const MOCK_SUBMISSION_STATUSES_DATA = [
 ] as const;
 
 export const MOCK_SUBMISSION_STATUSES = new Map(
-  MOCK_SUBMISSION_STATUSES_DATA as unknown as Array<[string, any]>,
+  MOCK_SUBMISSION_STATUSES_DATA as unknown as Array<[string, MockedSubmissionStatus]>,
 );
 
 export const MOCK_ANSWERS_WITH_ANSWERS = new Map([

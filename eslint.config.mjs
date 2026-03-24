@@ -6,7 +6,6 @@ import globals from 'globals';
 import tsParser from '@typescript-eslint/parser';
 import svelteParser from 'svelte-eslint-parser';
 import sveltePlugin from 'eslint-plugin-svelte';
-import js from '@eslint/js';
 
 export default [
   {
@@ -28,10 +27,10 @@ export default [
       '**/vite.config.js.timestamp-*',
       '**/vite.config.ts.timestamp-*',
       'prisma/.fabbrica/index.ts',
+      // oxlint handles JS/TS files
+      '**/*.{js,ts,tsx,mjs,cjs}',
     ],
   },
-  // Base JS rules first
-  js.configs.recommended,
   // Svelte rules override JS rules where appropriate (intentional)
   // This allows Svelte-specific handling of rules like no-undef, no-unused-vars
   ...sveltePlugin.configs['flat/recommended'],

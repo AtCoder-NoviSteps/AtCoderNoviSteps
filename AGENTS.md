@@ -21,7 +21,7 @@ Always prefer simplicity over pathological correctness. YAGNI, KISS, DRY. No bac
 
 ## Tech Stack
 
-SvelteKit 2 + Svelte 5 (Runes) + TypeScript | PostgreSQL + Prisma | Flowbite Svelte + Tailwind 4 | Vitest + Playwright
+SvelteKit 2 + Svelte 5 (Runes) + TypeScript | PostgreSQL + Prisma | Flowbite Svelte + Tailwind 4 | Vitest + Playwright | oxlint (JS/TS) + ESLint (Svelte)
 
 ## Commands
 
@@ -32,7 +32,7 @@ pnpm test             # Run all tests
 pnpm test:unit        # Vitest unit tests
 pnpm test:e2e         # Playwright E2E tests
 pnpm coverage         # Report test coverage
-pnpm lint             # ESLint check
+pnpm lint             # Prettier + oxlint (JS/TS) + ESLint (.svelte) check
 pnpm format           # Prettier format
 pnpm check            # Svelte type check
 pnpm exec prisma generate           # Generate Prisma client
@@ -78,7 +78,7 @@ prisma/schema.prisma # Database schema
 - **Forms**: Superforms + Zod validation
 - **Tests**: Write tests before implementation (TDD). Use `@quramy/prisma-fabbrica` for factories only in `prisma/seed.ts`. For service-layer unit tests, mock the DB with `vi.mock('$lib/server/database', ...)` — do not use fabbrica there. Use Nock for HTTP mocking
 - **Naming**: `camelCase` variables, `PascalCase` types/components, `snake_case` files/routes, `kebab-case` directories
-- **Pre-commit**: Lefthook runs Prettier + ESLint (bypass: `LEFTHOOK=0 git commit`)
+- **Pre-commit**: Lefthook runs Prettier + oxlint (JS/TS) + ESLint (.svelte only) (bypass: `LEFTHOOK=0 git commit`)
 
 ## References
 

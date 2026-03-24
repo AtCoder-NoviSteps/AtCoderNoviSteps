@@ -25,7 +25,7 @@ async function login(page: Page, username: string, password: string): Promise<vo
   await expect(page).toHaveURL('/', { timeout: UP_TO_ONE_MINUTE });
 }
 
-async function logout(page: Page, username: string): Promise<void> {
+async function logout(page: Page, _username: string): Promise<void> {
   // Step 1: Click user button to display dropdown
   // Use ID selector because role="presentation" due to Flowbite-Svelte NavLi + Dropdown
   const userButton = page.locator('button[id="nav-user-page"]');

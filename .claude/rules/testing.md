@@ -24,6 +24,25 @@ If a task description does not mention tests, add them anyway for any non-trivia
 - Never delete, comment out, or weaken assertions (e.g. `toEqual` → `toBeDefined`) to make tests pass
 - Fix the implementation, not the test; if the test itself is wrong, explain why in a comment or commit message
 
+## Unused Imports in Test Files
+
+An unused import in a test file is a signal that a test was planned but not yet written — not dead code to remove.
+
+Before deleting such an import, check whether the corresponding test case is missing and add it:
+
+```typescript
+// Bad: remove the import because it's unused
+import { ABCLikeProvider } from './contest_table_provider';
+
+// Good: the import is unused because the test is missing — add the test
+test('expects to create ABCLike preset correctly', () => {
+  const group = prepareContestProviderPresets().ABCLike();
+  expect(group.getProvider(ContestType.ABC_LIKE)).toBeInstanceOf(ABCLikeProvider);
+});
+```
+
+Removing the import silences the linter but leaves a coverage gap. Adding the test both satisfies the linter and improves coverage.
+
 ## Test Types
 
 | Type | Tool       | Location                                                          | Run Command      |

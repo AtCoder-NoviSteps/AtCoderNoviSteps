@@ -71,6 +71,128 @@ describe('prepareContestProviderPresets', () => {
     expect(group.getProvider(ContestType.ABC)).toBeInstanceOf(ABC212ToABC318Provider);
   });
 
+  test('expects to create fromABC126ToABC211 preset correctly', () => {
+    const group = prepareContestProviderPresets().ABC126ToABC211();
+
+    expect(group.getGroupName()).toBe('From ABC 126 to ABC 211');
+    expect(group.getMetadata()).toEqual({
+      buttonLabel: 'ABC 126 〜 211',
+      ariaLabel: 'Filter contests from ABC 126 to ABC 211',
+    });
+    expect(group.getSize()).toBe(1);
+    expect(group.getProvider(ContestType.ABC)).toBeInstanceOf(ABC126ToABC211Provider);
+  });
+
+  test('expects to create fromABC042ToABC125 preset correctly', () => {
+    const group = prepareContestProviderPresets().ABC042ToABC125();
+
+    expect(group.getGroupName()).toBe('From ABC 042 to ABC 125');
+    expect(group.getMetadata()).toEqual({
+      buttonLabel: 'ABC 042 〜 125',
+      ariaLabel: 'Filter contests from ABC 042 to ABC 125',
+    });
+    expect(group.getSize()).toBe(1);
+    expect(group.getProvider(ContestType.ABC)).toBeInstanceOf(ABC042ToABC125Provider);
+  });
+
+  test('expects to create fromABC001ToABC041 preset correctly', () => {
+    const group = prepareContestProviderPresets().ABC001ToABC041();
+
+    expect(group.getGroupName()).toBe('From ABC 001 to ABC 041');
+    expect(group.getMetadata()).toEqual({
+      buttonLabel: '旧 ABC',
+      ariaLabel: 'Filter contests from ABC 001 to ABC 041',
+    });
+    expect(group.getSize()).toBe(1);
+    expect(group.getProvider(ContestType.ABC)).toBeInstanceOf(ABC001ToABC041Provider);
+  });
+
+  test('expects to create ARC104Onwards preset correctly', () => {
+    const group = prepareContestProviderPresets().ARC104Onwards();
+
+    expect(group.getGroupName()).toBe('ARC 104 Onwards');
+    expect(group.getMetadata()).toEqual({
+      buttonLabel: 'ARC 104 〜 ',
+      ariaLabel: 'Filter contests from ARC 104 onwards',
+    });
+    expect(group.getSize()).toBe(1);
+    expect(group.getProvider(ContestType.ARC)).toBeInstanceOf(ARC104OnwardsProvider);
+  });
+
+  test('expects to create ARC058ToARC103 preset correctly', () => {
+    const group = prepareContestProviderPresets().ARC058ToARC103();
+
+    expect(group.getGroupName()).toBe('ARC 058 To ARC 103');
+    expect(group.getMetadata()).toEqual({
+      buttonLabel: 'ARC 058 〜 103',
+      ariaLabel: 'Filter contests from ARC 058 to ARC 103',
+    });
+    expect(group.getSize()).toBe(1);
+    expect(group.getProvider(ContestType.ARC)).toBeInstanceOf(ARC058ToARC103Provider);
+  });
+
+  test('expects to create ARC001ToARC057 preset correctly', () => {
+    const group = prepareContestProviderPresets().ARC001ToARC057();
+
+    expect(group.getGroupName()).toBe('ARC 001 To ARC 057');
+    expect(group.getMetadata()).toEqual({
+      buttonLabel: '旧 ARC',
+      ariaLabel: 'Filter contests from ARC 001 to ARC 057',
+    });
+    expect(group.getSize()).toBe(1);
+    expect(group.getProvider(ContestType.ARC)).toBeInstanceOf(ARC001ToARC057Provider);
+  });
+
+  test('expects to create AGC001Onwards preset correctly', () => {
+    const group = prepareContestProviderPresets().AGC001Onwards();
+
+    expect(group.getGroupName()).toBe('AGC 001 Onwards');
+    expect(group.getMetadata()).toEqual({
+      buttonLabel: 'AGC 001 〜 ',
+      ariaLabel: 'Filter contests from AGC 001 onwards',
+    });
+    expect(group.getSize()).toBe(1);
+    expect(group.getProvider(ContestType.AGC)).toBeInstanceOf(AGC001OnwardsProvider);
+  });
+
+  test('expects to create ABCLike preset correctly', () => {
+    const group = prepareContestProviderPresets().ABCLike();
+
+    expect(group.getGroupName()).toBe('ABC-Like');
+    expect(group.getMetadata()).toEqual({
+      buttonLabel: 'ABC-Like',
+      ariaLabel: 'Filter contests from ABC-Like',
+    });
+    expect(group.getSize()).toBe(1);
+    expect(group.getProvider(ContestType.ABC_LIKE)).toBeInstanceOf(ABCLikeProvider);
+  });
+
+  test('expects to create AWC0001Onwards preset correctly', () => {
+    const group = prepareContestProviderPresets().AWC0001Onwards();
+
+    expect(group.getGroupName()).toBe('AWC 0001 Onwards');
+    expect(group.getMetadata()).toEqual({
+      buttonLabel: 'AWC 0001 〜 ',
+      ariaLabel: 'Filter contests from AWC 0001 onwards',
+    });
+    expect(group.getSize()).toBe(1);
+    expect(group.getProvider(ContestType.AWC)).toBeInstanceOf(AWC0001OnwardsProvider);
+  });
+
+  test('expects to create MathAndAlgorithm preset correctly', () => {
+    const group = prepareContestProviderPresets().MathAndAlgorithm();
+
+    expect(group.getGroupName()).toBe('アルゴリズムと数学');
+    expect(group.getMetadata()).toEqual({
+      buttonLabel: 'アルゴリズムと数学',
+      ariaLabel: 'Filter Math and Algorithm',
+    });
+    expect(group.getSize()).toBe(1);
+    expect(group.getProvider(ContestType.MATH_AND_ALGORITHM)).toBeInstanceOf(
+      MathAndAlgorithmProvider,
+    );
+  });
+
   test('expects to create Typical90 preset correctly', () => {
     const group = prepareContestProviderPresets().Typical90();
 

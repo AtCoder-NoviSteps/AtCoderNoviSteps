@@ -68,7 +68,7 @@ describe('AWC0001OnwardsProvider', () => {
     const filtered = provider.filter(taskResultsForAWC0001OnwardsProvider);
     const table = provider.generateTable(filtered);
 
-    Object.entries(table).forEach(([contestId, problems]) => {
+    Object.entries(table).forEach(([_contestId, problems]) => {
       const problemCount = Object.keys(problems).length;
       expect(problemCount).toBe(5);
       expect(Object.keys(problems)).toEqual(['A', 'B', 'C', 'D', 'E']);

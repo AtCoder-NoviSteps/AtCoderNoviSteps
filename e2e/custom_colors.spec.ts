@@ -25,7 +25,7 @@ test.describe('Custom colors for TailwindCSS v4 configuration', () => {
       if (cssFiles.length === 0) {
         cssFiles = allCssFiles;
       }
-    } catch (e) {
+    } catch {
       // True error: directory not found or inaccessible
       throw new Error(`Not found CSS directory: ${cssDir}`);
     }
