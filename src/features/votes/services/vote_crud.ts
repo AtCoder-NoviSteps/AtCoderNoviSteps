@@ -52,6 +52,43 @@ export async function getVoteGradeStatistics() {
   return gradesMap;
 }
 
+export async function getPendingTasksWithVoteInfo() {
+  const [pendingTasks, stats, counters] = await Promise.all([
+    prisma.task.findMany({ where: { grade: 'PENDING' }, orderBy: { task_id: 'asc' } }),
+    prisma.votedGradeStatistics.findMany(),
+    prisma.votedGradeCounter.findMany(),
+  ]);
+
+  const statsMap = new Map(stats.map((s) => [s.taskId, s]));
+  const totalsMap = new Map<string, number>();
+  for (const c of counters) {
+    totalsMap.set(c.taskId, (totalsMap.get(c.taskId) ?? 0) + c.count);
+  }
+
+  return pendingTasks.map((task) => ({
+    task_id: task.task_id,
+    contest_id: task.contest_id,
+    title: task.title,
+    estimatedGrade: statsMap.get(task.task_id)?.grade ?? null,
+    voteTotal: totalsMap.get(task.task_id) ?? 0,
+  }));
+}
+
+export async function getVoteCountersByTaskId(taskId: string) {
+  return prisma.votedGradeCounter.findMany({
+    where: { taskId },
+    orderBy: { grade: 'asc' },
+  });
+}
+
+export async function getVoteStatsByTaskId(taskId: string) {
+  return prisma.votedGradeStatistics.findFirst({ where: { taskId } });
+}
+
+export async function getAllVoteStatisticsAsArray() {
+  return prisma.votedGradeStatistics.findMany({ orderBy: { taskId: 'asc' } });
+}
+
 // 概念実装（読み込み→処理を同一トランザクション内で行う）
 export async function upsertVoteGradeTables(userId: string, taskId: string, grade: string) {
   await prisma.$transaction(async (tx) => {
