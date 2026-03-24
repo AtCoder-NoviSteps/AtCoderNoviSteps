@@ -54,6 +54,10 @@
     />
   </div>
 
+  <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">
+    ※ 3票以上集まると中央値が暫定グレードとして一覧表に反映されます。
+  </p>
+
   <!-- 投票UI -->
   {#if data.myVote?.voted}
     <!-- 投票済み → 統計表示 -->
@@ -110,9 +114,6 @@
     <!-- 未投票・ログイン済み → 投票フォーム -->
     <p class="text-gray-600 dark:text-gray-300 mb-4">
       この問題のグレードを投票してください。投票後に集計結果を確認できます。
-    </p>
-    <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">
-      ※ 3票以上集まると中央値が暫定グレードとして一覧表に反映されます。
     </p>
     {@render voteForm()}
   {:else}
