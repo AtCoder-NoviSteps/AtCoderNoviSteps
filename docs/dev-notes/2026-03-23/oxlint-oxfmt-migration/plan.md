@@ -125,7 +125,7 @@ PR #19807 がマージされ安定版に含まれるまで待機が必要。
 - 削除可能: `@eslint/js`（oxlint がカバー）
 - 保持: `eslint`, `eslint-plugin-svelte`, `svelte-eslint-parser`, `@typescript-eslint/eslint-plugin`, `@typescript-eslint/parser`
 
-### oxlint.json 設定例
+### .oxlintrc.json 設定例
 
 ```json
 {
@@ -250,7 +250,7 @@ pnpm exec oxlint .
 - [x] **Step 4: コミット**
 
 ```bash
-git add oxlint.json package.json pnpm-lock.yaml
+git add .oxlintrc.json package.json pnpm-lock.yaml
 git commit -m "chore: Add oxlint with TypeScript rules and Svelte 5 rune globals"
 ```
 
@@ -451,8 +451,8 @@ pnpm exec eslint . # .svelte のみ処理、0 エラー
 
 ### 実装で判明した非自明な事項
 
-1. **oxlint の設定ファイル名は `.oxlintrc.json`**（`.oxlintrc.json` は自動検出されない）
-   - `--config <path>` で明示指定するか、`.oxlintrc.json` という名前にする必要がある
+1. **oxlint の設定ファイル名は `.oxlintrc.json`**（プロジェクトルートから自動検出される）
+   - 標準ファイル名を使えば `--config` 指定不要。別名にする場合のみ `--config <path>` で明示指定が必要
    - 設定ファイル名を誤るとすべてのルールがデフォルトになりサイレントに動作してしまう
 
 2. **ESLint は `.ts` ファイルを実質的にリントしていなかった**
