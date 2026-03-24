@@ -11,7 +11,7 @@ Before writing new logic, decide which layer it belongs to. Run this check at pl
 | DB schema      | `prisma/`                                              | Migrations are immutable after apply                                       |
 | DB access      | `src/lib/server/`                                      | Server-only; never import in client code                                   |
 | Validation     | `src/**/zod/`                                          | `z.number().int()` for Int fields; comment dual-enforcement with SQL CHECK |
-| Domain types   | `src/**/types/` (`_types/` inside `src/routes/`)       | Plural aliases; TSDoc on every export; no `any`                            |
+| Domain types   | `src/**/types/` (`_types/` inside `src/routes/`)       | Plural aliases; TSDoc on every export; avoid `any`; see alternatives       |
 | Test data      | `src/**/fixtures/` (`_fixtures/` inside `src/routes/`) | Write before implementation (TDD); use realistic values                    |
 | Business logic | `src/**/services/`                                     | Return pure values or `null`; no `Response`/`json()`                       |
 | Pure utilities | `src/**/utils/` (`_utils/` inside `src/routes/`)       | No side effects; adjacent unit test required                               |
@@ -28,12 +28,13 @@ Before writing new logic, decide which layer it belongs to. Run this check at pl
 - **`upsert`**: only use when the implementation performs both insert and update. For insert-only, use `initialize`, `seed`, or another accurate verb.
 - **`any`**: before using `any`, check the value's origin — adding a missing `@types/*` or `devDependency` often provides the correct type. When `any` seems unavoidable, use the narrowest alternative:
 
-  | Situation                                         | Alternative                                  |
-  | ------------------------------------------------- | -------------------------------------------- |
-  | Assign to a property not on the type              | `obj as T & { prop: U }` (intersection cast) |
-  | Return type too complex to write manually         | `ReturnType<typeof fn>`                      |
-  | Partial mock object passed as full type in tests  | `as unknown as T` (double cast)              |
-  | Inline `: any` annotation where inference reaches | Delete the annotation                        |
+  | Situation                                                  | Alternative                                                              |
+  | ---------------------------------------------------------- | ------------------------------------------------------------------------ |
+  | Assign to a property not on the type                       | `obj as T & { prop: U }` (intersection cast)                             |
+  | Return type too complex to write manually                  | `ReturnType<typeof fn>`                                                  |
+  | Partial mock: only specific properties matter              | `Partial<T>`, `Pick<T, 'a' \| 'b'>`, or `satisfies` — prefer these first |
+  | Partial mock: none of the above narrow the type far enough | `as unknown as T` — last resort; bypasses type checking entirely         |
+  | Inline `: any` annotation where inference reaches          | Delete the annotation                                                    |
 
 - **UI labels**: if a label does not match actual behavior, update it or add an inline comment explaining the intentional mismatch.
 - **Constant names**: reflect what the value IS (content), not what it is used for (purpose). e.g., a set holding all enum tab values is `EXISTING_TABS`, not `VALID_TABS`.
@@ -54,8 +55,11 @@ Before writing new logic, decide which layer it belongs to. Run this check at pl
 try { ... } catch { }
 try { ... } catch (_e) { }
 
-// Good: re-throw
-try { ... } catch (error) { throw error; }
+// Good: log and re-throw (adds context before propagating)
+try { ... } catch (error) {
+  console.error('Operation failed:', error);
+  throw error;
+}
 
 // Good: intentional suppression with explanation
 try {
@@ -70,17 +74,18 @@ try {
 Extract magic numbers and strings to named constants. Never embed literal values whose meaning is not self-evident from the type or immediate context.
 
 ```typescript
-// Bad
+// Bad: magic literals embedded inline
 if (grade >= 11) { ... }
 
-const url = '/api/workbooks/submit';
+const response = await fetch('/api/workbooks/submit', options);
 
 // Good
 const MIN_GRADE = 11;
+const SUBMIT_URL = '/api/workbooks/submit';
 
 if (grade >= MIN_GRADE) { ... }
 
-const SUBMIT_URL = '/api/workbooks/submit';
+const response = await fetch(SUBMIT_URL, options);
 ```
 
 Place constants at the top of the file, or in a dedicated `constants/` module when shared across files.
@@ -92,7 +97,7 @@ Within a file, order declarations as follows:
 1. Exported functions and classes (public API first)
 2. Internal helper functions (supporting the exports above)
 
-Shared helper functions (used by two or more exports) should be grouped at the end of the file.
+Place a private helper immediately after the single export that uses it. Place helpers shared by two or more exports at the end of the file.
 
 ## Documentation
 
