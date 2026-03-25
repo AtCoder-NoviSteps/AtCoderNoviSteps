@@ -49,7 +49,7 @@
     "jsdom": "29.0.1",
     "lefthook": "2.1.4",
     "nock": "14.0.11",
-    "oxlint": "^1.56.0",
+    "oxlint": "^1.57.0",
     "pnpm": "10.32.1",
     "prettier": "3.8.1",
     "prettier-plugin-svelte": "3.5.1",
