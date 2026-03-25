@@ -30,7 +30,7 @@
       : taskResult.grade;
   let displayGrade = $state<TaskGrade | string>(initialGrade);
 
-  const componentId = Math.random().toString(36).substring(2);
+  const componentId = crypto.randomUUID();
 
   let selectedVoteGrade = $state<TaskGrade>();
   let showForm = $state(false);
@@ -66,7 +66,7 @@
     // Submit after the form is rendered.
     setTimeout(() => {
       const submitButton = document.querySelector(
-        '#voteGradeForm button[type="submit"]',
+        `#voteGradeForm-${componentId} button[type="submit"]`,
       ) as HTMLButtonElement;
 
       if (submitButton) {
@@ -195,7 +195,7 @@
 
 {#snippet voteGradeForm(selectedTaskResult: TaskResult, voteGrade: TaskGrade)}
   <form
-    id="voteGradeForm"
+    id="voteGradeForm-{componentId}"
     method="POST"
     action="?/voteAbsoluteGrade"
     style="display:none;"

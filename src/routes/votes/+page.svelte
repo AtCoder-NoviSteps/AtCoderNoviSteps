@@ -21,9 +21,9 @@
       ? data.tasks
       : data.tasks.filter(
           (t) =>
-            t.title.toLowerCase().includes(search.toLowerCase()) ||
-            t.task_id.toLowerCase().includes(search.toLowerCase()) ||
-            t.contest_id.toLowerCase().includes(search.toLowerCase()),
+            (t.title ?? '').toLowerCase().includes(search.toLowerCase()) ||
+            (t.task_id ?? '').toLowerCase().includes(search.toLowerCase()) ||
+            (t.contest_id ?? '').toLowerCase().includes(search.toLowerCase()),
         ),
   );
 </script>

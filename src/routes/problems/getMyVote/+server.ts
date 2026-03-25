@@ -9,6 +9,10 @@ export const GET: RequestHandler = async ({ url, locals }) => {
   if (!session || !session.user || !session.user.userId)
     return json({ error: 'unauthorized' }, { status: 401 });
 
-  const res = await getVoteGrade(session.user.userId, taskId);
-  return json(res);
+  try {
+    const res = await getVoteGrade(session.user.userId, taskId);
+    return json(res);
+  } catch {
+    return json({ error: 'internal error' }, { status: 500 });
+  }
 };

@@ -47,8 +47,7 @@ export function computeMedianGrade(counters: GradeCounter[], minVotes = 3): Task
         return getGradeOrder(counter.grade);
       }
     }
-    console.error('getGradeOrderAtPosition: position out of range');
-    return taskGradeOrderInfinity;
+    throw new RangeError(`getGradeOrderAtPosition: position ${target} is out of range (total=${total})`);
   };
 
   let medianOrder: number;

@@ -41,9 +41,12 @@ export const actions: Actions = {
   setTaskGrade: async ({ request, locals }) => {
     await validateAdminAccess(locals);
     const data = await request.formData();
-    const taskId = data.get('taskId') as string;
-    const grade = data.get('grade') as TaskGrade;
-    await updateTask(taskId, grade);
+    const taskId = data.get('taskId');
+    const grade = data.get('grade');
+    if (typeof taskId !== 'string' || !taskId || typeof grade !== 'string') {
+      return { success: false };
+    }
+    await updateTask(taskId, grade as TaskGrade);
     return { success: true };
   },
 };

@@ -21,13 +21,25 @@ export const voteAbsoluteGrade = async ({
   }
 
   const userId = session.user.userId;
-  const taskId = formData.get('taskId') as string;
-  const grade = formData.get('grade') as TaskGrade;
+  const taskIdRaw = formData.get('taskId');
+  const gradeRaw = formData.get('grade');
+
+  if (
+    typeof taskIdRaw !== 'string' ||
+    !taskIdRaw ||
+    typeof gradeRaw !== 'string' ||
+    !(Object.values(TaskGrade) as string[]).includes(gradeRaw)
+  ) {
+    return fail(BAD_REQUEST, { message: 'Invalid request parameters.' });
+  }
+
+  const taskId = taskIdRaw;
+  const grade = gradeRaw as TaskGrade;
 
   try {
     await upsertVoteGradeTables(userId, taskId, grade);
   } catch (error) {
     console.error('Failed to vote absolute grade: ', error);
-    return fail(BAD_REQUEST);
+    return fail(BAD_REQUEST, { message: 'Failed to record vote.' });
   }
 };
