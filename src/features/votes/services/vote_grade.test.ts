@@ -120,12 +120,22 @@ describe('upsertVoteGradeTables', () => {
 
     await upsertVoteGradeTables('user-1', 'abc001_a', TaskGrade.Q5);
 
+    // Q4 (old grade) should be decremented
     expect(tx.votedGradeCounter.update).toHaveBeenCalledWith(
       expect.objectContaining({
         where: { taskId_grade: { taskId: 'abc001_a', grade: TaskGrade.Q4 } },
         data: { count: { decrement: 1 } },
       }),
     );
+    // Q5 (new grade) should be incremented — confirms post-decrement state: Q5=1, Q4=0
+    expect(tx.votedGradeCounter.upsert).toHaveBeenCalledWith(
+      expect.objectContaining({
+        where: { taskId_grade: { taskId: 'abc001_a', grade: TaskGrade.Q5 } },
+        update: { count: { increment: 1 } },
+      }),
+    );
+    // Total = 1 vote (Q5:1 + Q4:0), below MIN_VOTES_FOR_STATISTICS — statistics must not be updated
+    expect(tx.votedGradeStatistics.upsert).not.toHaveBeenCalled();
   });
 
   test('upserts VoteGrade and increments counter for the new grade', async () => {
@@ -149,6 +159,8 @@ describe('upsertVoteGradeTables', () => {
         update: { count: { increment: 1 } },
       }),
     );
+    // Total = 1 vote (Q5:1), below MIN_VOTES_FOR_STATISTICS — statistics must not be updated
+    expect(tx.votedGradeStatistics.upsert).not.toHaveBeenCalled();
   });
 
   test('upserts VotedGradeStatistics when total votes reaches 3', async () => {
