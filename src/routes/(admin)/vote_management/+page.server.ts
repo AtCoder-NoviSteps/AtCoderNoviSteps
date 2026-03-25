@@ -1,25 +1,12 @@
-import { redirect } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
 
-import { Roles } from '$lib/types/user';
 import { type TaskGrade } from '$lib/types/task';
-import { isAdmin } from '$lib/utils/authorship';
-import { getUser } from '$lib/services/users';
 import { getTasksByTaskId, updateTask } from '$lib/services/tasks';
 import {
   getAllVoteStatisticsAsArray,
   getAllVoteCounters,
-} from '$features/votes/services/vote_crud';
-import { TEMPORARY_REDIRECT } from '$lib/constants/http-response-status-codes';
-import { LOGIN_PAGE } from '$lib/constants/navbar-links';
-
-async function validateAdminAccess(locals: App.Locals): Promise<void> {
-  const session = await locals.auth.validate();
-  if (!session) redirect(TEMPORARY_REDIRECT, LOGIN_PAGE);
-
-  const user = await getUser(session.user.username as string);
-  if (!isAdmin(user?.role as Roles)) redirect(TEMPORARY_REDIRECT, LOGIN_PAGE);
-}
+} from '$features/votes/services/vote_statistics';
+import { validateAdminAccess } from '../_utils/auth';
 
 export const load: PageServerLoad = async ({ locals }) => {
   await validateAdminAccess(locals);

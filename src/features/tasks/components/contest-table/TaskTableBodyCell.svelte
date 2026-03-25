@@ -1,5 +1,6 @@
 <script lang="ts">
   import type { TaskResult } from '$lib/types/task';
+  import type { VoteStatisticsMap } from '$features/votes/types/vote_result';
 
   import VotableGrade from '@/features/votes/components/VotableGrade.svelte';
   import ExternalLinkWrapper from '$lib/components/ExternalLinkWrapper.svelte';
@@ -11,7 +12,7 @@
     taskResult: TaskResult;
     isLoggedIn: boolean;
     isShownTaskIndex: boolean;
-    voteResults: Map<string, { grade: string }>;
+    voteResults: VoteStatisticsMap;
     onupdate?: (updatedTask: TaskResult) => void; // Ensure to update task result in parent component.
   }
 

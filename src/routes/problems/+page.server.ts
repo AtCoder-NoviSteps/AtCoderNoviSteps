@@ -1,7 +1,7 @@
 import { type Actions } from '@sveltejs/kit';
 
 import * as task_crud from '$lib/services/task_results';
-import * as vote_crud from '$features/votes/services/vote_crud';
+import { getVoteGradeStatistics } from '$features/votes/services/vote_statistics';
 import type { TaskResults } from '$lib/types/task';
 import { Roles } from '$lib/types/user';
 import { updateTaskResult } from '$lib/actions/update_task_result';
@@ -23,14 +23,14 @@ export async function load({ locals, url }) {
         tagIds,
         session?.user.userId,
       )) as TaskResults,
-      voteResults: await vote_crud.getVoteGradeStatistics(),
+      voteResults: await getVoteGradeStatistics(),
       isAdmin: isAdmin,
       isLoggedIn: isLoggedIn,
     };
   } else {
     return {
       taskResults: (await task_crud.getTaskResults(session?.user.userId)) as TaskResults,
-      voteResults: await vote_crud.getVoteGradeStatistics(),
+      voteResults: await getVoteGradeStatistics(),
       isAdmin: isAdmin,
       isLoggedIn: isLoggedIn,
     };

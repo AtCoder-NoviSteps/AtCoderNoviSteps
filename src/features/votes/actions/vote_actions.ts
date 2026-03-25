@@ -1,6 +1,7 @@
 import { fail } from '@sveltejs/kit';
+import { TaskGrade } from '@prisma/client';
 
-import * as crud from '@/features/votes/services/vote_crud';
+import { upsertVoteGradeTables } from '$features/votes/services/vote_grade';
 import { BAD_REQUEST, UNAUTHORIZED } from '$lib/constants/http-response-status-codes';
 
 export const voteAbsoluteGrade = async ({
@@ -21,10 +22,10 @@ export const voteAbsoluteGrade = async ({
 
   const userId = session.user.userId;
   const taskId = formData.get('taskId') as string;
-  const grade = formData.get('grade') as string;
+  const grade = formData.get('grade') as TaskGrade;
 
   try {
-    await crud.upsertVoteGradeTables(userId, taskId, grade);
+    await upsertVoteGradeTables(userId, taskId, grade);
   } catch (error) {
     console.error('Failed to vote absolute grade: ', error);
     return fail(BAD_REQUEST);

@@ -2,11 +2,11 @@ import { error } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
 
 import { getTask } from '$lib/services/tasks';
+import { getVoteGrade } from '$features/votes/services/vote_grade';
 import {
-  getVoteGrade,
   getVoteCountersByTaskId,
   getVoteStatsByTaskId,
-} from '$features/votes/services/vote_crud';
+} from '$features/votes/services/vote_statistics';
 import { voteAbsoluteGrade } from '$features/votes/actions/vote_actions';
 
 export const load: PageServerLoad = async ({ locals, params }) => {

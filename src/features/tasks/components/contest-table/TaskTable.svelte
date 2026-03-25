@@ -19,6 +19,7 @@
     ContestTableMetaData,
   } from '$features/tasks/types/contest-table/contest_table_provider';
   import type { ContestTaskPairKey } from '$lib/types/contest_task_pair';
+  import type { VoteStatisticsMap } from '$features/votes/types/vote_result';
 
   import TaskTableBodyCell from './TaskTableBodyCell.svelte';
 
@@ -36,7 +37,7 @@
   interface Props {
     taskResults: TaskResults;
     isLoggedIn: boolean;
-    voteResults: Map<string, { grade: string }>;
+    voteResults: VoteStatisticsMap;
   }
 
   let { taskResults, isLoggedIn, voteResults }: Props = $props();

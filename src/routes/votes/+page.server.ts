@@ -1,9 +1,9 @@
 import type { PageServerLoad } from './$types';
-import * as voteCrud from '$features/votes/services/vote_crud';
+import { getAllTasksWithVoteInfo } from '$features/votes/services/vote_statistics';
 
 export const load: PageServerLoad = async ({ locals }) => {
   const session = await locals.auth.validate();
-  const tasks = await voteCrud.getAllTasksWithVoteInfo();
+  const tasks = await getAllTasksWithVoteInfo();
 
   return {
     tasks,
