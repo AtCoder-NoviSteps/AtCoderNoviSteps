@@ -1,4 +1,4 @@
-import { error, redirect } from '@sveltejs/kit';
+import { error } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
 
 import { getTask } from '$lib/services/tasks';
@@ -8,7 +8,6 @@ import {
   getVoteStatsByTaskId,
 } from '$features/votes/services/vote_crud';
 import { voteAbsoluteGrade } from '$features/votes/actions/vote_actions';
-import { TEMPORARY_REDIRECT } from '$lib/constants/http-response-status-codes';
 
 export const load: PageServerLoad = async ({ locals, params }) => {
   const session = await locals.auth.validate();
@@ -17,9 +16,6 @@ export const load: PageServerLoad = async ({ locals, params }) => {
   const tasks = await getTask(taskId);
   const task = tasks[0];
   if (!task) throw error(404, 'Task not found');
-
-  // PENDING以外の問題は投票ページの対象外
-  if (task.grade !== 'PENDING') redirect(TEMPORARY_REDIRECT, '/votes');
 
   let myVote = null;
   if (session?.user.userId) {

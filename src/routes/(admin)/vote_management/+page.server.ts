@@ -1,10 +1,11 @@
 import { redirect } from '@sveltejs/kit';
-import type { PageServerLoad } from './$types';
+import type { Actions, PageServerLoad } from './$types';
 
 import { Roles } from '$lib/types/user';
+import { type TaskGrade } from '$lib/types/task';
 import { isAdmin } from '$lib/utils/authorship';
 import { getUser } from '$lib/services/users';
-import { getTasksByTaskId } from '$lib/services/tasks';
+import { getTasksByTaskId, updateTask } from '$lib/services/tasks';
 import {
   getAllVoteStatisticsAsArray,
   getVoteCountersByTaskId,
@@ -41,11 +42,20 @@ export const load: PageServerLoad = async ({ locals }) => {
         dbGrade: task?.grade ?? 'PENDING',
         estimatedGrade: stat.grade,
         voteTotal,
-        isExperimental: stat.isExperimental,
-        isApproved: stat.isApproved,
       };
     }),
   );
 
   return { stats: statsWithInfo };
+};
+
+export const actions: Actions = {
+  setTaskGrade: async ({ request, locals }) => {
+    await validateAdminAccess(locals);
+    const data = await request.formData();
+    const taskId = data.get('taskId') as string;
+    const grade = data.get('grade') as TaskGrade;
+    await updateTask(taskId, grade);
+    return { success: true };
+  },
 };

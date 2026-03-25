@@ -52,9 +52,9 @@ export async function getVoteGradeStatistics() {
   return gradesMap;
 }
 
-export async function getPendingTasksWithVoteInfo() {
-  const [pendingTasks, stats, counters] = await Promise.all([
-    prisma.task.findMany({ where: { grade: 'PENDING' }, orderBy: { task_id: 'asc' } }),
+export async function getAllTasksWithVoteInfo() {
+  const [allTasks, stats, counters] = await Promise.all([
+    prisma.task.findMany({ orderBy: { task_id: 'asc' } }),
     prisma.votedGradeStatistics.findMany(),
     prisma.votedGradeCounter.findMany(),
   ]);
@@ -65,7 +65,7 @@ export async function getPendingTasksWithVoteInfo() {
     totalsMap.set(c.taskId, (totalsMap.get(c.taskId) ?? 0) + c.count);
   }
 
-  return pendingTasks.map((task) => ({
+  return allTasks.map((task) => ({
     task_id: task.task_id,
     contest_id: task.contest_id,
     title: task.title,
@@ -178,7 +178,6 @@ export async function upsertVoteGradeTables(userId: string, taskId: string, grad
           taskId,
           grade: medianGrade,
           isExperimental: false,
-          isApproved: true,
           createdAt: new Date(),
           updatedAt: new Date(),
         },

@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { enhance } from '$app/forms';
   import {
     Table,
     TableBody,
@@ -6,11 +7,13 @@
     TableBodyRow,
     TableHead,
     TableHeadCell,
-    Badge,
   } from 'flowbite-svelte';
 
   import HeadingOne from '$lib/components/HeadingOne.svelte';
   import GradeLabel from '$lib/components/GradeLabel.svelte';
+
+  import { taskGradeValues } from '$lib/types/task';
+  import { getTaskGradeLabel } from '$lib/utils/task';
 
   let { data } = $props();
 </script>
@@ -29,7 +32,6 @@
       <TableHeadCell>DBグレード</TableHeadCell>
       <TableHeadCell>中央値グレード</TableHeadCell>
       <TableHeadCell>票数</TableHeadCell>
-      <TableHeadCell>ステータス</TableHeadCell>
     </TableHead>
     <TableBody class="divide-y">
       {#each data.stats as stat (stat.taskId)}
@@ -44,12 +46,20 @@
           </TableBodyCell>
           <TableBodyCell class="text-sm">{stat.contestId}</TableBodyCell>
           <TableBodyCell>
-            <GradeLabel
-              taskGrade={stat.dbGrade}
-              defaultPadding={0.25}
-              defaultWidth={6}
-              reducedWidth={6}
-            />
+            <form method="POST" action="?/setTaskGrade" use:enhance>
+              <input type="hidden" name="taskId" value={stat.taskId} />
+              <select
+                name="grade"
+                onchange={(e) => (e.currentTarget as HTMLSelectElement).form?.requestSubmit()}
+                class="text-sm rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 px-2 py-1 focus:ring-primary-500 focus:border-primary-500 min-w-20"
+              >
+                {#each taskGradeValues as grade}
+                  <option value={grade} selected={stat.dbGrade === grade}>
+                    {grade === 'PENDING' ? '-' : getTaskGradeLabel(grade)}
+                  </option>
+                {/each}
+              </select>
+            </form>
           </TableBodyCell>
           <TableBodyCell>
             <GradeLabel
@@ -60,23 +70,11 @@
             />
           </TableBodyCell>
           <TableBodyCell class="text-sm">{stat.voteTotal}</TableBodyCell>
-          <TableBodyCell>
-            <div class="flex gap-1 flex-wrap">
-              {#if stat.isExperimental}
-                <Badge color="yellow">暫定</Badge>
-              {/if}
-              {#if stat.isApproved}
-                <Badge color="green">承認済</Badge>
-              {:else}
-                <Badge color="red">未承認</Badge>
-              {/if}
-            </div>
-          </TableBodyCell>
         </TableBodyRow>
       {/each}
       {#if data.stats.length === 0}
         <TableBodyRow>
-          <TableBodyCell colspan={6} class="text-center text-gray-500 dark:text-gray-400">
+          <TableBodyCell colspan={5} class="text-center text-gray-500 dark:text-gray-400">
             集計データがありません
           </TableBodyCell>
         </TableBodyRow>

@@ -266,13 +266,12 @@ model VotedGradeCounter {
 }
 
 model VotedGradeStatistics {
-  id             String   @id
-  taskId         String   @unique
+  id             String    @id
+  taskId         String    @unique
   grade          TaskGrade
-  isExperimental Boolean @default(false)
-  isApproved     Boolean @default(true)
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
+  isExperimental Boolean   @default(false)
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
 
   @@map("votedgradestatistics")
 }
