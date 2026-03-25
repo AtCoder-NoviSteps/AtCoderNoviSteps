@@ -43,7 +43,6 @@ export const actions = {
     return await updateTaskResult({ request, locals }, operationLog);
   },
   voteAbsoluteGrade: async ({ request, locals }) => {
-    const operationLog = 'problems -> actions -> voteAbsoluteGrade';
-    await voteAbsoluteGrade({ request, locals }, operationLog);
+    await voteAbsoluteGrade({ request, locals });
   },
 } satisfies Actions;

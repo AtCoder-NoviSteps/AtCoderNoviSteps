@@ -1,40 +1,20 @@
 import { default as prisma } from '$lib/server/database';
-import { TaskGrade } from '@prisma/client';
+import { TaskGrade, type VotedGradeStatistics } from '@prisma/client';
 import { sha256 } from '$lib/utils/hash';
-import { getGradeOrder, taskGradeOrderInfinity } from '$lib/utils/task';
+import type { VoteGradeResult } from '$features/votes/types/vote_result';
+import { computeMedianGrade } from '$features/votes/utils/median';
 
-const OrderToTaskGrade: Map<number, TaskGrade> = new Map([
-  [1, TaskGrade.Q11],
-  [2, TaskGrade.Q10],
-  [3, TaskGrade.Q9],
-  [4, TaskGrade.Q8],
-  [5, TaskGrade.Q7],
-  [6, TaskGrade.Q6],
-  [7, TaskGrade.Q5],
-  [8, TaskGrade.Q4],
-  [9, TaskGrade.Q3],
-  [10, TaskGrade.Q2],
-  [11, TaskGrade.Q1],
-  [12, TaskGrade.D1],
-  [13, TaskGrade.D2],
-  [14, TaskGrade.D3],
-  [15, TaskGrade.D4],
-  [16, TaskGrade.D5],
-  [17, TaskGrade.D6],
-  [taskGradeOrderInfinity, TaskGrade.PENDING],
-]);
-
-export async function getVoteGrade(userId: string, taskId: string) {
-  const res = await prisma.voteGrade.findUnique({
+export async function getVoteGrade(userId: string, taskId: string): Promise<VoteGradeResult> {
+  const voteRecord = await prisma.voteGrade.findUnique({
     where: {
       userId_taskId: { userId: userId, taskId: taskId },
     },
   });
   let voted = false;
   let grade = null;
-  if (res !== null) {
+  if (voteRecord !== null) {
     voted = true;
-    grade = res.grade;
+    grade = voteRecord.grade;
   }
   return {
     voted: voted,
@@ -42,12 +22,12 @@ export async function getVoteGrade(userId: string, taskId: string) {
   };
 }
 
-export async function getVoteGradeStatistics() {
-  const all_data = prisma.votedGradeStatistics.findMany();
-  const gradesMap = new Map();
+export async function getVoteGradeStatistics(): Promise<Map<string, VotedGradeStatistics>> {
+  const allStats = await prisma.votedGradeStatistics.findMany();
+  const gradesMap = new Map<string, VotedGradeStatistics>();
 
-  (await all_data).map((data) => {
-    gradesMap.set(data.taskId, data);
+  allStats.forEach((stat) => {
+    gradesMap.set(stat.taskId, stat);
   });
   return gradesMap;
 }
@@ -79,6 +59,11 @@ export async function getVoteCountersByTaskId(taskId: string) {
     where: { taskId },
     orderBy: { grade: 'asc' },
   });
+}
+
+/** Fetches all vote counters at once, for use when aggregating across many tasks. */
+export async function getAllVoteCounters() {
+  return prisma.votedGradeCounter.findMany();
 }
 
 export async function getVoteStatsByTaskId(taskId: string) {
@@ -138,36 +123,13 @@ export async function upsertVoteGradeTables(userId: string, taskId: string, grad
     });
 
     // Recompute median for this task and update VotedGradeStatistics
-    const counters = await tx.votedGradeCounter.findMany({
+    const latestCounters = await tx.votedGradeCounter.findMany({
       where: { taskId },
       orderBy: { grade: 'asc' },
     });
 
-    const total = counters.reduce((s, c) => s + c.count, 0);
-    if (total >= 3) {
-      let median = 0;
-
-      const getGradeOrderAtPosition = (target: number): number => {
-        let cum = 0;
-        for (const c of counters) {
-          cum += c.count;
-          if (cum >= target) return getGradeOrder(c.grade);
-        }
-        console.error('範囲外の値にアクセスしました');
-        return taskGradeOrderInfinity;
-      };
-
-      if (total % 2) {
-        const target = Math.ceil(total / 2);
-        median = getGradeOrderAtPosition(target);
-      } else {
-        const target = total / 2;
-        median = Math.round(
-          (getGradeOrderAtPosition(target) + getGradeOrderAtPosition(target + 1)) / 2,
-        );
-      }
-
-      let medianGrade: TaskGrade = OrderToTaskGrade.get(median) as TaskGrade;
+    const medianGrade = computeMedianGrade(latestCounters);
+    if (medianGrade !== null) {
       const statsId = await sha256(taskId + 'stats');
 
       await tx.votedGradeStatistics.upsert({

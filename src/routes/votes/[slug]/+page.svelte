@@ -7,13 +7,17 @@
   import GradeLabel from '$lib/components/GradeLabel.svelte';
   import ExternalLinkWrapper from '$lib/components/ExternalLinkWrapper.svelte';
 
-  import { taskGradeValues, TaskGrade } from '$lib/types/task';
-  import { getTaskGradeLabel, getTaskUrl, getTaskGradeColor, toChangeTextColorIfNeeds } from '$lib/utils/task';
+  import { TaskGrade } from '$lib/types/task';
+  import {
+    getTaskGradeLabel,
+    getTaskUrl,
+    getTaskGradeColor,
+    toChangeTextColorIfNeeds,
+  } from '$lib/utils/task';
+  import { nonPendingGrades } from '$features/votes/utils/grade_options';
   import { SIGNUP_PAGE, LOGIN_PAGE } from '$lib/constants/navbar-links';
 
   let { data } = $props();
-
-  const nonPendingGrades = taskGradeValues.filter((g) => g !== TaskGrade.PENDING);
 
   const totalVotes = $derived(
     data.counters ? data.counters.reduce((sum, c) => sum + c.count, 0) : 0,
@@ -137,9 +141,11 @@
           type="submit"
           class="px-3 py-1.5 rounded-md text-sm font-medium border transition-opacity
             {grade === TaskGrade.D6
-              ? 'text-white shadow-md shadow-amber-900/80 ring-2 ring-amber-300/50 font-bold drop-shadow relative overflow-hidden'
-              : toChangeTextColorIfNeeds(getTaskGradeLabel(grade))}
-            {data.myVote?.grade === grade ? 'ring-2 ring-offset-1 ring-gray-600 dark:ring-gray-300' : 'opacity-80 hover:opacity-100'}"
+            ? 'text-white shadow-md shadow-amber-900/80 ring-2 ring-amber-300/50 font-bold drop-shadow relative overflow-hidden'
+            : toChangeTextColorIfNeeds(getTaskGradeLabel(grade))}
+            {data.myVote?.grade === grade
+            ? 'ring-2 ring-offset-1 ring-gray-600 dark:ring-gray-300'
+            : 'opacity-80 hover:opacity-100'}"
           style={grade === TaskGrade.D6
             ? 'background-image: linear-gradient(to bottom right, var(--color-atcoder-D6), rgb(120, 113, 108), rgb(217, 119, 6)); border-color: var(--color-atcoder-D6);'
             : `background-color: ${getTaskGradeColor(grade)}; border-color: ${getTaskGradeColor(grade)};`}

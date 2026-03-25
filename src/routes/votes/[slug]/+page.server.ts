@@ -43,6 +43,6 @@ export const load: PageServerLoad = async ({ locals, params }) => {
 
 export const actions: Actions = {
   voteAbsoluteGrade: async ({ request, locals }) => {
-    return await voteAbsoluteGrade({ request, locals }, 'votes/[slug] -> voteAbsoluteGrade');
+    return await voteAbsoluteGrade({ request, locals });
   },
 };

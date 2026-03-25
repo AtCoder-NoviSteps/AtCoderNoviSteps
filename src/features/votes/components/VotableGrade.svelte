@@ -4,8 +4,9 @@
   import { Dropdown, DropdownItem, DropdownDivider } from 'flowbite-svelte';
   import Check from '@lucide/svelte/icons/check';
 
-  import { taskGradeValues, TaskGrade, getTaskGrade, type TaskResult } from '$lib/types/task';
+  import { TaskGrade, getTaskGrade, type TaskResult } from '$lib/types/task';
   import { getTaskGradeLabel } from '$lib/utils/task';
+  import { nonPendingGrades } from '$features/votes/utils/grade_options';
   import { SIGNUP_PAGE, LOGIN_PAGE, VOTES_PAGE } from '$lib/constants/navbar-links';
   import { errorMessageStore } from '$lib/stores/error_message';
 
@@ -30,7 +31,6 @@
   let displayGrade = $state<TaskGrade | string>(initialGrade);
 
   const componentId = Math.random().toString(36).substring(2);
-  const nonPendingGrades = taskGradeValues.filter((g) => g !== TaskGrade.PENDING);
 
   let selectedVoteGrade = $state<TaskGrade>();
   let showForm = $state(false);
