@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { resolve } from '$app/paths';
   import {
     Table,
     TableBody,
@@ -47,7 +48,7 @@
         <TableBodyRow>
           <TableBodyCell>
             <a
-              href="/votes/{task.task_id}"
+              href={resolve('/votes/[slug]', { slug: task.task_id })}
               class="text-primary-600 dark:text-primary-400 hover:underline"
             >
               {task.title}

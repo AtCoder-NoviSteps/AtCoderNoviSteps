@@ -44,6 +44,35 @@ goto(resolve(url.pathname + url.search));
 replaceState(resolve(url.pathname + url.search + url.hash), state);
 ```
 
+## Server-side Form Data Validation
+
+`formData.get()` returns `string | File | null`. Never cast directly with `as string` or `as TaskGrade` — always validate first:
+
+```typescript
+// Bad — unsafe cast, null reaches the DB layer
+const taskId = data.get('taskId') as string;
+const grade = data.get('grade') as TaskGrade;
+
+// Good — validate before use
+const taskId = data.get('taskId');
+const grade = data.get('grade');
+if (typeof taskId !== 'string' || !taskId || typeof grade !== 'string') {
+  return { success: false };
+}
+// taskId and grade are now string, safe to pass onward
+```
+
+For enum fields, add a membership check after the type guard:
+
+```typescript
+if (!(Object.values(TaskGrade) as string[]).includes(gradeRaw)) {
+  return fail(BAD_REQUEST, { message: 'Invalid grade value.' });
+}
+const grade = gradeRaw as TaskGrade;
+```
+
+The same pattern applies to `url.searchParams.get()` in `+server.ts` handlers.
+
 ## Page Component Props
 
 SvelteKit page components (`+page.svelte`) accept only `data` and `form` as props (`svelte/valid-prop-names-in-kit-pages`). Commented-out features that reference other props are not "dead code" — remove only the violating prop declaration, preserve the feature code.

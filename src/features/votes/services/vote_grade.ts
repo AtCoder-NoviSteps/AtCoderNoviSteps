@@ -103,7 +103,14 @@ async function incrementNewGradeCounter(
   await tx.votedGradeCounter.upsert({
     where: { taskId_grade: { taskId, grade } },
     update: { count: { increment: 1 } },
-    create: { id: counterId, taskId, grade, count: 1, createdAt: new Date(), updatedAt: new Date() },
+    create: {
+      id: counterId,
+      taskId,
+      grade,
+      count: 1,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    },
   });
 }
 

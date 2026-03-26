@@ -1,5 +1,6 @@
 <script lang="ts">
   import { enhance } from '$app/forms';
+  import { resolve } from '$app/paths';
   import {
     Table,
     TableBody,
@@ -38,7 +39,7 @@
         <TableBodyRow>
           <TableBodyCell>
             <a
-              href="/votes/{stat.taskId}"
+              href={resolve('/votes/[slug]', { slug: stat.taskId })}
               class="text-primary-600 dark:text-primary-400 hover:underline text-sm"
             >
               {stat.title}

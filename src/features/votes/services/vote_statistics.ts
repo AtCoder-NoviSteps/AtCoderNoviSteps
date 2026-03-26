@@ -54,9 +54,7 @@ export async function getAllVoteCounters(): Promise<VotedGradeCounter[]> {
   return prisma.votedGradeCounter.findMany();
 }
 
-export async function getVoteStatsByTaskId(
-  taskId: string,
-): Promise<VotedGradeStatistics | null> {
+export async function getVoteStatsByTaskId(taskId: string): Promise<VotedGradeStatistics | null> {
   return prisma.votedGradeStatistics.findFirst({ where: { taskId } });
 }
 
