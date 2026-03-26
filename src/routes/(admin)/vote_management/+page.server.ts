@@ -1,6 +1,6 @@
 import type { Actions, PageServerLoad } from './$types';
 
-import { type TaskGrade } from '$lib/types/task';
+import { type TaskGrade, TaskGrade as TaskGradeEnum } from '$lib/types/task';
 import { getTasksByTaskId, updateTask } from '$lib/services/tasks';
 import {
   getAllVoteStatisticsAsArray,
@@ -43,7 +43,12 @@ export const actions: Actions = {
     const data = await request.formData();
     const taskId = data.get('taskId');
     const grade = data.get('grade');
-    if (typeof taskId !== 'string' || !taskId || typeof grade !== 'string') {
+    if (
+      typeof taskId !== 'string' ||
+      !taskId ||
+      typeof grade !== 'string' ||
+      !(Object.values(TaskGradeEnum) as string[]).includes(grade)
+    ) {
       return { success: false };
     }
     await updateTask(taskId, grade as TaskGrade);

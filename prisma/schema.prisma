@@ -102,10 +102,12 @@ model Task {
   created_at                  DateTime                  @default(now())
   updated_at                  DateTime                  @updatedAt
 
-  tags          TaskTag[]
-  task_answers  TaskAnswer[]
-  workBookTasks WorkBookTask[]
-  voteGrade     VoteGrade[]
+  tags                TaskTag[]
+  task_answers        TaskAnswer[]
+  workBookTasks       WorkBookTask[]
+  voteGrade           VoteGrade[]
+  votedGradeCounters  VotedGradeCounter[]
+  votedGradeStatistics VotedGradeStatistics?
 
   @@map("task")
 }
@@ -247,7 +249,7 @@ model VoteGrade {
   updatedAt  DateTime @updatedAt
 
   user User @relation(references: [id], fields: [userId])
-  task Task @relation(references: [task_id], fields: [taskId])
+  task Task @relation(references: [task_id], fields: [taskId], onDelete: Cascade)
 
   @@id([userId, taskId])
   @@map("votegrade")
@@ -261,6 +263,8 @@ model VotedGradeCounter {
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
 
+  task       Task     @relation(references: [task_id], fields: [taskId], onDelete: Cascade)
+
   @@id([taskId, grade])
   @@map("votedgradecounter")
 }
@@ -272,6 +276,8 @@ model VotedGradeStatistics {
   isExperimental Boolean   @default(false)
   createdAt      DateTime  @default(now())
   updatedAt      DateTime  @updatedAt
+
+  task           Task      @relation(references: [task_id], fields: [taskId], onDelete: Cascade)
 
   @@map("votedgradestatistics")
 }

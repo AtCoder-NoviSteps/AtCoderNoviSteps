@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { tick } from 'svelte';
   import { enhance } from '$app/forms';
 
   import { Dropdown, DropdownItem, DropdownDivider } from 'flowbite-svelte';
@@ -30,10 +31,12 @@
       : taskResult.grade;
   let displayGrade = $state<TaskGrade | string>(initialGrade);
 
-  const componentId = crypto.randomUUID();
+  // Use task_id as a deterministic component ID to avoid SSR/hydration mismatches.
+  const componentId = taskResult.task_id;
 
   let selectedVoteGrade = $state<TaskGrade>();
   let showForm = $state(false);
+  let formElement = $state<HTMLFormElement | undefined>(undefined);
 
   let isOpening = $state(false);
   let votedGrade = $state<TaskGrade | null>(null);
@@ -59,21 +62,12 @@
     }
   }
 
-  function handleClick(voteGrade: string): void {
+  async function handleClick(voteGrade: string): Promise<void> {
     selectedVoteGrade = getTaskGrade(voteGrade);
     showForm = true;
-
-    // Submit after the form is rendered.
-    setTimeout(() => {
-      const submitButton = document.querySelector(
-        `#voteGradeForm-${componentId} button[type="submit"]`,
-      ) as HTMLButtonElement;
-
-      if (submitButton) {
-        // Submit the form via the enhance directive by clicking the button.
-        submitButton.click();
-      }
-    }, 10);
+    // Wait for Svelte to render the form, then submit via the enhance directive.
+    await tick();
+    formElement?.requestSubmit();
   }
 
   type EnhanceForVote = {
@@ -162,7 +156,7 @@
     simple
     class="h-48 w-25 z-50 border border-gray-200 dark:border-gray-100 overflow-y-auto"
   >
-    {#each nonPendingGrades as grade}
+    {#each nonPendingGrades as grade (grade)}
       <DropdownItem onclick={() => handleClick(grade)} class="rounded-md">
         <div
           class="flex items-center justify-between w-full text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white"
@@ -195,7 +189,7 @@
 
 {#snippet voteGradeForm(selectedTaskResult: TaskResult, voteGrade: TaskGrade)}
   <form
-    id="voteGradeForm-{componentId}"
+    bind:this={formElement}
     method="POST"
     action="?/voteAbsoluteGrade"
     style="display:none;"

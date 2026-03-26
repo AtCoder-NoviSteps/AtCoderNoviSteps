@@ -54,7 +54,7 @@
                 onchange={(e) => (e.currentTarget as HTMLSelectElement).form?.requestSubmit()}
                 class="text-sm rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 px-2 py-1 focus:ring-primary-500 focus:border-primary-500 min-w-20"
               >
-                {#each taskGradeValues as grade}
+                {#each taskGradeValues as grade (grade)}
                   <option value={grade} selected={stat.dbGrade === grade}>
                     {grade === 'PENDING' ? '-' : getTaskGradeLabel(grade)}
                   </option>

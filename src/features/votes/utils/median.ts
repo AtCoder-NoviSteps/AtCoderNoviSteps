@@ -61,5 +61,9 @@ export function computeMedianGrade(counters: GradeCounter[], minVotes = 3): Task
     medianOrder = Math.round((lower + upper) / 2);
   }
 
-  return ORDER_TO_TASK_GRADE.get(medianOrder) as TaskGrade;
+  const result = ORDER_TO_TASK_GRADE.get(medianOrder);
+  if (result === undefined) {
+    throw new RangeError(`computeMedianGrade: no grade mapped to order ${medianOrder}`);
+  }
+  return result;
 }

@@ -17,20 +17,28 @@ export async function load({ locals, url }) {
   // TODO: utilに移動させる
   const isLoggedIn: boolean = session !== null;
 
+  // Degrade gracefully if vote stats are unavailable — the problems page must remain accessible.
+  let voteResults = new Map();
+  try {
+    voteResults = await getVoteGradeStatistics();
+  } catch (error) {
+    console.error('Failed to load vote statistics:', error);
+  }
+
   if (tagIds != null) {
     return {
       taskResults: (await task_crud.getTasksWithTagIds(
         tagIds,
         session?.user.userId,
       )) as TaskResults,
-      voteResults: await getVoteGradeStatistics(),
+      voteResults,
       isAdmin: isAdmin,
       isLoggedIn: isLoggedIn,
     };
   } else {
     return {
       taskResults: (await task_crud.getTaskResults(session?.user.userId)) as TaskResults,
-      voteResults: await getVoteGradeStatistics(),
+      voteResults,
       isAdmin: isAdmin,
       isLoggedIn: isLoggedIn,
     };

@@ -7,7 +7,7 @@ export type VoteGradeResult = {
 };
 
 /** A single entry in the vote statistics map, keyed by taskId. */
-export type VoteStatisticsEntry = { grade: string };
+export type VoteStatisticsEntry = { grade: TaskGrade };
 
 /** Map from taskId to its vote statistics entry. */
 export type VoteStatisticsMap = Map<string, VoteStatisticsEntry>;

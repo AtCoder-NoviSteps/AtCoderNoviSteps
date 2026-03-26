@@ -289,5 +289,7 @@ ANALYSIS ANALYSIS
     "votegrade" }o--|| user : "user"
     "votegrade" }o--|| task : "task"
     "votedgradecounter" |o--|| "TaskGrade" : "enum:grade"
+    "votedgradecounter" }o--|| task : "task"
     "votedgradestatistics" |o--|| "TaskGrade" : "enum:grade"
+    "votedgradestatistics" |o--|| task : "task"
 ```

@@ -69,7 +69,7 @@
     <div class="mb-6">
       <p class="flex items-center gap-2 text-green-600 dark:text-green-400 font-medium mb-4">
         <Check class="w-5 h-5" strokeWidth={3} />
-        投票済み：{getTaskGradeLabel(data.myVote.grade as TaskGrade)}
+        投票済み：{data.myVote.grade ? getTaskGradeLabel(data.myVote.grade) : ''}
       </p>
 
       {#if data.stats}
@@ -80,7 +80,7 @@
 
       <!-- 分布表 -->
       <div class="space-y-1">
-        {#each nonPendingGrades as grade}
+        {#each nonPendingGrades as grade (grade)}
           {@const count = getCount(grade)}
           {@const pct = getPct(grade)}
           {@const isMyVote = data.myVote?.grade === grade}
@@ -135,7 +135,7 @@
   <form method="POST" action="?/voteAbsoluteGrade" use:enhance>
     <input type="hidden" name="taskId" value={data.task.task_id} />
     <div class="flex flex-wrap gap-2">
-      {#each nonPendingGrades as grade}
+      {#each nonPendingGrades as grade (grade)}
         <button
           name="grade"
           value={grade}

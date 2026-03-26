@@ -46,7 +46,7 @@ function mockVoteGradeFindUnique(value: PrismaVoteGrade) {
 function setupTransaction() {
   const mockTx = {
     voteGrade: { findUnique: vi.fn(), upsert: vi.fn() },
-    votedGradeCounter: { update: vi.fn(), upsert: vi.fn(), findMany: vi.fn() },
+    votedGradeCounter: { updateMany: vi.fn(), upsert: vi.fn(), findMany: vi.fn() },
     votedGradeStatistics: { upsert: vi.fn() },
   };
   vi.mocked(prisma.$transaction).mockImplementation(async (callback: unknown) =>
@@ -103,7 +103,7 @@ describe('upsertVoteGradeTables', () => {
 
     await upsertVoteGradeTables('user-1', 'abc001_a', TaskGrade.Q5);
 
-    expect(tx.votedGradeCounter.update).not.toHaveBeenCalled();
+    expect(tx.votedGradeCounter.updateMany).not.toHaveBeenCalled();
     expect(tx.voteGrade.upsert).not.toHaveBeenCalled();
     expect(tx.votedGradeCounter.upsert).not.toHaveBeenCalled();
   });
@@ -121,9 +121,9 @@ describe('upsertVoteGradeTables', () => {
     await upsertVoteGradeTables('user-1', 'abc001_a', TaskGrade.Q5);
 
     // Q4 (old grade) should be decremented
-    expect(tx.votedGradeCounter.update).toHaveBeenCalledWith(
+    expect(tx.votedGradeCounter.updateMany).toHaveBeenCalledWith(
       expect.objectContaining({
-        where: { taskId_grade: { taskId: 'abc001_a', grade: TaskGrade.Q4 } },
+        where: { taskId: 'abc001_a', grade: TaskGrade.Q4, count: { gt: 0 } },
         data: { count: { decrement: 1 } },
       }),
     );

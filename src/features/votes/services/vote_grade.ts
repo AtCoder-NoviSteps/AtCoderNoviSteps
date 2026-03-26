@@ -74,8 +74,10 @@ async function decrementOldGradeCounter(
   taskId: string,
   oldGrade: TaskGrade,
 ): Promise<void> {
-  await tx.votedGradeCounter.update({
-    where: { taskId_grade: { taskId, grade: oldGrade } },
+  // updateMany does not throw if the row is missing (data inconsistency guard).
+  // count is also guarded to never go below zero.
+  await tx.votedGradeCounter.updateMany({
+    where: { taskId, grade: oldGrade, count: { gt: 0 } },
     data: { count: { decrement: 1 } },
   });
 }

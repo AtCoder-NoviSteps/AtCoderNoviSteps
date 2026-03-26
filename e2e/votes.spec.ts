@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test, expect, type Page } from '@playwright/test';
 
 import { loginAsAdmin, loginAsUser } from './helpers/auth';
 
@@ -60,7 +60,7 @@ test.describe('vote detail page (/votes/[slug])', () => {
    * Navigates to the first task in the vote list.
    * Assumes at least one task exists in the DB.
    */
-  async function navigateToFirstVoteDetailPage(page: Parameters<typeof test>[1]): Promise<void> {
+  async function navigateToFirstVoteDetailPage(page: Page): Promise<void> {
     await page.goto(VOTES_LIST_URL);
     await expect(page.getByRole('columnheader', { name: '問題' })).toBeVisible({
       timeout: TIMEOUT,
