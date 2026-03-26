@@ -1,6 +1,7 @@
 <script lang="ts">
   import { tick } from 'svelte';
   import { enhance } from '$app/forms';
+  import { resolve } from '$app/paths';
 
   import { Dropdown, DropdownItem, DropdownDivider } from 'flowbite-svelte';
   import Check from '@lucide/svelte/icons/check';
@@ -8,7 +9,7 @@
   import { TaskGrade, getTaskGrade, type TaskResult } from '$lib/types/task';
   import { getTaskGradeLabel } from '$lib/utils/task';
   import { nonPendingGrades } from '$features/votes/utils/grade_options';
-  import { SIGNUP_PAGE, LOGIN_PAGE, VOTES_PAGE } from '$lib/constants/navbar-links';
+  import { SIGNUP_PAGE, LOGIN_PAGE } from '$lib/constants/navbar-links';
   import { errorMessageStore } from '$lib/stores/error_message';
 
   import GradeLabel from '$lib/components/GradeLabel.svelte';
@@ -42,7 +43,7 @@
   let votedGrade = $state<TaskGrade | null>(null);
 
   async function onTriggerClick() {
-    if (isOpening) return;
+    if (!isLoggedIn || isOpening) return;
     isOpening = true;
     try {
       const res = await fetch(
@@ -169,7 +170,9 @@
       </DropdownItem>
     {/each}
     <DropdownDivider />
-    <DropdownItem href="{VOTES_PAGE}/{taskResult.task_id}" class="rounded-md">詳細</DropdownItem>
+    <DropdownItem href={resolve('/votes/[slug]', { slug: taskResult.task_id })} class="rounded-md"
+      >詳細</DropdownItem
+    >
   </Dropdown>
 {:else}
   <Dropdown
