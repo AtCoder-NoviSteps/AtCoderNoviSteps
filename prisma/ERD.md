@@ -263,7 +263,6 @@ ANALYSIS ANALYSIS
     String taskId 
     TaskGrade grade 
     Boolean isExperimental 
-    Boolean isApproved 
     DateTime createdAt 
     DateTime updatedAt 
     }
