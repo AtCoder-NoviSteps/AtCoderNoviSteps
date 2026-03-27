@@ -7,7 +7,7 @@ import type { Actions } from './$types';
 
 import { redirect } from '@sveltejs/kit';
 
-export async function load({ locals }) {
+export async function load({ locals, url }) {
   const session = await locals.auth.validate();
   if (!session) {
     redirect(302, '/login');
@@ -26,6 +26,7 @@ export async function load({ locals }) {
       is_validated: user?.atcoder_validation_status as boolean,
       message_type: '',
       message: '',
+      openAtCoderTab: url.searchParams.get('tab') === 'atcoder',
     };
   } catch (error) {
     console.error('Not found username: ', session?.user.username, error);

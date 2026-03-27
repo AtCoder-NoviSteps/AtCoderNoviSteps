@@ -38,7 +38,7 @@
   const componentId = taskResult.task_id;
 
   // @ts-expect-error svelte-check TS2554: AppTypes declaration merging causes RouteId to resolve as string, requiring params. Runtime behavior is correct.
-  const editProfileHref = resolve(EDIT_PROFILE_PAGE);
+  const editProfileHref = resolve(EDIT_PROFILE_PAGE + '?tab=atcoder');
 
   let selectedVoteGrade = $state<TaskGrade>();
   let showForm = $state(false);
@@ -184,7 +184,7 @@
   <Dropdown
     triggeredBy={`#update-grade-dropdown-trigger-${componentId}`}
     simple
-    class="w-40 z-50 border border-gray-200 dark:border-gray-100"
+    class="w-48 z-50 border border-gray-200 dark:border-gray-100"
   >
     <DropdownItem
       href={editProfileHref}

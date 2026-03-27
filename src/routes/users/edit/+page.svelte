@@ -20,6 +20,7 @@
       is_validated: boolean;
       message_type: string;
       message: string;
+      openAtCoderTab: boolean;
     };
     form: Record<string, unknown> | null;
   }
@@ -41,10 +42,13 @@
         : 'nothing',
   );
 
-  // Open the AtCoder tab when the user is in any step of the verification flow.
-  // Also check form?.is_tab_atcoder as extra safety in case load() hasn't reflected the action yet.
+  // Open the AtCoder tab when:
+  // - navigated here via ?tab=atcoder (e.g. from the unverified-user prompt)
+  // - the user is already in any step of the verification flow
+  // - form?.is_tab_atcoder is set (extra safety in case load() hasn't reflected the action yet)
   const shouldOpenAtCoderTab = $derived(
-    data.is_validated ||
+    data.openAtCoderTab ||
+      data.is_validated ||
       (data.atcoder_username.length > 0 && data.atcoder_validationcode.length > 0) ||
       form?.is_tab_atcoder === true,
   );
