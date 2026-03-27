@@ -38,6 +38,7 @@ export const load: PageServerLoad = async ({ locals, params }) => {
     counters,
     stats,
     isLoggedIn: session !== null,
+    isAtCoderVerified: locals.user?.is_validated === true,
   };
 };
 
