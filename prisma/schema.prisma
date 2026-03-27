@@ -55,6 +55,7 @@ model User {
   key          Key[]
   taskAnswer   TaskAnswer[]
   workBooks    WorkBook[]
+  voteGrade    VoteGrade[]
 
   @@map("user")
 }
@@ -101,9 +102,12 @@ model Task {
   created_at                  DateTime                  @default(now())
   updated_at                  DateTime                  @updatedAt
 
-  tags          TaskTag[]
-  task_answers  TaskAnswer[]
-  workBookTasks WorkBookTask[]
+  tags                TaskTag[]
+  task_answers        TaskAnswer[]
+  workBookTasks       WorkBookTask[]
+  voteGrade           VoteGrade[]
+  votedGradeCounters  VotedGradeCounter[]
+  votedGradeStatistics VotedGradeStatistics?
 
   @@map("task")
 }
@@ -234,6 +238,48 @@ model WorkBookTask {
   task     Task     @relation(references: [task_id], fields: [taskId])
 
   @@map("workbooktask")
+}
+
+model VoteGrade {
+  id         String   @unique
+  userId     String
+  taskId     String
+  grade      TaskGrade
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  user User @relation(references: [id], fields: [userId])
+  task Task @relation(references: [task_id], fields: [taskId], onDelete: Cascade)
+
+  @@id([userId, taskId])
+  @@map("votegrade")
+}
+
+model VotedGradeCounter {
+  id         String   @unique
+  taskId     String
+  grade      TaskGrade
+  count      Int
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  task       Task     @relation(references: [task_id], fields: [taskId], onDelete: Cascade)
+
+  @@id([taskId, grade])
+  @@map("votedgradecounter")
+}
+
+model VotedGradeStatistics {
+  id             String    @id
+  taskId         String    @unique
+  grade          TaskGrade
+  isExperimental Boolean   @default(false)
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  task           Task      @relation(references: [task_id], fields: [taskId], onDelete: Cascade)
+
+  @@map("votedgradestatistics")
 }
 
 enum ContestType {

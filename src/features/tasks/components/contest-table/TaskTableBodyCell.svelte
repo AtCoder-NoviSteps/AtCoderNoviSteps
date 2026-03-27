@@ -1,7 +1,8 @@
 <script lang="ts">
   import type { TaskResult } from '$lib/types/task';
+  import type { VoteStatisticsMap } from '$features/votes/types/vote_result';
 
-  import GradeLabel from '$lib/components/GradeLabel.svelte';
+  import VotableGrade from '@/features/votes/components/VotableGrade.svelte';
   import ExternalLinkWrapper from '$lib/components/ExternalLinkWrapper.svelte';
   import UpdatingDropdown from '$lib/components/SubmissionStatus/UpdatingDropdown.svelte';
 
@@ -11,10 +12,19 @@
     taskResult: TaskResult;
     isLoggedIn: boolean;
     isShownTaskIndex: boolean;
+    voteResults: VoteStatisticsMap;
     onupdate?: (updatedTask: TaskResult) => void; // Ensure to update task result in parent component.
   }
 
-  let { taskResult, isLoggedIn, isShownTaskIndex, onupdate = () => {} }: Props = $props();
+  let {
+    taskResult,
+    isLoggedIn,
+    isShownTaskIndex,
+    voteResults,
+    onupdate = () => {},
+  }: Props = $props();
+
+  let estimatedGrade = $derived(voteResults.get(taskResult.task_id)?.grade);
 </script>
 
 <div
@@ -29,14 +39,7 @@
 </div>
 
 {#snippet taskGradeLabel(taskResult: TaskResult)}
-  <div class="shrink-0">
-    <GradeLabel
-      taskGrade={taskResult.grade}
-      defaultPadding={0.25}
-      defaultWidth={6}
-      reducedWidth={6}
-    />
-  </div>
+  <VotableGrade {taskResult} {isLoggedIn} {estimatedGrade} />
 {/snippet}
 
 {#snippet taskTitleAndExternalLink(taskResult: TaskResult, isShownTaskIndex: boolean)}

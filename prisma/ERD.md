@@ -237,6 +237,36 @@ ANALYSIS ANALYSIS
     DateTime updatedAt 
     }
   
+
+  "votegrade" {
+    String id 
+    String userId "🗝️"
+    String taskId "🗝️"
+    TaskGrade grade 
+    DateTime createdAt 
+    DateTime updatedAt 
+    }
+  
+
+  "votedgradecounter" {
+    String id 
+    String taskId "🗝️"
+    TaskGrade grade "🗝️"
+    Int count 
+    DateTime createdAt 
+    DateTime updatedAt 
+    }
+  
+
+  "votedgradestatistics" {
+    String id "🗝️"
+    String taskId 
+    TaskGrade grade 
+    Boolean isExperimental 
+    DateTime createdAt 
+    DateTime updatedAt 
+    }
+  
     "user" |o--|| "Roles" : "enum:role"
     "session" }o--|| user : "user"
     "key" }o--|| user : "user"
@@ -255,4 +285,11 @@ ANALYSIS ANALYSIS
     "workbookplacement" |o--|| workbook : "workBook"
     "workbooktask" }o--|| workbook : "workBook"
     "workbooktask" }o--|| task : "task"
+    "votegrade" |o--|| "TaskGrade" : "enum:grade"
+    "votegrade" }o--|| user : "user"
+    "votegrade" }o--|| task : "task"
+    "votedgradecounter" |o--|| "TaskGrade" : "enum:grade"
+    "votedgradecounter" }o--|| task : "task"
+    "votedgradestatistics" |o--|| "TaskGrade" : "enum:grade"
+    "votedgradestatistics" |o--|| task : "task"
 ```

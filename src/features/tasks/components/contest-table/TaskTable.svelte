@@ -19,6 +19,7 @@
     ContestTableMetaData,
   } from '$features/tasks/types/contest-table/contest_table_provider';
   import type { ContestTaskPairKey } from '$lib/types/contest_task_pair';
+  import type { VoteStatisticsMap } from '$features/votes/types/vote_result';
 
   import TaskTableBodyCell from './TaskTableBodyCell.svelte';
 
@@ -36,9 +37,10 @@
   interface Props {
     taskResults: TaskResults;
     isLoggedIn: boolean;
+    voteResults: VoteStatisticsMap;
   }
 
-  let { taskResults, isLoggedIn }: Props = $props();
+  let { taskResults, isLoggedIn, voteResults }: Props = $props();
 
   // Prepare contest table provider based on the active contest type.
   let activeContestType: ContestTableProviderGroups = $derived(activeContestTypeStore.get());
@@ -281,6 +283,7 @@
                       <TaskTableBodyCell
                         {taskResult}
                         {isLoggedIn}
+                        {voteResults}
                         isShownTaskIndex={contestTable.displayConfig.isShownTaskIndex}
                         onupdate={(updatedTask: TaskResult) => handleUpdateTaskResult(updatedTask)}
                       />
