@@ -1,12 +1,11 @@
 <script lang="ts">
   import { Tabs, TabItem, Alert } from 'flowbite-svelte';
 
-  // import AtCoderUserValidationForm from '$lib/components/AtCoderUserValidationForm.svelte';
+  import AtCoderUserValidationForm from '$lib/components/AtCoderUserValidationForm.svelte';
   import UserAccountDeletionForm from '$lib/components/UserAccountDeletionForm.svelte';
   import ContainerWrapper from '$lib/components/ContainerWrapper.svelte';
   import FormWrapper from '$lib/components/FormWrapper.svelte';
   import LabelWrapper from '$lib/components/LabelWrapper.svelte';
-  // import SubmissionButton from '$lib/components/SubmissionButton.svelte';
 
   import { Roles } from '$lib/types/user';
 
@@ -22,28 +21,33 @@
       message_type: string;
       message: string;
     };
+    form: Record<string, unknown> | null;
   }
 
-  let { data }: Props = $props();
-  // TODO: Restore when AtCoderUserValidationForm is re-enabled (svelte/valid-prop-names-in-kit-pages requires $bindable props to be declared in Props):
-  //   interface Props { ...; status?: string; }
-  //   let { data, status = $bindable('nothing') }: Props = $props();
-  // let status = $state('nothing');
+  let { data, form }: Props = $props();
 
   let role = data.role;
   let username = data.username;
-  // let atcoder_username = data.atcoder_username;
-  // let atcoder_validationcode = data.atcoder_validationcode;
-  // let atcoder_is_validated = data.is_validated;
   let message = data.message;
   let message_type = data.message_type;
 
-  // if (data.is_validated) {
-  //   status = 'validated';
-  // }
-  // if (data.atcoder_username.length > 0 && data.atcoder_validationcode.length > 0) {
-  //   status = 'generated';
-  // }
+  // Status is derived exclusively from server-authoritative data.
+  // After each form action, SvelteKit re-runs load(), so data reflects the latest DB state.
+  const status = $derived(
+    data.is_validated
+      ? 'validated'
+      : data.atcoder_username.length > 0 && data.atcoder_validationcode.length > 0
+        ? 'generated'
+        : 'nothing',
+  );
+
+  // Open the AtCoder tab when the user is in any step of the verification flow.
+  // Also check form?.is_tab_atcoder as extra safety in case load() hasn't reflected the action yet.
+  const shouldOpenAtCoderTab = $derived(
+    data.is_validated ||
+      (data.atcoder_username.length > 0 && data.atcoder_validationcode.length > 0) ||
+      form?.is_tab_atcoder === true,
+  );
 
   const isGeneralUser = (userRole: Roles, userName: string) => {
     return userRole === Roles.USER && userName !== 'guest';
@@ -69,7 +73,7 @@
     ulClass="flex flex-wrap md:flex-nowrap md:gap-2 rtl:space-x-reverse items-start"
   >
     <!-- 基本情報 -->
-    <TabItem open>
+    <TabItem open={!shouldOpenAtCoderTab}>
       {#snippet titleSlot()}
         <span class="text-lg">基本情報</span>
       {/snippet}
@@ -77,48 +81,23 @@
       <ContainerWrapper>
         <FormWrapper action="update">
           <LabelWrapper labelName="ユーザ名" inputValue={username} />
-          <!-- <LabelWrapper labelName="AtCoder ID" inputValue={atcoder_username} /> -->
-
-          <!-- <SubmissionButton labelName="保存" /> -->
         </FormWrapper>
       </ContainerWrapper>
     </TabItem>
 
-    <!-- FIXME: フォーム送信時に、基本情報ページが表示されてしまう不具合が修正されるまでは非公開 -->
     <!-- AtCoder IDを利用した認証 -->
-    <!-- <TabItem>
-      <span slot="title" class="text-lg">AtCoder IDを設定</span>
-      <AtCoderUserValidationForm {username} {atcoder_username} {atcoder_validationcode} {status} />
-    </TabItem> -->
+    <TabItem open={shouldOpenAtCoderTab}>
+      {#snippet titleSlot()}
+        <span class="text-lg">AtCoder IDを設定</span>
+      {/snippet}
 
-    <!-- FIXME: 回答状況が正しく取得されないバグが修正されるまでは非公開 -->
-    <!-- 問題の回答状況をインポート (AtCoder ProblemsのAPIを使用) -->
-    <!-- {#if atcoder_is_validated === true}
-      <TabItem>
-        <span slot="title" class="text-lg text-gray-400 dark:text-gray-500">インポート</span>
-        <p class="text-sm text-gray-500 dark:text-gray-400">
-          <b>TODO:Taskのインポートボタンを作成する</b>
-        </p>
-      </TabItem>
-    {:else}
-      <TabItem disabled>
-        <span slot="title" class="text-lg text-gray-400 dark:text-gray-500">インポート</span>
-        <p class="text-sm text-gray-500 dark:text-gray-400">
-          <b>Disabled:</b>
-        </p>
-      </TabItem>
-    {/if} -->
-
-    <!-- TODO: 実装できるまで非公開 -->
-    <!-- ステータス -->
-    <!-- <TabItem disabled>
-      <span slot="title" class="text-lg text-gray-400 dark:text-gray-500">ステータス編集</span>
-      <p class="text-sm text-gray-500 dark:text-gray-400">
-        <b>Settings:</b>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
-        labore et dolore magna aliqua.
-      </p>
-    </TabItem> -->
+      <AtCoderUserValidationForm
+        {username}
+        atcoder_username={data.atcoder_username}
+        atcoder_validationcode={data.atcoder_validationcode}
+        {status}
+      />
+    </TabItem>
 
     <!-- アカウント削除 (ゲストを除いた一般ユーザのみ) -->
     {#if isGeneralUser(role, username)}
