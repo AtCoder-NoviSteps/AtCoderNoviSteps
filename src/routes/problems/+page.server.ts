@@ -34,6 +34,7 @@ export async function load({ locals, url }) {
       voteResults,
       isAdmin: isAdmin,
       isLoggedIn: isLoggedIn,
+      isAtCoderVerified: locals.user?.is_validated === true,
     };
   } else {
     return {
@@ -41,6 +42,7 @@ export async function load({ locals, url }) {
       voteResults,
       isAdmin: isAdmin,
       isLoggedIn: isLoggedIn,
+      isAtCoderVerified: locals.user?.is_validated === true,
     };
   }
 }

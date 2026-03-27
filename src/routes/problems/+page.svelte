@@ -24,6 +24,7 @@
 
   let isAdmin: boolean = data.isAdmin;
   let isLoggedIn: boolean = data.isLoggedIn;
+  let isAtCoderVerified: boolean = data.isAtCoderVerified;
   let voteResults = data.voteResults;
 
   function isActiveTab(currentTab: ActiveProblemListTab): boolean {
@@ -60,7 +61,7 @@
 {/snippet}
 
 {#snippet contestTable()}
-  <TaskTable {taskResults} {isLoggedIn} {voteResults} />
+  <TaskTable {taskResults} {isLoggedIn} {isAtCoderVerified} {voteResults} />
 {/snippet}
 
 {#snippet listByGrade()}
