@@ -22,8 +22,8 @@ export const handle: Handle = async ({ event, resolve }) => {
       id: user.id,
       name: user.username,
       role: user.role,
-      atcoder_name: user.atcoder_username,
-      is_validated: user.atcoder_validation_status,
+      atcoder_name: user.atCoderAccount?.handle ?? '',
+      is_validated: user.atCoderAccount?.isValidated ?? null,
     };
   }
 
