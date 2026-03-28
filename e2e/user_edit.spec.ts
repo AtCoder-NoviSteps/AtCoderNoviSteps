@@ -17,12 +17,17 @@ test.describe('user edit page (/users/edit)', () => {
     test.beforeEach(async ({ page }) => {
       await loginAsUser(page);
       await page.goto(EDIT_PAGE_URL);
+      // Wait for page to stabilize before running assertions
+      await expect(page.getByRole('tab', { name: '基本情報' })).toBeVisible({ timeout: TIMEOUT });
     });
 
-    test('基本情報 tab is visible and active by default', async ({ page }) => {
-      const tab = page.getByRole('tab', { name: '基本情報' });
-      await expect(tab).toBeVisible({ timeout: TIMEOUT });
-      await expect(tab).toHaveAttribute('aria-selected', 'true', { timeout: TIMEOUT });
+    test('基本情報 tab is active by default', async ({ page }) => {
+      // Tab visibility already asserted in beforeEach; check active state only
+      await expect(page.getByRole('tab', { name: '基本情報' })).toHaveAttribute(
+        'aria-selected',
+        'true',
+        { timeout: SHORT_TIMEOUT },
+      );
     });
 
     test('username is displayed in the 基本情報 tab', async ({ page }) => {

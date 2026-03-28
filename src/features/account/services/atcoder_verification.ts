@@ -17,7 +17,7 @@ async function confirmWithExternalApi(handle: string, validationCode: string): P
     const response = await fetch(url, { signal: controller.signal });
 
     if (!response.ok) {
-      throw new Error('Network response was not ok.');
+      throw new Error(`Network response was not ok: ${response.status} ${response.statusText}`);
     }
 
     try {
@@ -80,7 +80,7 @@ export async function validate(username: string): Promise<boolean> {
       user.atCoderAccount.validationCode,
     );
   } catch (error) {
-    throw new Error(`Failed to confirm AtCoder affiliation: ${error}`);
+    throw new Error('Failed to confirm AtCoder affiliation', { cause: error });
   }
 
   if (!confirmed) {

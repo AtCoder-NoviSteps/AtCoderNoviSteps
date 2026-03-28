@@ -8,7 +8,6 @@ vi.mock('$lib/server/database', () => ({
     atCoderAccount: {
       upsert: vi.fn(),
       update: vi.fn(),
-      delete: vi.fn(),
       deleteMany: vi.fn(),
     },
   },
@@ -216,7 +215,9 @@ describe('validate', () => {
     delete process.env.CONFIRM_API_URL;
     mockFindUniqueOrThrow(makeUser(makeAtCoderAccount()));
 
-    await expect(validate(SAMPLE_USERNAME)).rejects.toThrow('CONFIRM_API_URL is not set.');
+    await expect(validate(SAMPLE_USERNAME)).rejects.toThrow(
+      'Failed to confirm AtCoder affiliation',
+    );
   });
 });
 

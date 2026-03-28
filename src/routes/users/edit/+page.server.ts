@@ -6,7 +6,7 @@ import * as verificationService from '$features/account/services/atcoder_verific
 import type { Actions } from './$types';
 
 import { redirect, fail } from '@sveltejs/kit';
-import { FORBIDDEN } from '$lib/constants/http-response-status-codes';
+import { BAD_REQUEST, FORBIDDEN } from '$lib/constants/http-response-status-codes';
 
 export async function load({ locals, url }) {
   const session = await locals.auth.validate();
@@ -53,7 +53,10 @@ async function requireSelf(
 export const actions: Actions = {
   generate: async ({ request, locals }) => {
     const formData = await request.formData();
-    const username = formData.get('username')?.toString() as string;
+    const username = formData.get('username')?.toString();
+    if (!username) {
+      return fail(BAD_REQUEST, { message: 'Username is required.' });
+    }
     const authError = await requireSelf(locals, username);
     if (authError) {
       return authError;
@@ -74,7 +77,10 @@ export const actions: Actions = {
 
   validate: async ({ request, locals }) => {
     const formData = await request.formData();
-    const username = formData.get('username')?.toString() as string;
+    const username = formData.get('username')?.toString();
+    if (!username) {
+      return fail(BAD_REQUEST, { message: 'Username is required.' });
+    }
     const authError = await requireSelf(locals, username);
     if (authError) {
       return authError;
@@ -93,7 +99,10 @@ export const actions: Actions = {
 
   reset: async ({ request, locals }) => {
     const formData = await request.formData();
-    const username = formData.get('username')?.toString() as string;
+    const username = formData.get('username')?.toString();
+    if (!username) {
+      return fail(BAD_REQUEST, { message: 'Username is required.' });
+    }
     const authError = await requireSelf(locals, username);
     if (authError) {
       return authError;
@@ -115,7 +124,10 @@ export const actions: Actions = {
 
   delete: async ({ request, locals }) => {
     const formData = await request.formData();
-    const username = formData.get('username')?.toString() as string;
+    const username = formData.get('username')?.toString();
+    if (!username) {
+      return fail(BAD_REQUEST, { message: 'Username is required.' });
+    }
     const authError = await requireSelf(locals, username);
     if (authError) {
       return authError;
