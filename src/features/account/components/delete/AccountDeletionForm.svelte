@@ -5,7 +5,7 @@
   import ContainerWrapper from '$lib/components/ContainerWrapper.svelte';
   import FormWrapper from '$lib/components/FormWrapper.svelte';
   import LabelWrapper from '$lib/components/LabelWrapper.svelte';
-  import WarningMessageOnDeletingAccount from '$lib/components/WarningMessageOnDeletingAccount.svelte';
+  import WarningMessageOnDeletingAccount from './WarningMessageOnDeletingAccount.svelte';
 
   interface Props {
     username: string;
