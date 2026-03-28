@@ -22,7 +22,10 @@ async function confirmWithExternalApi(handle: string, validationCode: string): P
 
     try {
       const jsonData = await response.json();
-      return jsonData.contents?.some((item: string) => item === validationCode) ?? false;
+      if (!Array.isArray(jsonData.contents)) {
+        return false;
+      }
+      return jsonData.contents.some((item: unknown) => item === validationCode);
     } catch {
       // Invalid JSON from external API — treat as unconfirmed
       return false;
@@ -77,7 +80,7 @@ export async function validate(username: string): Promise<boolean> {
       user.atCoderAccount.validationCode,
     );
   } catch (error) {
-    throw new Error(`Failed to confirm AtCoder affiliation for ${username}: ${error}`);
+    throw new Error(`Failed to confirm AtCoder affiliation: ${error}`);
   }
 
   if (!confirmed) {

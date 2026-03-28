@@ -12,7 +12,7 @@ services:
       - NODE_ENV=development
       - DATABASE_URL=postgresql://db_user:db_password@db:5432/test_db?pgbouncer=true&connection_limit=10&connect_timeout=60&statement_timeout=60000 # Note: Local server cannot start if port is set to db:6543.
       - DIRECT_URL=postgresql://db_user:db_password@db:5432/test_db
-      - CONFIRM_API_URL=${CONFIRM_API_URL}
+      - CONFIRM_API_URL=${CONFIRM_API_URL} # AtCoder affiliation confirmation API endpoint (required)
     command: sleep infinity
     depends_on:
       - db

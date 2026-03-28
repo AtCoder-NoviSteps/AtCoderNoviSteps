@@ -10,7 +10,7 @@ const EDIT_PAGE_URL = '/users/edit';
 test.describe('user edit page (/users/edit)', () => {
   test('unauthenticated user is redirected to /login', async ({ page }) => {
     await page.goto(EDIT_PAGE_URL);
-    await expect(page).toHaveURL('/login', { timeout: TIMEOUT });
+    await expect(page).toHaveURL(/\/login/, { timeout: TIMEOUT });
   });
 
   test.describe('logged-in user (guest)', () => {

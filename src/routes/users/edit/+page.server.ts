@@ -35,18 +35,28 @@ export async function load({ locals, url }) {
   }
 }
 
+/** Validates the session and checks that the given username matches the logged-in user. */
+async function requireSelf(
+  locals: App.Locals,
+  username: string,
+): Promise<ReturnType<typeof fail> | null> {
+  const session = await locals.auth.validate();
+  if (!session) {
+    return fail(FORBIDDEN, { message: 'Not authenticated.' });
+  }
+  if (session.user.username !== username) {
+    return fail(FORBIDDEN, { message: 'Not authorized.' });
+  }
+  return null;
+}
+
 export const actions: Actions = {
   generate: async ({ request, locals }) => {
-    const session = await locals.auth.validate();
-    if (!session) {
-      return fail(FORBIDDEN, { message: 'Not authenticated.' });
-    }
-
     const formData = await request.formData();
     const username = formData.get('username')?.toString() as string;
-
-    if (session.user.username !== username) {
-      return fail(FORBIDDEN, { message: 'Not authorized.' });
+    const authError = await requireSelf(locals, username);
+    if (authError) {
+      return authError;
     }
 
     const atcoder_username = formData.get('atcoder_username')?.toString() as string;
@@ -63,16 +73,11 @@ export const actions: Actions = {
   },
 
   validate: async ({ request, locals }) => {
-    const session = await locals.auth.validate();
-    if (!session) {
-      return fail(FORBIDDEN, { message: 'Not authenticated.' });
-    }
-
     const formData = await request.formData();
     const username = formData.get('username')?.toString() as string;
-
-    if (session.user.username !== username) {
-      return fail(FORBIDDEN, { message: 'Not authorized.' });
+    const authError = await requireSelf(locals, username);
+    if (authError) {
+      return authError;
     }
 
     const is_validated = await verificationService.validate(username);
@@ -87,16 +92,11 @@ export const actions: Actions = {
   },
 
   reset: async ({ request, locals }) => {
-    const session = await locals.auth.validate();
-    if (!session) {
-      return fail(FORBIDDEN, { message: 'Not authenticated.' });
-    }
-
     const formData = await request.formData();
     const username = formData.get('username')?.toString() as string;
-
-    if (session.user.username !== username) {
-      return fail(FORBIDDEN, { message: 'Not authorized.' });
+    const authError = await requireSelf(locals, username);
+    if (authError) {
+      return authError;
     }
 
     const atcoder_username = formData.get('atcoder_username')?.toString() as string;
@@ -114,16 +114,11 @@ export const actions: Actions = {
   },
 
   delete: async ({ request, locals }) => {
-    const session = await locals.auth.validate();
-    if (!session) {
-      return fail(FORBIDDEN, { message: 'Not authenticated.' });
-    }
-
     const formData = await request.formData();
     const username = formData.get('username')?.toString() as string;
-
-    if (session.user.username !== username) {
-      return fail(FORBIDDEN, { message: 'Not authorized.' });
+    const authError = await requireSelf(locals, username);
+    if (authError) {
+      return authError;
     }
 
     await userService.deleteUser(username);
