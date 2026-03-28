@@ -60,8 +60,10 @@ export const actions: Actions = {
 
     return {
       success: is_validated,
-      message_type: 'green',
-      message: 'Successfully validated.',
+      message_type: is_validated ? 'green' : 'red',
+      message: is_validated
+        ? 'Successfully validated.'
+        : 'Validation failed. Please check your AtCoder affiliation.',
     };
   },
 

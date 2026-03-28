@@ -13,7 +13,7 @@ async function confirmWithExternalApi(handle: string, validationCode: string): P
     if (!baseUrl) {
       throw new Error('CONFIRM_API_URL is not set.');
     }
-    const url = `${baseUrl}?user=${handle}`;
+    const url = `${baseUrl}?user=${encodeURIComponent(handle)}`;
     const response = await fetch(url, { signal: controller.signal });
 
     if (!response.ok) {
@@ -95,5 +95,5 @@ export async function validate(username: string): Promise<boolean> {
 /** Deletes the AtCoderAccount record, effectively resetting the verification state. */
 export async function reset(username: string): Promise<void> {
   const user = await db.user.findUniqueOrThrow({ where: { username } });
-  await db.atCoderAccount.deleteMany({ where: { userId: user.id } });
+  await db.atCoderAccount.delete({ where: { userId: user.id } });
 }

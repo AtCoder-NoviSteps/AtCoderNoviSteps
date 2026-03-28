@@ -8,6 +8,7 @@ vi.mock('$lib/server/database', () => ({
     atCoderAccount: {
       upsert: vi.fn(),
       update: vi.fn(),
+      delete: vi.fn(),
       deleteMany: vi.fn(),
     },
   },
@@ -46,7 +47,9 @@ const SAMPLE_HANDLE = 'alice_ac';
 const SAMPLE_VALIDATION_CODE = 'mocked-hash';
 const SAMPLE_API_URL = 'https://example.com/api';
 
-function makeUser(atCoderAccount: PrismaUserWithAccount['atCoderAccount'] = null): PrismaUserWithAccount {
+function makeUser(
+  atCoderAccount: PrismaUserWithAccount['atCoderAccount'] = null,
+): PrismaUserWithAccount {
   return {
     id: SAMPLE_USER_ID,
     username: SAMPLE_USERNAME,
@@ -187,7 +190,7 @@ describe('validate', () => {
     );
   });
 
-  test('returns false when the external API returns non-OK response', async () => {
+  test('throws when the external API returns non-OK response', async () => {
     mockFindUniqueOrThrow(makeUser(makeAtCoderAccount()));
     mockFetch({}, false);
 
@@ -220,11 +223,12 @@ describe('validate', () => {
 describe('reset', () => {
   test('calls deleteMany with the correct userId', async () => {
     mockFindUniqueOrThrow(makeUser());
-    vi.mocked(prisma.atCoderAccount.deleteMany).mockResolvedValue({ count: 1 });
+    vi.mocked(prisma.atCoderAccount.deleteMany).mockResolvedValue({ count: 0 });
+    vi.mocked(prisma.atCoderAccount.delete).mockResolvedValue({} as never);
 
     await reset(SAMPLE_USERNAME);
 
-    expect(prisma.atCoderAccount.deleteMany).toHaveBeenCalledWith(
+    expect(prisma.atCoderAccount.delete).toHaveBeenCalledWith(
       expect.objectContaining({
         where: { userId: SAMPLE_USER_ID },
       }),

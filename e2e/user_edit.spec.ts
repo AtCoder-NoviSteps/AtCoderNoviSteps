@@ -15,25 +15,27 @@ test.describe('user edit page (/users/edit)', () => {
   test.describe('logged-in user (guest)', () => {
     test.beforeEach(async ({ page }) => {
       await loginAsUser(page);
+      await page.goto(EDIT_PAGE_URL);
     });
 
     test('can view the edit page', async ({ page }) => {
-      await page.goto(EDIT_PAGE_URL);
       await expect(page).toHaveURL(EDIT_PAGE_URL, { timeout: TIMEOUT });
     });
 
     test('基本情報 tab is visible and active by default', async ({ page }) => {
-      await page.goto(EDIT_PAGE_URL);
-      await expect(page.getByRole('tab', { name: '基本情報' })).toBeVisible({ timeout: TIMEOUT });
+      const tab = page.getByRole('tab', { name: '基本情報' });
+      await expect(tab).toBeVisible({ timeout: TIMEOUT });
+      await expect(tab).toHaveAttribute('aria-selected', 'true');
     });
 
     test('username is displayed in the 基本情報 tab', async ({ page }) => {
-      await page.goto(EDIT_PAGE_URL);
-      await expect(page.getByText('guest', { exact: false })).toBeVisible({ timeout: TIMEOUT });
+      // Assert the username label input shows the logged-in user's name
+      await expect(page.getByRole('textbox', { name: 'ユーザ名' })).toHaveValue('guest', {
+        timeout: TIMEOUT,
+      });
     });
 
     test('アカウント削除 tab is not shown for the guest user', async ({ page }) => {
-      await page.goto(EDIT_PAGE_URL);
       // guest is excluded from account deletion (isGeneralUser returns false for username 'guest')
       await expect(page.getByRole('tab', { name: 'アカウント削除' })).not.toBeVisible({
         timeout: TIMEOUT,
