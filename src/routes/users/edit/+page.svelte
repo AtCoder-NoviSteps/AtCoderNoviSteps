@@ -21,6 +21,7 @@
       is_validated: boolean;
       message_type: string;
       message: string;
+      openAtCoderTab: boolean;
     };
   }
 

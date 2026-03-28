@@ -1,19 +1,35 @@
 import { default as db } from '$lib/server/database';
 import { sha256 } from '$lib/utils/hash';
 
-const CONFIRM_API_URL = 'https://prettyhappy.sakura.ne.jp/php_curl/index.php';
+const EXTERNAL_API_TIMEOUT_MS = 5000;
 
 /** Calls the external API to check if the validation code appears in the user's AtCoder affiliation. */
 async function confirmWithExternalApi(handle: string, validationCode: string): Promise<boolean> {
-  const url = `${CONFIRM_API_URL}?user=${handle}`;
-  const response = await fetch(url);
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), EXTERNAL_API_TIMEOUT_MS);
 
-  if (!response.ok) {
-    throw new Error('Network response was not ok.');
+  try {
+    const baseUrl = process.env.CONFIRM_API_URL;
+    if (!baseUrl) {
+      throw new Error('CONFIRM_API_URL is not set.');
+    }
+    const url = `${baseUrl}?user=${handle}`;
+    const response = await fetch(url, { signal: controller.signal });
+
+    if (!response.ok) {
+      throw new Error('Network response was not ok.');
+    }
+
+    try {
+      const jsonData = await response.json();
+      return jsonData.contents?.some((item: string) => item === validationCode) ?? false;
+    } catch {
+      // Invalid JSON from external API — treat as unconfirmed
+      return false;
+    }
+  } finally {
+    clearTimeout(timeoutId);
   }
-
-  const jsonData = await response.json();
-  return jsonData.contents?.some((item: string) => item === validationCode) ?? false;
 }
 
 /**
@@ -46,6 +62,10 @@ export async function validate(username: string): Promise<boolean> {
   });
 
   if (!user.atCoderAccount) {
+    return false;
+  }
+
+  if (!user.atCoderAccount.validationCode) {
     return false;
   }
 

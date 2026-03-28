@@ -111,11 +111,18 @@ ANALYSIS ANALYSIS
     String id "🗝️"
     String username 
     Roles role 
-    String atcoder_validation_code 
-    String atcoder_username 
-    Boolean atcoder_validation_status "❓"
     DateTime created_at 
     DateTime updated_at 
+    }
+  
+
+  "atcoder_account" {
+    String userId "🗝️"
+    String handle 
+    Boolean isValidated 
+    String validationCode 
+    DateTime createdAt 
+    DateTime updatedAt 
     }
   
 
@@ -268,6 +275,7 @@ ANALYSIS ANALYSIS
     }
   
     "user" |o--|| "Roles" : "enum:role"
+    "atcoder_account" |o--|| user : "user"
     "session" }o--|| user : "user"
     "key" }o--|| user : "user"
     "task" |o--|| "ContestType" : "enum:contest_type"

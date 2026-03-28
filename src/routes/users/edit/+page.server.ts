@@ -5,7 +5,8 @@ import * as userService from '$lib/services/users';
 import * as verificationService from '$features/account/services/atcoder_verification';
 import type { Actions } from './$types';
 
-import { redirect } from '@sveltejs/kit';
+import { redirect, fail } from '@sveltejs/kit';
+import { FORBIDDEN } from '$lib/constants/http-response-status-codes';
 
 export async function load({ locals, url }) {
   const session = await locals.auth.validate();
@@ -54,20 +55,13 @@ export const actions: Actions = {
   validate: async ({ request }) => {
     const formData = await request.formData();
     const username = formData.get('username')?.toString() as string;
-    const atcoder_username = formData.get('atcoder_username')?.toString() as string;
-    const atcoder_validationcode = formData.get('atcoder_validationcode')?.toString() as string;
 
     const is_validated = await verificationService.validate(username);
 
     return {
       success: is_validated,
-      user: {
-        username,
-        atcoder_username,
-        atcoder_validationcode,
-        message_type: 'green',
-        message: 'Successfully validated.',
-      },
+      message_type: 'green',
+      message: 'Successfully validated.',
     };
   },
 
@@ -89,9 +83,17 @@ export const actions: Actions = {
   },
 
   delete: async ({ request, locals }) => {
+    const session = await locals.auth.validate();
+    if (!session) {
+      return fail(FORBIDDEN, { message: 'Not authenticated.' });
+    }
+
     const formData = await request.formData();
     const username = formData.get('username')?.toString() as string;
-    const atcoder_username = formData.get('atcoder_username')?.toString() as string;
+
+    if (session.user.username !== username) {
+      return fail(FORBIDDEN, { message: 'Not authorized.' });
+    }
 
     await userService.deleteUser(username);
     locals.auth.setSession(null); // remove cookie
@@ -99,8 +101,7 @@ export const actions: Actions = {
     return {
       success: true,
       username,
-      atcoder_username,
-      atcoder_validationcode: false,
+      atcoder_validationcode: '',
       message_type: 'green',
       message: 'Successfully deleted.',
     };
