@@ -147,6 +147,12 @@ describe('generate', () => {
 });
 
 describe('validate', () => {
+  test('propagates error when db lookup fails', async () => {
+    vi.mocked(prisma.user.findUniqueOrThrow).mockRejectedValue(new Error('not found'));
+
+    await expect(validate(SAMPLE_USERNAME)).rejects.toThrow();
+  });
+
   test('returns false when user has no AtCoderAccount', async () => {
     mockFindUniqueOrThrow(makeUser(null));
 

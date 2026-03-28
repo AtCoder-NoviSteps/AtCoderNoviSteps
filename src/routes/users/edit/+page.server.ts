@@ -62,7 +62,10 @@ export const actions: Actions = {
       return authError;
     }
 
-    const atcoder_username = formData.get('atcoder_username')?.toString() as string;
+    const atcoder_username = formData.get('atcoder_username')?.toString();
+    if (!atcoder_username) {
+      return fail(BAD_REQUEST, { message: 'AtCoder username is required.' });
+    }
 
     const validationCode = await verificationService.generate(username, atcoder_username);
 
@@ -108,7 +111,7 @@ export const actions: Actions = {
       return authError;
     }
 
-    const atcoder_username = formData.get('atcoder_username')?.toString() as string;
+    const atcoder_username = formData.get('atcoder_username')?.toString() ?? '';
 
     await verificationService.reset(username);
 

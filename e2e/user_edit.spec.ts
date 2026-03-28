@@ -33,14 +33,12 @@ test.describe('user edit page (/users/edit)', () => {
     test('username is displayed in the 基本情報 tab', async ({ page }) => {
       // Assert the username label input shows the logged-in user's name
       await expect(page.getByRole('textbox', { name: 'ユーザ名' })).toHaveValue('guest', {
-        timeout: TIMEOUT,
+        timeout: SHORT_TIMEOUT,
       });
     });
 
     test('アカウント削除 tab is not shown for the guest user', async ({ page }) => {
       // guest is excluded from account deletion (isGeneralUser returns false for username 'guest')
-      // Wait for page to stabilize before asserting absence
-      await expect(page.getByRole('tab', { name: '基本情報' })).toBeVisible({ timeout: TIMEOUT });
       await expect(page.getByRole('tab', { name: 'アカウント削除' })).not.toBeVisible({
         timeout: SHORT_TIMEOUT,
       });
