@@ -35,9 +35,6 @@ const admin: User = {
   id: '1',
   username: 'admin',
   role: Roles.ADMIN,
-  atcoder_validation_code: '',
-  atcoder_username: '',
-  atcoder_validation_status: false,
   created_at: SAMPLE_CREATION_TIMESTAMP,
   updated_at: SAMPLE_CREATION_TIMESTAMP,
 };
@@ -45,9 +42,6 @@ const guest: User = {
   id: '2',
   username: 'guest',
   role: Roles.USER,
-  atcoder_validation_code: '',
-  atcoder_username: '',
-  atcoder_validation_status: false,
   created_at: SAMPLE_CREATION_TIMESTAMP,
   updated_at: SAMPLE_CREATION_TIMESTAMP,
 };
@@ -55,9 +49,6 @@ const general: User = {
   id: '3',
   username: 'Alice',
   role: Roles.USER,
-  atcoder_validation_code: '',
-  atcoder_username: '',
-  atcoder_validation_status: false,
   created_at: SAMPLE_CREATION_TIMESTAMP,
   updated_at: SAMPLE_CREATION_TIMESTAMP,
 };
