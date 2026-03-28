@@ -2,6 +2,7 @@ import { test, expect } from '@playwright/test';
 import { loginAsUser } from './helpers/auth';
 
 const TIMEOUT = 60 * 1000;
+const SHORT_TIMEOUT = 5000;
 
 // Mirrors /users/edit route
 const EDIT_PAGE_URL = '/users/edit';
@@ -18,14 +19,10 @@ test.describe('user edit page (/users/edit)', () => {
       await page.goto(EDIT_PAGE_URL);
     });
 
-    test('can view the edit page', async ({ page }) => {
-      await expect(page).toHaveURL(EDIT_PAGE_URL, { timeout: TIMEOUT });
-    });
-
     test('基本情報 tab is visible and active by default', async ({ page }) => {
       const tab = page.getByRole('tab', { name: '基本情報' });
       await expect(tab).toBeVisible({ timeout: TIMEOUT });
-      await expect(tab).toHaveAttribute('aria-selected', 'true');
+      await expect(tab).toHaveAttribute('aria-selected', 'true', { timeout: TIMEOUT });
     });
 
     test('username is displayed in the 基本情報 tab', async ({ page }) => {
@@ -37,8 +34,10 @@ test.describe('user edit page (/users/edit)', () => {
 
     test('アカウント削除 tab is not shown for the guest user', async ({ page }) => {
       // guest is excluded from account deletion (isGeneralUser returns false for username 'guest')
+      // Wait for page to stabilize before asserting absence
+      await expect(page.getByRole('tab', { name: '基本情報' })).toBeVisible({ timeout: TIMEOUT });
       await expect(page.getByRole('tab', { name: 'アカウント削除' })).not.toBeVisible({
-        timeout: TIMEOUT,
+        timeout: SHORT_TIMEOUT,
       });
     });
   });

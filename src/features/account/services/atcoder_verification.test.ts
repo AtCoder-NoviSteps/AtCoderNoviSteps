@@ -221,14 +221,13 @@ describe('validate', () => {
 });
 
 describe('reset', () => {
-  test('calls deleteMany with the correct userId', async () => {
+  test('calls deleteMany with the correct userId (deleteMany is intentional: tolerates missing record)', async () => {
     mockFindUniqueOrThrow(makeUser());
-    vi.mocked(prisma.atCoderAccount.deleteMany).mockResolvedValue({ count: 0 });
-    vi.mocked(prisma.atCoderAccount.delete).mockResolvedValue({} as never);
+    vi.mocked(prisma.atCoderAccount.deleteMany).mockResolvedValue({ count: 1 });
 
     await reset(SAMPLE_USERNAME);
 
-    expect(prisma.atCoderAccount.delete).toHaveBeenCalledWith(
+    expect(prisma.atCoderAccount.deleteMany).toHaveBeenCalledWith(
       expect.objectContaining({
         where: { userId: SAMPLE_USER_ID },
       }),

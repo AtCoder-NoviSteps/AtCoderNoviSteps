@@ -36,9 +36,19 @@ export async function load({ locals, url }) {
 }
 
 export const actions: Actions = {
-  generate: async ({ request }) => {
+  generate: async ({ request, locals }) => {
+    const session = await locals.auth.validate();
+    if (!session) {
+      return fail(FORBIDDEN, { message: 'Not authenticated.' });
+    }
+
     const formData = await request.formData();
     const username = formData.get('username')?.toString() as string;
+
+    if (session.user.username !== username) {
+      return fail(FORBIDDEN, { message: 'Not authorized.' });
+    }
+
     const atcoder_username = formData.get('atcoder_username')?.toString() as string;
 
     const validationCode = await verificationService.generate(username, atcoder_username);
@@ -52,9 +62,18 @@ export const actions: Actions = {
     };
   },
 
-  validate: async ({ request }) => {
+  validate: async ({ request, locals }) => {
+    const session = await locals.auth.validate();
+    if (!session) {
+      return fail(FORBIDDEN, { message: 'Not authenticated.' });
+    }
+
     const formData = await request.formData();
     const username = formData.get('username')?.toString() as string;
+
+    if (session.user.username !== username) {
+      return fail(FORBIDDEN, { message: 'Not authorized.' });
+    }
 
     const is_validated = await verificationService.validate(username);
 
@@ -67,9 +86,19 @@ export const actions: Actions = {
     };
   },
 
-  reset: async ({ request }) => {
+  reset: async ({ request, locals }) => {
+    const session = await locals.auth.validate();
+    if (!session) {
+      return fail(FORBIDDEN, { message: 'Not authenticated.' });
+    }
+
     const formData = await request.formData();
     const username = formData.get('username')?.toString() as string;
+
+    if (session.user.username !== username) {
+      return fail(FORBIDDEN, { message: 'Not authorized.' });
+    }
+
     const atcoder_username = formData.get('atcoder_username')?.toString() as string;
 
     await verificationService.reset(username);

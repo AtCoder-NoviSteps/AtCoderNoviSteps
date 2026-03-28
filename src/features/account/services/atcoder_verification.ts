@@ -95,5 +95,6 @@ export async function validate(username: string): Promise<boolean> {
 /** Deletes the AtCoderAccount record, effectively resetting the verification state. */
 export async function reset(username: string): Promise<void> {
   const user = await db.user.findUniqueOrThrow({ where: { username } });
-  await db.atCoderAccount.delete({ where: { userId: user.id } });
+  // deleteMany is intentional: delete throws if no record exists (user may not have an AtCoderAccount)
+  await db.atCoderAccount.deleteMany({ where: { userId: user.id } });
 }
