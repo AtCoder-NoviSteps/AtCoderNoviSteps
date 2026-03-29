@@ -318,6 +318,8 @@ pnpm lint         # linter → 警告1件（auth_forms.test.ts、プリエグジ
 
 ## 追加タスク: `+page.server.ts` ― 共通パターンの抽出（低リスク）
 
+- [x] 完了（`parseUsernameAndAuthorize` として抽出済み）
+
 4つのアクション（generate / validate / reset / delete）が以下の完全に同一のブロックを繰り返している:
 
 ```typescript
@@ -332,19 +334,17 @@ if (authError) {
 }
 ```
 
-DRY 原則に基づき `parseUsernameAndAuthorize(request, locals)` として抽出する。戻り値は成功時に `{ formData, username }`、失敗時に `ActionFailure` の判別可能な型とする。
+DRY 原則に基づき `parseUsernameAndAuthorize(request, locals)` として抽出した。戻り値は `ParseResult` 型（成功: `{ ok: true; formData; username }` / 失敗: `{ ok: false; error }`）。
 
 ## CodeRabbit Findings
 
-`coderabbit review --plain` 実行済み（2026-03-29）。`potential_issue` 3件を以下に記録（ユーザが修正可否を判断）。`nitpick` / `refactor_suggestion` は PR CI に委ねる。
+`coderabbit review --plain` 実行済み（2026-03-29）。`potential_issue` 3件を以下に記録。`nitpick` / `refactor_suggestion` は PR CI に委ねる。
 
-### potential_issue: `src/routes/problems/+page.server.ts` line 37
+### potential_issue: `src/routes/problems/+page.server.ts` line 37 — **対応不要（false positive）**
 
-> ユーザーデータのアクセス元が不整合
->
-> 既存コードは session?.user（locals.auth.validate() 由来）を参照していますが、新規追加の isAtCoderVerified は locals.user を直接参照しています。
->
-> - session と locals.user のライフサイクルが異なる場合、isLoggedIn: true でも isAtCoderVerified: false となる不整合が発生する可能性があります。
+> ユーザーデータのアクセス元が不整合。isAtCoderVerified は locals.user を参照しているが、他は session?.user を参照している。
+
+`locals.user.is_validated` は `hooks.server.ts` で `user.atCoderAccount?.isValidated` から設定される。`session?.user` にはこのフィールドが存在しないため、`locals.user` 参照は正しい。不整合ではない。
 
 ### potential_issue: `src/routes/users/edit/+page.svelte` line 32–35
 
@@ -354,8 +354,4 @@ DRY 原則に基づき `parseUsernameAndAuthorize(request, locals)` として抽
 
 ### potential_issue: `docs/dev-notes/2026-03-26/pr-3316-review/review.md` line 196
 
-> 誤字を修正してください
->
-> updateValicationCode → updateValidationCode
-````
-`````
+> 誤字: updateValicationCode → updateValidationCode
