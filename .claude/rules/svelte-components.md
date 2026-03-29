@@ -183,7 +183,7 @@ const status = $derived(atCoderAccount.isValidated ? 'validated' : ...);
 
 Call site passes the object directly from `$derived(data.atCoderAccount)`.
 
-## $derived for data.* Fields in +page.svelte
+## $derived for data.\* Fields in +page.svelte
 
 When reading fields from `data` in a `+page.svelte`, use `$derived` rather than plain assignment:
 
