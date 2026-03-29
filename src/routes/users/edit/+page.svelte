@@ -29,22 +29,22 @@
 
   let { data, form }: Props = $props();
 
-  let role = data.role;
-  let username = data.username;
-  let message = data.message;
-  let message_type = data.message_type;
+  const role = $derived(data.role);
+  const username = $derived(data.username);
+  const message = $derived(data.message);
+  const message_type = $derived(data.message_type);
 
   const atCoderAccount = $derived(data.atCoderAccount);
 
   // Open the AtCoder tab when:
   // - navigated here via ?tab=atcoder (e.g. from the unverified-user prompt)
   // - the user is already in any step of the verification flow
-  // - form?.is_tab_atcoder is set (extra safety in case load() hasn't reflected the action yet)
+  // - form?.isTabAtcoder is set (extra safety in case load() hasn't reflected the action yet)
   const shouldOpenAtCoderTab = $derived(
     data.openAtCoderTab ||
       atCoderAccount.isValidated ||
       (atCoderAccount.handle.length > 0 && atCoderAccount.validationCode.length > 0) ||
-      form?.is_tab_atcoder === true,
+      form?.isTabAtcoder === true,
   );
 
   const isGeneralUser = (userRole: Roles, userName: string) => {

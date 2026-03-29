@@ -123,8 +123,12 @@ test.describe('vote detail page (/votes/[slug])', () => {
     test('sees vote grade buttons', async ({ page }) => {
       await navigateToFirstVoteDetailPage(page);
 
-      // Skip if the test user is not AtCoder-verified
-      const isUnverified = await page.getByText('AtCoderアカウントの認証が必要です').isVisible();
+      // Skip if the test user is not AtCoder-verified.
+      // Wait for either the vote form or the unverified message to appear before deciding.
+      const voteForm = page.locator('form[action="?/voteAbsoluteGrade"]');
+      const unverifiedMessage = page.getByText('AtCoderアカウントの認証が必要です');
+      await expect(voteForm.or(unverifiedMessage)).toBeVisible({ timeout: TIMEOUT });
+      const isUnverified = await unverifiedMessage.isVisible();
       test.skip(isUnverified, 'test user is not AtCoder-verified');
 
       // Vote form with grade buttons is rendered for logged-in verified users

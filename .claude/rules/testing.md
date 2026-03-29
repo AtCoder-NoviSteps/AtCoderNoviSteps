@@ -131,7 +131,7 @@ Stop the split if internal helpers (e.g. `fetchUnplacedWorkbooks`) would be frag
 
 Omit Vitest unit tests for a Svelte component when **both** conditions hold:
 
-1. The component is template-only (no logic beyond prop bindings and basic conditionals)
+1. The component is template-only (no logic beyond prop bindings and simple `{#if}`/`{#each}` blocks that only render — no inline function calls, ternaries with side effects, derived computations, or nested logic)
 2. The component is covered by E2E tests
 
 When a component contains extracted logic (e.g. derived values, event handlers, utility calls), add unit tests for that logic in the nearest `utils/` file instead of testing the component directly.

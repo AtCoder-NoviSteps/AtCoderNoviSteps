@@ -16,7 +16,16 @@ The `e2e/` directory is outside SvelteKit's build pipeline — `$lib`, `$feature
 const TAB_SOLUTION = 'solution';
 ```
 
-Avoid importing types from `src/` in E2E test files.
+Avoid importing values from `src/` in E2E test files. Type-only imports (`import type`) are acceptable since they are erased at compile time:
+
+```typescript
+// Bad: runtime import — path alias not resolved in e2e/
+import { TAB_SOLUTION } from '$features/workbooks/types/workbook';
+
+// Good: type-only import — compile-time only
+import type { WorkBookTab } from '$features/workbooks/types/workbook';
+const TAB_SOLUTION: WorkBookTab = 'solution';
+```
 
 ## Describe Hierarchy
 
@@ -33,7 +42,9 @@ test.describe('logged-in user', () => {
 
 ## Parameterized Tests
 
-Playwright has no native `test.each`. Use `for...of` loops — the official recommended pattern:
+Playwright has no native `test.each`. Use `for...of` loops — the official recommended pattern.
+
+**Single test with a loop** — use when testing a sequence or workflow within one test:
 
 ```typescript
 // Mirrors TaskGrade from $lib/types/task — do not import from src/ in E2E files
@@ -42,6 +53,20 @@ const GRADES = ['Q10', 'Q9', 'Q8'] as const;
 for (const grade of GRADES) {
   await gradeButton(grade).click();
   await expect(page).toHaveURL(`?grades=${grade}`);
+}
+```
+
+**Multiple tests from parameters** — use when each parameter represents an independent case:
+
+```typescript
+const GRADES = ['Q10', 'Q9', 'Q8'] as const;
+
+for (const grade of GRADES) {
+  test(`filters by grade ${grade}`, async ({ page }) => {
+    await page.goto('/tasks');
+    await gradeButton(page, grade).click();
+    await expect(page).toHaveURL(`?grades=${grade}`);
+  });
 }
 ```
 

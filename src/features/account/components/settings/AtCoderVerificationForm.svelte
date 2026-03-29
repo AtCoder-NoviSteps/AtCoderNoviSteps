@@ -2,6 +2,10 @@
   import { untrack } from 'svelte';
   import { Label, Input, P } from 'flowbite-svelte';
   import ClipboardCopy from '@lucide/svelte/icons/clipboard-copy';
+  import ContainerWrapper from '$lib/components/ContainerWrapper.svelte';
+  import FormWrapper from '$lib/components/FormWrapper.svelte';
+  import LabelWrapper from '$lib/components/LabelWrapper.svelte';
+  import SubmissionButton from '$lib/components/SubmissionButton.svelte';
 
   // TODO: Use Flowbite's ClipboardCopy component when available
   const copyToClipboard = async (text: string): Promise<void> => {
@@ -28,11 +32,6 @@
       document.body.removeChild(textArea);
     }
   };
-
-  import ContainerWrapper from '$lib/components/ContainerWrapper.svelte';
-  import FormWrapper from '$lib/components/FormWrapper.svelte';
-  import LabelWrapper from '$lib/components/LabelWrapper.svelte';
-  import SubmissionButton from '$lib/components/SubmissionButton.svelte';
 
   interface Props {
     username: string;

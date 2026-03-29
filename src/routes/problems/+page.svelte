@@ -22,10 +22,10 @@
 
   let taskResults: TaskResults = $derived(data.taskResults.sort(compareByContestIdAndTaskId));
 
-  let isAdmin: boolean = data.isAdmin;
-  let isLoggedIn: boolean = data.isLoggedIn;
-  let isAtCoderVerified: boolean = data.isAtCoderVerified;
-  let voteResults = data.voteResults;
+  const isAdmin = $derived(data.isAdmin);
+  const isLoggedIn = $derived(data.isLoggedIn);
+  const isAtCoderVerified = $derived(data.isAtCoderVerified);
+  const voteResults = $derived(data.voteResults);
 
   function isActiveTab(currentTab: ActiveProblemListTab): boolean {
     return currentTab === activeProblemListTabStore.get();

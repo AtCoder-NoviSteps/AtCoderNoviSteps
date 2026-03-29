@@ -81,7 +81,7 @@ SvelteKit page components (`+page.svelte`) accept only `data` and `form` as prop
 
 When a `load()` function returns fields from the same domain model (e.g., `AtCoderAccount`),
 group them as an object rather than flattening to top-level keys.
-Apply default values at this boundary so the page component never needs to handle `undefined`.
+Apply default values at this boundary so the page component typically does not need to handle `undefined`.
 
 ```typescript
 // Bad: flat, scattered across top-level keys

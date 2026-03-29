@@ -20,8 +20,7 @@
 
   let { data } = $props();
 
-  // @ts-expect-error svelte-check TS2554: AppTypes declaration merging causes RouteId to resolve as string, requiring params. Runtime behavior is correct.
-  const editProfileHref = resolve(EDIT_PROFILE_PAGE + '?tab=atcoder');
+  const editProfileHref = `${resolve(EDIT_PROFILE_PAGE)}?tab=atcoder`;
 
   const totalVotes = $derived(
     data.counters ? data.counters.reduce((sum, c) => sum + c.count, 0) : 0,

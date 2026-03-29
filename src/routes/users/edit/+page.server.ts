@@ -7,7 +7,12 @@ import type { Roles } from '$lib/types/user';
 import * as userService from '$lib/services/users';
 import * as verificationService from '$features/account/services/atcoder_verification';
 
-import { BAD_REQUEST, UNAUTHORIZED, FORBIDDEN } from '$lib/constants/http-response-status-codes';
+import {
+  BAD_REQUEST,
+  UNAUTHORIZED,
+  FORBIDDEN,
+  INTERNAL_SERVER_ERROR,
+} from '$lib/constants/http-response-status-codes';
 
 export async function load({ locals, url }) {
   const session = await locals.auth.validate();
@@ -54,15 +59,20 @@ export const actions: Actions = {
       return fail(BAD_REQUEST, { message: 'AtCoder username is required.' });
     }
 
-    const validationCode = await verificationService.generate(username, handle);
+    try {
+      const validationCode = await verificationService.generate(username, handle);
 
-    return {
-      success: true,
-      username,
-      handle,
-      validationCode,
-      is_tab_atcoder: true,
-    };
+      return {
+        success: true,
+        username,
+        handle,
+        validationCode,
+        isTabAtcoder: true,
+      };
+    } catch (error) {
+      console.error('Failed to generate validation code', error);
+      return fail(INTERNAL_SERVER_ERROR, { message: 'Failed to generate validation code.' });
+    }
   },
 
   validate: async ({ request, locals }) => {
@@ -73,15 +83,21 @@ export const actions: Actions = {
     }
 
     const { username } = parsed;
-    const is_validated = await verificationService.validate(username);
 
-    return {
-      success: is_validated,
-      message_type: is_validated ? 'green' : 'red',
-      message: is_validated
-        ? 'Successfully validated.'
-        : 'Validation failed. Please check your AtCoder affiliation.',
-    };
+    try {
+      const is_validated = await verificationService.validate(username);
+
+      return {
+        success: is_validated,
+        message_type: is_validated ? 'green' : 'red',
+        message: is_validated
+          ? 'Successfully validated.'
+          : 'Validation failed. Please check your AtCoder affiliation.',
+      };
+    } catch (error) {
+      console.error('Failed to validate AtCoder account', error);
+      return fail(INTERNAL_SERVER_ERROR, { message: 'Failed to validate AtCoder account.' });
+    }
   },
 
   reset: async ({ request, locals }) => {
@@ -92,14 +108,20 @@ export const actions: Actions = {
     }
 
     const { username } = parsed;
-    await verificationService.reset(username);
 
-    return {
-      success: true,
-      username,
-      message_type: 'green',
-      message: 'Successfully reset.',
-    };
+    try {
+      await verificationService.reset(username);
+
+      return {
+        success: true,
+        username,
+        message_type: 'green',
+        message: 'Successfully reset.',
+      };
+    } catch (error) {
+      console.error('Failed to reset AtCoder account', error);
+      return fail(INTERNAL_SERVER_ERROR, { message: 'Failed to reset AtCoder account.' });
+    }
   },
 
   delete: async ({ request, locals }) => {
@@ -110,15 +132,21 @@ export const actions: Actions = {
     }
 
     const { username } = parsed;
-    await userService.deleteUser(username);
-    locals.auth.setSession(null); // remove cookie
 
-    return {
-      success: true,
-      username,
-      message_type: 'green',
-      message: 'Successfully deleted.',
-    };
+    try {
+      await userService.deleteUser(username);
+      locals.auth.setSession(null); // remove cookie
+
+      return {
+        success: true,
+        username,
+        message_type: 'green',
+        message: 'Successfully deleted.',
+      };
+    } catch (error) {
+      console.error('Failed to delete user account', error);
+      return fail(INTERNAL_SERVER_ERROR, { message: 'Failed to delete account.' });
+    }
   },
 };
 
