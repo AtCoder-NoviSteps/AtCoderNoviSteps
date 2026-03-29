@@ -103,7 +103,9 @@ function mockCount(value: number) {
 
 Extract `mockFindUnique`, `mockFindMany`, and `mockCount` as the standard trio for service tests that touch a single Prisma model. Add `mockCreate`, `mockTransaction`, and `mockDelete` when those operations are also tested.
 
-### Cleanup for Tests with Real Side Effects
+### Cleanup for Integration Tests and Tests with Real Side Effects
+
+This does not apply to standard service layer unit tests that use Prisma mocks.
 
 If a test performs real DB mutations, file system changes, external API calls, or other stateful side effects that persist beyond the test (e.g., integration tests, seed scripts), wrap assertions in `try/finally` — a failing assertion skips cleanup and contaminates later tests:
 

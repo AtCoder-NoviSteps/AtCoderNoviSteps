@@ -37,8 +37,7 @@
   // Use task_id as a deterministic component ID to avoid SSR/hydration mismatches.
   const componentId = taskResult.task_id;
 
-  // @ts-expect-error svelte-check TS2554: AppTypes declaration merging causes RouteId to resolve as string, requiring params. Runtime behavior is correct.
-  const editProfileHref = resolve(EDIT_PROFILE_PAGE + '?tab=atcoder');
+  const editProfileHref = `${resolve(EDIT_PROFILE_PAGE)}?tab=atcoder`;
 
   let selectedVoteGrade = $state<TaskGrade>();
   let showForm = $state(false);
