@@ -241,7 +241,7 @@ PR #3319 のリアクティブロジックを採用し、import パスと型を 
 
 load() でモデルフィールドをオブジェクトとしてグループ化するパターン:
 
-````markdown
+`````markdown
 ## load() — Group Related Model Fields as Objects
 
 When a `load()` function returns fields from the same domain model (e.g., `AtCoderAccount`),
@@ -261,17 +261,14 @@ atCoderAccount: {
   isValidated:    user?.atCoderAccount?.isValidated    ?? false,
 },
 ```
-````
 
 When consuming in `+page.svelte`, use `$derived` to maintain reactivity (see svelte-runes.md).
-
-````
 
 ### `.claude/rules/svelte-components.md` に追加
 
 コンポーネント Props 設計のパターン:
 
-```markdown
+````markdown
 ## Props — Pass Domain Model Objects; Derive Computed Values Internally
 
 When a component's data comes from a domain model, pass the model object as a single prop
@@ -296,11 +293,9 @@ interface Props {
 }
 let { username, atCoderAccount }: Props = $props();
 const status = $derived(atCoderAccount.isValidated ? 'validated' : ...);
-````
+```
 
 Call site passes the object directly from `$derived(data.atCoderAccount)`.
-
-````
 
 ## Phase 7: 検証（低リスク）
 
@@ -320,24 +315,44 @@ pnpm lint         # linter → 警告1件（auth_forms.test.ts、プリエグジ
 - `?tab=atcoder` クエリパラメータで AtCoder タブが自動オープンすること
 - 未ログイン・AtCoder 未認証ユーザが投票できないこと（vote_actions.ts の確認）
 
+## 追加タスク: `+page.server.ts` ― 共通パターンの抽出（低リスク）
+
+4つのアクション（generate / validate / reset / delete）が以下の完全に同一のブロックを繰り返している:
+
+```typescript
+const formData = await request.formData();
+const username = formData.get('username')?.toString();
+if (!username) {
+  return fail(BAD_REQUEST, { message: 'Username is required.' });
+}
+const authError = await requireSelf(locals, username);
+if (authError) {
+  return authError;
+}
+```
+
+DRY 原則に基づき `parseUsernameAndAuthorize(request, locals)` として抽出する。戻り値は成功時に `{ formData, username }`、失敗時に `ActionFailure` の判別可能な型とする。
+
 ## CodeRabbit Findings
 
-`coderabbit review --plain` は認証が必要なため未実行。PR オープン後に CI で自動実行される。
+`coderabbit review --plain` 実行済み（2026-03-29）。`potential_issue` 3件を以下に記録（ユーザが修正可否を判断）。`nitpick` / `refactor_suggestion` は PR CI に委ねる。
 
-コードレビューアーサブエージェントが検出した critical / high / medium 相当の所見（PR 前にユーザが判断）:
+### potential_issue: `src/routes/problems/+page.server.ts` line 37
 
-### `src/routes/users/edit/+page.svelte`
+> ユーザーデータのアクセス元が不整合
+>
+> 既存コードは session?.user（locals.auth.validate() 由来）を参照していますが、新規追加の isAtCoderVerified は locals.user を直接参照しています。
+>
+> - session と locals.user のライフサイクルが異なる場合、isLoggedIn: true でも isAtCoderVerified: false となる不整合が発生する可能性があります。
 
-**[Critical]** Alert の green ブランチが Flowbite プレースホルダーテキストを表示している（"Change a few things up and try submitting again."）。実際の `message` 変数が表示されていない。ユーザが成功後に誤ったメッセージを見る。
+### potential_issue: `src/routes/users/edit/+page.svelte` line 32–35
 
-**[Important]** `message` と `message_type` が form アクション後に更新されない。`let message = data.message` は初期値のみキャプチャし、`form` prop からの応答が反映されない。
+> message / message_type がフォームアクション後に更新されない
+>
+> let message = data.message は初期値のみキャプチャ。アクション後は form?.message を参照する必要がある。
 
-### `src/routes/users/edit/+page.server.ts`
+### potential_issue: `docs/dev-notes/2026-03-26/pr-3316-review/review.md` line 196
 
-**[Important]** `getUser` が `null` を返す場合の unsafe `as` キャスト（`user?.id as string` 等）。null ユーザを明示的にガードしていない。
-
-### その他所見（Minor／スコープ外）
-
-- `is_tab_atcoder`、`is_validated`、`message_type` のスネークケース変数名（camelCase 規約違反）
-- `AtCoderVerificationForm` と `+page.svelte` 両方に `atCoderAccount` の型定義が重複
-- `+page.svelte` の `role`、`username` が非リアクティブな `let` バインディング
+> 誤字を修正してください
+>
+> updateValicationCode → updateValidationCode
