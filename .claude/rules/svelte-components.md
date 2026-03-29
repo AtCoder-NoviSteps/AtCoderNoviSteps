@@ -154,3 +154,46 @@ const map: Partial<Record<WorkBookType, Component<Props>>> = {
 };
 // Safe to guard with: {#if map[type]} or if (map[type])
 ```
+
+## Props — Pass Domain Model Objects; Derive Computed Values Internally
+
+When a component's data comes from a domain model, pass the model object as a single prop
+rather than individual fields. This keeps the call site in sync with the model automatically.
+
+Computed values (status, labels, flags derived from multiple fields) must NOT be props —
+they belong inside the component as `$derived`.
+
+```typescript
+// Bad: individual fields + derived value as prop
+interface Props {
+  handle: string;
+  validationCode: string;
+  isValidated: boolean;
+  status: string;  // derived — should not be a prop
+}
+
+// Good: model object as prop; status derived inside
+// (username is from User model; atCoderAccount is from a separate domain model — two props is correct here)
+interface Props {
+  username: string;
+  atCoderAccount: { handle: string; validationCode: string; isValidated: boolean };
+}
+let { username, atCoderAccount }: Props = $props();
+const status = $derived(atCoderAccount.isValidated ? 'validated' : ...);
+```
+
+Call site passes the object directly from `$derived(data.atCoderAccount)`.
+
+## $derived for data.\* Fields in +page.svelte
+
+When reading fields from `data` in a `+page.svelte`, use `$derived` rather than plain assignment:
+
+```typescript
+// Bad: stale after load() re-runs following a form action
+const atCoderAccount = data.atCoderAccount;
+
+// Good: stays in sync when SvelteKit re-runs load() after an action
+const atCoderAccount = $derived(data.atCoderAccount);
+```
+
+`data` is a reactive prop that SvelteKit updates after each form action. A plain assignment captures the initial value only.

@@ -16,9 +16,11 @@
     toChangeTextColorIfNeeds,
   } from '$lib/utils/task';
   import { nonPendingGrades } from '$features/votes/utils/grade_options';
-  import { SIGNUP_PAGE, LOGIN_PAGE } from '$lib/constants/navbar-links';
+  import { SIGNUP_PAGE, LOGIN_PAGE, EDIT_PROFILE_PAGE } from '$lib/constants/navbar-links';
 
   let { data } = $props();
+
+  const editProfileHref = `${resolve(EDIT_PROFILE_PAGE)}?tab=atcoder`;
 
   const totalVotes = $derived(
     data.counters ? data.counters.reduce((sum, c) => sum + c.count, 0) : 0,
@@ -115,8 +117,18 @@
         {@render voteForm()}
       </div>
     </details>
+  {:else if data.isLoggedIn && !data.isAtCoderVerified}
+    <!-- ログイン済み・未認証 → 認証誘導 -->
+    <div
+      class="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-700 rounded-lg p-4 mb-4"
+    >
+      <p class="text-yellow-800 dark:text-yellow-200 font-medium mb-2">
+        投票するにはAtCoderアカウントの認証が必要です。
+      </p>
+      <Button href={editProfileHref} color="yellow" size="sm">AtCoderアカウントを認証する</Button>
+    </div>
   {:else if data.isLoggedIn}
-    <!-- 未投票・ログイン済み → 投票フォーム -->
+    <!-- 未投票・ログイン済み・認証済み → 投票フォーム -->
     <p class="text-gray-600 dark:text-gray-300 mb-4">
       この問題のグレードを投票してください。投票後に集計結果を確認できます。
     </p>

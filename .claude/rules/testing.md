@@ -57,20 +57,6 @@ E2E test files must use the `.spec.ts` extension. `playwright.config.ts` matches
 - Use `toBe(true)` / `toBe(false)` over `toBeTruthy()` / `toBeFalsy()`
 - For DB query tests, assert `orderBy`, `include`, and other significant parameters with `expect.objectContaining` — not just `where`. When a returned field (e.g. `authorName`) depends on an `include` relation, that `include` clause must be part of the assertion, or a regression in the query shape will go undetected
 - Enum membership: `in` traverses the prototype chain; use `Object.hasOwn(Enum, value)` instead
-- **E2E state transitions**: after an interaction that changes element state (active tab, toggle, selection), assert the _new_ state — not just that the element is visible, which may have been true before the interaction. Assert an active CSS class, `aria-selected`, or similar attribute instead of `toBeVisible()`
-
-## Cleanup in Tests
-
-Wrap DB-mutating cleanup in `try/finally` — a failing assertion skips cleanup and contaminates later tests:
-
-```typescript
-try {
-  await doSomething();
-  expect(result).toBe(expected);
-} finally {
-  await restoreState();
-}
-```
 
 ## Test Data
 
@@ -79,9 +65,22 @@ try {
 - After `.filter()` on fixtures, verify actual contents — same ID may refer to a different entity after fixture updates
 - **Description ↔ code path alignment**: when a test name describes a specific scenario (e.g. "tie-break"), verify the fixture actually exercises that code path. A test that passes without reaching the branch it claims to cover gives false confidence
 
-## Mock Helpers
+## Coverage
 
-Extract repeated mock patterns into helpers in the test file. For Prisma service tests, define the return type alias once and use it across all helpers:
+- Run `pnpm coverage` for coverage report
+- Target: 80% lines, 80% branches
+
+## Test Order Mirrors Source Order
+
+Order `describe` blocks in service and utils test files to match the declaration order of functions in the source file. Misalignment makes it harder to cross-reference tests and implementation.
+
+## Service Layer Unit Tests
+
+Service tests mock Prisma via `vi.mock('$lib/server/database', ...)` — no real DB mutations occur.
+
+### Mock Helpers
+
+Extract repeated mock patterns into helpers in the test file. Define the return type alias once and use it across all helpers:
 
 ```typescript
 type PrismaWorkBook = Awaited<ReturnType<typeof prisma.workBook.findUnique>>;
@@ -104,12 +103,40 @@ function mockCount(value: number) {
 
 Extract `mockFindUnique`, `mockFindMany`, and `mockCount` as the standard trio for service tests that touch a single Prisma model. Add `mockCreate`, `mockTransaction`, and `mockDelete` when those operations are also tested.
 
+### Cleanup for Integration Tests and Tests with Real Side Effects
+
+This does not apply to standard service layer unit tests that use Prisma mocks.
+
+If a test performs real DB mutations, file system changes, external API calls, or other stateful side effects that persist beyond the test (e.g., integration tests, seed scripts), wrap assertions in `try/finally` — a failing assertion skips cleanup and contaminates later tests:
+
+```typescript
+try {
+  await doSomething();
+  expect(result).toBe(expected);
+} finally {
+  await restoreState();
+}
+```
+
+This is not needed for standard service unit tests that use Prisma mocks.
+
+### File Split for Testability
+
+When a service file mixes DB operations and pure functions, split it into two files:
+
+- `crud.ts` — DB operations (`getXxx`, `updateXxx`, `createXxx`); tests need Prisma mocks
+- `initializers.ts` — pure computation (grade grouping, priority assignment); tests need no mocks
+
+Stop the split if internal helpers (e.g. `fetchUnplacedWorkbooks`) would be fragmented across files — cohesion matters more than the split itself.
+
 ## Component Vitest Unit Tests
 
-Omit Vitest unit tests for a Svelte component when **both** conditions hold:
+E2E tests are complementary to, not a substitute for, unit tests. Add Vitest unit tests for any component logic (derived values, event handlers, utility calls) by extracting it to the nearest `utils/` file and testing there.
 
-1. The component is template-only (no logic beyond prop bindings and basic conditionals)
-2. The component is covered by E2E tests
+You may omit a component-level Vitest test when **both** conditions hold:
+
+1. The component is template-only (no logic beyond prop bindings and simple `{#if}`/`{#each}` blocks that only render — no inline function calls, ternaries with side effects, derived computations, or nested logic)
+2. The component's rendering paths are covered by E2E tests
 
 When a component contains extracted logic (e.g. derived values, event handlers, utility calls), add unit tests for that logic in the nearest `utils/` file instead of testing the component directly.
 
@@ -119,78 +146,6 @@ When a component contains extracted logic (e.g. derived values, event handlers, 
 - For URL manipulation: assert the original URL is not mutated
 - For multi-column operations (e.g., DnD): assert both source and destination columns
 
-## Coverage
-
-- Run `pnpm coverage` for coverage report
-- Target: 80% lines, 70% branches
-
-## Service Layer Split for Testability
-
-When a service file mixes DB operations and pure functions, split it into two files:
-
-- `crud.ts` — DB operations (`getXxx`, `updateXxx`, `createXxx`); tests need Prisma mocks
-- `initializers.ts` — pure computation (grade grouping, priority assignment); tests need no mocks
-
-Stop the split if internal helpers (e.g. `fetchUnplacedWorkbooks`) would be fragmented across files — cohesion matters more than the split itself.
-
 ## HTTP Mocking
 
 Use Nock for external HTTP calls. See `src/test/lib/clients/` for examples.
-
-## Test Order Mirrors Source Order
-
-Order `describe` blocks in service and utils test files to match the declaration order of functions in the source file. Misalignment makes it harder to cross-reference tests and implementation.
-
-## E2E Tests
-
-### No Path Aliases
-
-The `e2e/` directory is outside SvelteKit's build pipeline — `$lib`, `$features`, and other path aliases are not resolved. Define URL string values as local constants with a reference comment:
-
-```typescript
-// Mirrors WorkBookTab.SOLUTION from $features/workbooks/types/workbook
-const TAB_SOLUTION = 'solution';
-```
-
-Avoid importing types from `src/` in E2E test files.
-
-### Describe Hierarchy
-
-When a `describe` block for a user role grows large, split it by behavioral dimension rather than adding more flat `test()` calls:
-
-```typescript
-test.describe('logged-in user', () => {
-  test.describe('tab visibility', () => { ... });
-  test.describe('URL parameter handling', () => { ... });
-  test.describe('navigation interactions', () => { ... });
-  test.describe('session state', () => { ... });
-});
-```
-
-### Parameterized Tests
-
-Playwright has no native `test.each`. Use `for...of` loops — the official recommended pattern:
-
-```typescript
-// Mirrors TaskGrade from $lib/types/task — do not import from src/ in E2E files
-const GRADES = ['Q10', 'Q9', 'Q8'] as const;
-
-for (const grade of GRADES) {
-  await gradeButton(grade).click();
-  await expect(page).toHaveURL(`?grades=${grade}`);
-}
-```
-
-### Flowbite Toggle
-
-Flowbite's `Toggle` renders an `sr-only` `<input type="checkbox">` inside a `<label>`. Clicking the input directly fails because the visual `<span>` sibling intercepts pointer events. Click the label wrapper instead:
-
-```typescript
-const toggleInput = page.locator('input[aria-label="<aria-label value>"]');
-const toggleLabel = page.locator('label:has(input[aria-label="<aria-label value>"])');
-
-await toggleLabel.click();
-await expect(toggleInput).toBeChecked({ checked: true });
-```
-
-The same pattern applies to any Flowbite component that visually overlays its native input (e.g. `Checkbox`, `Radio`).

@@ -69,6 +69,8 @@ export const GET: RequestHandler = async () => {
       '/users/.*',
       '/workbooks/create.*',
       '/workbooks/edit/.*',
+      // Vote detail pages (dynamic, not indexed)
+      '/votes/\\[slug\\]',
       // Pages for not-logged-in users
       '/forgot_password',
       // Deprecated page

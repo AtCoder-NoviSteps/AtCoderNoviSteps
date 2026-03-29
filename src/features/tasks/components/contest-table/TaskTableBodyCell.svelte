@@ -11,6 +11,7 @@
   interface Props {
     taskResult: TaskResult;
     isLoggedIn: boolean;
+    isAtCoderVerified: boolean;
     isShownTaskIndex: boolean;
     voteResults: VoteStatisticsMap;
     onupdate?: (updatedTask: TaskResult) => void; // Ensure to update task result in parent component.
@@ -19,6 +20,7 @@
   let {
     taskResult,
     isLoggedIn,
+    isAtCoderVerified,
     isShownTaskIndex,
     voteResults,
     onupdate = () => {},
@@ -39,7 +41,7 @@
 </div>
 
 {#snippet taskGradeLabel(taskResult: TaskResult)}
-  <VotableGrade {taskResult} {isLoggedIn} {estimatedGrade} />
+  <VotableGrade {taskResult} {isLoggedIn} {isAtCoderVerified} {estimatedGrade} />
 {/snippet}
 
 {#snippet taskTitleAndExternalLink(taskResult: TaskResult, isShownTaskIndex: boolean)}

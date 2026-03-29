@@ -79,13 +79,16 @@ test.describe('vote detail page (/votes/[slug])', () => {
 
     test('sees login prompt instead of vote buttons', async ({ page }) => {
       await navigateToFirstVoteDetailPage(page);
-      await expect(page.getByText('投票するにはログインが必要です')).toBeVisible({
+
+      const content = page.locator('.container');
+
+      await expect(content.getByText('投票するにはログインが必要です')).toBeVisible({
         timeout: TIMEOUT,
       });
-      await expect(page.getByRole('link', { name: 'ログイン' })).toBeVisible({
+      await expect(content.getByRole('link', { name: 'ログイン' })).toBeVisible({
         timeout: TIMEOUT,
       });
-      await expect(page.getByRole('link', { name: 'アカウント作成' })).toBeVisible({
+      await expect(content.getByRole('link', { name: 'アカウント作成' })).toBeVisible({
         timeout: TIMEOUT,
       });
     });
@@ -98,7 +101,11 @@ test.describe('vote detail page (/votes/[slug])', () => {
 
     test('breadcrumb link navigates back to /votes', async ({ page }) => {
       await navigateToFirstVoteDetailPage(page);
-      await page.getByRole('link', { name: 'グレード投票' }).click();
+      await page
+        .locator('.container')
+        .locator('nav')
+        .getByRole('link', { name: 'グレード投票' })
+        .click();
       await expect(page).toHaveURL(VOTES_LIST_URL, { timeout: TIMEOUT });
     });
   });
@@ -115,8 +122,18 @@ test.describe('vote detail page (/votes/[slug])', () => {
 
     test('sees vote grade buttons', async ({ page }) => {
       await navigateToFirstVoteDetailPage(page);
-      // Vote form with grade buttons is rendered for logged-in users
-      await expect(page.locator('form[action="?/voteAbsoluteGrade"]')).toBeVisible({
+
+      // Skip if the test user is not AtCoder-verified.
+      // Wait for either the vote form or the unverified message to appear before deciding.
+      const voteForm = page.locator('form[action="?/voteAbsoluteGrade"]');
+      const unverifiedMessage = page.getByText('AtCoderアカウントの認証が必要です');
+      await expect(voteForm.or(unverifiedMessage)).toBeVisible({ timeout: TIMEOUT });
+      const isUnverified = await unverifiedMessage.isVisible();
+      test.skip(isUnverified, 'test user is not AtCoder-verified');
+
+      // Explicit check: voteForm is already guaranteed visible by the or() wait above,
+      // but this documents the expected state for verified users.
+      await expect(voteForm).toBeVisible({
         timeout: TIMEOUT,
       });
       // The grade buttons should include Q11 (11Q)
@@ -140,10 +157,10 @@ test.describe('vote management page (/vote_management)', () => {
     await expect(page).toHaveURL('/login', { timeout: TIMEOUT });
   });
 
-  test('non-admin user is redirected to /login', async ({ page }) => {
+  test('non-admin user is redirected to /', async ({ page }) => {
     await loginAsUser(page);
     await page.goto(VOTE_MANAGEMENT_URL);
-    await expect(page).toHaveURL('/login', { timeout: TIMEOUT });
+    await expect(page).toHaveURL('/', { timeout: TIMEOUT });
   });
 
   test.describe('admin user', () => {

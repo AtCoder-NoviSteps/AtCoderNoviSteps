@@ -9,7 +9,7 @@
   import { TaskGrade, getTaskGrade, type TaskResult } from '$lib/types/task';
   import { getTaskGradeLabel } from '$lib/utils/task';
   import { nonPendingGrades } from '$features/votes/utils/grade_options';
-  import { SIGNUP_PAGE, LOGIN_PAGE } from '$lib/constants/navbar-links';
+  import { SIGNUP_PAGE, LOGIN_PAGE, EDIT_PROFILE_PAGE } from '$lib/constants/navbar-links';
   import { errorMessageStore } from '$lib/stores/error_message';
 
   import GradeLabel from '$lib/components/GradeLabel.svelte';
@@ -18,10 +18,12 @@
   interface Props {
     taskResult: TaskResult;
     isLoggedIn: boolean;
+    // undefined means the prop was not passed — treat as verified to maintain backward compatibility.
+    isAtCoderVerified?: boolean;
     estimatedGrade?: string;
   }
 
-  let { taskResult, isLoggedIn, estimatedGrade }: Props = $props();
+  let { taskResult, isLoggedIn, isAtCoderVerified, estimatedGrade }: Props = $props();
 
   // 表示用のグレード（投票後に画面リロードなしで差し替えるためのローカル状態）
   // PENDING かつ estimatedGrade（集計済み中央値）があればそれを優先表示。
@@ -35,6 +37,8 @@
   // Use task_id as a deterministic component ID to avoid SSR/hydration mismatches.
   const componentId = taskResult.task_id;
 
+  const editProfileHref = `${resolve(EDIT_PROFILE_PAGE)}?tab=atcoder`;
+
   let selectedVoteGrade = $state<TaskGrade>();
   let showForm = $state(false);
   let formElement = $state<HTMLFormElement | undefined>(undefined);
@@ -43,7 +47,7 @@
   let votedGrade = $state<TaskGrade | null>(null);
 
   async function onTriggerClick() {
-    if (!isLoggedIn || isOpening) return;
+    if (!isLoggedIn || isAtCoderVerified === false || isOpening) return;
     isOpening = true;
     try {
       const res = await fetch(
@@ -151,7 +155,7 @@
 </button>
 
 <!-- Dropdown Menu -->
-{#if isLoggedIn}
+{#if isLoggedIn && isAtCoderVerified !== false}
   <Dropdown
     triggeredBy={`#update-grade-dropdown-trigger-${componentId}`}
     simple
@@ -173,6 +177,20 @@
     <DropdownItem href={resolve('/votes/[slug]', { slug: taskResult.task_id })} class="rounded-md"
       >詳細</DropdownItem
     >
+  </Dropdown>
+{:else if isLoggedIn}
+  <!-- Logged in but not AtCoder-verified: prompt user to complete verification -->
+  <Dropdown
+    triggeredBy={`#update-grade-dropdown-trigger-${componentId}`}
+    simple
+    class="w-48 z-50 border border-gray-200 dark:border-gray-100"
+  >
+    <DropdownItem
+      href={editProfileHref}
+      class="rounded-md text-sm text-yellow-700 dark:text-yellow-300"
+    >
+      AtCoder認証が必要です
+    </DropdownItem>
   </Dropdown>
 {:else}
   <Dropdown

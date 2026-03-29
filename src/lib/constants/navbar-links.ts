@@ -6,6 +6,7 @@ export const FORGOT_PASSWORD_PAGE = `/forgot_password`;
 export const WORKBOOKS_PAGE = `/workbooks`;
 export const PROBLEMS_PAGE = `/problems`;
 export const VOTES_PAGE = `/votes`;
+export const EDIT_PROFILE_PAGE = `/users/edit`;
 
 // For Admin
 export const IMPORTING_PROBLEMS_PAGE = `/tasks`;

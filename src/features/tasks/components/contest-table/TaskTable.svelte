@@ -37,10 +37,11 @@
   interface Props {
     taskResults: TaskResults;
     isLoggedIn: boolean;
+    isAtCoderVerified: boolean;
     voteResults: VoteStatisticsMap;
   }
 
-  let { taskResults, isLoggedIn, voteResults }: Props = $props();
+  let { taskResults, isLoggedIn, isAtCoderVerified, voteResults }: Props = $props();
 
   // Prepare contest table provider based on the active contest type.
   let activeContestType: ContestTableProviderGroups = $derived(activeContestTypeStore.get());
@@ -283,6 +284,7 @@
                       <TaskTableBodyCell
                         {taskResult}
                         {isLoggedIn}
+                        {isAtCoderVerified}
                         {voteResults}
                         isShownTaskIndex={contestTable.displayConfig.isShownTaskIndex}
                         onupdate={(updatedTask: TaskResult) => handleUpdateTaskResult(updatedTask)}

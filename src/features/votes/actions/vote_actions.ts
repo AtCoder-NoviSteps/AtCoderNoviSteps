@@ -4,6 +4,7 @@ import { TaskGrade } from '@prisma/client';
 import { upsertVoteGradeTables } from '$features/votes/services/vote_grade';
 import {
   BAD_REQUEST,
+  FORBIDDEN,
   INTERNAL_SERVER_ERROR,
   UNAUTHORIZED,
 } from '$lib/constants/http-response-status-codes';
@@ -24,6 +25,12 @@ export const voteAbsoluteGrade = async ({
   if (!session || !session.user || !session.user.userId) {
     return fail(UNAUTHORIZED, {
       message: 'ログインしていないか、もしくは、ログイン情報が不正です。',
+    });
+  }
+
+  if (!locals.user?.is_validated) {
+    return fail(FORBIDDEN, {
+      message: 'AtCoderアカウントの認証が必要です。',
     });
   }
 
