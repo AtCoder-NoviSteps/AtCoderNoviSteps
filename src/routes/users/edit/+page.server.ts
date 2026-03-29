@@ -23,16 +23,16 @@ export async function load({ locals, url }) {
       role: user?.role as Roles,
       isLoggedIn: (session?.user.userId === user?.id) as boolean,
       atCoderAccount: {
-        handle:         user?.atCoderAccount?.handle         ?? '',
+        handle: user?.atCoderAccount?.handle ?? '',
         validationCode: user?.atCoderAccount?.validationCode ?? '',
-        isValidated:    user?.atCoderAccount?.isValidated    ?? false,
+        isValidated: user?.atCoderAccount?.isValidated ?? false,
       },
       message_type: '',
       message: '',
       openAtCoderTab: url.searchParams.get('tab') === 'atcoder',
     };
   } catch (error) {
-    console.error('Not found username: ', session?.user.username, error);
+    console.error('User lookup failed during session validation', error);
     redirect(302, '/login');
   }
 }

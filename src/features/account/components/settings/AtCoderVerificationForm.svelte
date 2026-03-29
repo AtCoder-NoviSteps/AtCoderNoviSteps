@@ -86,12 +86,7 @@
       <Label class="flex flex-col gap-2">
         <!-- AtCoder IDを修正できるのは、notingのステータスの時のみ-->
         <span>AtCoder ID</span>
-        <Input
-          size="md"
-          name="handle"
-          placeholder="chokudai"
-          bind:value={editableHandle}
-        />
+        <Input size="md" name="handle" placeholder="chokudai" bind:value={editableHandle} />
       </Label>
 
       <SubmissionButton labelName="文字列を生成" />
