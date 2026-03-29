@@ -1,5 +1,4 @@
 //See https://tech-blog.rakus.co.jp/entry/20230209/sveltekit#%E3%82%B9%E3%83%AC%E3%83%83%E3%83%89%E6%8A%95%E7%A8%BF%E7%94%BB%E9%9D%A2
-
 import { redirect, fail } from '@sveltejs/kit';
 
 import type { Actions } from './$types';
@@ -40,21 +39,88 @@ export async function load({ locals, url }) {
   }
 }
 
-/** Validates the session and checks that the given username matches the logged-in user. */
-async function requireSelf(
-  locals: App.Locals,
-  username: string,
-): Promise<ReturnType<typeof fail> | null> {
-  const session = await locals.auth.validate();
+export const actions: Actions = {
+  generate: async ({ request, locals }) => {
+    const parsed = await parseUsernameAndAuthorize(request, locals);
 
-  if (!session) {
-    return fail(UNAUTHORIZED, { message: 'Not authenticated.' });
-  }
-  if (session.user.username !== username) {
-    return fail(FORBIDDEN, { message: 'Not authorized.' });
-  }
-  return null;
-}
+    if (!parsed.ok) {
+      return parsed.error;
+    }
+
+    const { formData, username } = parsed;
+    const handle = formData.get('handle')?.toString();
+
+    if (!handle) {
+      return fail(BAD_REQUEST, { message: 'AtCoder username is required.' });
+    }
+
+    const validationCode = await verificationService.generate(username, handle);
+
+    return {
+      success: true,
+      username,
+      handle,
+      validationCode,
+      is_tab_atcoder: true,
+    };
+  },
+
+  validate: async ({ request, locals }) => {
+    const parsed = await parseUsernameAndAuthorize(request, locals);
+
+    if (!parsed.ok) {
+      return parsed.error;
+    }
+
+    const { username } = parsed;
+    const is_validated = await verificationService.validate(username);
+
+    return {
+      success: is_validated,
+      message_type: is_validated ? 'green' : 'red',
+      message: is_validated
+        ? 'Successfully validated.'
+        : 'Validation failed. Please check your AtCoder affiliation.',
+    };
+  },
+
+  reset: async ({ request, locals }) => {
+    const parsed = await parseUsernameAndAuthorize(request, locals);
+
+    if (!parsed.ok) {
+      return parsed.error;
+    }
+
+    const { username } = parsed;
+    await verificationService.reset(username);
+
+    return {
+      success: true,
+      username,
+      message_type: 'green',
+      message: 'Successfully reset.',
+    };
+  },
+
+  delete: async ({ request, locals }) => {
+    const parsed = await parseUsernameAndAuthorize(request, locals);
+
+    if (!parsed.ok) {
+      return parsed.error;
+    }
+
+    const { username } = parsed;
+    await userService.deleteUser(username);
+    locals.auth.setSession(null); // remove cookie
+
+    return {
+      success: true,
+      username,
+      message_type: 'green',
+      message: 'Successfully deleted.',
+    };
+  },
+};
 
 type ParseResult =
   | { ok: true; formData: FormData; username: string }
@@ -81,80 +147,18 @@ async function parseUsernameAndAuthorize(
   return { ok: true, formData, username };
 }
 
-export const actions: Actions = {
-  generate: async ({ request, locals }) => {
-    const parsed = await parseUsernameAndAuthorize(request, locals);
-    if (!parsed.ok) {
-      return parsed.error;
-    }
-    const { formData, username } = parsed;
+/** Validates the session and checks that the given username matches the logged-in user. */
+async function requireSelf(
+  locals: App.Locals,
+  username: string,
+): Promise<ReturnType<typeof fail> | null> {
+  const session = await locals.auth.validate();
 
-    const handle = formData.get('handle')?.toString();
-    if (!handle) {
-      return fail(BAD_REQUEST, { message: 'AtCoder username is required.' });
-    }
-
-    const validationCode = await verificationService.generate(username, handle);
-
-    return {
-      success: true,
-      username,
-      handle,
-      validationCode,
-      is_tab_atcoder: true,
-    };
-  },
-
-  validate: async ({ request, locals }) => {
-    const parsed = await parseUsernameAndAuthorize(request, locals);
-    if (!parsed.ok) {
-      return parsed.error;
-    }
-    const { username } = parsed;
-
-    const is_validated = await verificationService.validate(username);
-
-    return {
-      success: is_validated,
-      message_type: is_validated ? 'green' : 'red',
-      message: is_validated
-        ? 'Successfully validated.'
-        : 'Validation failed. Please check your AtCoder affiliation.',
-    };
-  },
-
-  reset: async ({ request, locals }) => {
-    const parsed = await parseUsernameAndAuthorize(request, locals);
-    if (!parsed.ok) {
-      return parsed.error;
-    }
-    const { username } = parsed;
-
-    await verificationService.reset(username);
-
-    return {
-      success: true,
-      username,
-      message_type: 'green',
-      message: 'Successfully reset.',
-    };
-  },
-
-  delete: async ({ request, locals }) => {
-    const parsed = await parseUsernameAndAuthorize(request, locals);
-    if (!parsed.ok) {
-      return parsed.error;
-    }
-    const { username } = parsed;
-
-    await userService.deleteUser(username);
-    locals.auth.setSession(null); // remove cookie
-
-    return {
-      success: true,
-      username,
-      message_type: 'green',
-      message: 'Successfully deleted.',
-    };
-  },
-};
+  if (!session) {
+    return fail(UNAUTHORIZED, { message: 'Not authenticated.' });
+  }
+  if (session.user.username !== username) {
+    return fail(FORBIDDEN, { message: 'Not authorized.' });
+  }
+  return null;
+}
