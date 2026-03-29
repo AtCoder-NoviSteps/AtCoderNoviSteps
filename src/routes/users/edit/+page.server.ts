@@ -2,10 +2,11 @@
 
 import type { Roles } from '$lib/types/user';
 import * as userService from '$lib/services/users';
-import * as validationService from '$lib/services/validateApiService';
+import * as verificationService from '$features/account/services/atcoder_verification';
 import type { Actions } from './$types';
 
-import { redirect } from '@sveltejs/kit';
+import { redirect, fail } from '@sveltejs/kit';
+import { BAD_REQUEST, FORBIDDEN } from '$lib/constants/http-response-status-codes';
 
 export async function load({ locals, url }) {
   const session = await locals.auth.validate();
@@ -21,9 +22,11 @@ export async function load({ locals, url }) {
       username: user?.username as string,
       role: user?.role as Roles,
       isLoggedIn: (session?.user.userId === user?.id) as boolean,
-      atcoder_username: user?.atcoder_username as string,
-      atcoder_validationcode: user?.atcoder_validation_code as string,
-      is_validated: user?.atcoder_validation_status as boolean,
+      atCoderAccount: {
+        handle:         user?.atCoderAccount?.handle         ?? '',
+        validationCode: user?.atCoderAccount?.validationCode ?? '',
+        isValidated:    user?.atCoderAccount?.isValidated    ?? false,
+      },
       message_type: '',
       message: '',
       openAtCoderTab: url.searchParams.get('tab') === 'atcoder',
@@ -34,80 +37,109 @@ export async function load({ locals, url }) {
   }
 }
 
-export const actions: Actions = {
-  generate: async ({ request }) => {
-    console.log('users->actions->generate');
-    const formData = await request.formData();
-    const username = formData.get('username')?.toString() as string;
-    const atcoder_username = formData.get('atcoder_username')?.toString() as string;
+/** Validates the session and checks that the given username matches the logged-in user. */
+async function requireSelf(
+  locals: App.Locals,
+  username: string,
+): Promise<ReturnType<typeof fail> | null> {
+  const session = await locals.auth.validate();
+  if (!session) {
+    return fail(FORBIDDEN, { message: 'Not authenticated.' });
+  }
+  if (session.user.username !== username) {
+    return fail(FORBIDDEN, { message: 'Not authorized.' });
+  }
+  return null;
+}
 
-    //console.log('ここにvalidationCodeを作成してデータベースに登録するコードを書きます');
-    const validationCode = await validationService.generate(username, atcoder_username);
+export const actions: Actions = {
+  generate: async ({ request, locals }) => {
+    const formData = await request.formData();
+    const username = formData.get('username')?.toString();
+    if (!username) {
+      return fail(BAD_REQUEST, { message: 'Username is required.' });
+    }
+    const authError = await requireSelf(locals, username);
+    if (authError) {
+      return authError;
+    }
+
+    const handle = formData.get('handle')?.toString();
+    if (!handle) {
+      return fail(BAD_REQUEST, { message: 'AtCoder username is required.' });
+    }
+
+    const validationCode = await verificationService.generate(username, handle);
 
     return {
       success: true,
-      username: username,
-      atcoder_username: atcoder_username,
-      atcoder_validationcode: validationCode,
+      username,
+      handle,
+      validationCode,
       is_tab_atcoder: true,
     };
   },
 
-  validate: async ({ request }) => {
-    console.log('users->actions->validate');
+  validate: async ({ request, locals }) => {
     const formData = await request.formData();
-    const username = formData.get('username')?.toString() as string;
-    const atcoder_username = formData.get('atcoder_username')?.toString() as string;
-    const atcoder_validationcode = formData.get('atcoder_validationcode')?.toString() as string;
+    const username = formData.get('username')?.toString();
+    if (!username) {
+      return fail(BAD_REQUEST, { message: 'Username is required.' });
+    }
+    const authError = await requireSelf(locals, username);
+    if (authError) {
+      return authError;
+    }
 
-    //console.log('validateを呼び、AtCoderの所属欄とAPI呼び出した結果が一致しているかを確認');
-    const is_validated = await validationService.validate(username);
+    const is_validated = await verificationService.validate(username);
 
     return {
       success: is_validated,
-      user: {
-        username: username,
-        atcoder_username: atcoder_username,
-        atcoder_validationcode: atcoder_validationcode,
-        message_type: 'green',
-        message: 'Successfully validated.',
-      },
+      message_type: is_validated ? 'green' : 'red',
+      message: is_validated
+        ? 'Successfully validated.'
+        : 'Validation failed. Please check your AtCoder affiliation.',
     };
   },
 
-  reset: async ({ request }) => {
-    console.log('users->actions->edit');
+  reset: async ({ request, locals }) => {
     const formData = await request.formData();
-    const username = formData.get('username')?.toString() as string;
-    const atcoder_username = formData.get('atcoder_username')?.toString() as string;
+    const username = formData.get('username')?.toString();
+    if (!username) {
+      return fail(BAD_REQUEST, { message: 'Username is required.' });
+    }
+    const authError = await requireSelf(locals, username);
+    if (authError) {
+      return authError;
+    }
 
-    //console.log('AtCoderのユーザ名とValicationCodeをリセットする。');
-    const validationCode = await validationService.reset(username);
+    await verificationService.reset(username);
 
     return {
       success: true,
-      username: username,
-      atcoder_username: atcoder_username,
-      atcoder_validationcode: validationCode,
+      username,
       message_type: 'green',
       message: 'Successfully reset.',
     };
   },
 
   delete: async ({ request, locals }) => {
-    console.log('users->actions->delete');
     const formData = await request.formData();
-    const username = formData.get('username')?.toString() as string;
-    const atcoder_username = formData.get('atcoder_username')?.toString() as string;
+    const username = formData.get('username')?.toString();
+    if (!username) {
+      return fail(BAD_REQUEST, { message: 'Username is required.' });
+    }
+    const authError = await requireSelf(locals, username);
+    if (authError) {
+      return authError;
+    }
 
     await userService.deleteUser(username);
     locals.auth.setSession(null); // remove cookie
 
     return {
       success: true,
-      username: username,
-      atcoder_username: atcoder_username,
-      atcoder_validationcode: false,
+      username,
       message_type: 'green',
       message: 'Successfully deleted.',
     };

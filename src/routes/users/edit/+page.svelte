@@ -1,8 +1,8 @@
 <script lang="ts">
   import { Tabs, TabItem, Alert } from 'flowbite-svelte';
 
-  import AtCoderUserValidationForm from '$lib/components/AtCoderUserValidationForm.svelte';
-  import UserAccountDeletionForm from '$lib/components/UserAccountDeletionForm.svelte';
+  import AtCoderVerificationForm from '$features/account/components/settings/AtCoderVerificationForm.svelte';
+  import AccountDeletionForm from '$features/account/components/delete/AccountDeletionForm.svelte';
   import ContainerWrapper from '$lib/components/ContainerWrapper.svelte';
   import FormWrapper from '$lib/components/FormWrapper.svelte';
   import LabelWrapper from '$lib/components/LabelWrapper.svelte';
@@ -15,9 +15,11 @@
       username: string;
       role: Roles;
       isLoggedIn: boolean;
-      atcoder_username: string;
-      atcoder_validationcode: string;
-      is_validated: boolean;
+      atCoderAccount: {
+        handle: string;
+        validationCode: string;
+        isValidated: boolean;
+      };
       message_type: string;
       message: string;
       openAtCoderTab: boolean;
@@ -32,15 +34,7 @@
   let message = data.message;
   let message_type = data.message_type;
 
-  // Status is derived exclusively from server-authoritative data.
-  // After each form action, SvelteKit re-runs load(), so data reflects the latest DB state.
-  const status = $derived(
-    data.is_validated
-      ? 'validated'
-      : data.atcoder_username.length > 0 && data.atcoder_validationcode.length > 0
-        ? 'generated'
-        : 'nothing',
-  );
+  const atCoderAccount = $derived(data.atCoderAccount);
 
   // Open the AtCoder tab when:
   // - navigated here via ?tab=atcoder (e.g. from the unverified-user prompt)
@@ -48,8 +42,8 @@
   // - form?.is_tab_atcoder is set (extra safety in case load() hasn't reflected the action yet)
   const shouldOpenAtCoderTab = $derived(
     data.openAtCoderTab ||
-      data.is_validated ||
-      (data.atcoder_username.length > 0 && data.atcoder_validationcode.length > 0) ||
+      atCoderAccount.isValidated ||
+      (atCoderAccount.handle.length > 0 && atCoderAccount.validationCode.length > 0) ||
       form?.is_tab_atcoder === true,
   );
 
@@ -95,12 +89,7 @@
         <span class="text-lg">AtCoder IDを設定</span>
       {/snippet}
 
-      <AtCoderUserValidationForm
-        {username}
-        atcoder_username={data.atcoder_username}
-        atcoder_validationcode={data.atcoder_validationcode}
-        {status}
-      />
+      <AtCoderVerificationForm {username} {atCoderAccount} />
     </TabItem>
 
     <!-- アカウント削除 (ゲストを除いた一般ユーザのみ) -->
@@ -110,7 +99,7 @@
           <span class="text-lg">アカウント削除</span>
         {/snippet}
 
-        <UserAccountDeletionForm {username} />
+        <AccountDeletionForm {username} />
       </TabItem>
     {/if}
   </Tabs>

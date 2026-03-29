@@ -36,21 +36,37 @@
 
   interface Props {
     username: string;
-    atcoder_username: string;
-    atcoder_validationcode: string;
-    status: string;
+    atCoderAccount: {
+      handle: string;
+      validationCode: string;
+      isValidated: boolean;
+    };
   }
 
-  let { username, atcoder_username, atcoder_validationcode, status }: Props = $props();
+  let { username, atCoderAccount }: Props = $props();
 
   // Editable only in 'nothing' step; server is authoritative after each action.
   // untrack: prop is the initial seed only — intentional one-time capture.
-  let editableAtcoderId = $state(untrack(() => atcoder_username));
+  let editableHandle = $state(untrack(() => atCoderAccount.handle));
+
+  const status = $derived(
+    atCoderAccount.isValidated
+      ? 'validated'
+      : atCoderAccount.handle.length > 0 && atCoderAccount.validationCode.length > 0
+        ? 'generated'
+        : 'nothing',
+  );
+
+  $effect(() => {
+    if (status === 'nothing') {
+      editableHandle = atCoderAccount.handle;
+    }
+  });
 
   // TODO: Add a "Copied!" message when clicking
   // WHY: To provide feedback when the copy operation succeeds
   const handleClick = () => {
-    copyToClipboard(atcoder_validationcode);
+    copyToClipboard(atCoderAccount.validationCode);
   };
 </script>
 
@@ -72,9 +88,9 @@
         <span>AtCoder ID</span>
         <Input
           size="md"
-          name="atcoder_username"
+          name="handle"
           placeholder="chokudai"
-          bind:value={editableAtcoderId}
+          bind:value={editableHandle}
         />
       </Label>
 
@@ -95,15 +111,15 @@
       <LabelWrapper labelName="ユーザ名" inputValue={username} />
 
       <!-- atcoder_usernameとvalidation_code は編集不可-->
-      <Input size="md" type="hidden" name="atcoder_username" value={atcoder_username} />
-      <LabelWrapper labelName="AtCoder ID" inputValue={atcoder_username} />
+      <Input size="md" type="hidden" name="handle" value={atCoderAccount.handle} />
+      <LabelWrapper labelName="AtCoder ID" inputValue={atCoderAccount.handle} />
 
-      <Input size="md" type="hidden" name="atcoder_validationcode" value={atcoder_validationcode} />
+      <Input size="md" type="hidden" name="validationCode" value={atCoderAccount.validationCode} />
 
       <Label class="flex flex-col gap-2">
         <span>本人確認用の文字列</span>
         <div>
-          <Input size="md" value={atcoder_validationcode}>
+          <Input size="md" value={atCoderAccount.validationCode}>
             {#snippet right()}
               <ClipboardCopy class="w-5 h-5" onclick={handleClick} />
             {/snippet}
@@ -116,7 +132,7 @@
 
     <FormWrapper action="?/reset" marginTop="">
       <Input size="md" type="hidden" name="username" value={username} />
-      <Input size="md" type="hidden" name="atcoder_username" value={atcoder_username} />
+      <Input size="md" type="hidden" name="handle" value={atCoderAccount.handle} />
 
       <SubmissionButton labelName="リセット" />
     </FormWrapper>
@@ -131,8 +147,8 @@
       <LabelWrapper labelName="ユーザ名" inputValue={username} />
 
       <!-- atcoder_usernameを表示（変更不可）-->
-      <Input size="md" type="hidden" name="atcoder_username" value={atcoder_username} />
-      <LabelWrapper labelName="AtCoder ID" inputValue={atcoder_username} />
+      <Input size="md" type="hidden" name="handle" value={atCoderAccount.handle} />
+      <LabelWrapper labelName="AtCoder ID" inputValue={atCoderAccount.handle} />
 
       <SubmissionButton labelName="リセット" />
     </FormWrapper>
