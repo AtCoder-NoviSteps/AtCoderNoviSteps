@@ -76,3 +76,25 @@ The same pattern applies to `url.searchParams.get()` in `+server.ts` handlers.
 ## Page Component Props
 
 SvelteKit page components (`+page.svelte`) accept only `data` and `form` as props (`svelte/valid-prop-names-in-kit-pages`). Commented-out features that reference other props are not "dead code" — remove only the violating prop declaration, preserve the feature code.
+
+## load() — Group Related Model Fields as Objects
+
+When a `load()` function returns fields from the same domain model (e.g., `AtCoderAccount`),
+group them as an object rather than flattening to top-level keys.
+Apply default values at this boundary so the page component never needs to handle `undefined`.
+
+```typescript
+// Bad: flat, scattered across top-level keys
+atcoder_username: user?.atCoderAccount?.handle ?? '',
+atcoder_validationcode: user?.atCoderAccount?.validationCode ?? '',
+is_validated: user?.atCoderAccount?.isValidated ?? false,
+
+// Good: grouped by model, defaults absorbed here
+atCoderAccount: {
+  handle:         user?.atCoderAccount?.handle         ?? '',
+  validationCode: user?.atCoderAccount?.validationCode ?? '',
+  isValidated:    user?.atCoderAccount?.isValidated    ?? false,
+},
+```
+
+When consuming in `+page.svelte`, use `$derived` to maintain reactivity across load() re-runs after form actions (see svelte-components.md).
