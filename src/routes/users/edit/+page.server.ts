@@ -85,12 +85,12 @@ export const actions: Actions = {
     const { username } = parsed;
 
     try {
-      const is_validated = await verificationService.validate(username);
+      const isValidated = await verificationService.validate(username);
 
       return {
-        success: is_validated,
-        message_type: is_validated ? 'green' : 'red',
-        message: is_validated
+        success: isValidated,
+        message_type: isValidated ? 'green' : 'red',
+        message: isValidated
           ? 'Successfully validated.'
           : 'Validation failed. Please check your AtCoder affiliation.',
       };

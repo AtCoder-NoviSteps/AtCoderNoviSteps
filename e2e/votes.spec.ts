@@ -132,7 +132,7 @@ test.describe('vote detail page (/votes/[slug])', () => {
       test.skip(isUnverified, 'test user is not AtCoder-verified');
 
       // Vote form with grade buttons is rendered for logged-in verified users
-      await expect(page.locator('form[action="?/voteAbsoluteGrade"]')).toBeVisible({
+      await expect(voteForm).toBeVisible({
         timeout: TIMEOUT,
       });
       // The grade buttons should include Q11 (11Q)

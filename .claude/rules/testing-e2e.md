@@ -9,7 +9,7 @@ paths:
 
 ## No Path Aliases
 
-The `e2e/` directory is outside SvelteKit's build pipeline — `$lib`, `$features`, and other path aliases are not resolved. Define URL string values as local constants with a reference comment:
+The `e2e/` directory is outside SvelteKit's build pipeline — `$lib`, `$features`, and other path aliases are not resolved. Define string constant values as local constants with a reference comment:
 
 ```typescript
 // Mirrors WorkBookTab.SOLUTION from $features/workbooks/types/workbook
@@ -51,7 +51,7 @@ Playwright has no native `test.each`. Use `for...of` loops — the official reco
 const GRADES = ['Q10', 'Q9', 'Q8'] as const;
 
 for (const grade of GRADES) {
-  await gradeButton(grade).click();
+  await gradeButton(page, grade).click();
   await expect(page).toHaveURL(`?grades=${grade}`);
 }
 ```
