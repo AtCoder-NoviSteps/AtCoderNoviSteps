@@ -8,7 +8,7 @@ import type { Roles } from '$lib/types/user';
 import * as userService from '$lib/services/users';
 import * as verificationService from '$features/account/services/atcoder_verification';
 
-import { BAD_REQUEST, FORBIDDEN } from '$lib/constants/http-response-status-codes';
+import { BAD_REQUEST, UNAUTHORIZED, FORBIDDEN } from '$lib/constants/http-response-status-codes';
 
 export async function load({ locals, url }) {
   const session = await locals.auth.validate();
@@ -48,7 +48,7 @@ async function requireSelf(
   const session = await locals.auth.validate();
 
   if (!session) {
-    return fail(FORBIDDEN, { message: 'Not authenticated.' });
+    return fail(UNAUTHORIZED, { message: 'Not authenticated.' });
   }
   if (session.user.username !== username) {
     return fail(FORBIDDEN, { message: 'Not authorized.' });
