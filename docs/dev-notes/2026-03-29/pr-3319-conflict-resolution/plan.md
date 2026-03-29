@@ -291,6 +291,7 @@ interface Props {
   username: string;
   atCoderAccount: { handle: string; validationCode: string; isValidated: boolean };
 }
+
 let { username, atCoderAccount }: Props = $props();
 const status = $derived(atCoderAccount.isValidated ? 'validated' : ...);
 ```
@@ -356,3 +357,5 @@ DRY 原則に基づき `parseUsernameAndAuthorize(request, locals)` として抽
 > 誤字を修正してください
 >
 > updateValicationCode → updateValidationCode
+````
+`````

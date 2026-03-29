@@ -56,17 +56,38 @@ async function requireSelf(
   return null;
 }
 
+type ParseResult =
+  | { ok: true; formData: FormData; username: string }
+  | { ok: false; error: ReturnType<typeof fail> };
+
+/** Reads username from formData and verifies the request is from the same user. */
+async function parseUsernameAndAuthorize(
+  request: Request,
+  locals: App.Locals,
+): Promise<ParseResult> {
+  const formData = await request.formData();
+  const username = formData.get('username')?.toString();
+
+  if (!username) {
+    return { ok: false, error: fail(BAD_REQUEST, { message: 'Username is required.' }) };
+  }
+
+  const authError = await requireSelf(locals, username);
+
+  if (authError) {
+    return { ok: false, error: authError };
+  }
+
+  return { ok: true, formData, username };
+}
+
 export const actions: Actions = {
   generate: async ({ request, locals }) => {
-    const formData = await request.formData();
-    const username = formData.get('username')?.toString();
-    if (!username) {
-      return fail(BAD_REQUEST, { message: 'Username is required.' });
+    const parsed = await parseUsernameAndAuthorize(request, locals);
+    if (!parsed.ok) {
+      return parsed.error;
     }
-    const authError = await requireSelf(locals, username);
-    if (authError) {
-      return authError;
-    }
+    const { formData, username } = parsed;
 
     const handle = formData.get('handle')?.toString();
     if (!handle) {
@@ -85,15 +106,11 @@ export const actions: Actions = {
   },
 
   validate: async ({ request, locals }) => {
-    const formData = await request.formData();
-    const username = formData.get('username')?.toString();
-    if (!username) {
-      return fail(BAD_REQUEST, { message: 'Username is required.' });
+    const parsed = await parseUsernameAndAuthorize(request, locals);
+    if (!parsed.ok) {
+      return parsed.error;
     }
-    const authError = await requireSelf(locals, username);
-    if (authError) {
-      return authError;
-    }
+    const { username } = parsed;
 
     const is_validated = await verificationService.validate(username);
 
@@ -107,15 +124,11 @@ export const actions: Actions = {
   },
 
   reset: async ({ request, locals }) => {
-    const formData = await request.formData();
-    const username = formData.get('username')?.toString();
-    if (!username) {
-      return fail(BAD_REQUEST, { message: 'Username is required.' });
+    const parsed = await parseUsernameAndAuthorize(request, locals);
+    if (!parsed.ok) {
+      return parsed.error;
     }
-    const authError = await requireSelf(locals, username);
-    if (authError) {
-      return authError;
-    }
+    const { username } = parsed;
 
     await verificationService.reset(username);
 
@@ -128,15 +141,11 @@ export const actions: Actions = {
   },
 
   delete: async ({ request, locals }) => {
-    const formData = await request.formData();
-    const username = formData.get('username')?.toString();
-    if (!username) {
-      return fail(BAD_REQUEST, { message: 'Username is required.' });
+    const parsed = await parseUsernameAndAuthorize(request, locals);
+    if (!parsed.ok) {
+      return parsed.error;
     }
-    const authError = await requireSelf(locals, username);
-    if (authError) {
-      return authError;
-    }
+    const { username } = parsed;
 
     await userService.deleteUser(username);
     locals.auth.setSession(null); // remove cookie

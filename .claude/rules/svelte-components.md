@@ -173,6 +173,7 @@ interface Props {
 }
 
 // Good: model object as prop; status derived inside
+// (username is from User model; atCoderAccount is from a separate domain model — two props is correct here)
 interface Props {
   username: string;
   atCoderAccount: { handle: string; validationCode: string; isValidated: boolean };
