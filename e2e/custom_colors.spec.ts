@@ -72,7 +72,7 @@ test.describe('Custom colors for TailwindCSS v4 configuration', () => {
       .join('\n');
 
     // Verify xs breakpoint media query is generated (26.25rem = 420px)
-    // @media(min-width:26.25rem) confirms the xs breakpoint is defined correctly
-    expect(allCss).toMatch(/@media\(min-width:26\.25rem\)/);
+    // TailwindCSS v4 outputs range syntax: @media (width>=26.25rem)
+    expect(allCss).toMatch(/@media\s*\(width>=26\.25rem\)/);
   });
 });

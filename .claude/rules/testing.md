@@ -194,3 +194,34 @@ await expect(toggleInput).toBeChecked({ checked: true });
 ```
 
 The same pattern applies to any Flowbite component that visually overlays its native input (e.g. `Checkbox`, `Radio`).
+
+### Strict Mode: Scope Locators to the Content Area
+
+When the navbar and page body both contain a link or button with the same text (e.g., a breadcrumb and a nav link share the same label), `getByRole` in strict mode will find multiple matches and throw. Scope the locator to the page's content container:
+
+```typescript
+// Bad: matches navbar link AND breadcrumb link
+await page.getByRole('link', { name: 'グレード投票' }).click();
+
+// Good: scoped to page content only
+await page.locator('.container').locator('nav').getByRole('link', { name: 'グレード投票' }).click();
+await page.locator('.container').getByRole('link', { name: 'ログイン' }).click();
+```
+
+Use `.container` (page content wrapper) to exclude the global navbar. Prefer the narrowest scope that remains stable — breadcrumb `nav` inside `.container` is more precise than `.container` alone when the link only appears there.
+
+### Conditional Skip Based on Runtime State
+
+When a test depends on DB or session state that may vary across environments (e.g., a user's AtCoder verification status), use `test.skip(condition, reason)` inside the test body instead of a static `test.skip`. This way the test runs automatically when the precondition is met:
+
+```typescript
+test('sees vote grade buttons', async ({ page }) => {
+  await page.goto(url);
+  const isUnverified = await page.getByText('AtCoderアカウントの認証が必要です').isVisible();
+  test.skip(isUnverified, 'test user is not AtCoder-verified');
+  // assertions below run only when precondition holds
+  await expect(page.locator('form[action="?/voteAbsoluteGrade"]')).toBeVisible();
+});
+```
+
+Prefer this over a hard-coded `test.skip` whenever the condition is observable on the page.
