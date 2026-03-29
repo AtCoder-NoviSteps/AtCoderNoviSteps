@@ -46,6 +46,7 @@ async function requireSelf(
   username: string,
 ): Promise<ReturnType<typeof fail> | null> {
   const session = await locals.auth.validate();
+
   if (!session) {
     return fail(FORBIDDEN, { message: 'Not authenticated.' });
   }
