@@ -21,7 +21,7 @@
       is_validated: boolean;
       message_type: string;
       message: string;
-      openAtCoderTab: boolean;
+      // openAtCoderTab will be used here when the AtCoder tab is re-enabled
     };
   }
 

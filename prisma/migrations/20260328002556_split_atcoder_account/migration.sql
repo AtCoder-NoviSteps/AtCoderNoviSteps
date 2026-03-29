@@ -19,7 +19,7 @@ SELECT
     "id",
     "atcoder_username",
     COALESCE("atcoder_validation_status", false),
-    "atcoder_validation_code",
+    COALESCE("atcoder_validation_code", ''),
     NOW(),
     NOW()
 FROM "user"

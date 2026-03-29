@@ -13,16 +13,19 @@ async function confirmWithExternalApi(handle: string, validationCode: string): P
     if (!baseUrl) {
       throw new Error('CONFIRM_API_URL is not set.');
     }
-    const url = `${baseUrl}?user=${handle}`;
+    const url = `${baseUrl}?user=${encodeURIComponent(handle)}`;
     const response = await fetch(url, { signal: controller.signal });
 
     if (!response.ok) {
-      throw new Error('Network response was not ok.');
+      throw new Error(`Network response was not ok: ${response.status} ${response.statusText}`);
     }
 
     try {
       const jsonData = await response.json();
-      return jsonData.contents?.some((item: string) => item === validationCode) ?? false;
+      if (!Array.isArray(jsonData.contents)) {
+        return false;
+      }
+      return jsonData.contents.some((item: unknown) => item === validationCode);
     } catch {
       // Invalid JSON from external API — treat as unconfirmed
       return false;
@@ -77,7 +80,7 @@ export async function validate(username: string): Promise<boolean> {
       user.atCoderAccount.validationCode,
     );
   } catch (error) {
-    throw new Error(`Failed to confirm AtCoder affiliation for ${username}: ${error}`);
+    throw new Error('Failed to confirm AtCoder affiliation', { cause: error });
   }
 
   if (!confirmed) {
@@ -95,5 +98,6 @@ export async function validate(username: string): Promise<boolean> {
 /** Deletes the AtCoderAccount record, effectively resetting the verification state. */
 export async function reset(username: string): Promise<void> {
   const user = await db.user.findUniqueOrThrow({ where: { username } });
+  // deleteMany is intentional: delete throws if no record exists (user may not have an AtCoderAccount)
   await db.atCoderAccount.deleteMany({ where: { userId: user.id } });
 }

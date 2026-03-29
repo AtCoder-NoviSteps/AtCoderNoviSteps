@@ -6,7 +6,7 @@ import * as verificationService from '$features/account/services/atcoder_verific
 import type { Actions } from './$types';
 
 import { redirect, fail } from '@sveltejs/kit';
-import { FORBIDDEN } from '$lib/constants/http-response-status-codes';
+import { BAD_REQUEST, FORBIDDEN } from '$lib/constants/http-response-status-codes';
 
 export async function load({ locals, url }) {
   const session = await locals.auth.validate();
@@ -35,11 +35,37 @@ export async function load({ locals, url }) {
   }
 }
 
+/** Validates the session and checks that the given username matches the logged-in user. */
+async function requireSelf(
+  locals: App.Locals,
+  username: string,
+): Promise<ReturnType<typeof fail> | null> {
+  const session = await locals.auth.validate();
+  if (!session) {
+    return fail(FORBIDDEN, { message: 'Not authenticated.' });
+  }
+  if (session.user.username !== username) {
+    return fail(FORBIDDEN, { message: 'Not authorized.' });
+  }
+  return null;
+}
+
 export const actions: Actions = {
-  generate: async ({ request }) => {
+  generate: async ({ request, locals }) => {
     const formData = await request.formData();
-    const username = formData.get('username')?.toString() as string;
-    const atcoder_username = formData.get('atcoder_username')?.toString() as string;
+    const username = formData.get('username')?.toString();
+    if (!username) {
+      return fail(BAD_REQUEST, { message: 'Username is required.' });
+    }
+    const authError = await requireSelf(locals, username);
+    if (authError) {
+      return authError;
+    }
+
+    const atcoder_username = formData.get('atcoder_username')?.toString();
+    if (!atcoder_username) {
+      return fail(BAD_REQUEST, { message: 'AtCoder username is required.' });
+    }
 
     const validationCode = await verificationService.generate(username, atcoder_username);
 
@@ -52,23 +78,40 @@ export const actions: Actions = {
     };
   },
 
-  validate: async ({ request }) => {
+  validate: async ({ request, locals }) => {
     const formData = await request.formData();
-    const username = formData.get('username')?.toString() as string;
+    const username = formData.get('username')?.toString();
+    if (!username) {
+      return fail(BAD_REQUEST, { message: 'Username is required.' });
+    }
+    const authError = await requireSelf(locals, username);
+    if (authError) {
+      return authError;
+    }
 
     const is_validated = await verificationService.validate(username);
 
     return {
       success: is_validated,
-      message_type: 'green',
-      message: 'Successfully validated.',
+      message_type: is_validated ? 'green' : 'red',
+      message: is_validated
+        ? 'Successfully validated.'
+        : 'Validation failed. Please check your AtCoder affiliation.',
     };
   },
 
-  reset: async ({ request }) => {
+  reset: async ({ request, locals }) => {
     const formData = await request.formData();
-    const username = formData.get('username')?.toString() as string;
-    const atcoder_username = formData.get('atcoder_username')?.toString() as string;
+    const username = formData.get('username')?.toString();
+    if (!username) {
+      return fail(BAD_REQUEST, { message: 'Username is required.' });
+    }
+    const authError = await requireSelf(locals, username);
+    if (authError) {
+      return authError;
+    }
+
+    const atcoder_username = formData.get('atcoder_username')?.toString() ?? '';
 
     await verificationService.reset(username);
 
@@ -83,16 +126,14 @@ export const actions: Actions = {
   },
 
   delete: async ({ request, locals }) => {
-    const session = await locals.auth.validate();
-    if (!session) {
-      return fail(FORBIDDEN, { message: 'Not authenticated.' });
-    }
-
     const formData = await request.formData();
-    const username = formData.get('username')?.toString() as string;
-
-    if (session.user.username !== username) {
-      return fail(FORBIDDEN, { message: 'Not authorized.' });
+    const username = formData.get('username')?.toString();
+    if (!username) {
+      return fail(BAD_REQUEST, { message: 'Username is required.' });
+    }
+    const authError = await requireSelf(locals, username);
+    if (authError) {
+      return authError;
     }
 
     await userService.deleteUser(username);
