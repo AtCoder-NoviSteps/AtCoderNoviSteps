@@ -32,22 +32,22 @@
 
 ## Phase 1: ドキュメント整備（低リスク）
 
-- [ ] `docs/dev-notes/2026-03-29/pr-3319-conflict-resolution/plan.md` を作成（本ファイル）
+- [x] `docs/dev-notes/2026-03-29/pr-3319-conflict-resolution/plan.md` を作成（本ファイル）
 
 ## Phase 2: merge 実行（中リスク）
 
-- [ ] `feature/atcoder-verified-voting` ブランチに checkout
-- [ ] `git merge origin/staging` を実行（3件のコンフリクトが発生する）
+- [x] `feature/atcoder-verified-voting` ブランチに checkout
+- [x] `git merge origin/staging` を実行（3件のコンフリクトが発生する）
+  - 実際のコンフリクト: `+page.svelte` の1件のみ（`+page.server.ts` と `AtCoderVerificationForm.svelte` は自動マージ）
 
 ## Phase 3: Conflict 2 解消 ― `+page.server.ts`（低リスク）
+
+- [x] 完了
 
 対象: `src/routes/users/edit/+page.server.ts`
 
 staging 版をベースに採用し、`AtCoderAccount` モデルのフィールド名に揃えるためにキー名を rename する。
-
-```bash
-git checkout origin/staging -- src/routes/users/edit/+page.server.ts
-```
+（実際には git が自動マージ済みだったため `git checkout` は不要だった。設計変更のみ適用した。）
 
 その後、以下の変更を適用する:
 
@@ -83,6 +83,8 @@ atCoderAccount: {
 | `return { atcoder_validationcode: validationCode, ... }` | `return { validationCode, ... }` |
 
 ## Phase 4: Conflict 1 解消 ― `AtCoderVerificationForm.svelte`（中リスク）
+
+- [x] 完了
 
 対象: `src/features/account/components/settings/AtCoderVerificationForm.svelte`
 
@@ -159,6 +161,8 @@ staging がリネームした先のファイルに、PR #3319 の one-way bindin
 
 ## Phase 5: Conflict 3 解消 ― `+page.svelte`（中リスク）
 
+- [x] 完了
+
 対象: `src/routes/users/edit/+page.svelte`
 
 PR #3319 のリアクティブロジックを採用し、import パスと型を staging ベースに更新する。
@@ -231,6 +235,8 @@ PR #3319 のリアクティブロジックを採用し、import パスと型を 
 
 ## Phase 6: rules 追記（低リスク）
 
+- [x] 完了
+
 ### `.claude/rules/sveltekit.md` に追加
 
 load() でモデルフィールドをオブジェクトとしてグループ化するパターン:
@@ -298,11 +304,13 @@ Call site passes the object directly from `$derived(data.atCoderAccount)`.
 
 ## Phase 7: 検証（低リスク）
 
+- [x] 完了
+
 ```bash
-pnpm check        # Svelte 型チェック
-pnpm test:unit    # ユニットテスト
-pnpm lint         # linter
-````
+pnpm check        # Svelte 型チェック → WARNINGS のみ（login/signup の AuthForm 型エラーはプリエグジスティング）
+pnpm test:unit    # ユニットテスト → 2007 passed / 1 skipped ✅
+pnpm lint         # linter → 警告1件（auth_forms.test.ts、プリエグジスティング）・エラー0 ✅
+```
 
 手動確認項目:
 
@@ -311,3 +319,25 @@ pnpm lint         # linter
 - リセット後に入力欄が空になること（`editableHandle` の resync 確認）
 - `?tab=atcoder` クエリパラメータで AtCoder タブが自動オープンすること
 - 未ログイン・AtCoder 未認証ユーザが投票できないこと（vote_actions.ts の確認）
+
+## CodeRabbit Findings
+
+`coderabbit review --plain` は認証が必要なため未実行。PR オープン後に CI で自動実行される。
+
+コードレビューアーサブエージェントが検出した critical / high / medium 相当の所見（PR 前にユーザが判断）:
+
+### `src/routes/users/edit/+page.svelte`
+
+**[Critical]** Alert の green ブランチが Flowbite プレースホルダーテキストを表示している（"Change a few things up and try submitting again."）。実際の `message` 変数が表示されていない。ユーザが成功後に誤ったメッセージを見る。
+
+**[Important]** `message` と `message_type` が form アクション後に更新されない。`let message = data.message` は初期値のみキャプチャし、`form` prop からの応答が反映されない。
+
+### `src/routes/users/edit/+page.server.ts`
+
+**[Important]** `getUser` が `null` を返す場合の unsafe `as` キャスト（`user?.id as string` 等）。null ユーザを明示的にガードしていない。
+
+### その他所見（Minor／スコープ外）
+
+- `is_tab_atcoder`、`is_validated`、`message_type` のスネークケース変数名（camelCase 規約違反）
+- `AtCoderVerificationForm` と `+page.svelte` 両方に `atCoderAccount` の型定義が重複
+- `+page.svelte` の `role`、`username` が非リアクティブな `let` バインディング
