@@ -105,7 +105,7 @@ Extract `mockFindUnique`, `mockFindMany`, and `mockCount` as the standard trio f
 
 ### Cleanup for Integration Tests and Tests with Real Side Effects
 
-This does not apply to standard service layer unit tests that use Prisma mocks.
+> **Note:** This does not apply to standard service layer unit tests that use Prisma mocks.
 
 If a test performs real DB mutations, file system changes, external API calls, or other stateful side effects that persist beyond the test (e.g., integration tests, seed scripts), wrap assertions in `try/finally` — a failing assertion skips cleanup and contaminates later tests:
 
@@ -133,7 +133,7 @@ E2E tests are complementary to, not a substitute for, unit tests. Add Vitest uni
 
 You may omit a component-level Vitest test when **both** conditions hold:
 
-1. The component is template-only (no logic beyond prop bindings and simple `{#if}`/`{#each}` blocks that only render — no inline function calls, ternaries with side effects, derived computations, or nested logic)
+1. The component is template-only (no logic beyond prop bindings and simple `{#if}`/`{#each}` blocks that only render — no inline function calls, ternaries with complex conditional logic, derived computations, or nested logic)
 2. The component's rendering paths are covered by E2E tests
 
 When a component contains extracted logic (e.g. derived values, event handlers, utility calls), add unit tests for that logic in the nearest `utils/` file instead of testing the component directly.

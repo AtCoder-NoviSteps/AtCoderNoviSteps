@@ -20,7 +20,7 @@
 
   let { data } = $props();
 
-  let taskResults: TaskResults = $derived(data.taskResults.sort(compareByContestIdAndTaskId));
+  const taskResults: TaskResults = $derived(data.taskResults.sort(compareByContestIdAndTaskId));
 
   const isAdmin = $derived(data.isAdmin);
   const isLoggedIn = $derived(data.isLoggedIn);

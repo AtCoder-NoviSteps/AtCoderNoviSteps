@@ -86,7 +86,7 @@ await toggleLabel.click();
 await expect(toggleInput).toBeChecked();
 ```
 
-The same pattern applies to any Flowbite component that visually overlays its native input (e.g. `Checkbox`, `Radio`).
+The same pattern may apply to similar Flowbite components that visually overlay their native input (e.g. `Checkbox`, `Radio`). Verify the component structure before applying this workaround.
 
 ## Strict Mode: Scope Locators to the Content Area
 
