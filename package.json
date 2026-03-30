@@ -56,7 +56,7 @@
     "prettier-plugin-tailwindcss": "0.6.14",
     "prisma": "5.22.0",
     "super-sitemap": "1.0.7",
-    "svelte": "5.55.0",
+    "svelte": "5.55.1",
     "svelte-check": "4.4.5",
     "svelte-meta-tags": "4.5.1",
     "sveltekit-superforms": "2.30.1",
