@@ -28,7 +28,13 @@ export const voteAbsoluteGrade = async ({
     });
   }
 
-  if (!locals.user?.is_validated) {
+  if (!locals.user) {
+    return fail(INTERNAL_SERVER_ERROR, {
+      message: 'ユーザー情報の取得に失敗しました。',
+    });
+  }
+
+  if (!locals.user.is_validated) {
     return fail(FORBIDDEN, {
       message: 'AtCoderアカウントの認証が必要です。',
     });

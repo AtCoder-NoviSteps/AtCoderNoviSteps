@@ -131,11 +131,6 @@ test.describe('vote detail page (/votes/[slug])', () => {
       const isUnverified = await unverifiedMessage.isVisible();
       test.skip(isUnverified, 'test user is not AtCoder-verified');
 
-      // Explicit check: voteForm is already guaranteed visible by the or() wait above,
-      // but this documents the expected state for verified users.
-      await expect(voteForm).toBeVisible({
-        timeout: TIMEOUT,
-      });
       // The grade buttons should include Q11 (11Q)
       await expect(page.getByRole('button', { name: '11Q' })).toBeVisible({ timeout: TIMEOUT });
     });

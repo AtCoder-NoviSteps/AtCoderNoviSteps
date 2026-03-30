@@ -84,12 +84,12 @@ group them as an object rather than flattening to top-level keys.
 Apply default values at this boundary so the page component typically does not need to handle `undefined`.
 
 ```typescript
-// Bad: flat, scattered across top-level keys
-atcoder_username: user?.atCoderAccount?.handle ?? '',
-atcoder_validationcode: user?.atCoderAccount?.validationCode ?? '',
-is_validated: user?.atCoderAccount?.isValidated ?? false,
+// Bad: flat top-level keys (legacy snake_case naming, scattered fields)
+atcoder_handle: user?.atCoderAccount?.handle ?? '',
+atcoder_validation_code: user?.atCoderAccount?.validationCode ?? '',
+atcoder_is_validated: user?.atCoderAccount?.isValidated ?? false,
 
-// Good: grouped by model, defaults absorbed here
+// Good: grouped by model with camelCase; defaults absorbed here
 atCoderAccount: {
   handle:         user?.atCoderAccount?.handle         ?? '',
   validationCode: user?.atCoderAccount?.validationCode ?? '',

@@ -118,8 +118,6 @@ try {
 }
 ```
 
-This is not needed for standard service unit tests that use Prisma mocks.
-
 ### File Split for Testability
 
 When a service file mixes DB operations and pure functions, split it into two files:

@@ -136,17 +136,12 @@ export const actions: Actions = {
     try {
       await userService.deleteUser(username);
       locals.auth.setSession(null); // remove cookie
-
-      return {
-        success: true,
-        username,
-        message_type: 'green',
-        message: 'Successfully deleted.',
-      };
     } catch (error) {
       console.error('Failed to delete user account', error);
       return fail(INTERNAL_SERVER_ERROR, { message: 'Failed to delete account.' });
     }
+
+    redirect(302, '/login');
   },
 };
 

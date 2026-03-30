@@ -83,7 +83,7 @@ const toggleInput = page.locator('input[aria-label="<aria-label value>"]');
 const toggleLabel = page.locator('label:has(input[aria-label="<aria-label value>"])');
 
 await toggleLabel.click();
-await expect(toggleInput).toBeChecked({ checked: true });
+await expect(toggleInput).toBeChecked();
 ```
 
 The same pattern applies to any Flowbite component that visually overlays its native input (e.g. `Checkbox`, `Radio`).
@@ -97,7 +97,7 @@ When the navbar and page body both contain a link or button with the same text (
 await page.getByRole('link', { name: 'グレード投票' }).click();
 
 // Good: scoped to page content only
-await page.locator('.container').locator('nav').getByRole('link', { name: 'グレード投票' }).click();
+await page.locator('.container nav').getByRole('link', { name: 'グレード投票' }).click();
 await page.locator('.container').getByRole('link', { name: 'ログイン' }).click();
 ```
 
