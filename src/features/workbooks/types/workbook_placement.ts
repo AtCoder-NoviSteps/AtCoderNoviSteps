@@ -6,9 +6,9 @@ import { WorkBookType as WorkBookTypeConst } from '$features/workbooks/types/wor
 // Categories for solution placement.
 export const SolutionCategory: { [key in SolutionCategoryOrigin]: key } = {
   PENDING: 'PENDING',
+  DATA_STRUCTURE: 'DATA_STRUCTURE',
   SEARCH_SIMULATION: 'SEARCH_SIMULATION',
   DYNAMIC_PROGRAMMING: 'DYNAMIC_PROGRAMMING',
-  DATA_STRUCTURE: 'DATA_STRUCTURE',
   GRAPH: 'GRAPH',
   TREE: 'TREE',
   NUMBER_THEORY: 'NUMBER_THEORY',
@@ -18,8 +18,8 @@ export const SolutionCategory: { [key in SolutionCategoryOrigin]: key } = {
   STRING: 'STRING',
   GEOMETRY: 'GEOMETRY',
   OPTIMIZATION: 'OPTIMIZATION',
-  OTHERS: 'OTHERS',
   ANALYSIS: 'ANALYSIS',
+  OTHERS: 'OTHERS',
 } as const;
 
 export type SolutionCategory = SolutionCategoryOrigin;
@@ -30,9 +30,9 @@ export type SolutionCategories = SolutionCategory[];
 // Japanese labels for solution categories (used in admin UI)
 export const SOLUTION_LABELS: Record<string, string> = {
   PENDING: '未分類',
+  DATA_STRUCTURE: 'データ構造',
   SEARCH_SIMULATION: '探索・シミュレーション・実装',
   DYNAMIC_PROGRAMMING: '動的計画法',
-  DATA_STRUCTURE: 'データ構造',
   GRAPH: 'グラフ',
   TREE: '木',
   NUMBER_THEORY: '数学（整数論）',
@@ -42,8 +42,8 @@ export const SOLUTION_LABELS: Record<string, string> = {
   STRING: '文字列',
   GEOMETRY: '幾何',
   OPTIMIZATION: '最適化',
+  ANALYSIS: '考察・テクニック',
   OTHERS: 'その他',
-  ANALYSIS: '考察テクニック',
 };
 
 // Admin only: Used for ordering of workbooks (curriculums and solution)
