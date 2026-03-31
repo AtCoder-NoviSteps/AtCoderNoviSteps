@@ -172,8 +172,8 @@ importers:
         specifier: 4.4.5
         version: 4.4.5(picomatch@4.0.4)(svelte@5.55.1)(typescript@5.9.3)
       svelte-meta-tags:
-        specifier: 4.5.1
-        version: 4.5.1(svelte@5.55.1)
+        specifier: 4.5.2
+        version: 4.5.2(svelte@5.55.1)
       sveltekit-superforms:
         specifier: 2.30.1
         version: 2.30.1(@sveltejs/kit@2.55.0(@sveltejs/vite-plugin-svelte@7.0.0(svelte@5.55.1)(vite@8.0.3(@types/node@25.5.0)(esbuild@0.27.1)(jiti@1.21.7)(tsx@4.21.0)(yaml@2.8.1)))(svelte@5.55.1)(typescript@5.9.3)(vite@8.0.3(@types/node@25.5.0)(esbuild@0.27.1)(jiti@1.21.7)(tsx@4.21.0)(yaml@2.8.1)))(@types/json-schema@7.0.15)(svelte@5.55.1)(typescript@5.9.3)
@@ -2644,8 +2644,8 @@ packages:
       bare-buffer:
         optional: true
 
-  bare-os@3.8.4:
-    resolution: {integrity: sha512-4JboWUl7/2LhgU536tjUszzaVC8/WEWKtyX5crayvlN71ih8+O2SdvBhotQeDsuhhmPZmLCrPBJEcwVPhI/kkQ==}
+  bare-os@3.8.6:
+    resolution: {integrity: sha512-l8xaNWWb/bXuzgsrlF5jaa5QYDJ9S0ddd54cP6CH+081+5iPrbJiCfBWQqrWYzmUhCbsH+WR6qxo9MeHVCr0MQ==}
     engines: {bare: '>=1.14.0'}
 
   bare-path@3.0.0:
@@ -5099,8 +5099,8 @@ packages:
       svelte:
         optional: true
 
-  svelte-meta-tags@4.5.1:
-    resolution: {integrity: sha512-xIHKFrptHbLih1UDAJVUAQ3hrVvU9miLxmaWdhAjlp8H+SMTU2bIGu4AZ/O+qhZ6Rv7zzaCUQe03aVsEmzPMQw==}
+  svelte-meta-tags@4.5.2:
+    resolution: {integrity: sha512-zU22mSbj0y/hr2neP6K+aGsXX3Ul7retfLOlr4Yq2Edm7PbZatCi4qYQvbK38/StbN6G0FQLR0cVlWN1RPhyyA==}
     peerDependencies:
       svelte: ^5.0.0
 
@@ -7967,11 +7967,11 @@ snapshots:
       - bare-abort-controller
       - react-native-b4a
 
-  bare-os@3.8.4: {}
+  bare-os@3.8.6: {}
 
   bare-path@3.0.0:
     dependencies:
-      bare-os: 3.8.4
+      bare-os: 3.8.6
 
   bare-stream@2.11.0(bare-events@2.8.2):
     dependencies:
@@ -10499,7 +10499,7 @@ snapshots:
     optionalDependencies:
       svelte: 5.55.1
 
-  svelte-meta-tags@4.5.1(svelte@5.55.1):
+  svelte-meta-tags@4.5.2(svelte@5.55.1):
     dependencies:
       schema-dts: 1.1.5
       svelte: 5.55.1
