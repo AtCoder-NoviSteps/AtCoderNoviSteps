@@ -70,6 +70,40 @@ export function buildDonutSegments(
 }
 
 /**
+ * Returns the midpoint angle (radians) of a grade's position in the donut arc,
+ * even when the grade has zero votes. For zero-vote grades the midAngle equals
+ * the boundary angle between the preceding and following segments.
+ * Returns null when totalVotes is 0 or the grade is not found in the list.
+ * @param grades - Ordered list of all grade values (including zero-vote ones).
+ * @param counters - Raw counter records from DB.
+ * @param targetGrade - The grade whose angular position to look up.
+ */
+export function getGradeAngle(
+  grades: string[],
+  counters: { grade: string; count: number }[],
+  targetGrade: string,
+): number | null {
+  const totalVotes = counters.reduce((sum, c) => sum + c.count, 0);
+  if (totalVotes === 0) {
+    return null;
+  }
+
+  let cumulative = 0;
+  for (const grade of grades) {
+    const count = counters.find((c) => c.grade === grade)?.count ?? 0;
+    const ratio = count / totalVotes;
+    if (grade === targetGrade) {
+      const startAngle = cumulative * TAU - HALF_PI;
+      const endAngle = (cumulative + ratio) * TAU - HALF_PI;
+      return (startAngle + endAngle) / 2;
+    }
+    cumulative += ratio;
+  }
+
+  return null;
+}
+
+/**
  * Generates SVG path data for one donut arc segment.
  * @param cx - Center x coordinate.
  * @param cy - Center y coordinate.
