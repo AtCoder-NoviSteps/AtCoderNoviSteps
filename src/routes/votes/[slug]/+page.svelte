@@ -64,16 +64,9 @@
       {/if}
 
       <!-- 投票変更フォーム -->
-      <details class="mb-4">
-        <summary
-          class="cursor-pointer text-sm text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300"
-        >
-          投票を変更する
-        </summary>
-        <div class="mt-3">
-          {@render voteForm()}
-        </div>
-      </details>
+      <div class="mb-4">
+        {@render voteForm()}
+      </div>
 
       <!-- 分布グラフ -->
       <VoteDonutChart
