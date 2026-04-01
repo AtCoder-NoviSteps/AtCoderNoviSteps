@@ -3,7 +3,7 @@
   import type { TaskGrade } from '$lib/types/task';
   import { getTaskGradeColor, getTaskGradeLabel } from '$lib/utils/task';
   import { nonPendingGrades } from '$features/votes/utils/grade_options';
-  import { buildDonutSegments, arcPath, MIN_LABEL_PCT } from '$features/votes/utils/donut_chart';
+  import { buildDonutSegments, arcPath } from '$features/votes/utils/donut_chart';
 
   interface Props {
     counters: VotedGradeCounter[];
@@ -17,7 +17,7 @@
   const CY = 130;
   const OUTER_RADIUS = 90;
   const INNER_RADIUS = 55;
-  const LABEL_RADIUS = 115;
+  const RING_MID_RADIUS = (INNER_RADIUS + OUTER_RADIUS) / 2;
 
   const segments = $derived(
     buildDonutSegments(nonPendingGrades, counters, getTaskGradeColor, getTaskGradeLabel),
@@ -70,23 +70,44 @@
     {/if}
 
     {#each segments as seg (seg.grade)}
-      {#if seg.pct / 100 >= MIN_LABEL_PCT}
-        {@const labelX = CX + LABEL_RADIUS * Math.cos(seg.midAngle)}
-        {@const labelY = CY + LABEL_RADIUS * Math.sin(seg.midAngle)}
-        {@const anchor = Math.cos(seg.midAngle) >= 0 ? 'start' : 'end'}
+      {@const lx = CX + RING_MID_RADIUS * Math.cos(seg.midAngle)}
+      {@const ly = CY + RING_MID_RADIUS * Math.sin(seg.midAngle)}
+      {#if seg.pct >= 10}
         <text
-          x={labelX}
-          y={labelY - 6}
-          text-anchor={anchor}
-          class="fill-gray-800 dark:fill-gray-200"
-          font-size="10">{seg.label}</text
+          x={lx}
+          y={ly - 5}
+          text-anchor="middle"
+          dominant-baseline="middle"
+          fill="white"
+          stroke="rgba(0,0,0,0.55)"
+          stroke-width="2.5"
+          paint-order="stroke"
+          font-size="9"
+          font-weight="bold">{seg.label}</text
         >
         <text
-          x={labelX}
-          y={labelY + 7}
-          text-anchor={anchor}
-          class="fill-gray-600 dark:fill-gray-400"
-          font-size="9">({seg.count}票, {seg.pct}%)</text
+          x={lx}
+          y={ly + 6}
+          text-anchor="middle"
+          dominant-baseline="middle"
+          fill="white"
+          stroke="rgba(0,0,0,0.55)"
+          stroke-width="2"
+          paint-order="stroke"
+          font-size="7.5">{seg.count}票 {seg.pct}%</text
+        >
+      {:else if seg.pct >= 5}
+        <text
+          x={lx}
+          y={ly}
+          text-anchor="middle"
+          dominant-baseline="middle"
+          fill="white"
+          stroke="rgba(0,0,0,0.55)"
+          stroke-width="2.5"
+          paint-order="stroke"
+          font-size="9"
+          font-weight="bold">{seg.label}</text
         >
       {/if}
     {/each}
