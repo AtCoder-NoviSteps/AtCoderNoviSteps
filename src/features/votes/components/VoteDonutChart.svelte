@@ -27,18 +27,13 @@
 <svg viewBox="0 0 260 275" class="w-full max-w-xs mx-auto" role="img" aria-label="投票分布円グラフ">
   <title>投票分布</title>
   <defs>
-    <!-- Metallic gradient for D6 segment, matching the vote button style -->
-    <linearGradient
-      id="d6-metallic"
-      gradientUnits="userSpaceOnUse"
-      x1="40"
-      y1="40"
-      x2="220"
-      y2="220"
-    >
-      <stop offset="0%" stop-color="var(--color-atcoder-D6)" />
-      <stop offset="50%" stop-color="rgb(120, 113, 108)" />
-      <stop offset="100%" stop-color="rgb(217, 119, 6)" />
+    <!-- Metallic gradient for D6 segment, matching the vote button style.
+         objectBoundingBox ensures the gradient spans the segment itself. -->
+    <linearGradient id="d6-metallic" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#432414" />
+      <stop offset="40%" stop-color="rgb(120, 113, 108)" />
+      <stop offset="70%" stop-color="rgb(217, 119, 6)" />
+      <stop offset="100%" stop-color="#432414" />
     </linearGradient>
   </defs>
 
