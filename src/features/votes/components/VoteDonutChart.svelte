@@ -10,8 +10,10 @@
     totalVotes: number;
     /** Median grade to indicate with a radial line. Omit when stats are unavailable. */
     medianGrade?: TaskGrade | null;
+    /** The grade the current user voted for. Shows a ✅ on the matching segment. */
+    votedGrade?: TaskGrade | null;
   }
-  let { counters, totalVotes, medianGrade = null }: Props = $props();
+  let { counters, totalVotes, medianGrade = null, votedGrade = null }: Props = $props();
 
   const CX = 130;
   const CY = 130;
@@ -24,7 +26,7 @@
   );
 </script>
 
-<svg viewBox="0 0 260 275" class="w-full max-w-xs mx-auto" role="img" aria-label="投票分布円グラフ">
+<svg viewBox="0 0 260 275" class="w-full max-w-md mx-auto" role="img" aria-label="投票分布円グラフ">
   <title>投票分布</title>
   <defs>
     <!-- Metallic gradient for D6 segment, matching the vote button style.
@@ -93,7 +95,7 @@
           stroke-width="2.5"
           paint-order="stroke"
           font-size="9"
-          font-weight="bold">{seg.label}</text
+          font-weight="bold">{seg.grade === votedGrade ? `✅ ${seg.label}` : seg.label}</text
         >
         <text
           x={lx}
@@ -117,7 +119,7 @@
           stroke-width="2.5"
           paint-order="stroke"
           font-size="9"
-          font-weight="bold">{seg.label}</text
+          font-weight="bold">{seg.grade === votedGrade ? `✅ ${seg.label}` : seg.label}</text
         >
       {/if}
     {/each}

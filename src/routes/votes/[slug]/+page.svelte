@@ -77,6 +77,7 @@
         counters={data.counters ?? []}
         {totalVotes}
         medianGrade={data.stats?.grade ?? null}
+        votedGrade={data.myVote?.grade ?? null}
       />
     </div>
 
