@@ -17,6 +17,7 @@
   } from '$lib/utils/task';
   import { nonPendingGrades } from '$features/votes/utils/grade_options';
   import { SIGNUP_PAGE, LOGIN_PAGE, EDIT_PROFILE_PAGE } from '$lib/constants/navbar-links';
+  import VoteDonutChart from '$features/votes/components/VoteDonutChart.svelte';
 
   let { data } = $props();
 
@@ -25,15 +26,6 @@
   const totalVotes = $derived(
     data.counters ? data.counters.reduce((sum, c) => sum + c.count, 0) : 0,
   );
-
-  function getCount(grade: string): number {
-    return data.counters?.find((c) => c.grade === grade)?.count ?? 0;
-  }
-
-  function getPct(grade: string): number {
-    if (totalVotes === 0) return 0;
-    return Math.round((getCount(grade) / totalVotes) * 100);
-  }
 </script>
 
 <div class="container mx-auto w-5/6 max-w-2xl">
@@ -80,30 +72,8 @@
         </p>
       {/if}
 
-      <!-- 分布表 -->
-      <div class="space-y-1">
-        {#each nonPendingGrades as grade (grade)}
-          {@const count = getCount(grade)}
-          {@const pct = getPct(grade)}
-          {@const isMyVote = data.myVote?.grade === grade}
-          <div class="flex items-center gap-2 text-sm">
-            <span class="w-10 text-right text-gray-600 dark:text-gray-400 shrink-0">
-              {getTaskGradeLabel(grade)}
-            </span>
-            <div class="flex-1 bg-gray-100 dark:bg-gray-700 rounded overflow-hidden h-5">
-              <div
-                class="h-full rounded transition-all {isMyVote
-                  ? 'bg-primary-500'
-                  : 'bg-gray-300 dark:bg-gray-500'}"
-                style="width: {pct}%"
-              ></div>
-            </div>
-            <span class="w-14 text-gray-600 dark:text-gray-400 shrink-0">
-              {count}票 ({pct}%)
-            </span>
-          </div>
-        {/each}
-      </div>
+      <!-- 分布グラフ -->
+      <VoteDonutChart counters={data.counters ?? []} {totalVotes} />
     </div>
 
     <!-- 投票変更フォーム -->
