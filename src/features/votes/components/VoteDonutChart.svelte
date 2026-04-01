@@ -75,7 +75,7 @@
         y={CY + OUTER_RADIUS + 14}
         text-anchor="middle"
         class="fill-gray-700 dark:fill-gray-300"
-        font-size="9">↑ 中央値</text
+        font-size="9">中央値</text
       >
     {/if}
 
