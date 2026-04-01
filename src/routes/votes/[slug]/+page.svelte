@@ -120,7 +120,7 @@
               name="grade"
               value={grade}
               type="submit"
-              class="px-3 py-1.5 rounded-md text-sm font-medium border transition-opacity
+              class="w-12 py-1.5 rounded-md text-sm font-medium border transition-opacity text-center
                 {grade === TaskGrade.D6
                 ? 'text-white shadow-md shadow-amber-900/80 ring-2 ring-amber-300/50 font-bold drop-shadow relative overflow-hidden'
                 : toChangeTextColorIfNeeds(getTaskGradeLabel(grade))}
