@@ -43,6 +43,7 @@
       <a
         href={getTaskUrl(data.task.contest_id, data.task.task_id)}
         rel="noreferrer external"
+        target="_blank"
         class="hover:underline">{data.task.title}</a
       >
     </h1>
