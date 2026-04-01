@@ -1,5 +1,6 @@
 <script lang="ts">
   import type { VotedGradeCounter } from '@prisma/client';
+  import type { TaskGrade } from '$lib/types/task';
   import { getTaskGradeColor, getTaskGradeLabel } from '$lib/utils/task';
   import { nonPendingGrades } from '$features/votes/utils/grade_options';
   import { buildDonutSegments, arcPath, MIN_LABEL_PCT } from '$features/votes/utils/donut_chart';
@@ -7,8 +8,10 @@
   interface Props {
     counters: VotedGradeCounter[];
     totalVotes: number;
+    /** Median grade to indicate with a radial line. Omit when stats are unavailable. */
+    medianGrade?: TaskGrade | null;
   }
-  let { counters, totalVotes }: Props = $props();
+  let { counters, totalVotes, medianGrade = null }: Props = $props();
 
   const CX = 130;
   const CY = 130;
@@ -18,6 +21,10 @@
 
   const segments = $derived(
     buildDonutSegments(nonPendingGrades, counters, getTaskGradeColor, getTaskGradeLabel),
+  );
+
+  const medianSegment = $derived(
+    medianGrade ? (segments.find((seg) => seg.grade === medianGrade) ?? null) : null,
   );
 </script>
 
@@ -44,6 +51,19 @@
       />
     {/each}
 
+    <!-- Median grade indicator line -->
+    {#if medianSegment}
+      <line
+        x1={CX + INNER_RADIUS * Math.cos(medianSegment.midAngle)}
+        y1={CY + INNER_RADIUS * Math.sin(medianSegment.midAngle)}
+        x2={CX + OUTER_RADIUS * Math.cos(medianSegment.midAngle)}
+        y2={CY + OUTER_RADIUS * Math.sin(medianSegment.midAngle)}
+        stroke="white"
+        stroke-width="2.5"
+        stroke-linecap="round"
+      />
+    {/if}
+
     {#each segments as seg (seg.grade)}
       {#if seg.pct / 100 >= MIN_LABEL_PCT}
         {@const labelX = CX + LABEL_RADIUS * Math.cos(seg.midAngle)}
@@ -54,15 +74,15 @@
           y={labelY - 6}
           text-anchor={anchor}
           class="fill-gray-800 dark:fill-gray-200"
-          font-size="10"
-        >{seg.label}</text>
+          font-size="10">{seg.label}</text
+        >
         <text
           x={labelX}
           y={labelY + 7}
           text-anchor={anchor}
           class="fill-gray-600 dark:fill-gray-400"
-          font-size="9"
-        >({seg.count}票, {seg.pct}%)</text>
+          font-size="9">({seg.count}票, {seg.pct}%)</text
+        >
       {/if}
     {/each}
   {/if}
@@ -74,13 +94,13 @@
     text-anchor="middle"
     class="fill-gray-800 dark:fill-gray-200"
     font-size="22"
-    font-weight="bold"
-  >{totalVotes}</text>
+    font-weight="bold">{totalVotes}</text
+  >
   <text
     x={CX}
     y={CY + 12}
     text-anchor="middle"
     class="fill-gray-500 dark:fill-gray-400"
-    font-size="10"
-  >票</text>
+    font-size="10">票</text
+  >
 </svg>

@@ -73,7 +73,11 @@
       {/if}
 
       <!-- 分布グラフ -->
-      <VoteDonutChart counters={data.counters ?? []} {totalVotes} />
+      <VoteDonutChart
+        counters={data.counters ?? []}
+        {totalVotes}
+        medianGrade={data.stats?.grade ?? null}
+      />
     </div>
 
     <!-- 投票変更フォーム -->
