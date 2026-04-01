@@ -3,12 +3,7 @@
   import type { TaskGrade } from '$lib/types/task';
   import { getTaskGradeColor, getTaskGradeLabel } from '$lib/utils/task';
   import { nonPendingGrades } from '$features/votes/utils/grade_options';
-  import {
-    buildDonutSegments,
-    arcPath,
-    getGradeAngle,
-    MIN_LABEL_PCT,
-  } from '$features/votes/utils/donut_chart';
+  import { buildDonutSegments, arcPath, MIN_LABEL_PCT } from '$features/votes/utils/donut_chart';
 
   interface Props {
     counters: VotedGradeCounter[];
@@ -26,10 +21,6 @@
 
   const segments = $derived(
     buildDonutSegments(nonPendingGrades, counters, getTaskGradeColor, getTaskGradeLabel),
-  );
-
-  const medianAngle = $derived(
-    medianGrade ? getGradeAngle(nonPendingGrades, counters, medianGrade) : null,
   );
 </script>
 
@@ -56,13 +47,14 @@
       />
     {/each}
 
-    <!-- Median grade indicator line -->
-    {#if medianAngle !== null}
+    <!-- Median grade indicator line: the chart starts at the top and the median
+         always falls at the 50% cumulative mark, which is fixed at the bottom. -->
+    {#if medianGrade}
       <line
-        x1={CX + INNER_RADIUS * Math.cos(medianAngle)}
-        y1={CY + INNER_RADIUS * Math.sin(medianAngle)}
-        x2={CX + OUTER_RADIUS * Math.cos(medianAngle)}
-        y2={CY + OUTER_RADIUS * Math.sin(medianAngle)}
+        x1={CX}
+        y1={CY + INNER_RADIUS}
+        x2={CX}
+        y2={CY + OUTER_RADIUS}
         stroke="white"
         stroke-width="2.5"
         stroke-linecap="round"

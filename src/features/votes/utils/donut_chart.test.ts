@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { buildDonutSegments, arcPath, getGradeAngle, MIN_LABEL_PCT } from './donut_chart';
+import { buildDonutSegments, arcPath, MIN_LABEL_PCT } from './donut_chart';
 
 const GRADE_A = 'Q1';
 const GRADE_B = 'Q2';
@@ -68,47 +68,6 @@ describe('arcPath', () => {
   it('uses large-arc-flag=0 when angle span is less than π', () => {
     const path = arcPath(100, 100, 70, 40, 0, Math.PI - 0.1);
     expect(path).toMatch(/A \d+ \d+ 0 0 1/);
-  });
-});
-
-describe('getGradeAngle', () => {
-  it('returns null when totalVotes is 0', () => {
-    expect(getGradeAngle([GRADE_A], [], GRADE_A)).toBeNull();
-  });
-
-  it('returns null when grade is not in the list', () => {
-    const counters = [{ grade: GRADE_A, count: 1 }];
-    expect(getGradeAngle([GRADE_A], counters, 'UNKNOWN')).toBeNull();
-  });
-
-  it('returns top-of-circle angle for the first grade', () => {
-    const counters = [{ grade: GRADE_A, count: 1 }];
-    // single grade covers full circle: midAngle = -π/2 + π = π/2
-    const angle = getGradeAngle([GRADE_A], counters, GRADE_A);
-    expect(angle).toBeCloseTo(-Math.PI / 2 + Math.PI); // π/2
-  });
-
-  it('returns boundary angle for a zero-vote grade between two voted grades', () => {
-    // GRADE_A 50%, GRADE_ZERO 0%, GRADE_B 50%
-    const GRADE_ZERO = 'Q3';
-    const counters = [
-      { grade: GRADE_A, count: 1 },
-      { grade: GRADE_B, count: 1 },
-    ];
-    // GRADE_ZERO sits at the 50% boundary; start=end so midAngle = 50% * TAU - π/2
-    const angle = getGradeAngle([GRADE_A, GRADE_ZERO, GRADE_B], counters, GRADE_ZERO);
-    expect(angle).toBeCloseTo(Math.PI / 2); // 0.5 * 2π - π/2 = π - π/2 = π/2
-  });
-
-  it('returns the mid-arc angle for a grade that has votes', () => {
-    const counters = [
-      { grade: GRADE_A, count: 1 },
-      { grade: GRADE_B, count: 3 },
-    ];
-    // GRADE_B spans 25%→100% of the arc; midAngle = 62.5% * TAU - π/2
-    const angle = getGradeAngle([GRADE_A, GRADE_B], counters, GRADE_B);
-    const expected = 0.625 * 2 * Math.PI - Math.PI / 2;
-    expect(angle).toBeCloseTo(expected);
   });
 });
 
