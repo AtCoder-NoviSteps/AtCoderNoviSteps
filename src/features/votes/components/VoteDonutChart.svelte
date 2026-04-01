@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { VotedGradeCounter } from '@prisma/client';
-  import type { TaskGrade } from '$lib/types/task';
+  import { TaskGrade } from '$lib/types/task';
   import { getTaskGradeColor, getTaskGradeLabel } from '$lib/utils/task';
   import { nonPendingGrades } from '$features/votes/utils/grade_options';
   import { buildDonutSegments, arcPath } from '$features/votes/utils/donut_chart';
@@ -26,6 +26,21 @@
 
 <svg viewBox="0 0 260 275" class="w-full max-w-xs mx-auto" role="img" aria-label="投票分布円グラフ">
   <title>投票分布</title>
+  <defs>
+    <!-- Metallic gradient for D6 segment, matching the vote button style -->
+    <linearGradient
+      id="d6-metallic"
+      gradientUnits="userSpaceOnUse"
+      x1="40"
+      y1="40"
+      x2="220"
+      y2="220"
+    >
+      <stop offset="0%" stop-color="var(--color-atcoder-D6)" />
+      <stop offset="50%" stop-color="rgb(120, 113, 108)" />
+      <stop offset="100%" stop-color="rgb(217, 119, 6)" />
+    </linearGradient>
+  </defs>
 
   {#if totalVotes === 0}
     <!-- Show empty ring when there are no votes -->
@@ -43,7 +58,7 @@
     {#each segments as seg (seg.grade)}
       <path
         d={arcPath(CX, CY, OUTER_RADIUS, INNER_RADIUS, seg.startAngle, seg.endAngle)}
-        fill={seg.color}
+        fill={seg.grade === TaskGrade.D6 ? 'url(#d6-metallic)' : seg.color}
       />
     {/each}
 
