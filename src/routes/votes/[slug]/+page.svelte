@@ -4,9 +4,7 @@
   import { Button } from 'flowbite-svelte';
   import Check from '@lucide/svelte/icons/check';
 
-  import HeadingOne from '$lib/components/HeadingOne.svelte';
   import GradeLabel from '$lib/components/GradeLabel.svelte';
-  import ExternalLinkWrapper from '$lib/components/ExternalLinkWrapper.svelte';
 
   import { TaskGrade } from '$lib/types/task';
   import {
@@ -36,21 +34,20 @@
     <span>{data.task.task_id}</span>
   </nav>
 
-  <HeadingOne title={data.task.title} />
-
-  <!-- 問題情報 -->
-  <div class="flex items-center gap-3 mb-8">
+  <div class="flex items-center gap-3 py-6 mb-2">
     <GradeLabel
       taskGrade={data.task.grade}
       defaultPadding={0.25}
       defaultWidth={6}
       reducedWidth={6}
     />
-    <ExternalLinkWrapper
-      url={getTaskUrl(data.task.contest_id, data.task.task_id)}
-      description={data.task.contest_id}
-      iconSize={14}
-    />
+    <h1 class="text-3xl font-normal truncate dark:text-white">
+      <a
+        href={getTaskUrl(data.task.contest_id, data.task.task_id)}
+        rel="noreferrer external"
+        class="hover:underline">{data.task.title}</a
+      >
+    </h1>
   </div>
 
   <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">
