@@ -15,10 +15,10 @@
   }
   let { counters, totalVotes, medianGrade = null, votedGrade = null }: Props = $props();
 
-  const CX = 130;
-  const CY = 130;
-  const OUTER_RADIUS = 90;
-  const INNER_RADIUS = 55;
+  const CX = 160;
+  const CY = 155;
+  const OUTER_RADIUS = 120;
+  const INNER_RADIUS = 70;
   const RING_MID_RADIUS = (INNER_RADIUS + OUTER_RADIUS) / 2;
 
   const segments = $derived(
@@ -26,7 +26,7 @@
   );
 </script>
 
-<svg viewBox="0 0 260 275" class="w-full max-w-md mx-auto" role="img" aria-label="投票分布円グラフ">
+<svg viewBox="0 0 320 310" class="w-full max-w-lg mx-auto" role="img" aria-label="投票分布円グラフ">
   <title>投票分布</title>
   <defs>
     <!-- Metallic gradient for D6 segment, matching the vote button style.
@@ -77,7 +77,7 @@
         y={CY + OUTER_RADIUS + 14}
         text-anchor="middle"
         class="fill-gray-700 dark:fill-gray-300"
-        font-size="9">中央値</text
+        font-size="11">中央値</text
       >
     {/if}
 
@@ -87,26 +87,26 @@
       {#if seg.pct >= 10}
         <text
           x={lx}
-          y={ly - 5}
+          y={ly - 7}
           text-anchor="middle"
           dominant-baseline="middle"
           fill="white"
           stroke="rgba(0,0,0,0.55)"
           stroke-width="2.5"
           paint-order="stroke"
-          font-size="9"
+          font-size="11"
           font-weight="bold">{seg.grade === votedGrade ? `✅ ${seg.label}` : seg.label}</text
         >
         <text
           x={lx}
-          y={ly + 6}
+          y={ly + 8}
           text-anchor="middle"
           dominant-baseline="middle"
           fill="white"
           stroke="rgba(0,0,0,0.55)"
           stroke-width="2"
           paint-order="stroke"
-          font-size="7.5">{seg.count}票 {seg.pct}%</text
+          font-size="9.5">{seg.count}票 {seg.pct}%</text
         >
       {:else if seg.pct >= 5}
         <text
@@ -118,7 +118,7 @@
           stroke="rgba(0,0,0,0.55)"
           stroke-width="2.5"
           paint-order="stroke"
-          font-size="9"
+          font-size="11"
           font-weight="bold">{seg.grade === votedGrade ? `✅ ${seg.label}` : seg.label}</text
         >
       {/if}
@@ -131,14 +131,14 @@
     y={CY - 6}
     text-anchor="middle"
     class="fill-gray-800 dark:fill-gray-200"
-    font-size="22"
+    font-size="28"
     font-weight="bold">{totalVotes}</text
   >
   <text
     x={CX}
-    y={CY + 12}
+    y={CY + 16}
     text-anchor="middle"
     class="fill-gray-500 dark:fill-gray-400"
-    font-size="10">票</text
+    font-size="13">票</text
   >
 </svg>
