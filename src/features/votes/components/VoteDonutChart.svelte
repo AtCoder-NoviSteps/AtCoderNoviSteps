@@ -18,7 +18,7 @@
   const CX = 160;
   const CY = 155;
   const OUTER_RADIUS = 120;
-  const INNER_RADIUS = 70;
+  const INNER_RADIUS = 50;
   const RING_MID_RADIUS = (INNER_RADIUS + OUTER_RADIUS) / 2;
 
   const segments = $derived(
