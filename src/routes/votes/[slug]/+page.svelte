@@ -2,8 +2,6 @@
   import { enhance } from '$app/forms';
   import { resolve } from '$app/paths';
   import { Button } from 'flowbite-svelte';
-  import Check from '@lucide/svelte/icons/check';
-
   import GradeLabel from '$lib/components/GradeLabel.svelte';
 
   import { TaskGrade } from '$lib/types/task';
@@ -58,11 +56,6 @@
   {#if data.myVote?.voted}
     <!-- 投票済み → 統計表示 -->
     <div class="mb-6">
-      <p class="flex items-center gap-2 text-green-600 dark:text-green-400 font-medium mb-4">
-        <Check class="w-5 h-5" strokeWidth={3} />
-        投票済み：{data.myVote.grade ? getTaskGradeLabel(data.myVote.grade) : ''}
-      </p>
-
       {#if data.stats}
         <p class="text-sm text-gray-600 dark:text-gray-400 mb-3">
           暫定グレード：<strong>{getTaskGradeLabel(data.stats.grade)}</strong>（{totalVotes}票）
