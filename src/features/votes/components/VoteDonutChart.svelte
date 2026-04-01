@@ -24,7 +24,7 @@
   );
 </script>
 
-<svg viewBox="0 0 260 260" class="w-full max-w-xs mx-auto" role="img" aria-label="投票分布円グラフ">
+<svg viewBox="0 0 260 275" class="w-full max-w-xs mx-auto" role="img" aria-label="投票分布円グラフ">
   <title>投票分布</title>
 
   {#if totalVotes === 0}
@@ -55,10 +55,18 @@
         y1={CY + INNER_RADIUS}
         x2={CX}
         y2={CY + OUTER_RADIUS}
-        stroke="white"
+        stroke="black"
         stroke-width="2.5"
         stroke-linecap="round"
+        class="dark:stroke-white"
       />
+      <text
+        x={CX}
+        y={CY + OUTER_RADIUS + 14}
+        text-anchor="middle"
+        class="fill-gray-700 dark:fill-gray-300"
+        font-size="9">↑ 中央値</text
+      >
     {/if}
 
     {#each segments as seg (seg.grade)}
