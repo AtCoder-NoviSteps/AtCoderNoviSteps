@@ -37,6 +37,20 @@ Import from `flowbite-svelte`. Use Tailwind CSS v4 utility classes. Dark mode: `
 
 When copying button styles from a reference component, always check all three axes: `color`, `size`, and `class`. Omitting `color` applies Flowbite's default (filled blue).
 
+## Complex `{#if}` Conditions — Extract to Named Functions
+
+When a template condition requires API-specific knowledge or combines multiple null checks, extract it to a private function in `<script>`. A named function communicates intent at the call site; the implementation detail stays in one place. This applies even when the function is used only once.
+
+```svelte
+<!-- Bad: requires knowing $app/state's null semantics to understand -->
+{#if navigating.from !== null && navigating.from.route.id !== navigating.to?.route.id}
+
+<!-- Good: intent readable without knowing the API -->
+function isCrossRouteNavigation(): boolean { ... }
+
+{#if isCrossRouteNavigation()}
+```
+
 ## `{@const}` Placement
 
 `{@const}` must be an **immediate child** of a block statement (`{#if}`, `{#each}`, `{:else}`, `{#snippet}`, etc.). Placing it inside an HTML element is a compile error:
