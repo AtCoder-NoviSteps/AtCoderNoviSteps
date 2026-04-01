@@ -72,6 +72,18 @@
         </p>
       {/if}
 
+      <!-- 投票変更フォーム -->
+      <details class="mb-4">
+        <summary
+          class="cursor-pointer text-sm text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300"
+        >
+          投票を変更する
+        </summary>
+        <div class="mt-3">
+          {@render voteForm()}
+        </div>
+      </details>
+
       <!-- 分布グラフ -->
       <VoteDonutChart
         counters={data.counters ?? []}
@@ -80,18 +92,6 @@
         votedGrade={data.myVote?.grade ?? null}
       />
     </div>
-
-    <!-- 投票変更フォーム -->
-    <details class="mt-4">
-      <summary
-        class="cursor-pointer text-sm text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300"
-      >
-        投票を変更する
-      </summary>
-      <div class="mt-3">
-        {@render voteForm()}
-      </div>
-    </details>
   {:else if data.isLoggedIn && !data.isAtCoderVerified}
     <!-- ログイン済み・未認証 → 認証誘導 -->
     <div
