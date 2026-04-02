@@ -1,7 +1,7 @@
 <script lang="ts">
   import { enhance } from '$app/forms';
   import { resolve } from '$app/paths';
-  import { Button } from 'flowbite-svelte';
+  import { Button, Tooltip } from 'flowbite-svelte';
   import FlaskConical from '@lucide/svelte/icons/flask-conical';
   import GradeLabel from '$lib/components/GradeLabel.svelte';
 
@@ -35,12 +35,12 @@
 
   <div class="flex items-center gap-3 py-6 mb-2">
     {#if data.stats && data.task.grade === TaskGrade.PENDING}
-      <span
-        title="3票以上集まると中央値が暫定グレードとして一覧表に反映されます。"
-        class="cursor-help text-gray-500 dark:text-gray-400"
-      >
+      <span id="flask-icon" class="cursor-help text-gray-500 dark:text-gray-400">
         <FlaskConical class="w-5 h-5" />
       </span>
+      <Tooltip triggeredBy="#flask-icon" placement="bottom">
+        3票以上集まると中央値が暫定グレードとして一覧表に反映されます。
+      </Tooltip>
     {/if}
     <GradeLabel
       taskGrade={data.task.grade}
