@@ -35,7 +35,7 @@
               (t.task_id ?? '').toLowerCase().includes(search.toLowerCase()) ||
               (t.contest_id ?? '').toLowerCase().includes(search.toLowerCase()),
           )
-          .sort((a, b) => b.task_id.localeCompare(a.task_id))
+          .sort((a, b) => (b.contest_id > a.contest_id ? 1 : b.contest_id < a.contest_id ? -1 : 0))
           .slice(0, MAX_SEARCH_RESULTS),
   );
 </script>
