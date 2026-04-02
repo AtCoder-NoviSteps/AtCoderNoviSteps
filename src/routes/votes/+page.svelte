@@ -18,6 +18,8 @@
   import { TaskGrade } from '$lib/types/task';
   import { getTaskUrl } from '$lib/utils/task';
   import { getContestNameLabel } from '$lib/utils/contest';
+  import { compareByContestIdAndTaskId } from '$lib/utils/task';
+  import type { TaskResult } from '$lib/types/task';
 
   const MAX_SEARCH_RESULTS = 20;
 
@@ -35,7 +37,9 @@
               (t.task_id ?? '').toLowerCase().includes(search.toLowerCase()) ||
               (t.contest_id ?? '').toLowerCase().includes(search.toLowerCase()),
           )
-          .sort((a, b) => (b.contest_id > a.contest_id ? 1 : b.contest_id < a.contest_id ? -1 : 0))
+          .sort((a, b) =>
+            compareByContestIdAndTaskId(a as unknown as TaskResult, b as unknown as TaskResult),
+          )
           .slice(0, MAX_SEARCH_RESULTS),
   );
 </script>

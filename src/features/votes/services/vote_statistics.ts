@@ -8,6 +8,8 @@ export type TaskWithVoteInfo = {
   title: string;
   /** The confirmed grade stored in the DB. PENDING means not yet confirmed by admin. */
   grade: TaskGrade;
+  /** Problem index within the contest (e.g. "A", "B"). Used for sorting. */
+  task_table_index: string;
   estimatedGrade: TaskGrade | null;
   voteTotal: number;
 };
@@ -40,6 +42,7 @@ export async function getAllTasksWithVoteInfo(): Promise<TaskWithVoteInfo[]> {
     contest_id: task.contest_id,
     title: task.title,
     grade: task.grade,
+    task_table_index: task.task_table_index,
     estimatedGrade: statsMap.get(task.task_id)?.grade ?? null,
     voteTotal: totalsMap.get(task.task_id) ?? 0,
   }));
