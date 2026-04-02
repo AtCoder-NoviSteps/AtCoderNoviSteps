@@ -19,7 +19,7 @@ export const navbarLinks = [
   { title: `ホーム`, path: HOME_PAGE },
   { title: `問題集`, path: WORKBOOKS_PAGE },
   { title: `一覧表`, path: PROBLEMS_PAGE },
-  { title: `グレード投票`, path: VOTES_PAGE },
+  { title: `投票`, path: VOTES_PAGE },
   { title: `サービスの説明`, path: ABOUT_PAGE },
 ];
 
