@@ -8,6 +8,7 @@ const config: PlaywrightTestConfig = {
   },
   use: {
     baseURL: process.env.BASE_URL ?? 'http://localhost:4173',
+    trace: 'retain-on-failure-and-retries',
   },
   testDir: 'e2e',
   projects: [
