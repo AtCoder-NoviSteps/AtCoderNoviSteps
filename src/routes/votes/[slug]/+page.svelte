@@ -43,7 +43,7 @@
       </Tooltip>
     {/if}
     <GradeLabel
-      taskGrade={data.task.grade}
+      taskGrade={data.stats?.grade ?? data.task.grade}
       defaultPadding={0.25}
       defaultWidth={6}
       reducedWidth={6}
