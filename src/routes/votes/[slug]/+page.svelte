@@ -2,6 +2,7 @@
   import { enhance } from '$app/forms';
   import { resolve } from '$app/paths';
   import { Button } from 'flowbite-svelte';
+  import FlaskConical from '@lucide/svelte/icons/flask-conical';
   import GradeLabel from '$lib/components/GradeLabel.svelte';
 
   import { TaskGrade } from '$lib/types/task';
@@ -33,6 +34,14 @@
   </nav>
 
   <div class="flex items-center gap-3 py-6 mb-2">
+    {#if data.stats}
+      <span
+        title="3票以上集まると中央値が暫定グレードとして一覧表に反映されます。"
+        class="cursor-help text-gray-500 dark:text-gray-400"
+      >
+        <FlaskConical class="w-5 h-5" />
+      </span>
+    {/if}
     <GradeLabel
       taskGrade={data.task.grade}
       defaultPadding={0.25}
@@ -49,20 +58,10 @@
     </h1>
   </div>
 
-  <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">
-    ※ 3票以上集まると中央値が暫定グレードとして一覧表に反映されます。
-  </p>
-
   <!-- 投票UI -->
   {#if data.myVote?.voted}
     <!-- 投票済み → 統計表示 -->
     <div class="mb-6">
-      {#if data.stats}
-        <p class="text-sm text-gray-600 dark:text-gray-400 mb-3">
-          暫定グレード：<strong>{getTaskGradeLabel(data.stats.grade)}</strong>（{totalVotes}票）
-        </p>
-      {/if}
-
       <!-- 投票変更フォーム -->
       <div class="mb-4">
         {@render voteForm()}
