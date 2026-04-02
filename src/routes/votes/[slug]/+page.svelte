@@ -23,6 +23,10 @@
   const totalVotes = $derived(
     data.counters ? data.counters.reduce((sum, c) => sum + c.count, 0) : 0,
   );
+
+  const displayGrade = $derived(
+    data.task.grade === TaskGrade.PENDING && data.stats?.grade ? data.stats.grade : data.task.grade,
+  );
 </script>
 
 <div class="container mx-auto w-5/6 max-w-2xl">
@@ -42,12 +46,7 @@
         3票以上集まると中央値が暫定グレードとして一覧表に反映されます。
       </Tooltip>
     {/if}
-    <GradeLabel
-      taskGrade={data.stats?.grade ?? data.task.grade}
-      defaultPadding={0.25}
-      defaultWidth={6}
-      reducedWidth={6}
-    />
+    <GradeLabel taskGrade={displayGrade} defaultPadding={0.25} defaultWidth={6} reducedWidth={6} />
     <h1 class="text-3xl font-normal truncate dark:text-white">
       <a
         href={getTaskUrl(data.task.contest_id, data.task.task_id)}
