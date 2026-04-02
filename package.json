@@ -26,7 +26,7 @@
     "@dnd-kit/abstract": "0.3.2",
     "@dnd-kit/dom": "0.3.2",
     "@eslint/eslintrc": "3.3.5",
-    "@playwright/test": "1.58.2",
+    "@playwright/test": "1.59.1",
     "@quramy/prisma-fabbrica": "2.3.3",
     "@sveltejs/adapter-vercel": "6.3.3",
     "@sveltejs/kit": "2.55.0",
