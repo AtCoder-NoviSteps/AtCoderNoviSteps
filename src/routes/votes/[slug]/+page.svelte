@@ -34,7 +34,7 @@
   </nav>
 
   <div class="flex items-center gap-3 py-6 mb-2">
-    {#if data.stats}
+    {#if data.stats && data.task.grade === TaskGrade.PENDING}
       <span
         title="3票以上集まると中央値が暫定グレードとして一覧表に反映されます。"
         class="cursor-help text-gray-500 dark:text-gray-400"
