@@ -5,6 +5,7 @@
 
   import { Dropdown, DropdownItem, DropdownDivider } from 'flowbite-svelte';
   import Check from '@lucide/svelte/icons/check';
+  import FlaskConical from '@lucide/svelte/icons/flask-conical';
 
   import { TaskGrade, getTaskGrade, type TaskResult } from '$lib/types/task';
   import { getTaskGradeLabel } from '$lib/utils/task';
@@ -42,6 +43,10 @@
   let selectedVoteGrade = $state<TaskGrade>();
   let showForm = $state(false);
   let formElement = $state<HTMLFormElement | undefined>(undefined);
+
+  const isProvisional = $derived(
+    taskResult.grade === TaskGrade.PENDING && displayGrade !== TaskGrade.PENDING,
+  );
 
   let isOpening = $state(false);
   let votedGrade = $state<TaskGrade | null>(null);
@@ -137,22 +142,28 @@
 </script>
 
 <!-- Grade Icon（全問題で投票ドロップダウンを表示） -->
-<button
-  id={`update-grade-dropdown-trigger-${componentId}`}
-  class="relative group shrink-0 cursor-pointer"
-  type="button"
-  tabindex="0"
-  aria-label="Vote grade"
-  onclick={() => onTriggerClick()}
->
-  <GradeLabel taskGrade={displayGrade} defaultPadding={0.25} defaultWidth={6} reducedWidth={6} />
+<div class="inline-flex items-center gap-1">
+  <button
+    id={`update-grade-dropdown-trigger-${componentId}`}
+    class="relative group shrink-0 cursor-pointer"
+    type="button"
+    tabindex="0"
+    aria-label="Vote grade"
+    onclick={() => onTriggerClick()}
+  >
+    <GradeLabel taskGrade={displayGrade} defaultPadding={0.25} defaultWidth={6} reducedWidth={6} />
 
-  <!-- Overlay -->
-  <span
-    aria-hidden="true"
-    class="pointer-events-none absolute inset-0 rounded-lg bg-gray-200 dark:bg-gray-700 mix-blend-multiply opacity-0 transition-opacity duration-150 group-hover:opacity-100"
-  ></span>
-</button>
+    <!-- Overlay -->
+    <span
+      aria-hidden="true"
+      class="pointer-events-none absolute inset-0 rounded-lg bg-gray-200 dark:bg-gray-700 mix-blend-multiply opacity-0 transition-opacity duration-150 group-hover:opacity-100"
+    ></span>
+  </button>
+
+  {#if isProvisional}
+    <FlaskConical class="w-3.5 h-3.5 shrink-0 text-gray-400 dark:text-gray-500" />
+  {/if}
+</div>
 
 <!-- Dropdown Menu -->
 {#if isLoggedIn && isAtCoderVerified !== false}
