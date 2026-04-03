@@ -19,7 +19,6 @@
   import { getTaskUrl } from '$lib/utils/task';
   import { getContestNameLabel } from '$lib/utils/contest';
   import { compareByContestIdAndTaskId } from '$lib/utils/task';
-  import type { TaskResult } from '$lib/types/task';
 
   const MAX_SEARCH_RESULTS = 20;
 
@@ -37,9 +36,7 @@
               (t.task_id ?? '').toLowerCase().includes(search.toLowerCase()) ||
               (t.contest_id ?? '').toLowerCase().includes(search.toLowerCase()),
           )
-          .sort((a, b) =>
-            compareByContestIdAndTaskId(a as unknown as TaskResult, b as unknown as TaskResult),
-          )
+          .sort((a, b) => compareByContestIdAndTaskId(a, b))
           .slice(0, MAX_SEARCH_RESULTS),
   );
 </script>
@@ -107,9 +104,10 @@
                     href={getTaskUrl(task.contest_id, task.task_id)}
                     target="_blank"
                     rel="noreferrer external"
+                    aria-label={`${task.title} を別タブで開く`}
                     class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 shrink-0"
                   >
-                    <ExternalLink class="w-3.5 h-3.5" />
+                    <ExternalLink class="w-3.5 h-3.5" aria-hidden="true" />
                   </a>
                 </div>
               </TableBodyCell>

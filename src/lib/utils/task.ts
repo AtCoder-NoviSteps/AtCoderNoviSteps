@@ -72,7 +72,10 @@ export const areAllTasksAccepted = (
 
 // See:
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort
-export function compareByContestIdAndTaskId(first: TaskResult, second: TaskResult): number {
+export function compareByContestIdAndTaskId(
+  first: { contest_id: string; task_table_index: string },
+  second: { contest_id: string; task_table_index: string },
+): number {
   const firstContestPriority = getContestPriority(first.contest_id);
   const secondContestPriority = getContestPriority(second.contest_id);
 

@@ -40,11 +40,12 @@ export function buildDonutSegments(
     return [];
   }
 
+  const countMap = new Map(counters.map((c) => [c.grade, c.count]));
   let cumulative = 0;
   const segments: DonutSegment[] = [];
 
   for (const grade of grades) {
-    const count = counters.find((c) => c.grade === grade)?.count ?? 0;
+    const count = countMap.get(grade) ?? 0;
     if (count === 0) {
       continue;
     }

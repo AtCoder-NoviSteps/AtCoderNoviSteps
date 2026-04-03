@@ -84,6 +84,7 @@
     {#each segments as seg (seg.grade)}
       {@const lx = CX + RING_MID_RADIUS * Math.cos(seg.midAngle)}
       {@const ly = CY + RING_MID_RADIUS * Math.sin(seg.midAngle)}
+      {@const segLabel = seg.grade === votedGrade ? `✅ ${seg.label}` : seg.label}
       {#if seg.pct >= 10}
         <text
           x={lx}
@@ -95,7 +96,7 @@
           stroke-width="2.5"
           paint-order="stroke"
           font-size="11"
-          font-weight="bold">{seg.grade === votedGrade ? `✅ ${seg.label}` : seg.label}</text
+          font-weight="bold">{segLabel}</text
         >
         <text
           x={lx}
@@ -119,7 +120,7 @@
           stroke-width="2.5"
           paint-order="stroke"
           font-size="11"
-          font-weight="bold">{seg.grade === votedGrade ? `✅ ${seg.label}` : seg.label}</text
+          font-weight="bold">{segLabel}</text
         >
       {/if}
     {/each}
