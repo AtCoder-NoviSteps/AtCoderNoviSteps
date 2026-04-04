@@ -47,6 +47,7 @@ Before writing new logic, decide which layer it belongs to. Run this check at pl
 ### Syntax
 
 - **Braces**: always use braces for single-statement `if` blocks. Never `if () return;` — write `if () { return; }`.
+- **Domain types over `string`**: when the Prisma schema uses an enum (e.g. `grade: TaskGrade`), the corresponding app-layer type must use the same enum — not `string`. A loose `string` type hides misspellings in fixtures and forces `as TaskGrade` casts throughout the codebase. When a field comes from an external source (form data, query params), validate and narrow it at the boundary; inside the app it must always be the domain type.
 - **Plural type aliases**: define `type Placements = Placement[]` instead of using `Placement[]` directly in signatures and variables.
 - **Empty `catch` blocks**: never use `catch { }` or `catch (_e)` to silence errors. Every `catch` must re-throw, log, or contain an explanatory comment justifying the suppression. Silent swallowing hides bugs and makes failures untraceable.
 
