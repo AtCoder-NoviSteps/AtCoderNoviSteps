@@ -17,9 +17,10 @@
   import GradeLabel from '$lib/components/GradeLabel.svelte';
 
   import { TaskGrade } from '$lib/types/task';
-  import { getTaskUrl } from '$lib/utils/task';
+
   import { getContestNameLabel } from '$lib/utils/contest';
-  import { compareByContestIdAndTaskId } from '$lib/utils/task';
+  import { getTaskUrl, compareByContestIdAndTaskId } from '$lib/utils/task';
+  import { filterTasksBySearch } from '$lib/utils/task_filter';
   import { resolveDisplayGrade } from '$features/votes/utils/grade_options';
 
   const MAX_SEARCH_RESULTS = 20;
@@ -29,20 +30,7 @@
   let search = $state('');
 
   const filteredTasks = $derived(
-    search === ''
-      ? []
-      : data.tasks
-          .filter(
-            (task) =>
-              (task.title ?? '').toLowerCase().includes(search.toLowerCase()) ||
-              (task.task_id ?? '').toLowerCase().includes(search.toLowerCase()) ||
-              (task.contest_id ?? '').toLowerCase().includes(search.toLowerCase()) ||
-              (task.contest_id ? getContestNameLabel(task.contest_id) : '')
-                .toLowerCase()
-                .includes(search.toLowerCase()),
-          )
-          .sort((a, b) => compareByContestIdAndTaskId(a, b))
-          .slice(0, MAX_SEARCH_RESULTS),
+    filterTasksBySearch(data.tasks, search, MAX_SEARCH_RESULTS).sort(compareByContestIdAndTaskId),
   );
 </script>
 
