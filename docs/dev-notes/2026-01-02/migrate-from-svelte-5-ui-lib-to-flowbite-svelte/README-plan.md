@@ -2,9 +2,9 @@
 
 **作成日**: 2026-01-02
 
-**最終更新**: 2026-01-17
+**最終更新**: 2026-04-04
 
-**ステータス**: フェーズ1-4 完了
+**ステータス**: フェーズ0-3 完了（visual regression テストは手動確認待ち）
 
 ---
 
@@ -259,15 +259,13 @@
 
 ## 📋 今後対応が必要なタスク
 
-### ⚠️ フェーズ2: テスト実行・回帰検出（進行中）
+### ✅ フェーズ2: テスト実行・回帰検出（完了）
 
-**状態**: 一部テスト PASS、一部失敗・スキップ
+**状態**: 完了（2026-04-04）
 
-**テスト結果（2026-01-17）**:
+**テスト結果（2026-04-04 更新）**:
 
-- ✅ 17 passed
-- ❌ 1 failed（logout テスト - タイムアウト）
-- ⏭️ 1 skipped（mobile navbar テスト - `test.fixme()`）
+- ✅ 全テスト PASS（navbar mobile + logout 修正完了）
 
 #### チェックリスト
 
@@ -277,15 +275,11 @@
   - [x] `dark-mode.spec.ts` → dark mode toggle 動作確認 ✅ PASS (4/4)
   - [x] `navbar.spec.ts` → navbar レスポンシブ確認
     - [x] lg (1024px) での動作 ✅ PASS
-    - [ ] mobile (375px) での動作 ⏭️ SKIP（`test.fixme()`でマーク）
-      - 原因: Flowbite-Svelte v1.31.0 の navbar `breakpoint` prop が Svelte 5 Context API 実装の不具合で機能しない
-      - 対応: v2.0 リリース待機推奨
-      - [GitHub Issue #1710](https://github.com/themesberg/flowbite-svelte/issues/1710)
-
-- [ ] logout テスト失敗の調査・修正
-  - [ ] 原因: navbar header dropdown の実装・状態確認
-  - [ ] アクション: Header.svelte の dropdown 実装を確認し、ユーザー名リンクの可視性をテスト
-  - [ ] 期待時期: フェーズ1-4 完了後
+    - [x] mobile (375px) での動作 ✅ PASS（2026-04-04 修正完了）
+      - 原因: v1.31.0 の breakpoint context が $effect 内で set されていたため子コンポーネントに伝播せずハンバーガーが非表示 + テストセレクタミス（`nav button:not([aria-label])`）
+      - 修正: flowbite-svelte 1.33.0 へアップグレード（fix #1909 + #1924）+ セレクタを `nav button[aria-label="Open main menu"]` に修正
+      - 関連 PR: [#1928](https://github.com/themesberg/flowbite-svelte/pull/1928)
+  - [x] `signin.spec.ts` → login/logout 動作確認 ✅ PASS（2026-04-04 確認済み）
 
 - [ ] visual regression テスト（手動確認）
   - [ ] `space-y-_` / `space-x-_` セレクタ変更による layout shift 確認
@@ -309,18 +303,32 @@
 
 - package.json から両ライブラリを削除されたことを確認
 
+### ✅ Flowbite-Svelte 1.33.0 アップグレード（完了）
+
+**状態**: 完了（2026-04-04）
+
+**実施内容**:
+
+- ✅ flowbite-svelte 1.31.0 → 1.33.0 へアップグレード
+- ✅ navbar breakpoint バグ修正（fix #1909 + #1924）により mobile での動作が正常化
+- ✅ E2E テスト（navbar.spec.ts）のセレクタ修正とテスト復活
+- ✅ 全 E2E テスト PASS 確認
+
+**修正された問題**:
+
+- v1.31.0 では `$effect` 内で `setContext` を呼んでいたため、breakpoint context が子コンポーネントに伝播しない問題があった
+- v1.33.0 で reactive object (`$state`) + `$derived` パターンに変更され、context が正しく伝播するようになった
+
 ### 🔮 将来タスク: Flowbite-Svelte v2.0 アップグレード検討
 
 **状態**: 将来（v2.0 リリース後）
 
-**背景**: Flowbite-Svelte v1.31.0 は Svelte 5 + Tailwind CSS v4 への対応が不完全な可能性がある
+**背景**: Flowbite-Svelte v1.33.0 で主要な Svelte 5 対応は完了したが、v2.0 でさらなる改善が予定されている
 
 **確認事項**:
 
 - [ ] Flowbite-Svelte v2.0 リリース（ETA: TBD）
-- [ ] v2.0 で navbar `breakpoint` バグが解決されているか検証
 - [ ] v2.0 への upgrade 実行（必要に応じて）
-- [ ] mobile navbar テスト復活（`test.fixme()` → `test()`）
 
 **参考**: [Flowbite-Svelte v2.0 進捗（GitHub Issues #1614）](https://github.com/themesberg/flowbite-svelte/issues/1614)
 
@@ -407,7 +415,13 @@
    - boundingBox 取得前に `toBeVisible()` で存在確認
    - 複数 SVG がある場合は `.locator('svg').count()` で存在確認
 
-5. **カスタムフィクスチャの活用**
+5. **テストセレクタの検証**（2026-04-04 追加）
+   - セレクタが実際の DOM と一致するか、ライブラリのソースコードを追って検証する
+   - `nav button:not([aria-label])` → `nav button[aria-label="Open main menu"]` の修正例
+   - 「テストが通らない」原因が「ライブラリのバグ」だけでなく「セレクタミス」の可能性も常に考慮
+   - ToolbarButton.svelte → NavHamburger.svelte のコードを追跡し、`name = "Open main menu"` が aria-label に変換されることを確認
+
+6. **カスタムフィクスチャの活用**
    - `test.extend()` で device 固有設定を抽象化（`iPhonePage`, `desktopPage`）
    - Playwright の `await use(page)` パターンで自動 context クローズを実現し、ボイラープレート削減
    - 型定義 `<{ iPhonePage: Page; desktopPage: Page }>` で TypeScript サポート確保
