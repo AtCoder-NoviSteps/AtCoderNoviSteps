@@ -56,7 +56,7 @@ describe('filterTasksBySearch', () => {
     // abc30x matches: abc300, abc301, abc302 (in that input order)
     // With limit=3, the first 2 from input order should be returned when limit=2
     const result = filterTasksBySearch(tasks, 'abc30', 3);
-    expect(result.map((t) => t.task_id)).toEqual(['abc300_a', 'abc301_a', 'abc302_a']);
+    expect(result.map((task) => task.task_id)).toEqual(['abc300_a', 'abc301_a', 'abc302_a']);
   });
 
   test('returns all matched results when count is less than limit', () => {
