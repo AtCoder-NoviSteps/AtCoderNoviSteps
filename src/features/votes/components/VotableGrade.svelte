@@ -152,9 +152,12 @@
     class="relative group shrink-0 cursor-pointer"
     type="button"
     tabindex="0"
-    aria-label="Vote grade"
     onclick={() => onTriggerClick()}
   >
+    <span class="sr-only">
+      Voted grade: {getTaskGradeLabel(displayGrade)}{isProvisional ? ', provisional' : ''}
+    </span>
+
     <GradeLabel taskGrade={displayGrade} defaultPadding={0.25} defaultWidth={6} reducedWidth={6} />
 
     <!-- Overlay -->

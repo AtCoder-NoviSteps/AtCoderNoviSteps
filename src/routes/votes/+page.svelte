@@ -33,10 +33,13 @@
       ? []
       : data.tasks
           .filter(
-            (t) =>
-              (t.title ?? '').toLowerCase().includes(search.toLowerCase()) ||
-              (t.task_id ?? '').toLowerCase().includes(search.toLowerCase()) ||
-              (t.contest_id ?? '').toLowerCase().includes(search.toLowerCase()),
+            (task) =>
+              (task.title ?? '').toLowerCase().includes(search.toLowerCase()) ||
+              (task.task_id ?? '').toLowerCase().includes(search.toLowerCase()) ||
+              (task.contest_id ?? '').toLowerCase().includes(search.toLowerCase()) ||
+              (task.contest_id ? getContestNameLabel(task.contest_id) : '')
+                .toLowerCase()
+                .includes(search.toLowerCase()),
           )
           .sort((a, b) => compareByContestIdAndTaskId(a, b))
           .slice(0, MAX_SEARCH_RESULTS),
