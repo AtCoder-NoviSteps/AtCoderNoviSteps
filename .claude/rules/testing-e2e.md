@@ -88,6 +88,14 @@ await expect(toggleInput).toBeChecked({ checked: true });
 
 The same pattern applies to any Flowbite component that visually overlays its native input (e.g. `Checkbox`, `Radio`).
 
+## Waiting for Svelte Transitions
+
+Svelte's `{#if}/{:else}` blocks with transitions may temporarily render multiple elements with the same selector during outro/intro overlap. Playwright locators may match either element non-deterministically, causing flaky tests.
+
+Use `waitForFunction` with `Array.from(elements).every(...)` to explicitly wait until **all** matching elements reach the desired state before asserting — checking every element guards against the transient window where multiple elements coexist. **Do not use assertions as implicit sleeps** — separating wait logic from assertions makes test intent clear and avoids timing-dependent failures.
+
+This pattern applies to any Svelte component with transitions: modals, drawers, dropdowns, etc.
+
 ## Strict Mode: Scope Locators to the Content Area
 
 When the navbar and page body both contain a link or button with the same text (e.g., a breadcrumb and a nav link share the same label), `getByRole` in strict mode will find multiple matches and throw. Scope the locator to the page's content container:
