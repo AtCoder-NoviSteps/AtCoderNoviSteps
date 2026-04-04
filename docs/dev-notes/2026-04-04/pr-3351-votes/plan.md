@@ -775,4 +775,150 @@ pnpm dev
 
 ## CodeRabbit Findings
 
-（全フェーズ完了後に `coderabbit review --plain` を2〜3回実行し、critical/high/medium 指摘をここに記載 + critical や high は妥当と判断したら即修正）
+### potential_issue (medium)
+
+---
+
+**File:** `src/features/votes/utils/donut_chart.ts` Line 32–71 / 86–101
+
+> コーディングガイドラインにより、src//*utils/ 配下の各関数には隣接するユニットテストが必要です。buildDonutSegments と arcPath のテストを追加してください。
+
+**判断:** 誤検知。`donut_chart.test.ts` が同ディレクトリに存在し、`buildDonutSegments` / `arcPath` の両関数をテスト済み（10件）。
+
+---
+
+**File:** `src/routes/votes/+page.svelte` Line 78–88
+
+> #flask-{task.task_id} で task_id に . や : 等が含まれると triggeredBy のセレクタが壊れる可能性がある。AtCoderのIDは通常安全だが、念のため確認を。
+
+**判断:** 対応不要。task_id は英数字＋アンダースコアのみで構成され、`.` や `:` は含まれない。
+
+---
+
+**File:** `src/routes/votes/[slug]/+page.svelte` Line 35
+
+> resolve() の第2引数 {} は不要。SvelteKit の resolve() は単一のパス文字列のみを受け取ります。
+
+**判断:** 誤検知。プロジェクトの `.claude/rules/sveltekit.md` に記載の通り、TypeScript 宣言マージによる型エラー回避のため静的ルートには `{}` を第2引数として渡す規約がある。
+
+---
+
+## CodeRabbit Findings（目視レビュー後 2026-04-04）
+
+### potential_issue (medium)
+
+---
+
+**File:** `src/features/votes/utils/donut_chart.ts` Line 61
+
+> Math.round(ratio * 100) は合計が100にならない場合があります（例: 3等分 → 33+33+33=99）。
+
+**判断:** 対応済み。`Math.round(ratio * 1000) / 10` に変更し小数点1桁表示（33.3%）。CodeRabbit が修正後のコードを未反映。
+
+---
+
+**File:** `src/features/votes/utils/donut_chart.ts` Line 1–136、Line 86–101
+
+> コーディングガイドラインにより、buildDonutSegments / buildArcPath のテストを追加してください。
+
+**判断:** 誤検知。`donut_chart.test.ts` が同ディレクトリに存在し、全3関数をテスト済み（37件）。
+
+---
+
+**File:** `src/routes/votes/+page.svelte` Line 86–88
+
+> task_id に . や # 等の CSS セレクタ特殊文字が含まれると Tooltip が動作しなくなります。
+
+**判断:** 対応不要（3回目）。AtCoder の task_id は英数字＋アンダースコア＋ハイフンのみ。
+
+---
+
+**File:** `src/routes/votes/+page.svelte` Line 36–39
+
+> 検索プレースホルダーは「出典」と表示されるが、実際は `contest_id` の生値でフィルタしており、`getContestNameLabel` の結果（人間が読める名称）では検索できない。
+
+**判断:** ユーザー判断を仰ぐ。`getContestNameLabel(t.contest_id).toLowerCase()` を filter に追加するか、プレースホルダーを実態に合わせて変更するか。
+
+---
+
+### nitpick（PR CI で再指摘される可能性）
+
+---
+
+**File:** `src/features/votes/components/VoteDonutChart.svelte` Line 14–17
+
+> `VotedGradeCounters` は一度しか使わない局所エイリアスで冗長。`VotedGradeCounter[]` を直接使うべき。
+
+**判断:** plural alias ルール（AGENTS.md）に従い追加済み。CodeRabbit との見解相違。`counters: VotedGradeCounter[]` に戻してもよい。
+
+---
+
+**File:** `src/features/votes/utils/donut_chart.test.ts` Line 10–11
+
+> `getColor` / `getLabel` の引数型が `string` だが `TaskGrade` に変えると型安全性が向上。
+
+**判断:** 妥当。`buildDonutSegments` の引数型に合わせて `TaskGrade` に変更できる。
+
+---
+
+## 目視レビュー所見（2026-04-04）
+
+Phase 1–5 完了後に目視レビューを実施。rules 違反・設計改善・却下判断を記録する。
+
+---
+
+### Rules 違反（必ず修正）
+
+#### `donut_chart.ts`
+
+- [x] `pct: number` → `percentage: number`（略称禁止）
+- [x] `DonutSegment.grade: string` → `grade: TaskGrade`（domain type 必須）
+- [x] `buildDonutSegments` の引数 `grades: string[]` → `TaskGrade[]`
+- [x] `buildDonutSegments` の引数 `counters: { grade: string; ... }[]` → `grade: TaskGrade`
+- [x] `getColor: (grade: string)` → `(grade: TaskGrade)`
+- [x] `getLabel: (grade: string)` → `(grade: TaskGrade)`
+- [x] `counters.reduce((sum, c) => ...)` → `(sum, counter) =>`（一文字変数禁止）
+- [x] `counters.map((c) => ...)` → `(counter) =>`（同上）
+- [x] `DonutSegment[]` を関数シグネチャで直接使用 → `type DonutSegments = DonutSegment[]` を定義して使う（plural alias 必須）
+
+#### `donut_chart.test.ts`
+
+- [x] `it(...)` → `test(...)` に全件置換（`test` 統一ルール）
+- [x] `const GRADE_A = 'Q1'` → `const GRADE_A = TaskGrade.Q1`（domain type 必須）
+- [x] `const GRADE_B = 'Q2'` → `const GRADE_B = TaskGrade.Q2`（同上）
+- [x] `const getColor = (g: string)` → `(grade: string)`（一文字変数禁止）
+- [x] `const getLabel = (g: string)` → `(grade: string)`（同上）
+- [x] `expect(segment.label).toBe('1Q')` → `getLabel(GRADE_A)` を使う（ハードコード排除）
+
+#### `VoteDonutChart.svelte`
+
+- [x] `{#each segments as seg ...}` → `as segment`（略称禁止）
+- [x] `lx`, `ly` → `labelX`, `labelY`（略称禁止）
+- [x] `counters: VotedGradeCounter[]` の prop → `type VotedGradeCounters = VotedGradeCounter[]` を定義して使う（plural alias 必須）
+
+---
+
+### 設計改善（任意・推奨）
+
+- [x] `DonutSegment` 型を `src/features/votes/types/donut_graph.ts` に移動
+  - コンポーネントが消費する型は `types/` 配置が規約どおり
+- [x] `calcPointOnCircle(center: Point, radius: number, angle: number): Point` を export helper として `donut_chart.ts` に追加（`pointOnCircle` → `calcPointOnCircle` に改名）
+  - `arcPathSegment` 内の4点計算（`center.x + radius * Math.cos(angle)` パターン）が全4箇所で重複している
+  - Svelte 側の `labelX`/`labelY` 計算も同パターンのため `export` して共有できる
+- [x] `arcPath` → `buildArcPath` に改名
+  - `arc` が動詞になっていない。`build` プレフィックスで関数であることを明示する
+- [x] `VoteDonutChart.svelte` の各ブロックを `{#snippet}` に切り出す（sibling consistency ルール）
+  - `{#snippet metallicGradient()}` — D6 グラデーション定義（`<defs>` 内）
+  - `{#snippet emptyRing()}` — 投票0件時の空リング
+  - `{#snippet medianIndicator()}` — 中央値ライン＋ラベル
+  - `{#snippet segmentLabel(segment: DonutSegment)}` — `{#if segment.percentage >= 10}` 以降のラベル分岐
+  - `{#snippet centerVoteCount()}` — 中央の総票数表示
+
+---
+
+### 却下した提案と根拠
+
+| 提案 | 却下理由 |
+|------|----------|
+| `Point` 型を `votes/types/` に移動する | `Point` は `arcPathSegment` の内部実装補助型。`donut_chart.ts` 外から参照する理由がなく、`votes/types/` に置くと汎用幾何型が機能スコープに入り混む。private なまま `donut_chart.ts` に残す。 |
+| `Angle` 型（`{ start, end, mid }`）を導入する | `DonutSegment` の3フィールドは呼び出し側で個別に参照されるケースが大半。`Angle` オブジェクトに包んでも `angle.start` と書くだけで可読性の向上がない。YAGNI。 |

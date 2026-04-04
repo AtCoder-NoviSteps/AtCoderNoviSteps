@@ -1,25 +1,13 @@
+import { TaskGrade } from '$lib/types/task';
+import type { DonutSegment, DonutSegments } from '$features/votes/types/donut_graph';
+
+export type { DonutSegment, DonutSegments };
+
 const TAU = 2 * Math.PI;
 const HALF_PI = Math.PI / 2;
 
 /** Minimum percentage (0–1) threshold for a segment to receive an external label. */
 export const MIN_LABEL_PCT = 0.05;
-
-export type DonutSegment = {
-  grade: string;
-  count: number;
-  /** 0–100, rounded */
-  pct: number;
-  /** CSS color string (e.g. "var(--color-atcoder-Q1)") */
-  color: string;
-  /** Display label (e.g. "1Q") */
-  label: string;
-  /** Radians, 0 = top of circle, clockwise */
-  startAngle: number;
-  /** Radians */
-  endAngle: number;
-  /** Midpoint angle for label placement */
-  midAngle: number;
-};
 
 /**
  * Builds donut chart segment descriptors from vote counters.
@@ -30,22 +18,24 @@ export type DonutSegment = {
  * @param getLabel - Maps grade to display string.
  */
 export function buildDonutSegments(
-  grades: string[],
-  counters: { grade: string; count: number }[],
-  getColor: (grade: string) => string,
-  getLabel: (grade: string) => string,
-): DonutSegment[] {
-  const totalVotes = counters.reduce((sum, c) => sum + c.count, 0);
+  grades: TaskGrade[],
+  counters: { grade: TaskGrade; count: number }[],
+  getColor: (grade: TaskGrade) => string,
+  getLabel: (grade: TaskGrade) => string,
+): DonutSegments {
+  const totalVotes = counters.reduce((sum, counter) => sum + counter.count, 0);
+
   if (totalVotes === 0) {
     return [];
   }
 
-  const countMap = new Map(counters.map((c) => [c.grade, c.count]));
+  const countMap = new Map(counters.map((counter) => [counter.grade, counter.count]));
   let cumulative = 0;
-  const segments: DonutSegment[] = [];
+  const segments: DonutSegments = [];
 
   for (const grade of grades) {
     const count = countMap.get(grade) ?? 0;
+
     if (count === 0) {
       continue;
     }
@@ -58,7 +48,7 @@ export function buildDonutSegments(
     segments.push({
       grade,
       count,
-      pct: Math.round(ratio * 100),
+      percentage: Math.round(ratio * 1000) / 10,
       color: getColor(grade),
       label: getLabel(grade),
       startAngle,
@@ -73,17 +63,33 @@ export function buildDonutSegments(
 type Point = { x: number; y: number };
 
 /**
+ * Calculates the point on a circle at the given angle.
+ * @param center - Center of the circle.
+ * @param radius - Radius of the circle.
+ * @param angle - Angle in radians.
+ * @returns The Cartesian coordinates of the point.
+ */
+export function calcPointOnCircle(center: Point, radius: number, angle: number): Point {
+  return {
+    x: center.x + radius * Math.cos(angle),
+    y: center.y + radius * Math.sin(angle),
+  };
+}
+
+/**
  * Generates SVG path data for one donut arc segment.
  * When the span covers a full circle, the path is split into two semicircular
  * arcs to avoid the SVG arc command degeneracy (start == end coordinates).
+ *
  * @param center - Center coordinates of the donut chart.
  * @param outerRadius - Outer ring radius.
  * @param innerRadius - Inner hole radius.
  * @param startAngle - Radians, clockwise from top.
  * @param endAngle - Radians, clockwise from top.
+ *
  * @returns SVG path `d` attribute string.
  */
-export function arcPath(
+export function buildArcPath(
   center: Point,
   outerRadius: number,
   innerRadius: number,
@@ -92,11 +98,13 @@ export function arcPath(
 ): string {
   if (endAngle - startAngle >= 2 * Math.PI - 1e-9) {
     const midAngle = startAngle + Math.PI;
+
     return [
       arcPathSegment(center, outerRadius, innerRadius, startAngle, midAngle),
       arcPathSegment(center, outerRadius, innerRadius, midAngle, endAngle),
     ].join(' ');
   }
+
   return arcPathSegment(center, outerRadius, innerRadius, startAngle, endAngle);
 }
 
@@ -107,22 +115,10 @@ function arcPathSegment(
   startAngle: number,
   endAngle: number,
 ): string {
-  const outerStart: Point = {
-    x: center.x + outerRadius * Math.cos(startAngle),
-    y: center.y + outerRadius * Math.sin(startAngle),
-  };
-  const outerEnd: Point = {
-    x: center.x + outerRadius * Math.cos(endAngle),
-    y: center.y + outerRadius * Math.sin(endAngle),
-  };
-  const innerEnd: Point = {
-    x: center.x + innerRadius * Math.cos(endAngle),
-    y: center.y + innerRadius * Math.sin(endAngle),
-  };
-  const innerStart: Point = {
-    x: center.x + innerRadius * Math.cos(startAngle),
-    y: center.y + innerRadius * Math.sin(startAngle),
-  };
+  const outerStart = calcPointOnCircle(center, outerRadius, startAngle);
+  const outerEnd = calcPointOnCircle(center, outerRadius, endAngle);
+  const innerEnd = calcPointOnCircle(center, innerRadius, endAngle);
+  const innerStart = calcPointOnCircle(center, innerRadius, startAngle);
   const largeArcFlag = endAngle - startAngle > Math.PI ? 1 : 0;
 
   // SVG path commands per spec: M=moveto, A=arc, L=lineto, Z=closepath
