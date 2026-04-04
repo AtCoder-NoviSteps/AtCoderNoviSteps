@@ -8,6 +8,7 @@
     TableHead,
     TableHeadCell,
     Input,
+    Tooltip,
   } from 'flowbite-svelte';
   import ExternalLink from '@lucide/svelte/icons/external-link';
   import FlaskConical from '@lucide/svelte/icons/flask-conical';
@@ -67,17 +68,24 @@
         {:else}
           {#each filteredTasks as task (task.task_id)}
             {@const displayGrade = resolveDisplayGrade(task.grade, task.estimatedGrade)}
-            {@const isProvisional = task.grade === TaskGrade.PENDING && displayGrade !== TaskGrade.PENDING}
+            {@const isProvisional =
+              task.grade === TaskGrade.PENDING && displayGrade !== TaskGrade.PENDING}
             <TableBodyRow>
               <TableBodyCell>
                 <div class="flex items-center gap-1.5">
                   {#if isProvisional}
                     <span
-                      title="3票以上集まると中央値が暫定グレードとして一覧表に反映されます。"
+                      id="flask-{task.task_id}"
                       class="cursor-help text-gray-500 dark:text-gray-400"
+                      tabindex="0"
+                      role="img"
+                      aria-label="暫定グレード"
                     >
-                      <FlaskConical class="w-4 h-4" />
+                      <FlaskConical class="w-4 h-4" aria-hidden="true" />
                     </span>
+                    <Tooltip triggeredBy="#flask-{task.task_id}" placement="top">
+                      3票以上集まると中央値が暫定グレードとして一覧表に反映されます。
+                    </Tooltip>
                   {/if}
                   {#if displayGrade !== TaskGrade.PENDING}
                     <GradeLabel
