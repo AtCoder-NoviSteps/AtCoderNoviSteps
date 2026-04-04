@@ -1,8 +1,26 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, test } from 'vitest';
 
 import { TaskGrade, taskGradeValues } from '$lib/types/task';
 
-import { nonPendingGrades, qGrades, dGrades } from './grade_options';
+import { resolveDisplayGrade, nonPendingGrades, qGrades, dGrades } from './grade_options';
+
+describe('resolveDisplayGrade', () => {
+  test('returns the grade as-is when it is not PENDING', () => {
+    expect(resolveDisplayGrade(TaskGrade.Q1, TaskGrade.Q2)).toBe(TaskGrade.Q1);
+  });
+
+  test('returns estimatedGrade when grade is PENDING and estimatedGrade is provided', () => {
+    expect(resolveDisplayGrade(TaskGrade.PENDING, TaskGrade.Q3)).toBe(TaskGrade.Q3);
+  });
+
+  test('returns PENDING when grade is PENDING and estimatedGrade is null', () => {
+    expect(resolveDisplayGrade(TaskGrade.PENDING, null)).toBe(TaskGrade.PENDING);
+  });
+
+  test('returns PENDING when grade is PENDING and estimatedGrade is undefined', () => {
+    expect(resolveDisplayGrade(TaskGrade.PENDING)).toBe(TaskGrade.PENDING);
+  });
+});
 
 describe('nonPendingGrades', () => {
   it('does not include PENDING', () => {

@@ -9,7 +9,7 @@
 
   import { TaskGrade, getTaskGrade, type TaskResult } from '$lib/types/task';
   import { getTaskGradeLabel } from '$lib/utils/task';
-  import { nonPendingGrades } from '$features/votes/utils/grade_options';
+  import { nonPendingGrades, resolveDisplayGrade } from '$features/votes/utils/grade_options';
   import { SIGNUP_PAGE, LOGIN_PAGE, EDIT_PROFILE_PAGE } from '$lib/constants/navbar-links';
   import { errorMessageStore } from '$lib/stores/error_message';
 
@@ -21,7 +21,7 @@
     isLoggedIn: boolean;
     // undefined means the prop was not passed — treat as verified to maintain backward compatibility.
     isAtCoderVerified?: boolean;
-    estimatedGrade?: string;
+    estimatedGrade?: TaskGrade | null;
   }
 
   let { taskResult, isLoggedIn, isAtCoderVerified, estimatedGrade }: Props = $props();
@@ -29,10 +29,7 @@
   // 表示用のグレード（投票後に画面リロードなしで差し替えるためのローカル状態）
   // PENDING かつ estimatedGrade（集計済み中央値）があればそれを優先表示。
   // DBグレード付与済みの場合はそちらを優先。
-  const initialGrade =
-    taskResult.grade === TaskGrade.PENDING
-      ? (estimatedGrade ?? taskResult.grade)
-      : taskResult.grade;
+  const initialGrade = resolveDisplayGrade(taskResult.grade as TaskGrade, estimatedGrade);
   let displayGrade = $state<TaskGrade | string>(initialGrade);
 
   // Use task_id as a deterministic component ID to avoid SSR/hydration mismatches.

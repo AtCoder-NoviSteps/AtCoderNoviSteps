@@ -19,6 +19,7 @@
   import { getTaskUrl } from '$lib/utils/task';
   import { getContestNameLabel } from '$lib/utils/contest';
   import { compareByContestIdAndTaskId } from '$lib/utils/task';
+  import { resolveDisplayGrade } from '$features/votes/utils/grade_options';
 
   const MAX_SEARCH_RESULTS = 20;
 
@@ -65,10 +66,8 @@
           </TableBodyRow>
         {:else}
           {#each filteredTasks as task (task.task_id)}
-            {@const isProvisional =
-              task.grade === TaskGrade.PENDING && task.estimatedGrade !== null}
-            {@const displayGrade =
-              task.grade !== TaskGrade.PENDING ? task.grade : (task.estimatedGrade ?? task.grade)}
+            {@const displayGrade = resolveDisplayGrade(task.grade, task.estimatedGrade)}
+            {@const isProvisional = task.grade === TaskGrade.PENDING && displayGrade !== TaskGrade.PENDING}
             <TableBodyRow>
               <TableBodyCell>
                 <div class="flex items-center gap-1.5">
