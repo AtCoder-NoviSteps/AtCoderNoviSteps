@@ -53,5 +53,15 @@ test.describe('Navbar - Regression from Svelte 5 UI lib to Flowbite Svelte v1.31
     // Verify menu is hidden initially
     const menuContainer = page.locator('nav div ul');
     await expect(menuContainer).not.toBeVisible();
+
+    // Click hamburger to open menu
+    await hamburger.click();
+    await expect(menuContainer).toBeVisible();
+
+    // Click hamburger again to close menu
+    await hamburger.click();
+    // Svelte {#if}/{:else} renders two <div><ul> during slide-out outro; verify single element after transition
+    await expect(menuContainer).toHaveCount(1);
+    await expect(menuContainer).not.toBeVisible();
   });
 });
