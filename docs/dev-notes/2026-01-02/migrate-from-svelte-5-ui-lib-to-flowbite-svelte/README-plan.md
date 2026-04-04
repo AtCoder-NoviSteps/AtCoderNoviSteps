@@ -53,10 +53,6 @@ style={`background-color: ${getTaskGradeColor(grade)};`}
 
 テストが通らない原因が「ライブラリのバグ」だけでなく「セレクタミス」の可能性を常に考慮。ToolbarButton.svelte → NavHamburger.svelte のコードを追跡し、`name = "Open main menu"` が `aria-label` に変換されることを確認した例。
 
-### 5. Svelte `{#if}/{:else}` とトランジションの DOM 共存
-
-NavUl の `{#if !hidden}` ブロックに `transition:slide` がある場合、閉じる際に outgoing 要素と incoming 要素が一時的に DOM に共存する。Playwright テストでは `toHaveCount(1)` でトランジション完了を確認してから `not.toBeVisible()` を assert する。
-
 ---
 
 ## 参考資料
