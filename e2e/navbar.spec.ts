@@ -60,8 +60,16 @@ test.describe('Navbar - Regression from Svelte 5 UI lib to Flowbite Svelte v1.31
 
     // Click hamburger again to close menu
     await hamburger.click();
-    // Svelte {#if}/{:else} renders two <div><ul> during slide-out outro; verify single element after transition
-    await expect(menuContainer).toHaveCount(1);
+
+    // Wait for Svelte outro transition to complete
+    // (during transition, {#if}/{:else} may render two <div><ul> elements)
+    await page.waitForFunction(() => {
+      const menus = document.querySelectorAll('nav div ul');
+      return Array.from(menus).every((menu) => !menu.checkVisibility());
+    });
+
+    // Verify final state after transition
     await expect(menuContainer).not.toBeVisible();
+    await expect(menuContainer).toHaveCount(1);
   });
 });
