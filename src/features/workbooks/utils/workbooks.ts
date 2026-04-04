@@ -92,7 +92,7 @@ export function calcWorkBookGradeModes(
         const task = tasksMapByIds.get(workBookTask.taskId);
 
         if (task && task.grade !== TaskGrade.PENDING) {
-          results.push(task.grade as TaskGrade);
+          results.push(task.grade);
         }
 
         return results;

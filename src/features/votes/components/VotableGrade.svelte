@@ -29,7 +29,7 @@
   // 表示用のグレード（投票後に画面リロードなしで差し替えるためのローカル状態）
   // PENDING かつ estimatedGrade（集計済み中央値）があればそれを優先表示。
   // DBグレード付与済みの場合はそちらを優先。
-  const initialGrade = resolveDisplayGrade(taskResult.grade as TaskGrade, estimatedGrade);
+  const initialGrade = resolveDisplayGrade(taskResult.grade, estimatedGrade);
   let displayGrade = $state<TaskGrade | string>(initialGrade);
 
   // Use task_id as a deterministic component ID to avoid SSR/hydration mismatches.

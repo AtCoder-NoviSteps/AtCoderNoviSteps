@@ -1,4 +1,4 @@
-import type { TaskResult, TaskResults } from '$lib/types/task';
+import { TaskGrade, type TaskResult, type TaskResults } from '$lib/types/task';
 
 // Default task result with minimal initialization.
 // Most fields are empty strings as they're not relevant for these tests.
@@ -26,7 +26,7 @@ const defaultTaskResult: Readonly<TaskResult> = {
   task_table_index: '',
   task_id: '',
   title: '',
-  grade: '',
+  grade: TaskGrade.PENDING,
   updated_at: new Date(0), // Use the Unix epoch as the default value.
 };
 

@@ -1,3 +1,4 @@
+import { TaskGrade } from '$lib/types/task';
 import type { TaskResult, TaskResults } from '$lib/types/task';
 import type { WorkBookTaskBase } from '$features/workbooks/types/workbook';
 
@@ -33,7 +34,7 @@ export const taskResultsForUserId2: TaskResults = [
     task_table_index: 'B',
     task_id: 'abc999_b',
     title: 'B. Foo',
-    grade: '6Q',
+    grade: TaskGrade.Q6,
     updated_at: new Date(),
   },
   {
@@ -47,7 +48,7 @@ export const taskResultsForUserId2: TaskResults = [
     task_table_index: 'C',
     task_id: 'abc999_c',
     title: 'C. Bar',
-    grade: '4Q',
+    grade: TaskGrade.Q4,
     updated_at: new Date(),
   },
 ];
@@ -79,7 +80,7 @@ export const taskResultsForUserId3: TaskResults = [
     task_table_index: 'B',
     task_id: 'abc999_b',
     title: 'B. Foo',
-    grade: '6Q',
+    grade: TaskGrade.Q6,
     updated_at: new Date(),
   },
   {
@@ -93,7 +94,7 @@ export const taskResultsForUserId3: TaskResults = [
     task_table_index: 'C',
     task_id: 'abc999_c',
     title: 'C. Bar',
-    grade: '4Q',
+    grade: TaskGrade.Q4,
     updated_at: new Date(),
   },
 ];
@@ -125,7 +126,7 @@ export const taskResultsForUserId4: TaskResults = [
     task_table_index: 'B',
     task_id: 'abc999_b',
     title: 'B. Foo',
-    grade: '6Q',
+    grade: TaskGrade.Q6,
     updated_at: new Date(),
   },
   {
@@ -139,7 +140,7 @@ export const taskResultsForUserId4: TaskResults = [
     task_table_index: 'C',
     task_id: 'abc999_c',
     title: 'C. Bar',
-    grade: '4Q',
+    grade: TaskGrade.Q4,
     updated_at: new Date(),
   },
 ];
@@ -171,7 +172,7 @@ export const taskResultsForUserId5: TaskResults = [
     task_table_index: 'B',
     task_id: 'abc999_b',
     title: 'B. Foo',
-    grade: '6Q',
+    grade: TaskGrade.Q6,
     updated_at: new Date(),
   },
   {
@@ -185,7 +186,7 @@ export const taskResultsForUserId5: TaskResults = [
     task_table_index: 'C',
     task_id: 'abc999_c',
     title: 'C. Bar',
-    grade: '4Q',
+    grade: TaskGrade.Q4,
     updated_at: new Date(),
   },
   {
@@ -199,7 +200,7 @@ export const taskResultsForUserId5: TaskResults = [
     task_table_index: 'D',
     task_id: 'abc999_d',
     title: 'D. Fizz',
-    grade: '1Q',
+    grade: TaskGrade.Q1,
     updated_at: new Date(),
   },
 ];

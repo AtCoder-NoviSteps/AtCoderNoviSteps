@@ -8,7 +8,7 @@ export interface Task {
   task_table_index: string;
   task_id: string;
   title: string;
-  grade: string;
+  grade: TaskGrade;
 }
 
 export type Tasks = Task[];
