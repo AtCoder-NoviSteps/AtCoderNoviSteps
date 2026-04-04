@@ -29,9 +29,8 @@
 
   let search = $state('');
 
-  const filteredTasks = $derived(
-    filterTasksBySearch(data.tasks, search, MAX_SEARCH_RESULTS).sort(compareByContestIdAndTaskId),
-  );
+  const sortedTasks = $derived([...data.tasks].sort(compareByContestIdAndTaskId));
+  const filteredTasks = $derived(filterTasksBySearch(sortedTasks, search, MAX_SEARCH_RESULTS));
 </script>
 
 <div class="container mx-auto w-5/6">
