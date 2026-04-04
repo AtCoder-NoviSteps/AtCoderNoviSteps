@@ -87,11 +87,8 @@
                       3票以上集まると中央値が暫定グレードとして一覧表に反映されます。
                     </Tooltip>
                   {/if}
-                  {#if displayGrade !== TaskGrade.PENDING}
-                    <GradeLabel taskGrade={displayGrade} />
-                  {:else}
-                    <span class="text-gray-400 dark:text-gray-500">-</span>
-                  {/if}
+
+                  <GradeLabel taskGrade={displayGrade} />
                 </div>
               </TableBodyCell>
               <TableBodyCell class="text-base">
