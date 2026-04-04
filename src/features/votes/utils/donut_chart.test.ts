@@ -53,21 +53,32 @@ describe('buildDonutSegments', () => {
 
 describe('arcPath', () => {
   it('returns a string containing M and A and Z commands', () => {
-    const path = arcPath(100, 100, 70, 40, 0, Math.PI);
+    const path = arcPath({ x: 100, y: 100 }, 70, 40, 0, Math.PI);
     expect(path).toMatch(/^M /);
     expect(path).toContain(' A ');
     expect(path).toContain(' Z');
   });
 
   it('uses large-arc-flag=1 when angle span exceeds π', () => {
-    const path = arcPath(100, 100, 70, 40, 0, Math.PI + 0.1);
+    const path = arcPath({ x: 100, y: 100 }, 70, 40, 0, Math.PI + 0.1);
     // large-arc-flag appears as the 4th param of the A command
     expect(path).toMatch(/A \d+ \d+ 0 1 1/);
   });
 
   it('uses large-arc-flag=0 when angle span is less than π', () => {
-    const path = arcPath(100, 100, 70, 40, 0, Math.PI - 0.1);
+    const path = arcPath({ x: 100, y: 100 }, 70, 40, 0, Math.PI - 0.1);
     expect(path).toMatch(/A \d+ \d+ 0 0 1/);
+  });
+});
+
+describe('arcPath - full circle', () => {
+  test('renders full-circle segment as two sub-paths to avoid degenerate arc', () => {
+    const start = -Math.PI / 2;
+    const end = start + 2 * Math.PI;
+    const path = arcPath({ x: 100, y: 100 }, 70, 40, start, end);
+    // Two M commands indicate two sub-paths (dual-arc workaround)
+    const subPathCount = (path.match(/\bM\b/g) ?? []).length;
+    expect(subPathCount).toBe(2);
   });
 });
 

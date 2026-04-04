@@ -70,10 +70,13 @@ export function buildDonutSegments(
   return segments;
 }
 
+type Point = { x: number; y: number };
+
 /**
  * Generates SVG path data for one donut arc segment.
- * @param cx - Center x coordinate.
- * @param cy - Center y coordinate.
+ * When the span covers a full circle, the path is split into two semicircular
+ * arcs to avoid the SVG arc command degeneracy (start == end coordinates).
+ * @param center - Center coordinates of the donut chart.
  * @param outerRadius - Outer ring radius.
  * @param innerRadius - Inner hole radius.
  * @param startAngle - Radians, clockwise from top.
@@ -81,28 +84,53 @@ export function buildDonutSegments(
  * @returns SVG path `d` attribute string.
  */
 export function arcPath(
-  cx: number,
-  cy: number,
+  center: Point,
   outerRadius: number,
   innerRadius: number,
   startAngle: number,
   endAngle: number,
 ): string {
-  const x1 = cx + outerRadius * Math.cos(startAngle);
-  const y1 = cy + outerRadius * Math.sin(startAngle);
-  const x2 = cx + outerRadius * Math.cos(endAngle);
-  const y2 = cy + outerRadius * Math.sin(endAngle);
-  const x3 = cx + innerRadius * Math.cos(endAngle);
-  const y3 = cy + innerRadius * Math.sin(endAngle);
-  const x4 = cx + innerRadius * Math.cos(startAngle);
-  const y4 = cy + innerRadius * Math.sin(startAngle);
+  if (endAngle - startAngle >= 2 * Math.PI - 1e-9) {
+    const midAngle = startAngle + Math.PI;
+    return [
+      arcPathSegment(center, outerRadius, innerRadius, startAngle, midAngle),
+      arcPathSegment(center, outerRadius, innerRadius, midAngle, endAngle),
+    ].join(' ');
+  }
+  return arcPathSegment(center, outerRadius, innerRadius, startAngle, endAngle);
+}
+
+function arcPathSegment(
+  center: Point,
+  outerRadius: number,
+  innerRadius: number,
+  startAngle: number,
+  endAngle: number,
+): string {
+  const outerStart: Point = {
+    x: center.x + outerRadius * Math.cos(startAngle),
+    y: center.y + outerRadius * Math.sin(startAngle),
+  };
+  const outerEnd: Point = {
+    x: center.x + outerRadius * Math.cos(endAngle),
+    y: center.y + outerRadius * Math.sin(endAngle),
+  };
+  const innerEnd: Point = {
+    x: center.x + innerRadius * Math.cos(endAngle),
+    y: center.y + innerRadius * Math.sin(endAngle),
+  };
+  const innerStart: Point = {
+    x: center.x + innerRadius * Math.cos(startAngle),
+    y: center.y + innerRadius * Math.sin(startAngle),
+  };
   const largeArcFlag = endAngle - startAngle > Math.PI ? 1 : 0;
 
+  // SVG path commands per spec: M=moveto, A=arc, L=lineto, Z=closepath
   return [
-    `M ${x1} ${y1}`,
-    `A ${outerRadius} ${outerRadius} 0 ${largeArcFlag} 1 ${x2} ${y2}`,
-    `L ${x3} ${y3}`,
-    `A ${innerRadius} ${innerRadius} 0 ${largeArcFlag} 0 ${x4} ${y4}`,
+    `M ${outerStart.x} ${outerStart.y}`,
+    `A ${outerRadius} ${outerRadius} 0 ${largeArcFlag} 1 ${outerEnd.x} ${outerEnd.y}`,
+    `L ${innerEnd.x} ${innerEnd.y}`,
+    `A ${innerRadius} ${innerRadius} 0 ${largeArcFlag} 0 ${innerStart.x} ${innerStart.y}`,
     'Z',
   ].join(' ');
 }
