@@ -73,6 +73,12 @@ const grade = gradeRaw as TaskGrade;
 
 The same pattern applies to `url.searchParams.get()` in `+server.ts` handlers.
 
+## `$app/state`: navigating Idle Check
+
+`navigating` from `$app/state` always exists as an object. Use `navigating.from === null` to detect the idle state — not `navigating === null`.
+
+To limit spinner display to cross-route navigation only, compare `navigating.from.route.id` with `navigating.to?.route.id`. Same-route query-param changes produce equal ids.
+
 ## Page Component Props
 
 SvelteKit page components (`+page.svelte`) accept only `data` and `form` as props (`svelte/valid-prop-names-in-kit-pages`). Commented-out features that reference other props are not "dead code" — remove only the violating prop declaration, preserve the feature code.
