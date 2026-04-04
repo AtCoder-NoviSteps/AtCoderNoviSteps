@@ -140,6 +140,13 @@
 
 <!-- Grade Icon（全問題で投票ドロップダウンを表示） -->
 <div class="inline-flex items-center gap-1">
+  {#if isProvisional}
+    <FlaskConical
+      class="w-3.5 h-3.5 shrink-0 text-gray-400 dark:text-gray-500"
+      aria-label="暫定グレード"
+    />
+  {/if}
+
   <button
     id={`update-grade-dropdown-trigger-${componentId}`}
     class="relative group shrink-0 cursor-pointer"
@@ -156,13 +163,6 @@
       class="pointer-events-none absolute inset-0 rounded-lg bg-gray-200 dark:bg-gray-700 mix-blend-multiply opacity-0 transition-opacity duration-150 group-hover:opacity-100"
     ></span>
   </button>
-
-  {#if isProvisional}
-    <FlaskConical
-      class="w-3.5 h-3.5 shrink-0 text-gray-400 dark:text-gray-500"
-      aria-label="暫定グレード"
-    />
-  {/if}
 </div>
 
 <!-- Dropdown Menu -->
