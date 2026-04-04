@@ -60,7 +60,7 @@
 
 SVG の `arc` コマンドは始点と終点が同一座標になるとき（全票が 1 グレードに集中）省略される。デュアルアークに分割して回避する。
 
-- [ ] **Step 1: 失敗するテストを追加**
+- [x] **Step 1: 失敗するテストを追加**
 
 `donut_chart.test.ts` の `describe('arcPath')` ブロックに追加:
 
@@ -75,7 +75,7 @@ test('renders full-circle segment as two sub-paths to avoid degenerate arc', () 
 });
 ```
 
-- [ ] **Step 2: テストが失敗することを確認**
+- [x] **Step 2: テストが失敗することを確認**
 
 ```bash
 pnpm test:unit src/features/votes/utils/donut_chart.test.ts
@@ -83,7 +83,7 @@ pnpm test:unit src/features/votes/utils/donut_chart.test.ts
 
 期待: FAIL (`subPathCount` が 1 になる)
 
-- [ ] **Step 3: `donut_chart.ts` を修正**
+- [x] **Step 3: `donut_chart.ts` を修正**
 
 既存の `arcPath` 関数本体を `arcPathSegment`（非公開）に改名し、`arcPath` でフルサークル検出とデュアルアーク分割を追加。
 `Point` 型を導入し、`cx/cy` を `center: Point` にまとめて引数を削減。4 頂点も意味のある名前に改める。
@@ -157,7 +157,7 @@ function arcPathSegment(
 }
 ```
 
-- [ ] **Step 4: テストが通ることを確認**
+- [x] **Step 4: テストが通ることを確認**
 
 ```bash
 pnpm test:unit src/features/votes/utils/donut_chart.test.ts
@@ -165,7 +165,7 @@ pnpm test:unit src/features/votes/utils/donut_chart.test.ts
 
 期待: PASS（既存テストも含め全件グリーン）
 
-- [ ] **Step 5: コミット**
+- [x] **Step 5: コミット**
 
 ```bash
 git add src/features/votes/utils/donut_chart.ts src/features/votes/utils/donut_chart.test.ts
@@ -184,7 +184,7 @@ git commit -m "fix(votes): handle full-circle arc segment via dual-arc split"
 
 Task 1 で `arcPath` のシグネチャが `center: Point` に変わったため、呼び出し側も合わせて修正する。
 
-- [ ] **Step 1: `VoteDonutChart.svelte` の空リング `<circle>` と `arcPath` 呼び出しを修正**
+- [x] **Step 1: `VoteDonutChart.svelte` の空リング `<circle>` と `arcPath` 呼び出しを修正**
 
 `<circle>` の半径:
 
@@ -214,7 +214,7 @@ d={arcPath(CX, CY, OUTER_RADIUS, INNER_RADIUS, seg.startAngle, seg.endAngle)}
 d={arcPath({ x: CX, y: CY }, OUTER_RADIUS, INNER_RADIUS, seg.startAngle, seg.endAngle)}
 ```
 
-- [ ] **Step 2: 型チェック**
+- [x] **Step 2: 型チェック**
 
 ```bash
 pnpm check
@@ -222,7 +222,7 @@ pnpm check
 
 期待: エラーなし
 
-- [ ] **Step 3: コミット**
+- [x] **Step 3: コミット**
 
 ```bash
 git add src/features/votes/components/VoteDonutChart.svelte
@@ -244,7 +244,7 @@ git commit -m "fix(votes): use ring midpoint radius and update arcPath center ar
 
 `votes/+page.svelte` テンプレート内の `{@const displayGrade}` 計算と、`VotableGrade.svelte` の `initialGrade` 計算が同一パターン（`PENDING ? estimatedGrade ?? grade : grade`）で重複している。`grade_options.ts` に `resolveDisplayGrade()` として抽出する。
 
-- [ ] **Step 1: `grade_options.test.ts` にテストを追加**
+- [x] **Step 1: `grade_options.test.ts` にテストを追加**
 
 既存テストファイルに追記:
 
@@ -271,7 +271,7 @@ describe('resolveDisplayGrade', () => {
 });
 ```
 
-- [ ] **Step 2: テストが失敗することを確認**
+- [x] **Step 2: テストが失敗することを確認**
 
 ```bash
 pnpm test:unit src/features/votes/utils/grade_options.test.ts
@@ -279,7 +279,7 @@ pnpm test:unit src/features/votes/utils/grade_options.test.ts
 
 期待: FAIL（`resolveDisplayGrade` が未定義）
 
-- [ ] **Step 3: `grade_options.ts` に関数を追加**
+- [x] **Step 3: `grade_options.ts` に関数を追加**
 
 ファイル末尾に追記:
 
@@ -304,7 +304,7 @@ export function resolveDisplayGrade(
 }
 ```
 
-- [ ] **Step 4: テストが通ることを確認**
+- [x] **Step 4: テストが通ることを確認**
 
 ```bash
 pnpm test:unit src/features/votes/utils/grade_options.test.ts
@@ -312,7 +312,7 @@ pnpm test:unit src/features/votes/utils/grade_options.test.ts
 
 期待: PASS
 
-- [ ] **Step 5: `votes/+page.svelte` で `resolveDisplayGrade` を使用**
+- [x] **Step 5: `votes/+page.svelte` で `resolveDisplayGrade` を使用**
 
 `<script>` のインポートに追加:
 
@@ -337,7 +337,7 @@ import { resolveDisplayGrade } from '$features/votes/utils/grade_options';
 {@const isProvisional = task.grade === TaskGrade.PENDING && displayGrade !== TaskGrade.PENDING}
 ```
 
-- [ ] **Step 6: `VotableGrade.svelte` で `resolveDisplayGrade` を使用**
+- [x] **Step 6: `VotableGrade.svelte` で `resolveDisplayGrade` を使用**
 
 インポートに追加:
 
@@ -360,7 +360,7 @@ const initialGrade =
 const initialGrade = resolveDisplayGrade(taskResult.grade, estimatedGrade);
 ```
 
-- [ ] **Step 7: 型チェック**
+- [x] **Step 7: 型チェック**
 
 ```bash
 pnpm check
@@ -368,7 +368,7 @@ pnpm check
 
 期待: エラーなし
 
-- [ ] **Step 8: コミット**
+- [x] **Step 8: コミット**
 
 ```bash
 git add src/features/votes/utils/grade_options.ts src/features/votes/utils/grade_options.test.ts \
@@ -388,7 +388,7 @@ git commit -m "refactor(votes): extract resolveDisplayGrade to grade_options uti
 
 現状は `title` 属性のみでキーボードユーザーが到達できない。詳細ページ（`[slug]/+page.svelte`）と同様に Flowbite `<Tooltip>` コンポーネントに置換する。
 
-- [ ] **Step 1: `votes/+page.svelte` を修正**
+- [x] **Step 1: `votes/+page.svelte` を修正**
 
 `<script>` のインポートに `Tooltip` を追加:
 
@@ -439,7 +439,7 @@ import {
 {/if}
 ```
 
-- [ ] **Step 2: 型チェック**
+- [x] **Step 2: 型チェック**
 
 ```bash
 pnpm check
@@ -447,7 +447,7 @@ pnpm check
 
 期待: エラーなし
 
-- [ ] **Step 3: コミット**
+- [x] **Step 3: コミット**
 
 ```bash
 git add src/routes/votes/+page.svelte
@@ -465,7 +465,7 @@ git commit -m "fix(votes): make flask icon tooltip keyboard-accessible via Flowb
 
 `noreferrer` は現代ブラウザで `noopener` を含意するが、明示的に両方指定するのが標準。
 
-- [ ] **Step 1: `votes/+page.svelte` の外部リンクを修正**
+- [x] **Step 1: `votes/+page.svelte` の外部リンクを修正**
 
 変更前 (行 106):
 
@@ -479,7 +479,7 @@ rel="noreferrer external"
 rel="noopener noreferrer external"
 ```
 
-- [ ] **Step 2: `votes/[slug]/+page.svelte` の外部リンクを修正**
+- [x] **Step 2: `votes/[slug]/+page.svelte` の外部リンクを修正**
 
 変更前 (行 53):
 
@@ -493,7 +493,7 @@ rel="noreferrer external"
 rel="noopener noreferrer external"
 ```
 
-- [ ] **Step 3: コミット**
+- [x] **Step 3: コミット**
 
 ```bash
 git add src/routes/votes/+page.svelte src/routes/votes/[slug]/+page.svelte
@@ -510,7 +510,7 @@ git commit -m "fix(votes): add noopener to external link rel attributes"
 
 ナビバーは「投票」（`navbar-links.ts`）、詳細ページのパンくずは「グレード投票」で不整合。パンくずを「投票」に統一する。
 
-- [ ] **Step 1: `[slug]/+page.svelte` のパンくずを修正**
+- [x] **Step 1: `[slug]/+page.svelte` のパンくずを修正**
 
 変更前:
 
@@ -524,7 +524,7 @@ git commit -m "fix(votes): add noopener to external link rel attributes"
 <a href={resolve('/votes', {})} class="hover:underline">投票</a>
 ```
 
-- [ ] **Step 2: コミット**
+- [x] **Step 2: コミット**
 
 ```bash
 git add src/routes/votes/[slug]/+page.svelte
@@ -543,7 +543,7 @@ git commit -m "fix(votes): unify nav label from 'グレード投票' to '投票'
 
 Flowbite の `TableHeadCell` はデフォルト `text-xs uppercase`、`TableBodyCell` は `text-sm`。それぞれ一段階大きくする。空メッセージ（検索前・結果なし）はそのまま。
 
-- [ ] **Step 1: `votes/+page.svelte` のテーブルヘッダーを修正**
+- [x] **Step 1: `votes/+page.svelte` のテーブルヘッダーを修正**
 
 各 `TableHeadCell` に `class="text-sm"` を追加:
 
@@ -556,7 +556,7 @@ Flowbite の `TableHeadCell` はデフォルト `text-xs uppercase`、`TableBody
 </TableHead>
 ```
 
-- [ ] **Step 2: テーブル本文セルを修正**
+- [x] **Step 2: テーブル本文セルを修正**
 
 データ行の `TableBodyCell` に `class="text-base"` を追加（空メッセージ行は除く）:
 
@@ -571,13 +571,13 @@ Flowbite の `TableHeadCell` はデフォルト `text-xs uppercase`、`TableBody
 <TableBodyCell class="text-base">{task.voteTotal}</TableBodyCell>
 ```
 
-- [ ] **Step 3: 型チェック**
+- [x] **Step 3: 型チェック**
 
 ```bash
 pnpm check
 ```
 
-- [ ] **Step 4: コミット**
+- [x] **Step 4: コミット**
 
 ```bash
 git add src/routes/votes/+page.svelte
@@ -596,7 +596,7 @@ git commit -m "style(votes): increase table header and body font size"
 現状: `defaultPadding={0.25} defaultWidth={6} reducedWidth={6}`（小さい）
 変更後: `GradeLabel` のデフォルト props（`defaultPadding=1, defaultWidth=10, reducedWidth=8`）を使用
 
-- [ ] **Step 1: `votes/+page.svelte` の `GradeLabel` を修正**
+- [x] **Step 1: `votes/+page.svelte` の `GradeLabel` を修正**
 
 変更前:
 
@@ -610,7 +610,7 @@ git commit -m "style(votes): increase table header and body font size"
 <GradeLabel taskGrade={displayGrade} />
 ```
 
-- [ ] **Step 2: `[slug]/+page.svelte` の `GradeLabel` を修正**
+- [x] **Step 2: `[slug]/+page.svelte` の `GradeLabel` を修正**
 
 変更前 (行 49):
 
@@ -624,13 +624,13 @@ git commit -m "style(votes): increase table header and body font size"
 <GradeLabel taskGrade={displayGrade} />
 ```
 
-- [ ] **Step 3: 型チェック**
+- [x] **Step 3: 型チェック**
 
 ```bash
 pnpm check
 ```
 
-- [ ] **Step 4: コミット**
+- [x] **Step 4: コミット**
 
 ```bash
 git add src/routes/votes/+page.svelte src/routes/votes/[slug]/+page.svelte
@@ -649,7 +649,7 @@ git commit -m "style(votes): use default GradeLabel size to match workbooks page
 
 `votes/+page.svelte`（一覧ページの直接表示）はすでにフラスコが左側にあるため変更不要。
 
-- [ ] **Step 1: `VotableGrade.svelte` の順序を入れ替える**
+- [x] **Step 1: `VotableGrade.svelte` の順序を入れ替える**
 
 変更前:
 
@@ -687,13 +687,13 @@ git commit -m "style(votes): use default GradeLabel size to match workbooks page
 </div>
 ```
 
-- [ ] **Step 2: 型チェック**
+- [x] **Step 2: 型チェック**
 
 ```bash
 pnpm check
 ```
 
-- [ ] **Step 3: コミット**
+- [x] **Step 3: コミット**
 
 ```bash
 git add src/features/votes/components/VotableGrade.svelte
@@ -712,7 +712,7 @@ git commit -m "style(votes): move flask icon to the left of grade label in Votab
 
 `grade_options.ts` のエクスポート定数（`nonPendingGrades`, `qGrades`, `dGrades`）に TSDoc を追加する（`resolveDisplayGrade` は Task 3 で追加済み）。
 
-- [ ] **Step 1: `grade_options.ts` の定数に TSDoc を追加**
+- [x] **Step 1: `grade_options.ts` の定数に TSDoc を追加**
 
 ```typescript
 /** All task grades excluding PENDING, in display order (Q11 → D6). */
@@ -725,7 +725,7 @@ export const qGrades = nonPendingGrades.filter((grade) => grade.startsWith('Q'))
 export const dGrades = nonPendingGrades.filter((grade) => grade.startsWith('D'));
 ```
 
-- [ ] **Step 2: 全テスト実行**
+- [x] **Step 2: 全テスト実行**
 
 ```bash
 pnpm test:unit
@@ -733,7 +733,7 @@ pnpm test:unit
 
 期待: PASS
 
-- [ ] **Step 3: lint チェック**
+- [x] **Step 3: lint チェック**
 
 ```bash
 pnpm lint
@@ -741,7 +741,7 @@ pnpm lint
 
 期待: エラーなし
 
-- [ ] **Step 4: コミット**
+- [x] **Step 4: コミット**
 
 ```bash
 git add src/features/votes/utils/grade_options.ts
