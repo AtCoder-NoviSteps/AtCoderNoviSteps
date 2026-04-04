@@ -33,8 +33,6 @@
   let user = $derived(page.data.user);
 </script>
 
-<!-- Note: fluid and breakpoint props have not been working in v1.31.0 (as of January, 2026) -->
-<!-- See: docs/dev-notes/2026-01-02/migrate-from-svelte-5-ui-lib-to-flowbite-svelte/plan.md -->
 <Navbar fluid={true} breakpoint="lg">
   <NavBrand href="/">
     <img src="../../../favicon.png" class="mr-3 h-6 sm:h-9" alt="{PRODUCT_NAME} Logo" />
