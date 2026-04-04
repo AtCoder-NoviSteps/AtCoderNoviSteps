@@ -135,7 +135,13 @@ describe('getVoteGradeStatistics', () => {
 describe('getAllTasksWithVoteInfo', () => {
   test('attaches estimatedGrade from statistics when available', async () => {
     mockTaskFindMany([
-      { task_id: 'abc001_a', contest_id: 'abc001', title: 'Problem A', grade: TaskGrade.PENDING },
+      {
+        task_id: 'abc001_a',
+        contest_id: 'abc001',
+        title: 'Problem A',
+        grade: TaskGrade.PENDING,
+        task_table_index: 'A',
+      },
     ]);
     mockVotedGradeStatisticsFindMany([
       makeStatisticsRecord({ taskId: 'abc001_a', grade: TaskGrade.Q5 }),
@@ -149,7 +155,13 @@ describe('getAllTasksWithVoteInfo', () => {
 
   test('returns null estimatedGrade when no statistics exist for the task', async () => {
     mockTaskFindMany([
-      { task_id: 'abc001_a', contest_id: 'abc001', title: 'Problem A', grade: TaskGrade.PENDING },
+      {
+        task_id: 'abc001_a',
+        contest_id: 'abc001',
+        title: 'Problem A',
+        grade: TaskGrade.PENDING,
+        task_table_index: 'A',
+      },
     ]);
     mockVotedGradeStatisticsFindMany([]);
     mockVotedGradeCounterFindMany([]);
@@ -159,9 +171,34 @@ describe('getAllTasksWithVoteInfo', () => {
     expect(result[0].estimatedGrade).toBeNull();
   });
 
+  test('includes the confirmed grade and task_table_index from the task record', async () => {
+    mockTaskFindMany([
+      {
+        task_id: 'abc001_a',
+        contest_id: 'abc001',
+        title: 'Problem A',
+        grade: TaskGrade.Q5,
+        task_table_index: 'A',
+      },
+    ]);
+    mockVotedGradeStatisticsFindMany([]);
+    mockVotedGradeCounterFindMany([]);
+
+    const result = await getAllTasksWithVoteInfo();
+
+    expect(result[0].grade).toBe(TaskGrade.Q5);
+    expect(result[0].task_table_index).toBe('A');
+  });
+
   test('aggregates voteTotal across all grade counters for the task', async () => {
     mockTaskFindMany([
-      { task_id: 'abc001_a', contest_id: 'abc001', title: 'Problem A', grade: TaskGrade.PENDING },
+      {
+        task_id: 'abc001_a',
+        contest_id: 'abc001',
+        title: 'Problem A',
+        grade: TaskGrade.PENDING,
+        task_table_index: 'A',
+      },
     ]);
     mockVotedGradeStatisticsFindMany([]);
     mockVotedGradeCounterFindMany([
@@ -176,7 +213,13 @@ describe('getAllTasksWithVoteInfo', () => {
 
   test('returns 0 voteTotal when no counters exist for the task', async () => {
     mockTaskFindMany([
-      { task_id: 'abc001_a', contest_id: 'abc001', title: 'Problem A', grade: TaskGrade.PENDING },
+      {
+        task_id: 'abc001_a',
+        contest_id: 'abc001',
+        title: 'Problem A',
+        grade: TaskGrade.PENDING,
+        task_table_index: 'A',
+      },
     ]);
     mockVotedGradeStatisticsFindMany([]);
     mockVotedGradeCounterFindMany([]);

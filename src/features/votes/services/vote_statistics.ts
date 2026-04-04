@@ -6,6 +6,10 @@ export type TaskWithVoteInfo = {
   task_id: string;
   contest_id: string;
   title: string;
+  /** The confirmed grade stored in the DB. PENDING means not yet confirmed by admin. */
+  grade: TaskGrade;
+  /** Problem index within the contest (e.g. "A", "B"). Used for sorting. */
+  task_table_index: string;
   estimatedGrade: TaskGrade | null;
   voteTotal: number;
 };
@@ -22,7 +26,7 @@ export async function getVoteGradeStatistics(): Promise<Map<string, VotedGradeSt
 
 export async function getAllTasksWithVoteInfo(): Promise<TaskWithVoteInfo[]> {
   const [allTasks, stats, counters] = await Promise.all([
-    prisma.task.findMany({ orderBy: { task_id: 'asc' } }),
+    prisma.task.findMany({ orderBy: { task_id: 'desc' } }),
     prisma.votedGradeStatistics.findMany(),
     prisma.votedGradeCounter.findMany(),
   ]);
@@ -37,6 +41,8 @@ export async function getAllTasksWithVoteInfo(): Promise<TaskWithVoteInfo[]> {
     task_id: task.task_id,
     contest_id: task.contest_id,
     title: task.title,
+    grade: task.grade,
+    task_table_index: task.task_table_index,
     estimatedGrade: statsMap.get(task.task_id)?.grade ?? null,
     voteTotal: totalsMap.get(task.task_id) ?? 0,
   }));

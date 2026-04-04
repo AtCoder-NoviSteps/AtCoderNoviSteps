@@ -26,6 +26,7 @@ Before writing new logic, decide which layer it belongs to. Run this check at pl
 - **Abbreviations**: avoid non-standard abbreviations (`res` → `response`, `btn` → `button`). When in doubt, spell it out.
 - **Lambda parameters**: no single-character names (e.g., use `placement`, `workbook`). Iterator index `i` is the only exception.
 - **`upsert`**: only use when the implementation performs both insert and update. For insert-only, use `initialize`, `seed`, or another accurate verb.
+- **Function verbs**: every function name must start with a verb. Noun-only names (`pointOnCircle`, `arcPath`) are ambiguous — use `calcPointOnCircle`, `buildArcPath`, etc. Common prefixes: `get` (read existing), `build`/`create` (construct new), `calc`/`compute` (derive by formula), `update`, `fetch`, `resolve`.
 - **`any`**: before using `any`, check the value's origin — adding a missing `@types/*` or `devDependency` often provides the correct type. When `any` seems unavoidable, use the narrowest alternative:
 
   | Situation                                                  | Alternative                                                              |
@@ -47,6 +48,7 @@ Before writing new logic, decide which layer it belongs to. Run this check at pl
 ### Syntax
 
 - **Braces**: always use braces for single-statement `if` blocks. Never `if () return;` — write `if () { return; }`.
+- **Domain types over `string`**: when the Prisma schema uses an enum (e.g. `grade: TaskGrade`), the corresponding app-layer type must use the same enum — not `string`. A loose `string` type hides misspellings in fixtures and forces `as TaskGrade` casts throughout the codebase. When a field comes from an external source (form data, query params), validate and narrow it at the boundary; inside the app it must always be the domain type.
 - **Plural type aliases**: define `type Placements = Placement[]` instead of using `Placement[]` directly in signatures and variables.
 - **Empty `catch` blocks**: never use `catch { }` or `catch (_e)` to silence errors. Every `catch` must re-throw, log, or contain an explanatory comment justifying the suppression. Silent swallowing hides bugs and makes failures untraceable.
 
@@ -126,15 +128,7 @@ Common identifiers: `typescript`, `svelte`, `sql`, `bash`, `mermaid`, `json`, `p
 
 ### Svelte 5: Prefer Official Docs Over Training Knowledge
 
-When Svelte 5 behavior is unclear, fetch the official docs directly via WebFetch instead of relying on training knowledge.
-
-URL pattern: `https://svelte.dev/docs/svelte/{section}`
-
-Examples:
-
-- `$effect` behavior → `https://svelte.dev/docs/svelte/$effect`
-- Stores usage → `https://svelte.dev/docs/svelte/stores`
-- Runes overview → `https://svelte.dev/docs/svelte/what-are-runes`
+When Svelte 5 behavior is unclear, fetch official docs via WebFetch — do not rely on training knowledge. URL pattern: `https://svelte.dev/docs/svelte/{section}` (e.g. `/$effect`, `/stores`, `/what-are-runes`).
 
 ## Security
 

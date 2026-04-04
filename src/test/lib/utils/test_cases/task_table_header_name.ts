@@ -1,3 +1,4 @@
+import { TaskGrade } from '$lib/types/task';
 import type { TaskResult } from '$lib/types/task';
 
 // Default task result with minimal initialization.
@@ -15,7 +16,7 @@ const defaultTaskResult: TaskResult = {
   task_table_index: '',
   task_id: '',
   title: '',
-  grade: '',
+  grade: TaskGrade.PENDING,
   updated_at: new Date(0), // Use the Unix epoch as the default value.
 };
 

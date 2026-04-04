@@ -5,10 +5,11 @@
 
   import { Dropdown, DropdownItem, DropdownDivider } from 'flowbite-svelte';
   import Check from '@lucide/svelte/icons/check';
+  import FlaskConical from '@lucide/svelte/icons/flask-conical';
 
   import { TaskGrade, getTaskGrade, type TaskResult } from '$lib/types/task';
   import { getTaskGradeLabel } from '$lib/utils/task';
-  import { nonPendingGrades } from '$features/votes/utils/grade_options';
+  import { nonPendingGrades, resolveDisplayGrade } from '$features/votes/utils/grade_options';
   import { SIGNUP_PAGE, LOGIN_PAGE, EDIT_PROFILE_PAGE } from '$lib/constants/navbar-links';
   import { errorMessageStore } from '$lib/stores/error_message';
 
@@ -20,7 +21,7 @@
     isLoggedIn: boolean;
     // undefined means the prop was not passed — treat as verified to maintain backward compatibility.
     isAtCoderVerified?: boolean;
-    estimatedGrade?: string;
+    estimatedGrade?: TaskGrade | null;
   }
 
   let { taskResult, isLoggedIn, isAtCoderVerified, estimatedGrade }: Props = $props();
@@ -28,10 +29,7 @@
   // 表示用のグレード（投票後に画面リロードなしで差し替えるためのローカル状態）
   // PENDING かつ estimatedGrade（集計済み中央値）があればそれを優先表示。
   // DBグレード付与済みの場合はそちらを優先。
-  const initialGrade =
-    taskResult.grade === TaskGrade.PENDING
-      ? (estimatedGrade ?? taskResult.grade)
-      : taskResult.grade;
+  const initialGrade = resolveDisplayGrade(taskResult.grade, estimatedGrade);
   let displayGrade = $state<TaskGrade | string>(initialGrade);
 
   // Use task_id as a deterministic component ID to avoid SSR/hydration mismatches.
@@ -42,6 +40,10 @@
   let selectedVoteGrade = $state<TaskGrade>();
   let showForm = $state(false);
   let formElement = $state<HTMLFormElement | undefined>(undefined);
+
+  const isProvisional = $derived(
+    taskResult.grade === TaskGrade.PENDING && displayGrade !== TaskGrade.PENDING,
+  );
 
   let isOpening = $state(false);
   let votedGrade = $state<TaskGrade | null>(null);
@@ -137,22 +139,34 @@
 </script>
 
 <!-- Grade Icon（全問題で投票ドロップダウンを表示） -->
-<button
-  id={`update-grade-dropdown-trigger-${componentId}`}
-  class="relative group shrink-0 cursor-pointer"
-  type="button"
-  tabindex="0"
-  aria-label="Vote grade"
-  onclick={() => onTriggerClick()}
->
-  <GradeLabel taskGrade={displayGrade} defaultPadding={0.25} defaultWidth={6} reducedWidth={6} />
+<div class="inline-flex items-center gap-1">
+  {#if isProvisional}
+    <FlaskConical
+      class="w-3.5 h-3.5 shrink-0 text-gray-400 dark:text-gray-500"
+      aria-label="暫定グレード"
+    />
+  {/if}
 
-  <!-- Overlay -->
-  <span
-    aria-hidden="true"
-    class="pointer-events-none absolute inset-0 rounded-lg bg-gray-200 dark:bg-gray-700 mix-blend-multiply opacity-0 transition-opacity duration-150 group-hover:opacity-100"
-  ></span>
-</button>
+  <button
+    id={`update-grade-dropdown-trigger-${componentId}`}
+    class="relative group shrink-0 cursor-pointer"
+    type="button"
+    tabindex="0"
+    onclick={() => onTriggerClick()}
+  >
+    <span class="sr-only">
+      Voted grade: {getTaskGradeLabel(displayGrade)}{isProvisional ? ', provisional' : ''}
+    </span>
+
+    <GradeLabel taskGrade={displayGrade} defaultPadding={0.25} defaultWidth={6} reducedWidth={6} />
+
+    <!-- Overlay -->
+    <span
+      aria-hidden="true"
+      class="pointer-events-none absolute inset-0 rounded-lg bg-gray-200 dark:bg-gray-700 mix-blend-multiply opacity-0 transition-opacity duration-150 group-hover:opacity-100"
+    ></span>
+  </button>
+</div>
 
 <!-- Dropdown Menu -->
 {#if isLoggedIn && isAtCoderVerified !== false}

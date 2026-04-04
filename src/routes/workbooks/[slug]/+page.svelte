@@ -24,7 +24,8 @@
   import { addContestNameToTaskIndex } from '$lib/utils/contest';
   import { getTaskUrl, removeTaskIndexFromTitle } from '$lib/utils/task';
 
-  import type { TaskResult, TaskGrade } from '$lib/types/task';
+  import { TaskGrade } from '$lib/types/task';
+  import type { TaskResult } from '$lib/types/task';
   import type { WorkBookTaskBase } from '$features/workbooks/types/workbook';
 
   let { data } = $props();
@@ -41,7 +42,7 @@
   };
 
   const getTaskGrade = (taskId: string): TaskGrade => {
-    return getTaskResult(taskId)?.grade as TaskGrade;
+    return getTaskResult(taskId)?.grade ?? TaskGrade.PENDING;
   };
 
   const getContestIdFrom = (taskId: string): string => {

@@ -58,6 +58,10 @@ E2E test files must use the `.spec.ts` extension. `playwright.config.ts` matches
 - For DB query tests, assert `orderBy`, `include`, and other significant parameters with `expect.objectContaining` — not just `where`. When a returned field (e.g. `authorName`) depends on an `include` relation, that `include` clause must be part of the assertion, or a regression in the query shape will go undetected
 - Enum membership: `in` traverses the prototype chain; use `Object.hasOwn(Enum, value)` instead
 
+## Test Stubs
+
+Test stub parameter types must match the production function's signature — use domain types (e.g. `TaskGrade`), not `string`; a mismatch compiles silently but lets the stub accept inputs the real function would reject.
+
 ## Test Data
 
 - Use realistic fixture values (real task IDs, grade names) instead of placeholders like `'t1'`
@@ -117,8 +121,6 @@ try {
   await restoreState();
 }
 ```
-
-This is not needed for standard service unit tests that use Prisma mocks.
 
 ### File Split for Testability
 
