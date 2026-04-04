@@ -68,6 +68,20 @@ Define snippets at the **top level**, outside component tags. Inside a tag = nam
 <Dialog>{#snippet footer()}...{/snippet}</Dialog>
 ```
 
+## `{#snippet}` Parameter Types
+
+Snippet parameters do not infer types from call sites — always annotate explicitly or TypeScript will error with "implicitly has an 'any' type":
+
+```svelte
+<!-- Bad: implicit any → svelte-check error -->
+{#snippet segmentLabel(segment)}
+
+<!-- Good -->
+{#snippet segmentLabel(segment: DonutSegment)}
+```
+
+Import the type in `<script lang="ts">` as usual.
+
 ## Snippet vs Component
 
 Prefer `{#snippet}` when: (1) needs direct `$state` access, (2) pure display only, (3) same-file DRY.

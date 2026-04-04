@@ -26,6 +26,7 @@ Before writing new logic, decide which layer it belongs to. Run this check at pl
 - **Abbreviations**: avoid non-standard abbreviations (`res` → `response`, `btn` → `button`). When in doubt, spell it out.
 - **Lambda parameters**: no single-character names (e.g., use `placement`, `workbook`). Iterator index `i` is the only exception.
 - **`upsert`**: only use when the implementation performs both insert and update. For insert-only, use `initialize`, `seed`, or another accurate verb.
+- **Function verbs**: every function name must start with a verb. Noun-only names (`pointOnCircle`, `arcPath`) are ambiguous — use `calcPointOnCircle`, `buildArcPath`, etc. Common prefixes: `get` (read existing), `build`/`create` (construct new), `calc`/`compute` (derive by formula), `update`, `fetch`, `resolve`.
 - **`any`**: before using `any`, check the value's origin — adding a missing `@types/*` or `devDependency` often provides the correct type. When `any` seems unavoidable, use the narrowest alternative:
 
   | Situation                                                  | Alternative                                                              |
@@ -127,15 +128,7 @@ Common identifiers: `typescript`, `svelte`, `sql`, `bash`, `mermaid`, `json`, `p
 
 ### Svelte 5: Prefer Official Docs Over Training Knowledge
 
-When Svelte 5 behavior is unclear, fetch the official docs directly via WebFetch instead of relying on training knowledge.
-
-URL pattern: `https://svelte.dev/docs/svelte/{section}`
-
-Examples:
-
-- `$effect` behavior → `https://svelte.dev/docs/svelte/$effect`
-- Stores usage → `https://svelte.dev/docs/svelte/stores`
-- Runes overview → `https://svelte.dev/docs/svelte/what-are-runes`
+When Svelte 5 behavior is unclear, fetch official docs via WebFetch — do not rely on training knowledge. URL pattern: `https://svelte.dev/docs/svelte/{section}` (e.g. `/$effect`, `/stores`, `/what-are-runes`).
 
 ## Security
 
