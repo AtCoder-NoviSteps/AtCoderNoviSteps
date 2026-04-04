@@ -110,7 +110,7 @@
                   <a
                     href={getTaskUrl(task.contest_id, task.task_id)}
                     target="_blank"
-                    rel="noreferrer external"
+                    rel="noopener noreferrer external"
                     aria-label={`${task.title} を別タブで開く`}
                     class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 shrink-0"
                   >

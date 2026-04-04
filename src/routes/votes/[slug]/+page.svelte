@@ -50,7 +50,7 @@
     <h1 class="text-3xl font-normal truncate dark:text-white">
       <a
         href={getTaskUrl(data.task.contest_id, data.task.task_id)}
-        rel="noreferrer external"
+        rel="noopener noreferrer external"
         target="_blank"
         class="hover:underline">{data.task.title}</a
       >
