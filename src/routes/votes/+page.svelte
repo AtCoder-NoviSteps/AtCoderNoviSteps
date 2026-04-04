@@ -53,10 +53,10 @@
   <div class="rounded-lg overflow-hidden border border-gray-200 dark:border-gray-700">
     <Table hoverable>
       <TableHead>
-        <TableHeadCell>グレード</TableHeadCell>
-        <TableHeadCell>問題名</TableHeadCell>
-        <TableHeadCell>出典</TableHeadCell>
-        <TableHeadCell>票数</TableHeadCell>
+        <TableHeadCell class="text-sm">グレード</TableHeadCell>
+        <TableHeadCell class="text-sm">問題名</TableHeadCell>
+        <TableHeadCell class="text-sm">出典</TableHeadCell>
+        <TableHeadCell class="text-sm">票数</TableHeadCell>
       </TableHead>
       <TableBody class="divide-y divide-gray-100 dark:divide-gray-700">
         {#if search === ''}
@@ -71,7 +71,7 @@
             {@const isProvisional =
               task.grade === TaskGrade.PENDING && displayGrade !== TaskGrade.PENDING}
             <TableBodyRow>
-              <TableBodyCell>
+              <TableBodyCell class="text-base">
                 <div class="flex items-center gap-1.5">
                   {#if isProvisional}
                     <span
@@ -99,7 +99,7 @@
                   {/if}
                 </div>
               </TableBodyCell>
-              <TableBodyCell>
+              <TableBodyCell class="text-base">
                 <div class="flex items-center gap-1.5">
                   <a
                     href={resolve('/votes/[slug]', { slug: task.task_id })}
@@ -118,8 +118,8 @@
                   </a>
                 </div>
               </TableBodyCell>
-              <TableBodyCell>{getContestNameLabel(task.contest_id)}</TableBodyCell>
-              <TableBodyCell>{task.voteTotal}</TableBodyCell>
+              <TableBodyCell class="text-base">{getContestNameLabel(task.contest_id)}</TableBodyCell>
+              <TableBodyCell class="text-base">{task.voteTotal}</TableBodyCell>
             </TableBodyRow>
           {/each}
           {#if filteredTasks.length === 0}
