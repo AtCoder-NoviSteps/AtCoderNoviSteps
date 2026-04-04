@@ -44,7 +44,7 @@
     <circle
       cx={CX}
       cy={CY}
-      r={OUTER_RADIUS}
+      r={RING_MID_RADIUS}
       fill="none"
       stroke="currentColor"
       stroke-width={OUTER_RADIUS - INNER_RADIUS}
@@ -54,7 +54,7 @@
   {:else}
     {#each segments as seg (seg.grade)}
       <path
-        d={arcPath(CX, CY, OUTER_RADIUS, INNER_RADIUS, seg.startAngle, seg.endAngle)}
+        d={arcPath({ x: CX, y: CY }, OUTER_RADIUS, INNER_RADIUS, seg.startAngle, seg.endAngle)}
         fill={seg.grade === TaskGrade.D6 ? 'url(#d6-metallic)' : seg.color}
       />
     {/each}
