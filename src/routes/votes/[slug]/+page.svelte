@@ -32,7 +32,7 @@
 <div class="container mx-auto w-5/6 max-w-2xl">
   <!-- パンくず -->
   <nav class="text-sm text-gray-500 dark:text-gray-400 mb-4">
-    <a href={resolve('/votes', {})} class="hover:underline">グレード投票</a>
+    <a href={resolve('/votes', {})} class="hover:underline">投票</a>
     <span class="mx-1">/</span>
     <span>{data.task.task_id}</span>
   </nav>
