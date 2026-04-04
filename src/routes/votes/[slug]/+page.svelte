@@ -46,7 +46,7 @@
         3票以上集まると中央値が暫定グレードとして一覧表に反映されます。
       </Tooltip>
     {/if}
-    <GradeLabel taskGrade={displayGrade} defaultPadding={0.25} defaultWidth={6} reducedWidth={6} />
+    <GradeLabel taskGrade={displayGrade} />
     <h1 class="text-3xl font-normal truncate dark:text-white">
       <a
         href={getTaskUrl(data.task.contest_id, data.task.task_id)}

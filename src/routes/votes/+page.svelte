@@ -88,12 +88,7 @@
                     </Tooltip>
                   {/if}
                   {#if displayGrade !== TaskGrade.PENDING}
-                    <GradeLabel
-                      taskGrade={displayGrade}
-                      defaultPadding={0.25}
-                      defaultWidth={6}
-                      reducedWidth={6}
-                    />
+                    <GradeLabel taskGrade={displayGrade} />
                   {:else}
                     <span class="text-gray-400 dark:text-gray-500">-</span>
                   {/if}
@@ -118,7 +113,8 @@
                   </a>
                 </div>
               </TableBodyCell>
-              <TableBodyCell class="text-base">{getContestNameLabel(task.contest_id)}</TableBodyCell>
+              <TableBodyCell class="text-base">{getContestNameLabel(task.contest_id)}</TableBodyCell
+              >
               <TableBodyCell class="text-base">{task.voteTotal}</TableBodyCell>
             </TableBodyRow>
           {/each}
