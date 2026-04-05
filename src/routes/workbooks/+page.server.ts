@@ -59,20 +59,25 @@ export async function load({ locals, url }) {
   const adminUser = loggedInUser && isAdmin(loggedInUser.role as Roles);
 
   try {
-    const [workbooks, availableCategories, solutionCategoryMap, tasksMapByIds, taskResultsByTaskId] =
-      await Promise.all([
-        fetchWorkbooksByTab(tab, selectedGrade, selectedCategory, !!adminUser),
-        tab === WorkBookTab.SOLUTION
-          ? getAvailableSolutionCategories(!!adminUser)
-          : Promise.resolve([]),
-        tab === WorkBookTab.SOLUTION && selectedCategory === ALL_SOLUTION_CATEGORIES
-          ? getSolutionCategoryMapByWorkbookId(!!adminUser)
-          : Promise.resolve(new Map<number, SolutionCategory>()),
-        taskCrud.getTasksByTaskId(),
-        loggedInUser
-          ? taskResultsCrud.getTaskResultsOnlyResultExists(loggedInUser.id, true)
-          : Promise.resolve(new Map()),
-      ]);
+    const [
+      workbooks,
+      availableCategories,
+      solutionCategoryMap,
+      tasksMapByIds,
+      taskResultsByTaskId,
+    ] = await Promise.all([
+      fetchWorkbooksByTab(tab, selectedGrade, selectedCategory, !!adminUser),
+      tab === WorkBookTab.SOLUTION
+        ? getAvailableSolutionCategories(!!adminUser)
+        : Promise.resolve([]),
+      tab === WorkBookTab.SOLUTION && selectedCategory === ALL_SOLUTION_CATEGORIES
+        ? getSolutionCategoryMapByWorkbookId(!!adminUser)
+        : Promise.resolve(new Map<number, SolutionCategory>()),
+      taskCrud.getTasksByTaskId(),
+      loggedInUser
+        ? taskResultsCrud.getTaskResultsOnlyResultExists(loggedInUser.id, true)
+        : Promise.resolve(new Map()),
+    ]);
 
     return {
       workbooks,

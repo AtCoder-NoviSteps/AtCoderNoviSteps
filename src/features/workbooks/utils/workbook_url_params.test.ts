@@ -128,6 +128,8 @@ describe('buildWorkbooksUrl', () => {
   });
 
   test('solution tab with null category produces URL without categories param', () => {
-    expect(buildWorkbooksUrl(WorkBookTab.SOLUTION, undefined, null)).toBe('/workbooks?tab=solution');
+    expect(buildWorkbooksUrl(WorkBookTab.SOLUTION, undefined, null)).toBe(
+      '/workbooks?tab=solution',
+    );
   });
 });
