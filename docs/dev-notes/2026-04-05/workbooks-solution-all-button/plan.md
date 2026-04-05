@@ -123,8 +123,140 @@
 
 ---
 
+## コードレビュー指摘の妥当性判定
+
+### 1. ✅ **workbook_url_params.test.ts — describe() 分割**
+**妥当**
+`describe('buildWorkbooksUrl')` のテスト (109-135行目) でカリキュラムと解法別が混在しているため、以下の3つに分割推奨：
+- `describe('curriculum tab with grade', ...)`
+- `describe('solution tab with category', ...)`
+- `describe('created_by_user tab', ...)`
+
+テスト順序も「カリキュラム → 解法別 → ユーザ作成」に統一。
+
+---
+
+### 2. ✅ **workbook_url_params.ts — 関数配置・命名・コメント**
+**妥当**
+
+#### 2a. isSelectableCategory(value: string | null) の引数名
+`value` → `category` に変更。「何を検証しているのか」が不明確。
+
+#### 2b. Private 関数の配置順
+**違反確認**: isSelectableCategory (13-19行目) と isValidNonPending (96-102行目) は private だが、public 関数（parseWorkBookTab, parseWorkBookGrade 等）より**前に**配置されている。
+`coding-style.md` に「Exported functions and classes (public API first) 2. Internal helper functions」と明記。修正が必要。
+
+#### 2c. buildWorkbooksUrl コメント
+**違反確認**: TSDoc (65-73行目) は英語だが、実装コメント (85行目) の「category は null（ALL）のとき falsy なので params に追加されない」が日本語。AGENTS.md に「Write all source code comments, TSDoc, commit messages, and test titles in English」。英語に変更すべき。
+
+---
+
+### 3. ✅ **workbooks.test.ts — Mock ヘルパー化**
+**既に実装済み**
+mockFindUnique, mockFindMany, mockCount ヘルパー関数が 83-95行目に存在。指摘は不要。
+
+---
+
+### 4. ✅ **solution_category_grouper → solution_category_group への名前変更**
+**このフェーズで実施**
+`grouper` (～する者/ツール) よりも `group` (結果物) の方が自然という指摘は妥当。以下を一括変更：
+- ファイル: `solution_category_grouper.ts` → `solution_category_group.ts`
+- ファイル: `solution_category_grouper.test.ts` → `solution_category_group.test.ts`
+- 関数名: `groupBySolutionCategory` は現状のまま（関数内容は不変）
+- import 修正: `src/features/workbooks/components/list/SolutionWorkBookList.svelte` の import パス更新
+
+---
+
+### 5. ✅ **solution_category_grouper.test.ts — テスト内コメント英語化**
+**妥当**
+6行目の日本語コメント「groupBySolutionCategory は id のみ参照するため最小フィクスチャで十分。タイトルは実際の問題集名に合わせて可読性を確保する。」を英語に変更。fixture 内の日本語は許容。
+
+---
+
+### 6. ✅ **SolutionWorkBookList.svelte — スタイル統一・タイトル追加**
+**妥当**
+
+#### 6a. CurriculumWorkBookList とのスタイル統一
+- **CurriculumWorkBookList** (105行目): `<div class="text-2xl pb-4 dark:text-white">手引き</div>`
+- **SolutionWorkBookList** (96行目): `<h2 class="mt-8 mb-3 text-xl font-semibold">{...}</h2>`
+
+クラスを統一すべき（`text-2xl pb-4 dark:text-white` に合わせる）。
+
+#### 6b. ALL以外の解法別表示時もタイトルを追加
+現在の実装 (92-114行目) では：
+- `currentCategory === ALL_SOLUTION_CATEGORIES` 時: グループごとにヘッダー表示（96行目）
+- 特定カテゴリ選択時（107-113行目）: ヘッダーなし
+
+単一カテゴリ表示時もカテゴリタイトルを表示すべき（UX 一貫性）。
+
+---
+
 ## 未解決・後続タスク候補
 
-- [ ] E2E テスト修正・PENDING フィルター検証
+- [ ] workbook_url_params.ts: 関数配置修正、コメント英語化、引数名 value → category
+- [ ] workbook_url_params.test.ts: describe() 分割、テスト順序統一
+- [ ] solution_category_grouper.ts/test.ts → solution_category_group.ts/test.ts にリネーム + import 修正
+- [ ] solution_category_grouper.test.ts: 6行目のコメント英語化
+- [ ] SolutionWorkBookList.svelte: スタイル統一、ALL以外の解法別表示時もタイトル追加
+- [ ] prisma/seed.ts 確認：PENDING 問題集が `isPublished: false` か確認、または単体テスト環境での PENDING 除外確認
+- [ ] E2E テスト失敗原因の再調査・修正
 - [ ] CodeRabbit potential_issue 対応（lefthook.yml, E2E セマンティック属性）
-- [ ] SolutionWorkBookList セクションヘッダー: スタイル統一 + 単体カテゴリ表示時のヘッダー追加検討
+
+---
+
+## E2E テスト失敗の原因分析
+
+### テスト 1: `All button is shown at the beginning of category buttons` (行 165-172)
+
+**失敗の症状**:
+```typescript
+const buttons = page.getByRole('button');
+await expect(buttons.first()).toHaveText(LABEL_ALL, ...);
+```
+最初のボタンが「All」ではない。
+
+**原因の仮説**:
+- テスト DB にデータが不足し、「All」以外のカテゴリボタンが描画されていない
+- または、`AVAILABLE_CATEGORIES` が空で、テンプレート (SolutionWorkBookList.svelte:80-90) でボタンが描画されていない
+- CodeRabbit 指摘 (nitpick) と同じく、CSS クラスに依存したアクティブ判定が脆弱
+
+**改善方向**:
+1. テスト DB に複数カテゴリの SOLUTION workbook を確実にシード
+2. Tailwind `text-primary-700` ではなく、セマンティック属性 `aria-pressed="true"` でアクティブ状態を判定
+3. または、ボタン取得をスコープ限定: `await page.locator('.mb-6').getByRole('button').first()`
+
+---
+
+### テスト 2: `non-admin user does not see PENDING section in All view` (行 186-191)
+
+**失敗の症状**:
+```typescript
+await expect(page.getByRole('heading', { name: '未分類' })).not.toBeVisible();
+```
+一般ユーザに「未分類」(PENDING) セクションが表示されている。
+
+**原因の調査**:
+実装コード確認：
+- `getSolutionCategoryMapByWorkbookId(false)` (workbooks.ts:152-177) は `isPublished: true` 条件で公開済み問題集のみを取得 ✅
+- `groupBySolutionCategory()` (solution_category_grouper.ts:20-26) は categoryMap に含まれないワークブックをフィルター ✅
+- PENDING グループは空になり、自動除外される (`.filter((group) => group.workbooks.length > 0)`) ✅
+
+実装は正しいが、テスト失敗の可能性：
+- **仮説 A**: テスト DB シードスクリプトが PENDING 問題集を `isPublished: true` で作成している
+- **仮説 B**: テスト環境が共有 DB で、別のテスト/実行で PENDING 公開データが残存
+- **仮説 C**: テスト前提条件が不明確（PENDING データ有無の確認が不足）
+
+**改善方向** — **Test DB シード確認**（実施予定）:
+1. `prisma/seed.ts` を確認：PENDING 問題集（解法別未分類）が作成されているか
+   - 作成されている場合、`isPublished: false` で作成されているか確認
+   - または、PENDING は管理者用のため、テスト用シード時には省略すべき
+2. E2E テスト実行環境：テスト DB が毎回リセットされるか確認（Playwright setup/teardown）
+3. テスト失敗時のデバッグ：
+   ```typescript
+   // 詳細ログ取得
+   const sections = await page.locator('h2.text-xl').allTextContents();
+   console.log('Visible sections:', sections);
+   ```
+
+**代替案** (実施しない):
+- test.skip() は条件付きスキップとして有効だが、テスト DB 状態の不確定性が根本原因のため、シード確認が先決
