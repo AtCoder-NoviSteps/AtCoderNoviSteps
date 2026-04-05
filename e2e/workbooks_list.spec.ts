@@ -173,9 +173,7 @@ test.describe('logged-in user (general)', () => {
 
       test('clicking 全て button shows category-grouped sections', async ({ page }) => {
         // まず特定カテゴリで開く
-        await page.goto(
-          `${WORKBOOK_LIST_URL}?tab=${TAB_SOLUTION}&categories=${CATEGORY_GRAPH}`,
-        );
+        await page.goto(`${WORKBOOK_LIST_URL}?tab=${TAB_SOLUTION}&categories=${CATEGORY_GRAPH}`);
         await expect(page.getByRole('tab', { name: '解法別' })).toBeVisible({ timeout: TIMEOUT });
 
         // 「All」ボタンをクリック
@@ -289,9 +287,7 @@ test.describe('admin user', () => {
       const pendingHeading = page.getByRole('heading', { name: '未分類' });
 
       if (
-        !(await pendingHeading
-          .isVisible({ timeout: VISIBILITY_CHECK_TIMEOUT })
-          .catch(() => false))
+        !(await pendingHeading.isVisible({ timeout: VISIBILITY_CHECK_TIMEOUT }).catch(() => false))
       ) {
         // PENDING 問題集が存在しない場合はスキップ
         test.skip();
