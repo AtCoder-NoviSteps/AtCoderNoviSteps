@@ -83,6 +83,7 @@ Order `describe` blocks in service and utils test files to match the declaration
 When a function behaves differently based on input type or mode, split `describe` blocks by scenario rather than mixing all cases flat.
 
 **Bad:** All cases mixed
+
 ```typescript
 describe('buildWorkbooksUrl', () => {
   test('curriculum tab with grade produces correct URL', () => { ... });
@@ -93,6 +94,7 @@ describe('buildWorkbooksUrl', () => {
 ```
 
 **Good:** Split by scenario
+
 ```typescript
 describe('buildWorkbooksUrl with curriculum tab', () => {
   test('produces URL with tab and grade when grade is provided', () => { ... });

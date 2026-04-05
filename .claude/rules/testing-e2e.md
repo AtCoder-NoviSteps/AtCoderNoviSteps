@@ -79,11 +79,13 @@ After an interaction that changes element state (active tab, toggle, selection),
 Assert element state via accessibility attributes (`aria-pressed`, `aria-selected`, `data-*`), not CSS classes (which are implementation details and break on style refactors).
 
 **Bad:** Brittle to styling changes
+
 ```typescript
 await expect(button).toHaveClass(/text-primary-700/);
 ```
 
 **Good:** Resilient to refactors
+
 ```typescript
 await expect(button).toHaveAttribute('aria-pressed', 'true');
 // or
