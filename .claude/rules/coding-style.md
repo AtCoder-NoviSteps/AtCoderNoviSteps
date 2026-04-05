@@ -101,6 +101,45 @@ Within a file, order declarations as follows:
 
 Place a private helper immediately after the single export that uses it. Place helpers shared by two or more exports at the end of the file.
 
+### URL Parameter Patterns
+
+#### null-as-ALL: Omitting Params for "All" State
+
+When a filter has an "all" or "unfiltered" state, omit the parameter entirely rather than using a magic value (e.g., "ALL", "\*").
+
+**Pattern:**
+
+- Parse function defaults to `null` when param is absent
+- `null` → "show all" (no filter applied)
+- URL: `/workbooks?tab=solution` (no `categories=`)
+- Browser back button naturally restores default "all" view
+
+**Benefit:** Cleaner URLs, intuitive history behavior, smaller sessionStorage footprint.
+
+**Example:** `parseWorkBookCategory()` defaults to `null` = all categories
+
+### Type Guards: Precise Narrowing for Excluded Values
+
+When a type guard intentionally excludes enum members, use `Exclude<T, 'VALUE'>` in the return type to match runtime behavior.
+
+**Bad:** Type doesn't reflect runtime exclusion
+
+```typescript
+function isSelectable(value: string | null): value is Category {
+  return value !== null && ... && value !== PENDING;  // Excludes PENDING at runtime
+}
+```
+
+**Good:** Type matches runtime behavior
+
+```typescript
+function isSelectable(value: string | null): value is Exclude<Category, 'PENDING'> {
+  return value !== null && ... && value !== PENDING;
+}
+```
+
+**Benefit:** Caller code trusts the type system; no `as` casts needed.
+
 ## Documentation
 
 ### Language Policy

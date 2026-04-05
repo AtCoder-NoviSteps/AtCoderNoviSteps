@@ -78,6 +78,39 @@ Test stub parameter types must match the production function's signature — use
 
 Order `describe` blocks in service and utils test files to match the declaration order of functions in the source file. Misalignment makes it harder to cross-reference tests and implementation.
 
+### Describe Block Organization: Multi-Scenario Functions
+
+When a function behaves differently based on input type or mode, split `describe` blocks by scenario rather than mixing all cases flat.
+
+**Bad:** All cases mixed
+```typescript
+describe('buildWorkbooksUrl', () => {
+  test('curriculum tab with grade produces correct URL', () => { ... });
+  test('solution tab with category produces correct URL', () => { ... });
+  test('curriculum tab without grade produces URL with tab only', () => { ... });
+  test('created_by_user tab produces URL with tab only', () => { ... });
+});
+```
+
+**Good:** Split by scenario
+```typescript
+describe('buildWorkbooksUrl with curriculum tab', () => {
+  test('produces URL with tab and grade when grade is provided', () => { ... });
+  test('produces URL with tab only when grade is not provided', () => { ... });
+});
+
+describe('buildWorkbooksUrl with solution tab', () => {
+  test('produces URL with tab and category when category is provided', () => { ... });
+  test('produces URL with tab only when category is null', () => { ... });
+});
+
+describe('buildWorkbooksUrl with created_by_user tab', () => {
+  test('produces URL with tab only', () => { ... });
+});
+```
+
+**Benefit:** Test discovery improves, names less redundant, structure mirrors implementation.
+
 ## Service Layer Unit Tests
 
 Service tests mock Prisma via `vi.mock('$lib/server/database', ...)` — no real DB mutations occur.
