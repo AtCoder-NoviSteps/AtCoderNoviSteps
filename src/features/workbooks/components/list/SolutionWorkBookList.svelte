@@ -51,7 +51,7 @@
     ),
   );
 
-  // Unified button entries: "全て" (null) first, then individual categories.
+  // Unified button entries: All (null) first, then individual categories.
   // Using a typed entry object avoids a separate ALL button in the template.
   type CategoryEntry = { value: SelectedSolutionCategory; label: string };
 
@@ -82,6 +82,7 @@
     <Button
       onclick={() => onCategoryChange(entry.value)}
       color="alternative"
+      aria-pressed={currentCategory === entry.value}
       class={`rounded-lg dark:text-white ${currentCategory === entry.value ? 'text-primary-700 dark:text-primary-500!' : ''}`}
     >
       {entry.label}

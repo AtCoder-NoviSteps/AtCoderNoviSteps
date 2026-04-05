@@ -93,7 +93,7 @@ function isValidNonPending<T extends string>(
 }
 
 /** Returns true when category is a SolutionCategory selectable via URL (excludes PENDING). */
-function isSelectableCategory(category: string | null): category is SolutionCategory {
+function isSelectableCategory(category: string | null): category is Exclude<SolutionCategory, 'PENDING'> {
   return (
     category !== null &&
     (Object.values(SolutionCategory) as string[]).includes(category) &&

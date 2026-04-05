@@ -17,7 +17,7 @@ pre-commit:
 
     - name: plan-lambda-check
       run: >
-        if grep -nE '\([a-z]\)\s*(=>|:)' {staged_files}; then
+        if grep -nE '\([a-z]\)\s*(=>|:)' -- {staged_files}; then
           echo "Error: single-char lambda/type parameters found in plan code blocks. Rename to full domain concept (workbook, placement, group, ...)";
           exit 1;
         fi
