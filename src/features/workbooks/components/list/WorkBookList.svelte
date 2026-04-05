@@ -5,6 +5,7 @@
   import {
     type SolutionCategory,
     type SolutionCategories,
+    type SelectedSolutionCategory,
   } from '$features/workbooks/types/workbook_placement';
 
   import CurriculumWorkBookList from '$features/workbooks/components/list/CurriculumWorkBookList.svelte';
@@ -26,9 +27,10 @@
       }
     | {
         workbookType: typeof WorkBookType.SOLUTION;
-        currentCategory: SolutionCategory;
+        currentCategory: SelectedSolutionCategory;
         availableCategories: SolutionCategories;
-        onCategoryChange: (category: SolutionCategory) => void;
+        solutionCategoryMap: Map<number, SolutionCategory>;
+        onCategoryChange: (category: SelectedSolutionCategory) => void;
       }
     | { workbookType: typeof WorkBookType.CREATED_BY_USER };
 
@@ -56,6 +58,7 @@
     role={loggedInUser?.role ?? Roles.USER}
     availableCategories={restProps.availableCategories}
     currentCategory={restProps.currentCategory}
+    solutionCategoryMap={restProps.solutionCategoryMap}
     onCategoryChange={restProps.onCategoryChange}
   />
 {:else}
