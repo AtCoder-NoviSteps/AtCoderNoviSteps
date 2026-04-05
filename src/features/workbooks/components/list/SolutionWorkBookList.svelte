@@ -16,7 +16,7 @@
   import {
     groupBySolutionCategory,
     type WorkbookGroup,
-  } from '$features/workbooks/utils/solution_category_grouper';
+  } from '$features/workbooks/utils/solution_category_group';
 
   import SolutionTable from '$features/workbooks/components/list/SolutionTable.svelte';
   import EmptyWorkbookList from '$features/workbooks/components/list/EmptyWorkbookList.svelte';
@@ -90,10 +90,10 @@
 </div>
 
 {#if currentCategory === ALL_SOLUTION_CATEGORIES}
-  <!-- グループ表示: SolutionCategory 列挙順にセクションとして描画 -->
+  <!-- Group display: render sections in SolutionCategory enum order -->
   {#if readableCount}
     {#each groupedWorkbooks ?? [] as group (group.category)}
-      <h2 class="mt-8 mb-3 text-xl font-semibold">{SOLUTION_LABELS[group.category]}</h2>
+      <div class="text-2xl pb-4 dark:text-white">{SOLUTION_LABELS[group.category]}</div>
       <SolutionTable
         workbooks={group.workbooks}
         {userId}
@@ -105,8 +105,9 @@
     <EmptyWorkbookList />
   {/if}
 {:else}
-  <!-- 特定カテゴリ選択時: 既存のフラットリスト表示 -->
+  <!-- Specific category selected: flat list display with category title -->
   {#if readableCount}
+    <div class="text-2xl pb-4 dark:text-white">{SOLUTION_LABELS[currentCategory]}</div>
     <SolutionTable {workbooks} {userId} {role} taskResults={taskResultsWithWorkBookId} />
   {:else}
     <EmptyWorkbookList />

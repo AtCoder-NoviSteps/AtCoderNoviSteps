@@ -1,10 +1,10 @@
 import { describe, test, expect } from 'vitest';
 import { SolutionCategory } from '$features/workbooks/types/workbook_placement';
 import type { WorkbooksList } from '$features/workbooks/types/workbook';
-import { groupBySolutionCategory } from './solution_category_grouper';
+import { groupBySolutionCategory } from './solution_category_group';
 
-// groupBySolutionCategory は id のみ参照するため最小フィクスチャで十分。
-// タイトルは実際の問題集名に合わせて可読性を確保する。
+// groupBySolutionCategory references only the workbook id, so minimal fixtures are sufficient.
+// Titles are aligned with actual workbook names to ensure readability.
 const GRAPH_WORKBOOK = {
   id: 1,
   title: 'ポテンシャル付き Union-Find',

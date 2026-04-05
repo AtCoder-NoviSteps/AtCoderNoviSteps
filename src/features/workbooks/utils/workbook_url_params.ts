@@ -9,15 +9,6 @@ import {
 const DEFAULT_CURRICULUM_GRADE = TaskGrade.Q10;
 const EXISTING_TABS = new Set<string>(Object.values(WorkBookTab));
 
-/** Returns true when value is a SolutionCategory selectable via URL (excludes PENDING). */
-function isSelectableCategory(value: string | null): value is SolutionCategory {
-  return (
-    value !== null &&
-    (Object.values(SolutionCategory) as string[]).includes(value) &&
-    value !== SolutionCategory.PENDING
-  );
-}
-
 /**
  * Parses the `?tab=` URL parameter into a WorkBookTab.
  * Falls back to the default ('curriculum') for missing or invalid values.
@@ -82,7 +73,7 @@ export function buildWorkbooksUrl(
   if (tab === WorkBookTab.CURRICULUM && grade) {
     params.set('grades', grade);
   } else if (tab === WorkBookTab.SOLUTION && category) {
-    // category は null（ALL）のとき falsy なので params に追加されない
+    // When category is null (ALL), it is falsy and not appended to params
     params.set('categories', category);
   }
 
@@ -99,4 +90,13 @@ function isValidNonPending<T extends string>(
   pending: T,
 ): param is T {
   return param !== null && (values as string[]).includes(param) && param !== pending;
+}
+
+/** Returns true when category is a SolutionCategory selectable via URL (excludes PENDING). */
+function isSelectableCategory(category: string | null): category is SolutionCategory {
+  return (
+    category !== null &&
+    (Object.values(SolutionCategory) as string[]).includes(category) &&
+    category !== SolutionCategory.PENDING
+  );
 }

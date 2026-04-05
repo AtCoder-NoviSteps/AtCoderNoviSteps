@@ -158,7 +158,7 @@ test.describe('logged-in user (general)', () => {
 
         const allButton = page.getByRole('button', { name: LABEL_ALL });
         await expect(allButton).toBeVisible({ timeout: TIMEOUT });
-        // "全て" ボタンがアクティブスタイル（text-primary-700）を持つことを確認
+        // Verify All button has active text color styling
         await expect(allButton).toHaveClass(/text-primary-700/, { timeout: TIMEOUT });
       });
 
@@ -166,12 +166,13 @@ test.describe('logged-in user (general)', () => {
         await page.goto(`${WORKBOOK_LIST_URL}?tab=${TAB_SOLUTION}`);
         await expect(page.getByRole('tab', { name: '解法別' })).toBeVisible({ timeout: TIMEOUT });
 
-        const buttons = page.getByRole('button');
-        // 最初のボタンは「All」であることを確認
-        await expect(buttons.first()).toHaveText(LABEL_ALL, { timeout: TIMEOUT });
+        // Scope to the category buttons container to find the first button in that section
+        const categoryButtonsContainer = page.locator('div.mb-6');
+        const firstButton = categoryButtonsContainer.getByRole('button').first();
+        await expect(firstButton).toHaveText(LABEL_ALL, { timeout: TIMEOUT });
       });
 
-      test('clicking 全て button shows category-grouped sections', async ({ page }) => {
+      test('clicking All button shows category-grouped sections', async ({ page }) => {
         // まず特定カテゴリで開く
         await page.goto(`${WORKBOOK_LIST_URL}?tab=${TAB_SOLUTION}&categories=${CATEGORY_GRAPH}`);
         await expect(page.getByRole('tab', { name: '解法別' })).toBeVisible({ timeout: TIMEOUT });
