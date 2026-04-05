@@ -41,6 +41,7 @@
 **Task 1～11 完了。Unit test 2054 PASS、型チェック・lint OK。**
 
 実装内容（コードで確認可能）:
+
 - null-as-ALL 方式の型定義（ALL_SOLUTION_CATEGORIES, SelectedSolutionCategory）
 - URL パラメータ層の修正（parseWorkBookCategory デフォルト null）
 - サービス層の buildPlacementFilter ヘルパーと getSolutionCategoryMapByWorkbookId 追加
@@ -54,17 +55,20 @@
 ## 汎用的・新規性の高い教訓の候補
 
 ### 1. null-as-ALL パターンの URL パラメータ省略化
+
 **パターン**: URL パラメータの省略を「すべて表示」の意味として扱う設計
 **新規性**: YAGNI 的（デフォルト値より null）。従来は `?tab=solution&category=SEARCH_SIMULATION` が常に含まれていた。
 **応用**: フィルタUI全般で、デフォルトラジオボタン「全て」を選択時に URL パラメータを完全に省略し、戻ってくるとデフォルト状態に回帰する UX パターンに拡張可能。
 **注意**: sessionStorage が保存するのは `?tab=solution` のみになり、ブックマークや画面遷移で意図的に「全て」に戻る動作が実現される。
 
 ### 2. サービス層の buildPlacementFilter ヘルパー化
+
 **パターン**: CURRICULUM/SOLUTION の条件分岐ロジックをプライベートヘルパーに切り出す
 **利点**: 三項演算子のネスト回避、可読性向上。Prisma の where-filter 構築が複雑な場合（JOIN 条件など）に有効。
 **応用**: CRUD 層で複数の place-filter を組み合わせる場合、ヘルパーの再利用性が高まる。
 
 ### 3. グループ化用マップの別クエリ取得と遅延読込
+
 **パターン**: 関連データの取得を UI 操作（「全て」選択）に応じて遅延させる
 **効果**: 単一カテゴリ表示時は不要な categoryMap クエリをスキップ（Promise.all の条件）
 **注意**: Prisma N+1 回避と UI レスポンス時間のバランス。一般的には「全て」表示の方が重いため、初回ロード時は categoryMap クエリを避けて基本タブ表示を先に済ませる判断も検討余地あり。
@@ -74,6 +78,7 @@
 ## E2E テスト結果と課題
 
 **実装完了後の E2E テスト実行結果:**
+
 - ✅ 21 テスト PASS
 - ❌ 2 テスト失敗（新規追加）
 - ⊘ 2 テストスキップ（環境依存、テスト DB に該当データなし）
@@ -88,6 +93,7 @@
    - 推測: `getSolutionCategoryMapByWorkbookId(false)` で isPublished フィルターが機能していない、またはテスト DB に PENDING（未公開）問題集が存在しない
 
 **改善方向:**
+
 - E2E テスト修正: テスト DB 状態を明確に制御するか、Skip 条件を厳密にする
 - PENDING フィルター検証: 実装ロジック再確認（特にサービス層の where 条件）
 
@@ -98,6 +104,7 @@
 **指摘レベル別サマリー:**
 
 ### 🔴 potential_issue（修正推奨）
+
 1. **lefthook.yml** (line 18-24): ファイル名にスペースが含まれる場合 grep が失敗
    - 修正案: xargs で安全化（例：`echo {staged_files} | xargs -I {} grep ... {}`)
 
@@ -106,6 +113,7 @@
    - 修正案: `aria-pressed="true"` などセマンティック属性を使用
 
 ### 🟡 nitpick（低優先度）
+
 1. **e2e/workbooks_list.spec.ts**: 「All」ボタンのアクティブ判定が CSS クラス依存
 
 2. **solution_category_grouper.test.ts**: categoryMap に存在しない workbook.id のエッジケーステスト不足
