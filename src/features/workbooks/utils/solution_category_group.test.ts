@@ -1,7 +1,8 @@
 import { describe, test, expect } from 'vitest';
+import { Roles } from '$lib/types/user';
 import { SolutionCategory } from '$features/workbooks/types/workbook_placement';
 import type { WorkbooksList } from '$features/workbooks/types/workbook';
-import { groupBySolutionCategory } from './solution_category_group';
+import { groupBySolutionCategory, filterGroupsByRole } from './solution_category_group';
 
 // groupBySolutionCategory references only the workbook id, so minimal fixtures are sufficient.
 // Titles are aligned with actual workbook names to ensure readability.
@@ -111,5 +112,42 @@ describe('groupBySolutionCategory', () => {
       DYNAMIC_PROGRAMMING_WORKBOOK_1,
       DYNAMIC_PROGRAMMING_WORKBOOK_2,
     ]);
+  });
+});
+
+describe('filterGroupsByRole', () => {
+  const testGroups = [
+    {
+      category: SolutionCategory.GRAPH,
+      workbooks: [GRAPH_WORKBOOK],
+    },
+    {
+      category: SolutionCategory.PENDING,
+      workbooks: [PENDING_WORKBOOK],
+    },
+  ];
+
+  test('returns all groups for admin users', () => {
+    const result = filterGroupsByRole(testGroups, Roles.ADMIN);
+
+    // Verify both groups (GRAPH + PENDING) are returned unchanged
+    expect(result).toHaveLength(2);
+    expect(result).toEqual(testGroups);
+  });
+
+  test('excludes PENDING group for non-admin users', () => {
+    const result = filterGroupsByRole(testGroups, Roles.USER);
+
+    // PENDING group is filtered out, only GRAPH group remains
+    expect(result).toHaveLength(1);
+    expect(result[0]).toEqual({
+      category: SolutionCategory.GRAPH,
+      workbooks: [GRAPH_WORKBOOK],
+    });
+  });
+
+  test('returns empty array when input is empty', () => {
+    const result = filterGroupsByRole([], Roles.USER);
+    expect(result).toEqual([]);
   });
 });

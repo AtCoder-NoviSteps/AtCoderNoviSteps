@@ -15,6 +15,7 @@
   import { countReadableWorkbooks } from '$features/workbooks/utils/workbooks';
   import {
     groupBySolutionCategory,
+    filterGroupsByRole,
     type WorkbookGroup,
   } from '$features/workbooks/utils/solution_category_group';
 
@@ -70,7 +71,7 @@
   // "全て" 選択時のグループ化。特定カテゴリ選択時は null。
   let groupedWorkbooks = $derived<WorkbookGroup[] | null>(
     currentCategory === ALL_SOLUTION_CATEGORIES
-      ? groupBySolutionCategory(workbooks, solutionCategoryMap)
+      ? filterGroupsByRole(groupBySolutionCategory(workbooks, solutionCategoryMap), role)
       : null,
   );
 
@@ -95,7 +96,7 @@
   {#if readableCount}
     {#each groupedWorkbooks ?? [] as group, i (group.category)}
       <div class={i > 0 ? 'mt-8' : ''}>
-        <div class="text-2xl pb-4 dark:text-white">{SOLUTION_LABELS[group.category]}</div>
+        <h2 class="text-2xl pb-4 dark:text-white">{SOLUTION_LABELS[group.category]}</h2>
         <SolutionTable
           workbooks={group.workbooks}
           {userId}
@@ -110,7 +111,7 @@
 {:else}
   <!-- Specific category selected: flat list display with category title -->
   {#if readableCount}
-    <div class="text-2xl pb-4 dark:text-white">{SOLUTION_LABELS[currentCategory]}</div>
+    <h2 class="text-2xl pb-4 dark:text-white">{SOLUTION_LABELS[currentCategory]}</h2>
     <SolutionTable {workbooks} {userId} {role} taskResults={taskResultsWithWorkBookId} />
   {:else}
     <EmptyWorkbookList />

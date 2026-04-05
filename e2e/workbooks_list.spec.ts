@@ -182,6 +182,11 @@ test.describe('logged-in user (general)', () => {
         await expect(page).toHaveURL(new RegExp(`tab=${TAB_SOLUTION}`), { timeout: TIMEOUT });
         // Verify that the categories= parameter is not in the URL
         await expect(page).not.toHaveURL(/categories=/, { timeout: TIMEOUT });
+
+        // Verify category sections render
+        await expect(page.getByRole('heading', { name: 'グラフ' })).toBeVisible({
+          timeout: TIMEOUT,
+        });
       });
 
       test('non-admin user does not see PENDING section in All view', async ({ page }) => {

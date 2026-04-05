@@ -360,13 +360,24 @@ describe('getSolutionCategoryMapByWorkbookId', () => {
             workBookType: WorkBookType.SOLUTION,
             isPublished: true,
           }),
-          solutionCategory: { not: null },
         }),
         select: { workBookId: true, solutionCategory: true },
       }),
     );
     expect(result.get(1)).toBe(SolutionCategory.GRAPH);
     expect(result.get(2)).toBe(SolutionCategory.DYNAMIC_PROGRAMMING);
+  });
+
+  test('normalizes null solutionCategory to PENDING', async () => {
+    vi.mocked(prisma.workBookPlacement.findMany).mockResolvedValue([
+      { workBookId: 1, solutionCategory: null },
+      { workBookId: 2, solutionCategory: SolutionCategory.GRAPH },
+    ] as unknown as Awaited<ReturnType<typeof prisma.workBookPlacement.findMany>>);
+
+    const result = await getSolutionCategoryMapByWorkbookId(false);
+
+    expect(result.get(1)).toBe(SolutionCategory.PENDING);
+    expect(result.get(2)).toBe(SolutionCategory.GRAPH);
   });
 
   test('omits isPublished filter when includeUnpublished=true', async () => {

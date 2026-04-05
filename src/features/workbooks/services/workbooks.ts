@@ -158,20 +158,14 @@ export async function getSolutionCategoryMapByWorkbookId(
         workBookType: WorkBookTypeConst.SOLUTION,
         ...(includeUnpublished ? {} : { isPublished: true }),
       },
-      solutionCategory: { not: null },
     },
     select: { workBookId: true, solutionCategory: true },
   });
 
-  const categoryEntries = placements
-    .filter(
-      (placement): placement is typeof placement & { solutionCategory: SolutionCategory } =>
-        placement.solutionCategory !== null,
-    )
-    .map((placement): [number, SolutionCategory] => [
-      placement.workBookId,
-      placement.solutionCategory,
-    ]);
+  const categoryEntries = placements.map((placement): [number, SolutionCategory] => [
+    placement.workBookId,
+    placement.solutionCategory ?? SolutionCategory.PENDING,
+  ]);
 
   return new Map(categoryEntries);
 }
