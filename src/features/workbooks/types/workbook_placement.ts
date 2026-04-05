@@ -91,13 +91,19 @@ export type UnplacedCurriculumRow = {
 
 export type UnplacedCurriculumRows = UnplacedCurriculumRow[];
 
+/** Sentinel value representing "all solution categories" (no solutionCategory filter). Runtime value is null. */
+export const ALL_SOLUTION_CATEGORIES = null;
+
+/** Category selection for the SOLUTION tab. null means "show all categories". */
+export type SelectedSolutionCategory = SolutionCategory | null;
+
 /**
  * Discriminated union representing a placement-based filter query.
  * CURRICULUM filters by taskGrade; SOLUTION filters by solutionCategory.
  */
 export type PlacementQuery =
   | { workBookType: typeof WorkBookTypeConst.CURRICULUM; taskGrade: TaskGrade }
-  | { workBookType: typeof WorkBookTypeConst.SOLUTION; solutionCategory: SolutionCategory };
+  | { workBookType: typeof WorkBookTypeConst.SOLUTION; solutionCategory: SelectedSolutionCategory };
 
 // Shape of workbooks returned from the load function for use in KanbanBoard
 export type WorkbookWithPlacement = {
