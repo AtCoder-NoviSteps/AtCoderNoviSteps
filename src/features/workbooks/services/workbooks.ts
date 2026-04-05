@@ -12,6 +12,7 @@ import {
   type PlacementQuery,
   SolutionCategory,
   type SolutionCategories,
+  ALL_SOLUTION_CATEGORIES,
 } from '$features/workbooks/types/workbook_placement';
 
 import {
@@ -71,10 +72,7 @@ export async function getWorkbooksByPlacement(
   query: PlacementQuery,
   includeUnpublished = false,
 ): Promise<WorkbooksWithAuthors> {
-  const placementFilter =
-    query.workBookType === WorkBookTypeConst.CURRICULUM
-      ? { taskGrade: query.taskGrade }
-      : { solutionCategory: query.solutionCategory };
+  const placementFilter = buildPlacementFilter(query);
 
   const workbooks = await db.workBook.findMany({
     where: {
@@ -143,6 +141,39 @@ export async function getAvailableSolutionCategories(
   return placements
     .map((placement) => placement.solutionCategory)
     .filter((category): category is SolutionCategory => category !== null);
+}
+
+/**
+ * Returns a Map of workbook ID to SolutionCategory for all SOLUTION workbooks with a placement.
+ * Used to group workbooks by category when the "all categories" view is selected.
+ *
+ * @param includeUnpublished - When true, includes unpublished workbooks (admin use). Defaults to false.
+ */
+export async function getSolutionCategoryMapByWorkbookId(
+  includeUnpublished = false,
+): Promise<Map<number, SolutionCategory>> {
+  const placements = await db.workBookPlacement.findMany({
+    where: {
+      workBook: {
+        workBookType: WorkBookTypeConst.SOLUTION,
+        ...(includeUnpublished ? {} : { isPublished: true }),
+      },
+      solutionCategory: { not: null },
+    },
+    select: { workBookId: true, solutionCategory: true },
+  });
+
+  const categoryEntries = placements
+    .filter(
+      (placement): placement is typeof placement & { solutionCategory: SolutionCategory } =>
+        placement.solutionCategory !== null,
+    )
+    .map((placement): [number, SolutionCategory] => [
+      placement.workBookId,
+      placement.solutionCategory,
+    ]);
+
+  return new Map(categoryEntries);
 }
 
 export async function getWorkBook(workBookId: number): Promise<WorkBook | null> {
@@ -309,4 +340,17 @@ function mapWithAuthorName<T extends { user: { username: string } | null }>(
     ...workbook,
     authorName: workbook.user?.username ?? 'unknown',
   }));
+}
+
+/** Returns the Prisma placement where-filter for a given PlacementQuery. */
+function buildPlacementFilter(query: PlacementQuery) {
+  if (query.workBookType === WorkBookTypeConst.CURRICULUM) {
+    return { taskGrade: query.taskGrade };
+  }
+
+  if (query.solutionCategory === ALL_SOLUTION_CATEGORIES) {
+    return {}; // no solutionCategory filter = fetch all solution categories
+  }
+
+  return { solutionCategory: query.solutionCategory };
 }
