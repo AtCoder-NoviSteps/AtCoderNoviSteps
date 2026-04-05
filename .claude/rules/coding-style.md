@@ -27,15 +27,7 @@ Before writing new logic, decide which layer it belongs to. Run this check at pl
 - **Lambda parameters**: no single-character names (e.g., use `placement`, `workbook`). Iterator index `i` is the only exception.
 - **`upsert`**: only use when the implementation performs both insert and update. For insert-only, use `initialize`, `seed`, or another accurate verb.
 - **Function verbs**: every function name must start with a verb. Noun-only names (`pointOnCircle`, `arcPath`) are ambiguous — use `calcPointOnCircle`, `buildArcPath`, etc. Common prefixes: `get` (read existing), `build`/`create` (construct new), `calc`/`compute` (derive by formula), `update`, `fetch`, `resolve`.
-- **`any`**: before using `any`, check the value's origin — adding a missing `@types/*` or `devDependency` often provides the correct type. When `any` seems unavoidable, use the narrowest alternative:
-
-  | Situation                                                  | Alternative                                                              |
-  | ---------------------------------------------------------- | ------------------------------------------------------------------------ |
-  | Assign to a property not on the type                       | `obj as T & { prop: U }` (intersection cast)                             |
-  | Return type too complex to write manually                  | `ReturnType<typeof fn>`                                                  |
-  | Partial mock: only specific properties matter              | `Partial<T>`, `Pick<T, 'a' \| 'b'>`, or `satisfies` — prefer these first |
-  | Partial mock: none of the above narrow the type far enough | `as unknown as T` — last resort; bypasses type checking entirely         |
-  | Inline `: any` annotation where inference reaches          | Delete the annotation                                                    |
+- **`any`**: Before using `any`, check the value's origin. If unavoidable: use `ReturnType<typeof fn>` for complex returns, `Partial<T>` for partial objects, `obj as T & { prop: U }` for property extension. Last resort: `as unknown as T`.
 
 - **UI labels**: if a label does not match actual behavior, update it or add an inline comment explaining the intentional mismatch.
 - **Constant names**: reflect what the value IS (content), not what it is used for (purpose). e.g., a set holding all enum tab values is `EXISTING_TABS`, not `VALID_TABS`.
@@ -50,25 +42,11 @@ Before writing new logic, decide which layer it belongs to. Run this check at pl
 - **Braces**: always use braces for single-statement `if` blocks. Never `if () return;` — write `if () { return; }`.
 - **Domain types over `string`**: when the Prisma schema uses an enum (e.g. `grade: TaskGrade`), the corresponding app-layer type must use the same enum — not `string`. A loose `string` type hides misspellings in fixtures and forces `as TaskGrade` casts throughout the codebase. When a field comes from an external source (form data, query params), validate and narrow it at the boundary; inside the app it must always be the domain type.
 - **Plural type aliases**: define `type Placements = Placement[]` instead of using `Placement[]` directly in signatures and variables.
-- **Empty `catch` blocks**: never use `catch { }` or `catch (_e)` to silence errors. Every `catch` must re-throw, log, or contain an explanatory comment justifying the suppression. Silent swallowing hides bugs and makes failures untraceable.
+- **Empty `catch` blocks**: never use `catch { }` to silence errors. Either re-throw, log, or add a comment justifying suppression. Silent swallowing hides bugs.
 
 ```typescript
-// Bad: silently discards the error
-try { ... } catch { }
-try { ... } catch (_e) { }
-
-// Good: log and re-throw (adds context before propagating)
-try { ... } catch (error) {
-  console.error('Operation failed:', error);
-  throw error;
-}
-
-// Good: intentional suppression with explanation
-try {
-  localStorage.setItem(key, value);
-} catch {
-  // localStorage may be unavailable (private browsing) — fall back to in-memory store
-}
+try { ... } catch (error) { console.error('...'); throw error; }  // good
+try { localStorage.setItem(key, value); } catch { /* unavailable */ }  // good + comment
 ```
 
 ### No Hard-Coded Values
@@ -120,25 +98,28 @@ When a filter has an "all" or "unfiltered" state, omit the parameter entirely ra
 
 ### Type Guards: Precise Narrowing for Excluded Values
 
-When a type guard intentionally excludes enum members, use `Exclude<T, 'VALUE'>` in the return type to match runtime behavior.
+When a type guard intentionally excludes enum members, use `Exclude<T, 'VALUE'>` in the return type to match runtime behavior. Caller code then trusts the type system; no `as` casts needed.
 
-**Bad:** Type doesn't reflect runtime exclusion
+### Layer-Specific Responsibility: Normalization vs Filtering
+
+When filtering data by multiple criteria (format + role):
+
+- **Service layer**: Normalize raw data format (e.g., `null → PENDING`). Return all data; stay framework-agnostic and testable.
+- **UI layer**: Filter by role/context (e.g., "admin sees PENDING, user doesn't"). Apply display rules in component.
+
+**Benefit**: Services remain pure and unit-testable without mocking roles; UI logic explicit in one place.
+
+### Function Composition: Single Responsibility
+
+Separate independent transformations into distinct functions. Compose at call site.
 
 ```typescript
-function isSelectable(value: string | null): value is Category {
-  return value !== null && ... && value !== PENDING;  // Excludes PENDING at runtime
-}
+// groupBySolutionCategory(): pure grouping (testable)
+// filterGroupsByRole(): pure filtering by role (testable)
+let filtered = $derived(filterGroupsByRole(groupBySolutionCategory(workbooks, map), role));
 ```
 
-**Good:** Type matches runtime behavior
-
-```typescript
-function isSelectable(value: string | null): value is Exclude<Category, 'PENDING'> {
-  return value !== null && ... && value !== PENDING;
-}
-```
-
-**Benefit:** Caller code trusts the type system; no `as` casts needed.
+**Benefit**: Each function testable in isolation; reusable in different contexts.
 
 ## Documentation
 
@@ -150,50 +131,13 @@ Write all project documentation (plans, dev-notes, guides, refactor notes) in Ja
 
 ### TSDoc
 
-Add TSDoc comments to every exported function, type, and class. The minimum required fields are `@param` (for non-obvious parameters) and `@returns` (when the return value is not evident from the type). One-liner `/** ... */` is sufficient for simple cases; use multi-line only when behavior needs explanation.
+Add TSDoc to every exported function, type, class. Minimum: `@param` (non-obvious), `@returns` (not evident from type). One-liner OK; multi-line for complex behavior only.
 
-For optional parameters with a default, state it explicitly in `@param`: `Defaults to false.`
+### Documentation
 
-```typescript
-/** Returns the URL slug for a workbook, falling back to the workbook ID. */
-export function getUrlSlugFrom(workbook: WorkbookList): string { ... }
-```
+Write plans/dev-notes/guides in Japanese. Source code comments in English. Always specify language on code blocks (e.g., `typescript`, `sql`, `bash`). For Svelte 5 unclear behavior: fetch official docs via WebFetch, not training knowledge.
 
-### Markdown Code Blocks
+## Security & Code Review
 
-Always specify a language identifier on every fenced code block. Never write bare ` ``` `.
-
-Common identifiers: `typescript`, `svelte`, `sql`, `bash`, `mermaid`, `json`, `prisma`, `html`, `css`.
-
-### Svelte 5: Prefer Official Docs Over Training Knowledge
-
-When Svelte 5 behavior is unclear, fetch official docs via WebFetch — do not rely on training knowledge. URL pattern: `https://svelte.dev/docs/svelte/{section}` (e.g. `/$effect`, `/stores`, `/what-are-runes`).
-
-## Security
-
-### Server-side Logging
-
-Do not log user-identifiable or content data (titles, names, IDs that map to users) in server-side `console.log`. Use generic messages instead:
-
-```typescript
-// Bad: leaks content and user identity
-console.log(`Created workbook "${workBook.title}" by user ${author.id}`);
-
-// Good
-console.log('Workbook created successfully');
-```
-
-Prefer placing the single authoritative log in the service layer; remove duplicate logs in route handlers that cover the same event.
-
-## Code Review
-
-### CodeRabbit Review: Severity Triage
-
-Run `coderabbit review --plain` once after all phases are complete (not on every commit).
-
-**Triage by severity:**
-
-- **critical / high / potential_issue (medium)**: Write all findings verbatim to a `## CodeRabbit Findings` section in `plan.md`. The user decides which to fix before opening the PR. Do not fix any of these findings unilaterally.
-- **nitpick / info**: Defer to PR CI — CodeRabbit will re-comment on the open PR.
-
-Writing medium-and-above findings to `plan.md` serves a dual purpose: it gives the user full visibility for a fix/defer decision, and it builds the implementer's understanding of recurring quality issues.
+- **Logging**: No user-identifiable data in `console.log`. Single authoritative log in service layer.
+- **CodeRabbit**: Run after all phases complete. Write `critical`/`high`/`medium` findings to `plan.md` verbatim; defer `nitpick` to PR CI.
