@@ -93,14 +93,16 @@
 {#if currentCategory === ALL_SOLUTION_CATEGORIES}
   <!-- Group display: render sections in SolutionCategory enum order -->
   {#if readableCount}
-    {#each groupedWorkbooks ?? [] as group (group.category)}
-      <div class="text-2xl pb-4 dark:text-white">{SOLUTION_LABELS[group.category]}</div>
-      <SolutionTable
-        workbooks={group.workbooks}
-        {userId}
-        {role}
-        taskResults={taskResultsWithWorkBookId}
-      />
+    {#each groupedWorkbooks ?? [] as group, i (group.category)}
+      <div class={i > 0 ? 'mt-8' : ''}>
+        <div class="text-2xl pb-4 dark:text-white">{SOLUTION_LABELS[group.category]}</div>
+        <SolutionTable
+          workbooks={group.workbooks}
+          {userId}
+          {role}
+          taskResults={taskResultsWithWorkBookId}
+        />
+      </div>
     {/each}
   {:else}
     <EmptyWorkbookList />
