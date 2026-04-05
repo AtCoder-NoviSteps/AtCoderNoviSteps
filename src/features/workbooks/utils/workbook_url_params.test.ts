@@ -93,20 +93,16 @@ describe('parseWorkBookCategory', () => {
     );
   });
 
-  test('returns SEARCH_SIMULATION (default) when categories is absent', () => {
-    expect(parseWorkBookCategory(toParams(''))).toBe(SolutionCategory.SEARCH_SIMULATION);
+  test('returns null (all categories) when categories is absent', () => {
+    expect(parseWorkBookCategory(toParams(''))).toBeNull();
   });
 
-  test('returns SEARCH_SIMULATION (default) for PENDING', () => {
-    expect(parseWorkBookCategory(toParams('categories=PENDING'))).toBe(
-      SolutionCategory.SEARCH_SIMULATION,
-    );
+  test('returns null (all categories) for PENDING', () => {
+    expect(parseWorkBookCategory(toParams('categories=PENDING'))).toBeNull();
   });
 
-  test('returns SEARCH_SIMULATION (default) for invalid value', () => {
-    expect(parseWorkBookCategory(toParams('categories=FLYING_FISH'))).toBe(
-      SolutionCategory.SEARCH_SIMULATION,
-    );
+  test('returns null (all categories) for invalid value', () => {
+    expect(parseWorkBookCategory(toParams('categories=FLYING_FISH'))).toBeNull();
   });
 });
 
@@ -129,5 +125,9 @@ describe('buildWorkbooksUrl', () => {
 
   test('created_by_user tab produces URL with tab only', () => {
     expect(buildWorkbooksUrl(WorkBookTab.CREATED_BY_USER)).toBe('/workbooks?tab=created_by_user');
+  });
+
+  test('solution tab with null category produces URL without categories param', () => {
+    expect(buildWorkbooksUrl(WorkBookTab.SOLUTION, undefined, null)).toBe('/workbooks?tab=solution');
   });
 });

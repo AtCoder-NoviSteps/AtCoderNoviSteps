@@ -1,10 +1,22 @@
 import { TaskGrade } from '$lib/types/task';
 import { WorkBookTab, DEFAULT_WORKBOOK_TAB } from '$features/workbooks/types/workbook';
-import { SolutionCategory } from '$features/workbooks/types/workbook_placement';
+import {
+  SolutionCategory,
+  ALL_SOLUTION_CATEGORIES,
+  type SelectedSolutionCategory,
+} from '$features/workbooks/types/workbook_placement';
 
 const DEFAULT_CURRICULUM_GRADE = TaskGrade.Q10;
-const DEFAULT_SOLUTION_CATEGORY = SolutionCategory.SEARCH_SIMULATION;
 const EXISTING_TABS = new Set<string>(Object.values(WorkBookTab));
+
+/** Returns true when value is a SolutionCategory selectable via URL (excludes PENDING). */
+function isSelectableCategory(value: string | null): value is SolutionCategory {
+  return (
+    value !== null &&
+    (Object.values(SolutionCategory) as string[]).includes(value) &&
+    value !== SolutionCategory.PENDING
+  );
+}
 
 /**
  * Parses the `?tab=` URL parameter into a WorkBookTab.
@@ -39,19 +51,15 @@ export function parseWorkBookGrade(params: URLSearchParams): TaskGrade {
 }
 
 /**
- * Parses the `?categories=` URL parameter into a SolutionCategory.
- * Excludes PENDING. Falls back to SEARCH_SIMULATION for missing or invalid values.
+ * Parses the `?categories=` URL parameter into a SelectedSolutionCategory.
+ * Returns null (all categories) when the parameter is absent, invalid, or PENDING.
+ * PENDING is excluded because it is admin-only and managed via the order page, not via URL.
  *
  * @param params - URL search params to read from
  */
-export function parseWorkBookCategory(params: URLSearchParams): SolutionCategory {
+export function parseWorkBookCategory(params: URLSearchParams): SelectedSolutionCategory {
   const param = params.get('categories');
-
-  if (isValidNonPending(param, Object.values(SolutionCategory), SolutionCategory.PENDING)) {
-    return param;
-  }
-
-  return DEFAULT_SOLUTION_CATEGORY;
+  return isSelectableCategory(param) ? param : ALL_SOLUTION_CATEGORIES;
 }
 
 /**
@@ -66,7 +74,7 @@ export function parseWorkBookCategory(params: URLSearchParams): SolutionCategory
 export function buildWorkbooksUrl(
   tab: WorkBookTab,
   grade?: TaskGrade,
-  category?: SolutionCategory,
+  category?: SelectedSolutionCategory,
 ): string {
   const params = new URLSearchParams();
   params.set('tab', tab);
@@ -74,6 +82,7 @@ export function buildWorkbooksUrl(
   if (tab === WorkBookTab.CURRICULUM && grade) {
     params.set('grades', grade);
   } else if (tab === WorkBookTab.SOLUTION && category) {
+    // category は null（ALL）のとき falsy なので params に追加されない
     params.set('categories', category);
   }
 
