@@ -10,12 +10,18 @@ import {
   type WorkBookTab as WorkBookTabType,
   WorkBookType,
 } from '$features/workbooks/types/workbook';
-import { type PlacementQuery } from '$features/workbooks/types/workbook_placement';
+import {
+  type PlacementQuery,
+  ALL_SOLUTION_CATEGORIES,
+  type SelectedSolutionCategory,
+  type SolutionCategory,
+} from '$features/workbooks/types/workbook_placement';
 
 import {
   getWorkbooksByPlacement,
   getWorkBooksCreatedByUsers,
   getAvailableSolutionCategories,
+  getSolutionCategoryMapByWorkbookId,
 } from '$features/workbooks/services/workbooks';
 
 import { isAdmin, getLoggedInUser, canDelete } from '$lib/utils/authorship';
@@ -53,11 +59,20 @@ export async function load({ locals, url }) {
   const adminUser = loggedInUser && isAdmin(loggedInUser.role as Roles);
 
   try {
-    const [workbooks, availableCategories, tasksMapByIds, taskResultsByTaskId] = await Promise.all([
+    const [
+      workbooks,
+      availableCategories,
+      solutionCategoryMap,
+      tasksMapByIds,
+      taskResultsByTaskId,
+    ] = await Promise.all([
       fetchWorkbooksByTab(tab, selectedGrade, selectedCategory, !!adminUser),
       tab === WorkBookTab.SOLUTION
         ? getAvailableSolutionCategories(!!adminUser)
         : Promise.resolve([]),
+      tab === WorkBookTab.SOLUTION && selectedCategory === ALL_SOLUTION_CATEGORIES
+        ? getSolutionCategoryMapByWorkbookId(!!adminUser)
+        : Promise.resolve(new Map<number, SolutionCategory>()),
       taskCrud.getTasksByTaskId(),
       loggedInUser
         ? taskResultsCrud.getTaskResultsOnlyResultExists(loggedInUser.id, true)
@@ -67,6 +82,7 @@ export async function load({ locals, url }) {
     return {
       workbooks,
       availableCategories,
+      solutionCategoryMap,
       tasksMapByIds,
       taskResultsByTaskId,
       loggedInUser,
@@ -133,7 +149,7 @@ function fetchWorkbooksByTab(
 function buildPlacementQuery(
   tab: WorkBookTabType,
   grade: ReturnType<typeof parseWorkBookGrade>,
-  category: ReturnType<typeof parseWorkBookCategory>,
+  category: SelectedSolutionCategory,
 ): PlacementQuery {
   if (tab === WorkBookTab.CURRICULUM) {
     return { workBookType: WorkBookType.CURRICULUM, taskGrade: grade };

@@ -13,7 +13,7 @@
     WorkBookType,
     WorkBookTab,
   } from '$features/workbooks/types/workbook';
-  import { type SolutionCategory } from '$features/workbooks/types/workbook_placement';
+  import { type SelectedSolutionCategory } from '$features/workbooks/types/workbook_placement';
 
   import HeadingOne from '$lib/components/HeadingOne.svelte';
   import WorkbookTabItem from '$features/workbooks/components/list/WorkbookTabItem.svelte';
@@ -78,7 +78,7 @@
     goto(resolve(buildWorkbooksUrl(WorkBookTab.CURRICULUM, grade)));
   }
 
-  function handleCategoryChange(category: SolutionCategory) {
+  function handleCategoryChange(category: SelectedSolutionCategory) {
     // @ts-expect-error svelte-check TS2554: same declaration merging issue
     goto(resolve(buildWorkbooksUrl(WorkBookTab.SOLUTION, undefined, category)));
   }
@@ -135,6 +135,7 @@
               loggedInUser={loggedInUser as { id: string; role: Roles }}
               availableCategories={data.availableCategories}
               currentCategory={data.selectedCategory}
+              solutionCategoryMap={data.solutionCategoryMap}
               onCategoryChange={handleCategoryChange}
             />
           </div>

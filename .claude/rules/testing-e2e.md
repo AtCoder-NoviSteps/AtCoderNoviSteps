@@ -74,6 +74,26 @@ for (const grade of GRADES) {
 
 After an interaction that changes element state (active tab, toggle, selection), assert the _new_ state — not just that the element is visible, which may have been true before the interaction. Assert an active CSS class, `aria-selected`, or similar attribute instead of `toBeVisible()`.
 
+### Prefer Semantic Attributes Over CSS Classes
+
+Assert element state via accessibility attributes (`aria-pressed`, `aria-selected`, `data-*`), not CSS classes (which are implementation details and break on style refactors).
+
+**Bad:** Brittle to styling changes
+
+```typescript
+await expect(button).toHaveClass(/text-primary-700/);
+```
+
+**Good:** Resilient to refactors
+
+```typescript
+await expect(button).toHaveAttribute('aria-pressed', 'true');
+// or
+await expect(button).toHaveAttribute('data-active', 'true');
+```
+
+**Note:** If component library doesn't expose the attribute, add it (or contribute PR). Teaching tests brittle selectors is not sustainable.
+
 ## Flowbite Toggle
 
 Flowbite's `Toggle` renders an `sr-only` `<input type="checkbox">` inside a `<label>`. Clicking the input directly fails because the visual `<span>` sibling intercepts pointer events. Click the label wrapper instead:

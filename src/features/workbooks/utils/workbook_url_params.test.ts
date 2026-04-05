@@ -15,6 +15,10 @@ function toParams(query: string): URLSearchParams {
 }
 
 describe('parseWorkBookTab', () => {
+  test('returns curriculum (default) when tab is absent', () => {
+    expect(parseWorkBookTab(toParams(''))).toBe(WorkBookTab.CURRICULUM);
+  });
+
   test('returns curriculum for tab=curriculum', () => {
     expect(parseWorkBookTab(toParams('tab=curriculum'))).toBe(WorkBookTab.CURRICULUM);
   });
@@ -25,10 +29,6 @@ describe('parseWorkBookTab', () => {
 
   test('returns created_by_user for tab=created_by_user', () => {
     expect(parseWorkBookTab(toParams('tab=created_by_user'))).toBe(WorkBookTab.CREATED_BY_USER);
-  });
-
-  test('returns curriculum (default) when tab is absent', () => {
-    expect(parseWorkBookTab(toParams(''))).toBe(WorkBookTab.CURRICULUM);
   });
 
   test('returns curriculum (default) for invalid tab value', () => {
@@ -93,41 +93,49 @@ describe('parseWorkBookCategory', () => {
     );
   });
 
-  test('returns SEARCH_SIMULATION (default) when categories is absent', () => {
-    expect(parseWorkBookCategory(toParams(''))).toBe(SolutionCategory.SEARCH_SIMULATION);
+  test('returns null (all categories) when categories is absent', () => {
+    expect(parseWorkBookCategory(toParams(''))).toBeNull();
   });
 
-  test('returns SEARCH_SIMULATION (default) for PENDING', () => {
-    expect(parseWorkBookCategory(toParams('categories=PENDING'))).toBe(
-      SolutionCategory.SEARCH_SIMULATION,
-    );
+  test('returns null (all categories) for PENDING', () => {
+    expect(parseWorkBookCategory(toParams('categories=PENDING'))).toBeNull();
   });
 
-  test('returns SEARCH_SIMULATION (default) for invalid value', () => {
-    expect(parseWorkBookCategory(toParams('categories=FLYING_FISH'))).toBe(
-      SolutionCategory.SEARCH_SIMULATION,
-    );
+  test('returns null (all categories) for invalid value', () => {
+    expect(parseWorkBookCategory(toParams('categories=FLYING_FISH'))).toBeNull();
   });
 });
 
 describe('buildWorkbooksUrl', () => {
-  test('curriculum tab with grade produces correct URL', () => {
-    expect(buildWorkbooksUrl(WorkBookTab.CURRICULUM, TaskGrade.Q9)).toBe(
-      '/workbooks?tab=curriculum&grades=Q9',
-    );
+  describe('with curriculum tab', () => {
+    test('produces URL with tab only when grade is not provided', () => {
+      expect(buildWorkbooksUrl(WorkBookTab.CURRICULUM)).toBe('/workbooks?tab=curriculum');
+    });
+
+    test('produces URL with tab and grade when grade is provided', () => {
+      expect(buildWorkbooksUrl(WorkBookTab.CURRICULUM, TaskGrade.Q9)).toBe(
+        '/workbooks?tab=curriculum&grades=Q9',
+      );
+    });
   });
 
-  test('solution tab with category produces correct URL', () => {
-    expect(buildWorkbooksUrl(WorkBookTab.SOLUTION, undefined, SolutionCategory.GRAPH)).toBe(
-      '/workbooks?tab=solution&categories=GRAPH',
-    );
+  describe('with solution tab', () => {
+    test('produces URL with tab only when category is null', () => {
+      expect(buildWorkbooksUrl(WorkBookTab.SOLUTION, undefined, null)).toBe(
+        '/workbooks?tab=solution',
+      );
+    });
+
+    test('produces URL with tab and category when category is provided', () => {
+      expect(buildWorkbooksUrl(WorkBookTab.SOLUTION, undefined, SolutionCategory.GRAPH)).toBe(
+        '/workbooks?tab=solution&categories=GRAPH',
+      );
+    });
   });
 
-  test('curriculum tab without grade produces URL with tab only', () => {
-    expect(buildWorkbooksUrl(WorkBookTab.CURRICULUM)).toBe('/workbooks?tab=curriculum');
-  });
-
-  test('created_by_user tab produces URL with tab only', () => {
-    expect(buildWorkbooksUrl(WorkBookTab.CREATED_BY_USER)).toBe('/workbooks?tab=created_by_user');
+  describe('with created_by_user tab', () => {
+    test('produces URL with tab only', () => {
+      expect(buildWorkbooksUrl(WorkBookTab.CREATED_BY_USER)).toBe('/workbooks?tab=created_by_user');
+    });
   });
 });

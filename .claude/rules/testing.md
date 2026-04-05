@@ -26,22 +26,7 @@ If a task description does not mention tests, add them anyway for any non-trivia
 
 ## Unused Imports in Test Files
 
-An unused import in a test file is a signal that a test was planned but not yet written — not dead code to remove.
-
-Before deleting such an import, check whether the corresponding test case is missing and add it:
-
-```typescript
-// Bad: remove the import because it's unused
-import { ABCLikeProvider } from './contest_table_provider';
-
-// Good: the import is unused because the test is missing — add the test
-test('expects to create ABCLike preset correctly', () => {
-  const group = prepareContestProviderPresets().ABCLike();
-  expect(group.getProvider(ContestType.ABC_LIKE)).toBeInstanceOf(ABCLikeProvider);
-});
-```
-
-Removing the import silences the linter but leaves a coverage gap. Adding the test both satisfies the linter and improves coverage.
+Unused imports signal a missing test, not dead code. Before deleting, add the corresponding test case.
 
 ## Test Types
 
@@ -67,7 +52,24 @@ Test stub parameter types must match the production function's signature — use
 - Use realistic fixture values (real task IDs, grade names) instead of placeholders like `'t1'`
 - Extract shared data into fixture files; inline is fine for single-use cases
 - After `.filter()` on fixtures, verify actual contents — same ID may refer to a different entity after fixture updates
-- **Description ↔ code path alignment**: when a test name describes a specific scenario (e.g. "tie-break"), verify the fixture actually exercises that code path. A test that passes without reaching the branch it claims to cover gives false confidence
+- **Description ↔ code path alignment**: when a test name describes a specific scenario (e.g. "tie-break"), verify the fixture actually exercises that code path
+
+### Fixture Sharing in describe() Scope
+
+When multiple tests in a `describe` block use identical fixture data, define it once at block scope instead of duplicating in each test. Benefit: DRY + fixture changes sync automatically. Only use if fixture is immutable within tests (no mutations).
+
+```typescript
+describe('filterByRole', () => {
+  const testGroups = [{ role: ADMIN }, { role: PENDING }];
+
+  test('admin sees all', () => {
+    expect(filter(testGroups, ADMIN)).toHaveLength(2);
+  });
+  test('user sees filtered', () => {
+    expect(filter(testGroups, USER)).toHaveLength(1);
+  });
+});
+```
 
 ## Coverage
 
@@ -78,75 +80,31 @@ Test stub parameter types must match the production function's signature — use
 
 Order `describe` blocks in service and utils test files to match the declaration order of functions in the source file. Misalignment makes it harder to cross-reference tests and implementation.
 
+### Describe Block Organization: Multi-Scenario Functions
+
+Split `describe` blocks by scenario (not all cases flat) when a function behaves differently by mode. Example: separate `describe('func with modeA')` and `describe('func with modeB')` rather than mixing all cases. Benefit: better test discovery and names.
+
 ## Service Layer Unit Tests
 
 Service tests mock Prisma via `vi.mock('$lib/server/database', ...)` — no real DB mutations occur.
 
 ### Mock Helpers
 
-Extract repeated mock patterns into helpers in the test file. Define the return type alias once and use it across all helpers:
+Extract repeated mock patterns into helpers. Use `mockFindUnique`, `mockFindMany`, `mockCount` as the standard trio for Prisma model tests. Add `mockCreate`, `mockTransaction`, `mockDelete` when needed.
 
-```typescript
-type PrismaWorkBook = Awaited<ReturnType<typeof prisma.workBook.findUnique>>;
-type PrismaWorkBookRow = Awaited<ReturnType<typeof prisma.workBook.findMany>>[number];
+### Cleanup for Integration Tests
 
-function mockFindUnique(value: PrismaWorkBook) {
-  vi.mocked(prisma.workBook.findUnique).mockResolvedValue(value);
-}
-
-function mockFindMany(value: PrismaWorkBookRow[]) {
-  vi.mocked(prisma.workBook.findMany).mockResolvedValue(
-    value as unknown as Awaited<ReturnType<typeof prisma.workBook.findMany>>,
-  );
-}
-
-function mockCount(value: number) {
-  vi.mocked(prisma.workBook.count).mockResolvedValue(value);
-}
-```
-
-Extract `mockFindUnique`, `mockFindMany`, and `mockCount` as the standard trio for service tests that touch a single Prisma model. Add `mockCreate`, `mockTransaction`, and `mockDelete` when those operations are also tested.
-
-### Cleanup for Integration Tests and Tests with Real Side Effects
-
-This does not apply to standard service layer unit tests that use Prisma mocks.
-
-If a test performs real DB mutations, file system changes, external API calls, or other stateful side effects that persist beyond the test (e.g., integration tests, seed scripts), wrap assertions in `try/finally` — a failing assertion skips cleanup and contaminates later tests:
-
-```typescript
-try {
-  await doSomething();
-  expect(result).toBe(expected);
-} finally {
-  await restoreState();
-}
-```
+For tests with real side effects (DB mutations, file changes, API calls), wrap assertions in `try/finally` — a failing assertion skips cleanup and contaminates later tests.
 
 ### File Split for Testability
 
-When a service file mixes DB operations and pure functions, split it into two files:
+When a service mixes DB operations and pure functions, split into `crud.ts` (DB; Prisma mocks needed) and `initializers.ts` (pure; no mocks). Skip split if cohesion suffers.
 
-- `crud.ts` — DB operations (`getXxx`, `updateXxx`, `createXxx`); tests need Prisma mocks
-- `initializers.ts` — pure computation (grade grouping, priority assignment); tests need no mocks
+## Component & Utility Tests
 
-Stop the split if internal helpers (e.g. `fetchUnplacedWorkbooks`) would be fragmented across files — cohesion matters more than the split itself.
-
-## Component Vitest Unit Tests
-
-E2E tests are complementary to, not a substitute for, unit tests. Add Vitest unit tests for any component logic (derived values, event handlers, utility calls) by extracting it to the nearest `utils/` file and testing there.
-
-You may omit a component-level Vitest test when **both** conditions hold:
-
-1. The component is template-only (no logic beyond prop bindings and simple `{#if}`/`{#each}` blocks that only render — no inline function calls, ternaries with side effects, derived computations, or nested logic)
-2. The component's rendering paths are covered by E2E tests
-
-When a component contains extracted logic (e.g. derived values, event handlers, utility calls), add unit tests for that logic in the nearest `utils/` file instead of testing the component directly.
-
-## Testing Extracted Utilities
-
-- Add tests at extraction time, not later
-- For URL manipulation: assert the original URL is not mutated
-- For multi-column operations (e.g., DnD): assert both source and destination columns
+- Extract component logic to `utils/` and test there, not in the component.
+- Omit component Vitest test if template-only **and** E2E tests cover rendering paths.
+- Add utility tests at extraction time; assert immutability (URLs) and all affected parts (multi-column operations).
 
 ## HTTP Mocking
 

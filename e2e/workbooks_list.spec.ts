@@ -17,6 +17,9 @@ const GRADE_Q10 = 'Q10';
 const GRADE_Q9 = 'Q9';
 const GRADE_Q8 = 'Q8';
 
+// All button label
+const LABEL_ALL = 'All';
+
 // Category URL parameter values (must match SolutionCategory in src/features/workbooks/types/workbook_placement.ts)
 const CATEGORY_GRAPH = 'GRAPH';
 const CATEGORY_DP = 'DYNAMIC_PROGRAMMING';
@@ -143,6 +146,56 @@ test.describe('logged-in user (general)', () => {
         await expect(page).toHaveURL(new RegExp(`categories=${category}`), { timeout: TIMEOUT });
       });
     }
+
+    test.describe('solution tab all-categories view', () => {
+      test('solution tab default shows All button as active', async ({ page }) => {
+        await page.goto(`${WORKBOOK_LIST_URL}?tab=${TAB_SOLUTION}`);
+        await expect(page.getByRole('tab', { name: '解法別' })).toHaveAttribute(
+          'aria-selected',
+          'true',
+          { timeout: TIMEOUT },
+        );
+
+        const allButton = page.getByRole('button', { name: LABEL_ALL });
+        await expect(allButton).toBeVisible({ timeout: TIMEOUT });
+        // Verify All button is marked as active via semantic attribute
+        await expect(allButton).toHaveAttribute('aria-pressed', 'true', { timeout: TIMEOUT });
+      });
+
+      test('All button is shown at the beginning of category buttons', async ({ page }) => {
+        await page.goto(`${WORKBOOK_LIST_URL}?tab=${TAB_SOLUTION}`);
+        await expect(page.getByRole('tab', { name: '解法別' })).toBeVisible({ timeout: TIMEOUT });
+
+        // Scope to the category buttons container to find the first button in that section
+        const categoryButtonsContainer = page.locator('div.mb-6');
+        const firstButton = categoryButtonsContainer.getByRole('button').first();
+        await expect(firstButton).toHaveText(LABEL_ALL, { timeout: TIMEOUT });
+      });
+
+      test('clicking All button shows category-grouped sections', async ({ page }) => {
+        // First, open with a specific category
+        await page.goto(`${WORKBOOK_LIST_URL}?tab=${TAB_SOLUTION}&categories=${CATEGORY_GRAPH}`);
+        await expect(page.getByRole('tab', { name: '解法別' })).toBeVisible({ timeout: TIMEOUT });
+
+        // Click the All button
+        await page.getByRole('button', { name: LABEL_ALL }).click();
+        await expect(page).toHaveURL(new RegExp(`tab=${TAB_SOLUTION}`), { timeout: TIMEOUT });
+        // Verify that the categories= parameter is not in the URL
+        await expect(page).not.toHaveURL(/categories=/, { timeout: TIMEOUT });
+
+        // Verify category sections render
+        await expect(page.getByRole('heading', { name: 'グラフ' })).toBeVisible({
+          timeout: TIMEOUT,
+        });
+      });
+
+      test('non-admin user does not see PENDING section in All view', async ({ page }) => {
+        await page.goto(`${WORKBOOK_LIST_URL}?tab=${TAB_SOLUTION}`);
+        await expect(page.getByRole('tab', { name: '解法別' })).toBeVisible({ timeout: TIMEOUT });
+
+        await expect(page.getByRole('heading', { name: '未分類' })).not.toBeVisible();
+      });
+    });
   });
 
   test.describe('session state', () => {
@@ -227,6 +280,27 @@ test.describe('admin user', () => {
         'true',
         { timeout: TIMEOUT },
       );
+    });
+  });
+
+  test.describe('solution tab all-categories view (admin)', () => {
+    test('admin sees PENDING section in All view when PENDING workbooks exist', async ({
+      page,
+    }) => {
+      await page.goto(`${WORKBOOK_LIST_URL}?tab=${TAB_SOLUTION}`);
+      await expect(page.getByRole('tab', { name: '解法別' })).toBeVisible({ timeout: TIMEOUT });
+
+      const pendingHeading = page.getByRole('heading', { name: '未分類' });
+
+      if (
+        !(await pendingHeading.isVisible({ timeout: VISIBILITY_CHECK_TIMEOUT }).catch(() => false))
+      ) {
+        // PENDING 問題集が存在しない場合はスキップ
+        test.skip();
+        return;
+      }
+
+      await expect(pendingHeading).toBeVisible({ timeout: TIMEOUT });
     });
   });
 

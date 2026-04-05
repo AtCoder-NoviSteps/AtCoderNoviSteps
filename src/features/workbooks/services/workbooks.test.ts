@@ -10,6 +10,7 @@ import {
   getWorkbooksByPlacement,
   getWorkBooksCreatedByUsers,
   getAvailableSolutionCategories,
+  getSolutionCategoryMapByWorkbookId,
 } from './workbooks';
 import { TaskGrade } from '$lib/types/task';
 import { WorkBookType, type WorkBook } from '$features/workbooks/types/workbook';
@@ -222,6 +223,41 @@ describe('getWorkbooksByPlacement', () => {
 
     expect(result[0].authorName).toBe('unknown');
   });
+
+  test('returns all SOLUTION workbooks when solutionCategory is null', async () => {
+    mockFindMany([
+      { ...MOCK_WORKBOOK_BASE, workBookType: WorkBookType.SOLUTION },
+      { ...MOCK_WORKBOOK_BASE, id: 2, workBookType: WorkBookType.SOLUTION },
+    ]);
+
+    await getWorkbooksByPlacement({
+      workBookType: WorkBookType.SOLUTION,
+      solutionCategory: null,
+    });
+
+    expect(prisma.workBook.findMany).toHaveBeenCalledWith(
+      expect.objectContaining({
+        where: expect.objectContaining({
+          workBookType: WorkBookType.SOLUTION,
+          isPublished: true,
+          placement: {}, // no solutionCategory filter
+        }),
+      }),
+    );
+  });
+
+  test('null solutionCategory with includeUnpublished=true omits isPublished filter', async () => {
+    mockFindMany([{ ...MOCK_WORKBOOK_BASE, workBookType: WorkBookType.SOLUTION }]);
+
+    await getWorkbooksByPlacement(
+      { workBookType: WorkBookType.SOLUTION, solutionCategory: null },
+      true,
+    );
+
+    const callArg = vi.mocked(prisma.workBook.findMany).mock.calls[0][0];
+    expect(callArg?.where).not.toHaveProperty('isPublished');
+    expect(callArg?.where?.placement).toEqual({});
+  });
 });
 
 describe('getWorkBooksCreatedByUsers', () => {
@@ -305,6 +341,64 @@ describe('getAvailableSolutionCategories', () => {
         }),
       }),
     );
+  });
+});
+
+describe('getSolutionCategoryMapByWorkbookId', () => {
+  test('returns a Map of workbookId to SolutionCategory for published workbooks', async () => {
+    vi.mocked(prisma.workBookPlacement.findMany).mockResolvedValue([
+      { workBookId: 1, solutionCategory: SolutionCategory.GRAPH },
+      { workBookId: 2, solutionCategory: SolutionCategory.DYNAMIC_PROGRAMMING },
+    ] as unknown as Awaited<ReturnType<typeof prisma.workBookPlacement.findMany>>);
+
+    const result = await getSolutionCategoryMapByWorkbookId(false);
+
+    expect(prisma.workBookPlacement.findMany).toHaveBeenCalledWith(
+      expect.objectContaining({
+        where: expect.objectContaining({
+          workBook: expect.objectContaining({
+            workBookType: WorkBookType.SOLUTION,
+            isPublished: true,
+          }),
+        }),
+        select: { workBookId: true, solutionCategory: true },
+      }),
+    );
+    expect(result.get(1)).toBe(SolutionCategory.GRAPH);
+    expect(result.get(2)).toBe(SolutionCategory.DYNAMIC_PROGRAMMING);
+  });
+
+  test('normalizes null solutionCategory to PENDING', async () => {
+    vi.mocked(prisma.workBookPlacement.findMany).mockResolvedValue([
+      { workBookId: 1, solutionCategory: null },
+      { workBookId: 2, solutionCategory: SolutionCategory.GRAPH },
+    ] as unknown as Awaited<ReturnType<typeof prisma.workBookPlacement.findMany>>);
+
+    const result = await getSolutionCategoryMapByWorkbookId(false);
+
+    expect(result.get(1)).toBe(SolutionCategory.PENDING);
+    expect(result.get(2)).toBe(SolutionCategory.GRAPH);
+  });
+
+  test('omits isPublished filter when includeUnpublished=true', async () => {
+    vi.mocked(prisma.workBookPlacement.findMany).mockResolvedValue(
+      [] as unknown as Awaited<ReturnType<typeof prisma.workBookPlacement.findMany>>,
+    );
+
+    await getSolutionCategoryMapByWorkbookId(true);
+
+    const callArg = vi.mocked(prisma.workBookPlacement.findMany).mock.calls[0][0];
+    expect(callArg?.where?.workBook).not.toHaveProperty('isPublished');
+  });
+
+  test('returns empty Map when no placements exist', async () => {
+    vi.mocked(prisma.workBookPlacement.findMany).mockResolvedValue(
+      [] as unknown as Awaited<ReturnType<typeof prisma.workBookPlacement.findMany>>,
+    );
+
+    const result = await getSolutionCategoryMapByWorkbookId(false);
+
+    expect(result.size).toBe(0);
   });
 });
 
