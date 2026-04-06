@@ -99,11 +99,11 @@ function mockFetch(body: unknown, ok = true): void {
 
 beforeEach(() => {
   vi.clearAllMocks();
-  process.env.CONFIRM_API_URL = SAMPLE_API_URL;
+  vi.stubEnv('CONFIRM_API_URL', SAMPLE_API_URL);
 });
 
 afterEach(() => {
-  delete process.env.CONFIRM_API_URL;
+  vi.unstubAllEnvs();
   vi.unstubAllGlobals();
 });
 
@@ -218,7 +218,7 @@ describe('validate', () => {
   });
 
   test('throws when CONFIRM_API_URL is not set', async () => {
-    delete process.env.CONFIRM_API_URL;
+    vi.stubEnv('CONFIRM_API_URL', '');
     mockFindUniqueOrThrow(makeUser(makeAtCoderAccount()));
 
     await expect(validate(SAMPLE_USERNAME)).rejects.toThrow(
