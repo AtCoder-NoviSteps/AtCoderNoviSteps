@@ -23,9 +23,9 @@
 | 修正           | `src/lib/components/SubmissionButton.svelte`                              | `loading` prop 追加（#8a）                                                          |
 | 修正           | `src/lib/components/FormWrapper.svelte`                                   | `isSubmitting` context 追加（#8b）                                                  |
 | 修正           | `src/features/account/components/settings/AtCoderVerificationForm.svelte` | ボタン間隔（#8c）+ Flowbite Clipboard 導入（#8d）                                   |
-| 新規           | `src/features/votes/services/vote_api.ts`                                 | `fetchMyVote` / `submitVote` / `fetchMedianVote` 抽出（#1, #2）                     |
-| 新規           | `src/features/votes/services/vote_api.test.ts`                            | vote_api.ts の単体テスト（#2）                                                      |
-| 修正           | `src/features/votes/components/VotableGrade.svelte`                       | vote_api.ts 利用 + AbortController 連打対策（#1, #2, #3）                           |
+| 新規           | `src/features/votes/internal_clients/vote_grade.ts`                       | `fetchMyVote` / `submitVote` / `fetchMedianVote` 抽出（#1, #2）                     |
+| 新規           | `src/features/votes/internal_clients/vote_grade.test.ts`                  | vote_grade.ts の単体テスト（#2）                                                    |
+| 修正           | `src/features/votes/components/VotableGrade.svelte`                       | vote_grade.ts 利用 + AbortController 連打対策（#1, #2, #3）                         |
 | 修正           | `e2e/votes.spec.ts`                                                       | セレクタ修正 + 初期状態対応（#9）                                                   |
 | 新規 migration | `prisma/migrations/.../migration.sql`                                     | CHECK 制約追加（#12, #13）                                                          |
 | 修正           | `prisma/schema.prisma`                                                    | コメント追加（#12, #13）                                                            |
@@ -614,23 +614,23 @@ git commit -m "feat: add button gap and replace custom clipboard with Flowbite C
 
 ## Phase 4: 投票 API 関数抽出 + fetch 改善
 
-### Task 8: vote_api.ts 作成（fetch credentials 追加 + service 層として実装）
+### Task 8: vote_grade.ts 作成（fetch credentials 追加 + internal_clients 層として実装）
 
 **Files:**
 
-- Create: `src/features/votes/services/vote_api.ts`
-- Create: `src/features/votes/services/vote_api.test.ts`
+- Create: `src/features/votes/internal_clients/vote_grade.ts`
+- Create: `src/features/votes/internal_clients/vote_grade.test.ts`
 
 - [ ] **Step 1: テストファイルを先に作成（TDD）**
 
 ```typescript
-// src/features/votes/services/vote_api.test.ts
+// src/features/votes/internal_clients/vote_grade.test.ts
 import { describe, test, expect, vi, beforeEach, afterEach } from 'vitest';
 import nock from 'nock';
 
 import { TaskGrade } from '$lib/types/task';
 
-import { fetchMyVote, submitVote, fetchMedianVote } from './vote_api';
+import { fetchMyVote, submitVote, fetchMedianVote } from './vote_grade';
 
 beforeEach(() => {
   nock.cleanAll();
@@ -746,15 +746,15 @@ describe('fetchMedianVote', () => {
 - [ ] **Step 2: テスト実行（FAIL 確認）**
 
 ```bash
-pnpm test:unit -- vote_api
+pnpm test:unit -- vote_grade
 ```
 
-Expected: `vote_api.ts` が存在しないため import エラー
+Expected: `vote_grade.ts` が存在しないため import エラー
 
-- [ ] **Step 3: vote_api.ts を実装**
+- [ ] **Step 3: vote_grade.ts を実装**
 
 ```typescript
-// src/features/votes/services/vote_api.ts
+// src/features/votes/internal_clients/vote_grade.ts
 import type { TaskGrade } from '$lib/types/task';
 
 /**
@@ -831,7 +831,7 @@ export async function fetchMedianVote(taskId: string): Promise<TaskGrade | null>
 - [ ] **Step 4: テスト実行（PASS 確認）**
 
 ```bash
-pnpm test:unit -- vote_api
+pnpm test:unit -- vote_grade
 ```
 
 Expected: 9件 PASS
@@ -839,24 +839,24 @@ Expected: 9件 PASS
 - [ ] **Step 5: コミット**
 
 ```bash
-git add src/features/votes/services/vote_api.ts src/features/votes/services/vote_api.test.ts
-git commit -m "feat: extract fetchMyVote, submitVote, fetchMedianVote to vote_api service with credentials: same-origin"
+git add src/features/votes/internal_clients/vote_grade.ts src/features/votes/internal_clients/vote_grade.test.ts
+git commit -m "feat: extract fetchMyVote, submitVote, fetchMedianVote to vote_grade service with credentials: same-origin"
 ```
 
 ---
 
-### Task 9: VotableGrade.svelte を vote_api.ts 利用 + AbortController 連打対策
+### Task 9: VotableGrade.svelte を vote_grade.ts 利用 + AbortController 連打対策
 
 **Files:**
 
 - Modify: `src/features/votes/components/VotableGrade.svelte`
 
-- [ ] **Step 1: import を追加し、vote_api.ts の関数で既存 fetch を置換**
+- [ ] **Step 1: import を追加し、vote_grade.ts の関数で既存 fetch を置換**
 
 `<script>` の import セクションに追加:
 
 ```typescript
-import { fetchMyVote, submitVote, fetchMedianVote } from '$features/votes/services/vote_api';
+import { fetchMyVote, submitVote, fetchMedianVote } from '$features/votes/internal_clients/vote_grade';
 ```
 
 `onTriggerClick` 関数を置換（fetch 直接呼び出しを `fetchMyVote` に変更）:
@@ -1021,7 +1021,7 @@ Expected: エラーなし
 
 ```bash
 git add src/features/votes/components/VotableGrade.svelte
-git commit -m "refactor: use vote_api.ts in VotableGrade and add AbortController for rapid-click protection"
+git commit -m "refactor: use vote_grade.ts in VotableGrade and add AbortController for rapid-click protection"
 ```
 
 ---
