@@ -13,11 +13,13 @@
     toChangeTextColorIfNeeds,
   } from '$lib/utils/task';
   import { qGrades, dGrades } from '$features/votes/utils/grade_options';
+  import { MIN_VOTES_FOR_STATISTICS } from '$features/votes/constants/statistics';
   import { SIGNUP_PAGE, LOGIN_PAGE, EDIT_PROFILE_PAGE } from '$lib/constants/navbar-links';
   import VoteDonutChart from '$features/votes/components/VoteDonutChart.svelte';
 
   let { data } = $props();
 
+  // @ts-expect-error svelte-check TS2554: AppTypes declaration merging causes RouteId to resolve as string, requiring params. Runtime behavior is correct.
   const editProfileHref = `${resolve(EDIT_PROFILE_PAGE)}?tab=atcoder`;
 
   const totalVotes = $derived(
@@ -43,7 +45,7 @@
         <FlaskConical class="w-5 h-5" />
       </span>
       <Tooltip triggeredBy="#flask-icon" placement="bottom">
-        3票以上集まると中央値が暫定グレードとして一覧表に反映されます。
+        {MIN_VOTES_FOR_STATISTICS}票以上集まると中央値が暫定グレードとして一覧表に反映されます。
       </Tooltip>
     {/if}
     <GradeLabel taskGrade={displayGrade} />

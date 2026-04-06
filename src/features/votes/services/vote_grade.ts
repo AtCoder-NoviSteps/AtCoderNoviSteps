@@ -3,6 +3,7 @@ import { TaskGrade } from '@prisma/client';
 import { sha256 } from '$lib/utils/hash';
 import type { VoteGradeResult } from '$features/votes/types/vote_result';
 import { computeMedianGrade } from '$features/votes/utils/median';
+import { MIN_VOTES_FOR_STATISTICS } from '$features/votes/constants/statistics';
 
 export async function getVoteGrade(userId: string, taskId: string): Promise<VoteGradeResult> {
   const voteRecord = await prisma.voteGrade.findUnique({
@@ -21,10 +22,6 @@ export async function getVoteGrade(userId: string, taskId: string): Promise<Vote
     grade: grade,
   };
 }
-
-// Minimum number of votes required to compute and store the median grade.
-// Below this threshold the distribution is too sparse to be meaningful.
-const MIN_VOTES_FOR_STATISTICS = 3;
 
 // 概念実装（読み込み→処理を同一トランザクション内で行う）
 export async function upsertVoteGradeTables(
