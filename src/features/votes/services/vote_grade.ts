@@ -28,7 +28,7 @@ export async function upsertVoteGradeTables(
   userId: string,
   taskId: string,
   grade: TaskGrade,
-): Promise<void> {
+): Promise<{ success: true }> {
   await prisma.$transaction(async (tx) => {
     const existing = await tx.voteGrade.findUnique({
       where: { userId_taskId: { userId, taskId } },
@@ -57,6 +57,7 @@ export async function upsertVoteGradeTables(
 
     await updateVoteStatistics(tx, taskId, latestCounters);
   });
+  return { success: true };
 }
 
 // ---------------------------------------------------------------------------
