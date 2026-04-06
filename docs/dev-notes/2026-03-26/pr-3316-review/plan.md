@@ -856,7 +856,11 @@ git commit -m "feat: extract fetchMyVote, submitVote, fetchMedianVote to vote_gr
 `<script>` の import セクションに追加:
 
 ```typescript
-import { fetchMyVote, submitVote, fetchMedianVote } from '$features/votes/internal_clients/vote_grade';
+import {
+  fetchMyVote,
+  submitVote,
+  fetchMedianVote,
+} from '$features/votes/internal_clients/vote_grade';
 ```
 
 `onTriggerClick` 関数を置換（fetch 直接呼び出しを `fetchMyVote` に変更）:
@@ -1266,7 +1270,7 @@ Add `CHECK` constraints (via manual migration SQL) for:
 
 Document every `CHECK` constraint in `prisma/ERD.md` — it is the only place they are visible outside migration SQL.
 
-````
+`````
 
 - [ ] **Step 3: coding-style.md に load 関数・auth 監査・success フラグ・Dead Code ルールを追加**
 
@@ -1316,7 +1320,7 @@ afterEach(() => {
   vi.unstubAllEnvs();
 });
 ```
-````
+`````
 
 ````
 

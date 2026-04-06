@@ -1,0 +1,85 @@
+import type { TaskGrade } from '$lib/types/task';
+
+// Helper to get base URL (works in browser and Node.js test environments)
+function getBaseUrl(): string {
+  if (typeof globalThis !== 'undefined' && globalThis.location?.origin) {
+    return globalThis.location.origin;
+  }
+  return 'http://localhost';
+}
+
+/**
+ * Fetches the current user's vote grade for a given task.
+ * @returns The voted grade, or null if not voted or request fails.
+ */
+export async function fetchMyVote(taskId: string): Promise<TaskGrade | null> {
+  try {
+    const response = await fetch(
+      `${getBaseUrl()}/problems/getMyVote?taskId=${encodeURIComponent(taskId)}`,
+      {
+        credentials: 'same-origin',
+        headers: { Accept: 'application/json' },
+      },
+    );
+
+    if (!response.ok) {
+      return null;
+    }
+
+    const data = await response.json();
+    return (data.grade as TaskGrade) ?? null;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Submits a vote via POST to the given action URL.
+ * @param signal - Optional AbortSignal to cancel an in-flight request.
+ * @returns true if the server responded with ok status, false otherwise.
+ */
+export async function submitVote(
+  action: URL,
+  formData: FormData,
+  signal?: AbortSignal,
+): Promise<boolean> {
+  try {
+    const response = await fetch(action, {
+      method: 'POST',
+      body: formData,
+      credentials: 'same-origin',
+      headers: { Accept: 'application/json' },
+      signal,
+    });
+
+    return response.ok;
+  } catch {
+    // AbortError or network error
+    return false;
+  }
+}
+
+/**
+ * Fetches the current median vote grade for a given task.
+ * @returns The median grade, or null if not enough votes or request fails.
+ */
+export async function fetchMedianVote(taskId: string): Promise<TaskGrade | null> {
+  try {
+    const response = await fetch(
+      `${getBaseUrl()}/problems/getMedianVote?taskId=${encodeURIComponent(taskId)}`,
+      {
+        credentials: 'same-origin',
+        headers: { Accept: 'application/json' },
+      },
+    );
+
+    if (!response.ok) {
+      return null;
+    }
+
+    const data = await response.json();
+    return (data.grade as TaskGrade) ?? null;
+  } catch {
+    return null;
+  }
+}
