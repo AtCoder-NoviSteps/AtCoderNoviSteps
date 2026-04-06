@@ -83,6 +83,28 @@ automatically excluded. This is not an IS NOT NULL check; the mechanism is the J
 When documenting this behavior, write "excluded by INNER JOIN" rather than
 "implicitly includes IS NOT NULL".
 
+## FK Relations: Always Define @relation
+
+Any field that references another model's ID must have an explicit `@relation` defined. Without `@relation`, Prisma does not generate FK constraints automatically, leading to referential integrity gaps.
+
+```prisma
+// Bad: FK without @relation
+userId String
+
+// Good: explicit @relation generates FK constraint
+userId String
+user   User @relation(fields: [userId], references: [id])
+```
+
+## DB-Level Value Constraints
+
+Add `CHECK` constraints (via manual migration SQL) for:
+
+- `count` fields that must be non-negative (`count >= 0`)
+- Enum fields where specific values are invalid at the DB level (e.g. `grade != 'PENDING'`)
+
+Document every `CHECK` constraint in `prisma/ERD.md` — it is the only place they are visible outside migration SQL.
+
 ## Dual-Enforcement Constraints
 
 When the same constraint is enforced in both Zod (early validation) and SQL `CHECK` (last line of defense), add an inline comment stating each layer's role and the obligation to keep them in sync:

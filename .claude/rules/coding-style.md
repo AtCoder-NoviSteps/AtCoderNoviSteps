@@ -141,3 +141,19 @@ Write plans/dev-notes/guides in Japanese. Source code comments in English. Alway
 
 - **Logging**: No user-identifiable data in `console.log`. Single authoritative log in service layer.
 - **CodeRabbit**: Run after all phases complete. Write `critical`/`high`/`medium` findings to `plan.md` verbatim; defer `nitpick` to PR CI.
+
+## `+page.server.ts` load() Error Handling
+
+Wrap calls to service functions in try-catch and return safe default values on failure, preventing a single service error from crashing the entire page.
+
+## Auth: Action Audit
+
+When adding an auth guard to one action in `+page.server.ts`, audit all other actions in the same file. Asymmetric guards (some actions protected, others not) are a recurring pattern of vulnerability.
+
+## Auth: success Flag and message Consistency
+
+When an action returns `success: false`, the `message` and `message_type` must also reflect failure. A success flag contradicting the message is a silent bug.
+
+## Dead Code Deletion: Three-Condition Rule
+
+Before deleting a function, grep the full project for callers. Deletion is safe only when all three conditions hold: (1) zero callers, (2) a replacement implementation exists, (3) any fields this function wrote to are also being deleted.

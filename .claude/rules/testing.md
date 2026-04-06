@@ -109,3 +109,25 @@ When a service mixes DB operations and pure functions, split into `crud.ts` (DB;
 ## HTTP Mocking
 
 Use Nock for external HTTP calls. See `src/test/lib/clients/` for examples.
+
+## Environment Variable Stubs
+
+Use `vi.stubEnv(key, value)` + `vi.unstubAllEnvs()` instead of manually assigning `process.env[key]` and deleting it in cleanup. `vi.stubEnv` syncs `import.meta.env` as well and accurately restores the original value:
+
+```typescript
+// Bad
+beforeEach(() => {
+  process.env.MY_URL = 'https://example.com';
+});
+afterEach(() => {
+  delete process.env.MY_URL;
+});
+
+// Good
+beforeEach(() => {
+  vi.stubEnv('MY_URL', 'https://example.com');
+});
+afterEach(() => {
+  vi.unstubAllEnvs();
+});
+```

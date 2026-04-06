@@ -225,3 +225,11 @@ const atCoderAccount = $derived(data.atCoderAccount);
 ```
 
 `data` is a reactive prop that SvelteKit updates after each form action. A plain assignment captures the initial value only.
+
+## SSR Safety: Non-Deterministic IDs
+
+Do not use `crypto.randomUUID()` or `Math.random()` in component initialization code that runs during SSR. These produce different values on server and client, causing hydration mismatches. Derive component IDs deterministically from prop values (e.g. `const componentId = item.task_id`).
+
+## `{#each}` — Key Expression Required
+
+Every `{#each}` block must include a key expression `(item.id)`. Keyless `{#each}` causes incorrect DOM reuse and hard-to-debug update bugs. Prefer a unique domain field; fall back to the index `(i)` only when no unique field exists.
