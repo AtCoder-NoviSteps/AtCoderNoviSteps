@@ -31,8 +31,11 @@
     isSubmitting = true;
 
     return async ({ update }: { update: () => Promise<void> }) => {
-      await update();
-      isSubmitting = false;
+      try {
+        await update();
+      } finally {
+        isSubmitting = false;
+      }
     };
   }
 </script>
