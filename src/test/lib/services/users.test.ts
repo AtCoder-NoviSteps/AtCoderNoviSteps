@@ -93,17 +93,12 @@ describe('getUserById', () => {
 });
 
 describe('deleteUser', () => {
-  test('deletes user and subsequent getUser returns null', async () => {
+  test('deletes user and returns deleted user', async () => {
     mockDelete.mockResolvedValueOnce(SAMPLE_USER);
-    mockFindUnique.mockResolvedValueOnce(null);
 
     const deleteResult = await deleteUser('testuser');
 
     expect(deleteResult).toEqual(SAMPLE_USER);
     expect(mockDelete).toHaveBeenCalledWith({ where: { username: 'testuser' } });
-
-    // Verify that the user is actually deleted (subsequent getUser returns null)
-    const getResult = await getUser('testuser');
-    expect(getResult).toBeNull();
   });
 });

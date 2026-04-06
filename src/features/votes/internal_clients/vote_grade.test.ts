@@ -65,6 +65,8 @@ describe('submitVote', () => {
 
   test('returns false when server responds with error status', async () => {
     const formData = new FormData();
+    formData.append('taskId', 'abc_a');
+    formData.append('grade', TaskGrade.Q11);
 
     nock('http://localhost').post('/votes?/voteAbsoluteGrade').reply(500);
 
