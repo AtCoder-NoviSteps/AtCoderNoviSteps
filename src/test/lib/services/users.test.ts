@@ -42,7 +42,7 @@ const SAMPLE_USER: UserWithAccount = {
     createdAt: new Date('2024-01-01'),
     updatedAt: new Date('2024-01-01'),
   },
-} as UserWithAccount;
+};
 
 beforeEach(() => {
   vi.clearAllMocks();
