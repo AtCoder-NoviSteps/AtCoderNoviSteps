@@ -255,6 +255,7 @@ model VoteGrade {
   id         String   @unique
   userId     String
   taskId     String
+  // CHECK (grade != 'PENDING') enforced in migration SQL. Application layer uses NON_VOTABLE_GRADES guard.
   grade      TaskGrade
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
@@ -269,7 +270,10 @@ model VoteGrade {
 model VotedGradeCounter {
   id         String   @unique
   taskId     String
+  // CHECK (grade != 'PENDING') enforced in migration SQL. Application layer uses NON_VOTABLE_GRADES guard.
   grade      TaskGrade
+  // count is also constrained by CHECK (count >= 0) in migration SQL (DB last line of defense).
+  // Application layer guards this via decrementOldGradeCounter (WHERE count > 0).
   count      Int
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
@@ -283,6 +287,7 @@ model VotedGradeCounter {
 model VotedGradeStatistics {
   id             String    @id
   taskId         String    @unique
+  // CHECK (grade != 'PENDING') enforced in migration SQL. Application layer uses NON_VOTABLE_GRADES guard.
   grade          TaskGrade
   isExperimental Boolean   @default(false)
   createdAt      DateTime  @default(now())
