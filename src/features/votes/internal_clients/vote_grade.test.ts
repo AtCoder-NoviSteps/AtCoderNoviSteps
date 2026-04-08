@@ -5,11 +5,16 @@ import { TaskGrade } from '$lib/types/task';
 
 import { fetchMyVote, submitVote, fetchMedianVote } from './vote_grade';
 
+import * as statusCodes from '$lib/constants/http-response-status-codes';
+
+const BASE_URL = 'http://localhost';
+const TASK_ID = 'abc_a';
+
 beforeEach(() => {
   nock.cleanAll();
   // Set globalThis.location for test environment
   Object.defineProperty(globalThis, 'location', {
-    value: { origin: 'http://localhost' },
+    value: { origin: BASE_URL },
     writable: true,
   });
 });
@@ -19,105 +24,146 @@ afterEach(() => {
 });
 
 describe('fetchMyVote', () => {
-  test('returns grade when server responds with a voted grade', async () => {
-    nock('http://localhost')
-      .get('/problems/getMyVote')
-      .query({ taskId: 'abc_a' })
-      .reply(200, { grade: TaskGrade.Q11 });
+  const endpoint = '/problems/getMyVote';
 
-    const result = await fetchMyVote('abc_a');
+  const mockGetMyVote = (statusCode: number, grade?: TaskGrade | null) => {
+    nock(BASE_URL)
+      .get(endpoint)
+      .query({ taskId: TASK_ID })
+      .reply(statusCode, grade !== undefined ? { grade } : undefined);
+  };
 
-    expect(result).toBe(TaskGrade.Q11);
+  describe('successful case', () => {
+    test.each([
+      TaskGrade.PENDING,
+      TaskGrade.Q11,
+      TaskGrade.Q10,
+      TaskGrade.Q1,
+      TaskGrade.D1,
+      TaskGrade.D6,
+    ])('returns grade %s when voted', async (grade) => {
+      mockGetMyVote(statusCodes.OK, grade);
+
+      const result = await fetchMyVote(TASK_ID);
+
+      expect(result).toBe(grade);
+    });
+
+    test('returns null when no vote exists', async () => {
+      mockGetMyVote(statusCodes.OK, null);
+
+      const result = await fetchMyVote(TASK_ID);
+
+      expect(result).toBeNull();
+    });
   });
 
-  test('returns null when server responds with null grade', async () => {
-    nock('http://localhost')
-      .get('/problems/getMyVote')
-      .query({ taskId: 'abc_a' })
-      .reply(200, { grade: null });
+  describe('error cases', () => {
+    test('returns null when unauthorized', async () => {
+      mockGetMyVote(statusCodes.UNAUTHORIZED);
 
-    const result = await fetchMyVote('abc_a');
+      const result = await fetchMyVote(TASK_ID);
 
-    expect(result).toBeNull();
-  });
+      expect(result).toBeNull();
+    });
 
-  test('returns null when server responds with non-ok status', async () => {
-    nock('http://localhost').get('/problems/getMyVote').query({ taskId: 'abc_a' }).reply(401);
+    test('returns null when server error', async () => {
+      mockGetMyVote(statusCodes.INTERNAL_SERVER_ERROR);
 
-    const result = await fetchMyVote('abc_a');
+      const result = await fetchMyVote(TASK_ID);
 
-    expect(result).toBeNull();
+      expect(result).toBeNull();
+    });
   });
 });
 
 describe('submitVote', () => {
-  test('returns true when server responds with ok status', async () => {
-    const formData = new FormData();
-    formData.append('taskId', 'abc_a');
-    formData.append('grade', TaskGrade.Q11);
+  const endpoint = '/votes?/voteAbsoluteGrade';
+  const actionUrl = new URL(`${BASE_URL}${endpoint}`);
+  const formData = (() => {
+    const data = new FormData();
+    data.append('taskId', TASK_ID);
+    data.append('grade', TaskGrade.Q11);
+    return data;
+  })();
 
-    nock('http://localhost').post('/votes?/voteAbsoluteGrade').reply(200, { success: true });
+  describe('successful case', () => {
+    test('returns true when status code is 2xx', async () => {
+      nock(BASE_URL).post(endpoint).reply(statusCodes.OK, { success: true });
 
-    const result = await submitVote(new URL('http://localhost/votes?/voteAbsoluteGrade'), formData);
+      const result = await submitVote(actionUrl, formData);
 
-    expect(result).toBe(true);
+      expect(result).toBe(true);
+    });
   });
 
-  test('returns false when server responds with error status', async () => {
-    const formData = new FormData();
-    formData.append('taskId', 'abc_a');
-    formData.append('grade', TaskGrade.Q11);
+  describe('error cases', () => {
+    test.each([
+      statusCodes.BAD_REQUEST,
+      statusCodes.UNAUTHORIZED,
+      statusCodes.FORBIDDEN,
+      statusCodes.INTERNAL_SERVER_ERROR,
+    ])('returns false when status code is %s', async (statusCode) => {
+      nock(BASE_URL).post(endpoint).reply(statusCode);
 
-    nock('http://localhost').post('/votes?/voteAbsoluteGrade').reply(500);
+      const result = await submitVote(actionUrl, formData);
 
-    const result = await submitVote(new URL('http://localhost/votes?/voteAbsoluteGrade'), formData);
+      expect(result).toBe(false);
+    });
 
-    expect(result).toBe(false);
-  });
+    test('returns false when request is aborted', async () => {
+      const controller = new AbortController();
+      controller.abort();
 
-  test('returns false when request is aborted', async () => {
-    const formData = new FormData();
-    const controller = new AbortController();
-    controller.abort();
+      const result = await submitVote(actionUrl, formData, controller.signal);
 
-    const result = await submitVote(
-      new URL('http://localhost/votes?/voteAbsoluteGrade'),
-      formData,
-      controller.signal,
-    );
-
-    expect(result).toBe(false);
+      expect(result).toBe(false);
+    });
   });
 });
 
 describe('fetchMedianVote', () => {
-  test('returns grade when server responds with a median grade', async () => {
-    nock('http://localhost')
-      .get('/problems/getMedianVote')
-      .query({ taskId: 'abc_a' })
-      .reply(200, { grade: TaskGrade.Q10 });
+  const endpoint = '/problems/getMedianVote';
 
-    const result = await fetchMedianVote('abc_a');
+  const mockGetMedianVote = (statusCode: number, grade?: TaskGrade | null) => {
+    nock(BASE_URL)
+      .get(endpoint)
+      .query({ taskId: TASK_ID })
+      .reply(statusCode, grade !== undefined ? { grade } : undefined);
+  };
 
-    expect(result).toBe(TaskGrade.Q10);
+  describe('successful case', () => {
+    test.each([
+      TaskGrade.PENDING,
+      TaskGrade.Q11,
+      TaskGrade.Q10,
+      TaskGrade.Q1,
+      TaskGrade.D1,
+      TaskGrade.D6,
+    ])('returns grade %s when fetched', async (grade) => {
+      mockGetMedianVote(statusCodes.OK, grade);
+
+      const result = await fetchMedianVote(TASK_ID);
+
+      expect(result).toBe(grade);
+    });
+
+    test('returns null when no median exists', async () => {
+      mockGetMedianVote(statusCodes.OK, null);
+
+      const result = await fetchMedianVote(TASK_ID);
+
+      expect(result).toBeNull();
+    });
   });
 
-  test('returns null when server responds with null grade', async () => {
-    nock('http://localhost')
-      .get('/problems/getMedianVote')
-      .query({ taskId: 'abc_a' })
-      .reply(200, { grade: null });
+  describe('error cases', () => {
+    test('returns null when server error', async () => {
+      mockGetMedianVote(statusCodes.INTERNAL_SERVER_ERROR);
 
-    const result = await fetchMedianVote('abc_a');
+      const result = await fetchMedianVote(TASK_ID);
 
-    expect(result).toBeNull();
-  });
-
-  test('returns null when server responds with non-ok status', async () => {
-    nock('http://localhost').get('/problems/getMedianVote').query({ taskId: 'abc_a' }).reply(500);
-
-    const result = await fetchMedianVote('abc_a');
-
-    expect(result).toBeNull();
+      expect(result).toBeNull();
+    });
   });
 });

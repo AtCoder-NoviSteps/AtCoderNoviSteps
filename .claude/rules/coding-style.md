@@ -71,6 +71,24 @@ const response = await fetch(SUBMIT_URL, options);
 
 Place constants at the top of the file, or in a dedicated `constants/` module when shared across files.
 
+#### Test Code: Status Code Constants
+
+Applies equally to test code. HTTP status codes especially benefit from named constants for clarity of intent.
+
+```typescript
+import * as statusCodes from '$lib/constants/http-response-status-codes';
+
+// Bad: what does 200 mean here?
+nock('http://localhost').get('/user').reply(200, data);
+nock('http://localhost').get('/user').reply(500);
+
+// Good: intent is immediately clear
+nock('http://localhost').get('/user').reply(statusCodes.OK, data);
+nock('http://localhost').get('/user').reply(statusCodes.INTERNAL_SERVER_ERROR);
+```
+
+Test readers (reviewers, future maintainers) must quickly understand **what is being tested**. Named constants (`OK`, `UNAUTHORIZED`) communicate intent far better than numeric codes.
+
 ### Function Ordering
 
 Within a file, order declarations as follows:

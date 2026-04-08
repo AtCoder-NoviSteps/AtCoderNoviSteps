@@ -136,6 +136,83 @@ When a service mixes DB operations and pure functions, split into `crud.ts` (DB;
 
 Use Nock for external HTTP calls. See `src/test/lib/clients/` for examples.
 
+### HTTP Mock Helpers: DRY and Intent
+
+Extract repeated HTTP mock setup into helpers at describe scope. Benefits: DRY, readable test names, easier assertion updates.
+
+#### Naming convention
+
+- Mock builder: `mock<Endpoint>()` (e.g. `mockGetMyVote()`, `mockPostSubmit()`)
+- Data builder: `create<Entity>()` (e.g. `createFormData()`, `createRequestBody()`)
+
+#### Pattern: declare once, use many
+
+```typescript
+describe('fetchUser', () => {
+  const baseUrl = 'http://localhost';
+  const endpoint = '/api/user';
+
+  const mockGetUser = (statusCode: number, user?: User) => {
+    nock(baseUrl)
+      .get(endpoint)
+      .reply(statusCode, user ? { user } : undefined);
+  };
+
+  test('success', async () => {
+    mockGetUser(statusCodes.OK, { id: '1', name: 'Alice' });
+    expect(await fetchUser()).toEqual({ id: '1', name: 'Alice' });
+  });
+
+  test('not found', async () => {
+    mockGetUser(statusCodes.NOT_FOUND);
+    expect(await fetchUser()).toBeNull();
+  });
+});
+```
+
+**Benefit**: Reduces duplication, clarifies each test's focus, simplifies mock updates across multiple tests.
+
+## Parametrized Tests
+
+When a function accepts domain enum values, test across representative samples rather than a single value.
+
+#### Sampling strategy
+
+- **Boundaries**: first value (Q11), last value (D6), special states (PENDING)
+- **Mid-range**: one typical value (Q10)
+- **Exception**: separate `test()` for distinct behavioral branches (e.g. null return)
+
+#### Pattern: test.each() for variants
+
+```typescript
+// Bad: tests only one value
+test('returns grade', async () => {
+  mockGetVote(statusCodes.OK, TaskGrade.Q10);
+  expect(await fetchVote()).toBe(TaskGrade.Q10);
+});
+
+// Good: parametrized boundaries + typical value
+test.each([
+  TaskGrade.PENDING,
+  TaskGrade.Q11,
+  TaskGrade.Q10,
+  TaskGrade.Q1,
+  TaskGrade.D1,
+  TaskGrade.D6,
+])('returns grade %s when voted', async (grade) => {
+  mockGetVote(statusCodes.OK, grade);
+  expect(await fetchVote()).toBe(grade);
+});
+
+// Separate test for distinct behavior
+test('returns null when no vote', async () => {
+  mockGetVote(statusCodes.OK, null);
+  expect(await fetchVote()).toBeNull();
+});
+```
+
+**Benefit**: Catches enum-related bugs (misspellings, missing cases); prevents regressions when enum values change.
+
 ## Environment Variable Stubs
 
 Use `vi.stubEnv(key, value)` + `vi.unstubAllEnvs()` instead of manually assigning `process.env[key]` and deleting it in cleanup. `vi.stubEnv` syncs `import.meta.env` as well and accurately restores the original value:
