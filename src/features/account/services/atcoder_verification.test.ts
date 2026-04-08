@@ -98,6 +98,10 @@ function mockDeleteMany(count: number = 1): void {
   vi.mocked(prisma.atCoderAccount.deleteMany).mockResolvedValue({ count });
 }
 
+function mockFindUniqueOrThrowError(message: string = 'not found'): void {
+  vi.mocked(prisma.user.findUniqueOrThrow).mockRejectedValue(new Error(message));
+}
+
 function mockFetch(body: unknown, ok = true): void {
   vi.stubGlobal(
     'fetch',
@@ -164,7 +168,7 @@ describe('generate', () => {
 
   describe('error cases', () => {
     test('throws when user not found', async () => {
-      vi.mocked(prisma.user.findUniqueOrThrow).mockRejectedValue(new Error('not found'));
+      mockFindUniqueOrThrowError();
 
       await expect(generate(SAMPLE_USERNAME, SAMPLE_HANDLE)).rejects.toThrow();
     });
@@ -173,7 +177,7 @@ describe('generate', () => {
 
 describe('validate', () => {
   test('propagates error when db lookup fails', async () => {
-    vi.mocked(prisma.user.findUniqueOrThrow).mockRejectedValue(new Error('not found'));
+    mockFindUniqueOrThrowError();
 
     await expect(validate(SAMPLE_USERNAME)).rejects.toThrow();
   });
