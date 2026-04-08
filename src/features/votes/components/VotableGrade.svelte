@@ -8,15 +8,16 @@
   import FlaskConical from '@lucide/svelte/icons/flask-conical';
 
   import { TaskGrade, getTaskGrade, type TaskResult } from '$lib/types/task';
-  import { getTaskGradeLabel } from '$lib/utils/task';
-  import { nonPendingGrades, resolveDisplayGrade } from '$features/votes/utils/grade_options';
-  import { SIGNUP_PAGE, LOGIN_PAGE, EDIT_PROFILE_PAGE } from '$lib/constants/navbar-links';
   import { errorMessageStore } from '$lib/stores/error_message';
   import {
     fetchMyVote,
     submitVote,
     fetchMedianVote,
   } from '$features/votes/internal_clients/vote_grade';
+
+  import { getTaskGradeLabel } from '$lib/utils/task';
+  import { nonPendingGrades, resolveDisplayGrade } from '$features/votes/utils/grade_options';
+  import { SIGNUP_PAGE, LOGIN_PAGE, EDIT_PROFILE_PAGE } from '$lib/constants/navbar-links';
 
   import GradeLabel from '$lib/components/GradeLabel.svelte';
   import InputFieldWrapper from '$lib/components/InputFieldWrapper.svelte';
