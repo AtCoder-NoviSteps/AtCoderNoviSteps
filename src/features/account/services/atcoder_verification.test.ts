@@ -127,37 +127,47 @@ afterEach(() => {
 // ---------------------------------------------------------------------------
 
 describe('generate', () => {
-  test('returns the sha256 validation code', async () => {
-    mockFindUniqueOrThrow(prepareUser());
-    mockUpsert();
+  describe('successful cases', () => {
+    test('returns the sha256 validation code', async () => {
+      mockFindUniqueOrThrow(prepareUser());
+      mockUpsert();
 
-    const result = await generate(SAMPLE_USERNAME, SAMPLE_HANDLE);
+      const result = await generate(SAMPLE_USERNAME, SAMPLE_HANDLE);
 
-    expect(result).toBe(SAMPLE_VALIDATION_CODE);
+      expect(result).toBe(SAMPLE_VALIDATION_CODE);
+    });
+
+    test('calls upsert with correct create and update payloads', async () => {
+      mockFindUniqueOrThrow(prepareUser());
+      mockUpsert();
+
+      await generate(SAMPLE_USERNAME, SAMPLE_HANDLE);
+
+      expect(prisma.atCoderAccount.upsert).toHaveBeenCalledWith(
+        expect.objectContaining({
+          where: { userId: SAMPLE_USER_ID },
+          create: expect.objectContaining({
+            userId: SAMPLE_USER_ID,
+            handle: SAMPLE_HANDLE,
+            validationCode: SAMPLE_VALIDATION_CODE,
+            isValidated: false,
+          }),
+          update: expect.objectContaining({
+            handle: SAMPLE_HANDLE,
+            validationCode: SAMPLE_VALIDATION_CODE,
+            isValidated: false,
+          }),
+        }),
+      );
+    });
   });
 
-  test('calls upsert with correct create and update payloads', async () => {
-    mockFindUniqueOrThrow(prepareUser());
-    mockUpsert();
+  describe('error cases', () => {
+    test('throws when user not found', async () => {
+      vi.mocked(prisma.user.findUniqueOrThrow).mockRejectedValue(new Error('not found'));
 
-    await generate(SAMPLE_USERNAME, SAMPLE_HANDLE);
-
-    expect(prisma.atCoderAccount.upsert).toHaveBeenCalledWith(
-      expect.objectContaining({
-        where: { userId: SAMPLE_USER_ID },
-        create: expect.objectContaining({
-          userId: SAMPLE_USER_ID,
-          handle: SAMPLE_HANDLE,
-          validationCode: SAMPLE_VALIDATION_CODE,
-          isValidated: false,
-        }),
-        update: expect.objectContaining({
-          handle: SAMPLE_HANDLE,
-          validationCode: SAMPLE_VALIDATION_CODE,
-          isValidated: false,
-        }),
-      }),
-    );
+      await expect(generate(SAMPLE_USERNAME, SAMPLE_HANDLE)).rejects.toThrow();
+    });
   });
 });
 
