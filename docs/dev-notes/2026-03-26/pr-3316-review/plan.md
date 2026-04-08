@@ -1,74 +1,44 @@
 # PR #3316 マージ後修正 実装計画
 
 > Task 1-9（Phases 1-4）は git commits を参照。すべてのルール追加（Phase 7）は既に `.claude/rules/` に反映済み。
+> Phase 5 Task 10: Steps 1-3（セレクタ修正）・`navigateToFirstVoteDetailPage` 早期 return 骨格は実装済み。以下は残課題（revised）。
 
 ---
 
 ## Phase 5: E2E テスト修正
 
-### Task 10: votes.spec.ts セレクタ修正 + 初期状態対応
+### Task 10 (revised): votes.spec.ts 修正
+
+**Root cause（診断済み）:**
+
+1. **検索未入力バグ**: `votes/+page.svelte` は `search === ''` のときタスク行を描画しない。
+   `navigateToFirstVoteDetailPage` が検索ボックスに入力せずに `firstLink.isVisible()` を呼ぶため常に `false` → 早期 `return` → Test 5, 6, 8, 9, 10 がタイムアウト。Test 7 は `not.toBeAttached()` が `/votes` 上でも即座に成功するため偶然パス。
+2. **パンくずセレクタ不一致**: Test 8 は `グレード投票` でリンクを探すが `[slug]/+page.svelte:37` の実際のテキストは `投票`。
 
 **Files:**
 
 - Modify: `e2e/votes.spec.ts`
 
-現在の誤ったセレクタと正しい値の対応:
-
-| 現在の値                                                 | 正しい値                       | 理由                                                  |
-| -------------------------------------------------------- | ------------------------------ | ----------------------------------------------------- |
-| `getByRole('heading', { name: 'グレード投票' })`         | `'投票'`                       | `votes/+page.svelte` の `<HeadingOne title="投票" />` |
-| `getByRole('columnheader', { name: '問題' })`            | `'問題名'`                     | `<TableHeadCell>問題名</TableHeadCell>`               |
-| `getByRole('columnheader', { name: 'コンテスト' })`      | `'出典'`                       | `<TableHeadCell>出典</TableHeadCell>`                 |
-| `getByPlaceholder('問題名・問題ID・コンテストIDで検索')` | `'問題名・問題ID・出典で検索'` | `<Input placeholder="問題名・問題ID・出典で検索">`    |
-
-- [ ] **Step 1: heading セレクタを修正（2箇所: lines 17, 36）**
+#### Step 1: `navigateToFirstVoteDetailPage` に検索入力を追加
 
 ```typescript
-// 変更前
-await expect(page.getByRole('heading', { name: 'グレード投票' })).toBeVisible(...)
+const KNOWN_TASK_ID = 'abc422_a'; // From prisma/tasks.ts seed data
 
-// 変更後
-await expect(page.getByRole('heading', { name: '投票' })).toBeVisible(...)
-```
-
-- [ ] **Step 2: columnheader セレクタを修正（3箇所: lines 24, 27, 65）**
-
-```typescript
-// 変更前
-await expect(page.getByRole('columnheader', { name: '問題' })).toBeVisible(...)
-await expect(page.getByRole('columnheader', { name: 'コンテスト' })).toBeVisible(...)
-
-// 変更後
-await expect(page.getByRole('columnheader', { name: '問題名' })).toBeVisible(...)
-await expect(page.getByRole('columnheader', { name: '出典' })).toBeVisible(...)
-```
-
-- [ ] **Step 3: placeholder セレクタを修正（line 43）**
-
-```typescript
-// 変更前
-const searchInput = page.getByPlaceholder('問題名・問題ID・コンテストIDで検索');
-
-// 変更後
-const searchInput = page.getByPlaceholder('問題名・問題ID・出典で検索');
-```
-
-- [ ] **Step 4: navigateToFirstVoteDetailPage に初期状態スキップを追加**
-
-`navigateToFirstVoteDetailPage` でタスクが存在しない場合にテストをスキップする:
-
-```typescript
 async function navigateToFirstVoteDetailPage(page: Page): Promise<void> {
   await page.goto(VOTES_LIST_URL);
   await expect(page.getByRole('columnheader', { name: '問題名' })).toBeVisible({
     timeout: TIMEOUT,
   });
 
+  // Fill search to render task rows (table body is empty until search !== '')
+  const searchInput = page.getByPlaceholder('問題名・問題ID・出典で検索');
+  await searchInput.fill(KNOWN_TASK_ID);
+
   const firstLink = page.locator('table').getByRole('link').first();
   const hasTask = await firstLink.isVisible();
+
   if (!hasTask) {
-    // No tasks in DB — skip navigation-dependent tests.
-    return;
+    return; // No matching tasks in DB — callers must call test.skip
   }
 
   await firstLink.click();
@@ -76,30 +46,28 @@ async function navigateToFirstVoteDetailPage(page: Page): Promise<void> {
 }
 ```
 
-また、`navigateToFirstVoteDetailPage` を使う各テストに `test.skip` 条件を追加:
+#### Step 2: 直接URL遷移定数を追加 + テスト割り当て
 
 ```typescript
-test('can view the task detail page without redirect', async ({ page }) => {
-  await navigateToFirstVoteDetailPage(page);
-  const onDetailPage = page.url().match(/\/votes\/.+/);
-  test.skip(!onDetailPage, 'no tasks available in DB');
-  // ...
-});
+const KNOWN_VOTE_DETAIL_URL = '/votes/abc422_a'; // From prisma/tasks.ts seed data
 ```
 
-- [ ] **Step 5: E2E テスト実行（ローカル環境で確認）**
+| アプローチ                                      | 対象テスト                                                                                           |
+| ----------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
+| 検索+クリック (`navigateToFirstVoteDetailPage`) | `can view the task detail page without redirect` (unauthenticated) — リスト→詳細遷移フロー自体を検証 |
+| 直接URL (`page.goto(KNOWN_VOTE_DETAIL_URL)`)    | それ以外のコンテンツ検証系テスト                                                                     |
+
+#### Step 3: `test.skip` 追加 + パンくずセレクタ修正
+
+- `navigateToFirstVoteDetailPage` 使用テストに `test.skip(!onDetailPage, 'no matching tasks in DB')` を追加
+- Test 8 パンくず: `グレード投票` → `投票`
+
+#### Step 4: テスト実行・コミット
 
 ```bash
 pnpm test:e2e -- votes
-```
-
-Expected: セレクタ起因の FAIL がなくなる
-
-- [ ] **Step 6: コミット**
-
-```bash
 git add e2e/votes.spec.ts
-git commit -m "fix: correct stale selectors in votes E2E tests and add initial state skip conditions"
+git commit -m "fix: repair vote detail E2E tests broken by search-first UI and stale selectors"
 ```
 
 ---
