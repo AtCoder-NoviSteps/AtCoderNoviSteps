@@ -131,6 +131,53 @@ await page.locator('.container').getByRole('link', { name: 'ログイン' }).cli
 
 Use `.container` (page content wrapper) to exclude the global navbar. Prefer the narrowest scope that remains stable — breadcrumb `nav` inside `.container` is more precise than `.container` alone when the link only appears there.
 
+## Search-Gated Tables: Fill Before Locating Rows
+
+When a table renders no rows until the search input is non-empty, fill the
+search box before attempting to locate links or cells. Skipping the fill makes
+`isVisible()` return `false` silently, causing navigation helpers to return
+early instead of failing loudly.
+
+```typescript
+const KNOWN_TASK_ID = 'abc422_a'; // From prisma/tasks.ts seed data
+await page.getByPlaceholder('問題名・問題ID・出典で検索').fill(KNOWN_TASK_ID);
+const firstLink = page.locator('table').getByRole('link').first();
+const hasTask = await firstLink.isVisible();
+```
+
+## Direct URL vs Navigation Flow in Detail Page Tests
+
+Use a navigation helper (search + click) **only** when the transition itself is
+under test. Use `page.goto(KNOWN_DETAIL_URL)` for all content/behavior tests on
+the detail page — coupling them to the list page multiplies failure surfaces.
+
+```typescript
+const KNOWN_VOTE_DETAIL_URL = '/votes/abc422_a'; // From prisma/tasks.ts seed data
+
+// Verifies list→detail flow
+test('can view the task detail page without redirect', async ({ page }) => {
+  await navigateToFirstVoteDetailPage(page);
+  ...
+});
+
+// Content-only: go directly
+test('sees login prompt', async ({ page }) => {
+  await page.goto(KNOWN_VOTE_DETAIL_URL);
+  ...
+});
+```
+
+## Seed-Stable URL Constants
+
+E2E constants derived from seed data must carry an inline comment citing the
+source file. Without it, reviewers cannot distinguish an intentional seed
+reference from a magic string.
+
+```typescript
+const KNOWN_TASK_ID = 'abc422_a';           // From prisma/tasks.ts seed data
+const KNOWN_VOTE_DETAIL_URL = '/votes/abc422_a'; // From prisma/tasks.ts seed data
+```
+
 ## Conditional Skip Based on Runtime State
 
 When a test depends on DB or session state that may vary across environments (e.g., a user's AtCoder verification status), use `test.skip(condition, reason)` inside the test body instead of a static `test.skip`. This way the test runs automatically when the precondition is met:
