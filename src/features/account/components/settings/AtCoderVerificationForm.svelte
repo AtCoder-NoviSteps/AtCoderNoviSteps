@@ -84,7 +84,7 @@
         <div class="flex items-center gap-2">
           <Input size="md" value={atCoderAccount.validationCode} readonly />
 
-          <Clipboard value={atCoderAccount.validationCode}>
+          <Clipboard value={atCoderAccount.validationCode} color="alternative">
             {#snippet children(success)}
               {#if success}
                 <Check class="w-5 h-5 text-green-500" />
@@ -103,7 +103,7 @@
       <Input size="md" type="hidden" name="username" value={username} />
       <Input size="md" type="hidden" name="handle" value={atCoderAccount.handle} />
 
-      <SubmissionButton labelName="リセット" />
+      <SubmissionButton color="alternative" labelName="リセット" />
     </FormWrapper>
   </ContainerWrapper>
 {:else if status === 'validated'}
