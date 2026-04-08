@@ -26,12 +26,114 @@
 
 ---
 
-### 動作確認チェックリスト
+## 精査結果：対応方針
+
+| #   | 方針           | 理由                                                                                                                                                                        |
+| --- | -------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | **対応する**   | ルート層に Prisma 依存があるのは層違反。`updateTask` を `null` 返却に変更して分離。                                                                                         |
+| 2   | **対応不要**   | 対象テーブル（VoteGrade / VotedGradeCounter / VotedGradeStatistics）は今回新規追加。適用前データが存在しないため制約違反は起きない。                                        |
+| 3   | **対応する**   | TSDoc 1 行追加のみ。コーディングガイドライン準拠。                                                                                                                          |
+| 4   | **対応する**   | `browser` ガードを追加し SSR 文脈で呼ばれた場合に明示的に警告。                                                                                                             |
+| 5   | **対応する**   | `isValidTaskGrade` 型ガードを `src/lib/utils/` に追加し、`as TaskGrade` を排除。                                                                                            |
+| 7   | **対応する**   | `upsertVoteGradeTables` の戻り型は実際には `Promise<{ success: true }>` でありリスクなしだが、`return await` をやめて明示 `return { success: true }` に変更し意図を明確化。 |
+| 8   | **ルール修正** | `prisma-erd-generator` が ERD.md を毎回上書きするため追記は即消える。`coding-style.md` の「ERD.md に記載せよ」ルールを「schema.prisma インラインコメントで代替」に修正。    |
+| 9   | **対応する**   | `submitVote` が AbortError を内部で catch して `false` 返却するため `.catch()` には AbortError が届かない。正しい修正は `.then()` 内で `signal?.aborted` チェックを挿入。   |
+| 10  | **対応する**   | #9 と同ファイル。`fetchMedianVote` に `signal` パラメータを追加し連続クリック時の古いレスポンス上書きを防ぐ。                                                               |
+
+---
+
+## 実装フェーズ
+
+### Phase 1: Doc / Rules（最低リスク）
+
+**Task 1 — #3: ButtonColor に TSDoc を追加**
+
+- `src/lib/types/flowbite-svelte-wrapper.ts` に 1 行 TSDoc
+
+**Task 2 — #8: coding-style.md の ERD.md ルールを修正**
+
+- (英語でルールを更新) `.claude/rules/coding-style.md` の「`prisma/ERD.md` に記載せよ」を「`schema.prisma` のインラインコメントで文書化せよ（ERD.md は prisma-erd-generator が上書きするため不可）」に変更
+
+---
+
+### Phase 2: Internal Client 修正（`vote_grade.ts`）
+
+**Task 3 — #5: isValidTaskGrade 型ガードを追加（TDD）**
+
+- テスト先行: `src/test/utils/task_grade.test.ts`
+- 実装: `src/lib/utils/task_grade.ts` に `isValidTaskGrade(value: unknown): value is TaskGrade`
+- `vote_grade.ts` の `data.grade as TaskGrade` を 2 箇所置き換え（fetchMyVote, fetchMedianVote）
+
+**Task 4 — #4: getBaseUrl SSR 安全化**
+
+- `$app/environment` の `browser` をインポートし、SSR 呼び出し時は `console.warn` + `''` 返却
+- **背景**: `browser === false` はサーバー側実行を示す。SSR フェーズでブラウザ API (`window.location` 等) を呼ぶとクラッシュするため、ガードで安全に失敗させる
+
+**Task 5 — #10: fetchMedianVote に signal パラメータを追加**
+
+- `fetchMedianVote(taskId: string, signal?: AbortSignal)` にシグネチャ拡張し fetch に渡す
+- **背景**: signal は「キャンセル機能を実装するための仕組み」。abort() されると AbortError が throw されるため、連続クリック時に古いレスポンスの上書きを防ぐ
+
+---
+
+### Phase 3: Component 修正（`VotableGrade.svelte`）
+
+**Task 6 — #9 + #10: AbortError UX バグ修正 + signal 伝搬**
+
+- `.then()` 内で `signal?.aborted` チェックを挿入し abort 時はエラートーストを出さずに early return
+
+  ```typescript
+  .then(async (succeeded) => {
+    if (signal?.aborted) {
+      return; // Intentional abort — user selected a different grade
+    }
+
+    if (!succeeded) { throw new Error('Failed to vote'); }
+    ...
+  })
+  ```
+
+- `fetchMedianVote(taskId, signal)` に signal を渡す
+
+---
+
+### Phase 4: Service / Action 層
+
+**Task 7 — #1: P2025 処理をサービス層に移動（TDD）**
+
+- テスト先行: `updateTask` が P2025 で `null` を返すケースを追加
+- `src/lib/services/tasks.ts`: P2025 を catch して `null` 返却に変更（他の呼び出し元を事前に確認）
+- `src/routes/(admin)/vote_management/+page.server.ts`: `Prisma` インポート削除、`null` チェックでエラーレスポンスを返す
+
+**Task 8 — #7: vote_actions.ts の明示 return**
+
+- `return await upsertVoteGradeTables(...)` → `await upsertVoteGradeTables(...); return { success: true as const };`
+- **背景**: `as const` は `true` をリテラル型に固定し、TypeScript が「success === true の時は成功メッセージ必須」を型チェックで強制。Rust の `Result<T, E>` enum に近い安全性を実現
+
+---
+
+## 対象ファイル一覧
+
+| ファイル                                             | Phase |
+| ---------------------------------------------------- | ----- |
+| `src/lib/types/flowbite-svelte-wrapper.ts`           | 1     |
+| `.claude/rules/coding-style.md`                      | 1     |
+| `src/lib/utils/task_grade.ts` (新規)                 | 2     |
+| `src/test/utils/task_grade.test.ts` (新規)           | 2     |
+| `src/features/votes/internal_clients/vote_grade.ts`  | 2     |
+| `src/features/votes/components/VotableGrade.svelte`  | 3     |
+| `src/lib/services/tasks.ts`                          | 4     |
+| `src/routes/(admin)/vote_management/+page.server.ts` | 4     |
+| `src/features/votes/actions/vote_actions.ts`         | 4     |
+
+---
+
+## 動作確認チェックリスト
 
 - [ ] `AtCoderVerificationForm`: 文字列生成ボタン押下中に Spinner が表示され、二重送信不可
 - [ ] `AtCoderVerificationForm`: クリップボードアイコンクリック後にチェックマークアニメーション表示
 - [ ] `AtCoderVerificationForm`: 「本人確認」と「リセット」ボタン間に適切な隙間
-- [ ] `VotableGrade`: グレードを連打しても最後のリクエストのみ処理される
+- [ ] `VotableGrade`: グレードを連打しても「投票状況の更新に失敗しました」が**表示されない**こと
 - [ ] `votes/[slug]`: 投票閾値ツールチップが定数参照（`MIN_VOTES_FOR_STATISTICS`）に基づいて表示
 - [ ] vote_management: 存在しない taskId で `setTaskGrade` を呼んでも 500 ではなく `{ success: false }` が返る
 - [ ] DB: `VotedGradeCounter.count` に負の値を INSERT しようとすると CHECK 制約違反エラー
