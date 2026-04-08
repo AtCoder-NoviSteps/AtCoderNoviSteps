@@ -5,91 +5,26 @@
 
 ---
 
-## Phase 5: E2E テスト修正
+## CodeRabbit Findings
 
-### Task 10 (revised): votes.spec.ts 修正
+> `coderabbit review --base staging --plain` を 2 回実行（3 回目はレートリミットで実施不可）。
+> 両回で共通して出た指摘、および片方の実行で出た `potential_issue` 以上を記載。
 
-**Root cause（診断済み）:**
+### potential_issue（中）
 
-1. **検索未入力バグ**: `votes/+page.svelte` は `search === ''` のときタスク行を描画しない。
-   `navigateToFirstVoteDetailPage` が検索ボックスに入力せずに `firstLink.isVisible()` を呼ぶため常に `false` → 早期 `return` → Test 5, 6, 8, 9, 10 がタイムアウト。Test 7 は `not.toBeAttached()` が `/votes` 上でも即座に成功するため偶然パス。
-2. **パンくずセレクタ不一致**: Test 8 は `グレード投票` でリンクを探すが `[slug]/+page.svelte:37` の実際のテキストは `投票`。
-
-**Files:**
-
-- Modify: `e2e/votes.spec.ts`
-
-#### Step 1: `navigateToFirstVoteDetailPage` に検索入力を追加
-
-```typescript
-const KNOWN_TASK_ID = 'abc422_a'; // From prisma/tasks.ts seed data
-
-async function navigateToFirstVoteDetailPage(page: Page): Promise<void> {
-  await page.goto(VOTES_LIST_URL);
-  await expect(page.getByRole('columnheader', { name: '問題名' })).toBeVisible({
-    timeout: TIMEOUT,
-  });
-
-  // Fill search to render task rows (table body is empty until search !== '')
-  const searchInput = page.getByPlaceholder('問題名・問題ID・出典で検索');
-  await searchInput.fill(KNOWN_TASK_ID);
-
-  const firstLink = page.locator('table').getByRole('link').first();
-  const hasTask = await firstLink.isVisible();
-
-  if (!hasTask) {
-    return; // No matching tasks in DB — callers must call test.skip
-  }
-
-  await firstLink.click();
-  await expect(page).toHaveURL(/\/votes\/.+/, { timeout: TIMEOUT });
-}
-```
-
-#### Step 2: 直接URL遷移定数を追加 + テスト割り当て
-
-```typescript
-const KNOWN_VOTE_DETAIL_URL = '/votes/abc422_a'; // From prisma/tasks.ts seed data
-```
-
-| アプローチ                                      | 対象テスト                                                                                           |
-| ----------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
-| 検索+クリック (`navigateToFirstVoteDetailPage`) | `can view the task detail page without redirect` (unauthenticated) — リスト→詳細遷移フロー自体を検証 |
-| 直接URL (`page.goto(KNOWN_VOTE_DETAIL_URL)`)    | それ以外のコンテンツ検証系テスト                                                                     |
-
-#### Step 3: `test.skip` 追加 + パンくずセレクタ修正
-
-- `navigateToFirstVoteDetailPage` 使用テストに `test.skip(!onDetailPage, 'no matching tasks in DB')` を追加
-- Test 8 パンくず: `グレード投票` → `投票`
-
-#### Step 4: テスト実行・コミット
-
-```bash
-pnpm test:e2e -- votes
-git add e2e/votes.spec.ts
-git commit -m "fix: repair vote detail E2E tests broken by search-first UI and stale selectors"
-```
+| #   | ファイル                                                                          | 行                           | 内容                                                                                                                                                                                                                                              |
+| --- | --------------------------------------------------------------------------------- | ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | `src/routes/(admin)/vote_management/+page.server.ts`                              | L3, L55-63                   | Prisma 固有エラー型 (`PrismaClientKnownRequestError`, `P2025`) をルート層で直接参照。サービス層でドメイン例外 (`TaskNotFoundError` 等) にラップして再 throw し、ルートから Prisma 依存を除去するべき。                                            |
+| 2   | `prisma/migrations/20260406112057_add_vote_grade_check_constraints/migration.sql` | L2-15                        | CHECK 制約追加前に既存データが制約を満たすか検証していない。`count < 0` の行や `grade = 'PENDING'` の行が存在する場合マイグレーション失敗→デプロイブロック。事前クエリまたは `NOT VALID` オプションでの段階適用を検討。                           |
+| 3   | `src/lib/types/flowbite-svelte-wrapper.ts`                                        | L4-5                         | エクスポート型 `ButtonColor` に TSDoc が未記載。コーディングガイドライン「Add TSDoc to every exported type」に違反。                                                                                                                              |
+| 4   | `src/features/votes/internal_clients/vote_grade.ts`                               | L79-85                       | `getBaseUrl` の `http://localhost` フォールバックはポート未指定かつ SSR 環境 (`globalThis.location` が undefined) で意図しないエンドポイントへリクエストを送る可能性。環境変数または `$app/environment` からベース URL を取得する設計が望ましい。 |
+| 5   | `src/features/votes/internal_clients/vote_grade.ts`                               | L21-22                       | `data.grade as TaskGrade` はコンパイル時のみの型アサーション。API が予期しない値を返した場合に下流で不具合が発生する。ランタイム型ガード (`isValidTaskGrade`) でバリデーション後に返すべき。                                                      |
+| 7   | `src/features/votes/actions/vote_actions.ts`                                      | L55                          | `upsertVoteGradeTables` の戻り値をそのままクライアントに返しており、Prisma モデルや内部データが漏洩するリスク。戻り値を使わないか、安全な DTO に変換してから返すべき。                                                                            |
+| 8   | `prisma/schema.prisma`                                                            | L258-259, L273-277, L290-291 | migration.sql に手動追加した CHECK 制約 (`grade != 'PENDING'`, `count >= 0`) が `prisma/ERD.md` に記載されていない。コーディングガイドライン「CHECK constraints added manually to migration.sql must be documented in prisma/ERD.md」に違反。     |
+| 9   | `src/features/votes/components/VotableGrade.svelte`                               | L74-76, L97-98               | `voteAbortController?.abort()` 由来の `AbortError` が catch されずにエラーメッセージとして表示される。`error.name === 'AbortError'` を確認して静かに無視するべき。                                                                                |
+| 10  | `src/features/votes/components/VotableGrade.svelte`                               | L109-113                     | `fetchMedianVote` に abort signal が渡されておらず、連続クリック時に古いレスポンスが後から返り表示が不整合になる可能性がある（低確率）。                                                                                                          |
 
 ---
-
-## 検証方法
-
-```bash
-# 単体テスト（全件）
-pnpm test:unit
-
-# 型チェック
-pnpm check
-
-# lint
-pnpm lint
-
-# E2E テスト（votes 関連）
-pnpm test:e2e -- votes
-
-# フォーマット（コミット前）
-pnpm format
-```
 
 ### 動作確認チェックリスト
 
