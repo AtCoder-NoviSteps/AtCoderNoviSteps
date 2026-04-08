@@ -40,7 +40,8 @@ type UserWithAtCoderAccount = Awaited<ReturnType<typeof prisma.user.findUniqueOr
 // ---------------------------------------------------------------------------
 
 const SAMPLE_TIMESTAMP = new Date('2024-01-01T00:00:00Z');
-const SAMPLE_USER_ID = 'user-1';
+// Lucia (auth library) auto-generates User.id in UUID format
+const SAMPLE_USER_ID = '550e8400-e29b-41d4-a716-446655440000';
 const SAMPLE_USERNAME = 'alice';
 const SAMPLE_HANDLE = 'alice_ac';
 const SAMPLE_VALIDATION_CODE = 'mocked-hash';
