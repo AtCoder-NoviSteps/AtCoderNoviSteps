@@ -11,8 +11,7 @@
 
   let { width = 'w-full', labelName, loading = false }: Props = $props();
 
-  // FormWrapper が setContext('form', ...) でセットしている場合、自動的に isSubmitting を受け取る。
-  // FormWrapper 外で使う場合は context が undefined になるため ?? false でフォールバック。
+  // Get isSubmitting from FormWrapper's context, default to false if undefined.
   const formContext = getContext<{ isSubmitting: boolean } | undefined>('form');
   const isLoading = $derived(loading || (formContext?.isSubmitting ?? false));
 </script>
