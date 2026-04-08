@@ -14,6 +14,7 @@ Before writing new logic, decide which layer it belongs to. Run this check at pl
 | Domain types   | `src/**/types/` (`_types/` inside `src/routes/`)       | Plural aliases; TSDoc on every export; avoid `any`; see alternatives       |
 | Test data      | `src/**/fixtures/` (`_fixtures/` inside `src/routes/`) | Write before implementation (TDD); use realistic values                    |
 | Business logic | `src/**/services/`                                     | Return pure values or `null`; no `Response`/`json()`                       |
+| External APIs  | `src/lib/clients/` or `src/features/*/internal_clients/` | Shared APIs → `lib/clients/`; feature-scoped APIs → `internal_clients/`   |
 | Pure utilities | `src/**/utils/` (`_utils/` inside `src/routes/`)       | No side effects; adjacent unit test required                               |
 | State          | `src/**/stores/`                                       | `.svelte.ts`; class + `$state()`; singleton export                         |
 | Route handlers | `src/routes/`                                          | Page: `redirect()`; API: `error()`                                         |

@@ -84,6 +84,32 @@ Order `describe` blocks in service and utils test files to match the declaration
 
 Split `describe` blocks by scenario (not all cases flat) when a function behaves differently by mode. Example: separate `describe('func with modeA')` and `describe('func with modeB')` rather than mixing all cases. Benefit: better test discovery and names.
 
+**Pattern: successful case vs error cases**
+
+Organize functions by behavioral outcome: separate successful execution from failures (returns false, throws errors, etc.).
+
+```typescript
+describe('validate', () => {
+  describe('successful case', () => {
+    test('returns true and updates DB when external API confirms', async () => { ... });
+  });
+
+  describe('error cases', () => {
+    describe('returns false', () => {
+      test('when user has no AtCoderAccount', async () => { ... });
+      test('when validation code is empty', async () => { ... });
+    });
+
+    describe('throws errors', () => {
+      test('when user not found', async () => { ... });
+      test('when external API returns non-OK response', async () => { ... });
+    });
+  });
+});
+```
+
+When abnormal cases span multiple outcome types (graceful failures returning false vs exceptions), subdivide error cases by outcome. This clarifies caller behavior: some scenarios return false (can be handled inline), others throw (require try-catch).
+
 ## Service Layer Unit Tests
 
 Service tests mock Prisma via `vi.mock('$lib/server/database', ...)` — no real DB mutations occur.
