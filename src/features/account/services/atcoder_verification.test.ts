@@ -17,6 +17,8 @@ vi.mock('$lib/utils/hash', () => ({
   sha256: vi.fn().mockResolvedValue('mocked-hash'),
 }));
 
+import { Roles } from '@prisma/client';
+
 import prisma from '$lib/server/database';
 import { generate, validate, reset } from './atcoder_verification';
 
@@ -47,20 +49,20 @@ const SAMPLE_HANDLE = 'alice_ac';
 const SAMPLE_VALIDATION_CODE = 'mocked-hash';
 const SAMPLE_API_URL = 'https://example.com/api';
 
-function makeUser(
+function prepareUser(
   atCoderAccount: UserWithAtCoderAccount['atCoderAccount'] = null,
 ): UserWithAtCoderAccount {
   return {
     id: SAMPLE_USER_ID,
     username: SAMPLE_USERNAME,
-    role: 'USER',
+    role: Roles.USER,
     created_at: SAMPLE_TIMESTAMP,
     updated_at: SAMPLE_TIMESTAMP,
     atCoderAccount,
   } as unknown as UserWithAtCoderAccount;
 }
 
-function makeAtCoderAccount(
+function prepareAtCoderAccount(
   overrides: Partial<NonNullable<UserWithAtCoderAccount['atCoderAccount']>> = {},
 ): NonNullable<UserWithAtCoderAccount['atCoderAccount']> {
   return {
@@ -114,7 +116,7 @@ afterEach(() => {
 
 describe('generate', () => {
   test('returns the sha256 validation code', async () => {
-    mockFindUniqueOrThrow(makeUser());
+    mockFindUniqueOrThrow(prepareUser());
     vi.mocked(prisma.atCoderAccount.upsert).mockResolvedValue({} as never);
 
     const result = await generate(SAMPLE_USERNAME, SAMPLE_HANDLE);
@@ -123,7 +125,7 @@ describe('generate', () => {
   });
 
   test('calls upsert with correct create and update payloads', async () => {
-    mockFindUniqueOrThrow(makeUser());
+    mockFindUniqueOrThrow(prepareUser());
     vi.mocked(prisma.atCoderAccount.upsert).mockResolvedValue({} as never);
 
     await generate(SAMPLE_USERNAME, SAMPLE_HANDLE);
@@ -155,7 +157,7 @@ describe('validate', () => {
   });
 
   test('returns false when user has no AtCoderAccount', async () => {
-    mockFindUniqueOrThrow(makeUser(null));
+    mockFindUniqueOrThrow(prepareUser(null));
 
     const result = await validate(SAMPLE_USERNAME);
 
@@ -163,7 +165,7 @@ describe('validate', () => {
   });
 
   test('returns false when validationCode is empty', async () => {
-    mockFindUniqueOrThrow(makeUser(makeAtCoderAccount({ validationCode: '' })));
+    mockFindUniqueOrThrow(prepareUser(prepareAtCoderAccount({ validationCode: '' })));
 
     const result = await validate(SAMPLE_USERNAME);
 
@@ -171,7 +173,7 @@ describe('validate', () => {
   });
 
   test('returns false when the external API does not confirm the code', async () => {
-    mockFindUniqueOrThrow(makeUser(makeAtCoderAccount()));
+    mockFindUniqueOrThrow(prepareUser(prepareAtCoderAccount()));
     mockFetch({ contents: ['other-code'] });
 
     const result = await validate(SAMPLE_USERNAME);
@@ -181,7 +183,7 @@ describe('validate', () => {
   });
 
   test('returns true and marks account as validated when the external API confirms the code', async () => {
-    mockFindUniqueOrThrow(makeUser(makeAtCoderAccount()));
+    mockFindUniqueOrThrow(prepareUser(prepareAtCoderAccount()));
     mockFetch({ contents: [SAMPLE_VALIDATION_CODE] });
     vi.mocked(prisma.atCoderAccount.update).mockResolvedValue({} as never);
 
@@ -197,14 +199,14 @@ describe('validate', () => {
   });
 
   test('throws when the external API returns non-OK response', async () => {
-    mockFindUniqueOrThrow(makeUser(makeAtCoderAccount()));
+    mockFindUniqueOrThrow(prepareUser(prepareAtCoderAccount()));
     mockFetch({}, false);
 
     await expect(validate(SAMPLE_USERNAME)).rejects.toThrow();
   });
 
   test('returns false when the external API returns invalid JSON', async () => {
-    mockFindUniqueOrThrow(makeUser(makeAtCoderAccount()));
+    mockFindUniqueOrThrow(prepareUser(prepareAtCoderAccount()));
     vi.stubGlobal(
       'fetch',
       vi.fn().mockResolvedValue({
@@ -220,7 +222,7 @@ describe('validate', () => {
 
   test('throws when CONFIRM_API_URL is not set', async () => {
     vi.stubEnv('CONFIRM_API_URL', '');
-    mockFindUniqueOrThrow(makeUser(makeAtCoderAccount()));
+    mockFindUniqueOrThrow(prepareUser(prepareAtCoderAccount()));
 
     await expect(validate(SAMPLE_USERNAME)).rejects.toThrow(
       'Failed to confirm AtCoder affiliation',
@@ -230,7 +232,7 @@ describe('validate', () => {
 
 describe('reset', () => {
   test('calls deleteMany with the correct userId (deleteMany is intentional: tolerates missing record)', async () => {
-    mockFindUniqueOrThrow(makeUser());
+    mockFindUniqueOrThrow(prepareUser());
     vi.mocked(prisma.atCoderAccount.deleteMany).mockResolvedValue({ count: 1 });
 
     await reset(SAMPLE_USERNAME);
