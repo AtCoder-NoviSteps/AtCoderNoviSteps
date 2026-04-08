@@ -9,98 +9,102 @@ paths:
 
 ## Routes vs API Endpoints
 
-- Page routes (`+page.server.ts`): use `redirect()` to navigate
-- API routes (`+server.ts`): use `error()` — throwing `redirect()` returns a 3xx response; `fetch` follows it by default and receives the HTML page at the redirect target instead of a JSON error
+- Page routes: use `redirect()` to navigate
+- API routes (`+server.ts`): use `error()` — `redirect()` returns 3xx; `fetch` follows and gets HTML not JSON
 
-## Internal Navigation: `resolve()` Wrapping
+## Internal Navigation: `resolve()`
 
-`svelte/no-navigation-without-resolve` requires all internal navigation to use `resolve()` from `$app/paths`. Two patterns apply:
+All internal navigation must use `resolve()` from `$app/paths`:
 
-**Parameterized routes** — type-safe, preferred:
+- **Parameterized** (preferred): `resolve('/workbooks/[slug]', { slug: workbook.slug })`
+- **Static**: `resolve('/')` + `@ts-expect-error` (AppTypes merging quirk)
+- **With search/hash**: `resolve(pathname + search + hash)` (concatenate inside, not outside)
+- **External**: no `resolve()`, use `rel="noreferrer external"`
 
-```typescript
-import { resolve } from '$app/paths';
-resolve('/workbooks/[slug]', { slug: workbook.slug });
-```
+## Form Data Validation
 
-**Static routes and computed string paths** — TypeScript declaration merging causes `ReturnType<AppTypes['RouteId']>` to resolve as `string` (the base overload in `@sveltejs/kit/types/index.d.ts` wins), making all routes require 2 arguments. Suppress with a description, and pre-compute in `<script>` when used in templates (where `@ts-expect-error` cannot be placed inline). A wrapper function does not help — the ESLint rule may not recognize `resolve()` calls inside wrappers.
-
-```typescript
-// @ts-expect-error svelte-check TS2554: AppTypes declaration merging causes RouteId to resolve as string, requiring params. Runtime behavior is correct.
-const homeHref = resolve('/');
-```
-
-**External links** — add `rel="noreferrer external"` instead of wrapping with `resolve()`.
-
-**With query string or hash** — `svelte/no-navigation-without-resolve` (eslint-plugin-svelte 3.16.0+) requires the _entire_ first argument to be a direct `resolve()` call. Concatenating `resolve(path) + search` is now rejected. Pass path, search, and hash as a single concatenated string inside `resolve()`:
+`formData.get()` returns `string | File | null`. Always validate before casting:
 
 ```typescript
-// Bad — rejected by eslint-plugin-svelte 3.16.0+
-goto(resolve(url.pathname) + url.search);
-replaceState(resolve(url.pathname) + url.search + url.hash, state);
-
-// Good
-goto(resolve(url.pathname + url.search));
-replaceState(resolve(url.pathname + url.search + url.hash), state);
-```
-
-## Server-side Form Data Validation
-
-`formData.get()` returns `string | File | null`. Never cast directly with `as string` or `as TaskGrade` — always validate first:
-
-```typescript
-// Bad — unsafe cast, null reaches the DB layer
+// Bad: unsafe cast, null reaches DB layer
 const taskId = data.get('taskId') as string;
-const grade = data.get('grade') as TaskGrade;
 
-// Good — validate before use
+// Good: validate first
 const taskId = data.get('taskId');
-const grade = data.get('grade');
-if (typeof taskId !== 'string' || !taskId || typeof grade !== 'string') {
-  return { success: false };
-}
-// taskId and grade are now string, safe to pass onward
+
+if (typeof taskId !== 'string' || !taskId) return fail(...);
 ```
 
-For enum fields, add a membership check after the type guard:
+For enum fields:
 
 ```typescript
+const gradeRaw = data.get('grade');
+
 if (!(Object.values(TaskGrade) as string[]).includes(gradeRaw)) {
-  return fail(BAD_REQUEST, { message: 'Invalid grade value.' });
+  return fail(BAD_REQUEST, { message: 'Invalid grade.' });
 }
-const grade = gradeRaw as TaskGrade;
+
+const grade = gradeRaw as TaskGrade; // Safe now
 ```
-
-The same pattern applies to `url.searchParams.get()` in `+server.ts` handlers.
-
-## `$app/state`: navigating Idle Check
-
-`navigating` from `$app/state` always exists as an object. Use `navigating.from === null` to detect the idle state — not `navigating === null`.
-
-To limit spinner display to cross-route navigation only, compare `navigating.from.route.id` with `navigating.to?.route.id`. Same-route query-param changes produce equal ids.
 
 ## Page Component Props
 
-SvelteKit page components (`+page.svelte`) accept only `data` and `form` as props (`svelte/valid-prop-names-in-kit-pages`). Commented-out features that reference other props are not "dead code" — remove only the violating prop declaration, preserve the feature code.
+`+page.svelte` accepts only `data` and `form` props (`svelte/valid-prop-names-in-kit-pages`).
 
-## load() — Group Related Model Fields as Objects
+## load() Return Structure
 
-When a `load()` function returns fields from the same domain model (e.g., `AtCoderAccount`),
-group them as an object rather than flattening to top-level keys.
-Apply default values at this boundary so the page component typically does not need to handle `undefined`.
+Group domain model fields as objects with defaults absorbed at boundary:
 
 ```typescript
-// Bad: flat, scattered across top-level keys
-atcoder_username: user?.atCoderAccount?.handle ?? '',
-atcoder_validationcode: user?.atCoderAccount?.validationCode ?? '',
-is_validated: user?.atCoderAccount?.isValidated ?? false,
+// Bad: scattered fields
+export async function load() {
+  return {
+    username: user?.name ?? '',
+    atcoderHandle: user?.atCoder?.handle ?? '',
+    isValidated: user?.atCoder?.isValidated ?? false,
+  };
+}
 
-// Good: grouped by model, defaults absorbed here
-atCoderAccount: {
-  handle:         user?.atCoderAccount?.handle         ?? '',
-  validationCode: user?.atCoderAccount?.validationCode ?? '',
-  isValidated:    user?.atCoderAccount?.isValidated    ?? false,
-},
+// Good: grouped by model
+export async function load() {
+  return {
+    username: user?.name ?? '',
+    atCoderAccount: {
+      handle: user?.atCoder?.handle ?? '',
+      isValidated: user?.atCoder?.isValidated ?? false,
+    },
+  };
+}
 ```
 
-When consuming in `+page.svelte`, use `$derived` to maintain reactivity across load() re-runs after form actions (see svelte-components.md).
+Consume with `$derived` in `+page.svelte` to sync after `load()` re-runs.
+
+## Error Handling in load()
+
+Wrap service calls in try-catch, return safe defaults:
+
+```typescript
+const data = await service.fetch(...).catch(() => []);
+```
+
+Prevents single service error from crashing entire page.
+
+## Auth Audit
+
+When adding guard to one action in `+page.server.ts`, audit all other actions. Asymmetric guards (some protected, others not) are a recurring vulnerability.
+
+## success Flag & message Consistency
+
+When action returns `success: false`, `message` and `message_type` must reflect failure. Contradicting flags are silent bugs:
+
+```typescript
+// Bad: success contradicts message
+return { success: true, message: 'Failed to save' };
+
+// Good
+return { success: false, message: 'Failed to save' };
+```
+
+## navigating State
+
+`navigating` from `$app/state` always exists (never null). Check idle: `navigating.from === null`. For cross-route navigation only: compare `navigating.from.route.id` with `navigating.to?.route.id` (same-route param changes have equal ids).

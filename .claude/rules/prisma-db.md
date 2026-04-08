@@ -98,12 +98,15 @@ user   User @relation(fields: [userId], references: [id])
 
 ## DB-Level Value Constraints
 
-Add `CHECK` constraints (via manual migration SQL) for:
+Add `CHECK` constraints (via manual migration SQL) for count and invalid enum values. Document with inline `schema.prisma` comments (e.g., `/// CHECK: count >= 0`) — `prisma-erd-generator` overwrites `ERD.md` on each migration.
 
-- `count` fields that must be non-negative (`count >= 0`)
-- Enum fields where specific values are invalid at the DB level (e.g. `grade != 'PENDING'`)
+## Service Layer Error Handling
 
-Document every `CHECK` constraint in `prisma/ERD.md` — it is the only place they are visible outside migration SQL.
+Catch Prisma errors in service functions, return domain values:
+- `P2025` (record not found) → `null` (no exception)
+- Other errors → re-throw (caller handles as 500)
+
+This removes Prisma imports from route handlers and enables easy testing with mocked returns.
 
 ## Dual-Enforcement Constraints
 
