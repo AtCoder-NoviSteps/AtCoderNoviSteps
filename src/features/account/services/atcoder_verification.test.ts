@@ -24,7 +24,7 @@ import { generate, validate, reset } from './atcoder_verification';
 // Type aliases
 // ---------------------------------------------------------------------------
 
-type PrismaUserWithAccount = Awaited<ReturnType<typeof prisma.user.findUniqueOrThrow>> & {
+type UserWithAtCoderAccount = Awaited<ReturnType<typeof prisma.user.findUniqueOrThrow>> & {
   atCoderAccount: {
     userId: string;
     handle: string;
@@ -47,8 +47,8 @@ const SAMPLE_VALIDATION_CODE = 'mocked-hash';
 const SAMPLE_API_URL = 'https://example.com/api';
 
 function makeUser(
-  atCoderAccount: PrismaUserWithAccount['atCoderAccount'] = null,
-): PrismaUserWithAccount {
+  atCoderAccount: UserWithAtCoderAccount['atCoderAccount'] = null,
+): UserWithAtCoderAccount {
   return {
     id: SAMPLE_USER_ID,
     username: SAMPLE_USERNAME,
@@ -56,12 +56,12 @@ function makeUser(
     created_at: SAMPLE_TIMESTAMP,
     updated_at: SAMPLE_TIMESTAMP,
     atCoderAccount,
-  } as unknown as PrismaUserWithAccount;
+  } as unknown as UserWithAtCoderAccount;
 }
 
 function makeAtCoderAccount(
-  overrides: Partial<NonNullable<PrismaUserWithAccount['atCoderAccount']>> = {},
-): NonNullable<PrismaUserWithAccount['atCoderAccount']> {
+  overrides: Partial<NonNullable<UserWithAtCoderAccount['atCoderAccount']>> = {},
+): NonNullable<UserWithAtCoderAccount['atCoderAccount']> {
   return {
     userId: SAMPLE_USER_ID,
     handle: SAMPLE_HANDLE,
@@ -77,7 +77,7 @@ function makeAtCoderAccount(
 // Mock helpers
 // ---------------------------------------------------------------------------
 
-function mockFindUniqueOrThrow(value: PrismaUserWithAccount) {
+function mockFindUniqueOrThrow(value: UserWithAtCoderAccount) {
   vi.mocked(prisma.user.findUniqueOrThrow).mockResolvedValue(
     value as Awaited<ReturnType<typeof prisma.user.findUniqueOrThrow>>,
   );
