@@ -1,13 +1,5 @@
 import type { TaskGrade } from '$lib/types/task';
 
-// Helper to get base URL (works in browser and Node.js test environments)
-function getBaseUrl(): string {
-  if (typeof globalThis !== 'undefined' && globalThis.location?.origin) {
-    return globalThis.location.origin;
-  }
-  return 'http://localhost';
-}
-
 /**
  * Fetches the current user's vote grade for a given task.
  * @returns The voted grade, or null if not voted or request fails.
@@ -82,4 +74,12 @@ export async function fetchMedianVote(taskId: string): Promise<TaskGrade | null>
   } catch {
     return null;
   }
+}
+
+// Helper to get base URL (works in browser and Node.js test environments)
+function getBaseUrl(): string {
+  if (typeof globalThis !== 'undefined' && globalThis.location?.origin) {
+    return globalThis.location.origin;
+  }
+  return 'http://localhost';
 }
