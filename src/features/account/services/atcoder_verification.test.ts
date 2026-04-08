@@ -176,7 +176,7 @@ describe('generate', () => {
 });
 
 describe('validate', () => {
-  describe('正常系 (returns true)', () => {
+  describe('successful case', () => {
     test('returns true and marks account as validated when the external API confirms the code', async () => {
       mockFindUniqueOrThrow(prepareUser(prepareAtCoderAccount()));
       mockFetch({ contents: [SAMPLE_VALIDATION_CODE] });
@@ -194,68 +194,72 @@ describe('validate', () => {
     });
   });
 
-  describe('異常系', () => {
-    test('returns false when user has no AtCoderAccount', async () => {
-      mockFindUniqueOrThrow(prepareUser(null));
+  describe('error cases', () => {
+    describe('returns false', () => {
+      test('when user has no AtCoderAccount', async () => {
+        mockFindUniqueOrThrow(prepareUser(null));
 
-      const result = await validate(SAMPLE_USERNAME);
+        const result = await validate(SAMPLE_USERNAME);
 
-      expect(result).toBe(false);
+        expect(result).toBe(false);
+      });
+
+      test('when validationCode is empty', async () => {
+        mockFindUniqueOrThrow(prepareUser(prepareAtCoderAccount({ validationCode: '' })));
+
+        const result = await validate(SAMPLE_USERNAME);
+
+        expect(result).toBe(false);
+      });
+
+      test('when the external API does not confirm the code', async () => {
+        mockFindUniqueOrThrow(prepareUser(prepareAtCoderAccount()));
+        mockFetch({ contents: ['other-code'] });
+
+        const result = await validate(SAMPLE_USERNAME);
+
+        expect(result).toBe(false);
+        expect(prisma.atCoderAccount.update).not.toHaveBeenCalled();
+      });
+
+      test('when the external API returns invalid JSON', async () => {
+        mockFindUniqueOrThrow(prepareUser(prepareAtCoderAccount()));
+        vi.stubGlobal(
+          'fetch',
+          vi.fn().mockResolvedValue({
+            ok: true,
+            json: vi.fn().mockRejectedValue(new SyntaxError('Unexpected token')),
+          }),
+        );
+
+        const result = await validate(SAMPLE_USERNAME);
+
+        expect(result).toBe(false);
+      });
     });
 
-    test('returns false when validationCode is empty', async () => {
-      mockFindUniqueOrThrow(prepareUser(prepareAtCoderAccount({ validationCode: '' })));
+    describe('throws errors', () => {
+      test('when db lookup fails', async () => {
+        mockFindUniqueOrThrowError();
 
-      const result = await validate(SAMPLE_USERNAME);
+        await expect(validate(SAMPLE_USERNAME)).rejects.toThrow();
+      });
 
-      expect(result).toBe(false);
-    });
+      test('when the external API returns non-OK response', async () => {
+        mockFindUniqueOrThrow(prepareUser(prepareAtCoderAccount()));
+        mockFetch({}, false);
 
-    test('returns false when the external API does not confirm the code', async () => {
-      mockFindUniqueOrThrow(prepareUser(prepareAtCoderAccount()));
-      mockFetch({ contents: ['other-code'] });
+        await expect(validate(SAMPLE_USERNAME)).rejects.toThrow();
+      });
 
-      const result = await validate(SAMPLE_USERNAME);
+      test('when CONFIRM_API_URL is not set', async () => {
+        vi.stubEnv('CONFIRM_API_URL', '');
+        mockFindUniqueOrThrow(prepareUser(prepareAtCoderAccount()));
 
-      expect(result).toBe(false);
-      expect(prisma.atCoderAccount.update).not.toHaveBeenCalled();
-    });
-
-    test('returns false when the external API returns invalid JSON', async () => {
-      mockFindUniqueOrThrow(prepareUser(prepareAtCoderAccount()));
-      vi.stubGlobal(
-        'fetch',
-        vi.fn().mockResolvedValue({
-          ok: true,
-          json: vi.fn().mockRejectedValue(new SyntaxError('Unexpected token')),
-        }),
-      );
-
-      const result = await validate(SAMPLE_USERNAME);
-
-      expect(result).toBe(false);
-    });
-
-    test('propagates error when db lookup fails', async () => {
-      mockFindUniqueOrThrowError();
-
-      await expect(validate(SAMPLE_USERNAME)).rejects.toThrow();
-    });
-
-    test('throws when the external API returns non-OK response', async () => {
-      mockFindUniqueOrThrow(prepareUser(prepareAtCoderAccount()));
-      mockFetch({}, false);
-
-      await expect(validate(SAMPLE_USERNAME)).rejects.toThrow();
-    });
-
-    test('throws when CONFIRM_API_URL is not set', async () => {
-      vi.stubEnv('CONFIRM_API_URL', '');
-      mockFindUniqueOrThrow(prepareUser(prepareAtCoderAccount()));
-
-      await expect(validate(SAMPLE_USERNAME)).rejects.toThrow(
-        'Failed to confirm AtCoder affiliation',
-      );
+        await expect(validate(SAMPLE_USERNAME)).rejects.toThrow(
+          'Failed to confirm AtCoder affiliation',
+        );
+      });
     });
   });
 });
