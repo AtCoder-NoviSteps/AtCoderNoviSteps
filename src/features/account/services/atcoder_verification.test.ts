@@ -176,7 +176,25 @@ describe('generate', () => {
 });
 
 describe('validate', () => {
-  describe('successful cases', () => {
+  describe('正常系 (returns true)', () => {
+    test('returns true and marks account as validated when the external API confirms the code', async () => {
+      mockFindUniqueOrThrow(prepareUser(prepareAtCoderAccount()));
+      mockFetch({ contents: [SAMPLE_VALIDATION_CODE] });
+      mockUpdate();
+
+      const result = await validate(SAMPLE_USERNAME);
+
+      expect(result).toBe(true);
+      expect(prisma.atCoderAccount.update).toHaveBeenCalledWith(
+        expect.objectContaining({
+          where: { userId: SAMPLE_USER_ID },
+          data: { validationCode: '', isValidated: true },
+        }),
+      );
+    });
+  });
+
+  describe('異常系', () => {
     test('returns false when user has no AtCoderAccount', async () => {
       mockFindUniqueOrThrow(prepareUser(null));
 
@@ -203,22 +221,6 @@ describe('validate', () => {
       expect(prisma.atCoderAccount.update).not.toHaveBeenCalled();
     });
 
-    test('returns true and marks account as validated when the external API confirms the code', async () => {
-      mockFindUniqueOrThrow(prepareUser(prepareAtCoderAccount()));
-      mockFetch({ contents: [SAMPLE_VALIDATION_CODE] });
-      mockUpdate();
-
-      const result = await validate(SAMPLE_USERNAME);
-
-      expect(result).toBe(true);
-      expect(prisma.atCoderAccount.update).toHaveBeenCalledWith(
-        expect.objectContaining({
-          where: { userId: SAMPLE_USER_ID },
-          data: { validationCode: '', isValidated: true },
-        }),
-      );
-    });
-
     test('returns false when the external API returns invalid JSON', async () => {
       mockFindUniqueOrThrow(prepareUser(prepareAtCoderAccount()));
       vi.stubGlobal(
@@ -233,9 +235,7 @@ describe('validate', () => {
 
       expect(result).toBe(false);
     });
-  });
 
-  describe('error cases', () => {
     test('propagates error when db lookup fails', async () => {
       mockFindUniqueOrThrowError();
 
