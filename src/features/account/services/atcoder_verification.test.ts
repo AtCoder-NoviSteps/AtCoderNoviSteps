@@ -265,16 +265,26 @@ describe('validate', () => {
 });
 
 describe('reset', () => {
-  test('calls deleteMany with the correct userId (deleteMany is intentional: tolerates missing record)', async () => {
-    mockFindUniqueOrThrow(prepareUser());
-    mockDeleteMany(1);
+  describe('successful case', () => {
+    test('calls deleteMany with the correct userId (deleteMany is intentional: tolerates missing record)', async () => {
+      mockFindUniqueOrThrow(prepareUser());
+      mockDeleteMany(1);
 
-    await reset(SAMPLE_USERNAME);
+      await reset(SAMPLE_USERNAME);
 
-    expect(prisma.atCoderAccount.deleteMany).toHaveBeenCalledWith(
-      expect.objectContaining({
-        where: { userId: SAMPLE_USER_ID },
-      }),
-    );
+      expect(prisma.atCoderAccount.deleteMany).toHaveBeenCalledWith(
+        expect.objectContaining({
+          where: { userId: SAMPLE_USER_ID },
+        }),
+      );
+    });
+  });
+
+  describe('error cases', () => {
+    test('throws when user not found', async () => {
+      mockFindUniqueOrThrowError();
+
+      await expect(reset(SAMPLE_USERNAME)).rejects.toThrow();
+    });
   });
 });
