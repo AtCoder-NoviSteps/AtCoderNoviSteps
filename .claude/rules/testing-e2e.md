@@ -174,7 +174,7 @@ source file. Without it, reviewers cannot distinguish an intentional seed
 reference from a magic string.
 
 ```typescript
-const KNOWN_TASK_ID = 'abc422_a';           // From prisma/tasks.ts seed data
+const KNOWN_TASK_ID = 'abc422_a'; // From prisma/tasks.ts seed data
 const KNOWN_VOTE_DETAIL_URL = '/votes/abc422_a'; // From prisma/tasks.ts seed data
 ```
 
