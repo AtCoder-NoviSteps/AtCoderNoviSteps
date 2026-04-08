@@ -17,7 +17,7 @@ vi.mock('$lib/utils/hash', () => ({
   sha256: vi.fn().mockResolvedValue('mocked-hash'),
 }));
 
-import { Roles } from '@prisma/client';
+import { Roles, type AtCoderAccount } from '@prisma/client';
 
 import prisma from '$lib/server/database';
 import { generate, validate, reset } from './atcoder_verification';
@@ -86,6 +86,18 @@ function mockFindUniqueOrThrow(value: UserWithAtCoderAccount) {
   );
 }
 
+function mockUpsert(value: Partial<AtCoderAccount> = {}): void {
+  vi.mocked(prisma.atCoderAccount.upsert).mockResolvedValue(value as AtCoderAccount);
+}
+
+function mockUpdate(value: Partial<AtCoderAccount> = {}): void {
+  vi.mocked(prisma.atCoderAccount.update).mockResolvedValue(value as AtCoderAccount);
+}
+
+function mockDeleteMany(count: number = 1): void {
+  vi.mocked(prisma.atCoderAccount.deleteMany).mockResolvedValue({ count });
+}
+
 function mockFetch(body: unknown, ok = true): void {
   vi.stubGlobal(
     'fetch',
@@ -117,7 +129,7 @@ afterEach(() => {
 describe('generate', () => {
   test('returns the sha256 validation code', async () => {
     mockFindUniqueOrThrow(prepareUser());
-    vi.mocked(prisma.atCoderAccount.upsert).mockResolvedValue({} as never);
+    mockUpsert();
 
     const result = await generate(SAMPLE_USERNAME, SAMPLE_HANDLE);
 
@@ -126,7 +138,7 @@ describe('generate', () => {
 
   test('calls upsert with correct create and update payloads', async () => {
     mockFindUniqueOrThrow(prepareUser());
-    vi.mocked(prisma.atCoderAccount.upsert).mockResolvedValue({} as never);
+    mockUpsert();
 
     await generate(SAMPLE_USERNAME, SAMPLE_HANDLE);
 
@@ -185,7 +197,7 @@ describe('validate', () => {
   test('returns true and marks account as validated when the external API confirms the code', async () => {
     mockFindUniqueOrThrow(prepareUser(prepareAtCoderAccount()));
     mockFetch({ contents: [SAMPLE_VALIDATION_CODE] });
-    vi.mocked(prisma.atCoderAccount.update).mockResolvedValue({} as never);
+    mockUpdate();
 
     const result = await validate(SAMPLE_USERNAME);
 
@@ -233,7 +245,7 @@ describe('validate', () => {
 describe('reset', () => {
   test('calls deleteMany with the correct userId (deleteMany is intentional: tolerates missing record)', async () => {
     mockFindUniqueOrThrow(prepareUser());
-    vi.mocked(prisma.atCoderAccount.deleteMany).mockResolvedValue({ count: 1 });
+    mockDeleteMany(1);
 
     await reset(SAMPLE_USERNAME);
 
