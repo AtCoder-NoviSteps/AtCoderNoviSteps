@@ -34,7 +34,7 @@ test.describe('logged-in user', () => {
 });
 ```
 
-## Parametrized Tests
+## Parameterized Tests
 
 Playwright has no native `test.each`. Use `for...of` loops (official pattern):
 

@@ -75,7 +75,7 @@ const mockGetUser = (statusCode, user?) => {
 };
 ```
 
-### Parametrized Tests
+### Parameterized Tests
 
 Test enum boundaries + typical value, then separate test for distinct behavior:
 
@@ -115,3 +115,50 @@ Target: 80% lines, 80% branches. Run `pnpm coverage`.
 ## Test Files Ship with Code
 
 Never defer tests. For non-trivial logic without explicit test requirement, add them anyway.
+
+## Multiple Test Location Patterns
+
+During migration, support both centralized (`src/test/`) and co-located (`src/features/`, `src/lib/`) tests.
+Configure `vite.config.ts` with explicit ordering:
+
+```typescript
+include: [
+  'src/lib/**/*.test.ts',        // shared utilities (adjacent)
+  'src/test/**/*.test.ts',       // legacy centralized
+  'src/features/**/*.test.ts',   // feature co-location
+],
+```
+
+## Mocking globalThis Properties
+
+Save and restore `globalThis` state to prevent test leaks:
+
+```typescript
+const original = globalThis.location;
+
+beforeEach(() => {
+  Object.defineProperty(globalThis, 'location', {
+    value: { origin: 'http://test' },
+    writable: true,
+  });
+});
+
+afterEach(() => {
+  if (original !== undefined) {
+    Object.defineProperty(globalThis, 'location', { value: original, writable: true });
+  }
+});
+```
+
+## Guard Clause Reachability
+
+Ensure guard clauses don't make later code unreachable. Example anti-pattern:
+
+```typescript
+// Bad: 'http://localhost' is unreachable
+if (location?.origin) return location.origin;
+if (!browser) return '';
+return 'http://localhost'; // Never reached in browser
+```
+
+Simplify to remove dead code after the final guard.

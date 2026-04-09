@@ -10,6 +10,8 @@ import * as statusCodes from '$lib/constants/http-response-status-codes';
 const BASE_URL = 'http://localhost';
 const TASK_ID = 'abc_a';
 
+const originalLocation = globalThis.location;
+
 beforeEach(() => {
   nock.cleanAll();
   // Set globalThis.location for test environment
@@ -21,6 +23,13 @@ beforeEach(() => {
 
 afterEach(() => {
   nock.cleanAll();
+  // Restore original location to prevent test state leak
+  if (originalLocation !== undefined) {
+    Object.defineProperty(globalThis, 'location', {
+      value: originalLocation,
+      writable: true,
+    });
+  }
 });
 
 describe('fetchMyVote', () => {

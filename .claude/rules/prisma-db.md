@@ -98,7 +98,7 @@ user   User @relation(fields: [userId], references: [id])
 
 ## DB-Level Value Constraints
 
-Add `CHECK` constraints (via manual migration SQL) for count and invalid enum values. Document with inline `schema.prisma` comments (e.g., `/// CHECK: count >= 0`) — `prisma-erd-generator` overwrites `ERD.md` on each migration.
+Add `CHECK` constraints via manual migration SQL. Document with inline `schema.prisma` comments (e.g., `/// CHECK: count >= 0`). Note: `prisma-erd-generator` may overwrite `ERD.md` on each migration—always keep the constraint definition in `schema.prisma` as the source of truth.
 
 ## Service Layer Error Handling
 
@@ -125,9 +125,10 @@ Prisma does not support `@@check`. To add one:
 
 1. `pnpm exec prisma migrate dev --create-only --name <description>` — generate migration without applying
 2. Edit the generated `migration.sql` to add the CHECK constraint manually
-3. `pnpm exec prisma migrate dev` — apply
+3. Add an inline comment in `schema.prisma` (e.g., `/// CHECK: constraint description`)
+4. `pnpm exec prisma migrate dev` — apply
 
-Document the constraint in `prisma/ERD.md` (the only place it's visible):
+For visibility, also document complex constraints in `prisma/ERD.md`:
 
 ```mermaid
 %% XOR constraint: workbookplacement_xor_grade_category — exactly one of taskGrade or solutionCategory must be non-null

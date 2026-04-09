@@ -1,6 +1,5 @@
 import type { TaskGrade } from '$lib/types/task';
 import { isValidTaskGrade } from '$lib/utils/task_grade';
-import { browser } from '$app/environment';
 
 /**
  * Fetches the current user's vote grade for a given task.
@@ -88,14 +87,10 @@ function getBaseUrl(): string {
     return globalThis.location.origin;
   }
 
-  if (!browser) {
-    console.warn(
-      'getBaseUrl() called in SSR context where browser APIs are unavailable. ' +
-        'This should only be called from client-side code.',
-    );
+  console.warn(
+    'getBaseUrl() called in SSR context where browser APIs are unavailable. ' +
+      'This should only be called from client-side code.',
+  );
 
-    return '';
-  }
-
-  return 'http://localhost';
+  return '';
 }
