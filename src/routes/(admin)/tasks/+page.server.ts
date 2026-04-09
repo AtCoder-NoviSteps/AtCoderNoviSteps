@@ -179,7 +179,14 @@ export const actions: Actions = {
         };
       }
 
-      await taskService.updateTask(task_id, task_grade);
+      const updateResult = await taskService.updateTask(task_id, task_grade);
+
+      if (updateResult === null) {
+        return {
+          success: false,
+        };
+      }
+
       const contest_id = formData.get('contest_id')?.toString() as string;
 
       const tasks = await apiClient.getTasks();

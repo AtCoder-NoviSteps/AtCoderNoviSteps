@@ -52,7 +52,8 @@ export const voteAbsoluteGrade = async ({
   const grade = gradeRaw as TaskGrade;
 
   try {
-    return await upsertVoteGradeTables(userId, taskId, grade);
+    await upsertVoteGradeTables(userId, taskId, grade);
+    return { success: true as const };
   } catch (error) {
     console.error('Failed to vote absolute grade: ', error);
     return fail(INTERNAL_SERVER_ERROR, { message: 'Failed to record vote.' });

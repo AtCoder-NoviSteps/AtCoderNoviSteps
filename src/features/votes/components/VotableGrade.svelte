@@ -98,16 +98,21 @@
 
       submitVote(action, formData, signal)
         .then(async (succeeded) => {
+          if (signal?.aborted) {
+            return; // Intentional abort — user selected a different grade
+          }
+
           if (!succeeded) {
             throw new Error('vote failed');
           }
 
-          // 投票したグレードをローカル状態に反映（チェックマーク更新）
+          // Reflect the voted grade in local state (to update the checkmark in the dropdown), even though the server response may later indicate a different median grade due to other voters or admin overrides.
           votedGrade = selectedVoteGrade ?? null;
 
-          // 成功したらサーバから最新の中央値を取得して表示を更新
+          // Update the displayed grade to the latest median from the server, which may differ from the just-submitted vote due to other voters or admin overrides.
           const taskId = formData.get('taskId') as string;
-          const medianGrade = await fetchMedianVote(taskId);
+          const medianGrade = await fetchMedianVote(taskId, signal);
+
           if (medianGrade !== null && taskResult.grade === TaskGrade.PENDING) {
             displayGrade = medianGrade;
           }

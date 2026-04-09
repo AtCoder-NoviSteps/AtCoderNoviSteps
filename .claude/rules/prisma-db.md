@@ -103,6 +103,7 @@ Add `CHECK` constraints (via manual migration SQL) for count and invalid enum va
 ## Service Layer Error Handling
 
 Catch Prisma errors in service functions, return domain values:
+
 - `P2025` (record not found) → `null` (no exception)
 - Other errors → re-throw (caller handles as 500)
 

@@ -1,6 +1,5 @@
 import type { Actions, PageServerLoad } from './$types';
 
-import { Prisma } from '@prisma/client';
 import { type TaskGrade, TaskGrade as TaskGradeEnum } from '$lib/types/task';
 import { getTasksByTaskId, updateTask } from '$lib/services/tasks';
 import {
@@ -52,15 +51,13 @@ export const actions: Actions = {
     ) {
       return { success: false };
     }
-    try {
-      await updateTask(taskId, grade as TaskGrade);
-    } catch (error) {
-      if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2025') {
-        return { success: false, message: `Not found task: ${taskId}` };
-      }
 
-      throw error;
+    const result = await updateTask(taskId, grade as TaskGrade);
+
+    if (result === null) {
+      return { success: false, message: `Not found task: ${taskId}` };
     }
+
     return { success: true };
   },
 };

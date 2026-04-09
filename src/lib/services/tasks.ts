@@ -1,3 +1,4 @@
+import { Prisma } from '@prisma/client';
 import { default as db } from '$lib/server/database';
 
 import { getContestTaskPairs } from '$lib/services/contest_task_pairs';
@@ -179,42 +180,29 @@ export async function createTask(
   console.log(task);
 }
 
-export async function updateTask(task_id: string, task_grade: TaskGrade) {
-  const task = await db.task.update({
-    where: { task_id: task_id },
-    data: {
-      grade: task_grade,
-    },
-  });
+/**
+ * Updates a task's grade by task_id.
+ *
+ * @param task_id - The task ID to update
+ * @param task_grade - The new grade value
+ *
+ * @returns undefined if successful, null if task not found (P2025)
+ */
+export async function updateTask(task_id: string, task_grade: TaskGrade): Promise<void | null> {
+  try {
+    const task = await db.task.update({
+      where: { task_id: task_id },
+      data: {
+        grade: task_grade,
+      },
+    });
 
-  console.log(task);
+    console.log(task);
+  } catch (error) {
+    if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2025') {
+      return null;
+    }
+
+    throw error;
+  }
 }
-
-// TODO: deleteTask()
-
-// Note:
-// Uncomment only when executing the following commands directly from the script.
-//
-// pnpm dlx vite-node ./prisma/tasks.ts
-//
-//
-// async function main() {
-//   const tasks = getTasks();
-//   console.log(tasks);
-
-//   const task_id = 'abc322_e';
-//   const task = getTask(task_id);
-//   console.log(task);
-
-//   // updateTask(task_id, TaskGrade.Q1);
-//   // console.log(task);
-// }
-
-// main()
-//   .catch(async (e) => {
-//     console.error(e);
-//     process.exit(1);
-//   })
-//   .finally(async () => {
-//     await db.$disconnect();
-//   });

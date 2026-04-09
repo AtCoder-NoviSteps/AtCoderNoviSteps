@@ -1,4 +1,6 @@
 import type { TaskGrade } from '$lib/types/task';
+import { isValidTaskGrade } from '$lib/utils/task_grade';
+import { browser } from '$app/environment';
 
 /**
  * Fetches the current user's vote grade for a given task.
@@ -19,7 +21,7 @@ export async function fetchMyVote(taskId: string): Promise<TaskGrade | null> {
     }
 
     const data = await response.json();
-    return (data.grade as TaskGrade) ?? null;
+    return isValidTaskGrade(data.grade) ? data.grade : null;
   } catch {
     return null;
   }
@@ -55,13 +57,17 @@ export async function submitVote(
  * Fetches the current median vote grade for a given task.
  * @returns The median grade, or null if not enough votes or request fails.
  */
-export async function fetchMedianVote(taskId: string): Promise<TaskGrade | null> {
+export async function fetchMedianVote(
+  taskId: string,
+  signal?: AbortSignal,
+): Promise<TaskGrade | null> {
   try {
     const response = await fetch(
       `${getBaseUrl()}/problems/getMedianVote?taskId=${encodeURIComponent(taskId)}`,
       {
         credentials: 'same-origin',
         headers: { Accept: 'application/json' },
+        signal,
       },
     );
 
@@ -70,7 +76,7 @@ export async function fetchMedianVote(taskId: string): Promise<TaskGrade | null>
     }
 
     const data = await response.json();
-    return (data.grade as TaskGrade) ?? null;
+    return isValidTaskGrade(data.grade) ? data.grade : null;
   } catch {
     return null;
   }
@@ -81,5 +87,15 @@ function getBaseUrl(): string {
   if (typeof globalThis !== 'undefined' && globalThis.location?.origin) {
     return globalThis.location.origin;
   }
+
+  if (!browser) {
+    console.warn(
+      'getBaseUrl() called in SSR context where browser APIs are unavailable. ' +
+        'This should only be called from client-side code.',
+    );
+
+    return '';
+  }
+
   return 'http://localhost';
 }
