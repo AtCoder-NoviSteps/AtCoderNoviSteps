@@ -119,6 +119,28 @@ When the same constraint is enforced in both Zod (early validation) and SQL `CHE
 .refine(...)
 ```
 
+## @@map and Manual Migration SQL
+
+When writing manual migration SQL for models that use `@@map`, always use the `@@map` value (the actual DB table name), not the Prisma model name. PostgreSQL treats quoted identifiers as case-sensitive, so `"VotedGradeCounter"` and `"votedgradecounter"` refer to different tables.
+
+```sql
+-- Bad: Prisma model name does not exist as a table
+ALTER TABLE "VotedGradeCounter" ADD CONSTRAINT ...
+
+-- Good: use the @@map value
+ALTER TABLE "votedgradecounter" ADD CONSTRAINT ...
+```
+
+## P3009: Recovering from a Failed Migration
+
+When a migration leaves `finished_at = NULL` in `_prisma_migrations`:
+
+1. **Delete the broken migration file** from git (`git rm -r prisma/migrations/<name>/`) — leaving it causes `migrate dev` to fail on other machines.
+2. Mark it as rolled back: `pnpm exec prisma migrate resolve --rolled-back <name>`
+3. Create a **new migration with a new timestamp** containing the corrected SQL and deploy it.
+
+A `--rolled-back` migration is permanently skipped by `migrate deploy`; fixing the original file has no effect.
+
 ## Validate Constraints
 
 Prisma does not support `@@check`. To add one:
