@@ -1,9 +1,8 @@
 <script lang="ts">
   import { enhance } from '$app/forms';
+  import { setContext } from 'svelte';
   import type { Snippet } from 'svelte';
 
-  // See:
-  // https://developer.mozilla.org/en-US/docs/Web/HTML/Element/form#attributes_for_form_submission
   interface Props {
     method?: 'POST' | 'GET' | 'DIALOG' | 'post' | 'get' | 'dialog' | null | undefined;
     action: string;
@@ -19,9 +18,34 @@
     spaceYAxis = 'space-y-6',
     children,
   }: Props = $props();
+
+  let isSubmitting = $state(false);
+
+  setContext('form', {
+    get isSubmitting() {
+      return isSubmitting;
+    },
+  });
+
+  function handleEnhance() {
+    isSubmitting = true;
+
+    return async ({ update }: { update: () => Promise<void> }) => {
+      try {
+        await update();
+      } finally {
+        isSubmitting = false;
+      }
+    };
+  }
 </script>
 
-<form {method} {action} class={`w-full max-w-md ${marginTop} ${spaceYAxis}`} use:enhance>
+<form
+  {method}
+  {action}
+  class={`w-full max-w-md ${marginTop} ${spaceYAxis}`}
+  use:enhance={handleEnhance}
+>
   {#if children}
     {@render children()}
   {/if}

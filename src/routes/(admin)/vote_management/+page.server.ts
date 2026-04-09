@@ -51,7 +51,13 @@ export const actions: Actions = {
     ) {
       return { success: false };
     }
-    await updateTask(taskId, grade as TaskGrade);
+
+    const result = await updateTask(taskId, grade as TaskGrade);
+
+    if (result === null) {
+      return { success: false, message: `Not found task: ${taskId}` };
+    }
+
     return { success: true };
   },
 };

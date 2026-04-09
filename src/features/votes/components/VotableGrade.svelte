@@ -8,10 +8,16 @@
   import FlaskConical from '@lucide/svelte/icons/flask-conical';
 
   import { TaskGrade, getTaskGrade, type TaskResult } from '$lib/types/task';
+  import { errorMessageStore } from '$lib/stores/error_message';
+  import {
+    fetchMyVote,
+    submitVote,
+    fetchMedianVote,
+  } from '$features/votes/internal_clients/vote_grade';
+
   import { getTaskGradeLabel } from '$lib/utils/task';
   import { nonPendingGrades, resolveDisplayGrade } from '$features/votes/utils/grade_options';
   import { SIGNUP_PAGE, LOGIN_PAGE, EDIT_PROFILE_PAGE } from '$lib/constants/navbar-links';
-  import { errorMessageStore } from '$lib/stores/error_message';
 
   import GradeLabel from '$lib/components/GradeLabel.svelte';
   import InputFieldWrapper from '$lib/components/InputFieldWrapper.svelte';
@@ -35,6 +41,7 @@
   // Use task_id as a deterministic component ID to avoid SSR/hydration mismatches.
   const componentId = taskResult.task_id;
 
+  // @ts-expect-error svelte-check TS2554: AppTypes declaration merging causes RouteId to resolve as string, requiring params. Runtime behavior is correct.
   const editProfileHref = `${resolve(EDIT_PROFILE_PAGE)}?tab=atcoder`;
 
   let selectedVoteGrade = $state<TaskGrade>();
@@ -47,21 +54,15 @@
 
   let isOpening = $state(false);
   let votedGrade = $state<TaskGrade | null>(null);
+  let voteAbortController: AbortController | null = null;
 
   async function onTriggerClick() {
-    if (!isLoggedIn || isAtCoderVerified === false || isOpening) return;
+    if (!isLoggedIn || isAtCoderVerified === false || isOpening) {
+      return;
+    }
     isOpening = true;
     try {
-      const res = await fetch(
-        `/problems/getMyVote?taskId=${encodeURIComponent(taskResult.task_id)}`,
-        {
-          headers: { Accept: 'application/json' },
-        },
-      );
-      if (res.ok) {
-        const data = await res.json();
-        votedGrade = data.grade;
-      }
+      votedGrade = await fetchMyVote(taskResult.task_id);
     } catch (err) {
       console.error(err);
     } finally {
@@ -70,6 +71,9 @@
   }
 
   async function handleClick(voteGrade: string): Promise<void> {
+    // Cancel any in-flight vote request before starting a new one.
+    voteAbortController?.abort();
+    voteAbortController = new AbortController();
     selectedVoteGrade = getTaskGrade(voteGrade);
     showForm = true;
     // Wait for Svelte to render the form, then submit via the enhance directive.
@@ -90,34 +94,27 @@
       // Cancel the default form submission.
       cancel();
 
-      // Submit data manually using fetch API.
-      fetch(action, {
-        method: 'POST',
-        body: formData,
-        headers: {
-          Accept: 'application/json',
-        },
-      })
-        .then(async (res) => {
-          if (!res.ok) throw new Error('vote failed');
+      const signal = voteAbortController?.signal;
 
-          // 投票したグレードをローカル状態に反映（チェックマーク更新）
+      submitVote(action, formData, signal)
+        .then(async (succeeded) => {
+          if (signal?.aborted) {
+            return; // Intentional abort — user selected a different grade
+          }
+
+          if (!succeeded) {
+            throw new Error('vote failed');
+          }
+
+          // Reflect the voted grade in local state (to update the checkmark in the dropdown), even though the server response may later indicate a different median grade due to other voters or admin overrides.
           votedGrade = selectedVoteGrade ?? null;
 
-          // 成功したらサーバから最新の中央値を取得して表示を更新
-          try {
-            const taskId = formData.get('taskId') as string;
-            const medianRes = await fetch(
-              `/problems/getMedianVote?taskId=${encodeURIComponent(taskId)}`,
-              { headers: { Accept: 'application/json' } },
-            );
-            if (medianRes.ok) {
-              const data = await medianRes.json();
-              // DBグレード付与済みはそちらを優先表示するため更新しない
-              if (data?.grade && taskResult.grade === TaskGrade.PENDING) displayGrade = data.grade;
-            }
-          } catch (err) {
-            console.error('Failed to fetch median after vote', err);
+          // Update the displayed grade to the latest median from the server, which may differ from the just-submitted vote due to other voters or admin overrides.
+          const taskId = formData.get('taskId') as string;
+          const medianGrade = await fetchMedianVote(taskId, signal);
+
+          if (medianGrade !== null && taskResult.grade === TaskGrade.PENDING) {
+            displayGrade = medianGrade;
           }
         })
         .catch((error) => {

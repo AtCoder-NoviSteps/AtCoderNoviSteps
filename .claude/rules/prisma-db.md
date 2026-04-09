@@ -83,6 +83,32 @@ automatically excluded. This is not an IS NOT NULL check; the mechanism is the J
 When documenting this behavior, write "excluded by INNER JOIN" rather than
 "implicitly includes IS NOT NULL".
 
+## FK Relations: Always Define @relation
+
+Any field that references another model's ID must have an explicit `@relation` defined. Without `@relation`, Prisma does not generate FK constraints automatically, leading to referential integrity gaps.
+
+```prisma
+// Bad: FK without @relation
+userId String
+
+// Good: explicit @relation generates FK constraint
+userId String
+user   User @relation(fields: [userId], references: [id])
+```
+
+## DB-Level Value Constraints
+
+Add `CHECK` constraints via manual migration SQL. Document with inline `schema.prisma` comments (e.g., `/// CHECK: count >= 0`). Note: `prisma-erd-generator` may overwrite `ERD.md` on each migration—always keep the constraint definition in `schema.prisma` as the source of truth.
+
+## Service Layer Error Handling
+
+Catch Prisma errors in service functions, return domain values:
+
+- `P2025` (record not found) → `null` (no exception)
+- Other errors → re-throw (caller handles as 500)
+
+This removes Prisma imports from route handlers and enables easy testing with mocked returns.
+
 ## Dual-Enforcement Constraints
 
 When the same constraint is enforced in both Zod (early validation) and SQL `CHECK` (last line of defense), add an inline comment stating each layer's role and the obligation to keep them in sync:
@@ -99,9 +125,10 @@ Prisma does not support `@@check`. To add one:
 
 1. `pnpm exec prisma migrate dev --create-only --name <description>` — generate migration without applying
 2. Edit the generated `migration.sql` to add the CHECK constraint manually
-3. `pnpm exec prisma migrate dev` — apply
+3. Add an inline comment in `schema.prisma` (e.g., `/// CHECK: constraint description`)
+4. `pnpm exec prisma migrate dev` — apply
 
-Document the constraint in `prisma/ERD.md` (the only place it's visible):
+For visibility, also document complex constraints in `prisma/ERD.md`:
 
 ```mermaid
 %% XOR constraint: workbookplacement_xor_grade_category — exactly one of taskGrade or solutionCategory must be non-null

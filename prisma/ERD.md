@@ -301,3 +301,16 @@ ANALYSIS ANALYSIS
     "votedgradestatistics" |o--|| "TaskGrade" : "enum:grade"
     "votedgradestatistics" |o--|| task : "task"
 ```
+
+## Database Constraints
+
+### CHECK Constraints
+
+The following `CHECK` constraints are applied at the database level (via migration SQL):
+
+- `votedgradecounter_count_non_negative` — `VotedGradeCounter.count >= 0`
+- `votegrade_grade_not_pending` — `VoteGrade.grade != 'PENDING'`
+- `votedgradecounter_grade_not_pending` — `VotedGradeCounter.grade != 'PENDING'`
+- `votedgradestatistics_grade_not_pending` — `VotedGradeStatistics.grade != 'PENDING'`
+
+These constraints enforce domain rules at the database level as a last line of defense. Application-layer guards are documented in the schema comments.

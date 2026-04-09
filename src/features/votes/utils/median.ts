@@ -1,5 +1,6 @@
 import { TaskGrade } from '@prisma/client';
 import { getGradeOrder, taskGradeOrderInfinity } from '$lib/utils/task';
+import { MIN_VOTES_FOR_STATISTICS } from '$features/votes/constants/statistics';
 
 /** Maps grade order (1=Q11 … 17=D6) back to the corresponding TaskGrade enum value. */
 const ORDER_TO_TASK_GRADE: Map<number, TaskGrade> = new Map([
@@ -30,10 +31,14 @@ type GradeCounter = { grade: TaskGrade; count: number };
  * Returns `null` when the total vote count is below the minimum threshold.
  *
  * @param counters - Grade counters sorted by grade ascending.
- * @param minVotes - Minimum votes required to compute a median. Defaults to 3.
+ * @param minVotes - Minimum votes required to compute a median. Defaults to MIN_VOTES_FOR_STATISTICS.
+ *
  * @returns The median TaskGrade, or `null` if there are fewer than `minVotes` total votes.
  */
-export function computeMedianGrade(counters: GradeCounter[], minVotes = 3): TaskGrade | null {
+export function computeMedianGrade(
+  counters: GradeCounter[],
+  minVotes = MIN_VOTES_FOR_STATISTICS,
+): TaskGrade | null {
   const total = counters.reduce((sum, counter) => sum + counter.count, 0);
   if (total < minVotes) {
     return null;

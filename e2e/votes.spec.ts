@@ -5,6 +5,8 @@ import { loginAsAdmin, loginAsUser } from './helpers/auth';
 const TIMEOUT = 60 * 1000;
 const VOTES_LIST_URL = '/votes';
 const VOTE_MANAGEMENT_URL = '/vote_management';
+const KNOWN_TASK_ID = 'abc422_a'; // From prisma/tasks.ts seed data
+const KNOWN_VOTE_DETAIL_URL = '/votes/abc422_a'; // From prisma/tasks.ts seed data
 
 // ---------------------------------------------------------------------------
 // Votes list page (/votes)
@@ -14,17 +16,17 @@ test.describe('votes list page (/votes)', () => {
   test('unauthenticated user can view the page without redirect', async ({ page }) => {
     await page.goto(VOTES_LIST_URL);
     await expect(page).toHaveURL(VOTES_LIST_URL, { timeout: TIMEOUT });
-    await expect(page.getByRole('heading', { name: 'グレード投票' })).toBeVisible({
+    await expect(page.getByRole('heading', { name: '投票' })).toBeVisible({
       timeout: TIMEOUT,
     });
   });
 
   test('task table is visible to unauthenticated user', async ({ page }) => {
     await page.goto(VOTES_LIST_URL);
-    await expect(page.getByRole('columnheader', { name: '問題' })).toBeVisible({
+    await expect(page.getByRole('columnheader', { name: '問題名' })).toBeVisible({
       timeout: TIMEOUT,
     });
-    await expect(page.getByRole('columnheader', { name: 'コンテスト' })).toBeVisible({
+    await expect(page.getByRole('columnheader', { name: '出典' })).toBeVisible({
       timeout: TIMEOUT,
     });
   });
@@ -33,14 +35,14 @@ test.describe('votes list page (/votes)', () => {
     await loginAsUser(page);
     await page.goto(VOTES_LIST_URL);
     await expect(page).toHaveURL(VOTES_LIST_URL, { timeout: TIMEOUT });
-    await expect(page.getByRole('heading', { name: 'グレード投票' })).toBeVisible({
+    await expect(page.getByRole('heading', { name: '投票' })).toBeVisible({
       timeout: TIMEOUT,
     });
   });
 
   test('search input filters tasks by title', async ({ page }) => {
     await page.goto(VOTES_LIST_URL);
-    const searchInput = page.getByPlaceholder('問題名・問題ID・コンテストIDで検索');
+    const searchInput = page.getByPlaceholder('問題名・問題ID・出典で検索');
     await expect(searchInput).toBeVisible({ timeout: TIMEOUT });
 
     // Type a string unlikely to match any task to get 0 results
@@ -57,28 +59,42 @@ test.describe('votes list page (/votes)', () => {
 
 test.describe('vote detail page (/votes/[slug])', () => {
   /**
-   * Navigates to the first task in the vote list.
-   * Assumes at least one task exists in the DB.
+   * Navigates to the first task in the vote list by searching for a known task ID,
+   * then clicking the first result link.
+   * Callers must check page.url() and call test.skip if still on the list page.
    */
   async function navigateToFirstVoteDetailPage(page: Page): Promise<void> {
     await page.goto(VOTES_LIST_URL);
-    await expect(page.getByRole('columnheader', { name: '問題' })).toBeVisible({
+    await expect(page.getByRole('columnheader', { name: '問題名' })).toBeVisible({
       timeout: TIMEOUT,
     });
-    // Click the first task title link in the table
-    await page.locator('table').getByRole('link').first().click();
+
+    // Fill search to render task rows (table body is empty until search !== '')
+    const searchInput = page.getByPlaceholder('問題名・問題ID・出典で検索');
+    await searchInput.fill(KNOWN_TASK_ID);
+
+    const firstLink = page.locator('table').getByRole('link').first();
+    const hasTask = await firstLink.isVisible();
+
+    if (!hasTask) {
+      return; // No matching tasks in DB — callers must call test.skip
+    }
+
+    await firstLink.click();
     await expect(page).toHaveURL(/\/votes\/.+/, { timeout: TIMEOUT });
   }
 
   test.describe('unauthenticated user', () => {
     test('can view the task detail page without redirect', async ({ page }) => {
       await navigateToFirstVoteDetailPage(page);
+      const onDetailPage = /\/votes\/.+/.test(page.url());
+      test.skip(!onDetailPage, 'no matching tasks in DB');
       // Should stay on /votes/[slug], not redirected
       await expect(page).toHaveURL(/\/votes\/.+/, { timeout: TIMEOUT });
     });
 
     test('sees login prompt instead of vote buttons', async ({ page }) => {
-      await navigateToFirstVoteDetailPage(page);
+      await page.goto(KNOWN_VOTE_DETAIL_URL);
 
       const content = page.locator('.container');
 
@@ -94,18 +110,14 @@ test.describe('vote detail page (/votes/[slug])', () => {
     });
 
     test('does not see vote grade buttons', async ({ page }) => {
-      await navigateToFirstVoteDetailPage(page);
+      await page.goto(KNOWN_VOTE_DETAIL_URL);
       // Grade buttons are only rendered inside the vote form (not shown when logged out)
       await expect(page.locator('form[action="?/voteAbsoluteGrade"]')).not.toBeAttached();
     });
 
     test('breadcrumb link navigates back to /votes', async ({ page }) => {
-      await navigateToFirstVoteDetailPage(page);
-      await page
-        .locator('.container')
-        .locator('nav')
-        .getByRole('link', { name: 'グレード投票' })
-        .click();
+      await page.goto(KNOWN_VOTE_DETAIL_URL);
+      await page.locator('.container').locator('nav').getByRole('link', { name: '投票' }).click();
       await expect(page).toHaveURL(VOTES_LIST_URL, { timeout: TIMEOUT });
     });
   });
@@ -116,12 +128,12 @@ test.describe('vote detail page (/votes/[slug])', () => {
     });
 
     test('can view the task detail page', async ({ page }) => {
-      await navigateToFirstVoteDetailPage(page);
+      await page.goto(KNOWN_VOTE_DETAIL_URL);
       await expect(page).toHaveURL(/\/votes\/.+/, { timeout: TIMEOUT });
     });
 
     test('sees vote grade buttons', async ({ page }) => {
-      await navigateToFirstVoteDetailPage(page);
+      await page.goto(KNOWN_VOTE_DETAIL_URL);
 
       // Skip if the test user is not AtCoder-verified.
       // Wait for either the vote form or the unverified message to appear before deciding.
@@ -141,7 +153,7 @@ test.describe('vote detail page (/votes/[slug])', () => {
     });
 
     test('does not see login prompt', async ({ page }) => {
-      await navigateToFirstVoteDetailPage(page);
+      await page.goto(KNOWN_VOTE_DETAIL_URL);
       await expect(page.getByText('投票するにはログインが必要です')).not.toBeVisible();
     });
   });

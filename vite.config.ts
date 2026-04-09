@@ -9,6 +9,7 @@ export default defineConfig({
   },
   test: {
     include: [
+      'src/lib/**/*.test.ts', // shared utility tests
       'src/test/**/*.test.ts', // existing tests (phase transition)
       'src/features/**/*.test.ts', // feature co-location tests
     ],

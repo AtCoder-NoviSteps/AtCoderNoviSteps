@@ -53,6 +53,7 @@ export const voteAbsoluteGrade = async ({
 
   try {
     await upsertVoteGradeTables(userId, taskId, grade);
+    return { success: true as const };
   } catch (error) {
     console.error('Failed to vote absolute grade: ', error);
     return fail(INTERNAL_SERVER_ERROR, { message: 'Failed to record vote.' });

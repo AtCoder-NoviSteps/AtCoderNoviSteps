@@ -9,103 +9,156 @@ paths:
 
 # Testing
 
-## Test Titles
+## Core Principles
 
-Write all test titles in English. Use descriptive sentences that state the expected behavior (e.g., `'returns empty array when workbooks is empty'`). Japanese is only acceptable in inline comments or fixture strings that represent real user-facing content.
-
-## Tests Ship with the Implementation
-
-Tests must be included in the same commit as the implementation they cover. "Add tests later" is not acceptable — a feature or fix is not done until its tests pass.
-
-If a task description does not mention tests, add them anyway for any non-trivial logic.
-
-## Test Integrity
-
-- Never delete, comment out, or weaken assertions (e.g. `toEqual` → `toBeDefined`) to make tests pass
-- Fix the implementation, not the test; if the test itself is wrong, explain why in a comment or commit message
-
-## Unused Imports in Test Files
-
-Unused imports signal a missing test, not dead code. Before deleting, add the corresponding test case.
+- **Tests ship with implementation**: same commit, feature not done until tests pass
+- **English only**: describe expected behavior (e.g., `'returns empty array when workbooks is empty'`)
+- **Test integrity**: never weaken assertions to make tests pass; fix implementation instead
+- **Unused imports**: signal missing tests, not dead code—add the test case first
 
 ## Test Types
 
-| Type | Tool       | Location                                                          | Run Command      |
-| ---- | ---------- | ----------------------------------------------------------------- | ---------------- |
-| Unit | Vitest     | `src/test/` (mirrors `src/lib/`) or co-located in `src/features/` | `pnpm test:unit` |
-| E2E  | Playwright | `e2e/`                                                            | `pnpm test:e2e`  |
+| Type | Tool       | Location                  | Command          |
+| ---- | ---------- | ------------------------- | ---------------- |
+| Unit | Vitest     | `src/test/` or co-located | `pnpm test:unit` |
+| E2E  | Playwright | `e2e/`                    | `pnpm test:e2e`  |
 
-E2E test files must use the `.spec.ts` extension. `playwright.config.ts` matches only `*.spec.ts`, so `.test.ts` files will not be detected.
+E2E files: **must** use `.spec.ts` extension (`.test.ts` not detected).
 
-## Assertions
+## Unit Testing Patterns
 
-- Use `toBe(true)` / `toBe(false)` over `toBeTruthy()` / `toBeFalsy()`
-- For DB query tests, assert `orderBy`, `include`, and other significant parameters with `expect.objectContaining` — not just `where`. When a returned field (e.g. `authorName`) depends on an `include` relation, that `include` clause must be part of the assertion, or a regression in the query shape will go undetected
-- Enum membership: `in` traverses the prototype chain; use `Object.hasOwn(Enum, value)` instead
+### Assertions
 
-## Test Stubs
+- Use `toBe(true)` / `toBe(false)` not `toBeTruthy()` / `toBeFalsy()`
+- DB query tests: assert `orderBy`, `include` with `expect.objectContaining`, not just `where`
+- Enum membership: `Object.hasOwn(Enum, value)` not `in` (avoids prototype chain)
 
-Test stub parameter types must match the production function's signature — use domain types (e.g. `TaskGrade`), not `string`; a mismatch compiles silently but lets the stub accept inputs the real function would reject.
+### Describe Organization
 
-## Test Data
-
-- Use realistic fixture values (real task IDs, grade names) instead of placeholders like `'t1'`
-- Extract shared data into fixture files; inline is fine for single-use cases
-- After `.filter()` on fixtures, verify actual contents — same ID may refer to a different entity after fixture updates
-- **Description ↔ code path alignment**: when a test name describes a specific scenario (e.g. "tie-break"), verify the fixture actually exercises that code path
-
-### Fixture Sharing in describe() Scope
-
-When multiple tests in a `describe` block use identical fixture data, define it once at block scope instead of duplicating in each test. Benefit: DRY + fixture changes sync automatically. Only use if fixture is immutable within tests (no mutations).
+Group by scenario (successful vs error cases), not flat:
 
 ```typescript
-describe('filterByRole', () => {
-  const testGroups = [{ role: ADMIN }, { role: PENDING }];
-
-  test('admin sees all', () => {
-    expect(filter(testGroups, ADMIN)).toHaveLength(2);
-  });
-  test('user sees filtered', () => {
-    expect(filter(testGroups, USER)).toHaveLength(1);
+describe('validate', () => {
+  describe('successful case', () => { ... });
+  describe('error cases', () => {
+    describe('returns false', () => { ... });
+    describe('throws', () => { ... });
   });
 });
 ```
 
+### Test Data
+
+- Use realistic values (real task IDs, grade names), not `'t1'` placeholders
+- Extract shared fixture data to file scope; inline for single-use
+- Verify fixture alignment: test name "tie-break" must exercise that code path
+- Shared fixtures at `describe` scope avoid duplication (DRY + auto-sync)
+
+### Service Layer Mocking
+
+Mock Prisma with `vi.mock('$lib/server/database', ...)` — no real DB mutations. Use helpers:
+
+```typescript
+const mockFindUnique = (data) => db.task.findUnique.mockResolvedValue(data);
+const mockFindMany = (data) => db.task.findMany.mockResolvedValue(data);
+```
+
+### HTTP Mocking (Nock)
+
+Extract setup into helpers, declare once at describe scope:
+
+```typescript
+const mockGetUser = (statusCode, user?) => {
+  nock('http://localhost')
+    .get('/api/user')
+    .reply(statusCode, user ? { user } : undefined);
+};
+```
+
+### Parameterized Tests
+
+Test enum boundaries + typical value, then separate test for distinct behavior:
+
+```typescript
+test.each([TaskGrade.PENDING, TaskGrade.Q11, TaskGrade.Q10, TaskGrade.D6])(
+  'returns grade %s', (grade) => { ... }
+);
+test('returns null when no vote', () => { ... });
+```
+
+### Environment Variables
+
+Use `vi.stubEnv()` + `vi.unstubAllEnvs()`:
+
+```typescript
+beforeEach(() => {
+  vi.stubEnv('MY_VAR', 'value');
+});
+afterEach(() => {
+  vi.unstubAllEnvs();
+});
+```
+
+### Test Stubs
+
+Parameter types **must match** production signature — use domain types (`TaskGrade`), not `string`. Mismatch compiles silently but breaks type safety.
+
+## Component Testing
+
+- Extract logic to `utils/` or `_utils/` and test there, not in component
+- Omit component Vitest if template-only **and** E2E covers rendering paths
+
 ## Coverage
 
-- Run `pnpm coverage` for coverage report
-- Target: 80% lines, 80% branches
+Target: 80% lines, 80% branches. Run `pnpm coverage`.
 
-## Test Order Mirrors Source Order
+## Test Files Ship with Code
 
-Order `describe` blocks in service and utils test files to match the declaration order of functions in the source file. Misalignment makes it harder to cross-reference tests and implementation.
+Never defer tests. For non-trivial logic without explicit test requirement, add them anyway.
 
-### Describe Block Organization: Multi-Scenario Functions
+## Multiple Test Location Patterns
 
-Split `describe` blocks by scenario (not all cases flat) when a function behaves differently by mode. Example: separate `describe('func with modeA')` and `describe('func with modeB')` rather than mixing all cases. Benefit: better test discovery and names.
+During migration, support both centralized (`src/test/`) and co-located (`src/features/`, `src/lib/`) tests.
+Configure `vite.config.ts` with explicit ordering:
 
-## Service Layer Unit Tests
+```typescript
+include: [
+  'src/lib/**/*.test.ts',        // shared utilities (adjacent)
+  'src/test/**/*.test.ts',       // legacy centralized
+  'src/features/**/*.test.ts',   // feature co-location
+],
+```
 
-Service tests mock Prisma via `vi.mock('$lib/server/database', ...)` — no real DB mutations occur.
+## Mocking globalThis Properties
 
-### Mock Helpers
+Save and restore `globalThis` state to prevent test leaks:
 
-Extract repeated mock patterns into helpers. Use `mockFindUnique`, `mockFindMany`, `mockCount` as the standard trio for Prisma model tests. Add `mockCreate`, `mockTransaction`, `mockDelete` when needed.
+```typescript
+const original = globalThis.location;
 
-### Cleanup for Integration Tests
+beforeEach(() => {
+  Object.defineProperty(globalThis, 'location', {
+    value: { origin: 'http://test' },
+    writable: true,
+  });
+});
 
-For tests with real side effects (DB mutations, file changes, API calls), wrap assertions in `try/finally` — a failing assertion skips cleanup and contaminates later tests.
+afterEach(() => {
+  if (original !== undefined) {
+    Object.defineProperty(globalThis, 'location', { value: original, writable: true });
+  }
+});
+```
 
-### File Split for Testability
+## Guard Clause Reachability
 
-When a service mixes DB operations and pure functions, split into `crud.ts` (DB; Prisma mocks needed) and `initializers.ts` (pure; no mocks). Skip split if cohesion suffers.
+Ensure guard clauses don't make later code unreachable. Example anti-pattern:
 
-## Component & Utility Tests
+```typescript
+// Bad: 'http://localhost' is unreachable
+if (location?.origin) return location.origin;
+if (!browser) return '';
+return 'http://localhost'; // Never reached in browser
+```
 
-- Extract component logic to `utils/` and test there, not in the component.
-- Omit component Vitest test if template-only **and** E2E tests cover rendering paths.
-- Add utility tests at extraction time; assert immutability (URLs) and all affected parts (multi-column operations).
-
-## HTTP Mocking
-
-Use Nock for external HTTP calls. See `src/test/lib/clients/` for examples.
+Simplify to remove dead code after the final guard.

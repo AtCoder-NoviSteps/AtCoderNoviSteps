@@ -17,6 +17,8 @@ vi.mock('$lib/utils/hash', () => ({
   sha256: vi.fn().mockResolvedValue('mocked-hash'),
 }));
 
+import { Roles, type AtCoderAccount } from '@prisma/client';
+
 import prisma from '$lib/server/database';
 import { generate, validate, reset } from './atcoder_verification';
 
@@ -24,7 +26,7 @@ import { generate, validate, reset } from './atcoder_verification';
 // Type aliases
 // ---------------------------------------------------------------------------
 
-type PrismaUserWithAccount = Awaited<ReturnType<typeof prisma.user.findUniqueOrThrow>> & {
+type UserWithAtCoderAccount = Awaited<ReturnType<typeof prisma.user.findUniqueOrThrow>> & {
   atCoderAccount: {
     userId: string;
     handle: string;
@@ -40,28 +42,29 @@ type PrismaUserWithAccount = Awaited<ReturnType<typeof prisma.user.findUniqueOrT
 // ---------------------------------------------------------------------------
 
 const SAMPLE_TIMESTAMP = new Date('2024-01-01T00:00:00Z');
-const SAMPLE_USER_ID = 'user-1';
+// Lucia (auth library) auto-generates User.id in UUID format
+const SAMPLE_USER_ID = '550e8400-e29b-41d4-a716-446655440000';
 const SAMPLE_USERNAME = 'alice';
 const SAMPLE_HANDLE = 'alice_ac';
 const SAMPLE_VALIDATION_CODE = 'mocked-hash';
 const SAMPLE_API_URL = 'https://example.com/api';
 
-function makeUser(
-  atCoderAccount: PrismaUserWithAccount['atCoderAccount'] = null,
-): PrismaUserWithAccount {
+function prepareUser(
+  atCoderAccount: UserWithAtCoderAccount['atCoderAccount'] = null,
+): UserWithAtCoderAccount {
   return {
     id: SAMPLE_USER_ID,
     username: SAMPLE_USERNAME,
-    role: 'USER',
+    role: Roles.USER,
     created_at: SAMPLE_TIMESTAMP,
     updated_at: SAMPLE_TIMESTAMP,
     atCoderAccount,
-  } as unknown as PrismaUserWithAccount;
+  } as unknown as UserWithAtCoderAccount;
 }
 
-function makeAtCoderAccount(
-  overrides: Partial<NonNullable<PrismaUserWithAccount['atCoderAccount']>> = {},
-): NonNullable<PrismaUserWithAccount['atCoderAccount']> {
+function prepareAtCoderAccount(
+  overrides: Partial<NonNullable<UserWithAtCoderAccount['atCoderAccount']>> = {},
+): NonNullable<UserWithAtCoderAccount['atCoderAccount']> {
   return {
     userId: SAMPLE_USER_ID,
     handle: SAMPLE_HANDLE,
@@ -77,10 +80,26 @@ function makeAtCoderAccount(
 // Mock helpers
 // ---------------------------------------------------------------------------
 
-function mockFindUniqueOrThrow(value: PrismaUserWithAccount) {
+function mockFindUniqueOrThrow(value: UserWithAtCoderAccount) {
   vi.mocked(prisma.user.findUniqueOrThrow).mockResolvedValue(
     value as Awaited<ReturnType<typeof prisma.user.findUniqueOrThrow>>,
   );
+}
+
+function mockUpsert(value: Partial<AtCoderAccount> = {}): void {
+  vi.mocked(prisma.atCoderAccount.upsert).mockResolvedValue(value as AtCoderAccount);
+}
+
+function mockUpdate(value: Partial<AtCoderAccount> = {}): void {
+  vi.mocked(prisma.atCoderAccount.update).mockResolvedValue(value as AtCoderAccount);
+}
+
+function mockDeleteMany(count: number = 1): void {
+  vi.mocked(prisma.atCoderAccount.deleteMany).mockResolvedValue({ count });
+}
+
+function mockFindUniqueOrThrowError(message: string = 'not found'): void {
+  vi.mocked(prisma.user.findUniqueOrThrow).mockRejectedValue(new Error(message));
 }
 
 function mockFetch(body: unknown, ok = true): void {
@@ -99,11 +118,11 @@ function mockFetch(body: unknown, ok = true): void {
 
 beforeEach(() => {
   vi.clearAllMocks();
-  process.env.CONFIRM_API_URL = SAMPLE_API_URL;
+  vi.stubEnv('CONFIRM_API_URL', SAMPLE_API_URL);
 });
 
 afterEach(() => {
-  delete process.env.CONFIRM_API_URL;
+  vi.unstubAllEnvs();
   vi.unstubAllGlobals();
 });
 
@@ -112,132 +131,160 @@ afterEach(() => {
 // ---------------------------------------------------------------------------
 
 describe('generate', () => {
-  test('returns the sha256 validation code', async () => {
-    mockFindUniqueOrThrow(makeUser());
-    vi.mocked(prisma.atCoderAccount.upsert).mockResolvedValue({} as never);
+  describe('successful cases', () => {
+    test('returns the sha256 validation code', async () => {
+      mockFindUniqueOrThrow(prepareUser());
+      mockUpsert();
 
-    const result = await generate(SAMPLE_USERNAME, SAMPLE_HANDLE);
+      const result = await generate(SAMPLE_USERNAME, SAMPLE_HANDLE);
 
-    expect(result).toBe(SAMPLE_VALIDATION_CODE);
+      expect(result).toBe(SAMPLE_VALIDATION_CODE);
+    });
+
+    test('calls upsert with correct create and update payloads', async () => {
+      mockFindUniqueOrThrow(prepareUser());
+      mockUpsert();
+
+      await generate(SAMPLE_USERNAME, SAMPLE_HANDLE);
+
+      expect(prisma.atCoderAccount.upsert).toHaveBeenCalledWith(
+        expect.objectContaining({
+          where: { userId: SAMPLE_USER_ID },
+          create: expect.objectContaining({
+            userId: SAMPLE_USER_ID,
+            handle: SAMPLE_HANDLE,
+            validationCode: SAMPLE_VALIDATION_CODE,
+            isValidated: false,
+          }),
+          update: expect.objectContaining({
+            handle: SAMPLE_HANDLE,
+            validationCode: SAMPLE_VALIDATION_CODE,
+            isValidated: false,
+          }),
+        }),
+      );
+    });
   });
 
-  test('calls upsert with correct create and update payloads', async () => {
-    mockFindUniqueOrThrow(makeUser());
-    vi.mocked(prisma.atCoderAccount.upsert).mockResolvedValue({} as never);
+  describe('error cases', () => {
+    test('throws when user not found', async () => {
+      mockFindUniqueOrThrowError();
 
-    await generate(SAMPLE_USERNAME, SAMPLE_HANDLE);
-
-    expect(prisma.atCoderAccount.upsert).toHaveBeenCalledWith(
-      expect.objectContaining({
-        where: { userId: SAMPLE_USER_ID },
-        create: expect.objectContaining({
-          userId: SAMPLE_USER_ID,
-          handle: SAMPLE_HANDLE,
-          validationCode: SAMPLE_VALIDATION_CODE,
-          isValidated: false,
-        }),
-        update: expect.objectContaining({
-          handle: SAMPLE_HANDLE,
-          validationCode: SAMPLE_VALIDATION_CODE,
-          isValidated: false,
-        }),
-      }),
-    );
+      await expect(generate(SAMPLE_USERNAME, SAMPLE_HANDLE)).rejects.toThrow();
+    });
   });
 });
 
 describe('validate', () => {
-  test('propagates error when db lookup fails', async () => {
-    vi.mocked(prisma.user.findUniqueOrThrow).mockRejectedValue(new Error('not found'));
+  describe('successful case', () => {
+    test('returns true and marks account as validated when the external API confirms the code', async () => {
+      mockFindUniqueOrThrow(prepareUser(prepareAtCoderAccount()));
+      mockFetch({ contents: [SAMPLE_VALIDATION_CODE] });
+      mockUpdate();
 
-    await expect(validate(SAMPLE_USERNAME)).rejects.toThrow();
+      const result = await validate(SAMPLE_USERNAME);
+
+      expect(result).toBe(true);
+      expect(prisma.atCoderAccount.update).toHaveBeenCalledWith(
+        expect.objectContaining({
+          where: { userId: SAMPLE_USER_ID },
+          data: { validationCode: '', isValidated: true },
+        }),
+      );
+    });
   });
 
-  test('returns false when user has no AtCoderAccount', async () => {
-    mockFindUniqueOrThrow(makeUser(null));
+  describe('error cases', () => {
+    describe('returns false', () => {
+      test('when user has no AtCoderAccount', async () => {
+        mockFindUniqueOrThrow(prepareUser(null));
 
-    const result = await validate(SAMPLE_USERNAME);
+        const result = await validate(SAMPLE_USERNAME);
 
-    expect(result).toBe(false);
-  });
+        expect(result).toBe(false);
+      });
 
-  test('returns false when validationCode is empty', async () => {
-    mockFindUniqueOrThrow(makeUser(makeAtCoderAccount({ validationCode: '' })));
+      test('when validationCode is empty', async () => {
+        mockFindUniqueOrThrow(prepareUser(prepareAtCoderAccount({ validationCode: '' })));
 
-    const result = await validate(SAMPLE_USERNAME);
+        const result = await validate(SAMPLE_USERNAME);
 
-    expect(result).toBe(false);
-  });
+        expect(result).toBe(false);
+      });
 
-  test('returns false when the external API does not confirm the code', async () => {
-    mockFindUniqueOrThrow(makeUser(makeAtCoderAccount()));
-    mockFetch({ contents: ['other-code'] });
+      test('when the external API does not confirm the code', async () => {
+        mockFindUniqueOrThrow(prepareUser(prepareAtCoderAccount()));
+        mockFetch({ contents: ['other-code'] });
 
-    const result = await validate(SAMPLE_USERNAME);
+        const result = await validate(SAMPLE_USERNAME);
 
-    expect(result).toBe(false);
-    expect(prisma.atCoderAccount.update).not.toHaveBeenCalled();
-  });
+        expect(result).toBe(false);
+        expect(prisma.atCoderAccount.update).not.toHaveBeenCalled();
+      });
 
-  test('returns true and marks account as validated when the external API confirms the code', async () => {
-    mockFindUniqueOrThrow(makeUser(makeAtCoderAccount()));
-    mockFetch({ contents: [SAMPLE_VALIDATION_CODE] });
-    vi.mocked(prisma.atCoderAccount.update).mockResolvedValue({} as never);
+      test('when the external API returns invalid JSON', async () => {
+        mockFindUniqueOrThrow(prepareUser(prepareAtCoderAccount()));
+        vi.stubGlobal(
+          'fetch',
+          vi.fn().mockResolvedValue({
+            ok: true,
+            json: vi.fn().mockRejectedValue(new SyntaxError('Unexpected token')),
+          }),
+        );
 
-    const result = await validate(SAMPLE_USERNAME);
+        const result = await validate(SAMPLE_USERNAME);
 
-    expect(result).toBe(true);
-    expect(prisma.atCoderAccount.update).toHaveBeenCalledWith(
-      expect.objectContaining({
-        where: { userId: SAMPLE_USER_ID },
-        data: { validationCode: '', isValidated: true },
-      }),
-    );
-  });
+        expect(result).toBe(false);
+      });
+    });
 
-  test('throws when the external API returns non-OK response', async () => {
-    mockFindUniqueOrThrow(makeUser(makeAtCoderAccount()));
-    mockFetch({}, false);
+    describe('throws errors', () => {
+      test('when db lookup fails', async () => {
+        mockFindUniqueOrThrowError();
 
-    await expect(validate(SAMPLE_USERNAME)).rejects.toThrow();
-  });
+        await expect(validate(SAMPLE_USERNAME)).rejects.toThrow();
+      });
 
-  test('returns false when the external API returns invalid JSON', async () => {
-    mockFindUniqueOrThrow(makeUser(makeAtCoderAccount()));
-    vi.stubGlobal(
-      'fetch',
-      vi.fn().mockResolvedValue({
-        ok: true,
-        json: vi.fn().mockRejectedValue(new SyntaxError('Unexpected token')),
-      }),
-    );
+      test('when the external API returns non-OK response', async () => {
+        mockFindUniqueOrThrow(prepareUser(prepareAtCoderAccount()));
+        mockFetch({}, false);
 
-    const result = await validate(SAMPLE_USERNAME);
+        await expect(validate(SAMPLE_USERNAME)).rejects.toThrow();
+      });
 
-    expect(result).toBe(false);
-  });
+      test('when CONFIRM_API_URL is not set', async () => {
+        vi.stubEnv('CONFIRM_API_URL', '');
+        mockFindUniqueOrThrow(prepareUser(prepareAtCoderAccount()));
 
-  test('throws when CONFIRM_API_URL is not set', async () => {
-    delete process.env.CONFIRM_API_URL;
-    mockFindUniqueOrThrow(makeUser(makeAtCoderAccount()));
-
-    await expect(validate(SAMPLE_USERNAME)).rejects.toThrow(
-      'Failed to confirm AtCoder affiliation',
-    );
+        await expect(validate(SAMPLE_USERNAME)).rejects.toThrow(
+          'Failed to confirm AtCoder affiliation',
+        );
+      });
+    });
   });
 });
 
 describe('reset', () => {
-  test('calls deleteMany with the correct userId (deleteMany is intentional: tolerates missing record)', async () => {
-    mockFindUniqueOrThrow(makeUser());
-    vi.mocked(prisma.atCoderAccount.deleteMany).mockResolvedValue({ count: 1 });
+  describe('successful case', () => {
+    test('calls deleteMany with the correct userId (deleteMany is intentional: tolerates missing record)', async () => {
+      mockFindUniqueOrThrow(prepareUser());
+      mockDeleteMany(1);
 
-    await reset(SAMPLE_USERNAME);
+      await reset(SAMPLE_USERNAME);
 
-    expect(prisma.atCoderAccount.deleteMany).toHaveBeenCalledWith(
-      expect.objectContaining({
-        where: { userId: SAMPLE_USER_ID },
-      }),
-    );
+      expect(prisma.atCoderAccount.deleteMany).toHaveBeenCalledWith(
+        expect.objectContaining({
+          where: { userId: SAMPLE_USER_ID },
+        }),
+      );
+    });
+  });
+
+  describe('error cases', () => {
+    test('throws when user not found', async () => {
+      mockFindUniqueOrThrowError();
+
+      await expect(reset(SAMPLE_USERNAME)).rejects.toThrow();
+    });
   });
 });

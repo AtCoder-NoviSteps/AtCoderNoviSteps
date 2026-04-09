@@ -1,37 +1,12 @@
 <script lang="ts">
   import { untrack } from 'svelte';
-  import { Label, Input, P } from 'flowbite-svelte';
+  import { Label, Input, P, Clipboard } from 'flowbite-svelte';
   import ClipboardCopy from '@lucide/svelte/icons/clipboard-copy';
+  import Check from '@lucide/svelte/icons/check';
   import ContainerWrapper from '$lib/components/ContainerWrapper.svelte';
   import FormWrapper from '$lib/components/FormWrapper.svelte';
   import LabelWrapper from '$lib/components/LabelWrapper.svelte';
   import SubmissionButton from '$lib/components/SubmissionButton.svelte';
-
-  // TODO: Use Flowbite's ClipboardCopy component when available
-  const copyToClipboard = async (text: string): Promise<void> => {
-    try {
-      await navigator.clipboard.writeText(text);
-      console.log('Text copied to clipboard successfully');
-    } catch (error) {
-      // Fallback for older browsers that do not support the Clipboard API
-      const textArea = document.createElement('textarea');
-      textArea.value = text;
-      textArea.style.position = 'fixed';
-      textArea.style.opacity = '0';
-      document.body.appendChild(textArea);
-      textArea.focus();
-      textArea.select();
-
-      try {
-        document.execCommand('copy');
-        console.log('Text copied fallback method');
-      } catch (fallbackError) {
-        console.error('Both Clipboard API and fallback failed:', error, fallbackError);
-      }
-
-      document.body.removeChild(textArea);
-    }
-  };
 
   interface Props {
     username: string;
@@ -61,12 +36,6 @@
       editableHandle = atCoderAccount.handle;
     }
   });
-
-  // TODO: Add a "Copied!" message when clicking
-  // WHY: To provide feedback when the copy operation succeeds
-  const handleClick = () => {
-    copyToClipboard(atCoderAccount.validationCode);
-  };
 </script>
 
 {#if status === 'nothing'}
@@ -112,23 +81,29 @@
 
       <Label class="flex flex-col gap-2">
         <span>本人確認用の文字列</span>
-        <div>
-          <Input size="md" value={atCoderAccount.validationCode}>
-            {#snippet right()}
-              <ClipboardCopy class="w-5 h-5" onclick={handleClick} />
+        <div class="flex items-center gap-2">
+          <Input size="md" value={atCoderAccount.validationCode} readonly />
+
+          <Clipboard value={atCoderAccount.validationCode} color="alternative">
+            {#snippet children(success)}
+              {#if success}
+                <Check class="w-5 h-5 text-green-500" />
+              {:else}
+                <ClipboardCopy class="w-5 h-5" />
+              {/if}
             {/snippet}
-          </Input>
+          </Clipboard>
         </div>
       </Label>
 
       <SubmissionButton labelName="本人確認" />
     </FormWrapper>
 
-    <FormWrapper action="?/reset" marginTop="">
+    <FormWrapper action="?/reset" marginTop="mt-4">
       <Input size="md" type="hidden" name="username" value={username} />
       <Input size="md" type="hidden" name="handle" value={atCoderAccount.handle} />
 
-      <SubmissionButton labelName="リセット" />
+      <SubmissionButton color="alternative" labelName="リセット" />
     </FormWrapper>
   </ContainerWrapper>
 {:else if status === 'validated'}
