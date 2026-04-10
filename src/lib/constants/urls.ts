@@ -19,7 +19,9 @@ export const AOJ_ATCODER_JOI_URL: string = 'https://joi.goodbaton.com/';
 
 export const AOJ_PCK_URL: string = 'https://pro-ktmr.github.io/aoj-pck/';
 
-export const ICPC_JAPAN_PROBLEMS_URL: string = 'https://icpc-japan-problems.irrrrr.cc/';
+export const X_URL: string = 'https://x.com/acnovisteps';
+
+export const MOND_URL: string = 'https://mond.how/ja/acnovisteps';
 
 export const GITHUB_URL: string = 'https://github.com/AtCoder-NoviSteps/AtCoderNoviSteps';
 
