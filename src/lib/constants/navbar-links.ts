@@ -26,9 +26,9 @@ export const navbarLinks = [
 export const navbarDashboardLinks = [
   { title: `問題のインポート`, path: IMPORTING_PROBLEMS_PAGE },
   { title: `一覧表`, path: PROBLEMS_PAGE },
+  { title: `投票管理`, path: VOTE_MANAGEMENT_PAGE },
   { title: `問題集`, path: WORKBOOKS_PAGE },
   { title: `問題集（並び替え）`, path: WORKBOOKS_ORDER_PAGE },
   { title: `タグ一覧`, path: TAGS_PAGE },
   { title: `アカウント移行`, path: ACCOUNT_TRANSFER_PAGE },
-  { title: `投票管理`, path: VOTE_MANAGEMENT_PAGE },
 ];
