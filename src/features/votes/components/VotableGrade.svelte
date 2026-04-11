@@ -3,7 +3,7 @@
   import { enhance } from '$app/forms';
   import { resolve } from '$app/paths';
 
-  import { Dropdown, DropdownItem, DropdownDivider } from 'flowbite-svelte';
+  import { Dropdown, DropdownItem, DropdownDivider, Tooltip } from 'flowbite-svelte';
   import Check from '@lucide/svelte/icons/check';
   import FlaskConical from '@lucide/svelte/icons/flask-conical';
 
@@ -139,9 +139,13 @@
 <div class="inline-flex items-center gap-1">
   {#if isProvisional}
     <FlaskConical
+      id={`provisional-flask-${componentId}`}
       class="w-3.5 h-3.5 shrink-0 text-gray-400 dark:text-gray-500"
-      aria-label="暫定グレード"
+      aria-label="非公式グレード（投票に基づく）"
     />
+    <Tooltip triggeredBy={`#provisional-flask-${componentId}`} placement="bottom">
+      非公式グレード（投票に基づく）
+    </Tooltip>
   {/if}
 
   <button
