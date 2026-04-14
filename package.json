@@ -71,7 +71,7 @@
   "type": "module",
   "dependencies": {
     "@dnd-kit/helpers": "0.3.2",
-    "@dnd-kit/svelte": "0.3.2",
+    "@dnd-kit/svelte": "0.4.0",
     "@lucia-auth/adapter-prisma": "3.0.2",
     "@lucide/svelte": "1.8.0",
     "@mermaid-js/mermaid-cli": "11.12.0",
