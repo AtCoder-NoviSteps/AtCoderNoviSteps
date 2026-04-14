@@ -23,7 +23,7 @@
     "coverage": "vitest run --coverage"
   },
   "devDependencies": {
-    "@dnd-kit/abstract": "0.3.2",
+    "@dnd-kit/abstract": "0.4.0",
     "@dnd-kit/dom": "0.3.2",
     "@eslint/eslintrc": "3.3.5",
     "@playwright/test": "1.59.1",
