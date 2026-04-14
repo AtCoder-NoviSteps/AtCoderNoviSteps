@@ -24,7 +24,7 @@
   },
   "devDependencies": {
     "@dnd-kit/abstract": "0.3.2",
-    "@dnd-kit/dom": "0.3.2",
+    "@dnd-kit/dom": "0.4.0",
     "@eslint/eslintrc": "3.3.5",
     "@playwright/test": "1.59.1",
     "@quramy/prisma-fabbrica": "2.3.3",
