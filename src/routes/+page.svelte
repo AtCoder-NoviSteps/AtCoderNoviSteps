@@ -7,7 +7,7 @@
   import ExternalLinkWrapper from '$lib/components/ExternalLinkWrapper.svelte';
 
   import { PRODUCT_CATCH_PHRASE } from '$lib/constants/product-info';
-  import { ATCODER_BASE_URL } from '$lib/constants/urls';
+  import { ATCODER_BASE_URL, TASK_GRADE_CRITERIA_SHEET_URL } from '$lib/constants/urls';
   import {
     WORKBOOKS_PAGE,
     PROBLEMS_PAGE,
@@ -123,10 +123,7 @@
       <p class="mb-2">問題の難易度の評価・分類が揃うほど、問題集の作成・更新が加速します。</p>
       <p class="mb-10 xs:mb-16">
         難易度の評価基準は
-        <ExternalLinkWrapper
-          url={'https://docs.google.com/spreadsheets/d/1GJbTRRBsoBaY-CXIr3dIXmxkwacV4nHOTOIMCmo__Ug/edit?gid=0#gid=0'}
-          description="公開"
-        />
+        <ExternalLinkWrapper url={TASK_GRADE_CRITERIA_SHEET_URL} description="公開" />
         しており、あなたの一票がその一歩になります。
       </p>
     </div>
