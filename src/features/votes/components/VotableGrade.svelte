@@ -17,6 +17,10 @@
 
   import { getTaskGradeLabel } from '$lib/utils/task';
   import { nonPendingGrades, resolveDisplayGrade } from '$features/votes/utils/grade_options';
+  import {
+    calcGradeDiff,
+    getRelativeEvaluationLabel,
+  } from '$features/votes/utils/relative_evaluation';
   import { SIGNUP_PAGE, LOGIN_PAGE, EDIT_PROFILE_PAGE } from '$lib/constants/navbar-links';
 
   import GradeLabel from '$lib/components/GradeLabel.svelte';
@@ -51,6 +55,14 @@
   const isProvisional = $derived(
     taskResult.grade === TaskGrade.PENDING && displayGrade !== TaskGrade.PENDING,
   );
+
+  // Relative evaluation badge: shown only when grade is confirmed and a median vote exists.
+  const relativeEvaluationLabel = $derived.by(() => {
+    if (taskResult.grade === TaskGrade.PENDING || !estimatedGrade) {
+      return '';
+    }
+    return getRelativeEvaluationLabel(calcGradeDiff(taskResult.grade, estimatedGrade));
+  });
 
   let isOpening = $state(false);
   let votedGrade = $state<TaskGrade | null>(null);
@@ -156,10 +168,25 @@
     onclick={() => onTriggerClick()}
   >
     <span class="sr-only">
-      Voted grade: {getTaskGradeLabel(displayGrade)}{isProvisional ? ', provisional' : ''}
+      Voted grade: {getTaskGradeLabel(displayGrade)}{relativeEvaluationLabel
+        ? `, relative evaluation: ${relativeEvaluationLabel}`
+        : ''}{isProvisional ? ', provisional' : ''}
     </span>
 
     <GradeLabel taskGrade={displayGrade} defaultPadding={0.25} defaultWidth={6} reducedWidth={6} />
+
+    {#if relativeEvaluationLabel}
+      {@const isHarder = relativeEvaluationLabel.startsWith('+')}
+      <span
+        aria-hidden="true"
+        class="pointer-events-none absolute -top-2 -right-2 z-10 rounded-full px-1 py-px text-[0.6rem] font-bold leading-none shadow-sm
+          {isHarder
+          ? 'bg-orange-100 text-orange-700 dark:bg-orange-900/60 dark:text-orange-300'
+          : 'bg-sky-100 text-sky-700 dark:bg-sky-900/60 dark:text-sky-300'}"
+      >
+        {relativeEvaluationLabel}
+      </span>
+    {/if}
 
     <!-- Overlay -->
     <span
