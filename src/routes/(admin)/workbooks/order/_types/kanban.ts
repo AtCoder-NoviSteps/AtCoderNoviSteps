@@ -1,13 +1,10 @@
 import type { DragDropManager, Draggable, Droppable } from '@dnd-kit/dom';
-import type { DragDropEvents } from '@dnd-kit/abstract';
+import type { DragDropEventMap } from '@dnd-kit/abstract';
 
 import type { WorkBookTab } from '$features/workbooks/types/workbook';
 
-// DnD event types derived from dnd-kit abstractions
-type DndEvents = DragDropEvents<Draggable, Droppable, DragDropManager>;
-
-export type DragOverEventArg = Parameters<DndEvents['dragover']>[0];
-export type DragEndEventArg = Parameters<DndEvents['dragend']>[0];
+export type DragOverEventArg = DragDropEventMap<Draggable, Droppable, DragDropManager>['dragover'];
+export type DragEndEventArg = DragDropEventMap<Draggable, Droppable, DragDropManager>['dragend'];
 
 export type ColumnKey = 'solutionCategory' | 'taskGrade';
 
