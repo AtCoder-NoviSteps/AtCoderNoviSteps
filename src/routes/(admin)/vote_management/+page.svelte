@@ -63,7 +63,7 @@
                   {/each}
                 </select>
               </form>
-              {#if stat.dbGrade !== TaskGrade.PENDING && stat.estimatedGrade !== TaskGrade.PENDING}
+              {#if stat.dbGrade !== TaskGrade.PENDING && stat.estimatedGrade}
                 <div class="relative inline-block">
                   <GradeLabel
                     taskGrade={stat.dbGrade}
