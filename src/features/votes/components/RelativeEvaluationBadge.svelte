@@ -52,7 +52,6 @@
     aria-hidden={!showTooltip}
     role={showTooltip ? 'img' : undefined}
     aria-label={showTooltip ? tooltipText : undefined}
-    tabindex={showTooltip ? 0 : undefined}
   >
     {label}
   </span>
