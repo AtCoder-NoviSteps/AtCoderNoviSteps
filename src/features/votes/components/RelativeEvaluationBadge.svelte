@@ -45,10 +45,11 @@
 {#if label}
   <span
     id={badgeId}
-    class="absolute -top-2 -right-2 z-10 rounded-full px-1 py-px text-[0.65rem] font-bold leading-none tracking-[0.375em] -mr-[0.375em] shadow-sm
+    class="absolute -top-2 -right-2 z-10 rounded-full px-1 py-px text-[0.65rem] font-bold leading-none shadow-sm
       {isHarder
       ? 'bg-orange-400 text-white dark:bg-orange-500 dark:text-white'
       : 'bg-sky-400 text-white dark:bg-sky-500 dark:text-white'}"
+    style="letter-spacing: 0.375em; margin-right: -0.375em;"
     aria-hidden={!showTooltip}
     role={showTooltip ? 'img' : undefined}
     aria-label={showTooltip ? tooltipText : undefined}
