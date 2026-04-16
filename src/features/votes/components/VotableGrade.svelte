@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { tick } from 'svelte';
+  import { tick, untrack } from 'svelte';
   import { enhance } from '$app/forms';
   import { resolve } from '$app/paths';
 
@@ -25,6 +25,7 @@
 
   import GradeLabel from '$lib/components/GradeLabel.svelte';
   import InputFieldWrapper from '$lib/components/InputFieldWrapper.svelte';
+  import RelativeEvaluationBadge from '$features/votes/components/RelativeEvaluationBadge.svelte';
 
   interface Props {
     taskResult: TaskResult;
@@ -56,12 +57,17 @@
     taskResult.grade === TaskGrade.PENDING && displayGrade !== TaskGrade.PENDING,
   );
 
-  // Relative evaluation badge: shown only when grade is confirmed and a median vote exists.
+  // Track the latest median grade locally so the badge updates immediately after voting,
+  // even for confirmed-grade tasks (where displayGrade does not change on vote).
+  // Initialized from the prop; updated by the vote handler after fetchMedianVote.
+  let latestMedianGrade = $state<TaskGrade | null>(untrack(() => estimatedGrade ?? null));
+
+  // Relative evaluation badge label: shown only for confirmed grades with a known median.
   const relativeEvaluationLabel = $derived.by(() => {
-    if (taskResult.grade === TaskGrade.PENDING || !estimatedGrade) {
+    if (taskResult.grade === TaskGrade.PENDING || !latestMedianGrade) {
       return '';
     }
-    return getRelativeEvaluationLabel(calcGradeDiff(taskResult.grade, estimatedGrade));
+    return getRelativeEvaluationLabel(calcGradeDiff(taskResult.grade, latestMedianGrade));
   });
 
   let isOpening = $state(false);
@@ -125,8 +131,12 @@
           const taskId = formData.get('taskId') as string;
           const medianGrade = await fetchMedianVote(taskId, signal);
 
-          if (medianGrade !== null && taskResult.grade === TaskGrade.PENDING) {
-            displayGrade = medianGrade;
+          if (medianGrade !== null) {
+            // Always update latestMedianGrade so the relative evaluation badge refreshes.
+            latestMedianGrade = medianGrade;
+            if (taskResult.grade === TaskGrade.PENDING) {
+              displayGrade = medianGrade;
+            }
           }
         })
         .catch((error) => {
@@ -175,17 +185,13 @@
 
     <GradeLabel taskGrade={displayGrade} defaultPadding={0.25} defaultWidth={6} reducedWidth={6} />
 
-    {#if relativeEvaluationLabel}
-      {@const isHarder = relativeEvaluationLabel.startsWith('+')}
-      <span
-        aria-hidden="true"
-        class="pointer-events-none absolute -top-2 -right-2 z-10 rounded-full px-1 py-px text-[0.6rem] font-bold leading-none shadow-sm
-          {isHarder
-          ? 'bg-orange-100 text-orange-700 dark:bg-orange-900/60 dark:text-orange-300'
-          : 'bg-sky-100 text-sky-700 dark:bg-sky-900/60 dark:text-sky-300'}"
-      >
-        {relativeEvaluationLabel}
-      </span>
+    {#if taskResult.grade !== TaskGrade.PENDING && latestMedianGrade}
+      <RelativeEvaluationBadge
+        officialGrade={taskResult.grade}
+        medianGrade={latestMedianGrade}
+        badgeId="relative-eval-{componentId}"
+        showTooltip={false}
+      />
     {/if}
 
     <!-- Overlay -->

@@ -4,6 +4,7 @@
   import { Button, Tooltip } from 'flowbite-svelte';
   import FlaskConical from '@lucide/svelte/icons/flask-conical';
   import GradeLabel from '$lib/components/GradeLabel.svelte';
+  import RelativeEvaluationBadge from '$features/votes/components/RelativeEvaluationBadge.svelte';
 
   import { TaskGrade } from '$lib/types/task';
   import {
@@ -48,7 +49,16 @@
         {MIN_VOTES_FOR_STATISTICS}票以上集まると中央値が暫定グレードとして一覧表に反映されます。
       </Tooltip>
     {/if}
-    <GradeLabel taskGrade={displayGrade} />
+    <div class="relative inline-block">
+      <GradeLabel taskGrade={displayGrade} />
+      {#if data.task.grade !== TaskGrade.PENDING && data.stats?.grade}
+        <RelativeEvaluationBadge
+          officialGrade={data.task.grade}
+          medianGrade={data.stats.grade}
+          badgeId="relative-eval-{data.task.task_id}"
+        />
+      {/if}
+    </div>
     <h1 class="text-3xl font-normal truncate dark:text-white">
       <a
         href={getTaskUrl(data.task.contest_id, data.task.task_id)}

@@ -2,15 +2,15 @@ import type { TaskGrade } from '$lib/types/task';
 import { getGradeOrder } from '$lib/utils/task';
 
 /**
- * Computes the difference in grade order between the median vote and the confirmed grade.
- * Positive means users consider the problem harder than confirmed; negative means easier.
+ * Computes the difference in grade order between the median vote and the official grade.
+ * Positive means users consider the problem harder than the official grade; negative means easier.
  *
- * @param confirmedGrade - The officially confirmed grade stored in the DB.
+ * @param officialGrade - The officially confirmed grade stored in the DB.
  * @param medianGrade - The median grade derived from user votes.
- * @returns `gradeOrder(medianGrade) - gradeOrder(confirmedGrade)`
+ * @returns `gradeOrder(medianGrade) - gradeOrder(officialGrade)`
  */
-export function calcGradeDiff(confirmedGrade: TaskGrade, medianGrade: TaskGrade): number {
-  return getGradeOrder(medianGrade) - getGradeOrder(confirmedGrade);
+export function calcGradeDiff(officialGrade: TaskGrade, medianGrade: TaskGrade): number {
+  return getGradeOrder(medianGrade) - getGradeOrder(officialGrade);
 }
 
 /**

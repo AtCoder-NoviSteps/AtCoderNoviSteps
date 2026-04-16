@@ -12,8 +12,9 @@
 
   import HeadingOne from '$lib/components/HeadingOne.svelte';
   import GradeLabel from '$lib/components/GradeLabel.svelte';
+  import RelativeEvaluationBadge from '$features/votes/components/RelativeEvaluationBadge.svelte';
 
-  import { taskGradeValues } from '$lib/types/task';
+  import { taskGradeValues, TaskGrade } from '$lib/types/task';
   import { getTaskGradeLabel } from '$lib/utils/task';
 
   let { data } = $props();
@@ -63,12 +64,21 @@
             </form>
           </TableBodyCell>
           <TableBodyCell>
-            <GradeLabel
-              taskGrade={stat.estimatedGrade}
-              defaultPadding={0.25}
-              defaultWidth={6}
-              reducedWidth={6}
-            />
+            <div class="relative inline-block">
+              <GradeLabel
+                taskGrade={stat.estimatedGrade}
+                defaultPadding={0.25}
+                defaultWidth={6}
+                reducedWidth={6}
+              />
+              {#if stat.dbGrade !== TaskGrade.PENDING}
+                <RelativeEvaluationBadge
+                  officialGrade={stat.dbGrade}
+                  medianGrade={stat.estimatedGrade}
+                  badgeId="relative-eval-{stat.taskId}"
+                />
+              {/if}
+            </div>
           </TableBodyCell>
           <TableBodyCell class="text-sm">{stat.voteTotal}</TableBodyCell>
         </TableBodyRow>
