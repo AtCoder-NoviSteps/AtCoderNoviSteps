@@ -105,19 +105,19 @@ describe('getRelativeEvaluationTooltipText', () => {
     expect(getRelativeEvaluationTooltipText('')).toBe('');
   });
 
-  test('returns the harder-by-2 explanation for "++"', () => {
-    expect(getRelativeEvaluationTooltipText('++')).toBe('投票: 2グレード以上難しい');
+  test('returns ++ for users feel the difficult than official grade', () => {
+    expect(getRelativeEvaluationTooltipText('++')).toBe('ユーザは「難しい」と評価');
   });
 
-  test('returns the harder-by-1 explanation for "+"', () => {
-    expect(getRelativeEvaluationTooltipText('+')).toBe('投票: 1グレード難しい');
+  test('returns + for users feel the slightly difficult than official grade', () => {
+    expect(getRelativeEvaluationTooltipText('+')).toBe('ユーザは「やや難しい」と評価');
   });
 
-  test('returns the easier-by-1 explanation for "-"', () => {
-    expect(getRelativeEvaluationTooltipText('-')).toBe('投票: 1グレード易しい');
+  test('returns - for users feel the slightly easy than official grade', () => {
+    expect(getRelativeEvaluationTooltipText('-')).toBe('ユーザは「やや易しい」と評価');
   });
 
-  test('returns the easier-by-2 explanation for "--"', () => {
-    expect(getRelativeEvaluationTooltipText('--')).toBe('投票: 2グレード以上易しい');
+  test('returns -- for users feel the easy than official grade', () => {
+    expect(getRelativeEvaluationTooltipText('--')).toBe('ユーザは「易しい」と評価');
   });
 });
