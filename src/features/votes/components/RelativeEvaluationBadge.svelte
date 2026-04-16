@@ -45,10 +45,10 @@
 {#if label}
   <span
     id={badgeId}
-    class="absolute -top-2 -right-2 z-10 rounded-full px-1 py-px text-[0.65rem] font-bold leading-none tracking-wider shadow-sm
+    class="absolute -top-2 -right-2 z-10 rounded-full px-1 py-px text-[0.65rem] font-bold leading-none tracking-widest shadow-sm
       {isHarder
-      ? 'bg-orange-200 text-orange-800 dark:bg-orange-800/70 dark:text-orange-200'
-      : 'bg-sky-200 text-sky-800 dark:bg-sky-800/70 dark:text-sky-200'}"
+      ? 'bg-orange-400 text-white dark:bg-orange-500 dark:text-white'
+      : 'bg-sky-400 text-white dark:bg-sky-500 dark:text-white'}"
     aria-hidden={!showTooltip}
     role={showTooltip ? 'img' : undefined}
     aria-label={showTooltip ? tooltipText : undefined}
