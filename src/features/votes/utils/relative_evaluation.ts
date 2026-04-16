@@ -2,15 +2,36 @@ import type { TaskGrade } from '$lib/types/task';
 import { getGradeOrder } from '$lib/utils/task';
 
 /**
- * Computes the difference in grade order between the median vote and the confirmed grade.
- * Positive means users consider the problem harder than confirmed; negative means easier.
+ * Computes the difference in grade order between the median vote and the official grade.
+ * Positive means users consider the problem harder than the official grade; negative means easier.
  *
- * @param confirmedGrade - The officially confirmed grade stored in the DB.
+ * @param officialGrade - The officially confirmed grade stored in the DB.
  * @param medianGrade - The median grade derived from user votes.
- * @returns `gradeOrder(medianGrade) - gradeOrder(confirmedGrade)`
+ * @returns `gradeOrder(medianGrade) - gradeOrder(officialGrade)`
  */
-export function calcGradeDiff(confirmedGrade: TaskGrade, medianGrade: TaskGrade): number {
-  return getGradeOrder(medianGrade) - getGradeOrder(confirmedGrade);
+export function calcGradeDiff(officialGrade: TaskGrade, medianGrade: TaskGrade): number {
+  return getGradeOrder(medianGrade) - getGradeOrder(officialGrade);
+}
+
+/**
+ * Returns a Japanese tooltip string explaining the relative evaluation label.
+ *
+ * @param label - The label returned by {@link getRelativeEvaluationLabel}.
+ * @returns A human-readable explanation, or `''` when label is empty.
+ */
+export function getRelativeEvaluationTooltipText(label: string): string {
+  switch (label) {
+    case '++':
+      return '投票中央値が公式グレードより2段階以上高い（難しい）';
+    case '+':
+      return '投票中央値が公式グレードより1段階高い（難しい）';
+    case '-':
+      return '投票中央値が公式グレードより1段階低い（易しい）';
+    case '--':
+      return '投票中央値が公式グレードより2段階以上低い（易しい）';
+    default:
+      return '';
+  }
 }
 
 /**
