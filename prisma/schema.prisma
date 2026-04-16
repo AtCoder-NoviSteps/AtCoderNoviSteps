@@ -10,12 +10,11 @@ generator client {
 }
 
 // See:
-// https://dev.classmethod.jp/articles/prisma_er_diagram_auto_generation/
-generator erd {
-  provider                  = "prisma-erd-generator"
-  theme                     = "forest"
-  output                    = "ERD.md"
-  includeRelationFromFields = true
+// https://github.com/samchon/prisma-markdown
+generator markdown {
+  provider = "prisma-markdown"
+  output   = "ERD.md"
+  title    = "AtCoder NoviSteps ERD"
 }
 
 // See:
