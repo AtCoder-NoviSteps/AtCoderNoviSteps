@@ -98,7 +98,7 @@ user   User @relation(fields: [userId], references: [id])
 
 ## DB-Level Value Constraints
 
-Add `CHECK` constraints via manual migration SQL. Document with inline `schema.prisma` comments (e.g., `/// CHECK: count >= 0`). Note: `prisma-erd-generator` may overwrite `ERD.md` on each migration—always keep the constraint definition in `schema.prisma` as the source of truth.
+Add `CHECK` constraints via manual migration SQL. Document with inline `schema.prisma` comments (e.g., `/// CHECK: count >= 0`). Note: `prisma generate` (via `prisma-markdown`) overwrites `ERD.md`—always keep the constraint definition in `schema.prisma` as the source of truth.
 
 ## Service Layer Error Handling
 
