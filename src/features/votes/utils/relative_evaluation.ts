@@ -14,6 +14,27 @@ export function calcGradeDiff(officialGrade: TaskGrade, medianGrade: TaskGrade):
 }
 
 /**
+ * Returns a Japanese tooltip string explaining the relative evaluation label.
+ *
+ * @param label - The label returned by {@link getRelativeEvaluationLabel}.
+ * @returns A human-readable explanation, or `''` when label is empty.
+ */
+export function getRelativeEvaluationTooltipText(label: string): string {
+  switch (label) {
+    case '++':
+      return '投票中央値が公式グレードより2段階以上高い（難しい）';
+    case '+':
+      return '投票中央値が公式グレードより1段階高い（難しい）';
+    case '-':
+      return '投票中央値が公式グレードより1段階低い（易しい）';
+    case '--':
+      return '投票中央値が公式グレードより2段階以上低い（易しい）';
+    default:
+      return '';
+  }
+}
+
+/**
  * Converts a grade difference to a 5-level relative evaluation label.
  *
  * | diff   | label |

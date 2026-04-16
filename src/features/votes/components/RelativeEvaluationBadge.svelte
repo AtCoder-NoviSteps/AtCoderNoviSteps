@@ -5,6 +5,7 @@
   import {
     calcGradeDiff,
     getRelativeEvaluationLabel,
+    getRelativeEvaluationTooltipText,
   } from '$features/votes/utils/relative_evaluation';
 
   interface Props {
@@ -26,20 +27,7 @@
   const label = $derived(getRelativeEvaluationLabel(calcGradeDiff(officialGrade, medianGrade)));
   const isHarder = $derived(label.startsWith('+'));
 
-  const tooltipText = $derived.by(() => {
-    switch (label) {
-      case '++':
-        return '投票中央値が公式グレードより2段階以上高い（難しい）';
-      case '+':
-        return '投票中央値が公式グレードより1段階高い（難しい）';
-      case '-':
-        return '投票中央値が公式グレードより1段階低い（易しい）';
-      case '--':
-        return '投票中央値が公式グレードより2段階以上低い（易しい）';
-      default:
-        return '';
-    }
-  });
+  const tooltipText = $derived(getRelativeEvaluationTooltipText(label));
 </script>
 
 {#if label}
