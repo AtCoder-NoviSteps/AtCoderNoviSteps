@@ -22,13 +22,13 @@ export function calcGradeDiff(officialGrade: TaskGrade, medianGrade: TaskGrade):
 export function getRelativeEvaluationTooltipText(label: string): string {
   switch (label) {
     case '++':
-      return '投票中央値が公式グレードより2段階以上高い（難しい）';
+      return '投票: 2グレード以上難しい';
     case '+':
-      return '投票中央値が公式グレードより1段階高い（難しい）';
+      return '投票: 1グレード難しい';
     case '-':
-      return '投票中央値が公式グレードより1段階低い（易しい）';
+      return '投票: 1グレード易しい';
     case '--':
-      return '投票中央値が公式グレードより2段階以上低い（易しい）';
+      return '投票: 2グレード以上易しい';
     default:
       return '';
   }
