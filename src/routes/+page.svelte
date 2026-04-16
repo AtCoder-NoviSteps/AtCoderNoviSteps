@@ -7,8 +7,13 @@
   import ExternalLinkWrapper from '$lib/components/ExternalLinkWrapper.svelte';
 
   import { PRODUCT_CATCH_PHRASE } from '$lib/constants/product-info';
-  import { ATCODER_BASE_URL } from '$lib/constants/urls';
-  import { WORKBOOKS_PAGE, PROBLEMS_PAGE, ABOUT_PAGE } from '$lib/constants/navbar-links';
+  import { ATCODER_BASE_URL, TASK_GRADE_CRITERIA_SHEET_URL } from '$lib/constants/urls';
+  import {
+    WORKBOOKS_PAGE,
+    PROBLEMS_PAGE,
+    VOTES_PAGE,
+    ABOUT_PAGE,
+  } from '$lib/constants/navbar-links';
 
   const problemImages = [
     {
@@ -25,6 +30,24 @@
       alt: 'Sample of problems with 10Q',
       src: '../../grade_10Q_details.png',
       title: 'Sample-of-problems-with-10Q',
+    },
+  ];
+
+  const voteImages = [
+    {
+      alt: 'Sample list of voting',
+      src: '../../vote.png',
+      title: 'Sample-list-of-voting',
+    },
+    {
+      alt: 'Sample of voting and results',
+      src: '../../vote_details.png',
+      title: 'Sample-of-voting-and-results',
+    },
+    {
+      alt: 'Vote from contest table',
+      src: '../../vote_from_contest_table.png',
+      title: 'Vote-from-contest-table',
     },
   ];
 </script>
@@ -54,11 +77,8 @@
 
   <div class="mx-auto w-11/12 md:w-5/6">
     <!-- 主要な機能 + スクリーンショット -->
-    <!-- FIXME: 重複部分をコンポーネント化 -->
     <!-- 問題集 -->
-    <Heading tag="h2" class="text-xl font-medium md:text-2xl lg:text-3xl mt-14 xs:mt-24 mb-3">
-      問題集で得意を伸ばす・苦手を克服
-    </Heading>
+    {@render featureWithTitle('問題集で得意を伸ばす・苦手を克服')}
 
     <div class="text-lg text-gray-800 dark:text-gray-300">
       <p class="mb-2">例題・類題を通して、各トピックの基礎から応用的な方法まで身につけられます。</p>
@@ -82,9 +102,7 @@
     </div>
 
     <!-- 一覧表 -->
-    <Heading tag="h2" class="text-xl font-medium  md:text-2xl lg:text-3xl mt-14 xs:mt-20 mb-3">
-      問題の回答状況を自分で記録できる
-    </Heading>
+    {@render featureWithTitle('問題の回答状況を自分で記録できる')}
 
     <div class="text-lg text-gray-800 dark:text-gray-300">
       <p class="mb-10 xs:mb-16">
@@ -92,19 +110,48 @@
       </p>
     </div>
 
-    <div class="m-4 mb-8 xs:mb-12 overflow-hidden">
-      <Carousel
-        images={problemImages}
-        duration={3000}
-        slideFit="contain"
-        class="min-h-75 xs:min-h-100 md:min-h-135"
-      />
-    </div>
+    {@render carouselWrapper(problemImages)}
 
     <div class="flex flex-wrap justify-center items-center">
+      <Button href={PROBLEMS_PAGE} class="w-full sm:w-5/6 md:w-1/3 m-2">一覧表へ</Button>
+    </div>
+
+    <!-- 投票 -->
+    {@render featureWithTitle('コミュニティで問題集を育てる')}
+
+    <div class="text-lg text-gray-800 dark:text-gray-300">
+      <p class="mb-2">問題の難易度の評価・分類が揃うほど、問題集の作成・更新が加速します。</p>
+      <p class="mb-10 xs:mb-16">
+        難易度の評価基準は
+        <ExternalLinkWrapper url={TASK_GRADE_CRITERIA_SHEET_URL} description="公開" />
+        しており、あなたの一票がその一歩になります。
+      </p>
+    </div>
+
+    {@render carouselWrapper(voteImages)}
+
+    <div class="flex flex-wrap justify-center items-center">
+      <Button href={VOTES_PAGE} class="w-full sm:w-5/6 md:w-1/3 m-2">投票へ</Button>
       <Button href={PROBLEMS_PAGE} class="w-full sm:w-5/6 md:w-1/3 m-2">一覧表へ</Button>
     </div>
 
     <p class="mb-10 xs:mb-16"></p>
   </div>
 </div>
+
+{#snippet featureWithTitle(title: string)}
+  <Heading tag="h2" class="text-xl font-medium md:text-2xl lg:text-3xl mt-14 xs:mt-24 mb-3">
+    {title}
+  </Heading>
+{/snippet}
+
+{#snippet carouselWrapper(images: { alt: string; src: string; title: string }[])}
+  <div class="m-4 mb-8 xs:mb-12 overflow-hidden">
+    <Carousel
+      {images}
+      duration={3000}
+      slideFit="contain"
+      class="min-h-75 xs:min-h-100 md:min-h-135"
+    />
+  </div>
+{/snippet}
