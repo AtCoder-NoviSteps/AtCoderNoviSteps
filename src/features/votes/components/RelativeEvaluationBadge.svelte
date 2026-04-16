@@ -49,12 +49,17 @@
       {isHarder
       ? 'bg-orange-400 text-white dark:bg-orange-500 dark:text-white'
       : 'bg-sky-400 text-white dark:bg-sky-500 dark:text-white'}"
-    style="letter-spacing: 0.375em; margin-right: -0.375em;"
     aria-hidden={!showTooltip}
     role={showTooltip ? 'img' : undefined}
     aria-label={showTooltip ? tooltipText : undefined}
   >
-    {label}
+    {#if label === '--'}
+      -&thinsp;-
+    {:else if label === '++'}
+      +&thinsp;+
+    {:else}
+      {label}
+    {/if}
   </span>
   {#if showTooltip && tooltipText}
     <Tooltip triggeredBy="#{badgeId}" placement="top">
