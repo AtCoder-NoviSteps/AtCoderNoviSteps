@@ -45,7 +45,7 @@
 {#if label}
   <span
     id={badgeId}
-    class="absolute -top-2 -right-2 z-10 rounded-full px-1 py-px text-[0.65rem] font-bold leading-none tracking-[0.25em] shadow-sm
+    class="absolute -top-2 -right-2 z-10 rounded-full px-1 py-px text-[0.65rem] font-bold leading-none tracking-[0.375em] -mr-[0.375em] shadow-sm
       {isHarder
       ? 'bg-orange-400 text-white dark:bg-orange-500 dark:text-white'
       : 'bg-sky-400 text-white dark:bg-sky-500 dark:text-white'}"
