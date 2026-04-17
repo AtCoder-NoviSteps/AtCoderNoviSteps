@@ -12,8 +12,9 @@
 
   import HeadingOne from '$lib/components/HeadingOne.svelte';
   import GradeLabel from '$lib/components/GradeLabel.svelte';
+  import RelativeEvaluationBadge from '$features/votes/components/RelativeEvaluationBadge.svelte';
 
-  import { taskGradeValues } from '$lib/types/task';
+  import { taskGradeValues, TaskGrade } from '$lib/types/task';
   import { getTaskGradeLabel } from '$lib/utils/task';
 
   let { data } = $props();
@@ -47,20 +48,37 @@
           </TableBodyCell>
           <TableBodyCell class="text-sm">{stat.contestId}</TableBodyCell>
           <TableBodyCell>
-            <form method="POST" action="?/setTaskGrade" use:enhance>
-              <input type="hidden" name="taskId" value={stat.taskId} />
-              <select
-                name="grade"
-                onchange={(e) => (e.currentTarget as HTMLSelectElement).form?.requestSubmit()}
-                class="text-sm rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 px-2 py-1 focus:ring-primary-500 focus:border-primary-500 min-w-20"
-              >
-                {#each taskGradeValues as grade (grade)}
-                  <option value={grade} selected={stat.dbGrade === grade}>
-                    {grade === 'PENDING' ? '-' : getTaskGradeLabel(grade)}
-                  </option>
-                {/each}
-              </select>
-            </form>
+            <div class="flex items-center gap-2">
+              <form method="POST" action="?/setTaskGrade" use:enhance>
+                <input type="hidden" name="taskId" value={stat.taskId} />
+                <select
+                  name="grade"
+                  onchange={(e) => (e.currentTarget as HTMLSelectElement).form?.requestSubmit()}
+                  class="text-sm rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 px-2 py-1 focus:ring-primary-500 focus:border-primary-500 min-w-20"
+                >
+                  {#each taskGradeValues as grade (grade)}
+                    <option value={grade} selected={stat.dbGrade === grade}>
+                      {grade === 'PENDING' ? '-' : getTaskGradeLabel(grade)}
+                    </option>
+                  {/each}
+                </select>
+              </form>
+              {#if stat.dbGrade !== TaskGrade.PENDING && stat.estimatedGrade}
+                <div class="relative inline-block">
+                  <GradeLabel
+                    taskGrade={stat.dbGrade}
+                    defaultPadding={0.25}
+                    defaultWidth={6}
+                    reducedWidth={6}
+                  />
+                  <RelativeEvaluationBadge
+                    officialGrade={stat.dbGrade}
+                    medianGrade={stat.estimatedGrade}
+                    badgeId="relative-eval-{stat.taskId}"
+                  />
+                </div>
+              {/if}
+            </div>
           </TableBodyCell>
           <TableBodyCell>
             <GradeLabel

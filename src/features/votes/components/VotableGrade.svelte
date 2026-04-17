@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { tick } from 'svelte';
+  import { tick, untrack } from 'svelte';
   import { enhance } from '$app/forms';
   import { resolve } from '$app/paths';
 
@@ -17,10 +17,15 @@
 
   import { getTaskGradeLabel } from '$lib/utils/task';
   import { nonPendingGrades, resolveDisplayGrade } from '$features/votes/utils/grade_options';
+  import {
+    calcGradeDiff,
+    getRelativeEvaluationLabel,
+  } from '$features/votes/utils/relative_evaluation';
   import { SIGNUP_PAGE, LOGIN_PAGE, EDIT_PROFILE_PAGE } from '$lib/constants/navbar-links';
 
   import GradeLabel from '$lib/components/GradeLabel.svelte';
   import InputFieldWrapper from '$lib/components/InputFieldWrapper.svelte';
+  import RelativeEvaluationBadge from '$features/votes/components/RelativeEvaluationBadge.svelte';
 
   interface Props {
     taskResult: TaskResult;
@@ -51,6 +56,19 @@
   const isProvisional = $derived(
     taskResult.grade === TaskGrade.PENDING && displayGrade !== TaskGrade.PENDING,
   );
+
+  // Track the latest median grade locally so the badge updates immediately after voting,
+  // even for confirmed-grade tasks (where displayGrade does not change on vote).
+  // Initialized from the prop; updated by the vote handler after fetchMedianVote.
+  let latestMedianGrade = $state<TaskGrade | null>(untrack(() => estimatedGrade ?? null));
+
+  // Relative evaluation badge label: shown only for confirmed grades with a known median.
+  const relativeEvaluationLabel = $derived.by(() => {
+    if (taskResult.grade === TaskGrade.PENDING || !latestMedianGrade) {
+      return '';
+    }
+    return getRelativeEvaluationLabel(calcGradeDiff(taskResult.grade, latestMedianGrade));
+  });
 
   let isOpening = $state(false);
   let votedGrade = $state<TaskGrade | null>(null);
@@ -113,8 +131,12 @@
           const taskId = formData.get('taskId') as string;
           const medianGrade = await fetchMedianVote(taskId, signal);
 
-          if (medianGrade !== null && taskResult.grade === TaskGrade.PENDING) {
-            displayGrade = medianGrade;
+          if (medianGrade !== null) {
+            // Always update latestMedianGrade so the relative evaluation badge refreshes.
+            latestMedianGrade = medianGrade;
+            if (taskResult.grade === TaskGrade.PENDING) {
+              displayGrade = medianGrade;
+            }
           }
         })
         .catch((error) => {
@@ -156,10 +178,21 @@
     onclick={() => onTriggerClick()}
   >
     <span class="sr-only">
-      Voted grade: {getTaskGradeLabel(displayGrade)}{isProvisional ? ', provisional' : ''}
+      Voted grade: {getTaskGradeLabel(displayGrade)}{relativeEvaluationLabel
+        ? `, relative evaluation: ${relativeEvaluationLabel}`
+        : ''}{isProvisional ? ', provisional' : ''}
     </span>
 
     <GradeLabel taskGrade={displayGrade} defaultPadding={0.25} defaultWidth={6} reducedWidth={6} />
+
+    {#if taskResult.grade !== TaskGrade.PENDING && latestMedianGrade}
+      <RelativeEvaluationBadge
+        officialGrade={taskResult.grade}
+        medianGrade={latestMedianGrade}
+        badgeId="relative-eval-{componentId}"
+        showTooltip={false}
+      />
+    {/if}
 
     <!-- Overlay -->
     <span

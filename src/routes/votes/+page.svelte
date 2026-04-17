@@ -15,6 +15,7 @@
 
   import HeadingOne from '$lib/components/HeadingOne.svelte';
   import GradeLabel from '$lib/components/GradeLabel.svelte';
+  import RelativeEvaluationBadge from '$features/votes/components/RelativeEvaluationBadge.svelte';
 
   import { TaskGrade } from '$lib/types/task';
 
@@ -78,7 +79,16 @@
                     </Tooltip>
                   {/if}
 
-                  <GradeLabel taskGrade={displayGrade} />
+                  <div class="relative inline-block">
+                    <GradeLabel taskGrade={displayGrade} />
+                    {#if task.grade !== TaskGrade.PENDING && task.estimatedGrade}
+                      <RelativeEvaluationBadge
+                        officialGrade={task.grade}
+                        medianGrade={task.estimatedGrade}
+                        badgeId="relative-eval-{task.task_id}"
+                      />
+                    {/if}
+                  </div>
                 </div>
               </TableBodyCell>
               <TableBodyCell class="text-base">
