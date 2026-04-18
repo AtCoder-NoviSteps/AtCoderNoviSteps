@@ -13,6 +13,7 @@
     "skipLibCheck": true,
     "sourceMap": true,
     "strict": true,
+    "types": ["node", "vitest/globals"], // Note: "node" is required to avoid overwriting the "types" field from the referenced tsconfig.json, which includes "svelte" and "svelte/types/runtime"
     "verbatimModuleSyntax": true
   },
   // Path aliases are handled by https://kit.svelte.dev/docs/configuration#alias
