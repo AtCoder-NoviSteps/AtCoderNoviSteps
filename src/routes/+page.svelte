@@ -117,10 +117,10 @@
     </div>
 
     <!-- 投票 -->
-    {@render featureWithTitle('コミュニティで問題集を育てる')}
+    {@render featureWithTitle('コミュニティでコンテンツを育てる')}
 
     <div class="text-lg text-gray-800 dark:text-gray-300">
-      <p class="mb-2">問題の難易度の評価・分類が揃うほど、問題集の作成・更新が加速します。</p>
+      <p class="mb-2">問題の難易度評価が揃うほど、自分の実力帯に応じた練習がしやすくなります。</p>
       <p class="mb-10 xs:mb-16">
         難易度の評価基準は
         <ExternalLinkWrapper url={TASK_GRADE_CRITERIA_SHEET_URL} description="公開" />
