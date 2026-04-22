@@ -62,7 +62,7 @@
           </TableBodyCell>
           <TableBodyCell>
             <form method="POST" action="?/create">
-              <Input size="md" type="hidden" name="contest_id" bind:value={importContest.id} />
+              <Input size="md" type="hidden" name="contest_id" value={importContest.id} />
 
               <Button type="submit">インポート</Button>
             </form>
