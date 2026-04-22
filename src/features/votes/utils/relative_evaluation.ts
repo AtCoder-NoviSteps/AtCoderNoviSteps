@@ -35,6 +35,40 @@ export function getRelativeEvaluationTooltipText(label: string): string {
 }
 
 /**
+ * Maps a grade difference to a Japanese label for display in the vote dropdown.
+ * Returns an empty string when the diff falls outside the expected ±2 range.
+ *
+ * | diff | label        |
+ * | ---- | ------------ |
+ * | ≤ −3 | `''`         |
+ * | −2   | `易しい`     |
+ * | −1   | `やや易しい` |
+ * |  0   | `ふつう`     |
+ * | +1   | `やや難しい` |
+ * | +2   | `難しい`     |
+ * | ≥ +3 | `''`         |
+ *
+ * @param diff - The result of {@link calcGradeDiff}.
+ * @returns The Japanese label string, or `''` if out of expected range.
+ */
+export function getRelativeEvaluationJapaneseLabel(diff: number): string {
+  switch (diff) {
+    case -2:
+      return '易しい';
+    case -1:
+      return 'やや易しい';
+    case 0:
+      return 'ふつう';
+    case 1:
+      return 'やや難しい';
+    case 2:
+      return '難しい';
+    default:
+      return '';
+  }
+}
+
+/**
  * Converts a grade difference to a 5-level relative evaluation label.
  *
  * | diff   | label |

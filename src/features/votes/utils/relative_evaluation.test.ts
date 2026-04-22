@@ -5,6 +5,7 @@ import {
   calcGradeDiff,
   getRelativeEvaluationLabel,
   getRelativeEvaluationTooltipText,
+  getRelativeEvaluationJapaneseLabel,
 } from './relative_evaluation';
 
 describe('calcGradeDiff', () => {
@@ -119,5 +120,37 @@ describe('getRelativeEvaluationTooltipText', () => {
 
   test('returns -- for users feel the easy than official grade', () => {
     expect(getRelativeEvaluationTooltipText('--')).toBe('ユーザは「易しい」と評価');
+  });
+});
+
+describe('getRelativeEvaluationJapaneseLabel', () => {
+  test('returns "" for diff <= -3 (out of expected range)', () => {
+    expect(getRelativeEvaluationJapaneseLabel(-3)).toBe('');
+    expect(getRelativeEvaluationJapaneseLabel(-16)).toBe('');
+  });
+
+  test('returns "易しい" for diff === -2', () => {
+    expect(getRelativeEvaluationJapaneseLabel(-2)).toBe('易しい');
+  });
+
+  test('returns "やや易しい" for diff === -1', () => {
+    expect(getRelativeEvaluationJapaneseLabel(-1)).toBe('やや易しい');
+  });
+
+  test('returns "ふつう" for diff === 0', () => {
+    expect(getRelativeEvaluationJapaneseLabel(0)).toBe('ふつう');
+  });
+
+  test('returns "やや難しい" for diff === 1', () => {
+    expect(getRelativeEvaluationJapaneseLabel(1)).toBe('やや難しい');
+  });
+
+  test('returns "難しい" for diff === 2', () => {
+    expect(getRelativeEvaluationJapaneseLabel(2)).toBe('難しい');
+  });
+
+  test('returns "" for diff >= 3 (out of expected range)', () => {
+    expect(getRelativeEvaluationJapaneseLabel(3)).toBe('');
+    expect(getRelativeEvaluationJapaneseLabel(16)).toBe('');
   });
 });
