@@ -56,7 +56,7 @@
           </TableBodyCell>
 
           <TableBodyCell>
-            {#each importContest.tasks as importTask (importTask.task_id)}
+            {#each importContest.tasks as importTask (importTask.id)}
               <li>{importTask.title}</li>
             {/each}
           </TableBodyCell>
