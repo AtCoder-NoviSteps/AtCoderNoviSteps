@@ -48,7 +48,7 @@ export function getRelativeEvaluationTooltipText(label: string): string {
  * | +2   | `難しい`     |
  * | ≥ +3 | `''`         |
  *
- * @param diff - The result of {@link calcGradeDiff}.
+ * @param diff - A grade difference (e.g., from {@link calcGradeDiff}).
  * @returns The Japanese label string, or `''` if out of expected range.
  */
 export function getRelativeEvaluationJapaneseLabel(diff: number): string {
