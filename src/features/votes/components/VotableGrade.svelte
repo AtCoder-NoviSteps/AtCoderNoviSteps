@@ -20,6 +20,7 @@
   import {
     calcGradeDiff,
     getRelativeEvaluationLabel,
+    getRelativeEvaluationJapaneseLabel,
   } from '$features/votes/utils/relative_evaluation';
   import { SIGNUP_PAGE, LOGIN_PAGE, EDIT_PROFILE_PAGE } from '$lib/constants/navbar-links';
 
@@ -207,16 +208,29 @@
   <Dropdown
     triggeredBy={`#update-grade-dropdown-trigger-${componentId}`}
     simple
-    class="h-48 w-25 z-50 border border-gray-200 dark:border-gray-100 overflow-y-auto"
+    class="h-48 w-44 z-50 border border-gray-200 dark:border-gray-100 overflow-y-auto"
   >
     {#each nonPendingGrades as grade (grade)}
       <DropdownItem onclick={() => handleClick(grade)} class="rounded-md">
         <div
-          class="flex items-center justify-between w-full text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white"
+          class="flex items-center w-full gap-2 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white"
         >
-          <span>{getTaskGradeLabel(grade)}</span>
+          <span class="flex-1">{getTaskGradeLabel(grade)}</span>
+          {#if taskResult.grade !== TaskGrade.PENDING}
+            {@const diff = calcGradeDiff(taskResult.grade, grade)}
+            {@const relLabel = getRelativeEvaluationJapaneseLabel(diff)}
+            {#if relLabel}
+              <span
+                class="w-16 text-right text-xs {diff < 0
+                  ? 'text-sky-500 dark:text-sky-400'
+                  : diff === 0
+                    ? 'text-gray-400 dark:text-gray-500'
+                    : 'text-orange-400'}"
+              >{relLabel}</span>
+            {/if}
+          {/if}
           {#if votedGrade === grade}
-            <Check class="w-4 h-4 text-primary-600 dark:text-gray-300" strokeWidth={3} />
+            <Check class="w-4 h-4 shrink-0 text-primary-600 dark:text-gray-300" strokeWidth={3} />
           {/if}
         </div>
       </DropdownItem>
