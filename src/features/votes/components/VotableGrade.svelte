@@ -221,9 +221,9 @@
             {@const diff = calcGradeDiff(taskResult.grade, grade)}
             {@const relLabel = getRelativeEvaluationJapaneseLabel(diff)}
             {#if relLabel}
-              <span
-                class="w-16 text-right text-xs {getRelativeEvaluationColorClass(diff)}">{relLabel}</span
-              >
+              <span class="w-16 text-right text-xs {getRelativeEvaluationColorClass(diff)}">
+                {relLabel}
+              </span>
             {/if}
           {/if}
           {#if votedGrade === grade}
