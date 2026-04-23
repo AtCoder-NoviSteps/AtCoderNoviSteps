@@ -225,8 +225,8 @@
                   ? 'text-sky-500 dark:text-sky-400'
                   : diff === 0
                     ? 'text-gray-400 dark:text-gray-500'
-                    : 'text-orange-400 dark:text-orange-300'}"
-              >{relLabel}</span>
+                    : 'text-orange-400 dark:text-orange-300'}">{relLabel}</span
+              >
             {/if}
           {/if}
           {#if votedGrade === grade}
