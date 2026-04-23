@@ -6,6 +6,7 @@
     calcGradeDiff,
     getRelativeEvaluationLabel,
     getRelativeEvaluationTooltipText,
+    getRelativeEvaluationBadgeColorClass,
   } from '$features/votes/utils/relative_evaluation';
 
   interface Props {
@@ -24,8 +25,9 @@
 
   let { officialGrade, medianGrade, badgeId, showTooltip = true }: Props = $props();
 
-  const label = $derived(getRelativeEvaluationLabel(calcGradeDiff(officialGrade, medianGrade)));
-  const isHarder = $derived(label.startsWith('+'));
+  const diff = $derived(calcGradeDiff(officialGrade, medianGrade));
+  const label = $derived(getRelativeEvaluationLabel(diff));
+  const badgeColorClass = $derived(getRelativeEvaluationBadgeColorClass(diff));
 
   const tooltipText = $derived(getRelativeEvaluationTooltipText(label));
 </script>
@@ -33,10 +35,7 @@
 {#if label}
   <span
     id={badgeId}
-    class="absolute -top-2 -right-2 z-10 rounded-full px-1 py-px text-[0.65rem] font-bold leading-none shadow-sm
-      {isHarder
-      ? 'bg-orange-400 text-white dark:bg-orange-500 dark:text-white'
-      : 'bg-sky-400 text-white dark:bg-sky-500 dark:text-white'}"
+    class="absolute -top-2 -right-2 z-10 rounded-full px-1 py-px text-[0.65rem] font-bold leading-none shadow-sm {badgeColorClass}"
     aria-hidden={!showTooltip}
     role={showTooltip ? 'img' : undefined}
     aria-label={showTooltip ? tooltipText : undefined}

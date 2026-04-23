@@ -14,6 +14,36 @@ export function calcGradeDiff(officialGrade: TaskGrade, medianGrade: TaskGrade):
 }
 
 /**
+ * Converts a grade difference to a 5-level relative evaluation label.
+ *
+ * | diff   | label |
+ * | ------ | ----- |
+ * | ≤ −2   | `--`  |
+ * | −1     | `-`   |
+ * |  0     | `""`  |
+ * | +1     | `+`   |
+ * | ≥ +2   | `++`  |
+ *
+ * @param diff - The result of {@link calcGradeDiff}.
+ * @returns The display label string.
+ */
+export function getRelativeEvaluationLabel(diff: number): string {
+  if (diff <= -2) {
+    return '--';
+  }
+  if (diff === -1) {
+    return '-';
+  }
+  if (diff === 0) {
+    return '';
+  }
+  if (diff === 1) {
+    return '+';
+  }
+  return '++';
+}
+
+/**
  * Returns a Japanese tooltip string explaining the relative evaluation label.
  *
  * @param label - The label returned by {@link getRelativeEvaluationLabel}.
@@ -69,31 +99,34 @@ export function getRelativeEvaluationJapaneseLabel(diff: number): string {
 }
 
 /**
- * Converts a grade difference to a 5-level relative evaluation label.
- *
- * | diff   | label |
- * | ------ | ----- |
- * | ≤ −2   | `--`  |
- * | −1     | `-`   |
- * |  0     | `""`  |
- * | +1     | `+`   |
- * | ≥ +2   | `++`  |
+ * Returns Tailwind text color classes for a diff value in the vote dropdown.
+ * Negative diff (easier) → sky, zero → gray, positive (harder) → orange.
  *
  * @param diff - The result of {@link calcGradeDiff}.
- * @returns The display label string.
  */
-export function getRelativeEvaluationLabel(diff: number): string {
-  if (diff <= -2) {
-    return '--';
-  }
-  if (diff === -1) {
-    return '-';
+export function getRelativeEvaluationColorClass(diff: number): string {
+  if (diff < 0) {
+    return 'text-sky-500 dark:text-sky-400';
   }
   if (diff === 0) {
-    return '';
+    return 'text-gray-400 dark:text-gray-500';
   }
-  if (diff === 1) {
-    return '+';
+  return 'text-orange-400 dark:text-orange-300';
+}
+
+/**
+ * Returns Tailwind background + text color classes for the relative evaluation badge.
+ * Negative diff (easier) → sky, positive (harder) → orange.
+ * Returns empty string for diff === 0 (badge is not shown).
+ *
+ * @param diff - The result of {@link calcGradeDiff}.
+ */
+export function getRelativeEvaluationBadgeColorClass(diff: number): string {
+  if (diff < 0) {
+    return 'bg-sky-400 text-white dark:bg-sky-500 dark:text-white';
   }
-  return '++';
+  if (diff > 0) {
+    return 'bg-orange-400 text-white dark:bg-orange-500 dark:text-white';
+  }
+  return '';
 }

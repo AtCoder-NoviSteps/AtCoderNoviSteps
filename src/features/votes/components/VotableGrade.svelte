@@ -21,6 +21,7 @@
     calcGradeDiff,
     getRelativeEvaluationLabel,
     getRelativeEvaluationJapaneseLabel,
+    getRelativeEvaluationColorClass,
   } from '$features/votes/utils/relative_evaluation';
   import { SIGNUP_PAGE, LOGIN_PAGE, EDIT_PROFILE_PAGE } from '$lib/constants/navbar-links';
 
@@ -221,11 +222,7 @@
             {@const relLabel = getRelativeEvaluationJapaneseLabel(diff)}
             {#if relLabel}
               <span
-                class="w-16 text-right text-xs {diff < 0
-                  ? 'text-sky-500 dark:text-sky-400'
-                  : diff === 0
-                    ? 'text-gray-400 dark:text-gray-500'
-                    : 'text-orange-400 dark:text-orange-300'}">{relLabel}</span
+                class="w-16 text-right text-xs {getRelativeEvaluationColorClass(diff)}">{relLabel}</span
               >
             {/if}
           {/if}
