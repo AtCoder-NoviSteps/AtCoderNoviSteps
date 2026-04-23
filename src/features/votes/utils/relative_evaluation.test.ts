@@ -5,6 +5,9 @@ import {
   calcGradeDiff,
   getRelativeEvaluationLabel,
   getRelativeEvaluationTooltipText,
+  getRelativeEvaluationJapaneseLabel,
+  getRelativeEvaluationColorClass,
+  getRelativeEvaluationBadgeColorClass,
 } from './relative_evaluation';
 
 describe('calcGradeDiff', () => {
@@ -119,5 +122,77 @@ describe('getRelativeEvaluationTooltipText', () => {
 
   test('returns -- for users feel the easy than official grade', () => {
     expect(getRelativeEvaluationTooltipText('--')).toBe('ユーザは「易しい」と評価');
+  });
+});
+
+describe('getRelativeEvaluationJapaneseLabel', () => {
+  test('returns "" for diff <= -3 (out of expected range)', () => {
+    expect(getRelativeEvaluationJapaneseLabel(-3)).toBe('');
+    expect(getRelativeEvaluationJapaneseLabel(-16)).toBe('');
+  });
+
+  test('returns "易しい" for diff === -2', () => {
+    expect(getRelativeEvaluationJapaneseLabel(-2)).toBe('易しい');
+  });
+
+  test('returns "やや易しい" for diff === -1', () => {
+    expect(getRelativeEvaluationJapaneseLabel(-1)).toBe('やや易しい');
+  });
+
+  test('returns "ふつう" for diff === 0', () => {
+    expect(getRelativeEvaluationJapaneseLabel(0)).toBe('ふつう');
+  });
+
+  test('returns "やや難しい" for diff === 1', () => {
+    expect(getRelativeEvaluationJapaneseLabel(1)).toBe('やや難しい');
+  });
+
+  test('returns "難しい" for diff === 2', () => {
+    expect(getRelativeEvaluationJapaneseLabel(2)).toBe('難しい');
+  });
+
+  test('returns "" for diff >= 3 (out of expected range)', () => {
+    expect(getRelativeEvaluationJapaneseLabel(3)).toBe('');
+    expect(getRelativeEvaluationJapaneseLabel(16)).toBe('');
+  });
+});
+
+describe('getRelativeEvaluationColorClass', () => {
+  test('returns sky text classes for negative diff (easier)', () => {
+    expect(getRelativeEvaluationColorClass(-1)).toBe('text-sky-500 dark:text-sky-400');
+    expect(getRelativeEvaluationColorClass(-16)).toBe('text-sky-500 dark:text-sky-400');
+  });
+
+  test('returns gray text classes for diff === 0', () => {
+    expect(getRelativeEvaluationColorClass(0)).toBe('text-gray-400 dark:text-gray-500');
+  });
+
+  test('returns orange text classes for positive diff (harder)', () => {
+    expect(getRelativeEvaluationColorClass(1)).toBe('text-orange-400 dark:text-orange-300');
+    expect(getRelativeEvaluationColorClass(16)).toBe('text-orange-400 dark:text-orange-300');
+  });
+});
+
+describe('getRelativeEvaluationBadgeColorClass', () => {
+  test('returns sky bg classes for negative diff (easier)', () => {
+    expect(getRelativeEvaluationBadgeColorClass(-1)).toBe(
+      'bg-sky-400 text-white dark:bg-sky-500 dark:text-white',
+    );
+    expect(getRelativeEvaluationBadgeColorClass(-16)).toBe(
+      'bg-sky-400 text-white dark:bg-sky-500 dark:text-white',
+    );
+  });
+
+  test('returns empty string for diff === 0 (badge not shown)', () => {
+    expect(getRelativeEvaluationBadgeColorClass(0)).toBe('');
+  });
+
+  test('returns orange bg classes for positive diff (harder)', () => {
+    expect(getRelativeEvaluationBadgeColorClass(1)).toBe(
+      'bg-orange-400 text-white dark:bg-orange-500 dark:text-white',
+    );
+    expect(getRelativeEvaluationBadgeColorClass(16)).toBe(
+      'bg-orange-400 text-white dark:bg-orange-500 dark:text-white',
+    );
   });
 });
