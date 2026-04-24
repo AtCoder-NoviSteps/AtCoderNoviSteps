@@ -139,8 +139,8 @@ importers:
         specifier: ^1.61.0
         version: 1.61.0
       pnpm:
-        specifier: 10.33.0
-        version: 10.33.0
+        specifier: 10.33.2
+        version: 10.33.2
       prettier:
         specifier: 3.8.3
         version: 3.8.3
@@ -3683,8 +3683,8 @@ packages:
     engines: {node: '>=18'}
     hasBin: true
 
-  pnpm@10.33.0:
-    resolution: {integrity: sha512-EFaLtKavtYyes2MNqQzJUWQXq+vT+rvmc58K55VyjaFJHp21pUTHatjrdXD1xLs9bGN7LLQb/c20f6gjyGSTGQ==}
+  pnpm@10.33.2:
+    resolution: {integrity: sha512-qQ+vb+6rca1sblf5Tg/hoS9dzCLNdU20CulZPraj4LaxLjVAIYuzeuCDQEsfLObbKkEh6XmCm0r/lLmfSdoc+A==}
     engines: {node: '>=18.12'}
     hasBin: true
 
@@ -7905,7 +7905,7 @@ snapshots:
     optionalDependencies:
       fsevents: 2.3.2
 
-  pnpm@10.33.0: {}
+  pnpm@10.33.2: {}
 
   postcss-load-config@3.1.4(postcss@8.5.10)(ts-node@10.9.1(@types/node@25.6.0)(typescript@5.9.3)):
     dependencies:
