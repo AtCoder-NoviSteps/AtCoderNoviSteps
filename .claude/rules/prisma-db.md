@@ -141,6 +141,12 @@ When a migration leaves `finished_at = NULL` in `_prisma_migrations`:
 
 A `--rolled-back` migration is permanently skipped by `migrate deploy`; fixing the original file has no effect.
 
+## Merged Data: Document Uniqueness Loss
+
+Service functions that merge records from multiple sources (e.g., `getMergedTasksMap()` combining base tasks + `ContestTaskPair` entries) lose individual field uniqueness. Document that results contain duplicates in "unique" DB fields.
+
+Example: `getMergedTasksMap()` returns multiple entries with same `task_id` but different `contest_id` — callers must not assume `task_id` is unique. UI layer must use composite keys (see svelte-components.md `{#each}` patterns).
+
 ## Validate Constraints
 
 Prisma does not support `@@check`. To add one:
