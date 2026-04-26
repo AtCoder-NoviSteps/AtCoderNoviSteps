@@ -37,7 +37,7 @@ Use `$props()`, `$state()`, `$derived()`, `$effect()` in all components:
 ## `{#each}` Patterns
 
 - Always key: `(item.id)` or `(i)`
-- **Key MUST be unique per iteration** — if domain allows duplicates, use composite key (e.g. `contest_id + task_id`)
+- **Key MUST be unique per iteration** — if domain allows duplicates, use composite key (e.g. `contest_id + '-' + task_id`)
 - Filter **before**, not inside with `{#if}`
 - Use `{:else}` for empty lists
 
