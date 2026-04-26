@@ -37,6 +37,7 @@ Use `$props()`, `$state()`, `$derived()`, `$effect()` in all components:
 ## `{#each}` Patterns
 
 - Always key: `(item.id)` or `(i)`
+- **Key MUST be unique per iteration** — if domain allows duplicates, use composite key (e.g. `contest_id + '-' + task_id`)
 - Filter **before**, not inside with `{#if}`
 - Use `{:else}` for empty lists
 
@@ -47,6 +48,8 @@ Use `$props()`, `$state()`, `$derived()`, `$effect()` in all components:
   <p>No items.</p>
 {/each}
 ```
+
+**Common Trap:** `task_id` alone is NOT unique when same task appears in multiple contests. Use `contest_id + '-' + task_id` as composite key (see issue #3460 & PR #3442).
 
 ## Snippets vs Components
 

@@ -97,7 +97,7 @@
         </TableHead>
 
         <TableBody class="divide-y divide-gray-200 dark:divide-gray-700">
-          {#each taskResults as taskResult (taskResult.task_id)}
+          {#each taskResults as taskResult (taskResult.contest_id + '-' + taskResult.task_id)}
             <TableBodyRow
               id={taskResult.contest_id + '-' + taskResult.task_id}
               class={getBackgroundColorFrom(taskResult.status_name)}
