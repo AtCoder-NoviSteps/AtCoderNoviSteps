@@ -46,7 +46,7 @@
     "flowbite": "3.1.2",
     "flowbite-svelte": "1.33.1",
     "globals": "17.5.0",
-    "jsdom": "29.0.2",
+    "jsdom": "29.1.0",
     "lefthook": "2.1.6",
     "nock": "14.0.13",
     "oxlint": "^1.61.0",
