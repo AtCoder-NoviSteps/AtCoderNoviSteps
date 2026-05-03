@@ -70,6 +70,7 @@
 
 - [Claude Code](https://docs.anthropic.com/en/docs/claude-code) - AI コーディングアシスタント（VS Code 拡張: `anthropic.claude-code`）
   - [superpowers plugin](https://github.com/obra/superpowers) - `/writing-plans` スキルによる実装前の詳細計画生成
+  - [RTK](https://github.com/rtk-ai/rtk) - AI コーディングアシスタント向けトークン最適化プロキシ（60–90% 削減）
 - [CodeRabbit](https://coderabbit.ai/) - AI コードレビュー
   - CodeRabbit CLI (`coderabbit review --plain`) — milestone 区切りでのローカルレビュー
   - CodeRabbit CI — PR 作成後の自動レビュー（最終品質ゲート）
