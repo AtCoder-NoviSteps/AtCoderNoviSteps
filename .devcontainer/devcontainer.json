@@ -11,7 +11,9 @@
     "source=${localEnv:HOME}/.claude,target=/home/node/.claude,type=bind,consistency=cached"
   ],
   // Features to add to the dev container. More info: https://containers.dev/features.
-  // "features": {},
+  "features": {
+    "ghcr.io/devcontainers/features/github-cli:1": {}
+  },
   //
   // Use 'forwardPorts' to make a list of ports inside the container available locally.
   "forwardPorts": [
@@ -25,7 +27,7 @@
   "initializeCommand": "mkdir -p ~/.claude",
   //
   // Use 'postCreateCommand' to run commands after the container is created.
-  "postCreateCommand": "npm install -g @anthropic-ai/claude-code && (curl -fsSL https://cli.coderabbit.ai/install.sh | sh || echo 'CodeRabbit CLI installation failed, continuing...') && pnpm install",
+  "postCreateCommand": "bash .devcontainer/setup-devcontainer.sh",
   //
   // Configure tool-specific properties.
   "customizations": {
