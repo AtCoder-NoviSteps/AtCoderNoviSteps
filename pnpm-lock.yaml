@@ -16,13 +16,13 @@ importers:
         version: 0.4.0(svelte@5.55.5(@typescript-eslint/types@8.59.1))
       '@lucia-auth/adapter-prisma':
         specifier: 3.0.2
-        version: 3.0.2(@prisma/client@5.22.0(prisma@5.22.0))(lucia@2.7.7)
+        version: 3.0.2(@prisma/client@7.8.0(prisma@5.22.0)(typescript@5.9.3))(lucia@2.7.7)
       '@lucide/svelte':
         specifier: 1.14.0
         version: 1.14.0(svelte@5.55.5(@typescript-eslint/types@8.59.1))
       '@prisma/client':
-        specifier: 5.22.0
-        version: 5.22.0(prisma@5.22.0)
+        specifier: 7.8.0
+        version: 7.8.0(prisma@5.22.0)(typescript@5.9.3)
       '@testing-library/svelte':
         specifier: 5.3.1
         version: 5.3.1(svelte@5.55.5(@typescript-eslint/types@8.59.1))(vite@8.0.10(@types/node@25.6.0)(esbuild@0.27.1)(jiti@2.6.1)(tsx@4.21.0))(vitest@4.1.5)
@@ -71,7 +71,7 @@ importers:
         version: 1.59.1
       '@quramy/prisma-fabbrica':
         specifier: 2.3.3
-        version: 2.3.3(@prisma/client@5.22.0(prisma@5.22.0))(typescript@5.9.3)
+        version: 2.3.3(@prisma/client@7.8.0(prisma@5.22.0)(typescript@5.9.3))(typescript@5.9.3)
       '@sveltejs/adapter-vercel':
         specifier: 6.3.3
         version: 6.3.3(@sveltejs/kit@2.59.0(@sveltejs/vite-plugin-svelte@7.0.0(svelte@5.55.5(@typescript-eslint/types@8.59.1))(vite@8.0.10(@types/node@25.6.0)(esbuild@0.27.1)(jiti@2.6.1)(tsx@4.21.0)))(svelte@5.55.5(@typescript-eslint/types@8.59.1))(typescript@5.9.3)(vite@8.0.10(@types/node@25.6.0)(esbuild@0.27.1)(jiti@2.6.1)(tsx@4.21.0)))
@@ -155,7 +155,7 @@ importers:
         version: 5.22.0
       prisma-markdown:
         specifier: 1.0.9
-        version: 1.0.9(@prisma/client@5.22.0(prisma@5.22.0))(prisma@5.22.0)
+        version: 1.0.9(@prisma/client@7.8.0(prisma@5.22.0)(typescript@5.9.3))(prisma@5.22.0)
       super-sitemap:
         specifier: 1.0.12
         version: 1.0.12(svelte@5.55.5(@typescript-eslint/types@8.59.1))
@@ -1272,13 +1272,19 @@ packages:
   '@preact/signals-core@1.13.0':
     resolution: {integrity: sha512-slT6XeTCAbdql61GVLlGU4x7XHI7kCZV5Um5uhE4zLX4ApgiiXc0UYFvVOKq06xcovzp7p+61l68oPi563ARKg==}
 
-  '@prisma/client@5.22.0':
-    resolution: {integrity: sha512-M0SVXfyHnQREBKxCgyo7sffrKttwE6R8PMq330MIUF0pTwjUhLbW84pFDlf06B27XyCR++VtjugEnIHdr07SVA==}
-    engines: {node: '>=16.13'}
+  '@prisma/client-runtime-utils@7.8.0':
+    resolution: {integrity: sha512-5NQZztQ0oY/ADFkmd9gPuweH5A1/CCY8YQPorLLO0Mu6a87mY5gsnDkzmFmIHs9NFaLnZojzgddFVN4RpKYrdw==}
+
+  '@prisma/client@7.8.0':
+    resolution: {integrity: sha512-HFp3Dawv/3sU3JtlPha90IB+48lS7zHiH4LKZPjmcE8YH5P9DOXGPvo8dqOtO7MqLDd1p2hOWMcFlRT1DMblHw==}
+    engines: {node: ^20.19 || ^22.12 || >=24.0}
     peerDependencies:
       prisma: '*'
+      typescript: '>=5.4.0'
     peerDependenciesMeta:
       prisma:
+        optional: true
+      typescript:
         optional: true
 
   '@prisma/config@6.19.0':
@@ -4916,9 +4922,9 @@ snapshots:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.5
 
-  '@lucia-auth/adapter-prisma@3.0.2(@prisma/client@5.22.0(prisma@5.22.0))(lucia@2.7.7)':
+  '@lucia-auth/adapter-prisma@3.0.2(@prisma/client@7.8.0(prisma@5.22.0)(typescript@5.9.3))(lucia@2.7.7)':
     dependencies:
-      '@prisma/client': 5.22.0(prisma@5.22.0)
+      '@prisma/client': 7.8.0(prisma@5.22.0)(typescript@5.9.3)
       lucia: 2.7.7
 
   '@lucide/svelte@1.14.0(svelte@5.55.5(@typescript-eslint/types@8.59.1))':
@@ -5114,9 +5120,14 @@ snapshots:
 
   '@preact/signals-core@1.13.0': {}
 
-  '@prisma/client@5.22.0(prisma@5.22.0)':
+  '@prisma/client-runtime-utils@7.8.0': {}
+
+  '@prisma/client@7.8.0(prisma@5.22.0)(typescript@5.9.3)':
+    dependencies:
+      '@prisma/client-runtime-utils': 7.8.0
     optionalDependencies:
       prisma: 5.22.0
+      typescript: 5.9.3
 
   '@prisma/config@6.19.0':
     dependencies:
@@ -5217,9 +5228,9 @@ snapshots:
       '@prisma/prisma-schema-wasm': 6.19.0-26.2ba551f319ab1df4bc874a89965d8b3641056773
       fs-extra: 11.3.0
 
-  '@quramy/prisma-fabbrica@2.3.3(@prisma/client@5.22.0(prisma@5.22.0))(typescript@5.9.3)':
+  '@quramy/prisma-fabbrica@2.3.3(@prisma/client@7.8.0(prisma@5.22.0)(typescript@5.9.3))(typescript@5.9.3)':
     dependencies:
-      '@prisma/client': 5.22.0(prisma@5.22.0)
+      '@prisma/client': 7.8.0(prisma@5.22.0)(typescript@5.9.3)
       '@prisma/generator-helper': 6.19.0
       '@prisma/internals': 6.19.0(typescript@5.9.3)
       short-uuid: 5.2.0
@@ -7690,9 +7701,9 @@ snapshots:
     dependencies:
       parse-ms: 2.1.0
 
-  prisma-markdown@1.0.9(@prisma/client@5.22.0(prisma@5.22.0))(prisma@5.22.0):
+  prisma-markdown@1.0.9(@prisma/client@7.8.0(prisma@5.22.0)(typescript@5.9.3))(prisma@5.22.0):
     dependencies:
-      '@prisma/client': 5.22.0(prisma@5.22.0)
+      '@prisma/client': 7.8.0(prisma@5.22.0)(typescript@5.9.3)
       '@prisma/generator-helper': 5.22.0
       prisma: 5.22.0
 
