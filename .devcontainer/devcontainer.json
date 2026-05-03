@@ -25,7 +25,7 @@
   // "shutdownAction": "none",
   //
   // Use 'initializeCommand' to run commands before the container is created.
-  "initializeCommand": "mkdir -p ~/.claude",
+  "initializeCommand": "mkdir -p ~/.claude && touch ~/.gitconfig",
   //
   // Use 'postCreateCommand' to run commands after the container is created.
   "postCreateCommand": "bash .devcontainer/setup-devcontainer.sh",
