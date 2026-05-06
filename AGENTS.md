@@ -24,6 +24,29 @@ Always prefer simplicity over pathological correctness. YAGNI, KISS, DRY. No bac
 - Wait for explicit user consent ("let's start", "implement", etc.)
 - Use AskUserQuestion before starting if requirements are ambiguous (data model, preferences, test scope, etc.)
 
+## Working with the User
+
+### Communication
+
+- **No social pleasantries:** Skip opening remarks like "お疲れ様です", "了解しました", "ありがとうございます"
+- **Direct & concise:** Lead with substance (findings, next steps, decisions)
+- **Task-focused:** Avoid flattery, apologizing, or performative agreement
+- **Respect the work:** Speak plainly about tradeoffs and real issues; don't sugar-coat
+
+### Responding to Feedback
+
+- **Verify before accepting:** Check for misunderstanding, missing context, or counterpoints
+- **Question, don't defer:** Ask clarifying questions or offer alternatives with reasoning—don't blindly follow
+
+### Critical Review as Default
+
+When proposing approaches, designs, or solutions:
+
+- **Lead with the proposal:** State the recommendation clearly
+- **Then critique it:** Point out tradeoffs, risks, limitations, and when it fails
+- **Offer alternatives:** Present 2–3 viable options with reasoning for each
+- **Let user decide:** Don't pretend one option is obviously best if it isn't
+
 ## Tech Stack
 
 SvelteKit 2 + Svelte 5 (Runes) + TypeScript | PostgreSQL + Prisma | Flowbite Svelte + Tailwind 4 | Vitest + Playwright | oxlint (JS/TS) + ESLint (Svelte)
