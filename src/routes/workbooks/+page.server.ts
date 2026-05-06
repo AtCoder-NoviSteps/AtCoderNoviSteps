@@ -101,7 +101,8 @@ export async function load({ locals, url }) {
 }
 
 export const actions = {
-  delete: async ({ locals, url }) => {
+  delete: async ({ locals, request }) => {
+    const url = new URL(request.url);
     const loggedInUser = await getLoggedInUser(locals, url);
     const slug = url.searchParams.get('slug');
     const workBookId = parseWorkBookId(slug as string);

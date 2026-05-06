@@ -107,7 +107,9 @@ function mergeContestsAndUnregisteredTasks(
 }
 
 export const actions: Actions = {
-  create: async ({ request }) => {
+  create: async ({ request, locals }) => {
+    await validateAdminAccess(locals);
+
     try {
       console.log('users->actions->generate');
       const formData = await request.formData();
@@ -133,7 +135,9 @@ export const actions: Actions = {
     };
   },
 
-  update: async ({ request }) => {
+  update: async ({ request, locals }) => {
+    await validateAdminAccess(locals);
+
     try {
       console.log('users->actions->generate');
       const formData = await request.formData();
