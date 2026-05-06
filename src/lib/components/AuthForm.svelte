@@ -28,7 +28,7 @@
     submitButtonLabel: string;
     confirmationMessage: string;
     alternativePageName: string;
-    alternativePageLink: '/login' | '/signup';
+    alternativePageLink: string;
   }
 
   let {

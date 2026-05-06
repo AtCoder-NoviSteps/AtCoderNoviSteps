@@ -12,6 +12,10 @@ paths:
 - Page routes: use `redirect()` to navigate
 - API routes (`+server.ts`): use `error()` — `redirect()` returns 3xx; `fetch` follows and gets HTML not JSON
 
+## User-Provided Redirect Destinations
+
+**SvelteKit's `redirect()` does NOT validate origin.** If the redirect destination comes from user input (URL query params, form data), always validate with `isSameOriginRedirect(redirectTo, url.origin)` from `src/lib/utils/url.ts` before redirecting.
+
 ## Internal Navigation: `resolve()`
 
 All internal navigation must use `resolve()` from `$app/paths`:

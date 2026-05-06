@@ -44,3 +44,19 @@ export function isValidUrlSlug(slug: string): boolean {
 export function sanitizeUrl(rawUrl: string) {
   return xss(rawUrl);
 }
+
+/**
+ * Validates if a redirect target is safe (same origin) to prevent open redirect vulnerabilities.
+ *
+ * @param redirectTarget - The target URL to redirect to (relative or absolute)
+ * @param requestOrigin - The origin of the current request (e.g., 'http://localhost:5174')
+ * @returns A boolean indicating whether the redirect target is same-origin as the request
+ */
+export function isSameOriginRedirect(redirectTarget: string, requestOrigin: string): boolean {
+  try {
+    const targetUrl = new URL(redirectTarget, requestOrigin);
+    return targetUrl.origin === requestOrigin;
+  } catch {
+    return false;
+  }
+}

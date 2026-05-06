@@ -9,20 +9,15 @@ import * as workBooksCrud from '$features/workbooks/services/workbooks';
 
 import { Roles } from '$lib/types/user';
 
-import { getLoggedInUser } from '$lib/utils/authorship';
+import { ensureSessionOrRedirect, getLoggedInUser } from '$features/auth/services/session';
 import {
   BAD_REQUEST,
   FORBIDDEN,
   TEMPORARY_REDIRECT,
 } from '$lib/constants/http-response-status-codes';
 
-export const load = async ({ locals }) => {
-  // ログインしていない場合は、ログイン画面へ遷移させる
-  const session = await locals.auth.validate();
-
-  if (!session) {
-    redirect(TEMPORARY_REDIRECT, '/login');
-  }
+export const load = async ({ locals, url }) => {
+  await ensureSessionOrRedirect(locals, url);
 
   const form = await superValidate(null, zod4(workBookSchema));
   const author = locals.user;
@@ -39,8 +34,8 @@ export const load = async ({ locals }) => {
 };
 
 export const actions = {
-  default: async ({ locals, request }) => {
-    const author = await getLoggedInUser(locals);
+  default: async ({ locals, request, url }) => {
+    const author = await getLoggedInUser(locals, url);
 
     if (!author) {
       return fail(FORBIDDEN, { message: 'ログインが必要です。' });

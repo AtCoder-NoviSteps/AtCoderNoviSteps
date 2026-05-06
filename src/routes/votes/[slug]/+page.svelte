@@ -1,6 +1,7 @@
 <script lang="ts">
   import { enhance } from '$app/forms';
   import { resolve } from '$app/paths';
+  import { page } from '$app/state';
   import { Button, Tooltip } from 'flowbite-svelte';
   import FlaskConical from '@lucide/svelte/icons/flask-conical';
   import GradeLabel from '$lib/components/GradeLabel.svelte';
@@ -13,12 +14,18 @@
     getTaskGradeColor,
     toChangeTextColorIfNeeds,
   } from '$lib/utils/task';
+
+  import VoteDonutChart from '$features/votes/components/VoteDonutChart.svelte';
   import { qGrades, dGrades } from '$features/votes/utils/grade_options';
   import { MIN_VOTES_FOR_STATISTICS } from '$features/votes/constants/statistics';
-  import { SIGNUP_PAGE, LOGIN_PAGE, EDIT_PROFILE_PAGE } from '$lib/constants/navbar-links';
-  import VoteDonutChart from '$features/votes/components/VoteDonutChart.svelte';
+
+  import { EDIT_PROFILE_PAGE } from '$lib/constants/navbar-links';
+  import { buildLoginPath } from '$features/auth/utils/login';
+  import { buildSignupPath } from '$features/auth/utils/signup';
 
   let { data } = $props();
+
+  const redirectTo = page.url.pathname;
 
   // @ts-expect-error svelte-check TS2554: AppTypes declaration merging causes RouteId to resolve as string, requiring params. Runtime behavior is correct.
   const editProfileHref = `${resolve(EDIT_PROFILE_PAGE)}?tab=atcoder`;
@@ -106,8 +113,8 @@
     <!-- 未ログイン -->
     <p class="text-gray-600 dark:text-gray-300 mb-4">投票するにはログインが必要です。</p>
     <div class="flex gap-3">
-      <Button href={LOGIN_PAGE} color="primary">ログイン</Button>
-      <Button href={SIGNUP_PAGE} color="alternative">アカウント作成</Button>
+      <Button href={buildLoginPath(redirectTo)} color="primary">ログイン</Button>
+      <Button href={buildSignupPath(redirectTo)} color="alternative">アカウント作成</Button>
     </div>
   {/if}
 </div>

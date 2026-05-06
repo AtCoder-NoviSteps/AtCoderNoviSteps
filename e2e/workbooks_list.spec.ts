@@ -29,7 +29,7 @@ const CATEGORY_SEARCH = 'SEARCH_SIMULATION';
 test.describe('access control', () => {
   test('unauthenticated user is redirected to /login', async ({ page }) => {
     await page.goto(WORKBOOK_LIST_URL);
-    await expect(page).toHaveURL('/login', { timeout: TIMEOUT });
+    await expect(page).toHaveURL(/\/login/, { timeout: TIMEOUT });
   });
 });
 

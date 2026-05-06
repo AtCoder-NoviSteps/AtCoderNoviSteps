@@ -3,22 +3,11 @@ import { redirect, type Actions } from '@sveltejs/kit';
 import type { Tag } from '$lib/types/tag';
 
 import * as tagService from '$lib/services/tags';
-import * as userService from '$lib/services/users';
 
-//import { sha256 } from '$lib/utils/hash';
+import { validateAdminAccess } from '$features/auth/services/admin_access';
 
-import { Roles } from '$lib/types/user';
-
-export async function load({ locals }) {
-  const session = await locals.auth.validate();
-  if (!session) {
-    redirect(302, '/login');
-  }
-
-  const user = await userService.getUser(session?.user.username as string);
-  if (user?.role !== Roles.ADMIN) {
-    redirect(302, '/login');
-  }
+export async function load({ locals, url }) {
+  await validateAdminAccess(locals, url);
 
   const tags = await tagService.getTags();
 

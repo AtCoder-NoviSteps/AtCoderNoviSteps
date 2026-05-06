@@ -19,6 +19,11 @@ Always prefer simplicity over pathological correctness. YAGNI, KISS, DRY. No bac
 5. After all phases complete (feature and refactor branches only — not hotfixes or dependency bumps): run a mandatory refactor cycle. Write to `plan.md`: novel lessons (implementation blockers, non-obvious patterns not already in rules) and remaining tasks. Discard `phase-N.md` files. Run `coderabbit review --plain`; write all findings of `critical` / `high` / `potential_issue` (medium) to a `## CodeRabbit Findings` section in `plan.md`. The user decides which to fix before opening a PR; do not fix any finding unilaterally. `nitpick` findings defer to PR CI.
 6. Run `/session-close` at the end of each session: updates plan checklist, proposes rule/skill additions, checks for bloat, and detects repeated instructions
 
+**Plan Approval ≠ Implementation Start:** Generating a plan (`/writing-plans`) does NOT authorize implementation. Always:
+
+- Wait for explicit user consent ("let's start", "implement", etc.)
+- Use AskUserQuestion before starting if requirements are ambiguous (data model, preferences, test scope, etc.)
+
 ## Tech Stack
 
 SvelteKit 2 + Svelte 5 (Runes) + TypeScript | PostgreSQL + Prisma | Flowbite Svelte + Tailwind 4 | Vitest + Playwright | oxlint (JS/TS) + ESLint (Svelte)

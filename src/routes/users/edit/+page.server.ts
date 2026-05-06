@@ -7,28 +7,28 @@ import type { Roles } from '$lib/types/user';
 import * as userService from '$lib/services/users';
 import * as verificationService from '$features/account/services/atcoder_verification';
 
+import { ensureSessionOrRedirect } from '$features/auth/services/session';
+import { buildLoginPath } from '$features/auth/utils/login';
+
 import {
   BAD_REQUEST,
   UNAUTHORIZED,
   FORBIDDEN,
   INTERNAL_SERVER_ERROR,
+  TEMPORARY_REDIRECT,
 } from '$lib/constants/http-response-status-codes';
 
 export async function load({ locals, url }) {
-  const session = await locals.auth.validate();
-
-  if (!session) {
-    redirect(302, '/login');
-  }
+  await ensureSessionOrRedirect(locals, url);
 
   try {
-    const user = await userService.getUser(session?.user.username as string);
+    const user = await userService.getUser(locals.user.name);
 
     return {
       userId: user?.id as string,
       username: user?.username as string,
       role: user?.role as Roles,
-      isLoggedIn: (session?.user.userId === user?.id) as boolean,
+      isLoggedIn: (locals.user.id === user?.id) as boolean,
       atCoderAccount: {
         handle: user?.atCoderAccount?.handle ?? '',
         validationCode: user?.atCoderAccount?.validationCode ?? '',
@@ -40,7 +40,7 @@ export async function load({ locals, url }) {
     };
   } catch (error) {
     console.error('User lookup failed during session validation', error);
-    redirect(302, '/login');
+    redirect(TEMPORARY_REDIRECT, buildLoginPath(url));
   }
 }
 

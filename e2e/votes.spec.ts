@@ -166,7 +166,7 @@ test.describe('vote detail page (/votes/[slug])', () => {
 test.describe('vote management page (/vote_management)', () => {
   test('unauthenticated user is redirected to /login', async ({ page }) => {
     await page.goto(VOTE_MANAGEMENT_URL);
-    await expect(page).toHaveURL('/login', { timeout: TIMEOUT });
+    await expect(page).toHaveURL(/\/login/, { timeout: TIMEOUT });
   });
 
   test('non-admin user is redirected to /', async ({ page }) => {

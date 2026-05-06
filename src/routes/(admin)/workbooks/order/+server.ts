@@ -4,7 +4,7 @@ import { validateAndUpdatePlacements } from '$features/workbooks/services/workbo
 
 import { updatePlacementsSchema } from '$features/workbooks/zod/schema';
 
-import { validateAdminAccessForApi } from '../../_utils/auth';
+import { validateAdminAccessForApi } from '$features/auth/services/admin_access';
 
 import { BAD_REQUEST } from '$lib/constants/http-response-status-codes';
 

@@ -32,6 +32,15 @@ E2E files: **must** use `.spec.ts` extension (`.test.ts` not detected).
 - Use `toBe(true)` / `toBe(false)` not `toBeTruthy()` / `toBeFalsy()`
 - DB query tests: assert `orderBy`, `include` with `expect.objectContaining`, not just `where`
 - Enum membership: `Object.hasOwn(Enum, value)` not `in` (avoids prototype chain)
+- `Promise<void>`: use `resolves` alone (not `toBeUndefined()`); `.resolves` confirms the promise resolves without asserting the value
+
+```typescript
+// ✓ Correct: confirms promise resolves without throwing
+await expect(ensureSessionOrRedirect(mockLocals)).resolves;
+
+// ✗ Avoid: toBeUndefined() is redundant for Promise<void>
+await expect(ensureSessionOrRedirect(mockLocals)).resolves.toBeUndefined();
+```
 
 ### Describe Organization
 

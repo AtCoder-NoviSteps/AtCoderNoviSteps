@@ -5,10 +5,10 @@ import {
   createInitialPlacements,
 } from '$features/workbooks/services/workbook_placements/crud';
 
-import { validateAdminAccess } from '../../_utils/auth';
+import { validateAdminAccess } from '$features/auth/services/admin_access';
 
-export async function load({ locals }) {
-  await validateAdminAccess(locals);
+export async function load({ locals, url }) {
+  await validateAdminAccess(locals, url);
 
   const workbooks = await getWorkbooksWithPlacements();
   const hasUnplacedWorkbooks = workbooks.some((workbook) => !workbook.placement);
