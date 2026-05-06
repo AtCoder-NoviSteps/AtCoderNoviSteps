@@ -28,12 +28,12 @@ describe('URL', () => {
       ];
 
       runTests('isValidUrl', testCases, ({ rawUrl }: TestCaseForUrlValidation) => {
-        expect(isValidUrl(rawUrl)).toBeTruthy();
+        expect(isValidUrl(rawUrl)).toBe(true);
       });
     });
 
     test('when an empty URL is given', () => {
-      expect(isValidUrl('')).toBeTruthy();
+      expect(isValidUrl('')).toBe(true);
     });
 
     describe('when invalid URL are given', () => {
@@ -48,7 +48,7 @@ describe('URL', () => {
       ];
 
       runTests('isValidUrl', testCases, ({ rawUrl }: TestCaseForUrlValidation) => {
-        expect(isValidUrl(rawUrl)).toBeFalsy();
+        expect(isValidUrl(rawUrl)).toBe(false);
       });
     });
 
@@ -78,7 +78,7 @@ describe('URL', () => {
       ];
 
       runTests('isValidUrlSlug', testCases, ({ rawUrl }: TestCaseForUrlValidation) => {
-        expect(isValidUrlSlug(rawUrl)).toBeTruthy();
+        expect(isValidUrlSlug(rawUrl)).toBe(true);
       });
     });
 
@@ -117,7 +117,7 @@ describe('URL', () => {
       ];
 
       runTests('isValidUrlSlug', testCases, ({ rawUrl }: TestCaseForUrlValidation) => {
-        expect(isValidUrlSlug(rawUrl)).toBeFalsy();
+        expect(isValidUrlSlug(rawUrl)).toBe(false);
       });
     });
 
