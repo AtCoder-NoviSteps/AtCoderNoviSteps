@@ -303,37 +303,10 @@ export const actions: Actions = {
 
 ---
 
-#### Issue 7: Testing.md の `.resolves` マッチャー説明が不正確
+#### ✅ Issue 7: Testing.md の `.resolves` マッチャー説明が不正確（対処済み）
 
-**File:** `.claude/rules/testing.md:35-43`
-
-**現状 (❌ 不完全):**
-
-```typescript
-// ✓ Correct: confirms promise resolves without throwing
-await expect(ensureSessionOrRedirect(mockLocals)).resolves;
-
-// ✗ Avoid: toBeUndefined() is redundant for Promise<void>
-await expect(ensureSessionOrRedirect(mockLocals)).resolves.toBeUndefined();
-```
-
-**問題:** Vitest では `.resolves` だけではアサーションが完成しない。以下いずれかが必須：
-
-1. `.resolves.toBeUndefined()` （Promise\<void\> の場合）
-2. `await ensureSessionOrRedirect(mockLocals)` （throw しないことで成功）
-
-**ユーザーコメント:** 「toBeUndefined をつかうことに違和感があってあえて外した」
-→ **これは誤解**。Vitest 構文上、matcher が必須。
-
-**修正案:**
-
-```typescript
-// ✓ Option 1: Explicit matcher (Promise<void>)
-await expect(ensureSessionOrRedirect(mockLocals)).resolves.toBeUndefined();
-
-// ✓ Option 2: No expectation wrapper (rely on throw)
-await ensureSessionOrRedirect(mockLocals); // Asserts it doesn't throw
-```
+- `.resolves` のみでは false-positive になることを公式ドキュメントで確認
+- testing.md・session.test.ts・admin_access.test.ts を修正済み（`await fn()` パターンに統一）
 
 ---
 

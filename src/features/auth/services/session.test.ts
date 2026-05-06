@@ -49,7 +49,7 @@ describe('ensureSessionOrRedirect', () => {
     test('does not throw when user has valid session', async () => {
       const mockLocals = createMockLocalsWithValidSession();
 
-      await expect(ensureSessionOrRedirect(mockLocals)).resolves;
+      await ensureSessionOrRedirect(mockLocals);
       expect(mockLocals.auth.validate).toHaveBeenCalledTimes(1);
     });
   });

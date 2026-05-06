@@ -51,7 +51,7 @@ describe('validateAdminAccess', () => {
       const mockLocals = createMockLocalsWithSession();
       vi.mocked(userService.getUser).mockResolvedValue({ role: Roles.ADMIN } as never);
 
-      await expect(validateAdminAccess(mockLocals)).resolves;
+      await validateAdminAccess(mockLocals);
     });
   });
 
@@ -96,7 +96,7 @@ describe('validateAdminAccessForApi', () => {
       const mockLocals = createMockLocalsWithSession();
       vi.mocked(userService.getUser).mockResolvedValue({ role: Roles.ADMIN } as never);
 
-      await expect(validateAdminAccessForApi(mockLocals)).resolves;
+      await validateAdminAccessForApi(mockLocals);
     });
   });
 
