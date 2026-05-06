@@ -296,51 +296,10 @@ export const actions: Actions = {
 
 ---
 
-#### Issue 5: Signup Helper のドキュメント漏れ
+#### ✅ Issue 5 & 6: Signup Helper のドキュメント漏れ・API 非対称（対処済み）
 
-**File:** `.claude/rules/auth.md:41-49` (Redirect After Login Pattern)
-
-**問題:** `buildSignupPath()` が存在するが、auth.md では `buildLoginPath` のみ記載。signup フロー用の同等ヘルパーが隠れている。
-
-**修正案:** auth.md の Key Files セクションに追記：
-
-```markdown
-- `src/features/auth/utils/signup.ts`: `buildSignupPath(url?)` — generates `/signup` or `/signup?redirectTo=...`
-```
-
----
-
-#### Issue 6: buildSignupPath API が非対称
-
-**File:** `src/features/auth/utils/signup.ts:8-14`
-
-**現状:**
-
-```typescript
-export function buildSignupPath(redirectTo: string | null): string {
-  // ...
-}
-
-// vs. buildLoginPath:
-export function buildLoginPath(url: string | URL | null): string {
-  // ...
-}
-```
-
-**問題:** `buildLoginPath()` は `URL` を受け入れるが、`buildSignupPath()` は `string` のみ。呼び出し側で手動変換が必要（DRY 違反）。
-
-**批判的評価:**
-
-- 些細だが一貫性欠落
-- 今後新しい redirect builder が増えるなら署名を統一すべき
-
-**修正案:** `buildSignupPath` の署名を `buildLoginPath` に合わせる：
-
-```typescript
-export function buildSignupPath(url: string | URL | null): string {
-  // ...
-}
-```
+- `buildSignupPath` の型シグネチャを `string | URL | null` に統一（`buildLoginPath` と同一）
+- `auth.md` の Key Files セクションに `buildSignupPath` を追記
 
 ---
 

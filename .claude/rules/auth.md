@@ -39,6 +39,7 @@ paths:
   - `validateAdminAccess(locals, url?)` — for page routes; redirects to `/login` for both unauthenticated and non-admin users (do not use in `+server.ts`)
   - `validateAdminAccessForApi(locals)` — for API routes (`+server.ts`); throws `error(401)` if unauthenticated, `error(403)` if not admin
 - `src/features/auth/utils/login.ts`: `buildLoginPath(url?)` — generates `/login` or `/login?redirectTo=...`
+- `src/features/auth/utils/signup.ts`: `buildSignupPath(url?)` — generates `/signup` or `/signup?redirectTo=...` (same signature as `buildLoginPath`)
 - `prisma/schema.prisma`: User, Session, Key models
 
 ## Redirect After Login Pattern
