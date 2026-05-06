@@ -51,9 +51,19 @@ if (!(Object.values(TaskGrade) as string[]).includes(gradeRaw)) {
 const grade = gradeRaw as TaskGrade; // Safe now
 ```
 
-## Form Actions: `url` Parameter Unavailable
+## Form Actions: `url` Parameter
 
-Form action handlers cannot access `url`. Use `new URL(request.url)` instead.
+Form action handlers receive the full `RequestEvent`, including `url`. Destructure it directly:
+
+```typescript
+export const actions = {
+  default: async ({ request, locals, url }) => {
+    const redirectTo = url.searchParams.get('redirectTo');
+  },
+};
+```
+
+`url` is guaranteed non-null. `new URL(request.url)` is an equivalent alternative but unnecessary when `url` is already available.
 
 ## Page Component Props
 

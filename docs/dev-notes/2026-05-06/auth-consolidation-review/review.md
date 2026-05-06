@@ -286,61 +286,13 @@ export const actions: Actions = {
 
 ### 新規追加: MEDIUM 問題（優先度順）
 
-#### Issue 4: SvelteKit ドキュメント記述が不正確
+#### ✅ Issue 4: SvelteKit ドキュメント記述が不正確（対処済み）
 
 **File:** `.claude/rules/sveltekit.md:54-56`
 
-**現状 (❌):**
+**指摘（正当）:** `url` は form actions の RequestEvent の標準プロパティとして保証されており、null にならない。公式ドキュメントでも `url.searchParams` を直接使う例が示されている。旧ルール「`url` は受け取れない」は誤りだった。
 
-```markdown
-## Form Actions: `url` Parameter Unavailable
-
-Form action handlers cannot access `url`. Use `new URL(request.url)` instead.
-```
-
-**問題:** 実際には form actions は `url` を **受け取れる**。ドキュメントが誤り。
-
-**例（実際に動作）:**
-
-```typescript
-export const actions = {
-  default: async ({ request, locals, url }) => {
-    // ← url は受け取れる
-    const redirectTo = url.searchParams.get('redirectTo');
-  },
-};
-```
-
-**批判的評価:**
-
-- ドキュメント誤りは開発者の混乱を招く
-- ただし「new URL(request.url) パターン」も正しいアプローチなので、削除ではなく「両方サポート、url は convenience」と修正すべき
-- 実装側との乖離が大
-
-**修正案:**
-
-````markdown
-## Form Actions: `url` Parameter Usage
-
-Form action handlers can access `url` directly:
-
-```typescript
-export const actions = {
-  default: async ({ request, locals, url }) => {
-    const redirectTo = url.searchParams.get('redirectTo');
-  },
-};
-```
-````
-
-または、request から再構築することも可能：
-
-```typescript
-const url = new URL(request.url);
-
-（両方正しい）
-
-```
+**対処:** sveltekit.md を修正済み。`url` は destructure して直接使える、`new URL(request.url)` は等価な代替手段と記載。
 
 ---
 
