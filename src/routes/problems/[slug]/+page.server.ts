@@ -9,8 +9,10 @@ import { BAD_REQUEST, TEMPORARY_REDIRECT } from '$lib/constants/http-response-st
 const buttons = await getButtons();
 
 export async function load({ locals, params, url }) {
+  // getLoggedInUser either returns a user or throws redirect(); null is unreachable.
+  // Non-null assertion (!) is safe here.
   const loggedInUser = await getLoggedInUser(locals, url);
-  const taskResult = await crud.getTaskResult(params.slug as string, loggedInUser!.id);
+  const taskResult = await crud.getTaskResult(params.slug as string, loggedInUser.id);
 
   return { taskResult: taskResult, buttons: buttons };
 }
@@ -20,8 +22,10 @@ export const actions = {
     const response = await request.formData();
     const slug = params.slug as string;
 
+    // Note: getLoggedInUser either returns a user or throws redirect(); null is unreachable.
+    // This action implicitly requires login (redirect on no session).
     const loggedInUser = await getLoggedInUser(locals, url);
-    const userId = loggedInUser!.id;
+    const userId = loggedInUser.id;
 
     try {
       const submissionStatus = response.get('submissionStatus') as string;
