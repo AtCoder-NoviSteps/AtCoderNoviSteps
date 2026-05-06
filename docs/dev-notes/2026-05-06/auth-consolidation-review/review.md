@@ -310,66 +310,10 @@ export const actions: Actions = {
 
 ---
 
-#### Issue 8: Users/Edit ハンドラーのエラーマスキング
+#### ✅ Issue 8: Users/Edit ハンドラーのエラーマスキング（対処済み）
 
-**File:** `src/routes/users/edit/+page.server.ts:41-44`
-
-**現状 (❌):**
-
-```typescript
-try {
-  const user = await userService.getUser(userId);
-  // ...
-} catch (e) {
-  redirect(buildLoginPath(...)); // ❌ getUser の失敗を login に誤誘導
-}
-```
-
-**問題:** `ensureSessionOrRedirect()` で auth 済みなので、catch ブロックは `getUser` の **DB エラー** を捕捉しているはずだが、redirect(login) で隠蔽。リクエストログやエラートレースが失われる。
-
-**批判的評価:**
-
-- 「エラーをログイン画面で隠す」はセキュリティと UX の両面で悪い
-- ユーザーは意味不明なログイン画面に誘導される（既にログイン済みなのに）
-- 実装者は何が失敗したか分からない
-
-**修正案:**
-
-```typescript
-try {
-  const user = await userService.getUser(userId);
-  // ...
-} catch (e) {
-  console.error('Failed to fetch user:', e);
-  error(500, 'ユーザー情報の取得に失敗しました。');
-}
-```
-
----
-
-#### Issue 9: Phase 1 の見出し vs チェックリスト矛盾
-
-**File:** Review doc lines 195-199
-
-**現状 (❌ 矛盾):**
-
-```markdown
-### Phase 1: CRITICAL & HIGH（✅ 完了）
-
-- [ ] NPE リスク → null チェックに変更（3 箇所）← Phase 2へ延期
-```
-
-**問題:** 見出しは「完了」だが、チェックリストは「未完了（延期）」。どちらが true か不明。
-
-**批判的評価:**
-
-- PR の「完了」判定が曖昧
-- 責任者が Phase 2 に進むべき判断ができない
-
-**修正案:** いずれかを選択：
-
-1. 見出しを「Phase 1: 部分完了」に修正
-2. NPE チェックリストを Phase 2 セクションに移動
+- catch ブロックの `redirect(login)` を `error(INTERNAL_SERVER_ERROR, ...)` に変更
+- 不要になった `redirect`・`buildLoginPath`・`TEMPORARY_REDIRECT` の import も削除
 
 ---
 

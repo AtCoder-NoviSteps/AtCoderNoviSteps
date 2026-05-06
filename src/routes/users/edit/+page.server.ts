@@ -1,5 +1,5 @@
 //See https://tech-blog.rakus.co.jp/entry/20230209/sveltekit#%E3%82%B9%E3%83%AC%E3%83%83%E3%83%89%E6%8A%95%E7%A8%BF%E7%94%BB%E9%9D%A2
-import { redirect, fail } from '@sveltejs/kit';
+import { error, fail } from '@sveltejs/kit';
 
 import type { Actions } from './$types';
 import type { Roles } from '$lib/types/user';
@@ -8,14 +8,12 @@ import * as userService from '$lib/services/users';
 import * as verificationService from '$features/account/services/atcoder_verification';
 
 import { ensureSessionOrRedirect } from '$features/auth/services/session';
-import { buildLoginPath } from '$features/auth/utils/login';
 
 import {
   BAD_REQUEST,
   UNAUTHORIZED,
   FORBIDDEN,
   INTERNAL_SERVER_ERROR,
-  TEMPORARY_REDIRECT,
 } from '$lib/constants/http-response-status-codes';
 
 export async function load({ locals, url }) {
@@ -38,9 +36,9 @@ export async function load({ locals, url }) {
       message: '',
       openAtCoderTab: url.searchParams.get('tab') === 'atcoder',
     };
-  } catch (error) {
-    console.error('User lookup failed during session validation', error);
-    redirect(TEMPORARY_REDIRECT, buildLoginPath(url));
+  } catch (e) {
+    console.error('Failed to fetch user:', e);
+    error(INTERNAL_SERVER_ERROR, 'ユーザー情報の取得に失敗しました。');
   }
 }
 
