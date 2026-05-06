@@ -31,7 +31,9 @@ export async function load({ locals, url }) {
 }
 
 export const actions: Actions = {
-  default: async ({ request }) => {
+  default: async ({ request, locals, url }) => {
+    await validateAdminAccess(locals, url);
+
     try {
       const form = await superValidate(request, zod4(accountTransferSchema));
 
