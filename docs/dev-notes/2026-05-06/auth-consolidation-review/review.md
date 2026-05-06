@@ -334,10 +334,12 @@ delete: async ({ locals, request }) => {
    - `loggedInUser` 型を `Awaited<ReturnType<typeof getLoggedInUser>>` で正確に宣言
 
 **テスト結果:**
+
 - ✓ Unit tests: 2224 passed | 1 skipped
 - ✓ 既存テストで回帰なし
 
 **注記:**
+
 - Non-null Assertion NPE (3 箇所) は Phase 2 で大規模修正として対応
 - すべての修正は既存テストを通過
 
