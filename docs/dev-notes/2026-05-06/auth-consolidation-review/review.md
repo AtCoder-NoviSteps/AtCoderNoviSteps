@@ -98,6 +98,26 @@ await ensureAdminOrRedirect(locals);
 
 利点：Service は純粋 + 呼び出し側は冗長性ゼロ
 
+ただし `utils/` は「副作用禁止」の規約があるため、`ensureAdminOrRedirect` の配置先は規約上グレー。
+
+**代替案：SvelteKit レイアウト階層による一元化**
+
+admin ページが `/admin/` 配下に集約されているなら、layout で一度だけ書くことで書き漏れを構造的に防げる：
+
+```typescript
+// src/routes/(admin)/+layout.server.ts
+export async function load({ locals, url }) {
+  const status = await validateAdminStatus(locals);
+  if (status !== AdminStatus.OK) redirect(TEMPORARY_REDIRECT, buildLoginPath(url));
+}
+```
+
+- `redirect()` が規約上の正規の場所（route handler）に収まる
+- 各ページへの書き漏れリスクがゼロ
+- wrapper 関数が不要になるため utils の副作用問題も消える
+
+制約：admin ルートが複数の route group に散らばっている場合は適用できない。
+
 ---
 
 ### ⚠️ MEDIUM: Module-scope Mutable State
