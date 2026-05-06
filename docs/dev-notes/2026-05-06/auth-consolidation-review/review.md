@@ -243,14 +243,16 @@ delete: async ({ locals, request }) => {
 
 ## 📊 優先度別修正スケジュール
 
-### Phase 1: CRITICAL & HIGH（今すぐ）
+### Phase 1: CRITICAL & HIGH（✅ 完了）
 
 ```markdown
-- [x] Form actions の url パラメータ修正
-- [x] POST actions への admin 検証追加
 - [ ] NPE リスク → null チェックに変更（3 箇所）← Phase 2へ延期
-- [x] getLoggedInUser を try-catch 内に移動
 ```
+
+**完了済み:**
+- ✓ Form actions の url パラメータ修正
+- ✓ POST actions への admin 検証追加
+- ✓ getLoggedInUser を try-catch 内に移動
 
 **見積:** 1-2 時間 | **実績:** 完了 (NPE は別PRで対応)
 
