@@ -136,18 +136,35 @@ export async function validateAdminAccess(locals: App.Locals, url?: URL): Promis
 }
 ```
 
-**Recommended (✅):**
+**Recommended (✅): Wrapper パターン**
+
+Service 層は純粋、Route helper で framework 処理を集約：
 
 ```typescript
-export async function validateAdminAccess(locals: App.Locals): Promise<AdminStatus> {
-  return validateAdminStatus(locals); // ✅ 純粋な値返却
+// src/features/auth/services/admin_access.ts （純粋、テスト可能）
+export async function validateAdminStatus(locals: App.Locals): Promise<AdminStatus> {
+  // ...
 }
 
-// Route handler で処理
-if ((await validateAdminAccess(locals)) !== AdminStatus.OK) {
-  redirect(TEMPORARY_REDIRECT, buildLoginPath(url));
+// src/features/auth/utils/admin_access.ts （Route helper）
+export async function ensureAdminOrRedirect(locals: App.Locals, url?: URL): Promise<void> {
+  const status = await validateAdminStatus(locals);
+  if (status !== AdminStatus.OK) {
+    redirect(TEMPORARY_REDIRECT, buildLoginPath(url));
+  }
 }
 ```
+
+**呼び出し側：**
+```typescript
+// Route handler
+await ensureAdminOrRedirect(locals, url);
+
+// Form action
+await ensureAdminOrRedirect(locals);
+```
+
+利点：Service は純粋 + 呼び出し側は冗長性ゼロ
 
 ---
 
@@ -239,13 +256,13 @@ delete: async ({ locals, request }) => {
 ### Phase 2: Service 層リファクタ（短期）
 
 ```markdown
-- [ ] ensureSessionOrRedirect を純粋関数に変更
+- [ ] ensureSessionOrRedirect → 純粋関数 + Wrapper パターン
 - [ ] getLoggedInUser の戻り値型を正確に
-- [ ] validateAdminAccess → AdminStatus 返却に変更
-- [ ] validateAdminAccessForApi → error() 削除
+- [ ] validateAdminStatus → 純粋関数、ensureAdminOrRedirect Wrapper を提供
+- [ ] validateAdminAccessForApi → 純粋関数化、error() は Route に移動
 ```
 
-**見積:** 3-4 時間 + テスト修正
+**見積:** 3-4 時間 + テスト修正 | **パターン:** Wrapper 関数で Service 純粋性 + Route 簡潔性を両立
 
 ### Phase 3: テスト・ドキュメント（並行可）
 
