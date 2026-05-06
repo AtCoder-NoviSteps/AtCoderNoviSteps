@@ -1,7 +1,7 @@
 # Auth Feature Consolidation (#1582) - 総合レビューレポート
 
-**実施日:** 2026-05-06  
-**ブランチ:** #1582  
+**実施日:** 2026-05-06
+**ブランチ:** #1582
 **実施内容:** Security Review + CodeRabbit ×2
 
 ---
@@ -156,6 +156,7 @@ export async function ensureAdminOrRedirect(locals: App.Locals, url?: URL): Prom
 ```
 
 **呼び出し側：**
+
 ```typescript
 // Route handler
 await ensureAdminOrRedirect(locals, url);
