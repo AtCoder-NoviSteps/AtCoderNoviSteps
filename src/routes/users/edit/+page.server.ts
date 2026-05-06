@@ -7,7 +7,7 @@ import type { Roles } from '$lib/types/user';
 import * as userService from '$lib/services/users';
 import * as verificationService from '$features/account/services/atcoder_verification';
 
-import { ensureSessionOrRedirect } from '$features/auth/services/session';
+import { getLoggedInUser } from '$features/auth/services/session';
 
 import {
   BAD_REQUEST,
@@ -17,16 +17,16 @@ import {
 } from '$lib/constants/http-response-status-codes';
 
 export async function load({ locals, url }) {
-  await ensureSessionOrRedirect(locals, url);
+  const loggedInUser = await getLoggedInUser(locals, url);
 
   try {
-    const user = await userService.getUser(locals.user.name);
+    const user = await userService.getUser(loggedInUser.name);
 
     return {
       userId: user?.id as string,
       username: user?.username as string,
       role: user?.role as Roles,
-      isLoggedIn: (locals.user.id === user?.id) as boolean,
+      isLoggedIn: Boolean(loggedInUser && user && loggedInUser.id === user.id),
       atCoderAccount: {
         handle: user?.atCoderAccount?.handle ?? '',
         validationCode: user?.atCoderAccount?.validationCode ?? '',
