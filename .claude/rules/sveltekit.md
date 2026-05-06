@@ -51,6 +51,25 @@ if (!(Object.values(TaskGrade) as string[]).includes(gradeRaw)) {
 const grade = gradeRaw as TaskGrade; // Safe now
 ```
 
+## Form Actions: `url` Parameter Unavailable
+
+Form action handlers cannot access `url`. Construct it from `request.url`:
+
+```typescript
+// ❌ Runtime error
+export const actions = {
+  delete: async ({ request, url }) => { ... }
+};
+
+// ✅ Correct
+export const actions = {
+  delete: async ({ request }) => {
+    const url = new URL(request.url);
+    // ...
+  }
+};
+```
+
 ## Page Component Props
 
 `+page.svelte` accepts only `data` and `form` props (`svelte/valid-prop-names-in-kit-pages`).
@@ -85,17 +104,48 @@ Consume with `$derived` in `+page.svelte` to sync after `load()` re-runs.
 
 ## Error Handling in load()
 
-Wrap service calls in try-catch, return safe defaults:
+All async operations must be **inside** the try-catch block, not before:
 
 ```typescript
-const data = await service.fetch(...).catch(() => []);
+// ❌ getLoggedInUser outside try-catch; errors escape unhandled
+const loggedInUser = await getLoggedInUser(locals, url);
+try {
+  const data = await service.fetch(...);
+} catch (e) { ... }
+
+// ✅ All async inside try-catch
+try {
+  const loggedInUser = await getLoggedInUser(locals, url);
+  const data = await service.fetch(...);
+} catch (e) { ... }
 ```
 
-Prevents single service error from crashing entire page.
+Errors from async calls before the try block propagate unhandled and crash the page.
 
 ## Auth Audit
 
-When adding guard to one action in `+page.server.ts`, audit all other actions. Asymmetric guards (some protected, others not) are a recurring vulnerability.
+When protecting one action (in `load()` or form actions), **audit all others**.
+Asymmetric guards (some protected, others not) are a critical vulnerability.
+
+```typescript
+// ❌ Only delete is protected
+export const actions = {
+  create: async ({ request }) => { ... },
+  delete: async ({ request, locals }) => {
+    await validateAdminAccess(locals);
+  },
+};
+
+// ✅ All admin actions protected equally
+export const actions = {
+  create: async ({ request, locals }) => {
+    await validateAdminAccess(locals);
+  },
+  delete: async ({ request, locals }) => {
+    await validateAdminAccess(locals);
+  },
+};
+```
 
 ## success Flag & message Consistency
 
