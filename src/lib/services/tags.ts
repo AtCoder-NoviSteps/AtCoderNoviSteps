@@ -9,16 +9,8 @@ export async function getTags(): Promise<Tag[]> {
   return tags;
 }
 
-export async function getTag(tag_id: string): Promise<Tag[]> {
-  //本当はfindUniqueで取得したいがうまくいかない
-  const tag = await db.tag.findMany({
-    where: {
-      id: tag_id,
-    },
-  });
-  console.log(tag);
-
-  return tag;
+export async function getTag(tag_id: string): Promise<Tag | null> {
+  return db.tag.findUnique({ where: { id: tag_id } });
 }
 
 export async function getTagByName(name: string): Promise<Tag[]> {
