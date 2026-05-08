@@ -166,8 +166,8 @@ importers:
         specifier: 4.4.8
         version: 4.4.8(picomatch@4.0.4)(svelte@5.55.5(@typescript-eslint/types@8.59.2))(typescript@6.0.3)
       svelte-meta-tags:
-        specifier: 4.6.0
-        version: 4.6.0(svelte@5.55.5(@typescript-eslint/types@8.59.2))
+        specifier: 4.7.0
+        version: 4.7.0(svelte@5.55.5(@typescript-eslint/types@8.59.2))
       sveltekit-superforms:
         specifier: 2.30.1
         version: 2.30.1(@sveltejs/kit@2.59.1(@sveltejs/vite-plugin-svelte@7.0.0(svelte@5.55.5(@typescript-eslint/types@8.59.2))(vite@8.0.10(@types/node@25.6.0)(esbuild@0.27.1)(jiti@2.6.1)(tsx@4.21.0)))(svelte@5.55.5(@typescript-eslint/types@8.59.2))(typescript@6.0.3)(vite@8.0.10(@types/node@25.6.0)(esbuild@0.27.1)(jiti@2.6.1)(tsx@4.21.0)))(@types/json-schema@7.0.15)(svelte@5.55.5(@typescript-eslint/types@8.59.2))(typescript@6.0.3)
@@ -3959,8 +3959,8 @@ packages:
       svelte:
         optional: true
 
-  svelte-meta-tags@4.6.0:
-    resolution: {integrity: sha512-UvoylslTqnhoWISfcimskFayGOqgJRLmk5ZWwNoIqfGyRBdc5yq2lxeH+nhxWp9C3x3ywXAw+GL1QyjQpM9WEw==}
+  svelte-meta-tags@4.7.0:
+    resolution: {integrity: sha512-H65QB8UAeS8eSt9CIa0jMoVbT7igtuCQP6itC+tqGoybxITl1Xb9m2nLNCwaS53UTeGyGtT7MGgwgsuhAJpfnQ==}
     peerDependencies:
       svelte: ^5.0.0
 
@@ -8015,7 +8015,7 @@ snapshots:
     optionalDependencies:
       svelte: 5.55.5(@typescript-eslint/types@8.59.2)
 
-  svelte-meta-tags@4.6.0(svelte@5.55.5(@typescript-eslint/types@8.59.2)):
+  svelte-meta-tags@4.7.0(svelte@5.55.5(@typescript-eslint/types@8.59.2)):
     dependencies:
       schema-dts: 1.1.5
       svelte: 5.55.5(@typescript-eslint/types@8.59.2)
