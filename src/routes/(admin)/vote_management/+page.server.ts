@@ -1,15 +1,16 @@
 import type { Actions, PageServerLoad } from './$types';
 
 import { type TaskGrade, TaskGrade as TaskGradeEnum } from '$lib/types/task';
+
 import { getTasksByTaskId, updateTask } from '$lib/services/tasks';
 import {
   getAllVoteStatisticsAsArray,
   getAllVoteCounters,
 } from '$features/votes/services/vote_statistics';
-import { validateAdminAccess } from '../_utils/auth';
+import { validateAdminAccess } from '$features/auth/services/admin_access';
 
-export const load: PageServerLoad = async ({ locals }) => {
-  await validateAdminAccess(locals);
+export const load: PageServerLoad = async ({ locals, url }) => {
+  await validateAdminAccess(locals, url);
 
   const [allStats, tasksMap, allCounters] = await Promise.all([
     getAllVoteStatisticsAsArray(),

@@ -8,7 +8,8 @@ import { workBookSchema } from '$features/workbooks/zod/schema';
 import * as tasksCrud from '$lib/services/tasks';
 import * as workBooksCrud from '$features/workbooks/services/workbooks';
 
-import { getLoggedInUser, canEdit, isAdmin } from '$lib/utils/authorship';
+import { canEdit, isAdmin } from '$lib/utils/authorship';
+import { getLoggedInUser } from '$features/auth/services/session';
 import { parseWorkBookId, parseWorkBookUrlSlug } from '$features/workbooks/utils/workbook';
 
 import {
@@ -19,8 +20,8 @@ import {
   INTERNAL_SERVER_ERROR,
 } from '$lib/constants/http-response-status-codes';
 
-export async function load({ locals, params }) {
-  const loggedInUser = await getLoggedInUser(locals);
+export async function load({ locals, params, url }) {
+  const loggedInUser = await getLoggedInUser(locals, url);
   const loggedInAsAdmin = isAdmin(loggedInUser?.role as Roles);
   const slug = params.slug.toLowerCase();
 

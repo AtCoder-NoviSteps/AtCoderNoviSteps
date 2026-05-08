@@ -1,33 +1,18 @@
-import { redirect } from '@sveltejs/kit';
-
-//import type { Roles } from '$lib/types/user';
-import type { Task } from '$lib/types/task';
-import * as taskService from '$lib/services/tasks';
-import * as userService from '$lib/services/users';
-//import * as tagService from '$lib/services/tags';
-import { Roles } from '$lib/types/user';
-import type { ImportTaskTag } from '$lib/types/tasktag';
+import type { Tasks } from '$lib/types/task';
 import type { Tag } from '$lib/types/tag';
+import type { ImportTaskTag } from '$lib/types/tasktag';
+
+import * as taskService from '$lib/services/tasks';
 import * as taskTagsApiService from '$lib/services/tasktagsApiService';
 import * as taskTagsService from '$lib/services/task_tags';
 
-export async function load({ locals, params }) {
-  const session = await locals.auth.validate();
-  if (!session) {
-    redirect(302, '/login');
-  }
+import { validateAdminAccess } from '$features/auth/services/admin_access';
 
-  const user = await userService.getUser(session?.user.username as string);
-  if (user?.role !== Roles.ADMIN) {
-    redirect(302, '/login');
-  }
-  const task: Task[] = await taskService.getTask(params.task_id as string);
+export async function load({ locals, params, url }) {
+  await validateAdminAccess(locals, url);
 
-  //console.log(task);
-  //console.log(user.role);
-  //console.log(session?.user.role);
+  const task: Tasks = await taskService.getTask(params.task_id as string);
 
-  //jsonデータから必要なTask情報を取り出す。
   const importTagsJson = await taskTagsApiService.getTaskTags();
   const taskTagsJson = importTagsJson[0].data.filter(
     (taskTag: ImportTaskTag) => taskTag.task_id === params.task_id,
@@ -38,10 +23,7 @@ export async function load({ locals, params }) {
 
   taskTags.map(async (tag: Tag) => {
     tagMap.set(tag.name, tag);
-    //console.log(tag.name, tag)
   });
-
-  //console.log(taskTags)
 
   if (taskTagsJson.length > 0) {
     const importTags: string[] = taskTagsJson[0].tags;
@@ -57,15 +39,10 @@ export async function load({ locals, params }) {
         tagMap.set(importTags[i], tmpTag);
       }
     }
-    //console.log(importTags)
   }
-
-  //console.log(tagMap)
-  //console.log(tagMap.values())
 
   return {
     task: task[0],
     tags: Array.from(tagMap.values()),
-    isAdmin: user?.role !== Roles.ADMIN,
   };
 }

@@ -1,6 +1,5 @@
 import { redirect, type Actions } from '@sveltejs/kit';
 
-import { Roles } from '$lib/types/user';
 import type { Contests, ContestForImport, ContestsForImport } from '$lib/types/contest';
 import {
   type Task,
@@ -11,19 +10,15 @@ import {
   getTaskGrade,
 } from '$lib/types/task';
 
-import * as taskService from '$lib/services/tasks';
-import * as userService from '$lib/services/users';
 import * as apiClient from '$lib/clients';
+import * as taskService from '$lib/services/tasks';
+import { validateAdminAccess } from '$features/auth/services/admin_access';
 
-import { isAdmin } from '$lib/utils/authorship';
-import { sha256 } from '$lib/utils/hash';
 import { classifyContest } from '$lib/utils/contest';
+import { sha256 } from '$lib/utils/hash';
 
-import { LOGIN_PAGE } from '$lib/constants/navbar-links';
-import { TEMPORARY_REDIRECT } from '$lib/constants/http-response-status-codes.js';
-
-export async function load({ locals }) {
-  await validateAdminAccess(locals);
+export async function load({ locals, url }) {
+  await validateAdminAccess(locals, url);
 
   const { contestsForImport, tasksForImport } = await fetchContestsAndTasksFromAPI();
 
@@ -43,20 +38,6 @@ export async function load({ locals }) {
   return {
     importContests: contestsWithUnregisteredTasks,
   };
-}
-
-async function validateAdminAccess(locals: App.Locals): Promise<void> {
-  const session = await locals.auth.validate();
-
-  if (!session) {
-    redirect(TEMPORARY_REDIRECT, LOGIN_PAGE);
-  }
-
-  const user = await userService.getUser(session?.user.username as string);
-
-  if (!isAdmin(user?.role as Roles)) {
-    redirect(TEMPORARY_REDIRECT, LOGIN_PAGE);
-  }
 }
 
 async function fetchContestsAndTasksFromAPI(): Promise<{
@@ -126,7 +107,9 @@ function mergeContestsAndUnregisteredTasks(
 }
 
 export const actions: Actions = {
-  create: async ({ request }) => {
+  create: async ({ request, locals }) => {
+    await validateAdminAccess(locals);
+
     try {
       console.log('users->actions->generate');
       const formData = await request.formData();
@@ -152,7 +135,9 @@ export const actions: Actions = {
     };
   },
 
-  update: async ({ request }) => {
+  update: async ({ request, locals }) => {
+    await validateAdminAccess(locals);
+
     try {
       console.log('users->actions->generate');
       const formData = await request.formData();

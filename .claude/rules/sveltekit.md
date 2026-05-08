@@ -12,6 +12,10 @@ paths:
 - Page routes: use `redirect()` to navigate
 - API routes (`+server.ts`): use `error()` — `redirect()` returns 3xx; `fetch` follows and gets HTML not JSON
 
+## User-Provided Redirect Destinations
+
+**SvelteKit's `redirect()` does NOT validate origin.** If the redirect destination comes from user input (URL query params, form data), always validate with `isSameOriginRedirect(redirectTo, url.origin)` from `src/lib/utils/url.ts` before redirecting.
+
 ## Internal Navigation: `resolve()`
 
 All internal navigation must use `resolve()` from `$app/paths`:
@@ -47,6 +51,20 @@ if (!(Object.values(TaskGrade) as string[]).includes(gradeRaw)) {
 const grade = gradeRaw as TaskGrade; // Safe now
 ```
 
+## Form Actions: `url` Parameter
+
+Form action handlers receive the full `RequestEvent`, including `url`. Destructure it directly:
+
+```typescript
+export const actions = {
+  default: async ({ request, locals, url }) => {
+    const redirectTo = url.searchParams.get('redirectTo');
+  },
+};
+```
+
+`url` is guaranteed non-null. `new URL(request.url)` is an equivalent alternative but unnecessary when `url` is already available.
+
 ## Page Component Props
 
 `+page.svelte` accepts only `data` and `form` props (`svelte/valid-prop-names-in-kit-pages`).
@@ -81,17 +99,11 @@ Consume with `$derived` in `+page.svelte` to sync after `load()` re-runs.
 
 ## Error Handling in load()
 
-Wrap service calls in try-catch, return safe defaults:
-
-```typescript
-const data = await service.fetch(...).catch(() => []);
-```
-
-Prevents single service error from crashing entire page.
+All async operations must be inside the try-catch block, not before it. Errors from async calls outside propagate unhandled.
 
 ## Auth Audit
 
-When adding guard to one action in `+page.server.ts`, audit all other actions. Asymmetric guards (some protected, others not) are a recurring vulnerability.
+When protecting one action (in `load()` or form actions), audit all others. Asymmetric guards are a critical vulnerability.
 
 ## success Flag & message Consistency
 

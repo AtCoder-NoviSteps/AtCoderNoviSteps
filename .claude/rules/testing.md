@@ -32,6 +32,18 @@ E2E files: **must** use `.spec.ts` extension (`.test.ts` not detected).
 - Use `toBe(true)` / `toBe(false)` not `toBeTruthy()` / `toBeFalsy()`
 - DB query tests: assert `orderBy`, `include` with `expect.objectContaining`, not just `where`
 - Enum membership: `Object.hasOwn(Enum, value)` not `in` (avoids prototype chain)
+- `Promise<void>`: `.resolves` requires a matcher — without one it does not assert and becomes a false-positive; use `await fn()` to assert no throw, or `.resolves.toBeUndefined()` for explicit form
+
+```typescript
+// ✓ Preferred: simplest way to assert Promise<void> does not throw
+await ensureSessionOrRedirect(mockLocals);
+
+// ✓ Also correct: explicit resolves form
+await expect(ensureSessionOrRedirect(mockLocals)).resolves.toBeUndefined();
+
+// ✗ Wrong: .resolves without a matcher does not assert anything (false-positive)
+await expect(ensureSessionOrRedirect(mockLocals)).resolves;
+```
 
 ### Describe Organization
 

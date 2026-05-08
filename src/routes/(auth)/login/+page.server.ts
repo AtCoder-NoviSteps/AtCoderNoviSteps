@@ -6,8 +6,10 @@
 import { fail, redirect } from '@sveltejs/kit';
 import { LuciaError } from 'lucia';
 
-import { initializeAuthForm, validateAuthFormWithFallback } from '$lib/utils/auth_forms';
 import { auth } from '$lib/server/auth';
+
+import { initializeAuthForm, validateAuthFormWithFallback } from '$lib/utils/auth_forms';
+import { isSameOriginRedirect } from '$lib/utils/url';
 
 import {
   BAD_REQUEST,
@@ -23,7 +25,7 @@ export const load: PageServerLoad = async ({ locals }) => {
 };
 
 export const actions: Actions = {
-  default: async ({ request, locals }) => {
+  default: async ({ request, locals, url }) => {
     const form = await validateAuthFormWithFallback(request);
 
     if (!form.valid) {
@@ -73,8 +75,15 @@ export const actions: Actions = {
       });
     }
 
+    const redirectTo = url.searchParams.get('redirectTo');
+    let destination = HOME_PAGE;
+
+    if (redirectTo && isSameOriginRedirect(redirectTo, url.origin)) {
+      destination = redirectTo;
+    }
+
     // redirect to
     // make sure you don't throw inside a try/catch block!
-    redirect(SEE_OTHER, HOME_PAGE);
+    redirect(SEE_OTHER, destination);
   },
 };

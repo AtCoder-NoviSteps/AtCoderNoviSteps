@@ -1,11 +1,13 @@
 //See https://tech-blog.rakus.co.jp/entry/20230209/sveltekit#%E3%82%B9%E3%83%AC%E3%83%83%E3%83%89%E6%8A%95%E7%A8%BF%E7%94%BB%E9%9D%A2
-import { redirect, fail } from '@sveltejs/kit';
+import { error, fail } from '@sveltejs/kit';
 
 import type { Actions } from './$types';
 import type { Roles } from '$lib/types/user';
 
 import * as userService from '$lib/services/users';
 import * as verificationService from '$features/account/services/atcoder_verification';
+
+import { getLoggedInUser } from '$features/auth/services/session';
 
 import {
   BAD_REQUEST,
@@ -15,20 +17,16 @@ import {
 } from '$lib/constants/http-response-status-codes';
 
 export async function load({ locals, url }) {
-  const session = await locals.auth.validate();
-
-  if (!session) {
-    redirect(302, '/login');
-  }
+  const loggedInUser = await getLoggedInUser(locals, url);
 
   try {
-    const user = await userService.getUser(session?.user.username as string);
+    const user = await userService.getUser(loggedInUser.name);
 
     return {
       userId: user?.id as string,
       username: user?.username as string,
       role: user?.role as Roles,
-      isLoggedIn: (session?.user.userId === user?.id) as boolean,
+      isLoggedIn: Boolean(loggedInUser && user && loggedInUser.id === user.id),
       atCoderAccount: {
         handle: user?.atCoderAccount?.handle ?? '',
         validationCode: user?.atCoderAccount?.validationCode ?? '',
@@ -38,9 +36,9 @@ export async function load({ locals, url }) {
       message: '',
       openAtCoderTab: url.searchParams.get('tab') === 'atcoder',
     };
-  } catch (error) {
-    console.error('User lookup failed during session validation', error);
-    redirect(302, '/login');
+  } catch (e) {
+    console.error('Failed to fetch user:', e);
+    error(INTERNAL_SERVER_ERROR, 'ユーザー情報の取得に失敗しました。');
   }
 }
 
