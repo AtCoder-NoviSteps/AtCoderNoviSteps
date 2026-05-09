@@ -8,10 +8,13 @@
   "dockerComposeFile": ["../compose.yaml"],
   "mounts": [
     "source=${localEnv:HOME}/.ssh,target=/home/node/.ssh,type=bind,consistency=cached",
-    "source=${localEnv:HOME}/.claude,target=/home/node/.claude,type=bind,consistency=cached"
+    "source=${localEnv:HOME}/.claude,target=/home/node/.claude,type=bind,consistency=cached",
+    "source=${localEnv:HOME}/.gitconfig,target=/home/node/.gitconfig,type=bind,consistency=cached"
   ],
   // Features to add to the dev container. More info: https://containers.dev/features.
-  // "features": {},
+  "features": {
+    "ghcr.io/devcontainers/features/github-cli:1": {}
+  },
   //
   // Use 'forwardPorts' to make a list of ports inside the container available locally.
   "forwardPorts": [
@@ -22,10 +25,10 @@
   // "shutdownAction": "none",
   //
   // Use 'initializeCommand' to run commands before the container is created.
-  "initializeCommand": "mkdir -p ~/.claude",
+  "initializeCommand": "mkdir -p ~/.claude && touch ~/.gitconfig",
   //
   // Use 'postCreateCommand' to run commands after the container is created.
-  "postCreateCommand": "npm install -g @anthropic-ai/claude-code && (curl -fsSL https://cli.coderabbit.ai/install.sh | sh || echo 'CodeRabbit CLI installation failed, continuing...') && pnpm install",
+  "postCreateCommand": "bash .devcontainer/setup-devcontainer.sh",
   //
   // Configure tool-specific properties.
   "customizations": {

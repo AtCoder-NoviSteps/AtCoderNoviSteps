@@ -5,13 +5,13 @@ import * as userService from '$lib/services/users';
 import { Roles } from '$lib/types/user';
 
 import { isAdmin } from '$lib/utils/authorship';
-
-import { LOGIN_PAGE } from '$lib/constants/navbar-links';
 import {
   TEMPORARY_REDIRECT,
   UNAUTHORIZED,
   FORBIDDEN,
 } from '$lib/constants/http-response-status-codes';
+
+import { buildLoginPath } from '../utils/login';
 
 enum AdminStatus {
   OK = 'ok',
@@ -22,10 +22,12 @@ enum AdminStatus {
 /**
  * Validates that the current session belongs to an admin user.
  * Redirects to the login page if the session is missing or the user is not an admin.
+ * @param locals - The application locals containing auth and user information
+ * @param url - The current URL; when provided, appends ?redirectTo= so the user returns after login
  */
-export async function validateAdminAccess(locals: App.Locals): Promise<void> {
+export async function validateAdminAccess(locals: App.Locals, url?: URL): Promise<void> {
   if ((await validateAdminStatus(locals)) !== AdminStatus.OK) {
-    redirect(TEMPORARY_REDIRECT, LOGIN_PAGE);
+    redirect(TEMPORARY_REDIRECT, buildLoginPath(url));
   }
 }
 

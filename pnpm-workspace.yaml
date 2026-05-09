@@ -1,10 +1,16 @@
-onlyBuiltDependencies:
-  - '@prisma/client'
-  - '@prisma/engines'
-  - esbuild
-  - lefthook
-  - prisma
-  - puppeteer
+allowBuilds:
+  '@prisma/client': true
+  '@prisma/engines': true
+  esbuild: true
+  lefthook: true
+  prisma: true
+  puppeteer: true
+
+engineStrict: true
+resolutionMode: highest
+# necessary for a PNPM bug: https://github.com/pnpm/pnpm/issues/5152#issuecomment-1223449173
+strictPeerDependencies: false
+packageImportMethod: clone-or-copy
 
 # Security configuration: supply chain attack mitigation
 # Delay the adoption of newly released packages to allow detection of malicious code

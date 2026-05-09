@@ -99,6 +99,28 @@ Prefer in order:
 - `page.pause()` for interactive debugging
 - Logs: `page.on('console', msg => console.log(msg.text()))`
 
+## Multi-Route Infrastructure Changes: Test Ordering
+
+When implementing infrastructure changes that span multiple routes (e.g., redirect behavior, auth flow), write E2E tests **after** the core mechanism is implemented but **before** applying it to all routes:
+
+1. **Implement core mechanism** (unit-tested) — e.g., `isSameOriginRedirect()`, `redirect()` logic
+2. **Write E2E tests** (RED state) — tests fail until all routes are updated
+3. **Apply to all routes** (GREEN state) — update each load/action function to use the mechanism
+
+**Why this order?**
+
+- If you write E2E tests before the mechanism exists, they'll fail immediately and block progress
+- E2E tests verify integration end-to-end; unit tests verify the building blocks
+- The RED→GREEN cycle for E2E tests spans multiple phases, unlike unit tests which turn GREEN immediately
+
+**Example:** Redirect After Login pattern
+
+- Phase 1-2: Unit test `isSameOriginRedirect()` (GREEN)
+- Phase 3-4: Unit test auth helpers (GREEN)
+- Phase 5-6: Implement login/signup actions (GREEN)
+- Phase 7: Write E2E tests for all routes (RED)
+- Phase 8-9: Update all load functions to pass `url` (GREEN)
+
 ## E2E Lessons from Votes Tests
 
 Recent fixes (detailed in plan.md):
@@ -106,3 +128,14 @@ Recent fixes (detailed in plan.md):
 - Dropdown selectors drift when UI changes; re-verify on refactors
 - Abort signal prevents stale response race; update signal if fetch signature changes
 - Toast messages are temporary; use waiter pattern, not fixed delay
+
+## Timeout: Element Not Found
+
+When `page.locator()` or `getByRole()` times out:
+
+1. Verify element exists in DevTools
+2. Check ARIA roles in component UI libraries often lack semantic role definitions
+3. If `role="menuitem"` fails: use href pattern or functional marker instead (e.g., `a[href^="/login?redirectTo"]` vs navbar's `/login`)
+4. Never use `.first()` / `.last()` (DOM order is unstable)
+
+**Example:** `getByRole('menuitem')` times out because DropdownItem renders as `<li><a>` without the role. Use `a[href^="/login?redirectTo"]` to distinguish dropdown from navbar.

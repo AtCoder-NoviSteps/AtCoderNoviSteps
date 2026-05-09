@@ -24,7 +24,8 @@ import {
   getSolutionCategoryMapByWorkbookId,
 } from '$features/workbooks/services/workbooks';
 
-import { isAdmin, getLoggedInUser, canDelete } from '$lib/utils/authorship';
+import { isAdmin, canDelete } from '$lib/utils/authorship';
+import { getLoggedInUser } from '$features/auth/services/session';
 import {
   parseWorkBookTab,
   parseWorkBookGrade,
@@ -41,7 +42,7 @@ import {
 } from '$lib/constants/http-response-status-codes';
 
 export async function load({ locals, url }) {
-  const loggedInUser = await getLoggedInUser(locals);
+  const loggedInUser = await getLoggedInUser(locals, url);
   const params = url.searchParams;
 
   const tab = parseWorkBookTab(params);
@@ -101,9 +102,8 @@ export async function load({ locals, url }) {
 
 export const actions = {
   delete: async ({ locals, request }) => {
-    const loggedInUser = await getLoggedInUser(locals);
-
     const url = new URL(request.url);
+    const loggedInUser = await getLoggedInUser(locals, url);
     const slug = url.searchParams.get('slug');
     const workBookId = parseWorkBookId(slug as string);
 

@@ -62,3 +62,12 @@ Delete function only if: (1) zero callers, (2) replacement exists, (3) dependent
 - No Prisma imports in route handlers
 - Validate input at system boundaries
 - Return safe defaults on service errors
+
+## Comments: Why, Not What
+
+Comment the **why** (non-obvious reason), not the **what** (code already says).
+
+- Bad: `// increment counter`
+- Good: `// use task_id as deterministic ID to avoid SSR/hydration mismatch`
+
+Keep to one line. If longer, refactor code (naming, structure) instead.

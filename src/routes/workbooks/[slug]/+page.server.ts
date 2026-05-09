@@ -7,12 +7,14 @@ import * as taskResultsCrud from '$lib/services/task_results';
 import { getWorkbookWithAuthor } from '$features/workbooks/services/workbooks';
 import * as action from '$lib/actions/update_task_result';
 
-import { getLoggedInUser, isAdmin, canRead } from '$lib/utils/authorship';
+import { isAdmin, canRead } from '$lib/utils/authorship';
+import { getLoggedInUser } from '$features/auth/services/session';
 import { parseWorkBookId, parseWorkBookUrlSlug } from '$features/workbooks/utils/workbook';
+
 import { BAD_REQUEST, FORBIDDEN, NOT_FOUND } from '$lib/constants/http-response-status-codes';
 
-export async function load({ locals, params }) {
-  const loggedInUser = await getLoggedInUser(locals);
+export async function load({ locals, params, url }) {
+  const loggedInUser = await getLoggedInUser(locals, url);
   const loggedInAsAdmin = isAdmin(loggedInUser?.role as Roles);
   const slug = params.slug.toLowerCase();
 

@@ -1,39 +1,15 @@
-import { expect, test, describe, vi, afterEach } from 'vitest';
+import { expect, test, describe } from 'vitest';
 
-// Mock modules
-vi.mock('@sveltejs/kit', () => {
-  const redirectImpl = (status: number, location: string) => {
-    const error = new Error('Redirect') as Error & { status: number; location: string };
-    error.name = 'Redirect';
-    error.status = status;
-    error.location = location;
+import { Roles } from '$lib/types/user';
 
-    throw error;
-  };
-
-  return { redirect: vi.fn(redirectImpl) };
-});
-
-afterEach(() => {
-  vi.clearAllMocks();
-});
-
-import {
-  ensureSessionOrRedirect,
-  getLoggedInUser,
-  isAdmin,
-  hasAuthority,
-  canRead,
-  canEdit,
-  canDelete,
-} from '$lib/utils/authorship';
 import type {
   Authorship,
   AuthorshipForRead,
   AuthorshipForEdit,
   AuthorshipForDelete,
 } from '$lib/types/authorship';
-import { Roles } from '$lib/types/user';
+
+import { isAdmin, hasAuthority, canRead, canEdit, canDelete } from '$lib/utils/authorship';
 
 const adminId = '1';
 const userId1 = '2';
@@ -42,86 +18,17 @@ const userId2 = '3';
 // See:
 // https://vitest.dev/api/#describe
 // https://vitest.dev/api/#test-each
-describe('ensureSessionOrRedirect', () => {
-  test('expect not to throw when user has valid session', async () => {
-    const mockLocals = {
-      auth: {
-        validate: vi.fn().mockResolvedValue({ user: { id: 'test-user' } }),
-      },
-    } as unknown as App.Locals;
-
-    await expect(ensureSessionOrRedirect(mockLocals)).resolves.toBeUndefined();
-    expect(mockLocals.auth.validate).toHaveBeenCalledTimes(1);
-  });
-
-  test('expect to redirect when user has no session', async () => {
-    const mockLocals = {
-      auth: {
-        validate: vi.fn().mockResolvedValue(null),
-      },
-    } as unknown as App.Locals;
-
-    await expect(ensureSessionOrRedirect(mockLocals)).rejects.toMatchObject({
-      name: 'Redirect',
-      status: expect.any(Number),
-      location: '/login',
-    });
-  });
-});
-
-describe('getLoggedInUser', () => {
-  test('expect to return user when session and user exist', async () => {
-    const mockUser = { id: 'test-user', name: 'Test User' };
-    const mockLocals = {
-      auth: {
-        validate: vi.fn().mockResolvedValue({ user: mockUser }),
-      },
-      user: mockUser,
-    } as unknown as App.Locals;
-
-    const result = await getLoggedInUser(mockLocals);
-
-    expect(result).toEqual(mockUser);
-    expect(mockLocals.auth.validate).toHaveBeenCalledTimes(1);
-  });
-
-  test('expect to redirect when no session', async () => {
-    const mockLocals = {
-      auth: {
-        validate: vi.fn().mockResolvedValue(null),
-      },
-    } as unknown as App.Locals;
-
-    await expect(getLoggedInUser(mockLocals)).rejects.toMatchObject({
-      name: 'Redirect',
-      status: expect.any(Number),
-      location: '/login',
-    });
-  });
-
-  test('expect to redirect when session exists but no user', async () => {
-    const mockLocals = {
-      auth: {
-        validate: vi.fn().mockResolvedValue({ user: { id: 'test-user' } }),
-      },
-      user: null,
-    } as unknown as App.Locals;
-
-    await expect(getLoggedInUser(mockLocals)).rejects.toMatchObject({
-      name: 'Redirect',
-      status: expect.any(Number),
-      location: '/login',
-    });
-  });
-});
-
 describe('isAdmin', () => {
-  test('expect to return true for ADMIN role', () => {
-    expect(isAdmin(Roles.ADMIN)).toBe(true);
+  describe('returns true', () => {
+    test('when role is ADMIN', () => {
+      expect(isAdmin(Roles.ADMIN)).toBe(true);
+    });
   });
 
-  test('expect to return false for USER role', () => {
-    expect(isAdmin(Roles.USER)).toBe(false);
+  describe('returns false', () => {
+    test('when role is USER', () => {
+      expect(isAdmin(Roles.USER)).toBe(false);
+    });
   });
 });
 

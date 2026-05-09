@@ -13,7 +13,7 @@ const ORDER_URL = '/workbooks/order';
 test.describe('access control', () => {
   test('unauthenticated user is redirected to /login', async ({ page }) => {
     await page.goto(ORDER_URL);
-    await expect(page).toHaveURL('/login', { timeout: TIMEOUT });
+    await expect(page).toHaveURL(/\/login/, { timeout: TIMEOUT });
   });
 });
 

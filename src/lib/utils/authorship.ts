@@ -1,36 +1,4 @@
-import { redirect } from '@sveltejs/kit';
-
-import { TEMPORARY_REDIRECT } from '$lib/constants/http-response-status-codes';
 import { Roles } from '$lib/types/user';
-
-/**
- * Ensure user has a valid session or redirect to login
- * @param locals - The application locals containing auth and user information
- * @returns {Promise<void>}
- */
-export const ensureSessionOrRedirect = async (locals: App.Locals): Promise<void> => {
-  const session = await locals.auth.validate();
-
-  if (!session) {
-    redirect(TEMPORARY_REDIRECT, '/login');
-  }
-};
-
-/**
- * Get the current logged-in user or redirect to login
- * @param locals - The application locals containing auth and user information
- * @returns {Promise<App.Locals['user'] | null>} - The logged-in user or null
- */
-export const getLoggedInUser = async (locals: App.Locals): Promise<App.Locals['user'] | null> => {
-  await ensureSessionOrRedirect(locals);
-  const loggedInUser = locals.user;
-
-  if (!loggedInUser) {
-    redirect(TEMPORARY_REDIRECT, '/login');
-  }
-
-  return loggedInUser;
-};
 
 /**
  * Validate if the user has admin role

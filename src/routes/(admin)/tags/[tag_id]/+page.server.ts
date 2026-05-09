@@ -1,35 +1,25 @@
-import { redirect } from '@sveltejs/kit';
+import { error } from '@sveltejs/kit';
 
-//import type { Roles } from '$lib/types/user';
-import type { Tag } from '$lib/types/tag';
-import type { Task } from '$lib/types/task';
+import type { Tasks } from '$lib/types/task';
+
+import { validateAdminAccess } from '$features/auth/services/admin_access';
 import * as tagService from '$lib/services/tags';
 import * as taskTagService from '$lib/services/task_tags';
-import * as userService from '$lib/services/users';
-import { Roles } from '$lib/types/user';
 
-export async function load({ locals, params }) {
-  const session = await locals.auth.validate();
-  if (!session) {
-    redirect(302, '/login');
+import { NOT_FOUND } from '$lib/constants/http-response-status-codes';
+
+export async function load({ locals, params, url }) {
+  await validateAdminAccess(locals, url);
+
+  const tasks: Tasks = await taskTagService.getTasks(params.tag_id as string);
+  const tag = await tagService.getTag(params.tag_id as string);
+
+  if (!tag) {
+    error(NOT_FOUND, 'Not found tag');
   }
-
-  const user = await userService.getUser(session?.user.username as string);
-  if (user?.role !== Roles.ADMIN) {
-    redirect(302, '/login');
-  }
-  const tags: Tag[] = await tagService.getTag(params.tag_id as string);
-  const tasks: Task[] = await taskTagService.getTasks(params.tag_id as string);
-
-  //Jsonから、必要なtag
-
-  console.log(tags[0]);
-  console.log(user.role);
-  console.log(session?.user.role);
 
   return {
-    tag: tags[0],
-    tasks: tasks,
-    isAdmin: user?.role !== Roles.ADMIN,
+    tasks,
+    tag,
   };
 }
