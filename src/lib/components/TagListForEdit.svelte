@@ -59,7 +59,8 @@
           </Label>
         </TableBodyCell>
         <TableBodyCell>
-          {#if tag.id !== 'undefined'}
+          <!-- Note: temp_ prefix = not yet in DB; show edit link only for registered tags -->
+          {#if !tag.id.startsWith('temp_')}
             <a href={resolve('/(admin)/tags/[tag_id]', { tag_id: tag.id })}>編集</a>
           {:else}
             未登録

@@ -31,7 +31,7 @@ export async function load({ locals, params, url }) {
     for (let i = 0; i < importTags.length; i++) {
       if (!tagMap.has(importTags[i])) {
         const tmpTag = {
-          id: 'undefined',
+          id: `temp_${importTags[i]}`, // Note: temp_ prefix = not yet in DB; used to distinguish from existing tags in the UI
           name: importTags[i],
           is_published: false,
           is_official: false,
