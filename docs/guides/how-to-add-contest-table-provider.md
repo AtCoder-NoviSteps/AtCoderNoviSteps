@@ -265,12 +265,14 @@ class TessokuBookSectionProvider extends TessokuBookProvider {
 | -------------- | ------------- | ---------- | ------------ |
 | EDPC           | `'dp'`        | 26問       | A～Z         |
 | TDPC           | `'tdpc'`      | 26問       | A～Z         |
+| NDPC           | `'ndpc'`      | 20問       | A～T         |
 | FPS_24         | `'fps-24'`    | 24問       | A～X         |
 | ACL_PRACTICE   | `'practice2'` | 12問       | A～L         |
 | ACL_BEGINNER\* | `'abl'`       | 6問        | A～F         |
 | ACL_CONTEST1\* | `'acl1'`      | 6問        | A～F         |
 
 \*注: ACL_PRACTICE、ACL_BEGINNER、ACL_CONTEST1 は `Acl` グループの下で 3 つのコンテストが統一管理されています。
+\*\*注: EDPC・TDPC・NDPC・FPS 24 は `dps` グループ下で 4 つのコンテストが統一管理されています。
 
 ### 複合ソース型
 
@@ -317,7 +319,7 @@ describe('MyNewProvider', () => {
   test('filters tasks correctly', () => {
     const provider = new MyNewProvider(ContestType.MY_NEW);
     const filtered = provider.filter(taskResultsForMyNew);
-    expect(filtered.every((t) => t.contest_id === 'my-contest')).toBe(true);
+    expect(filtered.every((task) => task.contest_id === 'my-contest')).toBe(true);
   });
 
   test('returns correct metadata', () => {
@@ -532,6 +534,7 @@ describe('CustomProvider with unique config', () => {
 - [#2797](https://github.com/AtCoder-NoviSteps/AtCoderNoviSteps/issues/2797) - FPS24Provider
 - [#2920](https://github.com/AtCoder-NoviSteps/AtCoderNoviSteps/issues/2920)、[#3120](https://github.com/AtCoder-NoviSteps/AtCoderNoviSteps/issues/3120) - ACLPracticeProvider、ACLBeginnerProvider、ACLProvider
 - [#3152](https://github.com/AtCoder-NoviSteps/AtCoderNoviSteps/issues/3152) - JOISemiFinalRoundProvider（本選 → セミファイナルステージ への対応）
+- NDPC実装 - NDPCProvider（パターン2: 単一ソース型、prisma/tasks.ts に 20 問存在）
 
 ### 実装ファイル
 
@@ -541,4 +544,4 @@ describe('CustomProvider with unique config', () => {
 
 ---
 
-**最終更新**: 2026-02-22
+**最終更新**: 2026-05-10

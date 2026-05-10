@@ -363,7 +363,12 @@ describe('Task', () => {
         {
           first: tasksForVerificationOfOrder.abc999_a,
           second: tasksForVerificationOfOrder.tdpc_contest,
-          expected: -4, // order: abc999_a, tpdc_contest
+          expected: -4, // order: abc999_a, tdpc_contest
+        },
+        {
+          first: tasksForVerificationOfOrder.abc999_a,
+          second: tasksForVerificationOfOrder.ndpc2026_a,
+          expected: -5, // order: abc999_a, ndpc2026_a
         },
         {
           first: tasksForVerificationOfOrder.abc999_a,

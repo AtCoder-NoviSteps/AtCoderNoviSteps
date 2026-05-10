@@ -252,13 +252,13 @@ export function getContestPrefixes(contestPrefixes: Record<string, string>) {
 }
 
 /**
- * Contest type priorities (0 = Highest, 21 = Lowest)
+ * Contest type priorities (0 = Highest, 23 = Lowest)
  *
  * Priority assignment rationale:
- * - Educational contests (0-10, 16): ABS, ABC, APG4B and AWC etc.
- * - Contests for genius (11-15): ARC, AGC, and their variants
- * - Special contests (17-19): UNIVERSITY, FPS_24, OTHERS
- * - External platforms (20-22): AOJ_COURSES, AOJ_PCK, AOJ_JAG
+ * - Educational contests (0-11, 17): ABS, ABC, APG4B and AWC etc.
+ * - Contests for genius (12-16): ARC, AGC, and their variants
+ * - Special contests (18-20): UNIVERSITY, FPS_24, OTHERS
+ * - External platforms (21-23): AOJ_COURSES, AOJ_PCK, AOJ_JAG
  *
  * @remarks
  * HACK: The priorities for ARC, AGC, UNIVERSITY, AOJ_COURSES, and AOJ_PCK are temporary
