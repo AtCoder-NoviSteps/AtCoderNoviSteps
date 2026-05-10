@@ -405,6 +405,20 @@ const tdpc_contest: TaskResult = {
   grade: 'PENDING',
   updated_at: new Date(),
 };
+const ndpc2026_a: TaskResult = {
+  is_ac: false,
+  user_id: userId2,
+  status_name: 'ns',
+  status_id: '4',
+  submission_status_image_path: 'ns.png',
+  submission_status_label_name: '未挑戦',
+  contest_id: 'ndpc',
+  task_table_index: 'A',
+  task_id: 'ndpc2026_a',
+  title: 'A. Polyomino',
+  grade: 'PENDING',
+  updated_at: new Date(),
+};
 const acl_a: TaskResult = {
   is_ac: false,
   user_id: userId2,
@@ -490,8 +504,9 @@ export const tasksForVerificationOfOrder = {
   typical90_a,
   dp_b,
   tdpc_contest,
-  acl_a,
+  ndpc2026_a,
   past202309_a,
+  acl_a,
   joi2023_yo1c,
   tessoku_book_a,
   math_and_algorithm_a,

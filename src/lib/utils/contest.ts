@@ -40,6 +40,10 @@ export const classifyContest = (contest_id: string) => {
     return ContestType.TDPC;
   }
 
+  if (contest_id === 'ndpc') {
+    return ContestType.NDPC;
+  }
+
   if (contest_id.startsWith('past')) {
     return ContestType.PAST;
   }
@@ -248,13 +252,13 @@ export function getContestPrefixes(contestPrefixes: Record<string, string>) {
 }
 
 /**
- * Contest type priorities (0 = Highest, 21 = Lowest)
+ * Contest type priorities (0 = Highest, 23 = Lowest)
  *
  * Priority assignment rationale:
- * - Educational contests (0-10, 16): ABS, ABC, APG4B and AWC etc.
- * - Contests for genius (11-15): ARC, AGC, and their variants
- * - Special contests (17-19): UNIVERSITY, FPS_24, OTHERS
- * - External platforms (20-22): AOJ_COURSES, AOJ_PCK, AOJ_JAG
+ * - Educational contests (0-11, 17): ABS, ABC, APG4B and AWC etc.
+ * - Contests for genius (12-16): ARC, AGC, and their variants
+ * - Special contests (18-20): UNIVERSITY, FPS_24, OTHERS
+ * - External platforms (21-23): AOJ_COURSES, AOJ_PCK, AOJ_JAG
  *
  * @remarks
  * HACK: The priorities for ARC, AGC, UNIVERSITY, AOJ_COURSES, and AOJ_PCK are temporary
@@ -270,23 +274,24 @@ export const contestTypePriorities: Map<ContestType, number> = new Map([
   [ContestType.TYPICAL90, 3],
   [ContestType.EDPC, 4],
   [ContestType.TDPC, 5],
-  [ContestType.PAST, 6],
-  [ContestType.ACL_PRACTICE, 7],
-  [ContestType.JOI, 8],
-  [ContestType.TESSOKU_BOOK, 9],
-  [ContestType.MATH_AND_ALGORITHM, 10],
-  [ContestType.ARC, 11],
-  [ContestType.AGC, 12],
-  [ContestType.ABC_LIKE, 13],
-  [ContestType.ARC_LIKE, 14],
-  [ContestType.AGC_LIKE, 15],
-  [ContestType.AWC, 16],
-  [ContestType.UNIVERSITY, 17],
-  [ContestType.FPS_24, 18],
-  [ContestType.OTHERS, 19], // AtCoder (その他)
-  [ContestType.AOJ_COURSES, 20],
-  [ContestType.AOJ_PCK, 21],
-  [ContestType.AOJ_JAG, 22],
+  [ContestType.NDPC, 6],
+  [ContestType.PAST, 7],
+  [ContestType.ACL_PRACTICE, 8],
+  [ContestType.JOI, 9],
+  [ContestType.TESSOKU_BOOK, 10],
+  [ContestType.MATH_AND_ALGORITHM, 11],
+  [ContestType.ARC, 12],
+  [ContestType.AGC, 13],
+  [ContestType.ABC_LIKE, 14],
+  [ContestType.ARC_LIKE, 15],
+  [ContestType.AGC_LIKE, 16],
+  [ContestType.AWC, 17],
+  [ContestType.UNIVERSITY, 18],
+  [ContestType.FPS_24, 19],
+  [ContestType.OTHERS, 20], // AtCoder (その他)
+  [ContestType.AOJ_COURSES, 21],
+  [ContestType.AOJ_PCK, 22],
+  [ContestType.AOJ_JAG, 23],
 ]);
 
 export function getContestPriority(contestId: string): number {
@@ -375,6 +380,10 @@ export const getContestNameLabel = (contestId: string) => {
 
   if (contestId === 'tdpc') {
     return 'TDPC';
+  }
+
+  if (contestId === 'ndpc') {
+    return 'NDPC';
   }
 
   if (contestId.startsWith('past')) {

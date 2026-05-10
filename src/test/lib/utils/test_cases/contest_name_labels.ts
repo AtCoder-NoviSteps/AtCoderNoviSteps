@@ -21,6 +21,13 @@ export const tdpc = [
   }),
 ];
 
+export const ndpc = [
+  createTestCaseForContestNameLabel('NDPC')({
+    contestId: 'ndpc',
+    expected: 'NDPC',
+  }),
+];
+
 export const aclPractice = [
   createTestCaseForContestNameLabel('ACL Practice')({
     contestId: 'practice2',

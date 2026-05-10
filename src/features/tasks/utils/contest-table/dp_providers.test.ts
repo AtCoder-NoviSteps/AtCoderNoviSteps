@@ -3,7 +3,7 @@ import { describe, test, expect } from 'vitest';
 import { ContestType } from '$lib/types/contest';
 import type { TaskResults } from '$lib/types/task';
 
-import { EDPCProvider, TDPCProvider } from './dp_providers';
+import { EDPCProvider, TDPCProvider, NDPCProvider } from './dp_providers';
 
 describe('DP providers', () => {
   describe.each([
@@ -22,6 +22,14 @@ describe('DP providers', () => {
       title: 'Typical DP Contest',
       abbreviationName: 'tdpc',
       label: 'TDPC provider',
+    },
+    {
+      providerClass: NDPCProvider,
+      contestType: ContestType.NDPC,
+      contestId: 'ndpc',
+      title: 'Next DP Contest',
+      abbreviationName: 'ndpc',
+      label: 'NDPC provider',
     },
   ])('$label', ({ providerClass, contestType, contestId, title, abbreviationName }) => {
     test('expects to get correct metadata', () => {
