@@ -88,7 +88,7 @@
     "vercel": "53.2.0",
     "xss": "1.0.15"
   },
-  "packageManager": "pnpm@11.0.8",
+  "packageManager": "pnpm@11.0.9",
   "engines": {
     "node": "24.x"
   }
