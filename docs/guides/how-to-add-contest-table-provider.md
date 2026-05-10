@@ -428,7 +428,7 @@ export const taskResultsForNewProvider: TaskResults = [
 
 ---
 
-## よくあるミス Top 4
+## よくあるミス Top 5
 
 ### 1. **getDisplayConfig() での属性漏れ**
 
@@ -500,6 +500,31 @@ describe.each([...])('shared tests', () => { /* ... */ });
 describe('CustomProvider with unique config', () => {
   test('custom test', () => { /* ... */ });
 });
+```
+
+---
+
+### 5. **contestTypePriorities の JSDoc カテゴリ名を変更してしまう**
+
+**問題**: 新しい ContestType を挿入して数値範囲が変わったとき、既存の4カテゴリ名
+（`Educational` / `Contests for genius` / `Special contests` / `External platforms`）を
+意図せず改名・分割・合体してしまい、歴史的経緯や分類上の意味が失われる。
+
+**解決策**: **カテゴリ名は絶対に変更しない**。変えてよいのは括弧内の数値範囲だけ。
+
+```typescript
+// Before: [ContestType.TDPC, 5] ... [ContestType.PAST, 6]
+// After inserting NDPC at 6:
+//   [ContestType.NDPC, 6], [ContestType.PAST, 7], ...
+
+// ✅ 数値範囲だけ更新
+// Educational contests (0–11, 17)
+// Contests for genius (12–16)
+// Special contests (18–20)
+// External platforms (21–23)
+
+// ❌ カテゴリを改名・分割・合体しない
+// Educational / DP contests (0–6)   ← NG
 ```
 
 ---
