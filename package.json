@@ -50,7 +50,7 @@
     "lefthook": "2.1.6",
     "nock": "14.0.15",
     "oxlint": "^1.63.0",
-    "pnpm": "11.0.8",
+    "pnpm": "11.0.9",
     "prettier": "3.8.3",
     "prettier-plugin-svelte": "3.5.1",
     "prettier-plugin-tailwindcss": "0.8.0",
