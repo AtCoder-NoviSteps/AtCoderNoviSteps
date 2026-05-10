@@ -62,6 +62,13 @@ export const tdpc = [
   }),
 ];
 
+export const ndpc = [
+  createTestCaseForContestType('NDPC')({
+    contestId: 'ndpc',
+    expected: ContestType.NDPC,
+  }),
+];
+
 const pastContestData = [
   { name: 'PAST 1st', contestId: 'past201912-open' },
   { name: 'PAST 2nd', contestId: 'past202004-open' },

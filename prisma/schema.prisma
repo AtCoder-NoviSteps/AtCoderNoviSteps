@@ -305,6 +305,7 @@ enum ContestType {
   PAST // Practical Algorithm Skill Test (アルゴリズム実技検定)
   EDPC // Educational DP Contest / DP まとめコンテスト
   TDPC // Typical DP Contest
+  NDPC // Next DP Contest
   JOI // Japanese Olympiad in Informatics
   TYPICAL90 // 競プロ典型 90 問
   TESSOKU_BOOK // 競技プログラミングの鉄則

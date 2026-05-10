@@ -67,6 +67,14 @@ describe('Contest', () => {
         });
       });
 
+      describe('when contest_id is ndpc', () => {
+        TestCasesForContestType.ndpc.forEach(({ name, value }) => {
+          runTests(`${name}`, [value], ({ contestId, expected }: TestCaseForContestType) => {
+            expect(classifyContest(contestId)).toEqual(expected);
+          });
+        });
+      });
+
       describe('when contest_id contains past', () => {
         TestCasesForContestType.past.forEach(({ name, value }) => {
           runTests(`${name}`, [value], ({ contestId, expected }: TestCaseForContestType) => {
@@ -257,6 +265,14 @@ describe('Contest', () => {
         });
       });
 
+      describe('when contest_id is ndpc', () => {
+        TestCasesForContestType.ndpc.forEach(({ name, value }) => {
+          runTests(`${name}`, [value], ({ contestId, expected }: TestCaseForContestType) => {
+            expect(getContestPriority(contestId)).toEqual(contestTypePriorities.get(expected));
+          });
+        });
+      });
+
       describe('when contest_id contains past', () => {
         TestCasesForContestType.past.forEach(({ name, value }) => {
           runTests(`${name}`, [value], ({ contestId, expected }: TestCaseForContestType) => {
@@ -409,6 +425,14 @@ describe('Contest', () => {
 
       describe('when contest_id is tdpc', () => {
         TestCasesForContestNameLabel.tdpc.forEach(({ name, value }) => {
+          runTests(`${name}`, [value], ({ contestId, expected }: TestCaseForContestNameLabel) => {
+            expect(getContestNameLabel(contestId)).toEqual(expected);
+          });
+        });
+      });
+
+      describe('when contest_id is ndpc', () => {
+        TestCasesForContestNameLabel.ndpc.forEach(({ name, value }) => {
           runTests(`${name}`, [value], ({ contestId, expected }: TestCaseForContestNameLabel) => {
             expect(getContestNameLabel(contestId)).toEqual(expected);
           });
