@@ -368,27 +368,27 @@ describe('Task', () => {
         {
           first: tasksForVerificationOfOrder.abc999_a,
           second: tasksForVerificationOfOrder.past202309_a,
-          expected: -5, // order: abc999_a, past202309_a
+          expected: -6, // order: abc999_a, past202309_a
         },
         {
           first: tasksForVerificationOfOrder.abc999_a,
           second: tasksForVerificationOfOrder.acl_a,
-          expected: -6, // order: abc999_a, acl_a
+          expected: -7, // order: abc999_a, acl_a
         },
         {
           first: tasksForVerificationOfOrder.abc999_a,
           second: tasksForVerificationOfOrder.joi2023_yo1c,
-          expected: -7, // order: abc999_a, joi2023_yo1c
+          expected: -8, // order: abc999_a, joi2023_yo1c
         },
         {
           first: tasksForVerificationOfOrder.abc999_a,
           second: tasksForVerificationOfOrder.tessoku_book_a,
-          expected: -8, // order: abc999_a, tessoku_book_a
+          expected: -9, // order: abc999_a, tessoku_book_a
         },
         {
           first: tasksForVerificationOfOrder.abc999_a,
           second: tasksForVerificationOfOrder.math_and_algorithm_a,
-          expected: -9, // order: abc999_a, math_and_algorithm_a
+          expected: -10, // order: abc999_a, math_and_algorithm_a
         },
       ];
 

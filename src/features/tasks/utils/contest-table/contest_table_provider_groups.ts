@@ -23,7 +23,7 @@ import {
   TessokuBookForChallengesProvider,
 } from './tessoku_book_providers';
 import { MathAndAlgorithmProvider } from './math_and_algorithm_provider';
-import { EDPCProvider, TDPCProvider } from './dp_providers';
+import { EDPCProvider, TDPCProvider, NDPCProvider } from './dp_providers';
 import { FPS24Provider } from './fps24_provider';
 import { ACLPracticeProvider, ACLBeginnerProvider, ACLProvider } from './acl_providers';
 import {
@@ -182,15 +182,16 @@ export const prepareContestProviderPresets = () => {
       }).addProvider(new MathAndAlgorithmProvider(ContestType.MATH_AND_ALGORITHM)),
 
     /**
-     * DP group (EDPC and TDPC)
+     * DP group (EDPC, TDPC, NDPC, and FPS 24)
      */
     dps: () =>
-      new ContestTableProviderGroup(`EDPC・TDPC・FPS 24`, {
-        buttonLabel: 'EDPC・TDPC・FPS 24',
-        ariaLabel: 'EDPC and TDPC and FPS 24 contests',
+      new ContestTableProviderGroup(`EDPC・TDPC・NDPC・FPS 24`, {
+        buttonLabel: 'EDPC・TDPC・NDPC・FPS 24',
+        ariaLabel: 'EDPC, TDPC, NDPC and FPS 24 contests',
       }).addProviders(
         new EDPCProvider(ContestType.EDPC),
         new TDPCProvider(ContestType.TDPC),
+        new NDPCProvider(ContestType.NDPC),
         new FPS24Provider(ContestType.FPS_24),
       ),
 

@@ -73,3 +73,36 @@ export class TDPCProvider extends ContestTableProviderBase {
     return '';
   }
 }
+
+export class NDPCProvider extends ContestTableProviderBase {
+  protected setFilterCondition(): (taskResult: TaskResult) => boolean {
+    return (taskResult: TaskResult) => {
+      if (classifyContest(taskResult.contest_id) !== this.contestType) {
+        return false;
+      }
+
+      return taskResult.contest_id === 'ndpc';
+    };
+  }
+
+  getMetadata(): ContestTableMetaData {
+    return {
+      title: 'Next DP Contest',
+      abbreviationName: 'ndpc',
+    };
+  }
+
+  getDisplayConfig(): ContestTableDisplayConfig {
+    return {
+      isShownHeader: false,
+      isShownRoundLabel: false,
+      roundLabelWidth: '',
+      tableBodyCellsWidth: 'w-1/2 xs:w-1/3 sm:w-1/4 md:w-1/5 lg:w-1/6 2xl:w-1/7 px-1 py-2',
+      isShownTaskIndex: true,
+    };
+  }
+
+  getContestRoundLabel(_contestId: string): string {
+    return '';
+  }
+}

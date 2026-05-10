@@ -20,6 +20,7 @@ import {
   ACLProvider,
   EDPCProvider,
   TDPCProvider,
+  NDPCProvider,
   FPS24Provider,
   JOIFirstQualRoundProvider,
   JOISecondQualRound2020OnwardsProvider,
@@ -228,14 +229,15 @@ describe('prepareContestProviderPresets', () => {
   test('expects to create DPs preset correctly', () => {
     const group = prepareContestProviderPresets().dps();
 
-    expect(group.getGroupName()).toBe('EDPC・TDPC・FPS 24');
+    expect(group.getGroupName()).toBe('EDPC・TDPC・NDPC・FPS 24');
     expect(group.getMetadata()).toEqual({
-      buttonLabel: 'EDPC・TDPC・FPS 24',
-      ariaLabel: 'EDPC and TDPC and FPS 24 contests',
+      buttonLabel: 'EDPC・TDPC・NDPC・FPS 24',
+      ariaLabel: 'EDPC, TDPC, NDPC and FPS 24 contests',
     });
-    expect(group.getSize()).toBe(3);
+    expect(group.getSize()).toBe(4);
     expect(group.getProvider(ContestType.EDPC)).toBeInstanceOf(EDPCProvider);
     expect(group.getProvider(ContestType.TDPC)).toBeInstanceOf(TDPCProvider);
+    expect(group.getProvider(ContestType.NDPC)).toBeInstanceOf(NDPCProvider);
     expect(group.getProvider(ContestType.FPS_24)).toBeInstanceOf(FPS24Provider);
   });
 
