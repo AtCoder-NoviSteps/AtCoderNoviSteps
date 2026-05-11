@@ -53,6 +53,7 @@ model TaskComment {
   taskId    String
   userId    String
   parentId  String?  // null = トップレベル、非 null = リプライ（1段階のみ）
+  // CHECK: char_length(content) BETWEEN 1 AND 1000 — dual enforcement with Zod (see content length constraint)
   content   String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -67,11 +68,23 @@ model TaskComment {
 }
 ```
 
+また、`Task` モデルと `User` モデルに以下の逆参照フィールドを追加する（`prisma generate` に必要）。
+
+```prisma
+// Task モデルに追加
+taskComments TaskComment[]
+
+// User モデルに追加
+taskComments TaskComment[]
+```
+
 **設計判断:**
 
 - `parentId` の自己参照リレーションで1段階ネストのみ許容する。深い再帰クエリが不要になりシンプルに保てる。
 - `onDelete: Cascade` により Task・User・親コメント削除時に関連するコメントも削除される。
 - ページネーション用に `(taskId, createdAt)` 複合インデックスを追加する。
+- `content` の1〜1000文字制約は Zod（早期バリデーション）と SQL `CHECK`（最終防衛ライン）の両層で強制する（dual enforcement）。マイグレーション SQL に `CHECK (char_length(content) BETWEEN 1 AND 1000)` を手動で追加する。
+- 1段階リプライ制限はアプリ層（`createTaskCommentReply` 内での `parent.parentId != null` チェック）でのみ強制する。DB の自己参照 FK に `CHECK` で深さを制限する方法は Prisma では標準サポートされないため、アプリ層のみとする。管理者以外は DB に直接アクセスしないためリスクは許容範囲内。
 
 **却下した代替案:**
 
@@ -100,7 +113,7 @@ src/features/comments/
 ```typescript
 // src/features/comments/types/index.ts
 
-type TaskCommentWithReplies = {
+export type TaskCommentWithReplies = {
   id: string;
   taskId: string;
   userId: string;
@@ -112,7 +125,7 @@ type TaskCommentWithReplies = {
   replies: TaskCommentWithUser[];
 };
 
-type TaskCommentWithUser = {
+export type TaskCommentWithUser = {
   id: string;
   taskId: string;
   userId: string;
@@ -123,7 +136,7 @@ type TaskCommentWithUser = {
   user: { username: string };
 };
 
-type TaskCommentPage = {
+export type TaskCommentPage = {
   comments: TaskCommentWithReplies[];
   totalCount: number;
   page: number;
@@ -137,17 +150,18 @@ type TaskCommentPage = {
 
 | 関数 | シグネチャ | 説明 |
 |---|---|---|
-| `getTaskComments` | `(taskId, page, pageSize) => Promise<TaskCommentPage>` | トップレベルコメントをページネーションで取得。リプライは全件 include |
+| `getTaskComments` | `(taskId, page, pageSize) => Promise<TaskCommentPage \| null>` | トップレベルコメントをページネーションで取得。タスクが存在しない場合は `null` |
 | `createTaskComment` | `(taskId, userId, content) => Promise<TaskCommentWithUser>` | トップレベルコメントを投稿 |
 | `createTaskCommentReply` | `(parentId, userId, content) => Promise<TaskCommentWithUser \| null>` | リプライを投稿。親がリプライの場合は `null` を返す |
-| `deleteTaskComment` | `(commentId, requesterId, requesterRole) => Promise<void \| null>` | 本人または ADMIN のみ削除可能。権限なしは `null` |
+| `deleteTaskComment` | `(commentId, requesterId, requesterRole) => Promise<true \| null>` | 本人または ADMIN のみ削除可能。成功時 `true`、権限なし・存在しない場合は `null` |
 | `updateTaskComment` | `(commentId, requesterId, requesterRole, content) => Promise<TaskCommentWithUser \| null>` | 本人または ADMIN のみ編集可能。権限なしは `null` |
 
 **エラーケース:**
 
-- リプライへのリプライ: `null` を返す
-- 権限なし（第三者が削除・編集）: `null` を返す
-- 存在しないコメント: `null` を返す（Prisma P2025）
+- タスクが存在しない: `getTaskComments` が `null` を返す → load() で `error(404)` に変換
+- リプライへのリプライ: `createTaskCommentReply` が `null` を返す → action で `fail(400, { error: 'invalid_parent' })` に変換
+- 権限なし（第三者が削除・編集）: `null` を返す → action で `fail(403)` に変換
+- 存在しないコメント: `null` を返す（Prisma P2025）→ action で `fail(404)` に変換
 
 ### ルートハンドラ変更
 
@@ -161,6 +175,8 @@ const [taskResult, buttons, commentPage] = await Promise.all([
   getButtons(...),
   getTaskComments(task.task_id, page, PAGE_SIZE),
 ]);
+
+if (!commentPage) error(404, 'Task not found');
 ```
 
 `page` は `url.searchParams.get('page')` から取得（デフォルト 1）。
