@@ -185,9 +185,9 @@ export const prepareContestProviderPresets = () => {
      * DP group (EDPC, TDPC, NDPC, and FPS 24)
      */
     dps: () =>
-      new ContestTableProviderGroup(`EDPC・TDPC・NDPC・FPS 24`, {
-        buttonLabel: 'EDPC・TDPC・NDPC・FPS 24',
-        ariaLabel: 'EDPC, TDPC, NDPC and FPS 24 contests',
+      new ContestTableProviderGroup(`xDPC・FPS 24`, {
+        buttonLabel: 'xDPC・FPS 24',
+        ariaLabel: 'xDPC and FPS 24 contests',
       }).addProviders(
         new EDPCProvider(ContestType.EDPC),
         new TDPCProvider(ContestType.TDPC),

@@ -229,10 +229,10 @@ describe('prepareContestProviderPresets', () => {
   test('expects to create DPs preset correctly', () => {
     const group = prepareContestProviderPresets().dps();
 
-    expect(group.getGroupName()).toBe('EDPC・TDPC・NDPC・FPS 24');
+    expect(group.getGroupName()).toBe('xDPC・FPS 24');
     expect(group.getMetadata()).toEqual({
-      buttonLabel: 'EDPC・TDPC・NDPC・FPS 24',
-      ariaLabel: 'EDPC, TDPC, NDPC and FPS 24 contests',
+      buttonLabel: 'xDPC・FPS 24',
+      ariaLabel: 'xDPC and FPS 24 contests',
     });
     expect(group.getSize()).toBe(4);
     expect(group.getProvider(ContestType.EDPC)).toBeInstanceOf(EDPCProvider);
