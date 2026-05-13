@@ -78,6 +78,7 @@ const pastContestData = [
   { name: 'PAST 15th', contestId: 'past15-open' },
   { name: 'PAST 16th', contestId: 'past16-open' },
   { name: 'PAST 17th', contestId: 'past17-open' },
+  { name: '典型アルゴリズム問題集 上級〜エキスパート編', contestId: 'pastbook2022' },
 ];
 
 export const past = pastContestData.map(({ name, contestId }) =>
@@ -360,6 +361,7 @@ export const awc = awcContestIds.map((contestId) =>
 // UTPC contests on AtCoder: 2011-2014 and 2020-2023 (not held during 2015-2019)
 // TTPC contests on AtCoder: 2015, 2019, 2022-
 // TUPC contests on AtCoder: 2022-
+// WUPC contests on AtCoder: 2019
 //
 // See:
 // https://kenkoooo.com/atcoder/resources/contests.json
@@ -387,6 +389,7 @@ const universityContestIds = [
   'ttpc2023',
   'tupc2022',
   'tupc2023',
+  'wupc2019',
 ];
 
 export const universities = universityContestIds.map((contestId) =>
@@ -409,8 +412,24 @@ export const atCoderOthers = [
     contestId: 'atc001',
     expected: ContestType.OTHERS,
   }),
+  createTestCaseForContestType('幾何コンテスト2013')({
+    contestId: 'geocon2013',
+    expected: ContestType.OTHERS,
+  }),
+  createTestCaseForContestType('square869120Contest #3')({
+    contestId: 's8pc-3',
+    expected: ContestType.OTHERS,
+  }),
   createTestCaseForContestType('square869120Contest #4')({
     contestId: 's8pc-4',
+    expected: ContestType.OTHERS,
+  }),
+  createTestCaseForContestType('Maximum-Cup 2013')({
+    contestId: 'maximum-cup-2013',
+    expected: ContestType.OTHERS,
+  }),
+  createTestCaseForContestType('Maximum-Cup 2018')({
+    contestId: 'maximum-cup-2018',
     expected: ContestType.OTHERS,
   }),
   createTestCaseForContestType('CODE FESTIVAL 2014 qual A')({
@@ -423,6 +442,10 @@ export const atCoderOthers = [
   }),
   createTestCaseForContestType('CODE FESTIVAL 2014 final')({
     contestId: 'code-festival-2014-final',
+    expected: ContestType.OTHERS,
+  }),
+  createTestCaseForContestType('CODE FESTIVAL 2014 上海')({
+    contestId: 'code-festival-2014-china-open',
     expected: ContestType.OTHERS,
   }),
   createTestCaseForContestType('CODE FESTIVAL 2015 qual B')({
@@ -465,6 +488,18 @@ export const atCoderOthers = [
     contestId: 'mujin-pc-2018',
     expected: ContestType.OTHERS,
   }),
+  createTestCaseForContestType('SoundHound Inc. Programming Contest 2018 (春)')({
+    contestId: 'soundhound2018',
+    expected: ContestType.OTHERS,
+  }),
+  createTestCaseForContestType('パ研合宿コンペティション 3日目')({
+    contestId: 'pakencamp-2018-day3',
+    expected: ContestType.OTHERS,
+  }),
+  createTestCaseForContestType('天下一プログラマーコンテスト2012予選B')({
+    contestId: 'tenka1-2012-qualB',
+    expected: ContestType.OTHERS,
+  }),
   createTestCaseForContestType('天下一プログラマーコンテスト2015予選A')({
     contestId: 'tenka1-2015-quala',
     expected: ContestType.OTHERS,
@@ -501,6 +536,10 @@ export const atCoderOthers = [
       expected: ContestType.OTHERS,
     }),
   ),
+  createTestCaseForContestType('全国統一プログラミング王決定戦本戦')({
+    contestId: 'nikkei2019-final',
+    expected: ContestType.OTHERS,
+  }),
   createTestCaseForContestType('第一回日本最強プログラマー学生選手権決勝')({
     contestId: 'jsc2019-final',
     expected: ContestType.OTHERS,
@@ -511,6 +550,14 @@ export const atCoderOthers = [
   }),
   createTestCaseForContestType('DEGwer さんの D 論応援コンテスト')({
     contestId: 'DEGwer2023',
+    expected: ContestType.OTHERS,
+  }),
+  createTestCaseForContestType('World Tour Finals 2024')({
+    contestId: 'awtf2024',
+    expected: ContestType.OTHERS,
+  }),
+  createTestCaseForContestType('Xmas Contest 2019')({
+    contestId: 'xmascon19',
     expected: ContestType.OTHERS,
   }),
 ];
