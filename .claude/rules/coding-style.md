@@ -32,7 +32,7 @@ Before writing logic, decide which layer it belongs to:
 - **Braces**: always for single-statement `if` blocks
 - **Catch blocks**: never silent; re-throw, log, or comment
 - **Plural aliases**: `type Items = Item[]` in signatures
-- **TSDoc**: every export; `@param`/`@returns` when non-obvious
+- **TSDoc**: add when behavior, constraints, or params are non-obvious; omit when names are self-explanatory (`getTaskById(id: string)` needs no `@param id` comment)
 
 ## Type Guards at API Boundaries
 

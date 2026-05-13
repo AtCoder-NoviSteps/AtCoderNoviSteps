@@ -8,7 +8,7 @@ Always prefer simplicity over pathological correctness. YAGNI, KISS, DRY. No bac
 
 **When implementing:**
 
-1. Use `/writing-plans` to generate a phased plan (2–5-min tasks, lower risk → higher risk order). Store the plan at `docs/dev-notes/YYYY-MM-DD/{task-name-en}/plan.md`. Split into `phase-N.md` files when the plan exceeds 200 lines or has 5+ phases. Each plan must include: overview, design rationale, rejected alternatives, and a per-phase summary. Write plans in Japanese; source code comments in English. Verify each task before starting:
+1. Use `/writing-plans` to generate a phased plan (lower risk → higher risk order). Store the plan at `docs/dev-notes/YYYY-MM-DD/{task-name-en}/plan.md`. Split into `phase-N.md` files when the plan exceeds 200 lines or has 5+ phases. Each plan must include: overview, design rationale, rejected alternatives, and a per-phase summary. Write plans in Japanese; source code comments in English. Verify each task before starting:
    - Which layer? (prisma / server / zod / types / fixtures / services / utils / stores / routes / components) — split if 2+ layers
    - Single responsibility: one purpose per task
    - Existing util/service/type? Search before creating
@@ -17,7 +17,7 @@ Always prefer simplicity over pathological correctness. YAGNI, KISS, DRY. No bac
 3. Write tests first, then implement production code, then verify with `pnpm test:unit`
 4. Review critically after implementing: flag YAGNI violations, over-abstraction, missing tests
 5. After all phases complete (feature and refactor branches only — not hotfixes or dependency bumps): run a mandatory refactor cycle. Write to `plan.md`: novel lessons (implementation blockers, non-obvious patterns not already in rules) and remaining tasks. Discard `phase-N.md` files. Run `coderabbit review --plain`; write all findings of `critical` / `high` / `potential_issue` (medium) to a `## CodeRabbit Findings` section in `plan.md`. The user decides which to fix before opening a PR; do not fix any finding unilaterally. `nitpick` findings defer to PR CI.
-6. Run `/session-close` at the end of each session: updates plan checklist, proposes rule/skill additions, checks for bloat, and detects repeated instructions
+6. Run `/session-close` at the end of feature and refactor branches (not hotfixes, deps bumps, or single-session fixes): updates plan checklist, proposes rule/skill additions, checks for bloat, and detects repeated instructions
 
 **Plan Approval ≠ Implementation Start:** Generating a plan (`/writing-plans`) does NOT authorize implementation. Always:
 

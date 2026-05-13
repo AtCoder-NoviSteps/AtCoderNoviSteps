@@ -15,6 +15,7 @@ paths:
 - **English only**: describe expected behavior (e.g., `'returns empty array when workbooks is empty'`)
 - **Test integrity**: never weaken assertions to make tests pass; fix implementation instead
 - **Unused imports**: signal missing tests, not dead code—add the test case first
+- **TDD exceptions**: skip test-first for exploratory spikes, type-only changes, and config files with no branching logic; write tests before implementation for all service/util/store code
 
 ## Test Types
 
@@ -122,11 +123,7 @@ Parameter types **must match** production signature — use domain types (`TaskG
 
 ## Coverage
 
-Target: 80% lines, 80% branches. Run `pnpm coverage`.
-
-## Test Files Ship with Code
-
-Never defer tests. For non-trivial logic without explicit test requirement, add them anyway.
+Cover meaningful boundaries: happy path, error cases, and edge cases specific to the domain (e.g. empty arrays, null, enum extremes). Run `pnpm coverage` to spot untested branches — treat low coverage as a signal to review, not a target to hit mechanically.
 
 ## Multiple Test Location Patterns
 
@@ -140,6 +137,10 @@ include: [
   'src/features/**/*.test.ts',   // feature co-location
 ],
 ```
+
+## Test Files Ship with Code
+
+Never defer tests. For non-trivial logic without explicit test requirement, add them anyway.
 
 ## Mocking globalThis Properties
 
