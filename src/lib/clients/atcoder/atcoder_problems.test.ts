@@ -1,24 +1,24 @@
 import { describe, test, expect } from 'vitest';
 
-import { loadMockData } from '../common/test_helpers';
-
-import { ContestSiteApiClient } from '$lib/clients/http_client';
-import { AojApiClient } from '$lib/clients/aizu_online_judge';
-
+import type { TasksApiClient } from '$lib/clients/http_client';
 import type { ContestsForImport } from '$lib/types/contest';
 import type { TasksForImport } from '$lib/types/task';
 
-describe('AIZU ONLINE JUDGE API client', () => {
-  let client: ContestSiteApiClient;
+import { AtCoderProblemsApiClient } from '$lib/clients/atcoder/atcoder_problems';
+
+import { loadMockData } from '../fixtures/helpers';
+
+describe('AtCoder Problems API client', () => {
+  let client: TasksApiClient<void>;
   let contestsMock: ContestsForImport;
   let tasksMock: TasksForImport;
 
   beforeAll(() => {
-    client = new AojApiClient();
+    client = new AtCoderProblemsApiClient();
 
     const MOCK_DATA_PATHS = {
-      contests: './src/test/lib/clients/test_data/aizu_online_judge/contests.json',
-      tasks: './src/test/lib/clients/test_data/aizu_online_judge/tasks.json',
+      contests: './src/lib/clients/fixtures/atcoder_problems/contests.json',
+      tasks: './src/lib/clients/fixtures/atcoder_problems/tasks.json',
     };
 
     try {
@@ -39,7 +39,7 @@ describe('AIZU ONLINE JUDGE API client', () => {
       client.getContests = async () => contestsMock;
       const contests = await client.getContests();
 
-      expect(contests.length).toEqual(contestsMock.length);
+      expect(contests.length).toBe(contestsMock.length);
     });
 
     // See:
@@ -96,6 +96,7 @@ describe('AIZU ONLINE JUDGE API client', () => {
         expect(typeof task.id).toBe('string');
         expect(typeof task.contest_id).toBe('string');
         expect(typeof task.problem_index).toBe('string');
+        expect(task.problem_index).toMatch(/^[A-Z]*[a-z]*[0-9]*$/);
         expect(typeof task.title).toBe('string');
         expect(task.title.length).toBeGreaterThan(0);
       });
