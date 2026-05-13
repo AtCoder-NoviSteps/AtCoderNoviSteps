@@ -53,7 +53,7 @@ Delete function only if: (1) zero callers, (2) replacement exists, (3) dependent
 
 - **Plans/dev-notes**: Japanese
 - **Code/commits/tests**: English
-- **TSDoc**: required on all exports
+- **TSDoc**: add when behavior, constraints, or params are non-obvious
 - **Code blocks**: specify language (`typescript`, `sql`, `bash`)
 
 ## Security

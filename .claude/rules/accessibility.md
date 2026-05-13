@@ -35,8 +35,9 @@ on open and restore it on close.
 
 ## Flowbite Svelte
 
-Omitting `color` on `<Button>` applies the filled green default and may strip
-`aria-label` on icon-only variants — always verify in browser DevTools Accessibility panel.
+Icon-only `<Button>` variants require an explicit `aria-label`; Flowbite Svelte does
+not generate one automatically. Omitting `color` only applies the `'primary'` default
+style — it has no effect on `aria-label`.
 
 ## Form Labels
 
