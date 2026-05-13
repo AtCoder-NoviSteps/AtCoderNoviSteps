@@ -59,7 +59,9 @@ describe('AtCoder Problems API client', () => {
     // See:
     // https://vitest.dev/api/expect.html#tobedefined
     test('each contest expects to have id and title', async () => {
-      contestsMock.forEach((contest) => {
+      nock(API_BASE).get(`${API_PATH}contests.json`).reply(200, contestsMock);
+      const contests = await client.getContests();
+      contests.forEach((contest) => {
         expect(contest.id).toBeDefined();
         expect(contest.title).toBeDefined();
       });
@@ -72,7 +74,9 @@ describe('AtCoder Problems API client', () => {
     });
 
     test('validates contest properties format', async () => {
-      contestsMock.forEach((contest) => {
+      nock(API_BASE).get(`${API_PATH}contests.json`).reply(200, contestsMock);
+      const contests = await client.getContests();
+      contests.forEach((contest) => {
         expect(typeof contest.id).toBe('string');
         expect(contest.id).toMatch(/^[a-zA-Z0-9_-]+$/);
         expect(typeof contest.title).toBe('string');
@@ -90,7 +94,9 @@ describe('AtCoder Problems API client', () => {
     });
 
     test('each task expects to have id, contest_id, problem_index and title', async () => {
-      tasksMock.forEach((task) => {
+      nock(API_BASE).get(`${API_PATH}problems.json`).reply(200, tasksMock);
+      const tasks = await client.getTasks();
+      tasks.forEach((task) => {
         expect(task.id).toBeDefined();
         expect(task.contest_id).toBeDefined();
         expect(task.problem_index).toBeDefined();
@@ -105,7 +111,9 @@ describe('AtCoder Problems API client', () => {
     });
 
     test('validates task properties format', async () => {
-      tasksMock.forEach((task) => {
+      nock(API_BASE).get(`${API_PATH}problems.json`).reply(200, tasksMock);
+      const tasks = await client.getTasks();
+      tasks.forEach((task) => {
         expect(typeof task.id).toBe('string');
         expect(typeof task.contest_id).toBe('string');
         expect(typeof task.problem_index).toBe('string');
