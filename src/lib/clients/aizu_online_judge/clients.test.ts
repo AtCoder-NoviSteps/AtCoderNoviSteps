@@ -1,4 +1,4 @@
-import { describe, test, expect } from 'vitest';
+import { describe, test, expect, beforeAll } from 'vitest';
 
 import type { TasksApiClient } from '$lib/clients/http_client';
 import type { ContestsForImport } from '$lib/types/contest';

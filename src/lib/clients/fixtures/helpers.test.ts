@@ -1,6 +1,6 @@
 import path from 'path';
 import fs from 'fs';
-import { describe, it, expect, beforeAll, afterAll } from 'vitest';
+import { describe, test, expect, beforeAll, afterAll } from 'vitest';
 
 import { loadMockData } from './helpers';
 
@@ -25,17 +25,17 @@ describe('loadMockData', () => {
     });
   });
 
-  it('expects to load and parse mock data from a file', () => {
+  test('expects to load and parse mock data from a file', () => {
     const data = loadMockData<typeof mockData>(mockFilePath);
     expect(data).toEqual(mockData);
   });
 
-  it('expects to throw an error if the file does not exist', () => {
+  test('expects to throw an error if the file does not exist', () => {
     const invalidFilePath = path.resolve(__dirname, 'nonExistentFile.json');
     expect(() => loadMockData<typeof mockData>(invalidFilePath)).toThrow();
   });
 
-  it('expects to throw an error if the file content is not valid JSON', () => {
+  test('expects to throw an error if the file content is not valid JSON', () => {
     const invalidJsonFilePath = path.resolve(__dirname, 'invalidJson.json');
     fs.writeFileSync(invalidJsonFilePath, 'invalid json');
 

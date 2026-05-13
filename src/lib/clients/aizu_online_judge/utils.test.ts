@@ -45,28 +45,30 @@ describe('buildEndpoint', () => {
 });
 
 describe('mapToContest', () => {
-  test('maps contestId and title to ContestForImport shape', () => {
-    const result = mapToContest('PCK2024', 'PCK 2024 Preliminary');
+  describe('successful cases', () => {
+    test('maps contestId and title to ContestForImport shape', () => {
+      const result = mapToContest('PCK2024', 'PCK 2024 Preliminary');
 
-    expect(result).toEqual({
-      id: 'PCK2024',
-      title: 'PCK 2024 Preliminary',
-      start_epoch_second: PENDING,
-      duration_second: PENDING,
-      rate_change: '',
+      expect(result).toEqual({
+        id: 'PCK2024',
+        title: 'PCK 2024 Preliminary',
+        start_epoch_second: PENDING,
+        duration_second: PENDING,
+        rate_change: '',
+      });
     });
-  });
 
-  test('sets PENDING for start_epoch_second and duration_second', () => {
-    const result = mapToContest('ITP1', 'Introduction to Programming');
+    test('sets PENDING for start_epoch_second and duration_second', () => {
+      const result = mapToContest('ITP1', 'Introduction to Programming');
 
-    expect(result.start_epoch_second).toBe(PENDING);
-    expect(result.duration_second).toBe(PENDING);
-  });
+      expect(result.start_epoch_second).toBe(PENDING);
+      expect(result.duration_second).toBe(PENDING);
+    });
 
-  test('sets empty string for rate_change', () => {
-    const result = mapToContest('JAG2023', 'JAG Regional 2023');
-    expect(result.rate_change).toBe('');
+    test('sets empty string for rate_change', () => {
+      const result = mapToContest('JAG2023', 'JAG Regional 2023');
+      expect(result.rate_change).toBe('');
+    });
   });
 });
 
@@ -90,28 +92,30 @@ describe('mapToTask', () => {
     userScore: 0,
   };
 
-  test('maps problem id, contest_id, and name', () => {
-    const result = mapToTask(baseTask, 'ITP1');
+  describe('successful cases', () => {
+    test('maps problem id, contest_id, and name', () => {
+      const result = mapToTask(baseTask, 'ITP1');
 
-    expect(result).toEqual({
-      id: 'ITP1_1_A',
-      contest_id: 'ITP1',
-      problem_index: 'ITP1_1_A',
-      task_id: 'ITP1_1_A',
-      title: 'Hello, World!',
+      expect(result).toEqual({
+        id: 'ITP1_1_A',
+        contest_id: 'ITP1',
+        problem_index: 'ITP1_1_A',
+        task_id: 'ITP1_1_A',
+        title: 'Hello, World!',
+      });
     });
-  });
 
-  test('uses problem.id as problem_index and task_id', () => {
-    const result = mapToTask(baseTask, 'ITP1');
+    test('uses problem.id as problem_index and task_id', () => {
+      const result = mapToTask(baseTask, 'ITP1');
 
-    expect(result.problem_index).toBe(baseTask.id);
-    expect(result.task_id).toBe(baseTask.id);
-  });
+      expect(result.problem_index).toBe(baseTask.id);
+      expect(result.task_id).toBe(baseTask.id);
+    });
 
-  test('uses problem.name as title', () => {
-    const result = mapToTask(baseTask, 'ITP1');
-    expect(result.title).toBe('Hello, World!');
+    test('uses problem.name as title', () => {
+      const result = mapToTask(baseTask, 'ITP1');
+      expect(result.title).toBe('Hello, World!');
+    });
   });
 });
 
@@ -130,7 +134,7 @@ describe('getCourseName', () => {
     });
   });
 
-  describe('returns empty string', () => {
+  describe('edge cases', () => {
     test('for challenge numeric task ID (no underscores)', () => {
       expect(getCourseName('0001')).toBe('');
     });
