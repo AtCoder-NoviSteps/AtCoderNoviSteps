@@ -1,15 +1,15 @@
-import { describe, test, expect } from 'vitest';
+import { describe, test, expect, beforeAll } from 'vitest';
 
-import { loadMockData } from '../common/test_helpers';
-
-import { ContestSiteApiClient } from '$lib/clients/http_client';
-import { AojApiClient } from '$lib/clients/aizu_online_judge';
-
+import type { TasksApiClient } from '$lib/clients/http_client';
 import type { ContestsForImport } from '$lib/types/contest';
 import type { TasksForImport } from '$lib/types/task';
 
+import { AojApiClient } from '$lib/clients/aizu_online_judge/clients';
+
+import { loadMockData } from '../fixtures/helpers';
+
 describe('AIZU ONLINE JUDGE API client', () => {
-  let client: ContestSiteApiClient;
+  let client: TasksApiClient<void>;
   let contestsMock: ContestsForImport;
   let tasksMock: TasksForImport;
 
@@ -17,8 +17,8 @@ describe('AIZU ONLINE JUDGE API client', () => {
     client = new AojApiClient();
 
     const MOCK_DATA_PATHS = {
-      contests: './src/test/lib/clients/test_data/aizu_online_judge/contests.json',
-      tasks: './src/test/lib/clients/test_data/aizu_online_judge/tasks.json',
+      contests: './src/lib/clients/fixtures/aizu_online_judge/contests.json',
+      tasks: './src/lib/clients/fixtures/aizu_online_judge/tasks.json',
     };
 
     try {

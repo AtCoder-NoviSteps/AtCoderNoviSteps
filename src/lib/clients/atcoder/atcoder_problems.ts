@@ -1,4 +1,4 @@
-import { ContestSiteApiClient } from '$lib/clients/http_client';
+import { HttpRequestClient } from '$lib/clients/http_client';
 
 import type { ContestsForImport } from '$lib/types/contest';
 import type { TasksForImport } from '$lib/types/task';
@@ -7,32 +7,21 @@ import { ATCODER_PROBLEMS_API_BASE_URL } from '$lib/constants/urls';
 
 /**
  * The `AtCoderProblemsApiClient` class provides methods to interact with the AtCoder Problems API.
- * It extends the `ContestSiteApiClient` class and includes methods to fetch contests and tasks.
+ * Uses `HttpRequestClient` for HTTP requests.
  *
  * @class
- * @extends {ContestSiteApiClient}
- *
- * @method getContests
- * Fetches the list of contests from the AtCoder Problems API.
- * @returns {Promise<ContestsForImport>} A promise that resolves to the list of contests.
- * @throws Will throw an error if the fetch operation fails or if the response is invalid.
- *
- * @method getTasks
- * Fetches tasks from the AtCoder Problems API.
- * @returns {Promise<TasksForImport>} A promise that resolves to an array of tasks for import.
- * @throws Will throw an error if the fetch operation fails or if the response validation fails.
  */
-export class AtCoderProblemsApiClient extends ContestSiteApiClient {
+export class AtCoderProblemsApiClient {
+  constructor(private readonly http = new HttpRequestClient(ATCODER_PROBLEMS_API_BASE_URL)) {}
+
   /**
    * Fetches the list of contests from the AtCoder Problems API.
    *
    * @returns {Promise<ContestsForImport>} A promise that resolves to the list of contests.
-   * @throws Will throw an error if the fetch operation fails or if the response is invalid.
    */
   async getContests(): Promise<ContestsForImport> {
     try {
-      const contests = await this.fetchApiWithConfig<ContestsForImport>({
-        baseApiUrl: ATCODER_PROBLEMS_API_BASE_URL,
+      const contests = await this.http.fetchApiWithConfig<ContestsForImport>({
         endpoint: 'contests.json',
         errorMessage: 'Failed to fetch contests from AtCoder Problems API',
         validateResponse: (data) => Array.isArray(data) && data.length > 0,
@@ -51,12 +40,10 @@ export class AtCoderProblemsApiClient extends ContestSiteApiClient {
    * Fetches tasks from the AtCoder Problems API.
    *
    * @returns {Promise<TasksForImport>} A promise that resolves to an array of tasks for import.
-   * @throws Will throw an error if the fetch operation fails or if the response validation fails.
    */
   async getTasks(): Promise<TasksForImport> {
     try {
-      const tasks = await this.fetchApiWithConfig<TasksForImport>({
-        baseApiUrl: ATCODER_PROBLEMS_API_BASE_URL,
+      const tasks = await this.http.fetchApiWithConfig<TasksForImport>({
         endpoint: 'problems.json',
         errorMessage: 'Failed to fetch tasks from AtCoder Problems API',
         validateResponse: (data) => Array.isArray(data) && data.length > 0,

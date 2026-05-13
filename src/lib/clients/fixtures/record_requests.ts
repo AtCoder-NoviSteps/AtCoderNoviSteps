@@ -5,13 +5,14 @@ import path from 'path';
 import nock from 'nock';
 import fs from 'fs';
 
-import type { ContestSiteApiClient } from '$lib/clients/http_client';
-import { AtCoderProblemsApiClient } from '$lib/clients/atcoder_problems';
-import { AojApiClient } from '$lib/clients/aizu_online_judge';
+import type { TasksApiClient } from '$lib/clients/http_client';
+
+import { AtCoderProblemsApiClient } from '$lib/clients/atcoder/atcoder_problems';
+import { AojApiClient } from '$lib/clients/aizu_online_judge/clients';
 
 // Run the main function if you add a contest site.
 // Usage:
-// pnpm dlx vite-node ./src/test/lib/clients/record_requests.ts
+// pnpm dlx vite-node ./src/lib/clients/fixtures/record_requests.ts
 async function main(): Promise<void> {
   try {
     startRecordRequests();
@@ -38,16 +39,16 @@ async function main(): Promise<void> {
  * An array of client objects, each containing a name and an instance of an API client.
  *
  * @constant
- * @type {Array<{ name: string, source: ContestSiteApiClient }>}
+ * @type {Array<{ name: string, source: TasksApiClient<void> }>}
  * @property {string} name - The name of the client.
- * @property {ContestSiteApiClient} source - An instance of the API client.
+ * @property {TasksApiClient<void>} source - An instance of the API client.
  */
 const clients = [
   { name: 'atcoder_problems', source: new AtCoderProblemsApiClient() },
   { name: 'aizu_online_judge', source: new AojApiClient() },
 ];
 
-export const TEST_DATA_BASE_DIR = path.join('src', 'test', 'lib', 'clients', 'test_data');
+export const TEST_DATA_BASE_DIR = path.join('src', 'lib', 'clients', 'fixtures');
 
 function ensureDirectoryExists(dirPath: string): void {
   if (!fs.existsSync(dirPath)) {
@@ -58,13 +59,13 @@ function ensureDirectoryExists(dirPath: string): void {
 /**
  * Saves a specified number of contests from a contest site to a JSON file.
  *
- * @param client - An instance of `ContestSiteApiClient` used to fetch contests.
+ * @param client - An instance of `TasksApiClient<void>` used to fetch contests.
  * @param contestSite - The name of the contest site.
  * @param count - The number of contests to save. Defaults to 100.
  * @returns A promise that resolves when the contests have been saved.
  */
 async function saveContests(
-  client: ContestSiteApiClient,
+  client: TasksApiClient<void>,
   contestSite: string,
   count: number = 100,
 ): Promise<void> {
@@ -80,14 +81,14 @@ async function saveContests(
 /**
  * Saves a specified number of tasks from a contest site to a JSON file.
  *
- * @param client - An instance of `ContestSiteApiClient` used to fetch tasks.
+ * @param client - An instance of `TasksApiClient<void>` used to fetch tasks.
  * @param contestSite - The identifier for the contest site.
  * @param count - The number of tasks to save. Defaults to 100.
  *
  * @returns A promise that resolves when the tasks have been saved.
  */
 async function saveTasks(
-  client: ContestSiteApiClient,
+  client: TasksApiClient<void>,
   contestSite: string,
   count: number = 100,
 ): Promise<void> {
@@ -111,7 +112,7 @@ function stopRecordRequests(): void {
   nock.recorder.play();
 }
 
-function validateContestSiteApi(client: ContestSiteApiClient, contestSite: string): void {
+function validateContestSiteApi(client: TasksApiClient<void>, contestSite: string): void {
   if (!client) {
     throw new Error('Client is required');
   }

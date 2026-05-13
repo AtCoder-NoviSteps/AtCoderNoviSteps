@@ -1,5 +1,5 @@
-import { AtCoderProblemsApiClient } from '$lib/clients/atcoder_problems';
-import { AojApiClient } from '$lib/clients/aizu_online_judge';
+import { AtCoderProblemsApiClient } from '$lib/clients/atcoder/atcoder_problems';
+import { AojApiClient } from '$lib/clients/aizu_online_judge/clients';
 
 import type { ContestForImport, ContestsForImport } from '$lib/types/contest';
 import type { TaskForImport, TasksForImport } from '$lib/types/task';
