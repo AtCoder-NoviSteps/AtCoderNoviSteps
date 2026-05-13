@@ -38,13 +38,6 @@ describe('loadMockData', () => {
   test('expects to throw an error if the file content is not valid JSON', () => {
     const invalidJsonFilePath = path.resolve(__dirname, 'invalidJson.json');
     fs.writeFileSync(invalidJsonFilePath, 'invalid json');
-
-    try {
-      expect(() => loadMockData<typeof mockData>(invalidJsonFilePath)).toThrow();
-    } finally {
-      if (fs.existsSync(invalidJsonFilePath)) {
-        fs.unlinkSync(invalidJsonFilePath);
-      }
-    }
+    expect(() => loadMockData<typeof mockData>(invalidJsonFilePath)).toThrow();
   });
 });
