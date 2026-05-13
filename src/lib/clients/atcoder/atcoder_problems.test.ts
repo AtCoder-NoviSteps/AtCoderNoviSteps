@@ -1,6 +1,10 @@
-import { describe, test, expect } from 'vitest';
+import { describe, test, expect, beforeAll, beforeEach, afterEach, vi } from 'vitest';
+import nock from 'nock';
 
-import type { TasksApiClient } from '$lib/clients/http_client';
+vi.mock('$lib/utils/time', () => ({
+  delay: vi.fn().mockResolvedValue(undefined),
+}));
+
 import type { ContestsForImport } from '$lib/types/contest';
 import type { TasksForImport } from '$lib/types/task';
 
@@ -8,8 +12,11 @@ import { AtCoderProblemsApiClient } from '$lib/clients/atcoder/atcoder_problems'
 
 import { loadMockData } from '../fixtures/helpers';
 
+const API_BASE = 'https://kenkoooo.com';
+const API_PATH = '/atcoder/resources/';
+
 describe('AtCoder Problems API client', () => {
-  let client: TasksApiClient<void>;
+  let client: AtCoderProblemsApiClient;
   let contestsMock: ContestsForImport;
   let tasksMock: TasksForImport;
 
@@ -33,10 +40,17 @@ describe('AtCoder Problems API client', () => {
     }
   });
 
+  beforeEach(() => {
+    nock.cleanAll();
+  });
+
+  afterEach(() => {
+    nock.cleanAll();
+  });
+
   describe('getContests', () => {
     test('expects to fetch contests', async () => {
-      // Use mock data instead of making a request.
-      client.getContests = async () => contestsMock;
+      nock(API_BASE).get(`${API_PATH}contests.json`).reply(200, contestsMock);
       const contests = await client.getContests();
 
       expect(contests.length).toBe(contestsMock.length);
@@ -51,8 +65,8 @@ describe('AtCoder Problems API client', () => {
       });
     });
 
-    test('handles empty contests list', async () => {
-      client.getContests = async () => [];
+    test('returns empty array when API response is empty', async () => {
+      nock(API_BASE).get(`${API_PATH}contests.json`).reply(200, []);
       const contests = await client.getContests();
       expect(contests).toHaveLength(0);
     });
@@ -69,8 +83,7 @@ describe('AtCoder Problems API client', () => {
 
   describe('getTasks', () => {
     test('expects to fetch tasks', async () => {
-      // Use mock data instead of making a request.
-      client.getTasks = async () => tasksMock;
+      nock(API_BASE).get(`${API_PATH}problems.json`).reply(200, tasksMock);
       const tasks = await client.getTasks();
 
       expect(tasks.length).toEqual(tasksMock.length);
@@ -85,8 +98,8 @@ describe('AtCoder Problems API client', () => {
       });
     });
 
-    test('handles empty tasks list', async () => {
-      client.getTasks = async () => [];
+    test('returns empty array when API response is empty', async () => {
+      nock(API_BASE).get(`${API_PATH}problems.json`).reply(200, []);
       const tasks = await client.getTasks();
       expect(tasks).toHaveLength(0);
     });
