@@ -62,4 +62,3 @@ export function zip<T, U>(firstArray: T[], secondArray: U[]): [T, U][] {
 export function runTests<T>(testName: string, testCases: T[], testFunction: (testCase: T) => void) {
   test.each(testCases)(`${testName} - %o`, testFunction);
 }
-

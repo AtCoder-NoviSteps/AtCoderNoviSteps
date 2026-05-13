@@ -88,14 +88,14 @@ src/lib/clients/
 
 ### 移動対象
 
-| 移動元                                              | 移動先                                             |
-| --------------------------------------------------- | -------------------------------------------------- |
-| `src/test/lib/clients/cache.test.ts`                | `src/lib/clients/cache.test.ts`                    |
-| `src/test/lib/clients/clients.test.ts`    | `src/lib/clients/aizu_online_judge/clients.test.ts`    |
-| `src/test/lib/clients/atcoder_problems.test.ts`     | `src/lib/clients/atcoder/atcoder_problems.test.ts` |
-| `src/test/lib/clients/record_requests.ts`           | `src/lib/clients/fixtures/record_requests.ts`      |
-| `src/test/lib/clients/test_data/aizu_online_judge/` | `src/lib/clients/fixtures/aizu_online_judge/`      |
-| `src/test/lib/clients/test_data/atcoder_problems/`  | `src/lib/clients/fixtures/atcoder/`                |
+| 移動元                                              | 移動先                                              |
+| --------------------------------------------------- | --------------------------------------------------- |
+| `src/test/lib/clients/cache.test.ts`                | `src/lib/clients/cache.test.ts`                     |
+| `src/test/lib/clients/clients.test.ts`              | `src/lib/clients/aizu_online_judge/clients.test.ts` |
+| `src/test/lib/clients/atcoder_problems.test.ts`     | `src/lib/clients/atcoder/atcoder_problems.test.ts`  |
+| `src/test/lib/clients/record_requests.ts`           | `src/lib/clients/fixtures/record_requests.ts`       |
+| `src/test/lib/clients/test_data/aizu_online_judge/` | `src/lib/clients/fixtures/aizu_online_judge/`       |
+| `src/test/lib/clients/test_data/atcoder_problems/`  | `src/lib/clients/fixtures/atcoder/`                 |
 
 ### 抽出・新規作成
 
@@ -137,8 +137,8 @@ src/lib/clients/
 
 `aizu_online_judge/clients.ts` の protected/private メソッドのうち、純粋関数を `aizu_online_judge/utils.ts` に抽出:
 
-| 関数                            | 現在の場所                        | 移動先         |
-| ------------------------------- | --------------------------------- | -------------- |
+| 関数                            | 現在の場所                        | 移動先                       |
+| ------------------------------- | --------------------------------- | ---------------------------- |
 | `buildEndpoint(segments)`       | `AojTasksApiClientBase` protected | `aizu_online_judge/utils.ts` |
 | `mapToContest(id, title)`       | `AojTasksApiClientBase` protected | `aizu_online_judge/utils.ts` |
 | `mapToTask(problem, contestId)` | `AojTasksApiClientBase` protected | `aizu_online_judge/utils.ts` |

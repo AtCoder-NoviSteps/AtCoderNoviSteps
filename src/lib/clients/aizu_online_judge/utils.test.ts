@@ -11,9 +11,7 @@ describe('buildEndpoint', () => {
     });
 
     test('joins multiple segments with slash', () => {
-      expect(buildEndpoint(['challenges', 'cl', 'PCK', 'PRELIM'])).toBe(
-        'challenges/cl/PCK/PRELIM',
-      );
+      expect(buildEndpoint(['challenges', 'cl', 'PCK', 'PRELIM'])).toBe('challenges/cl/PCK/PRELIM');
     });
 
     test('encodes segments with URI encoding', () => {
@@ -23,9 +21,7 @@ describe('buildEndpoint', () => {
     });
 
     test('accepts segments with hyphens and underscores', () => {
-      expect(buildEndpoint(['some-segment', 'other_segment'])).toBe(
-        'some-segment/other_segment',
-      );
+      expect(buildEndpoint(['some-segment', 'other_segment'])).toBe('some-segment/other_segment');
     });
   });
 
