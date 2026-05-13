@@ -161,6 +161,7 @@ const agcLikePrefixes = getContestPrefixes(AGC_LIKE);
  *   utpc: 'UTPC' // University of Tokyo Programming Contest
  *   ttpc: 'TTPC' // Tokyo Institute of Technology Programming Contest
  *   tupc: 'TUPC' // Tohoku University Programming Contest
+ *   wupc: 'WUPC' // Waseda University Programming Contest
  * }
  *
  * @remarks
@@ -175,6 +176,7 @@ const ATCODER_UNIVERSITIES: ContestPrefix = {
   utpc: 'UTPC',
   ttpc: 'TTPC',
   tupc: 'TUPC',
+  wupc: 'WUPC',
 } as const;
 
 const atCoderUniversityPrefixes = getContestPrefixes(ATCODER_UNIVERSITIES);
@@ -198,10 +200,15 @@ const atCoderUniversityPrefixes = getContestPrefixes(ATCODER_UNIVERSITIES);
 const ATCODER_OTHERS: ContestPrefix = {
   chokudai_S: 'Chokudai SpeedRun',
   atc001: 'AtCoder Typical Contest 001',
+  geocon2013: '幾何コンテスト2013',
+  's8pc-3': 'square869120Contest #3',
   's8pc-4': 'square869120Contest #4',
+  'maximum-cup-2013': 'Maximum-Cup 2013',
+  'maximum-cup-2018': 'Maximum-Cup 2018',
   'code-festival-2014-quala': 'Code Festival 2014 予選 A',
   'code-festival-2014-qualb': 'Code Festival 2014 予選 B',
   'code-festival-2014-final': 'Code Festival 2014 決勝',
+  'code-festival-2014-china-open': 'Code Festival 2014 上海',
   'code-festival-2015-qualb': 'Code Festival 2015 予選 B',
   'code-festival-2015-morning-middle': 'CODE FESTIVAL 2015 あさぷろ Middle',
   'code-thanks-festival': 'CODE THANKS FESTIVAL',
@@ -210,6 +217,9 @@ const ATCODER_OTHERS: ContestPrefix = {
   'dwacon2017-prelims': '第3回 ドワンゴからの挑戦状 予選',
   'mujin-pc-2016': 'Mujin Programming Challenge 2016',
   'mujin-pc-2018': 'Mujin Programming Challenge 2018',
+  soundhound2018: 'SoundHound Inc. Programming Contest 2018 (春)',
+  'pakencamp-2018-day3': 'パ研合宿コンペティション 3日目',
+  'tenka1-2012-qualB': '天下一プログラマーコンテスト2012予選B',
   'tenka1-2015-quala': '天下一プログラマーコンテスト2015予選A',
   'tenka1-2015-qualb': '天下一プログラマーコンテスト2015予選B',
   'tenka1-2016-final': '天下一プログラマーコンテスト2016本戦',
@@ -218,9 +228,12 @@ const ATCODER_OTHERS: ContestPrefix = {
   colopl: 'COLOCON',
   gigacode: 'GigaCode',
   cpsco2019: 'CPSCO 2019',
+  'nikkei2019-final': '全国統一プログラミング王決定戦本戦',
   'jsc2019-final': '第一回日本最強プログラマー学生選手権決勝',
   'jsc2025-final': '第六回日本最強プログラマー学生選手権 -決勝-',
   DEGwer2023: 'DEGwer さんの D 論応援コンテスト',
+  awtf2024: 'World Tour Finals 2024',
+  xmascon19: 'Xmas Contest 2019',
 } as const;
 const atCoderOthersPrefixes = getContestPrefixes(ATCODER_OTHERS);
 
@@ -337,7 +350,7 @@ const regexForAwc = /^(awc)(\d{4})$/i;
  * Regular expression to match AtCoder University contest identifiers.
  *
  * The pattern matches strings that:
- * - Start with either "ku", "qu", "ut", "tt", or "tu"
+ * - Start with either "ku", "qu", "ut", "tt","tu", or "wu"
  * - Followed by "pc"
  * - End with exactly year (four digits)
  *
@@ -347,8 +360,9 @@ const regexForAwc = /^(awc)(\d{4})$/i;
  * - "utpc2014"
  * - "ttpc2022"
  * - "tupc2023"
+ * - "wupc2019"
  */
-const regexForAtCoderUniversity = /^(ku|qu|ut|tt|tu)(pc)(\d{4})$/i;
+const regexForAtCoderUniversity = /^(ku|qu|ut|tt|tu|wu)(pc)(\d{4})$/i;
 
 export const getContestNameLabel = (contestId: string) => {
   // AtCoder
