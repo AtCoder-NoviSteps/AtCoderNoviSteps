@@ -84,7 +84,7 @@
     "p-queue": "9.2.0",
     "playwright": "1.59.1",
     "svelte-eslint-parser": "1.6.1",
-    "tailwind-merge": "3.5.0",
+    "tailwind-merge": "3.6.0",
     "vercel": "53.2.0",
     "xss": "1.0.15"
   },
