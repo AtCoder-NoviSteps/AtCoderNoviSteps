@@ -85,7 +85,7 @@
     "playwright": "1.60.0",
     "svelte-eslint-parser": "1.6.1",
     "tailwind-merge": "3.6.0",
-    "vercel": "54.0.0",
+    "vercel": "54.1.0",
     "xss": "1.0.15"
   },
   "packageManager": "pnpm@11.1.1",
