@@ -35,7 +35,6 @@
 
       if (result.type === 'success' && result.data?.importContests) {
         importContests = result.data.importContests as Contests;
-        currentPage = 1;
         searchQuery = '';
       } else if (result.type === 'failure') {
         fetchError = (result.data as { message?: string })?.message ?? 'データ取得に失敗しました。';
