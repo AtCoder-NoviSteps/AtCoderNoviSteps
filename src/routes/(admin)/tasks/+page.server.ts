@@ -6,7 +6,7 @@ import { type Task, type Tasks, type TaskForImport, type TasksForImport } from '
 import * as taskService from '$lib/services/tasks';
 import { validateAdminAccess } from '$features/auth/services/admin_access';
 
-import { fetchContests, isContestTaskImportSource } from '$lib/clients';
+import { fetchContests, fetchTasks, isContestTaskImportSource } from '$lib/clients';
 
 import { classifyContest } from '$lib/utils/contest';
 import { sha256 } from '$lib/utils/hash';

@@ -70,24 +70,26 @@
 <div class="container mx-auto w-5/6">
   <HeadingOne title="問題のインポート" />
 
-  <section class="mb-10 p-6">
-    <form method="POST" action="?/fetch" use:enhance={handleFetch} class="flex flex-col gap-4">
-      <div class="flex items-center gap-4">
-        <div class="flex-1">
-          <Label for="source-select">コンテストサイト・種別</Label>
-          <Select
-            id="source-select"
-            name="source"
-            bind:value={selectedSource}
-            items={sourceOptions}
-            onchange={() => {
-              currentPage = 1;
-            }}
-          />
+  <section class="mb-10">
+    <div class="p-6">
+      <form method="POST" action="?/fetch" use:enhance={handleFetch}>
+        <Label for="source-select">コンテストサイト・種別</Label>
+        <div class="mt-2 flex items-center gap-4">
+          <div class="flex-1">
+            <Select
+              id="source-select"
+              name="source"
+              bind:value={selectedSource}
+              items={sourceOptions}
+              onchange={() => {
+                currentPage = 1;
+              }}
+            />
+          </div>
+          <Button type="submit" disabled={isFetching}>問題を取得</Button>
         </div>
-        <Button type="submit" disabled={isFetching}>問題を取得</Button>
-      </div>
-    </form>
+      </form>
+    </div>
   </section>
 
   {#if isFetching}
