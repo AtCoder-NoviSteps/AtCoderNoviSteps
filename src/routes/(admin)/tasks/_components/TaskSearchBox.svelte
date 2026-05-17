@@ -12,7 +12,7 @@
 </script>
 
 <div class="w-96">
-  <Input id="task-search" type="text" bind:value {placeholder}>
+  <Input id="task-search" type="text" bind:value {placeholder} class="pl-9">
     {#snippet left()}
       <Search class="h-4 w-4 text-gray-400" />
     {/snippet}
