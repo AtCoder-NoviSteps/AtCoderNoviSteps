@@ -10,7 +10,7 @@
     $props();
 </script>
 
-<div class="flex flex-col gap-1">
+<div class="flex w-96 flex-col gap-1">
   <Label for="task-search">検索</Label>
   <Input id="task-search" type="text" bind:value {placeholder} />
 </div>
