@@ -1,54 +1,96 @@
-import { redirect, type Actions } from '@sveltejs/kit';
+import { fail, type Actions } from '@sveltejs/kit';
 
 import type { Contests, ContestForImport, ContestsForImport } from '$lib/types/contest';
-import {
-  type Task,
-  type Tasks,
-  type TaskForImport,
-  type TasksForImport,
-  TaskGrade,
-  getTaskGrade,
-} from '$lib/types/task';
+import { type Task, type Tasks, type TaskForImport, type TasksForImport } from '$lib/types/task';
 
-import * as apiClient from '$lib/clients';
 import * as taskService from '$lib/services/tasks';
 import { validateAdminAccess } from '$features/auth/services/admin_access';
+
+import { fetchContests, fetchTasks, isContestTaskImportSource } from '$lib/clients';
 
 import { classifyContest } from '$lib/utils/contest';
 import { sha256 } from '$lib/utils/hash';
 
+import { BAD_REQUEST, INTERNAL_SERVER_ERROR } from '$lib/constants/http-response-status-codes';
+
 export async function load({ locals, url }) {
   await validateAdminAccess(locals, url);
-
-  const { contestsForImport, tasksForImport } = await fetchContestsAndTasksFromAPI();
-
-  const tasksFromDB = await taskService.getTasks();
-  const registeredTaskMap = prepareTaskMap(tasksFromDB);
-
-  const unregisteredTasks = filterUnregisteredTasks(
-    contestsForImport,
-    tasksForImport,
-    registeredTaskMap,
-  );
-  const contestsWithUnregisteredTasks: Contests = mergeContestsAndUnregisteredTasks(
-    contestsForImport,
-    unregisteredTasks,
-  );
-
-  return {
-    importContests: contestsWithUnregisteredTasks,
-  };
 }
 
-async function fetchContestsAndTasksFromAPI(): Promise<{
-  contestsForImport: ContestsForImport;
-  tasksForImport: TasksForImport;
-}> {
-  const contestsForImport = await apiClient.getContests();
-  const tasksForImport = await apiClient.getTasks();
+export const actions: Actions = {
+  fetch: async ({ request, locals }) => {
+    await validateAdminAccess(locals);
 
-  return { contestsForImport, tasksForImport };
-}
+    const formData = await request.formData();
+    const source = formData.get('source');
+
+    if (!isContestTaskImportSource(source)) {
+      return fail(BAD_REQUEST, { message: 'コンテストサイト・種別が不正です。' });
+    }
+
+    try {
+      const [contestsForImport, tasksForImport, tasksFromDB] = await Promise.all([
+        fetchContests(source),
+        fetchTasks(source),
+        taskService.getTasks(),
+      ]);
+
+      const registeredTaskMap = prepareTaskMap(tasksFromDB);
+      const unregisteredTasks = filterUnregisteredTasks(
+        contestsForImport,
+        tasksForImport,
+        registeredTaskMap,
+      );
+
+      return {
+        importContests: mergeContestsAndUnregisteredTasks(contestsForImport, unregisteredTasks),
+      };
+    } catch {
+      return fail(INTERNAL_SERVER_ERROR, { message: 'データ取得に失敗しました。' });
+    }
+  },
+
+  create: async ({ request, locals }) => {
+    await validateAdminAccess(locals);
+
+    const formData = await request.formData();
+    const source = formData.get('source');
+
+    if (!isContestTaskImportSource(source)) {
+      return fail(BAD_REQUEST, { message: 'コンテストサイト・種別が不正です。' });
+    }
+
+    const contest_id = formData.get('contest_id')?.toString();
+
+    if (!contest_id) {
+      return fail(BAD_REQUEST, { message: 'コンテストIDが指定されていません。' });
+    }
+
+    try {
+      const tasks = await fetchTasks(source);
+      const tasksByContestId = tasks.filter(
+        (task: TaskForImport) => task.contest_id === contest_id,
+      );
+
+      await Promise.all(
+        tasksByContestId.map(async (task: TaskForImport) => {
+          const id = (await sha256(contest_id + task.title)) as string;
+          await taskService.createTask(
+            id,
+            task.id,
+            task.contest_id,
+            task.problem_index,
+            task.title,
+          );
+        }),
+      );
+    } catch {
+      return { success: false };
+    }
+
+    return { success: true };
+  },
+};
 
 function prepareTaskMap(tasks: Tasks): Map<string, Task> {
   const taskMap = new Map<string, Task>();
@@ -60,8 +102,6 @@ function prepareTaskMap(tasks: Tasks): Map<string, Task> {
   return taskMap;
 }
 
-// See:
-// src/lib/utils/contest.ts
 function filterUnregisteredTasks(
   contestsForImport: ContestsForImport,
   tasksForImport: TasksForImport,
@@ -90,107 +130,12 @@ function filterUnregisteredTasks(
 function mergeContestsAndUnregisteredTasks(
   contestsForImport: ContestsForImport,
   unregisteredTasks: Map<string, TasksForImport>,
-) {
-  const contestsWithUnregisteredTasks: Contests = contestsForImport.map(
-    (contestForImport: ContestForImport) => {
-      return {
-        id: contestForImport.id,
-        title: contestForImport.title,
-        start_epoch_second: contestForImport.start_epoch_second,
-        duration_second: contestForImport.duration_second,
-        tasks: unregisteredTasks.get(contestForImport.id) ?? [],
-      };
-    },
-  );
-
-  return contestsWithUnregisteredTasks;
+): Contests {
+  return contestsForImport.map((contestForImport: ContestForImport) => ({
+    id: contestForImport.id,
+    title: contestForImport.title,
+    start_epoch_second: contestForImport.start_epoch_second,
+    duration_second: contestForImport.duration_second,
+    tasks: unregisteredTasks.get(contestForImport.id) ?? [],
+  }));
 }
-
-export const actions: Actions = {
-  create: async ({ request, locals }) => {
-    await validateAdminAccess(locals);
-
-    try {
-      console.log('users->actions->generate');
-      const formData = await request.formData();
-      const contest_id = formData.get('contest_id')?.toString() as string;
-
-      const tasks = await apiClient.getTasks();
-      const tasksByContestId = tasks.filter(
-        (task: TaskForImport) => task.contest_id === contest_id,
-      );
-
-      tasksByContestId.map(async (task: TaskForImport) => {
-        const id = (await sha256(contest_id + task.title)) as string;
-        await taskService.createTask(id, task.id, task.contest_id, task.problem_index, task.title);
-      });
-    } catch {
-      return {
-        success: false,
-      };
-    }
-
-    return {
-      success: true,
-    };
-  },
-
-  update: async ({ request, locals }) => {
-    await validateAdminAccess(locals);
-
-    try {
-      console.log('users->actions->generate');
-      const formData = await request.formData();
-      console.log(formData);
-      const task_id = formData.get('task_id')?.toString();
-
-      const task_grade_str: string | null = formData.get('task_grade')?.toString() || '';
-
-      //POSTされてこなかった場合は抜ける
-      if (task_grade_str === '') {
-        return {
-          success: true,
-        };
-      }
-
-      // Assuming getTaskGrade function is defined as mentioned before
-      const task_grade: TaskGrade | undefined = task_grade_str
-        ? getTaskGrade(task_grade_str)
-        : TaskGrade.PENDING;
-
-      if (!task_id || task_grade === undefined) {
-        return {
-          success: false,
-        };
-      }
-
-      const updateResult = await taskService.updateTask(task_id, task_grade);
-
-      if (updateResult === null) {
-        return {
-          success: false,
-        };
-      }
-
-      const contest_id = formData.get('contest_id')?.toString() as string;
-
-      const tasks = await apiClient.getTasks();
-
-      const tasksByContestId = tasks.filter(
-        (task: TaskForImport) => task.contest_id === contest_id,
-      );
-
-      tasksByContestId.map(async (task: TaskForImport) => {
-        const id = (await sha256(contest_id + task.title)) as string;
-        console.log(id);
-        await taskService.createTask(id, task.id, task.contest_id, task.problem_index, task.title);
-      });
-    } catch {
-      return {
-        success: false,
-      };
-    }
-
-    redirect(301, '/problems/');
-  },
-};

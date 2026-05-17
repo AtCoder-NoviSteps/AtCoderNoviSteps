@@ -1,4 +1,6 @@
-import type { Tasks } from '$lib/types/task';
+import { fail, type Actions } from '@sveltejs/kit';
+
+import { type Tasks, type TaskGrade, getTaskGrade } from '$lib/types/task';
 import type { Tag } from '$lib/types/tag';
 import type { ImportTaskTag } from '$lib/types/tasktag';
 
@@ -7,6 +9,8 @@ import * as taskTagsApiService from '$lib/services/tasktagsApiService';
 import * as taskTagsService from '$lib/services/task_tags';
 
 import { validateAdminAccess } from '$features/auth/services/admin_access';
+
+import { BAD_REQUEST } from '$lib/constants/http-response-status-codes';
 
 export async function load({ locals, params, url }) {
   await validateAdminAccess(locals, url);
@@ -46,3 +50,31 @@ export async function load({ locals, params, url }) {
     tags: Array.from(tagMap.values()),
   };
 }
+
+export const actions: Actions = {
+  update: async ({ request, locals }) => {
+    await validateAdminAccess(locals);
+
+    const formData = await request.formData();
+    const taskId = formData.get('task_id')?.toString();
+    const taskGradeStr = formData.get('task_grade')?.toString() ?? '';
+
+    if (taskGradeStr === '') {
+      return { success: true };
+    }
+
+    const task_grade: TaskGrade | undefined = getTaskGrade(taskGradeStr);
+
+    if (!taskId || task_grade === undefined) {
+      return fail(BAD_REQUEST, { success: false });
+    }
+
+    const updateResult = await taskService.updateTask(taskId, task_grade);
+
+    if (updateResult === null) {
+      return { success: false };
+    }
+
+    return { success: true };
+  },
+};

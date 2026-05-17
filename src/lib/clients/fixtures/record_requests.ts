@@ -1,123 +1,106 @@
 import path from 'path';
-
-// See:
-// https://github.com/nock/nock
-import nock from 'nock';
 import fs from 'fs';
 
-import type { TasksApiClient } from '$lib/clients/http_client';
-
 import { AtCoderProblemsApiClient } from '$lib/clients/atcoder/atcoder_problems';
-import { AojApiClient } from '$lib/clients/aizu_online_judge/clients';
+import { HttpRequestClient } from '$lib/clients/http_client';
+
+import type {
+  AOJCourseAPI,
+  AOJTaskAPIs,
+  AOJChallengeContestAPI,
+} from '$lib/clients/aizu_online_judge/types';
+
+import { AOJ_API_BASE_URL } from '$lib/constants/urls';
 
 // Run the main function if you add a contest site.
 // Usage:
 // pnpm dlx vite-node ./src/lib/clients/fixtures/record_requests.ts
+// Saves raw API responses (no transformation) so nock can replay them in tests.
 async function main(): Promise<void> {
   try {
-    startRecordRequests();
+    await saveAtCoder();
 
-    await Promise.all(
-      clients.map(async (client) => {
-        try {
-          await saveContests(client.source, client.name, 100);
-          await saveTasks(client.source, client.name, 100);
-        } catch (error) {
-          console.error(`Failed to save data for ${client.name}: `, error);
-        }
-      }),
-    );
+    // AOJ courses API has separate endpoints for contests and tasks, so we save them separately.
+    await saveAojCourseContests();
+    await saveAojCourseTasks();
+
+    for (const { contestType, round, dir } of challengeConfigs) {
+      await saveAojChallenge(contestType, round, dir);
+    }
   } catch (error) {
     console.error('Failed to record requests: ', error);
     throw error;
-  } finally {
-    stopRecordRequests();
   }
 }
 
-/**
- * An array of client objects, each containing a name and an instance of an API client.
- *
- * @constant
- * @type {Array<{ name: string, source: TasksApiClient<void> }>}
- * @property {string} name - The name of the client.
- * @property {TasksApiClient<void>} source - An instance of the API client.
- */
-const clients = [
-  { name: 'atcoder_problems', source: new AtCoderProblemsApiClient() },
-  { name: 'aizu_online_judge', source: new AojApiClient() },
-];
+const atCoderClient = new AtCoderProblemsApiClient();
+const aojHttpClient = new HttpRequestClient(AOJ_API_BASE_URL);
+
+const challengeConfigs = [
+  { contestType: 'PCK', round: 'PRELIM', dir: 'pck_prelim' },
+  { contestType: 'PCK', round: 'FINAL', dir: 'pck_final' },
+  { contestType: 'JAG', round: 'PRELIM', dir: 'jag_prelim' },
+  { contestType: 'JAG', round: 'REGIONAL', dir: 'jag_regional' },
+] as const;
 
 export const TEST_DATA_BASE_DIR = path.join('src', 'lib', 'clients', 'fixtures');
+
+// AtCoder Problems API returns data in ContestsForImport format directly (no transformation).
+async function saveAtCoder(): Promise<void> {
+  const contests = await atCoderClient.getContests();
+  const tasks = await atCoderClient.getTasks();
+
+  await toJson(
+    path.join(TEST_DATA_BASE_DIR, 'atcoder_problems', 'contests.json'),
+    getRandomElementsFromArray(contests, 100),
+  );
+  await toJson(
+    path.join(TEST_DATA_BASE_DIR, 'atcoder_problems', 'tasks.json'),
+    getRandomElementsFromArray(tasks, 100),
+  );
+}
+
+async function saveAojCourseContests(): Promise<void> {
+  const raw = await aojHttpClient.fetchApiWithConfig<AOJCourseAPI>({
+    endpoint: 'courses',
+    errorMessage: 'Failed to fetch AOJ courses',
+  });
+  await toJson(path.join(TEST_DATA_BASE_DIR, 'aizu_online_judge', 'courses', 'contests.json'), raw);
+}
+
+async function saveAojCourseTasks(): Promise<void> {
+  const raw = await aojHttpClient.fetchApiWithConfig<AOJTaskAPIs>({
+    endpoint: 'problems?size=10000',
+    errorMessage: 'Failed to fetch AOJ course tasks',
+  });
+  const sampled = getRandomElementsFromArray(raw, 100);
+
+  await toJson(
+    path.join(TEST_DATA_BASE_DIR, 'aizu_online_judge', 'courses', 'tasks.json'),
+    sampled,
+  );
+}
+
+async function saveAojChallenge(
+  contestType: 'PCK' | 'JAG',
+  round: 'PRELIM' | 'FINAL' | 'REGIONAL',
+  dir: string,
+): Promise<void> {
+  const raw = await aojHttpClient.fetchApiWithConfig<AOJChallengeContestAPI>({
+    endpoint: `challenges/cl/${contestType}/${round}`,
+    errorMessage: `Failed to fetch AOJ ${contestType} ${round}`,
+  });
+  const sampled = { ...raw, contests: getRandomElementsFromArray(raw.contests, 100) };
+
+  await toJson(
+    path.join(TEST_DATA_BASE_DIR, 'aizu_online_judge', 'challenges', dir, 'contests.json'),
+    sampled,
+  );
+}
 
 function ensureDirectoryExists(dirPath: string): void {
   if (!fs.existsSync(dirPath)) {
     fs.mkdirSync(dirPath, { recursive: true });
-  }
-}
-
-/**
- * Saves a specified number of contests from a contest site to a JSON file.
- *
- * @param client - An instance of `TasksApiClient<void>` used to fetch contests.
- * @param contestSite - The name of the contest site.
- * @param count - The number of contests to save. Defaults to 100.
- * @returns A promise that resolves when the contests have been saved.
- */
-async function saveContests(
-  client: TasksApiClient<void>,
-  contestSite: string,
-  count: number = 100,
-): Promise<void> {
-  validateContestSiteApi(client, contestSite);
-
-  const contests = await client.getContests();
-  const selectedContests = getRandomElementsFromArray(contests, count);
-
-  const filePath = path.join(TEST_DATA_BASE_DIR, contestSite, 'contests.json');
-  await toJson(filePath, selectedContests);
-}
-
-/**
- * Saves a specified number of tasks from a contest site to a JSON file.
- *
- * @param client - An instance of `TasksApiClient<void>` used to fetch tasks.
- * @param contestSite - The identifier for the contest site.
- * @param count - The number of tasks to save. Defaults to 100.
- *
- * @returns A promise that resolves when the tasks have been saved.
- */
-async function saveTasks(
-  client: TasksApiClient<void>,
-  contestSite: string,
-  count: number = 100,
-): Promise<void> {
-  validateContestSiteApi(client, contestSite);
-
-  const tasks = await client.getTasks();
-  const selectedTasks = getRandomElementsFromArray(tasks, count);
-
-  const filePath = path.join(TEST_DATA_BASE_DIR, contestSite, 'tasks.json');
-  await toJson(filePath, selectedTasks);
-}
-
-function startRecordRequests(): void {
-  nock.recorder.rec({
-    output_objects: true,
-    dont_print: true,
-  });
-}
-
-function stopRecordRequests(): void {
-  nock.recorder.play();
-}
-
-function validateContestSiteApi(client: TasksApiClient<void>, contestSite: string): void {
-  if (!client) {
-    throw new Error('Client is required');
-  }
-  if (!contestSite || contestSite.trim() === '') {
-    throw new Error('Contest site identifier is required');
   }
 }
 
@@ -147,14 +130,7 @@ function getRandomElementsFromArray<T>(array: T[], count: number): T[] {
   return results;
 }
 
-async function toJson<T>(filePath: string, data: T[]): Promise<void> {
-  if (!filePath || filePath.trim() === '') {
-    throw new Error('File path is required');
-  }
-  if (!Array.isArray(data)) {
-    throw new Error('Data must be an array');
-  }
-
+async function toJson<T>(filePath: string, data: T): Promise<void> {
   ensureDirectoryExists(path.dirname(filePath));
 
   await fs.promises.writeFile(filePath, JSON.stringify(data, null, 2), 'utf-8');

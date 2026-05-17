@@ -1,0 +1,1166 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>UI Mock - AtCoder NoviSteps</title>
+    <!-- Lucide Icons CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Flowbite v3 CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.css"
+      rel="stylesheet"
+    />
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              primary: {
+                50: '#eaf6f0',
+                100: '#d2ecdf',
+                200: '#bbe1ce',
+                300: '#a3d7bd',
+                400: '#8bcdac',
+                500: '#74c29b',
+                600: '#5cb88a',
+                700: '#44ae79',
+                800: '#2da368',
+                900: '#159957',
+              },
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      body {
+        background-color: #ffffff;
+        color: #111827;
+        margin: 0;
+        padding: 0;
+        font-family:
+          ui-sans-serif,
+          system-ui,
+          -apple-system,
+          BlinkMacSystemFont,
+          'Segoe UI',
+          Roboto,
+          'Helvetica Neue',
+          Arial,
+          'Noto Sans',
+          sans-serif;
+      }
+      @media (prefers-color-scheme: dark) {
+        body {
+          background-color: #111827;
+          color: #ffffff;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="w-5/6 mx-auto p-8">
+      <div class="w-2/3">
+        <header class="mb-8">
+          <h1 class="text-3xl font-bold mb-4">問題のインポート</h1>
+        </header>
+
+        <section class="mb-10">
+          <div class="p-6">
+            <label
+              for="source-select"
+              class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+              >コンテストサイト・種別</label
+            >
+            <div class="flex gap-4 items-center">
+              <select
+                id="source-select"
+                class="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+              >
+                <!-- <option value="" selected disabled>選択してください</option> -->
+                <option value="atcoder" selected>AtCoder</option>
+                <option value="aoj_pck_prelim">AOJ - パソコン甲子園 予選</option>
+                <option value="aoj_pck_final">AOJ - パソコン甲子園 本選</option>
+                <option value="aoj_jag_domestic">AOJ - JAG 模擬国内</option>
+                <option value="aoj_jag_regional">AOJ - JAG 模擬地区</option>
+              </select>
+              <button
+                id="fetch-button"
+                type="button"
+                class="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-xs px-4 py-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800 flex items-center gap-2 whitespace-nowrap"
+              >
+                <i data-lucide="download" class="w-4 h-4"></i>
+                問題を取得
+              </button>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <section id="results-section" class="hidden">
+        <h2 class="text-xl font-semibold flex items-center gap-2 mb-4">
+          <i data-lucide="list" class="w-5 h-5 text-primary-500"></i>
+          一覧
+        </h2>
+        <div class="flex items-center justify-between mb-4">
+          <div class="relative">
+            <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+              <i data-lucide="search" class="w-4 h-4 text-gray-400"></i>
+            </div>
+            <input
+              id="search-input"
+              type="text"
+              placeholder="コンテストID・コンテスト名・問題名で絞り込み"
+              class="block w-96 pl-9 pr-3 py-2 text-sm text-gray-900 border border-gray-300 rounded-lg bg-white focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:placeholder-gray-400 dark:focus:ring-primary-500 dark:focus:border-primary-500"
+            />
+          </div>
+          <div id="pagination-top" class="flex items-center gap-2"></div>
+        </div>
+        <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+          <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+            <thead
+              class="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-400"
+            >
+              <tr>
+                <th
+                  scope="col"
+                  class="px-6 py-3 w-1/6 cursor-pointer select-none hover:bg-gray-200 dark:hover:bg-gray-600"
+                  id="sort-id"
+                >
+                  <div class="flex items-center gap-1">
+                    コンテストID <span id="sort-id-icon" class="text-gray-400"></span>
+                  </div>
+                </th>
+                <th
+                  scope="col"
+                  class="px-6 py-3 w-1/3 cursor-pointer select-none hover:bg-gray-200 dark:hover:bg-gray-600"
+                  id="sort-title"
+                >
+                  <div class="flex items-center gap-1">
+                    コンテスト名 <span id="sort-title-icon" class="text-gray-400"></span>
+                  </div>
+                </th>
+                <th scope="col" class="px-6 py-3 w-5/12">問題名</th>
+                <th scope="col" class="px-6 py-3 text-right"></th>
+              </tr>
+            </thead>
+            <tbody
+              id="table-body"
+              class="divide-y divide-gray-200 dark:divide-gray-700 bg-white dark:bg-gray-800"
+            ></tbody>
+          </table>
+        </div>
+        <div class="flex justify-end mt-3">
+          <div id="pagination-bottom" class="flex items-center gap-2"></div>
+        </div>
+      </section>
+
+      <div
+        id="loading-state"
+        class="flex flex-col items-center justify-center p-12"
+        style="display: none"
+      >
+        <div role="status">
+          <svg
+            aria-hidden="true"
+            class="w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-primary-600"
+            viewBox="0 0 100 101"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
+              fill="currentColor"
+            />
+            <path
+              d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
+              fill="currentFill"
+            />
+          </svg>
+        </div>
+        <p class="mt-4 text-sm text-gray-500 dark:text-gray-400">データを取得しています...</p>
+      </div>
+    </div>
+
+    <!-- Flowbite v3 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>
+    <script>
+      lucide.createIcons();
+
+      const mockData = {
+        atcoder: [
+          {
+            id: 'abc300',
+            title: 'AtCoder Beginner Contest 300',
+            tasks: [
+              { id: 'abc300_a', title: 'A - N-choice question' },
+              { id: 'abc300_b', title: 'B - Same Map in the Same Way' },
+            ],
+          },
+          {
+            id: 'abc301',
+            title: 'AtCoder Beginner Contest 301',
+            tasks: [
+              { id: 'abc301_a', title: 'A - Overall Winner' },
+              { id: 'abc301_b', title: 'B - Fill the Gaps' },
+            ],
+          },
+          {
+            id: 'abc302',
+            title: 'AtCoder Beginner Contest 302',
+            tasks: [
+              { id: 'abc302_a', title: 'A - Attack' },
+              { id: 'abc302_b', title: 'B - Find snuke' },
+            ],
+          },
+          {
+            id: 'abc303',
+            title: 'AtCoder Beginner Contest 303',
+            tasks: [
+              { id: 'abc303_a', title: 'A - Similar String' },
+              { id: 'abc303_b', title: 'B - Substring' },
+            ],
+          },
+          {
+            id: 'abc304',
+            title: 'AtCoder Beginner Contest 304',
+            tasks: [
+              { id: 'abc304_a', title: 'A - First Player' },
+              { id: 'abc304_b', title: 'B - Smartphones' },
+            ],
+          },
+          {
+            id: 'abc305',
+            title: 'AtCoder Beginner Contest 305',
+            tasks: [
+              { id: 'abc305_a', title: 'A - Water' },
+              { id: 'abc305_b', title: 'B - ABCDEFG' },
+            ],
+          },
+          {
+            id: 'abc306',
+            title: 'AtCoder Beginner Contest 306',
+            tasks: [
+              { id: 'abc306_a', title: 'A - Count Takahashi' },
+              { id: 'abc306_b', title: 'B - Base 2' },
+            ],
+          },
+          {
+            id: 'abc307',
+            title: 'AtCoder Beginner Contest 307',
+            tasks: [
+              { id: 'abc307_a', title: 'A - Weekly Records' },
+              { id: 'abc307_b', title: 'B - racecar' },
+            ],
+          },
+          {
+            id: 'abc308',
+            title: 'AtCoder Beginner Contest 308',
+            tasks: [
+              { id: 'abc308_a', title: 'A - New Scheme' },
+              { id: 'abc308_b', title: 'B - Pill' },
+            ],
+          },
+          {
+            id: 'abc309',
+            title: 'AtCoder Beginner Contest 309',
+            tasks: [
+              { id: 'abc309_a', title: 'A - Nine' },
+              { id: 'abc309_b', title: 'B - Rotate' },
+            ],
+          },
+          {
+            id: 'abc310',
+            title: 'AtCoder Beginner Contest 310',
+            tasks: [
+              { id: 'abc310_a', title: 'A - Order Something' },
+              { id: 'abc310_b', title: 'B - Qualification' },
+            ],
+          },
+          {
+            id: 'abc311',
+            title: 'AtCoder Beginner Contest 311',
+            tasks: [
+              { id: 'abc311_a', title: 'A - First Digit' },
+              { id: 'abc311_b', title: 'B - Grid' },
+            ],
+          },
+          {
+            id: 'abc312',
+            title: 'AtCoder Beginner Contest 312',
+            tasks: [
+              { id: 'abc312_a', title: 'A - Chord' },
+              { id: 'abc312_b', title: 'B - TaK Code' },
+            ],
+          },
+          {
+            id: 'abc313',
+            title: 'AtCoder Beginner Contest 313',
+            tasks: [
+              { id: 'abc313_a', title: 'A - To Be Scolded' },
+              { id: 'abc313_b', title: 'B - Who is Saikawa?' },
+            ],
+          },
+          {
+            id: 'abc314',
+            title: 'AtCoder Beginner Contest 314',
+            tasks: [
+              { id: 'abc314_a', title: 'A - 3.14' },
+              { id: 'abc314_b', title: 'B - Roulette' },
+            ],
+          },
+          {
+            id: 'abc315',
+            title: 'AtCoder Beginner Contest 315',
+            tasks: [
+              { id: 'abc315_a', title: 'A - 321' },
+              { id: 'abc315_b', title: 'B - Shifting Bits' },
+            ],
+          },
+          {
+            id: 'abc316',
+            title: 'AtCoder Beginner Contest 316',
+            tasks: [
+              { id: 'abc316_a', title: 'A - Candy' },
+              { id: 'abc316_b', title: 'B - Dressup' },
+            ],
+          },
+          {
+            id: 'abc317',
+            title: 'AtCoder Beginner Contest 317',
+            tasks: [
+              { id: 'abc317_a', title: 'A - Dreamer' },
+              { id: 'abc317_b', title: 'B - Perfect Team' },
+            ],
+          },
+          {
+            id: 'abc318',
+            title: 'AtCoder Beginner Contest 318',
+            tasks: [
+              { id: 'abc318_a', title: 'A - Full Moon' },
+              { id: 'abc318_b', title: 'B - Overlapping sheets' },
+            ],
+          },
+          {
+            id: 'abc319',
+            title: 'AtCoder Beginner Contest 319',
+            tasks: [
+              { id: 'abc319_a', title: 'A - Legendary Players' },
+              { id: 'abc319_b', title: 'B - Smartphone' },
+            ],
+          },
+        ],
+        aoj_pck_prelim: [
+          {
+            id: 'pck_prelim_2005',
+            title: 'PCK Prelim 2005',
+            tasks: [
+              { id: '0002', title: 'Digit Sum' },
+              { id: '0003', title: 'Median' },
+            ],
+          },
+          {
+            id: 'pck_prelim_2006',
+            title: 'PCK Prelim 2006',
+            tasks: [
+              { id: '0013', title: 'Switching' },
+              { id: '0014', title: 'Calendar' },
+            ],
+          },
+          {
+            id: 'pck_prelim_2007',
+            title: 'PCK Prelim 2007',
+            tasks: [
+              { id: '0025', title: 'Cipher' },
+              { id: '0026', title: 'Scoring' },
+            ],
+          },
+          {
+            id: 'pck_prelim_2008',
+            title: 'PCK Prelim 2008',
+            tasks: [
+              { id: '0037', title: 'Card' },
+              { id: '0038', title: 'Equation' },
+            ],
+          },
+          {
+            id: 'pck_prelim_2009',
+            title: 'PCK Prelim 2009',
+            tasks: [
+              { id: '0049', title: 'Stamp' },
+              { id: '0050', title: 'Route' },
+            ],
+          },
+          {
+            id: 'pck_prelim_2010',
+            title: 'PCK Prelim 2010',
+            tasks: [
+              { id: '0085', title: 'Dial' },
+              { id: '0086', title: 'Clock' },
+            ],
+          },
+          {
+            id: 'pck_prelim_2011',
+            title: 'PCK Prelim 2011',
+            tasks: [
+              { id: '0107', title: 'Flag' },
+              { id: '0108', title: 'Password' },
+            ],
+          },
+          {
+            id: 'pck_prelim_2012',
+            title: 'PCK Prelim 2012',
+            tasks: [
+              { id: '0142', title: 'Vending' },
+              { id: '0143', title: 'Tile' },
+            ],
+          },
+          {
+            id: 'pck_prelim_2013',
+            title: 'PCK Prelim 2013',
+            tasks: [
+              { id: '0195', title: 'Parking' },
+              { id: '0196', title: 'Maze' },
+            ],
+          },
+          {
+            id: 'pck_prelim_2014',
+            title: 'PCK Prelim 2014',
+            tasks: [
+              { id: '0236', title: 'Lottery' },
+              { id: '0237', title: 'Snowball' },
+            ],
+          },
+          {
+            id: 'pck_prelim_2015',
+            title: 'PCK Prelim 2015',
+            tasks: [
+              { id: '0270', title: 'Pocket' },
+              { id: '0271', title: 'Shopping' },
+            ],
+          },
+          {
+            id: 'pck_prelim_2016',
+            title: 'PCK Prelim 2016',
+            tasks: [
+              { id: '0310', title: 'Elevator' },
+              { id: '0311', title: 'Garden' },
+            ],
+          },
+          {
+            id: 'pck_prelim_2017',
+            title: 'PCK Prelim 2017',
+            tasks: [
+              { id: '0348', title: 'Taxi' },
+              { id: '0349', title: 'Museum' },
+            ],
+          },
+          {
+            id: 'pck_prelim_2018',
+            title: 'PCK Prelim 2018',
+            tasks: [
+              { id: '0390', title: 'Fence' },
+              { id: '0391', title: 'Delivery' },
+            ],
+          },
+          {
+            id: 'pck_prelim_2019',
+            title: 'PCK Prelim 2019',
+            tasks: [
+              { id: '0420', title: 'Signal' },
+              { id: '0421', title: 'Island' },
+            ],
+          },
+          {
+            id: 'pck_prelim_2020',
+            title: 'PCK Prelim 2020',
+            tasks: [
+              { id: '0440', title: 'Warehouse' },
+              { id: '0441', title: 'Bridge' },
+            ],
+          },
+          {
+            id: 'pck_prelim_2021',
+            title: 'PCK Prelim 2021',
+            tasks: [
+              { id: '0455', title: 'Market' },
+              { id: '0456', title: 'Forest' },
+            ],
+          },
+          {
+            id: 'pck_prelim_2022',
+            title: 'PCK Prelim 2022',
+            tasks: [
+              { id: '0470', title: 'Gift' },
+              { id: '0471', title: 'River' },
+            ],
+          },
+          {
+            id: 'pck_prelim_2023',
+            title: 'PCK Prelim 2023',
+            tasks: [
+              { id: '0490', title: 'Tower' },
+              { id: '0491', title: 'Field' },
+            ],
+          },
+          {
+            id: 'pck_prelim_2024',
+            title: 'PCK Prelim 2024',
+            tasks: [
+              { id: '0510', title: 'Village' },
+              { id: '0511', title: 'Harbor' },
+            ],
+          },
+        ],
+        aoj_pck_final: [
+          {
+            id: 'pck_final_2005',
+            title: 'PCK Final 2005',
+            tasks: [
+              { id: '0008', title: 'Matrix' },
+              { id: '0009', title: 'Graph' },
+            ],
+          },
+          {
+            id: 'pck_final_2006',
+            title: 'PCK Final 2006',
+            tasks: [
+              { id: '0019', title: 'Polygon' },
+              { id: '0020', title: 'Circuit' },
+            ],
+          },
+          {
+            id: 'pck_final_2007',
+            title: 'PCK Final 2007',
+            tasks: [
+              { id: '0031', title: 'Tiling' },
+              { id: '0032', title: 'Labyrinth' },
+            ],
+          },
+          {
+            id: 'pck_final_2008',
+            title: 'PCK Final 2008',
+            tasks: [
+              { id: '0043', title: 'Flow' },
+              { id: '0044', title: 'Matching' },
+            ],
+          },
+          {
+            id: 'pck_final_2009',
+            title: 'PCK Final 2009',
+            tasks: [
+              { id: '0055', title: 'Geometry' },
+              { id: '0056', title: 'Spanning' },
+            ],
+          },
+          {
+            id: 'pck_final_2010',
+            title: 'PCK Final 2010',
+            tasks: [
+              { id: '0092', title: 'Knapsack' },
+              { id: '0093', title: 'Segment' },
+            ],
+          },
+          {
+            id: 'pck_final_2011',
+            title: 'PCK Final 2011',
+            tasks: [
+              { id: '0115', title: 'Permutation' },
+              { id: '0116', title: 'Interval' },
+            ],
+          },
+          {
+            id: 'pck_final_2012',
+            title: 'PCK Final 2012',
+            tasks: [
+              { id: '0152', title: 'Partition' },
+              { id: '0153', title: 'Network' },
+            ],
+          },
+          {
+            id: 'pck_final_2013',
+            title: 'PCK Final 2013',
+            tasks: [
+              { id: '0205', title: 'Schedule' },
+              { id: '0206', title: 'Bracket' },
+            ],
+          },
+          {
+            id: 'pck_final_2014',
+            title: 'PCK Final 2014',
+            tasks: [
+              { id: '0245', title: 'Sequence' },
+              { id: '0246', title: 'Coloring' },
+            ],
+          },
+          {
+            id: 'pck_final_2015',
+            title: 'PCK Final 2015',
+            tasks: [
+              { id: '0280', title: 'Arrangement' },
+              { id: '0281', title: 'Division' },
+            ],
+          },
+          {
+            id: 'pck_final_2016',
+            title: 'PCK Final 2016',
+            tasks: [
+              { id: '0320', title: 'Recursion' },
+              { id: '0321', title: 'Simulation' },
+            ],
+          },
+          {
+            id: 'pck_final_2017',
+            title: 'PCK Final 2017',
+            tasks: [
+              { id: '0358', title: 'Reduction' },
+              { id: '0359', title: 'Expression' },
+            ],
+          },
+          {
+            id: 'pck_final_2018',
+            title: 'PCK Final 2018',
+            tasks: [
+              { id: '0400', title: 'Combination' },
+              { id: '0401', title: 'Conversion' },
+            ],
+          },
+          {
+            id: 'pck_final_2019',
+            title: 'PCK Final 2019',
+            tasks: [
+              { id: '0430', title: 'Optimization' },
+              { id: '0431', title: 'Compression' },
+            ],
+          },
+          {
+            id: 'pck_final_2020',
+            title: 'PCK Final 2020',
+            tasks: [
+              { id: '0448', title: 'Traversal' },
+              { id: '0449', title: 'Enumeration' },
+            ],
+          },
+          {
+            id: 'pck_final_2021',
+            title: 'PCK Final 2021',
+            tasks: [
+              { id: '0463', title: 'Allocation' },
+              { id: '0464', title: 'Construction' },
+            ],
+          },
+          {
+            id: 'pck_final_2022',
+            title: 'PCK Final 2022',
+            tasks: [
+              { id: '0480', title: 'Inheritance' },
+              { id: '0481', title: 'Transformation' },
+            ],
+          },
+          {
+            id: 'pck_final_2023',
+            title: 'PCK Final 2023',
+            tasks: [
+              { id: '0498', title: 'Generation' },
+              { id: '0499', title: 'Restoration' },
+            ],
+          },
+          {
+            id: 'pck_final_2024',
+            title: 'PCK Final 2024',
+            tasks: [
+              { id: '0518', title: 'Foundation' },
+              { id: '0519', title: 'Revolution' },
+            ],
+          },
+        ],
+        aoj_jag_domestic: [
+          {
+            id: 'jag_domestic_2006',
+            title: 'JAG 模擬国内予選 2006',
+            tasks: [
+              { id: '3100', title: 'A - Array' },
+              { id: '3101', title: 'B - Sort' },
+            ],
+          },
+          {
+            id: 'jag_domestic_2007',
+            title: 'JAG 模擬国内予選 2007',
+            tasks: [
+              { id: '3110', title: 'A - Path' },
+              { id: '3111', title: 'B - Cycle' },
+            ],
+          },
+          {
+            id: 'jag_domestic_2008',
+            title: 'JAG 模擬国内予選 2008',
+            tasks: [
+              { id: '3120', title: 'A - Heap' },
+              { id: '3121', title: 'B - Queue' },
+            ],
+          },
+          {
+            id: 'jag_domestic_2009',
+            title: 'JAG 模擬国内予選 2009',
+            tasks: [
+              { id: '3130', title: 'A - Stack' },
+              { id: '3131', title: 'B - List' },
+            ],
+          },
+          {
+            id: 'jag_domestic_2010',
+            title: 'JAG 模擬国内予選 2010',
+            tasks: [
+              { id: '3140', title: 'A - Map' },
+              { id: '3141', title: 'B - Set' },
+            ],
+          },
+          {
+            id: 'jag_domestic_2011',
+            title: 'JAG 模擬国内予選 2011',
+            tasks: [
+              { id: '3150', title: 'A - Tree' },
+              { id: '3151', title: 'B - Graph' },
+            ],
+          },
+          {
+            id: 'jag_domestic_2012',
+            title: 'JAG 模擬国内予選 2012',
+            tasks: [
+              { id: '3160', title: 'A - Flow' },
+              { id: '3161', title: 'B - Cut' },
+            ],
+          },
+          {
+            id: 'jag_domestic_2013',
+            title: 'JAG 模擬国内予選 2013',
+            tasks: [
+              { id: '3170', title: 'A - Match' },
+              { id: '3171', title: 'B - Cover' },
+            ],
+          },
+          {
+            id: 'jag_domestic_2014',
+            title: 'JAG 模擬国内予選 2014',
+            tasks: [
+              { id: '3180', title: 'A - Span' },
+              { id: '3181', title: 'B - Range' },
+            ],
+          },
+          {
+            id: 'jag_domestic_2015',
+            title: 'JAG 模擬国内予選 2015',
+            tasks: [
+              { id: '3190', title: 'A - Pair' },
+              { id: '3191', title: 'B - Union' },
+            ],
+          },
+          {
+            id: 'jag_domestic_2016',
+            title: 'JAG 模擬国内予選 2016',
+            tasks: [
+              { id: '3199', title: 'A - Find' },
+              { id: '3200', title: 'B - Search' },
+            ],
+          },
+          {
+            id: 'jag_domestic_2017',
+            title: 'JAG 模擬国内予選 2017',
+            tasks: [
+              { id: '3210', title: 'A - Count' },
+              { id: '3211', title: 'B - Sum' },
+            ],
+          },
+          {
+            id: 'jag_domestic_2018',
+            title: 'JAG 模擬国内予選 2018',
+            tasks: [
+              { id: '3220', title: 'A - Max' },
+              { id: '3221', title: 'B - Min' },
+            ],
+          },
+          {
+            id: 'jag_domestic_2019',
+            title: 'JAG 模擬国内予選 2019',
+            tasks: [
+              { id: '3230', title: 'A - Swap' },
+              { id: '3231', title: 'B - Shift' },
+            ],
+          },
+          {
+            id: 'jag_domestic_2020',
+            title: 'JAG 模擬国内予選 2020',
+            tasks: [
+              { id: '3240', title: 'A - Rotate' },
+              { id: '3241', title: 'B - Reverse' },
+            ],
+          },
+          {
+            id: 'jag_domestic_2021',
+            title: 'JAG 模擬国内予選 2021',
+            tasks: [
+              { id: '3250', title: 'A - Merge' },
+              { id: '3251', title: 'B - Split' },
+            ],
+          },
+          {
+            id: 'jag_domestic_2022',
+            title: 'JAG 模擬国内予選 2022',
+            tasks: [
+              { id: '3260', title: 'A - Concat' },
+              { id: '3261', title: 'B - Trim' },
+            ],
+          },
+          {
+            id: 'jag_domestic_2023',
+            title: 'JAG 模擬国内予選 2023',
+            tasks: [
+              { id: '3270', title: 'A - Pad' },
+              { id: '3271', title: 'B - Strip' },
+            ],
+          },
+          {
+            id: 'jag_domestic_2024',
+            title: 'JAG 模擬国内予選 2024',
+            tasks: [
+              { id: '3280', title: 'A - Fill' },
+              { id: '3281', title: 'B - Clear' },
+            ],
+          },
+          {
+            id: 'jag_domestic_2025',
+            title: 'JAG 模擬国内予選 2025',
+            tasks: [
+              { id: '3290', title: 'A - Reset' },
+              { id: '3291', title: 'B - Init' },
+            ],
+          },
+        ],
+        aoj_jag_regional: [
+          {
+            id: 'jag_regional_2006',
+            title: 'JAG 模擬地区予選 2006',
+            tasks: [
+              { id: '3300', title: 'A - Vertex' },
+              { id: '3301', title: 'B - Edge' },
+            ],
+          },
+          {
+            id: 'jag_regional_2007',
+            title: 'JAG 模擬地区予選 2007',
+            tasks: [
+              { id: '3310', title: 'A - Node' },
+              { id: '3311', title: 'B - Link' },
+            ],
+          },
+          {
+            id: 'jag_regional_2008',
+            title: 'JAG 模擬地区予選 2008',
+            tasks: [
+              { id: '3320', title: 'A - Root' },
+              { id: '3321', title: 'B - Leaf' },
+            ],
+          },
+          {
+            id: 'jag_regional_2009',
+            title: 'JAG 模擬地区予選 2009',
+            tasks: [
+              { id: '3330', title: 'A - Depth' },
+              { id: '3331', title: 'B - Width' },
+            ],
+          },
+          {
+            id: 'jag_regional_2010',
+            title: 'JAG 模擬地区予選 2010',
+            tasks: [
+              { id: '3340', title: 'A - Height' },
+              { id: '3341', title: 'B - Level' },
+            ],
+          },
+          {
+            id: 'jag_regional_2011',
+            title: 'JAG 模擬地区予選 2011',
+            tasks: [
+              { id: '3350', title: 'A - Order' },
+              { id: '3351', title: 'B - Rank' },
+            ],
+          },
+          {
+            id: 'jag_regional_2012',
+            title: 'JAG 模擬地区予選 2012',
+            tasks: [
+              { id: '3360', title: 'A - Index' },
+              { id: '3361', title: 'B - Key' },
+            ],
+          },
+          {
+            id: 'jag_regional_2013',
+            title: 'JAG 模擬地区予選 2013',
+            tasks: [
+              { id: '3370', title: 'A - Value' },
+              { id: '3371', title: 'B - Token' },
+            ],
+          },
+          {
+            id: 'jag_regional_2014',
+            title: 'JAG 模擬地区予選 2014',
+            tasks: [
+              { id: '3380', title: 'A - Symbol' },
+              { id: '3381', title: 'B - Label' },
+            ],
+          },
+          {
+            id: 'jag_regional_2015',
+            title: 'JAG 模擬地区予選 2015',
+            tasks: [
+              { id: '3390', title: 'A - Tag' },
+              { id: '3391', title: 'B - Scope' },
+            ],
+          },
+          {
+            id: 'jag_regional_2016',
+            title: 'JAG 模擬地区予選 2016',
+            tasks: [
+              { id: '3400', title: 'A - Block' },
+              { id: '3401', title: 'B - Frame' },
+            ],
+          },
+          {
+            id: 'jag_regional_2017',
+            title: 'JAG 模擬地区予選 2017',
+            tasks: [
+              { id: '3410', title: 'A - Layer' },
+              { id: '3411', title: 'B - Buffer' },
+            ],
+          },
+          {
+            id: 'jag_regional_2018',
+            title: 'JAG 模擬地区予選 2018',
+            tasks: [
+              { id: '3420', title: 'A - Cache' },
+              { id: '3421', title: 'B - Chunk' },
+            ],
+          },
+          {
+            id: 'jag_regional_2019',
+            title: 'JAG 模擬地区予選 2019',
+            tasks: [
+              { id: '3430', title: 'A - Page' },
+              { id: '3431', title: 'B - Byte' },
+            ],
+          },
+          {
+            id: 'jag_regional_2020',
+            title: 'JAG 模擬地区予選 2020',
+            tasks: [
+              { id: '3440', title: 'A - Word' },
+              { id: '3441', title: 'B - Bit' },
+            ],
+          },
+          {
+            id: 'jag_regional_2021',
+            title: 'JAG 模擬地区予選 2021',
+            tasks: [
+              { id: '3450', title: 'A - Flag' },
+              { id: '3451', title: 'B - Mask' },
+            ],
+          },
+          {
+            id: 'jag_regional_2022',
+            title: 'JAG 模擬地区予選 2022',
+            tasks: [
+              { id: '3460', title: 'A - Port' },
+              { id: '3461', title: 'B - Pipe' },
+            ],
+          },
+          {
+            id: 'jag_regional_2023',
+            title: 'JAG 模擬地区予選 2023',
+            tasks: [
+              { id: '3470', title: 'A - Wire' },
+              { id: '3471', title: 'B - Signal' },
+            ],
+          },
+          {
+            id: 'jag_regional_2024',
+            title: 'JAG 模擬地区予選 2024',
+            tasks: [
+              { id: '3480', title: 'A - Pulse' },
+              { id: '3481', title: 'B - Clock' },
+            ],
+          },
+          {
+            id: 'jag_regional_2025',
+            title: 'JAG 模擬地区予選 2025',
+            tasks: [
+              { id: '3490', title: 'A - Timer' },
+              { id: '3491', title: 'B - Counter' },
+            ],
+          },
+        ],
+      };
+
+      const sourceSelect = document.getElementById('source-select');
+      const fetchButton = document.getElementById('fetch-button');
+      const resultsSection = document.getElementById('results-section');
+      const tableBody = document.getElementById('table-body');
+      const loadingState = document.getElementById('loading-state');
+      const paginationTop = document.getElementById('pagination-top');
+      const paginationBottom = document.getElementById('pagination-bottom');
+      const searchInput = document.getElementById('search-input');
+
+      const PAGE_SIZE = 10;
+      let currentPage = 1;
+      let currentContests = [];
+      let filteredContests = [];
+      let sortKey = null;
+      let sortAsc = true;
+
+      const sortIdHeader = document.getElementById('sort-id');
+      const sortTitleHeader = document.getElementById('sort-title');
+      const sortIdIcon = document.getElementById('sort-id-icon');
+      const sortTitleIcon = document.getElementById('sort-title-icon');
+
+      const applySort = () => {
+        if (!sortKey) return;
+        filteredContests = [...filteredContests].sort((a, b) => {
+          const cmp = a[sortKey].localeCompare(b[sortKey], 'ja');
+          return sortAsc ? cmp : -cmp;
+        });
+      };
+
+      const updateSortIcons = () => {
+        sortIdIcon.textContent = sortKey === 'id' ? (sortAsc ? '▲' : '▼') : '';
+        sortTitleIcon.textContent = sortKey === 'title' ? (sortAsc ? '▲' : '▼') : '';
+      };
+
+      const onSortClick = (key) => {
+        if (sortKey === key) {
+          sortAsc = !sortAsc;
+        } else {
+          sortKey = key;
+          sortAsc = true;
+        }
+        applySort();
+        updateSortIcons();
+        currentPage = 1;
+        renderPage();
+        lucide.createIcons();
+      };
+
+      sortIdHeader.addEventListener('click', () => onSortClick('id'));
+      sortTitleHeader.addEventListener('click', () => onSortClick('title'));
+
+      fetchButton.addEventListener('click', () => {
+        const source = sourceSelect.value;
+        if (!source) return;
+
+        resultsSection.classList.add('hidden');
+        loadingState.style.display = 'flex';
+
+        setTimeout(() => {
+          currentContests = mockData[source] || [];
+          searchInput.value = '';
+          filteredContests = currentContests;
+          sortKey = null;
+          sortAsc = true;
+          updateSortIcons();
+          currentPage = 1;
+          renderPage();
+          loadingState.style.display = 'none';
+          resultsSection.classList.remove('hidden');
+          lucide.createIcons();
+        }, 500);
+      });
+
+      searchInput.addEventListener('input', () => {
+        const query = searchInput.value.trim().toLowerCase();
+        filteredContests = query
+          ? currentContests.filter(
+              (c) =>
+                c.id.toLowerCase().includes(query) ||
+                c.title.toLowerCase().includes(query) ||
+                c.tasks.some((t) => t.title.toLowerCase().includes(query)),
+            )
+          : currentContests;
+        applySort();
+        currentPage = 1;
+        renderPage();
+        lucide.createIcons();
+      });
+
+      function renderPage() {
+        const totalPages = Math.ceil(filteredContests.length / PAGE_SIZE);
+        const start = (currentPage - 1) * PAGE_SIZE;
+        const pageContests = filteredContests.slice(start, start + PAGE_SIZE);
+
+        tableBody.innerHTML = '';
+        if (pageContests.length === 0) {
+          const row = document.createElement('tr');
+          row.innerHTML = `<td colspan="4" class="px-6 py-4 text-center text-sm text-gray-400 dark:text-gray-500">該当するコンテストが見つかりませんでした</td>`;
+          tableBody.appendChild(row);
+        }
+        pageContests.forEach((contest) => {
+          const row = document.createElement('tr');
+          row.className = 'bg-white dark:bg-gray-800 border-b dark:border-gray-700';
+          const taskList = contest.tasks.map((task) => `<li>${task.title}</li>`).join('');
+          row.innerHTML = `
+            <td class="px-6 py-4 font-mono text-xs">${contest.id}</td>
+            <td class="px-6 py-4">${contest.title}</td>
+            <td class="px-6 py-4"><ul class="list-disc list-inside">${taskList}</ul></td>
+            <td class="px-6 py-4 text-right whitespace-nowrap">
+              <button type="button" class="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-xs px-3 py-2 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
+                インポート
+              </button>
+            </td>
+          `;
+          tableBody.appendChild(row);
+        });
+
+        renderPagination(paginationTop, totalPages);
+        renderPagination(paginationBottom, totalPages);
+      }
+
+      function renderPagination(container, totalPages) {
+        const btnBase =
+          'flex items-center justify-center px-3 h-8 text-sm font-medium rounded-lg border';
+        const btnInactive = `${btnBase} text-gray-500 bg-white border-gray-300 hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700`;
+        const btnDisabled = `${btnBase} text-gray-300 bg-white border-gray-200 cursor-not-allowed dark:bg-gray-800 dark:border-gray-700 dark:text-gray-600`;
+
+        container.innerHTML = '';
+
+        const prevBtn = document.createElement('button');
+        prevBtn.type = 'button';
+        prevBtn.innerHTML = '<i data-lucide="chevron-left" class="w-4 h-4"></i>';
+        prevBtn.className = currentPage === 1 ? btnDisabled : btnInactive;
+        prevBtn.disabled = currentPage === 1;
+        prevBtn.addEventListener('click', () => {
+          currentPage--;
+          renderPage();
+          lucide.createIcons();
+        });
+        container.appendChild(prevBtn);
+
+        const pageInfo = document.createElement('span');
+        pageInfo.className = 'text-sm text-gray-600 dark:text-gray-400 px-1';
+        pageInfo.textContent = `${currentPage} / ${totalPages}`;
+        container.appendChild(pageInfo);
+
+        const nextBtn = document.createElement('button');
+        nextBtn.type = 'button';
+        nextBtn.innerHTML = '<i data-lucide="chevron-right" class="w-4 h-4"></i>';
+        nextBtn.className = currentPage === totalPages ? btnDisabled : btnInactive;
+        nextBtn.disabled = currentPage === totalPages;
+        nextBtn.addEventListener('click', () => {
+          currentPage++;
+          renderPage();
+          lucide.createIcons();
+        });
+        container.appendChild(nextBtn);
+      }
+    </script>
+  </body>
+</html>
