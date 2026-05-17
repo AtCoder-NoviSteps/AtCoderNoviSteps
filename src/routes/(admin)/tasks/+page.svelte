@@ -24,7 +24,7 @@
   let isFetching = $state(false);
   let fetchError = $state<string | null>(null);
 
-  // result.data is applied directly to avoid calling update() / applyAction(),
+  // Note: result.data is applied directly to avoid calling update() / applyAction(),
   // both of which trigger invalidateAll() and reset Flowbite Select's displayed value.
   const handleFetch: SubmitFunction = () => {
     isFetching = true;
