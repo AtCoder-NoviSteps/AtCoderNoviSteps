@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { SubmitFunction } from '@sveltejs/kit';
-  import { enhance, applyAction } from '$app/forms';
+  import { enhance } from '$app/forms';
 
   import { Select, Label, Button, PaginationNav } from 'flowbite-svelte';
 
@@ -15,28 +15,12 @@
 
   const PAGE_SIZE = 20;
 
-  let { form } = $props();
-
   let selectedSource = $state<ContestTaskImportSource>('atcoder');
   let searchQuery = $state('');
   let currentPage = $state(1);
   let importContests = $state<Contests>([]);
   let isFetching = $state(false);
   let fetchError = $state<string | null>(null);
-
-  // Sync only when form.importContests is present.
-  // After a create action, form becomes {success:true} with no importContests,
-  // so this block does not fire and the displayed list is preserved.
-  $effect(() => {
-    if (form?.importContests) {
-      importContests = form.importContests;
-      currentPage = 1;
-      searchQuery = '';
-      fetchError = null;
-    } else if (form?.message) {
-      fetchError = form.message;
-    }
-  });
 
   const filteredContests = $derived(filterContests(importContests, searchQuery));
 
@@ -51,14 +35,24 @@
     name: config.label,
   }));
 
-  // Use applyAction() instead of update() to skip invalidateAll(),
+  // update() is intentionally not called to skip invalidateAll(),
   // preventing Flowbite Select from resetting its displayed value.
   const handleFetch: SubmitFunction = () => {
     isFetching = true;
     fetchError = null;
+
     return async ({ result }) => {
       isFetching = false;
-      await applyAction(result); // updates form, triggering $effect
+
+      if (result.type === 'success' && result.data?.importContests) {
+        importContests = result.data.importContests as Contests;
+        currentPage = 1;
+        searchQuery = '';
+      } else if (result.type === 'failure') {
+        fetchError = (result.data as { message?: string })?.message ?? 'データ取得に失敗しました。';
+      } else {
+        fetchError = 'データ取得に失敗しました。';
+      }
     };
   };
 
