@@ -6,7 +6,7 @@ import { type Task, type Tasks, type TaskForImport, type TasksForImport } from '
 import * as taskService from '$lib/services/tasks';
 import { validateAdminAccess } from '$features/auth/services/admin_access';
 
-import { fetchContests, fetchTasks, isContestTaskImportSource } from '$lib/clients';
+import { fetchContests, isContestTaskImportSource } from '$lib/clients';
 
 import { classifyContest } from '$lib/utils/contest';
 import { sha256 } from '$lib/utils/hash';
@@ -60,20 +60,29 @@ export const actions: Actions = {
       return fail(BAD_REQUEST, { message: 'コンテストサイト・種別が不正です。' });
     }
 
-    const contest_id = formData.get('contest_id')?.toString();
+    const contest_id = formData.get('contest_id');
 
-    if (!contest_id) {
+    if (typeof contest_id !== 'string' || !contest_id) {
       return fail(BAD_REQUEST, { message: 'コンテストIDが指定されていません。' });
     }
 
-    try {
-      const tasks = await fetchTasks(source);
-      const tasksByContestId = tasks.filter(
-        (task: TaskForImport) => task.contest_id === contest_id,
-      );
+    const tasksJson = formData.get('tasks');
 
+    if (typeof tasksJson !== 'string') {
+      return fail(BAD_REQUEST, { message: '問題データが不正です。' });
+    }
+
+    let tasks: TasksForImport;
+
+    try {
+      tasks = JSON.parse(tasksJson) as TasksForImport;
+    } catch {
+      return fail(BAD_REQUEST, { message: '問題データの解析に失敗しました。' });
+    }
+
+    try {
       await Promise.all(
-        tasksByContestId.map(async (task: TaskForImport) => {
+        tasks.map(async (task: TaskForImport) => {
           const id = (await sha256(contest_id + task.title)) as string;
           await taskService.createTask(
             id,

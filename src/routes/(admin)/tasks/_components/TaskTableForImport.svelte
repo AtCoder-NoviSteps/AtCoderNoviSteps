@@ -1,4 +1,7 @@
 <script lang="ts">
+  import { enhance } from '$app/forms';
+  import type { SubmitFunction } from '@sveltejs/kit';
+
   import {
     Table,
     TableBody,
@@ -8,7 +11,6 @@
     TableHeadCell,
     Button,
     Label,
-    Input,
   } from 'flowbite-svelte';
 
   import type { Contests } from '$lib/types/contest';
@@ -19,9 +21,19 @@
   interface Props {
     importContests: Contests;
     source: ContestTaskImportSource;
+    onImportSuccess: (contestId: string) => void;
   }
 
-  let { importContests, source }: Props = $props();
+  let { importContests, source, onImportSuccess }: Props = $props();
+
+  function makeImportHandler(contestId: string): SubmitFunction {
+    return () =>
+      async ({ result }) => {
+        if (result.type === 'success' && (result.data as { success?: boolean })?.success) {
+          onImportSuccess(contestId);
+        }
+      };
+  }
 </script>
 
 <Table shadow hoverable={true} class="text-md" divClass="">
@@ -48,16 +60,16 @@
             {/each}
           </Label>
         </TableBodyCell>
-
         <TableBodyCell>
           {#each importContest.tasks as importTask (importTask.id)}
             <li>{importTask.title}</li>
           {/each}
         </TableBodyCell>
         <TableBodyCell>
-          <form method="POST" action="?/create">
-            <Input size="md" type="hidden" name="contest_id" value={importContest.id} />
-            <Input size="md" type="hidden" name="source" value={source} />
+          <form method="POST" action="?/create" use:enhance={makeImportHandler(importContest.id)}>
+            <input type="hidden" name="contest_id" value={importContest.id} />
+            <input type="hidden" name="source" value={source} />
+            <input type="hidden" name="tasks" value={JSON.stringify(importContest.tasks)} />
             <Button type="submit">インポート</Button>
           </form>
         </TableBodyCell>
