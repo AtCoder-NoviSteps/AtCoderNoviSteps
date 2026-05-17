@@ -56,9 +56,15 @@
   }
 
   // -- pagination --
+  const PAGE_SIZE = 20;
   let currentPage = $state(1);
 
-  const PAGE_SIZE = 20;
+  // Reset to page 1 whenever the filtered set changes (new search or new data).
+  $effect(() => {
+    filteredContests;
+    currentPage = 1;
+  });
+
   const pagedContests = $derived(
     filteredContests.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE),
   );
