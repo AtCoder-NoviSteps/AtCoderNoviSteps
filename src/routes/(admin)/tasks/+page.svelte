@@ -59,7 +59,7 @@
   const PAGE_SIZE = 20;
   let currentPage = $state(1);
 
-  // Reset to page 1 whenever the filtered set changes (new search or new data).
+  // Note: Reset to page 1 whenever the filtered set changes (new search or new data).
   $effect(() => {
     filteredContests;
     currentPage = 1;
