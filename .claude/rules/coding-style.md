@@ -49,6 +49,8 @@ Extract to `src/lib/utils/` with adjacent tests.
 
 Delete function only if: (1) zero callers, (2) replacement exists, (3) dependent fields also deleted.
 
+Before removing an import, grep the entire file for all usages — removing one call site doesn't mean no others exist.
+
 ## Documentation
 
 - **Plans/dev-notes**: Japanese

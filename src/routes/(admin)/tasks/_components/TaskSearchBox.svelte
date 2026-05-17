@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Input, Label } from 'flowbite-svelte';
+  import { Input } from 'flowbite-svelte';
 
   interface Props {
     value: string;
@@ -11,6 +11,5 @@
 </script>
 
 <div class="flex w-96 flex-col gap-1">
-  <Label for="task-search">検索</Label>
   <Input id="task-search" type="text" bind:value {placeholder} />
 </div>

@@ -596,6 +596,29 @@ git commit -m "fix: remove fetchTasks from create action to prevent silent AOJ i
 
 ---
 
+## 実装後の学び
+
+### `use:enhance` コールバックで直接 `$state` に代入する
+
+`applyAction(result)` → `form` prop → `$effect` の2段階同期は、Svelte 5 で同じ構造のオブジェクトが連続して返ると `$effect` が再発火しないことがある。`use:enhance` コールバック内で `result.data` を直接 `$state` に代入するほうが確実でシンプル。
+
+```typescript
+// Bad: $effect が2回目以降に再発火しない場合がある
+return async ({ result }) => {
+  await applyAction(result);
+};
+$effect(() => {
+  if (form?.importContests) importContests = form.importContests;
+});
+
+// Good: コールバックで直接代入
+return async ({ result }) => {
+  if (result.type === 'success') importContests = result.data.importContests as Contests;
+};
+```
+
+---
+
 ## ドロップダウンが AtCoder に戻る問題について
 
 **根本原因:** デフォルトの `use:enhance`（コールバックなし）が `invalidateAll()` を呼び出し、Flowbite Select の内部状態がリセットされる。
