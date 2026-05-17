@@ -11,7 +11,7 @@
   import SpinnerWrapper from '$lib/components/SpinnerWrapper.svelte';
   import TaskTableForImport from './_components/TaskTableForImport.svelte';
   import TaskSearchBox from './_components/TaskSearchBox.svelte';
-  import { filterContests } from './_utils/filter_contests';
+  import { filterContests } from './_utils/contests';
 
   const PAGE_SIZE = 20;
 

@@ -1,5 +1,5 @@
 import { describe, test, expect } from 'vitest';
-import { filterContests } from './filter_contests';
+import { filterContests } from './contests';
 import type { Contests } from '$lib/types/contest';
 
 const contests: Contests = [
@@ -7,7 +7,7 @@ const contests: Contests = [
     id: 'abc300',
     title: 'AtCoder Beginner Contest 300',
     tasks: [
-      { id: 'abc300_a', contest_id: 'abc300', problem_index: 'A', title: 'N-choice question' },
+      { id: 'abc300_a', task_id: 'abc300_a', contest_id: 'abc300', problem_index: 'A', title: 'N-choice question' },
     ],
     start_epoch_second: 0,
     duration_second: 0,
@@ -15,7 +15,7 @@ const contests: Contests = [
   {
     id: 'abc301',
     title: 'AtCoder Beginner Contest 301',
-    tasks: [{ id: 'abc301_a', contest_id: 'abc301', problem_index: 'A', title: 'Overall Winner' }],
+    tasks: [{ id: 'abc301_a', task_id: 'abc301_a', contest_id: 'abc301', problem_index: 'A', title: 'Overall Winner' }],
     start_epoch_second: 0,
     duration_second: 0,
   },
