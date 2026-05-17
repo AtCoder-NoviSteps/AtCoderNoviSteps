@@ -96,8 +96,6 @@
     <div class="flex flex-col items-center">
       <SpinnerWrapper size="8" />
     </div>
-  {:else if fetchError !== null}
-    <p class="text-red-500">{fetchError}</p>
   {:else if importContests.length >= 1}
     <div class="flex flex-col gap-4">
       <div class="flex items-center justify-between">
@@ -115,6 +113,8 @@
         {@render paginationNav()}
       </div>
     </div>
+  {:else if fetchError !== null}
+    <p class="text-red-500">{fetchError}</p>
   {/if}
 </div>
 
