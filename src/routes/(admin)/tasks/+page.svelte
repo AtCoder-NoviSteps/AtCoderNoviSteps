@@ -24,8 +24,8 @@
   let isFetching = $state(false);
   let fetchError = $state<string | null>(null);
 
-  // update() is intentionally not called to skip invalidateAll(),
-  // preventing Flowbite Select from resetting its displayed value.
+  // result.data is applied directly to avoid calling update() / applyAction(),
+  // both of which trigger invalidateAll() and reset Flowbite Select's displayed value.
   const handleFetch: SubmitFunction = () => {
     isFetching = true;
     fetchError = null;
@@ -48,6 +48,7 @@
   // -- filtering --
   let importContests = $state<Contests>([]);
   let searchQuery = $state('');
+
   const filteredContests = $derived(filterContests(importContests, searchQuery));
 
   function handleImportSuccess(contestId: string) {
