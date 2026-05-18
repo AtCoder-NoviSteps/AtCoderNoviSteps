@@ -22,15 +22,18 @@
     importContests: Contests;
     source: ContestTaskImportSource;
     onImportSuccess: (contestId: string) => void;
+    onImportError: (message: string) => void;
   }
 
-  let { importContests, source, onImportSuccess }: Props = $props();
+  let { importContests, source, onImportSuccess, onImportError }: Props = $props();
 
   function makeImportHandler(contestId: string): SubmitFunction {
     return () =>
       async ({ result }) => {
         if (result.type === 'success' && (result.data as { success?: boolean })?.success) {
           onImportSuccess(contestId);
+        } else if (result.type === 'failure') {
+          onImportError('インポートに失敗しました。');
         }
       };
   }

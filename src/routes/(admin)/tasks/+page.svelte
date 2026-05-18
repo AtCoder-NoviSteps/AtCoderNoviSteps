@@ -23,6 +23,7 @@
   let selectedSource = $state<ContestTaskImportSource>('atcoder');
   let isFetching = $state(false);
   let fetchError = $state<string | null>(null);
+  let importError = $state<string | null>(null);
 
   // Note: result.data is applied directly to avoid calling update() / applyAction(),
   // both of which trigger invalidateAll() and reset Flowbite Select's displayed value.
@@ -51,7 +52,12 @@
   const filteredContests = $derived(filterContests(importContests, searchQuery));
 
   function handleImportSuccess(contestId: string) {
+    importError = null;
     importContests = importContests.filter((contest) => contest.id !== contestId);
+  }
+
+  function handleImportError(message: string) {
+    importError = message;
   }
 
   // -- pagination --
@@ -112,7 +118,12 @@
         importContests={pagedContests}
         source={selectedSource}
         onImportSuccess={handleImportSuccess}
+        onImportError={handleImportError}
       />
+
+      {#if importError !== null}
+        <p class="text-red-500">{importError}</p>
+      {/if}
 
       <div class="flex justify-end">
         {@render paginationNav()}

@@ -46,7 +46,7 @@ export function mapToContest(contestId: string, title: string): ContestForImport
     id: contestId,
     start_epoch_second: PENDING, // Data not available
     duration_second: PENDING, // Same as above
-    title: title,
+    title: title.trim(),
     rate_change: '', // Same as above
   };
 }
@@ -64,7 +64,7 @@ export function mapToTask(problem: AOJTaskAPI, contestId: string) {
     contest_id: contestId,
     problem_index: problem.id, // Using task.id as a substitute since there's no equivalent to problem_index. Similar approach is used in AtCoder Problems API for old JOI problems.
     task_id: problem.id, // Same as above
-    title: problem.name,
+    title: problem.name.trim(),
   };
 }
 

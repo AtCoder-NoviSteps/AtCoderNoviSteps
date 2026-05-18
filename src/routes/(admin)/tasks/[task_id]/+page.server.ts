@@ -10,7 +10,7 @@ import * as taskTagsService from '$lib/services/task_tags';
 
 import { validateAdminAccess } from '$features/auth/services/admin_access';
 
-import { BAD_REQUEST } from '$lib/constants/http-response-status-codes';
+import { BAD_REQUEST, INTERNAL_SERVER_ERROR } from '$lib/constants/http-response-status-codes';
 
 export async function load({ locals, params, url }) {
   await validateAdminAccess(locals, url);
@@ -72,7 +72,7 @@ export const actions: Actions = {
     const updateResult = await taskService.updateTask(taskId, task_grade);
 
     if (updateResult === null) {
-      return { success: false };
+      return fail(INTERNAL_SERVER_ERROR, { success: false });
     }
 
     return { success: true };

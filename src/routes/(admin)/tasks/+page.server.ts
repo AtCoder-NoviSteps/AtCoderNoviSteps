@@ -45,7 +45,8 @@ export const actions: Actions = {
       return {
         importContests: mergeContestsAndUnregisteredTasks(contestsForImport, unregisteredTasks),
       };
-    } catch {
+    } catch (error) {
+      console.error('Failed to fetch contests/tasks:', error);
       return fail(INTERNAL_SERVER_ERROR, { message: 'データ取得に失敗しました。' });
     }
   },
@@ -93,8 +94,9 @@ export const actions: Actions = {
           );
         }),
       );
-    } catch {
-      return { success: false };
+    } catch (error) {
+      console.error('Failed to create tasks:', error);
+      return fail(INTERNAL_SERVER_ERROR, { success: false });
     }
 
     return { success: true };
