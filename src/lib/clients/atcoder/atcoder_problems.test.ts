@@ -85,7 +85,13 @@ describe('AtCoder Problems API client', () => {
     });
 
     test('trims trailing whitespace from contest titles', async () => {
-      const dirtyContest = { id: 'abc001', title: 'AtCoder Beginner Contest 001  ', start_epoch_second: 0, duration_second: 0, rate_change: '-' };
+      const dirtyContest = {
+        id: 'abc001',
+        title: 'AtCoder Beginner Contest 001  ',
+        start_epoch_second: 0,
+        duration_second: 0,
+        rate_change: '-',
+      };
       nock(API_BASE).get(`${API_PATH}contests.json`).reply(200, [dirtyContest]);
       const contests = await client.getContests();
       expect(contests[0].title).toBe('AtCoder Beginner Contest 001');
@@ -131,7 +137,12 @@ describe('AtCoder Problems API client', () => {
     });
 
     test('trims trailing whitespace from task titles', async () => {
-      const dirtyTask = { id: 'abc001_a', contest_id: 'abc001', problem_index: 'A', title: 'Product  ' };
+      const dirtyTask = {
+        id: 'abc001_a',
+        contest_id: 'abc001',
+        problem_index: 'A',
+        title: 'Product  ',
+      };
       nock(API_BASE).get(`${API_PATH}problems.json`).reply(200, [dirtyTask]);
       const tasks = await client.getTasks();
       expect(tasks[0].title).toBe('Product');
