@@ -40,6 +40,7 @@
       } else if (result.type === 'failure') {
         fetchError = (result.data as { message?: string })?.message ?? 'データ取得に失敗しました。';
       } else if (result.type === 'redirect') {
+        // result.location is a server-generated URL, so resolve() is not needed
         // eslint-disable-next-line svelte/no-navigation-without-resolve
         await goto(result.location);
       } else {
