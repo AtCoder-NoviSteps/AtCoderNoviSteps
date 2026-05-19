@@ -31,12 +31,14 @@
   const handleFetch: SubmitFunction = () => {
     isFetching = true;
     fetchError = null;
+
     return async ({ result }) => {
       isFetching = false;
 
       if (result.type === 'success' && result.data?.importContests) {
         importContests = result.data.importContests as Contests;
         searchQuery = '';
+        importError = null;
       } else if (result.type === 'failure') {
         fetchError = (result.data as { message?: string })?.message ?? 'データ取得に失敗しました。';
       } else if (result.type === 'redirect') {
