@@ -1,6 +1,8 @@
 <script lang="ts">
   import type { SubmitFunction } from '@sveltejs/kit';
   import { enhance } from '$app/forms';
+  import { goto } from '$app/navigation';
+  import { resolve } from '$app/paths';
 
   import { Select, Label, Button, PaginationNav } from 'flowbite-svelte';
 
@@ -30,7 +32,6 @@
   const handleFetch: SubmitFunction = () => {
     isFetching = true;
     fetchError = null;
-
     return async ({ result }) => {
       isFetching = false;
 
@@ -39,6 +40,8 @@
         searchQuery = '';
       } else if (result.type === 'failure') {
         fetchError = (result.data as { message?: string })?.message ?? 'データ取得に失敗しました。';
+      } else if (result.type === 'redirect') {
+        await goto(resolve(result.location));
       } else {
         fetchError = 'データ取得に失敗しました。';
       }
@@ -90,6 +93,7 @@
               id="source-select"
               name="source"
               bind:value={selectedSource}
+              disabled={isFetching}
               items={sourceOptions}
               onchange={() => {
                 currentPage = 1;
