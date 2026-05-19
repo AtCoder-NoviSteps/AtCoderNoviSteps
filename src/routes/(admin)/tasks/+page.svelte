@@ -110,7 +110,7 @@
     <div class="flex flex-col items-center">
       <SpinnerWrapper size="8" />
     </div>
-  <!-- Note: fetchError takes priority over stale importContests; a re-fetch failure must not be hidden by the previous result. -->
+    <!-- Note: fetchError takes priority over stale importContests; a re-fetch failure must not be hidden by the previous result. -->
   {:else if fetchError !== null}
     <p class="text-red-500">{fetchError}</p>
   {:else if importContests.length >= 1}
