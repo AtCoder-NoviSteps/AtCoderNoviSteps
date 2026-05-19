@@ -94,6 +94,7 @@
               onchange={() => {
                 currentPage = 1;
                 importContests = [];
+                fetchError = null;
                 importError = null;
               }}
             />

@@ -43,7 +43,7 @@ const challengeConfigs = [
   { contestType: 'JAG', round: 'REGIONAL', dir: 'jag_regional' },
 ] as const;
 
-export const TEST_DATA_BASE_DIR = path.join('src', 'lib', 'clients', 'fixtures');
+const TEST_DATA_BASE_DIR = path.join('src', 'lib', 'clients', 'fixtures');
 
 // AtCoder Problems API returns data in ContestsForImport format directly (no transformation).
 async function saveAtCoder(): Promise<void> {
