@@ -50,14 +50,15 @@ async function saveAtCoder(): Promise<void> {
   const contests = await atCoderClient.getContests();
   const tasks = await atCoderClient.getTasks();
 
-  await toJson(
-    path.join(TEST_DATA_BASE_DIR, 'atcoder_problems', 'contests.json'),
-    getRandomElementsFromArray(contests, 100),
-  );
-  await toJson(
-    path.join(TEST_DATA_BASE_DIR, 'atcoder_problems', 'tasks.json'),
-    getRandomElementsFromArray(tasks, 100),
-  );
+  const sampledContests = [...contests].sort((a, b) => a.id.localeCompare(b.id)).slice(0, 100);
+  const sampledContestIds = new Set(sampledContests.map((contest) => contest.id));
+  const sampledTasks = tasks
+    .filter((task) => sampledContestIds.has(task.contest_id))
+    .sort((a, b) => a.id.localeCompare(b.id))
+    .slice(0, 100);
+
+  await toJson(path.join(TEST_DATA_BASE_DIR, 'atcoder_problems', 'contests.json'), sampledContests);
+  await toJson(path.join(TEST_DATA_BASE_DIR, 'atcoder_problems', 'tasks.json'), sampledTasks);
 }
 
 async function saveAojCourseContests(): Promise<void> {
@@ -73,7 +74,7 @@ async function saveAojCourseTasks(): Promise<void> {
     endpoint: 'problems?size=10000',
     errorMessage: 'Failed to fetch AOJ course tasks',
   });
-  const sampled = getRandomElementsFromArray(raw, 100);
+  const sampled = [...raw].sort((a, b) => a.id.localeCompare(b.id)).slice(0, 100);
 
   await toJson(
     path.join(TEST_DATA_BASE_DIR, 'aizu_online_judge', 'courses', 'tasks.json'),
@@ -90,7 +91,10 @@ async function saveAojChallenge(
     endpoint: `challenges/cl/${contestType}/${round}`,
     errorMessage: `Failed to fetch AOJ ${contestType} ${round}`,
   });
-  const sampled = { ...raw, contests: getRandomElementsFromArray(raw.contests, 100) };
+  const sampled = {
+    ...raw,
+    contests: [...raw.contests].sort((a, b) => a.abbr.localeCompare(b.abbr)).slice(0, 100),
+  };
 
   await toJson(
     path.join(TEST_DATA_BASE_DIR, 'aizu_online_judge', 'challenges', dir, 'contests.json'),
@@ -102,32 +106,6 @@ function ensureDirectoryExists(dirPath: string): void {
   if (!fs.existsSync(dirPath)) {
     fs.mkdirSync(dirPath, { recursive: true });
   }
-}
-
-function getRandomElementsFromArray<T>(array: T[], count: number): T[] {
-  if (!Array.isArray(array)) {
-    throw new Error('Input must be an array');
-  }
-  if (count < 0) {
-    throw new Error('Count must be non-negative');
-  }
-
-  count = Math.min(count, array.length);
-  const results = [];
-  const selectedIndices = new Set<number>();
-
-  while (results.length < count) {
-    const index = Math.floor(Math.random() * array.length);
-
-    if (selectedIndices.has(index)) {
-      continue;
-    }
-
-    selectedIndices.add(index);
-    results.push(array[index]);
-  }
-
-  return results;
 }
 
 async function toJson<T>(filePath: string, data: T): Promise<void> {

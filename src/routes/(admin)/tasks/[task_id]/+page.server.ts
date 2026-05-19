@@ -52,11 +52,10 @@ export async function load({ locals, params, url }) {
 }
 
 export const actions: Actions = {
-  update: async ({ request, locals }) => {
+  update: async ({ request, locals, params }) => {
     await validateAdminAccess(locals);
 
     const formData = await request.formData();
-    const taskId = formData.get('task_id')?.toString();
     const taskGradeStr = formData.get('task_grade')?.toString() ?? '';
 
     if (taskGradeStr === '') {
@@ -65,11 +64,11 @@ export const actions: Actions = {
 
     const task_grade: TaskGrade | undefined = getTaskGrade(taskGradeStr);
 
-    if (!taskId || task_grade === undefined) {
+    if (task_grade === undefined) {
       return fail(BAD_REQUEST, { success: false });
     }
 
-    const updateResult = await taskService.updateTask(taskId, task_grade);
+    const updateResult = await taskService.updateTask(params.task_id, task_grade);
 
     if (updateResult === null) {
       return fail(INTERNAL_SERVER_ERROR, { success: false });

@@ -84,7 +84,8 @@ export const actions: Actions = {
     try {
       await Promise.all(
         tasks.map(async (task: TaskForImport) => {
-          const id = (await sha256(contest_id + task.title)) as string;
+          const id = (await sha256(contest_id + task.id)) as string;
+
           await taskService.createTask(
             id,
             task.id,
@@ -142,11 +143,22 @@ function mergeContestsAndUnregisteredTasks(
   contestsForImport: ContestsForImport,
   unregisteredTasks: Map<string, TasksForImport>,
 ): Contests {
-  return contestsForImport.map((contestForImport: ContestForImport) => ({
-    id: contestForImport.id,
-    title: contestForImport.title,
-    start_epoch_second: contestForImport.start_epoch_second,
-    duration_second: contestForImport.duration_second,
-    tasks: unregisteredTasks.get(contestForImport.id) ?? [],
-  }));
+  const seen = new Set<string>();
+
+  return contestsForImport
+    .filter(({ id }) => {
+      if (seen.has(id)) {
+        return false;
+      }
+
+      seen.add(id);
+      return true;
+    })
+    .map((contestForImport: ContestForImport) => ({
+      id: contestForImport.id,
+      title: contestForImport.title,
+      start_epoch_second: contestForImport.start_epoch_second,
+      duration_second: contestForImport.duration_second,
+      tasks: unregisteredTasks.get(contestForImport.id) ?? [],
+    }));
 }

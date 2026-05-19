@@ -1,8 +1,8 @@
 import type { Contests } from '$lib/types/contest';
 
 export function filterContests(contests: Contests, query: string): Contests {
-  const hasNoQuery = !query;
-  const lowerQuery = query.toLowerCase();
+  const hasNoQuery = !query || query.trim() === '';
+  const lowerQuery = query.trim().toLowerCase();
 
   return contests.filter((contest) => {
     if (contest.tasks.length === 0) {

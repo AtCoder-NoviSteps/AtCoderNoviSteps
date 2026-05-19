@@ -93,6 +93,8 @@
               items={sourceOptions}
               onchange={() => {
                 currentPage = 1;
+                importContests = [];
+                importError = null;
               }}
             />
           </div>
