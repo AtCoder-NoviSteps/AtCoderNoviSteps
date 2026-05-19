@@ -2,7 +2,6 @@
   import type { SubmitFunction } from '@sveltejs/kit';
   import { enhance } from '$app/forms';
   import { goto } from '$app/navigation';
-  import { resolve } from '$app/paths';
 
   import { Select, Label, Button, PaginationNav } from 'flowbite-svelte';
 
@@ -41,7 +40,8 @@
       } else if (result.type === 'failure') {
         fetchError = (result.data as { message?: string })?.message ?? 'データ取得に失敗しました。';
       } else if (result.type === 'redirect') {
-        await goto(resolve(result.location));
+        // eslint-disable-next-line svelte/no-navigation-without-resolve
+        await goto(result.location);
       } else {
         fetchError = 'データ取得に失敗しました。';
       }
