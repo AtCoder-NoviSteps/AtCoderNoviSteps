@@ -1,13 +1,156 @@
 <script lang="ts">
+  import type { SubmitFunction } from '@sveltejs/kit';
+  import { enhance } from '$app/forms';
+  import { goto } from '$app/navigation';
+
+  import { Select, Label, Button, PaginationNav } from 'flowbite-svelte';
+
+  import type { Contests } from '$lib/types/contest';
+
+  import { importSourceEntries, type ContestTaskImportSource } from '$lib/clients';
+
   import HeadingOne from '$lib/components/HeadingOne.svelte';
-  import TaskListForEdit from '$lib/components/TaskListForEdit.svelte';
+  import SpinnerWrapper from '$lib/components/SpinnerWrapper.svelte';
+  import TaskTableForImport from './_components/TaskTableForImport.svelte';
+  import TaskSearchBox from './_components/TaskSearchBox.svelte';
 
-  let { data } = $props();
+  import { filterContests } from './_utils/contests';
 
-  let importContests = data.importContests;
+  // -- source dropdown --
+  const sourceOptions = importSourceEntries.map(([value, config]) => ({
+    value,
+    name: config.label,
+  }));
+  let selectedSource = $state<ContestTaskImportSource>('atcoder');
+  let isFetching = $state(false);
+  let fetchError = $state<string | null>(null);
+  let importError = $state<string | null>(null);
+
+  // Note: result.data is applied directly to avoid calling update() / applyAction(),
+  // both of which trigger invalidateAll() and reset Flowbite Select's displayed value.
+  const handleFetch: SubmitFunction = () => {
+    isFetching = true;
+    fetchError = null;
+
+    return async ({ result }) => {
+      isFetching = false;
+
+      if (result.type === 'success' && result.data?.importContests) {
+        importContests = result.data.importContests as Contests;
+        searchQuery = '';
+        importError = null;
+      } else if (result.type === 'failure') {
+        fetchError = (result.data as { message?: string })?.message ?? 'データ取得に失敗しました。';
+      } else if (result.type === 'redirect') {
+        // result.location is a server-generated URL, so resolve() is not needed
+        // eslint-disable-next-line svelte/no-navigation-without-resolve
+        await goto(result.location);
+      } else {
+        fetchError = 'データ取得に失敗しました。';
+      }
+    };
+  };
+
+  // -- filtering --
+  let importContests = $state<Contests>([]);
+  let searchQuery = $state('');
+
+  const filteredContests = $derived(filterContests(importContests, searchQuery));
+
+  function handleImportSuccess(contestId: string) {
+    importError = null;
+    importContests = importContests.filter((contest) => contest.id !== contestId);
+  }
+
+  function handleImportError(message: string) {
+    importError = message;
+  }
+
+  // -- pagination --
+  const PAGE_SIZE = 20;
+  let currentPage = $state(1);
+
+  // Note: Reset to page 1 whenever the filtered set changes (new search or new data).
+  $effect(() => {
+    filteredContests;
+    currentPage = 1;
+  });
+
+  const pagedContests = $derived(
+    filteredContests.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE),
+  );
+  const totalPages = $derived(Math.max(1, Math.ceil(filteredContests.length / PAGE_SIZE)));
 </script>
 
 <div class="container mx-auto w-5/6">
   <HeadingOne title="問題のインポート" />
-  <TaskListForEdit {importContests} />
+
+  <section class="mb-10">
+    <div class="w-2/3">
+      <form method="POST" action="?/fetch" use:enhance={handleFetch}>
+        <Label for="source-select">コンテストサイト・種別</Label>
+
+        <div class="mt-2 flex items-center gap-4">
+          <div class="flex-1">
+            <Select
+              id="source-select"
+              name="source"
+              bind:value={selectedSource}
+              disabled={isFetching}
+              items={sourceOptions}
+              onchange={() => {
+                currentPage = 1;
+                importContests = [];
+                fetchError = null;
+                importError = null;
+              }}
+            />
+          </div>
+
+          <Button type="submit" disabled={isFetching}>問題を取得</Button>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  {#if isFetching}
+    <div class="flex flex-col items-center">
+      <SpinnerWrapper size="8" />
+    </div>
+    <!-- Note: fetchError takes priority over stale importContests; a re-fetch failure must not be hidden by the previous result. -->
+  {:else if fetchError !== null}
+    <p class="text-red-500">{fetchError}</p>
+  {:else if importContests.length >= 1}
+    <div class="flex flex-col gap-4">
+      <div class="flex items-center justify-between">
+        <TaskSearchBox bind:value={searchQuery} />
+        {@render paginationNav()}
+      </div>
+
+      <TaskTableForImport
+        importContests={pagedContests}
+        source={selectedSource}
+        onImportSuccess={handleImportSuccess}
+        onImportError={handleImportError}
+      />
+
+      {#if importError !== null}
+        <p class="text-red-500">{importError}</p>
+      {/if}
+
+      <div class="flex justify-end">
+        {@render paginationNav()}
+      </div>
+    </div>
+  {/if}
 </div>
+
+{#snippet paginationNav()}
+  <PaginationNav
+    {currentPage}
+    {totalPages}
+    onPageChange={(page) => {
+      currentPage = page;
+    }}
+  />
+{/snippet}

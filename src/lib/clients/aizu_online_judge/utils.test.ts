@@ -46,6 +46,11 @@ describe('buildEndpoint', () => {
 
 describe('mapToContest', () => {
   describe('successful cases', () => {
+    test('trims trailing whitespace from title', () => {
+      expect(mapToContest('PCK2024', 'PCK 2024 Preliminary  ').title).toBe('PCK 2024 Preliminary');
+      expect(mapToContest('JAG2023', 'JAG Regional 2023\t').title).toBe('JAG Regional 2023');
+    });
+
     test('maps contestId and title to ContestForImport shape', () => {
       const result = mapToContest('PCK2024', 'PCK 2024 Preliminary');
 
@@ -115,6 +120,11 @@ describe('mapToTask', () => {
     test('uses problem.name as title', () => {
       const result = mapToTask(baseTask, 'ITP1');
       expect(result.title).toBe('Hello, World!');
+    });
+
+    test('trims trailing whitespace from problem name', () => {
+      const taskWithWhitespace: AOJTaskAPI = { ...baseTask, name: 'Hello, World!  ' };
+      expect(mapToTask(taskWithWhitespace, 'ITP1').title).toBe('Hello, World!');
     });
   });
 });

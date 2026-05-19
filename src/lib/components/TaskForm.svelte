@@ -26,7 +26,7 @@
   });
 </script>
 
-<form method="post" action="/tasks?/update" class="flex flex-col gap-4">
+<form method="post" action="?/update" class="flex flex-col gap-4">
   <Breadcrumb aria-label="">
     <BreadcrumbItem href="/problems" home>問題一覧</BreadcrumbItem>
     <BreadcrumbItem>
