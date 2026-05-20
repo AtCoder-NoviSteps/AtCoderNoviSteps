@@ -78,6 +78,7 @@ async function main() {
     await addTaskTags();
     await addSubmissionStatuses();
     await addAnswers();
+    await addVoteStatisticsDemoData();
 
     console.log('Seeding has been completed.');
   } catch (e) {
@@ -192,7 +193,9 @@ async function addContestTaskPairs() {
   const contestTaskPairFactory = defineContestTaskPairFactory();
 
   // Create a queue with limited concurrency for contest task pair operations
-  const contestTaskPairQueue = new PQueue({ concurrency: QUEUE_CONCURRENCY.contestTaskPairs });
+  const contestTaskPairQueue = new PQueue({
+    concurrency: QUEUE_CONCURRENCY.contestTaskPairs,
+  });
 
   for (const pair of contest_task_pairs) {
     contestTaskPairQueue.add(async () => {
@@ -256,7 +259,9 @@ async function addContestTaskPair(
 async function addWorkBooks() {
   console.log('Start adding workbooks...');
 
-  const workBookFactory = defineWorkBookFactory({ defaultData: { user: defineUserFactory() } });
+  const workBookFactory = defineWorkBookFactory({
+    defaultData: { user: defineUserFactory() },
+  });
 
   // Note: Use a for loop to ensure each workbook is processed sequentially.
   for (const workbook of workbooks) {
@@ -321,7 +326,9 @@ async function addWorkBookPlacements() {
     prisma.workBook.findMany({
       where: { workBookType: 'CURRICULUM', placement: null },
       include: {
-        workBookTasks: { include: { task: { select: { task_id: true, grade: true } } } },
+        workBookTasks: {
+          include: { task: { select: { task_id: true, grade: true } } },
+        },
       },
       orderBy: { id: 'asc' },
     }),
@@ -526,7 +533,9 @@ async function addSubmissionStatuses() {
   const submissionStatusFactory = defineSubmissionStatusFactory();
 
   // Create a queue with limited concurrency for submission status operations
-  const submissionStatusQueue = new PQueue({ concurrency: QUEUE_CONCURRENCY.submissionStatuses });
+  const submissionStatusQueue = new PQueue({
+    concurrency: QUEUE_CONCURRENCY.submissionStatuses,
+  });
 
   for (const submission_status of submission_statuses) {
     submissionStatusQueue.add(async () => {
@@ -632,6 +641,31 @@ async function addAnswer(
       connect: { id: answer.status_id },
     },
   });
+}
+
+// Demo data: tasks with VotedGradeStatistics so the ±0 badge is visible in the UI.
+// grade matches the task's official grade → diff=0 → ±0 badge displayed.
+const VOTE_STATS_DEMO_DATA = [
+  { id: 'demo-vote-stat-apg4b-co', taskId: 'APG4bPython_co', grade: 'Q8' },
+] as const;
+
+async function addVoteStatisticsDemoData() {
+  console.log('Start adding vote statistics demo data...');
+
+  for (const entry of VOTE_STATS_DEMO_DATA) {
+    try {
+      await prisma.votedGradeStatistics.upsert({
+        where: { taskId: entry.taskId },
+        update: {},
+        create: { id: entry.id, taskId: entry.taskId, grade: entry.grade },
+      });
+      console.log('vote stats demo: taskId', entry.taskId, 'was registered.');
+    } catch (e) {
+      console.error('Failed to add vote stats demo entry', entry.taskId, e);
+    }
+  }
+
+  console.log('Finished adding vote statistics demo data.');
 }
 
 main()
