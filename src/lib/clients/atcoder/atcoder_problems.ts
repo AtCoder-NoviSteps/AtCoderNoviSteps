@@ -29,7 +29,7 @@ export class AtCoderProblemsApiClient {
 
       console.log(`Found AtCoder: ${contests.length} contests.`);
 
-      return contests;
+      return contests.map((contest) => ({ ...contest, title: contest.title.trim() }));
     } catch (error) {
       console.error(`Failed to fetch from AtCoder contests`, error);
       return [];
@@ -51,7 +51,7 @@ export class AtCoderProblemsApiClient {
 
       console.log(`Found AtCoder: ${tasks.length} tasks.`);
 
-      return tasks;
+      return tasks.map((task) => ({ ...task, title: task.title.trim() }));
     } catch (error) {
       console.error(`Failed to fetch from AtCoder tasks`, error);
       return [];
