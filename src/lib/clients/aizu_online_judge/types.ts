@@ -17,27 +17,11 @@ export type Course = {
 
 export type Courses = Course[];
 
-/**
- * Parameters for configuring a challenge contest in the AOJ.
- * @property {ChallengeContestType} contestType - The type of contest for the challenge.
- * @property {ChallengeRoundMap[ChallengeContestType]} round - The round of the contest.
- */
-export type ChallengeParams = {
-  contestType: ChallengeContestType;
-  round: ChallengeRoundMap[ChallengeContestType];
-};
-
-/** Represents the types of challenge contests available. */
-export type ChallengeContestType = 'PCK' | 'JAG' | 'ICPC';
-
-/**
- * A map that associates each type of challenge contest with its corresponding round type.
- */
-export type ChallengeRoundMap = {
-  PCK: PckRound;
-  JAG: JagRound;
-  ICPC: IcpcRound;
-};
+/** Discriminated union enforcing valid (contestType, round) pairs for AOJ challenge contests. */
+export type ChallengeParams =
+  | { contestType: 'PCK'; round: PckRound }
+  | { contestType: 'JAG'; round: JagRound }
+  | { contestType: 'ICPC'; round: IcpcRound };
 
 /** Represents PCK contest rounds */
 export type PckRound = 'PRELIM' | 'FINAL';
