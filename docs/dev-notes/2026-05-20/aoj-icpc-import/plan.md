@@ -128,10 +128,10 @@ export const aojIcpc = aojIcpcContestData.map(({ name, contestId }) =>
 
 ```typescript
 const AOJ_ICPC_TEST_DATA = {
-  Prelim2023: { contestId: 'Prelim2023', tasks: ['実ID1', '実ID2'] },
-  Prelim2024: { contestId: 'Prelim2024', tasks: ['実ID1', '実ID2'] },
-  Regional2023: { contestId: 'Regional2023', tasks: ['実ID1', '実ID2'] },
-  Regional2024: { contestId: 'Regional2024', tasks: ['実ID1', '実ID2'] },
+  Prelim2023: { contestId: 'ICPCPrelim2023', tasks: ['実ID1', '実ID2'] },
+  Prelim2024: { contestId: 'ICPCPrelim2024', tasks: ['実ID1', '実ID2'] },
+  Regional2023: { contestId: 'ICPCRegional2023', tasks: ['実ID1', '実ID2'] },
+  Regional2024: { contestId: 'ICPCRegional2024', tasks: ['実ID1', '実ID2'] },
 };
 ```
 
@@ -331,3 +331,29 @@ pnpm test:unit src/test/lib/utils/task.test.ts  # 172 tests passed
 
 - `ContestTableProvider` 実装（how-to-add-contest-table-provider.md 参照）
 - `contestTypePriorities` の優先度は暫定値（次 PR で ContestTableProvider 登録後に再確認）
+
+---
+
+## CodeRabbit Findings
+
+### 1回目レビュー
+
+#### potential_issue: テストデータの contestId フォーマット（plan.md 記載のコード例）
+
+- **ファイル**: `docs/dev-notes/2026-05-20/aoj-icpc-import/plan.md` 131–135 行
+- **内容**: plan.md のコード例では `contestId: 'Prelim2023'` と ICPC プレフィックスなしで記載しているが、実際のソースコード（`contest_name_and_task_index.ts`）では `generateAojIcpcTestCases` 内で `ICPC${contestId}` とプレフィックスを付与しているため動作上は正しい。plan.md の説明が誤解を招く形になっているドキュメント上の問題。
+- **判断**: plan.md はリファレンスドキュメントであり、実装コードは正しく動作している。修正優先度: 低（次 PR 前に plan.md を更新するか削除すれば解消）
+
+### 2回目レビュー
+
+#### potential_issue: `saveAojChallenge` の型安全性（plan.md 記載のコード例）
+
+- **ファイル**: `docs/dev-notes/2026-05-20/aoj-icpc-import/plan.md` 57–63 行
+- **内容**: plan.md に記載された `saveAojChallenge` シグネチャが `contestType: 'PCK' | 'JAG' | 'ICPC'` / `round: 'PRELIM' | 'FINAL' | 'REGIONAL'` と独立 union になっており、`{contestType: 'ICPC', round: 'FINAL'}` のような不正な組み合わせを型で防げない形で文書化されている。実装コード（`record_requests.ts`）の実際のシグネチャも同様。
+- **判断**: 実装コード上の型安全性の問題。`ChallengeRoundMap[T]` を使ったジェネリクス or オーバーロードにすれば解決できるが、次 PR の `ContestTableProvider` 実装時に合わせて検討するのが適切。
+
+#### potential_issue × 2: 2026-04-26 の survey.md（SvelteKit Remote Functions / AWS Lambda）
+
+- **ファイル**: `docs/dev-notes/2026-04-26/sveltekit-streaming-vs-remote-functions/survey.md`
+- **内容**: 今回の PR (#3562) のスコープ外のドキュメント。AWS Lambda / Firebase のストリーミング対応状況が古くなっているという指摘だが、このファイルは AOJ_ICPC 機能とは無関係。
+- **判断**: 本 PR では対応不要

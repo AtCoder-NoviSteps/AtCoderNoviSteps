@@ -84,6 +84,7 @@ async function saveAojCourseTasks(): Promise<void> {
   );
 }
 
+// ICPC uses only 'PRELIM' and 'REGIONAL'; 'FINAL' is for PCK only.
 async function saveAojChallenge(
   contestType: 'PCK' | 'JAG' | 'ICPC',
   round: 'PRELIM' | 'FINAL' | 'REGIONAL',

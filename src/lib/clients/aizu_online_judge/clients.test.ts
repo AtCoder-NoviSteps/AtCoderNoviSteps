@@ -304,5 +304,14 @@ describe('AojChallengesApiClient', () => {
         .flatMap((day) => day.problems).length;
       expect(tasks.length).toBe(expectedCount);
     });
+
+    test('each ICPC REGIONAL task has required fields', async () => {
+      const tasks = await client.getTasks({ contestType: 'ICPC', round: 'REGIONAL' });
+      tasks.forEach((task) => {
+        expect(task.id).toBeDefined();
+        expect(task.contest_id).toBeDefined();
+        expect(task.title).toBeDefined();
+      });
+    });
   });
 });
