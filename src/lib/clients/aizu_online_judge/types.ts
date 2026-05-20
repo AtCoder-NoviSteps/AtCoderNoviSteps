@@ -28,7 +28,7 @@ export type ChallengeParams = {
 };
 
 /** Represents the types of challenge contests available. */
-export type ChallengeContestType = 'PCK' | 'JAG';
+export type ChallengeContestType = 'PCK' | 'JAG' | 'ICPC';
 
 /**
  * A map that associates each type of challenge contest with its corresponding round type.
@@ -36,6 +36,7 @@ export type ChallengeContestType = 'PCK' | 'JAG';
 export type ChallengeRoundMap = {
   PCK: PckRound;
   JAG: JagRound;
+  ICPC: IcpcRound;
 };
 
 /** Represents PCK contest rounds */
@@ -43,6 +44,9 @@ export type PckRound = 'PRELIM' | 'FINAL';
 
 /** Represents JAG contest rounds */
 export type JagRound = 'PRELIM' | 'REGIONAL';
+
+/** Represents ICPC contest rounds */
+export type IcpcRound = 'PRELIM' | 'REGIONAL';
 
 export type AOJChallengeContestAPI = {
   readonly largeCl: Record<string, unknown>;

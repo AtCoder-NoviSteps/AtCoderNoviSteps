@@ -97,6 +97,10 @@ export const classifyContest = (contest_id: string) => {
     return ContestType.AOJ_PCK;
   }
 
+  if (/^ICPC(Prelim|Regional)\d*$/.exec(contest_id)) {
+    return ContestType.AOJ_ICPC;
+  }
+
   if (/^JAG(Prelim|Regional|Summer|Winter|Spring)\d*$/.exec(contest_id)) {
     return ContestType.AOJ_JAG;
   }
@@ -265,13 +269,13 @@ export function getContestPrefixes(contestPrefixes: Record<string, string>) {
 }
 
 /**
- * Contest type priorities (0 = Highest, 23 = Lowest)
+ * Contest type priorities (0 = Highest, 24 = Lowest)
  *
  * Priority assignment rationale:
  * - Educational contests (0-11, 17): ABS, ABC, APG4B and AWC etc.
  * - Contests for genius (12-16): ARC, AGC, and their variants
  * - Special contests (18-20): UNIVERSITY, FPS_24, OTHERS
- * - External platforms (21-23): AOJ_COURSES, AOJ_PCK, AOJ_JAG
+ * - External platforms (21-24): AOJ_COURSES, AOJ_PCK, AOJ_ICPC, AOJ_JAG
  *
  * @remarks
  * HACK: The priorities for ARC, AGC, UNIVERSITY, AOJ_COURSES, and AOJ_PCK are temporary
@@ -304,7 +308,8 @@ export const contestTypePriorities: Map<ContestType, number> = new Map([
   [ContestType.OTHERS, 20], // AtCoder (その他)
   [ContestType.AOJ_COURSES, 21],
   [ContestType.AOJ_PCK, 22],
-  [ContestType.AOJ_JAG, 23],
+  [ContestType.AOJ_ICPC, 23],
+  [ContestType.AOJ_JAG, 24],
 ]);
 
 export function getContestPriority(contestId: string): number {
@@ -445,6 +450,10 @@ export const getContestNameLabel = (contestId: string) => {
 
   if (contestId.startsWith('PCK')) {
     return getAojContestLabel(PCK_TRANSLATIONS, contestId);
+  }
+
+  if (contestId.startsWith('ICPC')) {
+    return getAojContestLabel(ICPC_TRANSLATIONS, contestId);
   }
 
   if (contestId.startsWith('JAG')) {
@@ -692,6 +701,11 @@ const JAG_TRANSLATIONS = {
   Regional: ' 模擬地区 ',
 };
 
+const ICPC_TRANSLATIONS = {
+  Prelim: ' 国内予選 ',
+  Regional: ' 地区予選 ',
+};
+
 export function getAojContestLabel(
   translations: Readonly<ContestLabelTranslations>,
   contestId: string,
@@ -717,6 +731,9 @@ export const addContestNameToTaskIndex = (contestId: string, taskTableIndex: str
 
 function isAojContest(contestId: string): boolean {
   return (
-    aojCoursePrefixes.has(contestId) || contestId.startsWith('PCK') || contestId.startsWith('JAG')
+    aojCoursePrefixes.has(contestId) ||
+    contestId.startsWith('PCK') ||
+    contestId.startsWith('JAG') ||
+    contestId.startsWith('ICPC')
   );
 }

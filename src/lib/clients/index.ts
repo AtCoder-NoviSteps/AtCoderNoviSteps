@@ -21,7 +21,9 @@ export type ContestTaskImportSource =
   | 'aoj_pck_prelim'
   | 'aoj_pck_final'
   | 'aoj_jag_prelim'
-  | 'aoj_jag_regional';
+  | 'aoj_jag_regional'
+  | 'aoj_icpc_prelim'
+  | 'aoj_icpc_regional';
 
 type ContestTaskImportSourceConfig = {
   label: string;
@@ -65,6 +67,14 @@ const importSources: Record<ContestTaskImportSource, ContestTaskImportSourceConf
   aoj_jag_regional: buildAojChallengeConfig(
     { contestType: 'JAG', round: 'REGIONAL' },
     'AOJ - JAG 模擬地区',
+  ),
+  aoj_icpc_prelim: buildAojChallengeConfig(
+    { contestType: 'ICPC', round: 'PRELIM' },
+    'AOJ - ICPC 国内予選',
+  ),
+  aoj_icpc_regional: buildAojChallengeConfig(
+    { contestType: 'ICPC', round: 'REGIONAL' },
+    'AOJ - ICPC 地区予選',
   ),
 };
 
