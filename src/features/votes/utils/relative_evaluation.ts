@@ -20,7 +20,7 @@ export function calcGradeDiff(officialGrade: TaskGrade, medianGrade: TaskGrade):
  * | ------ | ----- |
  * | ≤ −2   | `--`  |
  * | −1     | `-`   |
- * |  0     | `""`  |
+ * |  0     | `±0`  |
  * | +1     | `+`   |
  * | ≥ +2   | `++`  |
  *
@@ -35,7 +35,7 @@ export function getRelativeEvaluationLabel(diff: number): string {
     return '-';
   }
   if (diff === 0) {
-    return '';
+    return '±0';
   }
   if (diff === 1) {
     return '+';
@@ -55,6 +55,8 @@ export function getRelativeEvaluationTooltipText(label: string): string {
       return 'ユーザは「難しい」と評価';
     case '+':
       return 'ユーザは「やや難しい」と評価';
+    case '±0':
+      return 'ユーザは「ふつう」と評価';
     case '-':
       return 'ユーザは「やや易しい」と評価';
     case '--':
@@ -116,8 +118,7 @@ export function getRelativeEvaluationColorClass(diff: number): string {
 
 /**
  * Returns Tailwind background + text color classes for the relative evaluation badge.
- * Negative diff (easier) → sky, positive (harder) → orange.
- * Returns empty string for diff === 0 (badge is not shown).
+ * Negative diff (easier) → sky, zero diff (neutral) → green, positive (harder) → orange.
  *
  * @param diff - The result of {@link calcGradeDiff}.
  */
@@ -128,5 +129,5 @@ export function getRelativeEvaluationBadgeColorClass(diff: number): string {
   if (diff > 0) {
     return 'bg-orange-400 text-white dark:bg-orange-500 dark:text-white';
   }
-  return '';
+  return 'bg-green-500 text-white dark:bg-green-600 dark:text-white';
 }

@@ -88,8 +88,8 @@ describe('getRelativeEvaluationLabel', () => {
     expect(getRelativeEvaluationLabel(1)).toBe('+');
   });
 
-  test('returns "" for diff === 0', () => {
-    expect(getRelativeEvaluationLabel(0)).toBe('');
+  test('returns "±0" for diff === 0', () => {
+    expect(getRelativeEvaluationLabel(0)).toBe('±0');
   });
 
   test('returns "-" for diff === -1', () => {
@@ -106,6 +106,10 @@ describe('getRelativeEvaluationLabel', () => {
 describe('getRelativeEvaluationTooltipText', () => {
   test('returns "" for empty string (default case)', () => {
     expect(getRelativeEvaluationTooltipText('')).toBe('');
+  });
+
+  test('returns tooltip text for ±0 (neutral match)', () => {
+    expect(getRelativeEvaluationTooltipText('±0')).toBe('ユーザは「ふつう」と評価');
   });
 
   test('returns ++ for users feel the difficult than official grade', () => {
@@ -183,8 +187,10 @@ describe('getRelativeEvaluationBadgeColorClass', () => {
     );
   });
 
-  test('returns empty string for diff === 0 (badge not shown)', () => {
-    expect(getRelativeEvaluationBadgeColorClass(0)).toBe('');
+  test('returns green bg classes for diff === 0 (neutral)', () => {
+    expect(getRelativeEvaluationBadgeColorClass(0)).toBe(
+      'bg-green-500 text-white dark:bg-green-600 dark:text-white',
+    );
   });
 
   test('returns orange bg classes for positive diff (harder)', () => {
