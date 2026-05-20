@@ -639,3 +639,17 @@ export const aojJag = aojJagContestData.map(({ name, contestId }) =>
     expected: ContestType.AOJ_JAG,
   }),
 );
+
+const aojIcpcContestData = [
+  { name: 'AOJ, ICPC Prelim 2023', contestId: 'ICPCPrelim2023' },
+  { name: 'AOJ, ICPC Prelim 2024', contestId: 'ICPCPrelim2024' },
+  { name: 'AOJ, ICPC Regional 2023', contestId: 'ICPCRegional2023' },
+  { name: 'AOJ, ICPC Regional 2024', contestId: 'ICPCRegional2024' },
+];
+
+export const aojIcpc = aojIcpcContestData.map(({ name, contestId }) =>
+  createTestCaseForContestType(name)({
+    contestId,
+    expected: ContestType.AOJ_ICPC,
+  }),
+);

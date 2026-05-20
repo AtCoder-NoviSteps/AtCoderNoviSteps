@@ -176,3 +176,22 @@ export const aojJag = jagContests.flatMap((jag) =>
     });
   }),
 );
+
+// ICPC contests follow these patterns:
+// - Contest ID format: ICPC(Prelim|Regional)<YEAR>
+const icpcContests = [
+  { contestId: 'ICPCPrelim2023', tasks: ['1664', '1665'] },
+  { contestId: 'ICPCPrelim2024', tasks: ['1672', '1673'] },
+  { contestId: 'ICPCRegional2023', tasks: ['1444', '1445'] },
+  { contestId: 'ICPCRegional2024', tasks: ['1455', '1456'] },
+];
+
+export const aojIcpc = icpcContests.flatMap((icpc) =>
+  icpc.tasks.map((task) => {
+    return createTestCaseForTaskUrl(`AOJ ICPC, ${icpc.contestId} ${task}`)({
+      contestId: icpc.contestId,
+      taskId: task,
+      expected: `${AOJ_TASKS_URL}/${task}`,
+    });
+  }),
+);

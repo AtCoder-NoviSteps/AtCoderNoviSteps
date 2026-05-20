@@ -41,6 +41,8 @@ const challengeConfigs = [
   { contestType: 'PCK', round: 'FINAL', dir: 'pck_final' },
   { contestType: 'JAG', round: 'PRELIM', dir: 'jag_prelim' },
   { contestType: 'JAG', round: 'REGIONAL', dir: 'jag_regional' },
+  { contestType: 'ICPC', round: 'PRELIM', dir: 'icpc_prelim' },
+  { contestType: 'ICPC', round: 'REGIONAL', dir: 'icpc_regional' },
 ] as const;
 
 const TEST_DATA_BASE_DIR = path.join('src', 'lib', 'clients', 'fixtures');
@@ -82,8 +84,9 @@ async function saveAojCourseTasks(): Promise<void> {
   );
 }
 
+// ICPC uses only 'PRELIM' and 'REGIONAL'; 'FINAL' is for PCK only.
 async function saveAojChallenge(
-  contestType: 'PCK' | 'JAG',
+  contestType: 'PCK' | 'JAG' | 'ICPC',
   round: 'PRELIM' | 'FINAL' | 'REGIONAL',
   dir: string,
 ): Promise<void> {

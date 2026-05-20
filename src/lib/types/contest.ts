@@ -51,6 +51,7 @@ export const ContestType: { [key in ContestTypeOrigin]: key } = {
   OTHERS: 'OTHERS', // AtCoder (その他)
   AOJ_COURSES: 'AOJ_COURSES', // AIZU ONLINE JUDGE Courses
   AOJ_PCK: 'AOJ_PCK', // All-Japan High School Programming Contest (PCK)
+  AOJ_ICPC: 'AOJ_ICPC', // ICPC (International Collegiate Programming Contest)
   AOJ_JAG: 'AOJ_JAG', // ACM-ICPC Japan Alumni Group Contest (JAG)
 } as const;
 

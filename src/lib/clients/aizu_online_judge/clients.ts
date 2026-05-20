@@ -13,8 +13,6 @@ import type {
   AOJChallengeContestAPI,
   ChallengeContest,
   ChallengeParams,
-  ChallengeContestType,
-  ChallengeRoundMap,
 } from './types';
 import { buildEndpoint, mapToContest, mapToTask, getCourseName } from './utils';
 
@@ -67,7 +65,7 @@ export class AojChallengesApiClient {
     const { contestType, round } = params;
 
     return getCachedOrFetchContests<AOJChallengeContestAPI>(this.httpClient, this.cache, {
-      cacheKey: this.getCacheKey(contestType, round),
+      cacheKey: this.getCacheKey(params),
       endpoint: buildEndpoint(['challenges', 'cl', contestType, round]),
       errorMessage: `Failed to fetch ${contestType} ${round} contests from AOJ API`,
       validateResponse: (data) =>
@@ -86,7 +84,7 @@ export class AojChallengesApiClient {
     const { contestType, round } = params;
 
     return getCachedOrFetchTasks<AOJChallengeContestAPI>(this.httpClient, this.cache, {
-      cacheKey: this.getCacheKey(contestType, round),
+      cacheKey: this.getCacheKey(params),
       endpoint: buildEndpoint(['challenges', 'cl', contestType, round]),
       errorMessage: `Failed to fetch ${contestType} ${round} tasks from AOJ API`,
       validateResponse: (data) =>
@@ -101,10 +99,7 @@ export class AojChallengesApiClient {
     });
   }
 
-  private getCacheKey(
-    contestType: ChallengeContestType,
-    round: ChallengeRoundMap[ChallengeContestType],
-  ): string {
+  private getCacheKey({ contestType, round }: ChallengeParams): string {
     return `aoj_${contestType.toLowerCase()}_${round.toLowerCase()}`;
   }
 }

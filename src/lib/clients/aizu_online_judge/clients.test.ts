@@ -53,6 +53,12 @@ const FIXTURE_PATHS = {
   jagRegional: {
     contests: './src/lib/clients/fixtures/aizu_online_judge/challenges/jag_regional/contests.json',
   },
+  icpcPrelim: {
+    contests: './src/lib/clients/fixtures/aizu_online_judge/challenges/icpc_prelim/contests.json',
+  },
+  icpcRegional: {
+    contests: './src/lib/clients/fixtures/aizu_online_judge/challenges/icpc_regional/contests.json',
+  },
 };
 
 describe('AojCoursesApiClient', () => {
@@ -249,6 +255,63 @@ describe('AojChallengesApiClient', () => {
         .flatMap((contest) => contest.days)
         .flatMap((day) => day.problems).length;
       expect(tasks.length).toBe(expectedCount);
+    });
+  });
+
+  describe('ICPC PRELIM', () => {
+    const contestsMock = loadMockData<AOJChallengeContestAPI>(FIXTURE_PATHS.icpcPrelim.contests);
+    let client: AojChallengesApiClient;
+
+    beforeEach(() => {
+      nock(AOJ_API_BASE).get('/challenges/cl/ICPC/PRELIM').reply(200, contestsMock);
+      client = buildChallengesClient();
+    });
+
+    test('fetches and transforms ICPC PRELIM contests', async () => {
+      const contests = await client.getContests({ contestType: 'ICPC', round: 'PRELIM' });
+      const expectedCount = contestsMock.contests.flatMap((contest) => contest.days).length;
+      expect(contests.length).toBe(expectedCount);
+    });
+
+    test('fetches and transforms ICPC PRELIM tasks', async () => {
+      const tasks = await client.getTasks({ contestType: 'ICPC', round: 'PRELIM' });
+      const expectedCount = contestsMock.contests
+        .flatMap((contest) => contest.days)
+        .flatMap((day) => day.problems).length;
+      expect(tasks.length).toBe(expectedCount);
+    });
+  });
+
+  describe('ICPC REGIONAL', () => {
+    const contestsMock = loadMockData<AOJChallengeContestAPI>(FIXTURE_PATHS.icpcRegional.contests);
+    let client: AojChallengesApiClient;
+
+    beforeEach(() => {
+      nock(AOJ_API_BASE).get('/challenges/cl/ICPC/REGIONAL').reply(200, contestsMock);
+      client = buildChallengesClient();
+    });
+
+    test('fetches and transforms ICPC REGIONAL contests', async () => {
+      const contests = await client.getContests({ contestType: 'ICPC', round: 'REGIONAL' });
+      const expectedCount = contestsMock.contests.flatMap((contest) => contest.days).length;
+      expect(contests.length).toBe(expectedCount);
+    });
+
+    test('fetches and transforms ICPC REGIONAL tasks', async () => {
+      const tasks = await client.getTasks({ contestType: 'ICPC', round: 'REGIONAL' });
+      const expectedCount = contestsMock.contests
+        .flatMap((contest) => contest.days)
+        .flatMap((day) => day.problems).length;
+      expect(tasks.length).toBe(expectedCount);
+    });
+
+    test('each ICPC REGIONAL task has required fields', async () => {
+      const tasks = await client.getTasks({ contestType: 'ICPC', round: 'REGIONAL' });
+      tasks.forEach((task) => {
+        expect(task.id).toBeDefined();
+        expect(task.contest_id).toBeDefined();
+        expect(task.title).toBeDefined();
+      });
     });
   });
 });

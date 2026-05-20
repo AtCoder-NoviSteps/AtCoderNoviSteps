@@ -36,7 +36,8 @@ class AojGenerator implements UrlGenerator {
     return (
       getPrefixForAojCourses().includes(contestId) ||
       contestId.startsWith('PCK') ||
-      contestId.startsWith('JAG')
+      contestId.startsWith('JAG') ||
+      contestId.startsWith('ICPC')
     );
   }
 

@@ -817,3 +817,49 @@ const generateAojJagTestCases = (contestIds: JagContestIds, taskIndices: string[
 export const aojJag = Object.entries(AOJ_JAG_TEST_DATA).flatMap(([contestId, tasks]) =>
   generateAojJagTestCases(Array(tasks.tasks.length).fill(contestId), tasks.tasks),
 );
+
+/**
+ * Test cases for AOJ ICPC contests
+ * Includes both preliminary (国内予選) and regional (地区予選) rounds
+ * Format: ICPC{Round}{Year} - {problemId}
+ */
+const AOJ_ICPC_TEST_DATA = {
+  Prelim2023: {
+    contestId: 'Prelim2023',
+    tasks: ['1664', '1665'],
+  },
+  Prelim2024: {
+    contestId: 'Prelim2024',
+    tasks: ['1672', '1673'],
+  },
+  Regional2023: {
+    contestId: 'Regional2023',
+    tasks: ['1444', '1445'],
+  },
+  Regional2024: {
+    contestId: 'Regional2024',
+    tasks: ['1455', '1456'],
+  },
+};
+
+type IcpcRound = 'Prelim' | 'Regional';
+type IcpcYear = '2023' | '2024';
+type IcpcContestId = `${IcpcRound}${IcpcYear}`;
+type IcpcContestIds = IcpcContestId[];
+
+const generateAojIcpcTestCases = (
+  contestIds: IcpcContestIds,
+  taskIndices: string[],
+): { name: string; value: TestCaseForContestNameAndTaskIndex }[] => {
+  return zip(contestIds, taskIndices).map(([contestId, taskIndex]) => {
+    return createTestCaseForContestNameAndTaskIndex(`AOJ, ICPC${contestId} - ${taskIndex}`)({
+      contestId: `ICPC${contestId}`,
+      taskTableIndex: taskIndex,
+      expected: `AOJ ${taskIndex}（ICPC${contestId.replace('Prelim', ' 国内予選 ').replace('Regional', ' 地区予選 ')}）`,
+    });
+  });
+};
+
+export const aojIcpc = Object.entries(AOJ_ICPC_TEST_DATA).flatMap(([contestId, tasks]) =>
+  generateAojIcpcTestCases(Array(tasks.tasks.length).fill(contestId), tasks.tasks),
+);

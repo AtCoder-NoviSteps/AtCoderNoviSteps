@@ -86,3 +86,22 @@ export const fps24 = [
     expected: 'FPS 24 題',
   }),
 ];
+
+export const aojIcpc = [
+  createTestCaseForContestNameLabel('ICPC Prelim 2024')({
+    contestId: 'ICPCPrelim2024',
+    expected: '（ICPC 国内予選 2024）',
+  }),
+  createTestCaseForContestNameLabel('ICPC Regional 2024')({
+    contestId: 'ICPCRegional2024',
+    expected: '（ICPC 地区予選 2024）',
+  }),
+  createTestCaseForContestNameLabel('ICPC Prelim 2023')({
+    contestId: 'ICPCPrelim2023',
+    expected: '（ICPC 国内予選 2023）',
+  }),
+  createTestCaseForContestNameLabel('ICPC Regional 2023')({
+    contestId: 'ICPCRegional2023',
+    expected: '（ICPC 地区予選 2023）',
+  }),
+];
