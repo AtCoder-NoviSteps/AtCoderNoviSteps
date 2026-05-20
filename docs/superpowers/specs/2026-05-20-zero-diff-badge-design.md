@@ -29,22 +29,26 @@
 - `{#if label}` ブロックは変更不要（`'±0'` は truthy）
 - `--`/`++` のスペーシング処理（`-&thinsp;-`）は `±0` に不要なため追加不要
 - `aria-label` / `tooltipText` は既存ロジック経由で自動的に機能する
+- **ツールチップの新規表示**: 現在は diff=0 のとき `tooltipText === ''` のため `{#if showTooltip && tooltipText}` が false でツールチップ非表示だった。変更後は `tooltipText = 'ユーザは「ふつう」と評価'`（truthy）になるため、`showTooltip=true` の呼び出し箇所（`votes/+page.svelte`、`votes/[slug]/+page.svelte`、`vote_management/+page.svelte`）でツールチップが初めて表示される。これは意図した挙動変更である。
 
 ### `src/features/votes/utils/relative_evaluation.test.ts`
 
-- `getRelativeEvaluationLabel(0)` のアサーションを `'±0'` に更新
-- `getRelativeEvaluationBadgeColorClass(0)` のアサーションをグリーンクラスに更新
-- `getRelativeEvaluationTooltipText('±0')` → `'ユーザは「ふつう」と評価'` のテストを追加
+- `getRelativeEvaluationLabel(0)` の既存アサーション（`''`）を `'±0'` に更新
+- `getRelativeEvaluationBadgeColorClass(0)` の既存アサーション（`''`）をグリーンクラスに更新（既存テスト `'returns empty string for diff === 0 (badge not shown)'` を修正）
+- `getRelativeEvaluationTooltipText('±0')` → `'ユーザは「ふつう」と評価'` のテストケースを追加。`default: return ''` ブランチは変更なし（無効な label 値に対して `''` を返す挙動は維持）
 
 ## 影響範囲
 
-`RelativeEvaluationBadge` を使う 3 箇所すべてで ±0 バッジが表示される：
+`RelativeEvaluationBadge` を使う 4 箇所すべてで ±0 バッジが表示される：
 
 - `src/features/votes/components/VotableGrade.svelte`（グレードアイコンのドロップダウントリガー）
 - `src/routes/votes/+page.svelte`（投票一覧）
+- `src/routes/votes/[slug]/+page.svelte`（投票詳細）
 - `src/routes/(admin)/vote_management/+page.svelte`（管理画面）
 
-`VotableGrade.svelte` の `relativeEvaluationLabel`（sr-only テキスト）も `'±0'` を返すようになり、アクセシビリティも維持される。
+**スクリーンリーダーの読み上げ**: `VotableGrade.svelte` の sr-only テキストが `, relative evaluation: ±0` を含むようになる。`±0` はほとんどのスクリーンリーダーで "plus minus zero" または "plus-minus zero" として読み上げられる。これは意図した挙動変更である。
+
+**`calcGradeDiff` の戻り値型**: `getGradeOrder` はグレード順序を表す整数を返すため、`calcGradeDiff` は常に整数を返す。`diff === 0` の厳密等価比較は安全である。
 
 `getRelativeEvaluationJapaneseLabel(0)` は既に `'ふつう'` を返しており変更不要。
 
