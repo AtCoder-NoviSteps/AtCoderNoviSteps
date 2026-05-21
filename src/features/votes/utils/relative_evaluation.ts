@@ -111,7 +111,7 @@ export function getRelativeEvaluationColorClass(diff: number): string {
     return 'text-sky-500 dark:text-sky-400';
   }
   if (diff === 0) {
-    return 'text-gray-400 dark:text-gray-500';
+    return 'text-green-500 dark:text-green-400';
   }
   return 'text-orange-400 dark:text-orange-300';
 }
@@ -129,5 +129,5 @@ export function getRelativeEvaluationBadgeColorClass(diff: number): string {
   if (diff > 0) {
     return 'bg-orange-400 text-white dark:bg-orange-500 dark:text-white';
   }
-  return 'bg-green-500 text-white dark:bg-green-600 dark:text-white';
+  return 'bg-green-400 text-white dark:bg-green-500 dark:text-white';
 }

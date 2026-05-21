@@ -167,8 +167,8 @@ describe('getRelativeEvaluationColorClass', () => {
     expect(getRelativeEvaluationColorClass(-16)).toBe('text-sky-500 dark:text-sky-400');
   });
 
-  test('returns gray text classes for diff === 0', () => {
-    expect(getRelativeEvaluationColorClass(0)).toBe('text-gray-400 dark:text-gray-500');
+  test('returns green text classes for diff === 0 (neutral)', () => {
+    expect(getRelativeEvaluationColorClass(0)).toBe('text-green-500 dark:text-green-400');
   });
 
   test('returns orange text classes for positive diff (harder)', () => {
@@ -189,7 +189,7 @@ describe('getRelativeEvaluationBadgeColorClass', () => {
 
   test('returns green bg classes for diff === 0 (neutral)', () => {
     expect(getRelativeEvaluationBadgeColorClass(0)).toBe(
-      'bg-green-500 text-white dark:bg-green-600 dark:text-white',
+      'bg-green-400 text-white dark:bg-green-500 dark:text-white',
     );
   });
 
