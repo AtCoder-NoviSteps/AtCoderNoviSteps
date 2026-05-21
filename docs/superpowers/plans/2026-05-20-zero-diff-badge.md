@@ -12,216 +12,67 @@
 
 ## File Map
 
-| Action | File | 変更内容 |
-|--------|------|----------|
-| Modify | `src/features/votes/utils/relative_evaluation.ts` | `getRelativeEvaluationLabel(0)` → `'±0'`、`getRelativeEvaluationBadgeColorClass(0)` → グリーン、`getRelativeEvaluationTooltipText('±0')` → 日本語文言追加 |
-| Modify | `src/features/votes/utils/relative_evaluation.test.ts` | diff=0 のアサーション更新・追加 |
+| Action | File                                                   | 変更内容                                                                                                                                                  |
+| ------ | ------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Modify | `src/features/votes/utils/relative_evaluation.ts`      | `getRelativeEvaluationLabel(0)` → `'±0'`、`getRelativeEvaluationBadgeColorClass(0)` → グリーン、`getRelativeEvaluationTooltipText('±0')` → 日本語文言追加 |
+| Modify | `src/features/votes/utils/relative_evaluation.test.ts` | diff=0 のアサーション更新・追加                                                                                                                           |
 
 ---
 
-### Task 1: テストを更新して失敗させる
+### Task 1: テストを更新して失敗させる ✅
 
 **Files:**
+
 - Modify: `src/features/votes/utils/relative_evaluation.test.ts`
 
-- [ ] **Step 1: `getRelativeEvaluationLabel(0)` のアサーションを `'±0'` に変更する**
-
-`src/features/votes/utils/relative_evaluation.test.ts` の `describe('getRelativeEvaluationLabel')` ブロック内にある diff=0 のテストを探す：
-
-```typescript
-test('returns "" for diff === 0', () => {
-  expect(getRelativeEvaluationLabel(0)).toBe('');
-});
-```
-
-これを以下に置き換える：
-
-```typescript
-test('returns "±0" for diff === 0', () => {
-  expect(getRelativeEvaluationLabel(0)).toBe('±0');
-});
-```
-
-- [ ] **Step 2: `getRelativeEvaluationBadgeColorClass(0)` のアサーションをグリーンクラスに変更する**
-
-同ファイルの `describe('getRelativeEvaluationBadgeColorClass')` ブロック内にある diff=0 のテストを探す：
-
-```typescript
-test('returns empty string for diff === 0 (badge not shown)', () => {
-  expect(getRelativeEvaluationBadgeColorClass(0)).toBe('');
-});
-```
-
-これを以下に置き換える：
-
-```typescript
-test('returns green bg classes for diff === 0 (neutral)', () => {
-  expect(getRelativeEvaluationBadgeColorClass(0)).toBe(
-    'bg-green-500 text-white dark:bg-green-600 dark:text-white',
-  );
-});
-```
-
-- [ ] **Step 3: `getRelativeEvaluationTooltipText('±0')` のテストを追加する**
-
-同ファイルの `describe('getRelativeEvaluationTooltipText')` ブロック内に以下を追加する（既存の `test('returns "" for empty string ...')` の直後が適切）：
-
-```typescript
-test('returns tooltip text for ±0 (neutral match)', () => {
-  expect(getRelativeEvaluationTooltipText('±0')).toBe('ユーザは「ふつう」と評価');
-});
-```
-
-- [ ] **Step 4: テストを実行して失敗を確認する**
-
-```bash
-pnpm test:unit src/features/votes/utils/relative_evaluation.test.ts
-```
-
-期待される出力: 3 つのテストが FAIL（`getRelativeEvaluationLabel`、`getRelativeEvaluationBadgeColorClass`、`getRelativeEvaluationTooltipText` それぞれ）
+- [x] **Step 1: `getRelativeEvaluationLabel(0)` のアサーションを `'±0'` に変更する**
+- [x] **Step 2: `getRelativeEvaluationBadgeColorClass(0)` のアサーションをグリーンクラスに変更する**
+- [x] **Step 3: `getRelativeEvaluationTooltipText('±0')` のテストを追加する**
+- [x] **Step 4: テストを実行して失敗を確認する**
 
 ---
 
-### Task 2: 実装を変更してテストを通す
+### Task 2: 実装を変更してテストを通す ✅
 
 **Files:**
+
 - Modify: `src/features/votes/utils/relative_evaluation.ts`
 
-- [ ] **Step 1: `getRelativeEvaluationLabel` の diff=0 分岐を `'±0'` に変更する**
+- [x] **Step 1: `getRelativeEvaluationLabel` の diff=0 分岐を `'±0'` に変更する**
+- [x] **Step 2: `getRelativeEvaluationBadgeColorClass` の diff=0 分岐にグリーンを返すよう変更する**
+- [x] **Step 3: `getRelativeEvaluationTooltipText` に `'±0'` ケースを追加する**
+- [x] **Step 4: テストを実行してすべて通ることを確認する** (38 tests passed)
+- [x] **Step 5: ユニットテスト全体を実行してリグレッションがないことを確認する**
+- [x] **Step 6: TSDoc コメントを更新する**
+- [x] **Step 7: コミットする**
 
-`src/features/votes/utils/relative_evaluation.ts` の `getRelativeEvaluationLabel` 関数内：
+---
 
-変更前：
-```typescript
-if (diff === 0) {
-  return '';
-}
-```
+## 追加変更（実装後にユーザー要求）
 
-変更後：
-```typescript
-if (diff === 0) {
-  return '±0';
-}
-```
+- `prisma/seed.ts`: `addVoteStatisticsDemoData()` 追加 — APG4bPython_co に diff=0 の VotedGradeStatistics を作成してバッジを目視確認できるようにした
+- `getRelativeEvaluationBadgeColorClass(0)`: バッジの色合いを `500/600` → `400/500` に修正（sky/orange の既存バッジと統一）
+- `getRelativeEvaluationColorClass(0)`: テキスト色を gray → green に変更（diff=0 のニュートラル色を統一）
 
-- [ ] **Step 2: `getRelativeEvaluationBadgeColorClass` の diff=0 分岐にグリーンを返すよう変更する**
+---
 
-同ファイルの `getRelativeEvaluationBadgeColorClass` 関数内の末尾 `return '';`：
+## 教訓（新規・非自明なもの）
 
-変更前：
-```typescript
-export function getRelativeEvaluationBadgeColorClass(diff: number): string {
-  if (diff < 0) {
-    return 'bg-sky-400 text-white dark:bg-sky-500 dark:text-white';
-  }
-  if (diff > 0) {
-    return 'bg-orange-400 text-white dark:bg-orange-500 dark:text-white';
-  }
-  return '';
-}
-```
+### Docker node_modules シンボリックリンク欠損問題
 
-変更後：
-```typescript
-export function getRelativeEvaluationBadgeColorClass(diff: number): string {
-  if (diff < 0) {
-    return 'bg-sky-400 text-white dark:bg-sky-500 dark:text-white';
-  }
-  if (diff > 0) {
-    return 'bg-orange-400 text-white dark:bg-orange-500 dark:text-white';
-  }
-  return 'bg-green-500 text-white dark:bg-green-600 dark:text-white';
-}
-```
-
-- [ ] **Step 3: `getRelativeEvaluationTooltipText` に `'±0'` ケースを追加する**
-
-同ファイルの `getRelativeEvaluationTooltipText` 関数の switch 文に `'±0'` ケースを追加する：
-
-変更前：
-```typescript
-export function getRelativeEvaluationTooltipText(label: string): string {
-  switch (label) {
-    case '++':
-      return 'ユーザは「難しい」と評価';
-    case '+':
-      return 'ユーザは「やや難しい」と評価';
-    case '-':
-      return 'ユーザは「やや易しい」と評価';
-    case '--':
-      return 'ユーザは「易しい」と評価';
-    default:
-      return '';
-  }
-}
-```
-
-変更後：
-```typescript
-export function getRelativeEvaluationTooltipText(label: string): string {
-  switch (label) {
-    case '++':
-      return 'ユーザは「難しい」と評価';
-    case '+':
-      return 'ユーザは「やや難しい」と評価';
-    case '±0':
-      return 'ユーザは「ふつう」と評価';
-    case '-':
-      return 'ユーザは「やや易しい」と評価';
-    case '--':
-      return 'ユーザは「易しい」と評価';
-    default:
-      return '';
-  }
-}
-```
-
-- [ ] **Step 4: テストを実行してすべて通ることを確認する**
-
+**現象:** `pnpm db:seed` が `Cannot find module '/usr/src/app/node_modules/pnpm/bin/pnpm.mjs'` でクラッシュ。
+**原因:** `node_modules/.pnpm-workspace-state-v1.json` に `lastValidatedTimestamp` が記録されていたため、pnpm がインストール済みと判断してスコープなしパッケージ（tsx, pnpm, p-queue, prisma 等）のトップレベルシンボリックリンクを貼り直さなかった。スコープ付きパッケージ（@prisma 等）は正常だったため一見インストール済みに見える。
+**修正コマンド:**
 ```bash
-pnpm test:unit src/features/votes/utils/relative_evaluation.test.ts
+docker compose exec web rm node_modules/.pnpm-workspace-state-v1.json
+docker compose exec web /usr/local/share/npm-global/bin/pnpm install
 ```
+この問題は `compose.yaml` の `./node_modules:/usr/src/app/node_modules:cached` マウントでホスト側 node_modules をコンテナに共有しているため、ホスト側で別の Node バージョンを使って操作した際などに発生する。
 
-期待される出力: 全テスト PASS
+### `getRelativeEvaluationColorClass` の TSDoc 陳腐化
 
-- [ ] **Step 5: ユニットテスト全体を実行してリグレッションがないことを確認する**
+バッジ色と同じ関数のコメントが古い情報（gray）を残したまま実装だけ緑に更新した。コードレビューで検出。今後: 色変更時は必ず同じ関数の TSDoc 内の色名も同時に確認する。
 
-```bash
-pnpm test:unit
-```
+## CodeRabbit Findings
 
-期待される出力: 全テスト PASS
-
-- [ ] **Step 6: TSDoc コメントを更新する**
-
-`getRelativeEvaluationLabel` 関数の TSDoc テーブル内の diff=0 行を更新する：
-
-変更前：
-```
- * |  0     | `""`  |
-```
-
-変更後：
-```
- * |  0     | `±0`  |
-```
-
-`getRelativeEvaluationBadgeColorClass` 関数の TSDoc を更新する：
-
-変更前：
-```
- * Returns empty string for diff === 0 (badge is not shown).
-```
-
-変更後（関数説明の末尾行）：
-```
- * Zero diff (neutral) → green.
-```
-
-- [ ] **Step 7: コミットする**
-
-```bash
-git add src/features/votes/utils/relative_evaluation.ts src/features/votes/utils/relative_evaluation.test.ts
-git commit -m "feat: show ±0 badge when vote median matches official grade"
-```
+（PRを開いた後に実施予定）
