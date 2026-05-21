@@ -50,9 +50,6 @@ importers:
       tailwind-merge:
         specifier: 3.6.0
         version: 3.6.0
-      vercel:
-        specifier: 54.1.0
-        version: 54.1.0(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0)
       xss:
         specifier: 1.0.15
         version: 1.0.15
@@ -183,6 +180,9 @@ importers:
       typescript:
         specifier: 6.0.3
         version: 6.0.3
+      vercel:
+        specifier: 54.1.0
+        version: 54.1.0(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0)
       vite:
         specifier: 8.0.13
         version: 8.0.13(@types/node@25.9.1)(esbuild@0.28.0)(jiti@2.7.0)(tsx@4.22.3)
