@@ -102,7 +102,7 @@ export function getRelativeEvaluationJapaneseLabel(diff: number): string {
 
 /**
  * Returns Tailwind text color classes for a diff value in the vote dropdown.
- * Negative diff (easier) → sky, zero → gray, positive (harder) → orange.
+ * Negative diff (easier) → sky, zero → green, positive (harder) → orange.
  *
  * @param diff - The result of {@link calcGradeDiff}.
  */
