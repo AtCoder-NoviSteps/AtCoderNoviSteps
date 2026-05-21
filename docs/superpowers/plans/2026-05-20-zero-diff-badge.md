@@ -63,10 +63,12 @@
 **現象:** `pnpm db:seed` が `Cannot find module '/usr/src/app/node_modules/pnpm/bin/pnpm.mjs'` でクラッシュ。
 **原因:** `node_modules/.pnpm-workspace-state-v1.json` に `lastValidatedTimestamp` が記録されていたため、pnpm がインストール済みと判断してスコープなしパッケージ（tsx, pnpm, p-queue, prisma 等）のトップレベルシンボリックリンクを貼り直さなかった。スコープ付きパッケージ（@prisma 等）は正常だったため一見インストール済みに見える。
 **修正コマンド:**
+
 ```bash
 docker compose exec web rm node_modules/.pnpm-workspace-state-v1.json
 docker compose exec web /usr/local/share/npm-global/bin/pnpm install
 ```
+
 この問題は `compose.yaml` の `./node_modules:/usr/src/app/node_modules:cached` マウントでホスト側 node_modules をコンテナに共有しているため、ホスト側で別の Node バージョンを使って操作した際などに発生する。
 
 ### `getRelativeEvaluationColorClass` の TSDoc 陳腐化

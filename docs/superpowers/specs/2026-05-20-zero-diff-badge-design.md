@@ -18,11 +18,11 @@
 
 ### `src/features/votes/utils/relative_evaluation.ts`
 
-| 関数 | diff=0 の現在値 | 変更後 |
-|---|---|---|
-| `getRelativeEvaluationLabel` | `''` | `'±0'` |
-| `getRelativeEvaluationBadgeColorClass` | `''` | `'bg-green-500 text-white dark:bg-green-600 dark:text-white'` |
-| `getRelativeEvaluationTooltipText` | `''`（default） | `'ユーザは「ふつう」と評価'`（`'±0'` case 追加） |
+| 関数                                   | diff=0 の現在値 | 変更後                                                        |
+| -------------------------------------- | --------------- | ------------------------------------------------------------- |
+| `getRelativeEvaluationLabel`           | `''`            | `'±0'`                                                        |
+| `getRelativeEvaluationBadgeColorClass` | `''`            | `'bg-green-500 text-white dark:bg-green-600 dark:text-white'` |
+| `getRelativeEvaluationTooltipText`     | `''`（default） | `'ユーザは「ふつう」と評価'`（`'±0'` case 追加）              |
 
 ### `src/features/votes/components/RelativeEvaluationBadge.svelte`
 
