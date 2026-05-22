@@ -20,7 +20,7 @@ export function calcGradeDiff(officialGrade: TaskGrade, medianGrade: TaskGrade):
  * | ------ | ----- |
  * | ≤ −2   | `--`  |
  * | −1     | `-`   |
- * |  0     | `""`  |
+ * |  0     | `±0`  |
  * | +1     | `+`   |
  * | ≥ +2   | `++`  |
  *
@@ -35,7 +35,7 @@ export function getRelativeEvaluationLabel(diff: number): string {
     return '-';
   }
   if (diff === 0) {
-    return '';
+    return '±0';
   }
   if (diff === 1) {
     return '+';
@@ -55,6 +55,8 @@ export function getRelativeEvaluationTooltipText(label: string): string {
       return 'ユーザは「難しい」と評価';
     case '+':
       return 'ユーザは「やや難しい」と評価';
+    case '±0':
+      return 'ユーザは「ふつう」と評価';
     case '-':
       return 'ユーザは「やや易しい」と評価';
     case '--':
@@ -100,7 +102,7 @@ export function getRelativeEvaluationJapaneseLabel(diff: number): string {
 
 /**
  * Returns Tailwind text color classes for a diff value in the vote dropdown.
- * Negative diff (easier) → sky, zero → gray, positive (harder) → orange.
+ * Negative diff (easier) → sky, zero → green, positive (harder) → orange.
  *
  * @param diff - The result of {@link calcGradeDiff}.
  */
@@ -109,15 +111,14 @@ export function getRelativeEvaluationColorClass(diff: number): string {
     return 'text-sky-500 dark:text-sky-400';
   }
   if (diff === 0) {
-    return 'text-gray-400 dark:text-gray-500';
+    return 'text-green-500 dark:text-green-400';
   }
   return 'text-orange-400 dark:text-orange-300';
 }
 
 /**
  * Returns Tailwind background + text color classes for the relative evaluation badge.
- * Negative diff (easier) → sky, positive (harder) → orange.
- * Returns empty string for diff === 0 (badge is not shown).
+ * Negative diff (easier) → sky, zero diff (neutral) → green, positive (harder) → orange.
  *
  * @param diff - The result of {@link calcGradeDiff}.
  */
@@ -128,5 +129,5 @@ export function getRelativeEvaluationBadgeColorClass(diff: number): string {
   if (diff > 0) {
     return 'bg-orange-400 text-white dark:bg-orange-500 dark:text-white';
   }
-  return '';
+  return 'bg-green-400 text-white dark:bg-green-500 dark:text-white';
 }
