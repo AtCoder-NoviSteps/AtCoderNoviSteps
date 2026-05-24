@@ -18,6 +18,7 @@
   import ExternalLinkWrapper from '$lib/components/ExternalLinkWrapper.svelte';
   import PublicationStatusLabel from '$features/workbooks/components/shared/PublicationStatusLabel.svelte';
   import CommentAndHint from '$features/workbooks/components/detail/CommentAndHint.svelte';
+  import RelativeEvaluationBadge from '$features/votes/components/RelativeEvaluationBadge.svelte';
 
   import { getBackgroundColorFrom } from '$lib/services/submission_status';
 
@@ -33,6 +34,7 @@
   let workBook = data.workBook;
   let workBookTasks: WorkBookTaskBase[] = $state([]);
   let taskResults: Map<string, TaskResult> = $derived(data.taskResults);
+  let voteStatisticsMap = $derived(data.voteStatisticsMap);
 
   let isLoggedIn = data.isLoggedIn;
 
@@ -157,6 +159,8 @@
         </TableHead>
         <TableBody class="divide-y divide-gray-200 dark:divide-gray-700">
           {#each workBookTasks as workBookTask (workBookTask.taskId)}
+            {@const taskGrade = getTaskGrade(workBookTask.taskId)}
+            {@const statsEntry = voteStatisticsMap?.get(workBookTask.taskId)}
             <TableBodyRow
               id={getUniqueIdUsing(workBookTask.taskId)}
               class={getBackgroundColorFrom(getTaskResult(workBookTask.taskId).status_name)}
@@ -164,7 +168,16 @@
               <!-- 問題のグレード -->
               <TableBodyCell class="justify-center w-16 px-0.5 xs:px-3">
                 <div class="flex items-center justify-center min-w-[54px] max-w-[54px]">
-                  <GradeLabel taskGrade={getTaskGrade(workBookTask.taskId)} />
+                  <div class="relative">
+                    <GradeLabel {taskGrade} />
+                    {#if taskGrade !== TaskGrade.PENDING && statsEntry}
+                      <RelativeEvaluationBadge
+                        officialGrade={taskGrade}
+                        medianGrade={statsEntry.grade}
+                        badgeId="rel-eval-{getUniqueIdUsing(workBookTask.taskId)}"
+                      />
+                    {/if}
+                  </div>
                 </div>
               </TableBodyCell>
 

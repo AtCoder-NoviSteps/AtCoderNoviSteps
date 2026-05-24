@@ -6,6 +6,7 @@ import type { TaskResult } from '$lib/types/task';
 import * as taskResultsCrud from '$lib/services/task_results';
 import { getWorkbookWithAuthor } from '$features/workbooks/services/workbooks';
 import * as action from '$lib/actions/update_task_result';
+import { getVoteGradeStatistics } from '$features/votes/services/vote_statistics';
 
 import { isAdmin, canRead } from '$lib/utils/authorship';
 import { getLoggedInUser } from '$features/auth/services/session';
@@ -36,16 +37,17 @@ export async function load({ locals, params, url }) {
     error(FORBIDDEN, `問題集id: ${slug} にアクセスする権限がありません。`);
   }
 
-  const taskResults: Map<string, TaskResult> = await taskResultsCrud.getTaskResultsByTaskId(
-    workBook.workBookTasks,
-    loggedInUser?.id as string,
-  );
+  const [taskResults, voteStatisticsMap] = await Promise.all([
+    taskResultsCrud.getTaskResultsByTaskId(workBook.workBookTasks, loggedInUser?.id as string),
+    getVoteGradeStatistics(),
+  ]);
 
   return {
     isLoggedIn: loggedInUser !== null,
     loggedInAsAdmin: loggedInAsAdmin,
     ...workbookWithAuthor,
     taskResults: taskResults,
+    voteStatisticsMap: voteStatisticsMap,
   };
 }
 
