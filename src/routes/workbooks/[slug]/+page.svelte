@@ -14,18 +14,15 @@
   import HeadingOne from '$lib/components/HeadingOne.svelte';
   import UpdatingModal from '$lib/components/SubmissionStatus/UpdatingModal.svelte';
   import SubmissionStatusImage from '$lib/components/SubmissionStatus/SubmissionStatusImage.svelte';
-  import GradeLabel from '$lib/components/GradeLabel.svelte';
   import ExternalLinkWrapper from '$lib/components/ExternalLinkWrapper.svelte';
+  import VotableGrade from '$features/votes/components/VotableGrade.svelte';
   import PublicationStatusLabel from '$features/workbooks/components/shared/PublicationStatusLabel.svelte';
   import CommentAndHint from '$features/workbooks/components/detail/CommentAndHint.svelte';
-  import RelativeEvaluationBadge from '$features/votes/components/RelativeEvaluationBadge.svelte';
-
   import { getBackgroundColorFrom } from '$lib/services/submission_status';
 
   import { addContestNameToTaskIndex } from '$lib/utils/contest';
   import { getTaskUrl, removeTaskIndexFromTitle } from '$lib/utils/task';
 
-  import { TaskGrade } from '$lib/types/task';
   import type { TaskResult } from '$lib/types/task';
   import type { WorkBookTaskBase } from '$features/workbooks/types/workbook';
 
@@ -37,14 +34,11 @@
   let voteStatisticsMap = $derived(data.voteStatisticsMap);
 
   let isLoggedIn = data.isLoggedIn;
+  let isAtCoderVerified = $derived(data.isAtCoderVerified);
 
   // TODO: 関数をutilへ移動させる
   const getTaskResult = (taskId: string): TaskResult => {
     return taskResults?.get(taskId) as TaskResult;
-  };
-
-  const getTaskGrade = (taskId: string): TaskGrade => {
-    return getTaskResult(taskId)?.grade ?? TaskGrade.PENDING;
   };
 
   const getContestIdFrom = (taskId: string): string => {
@@ -159,8 +153,6 @@
         </TableHead>
         <TableBody class="divide-y divide-gray-200 dark:divide-gray-700">
           {#each workBookTasks as workBookTask (workBookTask.taskId)}
-            {@const taskGrade = getTaskGrade(workBookTask.taskId)}
-            {@const statsEntry = voteStatisticsMap?.get(workBookTask.taskId)}
             <TableBodyRow
               id={getUniqueIdUsing(workBookTask.taskId)}
               class={getBackgroundColorFrom(getTaskResult(workBookTask.taskId).status_name)}
@@ -168,16 +160,12 @@
               <!-- 問題のグレード -->
               <TableBodyCell class="justify-center w-16 px-0.5 xs:px-3">
                 <div class="flex items-center justify-center min-w-[54px] max-w-[54px]">
-                  <div class="relative">
-                    <GradeLabel {taskGrade} />
-                    {#if taskGrade !== TaskGrade.PENDING && statsEntry}
-                      <RelativeEvaluationBadge
-                        officialGrade={taskGrade}
-                        medianGrade={statsEntry.grade}
-                        badgeId="rel-eval-{getUniqueIdUsing(workBookTask.taskId)}"
-                      />
-                    {/if}
-                  </div>
+                  <VotableGrade
+                    taskResult={getTaskResult(workBookTask.taskId)}
+                    {isLoggedIn}
+                    {isAtCoderVerified}
+                    estimatedGrade={voteStatisticsMap?.get(workBookTask.taskId)?.grade ?? null}
+                  />
                 </div>
               </TableBodyCell>
 

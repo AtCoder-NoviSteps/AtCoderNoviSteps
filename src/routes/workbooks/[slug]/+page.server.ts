@@ -6,6 +6,7 @@ import * as taskResultsCrud from '$lib/services/task_results';
 import { getWorkbookWithAuthor } from '$features/workbooks/services/workbooks';
 import * as action from '$lib/actions/update_task_result';
 import { getVoteGradeStatisticsForTaskIds } from '$features/votes/services/vote_statistics';
+import { voteAbsoluteGrade as voteAbsoluteGradeAction } from '$features/votes/actions/vote_actions';
 
 import { isAdmin, canRead } from '$lib/utils/authorship';
 import { getLoggedInUser } from '$features/auth/services/session';
@@ -44,6 +45,7 @@ export async function load({ locals, params, url }) {
 
   return {
     isLoggedIn: loggedInUser !== null,
+    isAtCoderVerified: locals.user?.is_validated === true,
     loggedInAsAdmin: loggedInAsAdmin,
     ...workbookWithAuthor,
     taskResults: taskResults,
@@ -55,5 +57,8 @@ export const actions = {
   update: async ({ request, locals }) => {
     const operationLog = 'workbook -> actions -> update';
     return await action.updateTaskResult({ request, locals }, operationLog);
+  },
+  voteAbsoluteGrade: async ({ request, locals }) => {
+    return await voteAbsoluteGradeAction({ request, locals });
   },
 } satisfies Actions;
