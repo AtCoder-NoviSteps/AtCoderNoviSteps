@@ -4,6 +4,7 @@ import { TaskGrade } from '@prisma/client';
 
 import {
   getVoteGradeStatistics,
+  getVoteGradeStatisticsForTaskIds,
   getAllTasksWithVoteInfo,
   getVoteCountersByTaskId,
   getVoteStatsByTaskId,
@@ -288,5 +289,54 @@ describe('getAllVoteCounters', () => {
 
     expect(result).toHaveLength(2);
     expect(prisma.votedGradeCounter.findMany).toHaveBeenCalledWith();
+  });
+});
+
+describe('getVoteGradeStatisticsForTaskIds', () => {
+  test('returns an empty Map without querying the DB when taskIds is empty', async () => {
+    const result = await getVoteGradeStatisticsForTaskIds([]);
+
+    expect(result.size).toBe(0);
+    expect(prisma.votedGradeStatistics.findMany).not.toHaveBeenCalled();
+  });
+
+  test('queries with a WHERE IN filter for the given taskIds', async () => {
+    mockVotedGradeStatisticsFindMany([]);
+
+    await getVoteGradeStatisticsForTaskIds(['abc001_a', 'abc002_a']);
+
+    expect(prisma.votedGradeStatistics.findMany).toHaveBeenCalledWith({
+      where: { taskId: { in: ['abc001_a', 'abc002_a'] } },
+    });
+  });
+
+  test('returns an empty Map when no matching statistics exist', async () => {
+    mockVotedGradeStatisticsFindMany([]);
+
+    const result = await getVoteGradeStatisticsForTaskIds(['abc001_a']);
+
+    expect(result.size).toBe(0);
+  });
+
+  test('maps each taskId to its statistics record', async () => {
+    const stat = makeStatisticsRecord({ taskId: 'abc001_a', grade: TaskGrade.Q5 });
+    mockVotedGradeStatisticsFindMany([stat]);
+
+    const result = await getVoteGradeStatisticsForTaskIds(['abc001_a']);
+
+    expect(result.get('abc001_a')?.grade).toBe(TaskGrade.Q5);
+  });
+
+  test('returns only statistics for the specified taskIds', async () => {
+    const records = [
+      makeStatisticsRecord({ taskId: 'abc001_a', grade: TaskGrade.Q5 }),
+      makeStatisticsRecord({ id: 'stats-abc002_a', taskId: 'abc002_a', grade: TaskGrade.D1 }),
+    ];
+    mockVotedGradeStatisticsFindMany(records);
+
+    const result = await getVoteGradeStatisticsForTaskIds(['abc001_a', 'abc002_a']);
+
+    expect(result.size).toBe(2);
+    expect(result.get('abc002_a')?.grade).toBe(TaskGrade.D1);
   });
 });
