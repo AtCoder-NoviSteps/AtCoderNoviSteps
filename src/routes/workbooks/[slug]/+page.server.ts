@@ -1,7 +1,6 @@
 import { error, type Actions } from '@sveltejs/kit';
 
 import { Roles } from '$lib/types/user';
-import type { TaskResult } from '$lib/types/task';
 
 import * as taskResultsCrud from '$lib/services/task_results';
 import { getWorkbookWithAuthor } from '$features/workbooks/services/workbooks';
