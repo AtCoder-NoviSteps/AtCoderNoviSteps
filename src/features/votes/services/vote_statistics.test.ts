@@ -293,6 +293,13 @@ describe('getAllVoteCounters', () => {
 });
 
 describe('getVoteGradeStatisticsForTaskIds', () => {
+  test('returns an empty Map without querying the DB when taskIds is empty', async () => {
+    const result = await getVoteGradeStatisticsForTaskIds([]);
+
+    expect(result.size).toBe(0);
+    expect(prisma.votedGradeStatistics.findMany).not.toHaveBeenCalled();
+  });
+
   test('queries with a WHERE IN filter for the given taskIds', async () => {
     mockVotedGradeStatisticsFindMany([]);
 

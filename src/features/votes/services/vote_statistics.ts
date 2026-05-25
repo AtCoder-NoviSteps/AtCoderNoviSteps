@@ -27,6 +27,10 @@ export async function getVoteGradeStatistics(): Promise<Map<string, VotedGradeSt
 export async function getVoteGradeStatisticsForTaskIds(
   taskIds: string[],
 ): Promise<Map<string, VotedGradeStatistics>> {
+  if (taskIds.length === 0) {
+    return new Map();
+  }
+
   const stats = await prisma.votedGradeStatistics.findMany({
     where: { taskId: { in: taskIds } },
   });
