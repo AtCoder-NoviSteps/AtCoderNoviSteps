@@ -101,7 +101,7 @@ export const classifyContest = (contest_id: string) => {
     return ContestType.AOJ_ICPC;
   }
 
-  if (/^JAG(Prelim|Regional|Summer|Winter|Spring)\d*(-day\d+[A-Z]?)?$/.exec(contest_id)) {
+  if (/^JAG(Prelim|Regional|Summer|Winter|Spring)\d{4}(-day\d+[A-Z]?)?$/.exec(contest_id)) {
     return ContestType.AOJ_JAG;
   }
 

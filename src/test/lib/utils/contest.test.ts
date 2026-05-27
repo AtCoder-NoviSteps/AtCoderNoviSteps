@@ -213,6 +213,15 @@ describe('Contest', () => {
         });
       });
 
+      describe('when contest_id is JAG-like but has no 4-digit year', () => {
+        test.each(['JAGSummer-day2', 'JAGPrelim', 'JAGRegional'])(
+          'returns null for %s',
+          (contestId) => {
+            expect(classifyContest(contestId)).toBeNull();
+          },
+        );
+      });
+
       describe('when contest_id means AOJ ICPC (prelim and regional)', () => {
         TestCasesForContestType.aojIcpc.forEach(({ name, value }) => {
           runTests(`${name}`, [value], ({ contestId, expected }: TestCaseForContestType) => {
