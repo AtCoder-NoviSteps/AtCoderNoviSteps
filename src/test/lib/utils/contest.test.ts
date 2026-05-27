@@ -514,6 +514,15 @@ describe('Contest', () => {
         });
       });
 
+      describe('when contest_id is JAG-like but has no 4-digit year', () => {
+        test.each(['JAGSummer-day2', 'JAGPrelim', 'JAGRegional-day1'])(
+          'does not return a JAG-style label for %s',
+          (contestId) => {
+            expect(getContestNameLabel(contestId)).not.toMatch(/^（/);
+          },
+        );
+      });
+
       describe('when contest_id means AOJ ICPC (prelim and regional)', () => {
         TestCasesForContestNameLabel.aojIcpc.forEach(({ name, value }) => {
           runTests(`${name}`, [value], ({ contestId, expected }: TestCaseForContestNameLabel) => {
@@ -694,6 +703,15 @@ describe('Contest', () => {
             },
           );
         });
+      });
+
+      describe('when contest_id is JAG-like but has no 4-digit year', () => {
+        test.each(['JAGSummer-day2', 'JAGPrelim', 'JAGRegional-day1'])(
+          'does not produce AOJ format for %s',
+          (contestId) => {
+            expect(addContestNameToTaskIndex(contestId, '1')).not.toMatch(/^AOJ /);
+          },
+        );
       });
 
       describe('when contest_id means AOJ ICPC (prelim and regional)', () => {
