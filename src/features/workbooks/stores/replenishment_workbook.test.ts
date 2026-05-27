@@ -1,4 +1,4 @@
-import { expect, test, vi } from 'vitest';
+import { expect, test, vi, type Mock } from 'vitest';
 
 import { replenishmentWorkBooksStore } from '$features/workbooks/stores/replenishment_workbook.svelte';
 
@@ -47,7 +47,7 @@ describe('Replenishment workbooks store', () => {
 
   // Note: This test is skipped because it is not possible to mock localStorage in JSDOM.
   test.skip('persists state in localStorage', () => {
-    (mockLocalStorage.getItem as jest.Mock).mockReturnValue(JSON.stringify(false));
+    (mockLocalStorage.getItem as Mock).mockReturnValue(JSON.stringify(false));
 
     replenishmentWorkBooksStore.toggleView();
 

@@ -1,4 +1,6 @@
-import { type Actions } from '@sveltejs/kit';
+import { fail, type Actions } from '@sveltejs/kit';
+import { superValidate } from 'sveltekit-superforms';
+import { zod4 } from 'sveltekit-superforms/adapters';
 
 import * as task_crud from '$lib/services/task_results';
 import { getVoteGradeStatistics } from '$features/votes/services/vote_statistics';
@@ -6,6 +8,8 @@ import type { TaskResults } from '$lib/types/task';
 import { Roles } from '$lib/types/user';
 import { updateTaskResult } from '$lib/actions/update_task_result';
 import { voteAbsoluteGrade } from '@/features/votes/actions/vote_actions';
+import { voteAbsoluteGradeSchema } from '$features/votes/zod/schema';
+import { BAD_REQUEST } from '$lib/constants/http-response-status-codes';
 
 // 一覧表ページは、ログインしていなくても閲覧できるようにする
 export async function load({ locals, url }) {
@@ -53,6 +57,10 @@ export const actions = {
     return await updateTaskResult({ request, locals }, operationLog);
   },
   voteAbsoluteGrade: async ({ request, locals }) => {
-    return await voteAbsoluteGrade({ request, locals });
+    const form = await superValidate(request, zod4(voteAbsoluteGradeSchema));
+    if (!form.valid) {
+      return fail(BAD_REQUEST, { form });
+    }
+    return await voteAbsoluteGrade({ locals, data: form.data });
   },
 } satisfies Actions;

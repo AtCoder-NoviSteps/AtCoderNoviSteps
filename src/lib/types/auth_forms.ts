@@ -19,6 +19,8 @@ export type AuthFormConstraints = {
   password?: FieldConstraints;
 };
 
+type SchemaShape = { [key: string]: SchemaShape };
+
 /**
  * Represents the state and data structure for authentication forms.
  *
@@ -31,7 +33,7 @@ export type AuthFormConstraints = {
  * @property {string} data.password - The password field value
  * @property {Record<string, string[]>} errors - Collection of validation errors keyed by field name
  * @property {AuthFormConstraints} [constraints] - Optional validation constraints for the form
- * @property {Record<string, unknown>} [shape] - Optional form schema or structure definition
+ * @property {SchemaShape} [shape] - Optional schema shape for nested error mapping
  * @property {string} message - General message associated with the form (success, error, etc.)
  */
 export type AuthForm = {
@@ -41,7 +43,7 @@ export type AuthForm = {
   data: { username: string; password: string };
   errors: Record<string, string[]>;
   constraints?: AuthFormConstraints;
-  shape?: Record<string, unknown>;
+  shape?: SchemaShape;
   message: string;
 };
 

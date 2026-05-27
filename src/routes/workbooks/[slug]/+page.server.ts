@@ -1,4 +1,6 @@
-import { error, type Actions } from '@sveltejs/kit';
+import { error, fail, type Actions } from '@sveltejs/kit';
+import { superValidate } from 'sveltekit-superforms';
+import { zod4 } from 'sveltekit-superforms/adapters';
 
 import { Roles } from '$lib/types/user';
 
@@ -7,6 +9,7 @@ import { getWorkbookWithAuthor } from '$features/workbooks/services/workbooks';
 import * as action from '$lib/actions/update_task_result';
 import { getVoteGradeStatisticsForTaskIds } from '$features/votes/services/vote_statistics';
 import { voteAbsoluteGrade as voteAbsoluteGradeAction } from '$features/votes/actions/vote_actions';
+import { voteAbsoluteGradeSchema } from '$features/votes/zod/schema';
 
 import { isAdmin, canRead } from '$lib/utils/authorship';
 import { getLoggedInUser } from '$features/auth/services/session';
@@ -59,6 +62,10 @@ export const actions = {
     return await action.updateTaskResult({ request, locals }, operationLog);
   },
   voteAbsoluteGrade: async ({ request, locals }) => {
-    return await voteAbsoluteGradeAction({ request, locals });
+    const form = await superValidate(request, zod4(voteAbsoluteGradeSchema));
+    if (!form.valid) {
+      return fail(BAD_REQUEST, { form });
+    }
+    return await voteAbsoluteGradeAction({ locals, data: form.data });
   },
 } satisfies Actions;
