@@ -19,7 +19,7 @@ export type AuthFormConstraints = {
   password?: FieldConstraints;
 };
 
-type SchemaShape = { [key: string]: SchemaShape };
+type SchemaShape = Record<string, unknown>;
 
 /**
  * Represents the state and data structure for authentication forms.

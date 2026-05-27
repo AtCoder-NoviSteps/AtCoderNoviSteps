@@ -164,7 +164,10 @@ const createBaseAuthForm = () => ({
       pattern: '(?=.*?[a-z])(?=.*?[A-Z])(?=.*?\\d)[a-zA-Z\\d]{8,128}',
     },
   },
-  shape: {},
+  shape: {
+    username: { type: 'string' },
+    password: { type: 'string' },
+  },
 });
 
 /**
