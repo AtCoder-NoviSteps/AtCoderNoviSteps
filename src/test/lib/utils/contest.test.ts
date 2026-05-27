@@ -205,7 +205,7 @@ describe('Contest', () => {
         });
       });
 
-      describe('when contest_id mean AOJ JAG (prelim and regional) ', () => {
+      describe('when contest_id means AOJ JAG', () => {
         TestCasesForContestType.aojJag.forEach(({ name, value }) => {
           runTests(`${name}`, [value], ({ contestId, expected }: TestCaseForContestType) => {
             expect(classifyContest(contestId)).toEqual(expected);
@@ -411,7 +411,7 @@ describe('Contest', () => {
         });
       });
 
-      describe('when contest_id means AOJ JAG (prelim and regional)', () => {
+      describe('when contest_id means AOJ JAG', () => {
         TestCasesForContestType.aojJag.forEach(({ name, value }) => {
           runTests(`${name}`, [value], ({ contestId, expected }: TestCaseForContestType) => {
             expect(getContestPriority(contestId)).toEqual(contestTypePriorities.get(expected));
@@ -497,6 +497,14 @@ describe('Contest', () => {
     });
 
     describe('AOJ', () => {
+      describe('when contest_id means AOJ JAG', () => {
+        TestCasesForContestNameLabel.aojJag.forEach(({ name, value }) => {
+          runTests(`${name}`, [value], ({ contestId, expected }: TestCaseForContestNameLabel) => {
+            expect(getContestNameLabel(contestId)).toEqual(expected);
+          });
+        });
+      });
+
       describe('when contest_id means AOJ ICPC (prelim and regional)', () => {
         TestCasesForContestNameLabel.aojIcpc.forEach(({ name, value }) => {
           runTests(`${name}`, [value], ({ contestId, expected }: TestCaseForContestNameLabel) => {
@@ -667,7 +675,7 @@ describe('Contest', () => {
         });
       });
 
-      describe('when contest_id means AOJ JAG (prelim and regional)', () => {
+      describe('when contest_id means AOJ JAG', () => {
         TestCasesForContestNameAndTaskIndex.aojJag.forEach(({ name, value }) => {
           runTests(
             `${name}`,

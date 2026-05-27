@@ -101,7 +101,7 @@ export const classifyContest = (contest_id: string) => {
     return ContestType.AOJ_ICPC;
   }
 
-  if (/^JAG(Prelim|Regional|Summer|Winter|Spring)\d*$/.exec(contest_id)) {
+  if (/^JAG(Prelim|Regional|Summer|Winter|Spring)\d*(-day\d+[A-Z]?)?$/.exec(contest_id)) {
     return ContestType.AOJ_JAG;
   }
 
@@ -699,6 +699,10 @@ const PCK_TRANSLATIONS = {
 const JAG_TRANSLATIONS = {
   Prelim: ' 模擬国内 ',
   Regional: ' 模擬地区 ',
+  Summer: ' 夏合宿 ',
+  Winter: ' 冬合宿 ',
+  Spring: ' 春合宿 ',
+  '-day': ' Day',
 };
 
 const ICPC_TRANSLATIONS = {
