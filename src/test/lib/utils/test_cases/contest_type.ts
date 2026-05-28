@@ -631,6 +631,18 @@ const aojJagContestData = [
   { name: 'AOJ, JAG Regional 2020', contestId: 'JAGRegional2020' },
   { name: 'AOJ, JAG Regional 2021', contestId: 'JAGRegional2021' },
   { name: 'AOJ, JAG Regional 2022', contestId: 'JAGRegional2022' },
+  { name: 'AOJ, JAG Spring 2012', contestId: 'JAGSpring2012' },
+  { name: 'AOJ, JAG Spring 2015', contestId: 'JAGSpring2015' },
+  { name: 'AOJ, JAG Winter 2009', contestId: 'JAGWinter2009' },
+  { name: 'AOJ, JAG Winter 2011', contestId: 'JAGWinter2011' },
+  { name: 'AOJ, JAG Summer 2006 day1', contestId: 'JAGSummer2006-day1' },
+  { name: 'AOJ, JAG Summer 2006 day2', contestId: 'JAGSummer2006-day2' },
+  { name: 'AOJ, JAG Winter 2006 day2', contestId: 'JAGWinter2006-day2' },
+  { name: 'AOJ, JAG Summer 2023 day2', contestId: 'JAGSummer2023-day2' },
+  { name: 'AOJ, JAG Summer 2024 day2', contestId: 'JAGSummer2024-day2' },
+  { name: 'AOJ, JAG Summer 2024 day3', contestId: 'JAGSummer2024-day3' },
+  { name: 'AOJ, JAG Summer 2012 day3A', contestId: 'JAGSummer2012-day3A' },
+  { name: 'AOJ, JAG Summer 2012 day3B', contestId: 'JAGSummer2012-day3B' },
 ];
 
 export const aojJag = aojJagContestData.map(({ name, contestId }) =>

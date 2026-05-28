@@ -1,5 +1,7 @@
 import { ContestType, type ContestPrefix, type ContestLabelTranslations } from '$lib/types/contest';
 
+const regexForJag = /^JAG(Prelim|Regional|Summer|Winter|Spring)\d{4}(-day\d+[A-Z]?)?$/;
+
 // See:
 // https://github.com/kenkoooo/AtCoderProblems/blob/master/atcoder-problems-frontend/src/utils/ContestClassifier.ts
 export const classifyContest = (contest_id: string) => {
@@ -101,7 +103,7 @@ export const classifyContest = (contest_id: string) => {
     return ContestType.AOJ_ICPC;
   }
 
-  if (/^JAG(Prelim|Regional|Summer|Winter|Spring)\d*$/.exec(contest_id)) {
+  if (regexForJag.exec(contest_id)) {
     return ContestType.AOJ_JAG;
   }
 
@@ -456,7 +458,7 @@ export const getContestNameLabel = (contestId: string) => {
     return getAojContestLabel(ICPC_TRANSLATIONS, contestId);
   }
 
-  if (contestId.startsWith('JAG')) {
+  if (regexForJag.exec(contestId)) {
     return getAojContestLabel(JAG_TRANSLATIONS, contestId);
   }
 
@@ -699,6 +701,10 @@ const PCK_TRANSLATIONS = {
 const JAG_TRANSLATIONS = {
   Prelim: ' 模擬国内 ',
   Regional: ' 模擬地区 ',
+  Summer: ' 夏合宿 ',
+  Winter: ' 冬合宿 ',
+  Spring: ' 春合宿 ',
+  '-day': ' Day',
 };
 
 const ICPC_TRANSLATIONS = {
@@ -733,7 +739,7 @@ function isAojContest(contestId: string): boolean {
   return (
     aojCoursePrefixes.has(contestId) ||
     contestId.startsWith('PCK') ||
-    contestId.startsWith('JAG') ||
+    regexForJag.test(contestId) ||
     contestId.startsWith('ICPC')
   );
 }

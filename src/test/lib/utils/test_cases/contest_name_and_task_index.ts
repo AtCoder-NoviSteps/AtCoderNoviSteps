@@ -814,9 +814,34 @@ const generateAojJagTestCases = (contestIds: JagContestIds, taskIndices: string[
       `AOJ ${taskIndex}（JAG${contestId.replace('Prelim', ' 模擬国内 ').replace('Regional', ' 模擬地区 ')}）`,
   );
 
-export const aojJag = Object.entries(AOJ_JAG_TEST_DATA).flatMap(([contestId, tasks]) =>
-  generateAojJagTestCases(Array(tasks.tasks.length).fill(contestId), tasks.tasks),
-);
+const generateAojJagCampTestCases = (contestIds: string[], taskIndices: string[]) =>
+  generateContestTestCases(
+    contestIds,
+    taskIndices,
+    (contestId, taskIndex) => `AOJ, JAG${contestId} - ${taskIndex}`,
+    (contestId, taskIndex) =>
+      `AOJ ${taskIndex}（JAG${contestId
+        .replace('Summer', ' 夏合宿 ')
+        .replace('Winter', ' 冬合宿 ')
+        .replace('Spring', ' 春合宿 ')
+        .replace('-day', ' Day')}）`,
+  );
+
+const AOJ_JAG_CAMP_TEST_DATA: Record<string, { tasks: string[] }> = {
+  'Summer2006-day2': { tasks: ['2058', '2059', '2060'] },
+  Winter2009: { tasks: ['2479', '2480', '2481'] },
+  Spring2012: { tasks: ['2389', '2390', '2391'] },
+  'Summer2012-day3A': { tasks: ['2434', '2435', '2436'] },
+};
+
+export const aojJag = [
+  ...Object.entries(AOJ_JAG_TEST_DATA).flatMap(([contestId, tasks]) =>
+    generateAojJagTestCases(Array(tasks.tasks.length).fill(contestId), tasks.tasks),
+  ),
+  ...Object.entries(AOJ_JAG_CAMP_TEST_DATA).flatMap(([contestId, tasks]) =>
+    generateAojJagCampTestCases(Array(tasks.tasks.length).fill(contestId), tasks.tasks),
+  ),
+];
 
 /**
  * Test cases for AOJ ICPC contests

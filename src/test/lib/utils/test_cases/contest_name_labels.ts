@@ -87,6 +87,25 @@ export const fps24 = [
   }),
 ];
 
+export const aojJag = [
+  createTestCaseForContestNameLabel('AOJ, JAG Summer 2024 day2')({
+    contestId: 'JAGSummer2024-day2',
+    expected: '（JAG 夏合宿 2024 Day2）',
+  }),
+  createTestCaseForContestNameLabel('AOJ, JAG Winter 2009')({
+    contestId: 'JAGWinter2009',
+    expected: '（JAG 冬合宿 2009）',
+  }),
+  createTestCaseForContestNameLabel('AOJ, JAG Spring 2012')({
+    contestId: 'JAGSpring2012',
+    expected: '（JAG 春合宿 2012）',
+  }),
+  createTestCaseForContestNameLabel('AOJ, JAG Summer 2012 day3A')({
+    contestId: 'JAGSummer2012-day3A',
+    expected: '（JAG 夏合宿 2012 Day3A）',
+  }),
+];
+
 export const aojIcpc = [
   createTestCaseForContestNameLabel('ICPC Prelim 2024')({
     contestId: 'ICPCPrelim2024',
