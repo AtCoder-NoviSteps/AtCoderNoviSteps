@@ -185,7 +185,7 @@
         : ''}{isProvisional ? ', provisional' : ''}
     </span>
 
-    <GradeLabel taskGrade={displayGrade} defaultPadding={0.25} defaultWidth={6} reducedWidth={6} />
+    <GradeLabel taskGrade={displayGrade} defaultWidth={10} reducedWidth={8} />
 
     {#if taskResult.grade !== TaskGrade.PENDING && latestMedianGrade}
       <RelativeEvaluationBadge
