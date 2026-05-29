@@ -35,9 +35,20 @@
     // undefined means the prop was not passed — treat as verified to maintain backward compatibility.
     isAtCoderVerified?: boolean;
     estimatedGrade?: TaskGrade | null;
+    defaultPadding?: number;
+    defaultWidth?: number;
+    reducedWidth?: number;
   }
 
-  let { taskResult, isLoggedIn, isAtCoderVerified, estimatedGrade }: Props = $props();
+  let {
+    taskResult,
+    isLoggedIn,
+    isAtCoderVerified,
+    estimatedGrade,
+    defaultPadding = 1,
+    defaultWidth = 10,
+    reducedWidth = 8,
+  }: Props = $props();
 
   // 表示用のグレード（投票後に画面リロードなしで差し替えるためのローカル状態）
   // PENDING かつ estimatedGrade（集計済み中央値）があればそれを優先表示。
@@ -185,7 +196,7 @@
         : ''}{isProvisional ? ', provisional' : ''}
     </span>
 
-    <GradeLabel taskGrade={displayGrade} defaultWidth={10} reducedWidth={8} />
+    <GradeLabel taskGrade={displayGrade} {defaultPadding} {defaultWidth} {reducedWidth} />
 
     {#if taskResult.grade !== TaskGrade.PENDING && latestMedianGrade}
       <RelativeEvaluationBadge

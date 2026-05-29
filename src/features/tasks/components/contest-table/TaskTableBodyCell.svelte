@@ -41,7 +41,15 @@
 </div>
 
 {#snippet taskGradeLabel(taskResult: TaskResult)}
-  <VotableGrade {taskResult} {isLoggedIn} {isAtCoderVerified} {estimatedGrade} />
+  <VotableGrade
+    {taskResult}
+    {isLoggedIn}
+    {isAtCoderVerified}
+    {estimatedGrade}
+    defaultPadding={0.25}
+    defaultWidth={6}
+    reducedWidth={6}
+  />
 {/snippet}
 
 {#snippet taskTitleAndExternalLink(taskResult: TaskResult, isShownTaskIndex: boolean)}
