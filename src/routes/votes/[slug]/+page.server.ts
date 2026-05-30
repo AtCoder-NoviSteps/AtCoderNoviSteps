@@ -1,4 +1,6 @@
-import { error } from '@sveltejs/kit';
+import { error, fail } from '@sveltejs/kit';
+import { superValidate } from 'sveltekit-superforms';
+import { zod4 } from 'sveltekit-superforms/adapters';
 import type { Actions, PageServerLoad } from './$types';
 
 import { getTask } from '$lib/services/tasks';
@@ -8,6 +10,8 @@ import {
   getVoteStatsByTaskId,
 } from '$features/votes/services/vote_statistics';
 import { voteAbsoluteGrade } from '$features/votes/actions/vote_actions';
+import { voteAbsoluteGradeSchema } from '$features/votes/zod/schema';
+import { BAD_REQUEST } from '$lib/constants/http-response-status-codes';
 
 export const load: PageServerLoad = async ({ locals, params }) => {
   const session = await locals.auth.validate();
@@ -44,6 +48,10 @@ export const load: PageServerLoad = async ({ locals, params }) => {
 
 export const actions: Actions = {
   voteAbsoluteGrade: async ({ request, locals }) => {
-    return await voteAbsoluteGrade({ request, locals });
+    const form = await superValidate(request, zod4(voteAbsoluteGradeSchema));
+    if (!form.valid) {
+      return fail(BAD_REQUEST, { form });
+    }
+    return await voteAbsoluteGrade({ locals, data: form.data });
   },
 };

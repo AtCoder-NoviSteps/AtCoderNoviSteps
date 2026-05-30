@@ -178,7 +178,7 @@ async function addTask(
 ) {
   // Note: Task-Tag relationships are handled separately via TaskTag table
   await taskFactory.create({
-    contest_type: classifyContest(task.contest_id),
+    contest_type: classifyContest(task.contest_id) ?? undefined,
     contest_id: task.contest_id,
     task_table_index: task.problem_index,
     task_id: task.id,
