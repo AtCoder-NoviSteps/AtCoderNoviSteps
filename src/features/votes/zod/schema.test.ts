@@ -62,11 +62,11 @@ describe('voteAbsoluteGradeSchema', () => {
     });
 
     test('missing grade is rejected', () => {
-      expect(validate({ taskId: 'abc408_a', grade: undefined })).toBe(false);
+      expect(validate({ taskId: 'abc408_a' })).toBe(false);
     });
 
     test('missing taskId is rejected', () => {
-      expect(validate({ taskId: undefined, grade: TaskGrade.Q5 })).toBe(false);
+      expect(validate({ grade: TaskGrade.Q5 })).toBe(false);
     });
 
     test('null taskId is rejected', () => {
