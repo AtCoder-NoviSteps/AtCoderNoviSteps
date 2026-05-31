@@ -1,6 +1,7 @@
 import { ContestType, type ContestPrefix, type ContestLabelTranslations } from '$lib/types/contest';
 
-const regexForJag = /^JAG(Prelim|Regional|Summer|Winter|Spring)\d{4}(-day\d+[A-Z]?)?$/;
+export const regexForJag = /^JAG(Prelim|Regional|Summer|Winter|Spring)\d{4}(-day\d+[A-Z]?)?$/;
+export const regexForAojUniversity = /^AOJ-[A-Z]+PC\d{4}/;
 
 // See:
 // https://github.com/kenkoooo/AtCoderProblems/blob/master/atcoder-problems-frontend/src/utils/ContestClassifier.ts
@@ -105,6 +106,10 @@ export const classifyContest = (contest_id: string) => {
 
   if (regexForJag.exec(contest_id)) {
     return ContestType.AOJ_JAG;
+  }
+
+  if (regexForAojUniversity.test(contest_id)) {
+    return ContestType.AOJ_UNIVERSITY;
   }
 
   return null;
@@ -271,13 +276,13 @@ export function getContestPrefixes(contestPrefixes: Record<string, string>) {
 }
 
 /**
- * Contest type priorities (0 = Highest, 24 = Lowest)
+ * Contest type priorities (0 = Highest, 25 = Lowest)
  *
  * Priority assignment rationale:
  * - Educational contests (0-11, 17): ABS, ABC, APG4B and AWC etc.
  * - Contests for genius (12-16): ARC, AGC, and their variants
  * - Special contests (18-20): UNIVERSITY, FPS_24, OTHERS
- * - External platforms (21-24): AOJ_COURSES, AOJ_PCK, AOJ_ICPC, AOJ_JAG
+ * - External platforms (21-25): AOJ_COURSES, AOJ_PCK, AOJ_ICPC, AOJ_JAG, AOJ_UNIVERSITY
  *
  * @remarks
  * HACK: The priorities for ARC, AGC, UNIVERSITY, AOJ_COURSES, and AOJ_PCK are temporary
@@ -312,6 +317,7 @@ export const contestTypePriorities: Map<ContestType, number> = new Map([
   [ContestType.AOJ_PCK, 22],
   [ContestType.AOJ_ICPC, 23],
   [ContestType.AOJ_JAG, 24],
+  [ContestType.AOJ_UNIVERSITY, 25],
 ]);
 
 export function getContestPriority(contestId: string): number {
@@ -460,6 +466,10 @@ export const getContestNameLabel = (contestId: string) => {
 
   if (regexForJag.exec(contestId)) {
     return getAojContestLabel(JAG_TRANSLATIONS, contestId);
+  }
+
+  if (regexForAojUniversity.test(contestId)) {
+    return getAojUniversityContestLabel(contestId);
   }
 
   return contestId.toUpperCase();
@@ -689,6 +699,17 @@ const PCK_TRANSLATIONS = {
   Final: ' 本選 ',
 };
 
+function getAojUniversityContestLabel(contestId: string): string {
+  const label = contestId
+    .replace(/^AOJ-/, '')
+    .replace(/UAPC/g, 'ACPC')
+    .replace(/([A-Z]{2,})(\d{4})/g, '$1 $2')
+    .replace(/-in-/, ' in ')
+    .replace(/-day(\d+)/, ' Day$1')
+    .replace(/-summer/, ' Summer');
+  return '（' + label + '）';
+}
+
 /**
  * Maps JAG contest type abbreviations to their Japanese translations.
  *
@@ -740,6 +761,7 @@ function isAojContest(contestId: string): boolean {
     aojCoursePrefixes.has(contestId) ||
     contestId.startsWith('PCK') ||
     regexForJag.test(contestId) ||
-    contestId.startsWith('ICPC')
+    contestId.startsWith('ICPC') ||
+    regexForAojUniversity.test(contestId)
   );
 }

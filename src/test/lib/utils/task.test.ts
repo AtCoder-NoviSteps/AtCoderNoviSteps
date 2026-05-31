@@ -107,6 +107,14 @@ describe('Task', () => {
         });
       });
     });
+
+    describe('when contest ids and task ids for AOJ University (RUPC, HUPC, UAPC) are given', () => {
+      TestCasesForTaskUrl.aojUniversity.forEach(({ name, value }) => {
+        runTests(`${name}`, [value], ({ contestId, taskId, expected }: TestCaseForTaskUrl) => {
+          expect(getTaskUrl(contestId, taskId)).toBe(expected);
+        });
+      });
+    });
   });
 
   describe('count accepted tasks', () => {

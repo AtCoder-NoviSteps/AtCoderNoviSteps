@@ -124,3 +124,30 @@ export const aojIcpc = [
     expected: '（ICPC 地区予選 2023）',
   }),
 ];
+
+export const aojUniversity = [
+  createTestCaseForContestNameLabel('AOJ, RUPC 2018 in ACPC 2018 Day1')({
+    contestId: 'AOJ-RUPC2018-in-ACPC2018-day1',
+    expected: '（RUPC 2018 in ACPC 2018 Day1）',
+  }),
+  createTestCaseForContestNameLabel('AOJ, HUPC 2020 in HUPC 2020 Day1')({
+    contestId: 'AOJ-HUPC2020-in-HUPC2020-day1',
+    expected: '（HUPC 2020 in HUPC 2020 Day1）',
+  }),
+  createTestCaseForContestNameLabel('AOJ, UAPC 2019 in RUPC 2019 Day2')({
+    contestId: 'AOJ-UAPC2019-in-RUPC2019-day2',
+    expected: '（ACPC 2019 in RUPC 2019 Day2）',
+  }),
+  createTestCaseForContestNameLabel('AOJ, UAPC 2003')({
+    contestId: 'AOJ-UAPC2003',
+    expected: '（ACPC 2003）',
+  }),
+  createTestCaseForContestNameLabel('AOJ, UAPC 2011 Summer')({
+    contestId: 'AOJ-UAPC2011-summer',
+    expected: '（ACPC 2011 Summer）',
+  }),
+  createTestCaseForContestNameLabel('AOJ, UAPC 2012 Day1')({
+    contestId: 'AOJ-UAPC2012-day1',
+    expected: '（ACPC 2012 Day1）',
+  }),
+];

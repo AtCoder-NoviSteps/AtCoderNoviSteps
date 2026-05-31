@@ -5,7 +5,12 @@ import type { UrlGenerator, UrlGenerators } from '$lib/types/url';
 import { type WorkBookTaskBase } from '$features/workbooks/types/workbook';
 
 import { ATCODER_BASE_CONTEST_URL, AOJ_TASKS_URL } from '$lib/constants/urls';
-import { getPrefixForAojCourses, getContestPriority } from '$lib/utils/contest';
+import {
+  getPrefixForAojCourses,
+  getContestPriority,
+  regexForAojUniversity,
+  regexForJag,
+} from '$lib/utils/contest';
 
 // TODO: Codeforces、yukicoder、BOJなどに対応できるようにする
 /**
@@ -36,8 +41,9 @@ class AojGenerator implements UrlGenerator {
     return (
       getPrefixForAojCourses().includes(contestId) ||
       contestId.startsWith('PCK') ||
-      contestId.startsWith('JAG') ||
-      contestId.startsWith('ICPC')
+      regexForJag.test(contestId) ||
+      contestId.startsWith('ICPC') ||
+      regexForAojUniversity.test(contestId)
     );
   }
 

@@ -665,3 +665,19 @@ export const aojIcpc = aojIcpcContestData.map(({ name, contestId }) =>
     expected: ContestType.AOJ_ICPC,
   }),
 );
+
+const aojUniversityContestData = [
+  { name: 'AOJ, RUPC 2018 in ACPC 2018 Day1', contestId: 'AOJ-RUPC2018-in-ACPC2018-day1' },
+  { name: 'AOJ, HUPC 2020 in HUPC 2020 Day1', contestId: 'AOJ-HUPC2020-in-HUPC2020-day1' },
+  { name: 'AOJ, UAPC 2019 in RUPC 2019 Day2', contestId: 'AOJ-UAPC2019-in-RUPC2019-day2' },
+  { name: 'AOJ, UAPC 2003', contestId: 'AOJ-UAPC2003' },
+  { name: 'AOJ, UAPC 2011 Summer', contestId: 'AOJ-UAPC2011-summer' },
+  { name: 'AOJ, UAPC 2012 Day1', contestId: 'AOJ-UAPC2012-day1' },
+];
+
+export const aojUniversity = aojUniversityContestData.map(({ name, contestId }) =>
+  createTestCaseForContestType(name)({
+    contestId,
+    expected: ContestType.AOJ_UNIVERSITY,
+  }),
+);
