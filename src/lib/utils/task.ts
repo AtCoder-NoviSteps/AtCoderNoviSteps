@@ -5,7 +5,11 @@ import type { UrlGenerator, UrlGenerators } from '$lib/types/url';
 import { type WorkBookTaskBase } from '$features/workbooks/types/workbook';
 
 import { ATCODER_BASE_CONTEST_URL, AOJ_TASKS_URL } from '$lib/constants/urls';
-import { getPrefixForAojCourses, getContestPriority, regexForAojUniversity } from '$lib/utils/contest';
+import {
+  getPrefixForAojCourses,
+  getContestPriority,
+  regexForAojUniversity,
+} from '$lib/utils/contest';
 
 // TODO: Codeforces、yukicoder、BOJなどに対応できるようにする
 /**
