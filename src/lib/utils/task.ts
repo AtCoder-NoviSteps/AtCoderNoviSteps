@@ -9,6 +9,7 @@ import {
   getPrefixForAojCourses,
   getContestPriority,
   regexForAojUniversity,
+  regexForJag,
 } from '$lib/utils/contest';
 
 // TODO: Codeforces、yukicoder、BOJなどに対応できるようにする
@@ -40,7 +41,7 @@ class AojGenerator implements UrlGenerator {
     return (
       getPrefixForAojCourses().includes(contestId) ||
       contestId.startsWith('PCK') ||
-      contestId.startsWith('JAG') ||
+      regexForJag.test(contestId) ||
       contestId.startsWith('ICPC') ||
       regexForAojUniversity.test(contestId)
     );

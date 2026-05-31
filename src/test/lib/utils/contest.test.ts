@@ -749,6 +749,18 @@ describe('Contest', () => {
           );
         });
       });
+
+      describe('when contest_id means AOJ University (RUPC, HUPC, UAPC)', () => {
+        TestCasesForContestNameAndTaskIndex.aojUniversity.forEach(({ name, value }) => {
+          runTests(
+            `${name}`,
+            [value],
+            ({ contestId, taskTableIndex, expected }: TestCaseForContestNameAndTaskIndex) => {
+              expect(addContestNameToTaskIndex(contestId, taskTableIndex)).toEqual(expected);
+            },
+          );
+        });
+      });
     });
   });
 
