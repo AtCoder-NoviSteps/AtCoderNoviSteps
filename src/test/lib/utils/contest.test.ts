@@ -229,6 +229,14 @@ describe('Contest', () => {
           });
         });
       });
+
+      describe('when contest_id means AOJ University (RUPC, HUPC, UAPC)', () => {
+        TestCasesForContestType.aojUniversity.forEach(({ name, value }) => {
+          runTests(`${name}`, [value], ({ contestId, expected }: TestCaseForContestType) => {
+            expect(classifyContest(contestId)).toEqual(expected);
+          });
+        });
+      });
     });
   });
 
@@ -435,6 +443,14 @@ describe('Contest', () => {
           });
         });
       });
+
+      describe('when contest_id means AOJ University (RUPC, HUPC, UAPC)', () => {
+        TestCasesForContestType.aojUniversity.forEach(({ name, value }) => {
+          runTests(`${name}`, [value], ({ contestId, expected }: TestCaseForContestType) => {
+            expect(getContestPriority(contestId)).toEqual(contestTypePriorities.get(expected));
+          });
+        });
+      });
     });
   });
 
@@ -525,6 +541,14 @@ describe('Contest', () => {
 
       describe('when contest_id means AOJ ICPC (prelim and regional)', () => {
         TestCasesForContestNameLabel.aojIcpc.forEach(({ name, value }) => {
+          runTests(`${name}`, [value], ({ contestId, expected }: TestCaseForContestNameLabel) => {
+            expect(getContestNameLabel(contestId)).toEqual(expected);
+          });
+        });
+      });
+
+      describe('when contest_id means AOJ University (RUPC, HUPC, UAPC)', () => {
+        TestCasesForContestNameLabel.aojUniversity.forEach(({ name, value }) => {
           runTests(`${name}`, [value], ({ contestId, expected }: TestCaseForContestNameLabel) => {
             expect(getContestNameLabel(contestId)).toEqual(expected);
           });

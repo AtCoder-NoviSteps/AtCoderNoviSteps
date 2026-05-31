@@ -195,3 +195,20 @@ export const aojIcpc = icpcContests.flatMap((icpc) =>
     });
   }),
 );
+
+// AOJ University contests: contest ID = AOJ-{NAME}PC{YEAR}[-...], task ID = numeric problem ID
+const aojUniversityContests = [
+  { contestId: 'AOJ-RUPC2018-in-ACPC2018-day1', tasks: ['2903', '2904'] },
+  { contestId: 'AOJ-UAPC2019-in-RUPC2019-day2', tasks: ['3058', '3059'] },
+  { contestId: 'AOJ-HUPC2020-in-HUPC2020-day1', tasks: ['3171', '3172'] },
+];
+
+export const aojUniversity = aojUniversityContests.flatMap((contest) =>
+  contest.tasks.map((task) => {
+    return createTestCaseForTaskUrl(`AOJ University, ${contest.contestId} ${task}`)({
+      contestId: contest.contestId,
+      taskId: task,
+      expected: `${AOJ_TASKS_URL}/${task}`,
+    });
+  }),
+);

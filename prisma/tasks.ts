@@ -11973,4 +11973,25 @@ export const tasks = [
     name: 'World Trip',
     title: '2349. World Trip',
   },
+  {
+    id: '3058',
+    contest_id: 'AOJ-UAPC2019-in-RUPC2019-day2',
+    problem_index: '3058',
+    name: 'Ghost',
+    title: '3058. Ghost',
+  },
+  {
+    id: '2903',
+    contest_id: 'AOJ-RUPC2018-in-ACPC2018-day1',
+    problem_index: '2903',
+    name: 'Board',
+    title: '2903. Board',
+  },
+  {
+    id: '3171',
+    contest_id: 'AOJ-HUPC2020-in-HUPC2020-day1',
+    problem_index: '3171',
+    name: 'Traditional Company',
+    title: '3171. Traditional Company',
+  },
 ];

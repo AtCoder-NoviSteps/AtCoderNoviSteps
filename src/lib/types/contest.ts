@@ -53,6 +53,7 @@ export const ContestType: { [key in ContestTypeOrigin]: key } = {
   AOJ_PCK: 'AOJ_PCK', // All-Japan High School Programming Contest (PCK)
   AOJ_ICPC: 'AOJ_ICPC', // ICPC (International Collegiate Programming Contest)
   AOJ_JAG: 'AOJ_JAG', // ACM-ICPC Japan Alumni Group Contest (JAG)
+  AOJ_UNIVERSITY: 'AOJ_UNIVERSITY', // University Programming Contest (RUPC, HUPC, UAPC)
 } as const;
 
 // Re-exporting the original type with the original name.
