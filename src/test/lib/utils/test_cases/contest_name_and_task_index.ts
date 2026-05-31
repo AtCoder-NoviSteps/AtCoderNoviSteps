@@ -890,18 +890,39 @@ export const aojIcpc = Object.entries(AOJ_ICPC_TEST_DATA).flatMap(([contestId, t
 );
 
 const AOJ_UNIVERSITY_TEST_DATA = [
-  { contestId: 'AOJ-RUPC2018-in-ACPC2018-day1', taskTableIndex: '2903', expected: 'AOJ 2903（RUPC 2018 in ACPC 2018 Day1）' },
-  { contestId: 'AOJ-UAPC2019-in-RUPC2019-day2', taskTableIndex: '3058', expected: 'AOJ 3058（ACPC 2019 in RUPC 2019 Day2）' },
-  { contestId: 'AOJ-HUPC2020-in-HUPC2020-day1', taskTableIndex: '3171', expected: 'AOJ 3171（HUPC 2020 in HUPC 2020 Day1）' },
+  {
+    contestId: 'AOJ-RUPC2018-in-ACPC2018-day1',
+    taskTableIndex: '2903',
+    expected: 'AOJ 2903（RUPC 2018 in ACPC 2018 Day1）',
+  },
+  {
+    contestId: 'AOJ-UAPC2019-in-RUPC2019-day2',
+    taskTableIndex: '3058',
+    expected: 'AOJ 3058（ACPC 2019 in RUPC 2019 Day2）',
+  },
+  {
+    contestId: 'AOJ-HUPC2020-in-HUPC2020-day1',
+    taskTableIndex: '3171',
+    expected: 'AOJ 3171（HUPC 2020 in HUPC 2020 Day1）',
+  },
   { contestId: 'AOJ-UAPC2003', taskTableIndex: '1000', expected: 'AOJ 1000（ACPC 2003）' },
-  { contestId: 'AOJ-UAPC2011-summer', taskTableIndex: '1001', expected: 'AOJ 1001（ACPC 2011 Summer）' },
-  { contestId: 'AOJ-UAPC2012-day1', taskTableIndex: '1002', expected: 'AOJ 1002（ACPC 2012 Day1）' },
+  {
+    contestId: 'AOJ-UAPC2011-summer',
+    taskTableIndex: '1001',
+    expected: 'AOJ 1001（ACPC 2011 Summer）',
+  },
+  {
+    contestId: 'AOJ-UAPC2012-day1',
+    taskTableIndex: '1002',
+    expected: 'AOJ 1002（ACPC 2012 Day1）',
+  },
 ];
 
-export const aojUniversity = AOJ_UNIVERSITY_TEST_DATA.map(({ contestId, taskTableIndex, expected }) =>
-  createTestCaseForContestNameAndTaskIndex(`AOJ, ${contestId} - ${taskTableIndex}`)({
-    contestId,
-    taskTableIndex,
-    expected,
-  }),
+export const aojUniversity = AOJ_UNIVERSITY_TEST_DATA.map(
+  ({ contestId, taskTableIndex, expected }) =>
+    createTestCaseForContestNameAndTaskIndex(`AOJ, ${contestId} - ${taskTableIndex}`)({
+      contestId,
+      taskTableIndex,
+      expected,
+    }),
 );
