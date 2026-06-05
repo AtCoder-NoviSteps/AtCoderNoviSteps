@@ -67,7 +67,7 @@
     "typescript": "6.0.3",
     "vercel": "54.9.1",
     "vite": "8.0.16",
-    "vitest": "4.1.7",
+    "vitest": "4.1.8",
     "zod": "4.4.3"
   },
   "type": "module",
