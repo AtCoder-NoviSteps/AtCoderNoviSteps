@@ -112,6 +112,25 @@ afterEach(() => {
 });
 ```
 
+### Mutable Module-Level Exports
+
+When a module exports a mutable `const` object (e.g. an override map), mutate it directly in `beforeEach`/`afterEach` to test override paths — no `vi.mock` needed:
+
+```typescript
+import { buildFn, OVERRIDE_MAP } from './module';
+
+beforeEach(() => {
+  OVERRIDE_MAP['testKey'] = { '100': 'A', '102': 'C' };
+});
+afterEach(() => {
+  delete OVERRIDE_MAP['testKey'];
+});
+
+test('uses override map when entry exists', () => {
+  expect(buildFn('testKey', ['100', '102']).get('100')).toBe('A');
+});
+```
+
 ### Test Stubs
 
 Parameter types **must match** production signature — use domain types (`TaskGrade`), not `string`. Mismatch compiles silently but breaks type safety.
