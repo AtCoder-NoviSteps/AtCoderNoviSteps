@@ -51,7 +51,7 @@
     "nock": "14.0.15",
     "oxlint": "^1.69.0",
     "pnpm": "11.5.2",
-    "prettier": "3.8.3",
+    "prettier": "3.8.4",
     "prettier-plugin-svelte": "4.1.0",
     "prettier-plugin-tailwindcss": "0.8.0",
     "prisma": "5.22.0",
