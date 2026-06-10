@@ -32,7 +32,11 @@ import {
   JOIQualRoundFrom2006To2019Provider,
   JOISemiFinalRoundProvider,
 } from './joi_providers';
+import { AojIcpcPrelimProvider } from './aoj_icpc_providers';
 import { ContestTableProviderGroup } from './contest_table_provider_group';
+
+export const ICPC_PRELIM_OLDEST_YEAR = 1998;
+export const ICPC_PRELIM_LATEST_YEAR = 2025;
 
 /**
  * Prepare predefined provider groups
@@ -224,6 +228,19 @@ export const prepareContestProviderPresets = () => {
         new JOIQualRoundFrom2006To2019Provider(ContestType.JOI),
         new JOISemiFinalRoundProvider(ContestType.JOI),
       ),
+
+    AojIcpcPrelim: () => {
+      const group = new ContestTableProviderGroup('ICPC 国内予選', {
+        buttonLabel: 'ICPC 国内予選',
+        ariaLabel: 'Filter ICPC Domestic Preliminary',
+      });
+      // Iterate from latest to oldest so the newest year's table renders on top.
+      for (let year = ICPC_PRELIM_LATEST_YEAR; year >= ICPC_PRELIM_OLDEST_YEAR; year--) {
+        group.addProvider(new AojIcpcPrelimProvider(ContestType.AOJ_ICPC, year));
+      }
+
+      return group;
+    },
   };
 };
 
@@ -249,6 +266,7 @@ export const contestTableProviderGroups = {
   acl: presets.Acl(),
   joiFirstQualRound: presets.JOIFirstQualRound(),
   joiSecondQualAndSemiFinalRound: presets.JOISecondQualAndSemiFinalRound(),
+  aojIcpcPrelim: presets.AojIcpcPrelim(),
 };
 
 export type ContestTableProviderGroups = keyof typeof contestTableProviderGroups;

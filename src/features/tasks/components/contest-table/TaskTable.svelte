@@ -224,7 +224,10 @@
   {@const contestTable = getTaskTable(metadata.abbreviationName)}
 
   <!-- Title -->
-  <Heading tag="h2" class="text-2xl pb-3 text-gray-900 dark:text-white">
+  <Heading
+    tag="h2"
+    class="{metadata.titleFontSize ?? 'text-2xl'} pb-3 text-gray-900 dark:text-white"
+  >
     {metadata.title}
   </Heading>
 

@@ -31,9 +31,12 @@ import {
   TessokuBookForPracticalsProvider,
   TessokuBookForChallengesProvider,
   MathAndAlgorithmProvider,
+  AojIcpcPrelimProvider,
   prepareContestProviderPresets,
 } from './contest_table_provider';
 import { TESSOKU_SECTIONS } from '$features/tasks/types/contest-table/contest_table_provider';
+
+import { ICPC_PRELIM_OLDEST_YEAR, ICPC_PRELIM_LATEST_YEAR } from './contest_table_provider_groups';
 
 describe('prepareContestProviderPresets', () => {
   test('expects to create ABS preset correctly', () => {
@@ -287,6 +290,18 @@ describe('prepareContestProviderPresets', () => {
     );
   });
 
+  test('expects to create AojIcpcPrelim preset correctly', () => {
+    const group = prepareContestProviderPresets().AojIcpcPrelim();
+
+    expect(group.getGroupName()).toBe('ICPC 国内予選');
+    expect(group.getMetadata()).toEqual({
+      buttonLabel: 'ICPC 国内予選',
+      ariaLabel: 'Filter ICPC Domestic Preliminary',
+    });
+    expect(group.getSize()).toBe(ICPC_PRELIM_LATEST_YEAR - ICPC_PRELIM_OLDEST_YEAR + 1); // 28
+    expect(group.getProvider(ContestType.AOJ_ICPC, '2023')).toBeInstanceOf(AojIcpcPrelimProvider);
+  });
+
   test('expects to verify all presets are functions', () => {
     const presets = prepareContestProviderPresets();
 
@@ -309,6 +324,7 @@ describe('prepareContestProviderPresets', () => {
     expect(typeof presets.Acl).toBe('function');
     expect(typeof presets.JOIFirstQualRound).toBe('function');
     expect(typeof presets.JOISecondQualAndSemiFinalRound).toBe('function');
+    expect(typeof presets.AojIcpcPrelim).toBe('function');
   });
 
   test('expects each preset to create independent instances', () => {

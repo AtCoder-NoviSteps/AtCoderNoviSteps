@@ -127,10 +127,12 @@ export type ContestTable = Record<string, Record<string, TaskResult>>;
  * @typedef {Object} ContestTableMetaData
  * @property {string} title - The title text to display for the contest table.
  * @property {string} abbreviationName - Contest abbreviation, used for map keys.
+ * @property {string} [titleFontSize] - Tailwind class for title font size, e.g. 'text-xl'. Defaults to 'text-2xl' at render.
  */
 export type ContestTableMetaData = {
   title: string;
   abbreviationName: string;
+  titleFontSize?: string;
 };
 
 /**
