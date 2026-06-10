@@ -14,3 +14,5 @@ export * from './dp_providers';
 export * from './fps24_provider';
 export * from './acl_providers';
 export * from './joi_providers';
+export * from './aoj_icpc_providers';
+export * from './aoj_icpc_labels';

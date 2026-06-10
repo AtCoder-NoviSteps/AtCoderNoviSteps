@@ -83,6 +83,25 @@ Import from `flowbite-svelte`. Use Tailwind v4 `dark:` prefix. When copying butt
 - Move business logic to `_utils/` or `utils/` with tests
 - Keep components thin: one responsibility
 
+## `{@const}` Placement Restriction
+
+`{@const}` is only valid as the immediate child of a control-flow block (`{#if}`, `{#each}`, `{:else}`, etc.) — placing it at the template top level is a compile error.
+
+When you need a derived value in both a `{#if}` condition and its body, declare it with `$derived` in `<script>` instead:
+
+```typescript
+// ✅ in <script>
+let groupMetadata = $derived(store?.getMetadata());
+```
+
+```svelte
+{#if groupMetadata?.mainTitle}
+  <Heading>{groupMetadata.mainTitle}</Heading>
+{/if}
+```
+
+This also avoids calling the getter twice per render.
+
 ## Reactive Data Pitfalls
 
 - `let` captures initial value only; use `$derived` for derived/prop data

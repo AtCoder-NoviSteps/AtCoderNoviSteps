@@ -33,6 +33,7 @@
   - **パターン1（範囲フィルタ型）**: ABC 001～041、ARC 058～103 など → 数値範囲でフィルタ
   - **パターン2（単一ソース型）**: EDPC、TDPC、ACL_PRACTICE など → 単一 contest_id のみ
   - **パターン3（複合ソース型）**: ABS、ABC-Like など → 複数 contest_id を統一表示
+  - **パターン4（コンストラクタパラメータ型）**: ICPC 国内予選など → 1クラスをコンストラクタ引数（年度等）で N 回インスタンス化
   - 対応セクション: [実装パターン](#実装パターン)
 
 - [ ] **JOI の contest_id サフィックス変更の確認**
@@ -189,6 +190,66 @@ protected setFilterCondition(): (taskResult: TaskResult) => boolean {
 その他の実装は [Provider実装ディレクトリ](../src/features/tasks/utils/contest-table/) を参照してください。
 
 **注意**: TDPC、FPS_24 も同じパターン。`contest_id` とメタデータだけ異なります。
+
+---
+
+### パターン4: コンストラクタパラメータ型（ICPC 国内予選）
+
+**特徴**:
+
+- 年度などのパラメータを受け取る1つのクラスを N 回インスタンス化
+- `super(contestType, String(year))` でセクションを年度文字列にし、プロバイダキーを `AOJ_ICPC::2025` のように一意化
+- 年度範囲定数（`OLDEST_YEAR` / `LATEST_YEAR`）をモジュールトップで `export` し、tests でも参照できるようにする
+- グループ登録時は最新年から古い年へ降順ループし、テーブルを新しい順に並べる
+
+**実装例**:
+
+```typescript
+export const ICPC_PRELIM_OLDEST_YEAR = 1998;
+export const ICPC_PRELIM_LATEST_YEAR = 2025;
+
+export class AojIcpcPrelimProvider extends ContestTableProviderBase {
+  private readonly year: number;
+  private readonly contestId: string;
+
+  constructor(contestType: ContestType, year: number) {
+    super(contestType, String(year)); // provider key: AOJ_ICPC::2025
+    this.year = year;
+    this.contestId = `ICPCPrelim${year}`;
+  }
+  // ...
+}
+
+// グループ登録（最新年が上に来るよう降順）
+for (let year = ICPC_PRELIM_LATEST_YEAR; year >= ICPC_PRELIM_OLDEST_YEAR; year--) {
+  group.addProvider(new AojIcpcPrelimProvider(ContestType.AOJ_ICPC, year));
+}
+```
+
+**注意**:
+
+- `generateTable` をオーバーライドして `task_table_index` をキーにする場合、`getHeaderIdsForTask` も**必ず同じフィールド・同じソート順**でオーバーライドすること。ベースクラスの `getHeaderIdsForTask` は `getTaskTableHeaderName()` 経由でキーを導出するため、`generateTable` と一致しないとセルが表示されない。
+- `task_table_index` が数値文字列（例: `'1664'`）の場合、辞書順ではなく数値昇順ソートが必要: `Number(a) - Number(b)`
+- アルゴリズムが成立しない例外年度には上書き Map を用意する:
+
+```typescript
+// contest_id -> (task_table_index -> letter). Used only for years with judge gaps.
+export const ICPC_PRELIM_LABEL_OVERRIDES: Record<string, Record<string, string>> = {};
+```
+
+上書き Map のテストは `beforeEach`/`afterEach` でエントリを直接追加・削除する（`vi.mock` 不要）:
+
+```typescript
+beforeEach(() => {
+  ICPC_PRELIM_LABEL_OVERRIDES['ICPCPrelimTest'] = { '1150': 'A', '1152': 'C' };
+});
+afterEach(() => {
+  delete ICPC_PRELIM_LABEL_OVERRIDES['ICPCPrelimTest'];
+});
+```
+
+- グループ全体に一度だけ大見出し（h2）を表示したい場合は、グループ登録時に `mainTitle: 'XXX'` を追加する。省略すると描画されない。個々の provider の `title` が冗長になるなら年や回だけに絞っても良い（ICPC 国内予選は敢えて重複させた）。
+- provider 見出しのフォント・太字・余白をデフォルトから変えたい場合は `getMetadata()` で `titleStyle` を返す。`ContestTableTitleStyle`（`headingTag` / `fontSize` / `fontWeight` / `bottomGap`）のうち必要なフィールドだけ指定すればよい。
 
 ---
 

@@ -14,6 +14,7 @@ Step 0 (seed check) is already done. Confirm the following before touching code:
   - Pattern 1: numeric range filter (e.g. ABC 001–041)
   - Pattern 2: single fixed contest_id (e.g. NDPC, TDPC, FPS_24)
   - Pattern 3: multiple contest_ids unified in one table (e.g. ABS, ABC-Like)
+  - Pattern 4: one class instantiated N times via constructor parameter (e.g. ICPC Prelim by year)
 - Nearest neighbor ContestType for insertion order in `contestTypePriorities`?
 - New group or merge into existing? If new: group name / `buttonLabel` / `ariaLabel`?
 
@@ -22,6 +23,15 @@ Step 0 (seed check) is already done. Confirm the following before touching code:
 - Numeric range: start and end (open-ended if no upper bound)?
 - Shared problems with another contest (e.g. ARC–ABC overlap)? Which contest_ids appear in both?
 - Round label format (e.g. `ABC 042`)?
+
+**Pattern 4 additional:**
+
+- Constructor parameter name and type (e.g. `year: number`)?
+- Year/ID range: oldest and latest? Export both as named constants so tests can reference them.
+- Iteration order: latest-first so newest table renders on top.
+- `task_table_index` values numeric strings? → override `getHeaderIdsForTask`; sort with `Number(a) - Number(b)`.
+- Display-only title transform needed (e.g. prepend letter)? → override `generateTable` for the transform AND override `getHeaderIdsForTask` using the same key derivation; mismatched keys between the two methods cause missing cells.
+- Known edge cases where the default algorithm breaks? → add a `Record<string, Record<string, string>>` module-level override map keyed by contest_id; exercise the override path in tests by mutating the export in `beforeEach` and cleaning up in `afterEach`.
 
 **Pattern 3 additional:**
 
@@ -87,6 +97,16 @@ Step 0 (seed check) is already done. Confirm the following before touching code:
 - [ ] Implement Provider using `parseContestRound()` range check
 - [ ] `pnpm test:unit <providers.test.ts>` — **expect GREEN**
 
+### Pattern 4: N-instances via constructor parameter
+
+- [ ] Export `OLDEST_YEAR` / `LATEST_YEAR` constants (module-level, before `prepareContestProviderPresets`) so tests can assert `getSize() === LATEST - OLDEST + 1`
+- [ ] Pass the parameter as `section` in `super(contestType, String(param))` → provider key becomes `TYPE::value` (unique per instance)
+- [ ] If `generateTable` is overridden to key the table by `task_table_index` directly: also override `getHeaderIdsForTask` using the same field and sort order
+- [ ] If display title needs transformation (e.g. prepend "A. "): do it inside `generateTable`; DB data must remain unchanged
+- [ ] Write override map (`Record<string, Record<string, value>>`) for known edge cases; test the override path by mutating the export in `beforeEach` and cleaning up in `afterEach`
+- [ ] If provider headings need non-default font/weight/gap: return `titleStyle` (`headingTag` / `fontSize` / `fontWeight` / `bottomGap`) from `getMetadata()`; include all set fields in the `titleStyle` assertion
+- [ ] `pnpm test:unit <providers.test.ts>` — **expect GREEN**
+
 ### Pattern 3: composite
 
 - [ ] Confirm whether `prisma/contest_task_pairs.ts` needs new entries before writing tests
@@ -101,7 +121,7 @@ Step 0 (seed check) is already done. Confirm the following before touching code:
 ## Layer 5 — Group registration (TDD)
 
 - [ ] Update `contest_table_provider_groups.test.ts`:
-  - New group name string, `buttonLabel`, `ariaLabel`
+  - New group name string, `buttonLabel`, `ariaLabel` (add `mainTitle` if used)
   - `getSize()` incremented to reflect the new provider count
   - Add `getProvider(ContestType.XXX)` assertion
   - Add import of new Provider class
@@ -109,6 +129,7 @@ Step 0 (seed check) is already done. Confirm the following before touching code:
 - [ ] Update `contest_table_provider_groups.ts`:
   - Add import of new Provider class
   - Update group name string, `buttonLabel`, `ariaLabel`
+  - Add `mainTitle: 'XXX'` if the group needs a single h2 heading rendered above all providers (opt-in; omit when not needed)
   - Add `new XXXProvider(ContestType.XXX)` to `addProviders()`
 - [ ] `pnpm test:unit src/features/tasks/utils/contest-table/` — **expect GREEN**
 

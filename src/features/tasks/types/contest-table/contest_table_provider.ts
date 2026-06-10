@@ -127,10 +127,30 @@ export type ContestTable = Record<string, Record<string, TaskResult>>;
  * @typedef {Object} ContestTableMetaData
  * @property {string} title - The title text to display for the contest table.
  * @property {string} abbreviationName - Contest abbreviation, used for map keys.
+ * @property {ContestTableTitleStyle} [titleStyle] - Title heading style overrides. Defaults applied at render.
  */
 export type ContestTableMetaData = {
   title: string;
   abbreviationName: string;
+  titleStyle?: ContestTableTitleStyle;
+};
+
+/**
+ * Visual style for a contest table's title heading.
+ *
+ * Each field is optional; the renderer applies the noted default when unset.
+ *
+ * @typedef {Object} ContestTableTitleStyle
+ * @property {'h2' | 'h3'} [headingTag] - Heading element tag. Defaults to 'h2' at render.
+ * @property {string} [fontSize] - Tailwind font-size class, e.g. 'text-base'. Defaults to 'text-2xl' at render.
+ * @property {string} [fontWeight] - Tailwind font-weight class, e.g. 'font-normal'. Defaults to Flowbite Heading default (bold).
+ * @property {string} [bottomGap] - Tailwind padding-bottom class, e.g. 'pb-1'. Defaults to 'pb-3' at render.
+ */
+export type ContestTableTitleStyle = {
+  headingTag?: 'h2' | 'h3';
+  fontSize?: string;
+  fontWeight?: string;
+  bottomGap?: string;
 };
 
 /**
@@ -139,10 +159,12 @@ export type ContestTableMetaData = {
  * @typeof {Object} ContestTablesMetaData
  * @property {string} buttonLabel - The text to display on the contest table's primary action button.
  * @property {string} ariaLabel - Accessibility label for screen readers describing the contest table.
+ * @property {string} [mainTitle] - Group-level heading rendered once above the providers (opt-in). Not rendered when unset.
  */
 export type ContestTablesMetaData = {
   buttonLabel: string;
   ariaLabel: string;
+  mainTitle?: string;
 };
 
 /**
