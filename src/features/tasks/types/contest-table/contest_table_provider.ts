@@ -142,7 +142,7 @@ export type ContestTableMetaData = {
  *
  * @typedef {Object} ContestTableTitleStyle
  * @property {'h2' | 'h3'} [headingTag] - Heading element tag. Defaults to 'h2' at render.
- * @property {string} [fontSize] - Tailwind font-size class, e.g. 'text-md'. Defaults to 'text-2xl' at render.
+ * @property {string} [fontSize] - Tailwind font-size class, e.g. 'text-base'. Defaults to 'text-2xl' at render.
  * @property {string} [fontWeight] - Tailwind font-weight class, e.g. 'font-normal'. Defaults to Flowbite Heading default (bold).
  * @property {string} [bottomGap] - Tailwind padding-bottom class, e.g. 'pb-1'. Defaults to 'pb-3' at render.
  */

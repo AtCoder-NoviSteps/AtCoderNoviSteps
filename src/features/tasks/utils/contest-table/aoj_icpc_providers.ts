@@ -54,7 +54,7 @@ export class AojIcpcPrelimProvider extends ContestTableProviderBase {
       abbreviationName: `icpcPrelim${this.year}`,
       titleStyle: {
         headingTag: 'h3',
-        fontSize: 'text-md',
+        fontSize: 'text-base',
         fontWeight: 'font-normal',
         bottomGap: 'pb-1',
       },

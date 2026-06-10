@@ -235,10 +235,10 @@ describe('AojIcpcPrelimProvider', () => {
       expect(provider2023.getMetadata().abbreviationName).toBe('icpcPrelim2023');
     });
 
-    test('returns titleStyle with text-md font size, pb-2 bottom gap, and h3 heading tag', () => {
+    test('returns titleStyle with text-base font size, pb-1 bottom gap, and h3 heading tag', () => {
       expect(provider2023.getMetadata().titleStyle).toEqual({
         headingTag: 'h3',
-        fontSize: 'text-md',
+        fontSize: 'text-base',
         fontWeight: 'font-normal',
         bottomGap: 'pb-1',
       });

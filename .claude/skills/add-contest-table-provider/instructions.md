@@ -29,9 +29,9 @@ Step 0 (seed check) is already done. Confirm the following before touching code:
 - Constructor parameter name and type (e.g. `year: number`)?
 - Year/ID range: oldest and latest? Export both as named constants so tests can reference them.
 - Iteration order: latest-first so newest table renders on top.
-- `task_table_index` values numeric strings? → override `getHeaderIdsForTask` with `Number(a) - Number(b)` sort.
-- `generateTable` needs display-only title transform (e.g. prepend letter)? → override it AND override `getHeaderIdsForTask` using the same key derivation — mismatched keys between the two methods cause missing cells.
-- Edge cases where the default algorithm breaks? → add a `Record<string, Record<string, string>>` override map; populate it per contest_id; test the override path with `beforeEach`/`afterEach` mutation.
+- `task_table_index` values numeric strings? → override `getHeaderIdsForTask`; sort with `Number(a) - Number(b)`.
+- Display-only title transform needed (e.g. prepend letter)? → override `generateTable` for the transform AND override `getHeaderIdsForTask` using the same key derivation; mismatched keys between the two methods cause missing cells.
+- Known edge cases where the default algorithm breaks? → add a `Record<string, Record<string, string>>` module-level override map keyed by contest_id; exercise the override path in tests by mutating the export in `beforeEach` and cleaning up in `afterEach`.
 
 **Pattern 3 additional:**
 
