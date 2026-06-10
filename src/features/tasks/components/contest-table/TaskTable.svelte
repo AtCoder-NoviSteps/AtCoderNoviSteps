@@ -56,6 +56,7 @@
     contestTableProviderGroups[activeContestType as ContestTableProviderGroups],
   );
   let providers = $derived(providerGroups?.getAllProviders() ?? []);
+  let groupMetadata = $derived(providerGroups?.getMetadata());
 
   interface ProviderData {
     filteredTaskResults: TaskResults;
@@ -214,6 +215,13 @@
   </div>
 </div>
 
+<!-- Group-level main heading: rendered once above all providers when opted in. -->
+{#if groupMetadata?.mainTitle}
+  <Heading tag="h2" class="text-2xl pb-3 text-gray-900 dark:text-white">
+    {groupMetadata.mainTitle}
+  </Heading>
+{/if}
+
 <!-- TODO: ページネーションを実装 -->
 <!-- See: -->
 <!-- https://github.com/kenkoooo/AtCoderProblems/blob/master/atcoder-problems-frontend/src/pages/TablePage/AtCoderRegularTable.tsx -->
@@ -225,8 +233,9 @@
 
   <!-- Title -->
   <Heading
-    tag="h2"
-    class="{metadata.titleFontSize ?? 'text-2xl'} pb-3 text-gray-900 dark:text-white"
+    tag={metadata.titleStyle?.headingTag ?? 'h2'}
+    class="{metadata.titleStyle?.fontSize ?? 'text-2xl'} {metadata.titleStyle?.bottomGap ??
+      'pb-3'} {metadata.titleStyle?.fontWeight ?? ''} text-gray-900 dark:text-white"
   >
     {metadata.title}
   </Heading>

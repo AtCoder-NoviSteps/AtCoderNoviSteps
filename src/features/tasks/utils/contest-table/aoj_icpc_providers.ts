@@ -52,7 +52,12 @@ export class AojIcpcPrelimProvider extends ContestTableProviderBase {
     return {
       title: `ICPC 国内予選 ${this.year}`,
       abbreviationName: `icpcPrelim${this.year}`,
-      titleFontSize: 'text-md',
+      titleStyle: {
+        headingTag: 'h3',
+        fontSize: 'text-md',
+        fontWeight: 'font-normal',
+        bottomGap: 'pb-1',
+      },
     };
   }
 

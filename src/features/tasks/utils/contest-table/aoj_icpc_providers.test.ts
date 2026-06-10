@@ -235,8 +235,13 @@ describe('AojIcpcPrelimProvider', () => {
       expect(provider2023.getMetadata().abbreviationName).toBe('icpcPrelim2023');
     });
 
-    test('returns titleFontSize as text-md', () => {
-      expect(provider2023.getMetadata().titleFontSize).toBe('text-md');
+    test('returns titleStyle with text-md font size, pb-2 bottom gap, and h3 heading tag', () => {
+      expect(provider2023.getMetadata().titleStyle).toEqual({
+        headingTag: 'h3',
+        fontSize: 'text-md',
+        fontWeight: 'font-normal',
+        bottomGap: 'pb-1',
+      });
     });
   });
 

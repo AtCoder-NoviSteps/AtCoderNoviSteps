@@ -297,6 +297,7 @@ describe('prepareContestProviderPresets', () => {
     expect(group.getMetadata()).toEqual({
       buttonLabel: 'ICPC 国内予選',
       ariaLabel: 'Filter ICPC Domestic Preliminary',
+      mainTitle: 'ICPC 国内予選',
     });
     expect(group.getSize()).toBe(ICPC_PRELIM_LATEST_YEAR - ICPC_PRELIM_OLDEST_YEAR + 1); // 28
     expect(group.getProvider(ContestType.AOJ_ICPC, '2023')).toBeInstanceOf(AojIcpcPrelimProvider);
