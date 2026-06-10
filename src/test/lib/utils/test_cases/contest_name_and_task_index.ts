@@ -916,6 +916,26 @@ const AOJ_UNIVERSITY_TEST_DATA = [
     taskTableIndex: '1002',
     expected: 'AOJ 1002（ACPC 2012 Day1）',
   },
+  {
+    contestId: 'AOJ-OUPC2012-in-RUPC2012-day2',
+    taskTableIndex: '2352',
+    expected: 'AOJ 2352（OUPC 2012 in RUPC 2012 Day2）',
+  },
+  {
+    contestId: 'AOJ-RUPC2018-in-RUPC2018-day1',
+    taskTableIndex: '2880',
+    expected: 'AOJ 2880（RUPC 2018 in RUPC 2018 Day1）',
+  },
+  {
+    contestId: 'AOJ-HUPC2014-in-RUPC2014-day3',
+    taskTableIndex: '2581',
+    expected: 'AOJ 2581（HUPC 2014 in RUPC 2014 Day3）',
+  },
+  {
+    contestId: 'AOJ-UAPC2015-in-ACPC2015-day2',
+    taskTableIndex: '1566',
+    expected: 'AOJ 1566（ACPC 2015 in ACPC 2015 Day2）',
+  },
 ];
 
 export const aojUniversity = AOJ_UNIVERSITY_TEST_DATA.map(

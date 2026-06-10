@@ -673,6 +673,7 @@ const aojUniversityContestData = [
   { name: 'AOJ, UAPC 2003', contestId: 'AOJ-UAPC2003' },
   { name: 'AOJ, UAPC 2011 Summer', contestId: 'AOJ-UAPC2011-summer' },
   { name: 'AOJ, UAPC 2012 Day1', contestId: 'AOJ-UAPC2012-day1' },
+  { name: 'AOJ, OUPC 2012 in RUPC 2012 Day2', contestId: 'AOJ-OUPC2012-in-RUPC2012-day2' },
 ];
 
 export const aojUniversity = aojUniversityContestData.map(({ name, contestId }) =>
