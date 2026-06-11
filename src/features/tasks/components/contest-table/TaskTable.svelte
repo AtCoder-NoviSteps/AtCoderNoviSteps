@@ -65,6 +65,7 @@
     contestIds: Array<string>;
     metadata: ContestTableMetaData;
     displayConfig: ContestTableDisplayConfig;
+    taskLabels: Record<string, Record<string, string>>;
   }
 
   let contestTableMaps = $derived(prepareContestTablesMap(providers));
@@ -98,6 +99,7 @@
       contestIds: provider.getContestRoundIds(filteredTaskResults),
       metadata: provider.getMetadata(),
       displayConfig: provider.getDisplayConfig(),
+      taskLabels: provider.getTaskLabels(filteredTaskResults),
     };
   }
 
@@ -284,6 +286,7 @@
 
                 {#each contestTable.headerIds as taskTableHeaderId (taskTableHeaderId)}
                   {@const taskResult = contestTable.innerTaskTable[contestId][taskTableHeaderId]}
+                  {@const taskLabel = contestTable.taskLabels[contestId]?.[taskTableHeaderId]}
 
                   <TableBodyCell
                     id={contestId + '-' + taskTableHeaderId}
@@ -299,6 +302,7 @@
                         {isAtCoderVerified}
                         {voteResults}
                         isShownTaskIndex={contestTable.displayConfig.isShownTaskIndex}
+                        {taskLabel}
                         onupdate={(updatedTask: TaskResult) => handleUpdateTaskResult(updatedTask)}
                       />
                     {/if}

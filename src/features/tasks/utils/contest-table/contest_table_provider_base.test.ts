@@ -23,5 +23,11 @@ describe('ContestTableProviderBase', () => {
 
       expect(headerIds).toEqual(['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K']);
     });
+
+    test('getTaskLabels returns empty object by default', () => {
+      const provider = new ABSProvider(ContestType.ABS);
+
+      expect(provider.getTaskLabels([])).toEqual({});
+    });
   });
 });

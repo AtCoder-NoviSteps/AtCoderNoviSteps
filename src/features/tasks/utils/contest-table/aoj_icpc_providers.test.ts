@@ -180,19 +180,27 @@ describe('AojIcpcPrelimProvider', () => {
 
   describe('generateTable', () => {
     describe('successful cases', () => {
-      test('assigns letter prefix A–H to all 8 titles in numeric ID order', () => {
+      test('stores raw titles (no letter prefix) for all 8 tasks', () => {
         const table = provider2023.generateTable(tasks2023);
 
         expect(table['ICPCPrelim2023']['1664'].title).toBe(
-          'A. Which Team Should Receive the Sponsor Prize?',
+          'Which Team Should Receive the Sponsor Prize?',
         );
-        expect(table['ICPCPrelim2023']['1665'].title).toBe('B. Amidakuji');
-        expect(table['ICPCPrelim2023']['1666'].title).toBe('C. Changing the Sitting Arrangement');
-        expect(table['ICPCPrelim2023']['1667'].title).toBe('D. Efficient Problem Set');
-        expect(table['ICPCPrelim2023']['1668'].title).toBe('E. Tampered Records');
-        expect(table['ICPCPrelim2023']['1669'].title).toBe('F. Villa of Emblem Shape');
-        expect(table['ICPCPrelim2023']['1670'].title).toBe('G. Fair Deal of Dice');
-        expect(table['ICPCPrelim2023']['1671'].title).toBe('H. Planning Locations of Bus Stops');
+        expect(table['ICPCPrelim2023']['1665'].title).toBe('Amidakuji');
+        expect(table['ICPCPrelim2023']['1666'].title).toBe('Changing the Sitting Arrangement');
+        expect(table['ICPCPrelim2023']['1667'].title).toBe('Efficient Problem Set');
+        expect(table['ICPCPrelim2023']['1668'].title).toBe('Tampered Records');
+        expect(table['ICPCPrelim2023']['1669'].title).toBe('Villa of Emblem Shape');
+        expect(table['ICPCPrelim2023']['1670'].title).toBe('Fair Deal of Dice');
+        expect(table['ICPCPrelim2023']['1671'].title).toBe('Planning Locations of Bus Stops');
+      });
+
+      test('title is unchanged when generateTable is called twice (structurally idempotent)', () => {
+        const firstTable = provider2023.generateTable(tasks2023);
+        const secondInput = Object.values(firstTable['ICPCPrelim2023']) as TaskResults;
+        const secondTable = provider2023.generateTable(secondInput);
+
+        expect(secondTable['ICPCPrelim2023']['1665'].title).toBe('Amidakuji');
       });
 
       test('uses task_table_index as the inner key', () => {
@@ -214,14 +222,6 @@ describe('AojIcpcPrelimProvider', () => {
         provider2023.generateTable(tasks2023);
 
         expect(tasks2023[0].title).toBe(originalTitle);
-      });
-    });
-
-    describe('edge cases', () => {
-      test('returns empty inner object when given empty input', () => {
-        const table = provider2023.generateTable([] as TaskResults);
-
-        expect(table).toEqual({ ICPCPrelim2023: {} });
       });
     });
   });
@@ -325,14 +325,14 @@ describe('AojIcpcPrelimProvider', () => {
       expect(provider1998.getMetadata().abbreviationName).toBe('icpcPrelim1998');
     });
 
-    test('oldest year 1998 assigns letters A–D', () => {
+    test('oldest year 1998 stores raw titles for 4 tasks', () => {
       const table = provider1998.generateTable(tasks1998);
 
-      expect(table['ICPCPrelim1998']['1100'].title).toBe('A. Area of Polygons');
-      expect(table['ICPCPrelim1998']['1101'].title).toBe('B. A Simple Offline Text Editor');
-      expect(table['ICPCPrelim1998']['1102'].title).toBe('C. Calculation of Expressions');
+      expect(table['ICPCPrelim1998']['1100'].title).toBe('Area of Polygons');
+      expect(table['ICPCPrelim1998']['1101'].title).toBe('A Simple Offline Text Editor');
+      expect(table['ICPCPrelim1998']['1102'].title).toBe('Calculation of Expressions');
       expect(table['ICPCPrelim1998']['1103'].title).toBe(
-        'D. Board Arrangements for Concentration Games',
+        'Board Arrangements for Concentration Games',
       );
     });
 
@@ -349,11 +349,11 @@ describe('AojIcpcPrelimProvider', () => {
       expect(provider2025.getMetadata().abbreviationName).toBe('icpcPrelim2025');
     });
 
-    test('latest year 2025 assigns letters A–I (maximum problem count)', () => {
+    test('latest year 2025 stores raw titles (maximum problem count)', () => {
       const table = provider2025.generateTable(tasks2025);
 
-      expect(table['ICPCPrelim2025']['1681'].title).toBe('A. 2025');
-      expect(table['ICPCPrelim2025']['1689'].title).toBe('I. Preparing the Lunch');
+      expect(table['ICPCPrelim2025']['1681'].title).toBe('2025');
+      expect(table['ICPCPrelim2025']['1689'].title).toBe('Preparing the Lunch');
     });
 
     test('latest year 2025 filter isolates its own contest_id', () => {
@@ -385,12 +385,43 @@ describe('AojIcpcPrelimProvider', () => {
       delete ICPC_PRELIM_LABEL_OVERRIDES[TEST_CONTEST_ID];
     });
 
-    test('uses override map when ICPC_PRELIM_LABEL_OVERRIDES has an entry for the contest', () => {
+    test('generateTable stores raw titles even when override map is active', () => {
       const provider = createProvider(TEST_YEAR);
       const table = provider.generateTable(overrideTasks);
 
-      expect(table[TEST_CONTEST_ID]['9001'].title).toBe('X. Task One');
-      expect(table[TEST_CONTEST_ID]['9002'].title).toBe('Y. Task Two');
+      expect(table[TEST_CONTEST_ID]['9001'].title).toBe('Task One');
+      expect(table[TEST_CONTEST_ID]['9002'].title).toBe('Task Two');
+    });
+  });
+
+  describe('getTaskLabels', () => {
+    describe('successful cases', () => {
+      test('returns letter map for all 8 tasks in numeric ID order (A–H)', () => {
+        const labels = provider2023.getTaskLabels(tasks2023);
+
+        expect(labels['ICPCPrelim2023']['1664']).toBe('A');
+        expect(labels['ICPCPrelim2023']['1665']).toBe('B');
+        expect(labels['ICPCPrelim2023']['1666']).toBe('C');
+        expect(labels['ICPCPrelim2023']['1667']).toBe('D');
+        expect(labels['ICPCPrelim2023']['1668']).toBe('E');
+        expect(labels['ICPCPrelim2023']['1669']).toBe('F');
+        expect(labels['ICPCPrelim2023']['1670']).toBe('G');
+        expect(labels['ICPCPrelim2023']['1671']).toBe('H');
+      });
+
+      test('returns object keyed by contestId', () => {
+        const labels = provider2023.getTaskLabels(tasks2023);
+
+        expect(Object.keys(labels)).toEqual(['ICPCPrelim2023']);
+      });
+    });
+
+    describe('edge cases', () => {
+      test('returns empty inner object for empty input', () => {
+        const labels = provider2023.getTaskLabels([] as TaskResults);
+
+        expect(labels).toEqual({ ICPCPrelim2023: {} });
+      });
     });
   });
 });

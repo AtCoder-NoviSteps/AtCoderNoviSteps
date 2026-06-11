@@ -66,6 +66,12 @@ export interface ContestTableProvider {
    * @returns {string} The formatted label string for the contest round.
    */
   getContestRoundLabel(contestId: string): string;
+
+  /**
+   * Positional display labels for cells (contestId -> task_table_index -> letter).
+   * Empty for providers that show the index in the column header instead.
+   */
+  getTaskLabels(filteredTaskResults: TaskResults): Record<string, Record<string, string>>;
 }
 
 /**
