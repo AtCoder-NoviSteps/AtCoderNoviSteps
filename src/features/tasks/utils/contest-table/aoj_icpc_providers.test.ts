@@ -429,8 +429,18 @@ describe('AojIcpcPrelimProvider', () => {
       const TEST_CONTEST_ID = `ICPCPrelim${TEST_YEAR}`;
 
       const overrideTasks: TaskResults = [
-        { contest_id: TEST_CONTEST_ID, task_id: '9001', task_table_index: '9001', title: 'Task One' },
-        { contest_id: TEST_CONTEST_ID, task_id: '9002', task_table_index: '9002', title: 'Task Two' },
+        {
+          contest_id: TEST_CONTEST_ID,
+          task_id: '9001',
+          task_table_index: '9001',
+          title: 'Task One',
+        },
+        {
+          contest_id: TEST_CONTEST_ID,
+          task_id: '9002',
+          task_table_index: '9002',
+          title: 'Task Two',
+        },
       ] as TaskResults;
 
       beforeEach(() => {
