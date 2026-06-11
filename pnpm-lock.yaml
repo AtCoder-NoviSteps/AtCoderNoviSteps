@@ -163,8 +163,8 @@ importers:
         specifier: 4.6.0
         version: 4.6.0(picomatch@4.0.4)(svelte@5.56.3(@typescript-eslint/types@8.61.0))(typescript@6.0.3)
       svelte-meta-tags:
-        specifier: 4.7.0
-        version: 4.7.0(svelte@5.56.3(@typescript-eslint/types@8.61.0))
+        specifier: 5.0.0
+        version: 5.0.0(svelte@5.56.3(@typescript-eslint/types@8.61.0))(typescript@6.0.3)
       sveltekit-superforms:
         specifier: 2.30.1
         version: 2.30.1(@sveltejs/kit@2.64.0(@sveltejs/vite-plugin-svelte@7.1.2(svelte@5.56.3(@typescript-eslint/types@8.61.0))(vite@8.0.16(@types/node@25.9.2)(esbuild@0.28.0)(jiti@2.7.0)(tsx@4.22.3)))(svelte@5.56.3(@typescript-eslint/types@8.61.0))(typescript@6.0.3)(vite@8.0.16(@types/node@25.9.2)(esbuild@0.28.0)(jiti@2.7.0)(tsx@4.22.3)))(@types/json-schema@7.0.15)(svelte@5.56.3(@typescript-eslint/types@8.61.0))(typescript@6.0.3)
@@ -3906,8 +3906,14 @@ packages:
     resolution: {integrity: sha512-xAg7SOnEhrm5zI3puOOKyy1OMcMlIJZYNJY7xLBwSze0UjhPLnWfj2GF2EpT0jmzaJKIWKHLsaSSajf35bcYnA==}
     engines: {node: '>=v12.22.7'}
 
-  schema-dts@1.1.5:
-    resolution: {integrity: sha512-RJr9EaCmsLzBX2NDiO5Z3ux2BVosNZN5jo0gWgsyKvxKIUL5R3swNvoorulAeL9kLB0iTSX7V6aokhla2m7xbg==}
+  schema-dts-lib@1.0.0:
+    resolution: {integrity: sha512-9MEO5vpQH9JdBioUupqluzxSYxPLjhmqRUudk15adUl/ypnRsM2/M1kN3AmVJQeG7nZqcL68H8JlGqQQT6vy9A==}
+    engines: {node: '>=14.0.0'}
+    peerDependencies:
+      typescript: '>=4.9.5'
+
+  schema-dts@2.0.0:
+    resolution: {integrity: sha512-t7NoCy3Rn5GHGx6p7s1qIYK/AeIb8ZxJNR9WUNFkwMv2CiiGZBmqqYWc2FlZVm5ZbiHMY4OvBWhj7QtyrFO2Jw==}
 
   semver@6.3.1:
     resolution: {integrity: sha512-BR7VvDCVHO+q2xBEWskxS6DJE1qRnb7DxzUrogb71CWoSficBxYsiAGd+Kl0mmq/MprG9yArRkyrQxTO6XjMzA==}
@@ -4076,8 +4082,8 @@ packages:
       svelte:
         optional: true
 
-  svelte-meta-tags@4.7.0:
-    resolution: {integrity: sha512-H65QB8UAeS8eSt9CIa0jMoVbT7igtuCQP6itC+tqGoybxITl1Xb9m2nLNCwaS53UTeGyGtT7MGgwgsuhAJpfnQ==}
+  svelte-meta-tags@5.0.0:
+    resolution: {integrity: sha512-bRfs71axu+UP+lybEqwaO9tQdF7K/g3p3tHrUeWs6THfsryVfzJxoC5bim3lcjOgpSk1Rw60ZExKZ31PYmKK/Q==}
     peerDependencies:
       svelte: ^5.0.0
 
@@ -8064,7 +8070,15 @@ snapshots:
     dependencies:
       xmlchars: 2.2.0
 
-  schema-dts@1.1.5: {}
+  schema-dts-lib@1.0.0(typescript@6.0.3):
+    dependencies:
+      typescript: 6.0.3
+
+  schema-dts@2.0.0(typescript@6.0.3):
+    dependencies:
+      schema-dts-lib: 1.0.0(typescript@6.0.3)
+    transitivePeerDependencies:
+      - typescript
 
   semver@6.3.1: {}
 
@@ -8214,10 +8228,12 @@ snapshots:
     optionalDependencies:
       svelte: 5.56.3(@typescript-eslint/types@8.61.0)
 
-  svelte-meta-tags@4.7.0(svelte@5.56.3(@typescript-eslint/types@8.61.0)):
+  svelte-meta-tags@5.0.0(svelte@5.56.3(@typescript-eslint/types@8.61.0))(typescript@6.0.3):
     dependencies:
-      schema-dts: 1.1.5
+      schema-dts: 2.0.0(typescript@6.0.3)
       svelte: 5.56.3(@typescript-eslint/types@8.61.0)
+    transitivePeerDependencies:
+      - typescript
 
   svelte@5.56.3(@typescript-eslint/types@8.61.0):
     dependencies:
