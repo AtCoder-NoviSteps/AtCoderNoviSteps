@@ -423,5 +423,34 @@ describe('AojIcpcPrelimProvider', () => {
         expect(labels).toEqual({ ICPCPrelim2023: {} });
       });
     });
+
+    describe('override map path', () => {
+      const TEST_YEAR = 9999;
+      const TEST_CONTEST_ID = `ICPCPrelim${TEST_YEAR}`;
+
+      const overrideTasks: TaskResults = [
+        { contest_id: TEST_CONTEST_ID, task_id: '9001', task_table_index: '9001', title: 'Task One' },
+        { contest_id: TEST_CONTEST_ID, task_id: '9002', task_table_index: '9002', title: 'Task Two' },
+      ] as TaskResults;
+
+      beforeEach(() => {
+        ICPC_PRELIM_LABEL_OVERRIDES[TEST_CONTEST_ID] = {
+          '9001': 'X',
+          '9002': 'Y',
+        };
+      });
+
+      afterEach(() => {
+        delete ICPC_PRELIM_LABEL_OVERRIDES[TEST_CONTEST_ID];
+      });
+
+      test('returns custom labels from ICPC_PRELIM_LABEL_OVERRIDES', () => {
+        const provider = createProvider(TEST_YEAR);
+        const labels = provider.getTaskLabels(overrideTasks);
+
+        expect(labels[TEST_CONTEST_ID]['9001']).toBe('X');
+        expect(labels[TEST_CONTEST_ID]['9002']).toBe('Y');
+      });
+    });
   });
 });

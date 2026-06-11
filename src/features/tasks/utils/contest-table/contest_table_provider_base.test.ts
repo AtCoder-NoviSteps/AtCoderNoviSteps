@@ -29,5 +29,12 @@ describe('ContestTableProviderBase', () => {
 
       expect(provider.getTaskLabels([])).toEqual({});
     });
+
+    test('getTaskLabels returns empty object regardless of input', () => {
+      const provider = new ABSProvider(ContestType.ABS);
+      const nonEmpty = taskResultsForABS.filter((task) => task.contest_id === 'abs');
+
+      expect(provider.getTaskLabels(nonEmpty)).toEqual({});
+    });
   });
 });

@@ -68,8 +68,14 @@ export interface ContestTableProvider {
   getContestRoundLabel(contestId: string): string;
 
   /**
-   * Positional display labels for cells (contestId -> task_table_index -> letter).
-   * Empty for providers that show the index in the column header instead.
+   * Positional display labels for cells.
+   *
+   * Returns a nested record: `{ [contestId]: { [task_table_index]: letter } }` where each
+   * letter is a non-null string such as "A" or "B". Entries may be absent for a given index
+   * (never null). Providers that render the index in column headers return `{}`.
+   *
+   * @param {TaskResults} filteredTaskResults - The filtered task results for the current view
+   * @returns {Record<string, Record<string, string>>} Nested label map, or `{}` when unused
    */
   getTaskLabels(filteredTaskResults: TaskResults): Record<string, Record<string, string>>;
 }
