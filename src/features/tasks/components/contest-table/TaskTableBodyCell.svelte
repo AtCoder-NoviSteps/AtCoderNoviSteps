@@ -30,13 +30,17 @@
   }: Props = $props();
 
   let estimatedGrade = $derived(voteResults.get(taskResult.task_id)?.grade);
-  let displayTitle = $derived(
-    taskLabel
-      ? formatAojIcpcTitle(taskResult.title, taskLabel)
-      : isShownTaskIndex
-        ? taskResult.title
-        : removeTaskIndexFromTitle(taskResult.title, taskResult.task_table_index),
-  );
+  let displayTitle = $derived.by(() => {
+    if (taskLabel) {
+      return formatAojIcpcTitle(taskResult.title, taskLabel);
+    }
+
+    if (isShownTaskIndex) {
+      return taskResult.title;
+    }
+
+    return removeTaskIndexFromTitle(taskResult.title, taskResult.task_table_index);
+  });
 </script>
 
 <div
