@@ -7,12 +7,14 @@
   import UpdatingDropdown from '$lib/components/SubmissionStatus/UpdatingDropdown.svelte';
 
   import { getTaskUrl, removeTaskIndexFromTitle } from '$lib/utils/task';
+  import { formatAojIcpcTitle } from '$features/tasks/utils/contest-table/aoj_icpc_labels';
 
   interface Props {
     taskResult: TaskResult;
     isLoggedIn: boolean;
     isAtCoderVerified: boolean;
     isShownTaskIndex: boolean;
+    taskLabel?: string;
     voteResults: VoteStatisticsMap;
     onupdate?: (updatedTask: TaskResult) => void; // Ensure to update task result in parent component.
   }
@@ -22,11 +24,23 @@
     isLoggedIn,
     isAtCoderVerified,
     isShownTaskIndex,
+    taskLabel,
     voteResults,
     onupdate = () => {},
   }: Props = $props();
 
   let estimatedGrade = $derived(voteResults.get(taskResult.task_id)?.grade);
+  let displayTitle = $derived.by(() => {
+    if (taskLabel) {
+      return formatAojIcpcTitle(taskResult.title, taskLabel);
+    }
+
+    if (isShownTaskIndex) {
+      return taskResult.title;
+    }
+
+    return removeTaskIndexFromTitle(taskResult.title, taskResult.task_table_index);
+  });
 </script>
 
 <div
@@ -35,7 +49,7 @@
   {@render taskGradeLabel(taskResult)}
 
   <div class="flex items-center justify-between w-full min-w-0">
-    {@render taskTitleAndExternalLink(taskResult, isShownTaskIndex)}
+    {@render taskTitleAndExternalLink(taskResult)}
     {@render submissionUpdaterAndLinksOfTaskDetailPage(taskResult)}
   </div>
 </div>
@@ -52,13 +66,11 @@
   />
 {/snippet}
 
-{#snippet taskTitleAndExternalLink(taskResult: TaskResult, isShownTaskIndex: boolean)}
+{#snippet taskTitleAndExternalLink(taskResult: TaskResult)}
   <div class="max-w-[calc(100%-1rem)] truncate">
     <ExternalLinkWrapper
       url={getTaskUrl(taskResult.contest_id, taskResult.task_id)}
-      description={isShownTaskIndex
-        ? taskResult.title
-        : removeTaskIndexFromTitle(taskResult.title, taskResult.task_table_index)}
+      description={displayTitle}
       textSize="xs:text-md"
       textColorInDarkMode="dark:text-gray-300"
       iconSize={0}

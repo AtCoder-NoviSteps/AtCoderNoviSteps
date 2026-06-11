@@ -1,6 +1,11 @@
 // contest_id -> (task_table_index -> letter). Used only for years with judge gaps.
 export const ICPC_PRELIM_LABEL_OVERRIDES: Record<string, Record<string, string>> = {};
 
+// Prepend the assigned positional letter to an ICPC title for inline display (e.g. "A. name").
+export function formatAojIcpcTitle(title: string, letter: string): string {
+  return `${letter}. ${title}`;
+}
+
 // Build task_table_index -> letter map for one contest.
 // Default: sort indices numerically asc, assign A, B, C...
 // Override: if ICPC_PRELIM_LABEL_OVERRIDES[contestId] exists, use it.

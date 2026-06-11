@@ -3,7 +3,6 @@ import type { TaskResult, TaskResults } from '$lib/types/task';
 import {
   type ContestTableMetaData,
   type ContestTableDisplayConfig,
-  type ContestTable,
 } from '$features/tasks/types/contest-table/contest_table_provider';
 
 import { ContestTableProviderBase } from './contest_table_provider_base';
@@ -21,24 +20,6 @@ export class AojIcpcPrelimProvider extends ContestTableProviderBase {
 
   protected setFilterCondition(): (taskResult: TaskResult) => boolean {
     return (taskResult: TaskResult) => taskResult.contest_id === this.contestId;
-  }
-
-  // Override: prepend assigned letter to the title (display only; DB unchanged).
-  // ICPC titles are stored as "{name}" only, so no prefix removal is needed.
-  generateTable(filtered: TaskResults): ContestTable {
-    const letterMap = buildAojIcpcLetterMap(
-      this.contestId,
-      filtered.map((taskResult) => taskResult.task_table_index),
-    );
-    const table: ContestTable = { [this.contestId]: {} };
-
-    for (const taskResult of filtered) {
-      const index = taskResult.task_table_index;
-      const letter = letterMap.get(index) ?? index;
-      table[this.contestId][index] = { ...taskResult, title: `${letter}. ${taskResult.title}` };
-    }
-
-    return table;
   }
 
   // Ensure left-to-right cell order is numeric (A,B,C...). Safeguard for variable-width ids.
@@ -73,5 +54,14 @@ export class AojIcpcPrelimProvider extends ContestTableProviderBase {
 
   getContestRoundLabel(_contestId: string): string {
     return `ICPC 国内予選 ${this.year}`;
+  }
+
+  override getTaskLabels(filtered: TaskResults): Record<string, Record<string, string>> {
+    const letterMap = buildAojIcpcLetterMap(
+      this.contestId,
+      filtered.map((taskResult) => taskResult.task_table_index),
+    );
+
+    return { [this.contestId]: Object.fromEntries(letterMap) };
   }
 }

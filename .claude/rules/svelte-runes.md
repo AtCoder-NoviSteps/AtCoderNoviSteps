@@ -33,6 +33,14 @@ Inside `$derived`, plain `new Map()` suffices — reactive dependency tracked at
 - Use `.by()` for multi-statement: `$derived.by(() => { ... })`
 - Inside `$effect`, use `$store` syntax, not `get(store)` (bypasses signal graph)
 
+## `$derived` Tracks Reactive Reads Inside Called Functions
+
+`$derived(fn)` tracks every reactive read inside `fn`, **including reads inside helper functions** called by `fn`. If a helper reads a `$state` array, the derived re-runs whenever that array changes.
+
+**Accumulation trap**: if the helper transforms data (e.g. `{ ...item, title: prefix + item.title }`) and the result is later written back to the source array (optimistic update), the next re-run reads the already-transformed value and transforms it again.
+
+Fix: put display formatting only in the leaf view (e.g. `$derived displayTitle` in a cell component), never inside a derived that feeds mutable state.
+
 ## Optimistic Updates
 
 Derive computed fields from canonical data source, not re-implement inline. Divergence → "works after reload" bugs.

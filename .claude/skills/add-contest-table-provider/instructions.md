@@ -30,7 +30,7 @@ Step 0 (seed check) is already done. Confirm the following before touching code:
 - Year/ID range: oldest and latest? Export both as named constants so tests can reference them.
 - Iteration order: latest-first so newest table renders on top.
 - `task_table_index` values numeric strings? → override `getHeaderIdsForTask`; sort with `Number(a) - Number(b)`.
-- Display-only title transform needed (e.g. prepend letter)? → override `generateTable` for the transform AND override `getHeaderIdsForTask` using the same key derivation; mismatched keys between the two methods cause missing cells.
+- Display-only positional label needed (e.g. prepend "A. ")? → override `getTaskLabels` to return `{ [contestId]: { index: letter } }`; **never mutate title inside `generateTable`** (transformed objects written back via optimistic update cause prefix accumulation on the next `$derived` re-run).
 - Known edge cases where the default algorithm breaks? → add a `Record<string, Record<string, string>>` module-level override map keyed by contest_id; exercise the override path in tests by mutating the export in `beforeEach` and cleaning up in `afterEach`.
 
 **Pattern 3 additional:**
@@ -101,8 +101,8 @@ Step 0 (seed check) is already done. Confirm the following before touching code:
 
 - [ ] Export `OLDEST_YEAR` / `LATEST_YEAR` constants (module-level, before `prepareContestProviderPresets`) so tests can assert `getSize() === LATEST - OLDEST + 1`
 - [ ] Pass the parameter as `section` in `super(contestType, String(param))` → provider key becomes `TYPE::value` (unique per instance)
-- [ ] If `generateTable` is overridden to key the table by `task_table_index` directly: also override `getHeaderIdsForTask` using the same field and sort order
-- [ ] If display title needs transformation (e.g. prepend "A. "): do it inside `generateTable`; DB data must remain unchanged
+- [ ] If `task_table_index` is a numeric string key: override `getHeaderIdsForTask` with numeric sort (`Number(a) - Number(b)`)
+- [ ] If display title needs transformation (e.g. prepend "A. "): override `getTaskLabels` to return `{ [contestId]: { index: letter } }`; do NOT mutate title in `generateTable`
 - [ ] Write override map (`Record<string, Record<string, value>>`) for known edge cases; test the override path by mutating the export in `beforeEach` and cleaning up in `afterEach`
 - [ ] If provider headings need non-default font/weight/gap: return `titleStyle` (`headingTag` / `fontSize` / `fontWeight` / `bottomGap`) from `getMetadata()`; include all set fields in the `titleStyle` assertion
 - [ ] `pnpm test:unit <providers.test.ts>` — **expect GREEN**

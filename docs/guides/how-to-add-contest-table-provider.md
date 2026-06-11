@@ -228,8 +228,7 @@ for (let year = ICPC_PRELIM_LATEST_YEAR; year >= ICPC_PRELIM_OLDEST_YEAR; year--
 
 **注意**:
 
-- `generateTable` をオーバーライドして `task_table_index` をキーにする場合、`getHeaderIdsForTask` も**必ず同じフィールド・同じソート順**でオーバーライドすること。ベースクラスの `getHeaderIdsForTask` は `getTaskTableHeaderName()` 経由でキーを導出するため、`generateTable` と一致しないとセルが表示されない。
-- `task_table_index` が数値文字列（例: `'1664'`）の場合、辞書順ではなく数値昇順ソートが必要: `Number(a) - Number(b)`
+- `task_table_index` が数値文字列キー（例: `'1664'`）の場合、ベースクラスの `getHeaderIdsForTask` は辞書順ソートになるため、**必ず数値昇順ソートでオーバーライド**すること。`generateTable`（ベースクラスが `getTaskTableHeaderName()` 経由で同じキーを使う）との一致が崩れるとセルが表示されない。`generateTable` 自体のオーバーライドは不要。
 - アルゴリズムが成立しない例外年度には上書き Map を用意する:
 
 ```typescript
@@ -247,6 +246,12 @@ afterEach(() => {
   delete ICPC_PRELIM_LABEL_OVERRIDES['ICPCPrelimTest'];
 });
 ```
+
+- **表示ラベルは `getTaskLabels` で返し、`generateTable` ではタイトルを変更しない**。
+  `generateTable` で `{ ...taskResult, title: \`${letter}. ${title}\` }` のような整形をすると、
+  optimistic update で整形済みオブジェクトがソース配列に書き戻され、次の `$derived`再計算で
+累積する（Issue [#3636](https://github.com/AtCoder-NoviSteps/AtCoderNoviSteps/issues/3636)）。
+位置ラベルは`getTaskLabels(filtered)`が`{ [contestId]: { index: letter } }`を返し、`TaskTableBodyCell`の`$derived displayTitle`で`formatAojIcpcTitle` を呼ぶ設計にすること。
 
 - グループ全体に一度だけ大見出し（h2）を表示したい場合は、グループ登録時に `mainTitle: 'XXX'` を追加する。省略すると描画されない。個々の provider の `title` が冗長になるなら年や回だけに絞っても良い（ICPC 国内予選は敢えて重複させた）。
 - provider 見出しのフォント・太字・余白をデフォルトから変えたい場合は `getMetadata()` で `titleStyle` を返す。`ContestTableTitleStyle`（`headingTag` / `fontSize` / `fontWeight` / `bottomGap`）のうち必要なフィールドだけ指定すればよい。

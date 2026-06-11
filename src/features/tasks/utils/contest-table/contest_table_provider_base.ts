@@ -111,6 +111,10 @@ export abstract class ContestTableProviderBase implements ContestTableProvider {
   }
 
   abstract getContestRoundLabel(contestId: string): string;
+
+  getTaskLabels(_filteredTaskResults: TaskResults): Record<string, Record<string, string>> {
+    return {};
+  }
 }
 
 export function parseContestRound(contestId: string, prefix: string): number {

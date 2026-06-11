@@ -1,6 +1,16 @@
 import { describe, test, expect, beforeEach, afterEach } from 'vitest';
 
-import { buildAojIcpcLetterMap, ICPC_PRELIM_LABEL_OVERRIDES } from './aoj_icpc_labels';
+import {
+  buildAojIcpcLetterMap,
+  formatAojIcpcTitle,
+  ICPC_PRELIM_LABEL_OVERRIDES,
+} from './aoj_icpc_labels';
+
+describe('formatAojIcpcTitle', () => {
+  test('prepends the letter and a dot to the title', () => {
+    expect(formatAojIcpcTitle('Amidakuji', 'B')).toBe('B. Amidakuji');
+  });
+});
 
 describe('buildAojIcpcLetterMap', () => {
   test('sorts indices numerically ascending and assigns letters A, B, C...', () => {
