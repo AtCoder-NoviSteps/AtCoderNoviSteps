@@ -27,6 +27,10 @@ describe('getBodyRowClasses', () => {
       expect(getBodyRowClasses(6, 6)).toBe('flex flex-wrap xl:table-row');
     });
 
+    test('returns xl:table-row class when totalColumns is below threshold', () => {
+      expect(getBodyRowClasses(5, 6)).toBe('flex flex-wrap xl:table-row');
+    });
+
     test('returns flex-wrap-only class when totalColumns exceeds threshold', () => {
       expect(getBodyRowClasses(7, 6)).toBe('flex flex-wrap');
     });
