@@ -6,6 +6,7 @@ import {
   X_URL,
   MOND_URL,
   GITHUB_URL,
+  GITHUB_SPONSORS_URL,
 } from './urls';
 
 export const externalLinks = [
@@ -16,4 +17,5 @@ export const externalLinks = [
   { title: `X`, path: X_URL },
   { title: `mond`, path: MOND_URL },
   { title: `GitHub`, path: GITHUB_URL },
+  { title: `Send a tip`, path: GITHUB_SPONSORS_URL },
 ];
