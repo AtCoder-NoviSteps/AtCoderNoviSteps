@@ -156,6 +156,7 @@ const arcLikePrefixes = new Set(getContestPrefixes(ARC_LIKE));
 const AGC_LIKE: ContestPrefix = {
   'code-festival-2016-qual': 'CODE FESTIVAL 2016 qual',
   'code-festival-2017-qual': 'CODE FESTIVAL 2017 qual',
+  'cf16-final': 'CODE FESTIVAL 2016 final',
   'cf17-final': 'CODE FESTIVAL 2017 final',
 } as const;
 const agcLikePrefixes = getContestPrefixes(AGC_LIKE);
@@ -225,6 +226,7 @@ const ATCODER_OTHERS: ContestPrefix = {
   'code-thanks-festival': 'CODE THANKS FESTIVAL',
   donuts: 'Donutsプロコンチャレンジ',
   indeednow: 'Indeedなう',
+  'dwango2016-prelims': '第2回 ドワンゴからの挑戦状 予選',
   'dwacon2017-prelims': '第3回 ドワンゴからの挑戦状 予選',
   'mujin-pc-2016': 'Mujin Programming Challenge 2016',
   'mujin-pc-2018': 'Mujin Programming Challenge 2018',
