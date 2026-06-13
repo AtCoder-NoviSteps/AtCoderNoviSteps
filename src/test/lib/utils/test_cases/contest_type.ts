@@ -340,6 +340,10 @@ export const agcLike = [
     contestId: 'code-festival-2017-qualc',
     expected: ContestType.AGC_LIKE,
   }),
+  createTestCaseForContestType('CODE FESTIVAL 2016 final')({
+    contestId: 'cf16-final',
+    expected: ContestType.AGC_LIKE,
+  }),
   createTestCaseForContestType('CODE FESTIVAL 2017 final')({
     contestId: 'cf17-final',
     expected: ContestType.AGC_LIKE,
@@ -474,6 +478,10 @@ export const atCoderOthers = [
   }),
   createTestCaseForContestType('IndeedNow Qual B')({
     contestId: 'indeednow-qualb',
+    expected: ContestType.OTHERS,
+  }),
+  createTestCaseForContestType('第2回 ドワンゴからの挑戦状 予選')({
+    contestId: 'dwango2016-prelims',
     expected: ContestType.OTHERS,
   }),
   createTestCaseForContestType('第3回 ドワンゴからの挑戦状 予選')({

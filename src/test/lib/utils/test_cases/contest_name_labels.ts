@@ -56,6 +56,10 @@ export const atCoderOthers = [
     contestId: 's8pc-4',
     expected: 'square869120Contest #4',
   }),
+  createTestCaseForContestNameLabel('第2回 ドワンゴからの挑戦状 予選')({
+    contestId: 'dwango2016-prelims',
+    expected: '第2回 ドワンゴからの挑戦状 予選',
+  }),
 ];
 
 export const mathAndAlgorithm = [
