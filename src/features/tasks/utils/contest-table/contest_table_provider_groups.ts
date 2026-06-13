@@ -233,7 +233,6 @@ export const prepareContestProviderPresets = () => {
       const group = new ContestTableProviderGroup('ICPC 国内予選', {
         buttonLabel: 'ICPC 国内予選',
         ariaLabel: 'Filter ICPC Domestic Preliminary',
-        mainTitle: 'ICPC 国内予選',
       });
       // Iterate from latest to oldest so the newest year's table renders on top.
       for (let year = ICPC_PRELIM_LATEST_YEAR; year >= ICPC_PRELIM_OLDEST_YEAR; year--) {

@@ -99,6 +99,7 @@ export class MyNewProvider extends ContestTableProviderBase {
   getDisplayConfig(): ContestTableDisplayConfig {
     return {
       /* 未定義 */
+      // columnWrapThreshold?: number  // optional: デフォルト8、AOJ系は6
     };
   }
 
@@ -253,7 +254,6 @@ afterEach(() => {
 累積する（Issue [#3636](https://github.com/AtCoder-NoviSteps/AtCoderNoviSteps/issues/3636)）。
 位置ラベルは`getTaskLabels(filtered)`が`{ [contestId]: { index: letter } }`を返し、`TaskTableBodyCell`の`$derived displayTitle`で`formatAojIcpcTitle` を呼ぶ設計にすること。
 
-- グループ全体に一度だけ大見出し（h2）を表示したい場合は、グループ登録時に `mainTitle: 'XXX'` を追加する。省略すると描画されない。個々の provider の `title` が冗長になるなら年や回だけに絞っても良い（ICPC 国内予選は敢えて重複させた）。
 - provider 見出しのフォント・太字・余白をデフォルトから変えたい場合は `getMetadata()` で `titleStyle` を返す。`ContestTableTitleStyle`（`headingTag` / `fontSize` / `fontWeight` / `bottomGap`）のうち必要なフィールドだけ指定すればよい。
 
 ---
@@ -359,7 +359,7 @@ class TessokuBookSectionProvider extends TessokuBookProvider {
 
 1. 基本的なフィルタリング検証（contest_id / 型）
 2. メタデータ取得（title、abbreviationName）
-3. ディスプレイ設定確認（isShownHeader、isShownRoundLabel 等）
+3. ディスプレイ設定確認（isShownHeader、isShownRoundLabel、columnWrapThreshold 等）
 4. ラウンドラベルフォーマット（`getContestRoundLabel()`）
 5. テーブル生成構造（問題数確認）
 6. ヘッダー・ラウンドID取得
@@ -397,6 +397,8 @@ describe('MyNewProvider', () => {
     const provider = new MyNewProvider(ContestType.MY_NEW);
     const config = provider.getDisplayConfig();
     expect(config.isShownHeader).toBe(true);
+    // columnWrapThreshold を明示する場合はアサーションを追加
+    // expect(config.columnWrapThreshold).toBe(6);
   });
 });
 ```
@@ -510,6 +512,7 @@ getDisplayConfig() {
     roundLabelWidth: 'xl:w-16',
     tableBodyCellsWidth: 'w-8 h-8 px-1 py-1',
     isShownTaskIndex: false,           // 必ず指定
+    // columnWrapThreshold?: number    // optional: 省略時は8（デフォルト）、AOJ系は6
   };
 }
 ```

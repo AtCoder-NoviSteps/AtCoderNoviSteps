@@ -171,12 +171,10 @@ export type ContestTableTitleStyle = {
  * @typeof {Object} ContestTablesMetaData
  * @property {string} buttonLabel - The text to display on the contest table's primary action button.
  * @property {string} ariaLabel - Accessibility label for screen readers describing the contest table.
- * @property {string} [mainTitle] - Group-level heading rendered once above the providers (opt-in). Not rendered when unset.
  */
 export type ContestTablesMetaData = {
   buttonLabel: string;
   ariaLabel: string;
-  mainTitle?: string;
 };
 
 /**
@@ -188,6 +186,8 @@ export type ContestTablesMetaData = {
  * @property {string} roundLabelWidth - tailwind CSS width for the round label column, e.g., "xl:w-16" or "xl:w-20"
  * @property {string} tableBodyCellsWidth - tailwind CSS width for the table body cells, e.g., "w-1/2 xs:w-1/3 sm:w-1/4 md:w-1/5 lg:w-1/6 px-1 py-1"
  * @property {boolean} isShownTaskIndex - Whether to display task index in the contest table cells
+ * @property {number} [columnWrapThreshold] - Column count above which rows always flex-wrap
+ *   (xl:table-row is suppressed). Defaults to 8 at render when unset.
  */
 export interface ContestTableDisplayConfig {
   isShownHeader: boolean;
@@ -195,4 +195,5 @@ export interface ContestTableDisplayConfig {
   roundLabelWidth: string;
   tableBodyCellsWidth: string;
   isShownTaskIndex: boolean;
+  columnWrapThreshold?: number;
 }

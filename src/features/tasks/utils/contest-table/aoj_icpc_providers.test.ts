@@ -237,9 +237,9 @@ describe('AojIcpcPrelimProvider', () => {
 
     test('returns titleStyle with text-base font size, pb-1 bottom gap, and h3 heading tag', () => {
       expect(provider2023.getMetadata().titleStyle).toEqual({
-        headingTag: 'h3',
-        fontSize: 'text-base',
-        fontWeight: 'font-normal',
+        headingTag: 'h2',
+        fontSize: 'text-xl',
+        fontWeight: 'font-bold',
         bottomGap: 'pb-1',
       });
     });
@@ -266,6 +266,10 @@ describe('AojIcpcPrelimProvider', () => {
       expect(provider2023.getDisplayConfig().tableBodyCellsWidth).toBe(
         'w-1/2 xs:w-1/3 sm:w-1/4 md:w-1/5 lg:w-1/6 px-1 py-2',
       );
+    });
+
+    test('returns columnWrapThreshold as 6', () => {
+      expect(provider2023.getDisplayConfig().columnWrapThreshold).toBe(6);
     });
   });
 

@@ -36,5 +36,11 @@ describe('ContestTableProviderBase', () => {
 
       expect(provider.getTaskLabels(nonEmpty)).toEqual({});
     });
+
+    test('columnWrapThreshold is undefined by default (component falls back to 8)', () => {
+      const provider = new ABSProvider(ContestType.ABS);
+
+      expect(provider.getDisplayConfig().columnWrapThreshold).toBeUndefined();
+    });
   });
 });
