@@ -237,9 +237,9 @@ describe('AojIcpcPrelimProvider', () => {
 
     test('returns titleStyle with text-base font size, pb-1 bottom gap, and h3 heading tag', () => {
       expect(provider2023.getMetadata().titleStyle).toEqual({
-        headingTag: 'h3',
-        fontSize: 'text-base',
-        fontWeight: 'font-normal',
+        headingTag: 'h2',
+        fontSize: 'text-xl',
+        fontWeight: 'font-bold',
         bottomGap: 'pb-1',
       });
     });

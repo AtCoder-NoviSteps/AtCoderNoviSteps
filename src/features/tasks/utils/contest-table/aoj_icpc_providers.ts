@@ -34,9 +34,9 @@ export class AojIcpcPrelimProvider extends ContestTableProviderBase {
       title: `ICPC 国内予選 ${this.year}`,
       abbreviationName: `icpcPrelim${this.year}`,
       titleStyle: {
-        headingTag: 'h3',
-        fontSize: 'text-base',
-        fontWeight: 'font-normal',
+        headingTag: 'h2',
+        fontSize: 'text-xl',
+        fontWeight: 'font-bold',
         bottomGap: 'pb-1',
       },
     };
