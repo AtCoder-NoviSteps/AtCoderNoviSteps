@@ -99,6 +99,7 @@ export class MyNewProvider extends ContestTableProviderBase {
   getDisplayConfig(): ContestTableDisplayConfig {
     return {
       /* 未定義 */
+      // columnWrapThreshold?: number  // optional: デフォルト8、AOJ系は6
     };
   }
 
@@ -358,7 +359,7 @@ class TessokuBookSectionProvider extends TessokuBookProvider {
 
 1. 基本的なフィルタリング検証（contest_id / 型）
 2. メタデータ取得（title、abbreviationName）
-3. ディスプレイ設定確認（isShownHeader、isShownRoundLabel 等）
+3. ディスプレイ設定確認（isShownHeader、isShownRoundLabel、columnWrapThreshold 等）
 4. ラウンドラベルフォーマット（`getContestRoundLabel()`）
 5. テーブル生成構造（問題数確認）
 6. ヘッダー・ラウンドID取得
@@ -396,6 +397,8 @@ describe('MyNewProvider', () => {
     const provider = new MyNewProvider(ContestType.MY_NEW);
     const config = provider.getDisplayConfig();
     expect(config.isShownHeader).toBe(true);
+    // columnWrapThreshold を明示する場合はアサーションを追加
+    // expect(config.columnWrapThreshold).toBe(6);
   });
 });
 ```
@@ -509,6 +512,7 @@ getDisplayConfig() {
     roundLabelWidth: 'xl:w-16',
     tableBodyCellsWidth: 'w-8 h-8 px-1 py-1',
     isShownTaskIndex: false,           // 必ず指定
+    // columnWrapThreshold?: number    // optional: 省略時は8（デフォルト）、AOJ系は6
   };
 }
 ```

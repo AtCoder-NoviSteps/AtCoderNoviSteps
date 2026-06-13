@@ -33,6 +33,7 @@
   import { getBackgroundColorFrom } from '$lib/services/submission_status';
   import { areAllTasksAccepted } from '$lib/utils/task';
   import { createContestTaskPairKey } from '$lib/utils/contest_task_pair';
+  import { getBodyRowClasses } from './_utils/contest_table_layout';
 
   interface Props {
     taskResults: TaskResults;
@@ -108,11 +109,6 @@
 
   function getContestRoundLabel(provider: ContestTableProvider, contestId: string): string {
     return provider.getContestRoundLabel(contestId);
-  }
-
-  // More than 8 columns will wrap to the next line to align with ABC212 〜 ABC318 (8 tasks per contest).
-  function getBodyRowClasses(totalColumns: number): string {
-    return totalColumns > 8 ? 'flex flex-wrap' : 'flex flex-wrap xl:table-row';
   }
 
   function getRoundLabelClasses(contestTable: ProviderData, contestId: string): string {
@@ -269,7 +265,12 @@
             {@const totalColumns = contestTable.headerIds.length}
 
             {#each contestTable.contestIds as contestId (contestId)}
-              <TableBodyRow class={getBodyRowClasses(totalColumns)}>
+              <TableBodyRow
+                class={getBodyRowClasses(
+                  totalColumns,
+                  contestTable.displayConfig.columnWrapThreshold,
+                )}
+              >
                 {#if contestTable.displayConfig.isShownRoundLabel}
                   <TableBodyCell class={getRoundLabelClasses(contestTable, contestId)}>
                     {getContestRoundLabel(provider, contestId)}
