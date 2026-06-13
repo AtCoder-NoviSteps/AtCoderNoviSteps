@@ -18,8 +18,8 @@ importers:
         specifier: 3.0.2
         version: 3.0.2(@prisma/client@5.22.0(prisma@5.22.0))(lucia@2.7.7)
       '@lucide/svelte':
-        specifier: 1.17.0
-        version: 1.17.0(svelte@5.56.3(@typescript-eslint/types@8.61.0))
+        specifier: 1.18.0
+        version: 1.18.0(svelte@5.56.3(@typescript-eslint/types@8.61.0))
       '@prisma/client':
         specifier: 5.22.0
         version: 5.22.0(prisma@5.22.0)
@@ -963,8 +963,8 @@ packages:
       '@prisma/client': ^4.2.0 || ^5.0.0
       lucia: ^2.0.0
 
-  '@lucide/svelte@1.17.0':
-    resolution: {integrity: sha512-q06YCFBN5CO8cd1ADmLCxWRVMVb7xxvHzqC0lvNoxGa+FLW6Cd1Y1AOxgbQk4Iwe68vkAMCRveNHint4WoaVKg==}
+  '@lucide/svelte@1.18.0':
+    resolution: {integrity: sha512-S1cjiJflMLIirDZtZ8ou2Vy0xMrOqEQzYzDo29AUxoJiOjUfMHUeClvprJsGUEr60RYDJzEgkjSkWm1nlN9iyQ==}
     peerDependencies:
       svelte: ^5
 
@@ -5072,7 +5072,7 @@ snapshots:
       '@prisma/client': 5.22.0(prisma@5.22.0)
       lucia: 2.7.7
 
-  '@lucide/svelte@1.17.0(svelte@5.56.3(@typescript-eslint/types@8.61.0))':
+  '@lucide/svelte@1.18.0(svelte@5.56.3(@typescript-eslint/types@8.61.0))':
     dependencies:
       svelte: 5.56.3(@typescript-eslint/types@8.61.0)
 
