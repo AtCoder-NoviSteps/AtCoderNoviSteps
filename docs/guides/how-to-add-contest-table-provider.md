@@ -253,7 +253,6 @@ afterEach(() => {
 累積する（Issue [#3636](https://github.com/AtCoder-NoviSteps/AtCoderNoviSteps/issues/3636)）。
 位置ラベルは`getTaskLabels(filtered)`が`{ [contestId]: { index: letter } }`を返し、`TaskTableBodyCell`の`$derived displayTitle`で`formatAojIcpcTitle` を呼ぶ設計にすること。
 
-- グループ全体に一度だけ大見出し（h2）を表示したい場合は、グループ登録時に `mainTitle: 'XXX'` を追加する。省略すると描画されない。個々の provider の `title` が冗長になるなら年や回だけに絞っても良い（ICPC 国内予選は敢えて重複させた）。
 - provider 見出しのフォント・太字・余白をデフォルトから変えたい場合は `getMetadata()` で `titleStyle` を返す。`ContestTableTitleStyle`（`headingTag` / `fontSize` / `fontWeight` / `bottomGap`）のうち必要なフィールドだけ指定すればよい。
 
 ---

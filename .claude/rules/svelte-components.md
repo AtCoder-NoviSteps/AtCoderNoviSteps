@@ -95,8 +95,8 @@ let groupMetadata = $derived(store?.getMetadata());
 ```
 
 ```svelte
-{#if groupMetadata?.mainTitle}
-  <Heading>{groupMetadata.mainTitle}</Heading>
+{#if groupMetadata?.title}
+  <Heading>{groupMetadata.title}</Heading>
 {/if}
 ```
 

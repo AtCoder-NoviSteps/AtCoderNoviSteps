@@ -56,7 +56,6 @@
     contestTableProviderGroups[activeContestType as ContestTableProviderGroups],
   );
   let providers = $derived(providerGroups?.getAllProviders() ?? []);
-  let groupMetadata = $derived(providerGroups?.getMetadata());
 
   interface ProviderData {
     filteredTaskResults: TaskResults;
@@ -216,13 +215,6 @@
     {/each}
   </div>
 </div>
-
-<!-- Group-level main heading: rendered once above all providers when opted in. -->
-{#if groupMetadata?.mainTitle}
-  <Heading tag="h2" class="text-2xl pb-3 text-gray-900 dark:text-white">
-    {groupMetadata.mainTitle}
-  </Heading>
-{/if}
 
 <!-- TODO: ページネーションを実装 -->
 <!-- See: -->

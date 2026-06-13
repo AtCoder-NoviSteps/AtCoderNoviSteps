@@ -171,12 +171,10 @@ export type ContestTableTitleStyle = {
  * @typeof {Object} ContestTablesMetaData
  * @property {string} buttonLabel - The text to display on the contest table's primary action button.
  * @property {string} ariaLabel - Accessibility label for screen readers describing the contest table.
- * @property {string} [mainTitle] - Group-level heading rendered once above the providers (opt-in). Not rendered when unset.
  */
 export type ContestTablesMetaData = {
   buttonLabel: string;
   ariaLabel: string;
-  mainTitle?: string;
 };
 
 /**

@@ -121,7 +121,7 @@ Step 0 (seed check) is already done. Confirm the following before touching code:
 ## Layer 5 — Group registration (TDD)
 
 - [ ] Update `contest_table_provider_groups.test.ts`:
-  - New group name string, `buttonLabel`, `ariaLabel` (add `mainTitle` if used)
+  - New group name string, `buttonLabel`, `ariaLabel`
   - `getSize()` incremented to reflect the new provider count
   - Add `getProvider(ContestType.XXX)` assertion
   - Add import of new Provider class
@@ -129,7 +129,6 @@ Step 0 (seed check) is already done. Confirm the following before touching code:
 - [ ] Update `contest_table_provider_groups.ts`:
   - Add import of new Provider class
   - Update group name string, `buttonLabel`, `ariaLabel`
-  - Add `mainTitle: 'XXX'` if the group needs a single h2 heading rendered above all providers (opt-in; omit when not needed)
   - Add `new XXXProvider(ContestType.XXX)` to `addProviders()`
 - [ ] `pnpm test:unit src/features/tasks/utils/contest-table/` — **expect GREEN**
 
