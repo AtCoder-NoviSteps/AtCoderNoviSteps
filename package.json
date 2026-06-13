@@ -88,7 +88,7 @@
     "tailwind-merge": "3.6.0",
     "xss": "1.0.15"
   },
-  "packageManager": "pnpm@11.5.2",
+  "packageManager": "pnpm@11.6.0",
   "engines": {
     "node": "24.x"
   }
