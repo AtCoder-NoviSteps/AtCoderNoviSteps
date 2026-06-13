@@ -80,7 +80,7 @@ importers:
         version: 7.1.2(svelte@5.56.3(@typescript-eslint/types@8.61.0))(vite@8.0.16(@types/node@25.9.3)(esbuild@0.28.0)(jiti@2.7.0)(tsx@4.22.3))
       '@tailwindcss/forms':
         specifier: 0.5.11
-        version: 0.5.11(tailwindcss@4.3.0)
+        version: 0.5.11(tailwindcss@4.3.1)
       '@tailwindcss/vite':
         specifier: 4.3.0
         version: 4.3.0(vite@8.0.16(@types/node@25.9.3)(esbuild@0.28.0)(jiti@2.7.0)(tsx@4.22.3))
@@ -119,7 +119,7 @@ importers:
         version: 3.1.2
       flowbite-svelte:
         specifier: 1.33.1
-        version: 1.33.1(svelte@5.56.3(@typescript-eslint/types@8.61.0))(tailwindcss@4.3.0)
+        version: 1.33.1(svelte@5.56.3(@typescript-eslint/types@8.61.0))(tailwindcss@4.3.1)
       globals:
         specifier: 17.6.0
         version: 17.6.0
@@ -169,8 +169,8 @@ importers:
         specifier: 2.30.1
         version: 2.30.1(@sveltejs/kit@2.65.0(@sveltejs/vite-plugin-svelte@7.1.2(svelte@5.56.3(@typescript-eslint/types@8.61.0))(vite@8.0.16(@types/node@25.9.3)(esbuild@0.28.0)(jiti@2.7.0)(tsx@4.22.3)))(svelte@5.56.3(@typescript-eslint/types@8.61.0))(typescript@6.0.3)(vite@8.0.16(@types/node@25.9.3)(esbuild@0.28.0)(jiti@2.7.0)(tsx@4.22.3)))(@types/json-schema@7.0.15)(svelte@5.56.3(@typescript-eslint/types@8.61.0))(typescript@6.0.3)
       tailwindcss:
-        specifier: 4.3.0
-        version: 4.3.0
+        specifier: 4.3.1
+        version: 4.3.1
       tslib:
         specifier: 2.8.1
         version: 2.8.1
@@ -4116,6 +4116,9 @@ packages:
   tailwindcss@4.3.0:
     resolution: {integrity: sha512-y6nxMGB1nMW9R6k96e5gdIFzcfL/gTJRNaqGes1YvkLnPVXzWgbqFF2yLC0T8G774n24cx3Pe8XrKoniCOAH+Q==}
 
+  tailwindcss@4.3.1:
+    resolution: {integrity: sha512-hk+TB1m+K8CYNrP6rjQaq/Y+4Zylwpa87mLYBKCunwnnQ9p+fHb7kmSfGqyEJoxF/O6CDyABWVFEafNSYKll+Q==}
+
   talt@2.4.4:
     resolution: {integrity: sha512-wyvc4IVzBbgWPqXqQMJNHJvm2shq6t/KoYkeC/qEAtVGxXyFq0y+acRKe5P6M/oJbb+Cp9ol+EK4WDqKiGLNog==}
     peerDependencies:
@@ -5611,10 +5614,10 @@ snapshots:
       vite: 8.0.16(@types/node@25.9.3)(esbuild@0.28.0)(jiti@2.7.0)(tsx@4.22.3)
       vitefu: 1.1.3(vite@8.0.16(@types/node@25.9.3)(esbuild@0.28.0)(jiti@2.7.0)(tsx@4.22.3))
 
-  '@tailwindcss/forms@0.5.11(tailwindcss@4.3.0)':
+  '@tailwindcss/forms@0.5.11(tailwindcss@4.3.1)':
     dependencies:
       mini-svg-data-uri: 1.4.4
-      tailwindcss: 4.3.0
+      tailwindcss: 4.3.1
 
   '@tailwindcss/node@4.3.0':
     dependencies:
@@ -7030,7 +7033,7 @@ snapshots:
     transitivePeerDependencies:
       - rollup
 
-  flowbite-svelte@1.33.1(svelte@5.56.3(@typescript-eslint/types@8.61.0))(tailwindcss@4.3.0):
+  flowbite-svelte@1.33.1(svelte@5.56.3(@typescript-eslint/types@8.61.0))(tailwindcss@4.3.1):
     dependencies:
       '@floating-ui/dom': 1.7.6
       '@floating-ui/utils': 0.2.11
@@ -7041,8 +7044,8 @@ snapshots:
       flowbite: 3.1.2
       svelte: 5.56.3(@typescript-eslint/types@8.61.0)
       tailwind-merge: 3.6.0
-      tailwind-variants: 3.2.2(tailwind-merge@3.6.0)(tailwindcss@4.3.0)
-      tailwindcss: 4.3.0
+      tailwind-variants: 3.2.2(tailwind-merge@3.6.0)(tailwindcss@4.3.1)
+      tailwindcss: 4.3.1
     transitivePeerDependencies:
       - rollup
 
@@ -8288,13 +8291,15 @@ snapshots:
 
   tailwind-merge@3.6.0: {}
 
-  tailwind-variants@3.2.2(tailwind-merge@3.6.0)(tailwindcss@4.3.0):
+  tailwind-variants@3.2.2(tailwind-merge@3.6.0)(tailwindcss@4.3.1):
     dependencies:
-      tailwindcss: 4.3.0
+      tailwindcss: 4.3.1
     optionalDependencies:
       tailwind-merge: 3.6.0
 
   tailwindcss@4.3.0: {}
+
+  tailwindcss@4.3.1: {}
 
   talt@2.4.4(typescript@6.0.3):
     dependencies:
