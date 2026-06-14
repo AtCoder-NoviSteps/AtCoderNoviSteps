@@ -9,6 +9,7 @@ import {
   getUrlSlugFrom,
   getWorkBooksByType,
   buildTaskResultsByWorkBookId,
+  buildTaskIdsFromWorkbooks,
   calcWorkBookGradeModes,
   getGradeMode,
   getTaskResult,
@@ -176,6 +177,44 @@ describe('Workbooks', () => {
 
     test('returns 0 for empty list', () => {
       expect(countReadableWorkbooks([], userId)).toBe(0);
+    });
+  });
+
+  describe('buildTaskIdsFromWorkbooks', () => {
+    test('returns unique task ids deduplicated across workbooks', () => {
+      const workbooks = [
+        createWorkBookListBase({
+          id: 1,
+          workBookTasks: [
+            { taskId: 'abc300_a', priority: 1, comment: '' },
+            { taskId: 'abc300_b', priority: 2, comment: '' },
+          ],
+        }),
+        createWorkBookListBase({
+          id: 2,
+          workBookTasks: [
+            { taskId: 'abc300_b', priority: 1, comment: '' },
+            { taskId: 'abc301_a', priority: 2, comment: '' },
+          ],
+        }),
+      ];
+      const result = buildTaskIdsFromWorkbooks(workbooks);
+      expect(result).toHaveLength(3);
+      expect(result).toContain('abc300_a');
+      expect(result).toContain('abc300_b');
+      expect(result).toContain('abc301_a');
+    });
+
+    test('returns empty array for empty workbooks', () => {
+      expect(buildTaskIdsFromWorkbooks([])).toEqual([]);
+    });
+
+    test('returns empty array when workbooks have no tasks', () => {
+      const workbooks = [
+        createWorkBookListBase({ id: 1, workBookTasks: [] }),
+        createWorkBookListBase({ id: 2, workBookTasks: [] }),
+      ];
+      expect(buildTaskIdsFromWorkbooks(workbooks)).toEqual([]);
     });
   });
 

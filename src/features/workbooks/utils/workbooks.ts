@@ -72,6 +72,20 @@ export function countReadableWorkbooks(workbooks: WorkbooksList, userId: string)
 }
 
 /**
+ * Builds the list of unique task IDs that the given workbooks reference via their workBookTasks.
+ * Used to fetch only the tasks actually displayed, instead of all tasks.
+ *
+ * @returns Unique task IDs (deduplicated across all workbooks).
+ */
+export function buildTaskIdsFromWorkbooks(
+  workbooks: { workBookTasks: WorkBookTaskBase[] }[],
+): string[] {
+  return Array.from(
+    new Set(workbooks.flatMap((workbook) => workbook.workBookTasks.map((task) => task.taskId))),
+  );
+}
+
+/**
  * Calculates the grade modes for a list of workbooks in curriculum based on their tasks.
  *
  * @param workbooks - Workbooks with their task lists (only `id` and `workBookTasks` are used)
@@ -82,7 +96,7 @@ export function countReadableWorkbooks(workbooks: WorkbooksList, userId: string)
  */
 export function calcWorkBookGradeModes(
   workbooks: { id: number; workBookTasks: WorkBookTaskBase[] }[],
-  tasksMapByIds: Map<string, Task>,
+  tasksMapByIds: Map<string, Pick<Task, 'grade'>>,
 ): Map<number, TaskGrade> {
   const gradeModes: Map<number, TaskGrade> = new Map();
 

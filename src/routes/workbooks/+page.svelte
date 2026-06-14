@@ -33,7 +33,7 @@
   let loggedInUser = $derived(data.loggedInUser);
   let role = $derived(loggedInUser?.role as Roles);
 
-  const tasksMapByIds = $derived(data.tasksMapByIds as Map<string, Task>);
+  const tasksMapByIds = $derived(data.tasksMapByIds as Map<string, Pick<Task, 'grade'>>);
   let taskResultsByTaskId = $derived(data.taskResultsByTaskId as Map<string, TaskResult>);
 
   const gradeModesEachWorkbook = $derived(calcWorkBookGradeModes(workbooks, tasksMapByIds));

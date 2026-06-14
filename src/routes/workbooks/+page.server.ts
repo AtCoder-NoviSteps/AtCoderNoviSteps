@@ -1,6 +1,7 @@
 import { error, redirect } from '@sveltejs/kit';
 
 import * as taskCrud from '$lib/services/tasks';
+import { buildTaskIdsFromWorkbooks } from '$features/workbooks/utils/workbooks';
 import * as taskResultsCrud from '$lib/services/task_results';
 import * as workBooksCrud from '$features/workbooks/services/workbooks';
 
@@ -60,25 +61,29 @@ export async function load({ locals, url }) {
   const adminUser = loggedInUser && isAdmin(loggedInUser.role as Roles);
 
   try {
-    const [
-      workbooks,
-      availableCategories,
-      solutionCategoryMap,
-      tasksMapByIds,
-      taskResultsByTaskId,
-    ] = await Promise.all([
-      fetchWorkbooksByTab(tab, selectedGrade, selectedCategory, !!adminUser),
-      tab === WorkBookTab.SOLUTION
-        ? getAvailableSolutionCategories(!!adminUser)
-        : Promise.resolve([]),
-      tab === WorkBookTab.SOLUTION && selectedCategory === ALL_SOLUTION_CATEGORIES
-        ? getSolutionCategoryMapByWorkbookId(!!adminUser)
-        : Promise.resolve(new Map<number, SolutionCategory>()),
-      taskCrud.getTasksByTaskId(),
-      loggedInUser
-        ? taskResultsCrud.getTaskResultsOnlyResultExists(loggedInUser.id, true)
-        : Promise.resolve(new Map()),
-    ]);
+    const [workbooks, availableCategories, solutionCategoryMap, taskResultsByTaskId] =
+      await Promise.all([
+        fetchWorkbooksByTab(tab, selectedGrade, selectedCategory, !!adminUser),
+        tab === WorkBookTab.SOLUTION
+          ? getAvailableSolutionCategories(!!adminUser)
+          : Promise.resolve([]),
+        tab === WorkBookTab.SOLUTION && selectedCategory === ALL_SOLUTION_CATEGORIES
+          ? getSolutionCategoryMapByWorkbookId(!!adminUser)
+          : Promise.resolve(new Map<number, SolutionCategory>()),
+        loggedInUser
+          ? taskResultsCrud.getTaskResultsOnlyResultExists(loggedInUser.id, true)
+          : Promise.resolve(new Map()),
+      ]);
+
+    // Grade modes are only displayed on the CURRICULUM tab for logged-in users.
+    // For other tabs / anonymous, the id list is empty and getTasksWithSelectedTaskIds
+    // returns [] without a query (see tasks.ts guard), so tasksMapByIds becomes an empty Map.
+    const referencedTaskIds =
+      tab === WorkBookTab.CURRICULUM && loggedInUser ? buildTaskIdsFromWorkbooks(workbooks) : [];
+    const referencedTasks = await taskCrud.getTasksWithSelectedTaskIds(referencedTaskIds);
+    const tasksMapByIds = new Map(
+      referencedTasks.map((task) => [task.task_id, { grade: task.grade }]),
+    );
 
     return {
       workbooks,
