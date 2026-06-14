@@ -68,8 +68,19 @@ describe('load() cache-control behaviour', () => {
 
       expect(event.setHeaders).toHaveBeenCalledOnce();
       const headerArg = event.setHeaders.mock.calls[0][0] as Record<string, string>;
-      expect(headerArg['cache-control']).toContain('public');
-      expect(headerArg['cache-control']).toContain('s-maxage=300');
+      expect(headerArg['Cache-Control']).toContain('public');
+      expect(headerArg['Cache-Control']).toContain('s-maxage=300');
+    });
+
+    test('anonymous users with tagIds also get a public shared-cache header', async () => {
+      const event = createMockEvent({ session: null, tagIds: 'abc,dp' });
+
+      await load(event);
+
+      expect(event.setHeaders).toHaveBeenCalledOnce();
+      const headerArg = event.setHeaders.mock.calls[0][0] as Record<string, string>;
+      expect(headerArg['Cache-Control']).toContain('public');
+      expect(headerArg['Cache-Control']).toContain('s-maxage=300');
     });
   });
 

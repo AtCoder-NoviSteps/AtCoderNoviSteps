@@ -38,7 +38,7 @@ export async function load({ locals, url, setHeaders }) {
   // Skip caching a degraded response (vote stats failed) to avoid pinning a
   // broken page at the edge for the full TTL.
   if (session === null && voteStatsOk) {
-    setHeaders({ 'cache-control': 'public, max-age=0, s-maxage=300, stale-while-revalidate=600' });
+    setHeaders({ 'Cache-Control': 'public, max-age=0, s-maxage=300, stale-while-revalidate=600' });
   }
 
   if (tagIds != null) {
