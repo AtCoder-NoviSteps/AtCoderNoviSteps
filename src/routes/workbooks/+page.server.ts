@@ -6,6 +6,7 @@ import * as taskResultsCrud from '$lib/services/task_results';
 import * as workBooksCrud from '$features/workbooks/services/workbooks';
 
 import { Roles } from '$lib/types/user';
+import type { TaskGrade, TaskResult } from '$lib/types/task';
 import {
   WorkBookTab,
   type WorkBookTab as WorkBookTabType,
@@ -59,16 +60,16 @@ export async function load({ locals, url }) {
   const selectedGrade = parseWorkBookGrade(params);
   const selectedCategory = parseWorkBookCategory(params);
 
-  // Phase 2: All tab content is gated by {#if loggedInUser}, so anonymous users
-  // render nothing. Skip the heavy workbook/category fetches and return a
+  // All tab content is gated by {#if loggedInUser}, so anonymous users render
+  // nothing. Skip the heavy workbook/category fetches and return a
   // display-equivalent empty shape (keys preserved for the page's $effect/$derived).
   if (!loggedInUser) {
     return {
       workbooks: [],
       availableCategories: [],
       solutionCategoryMap: new Map<number, SolutionCategory>(),
-      tasksMapByIds: new Map(),
-      taskResultsByTaskId: new Map(),
+      tasksMapByIds: new Map<string, { grade: TaskGrade }>(),
+      taskResultsByTaskId: new Map<string, TaskResult>(),
       loggedInUser: null,
       tab,
       selectedGrade,
