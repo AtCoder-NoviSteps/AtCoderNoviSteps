@@ -71,12 +71,7 @@ export function countReadableWorkbooks(workbooks: WorkbooksList, userId: string)
   }, 0);
 }
 
-/**
- * Builds the list of unique task IDs that the given workbooks reference via their workBookTasks.
- * Used to fetch only the tasks actually displayed, instead of all tasks.
- *
- * @returns Unique task IDs (deduplicated across all workbooks).
- */
+// Deduplicates task IDs across workbooks to avoid redundant DB fetches.
 export function buildTaskIdsFromWorkbooks(
   workbooks: { workBookTasks: WorkBookTaskBase[] }[],
 ): string[] {
