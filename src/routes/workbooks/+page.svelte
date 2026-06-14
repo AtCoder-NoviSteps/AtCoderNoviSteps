@@ -101,6 +101,9 @@
       contentClass="bg-white dark:bg-gray-800 mt-0 p-0"
       ulClass="flex flex-wrap md:flex-nowrap md:gap-2 rtl:space-x-reverse items-start"
     >
+      <!-- +page.server.ts skips workbook/category fetches for anonymous users on the -->
+      <!-- assumption that all tab content lives inside this guard. Revisit that early -->
+      <!-- return before surfacing any content to anonymous users outside this block. -->
       {#if loggedInUser}
         <WorkbookTabItem
           isOpen={data.tab === WorkBookTab.CURRICULUM}

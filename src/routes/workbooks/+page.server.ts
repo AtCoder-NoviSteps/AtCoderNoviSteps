@@ -6,6 +6,7 @@ import * as taskResultsCrud from '$lib/services/task_results';
 import * as workBooksCrud from '$features/workbooks/services/workbooks';
 
 import { Roles } from '$lib/types/user';
+import type { TaskGrade, TaskResult } from '$lib/types/task';
 import {
   WorkBookTab,
   type WorkBookTab as WorkBookTabType,
@@ -58,7 +59,25 @@ export async function load({ locals, url }) {
 
   const selectedGrade = parseWorkBookGrade(params);
   const selectedCategory = parseWorkBookCategory(params);
-  const adminUser = loggedInUser && isAdmin(loggedInUser.role as Roles);
+
+  // All tab content is gated by {#if loggedInUser}, so anonymous users render
+  // nothing. Skip the heavy workbook/category fetches and return a
+  // display-equivalent empty shape (keys preserved for the page's $effect/$derived).
+  if (!loggedInUser) {
+    return {
+      workbooks: [],
+      availableCategories: [],
+      solutionCategoryMap: new Map<number, SolutionCategory>(),
+      tasksMapByIds: new Map<string, { grade: TaskGrade }>(),
+      taskResultsByTaskId: new Map<string, TaskResult>(),
+      loggedInUser: null,
+      tab,
+      selectedGrade,
+      selectedCategory,
+    };
+  }
+
+  const adminUser = isAdmin(loggedInUser.role as Roles);
 
   try {
     const [workbooks, availableCategories, solutionCategoryMap, taskResultsByTaskId] =
@@ -70,16 +89,13 @@ export async function load({ locals, url }) {
         tab === WorkBookTab.SOLUTION && selectedCategory === ALL_SOLUTION_CATEGORIES
           ? getSolutionCategoryMapByWorkbookId(!!adminUser)
           : Promise.resolve(new Map<number, SolutionCategory>()),
-        loggedInUser
-          ? taskResultsCrud.getTaskResultsOnlyResultExists(loggedInUser.id, true)
-          : Promise.resolve(new Map()),
+        taskResultsCrud.getTaskResultsOnlyResultExists(loggedInUser.id, true),
       ]);
 
-    // Grade modes are only displayed on the CURRICULUM tab for logged-in users.
-    // For other tabs / anonymous, the id list is empty and getTasksWithSelectedTaskIds
-    // returns [] without a query (see tasks.ts guard), so tasksMapByIds becomes an empty Map.
+    // Grade modes are only displayed on the CURRICULUM tab.
+    // For other tabs the id list is empty so tasksMapByIds becomes an empty Map.
     const referencedTaskIds =
-      tab === WorkBookTab.CURRICULUM && loggedInUser ? buildTaskIdsFromWorkbooks(workbooks) : [];
+      tab === WorkBookTab.CURRICULUM ? buildTaskIdsFromWorkbooks(workbooks) : [];
     const referencedTasks = await taskCrud.getTasksWithSelectedTaskIds(referencedTaskIds);
     const tasksMapByIds = new Map(
       referencedTasks.map((task) => [task.task_id, { grade: task.grade }]),
