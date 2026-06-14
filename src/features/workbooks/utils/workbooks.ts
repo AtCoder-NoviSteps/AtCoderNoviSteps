@@ -71,6 +71,15 @@ export function countReadableWorkbooks(workbooks: WorkbooksList, userId: string)
   }, 0);
 }
 
+// Deduplicates task IDs across workbooks to avoid redundant DB fetches.
+export function buildTaskIdsFromWorkbooks(
+  workbooks: { workBookTasks: WorkBookTaskBase[] }[],
+): string[] {
+  return Array.from(
+    new Set(workbooks.flatMap((workbook) => workbook.workBookTasks.map((task) => task.taskId))),
+  );
+}
+
 /**
  * Calculates the grade modes for a list of workbooks in curriculum based on their tasks.
  *
@@ -82,7 +91,7 @@ export function countReadableWorkbooks(workbooks: WorkbooksList, userId: string)
  */
 export function calcWorkBookGradeModes(
   workbooks: { id: number; workBookTasks: WorkBookTaskBase[] }[],
-  tasksMapByIds: Map<string, Task>,
+  tasksMapByIds: Map<string, Pick<Task, 'grade'>>,
 ): Map<number, TaskGrade> {
   const gradeModes: Map<number, TaskGrade> = new Map();
 
