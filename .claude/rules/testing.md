@@ -26,6 +26,8 @@ paths:
 
 E2E files: **must** use `.spec.ts` extension (`.test.ts` not detected).
 
+Route unit tests: `src/routes/**/*.test.ts` is included by `vite.config.ts`. **Never use `+` as a filename prefix** — SvelteKit reserves it and `pnpm check` will error. Name route test files `page_server.test.ts`, not `+page.server.test.ts`.
+
 ## Unit Testing Patterns
 
 ### Assertions
@@ -129,6 +131,19 @@ afterEach(() => {
 test('uses override map when entry exists', () => {
   expect(buildFn('testKey', ['100', '102']).get('100')).toBe('A');
 });
+```
+
+### Route load() Unit Tests
+
+`load` in `+page.server.ts` is a plain async function — call it directly with a mock event. Pass `setHeaders` as a `vi.fn()` spy to assert whether and how headers are set. What unit tests **cannot** verify: whether the header actually reaches the wire, or that `Set-Cookie` is absent (auth mocks bypass that) — cover those in E2E.
+
+```typescript
+const createMockEvent = ({ session = null } = {}) =>
+  ({
+    locals: { auth: { validate: vi.fn().mockResolvedValue(session) } },
+    url: { searchParams: { get: vi.fn().mockReturnValue(null) } },
+    setHeaders: vi.fn(),
+  }) as unknown as Parameters<typeof load>[0] & { setHeaders: ReturnType<typeof vi.fn> };
 ```
 
 ### Test Stubs
