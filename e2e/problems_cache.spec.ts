@@ -14,7 +14,9 @@ test.describe('anonymous /problems response', () => {
 
     // Local dev server (pnpm preview) is not behind Vercel edge, so s-maxage is visible.
     expect(headers['cache-control']).toContain('public');
+    expect(headers['cache-control']).toContain('max-age=0');
     expect(headers['cache-control']).toContain('s-maxage=300');
+    expect(headers['cache-control']).toContain('stale-while-revalidate=600');
 
     // set-cookie makes a response ineligible for CDN caching.
     // Lucia must not attach a session cookie to anonymous requests.
@@ -36,6 +38,7 @@ test.describe('logged-in /problems response', () => {
     const headers = response.headers();
 
     // Personalized responses must never be shared-cached.
+    expect(headers['cache-control'] ?? '').not.toContain('public');
     expect(headers['cache-control'] ?? '').not.toContain('s-maxage');
   });
 });
