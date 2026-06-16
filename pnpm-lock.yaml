@@ -181,8 +181,8 @@ importers:
         specifier: 6.0.3
         version: 6.0.3
       vercel:
-        specifier: 54.13.0
-        version: 54.13.0(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0)
+        specifier: 54.14.0
+        version: 54.14.0(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0)
       vite:
         specifier: 8.0.16
         version: 8.0.16(@types/node@25.9.3)(esbuild@0.28.0)(jiti@2.7.0)(tsx@4.22.3)
@@ -2088,8 +2088,8 @@ packages:
   '@vercel/python-analysis@0.11.1':
     resolution: {integrity: sha512-EPPLuXJQhIDUx08H9nG76AR2HSgBquwe3OAX5s2w20M923iaWeGGVkhX/4yZ89CJfXEZgE1Aj/mX7lVHOVIcYA==}
 
-  '@vercel/python@6.44.1':
-    resolution: {integrity: sha512-wRYX8SKOmFGHLtQZvnhl3R405PgZFZqdqNXnrOsy7nxm5B8tkkqDSV6P8NhxOnoRm+fnQP3j+CzWpwTMbNZZgQ==}
+  '@vercel/python@6.45.0':
+    resolution: {integrity: sha512-5gpmA3LT1HTDsFIkDrQIBZaTWDnCXGwwRnD5JDajfn1GlKtY8JtdPmwbLk5dX8lTnQr8t2I7SWxJqD08XHZ/1w==}
 
   '@vercel/redwood@2.5.0':
     resolution: {integrity: sha512-LO24CbieV57rGAqrq5n5z/B+fMYeUqbE/Ge3qMeKRuS3Q9awgcBgB6WYLCe8crHM7XJd5AZjbuyoS/6k3r0X0w==}
@@ -4329,8 +4329,8 @@ packages:
     resolution: {integrity: sha512-spH26xU080ydGggxRyR1Yhcbgx+j3y5jbNXk/8L+iRvdIEQ4uTRH2Sgf2dokud6Q4oAtsbNvJ1Ft+9xmm6IZcA==}
     engines: {node: '>= 0.10'}
 
-  vercel@54.13.0:
-    resolution: {integrity: sha512-EgJosSfOkJkzWacaV0EIpvcQUSrTtaknIWvLylcx/nBoNtEw05nOEuXH325aNg6EvrtqgHBB58R1UWZDyG+UkQ==}
+  vercel@54.14.0:
+    resolution: {integrity: sha512-C753akCiJtBfcH+2kh+n3V7awcw/ESUxLzg6KC+SjDFociFWAm6queymFgILvaa9kHi3ouXosurvqhVtnLrjRA==}
     engines: {node: '>= 18'}
     hasBin: true
 
@@ -6201,7 +6201,7 @@ snapshots:
       smol-toml: 1.5.2
       zod: 3.22.4
 
-  '@vercel/python@6.44.1':
+  '@vercel/python@6.45.0':
     dependencies:
       '@vercel/python-analysis': 0.11.1
 
@@ -8499,7 +8499,7 @@ snapshots:
   validator@13.15.26:
     optional: true
 
-  vercel@54.13.0(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0):
+  vercel@54.14.0(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0):
     dependencies:
       '@vercel/backends': 0.8.14(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0)
       '@vercel/blob': 2.4.0
@@ -8520,7 +8520,7 @@ snapshots:
       '@vercel/next': 4.19.0
       '@vercel/node': 5.8.17
       '@vercel/prepare-flags-definitions': 0.3.0
-      '@vercel/python': 6.44.1
+      '@vercel/python': 6.45.0
       '@vercel/redwood': 2.5.0
       '@vercel/remix-builder': 5.9.1
       '@vercel/ruby': 2.4.0
