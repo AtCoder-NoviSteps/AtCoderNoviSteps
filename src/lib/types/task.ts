@@ -62,7 +62,8 @@ export type TaskGrades = TaskGrade[];
 export const taskGradeValues = Object.values(TaskGrade);
 
 export interface TaskResult extends Task {
-  user_id: string;
+  // Anonymous (logged-out) results carry no user; user_id is undefined for them.
+  user_id: string | undefined;
   status_name: string;
   status_id: string;
   submission_status_image_path: string;
