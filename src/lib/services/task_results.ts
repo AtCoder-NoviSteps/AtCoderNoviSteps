@@ -32,7 +32,7 @@ import { NOT_FOUND } from '$lib/constants/http-response-status-codes';
 const statusById = await getSubmissionStatusMapWithId();
 const statusByName = await getSubmissionStatusMapWithName();
 
-export async function getTaskResults(userId: string): Promise<TaskResults> {
+export async function getTaskResults(userId: string | undefined): Promise<TaskResults> {
   // 問題と特定のユーザの回答状況を使ってデータを結合
   // 計算量: 問題数をN、特定のユーザの解答数をMとすると、O(N + M)になるはず。
   const mergedTasksMap = await getMergedTasksMap();
@@ -127,14 +127,16 @@ async function transferAnswers(
 //       with_mapをtrueにすると、taskIdを使って各TaskResultにO(1)でアクセスできる。
 // Why : データ総量を抑えるため。
 export async function getTaskResultsOnlyResultExists(
-  userId: string,
+  userId: string | undefined,
   with_map: boolean = false,
 ): Promise<TaskResults | Map<string, TaskResult>> {
   const taskResultsMap: Map<string, TaskResult> = new Map();
 
   // TODO: answerの降順にしたい
   const tasks = await getTasks();
-  const answers = await answer_crud.getAnswers(userId);
+  // Skip the DB round-trip for anonymous users: getAnswers(undefined) drops the
+  // WHERE filter and full-scans taskAnswer.
+  const answers = userId !== undefined ? await answer_crud.getAnswers(userId) : new Map();
   const tasksHasAnswer = tasks.filter((task) => answers.has(task.task_id));
   const taskResultsWithAnswer = tasksHasAnswer.map((task: Task) => {
     const taskResult = createDefaultTaskResult(userId, task);
@@ -215,9 +217,11 @@ export async function getTaskResultsByTaskId(
  * @param userId - User ID for creating TaskResults
  * @returns Promise<TaskResults> - Array of TaskResult objects
  */
-async function createTaskResults(tasks: Tasks, userId: string): Promise<TaskResults> {
-  const answers = await answer_crud.getAnswers(userId);
+async function createTaskResults(tasks: Tasks, userId: string | undefined): Promise<TaskResults> {
   const isLoggedIn = userId !== undefined;
+  // Skip the DB round-trip for anonymous users: getAnswers(undefined) drops the
+  // WHERE filter and full-scans taskAnswer.
+  const answers = isLoggedIn ? await answer_crud.getAnswers(userId) : new Map();
 
   return tasks.map((task: Task) => {
     const answer = isLoggedIn ? answers.get(task.task_id) : null;
@@ -236,7 +240,7 @@ async function createTaskResults(tasks: Tasks, userId: string): Promise<TaskResu
  */
 function mergeTaskAndAnswer(
   task: Task,
-  userId: string,
+  userId: string | undefined,
   answer: TaskAnswer | null | undefined,
 ): TaskResult {
   const taskResult = createDefaultTaskResult(userId, task);
@@ -263,7 +267,7 @@ function mergeTaskAndAnswer(
   return taskResult;
 }
 
-export function createDefaultTaskResult(userId: string, task: Task): TaskResult {
+export function createDefaultTaskResult(userId: string | undefined, task: Task): TaskResult {
   const taskResult: TaskResult = {
     contest_id: task.contest_id,
     task_id: task.task_id,
@@ -312,7 +316,7 @@ export async function updateTaskResult(taskId: string, submissionStatus: string,
 
 export async function getTasksWithTagIds(
   tagIds_string: string,
-  userId: string,
+  userId: string | undefined,
 ): Promise<TaskResults> {
   const tagIds = tagIds_string.split(',');
   const taskIdByTagIds = await db.taskTag.groupBy({

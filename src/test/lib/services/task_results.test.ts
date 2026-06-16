@@ -12,8 +12,11 @@
 
 import { describe, test, expect, vi, beforeEach } from 'vitest';
 
-import { getTaskResults } from '$lib/services/task_results';
-import type { TaskResult, TaskResults } from '$lib/types/task';
+import { getTasks } from '$lib/services/tasks';
+import { getAnswers } from '$lib/services/answers';
+import { getTaskResults, getTaskResultsOnlyResultExists } from '$lib/services/task_results';
+
+import type { TaskResult, TaskResults, Tasks } from '$lib/types/task';
 
 import {
   MOCK_TASKS_DATA,
@@ -381,6 +384,27 @@ describe('getTaskResults', () => {
     });
   });
 
+  describe('when anonymous (userId is undefined)', () => {
+    beforeEach(async () => {
+      mockAnswersForTest = MOCK_ANSWERS_WITH_ANSWERS;
+      vi.mocked(getAnswers).mockClear();
+      taskResults = await getTaskResults(undefined);
+    });
+
+    test('does not call getAnswers (skips the full-scan DB round-trip)', () => {
+      expect(getAnswers).not.toHaveBeenCalled();
+    });
+
+    test('returns default (未挑戦) results for all tasks', () => {
+      expect(taskResults.length).toBeGreaterThan(0);
+      taskResults.forEach((taskResult: TaskResult) => {
+        expect(taskResult.is_ac).toBe(false);
+        expect(taskResult.status_name).toBe('ns');
+        expect(taskResult.submission_status_label_name).toBe('未挑戦');
+      });
+    });
+  });
+
   describe('when answers exist', () => {
     beforeEach(async () => {
       mockAnswersForTest = MOCK_ANSWERS_WITH_ANSWERS;
@@ -407,6 +431,33 @@ describe('getTaskResults', () => {
         expect(taskResult?.status_name).toBe(status_name);
         expect(taskResult?.is_ac).toBe(is_ac);
       });
+    });
+  });
+});
+
+describe('getTaskResultsOnlyResultExists', () => {
+  describe('when anonymous (userId is undefined)', () => {
+    beforeEach(() => {
+      mockAnswersForTest = MOCK_ANSWERS_WITH_ANSWERS;
+      vi.mocked(getAnswers).mockClear();
+      vi.mocked(getTasks).mockResolvedValue([
+        {
+          id: '1',
+          contest_id: 'abc101',
+          task_id: 'arc099_a',
+          contest_type: 'ABC',
+          task_table_index: 'C',
+          title: 'Minimization',
+          grade: 'Q3',
+        },
+      ] as unknown as Tasks);
+    });
+
+    test('does not call getAnswers and returns an empty array', async () => {
+      const taskResults = await getTaskResultsOnlyResultExists(undefined, false);
+
+      expect(getAnswers).not.toHaveBeenCalled();
+      expect(taskResults).toEqual([]);
     });
   });
 });
