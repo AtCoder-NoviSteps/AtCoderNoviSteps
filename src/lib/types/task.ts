@@ -61,8 +61,13 @@ export type TaskGrades = TaskGrade[];
 
 export const taskGradeValues = Object.values(TaskGrade);
 
+/**
+ * A user's submission result for a single task, extending {@link Task} with status metadata.
+ *
+ * Used for both authenticated and anonymous (logged-out) views.
+ */
 export interface TaskResult extends Task {
-  // Anonymous (logged-out) results carry no user; user_id is undefined for them.
+  /** Owner of this result; `undefined` for anonymous (logged-out) results. */
   user_id: string | undefined;
   status_name: string;
   status_id: string;
