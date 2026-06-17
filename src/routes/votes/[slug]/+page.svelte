@@ -17,7 +17,7 @@
 
   import VoteDonutChart from '$features/votes/components/VoteDonutChart.svelte';
   import { qGrades, dGrades } from '$features/votes/utils/grade_options';
-  import { MIN_VOTES_FOR_STATISTICS } from '$features/votes/constants/statistics';
+  import { MIN_VOTES_FOR_PROVISIONAL_GRADE } from '$features/votes/constants/statistics';
 
   import { EDIT_PROFILE_PAGE } from '$lib/constants/navbar-links';
   import { buildLoginPath } from '$features/auth/utils/login';
@@ -53,7 +53,7 @@
         <FlaskConical class="w-5 h-5" />
       </span>
       <Tooltip triggeredBy="#flask-icon" placement="bottom">
-        {MIN_VOTES_FOR_STATISTICS}票以上集まると中央値が暫定グレードとして一覧表に反映されます。
+        {MIN_VOTES_FOR_PROVISIONAL_GRADE}票以上集まると中央値が暫定グレードとして一覧表に反映されます。
       </Tooltip>
     {/if}
     <div class="relative inline-block">
