@@ -1,10 +1,6 @@
 import { describe, test, expect, beforeEach, afterEach } from 'vitest';
 
-import {
-  buildAojIcpcLetterMap,
-  formatAojIcpcTitle,
-  ICPC_PRELIM_LABEL_OVERRIDES,
-} from './aoj_icpc_labels';
+import { buildAojIcpcLetterMap, formatAojIcpcTitle, ICPC_LABEL_OVERRIDES } from './aoj_icpc_labels';
 
 describe('formatAojIcpcTitle', () => {
   test('prepends the letter and a dot to the title', () => {
@@ -36,7 +32,7 @@ describe('buildAojIcpcLetterMap', () => {
 
   describe('override path', () => {
     beforeEach(() => {
-      ICPC_PRELIM_LABEL_OVERRIDES['ICPCPrelimTest'] = {
+      ICPC_LABEL_OVERRIDES['ICPCPrelimTest'] = {
         '1150': 'A',
         '1152': 'C',
         '1155': 'E',
@@ -44,10 +40,10 @@ describe('buildAojIcpcLetterMap', () => {
     });
 
     afterEach(() => {
-      delete ICPC_PRELIM_LABEL_OVERRIDES['ICPCPrelimTest'];
+      delete ICPC_LABEL_OVERRIDES['ICPCPrelimTest'];
     });
 
-    test('uses override map when contest_id has an entry in ICPC_PRELIM_LABEL_OVERRIDES', () => {
+    test('uses override map when contest_id has an entry in ICPC_LABEL_OVERRIDES', () => {
       const result = buildAojIcpcLetterMap('ICPCPrelimTest', ['1150', '1152', '1155']);
 
       expect(result.get('1150')).toBe('A');

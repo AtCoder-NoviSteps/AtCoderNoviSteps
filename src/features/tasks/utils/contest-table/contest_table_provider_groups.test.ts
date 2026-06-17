@@ -32,11 +32,17 @@ import {
   TessokuBookForChallengesProvider,
   MathAndAlgorithmProvider,
   AojIcpcPrelimProvider,
+  AojIcpcRegionalProvider,
   prepareContestProviderPresets,
 } from './contest_table_provider';
 import { TESSOKU_SECTIONS } from '$features/tasks/types/contest-table/contest_table_provider';
 
-import { ICPC_PRELIM_OLDEST_YEAR, ICPC_PRELIM_LATEST_YEAR } from './contest_table_provider_groups';
+import {
+  ICPC_PRELIM_OLDEST_YEAR,
+  ICPC_PRELIM_LATEST_YEAR,
+  ICPC_REGIONAL_OLDEST_YEAR,
+  ICPC_REGIONAL_LATEST_YEAR,
+} from './contest_table_provider_groups';
 
 describe('prepareContestProviderPresets', () => {
   test('expects to create ABS preset correctly', () => {
@@ -302,6 +308,18 @@ describe('prepareContestProviderPresets', () => {
     expect(group.getProvider(ContestType.AOJ_ICPC, '2023')).toBeInstanceOf(AojIcpcPrelimProvider);
   });
 
+  test('expects to create AojIcpcRegional preset correctly', () => {
+    const group = prepareContestProviderPresets().AojIcpcRegional();
+
+    expect(group.getGroupName()).toBe('ICPC 地区予選');
+    expect(group.getMetadata()).toEqual({
+      buttonLabel: 'ICPC 地区予選',
+      ariaLabel: 'Filter ICPC Asia Regional',
+    });
+    expect(group.getSize()).toBe(ICPC_REGIONAL_LATEST_YEAR - ICPC_REGIONAL_OLDEST_YEAR + 1); // 27
+    expect(group.getProvider(ContestType.AOJ_ICPC, '2024')).toBeInstanceOf(AojIcpcRegionalProvider);
+  });
+
   test('expects to verify all presets are functions', () => {
     const presets = prepareContestProviderPresets();
 
@@ -325,6 +343,7 @@ describe('prepareContestProviderPresets', () => {
     expect(typeof presets.JOIFirstQualRound).toBe('function');
     expect(typeof presets.JOISecondQualAndSemiFinalRound).toBe('function');
     expect(typeof presets.AojIcpcPrelim).toBe('function');
+    expect(typeof presets.AojIcpcRegional).toBe('function');
   });
 
   test('expects each preset to create independent instances', () => {

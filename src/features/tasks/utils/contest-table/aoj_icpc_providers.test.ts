@@ -3,8 +3,8 @@ import { describe, test, expect, beforeEach, afterEach } from 'vitest';
 import { ContestType } from '$lib/types/contest';
 import type { TaskResults } from '$lib/types/task';
 
-import { ICPC_PRELIM_LABEL_OVERRIDES } from './aoj_icpc_labels';
-import { AojIcpcPrelimProvider } from './aoj_icpc_providers';
+import { ICPC_LABEL_OVERRIDES } from './aoj_icpc_labels';
+import { AojIcpcPrelimProvider, AojIcpcRegionalProvider } from './aoj_icpc_providers';
 
 const createProvider = (year: number) => new AojIcpcPrelimProvider(ContestType.AOJ_ICPC, year);
 
@@ -379,14 +379,14 @@ describe('AojIcpcPrelimProvider', () => {
     ] as TaskResults;
 
     beforeEach(() => {
-      ICPC_PRELIM_LABEL_OVERRIDES[TEST_CONTEST_ID] = {
+      ICPC_LABEL_OVERRIDES[TEST_CONTEST_ID] = {
         '9001': 'X',
         '9002': 'Y',
       };
     });
 
     afterEach(() => {
-      delete ICPC_PRELIM_LABEL_OVERRIDES[TEST_CONTEST_ID];
+      delete ICPC_LABEL_OVERRIDES[TEST_CONTEST_ID];
     });
 
     test('generateTable stores raw titles even when override map is active', () => {
@@ -448,22 +448,438 @@ describe('AojIcpcPrelimProvider', () => {
       ] as TaskResults;
 
       beforeEach(() => {
-        ICPC_PRELIM_LABEL_OVERRIDES[TEST_CONTEST_ID] = {
+        ICPC_LABEL_OVERRIDES[TEST_CONTEST_ID] = {
           '9001': 'X',
           '9002': 'Y',
         };
       });
 
       afterEach(() => {
-        delete ICPC_PRELIM_LABEL_OVERRIDES[TEST_CONTEST_ID];
+        delete ICPC_LABEL_OVERRIDES[TEST_CONTEST_ID];
       });
 
-      test('returns custom labels from ICPC_PRELIM_LABEL_OVERRIDES', () => {
+      test('returns custom labels from ICPC_LABEL_OVERRIDES', () => {
         const provider = createProvider(TEST_YEAR);
         const labels = provider.getTaskLabels(overrideTasks);
 
         expect(labels[TEST_CONTEST_ID]['9001']).toBe('X');
         expect(labels[TEST_CONTEST_ID]['9002']).toBe('Y');
+      });
+    });
+  });
+});
+
+const createRegionalProvider = (year: number) =>
+  new AojIcpcRegionalProvider(ContestType.AOJ_ICPC, year);
+
+// ICPCRegional1998: 8 problems (A–H)
+const regionalTasks1998: TaskResults = [
+  {
+    contest_id: 'ICPCRegional1998',
+    task_id: '1200',
+    task_table_index: '1200',
+    title: "Goldbach's Conjecture",
+  },
+  {
+    contest_id: 'ICPCRegional1998',
+    task_id: '1201',
+    task_table_index: '1201',
+    title: 'Lattice Practices',
+  },
+  {
+    contest_id: 'ICPCRegional1998',
+    task_id: '1202',
+    task_table_index: '1202',
+    title: 'Mobile Phone Coverage',
+  },
+  {
+    contest_id: 'ICPCRegional1998',
+    task_id: '1203',
+    task_table_index: '1203',
+    title: "Napoleon's Grumble",
+  },
+  {
+    contest_id: 'ICPCRegional1998',
+    task_id: '1204',
+    task_table_index: '1204',
+    title: 'Pipeline Scheduling',
+  },
+  {
+    contest_id: 'ICPCRegional1998',
+    task_id: '1205',
+    task_table_index: '1205',
+    title: 'Triangle Partition',
+  },
+  {
+    contest_id: 'ICPCRegional1998',
+    task_id: '1206',
+    task_table_index: '1206',
+    title: 'BUT We Need a Diagram',
+  },
+  {
+    contest_id: 'ICPCRegional1998',
+    task_id: '1207',
+    task_table_index: '1207',
+    title: 'Digital Racing Circuil',
+  },
+] as TaskResults;
+
+// ICPCRegional2024: 12 problems (A–L), maximum problem count
+const regionalTasks2024: TaskResults = [
+  {
+    contest_id: 'ICPCRegional2024',
+    task_id: '1455',
+    task_table_index: '1455',
+    title: 'Ribbon on the Christmas Present',
+  },
+  {
+    contest_id: 'ICPCRegional2024',
+    task_id: '1456',
+    task_table_index: '1456',
+    title: 'The Sparsest Number in Between',
+  },
+  {
+    contest_id: 'ICPCRegional2024',
+    task_id: '1457',
+    task_table_index: '1457',
+    title: 'Omnes Viae Yokohamam Ducunt?',
+  },
+  {
+    contest_id: 'ICPCRegional2024',
+    task_id: '1458',
+    task_table_index: '1458',
+    title: 'Tree Generators',
+  },
+  {
+    contest_id: 'ICPCRegional2024',
+    task_id: '1459',
+    task_table_index: '1459',
+    title: 'E-Circuit Is Now on Sale!',
+  },
+  {
+    contest_id: 'ICPCRegional2024',
+    task_id: '1460',
+    task_table_index: '1460',
+    title: 'The Farthest Point',
+  },
+  {
+    contest_id: 'ICPCRegional2024',
+    task_id: '1461',
+    task_table_index: '1461',
+    title: 'Beyond the Former Explorer',
+  },
+  {
+    contest_id: 'ICPCRegional2024',
+    task_id: '1462',
+    task_table_index: '1462',
+    title: 'Remodeling the Dungeon 2',
+  },
+  {
+    contest_id: 'ICPCRegional2024',
+    task_id: '1463',
+    task_table_index: '1463',
+    title: 'Greatest of the Greatest Common Divisors',
+  },
+  {
+    contest_id: 'ICPCRegional2024',
+    task_id: '1464',
+    task_table_index: '1464',
+    title: 'Mixing Solutions',
+  },
+  {
+    contest_id: 'ICPCRegional2024',
+    task_id: '1465',
+    task_table_index: '1465',
+    title: 'Scheduling Two Meetings',
+  },
+  {
+    contest_id: 'ICPCRegional2024',
+    task_id: '1466',
+    task_table_index: '1466',
+    title: 'Peculiar Protocol',
+  },
+] as TaskResults;
+
+const mixedRegionalTasks: TaskResults = [
+  ...regionalTasks1998,
+  // ICPCRegional1999: one task to verify year filtering
+  {
+    contest_id: 'ICPCRegional1999',
+    task_id: '1208',
+    task_table_index: '1208',
+    title: 'Rational Irrationals',
+  },
+  // Non-ICPC contest, to verify contest-type filtering
+  { contest_id: 'abc123', task_id: 'abc123_a', task_table_index: 'A', title: 'Divisor' },
+] as TaskResults;
+
+describe('AojIcpcRegionalProvider', () => {
+  const provider1998 = createRegionalProvider(1998);
+
+  describe('filter', () => {
+    describe('successful cases', () => {
+      test('returns only tasks belonging to the given year contest', () => {
+        const filtered = provider1998.filter(mixedRegionalTasks);
+
+        expect(filtered).toHaveLength(8);
+        expect(filtered.every((task) => task.contest_id === 'ICPCRegional1998')).toBe(true);
+      });
+
+      test('excludes tasks from other ICPC Regional years', () => {
+        const filtered = provider1998.filter(mixedRegionalTasks);
+
+        expect(filtered.some((task) => task.contest_id === 'ICPCRegional1999')).toBe(false);
+      });
+
+      test('excludes tasks from non-ICPC contests', () => {
+        const filtered = provider1998.filter(mixedRegionalTasks);
+
+        expect(filtered.some((task) => task.contest_id === 'abc123')).toBe(false);
+      });
+    });
+
+    describe('edge cases', () => {
+      test('returns empty array for empty input', () => {
+        expect(provider1998.filter([] as TaskResults)).toEqual([]);
+      });
+
+      test('returns empty array when no tasks match the given year', () => {
+        const provider2024 = createRegionalProvider(2024);
+
+        expect(provider2024.filter(regionalTasks1998)).toEqual([]);
+      });
+    });
+  });
+
+  describe('generateTable', () => {
+    describe('successful cases', () => {
+      test('stores raw titles (no letter prefix) for all 8 tasks', () => {
+        const table = provider1998.generateTable(regionalTasks1998);
+
+        expect(table['ICPCRegional1998']['1200'].title).toBe("Goldbach's Conjecture");
+        expect(table['ICPCRegional1998']['1207'].title).toBe('Digital Racing Circuil');
+      });
+
+      test('title is unchanged when generateTable is called twice (structurally idempotent)', () => {
+        const firstTable = provider1998.generateTable(regionalTasks1998);
+        const secondInput = Object.values(firstTable['ICPCRegional1998']) as TaskResults;
+        const secondTable = provider1998.generateTable(secondInput);
+
+        expect(secondTable['ICPCRegional1998']['1201'].title).toBe('Lattice Practices');
+      });
+
+      test('uses task_table_index as the inner key', () => {
+        const table = provider1998.generateTable(regionalTasks1998);
+
+        expect(Object.keys(table['ICPCRegional1998'])).toEqual(
+          expect.arrayContaining(['1200', '1201', '1202', '1203', '1204', '1205', '1206', '1207']),
+        );
+      });
+
+      test('creates table keyed by contest_id', () => {
+        const table = provider1998.generateTable(regionalTasks1998);
+
+        expect(Object.keys(table)).toEqual(['ICPCRegional1998']);
+      });
+
+      test('does not mutate original task data', () => {
+        const originalTitle = regionalTasks1998[0].title;
+        provider1998.generateTable(regionalTasks1998);
+
+        expect(regionalTasks1998[0].title).toBe(originalTitle);
+      });
+    });
+  });
+
+  describe('getMetadata', () => {
+    test('returns correct title with year', () => {
+      expect(provider1998.getMetadata().title).toBe('ICPC 地区予選 1998');
+    });
+
+    test('returns correct abbreviationName with year', () => {
+      expect(provider1998.getMetadata().abbreviationName).toBe('icpcRegional1998');
+    });
+
+    test('returns shared titleStyle (h2, text-xl, font-bold, pb-1)', () => {
+      expect(provider1998.getMetadata().titleStyle).toEqual({
+        headingTag: 'h2',
+        fontSize: 'text-xl',
+        fontWeight: 'font-bold',
+        bottomGap: 'pb-1',
+      });
+    });
+  });
+
+  describe('getDisplayConfig', () => {
+    test('returns isShownHeader as false', () => {
+      expect(provider1998.getDisplayConfig().isShownHeader).toBe(false);
+    });
+
+    test('returns isShownRoundLabel as false', () => {
+      expect(provider1998.getDisplayConfig().isShownRoundLabel).toBe(false);
+    });
+
+    test('returns isShownTaskIndex as true', () => {
+      expect(provider1998.getDisplayConfig().isShownTaskIndex).toBe(true);
+    });
+
+    test('returns empty roundLabelWidth', () => {
+      expect(provider1998.getDisplayConfig().roundLabelWidth).toBe('');
+    });
+
+    test('returns correct tableBodyCellsWidth', () => {
+      expect(provider1998.getDisplayConfig().tableBodyCellsWidth).toBe(
+        'w-1/2 xs:w-1/3 sm:w-1/4 md:w-1/5 lg:w-1/6 px-1 py-2',
+      );
+    });
+
+    test('returns columnWrapThreshold as 6', () => {
+      expect(provider1998.getDisplayConfig().columnWrapThreshold).toBe(6);
+    });
+  });
+
+  describe('getContestRoundLabel', () => {
+    test('returns label with year', () => {
+      expect(provider1998.getContestRoundLabel('ICPCRegional1998')).toBe('ICPC 地区予選 1998');
+    });
+  });
+
+  describe('getContestRoundIds', () => {
+    test('returns contest_id of the filtered tasks', () => {
+      expect(provider1998.getContestRoundIds(regionalTasks1998)).toEqual(['ICPCRegional1998']);
+    });
+
+    test('returns empty array for empty input', () => {
+      expect(provider1998.getContestRoundIds([] as TaskResults)).toEqual([]);
+    });
+  });
+
+  describe('getHeaderIdsForTask', () => {
+    describe('successful cases', () => {
+      test('returns indices sorted numerically ascending regardless of input order', () => {
+        const reversedTasks = [...regionalTasks1998].reverse() as TaskResults;
+
+        expect(provider1998.getHeaderIdsForTask(reversedTasks)).toEqual([
+          '1200',
+          '1201',
+          '1202',
+          '1203',
+          '1204',
+          '1205',
+          '1206',
+          '1207',
+        ]);
+      });
+
+      test('deduplicates repeated task_table_index values', () => {
+        const duplicateTasks = [regionalTasks1998[0], regionalTasks1998[0]] as TaskResults;
+
+        expect(provider1998.getHeaderIdsForTask(duplicateTasks)).toEqual(['1200']);
+      });
+    });
+
+    describe('edge cases', () => {
+      test('returns empty array for empty input', () => {
+        expect(provider1998.getHeaderIdsForTask([] as TaskResults)).toEqual([]);
+      });
+    });
+  });
+
+  describe('year boundary behavior', () => {
+    const provider2024 = createRegionalProvider(2024);
+
+    test('latest year 2024 returns correct metadata (12 problems, A–L)', () => {
+      expect(provider2024.getMetadata().title).toBe('ICPC 地区予選 2024');
+      expect(provider2024.getMetadata().abbreviationName).toBe('icpcRegional2024');
+    });
+
+    test('latest year 2024 stores raw titles (maximum problem count)', () => {
+      const table = provider2024.generateTable(regionalTasks2024);
+
+      expect(table['ICPCRegional2024']['1455'].title).toBe('Ribbon on the Christmas Present');
+      expect(table['ICPCRegional2024']['1466'].title).toBe('Peculiar Protocol');
+    });
+
+    test('latest year 2024 filter isolates its own contest_id', () => {
+      const mixed = [...regionalTasks2024, ...regionalTasks1998] as TaskResults;
+      const filtered = provider2024.filter(mixed);
+
+      expect(filtered).toHaveLength(12);
+      expect(filtered.every((task) => task.contest_id === 'ICPCRegional2024')).toBe(true);
+    });
+  });
+
+  describe('getTaskLabels', () => {
+    describe('successful cases', () => {
+      test('returns letter map for all 8 tasks in numeric ID order (A–H)', () => {
+        const labels = provider1998.getTaskLabels(regionalTasks1998);
+
+        expect(labels['ICPCRegional1998']['1200']).toBe('A');
+        expect(labels['ICPCRegional1998']['1201']).toBe('B');
+        expect(labels['ICPCRegional1998']['1202']).toBe('C');
+        expect(labels['ICPCRegional1998']['1203']).toBe('D');
+        expect(labels['ICPCRegional1998']['1204']).toBe('E');
+        expect(labels['ICPCRegional1998']['1205']).toBe('F');
+        expect(labels['ICPCRegional1998']['1206']).toBe('G');
+        expect(labels['ICPCRegional1998']['1207']).toBe('H');
+      });
+
+      test('returns letter map A–L for 12 tasks (2024)', () => {
+        const provider2024 = createRegionalProvider(2024);
+        const labels = provider2024.getTaskLabels(regionalTasks2024);
+
+        expect(labels['ICPCRegional2024']['1455']).toBe('A');
+        expect(labels['ICPCRegional2024']['1466']).toBe('L');
+      });
+
+      test('returns object keyed by contestId', () => {
+        const labels = provider1998.getTaskLabels(regionalTasks1998);
+
+        expect(Object.keys(labels)).toEqual(['ICPCRegional1998']);
+      });
+    });
+
+    describe('edge cases', () => {
+      test('returns empty inner object for empty input', () => {
+        const labels = provider1998.getTaskLabels([] as TaskResults);
+
+        expect(labels).toEqual({ ICPCRegional1998: {} });
+      });
+    });
+
+    describe('override map path', () => {
+      const TEST_YEAR = 8888;
+      const TEST_CONTEST_ID = `ICPCRegional${TEST_YEAR}`;
+
+      const overrideTasks: TaskResults = [
+        {
+          contest_id: TEST_CONTEST_ID,
+          task_id: '8001',
+          task_table_index: '8001',
+          title: 'Task One',
+        },
+        {
+          contest_id: TEST_CONTEST_ID,
+          task_id: '8002',
+          task_table_index: '8002',
+          title: 'Task Two',
+        },
+      ] as TaskResults;
+
+      beforeEach(() => {
+        ICPC_LABEL_OVERRIDES[TEST_CONTEST_ID] = { '8001': 'X', '8002': 'Y' };
+      });
+
+      afterEach(() => {
+        delete ICPC_LABEL_OVERRIDES[TEST_CONTEST_ID];
+      });
+
+      test('returns custom labels from ICPC_LABEL_OVERRIDES', () => {
+        const provider = createRegionalProvider(TEST_YEAR);
+        const labels = provider.getTaskLabels(overrideTasks);
+
+        expect(labels[TEST_CONTEST_ID]['8001']).toBe('X');
+        expect(labels[TEST_CONTEST_ID]['8002']).toBe('Y');
       });
     });
   });
