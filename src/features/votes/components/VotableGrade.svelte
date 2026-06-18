@@ -38,6 +38,7 @@
     defaultPadding?: number;
     defaultWidth?: number;
     reducedWidth?: number;
+    showNeutralBadge?: boolean;
   }
 
   let {
@@ -48,6 +49,7 @@
     defaultPadding = 1,
     defaultWidth = 10,
     reducedWidth = 8,
+    showNeutralBadge = true,
   }: Props = $props();
 
   // 表示用のグレード（投票後に画面リロードなしで差し替えるためのローカル状態）
@@ -191,14 +193,14 @@
     onclick={() => onTriggerClick()}
   >
     <span class="sr-only">
-      Voted grade: {getTaskGradeLabel(displayGrade)}{relativeEvaluationLabel
+      Voted grade: {getTaskGradeLabel(displayGrade)}{relativeEvaluationLabel && (showNeutralBadge || relativeEvaluationLabel !== '±0')
         ? `, relative evaluation: ${relativeEvaluationLabel}`
         : ''}{isProvisional ? ', provisional' : ''}
     </span>
 
     <GradeLabel taskGrade={displayGrade} {defaultPadding} {defaultWidth} {reducedWidth} />
 
-    {#if taskResult.grade !== TaskGrade.PENDING && latestMedianGrade}
+    {#if taskResult.grade !== TaskGrade.PENDING && latestMedianGrade && (showNeutralBadge || relativeEvaluationLabel !== '±0')}
       <RelativeEvaluationBadge
         officialGrade={taskResult.grade}
         medianGrade={latestMedianGrade}
