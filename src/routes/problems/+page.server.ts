@@ -40,7 +40,7 @@ export async function load({ locals, url, setHeaders }) {
   }
 
   const taskResults = (
-    tagIds != null
+    tagIds
       ? await task_crud.getTasksWithTagIds(tagIds, session?.user.userId)
       : await task_crud.getTaskResults(session?.user.userId)
   ) as TaskResults;
