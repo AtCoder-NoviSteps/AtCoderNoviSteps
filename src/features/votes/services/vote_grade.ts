@@ -3,7 +3,10 @@ import { TaskGrade } from '@prisma/client';
 import { sha256 } from '$lib/utils/hash';
 import type { VoteGradeResult } from '$features/votes/types/vote_result';
 import { computeMedianGrade } from '$features/votes/utils/median';
-import { MIN_VOTES_FOR_STATISTICS } from '$features/votes/constants/statistics';
+import {
+  MIN_VOTES_FOR_STATISTICS,
+  MIN_VOTES_FOR_PROVISIONAL_GRADE,
+} from '$features/votes/constants/statistics';
 
 export async function getVoteGrade(userId: string, taskId: string): Promise<VoteGradeResult> {
   const voteRecord = await prisma.voteGrade.findUnique({
@@ -51,11 +54,19 @@ export async function upsertVoteGradeTables(
     });
 
     const total = latestCounters.reduce((sum, counter) => sum + counter.count, 0);
-    if (total < MIN_VOTES_FOR_STATISTICS) {
+    const taskRecord = await tx.task.findUnique({
+      where: { task_id: taskId },
+      select: { grade: true },
+    });
+    const minVotes =
+      taskRecord?.grade === TaskGrade.PENDING
+        ? MIN_VOTES_FOR_PROVISIONAL_GRADE
+        : MIN_VOTES_FOR_STATISTICS;
+    if (total < minVotes) {
       return;
     }
 
-    await updateVoteStatistics(tx, taskId, latestCounters);
+    await updateVoteStatistics(tx, taskId, latestCounters, minVotes);
   });
   return { success: true };
 }
@@ -118,8 +129,9 @@ async function updateVoteStatistics(
   tx: TxClient,
   taskId: string,
   counters: GradeCounter[],
+  minVotes: number,
 ): Promise<void> {
-  const medianGrade = computeMedianGrade(counters);
+  const medianGrade = computeMedianGrade(counters, minVotes);
   if (medianGrade === null) {
     return;
   }

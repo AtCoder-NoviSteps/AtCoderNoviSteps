@@ -18,6 +18,7 @@
   import RelativeEvaluationBadge from '$features/votes/components/RelativeEvaluationBadge.svelte';
 
   import { TaskGrade } from '$lib/types/task';
+  import { MIN_VOTES_FOR_PROVISIONAL_GRADE } from '$features/votes/constants/statistics';
 
   import { getContestNameLabel } from '$lib/utils/contest';
   import { getTaskUrl, compareByContestIdAndTaskId } from '$lib/utils/task';
@@ -75,7 +76,7 @@
                       <FlaskConical class="w-4 h-4" aria-hidden="true" />
                     </span>
                     <Tooltip triggeredBy="#flask-{task.task_id}" placement="top">
-                      3票以上集まると中央値が暫定グレードとして一覧表に反映されます。
+                      {MIN_VOTES_FOR_PROVISIONAL_GRADE}票以上集まると中央値が暫定グレードとして一覧表に反映されます。
                     </Tooltip>
                   {/if}
 
