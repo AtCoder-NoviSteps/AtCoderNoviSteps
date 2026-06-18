@@ -4,6 +4,7 @@
   import {
     Heading,
     Button,
+    Toggle,
     Table,
     TableBody,
     TableBodyCell,
@@ -43,6 +44,8 @@
   }
 
   let { taskResults, isLoggedIn, isAtCoderVerified, voteResults }: Props = $props();
+
+  let showNeutralBadge = $state(true);
 
   // Prepare contest table provider based on the active contest type.
   let activeContestType: ContestTableProviderGroups = $derived(activeContestTypeStore.get());
@@ -192,7 +195,7 @@
 
 <!-- See: -->
 <!-- https://flowbite-svelte.com/docs/components/buttons -->
-<div class="flex justify-center md:justify-start m-4">
+<div class="flex flex-wrap justify-between items-center m-4 gap-2">
   <div class="flex flex-wrap justify-start gap-1 shadow-none">
     {#each Object.entries(contestTableProviderGroups) as [type, config] (type)}
       <Button
@@ -210,6 +213,10 @@
       </Button>
     {/each}
   </div>
+
+  <Toggle bind:checked={showNeutralBadge} class="text-sm text-gray-700 dark:text-gray-300">
+    ±0 を表示
+  </Toggle>
 </div>
 
 <!-- TODO: ページネーションを実装 -->
@@ -294,6 +301,7 @@
                         {isLoggedIn}
                         {isAtCoderVerified}
                         {voteResults}
+                        {showNeutralBadge}
                         isShownTaskIndex={contestTable.displayConfig.isShownTaskIndex}
                         {taskLabel}
                         onupdate={(updatedTask: TaskResult) => handleUpdateTaskResult(updatedTask)}
