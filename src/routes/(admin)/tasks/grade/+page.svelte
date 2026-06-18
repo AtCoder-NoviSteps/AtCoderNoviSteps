@@ -19,7 +19,11 @@
   import type { TaskWithVoteInfo } from '$features/votes/services/vote_statistics';
 
   import { addContestNameToTaskIndex } from '$lib/utils/contest';
-  import { getTaskGradeLabel, compareByContestIdAndTaskId } from '$lib/utils/task';
+  import {
+    getTaskGradeLabel,
+    compareByContestIdAndTaskId,
+    removeTaskIndexFromTitle,
+  } from '$lib/utils/task';
   import { filterTasksBySearch } from '$lib/utils/task_filter';
 
   const MAX_SEARCH_RESULTS = 20;
@@ -62,7 +66,7 @@
                 href={resolve('/votes/[slug]', { slug: task.task_id })}
                 class="text-primary-600 dark:text-primary-400 hover:underline text-sm"
               >
-                {task.title}
+                {removeTaskIndexFromTitle(task.title, task.task_table_index)}
               </a>
             </TableBodyCell>
 
