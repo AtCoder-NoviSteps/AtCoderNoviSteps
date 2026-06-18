@@ -85,6 +85,12 @@
     return getRelativeEvaluationLabel(calcGradeDiff(taskResult.grade, latestMedianGrade));
   });
 
+  // Whether to show the relative evaluation label (badge + sr-only text).
+  // Hidden only when showNeutralBadge is false and the label is exactly '±0'.
+  const shouldShowRelativeEvaluation = $derived(
+    showNeutralBadge || relativeEvaluationLabel !== '±0',
+  );
+
   let isOpening = $state(false);
   let votedGrade = $state<TaskGrade | null>(null);
   let voteAbortController: AbortController | null = null;
@@ -194,14 +200,14 @@
   >
     <span class="sr-only">
       Voted grade: {getTaskGradeLabel(displayGrade)}{relativeEvaluationLabel &&
-      (showNeutralBadge || relativeEvaluationLabel !== '±0')
+      shouldShowRelativeEvaluation
         ? `, relative evaluation: ${relativeEvaluationLabel}`
         : ''}{isProvisional ? ', provisional' : ''}
     </span>
 
     <GradeLabel taskGrade={displayGrade} {defaultPadding} {defaultWidth} {reducedWidth} />
 
-    {#if taskResult.grade !== TaskGrade.PENDING && latestMedianGrade && (showNeutralBadge || relativeEvaluationLabel !== '±0')}
+    {#if taskResult.grade !== TaskGrade.PENDING && latestMedianGrade && shouldShowRelativeEvaluation}
       <RelativeEvaluationBadge
         officialGrade={taskResult.grade}
         medianGrade={latestMedianGrade}
