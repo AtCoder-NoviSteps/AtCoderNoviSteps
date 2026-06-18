@@ -16,6 +16,7 @@
     isShownTaskIndex: boolean;
     taskLabel?: string;
     voteResults: VoteStatisticsMap;
+    showNeutralBadge?: boolean;
     onupdate?: (updatedTask: TaskResult) => void; // Ensure to update task result in parent component.
   }
 
@@ -26,6 +27,7 @@
     isShownTaskIndex,
     taskLabel,
     voteResults,
+    showNeutralBadge = true,
     onupdate = () => {},
   }: Props = $props();
 
@@ -60,6 +62,7 @@
     {isLoggedIn}
     {isAtCoderVerified}
     {estimatedGrade}
+    {showNeutralBadge}
     defaultPadding={0.25}
     defaultWidth={6}
     reducedWidth={6}
