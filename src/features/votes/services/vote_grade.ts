@@ -54,9 +54,14 @@ export async function upsertVoteGradeTables(
     });
 
     const total = latestCounters.reduce((sum, counter) => sum + counter.count, 0);
-    const taskRecord = await tx.task.findUnique({ where: { task_id: taskId }, select: { grade: true } });
+    const taskRecord = await tx.task.findUnique({
+      where: { task_id: taskId },
+      select: { grade: true },
+    });
     const minVotes =
-      taskRecord?.grade === TaskGrade.PENDING ? MIN_VOTES_FOR_PROVISIONAL_GRADE : MIN_VOTES_FOR_STATISTICS;
+      taskRecord?.grade === TaskGrade.PENDING
+        ? MIN_VOTES_FOR_PROVISIONAL_GRADE
+        : MIN_VOTES_FOR_STATISTICS;
     if (total < minVotes) {
       return;
     }
