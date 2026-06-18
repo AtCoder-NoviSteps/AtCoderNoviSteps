@@ -18,6 +18,9 @@ vi.mock('$lib/server/database', () => ({
     votedGradeStatistics: {
       upsert: vi.fn(),
     },
+    task: {
+      findUnique: vi.fn(),
+    },
     $transaction: vi.fn(),
   },
 }));
@@ -48,6 +51,7 @@ function setupTransaction() {
     voteGrade: { findUnique: vi.fn(), upsert: vi.fn() },
     votedGradeCounter: { updateMany: vi.fn(), upsert: vi.fn(), findMany: vi.fn() },
     votedGradeStatistics: { upsert: vi.fn() },
+    task: { findUnique: vi.fn() },
   };
   vi.mocked(prisma.$transaction).mockImplementation(async (callback: unknown) =>
     (callback as (tx: typeof mockTx) => Promise<unknown>)(mockTx),
@@ -117,6 +121,7 @@ describe('upsertVoteGradeTables', () => {
       { grade: TaskGrade.Q5, count: 1 },
       { grade: TaskGrade.Q4, count: 0 },
     ]);
+    tx.task.findUnique.mockResolvedValue({ grade: TaskGrade.Q3 });
 
     await upsertVoteGradeTables('user-1', 'abc001_a', TaskGrade.Q5);
 
@@ -134,7 +139,7 @@ describe('upsertVoteGradeTables', () => {
         update: { count: { increment: 1 } },
       }),
     );
-    // Total = 1 vote (Q5:1 + Q4:0), below MIN_VOTES_FOR_STATISTICS — statistics must not be updated
+    // Total = 1 vote (Q5:1 + Q4:0), below MIN_VOTES_FOR_STATISTICS (3) for non-PENDING task — statistics must not be updated
     expect(tx.votedGradeStatistics.upsert).not.toHaveBeenCalled();
   });
 
@@ -144,6 +149,7 @@ describe('upsertVoteGradeTables', () => {
     tx.voteGrade.upsert.mockResolvedValue({});
     tx.votedGradeCounter.upsert.mockResolvedValue({});
     tx.votedGradeCounter.findMany.mockResolvedValue([{ grade: TaskGrade.Q5, count: 1 }]);
+    tx.task.findUnique.mockResolvedValue({ grade: TaskGrade.Q3 });
 
     await upsertVoteGradeTables('user-1', 'abc001_a', TaskGrade.Q5);
 
@@ -159,17 +165,18 @@ describe('upsertVoteGradeTables', () => {
         update: { count: { increment: 1 } },
       }),
     );
-    // Total = 1 vote (Q5:1), below MIN_VOTES_FOR_STATISTICS — statistics must not be updated
+    // Total = 1 vote (Q5:1), below MIN_VOTES_FOR_STATISTICS (3) for non-PENDING task — statistics must not be updated
     expect(tx.votedGradeStatistics.upsert).not.toHaveBeenCalled();
   });
 
-  test('upserts VotedGradeStatistics when total votes reaches 3', async () => {
+  test('upserts VotedGradeStatistics when total votes reaches 3 for non-PENDING task', async () => {
     const tx = setupTransaction();
     tx.voteGrade.findUnique.mockResolvedValue(null);
     tx.voteGrade.upsert.mockResolvedValue({});
     tx.votedGradeCounter.upsert.mockResolvedValue({});
     // 3 votes all on Q5 → median = Q5
     tx.votedGradeCounter.findMany.mockResolvedValue([{ grade: TaskGrade.Q5, count: 3 }]);
+    tx.task.findUnique.mockResolvedValue({ grade: TaskGrade.Q3 });
     tx.votedGradeStatistics.upsert.mockResolvedValue({});
 
     await upsertVoteGradeTables('user-1', 'abc001_a', TaskGrade.Q5);
@@ -182,15 +189,35 @@ describe('upsertVoteGradeTables', () => {
     );
   });
 
-  test('does not upsert VotedGradeStatistics when total votes is below 3', async () => {
+  test('does not upsert VotedGradeStatistics when total votes is below 3 for non-PENDING task', async () => {
     const tx = setupTransaction();
     tx.voteGrade.findUnique.mockResolvedValue(null);
     tx.voteGrade.upsert.mockResolvedValue({});
     tx.votedGradeCounter.upsert.mockResolvedValue({});
     tx.votedGradeCounter.findMany.mockResolvedValue([{ grade: TaskGrade.Q5, count: 2 }]);
+    tx.task.findUnique.mockResolvedValue({ grade: TaskGrade.Q3 });
 
     await upsertVoteGradeTables('user-1', 'abc001_a', TaskGrade.Q5);
 
     expect(tx.votedGradeStatistics.upsert).not.toHaveBeenCalled();
+  });
+
+  test('upserts VotedGradeStatistics after 1 vote for PENDING task', async () => {
+    const tx = setupTransaction();
+    tx.voteGrade.findUnique.mockResolvedValue(null);
+    tx.voteGrade.upsert.mockResolvedValue({});
+    tx.votedGradeCounter.upsert.mockResolvedValue({});
+    tx.votedGradeCounter.findMany.mockResolvedValue([{ grade: TaskGrade.Q5, count: 1 }]);
+    tx.task.findUnique.mockResolvedValue({ grade: TaskGrade.PENDING });
+    tx.votedGradeStatistics.upsert.mockResolvedValue({});
+
+    await upsertVoteGradeTables('user-1', 'abc001_a', TaskGrade.Q5);
+
+    expect(tx.votedGradeStatistics.upsert).toHaveBeenCalledWith(
+      expect.objectContaining({
+        where: { taskId: 'abc001_a' },
+        update: { grade: TaskGrade.Q5 },
+      }),
+    );
   });
 });
