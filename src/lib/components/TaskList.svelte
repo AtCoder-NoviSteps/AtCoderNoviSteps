@@ -1,6 +1,4 @@
 <script lang="ts">
-  import { resolve } from '$app/paths';
-
   import {
     AccordionItem,
     Accordion,
@@ -34,11 +32,10 @@
   interface Props {
     grade: string;
     taskResults: TaskResults;
-    isAdmin: boolean;
     isLoggedIn: boolean;
   }
 
-  let { grade, taskResults, isAdmin, isLoggedIn }: Props = $props();
+  let { grade, taskResults, isLoggedIn }: Props = $props();
 
   let updatingModal: UpdatingModal | null = null;
 
@@ -127,18 +124,7 @@
                 {addContestNameToTaskIndex(taskResult.contest_id, taskResult.task_table_index)}
               </TableBodyCell>
               <TableBodyCell class="w-6 px-0">
-                {#if isAdmin}
-                  <div class="flex justify-center items-center px-0">
-                    <a
-                      href={resolve('/(admin)/tasks/[task_id]', { task_id: taskResult.task_id })}
-                      class="font-medium text-primary-600 hover:underline dark:text-gray-300"
-                    >
-                      編集
-                    </a>
-                  </div>
-                {:else}
-                  <!-- TODO: 解説を閲覧できるようにする -->
-                {/if}
+                <!-- TODO: 解説を閲覧できるようにする -->
               </TableBodyCell>
             </TableBodyRow>
           {/each}
