@@ -193,7 +193,8 @@
     onclick={() => onTriggerClick()}
   >
     <span class="sr-only">
-      Voted grade: {getTaskGradeLabel(displayGrade)}{relativeEvaluationLabel && (showNeutralBadge || relativeEvaluationLabel !== '±0')
+      Voted grade: {getTaskGradeLabel(displayGrade)}{relativeEvaluationLabel &&
+      (showNeutralBadge || relativeEvaluationLabel !== '±0')
         ? `, relative evaluation: ${relativeEvaluationLabel}`
         : ''}{isProvisional ? ', provisional' : ''}
     </span>
