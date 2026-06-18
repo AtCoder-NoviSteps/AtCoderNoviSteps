@@ -214,7 +214,11 @@
     {/each}
   </div>
 
-  <Toggle bind:checked={showNeutralBadge} class="text-sm text-gray-700 dark:text-gray-300">
+  <Toggle
+    bind:checked={showNeutralBadge}
+    class="text-sm text-gray-700 dark:text-gray-300"
+    aria-label="Toggle visibility of ±0 relative evaluation badge"
+  >
     ±0 を表示
   </Toggle>
 </div>
