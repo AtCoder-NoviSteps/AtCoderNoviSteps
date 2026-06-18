@@ -36,15 +36,15 @@
   <HeadingOne title="グレード管理" />
 
   <div class="mb-4 max-w-md">
-    <Input placeholder="問題名・問題ID・出典で検索" bind:value={search} />
+    <Input aria-label="Search tasks" placeholder="問題名・問題ID・出典で検索" bind:value={search} />
   </div>
 
   <Table hoverable>
     <TableHead>
-      <TableHeadCell>問題名</TableHeadCell>
-      <TableHeadCell>出典</TableHeadCell>
-      <TableHeadCell>グレード（admin）</TableHeadCell>
-      <TableHeadCell>グレード（ユーザ投票）</TableHeadCell>
+      <TableHeadCell scope="col">問題名</TableHeadCell>
+      <TableHeadCell scope="col">出典</TableHeadCell>
+      <TableHeadCell scope="col">グレード（admin）</TableHeadCell>
+      <TableHeadCell scope="col">グレード（ユーザ投票）</TableHeadCell>
     </TableHead>
     <TableBody class="divide-y">
       {#if search === ''}
@@ -86,15 +86,13 @@
               {/if}
             </TableBodyCell>
           </TableBodyRow>
-        {/each}
-
-        {#if filteredTasks.length === 0}
+        {:else}
           <TableBodyRow>
             <TableBodyCell colspan={4} class="text-center text-gray-500 dark:text-gray-400">
               該当する問題が見つかりませんでした
             </TableBodyCell>
           </TableBodyRow>
-        {/if}
+        {/each}
       {/if}
     </TableBody>
   </Table>
@@ -107,6 +105,7 @@
         <input type="hidden" name="taskId" value={task.task_id} />
         <select
           name="grade"
+          aria-label="Select grade for {task.title}"
           onchange={(e) => (e.currentTarget as HTMLSelectElement).form?.requestSubmit()}
           class="text-sm rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 px-2 py-1 focus:ring-primary-500 focus:border-primary-500 min-w-20"
         >
