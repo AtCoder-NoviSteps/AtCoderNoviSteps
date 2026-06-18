@@ -6,11 +6,10 @@
 
   interface Props {
     taskResults: TaskResults;
-    isAdmin: boolean;
     isLoggedIn: boolean;
   }
 
-  let { taskResults, isAdmin, isLoggedIn }: Props = $props();
+  let { taskResults, isLoggedIn }: Props = $props();
 
   // TODO: 共通する内容はutilsに移動させる。
   const taskResultsForEachGrade = $derived(
@@ -25,28 +24,14 @@
   const countTasks = (taskGrade: TaskGrade) => {
     return taskResultsForEachGrade.get(taskGrade)?.length ?? 0;
   };
-
-  const isShowTaskList = (isAdmin: boolean, taskGrade: TaskGrade): boolean => {
-    if (isAdmin) {
-      return true;
-    }
-
-    if (taskGrade !== TaskGrade.PENDING) {
-      return true;
-    }
-
-    return false;
-  };
 </script>
 
 {#each taskGradeValues as taskGrade (taskGrade)}
-  <!-- Pendingは、Adminのみ表示。-->
   <!-- HACK: Svelteでcontinueに相当する構文は確認できず(2024年1月時点)。 -->
-  {#if countTasks(taskGrade) && isShowTaskList(isAdmin, taskGrade)}
+  {#if countTasks(taskGrade) && taskGrade !== TaskGrade.PENDING}
     <TaskList
       grade={taskGrade}
       taskResults={taskResultsForEachGrade.get(taskGrade)!}
-      {isAdmin}
       {isLoggedIn}
     />
   {/if}

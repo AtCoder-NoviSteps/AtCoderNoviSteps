@@ -60,9 +60,9 @@ test.describe('redirect with redirectTo parameter', () => {
             '/account_transfer',
             '/tasks',
             '/tasks/1',
+            '/tasks/grade',
             '/tags',
             '/tags/1',
-            '/vote_management',
             '/workbooks/order',
           ];
 
