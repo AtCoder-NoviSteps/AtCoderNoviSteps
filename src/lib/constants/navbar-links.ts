@@ -10,10 +10,10 @@ export const EDIT_PROFILE_PAGE = `/users/edit`;
 
 // For Admin
 export const IMPORTING_PROBLEMS_PAGE = `/tasks`;
+export const TASKS_GRADE_PAGE = `/tasks/grade`;
+export const WORKBOOKS_ORDER_PAGE = `/workbooks/order`;
 export const TAGS_PAGE = `/tags`;
 export const ACCOUNT_TRANSFER_PAGE = `/account_transfer`;
-export const WORKBOOKS_ORDER_PAGE = `/workbooks/order`;
-export const VOTE_MANAGEMENT_PAGE = `/vote_management`;
 
 export const navbarLinks = [
   { title: `ホーム`, path: HOME_PAGE },
@@ -25,8 +25,7 @@ export const navbarLinks = [
 
 export const navbarDashboardLinks = [
   { title: `問題のインポート`, path: IMPORTING_PROBLEMS_PAGE },
-  { title: `一覧表`, path: PROBLEMS_PAGE },
-  { title: `投票管理`, path: VOTE_MANAGEMENT_PAGE },
+  { title: `グレード管理`, path: TASKS_GRADE_PAGE },
   { title: `問題集`, path: WORKBOOKS_PAGE },
   { title: `問題集（並び替え）`, path: WORKBOOKS_ORDER_PAGE },
   { title: `タグ一覧`, path: TAGS_PAGE },

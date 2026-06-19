@@ -4,7 +4,7 @@ import { loginAsAdmin, loginAsUser } from './helpers/auth';
 
 const TIMEOUT = 60 * 1000;
 const VOTES_LIST_URL = '/votes';
-const VOTE_MANAGEMENT_URL = '/vote_management';
+const TASKS_GRADE_URL = '/tasks/grade';
 const KNOWN_TASK_ID = 'abc422_a'; // From prisma/tasks.ts seed data
 const KNOWN_VOTE_DETAIL_URL = '/votes/abc422_a'; // From prisma/tasks.ts seed data
 
@@ -160,18 +160,18 @@ test.describe('vote detail page (/votes/[slug])', () => {
 });
 
 // ---------------------------------------------------------------------------
-// Vote management page (/vote_management) — admin only
+// Grade management page (/tasks/grade) — admin only
 // ---------------------------------------------------------------------------
 
-test.describe('vote management page (/vote_management)', () => {
+test.describe('grade management page (/tasks/grade)', () => {
   test('unauthenticated user is redirected to /login', async ({ page }) => {
-    await page.goto(VOTE_MANAGEMENT_URL);
+    await page.goto(TASKS_GRADE_URL);
     await expect(page).toHaveURL(/\/login/, { timeout: TIMEOUT });
   });
 
   test('non-admin user is redirected to /', async ({ page }) => {
     await loginAsUser(page);
-    await page.goto(VOTE_MANAGEMENT_URL);
+    await page.goto(TASKS_GRADE_URL);
     await expect(page).toHaveURL('/', { timeout: TIMEOUT });
   });
 
@@ -181,25 +181,25 @@ test.describe('vote management page (/vote_management)', () => {
     });
 
     test('can access the page', async ({ page }) => {
-      await page.goto(VOTE_MANAGEMENT_URL);
-      await expect(page).toHaveURL(VOTE_MANAGEMENT_URL, { timeout: TIMEOUT });
-      await expect(page.getByRole('heading', { name: '投票管理' })).toBeVisible({
+      await page.goto(TASKS_GRADE_URL);
+      await expect(page).toHaveURL(TASKS_GRADE_URL, { timeout: TIMEOUT });
+      await expect(page.getByRole('heading', { name: 'グレード管理' })).toBeVisible({
         timeout: TIMEOUT,
       });
     });
 
-    test('sees the vote management table with expected columns', async ({ page }) => {
-      await page.goto(VOTE_MANAGEMENT_URL);
-      await expect(page.getByRole('columnheader', { name: '問題' })).toBeVisible({
+    test('shows search input and table with expected columns', async ({ page }) => {
+      await page.goto(TASKS_GRADE_URL);
+      await expect(page.getByPlaceholder('問題名・問題ID・出典で検索')).toBeVisible({
         timeout: TIMEOUT,
       });
-      await expect(page.getByRole('columnheader', { name: 'DBグレード' })).toBeVisible({
+      await expect(page.getByRole('columnheader', { name: '問題名' })).toBeVisible({
         timeout: TIMEOUT,
       });
-      await expect(page.getByRole('columnheader', { name: '中央値グレード' })).toBeVisible({
+      await expect(page.getByRole('columnheader', { name: 'グレード（admin）' })).toBeVisible({
         timeout: TIMEOUT,
       });
-      await expect(page.getByRole('columnheader', { name: '票数' })).toBeVisible({
+      await expect(page.getByRole('columnheader', { name: 'グレード（ユーザ投票）' })).toBeVisible({
         timeout: TIMEOUT,
       });
     });

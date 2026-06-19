@@ -5,7 +5,6 @@ import { zod4 } from 'sveltekit-superforms/adapters';
 import * as task_crud from '$lib/services/task_results';
 import { getVoteGradeStatistics } from '$features/votes/services/vote_statistics';
 import type { TaskResults } from '$lib/types/task';
-import { Roles } from '$lib/types/user';
 import { updateTaskResult } from '$lib/actions/update_task_result';
 import { voteAbsoluteGrade } from '@/features/votes/actions/vote_actions';
 import { voteAbsoluteGradeSchema } from '$features/votes/zod/schema';
@@ -17,7 +16,6 @@ export async function load({ locals, url, setHeaders }) {
   const params = await url.searchParams;
 
   const tagIds: string | null = params.get('tagIds');
-  const isAdmin: boolean = session?.user.role === Roles.ADMIN;
   // TODO: utilに移動させる
   const isLoggedIn: boolean = session !== null;
 
@@ -41,26 +39,18 @@ export async function load({ locals, url, setHeaders }) {
     setHeaders({ 'Cache-Control': 'public, max-age=0, s-maxage=300, stale-while-revalidate=600' });
   }
 
-  if (tagIds != null) {
-    return {
-      taskResults: (await task_crud.getTasksWithTagIds(
-        tagIds,
-        session?.user.userId,
-      )) as TaskResults,
-      voteResults,
-      isAdmin: isAdmin,
-      isLoggedIn: isLoggedIn,
-      isAtCoderVerified: locals.user?.is_validated === true,
-    };
-  } else {
-    return {
-      taskResults: (await task_crud.getTaskResults(session?.user.userId)) as TaskResults,
-      voteResults,
-      isAdmin: isAdmin,
-      isLoggedIn: isLoggedIn,
-      isAtCoderVerified: locals.user?.is_validated === true,
-    };
-  }
+  const taskResults = (
+    tagIds
+      ? await task_crud.getTasksWithTagIds(tagIds, session?.user.userId)
+      : await task_crud.getTaskResults(session?.user.userId)
+  ) as TaskResults;
+
+  return {
+    taskResults,
+    voteResults,
+    isLoggedIn: isLoggedIn,
+    isAtCoderVerified: locals.user?.is_validated === true,
+  };
 }
 
 export const actions = {

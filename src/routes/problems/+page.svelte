@@ -22,7 +22,6 @@
 
   let taskResults: TaskResults = $derived(data.taskResults.sort(compareByContestIdAndTaskId));
 
-  const isAdmin = $derived(data.isAdmin);
   const isLoggedIn = $derived(data.isLoggedIn);
   const isAtCoderVerified = $derived(data.isAtCoderVerified);
   const voteResults = $derived(data.voteResults);
@@ -65,7 +64,7 @@
 {/snippet}
 
 {#snippet listByGrade()}
-  <TaskGradeList {taskResults} {isAdmin} {isLoggedIn}></TaskGradeList>
+  <TaskGradeList {taskResults} {isLoggedIn}></TaskGradeList>
 {/snippet}
 
 {#snippet gradeGuidelineTable()}
