@@ -60,6 +60,18 @@ export const atCoderOthers = [
     contestId: 'dwango2016-prelims',
     expected: '第2回 ドワンゴからの挑戦状 予選',
   }),
+  createTestCaseForContestNameLabel('CODE FESTIVAL 2015 エキシビション')({
+    contestId: 'code-festival-2015-exhibition',
+    expected: 'CODE FESTIVAL 2015 エキシビション',
+  }),
+  createTestCaseForContestNameLabel('パ研合宿2024 第1日「SpeedRun」')({
+    contestId: 'pakencamp-2024-day1',
+    expected: 'パ研合宿2024 第1日「SpeedRun」',
+  }),
+  createTestCaseForContestNameLabel('いろはちゃんコンテスト Day4')({
+    contestId: 'iroha2019-day4',
+    expected: 'いろはちゃんコンテスト Day4',
+  }),
 ];
 
 export const mathAndAlgorithm = [
