@@ -57,6 +57,8 @@ Use `$props()`, `$state()`, `$derived()`, `$effect()` in all components:
 - **Component**: independent logic, >30 lines, multi-file reuse
 - Define snippets at **top level** (outside tags)
 
+**Context trap:** Snippets capture context at definition site, not render site. Never define a snippet outside a context provider (e.g. `<Tabs>`) and `{@render}` it inside — `TabItem` calls `getContext` on init and throws during HMR when `<Tabs>` is not in its ancestor chain. Place children directly inside the provider.
+
 ## Async/Abort Handling
 
 When user can trigger same action multiple times, use `AbortController`:

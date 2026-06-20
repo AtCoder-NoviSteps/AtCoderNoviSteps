@@ -1,6 +1,4 @@
 <script lang="ts">
-  import type { Snippet } from 'svelte';
-
   import { Tabs } from 'flowbite-svelte';
 
   import type { TaskResults } from '$lib/types/task';
@@ -43,30 +41,30 @@
     ulClass="flex flex-wrap md:flex-nowrap md:gap-2 rtl:space-x-reverse items-start"
   >
     <!-- Contest table -->
-    {@render problemListTab('コンテスト別（アルファ版）', 'contestTable', contestTable)}
+    <ProblemListTabItem
+      title="コンテスト別（アルファ版）"
+      activeProblemList="contestTable"
+      isOpen={isActiveTab('contestTable')}
+    >
+      <TaskTable {taskResults} {isLoggedIn} {isAtCoderVerified} {voteResults} />
+    </ProblemListTabItem>
 
     <!-- Grades -->
-    {@render problemListTab('グレード別', 'listByGrade', listByGrade)}
+    <ProblemListTabItem
+      title="グレード別"
+      activeProblemList="listByGrade"
+      isOpen={isActiveTab('listByGrade')}
+    >
+      <TaskGradeList {taskResults} {isLoggedIn}></TaskGradeList>
+    </ProblemListTabItem>
 
     <!-- Grade guidelines -->
-    {@render problemListTab('グレードの目安', 'gradeGuidelineTable', gradeGuidelineTable)}
+    <ProblemListTabItem
+      title="グレードの目安"
+      activeProblemList="gradeGuidelineTable"
+      isOpen={isActiveTab('gradeGuidelineTable')}
+    >
+      <GradeGuidelineTable />
+    </ProblemListTabItem>
   </Tabs>
 </div>
-
-{#snippet problemListTab(title: string, tab: ActiveProblemListTab, children: Snippet)}
-  <ProblemListTabItem {title} activeProblemList={tab} isOpen={isActiveTab(tab)}>
-    {@render children()}
-  </ProblemListTabItem>
-{/snippet}
-
-{#snippet contestTable()}
-  <TaskTable {taskResults} {isLoggedIn} {isAtCoderVerified} {voteResults} />
-{/snippet}
-
-{#snippet listByGrade()}
-  <TaskGradeList {taskResults} {isLoggedIn}></TaskGradeList>
-{/snippet}
-
-{#snippet gradeGuidelineTable()}
-  <GradeGuidelineTable />
-{/snippet}
