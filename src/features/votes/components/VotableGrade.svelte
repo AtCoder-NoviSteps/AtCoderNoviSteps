@@ -38,6 +38,7 @@
     defaultPadding?: number;
     defaultWidth?: number;
     reducedWidth?: number;
+    showNeutralBadge?: boolean;
   }
 
   let {
@@ -48,6 +49,7 @@
     defaultPadding = 1,
     defaultWidth = 10,
     reducedWidth = 8,
+    showNeutralBadge = true,
   }: Props = $props();
 
   // 表示用のグレード（投票後に画面リロードなしで差し替えるためのローカル状態）
@@ -82,6 +84,12 @@
     }
     return getRelativeEvaluationLabel(calcGradeDiff(taskResult.grade, latestMedianGrade));
   });
+
+  // Whether to show the relative evaluation label (badge + sr-only text).
+  // Hidden only when showNeutralBadge is false and the label is exactly '±0'.
+  const shouldShowRelativeEvaluation = $derived(
+    showNeutralBadge || relativeEvaluationLabel !== '±0',
+  );
 
   let isOpening = $state(false);
   let votedGrade = $state<TaskGrade | null>(null);
@@ -191,14 +199,15 @@
     onclick={() => onTriggerClick()}
   >
     <span class="sr-only">
-      Voted grade: {getTaskGradeLabel(displayGrade)}{relativeEvaluationLabel
+      Voted grade: {getTaskGradeLabel(displayGrade)}{relativeEvaluationLabel &&
+      shouldShowRelativeEvaluation
         ? `, relative evaluation: ${relativeEvaluationLabel}`
         : ''}{isProvisional ? ', provisional' : ''}
     </span>
 
     <GradeLabel taskGrade={displayGrade} {defaultPadding} {defaultWidth} {reducedWidth} />
 
-    {#if taskResult.grade !== TaskGrade.PENDING && latestMedianGrade}
+    {#if taskResult.grade !== TaskGrade.PENDING && latestMedianGrade && shouldShowRelativeEvaluation}
       <RelativeEvaluationBadge
         officialGrade={taskResult.grade}
         medianGrade={latestMedianGrade}

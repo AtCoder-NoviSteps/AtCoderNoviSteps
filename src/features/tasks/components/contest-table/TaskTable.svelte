@@ -4,6 +4,7 @@
   import {
     Heading,
     Button,
+    Toggle,
     Table,
     TableBody,
     TableBodyCell,
@@ -29,6 +30,8 @@
     type ContestTableProviderGroup,
     type ContestTableProviderGroups,
   } from '$features/tasks/utils/contest-table/contest_table_provider';
+
+  import { useLocalStorage } from '$lib/stores/local_storage_helper.svelte';
 
   import { getBackgroundColorFrom } from '$lib/services/submission_status';
   import { areAllTasksAccepted } from '$lib/utils/task';
@@ -188,11 +191,19 @@
       taskResults = newTaskResults;
     }
   }
+
+  // Note: Persist the state of the neutral badge toggle across page reloads.
+  const neutralBadgeStorage = useLocalStorage<boolean>('show_neutral_badge', true);
+  let showNeutralBadge = $state(neutralBadgeStorage.value);
+
+  $effect(() => {
+    neutralBadgeStorage.value = showNeutralBadge;
+  });
 </script>
 
 <!-- See: -->
 <!-- https://flowbite-svelte.com/docs/components/buttons -->
-<div class="flex justify-center md:justify-start m-4">
+<div class="flex flex-wrap justify-between items-center m-4 gap-4">
   <div class="flex flex-wrap justify-start gap-1 shadow-none">
     {#each Object.entries(contestTableProviderGroups) as [type, config] (type)}
       <Button
@@ -210,6 +221,14 @@
       </Button>
     {/each}
   </div>
+
+  <Toggle
+    bind:checked={showNeutralBadge}
+    class="ml-auto text-sm text-gray-700 dark:text-gray-300"
+    aria-label="Toggle visibility of ±0 relative evaluation badge"
+  >
+    ユーザ投票 ±0（ふつう）を表示
+  </Toggle>
 </div>
 
 <!-- TODO: ページネーションを実装 -->
@@ -294,6 +313,7 @@
                         {isLoggedIn}
                         {isAtCoderVerified}
                         {voteResults}
+                        {showNeutralBadge}
                         isShownTaskIndex={contestTable.displayConfig.isShownTaskIndex}
                         {taskLabel}
                         onupdate={(updatedTask: TaskResult) => handleUpdateTaskResult(updatedTask)}
