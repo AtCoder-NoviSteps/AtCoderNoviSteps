@@ -34,29 +34,12 @@ export class ContestTaskCache {
    *   contestCache
    * );
    */
-  async getCachedOrFetch<T>(
+  async getCachedOrFetch<T extends {}>(
     key: string,
     fetchFunction: () => Promise<T>,
     cache: Cache<T>,
   ): Promise<T> {
-    const cachedData = cache.get(key);
-
-    if (cachedData) {
-      console.log(`Using cached data for ${key}`);
-      return cachedData;
-    }
-
-    console.log(`Cache miss for ${key}, fetching...`);
-
-    try {
-      const contestTasks = await fetchFunction();
-      cache.set(key, contestTasks);
-
-      return contestTasks;
-    } catch (error) {
-      console.error(`Failed to fetch contests and/or tasks for ${key}:`, error);
-      return [] as unknown as T;
-    }
+    return cache.getOrFetch(key, fetchFunction);
   }
 
   /**

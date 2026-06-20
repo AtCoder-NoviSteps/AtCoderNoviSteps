@@ -7,6 +7,7 @@ import {
   MIN_VOTES_FOR_STATISTICS,
   MIN_VOTES_FOR_PROVISIONAL_GRADE,
 } from '$features/votes/constants/statistics';
+import { invalidateVoteCaches } from '$features/votes/server/cache';
 
 export async function getVoteGrade(userId: string, taskId: string): Promise<VoteGradeResult> {
   const voteRecord = await prisma.voteGrade.findUnique({
@@ -32,14 +33,13 @@ export async function upsertVoteGradeTables(
   taskId: string,
   grade: TaskGrade,
 ): Promise<{ success: true }> {
-  await prisma.$transaction(async (tx) => {
+  const isUpdated = await prisma.$transaction(async (tx) => {
     const existing = await tx.voteGrade.findUnique({
       where: { userId_taskId: { userId, taskId } },
     });
 
-    // 冪等性: 既に同じグレードなら何もしない
     if (existing?.grade === grade) {
-      return;
+      return false;
     }
 
     if (existing) {
@@ -63,11 +63,18 @@ export async function upsertVoteGradeTables(
         ? MIN_VOTES_FOR_PROVISIONAL_GRADE
         : MIN_VOTES_FOR_STATISTICS;
     if (total < minVotes) {
-      return;
+      return true;
     }
 
     await updateVoteStatistics(tx, taskId, latestCounters, minVotes);
+
+    return true;
   });
+
+  if (isUpdated) {
+    invalidateVoteCaches();
+  }
+
   return { success: true };
 }
 

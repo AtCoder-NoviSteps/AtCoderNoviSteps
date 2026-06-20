@@ -5,8 +5,9 @@
  *
  * @template T - The type of data to be stored in the cache.
  */
-export class Cache<T> {
+export class Cache<T extends {}> {
   private cache: Map<string, CacheEntry<T>> = new Map();
+  private inflight = new Map<string, Promise<T>>();
   private cleanupInterval: NodeJS.Timeout;
 
   /**
@@ -133,10 +134,27 @@ export class Cache<T> {
       return cached;
     }
 
-    const result = await fetchFn();
-    this.set(key, result);
+    const pending = this.inflight.get(key);
 
-    return result;
+    if (pending) {
+      return pending;
+    }
+
+    const promise = fetchFn().then(
+      (result) => {
+        this.set(key, result);
+        this.inflight.delete(key);
+        return result;
+      },
+      (error) => {
+        this.inflight.delete(key);
+        throw error;
+      },
+    );
+
+    this.inflight.set(key, promise);
+
+    return promise;
   }
 
   /**
@@ -148,6 +166,7 @@ export class Cache<T> {
   dispose(): void {
     clearInterval(this.cleanupInterval);
     this.cache.clear();
+    this.inflight.clear();
   }
 
   /**

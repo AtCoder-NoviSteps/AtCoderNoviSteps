@@ -6,7 +6,7 @@ import type { PlacementQuery } from '$features/workbooks/types/workbook_placemen
 const HOUR_MS = 60 * 60 * 1000;
 const BY_USER_KEY = 'workbooks_by_user';
 
-const placementCache = new Cache<WorkbooksWithAuthors>(HOUR_MS);
+const placementCache = new Cache<WorkbooksWithAuthors>(HOUR_MS, 100);
 const byUserCache = new Cache<WorkbooksWithAuthors>(HOUR_MS);
 
 function buildPlacementKey(query: PlacementQuery, includeUnpublished: boolean): string {
