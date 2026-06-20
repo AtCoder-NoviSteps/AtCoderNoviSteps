@@ -43,63 +43,65 @@
     <Input aria-label="Search tasks" placeholder="問題名・問題ID・出典で検索" bind:value={search} />
   </div>
 
-  <Table hoverable>
-    <TableHead>
-      <TableHeadCell scope="col">問題名</TableHeadCell>
-      <TableHeadCell scope="col">出典</TableHeadCell>
-      <TableHeadCell scope="col">グレード（admin）</TableHeadCell>
-      <TableHeadCell scope="col">グレード（ユーザ投票）</TableHeadCell>
-    </TableHead>
-    <TableBody class="divide-y">
-      {#if search === ''}
-        <TableBodyRow>
-          <TableBodyCell colspan={4} class="text-center text-gray-500 dark:text-gray-400">
-            問題名・問題ID・出典を入力してください
-          </TableBodyCell>
-        </TableBodyRow>
-      {:else}
-        {#each filteredTasks as task (task.task_id)}
+  <div class="rounded-lg overflow-hidden border border-gray-200 dark:border-gray-700">
+    <Table hoverable>
+      <TableHead>
+        <TableHeadCell scope="col">問題名</TableHeadCell>
+        <TableHeadCell scope="col">出典</TableHeadCell>
+        <TableHeadCell scope="col">グレード（admin）</TableHeadCell>
+        <TableHeadCell scope="col">グレード（ユーザ投票）</TableHeadCell>
+      </TableHead>
+      <TableBody class="divide-y divide-gray-100 dark:divide-gray-700">
+        {#if search === ''}
           <TableBodyRow>
-            <!-- Task name -->
-            <TableBodyCell>
-              <a
-                href={resolve('/votes/[slug]', { slug: task.task_id })}
-                class="text-primary-600 dark:text-primary-400 hover:underline text-sm"
-              >
-                {removeTaskIndexFromTitle(task.title, task.task_table_index)}
-              </a>
-            </TableBodyCell>
-
-            <!-- Reference -->
-            <TableBodyCell class="text-sm">
-              {addContestNameToTaskIndex(task.contest_id, task.task_table_index)}
-            </TableBodyCell>
-
-            <!-- Grade for admin -->
-            {@render adminGradeCell(task)}
-
-            <!-- Grade for user votes -->
-            <TableBodyCell>
-              {#if task.estimatedGrade}
-                <GradeLabel
-                  taskGrade={task.estimatedGrade}
-                  defaultPadding={0.25}
-                  defaultWidth={6}
-                  reducedWidth={6}
-                />
-              {/if}
+            <TableBodyCell colspan={4} class="text-center text-gray-500 dark:text-gray-400">
+              問題名・問題ID・出典を入力してください
             </TableBodyCell>
           </TableBodyRow>
         {:else}
-          <TableBodyRow>
-            <TableBodyCell colspan={4} class="text-center text-gray-500 dark:text-gray-400">
-              該当する問題が見つかりませんでした
-            </TableBodyCell>
-          </TableBodyRow>
-        {/each}
-      {/if}
-    </TableBody>
-  </Table>
+          {#each filteredTasks as task (task.task_id)}
+            <TableBodyRow>
+              <!-- Task name -->
+              <TableBodyCell>
+                <a
+                  href={resolve('/votes/[slug]', { slug: task.task_id })}
+                  class="text-primary-600 dark:text-primary-400 hover:underline text-sm"
+                >
+                  {removeTaskIndexFromTitle(task.title, task.task_table_index)}
+                </a>
+              </TableBodyCell>
+
+              <!-- Reference -->
+              <TableBodyCell class="text-sm">
+                {addContestNameToTaskIndex(task.contest_id, task.task_table_index)}
+              </TableBodyCell>
+
+              <!-- Grade for admin -->
+              {@render adminGradeCell(task)}
+
+              <!-- Grade for user votes -->
+              <TableBodyCell>
+                {#if task.estimatedGrade}
+                  <GradeLabel
+                    taskGrade={task.estimatedGrade}
+                    defaultPadding={0.25}
+                    defaultWidth={6}
+                    reducedWidth={6}
+                  />
+                {/if}
+              </TableBodyCell>
+            </TableBodyRow>
+          {:else}
+            <TableBodyRow>
+              <TableBodyCell colspan={4} class="text-center text-gray-500 dark:text-gray-400">
+                該当する問題が見つかりませんでした
+              </TableBodyCell>
+            </TableBodyRow>
+          {/each}
+        {/if}
+      </TableBody>
+    </Table>
+  </div>
 </div>
 
 {#snippet adminGradeCell(task: TaskWithVoteInfo)}
@@ -121,7 +123,7 @@
         </select>
       </form>
 
-      {#if task.grade !== TaskGrade.PENDING && task.estimatedGrade}
+      {#if task.grade !== TaskGrade.PENDING}
         <div class="relative inline-block">
           <GradeLabel
             taskGrade={task.grade}
@@ -129,11 +131,14 @@
             defaultWidth={6}
             reducedWidth={6}
           />
-          <RelativeEvaluationBadge
-            officialGrade={task.grade}
-            medianGrade={task.estimatedGrade}
-            badgeId="relative-eval-{task.task_id}"
-          />
+
+          {#if task.estimatedGrade}
+            <RelativeEvaluationBadge
+              officialGrade={task.grade}
+              medianGrade={task.estimatedGrade}
+              badgeId="relative-eval-{task.task_id}"
+            />
+          {/if}
         </div>
       {/if}
     </div>
