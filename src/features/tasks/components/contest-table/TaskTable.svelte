@@ -195,7 +195,7 @@
 
 <!-- See: -->
 <!-- https://flowbite-svelte.com/docs/components/buttons -->
-<div class="flex flex-wrap justify-between items-center m-4 gap-2">
+<div class="flex flex-wrap justify-between items-center m-4 gap-4">
   <div class="flex flex-wrap justify-start gap-1 shadow-none">
     {#each Object.entries(contestTableProviderGroups) as [type, config] (type)}
       <Button
@@ -219,7 +219,7 @@
     class="ml-auto text-sm text-gray-700 dark:text-gray-300"
     aria-label="Toggle visibility of ±0 relative evaluation badge"
   >
-    ±0 を表示
+    ユーザ投票 ±0（ふつう）を表示
   </Toggle>
 </div>
 
