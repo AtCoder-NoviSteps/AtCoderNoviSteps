@@ -83,8 +83,8 @@ const mockFindMany = (data) => db.task.findMany.mockResolvedValue(data);
 Prevent timer leaks and test isolation:
 
 ```typescript
-afterAll(() => dispose*Caches());
-beforeEach(() => invalidate*Caches());
+afterAll(() => disposeDomainCaches());
+beforeEach(() => invalidateDomainCaches());
 ```
 
 Mock cache modules in service tests so caching is bypassed:
