@@ -58,6 +58,20 @@ Core cache behavior (hit, miss, TTL, error propagation) is tested on `Cache<T>.g
 
 Do not duplicate TTL or error propagation tests in domain cache test files.
 
+Always call `afterAll(() => dispose*Caches())` to prevent timer leaks. Isolate tests with `beforeEach(() => invalidate*Caches())`.
+
+## Type Constraint
+
+`Cache<T extends {}>` — never use `null` or `undefined` as `T`. The cache uses `=== undefined` to detect misses; storing `undefined` would silently bypass the cache on every call.
+
+## Stampede Prevention
+
+`Cache<T>.getOrFetch()` shares a single in-flight `Promise` across concurrent callers for the same key. Do not implement manual dedup on top of it.
+
+## Invalidation Audit
+
+When adding a new DB write function, audit every write path in the same domain for missing `invalidate*Caches()` calls. Initial implementation of `upsertVoteGradeTables()` missed this and served stale data for up to 10 minutes.
+
 ## Service Layer Integration
 
 Services call `getCached*()` with a `fetchFn` that performs the DB query. The service does not import `Cache` directly.

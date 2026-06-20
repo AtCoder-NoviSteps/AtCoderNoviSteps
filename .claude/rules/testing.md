@@ -78,6 +78,24 @@ const mockFindUnique = (data) => db.task.findUnique.mockResolvedValue(data);
 const mockFindMany = (data) => db.task.findMany.mockResolvedValue(data);
 ```
 
+### Cache Module Tests
+
+Prevent timer leaks and test isolation:
+
+```typescript
+afterAll(() => dispose*Caches());
+beforeEach(() => invalidate*Caches());
+```
+
+Mock cache modules in service tests so caching is bypassed:
+
+```typescript
+vi.mock('$lib/server/tasks/cache', () => ({
+  getCachedTasksMap: (fetchFn: () => Promise<unknown>) => fetchFn(),
+  invalidateTaskCaches: vi.fn(),
+}));
+```
+
 ### HTTP Mocking (Nock)
 
 Extract setup into helpers, declare once at describe scope:
