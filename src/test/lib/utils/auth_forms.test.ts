@@ -27,8 +27,8 @@ vi.mock('$lib/zod/schema', () => ({
   authSchema: {
     _type: 'ZodObject',
     shape: {
-      username: { type: 'string' },
-      password: { type: 'string' },
+      username: {},
+      password: {},
     },
   },
 }));
@@ -129,8 +129,8 @@ describe('auth_forms', () => {
           },
         },
         shape: {
-          username: { type: 'string' },
-          password: { type: 'string' },
+          username: {},
+          password: {},
         } as unknown,
         message: '',
       } as unknown as SuperValidated<Record<string, string>, string>;
@@ -205,8 +205,8 @@ describe('auth_forms', () => {
 
       expect(result.form.shape).toBeDefined();
       expect(result.form.shape).toEqual({
-        username: { type: 'string' },
-        password: { type: 'string' },
+        username: {},
+        password: {},
       });
     });
 

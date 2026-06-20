@@ -164,9 +164,11 @@ const createBaseAuthForm = () => ({
       pattern: '(?=.*?[a-z])(?=.*?[A-Z])(?=.*?\\d)[a-zA-Z\\d]{8,128}',
     },
   },
+  // Primitive fields get empty objects; only arrays/objects produce nested shape nodes.
+  // See: sveltekit-superforms/src/lib/jsonSchema/schemaShape.ts (_schemaShape)
   shape: {
-    username: { type: 'string' },
-    password: { type: 'string' },
+    username: {},
+    password: {},
   },
 });
 
