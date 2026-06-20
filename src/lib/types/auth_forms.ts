@@ -19,7 +19,9 @@ export type AuthFormConstraints = {
   password?: FieldConstraints;
 };
 
-type SchemaShape = Record<string, unknown>;
+// Must match the recursive SchemaShape from sveltekit-superforms (dist/jsonSchema/schemaShape.d.ts)
+// Record<string, SchemaShape> is semantically equivalent but triggers TS circular reference error.
+type SchemaShape = { [K in string]: SchemaShape };
 
 /**
  * Represents the state and data structure for authentication forms.
