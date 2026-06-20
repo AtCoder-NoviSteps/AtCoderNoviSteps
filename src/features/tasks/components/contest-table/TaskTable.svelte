@@ -31,6 +31,8 @@
     type ContestTableProviderGroups,
   } from '$features/tasks/utils/contest-table/contest_table_provider';
 
+  import { useLocalStorage } from '$lib/stores/local_storage_helper.svelte';
+
   import { getBackgroundColorFrom } from '$lib/services/submission_status';
   import { areAllTasksAccepted } from '$lib/utils/task';
   import { createContestTaskPairKey } from '$lib/utils/contest_task_pair';
@@ -44,8 +46,6 @@
   }
 
   let { taskResults, isLoggedIn, isAtCoderVerified, voteResults }: Props = $props();
-
-  let showNeutralBadge = $state(true);
 
   // Prepare contest table provider based on the active contest type.
   let activeContestType: ContestTableProviderGroups = $derived(activeContestTypeStore.get());
@@ -191,6 +191,14 @@
       taskResults = newTaskResults;
     }
   }
+
+  // Note: Persist the state of the neutral badge toggle across page reloads.
+  const neutralBadgeStorage = useLocalStorage<boolean>('show_neutral_badge', true);
+  let showNeutralBadge = $state(neutralBadgeStorage.value);
+
+  $effect(() => {
+    neutralBadgeStorage.value = showNeutralBadge;
+  });
 </script>
 
 <!-- See: -->
