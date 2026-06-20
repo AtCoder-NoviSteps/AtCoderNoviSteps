@@ -121,7 +121,7 @@
         </select>
       </form>
 
-      {#if task.grade !== TaskGrade.PENDING && task.estimatedGrade}
+      {#if task.grade !== TaskGrade.PENDING}
         <div class="relative inline-block">
           <GradeLabel
             taskGrade={task.grade}
@@ -129,11 +129,14 @@
             defaultWidth={6}
             reducedWidth={6}
           />
-          <RelativeEvaluationBadge
-            officialGrade={task.grade}
-            medianGrade={task.estimatedGrade}
-            badgeId="relative-eval-{task.task_id}"
-          />
+
+          {#if task.estimatedGrade}
+            <RelativeEvaluationBadge
+              officialGrade={task.grade}
+              medianGrade={task.estimatedGrade}
+              badgeId="relative-eval-{task.task_id}"
+            />
+          {/if}
         </div>
       {/if}
     </div>
