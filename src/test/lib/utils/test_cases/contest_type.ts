@@ -460,6 +460,10 @@ export const atCoderOthers = [
     contestId: 'code-festival-2015-morning-middle',
     expected: ContestType.OTHERS,
   }),
+  createTestCaseForContestType('CODE FESTIVAL 2015 エキシビション')({
+    contestId: 'code-festival-2015-exhibition',
+    expected: ContestType.OTHERS,
+  }),
   createTestCaseForContestType('CODE THANKS FESTIVAL 2017')({
     contestId: 'code-thanks-festival-2017',
     expected: ContestType.OTHERS,
@@ -504,6 +508,10 @@ export const atCoderOthers = [
     contestId: 'pakencamp-2018-day3',
     expected: ContestType.OTHERS,
   }),
+  createTestCaseForContestType('パ研合宿2024 第1日「SpeedRun」')({
+    contestId: 'pakencamp-2024-day1',
+    expected: ContestType.OTHERS,
+  }),
   createTestCaseForContestType('天下一プログラマーコンテスト2012予選B')({
     contestId: 'tenka1-2012-qualB',
     expected: ContestType.OTHERS,
@@ -544,6 +552,10 @@ export const atCoderOthers = [
       expected: ContestType.OTHERS,
     }),
   ),
+  createTestCaseForContestType('いろはちゃんコンテスト Day4')({
+    contestId: 'iroha2019-day4',
+    expected: ContestType.OTHERS,
+  }),
   createTestCaseForContestType('全国統一プログラミング王決定戦本戦')({
     contestId: 'nikkei2019-final',
     expected: ContestType.OTHERS,
