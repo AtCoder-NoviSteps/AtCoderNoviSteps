@@ -126,6 +126,19 @@ export class Cache<T> {
     return entry.data;
   }
 
+  async getOrFetch(key: string, fetchFn: () => Promise<T>): Promise<T> {
+    const cached = this.get(key);
+
+    if (cached !== undefined) {
+      return cached;
+    }
+
+    const result = await fetchFn();
+    this.set(key, result);
+
+    return result;
+  }
+
   /**
    * Disposes of resources used by the cache instance.
    *

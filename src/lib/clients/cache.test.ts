@@ -343,4 +343,75 @@ describe('Cache', () => {
       expect(cache.size).toBe(0);
     });
   });
+
+  describe('getOrFetch', () => {
+    describe('successful case', () => {
+      test('calls fetchFn and caches result on first invocation', async () => {
+        const cache = new Cache<string>();
+        const fetchFn = vi.fn().mockResolvedValue('fetched');
+        const result = await cache.getOrFetch('key', fetchFn);
+        expect(fetchFn).toHaveBeenCalledTimes(1);
+        expect(result).toBe('fetched');
+      });
+
+      test('returns cached value without calling fetchFn on subsequent calls', async () => {
+        const cache = new Cache<string>();
+        const fetchFn = vi.fn().mockResolvedValue('fetched');
+        await cache.getOrFetch('key', fetchFn);
+        await cache.getOrFetch('key', fetchFn);
+        expect(fetchFn).toHaveBeenCalledTimes(1);
+      });
+    });
+
+    describe('error cases', () => {
+      test('propagates fetchFn error without caching', async () => {
+        const cache = new Cache<string>();
+        const fetchFn = vi.fn().mockRejectedValue(new Error('fetch failed'));
+        await expect(cache.getOrFetch('key', fetchFn)).rejects.toThrow('fetch failed');
+        expect(cache.size).toBe(0);
+      });
+
+      test('retries fetchFn after a previous failure', async () => {
+        const cache = new Cache<string>();
+        const fetchFn = vi
+          .fn()
+          .mockRejectedValueOnce(new Error('fetch failed'))
+          .mockResolvedValue('retried');
+        await expect(cache.getOrFetch('key', fetchFn)).rejects.toThrow('fetch failed');
+        const result = await cache.getOrFetch('key', fetchFn);
+        expect(result).toBe('retried');
+        expect(fetchFn).toHaveBeenCalledTimes(2);
+      });
+    });
+
+    describe('boundary cases', () => {
+      test('caches empty Map as valid value', async () => {
+        const cache = new Cache<Map<string, unknown>>();
+        const fetchFn = vi.fn().mockResolvedValue(new Map());
+        await cache.getOrFetch('key', fetchFn);
+        await cache.getOrFetch('key', fetchFn);
+        expect(fetchFn).toHaveBeenCalledTimes(1);
+      });
+
+      test('returns cached value just before TTL expires', async () => {
+        const TTL = 1000;
+        const cache = new Cache<string>(TTL);
+        const fetchFn = vi.fn().mockResolvedValue('fetched');
+        await cache.getOrFetch('key', fetchFn);
+        vi.advanceTimersByTime(TTL - 1);
+        await cache.getOrFetch('key', fetchFn);
+        expect(fetchFn).toHaveBeenCalledTimes(1);
+      });
+
+      test('calls fetchFn again after TTL expires', async () => {
+        const TTL = 1000;
+        const cache = new Cache<string>(TTL);
+        const fetchFn = vi.fn().mockResolvedValue('fetched');
+        await cache.getOrFetch('key', fetchFn);
+        vi.advanceTimersByTime(TTL + 1);
+        await cache.getOrFetch('key', fetchFn);
+        expect(fetchFn).toHaveBeenCalledTimes(2);
+      });
+    });
+  });
 });

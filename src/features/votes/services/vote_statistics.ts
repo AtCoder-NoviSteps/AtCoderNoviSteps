@@ -1,4 +1,6 @@
 import { default as prisma } from '$lib/server/database';
+import { getCachedVoteStats } from '$features/votes/server/cache';
+
 import type { VotedGradeStatistics, VotedGradeCounter, TaskGrade } from '@prisma/client';
 
 /** A task row enriched with estimated grade and total vote count. */
@@ -15,13 +17,10 @@ export type TaskWithVoteInfo = {
 };
 
 export async function getVoteGradeStatistics(): Promise<Map<string, VotedGradeStatistics>> {
-  const allStats = await prisma.votedGradeStatistics.findMany();
-  const gradesMap = new Map<string, VotedGradeStatistics>();
-
-  allStats.forEach((stat) => {
-    gradesMap.set(stat.taskId, stat);
+  return getCachedVoteStats(async () => {
+    const allStats = await prisma.votedGradeStatistics.findMany();
+    return new Map(allStats.map((stat) => [stat.taskId, stat]));
   });
-  return gradesMap;
 }
 
 export async function getVoteGradeStatisticsForTaskIds(

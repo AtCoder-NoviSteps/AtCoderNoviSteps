@@ -11,6 +11,11 @@ import type {
   TaskMapByContestTaskPair,
 } from '$lib/types/contest_task_pair';
 
+import {
+  getCachedTasksMap,
+  getCachedMergedTasksMap,
+  invalidateTaskCaches,
+} from '$lib/server/tasks/cache';
 import { classifyContest } from '$lib/utils/contest';
 import { createContestTaskPairKey } from '$lib/utils/contest_task_pair';
 
@@ -40,16 +45,26 @@ export async function getTasks(): Promise<Task[]> {
  *       const mergedTasksMap = await getMergedTasksMap(filteredTasks);
  */
 export async function getMergedTasksMap(tasks?: Tasks): Promise<TaskMapByContestTaskPair> {
-  const tasksToMerge = tasks ?? (await getTasks());
-  const contestTaskPairs = await getContestTaskPairs();
+  if (tasks !== undefined) {
+    const contestTaskPairs = await getContestTaskPairs();
+    return buildMergedMap(tasks, contestTaskPairs);
+  }
 
+  return getCachedMergedTasksMap(async () => {
+    const [allTasks, contestTaskPairs] = await Promise.all([getTasks(), getContestTaskPairs()]);
+    return buildMergedMap(allTasks, contestTaskPairs);
+  });
+}
+
+function buildMergedMap(
+  tasks: Tasks,
+  contestTaskPairs: ContestTaskPair[],
+): TaskMapByContestTaskPair {
   const baseTaskMap = new Map<ContestTaskPairKey, Task>(
-    tasksToMerge.map((task) => [createContestTaskPairKey(task.contest_id, task.task_id), task]),
+    tasks.map((task) => [createContestTaskPairKey(task.contest_id, task.task_id), task]),
   );
-  // Unique task_id in database
-  const taskMap = new Map(tasksToMerge.map((task) => [task.task_id, task]));
+  const taskMap = new Map(tasks.map((task) => [task.task_id, task]));
 
-  // Filter task(s) only the same task_id but different contest_id
   const additionalTaskMap = contestTaskPairs
     .filter((pair) => !baseTaskMap.has(createContestTaskPairKey(pair.contestId, pair.taskId)))
     .flatMap((pair) => {
@@ -125,14 +140,10 @@ export async function getTasksWithSelectedTaskIds(
 }
 
 export async function getTasksByTaskId(): Promise<Map<string, Task>> {
-  const tasks = await db.task.findMany();
-  const tasksMap = new Map();
-
-  (await tasks).map((task) => {
-    tasksMap.set(task.task_id, task);
+  return getCachedTasksMap(async () => {
+    const tasks = await db.task.findMany();
+    return new Map(tasks.map((task) => [task.task_id, task]));
   });
-
-  return tasksMap;
 }
 
 export async function getTask(task_id: string): Promise<Task[]> {
@@ -177,6 +188,7 @@ export async function createTask(
     },
   });
 
+  invalidateTaskCaches();
   console.log(task);
 }
 
@@ -197,6 +209,7 @@ export async function updateTask(task_id: string, task_grade: TaskGrade): Promis
       },
     });
 
+    invalidateTaskCaches();
     console.log(task);
   } catch (error) {
     if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2025') {

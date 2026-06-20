@@ -40,6 +40,16 @@ vi.mock('$lib/services/users', () => ({
   getUserById: vi.fn(),
 }));
 
+vi.mock('$features/workbooks/server/cache', () => ({
+  getCachedWorkbooksByPlacement: (
+    _query: unknown,
+    _includeUnpublished: unknown,
+    fetchFn: () => Promise<unknown>,
+  ) => fetchFn(),
+  getCachedWorkbooksByUser: (fetchFn: () => Promise<unknown>) => fetchFn(),
+  invalidateWorkbookCaches: vi.fn(),
+}));
+
 import prisma from '$lib/server/database';
 import * as usersCrud from '$lib/services/users';
 

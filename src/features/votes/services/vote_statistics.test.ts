@@ -30,6 +30,10 @@ vi.mock('$lib/server/database', () => ({
   },
 }));
 
+vi.mock('$features/votes/server/cache', () => ({
+  getCachedVoteStats: (fetchFn: () => Promise<unknown>) => fetchFn(),
+}));
+
 import prisma from '$lib/server/database';
 
 beforeEach(() => {
