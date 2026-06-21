@@ -2,7 +2,26 @@ import { describe, test, expect, vi, beforeEach, afterEach, afterAll } from 'vit
 
 import type { VotedGradeStatistics } from '@prisma/client';
 import { TaskGrade } from '$lib/types/task';
-import { getCachedVoteStats, invalidateVoteCaches, disposeVoteCaches } from './cache';
+import type { TaskWithVoteInfo } from '$features/votes/services/vote_statistics';
+import {
+  getCachedVoteStats,
+  getCachedAllTasksWithVoteInfo,
+  invalidateVoteCaches,
+  disposeVoteCaches,
+} from './cache';
+
+const makeTasksWithVoteInfo = (): TaskWithVoteInfo[] => [
+  {
+    task_id: 'abc408_d',
+    contest_id: 'abc408',
+    title: 'D - Flip Cards',
+    grade: TaskGrade.PENDING as unknown as import('@prisma/client').TaskGrade,
+    task_table_index: 'D',
+    estimatedGrade: TaskGrade.Q1 as unknown as import('@prisma/client').TaskGrade,
+    voteTotal: 12,
+  },
+];
+const mockTasksFn = () => vi.fn().mockResolvedValue(makeTasksWithVoteInfo());
 
 const makeStats = (): Map<string, VotedGradeStatistics> =>
   new Map([
@@ -41,6 +60,26 @@ describe('getCachedVoteStats', () => {
   });
 });
 
+describe('getCachedAllTasksWithVoteInfo', () => {
+  beforeEach(() => invalidateVoteCaches());
+  afterEach(() => vi.restoreAllMocks());
+
+  test('delegates to fetchFn and returns fetched value', async () => {
+    const fetchFn = mockTasksFn();
+    const result = await getCachedAllTasksWithVoteInfo(fetchFn);
+    expect(fetchFn).toHaveBeenCalledTimes(1);
+    expect(result[0].task_id).toBe('abc408_d');
+    expect(result[0].voteTotal).toBe(12);
+  });
+
+  test('returns cached value on subsequent calls', async () => {
+    const fetchFn = mockTasksFn();
+    await getCachedAllTasksWithVoteInfo(fetchFn);
+    await getCachedAllTasksWithVoteInfo(fetchFn);
+    expect(fetchFn).toHaveBeenCalledTimes(1);
+  });
+});
+
 describe('invalidateVoteCaches', () => {
   beforeEach(() => invalidateVoteCaches());
   afterEach(() => vi.restoreAllMocks());
@@ -50,6 +89,14 @@ describe('invalidateVoteCaches', () => {
     await getCachedVoteStats(fetchFn);
     invalidateVoteCaches();
     await getCachedVoteStats(fetchFn);
+    expect(fetchFn).toHaveBeenCalledTimes(2);
+  });
+
+  test('clears all tasks with vote info cache', async () => {
+    const fetchFn = mockTasksFn();
+    await getCachedAllTasksWithVoteInfo(fetchFn);
+    invalidateVoteCaches();
+    await getCachedAllTasksWithVoteInfo(fetchFn);
     expect(fetchFn).toHaveBeenCalledTimes(2);
   });
 });

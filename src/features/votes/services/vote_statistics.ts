@@ -1,5 +1,5 @@
 import { default as prisma } from '$lib/server/database';
-import { getCachedVoteStats } from '$features/votes/server/cache';
+import { getCachedVoteStats, getCachedAllTasksWithVoteInfo } from '$features/votes/server/cache';
 
 import type { VotedGradeStatistics, VotedGradeCounter, TaskGrade } from '@prisma/client';
 
@@ -37,6 +37,10 @@ export async function getVoteGradeStatisticsForTaskIds(
 }
 
 export async function getAllTasksWithVoteInfo(): Promise<TaskWithVoteInfo[]> {
+  return getCachedAllTasksWithVoteInfo(fetchAllTasksWithVoteInfo);
+}
+
+async function fetchAllTasksWithVoteInfo(): Promise<TaskWithVoteInfo[]> {
   const [allTasks, stats, counters] = await Promise.all([
     prisma.task.findMany({ orderBy: { task_id: 'desc' } }),
     prisma.votedGradeStatistics.findMany(),
@@ -45,6 +49,7 @@ export async function getAllTasksWithVoteInfo(): Promise<TaskWithVoteInfo[]> {
 
   const statsMap = new Map(stats.map((s) => [s.taskId, s]));
   const totalsMap = new Map<string, number>();
+
   for (const c of counters) {
     totalsMap.set(c.taskId, (totalsMap.get(c.taskId) ?? 0) + c.count);
   }

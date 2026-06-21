@@ -16,6 +16,8 @@ import {
   getCachedMergedTasksMap,
   invalidateTaskCaches,
 } from '$lib/server/tasks/cache';
+import { invalidateVoteCaches } from '$features/votes/server/cache';
+
 import { classifyContest } from '$lib/utils/contest';
 import { createContestTaskPairKey } from '$lib/utils/contest_task_pair';
 
@@ -189,6 +191,7 @@ export async function createTask(
   });
 
   invalidateTaskCaches();
+  invalidateVoteCaches();
   console.log(task);
 }
 
@@ -210,6 +213,7 @@ export async function updateTask(task_id: string, task_grade: TaskGrade): Promis
     });
 
     invalidateTaskCaches();
+    invalidateVoteCaches();
     console.log(task);
   } catch (error) {
     if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2025') {
