@@ -1,20 +1,23 @@
 import type { PageServerLoad } from './$types';
-import { getAllTasksWithVoteInfo } from '$features/votes/services/vote_statistics';
+import {
+  getAllTasksWithVoteInfo,
+  type TaskWithVoteInfo,
+} from '$features/votes/services/vote_statistics';
 
 export const load: PageServerLoad = async ({ locals, setHeaders }) => {
   const session = await locals.auth.validate();
 
-  let tasks: Awaited<ReturnType<typeof getAllTasksWithVoteInfo>> = [];
-  let dataOk = true;
+  let tasks: TaskWithVoteInfo[] = [];
+  let fetchFailed = false;
 
   try {
     tasks = await getAllTasksWithVoteInfo();
   } catch (error) {
-    dataOk = false;
+    fetchFailed = true;
     console.error('Failed to load tasks with vote info:', error);
   }
 
-  if (session === null && dataOk) {
+  if (session === null && !fetchFailed) {
     setHeaders({ 'Cache-Control': 'public, max-age=0, s-maxage=300, stale-while-revalidate=600' });
   }
 

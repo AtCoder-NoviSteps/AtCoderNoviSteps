@@ -15,9 +15,9 @@ const makeTasksWithVoteInfo = (): TaskWithVoteInfo[] => [
     task_id: 'abc408_d',
     contest_id: 'abc408',
     title: 'D - Flip Cards',
-    grade: TaskGrade.PENDING as unknown as import('@prisma/client').TaskGrade,
+    grade: TaskGrade.PENDING,
     task_table_index: 'D',
-    estimatedGrade: TaskGrade.Q1 as unknown as import('@prisma/client').TaskGrade,
+    estimatedGrade: TaskGrade.Q1,
     voteTotal: 12,
   },
 ];

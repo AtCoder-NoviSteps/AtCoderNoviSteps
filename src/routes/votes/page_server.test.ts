@@ -75,8 +75,9 @@ describe('load() return data', () => {
 
     const result = await load(event);
 
-    expect(result.tasks).toEqual([]);
-    expect(result.isLoggedIn).toBe(false);
+    expect(result).toBeDefined();
+    expect(result!.tasks).toEqual([]);
+    expect(result!.isLoggedIn).toBe(false);
   });
 
   test('returns tasks and isLoggedIn for logged-in users', async () => {
@@ -85,8 +86,9 @@ describe('load() return data', () => {
 
     const result = await load(event);
 
-    expect(result.tasks).toEqual([]);
-    expect(result.isLoggedIn).toBe(true);
+    expect(result).toBeDefined();
+    expect(result!.tasks).toEqual([]);
+    expect(result!.isLoggedIn).toBe(true);
   });
 
   test('returns empty tasks array when data fetch fails (degraded)', async () => {
@@ -95,7 +97,8 @@ describe('load() return data', () => {
 
     const result = await load(event);
 
-    expect(result.tasks).toEqual([]);
-    expect(result.isLoggedIn).toBe(false);
+    expect(result).toBeDefined();
+    expect(result!.tasks).toEqual([]);
+    expect(result!.isLoggedIn).toBe(false);
   });
 });
