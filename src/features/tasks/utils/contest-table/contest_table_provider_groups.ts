@@ -246,8 +246,8 @@ export const prepareContestProviderPresets = () => {
     },
 
     AojIcpcRegional: () => {
-      const group = new ContestTableProviderGroup('ICPC 地区予選', {
-        buttonLabel: 'ICPC 地区予選',
+      const group = new ContestTableProviderGroup('ICPC アジア地区', {
+        buttonLabel: 'ICPC アジア地区',
         ariaLabel: 'Filter ICPC Asia Regional',
       });
       // Iterate from latest to oldest so the newest year's table renders on top.

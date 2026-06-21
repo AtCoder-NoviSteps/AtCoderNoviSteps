@@ -845,7 +845,7 @@ export const aojJag = [
 
 /**
  * Test cases for AOJ ICPC contests
- * Includes both preliminary (国内予選) and regional (地区予選) rounds
+ * Includes both preliminary (国内予選) and regional (アジア地区) rounds
  * Format: ICPC{Round}{Year} - {problemId}
  */
 const AOJ_ICPC_TEST_DATA = {
@@ -880,7 +880,7 @@ const generateAojIcpcTestCases = (
     return createTestCaseForContestNameAndTaskIndex(`AOJ, ICPC${contestId} - ${taskIndex}`)({
       contestId: `ICPC${contestId}`,
       taskTableIndex: taskIndex,
-      expected: `AOJ ${taskIndex}（ICPC${contestId.replace('Prelim', ' 国内予選 ').replace('Regional', ' 地区予選 ')}）`,
+      expected: `AOJ ${taskIndex}（ICPC${contestId.replace('Prelim', ' 国内予選 ').replace('Regional', ' アジア地区 ')}）`,
     });
   });
 };
