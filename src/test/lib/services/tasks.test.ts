@@ -19,7 +19,12 @@ vi.mock('$lib/server/tasks/cache', () => ({
   invalidateTaskCaches: vi.fn(),
 }));
 
+vi.mock('$features/votes/server/cache', () => ({
+  invalidateVoteCaches: vi.fn(),
+}));
+
 import db from '$lib/server/database';
+import { invalidateVoteCaches } from '$features/votes/server/cache';
 
 describe('updateTask', () => {
   const mockDb = db as unknown as { task: { update: ReturnType<typeof vi.fn> } };
@@ -44,6 +49,18 @@ describe('updateTask', () => {
         data: { grade: TaskGrade.Q2 },
       });
     });
+
+    test('invalidates vote caches after successful update', async () => {
+      mockDb.task.update.mockResolvedValue({
+        id: '1',
+        task_id: 'abc450_d',
+        grade: TaskGrade.Q2,
+      });
+
+      await updateTask('abc450_d', TaskGrade.Q2);
+
+      expect(invalidateVoteCaches).toHaveBeenCalledOnce();
+    });
   });
 
   describe('error cases', () => {
@@ -58,6 +75,18 @@ describe('updateTask', () => {
       const result = await updateTask('nonexistent_task', TaskGrade.Q1);
 
       expect(result).toBeNull();
+    });
+
+    test('does not invalidate vote caches when task is not found (P2025)', async () => {
+      const error = new Prisma.PrismaClientKnownRequestError('Record to update not found.', {
+        code: 'P2025',
+        clientVersion: '5.0.0',
+      });
+      mockDb.task.update.mockRejectedValue(error);
+
+      await updateTask('nonexistent_task', TaskGrade.Q1);
+
+      expect(invalidateVoteCaches).not.toHaveBeenCalled();
     });
 
     test('re-throws non-P2025 errors', async () => {
