@@ -95,17 +95,14 @@ export class Cache<T extends {}> {
       return pending;
     }
 
-    const promise = fetchFn().then(
-      (result) => {
+    const promise = fetchFn()
+      .then((result) => {
         this.set(key, result);
-        this.inflight.delete(key);
         return result;
-      },
-      (error) => {
+      })
+      .finally(() => {
         this.inflight.delete(key);
-        throw error;
-      },
-    );
+      });
 
     this.inflight.set(key, promise);
 
