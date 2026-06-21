@@ -1,14 +1,13 @@
-import { Cache } from '$lib/clients/cache';
-
 import type { Task } from '$lib/types/task';
 import type { TaskMapByContestTaskPair } from '$lib/types/contest_task_pair';
 
-const HOUR_MS = 60 * 60 * 1000;
+import { Cache, DEFAULT_CACHE_TTL } from '$lib/clients/cache';
+
 const TASK_MAP_KEY = 'tasks_by_task_id';
 const MERGED_KEY = 'merged_tasks_map';
 
-const tasksCache = new Cache<Map<string, Task>>(HOUR_MS);
-const mergedTasksCache = new Cache<TaskMapByContestTaskPair>(HOUR_MS);
+const tasksCache = new Cache<Map<string, Task>>(DEFAULT_CACHE_TTL);
+const mergedTasksCache = new Cache<TaskMapByContestTaskPair>(DEFAULT_CACHE_TTL);
 
 export function getCachedTasksMap(
   fetchFn: () => Promise<Map<string, Task>>,

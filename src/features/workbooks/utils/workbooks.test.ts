@@ -3,8 +3,11 @@ import { describe, expect, test } from 'vitest';
 import { Roles } from '$lib/types/user';
 import { TaskGrade, type Task, type TaskResult } from '$lib/types/task';
 import { type WorkbookList, WorkBookType } from '$features/workbooks/types/workbook';
+import { SolutionCategory } from '$features/workbooks/types/workbook_placement';
+import type { PlacementQuery } from '$features/workbooks/types/workbook_placement';
 
 import {
+  buildPlacementKey,
   canViewWorkBook,
   getUrlSlugFrom,
   getWorkBooksByType,
@@ -455,5 +458,33 @@ describe('Workbooks', () => {
       const map = new Map<number, TaskResult[]>();
       expect(getTaskResult(99, map)).toEqual([]);
     });
+  });
+});
+
+describe('buildPlacementKey', () => {
+  test('returns CURRICULUM key with taskGrade and includeUnpublished', () => {
+    const query: PlacementQuery = {
+      workBookType: WorkBookType.CURRICULUM,
+      taskGrade: TaskGrade.Q7,
+    };
+    expect(buildPlacementKey(query, false)).toBe('CURRICULUM:Q7:false');
+    expect(buildPlacementKey(query, true)).toBe('CURRICULUM:Q7:true');
+  });
+
+  test('returns SOLUTION key with solutionCategory and includeUnpublished', () => {
+    const query: PlacementQuery = {
+      workBookType: WorkBookType.SOLUTION,
+      solutionCategory: SolutionCategory.SEARCH_SIMULATION,
+    };
+    expect(buildPlacementKey(query, false)).toBe('SOLUTION:SEARCH_SIMULATION:false');
+    expect(buildPlacementKey(query, true)).toBe('SOLUTION:SEARCH_SIMULATION:true');
+  });
+
+  test('returns SOLUTION key with null solutionCategory', () => {
+    const query: PlacementQuery = {
+      workBookType: WorkBookType.SOLUTION,
+      solutionCategory: null,
+    };
+    expect(buildPlacementKey(query, false)).toBe('SOLUTION:null:false');
   });
 });

@@ -13,9 +13,19 @@ import type {
   WorkBookTaskBase,
   WorkBookType,
 } from '$features/workbooks/types/workbook';
+import { WorkBookType as WorkBookTypeConst } from '$features/workbooks/types/workbook';
+import type { PlacementQuery } from '$features/workbooks/types/workbook_placement';
 
 import { isAdmin, canRead } from '$lib/utils/authorship';
 import { calcGradeMode } from '$lib/utils/task';
+
+export function buildPlacementKey(query: PlacementQuery, includeUnpublished: boolean): string {
+  if (query.workBookType === WorkBookTypeConst.CURRICULUM) {
+    return `CURRICULUM:${query.taskGrade}:${includeUnpublished}`;
+  }
+
+  return `SOLUTION:${query.solutionCategory}:${includeUnpublished}`;
+}
 
 /** Returns true when the user can view the workbook: admins always can; others only when published. */
 export function canViewWorkBook(role: Roles, isPublished: boolean) {

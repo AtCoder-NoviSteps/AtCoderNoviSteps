@@ -41,11 +41,7 @@ vi.mock('$lib/services/users', () => ({
 }));
 
 vi.mock('$features/workbooks/server/cache', () => ({
-  getCachedWorkbooksByPlacement: (
-    _query: unknown,
-    _includeUnpublished: unknown,
-    fetchFn: () => Promise<unknown>,
-  ) => fetchFn(),
+  getCachedWorkbooksByPlacement: (_key: string, fetchFn: () => Promise<unknown>) => fetchFn(),
   getCachedWorkbooksByUser: (fetchFn: () => Promise<unknown>) => fetchFn(),
   invalidateWorkbookCaches: vi.fn(),
 }));

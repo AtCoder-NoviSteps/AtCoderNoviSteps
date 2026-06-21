@@ -29,6 +29,7 @@ import {
 
 import { sanitizeUrl } from '$lib/utils/url';
 import { parseWorkBookId, parseWorkBookUrlSlug } from '$features/workbooks/utils/workbook';
+import { buildPlacementKey } from '$features/workbooks/utils/workbooks';
 
 export async function getWorkBooks(): Promise<WorkBooks> {
   const workbooks = await db.workBook.findMany({
@@ -78,7 +79,9 @@ export async function getWorkbooksByPlacement(
   query: PlacementQuery,
   includeUnpublished = false,
 ): Promise<WorkbooksWithAuthors> {
-  return getCachedWorkbooksByPlacement(query, includeUnpublished, async () => {
+  const cacheKey = buildPlacementKey(query, includeUnpublished);
+
+  return getCachedWorkbooksByPlacement(cacheKey, async () => {
     const placementFilter = buildPlacementFilter(query);
 
     const workbooks = await db.workBook.findMany({
@@ -279,7 +282,6 @@ export async function createWorkBook(workBook: Omit<WorkBook, 'id'>): Promise<vo
   });
 
   invalidateWorkbookCaches();
-  console.log('Workbook created successfully');
 }
 
 async function isExistingUrlSlug(slug: string): Promise<boolean> {
