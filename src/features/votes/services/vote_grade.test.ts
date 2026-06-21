@@ -4,6 +4,10 @@ import { TaskGrade } from '@prisma/client';
 
 import { getVoteGrade, upsertVoteGradeTables } from './vote_grade';
 
+vi.mock('$features/votes/server/cache', () => ({
+  invalidateVoteCaches: vi.fn(),
+}));
+
 vi.mock('$lib/server/database', () => ({
   default: {
     voteGrade: {
@@ -26,6 +30,7 @@ vi.mock('$lib/server/database', () => ({
 }));
 
 import prisma from '$lib/server/database';
+import { invalidateVoteCaches } from '$features/votes/server/cache';
 
 beforeEach(() => {
   vi.clearAllMocks();
@@ -219,5 +224,27 @@ describe('upsertVoteGradeTables', () => {
         update: { grade: TaskGrade.Q5 },
       }),
     );
+  });
+
+  test('invalidates vote caches after successful write', async () => {
+    const tx = setupTransaction();
+    tx.voteGrade.findUnique.mockResolvedValue(null);
+    tx.voteGrade.upsert.mockResolvedValue({});
+    tx.votedGradeCounter.upsert.mockResolvedValue({});
+    tx.votedGradeCounter.findMany.mockResolvedValue([{ grade: TaskGrade.Q5, count: 1 }]);
+    tx.task.findUnique.mockResolvedValue({ grade: TaskGrade.Q3 });
+
+    await upsertVoteGradeTables('user-1', 'abc001_a', TaskGrade.Q5);
+
+    expect(invalidateVoteCaches).toHaveBeenCalledTimes(1);
+  });
+
+  test('does not invalidate vote caches when grade is unchanged (early return)', async () => {
+    const tx = setupTransaction();
+    tx.voteGrade.findUnique.mockResolvedValue({ grade: TaskGrade.Q5 });
+
+    await upsertVoteGradeTables('user-1', 'abc001_a', TaskGrade.Q5);
+
+    expect(invalidateVoteCaches).not.toHaveBeenCalled();
   });
 });

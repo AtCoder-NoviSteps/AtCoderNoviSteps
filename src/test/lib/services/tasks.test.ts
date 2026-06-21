@@ -13,6 +13,12 @@ vi.mock('$lib/server/database', () => ({
   },
 }));
 
+vi.mock('$lib/server/tasks/cache', () => ({
+  getCachedTasksMap: (fetchFn: () => Promise<unknown>) => fetchFn(),
+  getCachedMergedTasksMap: (fetchFn: () => Promise<unknown>) => fetchFn(),
+  invalidateTaskCaches: vi.fn(),
+}));
+
 import db from '$lib/server/database';
 
 describe('updateTask', () => {

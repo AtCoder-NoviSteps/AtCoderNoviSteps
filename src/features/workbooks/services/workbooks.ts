@@ -21,8 +21,15 @@ import {
 } from '$features/workbooks/services/workbook_tasks';
 import * as userCrud from '$lib/services/users';
 
+import {
+  getCachedWorkbooksByPlacement,
+  getCachedWorkbooksByUser,
+  invalidateWorkbookCaches,
+} from '$features/workbooks/server/cache';
+
 import { sanitizeUrl } from '$lib/utils/url';
 import { parseWorkBookId, parseWorkBookUrlSlug } from '$features/workbooks/utils/workbook';
+import { buildPlacementKey } from '$features/workbooks/utils/workbooks';
 
 export async function getWorkBooks(): Promise<WorkBooks> {
   const workbooks = await db.workBook.findMany({
@@ -72,28 +79,32 @@ export async function getWorkbooksByPlacement(
   query: PlacementQuery,
   includeUnpublished = false,
 ): Promise<WorkbooksWithAuthors> {
-  const placementFilter = buildPlacementFilter(query);
+  const cacheKey = buildPlacementKey(query, includeUnpublished);
 
-  const workbooks = await db.workBook.findMany({
-    where: {
-      workBookType: query.workBookType,
-      ...(includeUnpublished ? {} : { isPublished: true }),
-      placement: placementFilter,
-    },
-    orderBy: {
-      placement: { priority: 'asc' },
-    },
-    include: {
-      user: {
-        select: { username: true },
+  return getCachedWorkbooksByPlacement(cacheKey, async () => {
+    const placementFilter = buildPlacementFilter(query);
+
+    const workbooks = await db.workBook.findMany({
+      where: {
+        workBookType: query.workBookType,
+        ...(includeUnpublished ? {} : { isPublished: true }),
+        placement: placementFilter,
       },
-      workBookTasks: {
-        orderBy: { priority: 'asc' },
+      orderBy: {
+        placement: { priority: 'asc' },
       },
-    },
+      include: {
+        user: {
+          select: { username: true },
+        },
+        workBookTasks: {
+          orderBy: { priority: 'asc' },
+        },
+      },
+    });
+
+    return mapWithAuthorName(workbooks);
   });
-
-  return mapWithAuthorName(workbooks);
 }
 
 /**
@@ -101,20 +112,22 @@ export async function getWorkbooksByPlacement(
  * Intended for admin-only display on the workbooks list page.
  */
 export async function getWorkBooksCreatedByUsers(): Promise<WorkbooksWithAuthors> {
-  const workbooks = await db.workBook.findMany({
-    where: { workBookType: WorkBookTypeConst.CREATED_BY_USER },
-    orderBy: { id: 'asc' },
-    include: {
-      user: {
-        select: { username: true },
+  return getCachedWorkbooksByUser(async () => {
+    const workbooks = await db.workBook.findMany({
+      where: { workBookType: WorkBookTypeConst.CREATED_BY_USER },
+      orderBy: { id: 'asc' },
+      include: {
+        user: {
+          select: { username: true },
+        },
+        workBookTasks: {
+          orderBy: { priority: 'asc' },
+        },
       },
-      workBookTasks: {
-        orderBy: { priority: 'asc' },
-      },
-    },
-  });
+    });
 
-  return mapWithAuthorName(workbooks);
+    return mapWithAuthorName(workbooks);
+  });
 }
 
 /**
@@ -268,7 +281,7 @@ export async function createWorkBook(workBook: Omit<WorkBook, 'id'>): Promise<vo
     },
   });
 
-  console.log('Workbook created successfully');
+  invalidateWorkbookCaches();
 }
 
 async function isExistingUrlSlug(slug: string): Promise<boolean> {
@@ -304,6 +317,8 @@ export async function updateWorkBook(workBookId: number, workBook: WorkBook): Pr
         },
       }),
     ]);
+
+    invalidateWorkbookCaches();
   } catch (error) {
     console.error(
       `Failed to update WorkBook with id ${workBookId} and title ${workBook.title}:`,
@@ -323,6 +338,8 @@ export async function deleteWorkBook(workBookId: number): Promise<void> {
       id: workBookId,
     },
   });
+
+  invalidateWorkbookCaches();
 }
 
 // ---- Private helpers ----
