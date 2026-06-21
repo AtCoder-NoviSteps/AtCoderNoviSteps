@@ -77,7 +77,7 @@ export class AojIcpcRegionalProvider extends ContestTableProviderBase {
 
   getMetadata(): ContestTableMetaData {
     return {
-      title: `ICPC 地区予選 ${this.year}`,
+      title: `ICPC アジア地区 ${this.year}`,
       abbreviationName: `icpcRegional${this.year}`,
       titleStyle: AOJ_ICPC_TITLE_STYLE,
     };
@@ -88,7 +88,7 @@ export class AojIcpcRegionalProvider extends ContestTableProviderBase {
   }
 
   getContestRoundLabel(_contestId: string): string {
-    return `ICPC 地区予選 ${this.year}`;
+    return `ICPC アジア地区 ${this.year}`;
   }
 
   override getTaskLabels(filtered: TaskResults): Record<string, Record<string, string>> {

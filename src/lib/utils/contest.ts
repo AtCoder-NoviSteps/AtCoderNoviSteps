@@ -735,7 +735,7 @@ const JAG_TRANSLATIONS = {
 
 const ICPC_TRANSLATIONS = {
   Prelim: ' 国内予選 ',
-  Regional: ' 地区予選 ',
+  Regional: ' アジア地区 ',
 };
 
 export function getAojContestLabel(

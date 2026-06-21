@@ -74,7 +74,7 @@ const importSources: Record<ContestTaskImportSource, ContestTaskImportSourceConf
   ),
   aoj_icpc_regional: buildAojChallengeConfig(
     { contestType: 'ICPC', round: 'REGIONAL' },
-    'AOJ - ICPC 地区予選',
+    'AOJ - ICPC アジア地区',
   ),
 };
 

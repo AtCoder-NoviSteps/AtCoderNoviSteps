@@ -129,7 +129,7 @@ export const aojIcpc = [
   }),
   createTestCaseForContestNameLabel('ICPC Regional 2024')({
     contestId: 'ICPCRegional2024',
-    expected: '（ICPC 地区予選 2024）',
+    expected: '（ICPC アジア地区 2024）',
   }),
   createTestCaseForContestNameLabel('ICPC Prelim 2023')({
     contestId: 'ICPCPrelim2023',
@@ -137,7 +137,7 @@ export const aojIcpc = [
   }),
   createTestCaseForContestNameLabel('ICPC Regional 2023')({
     contestId: 'ICPCRegional2023',
-    expected: '（ICPC 地区予選 2023）',
+    expected: '（ICPC アジア地区 2023）',
   }),
 ];
 

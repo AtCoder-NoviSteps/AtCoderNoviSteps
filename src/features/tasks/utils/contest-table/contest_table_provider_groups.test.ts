@@ -311,9 +311,9 @@ describe('prepareContestProviderPresets', () => {
   test('expects to create AojIcpcRegional preset correctly', () => {
     const group = prepareContestProviderPresets().AojIcpcRegional();
 
-    expect(group.getGroupName()).toBe('ICPC 地区予選');
+    expect(group.getGroupName()).toBe('ICPC アジア地区');
     expect(group.getMetadata()).toEqual({
-      buttonLabel: 'ICPC 地区予選',
+      buttonLabel: 'ICPC アジア地区',
       ariaLabel: 'Filter ICPC Asia Regional',
     });
     expect(group.getSize()).toBe(ICPC_REGIONAL_LATEST_YEAR - ICPC_REGIONAL_OLDEST_YEAR + 1); // 27

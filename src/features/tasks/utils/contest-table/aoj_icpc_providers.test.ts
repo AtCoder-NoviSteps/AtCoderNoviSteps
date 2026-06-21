@@ -693,7 +693,7 @@ describe('AojIcpcRegionalProvider', () => {
 
   describe('getMetadata', () => {
     test('returns correct title with year', () => {
-      expect(provider1998.getMetadata().title).toBe('ICPC 地区予選 1998');
+      expect(provider1998.getMetadata().title).toBe('ICPC アジア地区 1998');
     });
 
     test('returns correct abbreviationName with year', () => {
@@ -740,7 +740,7 @@ describe('AojIcpcRegionalProvider', () => {
 
   describe('getContestRoundLabel', () => {
     test('returns label with year', () => {
-      expect(provider1998.getContestRoundLabel('ICPCRegional1998')).toBe('ICPC 地区予選 1998');
+      expect(provider1998.getContestRoundLabel('ICPCRegional1998')).toBe('ICPC アジア地区 1998');
     });
   });
 
@@ -789,7 +789,7 @@ describe('AojIcpcRegionalProvider', () => {
     const provider2024 = createRegionalProvider(2024);
 
     test('latest year 2024 returns correct metadata (12 problems, A–L)', () => {
-      expect(provider2024.getMetadata().title).toBe('ICPC 地区予選 2024');
+      expect(provider2024.getMetadata().title).toBe('ICPC アジア地区 2024');
       expect(provider2024.getMetadata().abbreviationName).toBe('icpcRegional2024');
     });
 
