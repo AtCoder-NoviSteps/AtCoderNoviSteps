@@ -21,6 +21,7 @@ Step 0 (seed check) is already done. Confirm the following before touching code:
 **Pattern 1 additional:**
 
 - Numeric range: start and end (open-ended if no upper bound)?
+- Splitting an existing "Onwards" provider? Rename to `{Start}To{End}Provider`; the new special-edition provider uses a fixed section string (e.g. `super(contestType, '0100')`) to coexist under the same ContestType.
 - Shared problems with another contest (e.g. ARC–ABC overlap)? Which contest_ids appear in both?
 - Round label format (e.g. `ABC 042`)?
 
@@ -93,6 +94,7 @@ Step 0 (seed check) is already done. Confirm the following before touching code:
 
 - [ ] Add test cases covering range boundaries and at least one mid-range value
 - [ ] If shared problems exist: add a test case with mixed contest_ids to confirm exclusion
+- [ ] If splitting an existing range: add a combined-fixture test confirming the upper bound excludes the adjacent range's contest_id: `[...fixtureA, ...fixtureB]` → `filter` → assert `some(task => task.contest_id === 'out-of-range') === false`
 - [ ] `pnpm test:unit <providers.test.ts>` — **expect RED**
 - [ ] Implement Provider using `parseContestRound()` range check
 - [ ] `pnpm test:unit <providers.test.ts>` — **expect GREEN**
@@ -124,13 +126,13 @@ Step 0 (seed check) is already done. Confirm the following before touching code:
 - [ ] Update `contest_table_provider_groups.test.ts`:
   - New group name string, `buttonLabel`, `ariaLabel`
   - `getSize()` incremented to reflect the new provider count
-  - Add `getProvider(ContestType.XXX)` assertion
+  - Add `getProvider(ContestType.XXX)` assertion; for section-based providers use `getProvider(ContestType.XXX, 'section')`
   - Add import of new Provider class
 - [ ] `pnpm test:unit contest_table_provider_groups.test.ts` — **expect RED**
 - [ ] Update `contest_table_provider_groups.ts`:
   - Add import of new Provider class
   - Update group name string, `buttonLabel`, `ariaLabel`
-  - Add `new XXXProvider(ContestType.XXX)` to `addProviders()`
+  - Add `new XXXProvider(ContestType.XXX)` to `addProvider()` chain — **`addProvider` call order = display order (first = top)**
 - [ ] `pnpm test:unit src/features/tasks/utils/contest-table/` — **expect GREEN**
 
 ---
