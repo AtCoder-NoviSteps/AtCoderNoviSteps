@@ -130,7 +130,7 @@ SvelteKit's response format for form actions differs by outcome:
 - `redirect()` → HTTP 200 + JSON body `{"type":"redirect","status":307,"location":"..."}`
 - `error(N)` → HTTP status N
 
-Assert accordingly: parse the JSON body for redirect checks, use `response.status` for error checks.
+Parse the response body with a typed deserialize helper — not raw `JSON.parse`. `$app/forms` (`deserialize`) is not resolvable outside SvelteKit, so define a local `ActionResultLike` type and a `deserializeActionResult(text)` wrapper in the E2E helper (see `e2e/workbook_edit.spec.ts` for reference). Assert `type` and `location` from the deserialized result for redirect checks, and `response.status` for error checks.
 
 ## E2E Lessons from Votes Tests
 

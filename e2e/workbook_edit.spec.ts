@@ -9,6 +9,15 @@ const TIMEOUT = 60 * 1000;
 const ADMIN_WORKBOOK_SLUG = 'standard-input-output-1-integer';
 const WORKBOOK_EDIT_URL = `/workbooks/edit/${ADMIN_WORKBOOK_SLUG}`;
 
+// Mirrors SvelteKit's ActionResult — $app/forms is not resolvable in Playwright.
+type ActionRedirect = { type: 'redirect'; status: number; location: string };
+type ActionError = { type: 'error'; status?: number; error: unknown };
+type ActionResultLike = ActionRedirect | ActionError | { type: 'success' | 'failure' };
+
+function deserializeActionResult(text: string): ActionResultLike {
+  return JSON.parse(text) as ActionResultLike;
+}
+
 async function postFormAction(
   page: Page,
   url: string,
@@ -29,10 +38,9 @@ test.describe('workbook edit access control', () => {
     await page.goto('/');
     const result = await postFormAction(page, WORKBOOK_EDIT_URL);
 
-    // SvelteKit returns a JSON redirect wrapper for JS fetch requests
-    const data = JSON.parse(result.body);
+    const data = deserializeActionResult(result.body);
     expect(data.type).toBe('redirect');
-    expect(data.location).toMatch(/\/login/);
+    expect(data).toHaveProperty('location', expect.stringMatching(/\/login/));
   });
 
   test('non-owner cannot edit workbook via direct POST', async ({ page }) => {
