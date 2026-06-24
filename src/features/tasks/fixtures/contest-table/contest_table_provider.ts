@@ -836,7 +836,7 @@ export const taskResultsForACLProvider: TaskResults = [
   acl1_f,
 ];
 
-// AWC 0001 onwards: 5 tasks (A, B, C, D, E)
+// AWC 0001-0099: 5 tasks (A, B, C, D, E)
 // Multiple contests to test range filtering
 const [awc0001_a, awc0001_b, awc0001_c, awc0001_d, awc0001_e] = createContestTasks('awc0001', [
   { taskTableIndex: 'A', statusName: AC },
@@ -862,7 +862,7 @@ const [awc0099_a, awc0099_b, awc0099_c, awc0099_d, awc0099_e] = createContestTas
   { taskTableIndex: 'E', statusName: AC_WITH_EDITORIAL },
 ]);
 
-export const taskResultsForAWC0001OnwardsProvider: TaskResults = [
+export const taskResultsForAWC0001To0099Provider: TaskResults = [
   awc0001_a,
   awc0001_b,
   awc0001_c,
@@ -878,4 +878,57 @@ export const taskResultsForAWC0001OnwardsProvider: TaskResults = [
   awc0099_c,
   awc0099_d,
   awc0099_e,
+];
+
+// AWC0100 (special edition): 15 tasks (A-O)
+const [
+  awc0100_a,
+  awc0100_b,
+  awc0100_c,
+  awc0100_d,
+  awc0100_e,
+  awc0100_f,
+  awc0100_g,
+  awc0100_h,
+  awc0100_i,
+  awc0100_j,
+  awc0100_k,
+  awc0100_l,
+  awc0100_m,
+  awc0100_n,
+  awc0100_o,
+] = createContestTasks('awc0100', [
+  { taskTableIndex: 'A', statusName: AC },
+  { taskTableIndex: 'B', statusName: AC },
+  { taskTableIndex: 'C', statusName: AC_WITH_EDITORIAL },
+  { taskTableIndex: 'D', statusName: AC },
+  { taskTableIndex: 'E', statusName: TRYING },
+  { taskTableIndex: 'F', statusName: AC_WITH_EDITORIAL },
+  { taskTableIndex: 'G', statusName: TRYING },
+  { taskTableIndex: 'H', statusName: PENDING },
+  { taskTableIndex: 'I', statusName: PENDING },
+  { taskTableIndex: 'J', statusName: PENDING },
+  { taskTableIndex: 'K', statusName: PENDING },
+  { taskTableIndex: 'L', statusName: PENDING },
+  { taskTableIndex: 'M', statusName: PENDING },
+  { taskTableIndex: 'N', statusName: PENDING },
+  { taskTableIndex: 'O', statusName: PENDING },
+]);
+
+export const taskResultsForAWC0100Provider: TaskResults = [
+  awc0100_a,
+  awc0100_b,
+  awc0100_c,
+  awc0100_d,
+  awc0100_e,
+  awc0100_f,
+  awc0100_g,
+  awc0100_h,
+  awc0100_i,
+  awc0100_j,
+  awc0100_k,
+  awc0100_l,
+  awc0100_m,
+  awc0100_n,
+  awc0100_o,
 ];

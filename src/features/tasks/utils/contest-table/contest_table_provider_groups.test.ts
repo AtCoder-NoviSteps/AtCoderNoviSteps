@@ -14,7 +14,8 @@ import {
   ARC001ToARC057Provider,
   AGC001OnwardsProvider,
   ABCLikeProvider,
-  AWC0001OnwardsProvider,
+  AWC0001To0099Provider,
+  AWC0100Provider,
   ACLPracticeProvider,
   ACLBeginnerProvider,
   ACLProvider,
@@ -185,8 +186,9 @@ describe('prepareContestProviderPresets', () => {
       buttonLabel: 'AWC 0001 〜 ',
       ariaLabel: 'Filter contests from AWC 0001 onwards',
     });
-    expect(group.getSize()).toBe(1);
-    expect(group.getProvider(ContestType.AWC)).toBeInstanceOf(AWC0001OnwardsProvider);
+    expect(group.getSize()).toBe(2);
+    expect(group.getProvider(ContestType.AWC, '0100')).toBeInstanceOf(AWC0100Provider);
+    expect(group.getProvider(ContestType.AWC)).toBeInstanceOf(AWC0001To0099Provider);
   });
 
   test('expects to create MathAndAlgorithm preset correctly', () => {
