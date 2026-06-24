@@ -121,6 +121,17 @@ When implementing infrastructure changes that span multiple routes (e.g., redire
 - Phase 7: Write E2E tests for all routes (RED)
 - Phase 8-9: Update all load functions to pass `url` (GREEN)
 
+## Testing Form Action Access Control
+
+Use `page.evaluate(async (url) => fetch(url, { method: 'POST', ... }))` — not `page.request.post()` — to test form action security. In practice, `page.request.post()` fails to carry the session (cookies or `origin` header are not sent as expected), causing auth guards to redirect even for logged-in users.
+
+SvelteKit's response format for form actions differs by outcome:
+
+- `redirect()` → HTTP 200 + JSON body `{"type":"redirect","status":307,"location":"..."}`
+- `error(N)` → HTTP status N
+
+Parse the response body with a typed deserialize helper — not raw `JSON.parse`. `$app/forms` (`deserialize`) is not resolvable outside SvelteKit, so define a local `ActionResultLike` type and a `deserializeActionResult(text)` wrapper in the E2E helper (see `e2e/workbook_edit.spec.ts` for reference). Assert `type` and `location` from the deserialized result for redirect checks, and `response.status` for error checks.
+
 ## E2E Lessons from Votes Tests
 
 Recent fixes (detailed in plan.md):
