@@ -371,11 +371,13 @@ class TessokuBookSectionProvider extends TessokuBookProvider {
 ### パターン固有テスト
 
 - **範囲フィルタ型**: 範囲境界値テスト、共有問題の有無確認。既存プロバイダーを上限付きに分割した場合は、隣接するもう一方のフィクスチャを結合して上限境界の除外を確認する:
+
   ```typescript
   const combined = [...taskResultsForAWC0001To0099Provider, ...taskResultsForAWC0100Provider];
   const filtered = provider.filter(combined);
   expect(filtered.some((task) => task.contest_id === 'awc0100')).toBe(false);
   ```
+
 - **複合ソース型**: 複数 contest_id 混在テスト、セクション分割ロジック
 
 ### Vitest テスト例
