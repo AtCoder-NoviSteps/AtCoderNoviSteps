@@ -1,4 +1,5 @@
 import { getContestNameLabel } from '$lib/utils/contest';
+import { getTaskUrl } from '$lib/utils/task';
 
 type SearchableTask = {
   title: string;
@@ -21,11 +22,13 @@ export function filterTasksBySearch<T extends SearchableTask>(
   search: string,
   limit: number,
 ): T[] {
-  if (search === '') {
+  const trimmed = search.trim();
+
+  if (trimmed === '') {
     return [];
   }
 
-  const query = search.toLowerCase();
+  const query = trimmed.toLowerCase();
 
   return tasks
     .filter(
@@ -33,7 +36,8 @@ export function filterTasksBySearch<T extends SearchableTask>(
         task.title.toLowerCase().includes(query) ||
         task.task_id.toLowerCase().includes(query) ||
         task.contest_id.toLowerCase().includes(query) ||
-        getContestNameLabel(task.contest_id).toLowerCase().includes(query),
+        getContestNameLabel(task.contest_id).toLowerCase().includes(query) ||
+        getTaskUrl(task.contest_id, task.task_id).toLowerCase().includes(query),
     )
     .slice(0, limit);
 }
