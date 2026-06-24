@@ -101,6 +101,8 @@ Consume with `$derived` in `+page.svelte` to sync after `load()` re-runs.
 
 All async operations must be inside the try-catch block, not before it. Errors from async calls outside propagate unhandled.
 
+**Exception:** Functions that throw `redirect()` or `error()` as control flow must be placed **before** the try-catch. A bare `catch` swallows them, silently disabling redirects and error responses.
+
 ## Auth Audit
 
 When protecting one action (in `load()` or form actions), audit all others. Asymmetric guards are a critical vulnerability.

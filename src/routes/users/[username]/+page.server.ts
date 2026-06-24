@@ -9,10 +9,9 @@ import type { TaskResult } from '$lib/types/task';
 import { getLoggedInUser } from '$features/auth/services/session';
 
 export async function load({ locals, params, url }) {
-  let loggedInUser: Awaited<ReturnType<typeof getLoggedInUser>> | undefined;
+  const loggedInUser = await getLoggedInUser(locals, url);
 
   try {
-    loggedInUser = await getLoggedInUser(locals, url);
     const user = await userService.getUser(params.username as string);
 
     if (!user) {

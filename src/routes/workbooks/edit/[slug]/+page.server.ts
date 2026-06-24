@@ -78,7 +78,26 @@ export async function load({ locals, params, url }) {
 }
 
 export const actions = {
-  default: async ({ request, params }) => {
+  default: async ({ request, params, locals, url }) => {
+    const loggedInUser = await getLoggedInUser(locals, url);
+    const slug = params.slug.toLowerCase();
+    const workBookWithAuthor = await workBooksCrud.getWorkbookWithAuthor(slug);
+
+    if (!workBookWithAuthor) {
+      error(NOT_FOUND, `問題集id: ${slug} は見つかりませんでした。`);
+    }
+
+    if (
+      !canEdit(
+        loggedInUser.id,
+        workBookWithAuthor.workBook.authorId,
+        loggedInUser.role as Roles,
+        workBookWithAuthor.workBook.isPublished,
+      )
+    ) {
+      error(FORBIDDEN, `問題集id: ${slug}にアクセスする権限がありません。`);
+    }
+
     const form = await superValidate(request, zod4(workBookSchema));
 
     if (!form.valid) {
@@ -92,13 +111,6 @@ export const actions = {
     }
 
     const workBook = form.data;
-    const slug = params.slug.toLowerCase();
-    const workBookWithAuthor = await workBooksCrud.getWorkbookWithAuthor(slug);
-
-    if (!workBookWithAuthor) {
-      error(NOT_FOUND, `問題集id: ${slug} は見つかりませんでした。`);
-    }
-
     const workBookId = workBookWithAuthor.workBook.id;
 
     try {
