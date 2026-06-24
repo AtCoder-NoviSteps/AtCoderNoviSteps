@@ -202,6 +202,7 @@ protected setFilterCondition(): (taskResult: TaskResult) => boolean {
 - `super(contestType, String(year))` でセクションを年度文字列にし、プロバイダキーを `AOJ_ICPC::2025` のように一意化
 - 年度範囲定数（`OLDEST_YEAR` / `LATEST_YEAR`）をモジュールトップで `export` し、tests でも参照できるようにする
 - グループ登録時は最新年から古い年へ降順ループし、テーブルを新しい順に並べる
+- **固定セクションバリアント**: N 回インスタンス化ではなく、同一グループ内で同一 ContestType のプロバイダーを 2 種類共存させる場合も同じ仕組みが使える。一方に固定文字列を渡し（例: `super(contestType, '0100')` → key `AWC::0100`）、もう一方はセクションなし（key `AWC`）とすることで衝突を回避する
 
 **実装例**:
 
@@ -312,18 +313,18 @@ class TessokuBookSectionProvider extends TessokuBookProvider {
 
 ### 範囲フィルタ型
 
-| コンテスト  | 範囲     | フォーマット | セクション | ラベル | 特有の注意    |
-| ----------- | -------- | ------------ | ---------- | ------ | ------------- |
-| ABC 001-041 | 001～041 | 001, 041     | A～D       | あり   | 旧形式        |
-| ABC 042-125 | 042～125 | 042, 125     | A～D       | あり   | 共有問題(ARC) |
-| ABC 126-211 | 126～211 | 126, 211     | A～F       | あり   | 6問制         |
-| ABC 212-318 | 212～318 | 212, 318     | A～Ex/H    | あり   | 8問制         |
-| ABC 319-    | 319～    | 319          | A～G       | あり   | 標準形式      |
-| ARC 001-057 | 001～057 | 001, 057     | A～D       | あり   | 旧形式        |
-| ARC 058-103 | 058～103 | 058, 103     | C～F       | あり   | 共有問題(ABC) |
-| ARC 104-    | 104～    | 104          | 4～6問     | あり   | -             |
-| AGC 001-    | 001～    | 001          | 4～7問     | あり   | -             |
-| AWC 0001-   | 0001～   | 0001         | A～E       | あり   | -             |
+| コンテスト    | 範囲       | フォーマット | セクション | ラベル | 特有の注意    |
+| ------------- | ---------- | ------------ | ---------- | ------ | ------------- |
+| ABC 001-041   | 001～041   | 001, 041     | A～D       | あり   | 旧形式        |
+| ABC 042-125   | 042～125   | 042, 125     | A～D       | あり   | 共有問題(ARC) |
+| ABC 126-211   | 126～211   | 126, 211     | A～F       | あり   | 6問制         |
+| ABC 212-318   | 212～318   | 212, 318     | A～Ex/H    | あり   | 8問制         |
+| ABC 319-      | 319～      | 319          | A～G       | あり   | 標準形式      |
+| ARC 001-057   | 001～057   | 001, 057     | A～D       | あり   | 旧形式        |
+| ARC 058-103   | 058～103   | 058, 103     | C～F       | あり   | 共有問題(ABC) |
+| ARC 104-      | 104～      | 104          | 4～6問     | あり   | -             |
+| AGC 001-      | 001～      | 001          | 4～7問     | あり   | -             |
+| AWC 0001-0099 | 0001～0099 | 0001         | A～E       | あり   | -             |
 
 ### 単一ソース型
 
@@ -336,9 +337,11 @@ class TessokuBookSectionProvider extends TessokuBookProvider {
 | ACL_PRACTICE   | `'practice2'` | 12問       | A～L         |
 | ACL_BEGINNER\* | `'abl'`       | 6問        | A～F         |
 | ACL_CONTEST1\* | `'acl1'`      | 6問        | A～F         |
+| AWC0100†       | `'awc0100'`   | 15問       | A～O         |
 
 \*注: ACL_PRACTICE、ACL_BEGINNER、ACL_CONTEST1 は `Acl` グループの下で 3 つのコンテストが統一管理されています。
 \*\*注: EDPC・TDPC・NDPC・FPS 24 は `dps` グループ下で 4 つのコンテストが統一管理されています。
+†注: ContestType.AWC を再利用し、section `'0100'` で同グループ内の AWC0001To0099Provider と共存（provider key = `AWC::0100`）。`getProvider(ContestType.AWC, '0100')` で取得。
 
 ### 複合ソース型
 
@@ -367,7 +370,14 @@ class TessokuBookSectionProvider extends TessokuBookProvider {
 
 ### パターン固有テスト
 
-- **範囲フィルタ型**: 範囲境界値テスト、共有問題の有無確認
+- **範囲フィルタ型**: 範囲境界値テスト、共有問題の有無確認。既存プロバイダーを上限付きに分割した場合は、隣接するもう一方のフィクスチャを結合して上限境界の除外を確認する:
+
+  ```typescript
+  const combined = [...taskResultsForAWC0001To0099Provider, ...taskResultsForAWC0100Provider];
+  const filtered = provider.filter(combined);
+  expect(filtered.some((task) => task.contest_id === 'awc0100')).toBe(false);
+  ```
+
 - **複合ソース型**: 複数 contest_id 混在テスト、セクション分割ロジック
 
 ### Vitest テスト例
@@ -496,7 +506,7 @@ export const taskResultsForNewProvider: TaskResults = [
 
 ---
 
-## よくあるミス Top 5
+## よくあるミス
 
 ### 1. **getDisplayConfig() での属性漏れ**
 
@@ -598,6 +608,21 @@ describe('CustomProvider with unique config', () => {
 
 ---
 
+### 6. `addProvider` の順序を意識しない
+
+**問題**: 同一グループ内の複数プロバイダーは `addProvider` の呼び出し順が画面上の表示順（先 = 上）になる。
+
+**解決策**: 上に表示したいプロバイダーを先に `addProvider` する。
+
+```typescript
+// AWC0100 を AWC0001-0099 の上に表示する場合
+group
+  .addProvider(new AWC0100Provider(ContestType.AWC)) // 上
+  .addProvider(new AWC0001To0099Provider(ContestType.AWC)); // 下
+```
+
+---
+
 ## 実装完了後
 
 ### ドキュメント更新チェックリスト
@@ -622,7 +647,7 @@ describe('CustomProvider with unique config', () => {
 - [#2837](https://github.com/AtCoder-NoviSteps/AtCoderNoviSteps/issues/2837) - AGC001OnwardsProvider
 - [#2838](https://github.com/AtCoder-NoviSteps/AtCoderNoviSteps/issues/2838) - ABC001～041 & ARC001～057
 - [#2840](https://github.com/AtCoder-NoviSteps/AtCoderNoviSteps/issues/2840)、[#3108](https://github.com/AtCoder-NoviSteps/AtCoderNoviSteps/issues/3108) - ABCLikeProvider
-- [#3153](https://github.com/AtCoder-NoviSteps/AtCoderNoviSteps/issues/3153) - AWC0001OnwardsProvider
+- [#3153](https://github.com/AtCoder-NoviSteps/AtCoderNoviSteps/issues/3153) - AWC0001To0099Provider（旧: AWC0001OnwardsProvider）、AWC0100Provider
 - [#2776](https://github.com/AtCoder-NoviSteps/AtCoderNoviSteps/issues/2776) - TessokuBookProvider
 - [#2785](https://github.com/AtCoder-NoviSteps/AtCoderNoviSteps/issues/2785) - MathAndAlgorithmProvider
 - [#2797](https://github.com/AtCoder-NoviSteps/AtCoderNoviSteps/issues/2797) - FPS24Provider
@@ -638,4 +663,4 @@ describe('CustomProvider with unique config', () => {
 
 ---
 
-**最終更新**: 2026-05-10
+**最終更新**: 2026-06-24

@@ -15,7 +15,7 @@ import {
 } from './arc_providers';
 import { AGC001OnwardsProvider } from './agc_provider';
 import { ABCLikeProvider } from './axc_like_provider';
-import { AWC0001OnwardsProvider } from './awc_provider';
+import { AWC0001To0099Provider, AWC0100Provider } from './awc_provider';
 import { Typical90Provider } from './typical90_provider';
 import {
   TessokuBookForExamplesProvider,
@@ -153,7 +153,9 @@ export const prepareContestProviderPresets = () => {
       new ContestTableProviderGroup(`AWC 0001 Onwards`, {
         buttonLabel: 'AWC 0001 〜 ',
         ariaLabel: 'Filter contests from AWC 0001 onwards',
-      }).addProvider(new AWC0001OnwardsProvider(ContestType.AWC)),
+      })
+        .addProvider(new AWC0100Provider(ContestType.AWC))
+        .addProvider(new AWC0001To0099Provider(ContestType.AWC)),
 
     /**
      * Single group for Typical 90 Problems
