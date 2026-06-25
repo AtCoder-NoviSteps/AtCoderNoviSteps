@@ -1,0 +1,12 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:recommended"],
+  "minimumReleaseAge": "1 day",
+  "rangeStrategy": "increase",
+  "packageRules": [
+    {
+      "matchPackageNames": ["prisma", "@prisma/client", "tsx", "vercel"],
+      "minimumReleaseAge": "0 days"
+    }
+  ]
+}
