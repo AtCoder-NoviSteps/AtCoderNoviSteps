@@ -3,6 +3,8 @@
   "extends": ["config:recommended"],
   "prHourlyLimit": 10,
   "automerge": false,
+  "timezone": "Asia/Tokyo",
+  "schedule": ["after 4am and before 5am"],
   "minimumReleaseAge": "1 day",
   "rangeStrategy": "increase",
   "packageRules": [
