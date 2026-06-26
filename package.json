@@ -77,7 +77,7 @@
     "@lucia-auth/adapter-prisma": "3.0.2",
     "@lucide/svelte": "1.21.0",
     "@prisma/client": "5.22.0",
-    "@testing-library/svelte": "5.3.1",
+    "@testing-library/svelte": "5.4.2",
     "@types/jest": "30.0.0",
     "@types/node": "25.9.4",
     "debug": "4.4.3",
