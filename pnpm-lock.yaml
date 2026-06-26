@@ -154,8 +154,8 @@ importers:
         specifier: 1.0.9
         version: 1.0.9(@prisma/client@5.22.0(prisma@5.22.0))(prisma@5.22.0)
       super-sitemap:
-        specifier: 1.0.12
-        version: 1.0.12(svelte@5.56.4(@typescript-eslint/types@8.62.0))
+        specifier: 2.0.3
+        version: 2.0.3
       svelte:
         specifier: 5.56.4
         version: 5.56.4(@typescript-eslint/types@8.62.0)
@@ -3885,10 +3885,8 @@ packages:
     resolution: {integrity: sha512-6fPc+R4ihwqP6N/aIv2f1gMH8lOVtWQHoqC4yK6oSDVVocumAsfCqjkXnqiYMhmMwS/mEHLp7Vehlt3ql6lEig==}
     engines: {node: '>=8'}
 
-  super-sitemap@1.0.12:
-    resolution: {integrity: sha512-C3gfAS1RZxL5bbZGtgnIOitMhfqAt8RmhW8AWTia6c8n9RW3Zx7f/SxVeFWZD0I1nUAx2pkxuWazVtev0Nmb5w==}
-    peerDependencies:
-      svelte: '>=4.0.0 <6.0.0'
+  super-sitemap@2.0.3:
+    resolution: {integrity: sha512-LNWoZ/dU+jfOsz+D9TV7QS1NYz/4IjvEVlpRgkmIstBsgkmu0LcxXXqfDV+QVuoCBfpsah/Gf8/Jkg2Qojehvw==}
 
   superstruct@2.0.2:
     resolution: {integrity: sha512-uV+TFRZdXsqXTL2pRvujROjdZQ4RAlBUS5BTh9IGm+jTqQntYThciG/qu57Gs69yjnVUSqdxF9YLmSnpupBW9A==}
@@ -7927,9 +7925,7 @@ snapshots:
 
   strip-json-comments@3.1.1: {}
 
-  super-sitemap@1.0.12(svelte@5.56.4(@typescript-eslint/types@8.62.0)):
-    dependencies:
-      svelte: 5.56.4(@typescript-eslint/types@8.62.0)
+  super-sitemap@2.0.3: {}
 
   superstruct@2.0.2:
     optional: true
