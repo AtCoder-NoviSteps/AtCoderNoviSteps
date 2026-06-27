@@ -50,11 +50,12 @@
         <TableHeadCell scope="col">出典</TableHeadCell>
         <TableHeadCell scope="col">グレード（admin）</TableHeadCell>
         <TableHeadCell scope="col">グレード（ユーザ投票）</TableHeadCell>
+        <TableHeadCell scope="col">投票総数</TableHeadCell>
       </TableHead>
       <TableBody class="divide-y divide-gray-100 dark:divide-gray-700">
         {#if search === ''}
           <TableBodyRow>
-            <TableBodyCell colspan={4} class="text-center text-gray-500 dark:text-gray-400">
+            <TableBodyCell colspan={5} class="text-center text-gray-500 dark:text-gray-400">
               問題名・問題ID・出典を入力してください
             </TableBodyCell>
           </TableBodyRow>
@@ -90,10 +91,15 @@
                   />
                 {/if}
               </TableBodyCell>
+
+              <!-- Total vote count -->
+              <TableBodyCell class="text-sm text-center">
+                {task.voteTotal >= 1 ? task.voteTotal : '-'}
+              </TableBodyCell>
             </TableBodyRow>
           {:else}
             <TableBodyRow>
-              <TableBodyCell colspan={4} class="text-center text-gray-500 dark:text-gray-400">
+              <TableBodyCell colspan={5} class="text-center text-gray-500 dark:text-gray-400">
                 該当する問題が見つかりませんでした
               </TableBodyCell>
             </TableBodyRow>
