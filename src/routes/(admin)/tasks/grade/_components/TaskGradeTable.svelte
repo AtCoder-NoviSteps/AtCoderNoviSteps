@@ -149,6 +149,7 @@
       onPageChange={(page) => {
         currentPage = page;
       }}
+      class="[&_button]:border-gray-300 [&_button]:dark:border-gray-700"
     />
   {/if}
 {/snippet}
