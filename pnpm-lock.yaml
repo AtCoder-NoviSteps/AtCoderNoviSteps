@@ -130,8 +130,8 @@ importers:
         specifier: 2.1.9
         version: 2.1.9
       nock:
-        specifier: 14.0.15
-        version: 14.0.15
+        specifier: 14.0.16
+        version: 14.0.16
       oxlint:
         specifier: ^1.70.0
         version: 1.70.0
@@ -3277,8 +3277,8 @@ packages:
     resolution: {integrity: sha512-eonl3sLUha+S1GzTPxychyhnUzKyeQkZ7jLjKrBagJgPla13F+uQ71HgpFefyHgqrjEbCPkDArxYsjY8/+gLKA==}
     engines: {node: '>= 0.4.0'}
 
-  nock@14.0.15:
-    resolution: {integrity: sha512-S0a47C9pLvcYx/Ugf0H30BVBEcUgMMBDk9VJIDlJ8XGrfH2QDUD4Tgdp45qDIiHttokBG+IbsOtsvIjGR/j3bg==}
+  nock@14.0.16:
+    resolution: {integrity: sha512-8r4KEc6nT1D/fdLD/R1BO1CPaVEL8o40u/guFRJlXabN7vr3RmMqyjsY5Krt0nMwhsOAwXQ/mtN5vy5Jh3aErg==}
     engines: {node: '>=18.20.0 <20 || >=20.12.1'}
 
   node-fetch-native@1.6.7:
@@ -7356,7 +7356,7 @@ snapshots:
 
   netmask@2.1.1: {}
 
-  nock@14.0.15:
+  nock@14.0.16:
     dependencies:
       '@mswjs/interceptors': 0.41.8
       json-stringify-safe: 5.0.1
