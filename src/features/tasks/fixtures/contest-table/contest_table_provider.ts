@@ -932,3 +932,47 @@ export const taskResultsForAWC0100Provider: TaskResults = [
   awc0100_n,
   awc0100_o,
 ];
+
+// AWC 0101 onwards: 5 tasks (A, B, C, D, E)
+// Multiple contests to test range filtering (101, 102, 9999 boundary)
+const [awc0101_a, awc0101_b, awc0101_c, awc0101_d, awc0101_e] = createContestTasks('awc0101', [
+  { taskTableIndex: 'A', statusName: AC },
+  { taskTableIndex: 'B', statusName: AC },
+  { taskTableIndex: 'C', statusName: AC_WITH_EDITORIAL },
+  { taskTableIndex: 'D', statusName: TRYING },
+  { taskTableIndex: 'E', statusName: PENDING },
+]);
+
+const [awc0102_a, awc0102_b, awc0102_c, awc0102_d, awc0102_e] = createContestTasks('awc0102', [
+  { taskTableIndex: 'A', statusName: AC },
+  { taskTableIndex: 'B', statusName: AC },
+  { taskTableIndex: 'C', statusName: TRYING },
+  { taskTableIndex: 'D', statusName: AC_WITH_EDITORIAL },
+  { taskTableIndex: 'E', statusName: AC },
+]);
+
+const [awc9999_a, awc9999_b, awc9999_c, awc9999_d, awc9999_e] = createContestTasks('awc9999', [
+  { taskTableIndex: 'A', statusName: AC },
+  { taskTableIndex: 'B', statusName: PENDING },
+  { taskTableIndex: 'C', statusName: AC },
+  { taskTableIndex: 'D', statusName: TRYING },
+  { taskTableIndex: 'E', statusName: AC_WITH_EDITORIAL },
+]);
+
+export const taskResultsForAWC0101OnwardsProvider: TaskResults = [
+  awc0101_a,
+  awc0101_b,
+  awc0101_c,
+  awc0101_d,
+  awc0101_e,
+  awc0102_a,
+  awc0102_b,
+  awc0102_c,
+  awc0102_d,
+  awc0102_e,
+  awc9999_a,
+  awc9999_b,
+  awc9999_c,
+  awc9999_d,
+  awc9999_e,
+];

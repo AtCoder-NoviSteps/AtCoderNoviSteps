@@ -79,3 +79,44 @@ export class AWC0100Provider extends ContestTableProviderBase {
     return '';
   }
 }
+
+// AWC0101 onwards (2026/06/29 〜 )
+// 5 tasks per contest. Upper bound 9999 = max of 4-digit format (cf. ARC104Onwards uses <= 999).
+export class AWC0101OnwardsProvider extends ContestTableProviderBase {
+  constructor(contestType: ContestType) {
+    super(contestType, '0101To9999');
+  }
+
+  protected setFilterCondition(): (taskResult: TaskResult) => boolean {
+    return (taskResult: TaskResult) => {
+      if (classifyContest(taskResult.contest_id) !== this.contestType) {
+        return false;
+      }
+
+      const contestRound = parseContestRound(taskResult.contest_id, 'awc');
+      return contestRound >= 101 && contestRound <= 9999;
+    };
+  }
+
+  getMetadata(): ContestTableMetaData {
+    return {
+      title: 'AtCoder Weekday Contest 0101 〜 ',
+      abbreviationName: 'awc0101Onwards',
+    };
+  }
+
+  getDisplayConfig(): ContestTableDisplayConfig {
+    return {
+      isShownHeader: true,
+      isShownRoundLabel: true,
+      roundLabelWidth: 'xl:w-16',
+      tableBodyCellsWidth: 'w-1/2 sm:w-1/3 md:w-1/4 lg:w-1/5 px-1 py-1',
+      isShownTaskIndex: false,
+    };
+  }
+
+  getContestRoundLabel(contestId: string): string {
+    const contestNameLabel = getContestNameLabel(contestId);
+    return contestNameLabel.replace('AWC ', '');
+  }
+}
