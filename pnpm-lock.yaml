@@ -5,7 +5,7 @@ settings:
   excludeLinksFromLockfile: false
 
 overrides:
-  path-to-regexp@>=6.0.0 <6.3.0: 6.3.0
+  path-to-regexp@>=6.0.0 <6.3.0: 8.4.2
   path-to-regexp@>=8.0.0 <8.4.0: 8.4.2
   tar@>=7.0.0 <7.5.8: 7.5.17
   minimatch@>=10.0.0 <10.2.3: 10.2.5
@@ -5807,7 +5807,7 @@ snapshots:
       etag: 1.8.1
       mime-types: 2.1.35
       node-fetch: 2.6.9
-      path-to-regexp: 6.3.0
+      path-to-regexp: 8.4.2
       path-to-regexp-updated: path-to-regexp@6.3.0
       ts-morph: 12.0.0
       tsx: 4.21.0
@@ -5852,7 +5852,7 @@ snapshots:
       '@vercel/error-utils': 2.2.0
       '@vercel/nft': 1.10.0
       '@vercel/static-config': 3.4.0
-      path-to-regexp: 6.3.0
+      path-to-regexp: 8.4.2
       path-to-regexp-updated: path-to-regexp@6.3.0
       ts-morph: 12.0.0
     transitivePeerDependencies:
