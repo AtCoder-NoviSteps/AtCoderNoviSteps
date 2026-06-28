@@ -49,7 +49,7 @@ List features unlocked by the new major version:
 
 Write `docs/dev-notes/YYYY-MM-DD/{package}-upgrade/plan.md` in Japanese:
 
-- **概要**: Which Dependabot PR / bump triggered this; summary of scope
+- **概要**: Which Renovate PR / bump triggered this; summary of scope
 - **破壊的変更の影響調査結果**: Tables from sections 1–2 above
 - **設計方針**: How to handle action-required items; companion package strategy
 - **却下した代替案**: Alternatives considered (e.g., upgrading only one of a companion pair)
