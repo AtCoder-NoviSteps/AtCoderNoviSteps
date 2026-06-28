@@ -28,21 +28,20 @@
 
   import { filterGradeTableTasks } from '../_utils/grade_table_filter';
 
-  const PAGE_SIZE = 20;
+  const PAGE_SIZE = 50;
 
   interface Props {
     title: string;
     tasks: TaskWithVoteInfo[];
-    requireSearch?: boolean;
   }
 
-  let { title, tasks, requireSearch = false }: Props = $props();
+  let { title, tasks }: Props = $props();
 
   let search = $state('');
   let currentPage = $state(1);
 
   const sortedTasks = $derived([...tasks].sort(compareByContestIdAndTaskId));
-  const filteredTasks = $derived(filterGradeTableTasks(sortedTasks, search, requireSearch));
+  const filteredTasks = $derived(filterGradeTableTasks(sortedTasks, search));
   const isSearchEmpty = $derived(search.trim() === '');
 
   $effect(() => {
@@ -78,22 +77,16 @@
       <TableHeadCell scope="col">投票総数</TableHeadCell>
     </TableHead>
     <TableBody class="divide-y divide-gray-100 dark:divide-gray-700">
-      {#if requireSearch && isSearchEmpty}
+      {#if isSearchEmpty}
         <TableBodyRow>
           <TableBodyCell colspan={5} class="text-center text-gray-500 dark:text-gray-400">
             問題名・問題ID・出典を入力してください
           </TableBodyCell>
         </TableBodyRow>
-      {:else if filteredTasks.length === 0 && !isSearchEmpty}
+      {:else if filteredTasks.length === 0}
         <TableBodyRow>
           <TableBodyCell colspan={5} class="text-center text-gray-500 dark:text-gray-400">
             該当する問題が見つかりませんでした
-          </TableBodyCell>
-        </TableBodyRow>
-      {:else if filteredTasks.length === 0 && isSearchEmpty}
-        <TableBodyRow>
-          <TableBodyCell colspan={5} class="text-center text-gray-500 dark:text-gray-400">
-            0件
           </TableBodyCell>
         </TableBodyRow>
       {:else}
