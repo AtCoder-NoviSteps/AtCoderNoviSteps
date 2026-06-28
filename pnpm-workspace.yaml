@@ -32,7 +32,7 @@ minimumReleaseAgeExclude:
 blockExoticSubdeps: true
 
 # Security overrides: force transitive dependencies to patched versions
-# See docs/dev-notes/2026-06-28/fix-transitive-dependency-vulnerabilities/plan.md
+# See: Issue #3761
 overrides:
   # high
   'path-to-regexp@>=6.0.0 <6.3.0': '6.3.0'
