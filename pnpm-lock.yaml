@@ -6,7 +6,7 @@ settings:
 
 overrides:
   path-to-regexp@>=6.0.0 <6.3.0: 6.3.0
-  path-to-regexp@>=8.0.0 <8.4.0: 8.4.0
+  path-to-regexp@>=8.0.0 <8.4.0: 8.4.2
   tar@>=7.0.0 <7.5.8: 7.5.16
   minimatch@>=10.0.0 <10.2.3: 10.2.3
   undici@>=5.0.0 <5.28.5: 5.28.5
@@ -3379,8 +3379,8 @@ packages:
   path-to-regexp@6.3.0:
     resolution: {integrity: sha512-Yhpw4T9C6hPpgPeA28us07OJeqZ5EzQTkbfwuhsUg0c237RomFoETJgmp2sa3F/41gfLE6G5cqcYwznmeEeOlQ==}
 
-  path-to-regexp@8.4.0:
-    resolution: {integrity: sha512-PuseHIvAnz3bjrM2rGJtSgo1zjgxapTLZ7x2pjhzWwlp4SJQgK3f3iZIQwkpEnBaKz6seKBADpM4B4ySkuYypg==}
+  path-to-regexp@8.4.2:
+    resolution: {integrity: sha512-qRcuIdP69NPm4qbACK+aDogI5CBDMi1jKe0ry5rSQJz8JVLsC7jV8XpiJjGRLLol3N+R5ihGYcrPLTno6pAdBA==}
 
   pathe@2.0.3:
     resolution: {integrity: sha512-WUjGcAqP1gQacoQe+OBJsFA7Ld4DyXuUIjZ5cc75cLHvJ7dtNsTugphxIADwspS+AraAUePCKrSVtPLFj/F88w==}
@@ -5576,7 +5576,7 @@ snapshots:
       fs-extra: 11.1.0
       get-port: 5.1.1
       oxc-transform: 0.111.0(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)
-      path-to-regexp: 8.4.0
+      path-to-regexp: 8.4.2
       resolve.exports: 2.0.3
       rolldown: 1.0.0-rc.1(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)
       srvx: 0.11.16
@@ -5648,7 +5648,7 @@ snapshots:
       '@vercel/node': 5.8.21
       '@vercel/static-config': 3.4.0
       fs-extra: 11.1.0
-      path-to-regexp: 8.4.0
+      path-to-regexp: 8.4.2
       ts-morph: 12.0.0
       zod: 3.22.4
     transitivePeerDependencies:
@@ -5676,7 +5676,7 @@ snapshots:
       micro: 9.3.5-canary.3
       ms: 2.1.1
       node-fetch: 2.6.7
-      path-to-regexp: 8.4.0
+      path-to-regexp: 8.4.2
       promisepipe: 3.0.0
       semver: 7.5.4
       stat-mode: 0.3.0
@@ -5720,7 +5720,7 @@ snapshots:
       '@vercel/node': 5.8.21
       '@vercel/static-config': 3.4.0
       fs-extra: 11.1.0
-      path-to-regexp: 8.4.0
+      path-to-regexp: 8.4.2
       ts-morph: 12.0.0
       zod: 3.22.4
     transitivePeerDependencies:
@@ -7374,7 +7374,7 @@ snapshots:
 
   path-to-regexp@6.3.0: {}
 
-  path-to-regexp@8.4.0: {}
+  path-to-regexp@8.4.2: {}
 
   pathe@2.0.3: {}
 
