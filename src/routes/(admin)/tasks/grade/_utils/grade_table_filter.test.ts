@@ -25,18 +25,12 @@ describe('filterGradeTableTasks', () => {
       buildTask({ task_id: 'abc300_b', task_table_index: 'B' }),
     ];
 
-    test('returns an empty array when search is required', () => {
-      expect(filterGradeTableTasks(tasks, '', true)).toEqual([]);
+    test('returns an empty array', () => {
+      expect(filterGradeTableTasks(tasks, '')).toEqual([]);
     });
 
     test('treats a whitespace-only query as empty', () => {
-      expect(filterGradeTableTasks(tasks, '   ', true)).toEqual([]);
-    });
-
-    test('returns all tasks unchanged when search is not required', () => {
-      const result = filterGradeTableTasks(tasks, '', false);
-
-      expect(result).toBe(tasks);
+      expect(filterGradeTableTasks(tasks, '   ')).toEqual([]);
     });
   });
 
@@ -47,7 +41,7 @@ describe('filterGradeTableTasks', () => {
         buildTask({ task_id: 'xyz999_a', title: 'Banana', contest_id: 'xyz999' }),
       ];
 
-      const result = filterGradeTableTasks(tasks, 'banana', false);
+      const result = filterGradeTableTasks(tasks, 'banana');
 
       expect(result.map((task) => task.task_id)).toEqual(['xyz999_a']);
     });
@@ -55,7 +49,7 @@ describe('filterGradeTableTasks', () => {
     test('returns an empty array when nothing matches', () => {
       const tasks = [buildTask({ task_id: 'abc300_a', contest_id: 'abc300' })];
 
-      expect(filterGradeTableTasks(tasks, 'nonexistent', false)).toEqual([]);
+      expect(filterGradeTableTasks(tasks, 'nonexistent')).toEqual([]);
     });
 
     // Regression guard: the grade table pages through all matches, so no result cap.
@@ -64,7 +58,7 @@ describe('filterGradeTableTasks', () => {
         buildTask({ task_id: `abc300_${index}`, contest_id: 'abc300' }),
       );
 
-      const result = filterGradeTableTasks(tasks, 'abc300', true);
+      const result = filterGradeTableTasks(tasks, 'abc300');
 
       expect(result).toHaveLength(25);
     });
