@@ -9,7 +9,7 @@ overrides:
   path-to-regexp@>=8.0.0 <8.4.0: 8.4.2
   tar@>=7.0.0 <7.5.8: 7.5.16
   minimatch@>=10.0.0 <10.2.3: 10.2.5
-  undici@>=5.0.0 <5.28.5: 5.28.5
+  undici@>=5.0.0 <5.28.5: 6.27.0
   undici@>=6.0.0 <6.27.0: 6.27.0
   undici@>=7.0.0 <7.28.0: 7.28.0
   effect@>=3.0.0 <3.20.0: 3.20.0
@@ -4021,10 +4021,6 @@ packages:
   undici-types@7.25.0:
     resolution: {integrity: sha512-AXNgS1Byr27fTI+2bsPEkV9CxkT8H6xNyRI68b3TatlZo3RkzlqQBLL+w7SmGPVpokjHbcuNVQUWE7FRTg+LRA==}
 
-  undici@5.28.5:
-    resolution: {integrity: sha512-zICwjrDrcrUE0pyyJc1I2QzBkLM8FINsgOrt6WjA+BgajVq9Nxu2PbFFXUrAggLfDXlZGZBVZYw7WNV5KiBiBA==}
-    engines: {node: '>=14.0'}
-
   undici@5.29.0:
     resolution: {integrity: sha512-raqeBD6NQK4SkWhQzeYKd1KmIG6dllBOTt55Rmkt4HtI9mwdWtJljnrXjAFUBLTSN67HWrOIZ3EPF4kjUw80Bg==}
     engines: {node: '>=14.0'}
@@ -5816,7 +5812,7 @@ snapshots:
       ts-morph: 12.0.0
       tsx: 4.21.0
       typescript: 5.9.3
-      undici: 5.28.5
+      undici: 6.27.0
     transitivePeerDependencies:
       - encoding
       - rollup
@@ -7976,10 +7972,6 @@ snapshots:
   undici-types@7.24.6: {}
 
   undici-types@7.25.0: {}
-
-  undici@5.28.5:
-    dependencies:
-      '@fastify/busboy': 2.1.1
 
   undici@5.29.0:
     dependencies:
