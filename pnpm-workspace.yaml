@@ -30,3 +30,27 @@ minimumReleaseAgeExclude:
 
 # Prevent transitive dependencies from Git/Tarball sources (enhanced security)
 blockExoticSubdeps: true
+
+# Security overrides: force transitive dependencies to patched versions
+# See: Issue #3761
+overrides:
+  # high
+  'path-to-regexp@>=6.0.0 <6.3.0': '6.3.0'
+  'path-to-regexp@>=8.0.0 <8.4.0': '8.4.0'
+  'tar@>=7.0.0 <7.5.8': '7.5.16'
+  'minimatch@>=10.0.0 <10.2.3': '10.2.3'
+  'undici@>=5.0.0 <5.28.5': '5.28.5'
+  'undici@>=6.0.0 <6.27.0': '6.27.0'
+  'undici@>=7.0.0 <7.28.0': '7.28.0'
+  'effect@>=3.0.0 <3.20.0': '3.20.0'
+  'defu@<6.1.5': '6.1.5'
+  'devalue@<5.8.1': '5.8.1'
+  # moderate
+  'ajv@>=8.0.0 <8.18.0': '8.18.0'
+  'brace-expansion@>=1.0.0 <1.1.13': '1.1.13'
+  'js-yaml@>=4.0.0 <=4.1.1': '4.2.0'
+  'postcss@>=8.0.0 <8.5.10': '8.5.10'
+  'smol-toml@>=1.0.0 <1.6.1': '1.6.1'
+  # low
+  'cookie@<0.7.0': '0.7.0'
+  '@tootallnate/once@>=2.0.0 <2.0.1': '2.0.1'
