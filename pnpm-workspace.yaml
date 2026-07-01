@@ -27,6 +27,7 @@ minimumReleaseAgeExclude:
   - tsx
   # Vercel: To use in a CI/CD environment
   - vercel
+  - '@vercel/*'
 
 # Prevent transitive dependencies from Git/Tarball sources (enhanced security)
 blockExoticSubdeps: true

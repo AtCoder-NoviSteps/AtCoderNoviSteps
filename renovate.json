@@ -8,7 +8,7 @@
   "rangeStrategy": "increase",
   "packageRules": [
     {
-      "matchPackageNames": ["prisma", "@prisma/client", "tsx", "vercel"],
+      "matchPackageNames": ["prisma", "@prisma/client", "tsx", "vercel", "@vercel/*"],
       "minimumReleaseAge": "0 days"
     }
   ]
