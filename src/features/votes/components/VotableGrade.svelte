@@ -104,7 +104,7 @@
     }
 
     const container = gradeListContainer;
-    const targetIndex = nonPendingGrades.indexOf(taskResult.grade as TaskGrade);
+    const targetIndex = nonPendingGrades.findIndex((g) => g === taskResult.grade);
 
     if (targetIndex < 0) {
       return;
