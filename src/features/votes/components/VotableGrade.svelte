@@ -17,6 +17,7 @@
 
   import { getTaskGradeLabel } from '$lib/utils/task';
   import { nonPendingGrades, resolveDisplayGrade } from '$features/votes/utils/grade_options';
+  import { calcCenteredScrollTop } from '$features/votes/utils/grade_scroll';
   import {
     calcGradeDiff,
     getRelativeEvaluationLabel,
@@ -111,10 +112,11 @@
     }
 
     // Scroll so the current grade ("ふつう") appears centered in the visible area.
-    const itemHeight = container.scrollHeight / nonPendingGrades.length;
-    container.scrollTop = Math.max(
-      0,
-      targetIndex * itemHeight - container.clientHeight / 2 + itemHeight / 2,
+    container.scrollTop = calcCenteredScrollTop(
+      targetIndex,
+      container.scrollHeight,
+      nonPendingGrades.length,
+      container.clientHeight,
     );
   });
 
