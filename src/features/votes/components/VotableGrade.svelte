@@ -95,6 +95,29 @@
   let votedGrade = $state<TaskGrade | null>(null);
   let voteAbortController: AbortController | null = null;
 
+  let isDropdownOpen = $state(false);
+  let gradeListContainer = $state<HTMLElement | undefined>(undefined);
+
+  $effect(() => {
+    if (!isDropdownOpen || taskResult.grade === TaskGrade.PENDING || !gradeListContainer) {
+      return;
+    }
+
+    const container = gradeListContainer;
+    const targetIndex = nonPendingGrades.indexOf(taskResult.grade as TaskGrade);
+
+    if (targetIndex < 0) {
+      return;
+    }
+
+    // Scroll so the current grade ("ふつう") appears centered in the visible area.
+    const itemHeight = container.scrollHeight / nonPendingGrades.length;
+    container.scrollTop = Math.max(
+      0,
+      targetIndex * itemHeight - container.clientHeight / 2 + itemHeight / 2,
+    );
+  });
+
   async function onTriggerClick() {
     if (!isLoggedIn || isAtCoderVerified === false || isOpening) {
       return;
@@ -229,33 +252,39 @@
   <Dropdown
     triggeredBy={`#update-grade-dropdown-trigger-${componentId}`}
     simple
-    class="h-48 w-44 z-50 border border-gray-200 dark:border-gray-100 overflow-y-auto"
+    bind:isOpen={isDropdownOpen}
+    class="w-44 z-50 border border-gray-200 dark:border-gray-100 py-1"
   >
-    {#each nonPendingGrades as grade (grade)}
-      <DropdownItem onclick={() => handleClick(grade)} class="rounded-md">
-        <div
-          class="flex items-center w-full gap-2 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white"
-        >
-          <span class="flex-1">{getTaskGradeLabel(grade)}</span>
-          {#if taskResult.grade !== TaskGrade.PENDING}
-            {@const diff = calcGradeDiff(taskResult.grade, grade)}
-            {@const relLabel = getRelativeEvaluationJapaneseLabel(diff)}
-            {#if relLabel}
-              <span class="w-16 text-right text-xs {getRelativeEvaluationColorClass(diff)}">
-                {relLabel}
-              </span>
-            {/if}
-          {/if}
-          {#if votedGrade === grade}
-            <Check class="w-4 h-4 shrink-0 text-primary-600 dark:text-gray-300" strokeWidth={3} />
-          {/if}
-        </div>
-      </DropdownItem>
-    {/each}
-    <DropdownDivider />
     <DropdownItem href={resolve('/votes/[slug]', { slug: taskResult.task_id })} class="rounded-md"
       >詳細</DropdownItem
     >
+    <DropdownDivider />
+    <div bind:this={gradeListContainer} class="h-44 overflow-y-auto">
+      {#each nonPendingGrades as grade (grade)}
+        <DropdownItem onclick={() => handleClick(grade)} class="rounded-md">
+          <div
+            class="flex items-center w-full gap-2 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white"
+          >
+            <span class="flex-1">{getTaskGradeLabel(grade)}</span>
+            {#if taskResult.grade !== TaskGrade.PENDING}
+              {@const diff = calcGradeDiff(taskResult.grade, grade)}
+              {@const relLabel = getRelativeEvaluationJapaneseLabel(diff)}
+              {#if relLabel}
+                <span class="w-16 text-right text-xs {getRelativeEvaluationColorClass(diff)}">
+                  {relLabel}
+                </span>
+              {/if}
+            {/if}
+            {#if votedGrade === grade}
+              <Check
+                class="w-4 h-4 shrink-0 text-primary-600 dark:text-gray-300"
+                strokeWidth={3}
+              />
+            {/if}
+          </div>
+        </DropdownItem>
+      {/each}
+    </div>
   </Dropdown>
 {:else if isLoggedIn}
   <!-- Logged in but not AtCoder-verified: prompt user to complete verification -->
