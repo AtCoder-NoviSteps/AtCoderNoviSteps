@@ -250,8 +250,8 @@ afterEach(() => {
 ```
 
 - **表示ラベルは `getTaskLabels` で返し、`generateTable` ではタイトルを変更しない**。
-  `generateTable` で `{ ...taskResult, title: \`${letter}. ${title}\` }` のような整形をすると、
-  optimistic update で整形済みオブジェクトがソース配列に書き戻され、次の `$derived`再計算で
+  `generateTable` で `{ ...taskResult, title: \`${letter}. ${title}\` }`のような整形をすると、
+optimistic update で整形済みオブジェクトがソース配列に書き戻され、次の`$derived`再計算で
 累積する（Issue [#3636](https://github.com/AtCoder-NoviSteps/AtCoderNoviSteps/issues/3636)）。
 位置ラベルは`getTaskLabels(filtered)`が`{ [contestId]: { index: letter } }`を返し、`TaskTableBodyCell`の`$derived displayTitle`で`formatAojIcpcTitle` を呼ぶ設計にすること。
 

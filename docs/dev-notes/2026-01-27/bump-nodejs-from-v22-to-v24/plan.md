@@ -139,13 +139,13 @@ ARG NODE_VERSION=24  # 22 → 24
 
 ```yaml
 # build job - matrix strategy
-node-version: [24]  # [22, 24] → [24]
+node-version: [24] # [22, 24] → [24]
 
 # preview job
-node-version: 24  # 22 → 24
+node-version: 24 # 22 → 24
 
 # production job
-node-version: 24  # 22 → 24
+node-version: 24 # 22 → 24
 ```
 
 **影響範囲**: CI/CD パイプライン

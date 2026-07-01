@@ -60,12 +60,10 @@
 
   let CATEGORY_ENTRIES = $derived<CategoryEntry[]>([
     ALL_ENTRY,
-    ...AVAILABLE_CATEGORIES.map(
-      (category): CategoryEntry => ({
-        value: category,
-        label: SOLUTION_LABELS[category],
-      }),
-    ),
+    ...AVAILABLE_CATEGORIES.map((category): CategoryEntry => ({
+      value: category,
+      label: SOLUTION_LABELS[category],
+    })),
   ]);
 
   // "全て" 選択時のグループ化。特定カテゴリ選択時は null。

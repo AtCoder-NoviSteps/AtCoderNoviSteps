@@ -80,8 +80,7 @@ export function updateWorkBookTaskForTable(
     newWorkBookTaskForTable,
   ) as WorkBookTasksCreate | WorkBookTasksEdit;
   updatedWorkBookTasksForTable = reCalcTaskPriority(updatedWorkBookTasksForTable) as
-    | WorkBookTasksCreate
-    | WorkBookTasksEdit;
+    WorkBookTasksCreate | WorkBookTasksEdit;
 
   return updatedWorkBookTasksForTable;
 }
