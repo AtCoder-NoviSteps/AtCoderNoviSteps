@@ -33,13 +33,11 @@ test('/sitemap.xml is valid', async ({ page }) => {
   // Ensure XML is valid. Playwright parses the XML here and will error if it
   // cannot be parsed.
   const urls = await page.$$eval('url', (urls) =>
-    urls.map(
-      (url): SitemapUrl => ({
-        loc: url.querySelector('loc')?.textContent,
-        changefreq: url.querySelector('changefreq')?.textContent, // if you enabled in your sitemap
-        priority: url.querySelector('priority')?.textContent,
-      }),
-    ),
+    urls.map((url): SitemapUrl => ({
+      loc: url.querySelector('loc')?.textContent,
+      changefreq: url.querySelector('changefreq')?.textContent, // if you enabled in your sitemap
+      priority: url.querySelector('priority')?.textContent,
+    })),
   );
 
   // Sanity check

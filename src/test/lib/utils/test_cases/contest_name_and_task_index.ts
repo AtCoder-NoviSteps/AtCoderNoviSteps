@@ -776,17 +776,7 @@ const AOJ_JAG_TEST_DATA = {
 // Regionals: 2005-2006, 2009-2011, 2016-2017, 2020-2022
 type JagRound = 'Prelim' | 'Regional';
 type JagYear =
-  | '2005'
-  | '2006'
-  | '2009'
-  | '2010'
-  | '2011'
-  | '2017'
-  | '2020'
-  | '2021'
-  | '2022'
-  | '2023'
-  | '2024';
+  '2005' | '2006' | '2009' | '2010' | '2011' | '2017' | '2020' | '2021' | '2022' | '2023' | '2024';
 type JagContestId = `${JagRound}${JagYear}`;
 type JagContestIds = JagContestId[];
 
