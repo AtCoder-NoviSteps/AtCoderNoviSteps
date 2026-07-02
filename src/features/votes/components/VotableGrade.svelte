@@ -96,11 +96,10 @@
   let votedGrade = $state<TaskGrade | null>(null);
   let voteAbortController: AbortController | null = null;
 
-  let isDropdownOpen = $state(false);
   let gradeListContainer = $state<HTMLElement | undefined>(undefined);
 
   $effect(() => {
-    if (!isDropdownOpen || taskResult.grade === TaskGrade.PENDING || !gradeListContainer) {
+    if (!gradeListContainer || taskResult.grade === TaskGrade.PENDING) {
       return;
     }
 
@@ -111,13 +110,18 @@
       return;
     }
 
-    // Scroll so the current grade ("ふつう") appears centered in the visible area.
-    container.scrollTop = calcCenteredScrollTop(
-      targetIndex,
-      container.scrollHeight,
-      nonPendingGrades.length,
-      container.clientHeight,
-    );
+    // Defer via RAF: Flowbite's showPopover() is also RAF-scheduled (onintrostart),
+    // and since it was registered first, it fires before this RAF so scrollHeight is non-zero.
+    const rafId = requestAnimationFrame(() => {
+      container.scrollTop = calcCenteredScrollTop(
+        targetIndex,
+        container.scrollHeight,
+        nonPendingGrades.length,
+        container.clientHeight,
+      );
+    });
+
+    return () => cancelAnimationFrame(rafId);
   });
 
   async function onTriggerClick() {
@@ -254,7 +258,6 @@
   <Dropdown
     triggeredBy={`#update-grade-dropdown-trigger-${componentId}`}
     simple
-    bind:isOpen={isDropdownOpen}
     class="w-44 z-50 border border-gray-200 dark:border-gray-100 py-1"
   >
     <DropdownItem href={resolve('/votes/[slug]', { slug: taskResult.task_id })} class="rounded-md"
