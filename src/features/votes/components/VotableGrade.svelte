@@ -17,6 +17,7 @@
 
   import { getTaskGradeLabel } from '$lib/utils/task';
   import { nonPendingGrades, resolveDisplayGrade } from '$features/votes/utils/grade_options';
+  import { calcCenteredScrollTop } from '$features/votes/utils/grade_scroll';
   import {
     calcGradeDiff,
     getRelativeEvaluationLabel,
@@ -94,6 +95,34 @@
   let isOpening = $state(false);
   let votedGrade = $state<TaskGrade | null>(null);
   let voteAbortController: AbortController | null = null;
+
+  let gradeListContainer = $state<HTMLElement | undefined>(undefined);
+
+  $effect(() => {
+    if (!gradeListContainer || taskResult.grade === TaskGrade.PENDING) {
+      return;
+    }
+
+    const container = gradeListContainer;
+    const targetIndex = nonPendingGrades.findIndex((g) => g === taskResult.grade);
+
+    if (targetIndex < 0) {
+      return;
+    }
+
+    // Defer via RAF: Flowbite's showPopover() is also RAF-scheduled (onintrostart),
+    // and since it was registered first, it fires before this RAF so scrollHeight is non-zero.
+    const rafId = requestAnimationFrame(() => {
+      container.scrollTop = calcCenteredScrollTop(
+        targetIndex,
+        container.scrollHeight,
+        nonPendingGrades.length,
+        container.clientHeight,
+      );
+    });
+
+    return () => cancelAnimationFrame(rafId);
+  });
 
   async function onTriggerClick() {
     if (!isLoggedIn || isAtCoderVerified === false || isOpening) {
@@ -229,33 +258,35 @@
   <Dropdown
     triggeredBy={`#update-grade-dropdown-trigger-${componentId}`}
     simple
-    class="h-48 w-44 z-50 border border-gray-200 dark:border-gray-100 overflow-y-auto"
+    class="w-44 z-50 border border-gray-200 dark:border-gray-100 py-1"
   >
     <DropdownItem href={resolve('/votes/[slug]', { slug: taskResult.task_id })} class="rounded-md"
       >詳細</DropdownItem
     >
     <DropdownDivider />
-    {#each nonPendingGrades as grade (grade)}
-      <DropdownItem onclick={() => handleClick(grade)} class="rounded-md">
-        <div
-          class="flex items-center w-full gap-2 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white"
-        >
-          <span class="flex-1">{getTaskGradeLabel(grade)}</span>
-          {#if taskResult.grade !== TaskGrade.PENDING}
-            {@const diff = calcGradeDiff(taskResult.grade, grade)}
-            {@const relLabel = getRelativeEvaluationJapaneseLabel(diff)}
-            {#if relLabel}
-              <span class="w-16 text-right text-xs {getRelativeEvaluationColorClass(diff)}">
-                {relLabel}
-              </span>
+    <div bind:this={gradeListContainer} class="h-44 overflow-y-auto">
+      {#each nonPendingGrades as grade (grade)}
+        <DropdownItem onclick={() => handleClick(grade)} class="rounded-md">
+          <div
+            class="flex items-center w-full gap-2 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white"
+          >
+            <span class="flex-1">{getTaskGradeLabel(grade)}</span>
+            {#if taskResult.grade !== TaskGrade.PENDING}
+              {@const diff = calcGradeDiff(taskResult.grade, grade)}
+              {@const relLabel = getRelativeEvaluationJapaneseLabel(diff)}
+              {#if relLabel}
+                <span class="w-16 text-right text-xs {getRelativeEvaluationColorClass(diff)}">
+                  {relLabel}
+                </span>
+              {/if}
             {/if}
-          {/if}
-          {#if votedGrade === grade}
-            <Check class="w-4 h-4 shrink-0 text-primary-600 dark:text-gray-300" strokeWidth={3} />
-          {/if}
-        </div>
-      </DropdownItem>
-    {/each}
+            {#if votedGrade === grade}
+              <Check class="w-4 h-4 shrink-0 text-primary-600 dark:text-gray-300" strokeWidth={3} />
+            {/if}
+          </div>
+        </DropdownItem>
+      {/each}
+    </div>
   </Dropdown>
 {:else if isLoggedIn}
   <!-- Logged in but not AtCoder-verified: prompt user to complete verification -->
