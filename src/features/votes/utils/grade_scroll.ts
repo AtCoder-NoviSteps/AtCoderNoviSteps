@@ -12,5 +12,6 @@ export function calcCenteredScrollTop(
     return 0;
   }
   const itemHeight = scrollHeight / itemCount;
-  return Math.max(0, targetIndex * itemHeight - clientHeight / 2 + itemHeight / 2);
+  const centered = targetIndex * itemHeight - clientHeight / 2 + itemHeight / 2;
+  return Math.max(0, Math.min(scrollHeight - clientHeight, centered));
 }

@@ -21,7 +21,12 @@ describe('calcCenteredScrollTop', () => {
   });
 
   it('handles item at the last index', () => {
-    // itemHeight = 200/10 = 20, scrollTop = 9*20 - 50/2 + 20/2 = 180 - 25 + 10 = 165
-    expect(calcCenteredScrollTop(9, 200, 10, 50)).toBe(165);
+    // itemHeight=20, centered=9*20-25+10=165, maxScrollTop=200-50=150 → clamped to 150
+    expect(calcCenteredScrollTop(9, 200, 10, 50)).toBe(150);
+  });
+
+  it('clamps to maxScrollTop when target is near the bottom', () => {
+    // itemHeight=20, centered=8*20-25+10=145, maxScrollTop=200-50=150 → no clamp
+    expect(calcCenteredScrollTop(8, 200, 10, 50)).toBe(145);
   });
 });
