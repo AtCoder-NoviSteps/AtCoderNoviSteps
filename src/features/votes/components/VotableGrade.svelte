@@ -278,10 +278,7 @@
               {/if}
             {/if}
             {#if votedGrade === grade}
-              <Check
-                class="w-4 h-4 shrink-0 text-primary-600 dark:text-gray-300"
-                strokeWidth={3}
-              />
+              <Check class="w-4 h-4 shrink-0 text-primary-600 dark:text-gray-300" strokeWidth={3} />
             {/if}
           </div>
         </DropdownItem>
