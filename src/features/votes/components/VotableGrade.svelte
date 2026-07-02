@@ -231,6 +231,10 @@
     simple
     class="h-48 w-44 z-50 border border-gray-200 dark:border-gray-100 overflow-y-auto"
   >
+    <DropdownItem href={resolve('/votes/[slug]', { slug: taskResult.task_id })} class="rounded-md"
+      >詳細</DropdownItem
+    >
+    <DropdownDivider />
     {#each nonPendingGrades as grade (grade)}
       <DropdownItem onclick={() => handleClick(grade)} class="rounded-md">
         <div
@@ -252,10 +256,6 @@
         </div>
       </DropdownItem>
     {/each}
-    <DropdownDivider />
-    <DropdownItem href={resolve('/votes/[slug]', { slug: taskResult.task_id })} class="rounded-md"
-      >詳細</DropdownItem
-    >
   </Dropdown>
 {:else if isLoggedIn}
   <!-- Logged in but not AtCoder-verified: prompt user to complete verification -->
