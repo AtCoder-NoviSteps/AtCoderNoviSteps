@@ -17,7 +17,7 @@
 
   import { getTaskGradeLabel } from '$lib/utils/task';
   import { nonPendingGrades, resolveDisplayGrade } from '$features/votes/utils/grade_options';
-  import { calcCenteredScrollTop } from '$features/votes/utils/grade_scroll';
+  import { calcCenteredScrollTop } from '$features/votes/utils/grade_scroll_position';
   import {
     calcGradeDiff,
     getRelativeEvaluationLabel,
@@ -114,9 +114,9 @@
     // and since it was registered first, it fires before this RAF so scrollHeight is non-zero.
     const rafId = requestAnimationFrame(() => {
       container.scrollTop = calcCenteredScrollTop(
+        nonPendingGrades.length,
         targetIndex,
         container.scrollHeight,
-        nonPendingGrades.length,
         container.clientHeight,
       );
     });
