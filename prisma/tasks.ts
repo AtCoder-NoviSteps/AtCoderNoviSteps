@@ -15376,6 +15376,13 @@ export const tasks = [
     title: '3171. Traditional Company',
   },
   {
+    id: '3369',
+    contest_id: 'AOJ-HUPC2023-in-OUPC2023-day2',
+    problem_index: '3369',
+    name: 'Namori Counting',
+    title: '3369. Namori Counting',
+  },
+  {
     id: '2352',
     contest_id: 'AOJ-OUPC2012-in-RUPC2012-day2',
     problem_index: '2352',

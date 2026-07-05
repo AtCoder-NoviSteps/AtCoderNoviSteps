@@ -170,13 +170,17 @@ export const aojUniversity = [
     contestId: 'AOJ-OUPC2012-in-RUPC2012-day2',
     expected: '（OUPC 2012 in RUPC 2012 Day2）',
   }),
+  createTestCaseForContestNameLabel('AOJ, HUPC 2014 in RUPC 2014 Day3')({
+    contestId: 'AOJ-HUPC2014-in-RUPC2014-day3',
+    expected: '（HUPC 2014 in RUPC 2014 Day3）',
+  }),
   createTestCaseForContestNameLabel('AOJ, RUPC 2018 in RUPC 2018 Day1')({
     contestId: 'AOJ-RUPC2018-in-RUPC2018-day1',
     expected: '（RUPC 2018 in RUPC 2018 Day1）',
   }),
-  createTestCaseForContestNameLabel('AOJ, HUPC 2014 in RUPC 2014 Day3')({
-    contestId: 'AOJ-HUPC2014-in-RUPC2014-day3',
-    expected: '（HUPC 2014 in RUPC 2014 Day3）',
+  createTestCaseForContestNameLabel('AOJ, HUPC 2023 in OUPC 2023 Day2')({
+    contestId: 'AOJ-HUPC2023-in-OUPC2023-day2',
+    expected: '（HUPC 2023 in OUPC 2023 Day2）',
   }),
   createTestCaseForContestNameLabel('AOJ, UAPC 2015 in ACPC 2015 Day2')({
     contestId: 'AOJ-UAPC2015-in-ACPC2015-day2',

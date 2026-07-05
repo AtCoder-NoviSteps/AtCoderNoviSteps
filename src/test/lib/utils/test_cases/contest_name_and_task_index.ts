@@ -912,14 +912,19 @@ const AOJ_UNIVERSITY_TEST_DATA = [
     expected: 'AOJ 2352（OUPC 2012 in RUPC 2012 Day2）',
   },
   {
+    contestId: 'AOJ-HUPC2014-in-RUPC2014-day3',
+    taskTableIndex: '2581',
+    expected: 'AOJ 2581（HUPC 2014 in RUPC 2014 Day3）',
+  },
+  {
     contestId: 'AOJ-RUPC2018-in-RUPC2018-day1',
     taskTableIndex: '2880',
     expected: 'AOJ 2880（RUPC 2018 in RUPC 2018 Day1）',
   },
   {
-    contestId: 'AOJ-HUPC2014-in-RUPC2014-day3',
-    taskTableIndex: '2581',
-    expected: 'AOJ 2581（HUPC 2014 in RUPC 2014 Day3）',
+    contestId: 'AOJ-HUPC2023-in-OUPC2023-day2',
+    taskTableIndex: '3369',
+    expected: 'AOJ 3369（HUPC 2023 in OUPC 2023 Day2）',
   },
   {
     contestId: 'AOJ-UAPC2015-in-ACPC2015-day2',
