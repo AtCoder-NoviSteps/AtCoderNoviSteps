@@ -155,8 +155,8 @@ importers:
         specifier: ^1.70.0
         version: 1.70.0
       pnpm:
-        specifier: 11.9.0
-        version: 11.9.0
+        specifier: 11.10.0
+        version: 11.10.0
       prettier:
         specifier: 3.9.4
         version: 3.9.4
@@ -3411,8 +3411,8 @@ packages:
     engines: {node: '>=18'}
     hasBin: true
 
-  pnpm@11.9.0:
-    resolution: {integrity: sha512-vWgtXQP+Ul73yf1ngMaITR51asTJyf4AxTh4KCQxDc+Q493E9Tg18G3669UIXkGFXgvLs7YN4qxburieUDbwOw==}
+  pnpm@11.10.0:
+    resolution: {integrity: sha512-C3+LmAYAMZBMAX46QesYehbUDuuCm5XE+MsDaBdh/Eq1PdIZEVubRH9NzhoFohR2RGHn03AzkqnzL5URzoyGyA==}
     engines: {node: '>=22.13'}
     hasBin: true
 
@@ -7386,7 +7386,7 @@ snapshots:
     optionalDependencies:
       fsevents: 2.3.2
 
-  pnpm@11.9.0: {}
+  pnpm@11.10.0: {}
 
   postcss-load-config@3.1.4(postcss@8.5.16):
     dependencies:
