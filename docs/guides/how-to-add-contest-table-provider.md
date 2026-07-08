@@ -235,17 +235,17 @@ for (let year = ICPC_PRELIM_LATEST_YEAR; year >= ICPC_PRELIM_OLDEST_YEAR; year--
 
 ```typescript
 // contest_id -> (task_table_index -> letter). Used only for years with judge gaps.
-export const ICPC_PRELIM_LABEL_OVERRIDES: Record<string, Record<string, string>> = {};
+export const AOJ_LABEL_OVERRIDES: Record<string, Record<string, string>> = {};
 ```
 
 上書き Map のテストは `beforeEach`/`afterEach` でエントリを直接追加・削除する（`vi.mock` 不要）:
 
 ```typescript
 beforeEach(() => {
-  ICPC_PRELIM_LABEL_OVERRIDES['ICPCPrelimTest'] = { '1150': 'A', '1152': 'C' };
+  AOJ_LABEL_OVERRIDES['ICPCPrelimTest'] = { '1150': 'A', '1152': 'C' };
 });
 afterEach(() => {
-  delete ICPC_PRELIM_LABEL_OVERRIDES['ICPCPrelimTest'];
+  delete AOJ_LABEL_OVERRIDES['ICPCPrelimTest'];
 });
 ```
 
@@ -253,9 +253,24 @@ afterEach(() => {
   `generateTable` で `{ ...taskResult, title: \`${letter}. ${title}\` }`のような整形をすると、
 optimistic update で整形済みオブジェクトがソース配列に書き戻され、次の`$derived`再計算で
 累積する（Issue [#3636](https://github.com/AtCoder-NoviSteps/AtCoderNoviSteps/issues/3636)）。
-位置ラベルは`getTaskLabels(filtered)`が`{ [contestId]: { index: letter } }`を返し、`TaskTableBodyCell`の`$derived displayTitle`で`formatAojIcpcTitle` を呼ぶ設計にすること。
+位置ラベルは`getTaskLabels(filtered)`が`{ [contestId]: { index: letter } }`を返し、`TaskTableBodyCell`の`$derived displayTitle`で`formatAojTitle` を呼ぶ設計にすること。
 
 - provider 見出しのフォント・太字・余白をデフォルトから変えたい場合は `getMetadata()` で `titleStyle` を返す。`ContestTableTitleStyle`（`headingTag` / `fontSize` / `fontWeight` / `bottomGap`）のうち必要なフィールドだけ指定すればよい。
+
+- **1つの論理単位を同一グループ内の2テーブルに分割する（同一クラスの2回インスタンス化）**: 例として JAG 2016 は同一年に 2 回開催され、seed 上は `JAGPrelim2016A` / `JAGPrelim2016B` に分かれる。コンストラクタに `suffix: '' | 'A' | 'B'` を追加し、`super(contestType, \`${year}${suffix}\`)`で provider key を一意化する（→`AOJ_JAG::2016A`）。分割対象は `Set`にデータとして持たせ、将来の分割年は 1 行追加で済むようにする。テストの`getSize()`は`年数スパン + 分割Setのサイズ` で検証する:
+
+  ```typescript
+  const JAG_PRELIM_YEARS_HELD_AS_A_AND_B = new Set([2016]);
+
+  if (JAG_PRELIM_YEARS_HELD_AS_A_AND_B.has(year)) {
+    group.addProvider(new JagPrelimProvider(type, year, 'A')); // 上
+    group.addProvider(new JagPrelimProvider(type, year, 'B')); // 下
+  } else {
+    group.addProvider(new JagPrelimProvider(type, year));
+  }
+  ```
+
+  上記の「固定セクションバリアント」（_異なる_ 2 クラスを共存させる）とは異なり、こちらは _同一_ クラスを 2 回インスタンス化する点に注意。
 
 ---
 
@@ -620,6 +635,18 @@ group
   .addProvider(new AWC0100Provider(ContestType.AWC)) // 上
   .addProvider(new AWC0001To0099Provider(ContestType.AWC)); // 下
 ```
+
+---
+
+### 7. 既存の分類 regex が新形状の contest_id を拾えない
+
+**問題**: 分類 branch（例: `regexForJag`）は既にあるが、新しい contest_id の形状 —— サフィックス付きや
+同一年分割（`JAGPrelim2016A` / `JAGPrelim2016B` など）—— にマッチしない。その結果、管理画面 `/tasks` の
+未登録タスク fetch（`classifyContest(id) !== null` が条件）から静かに漏れ、気づきにくい。
+
+**解決策**: サフィックス付き・分割の contest_id を追加するときは、**全形状** の分類テストケースを追加し、
+既存 regex がそれらにマッチするか確認する。regex を広げると下流の利用箇所（`getContestNameLabel`、
+`AojGenerator.canHandle`）にも波及するため、副作用がないか併せて検証する。
 
 ---
 

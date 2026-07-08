@@ -132,6 +132,14 @@ export const fps24 = [
 ];
 
 export const aojJag = [
+  createTestCaseForContestNameLabel('AOJ, JAG Prelim 2016 A')({
+    contestId: 'JAGPrelim2016A',
+    expected: '（JAG 模擬国内 2016A）',
+  }),
+  createTestCaseForContestNameLabel('AOJ, JAG Prelim 2016 B')({
+    contestId: 'JAGPrelim2016B',
+    expected: '（JAG 模擬国内 2016B）',
+  }),
   createTestCaseForContestNameLabel('AOJ, JAG Summer 2024 day2')({
     contestId: 'JAGSummer2024-day2',
     expected: '（JAG 夏合宿 2024 Day2）',
