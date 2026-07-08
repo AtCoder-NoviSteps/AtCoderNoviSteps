@@ -7,7 +7,7 @@
   import UpdatingDropdown from '$lib/components/SubmissionStatus/UpdatingDropdown.svelte';
 
   import { getTaskUrl, removeTaskIndexFromTitle } from '$lib/utils/task';
-  import { formatAojIcpcTitle } from '$features/tasks/utils/contest-table/aoj_icpc_labels';
+  import { formatAojTitle } from '$features/tasks/utils/contest-table/aoj_labels';
 
   interface Props {
     taskResult: TaskResult;
@@ -34,7 +34,7 @@
   let estimatedGrade = $derived(voteResults.get(taskResult.task_id)?.grade);
   let displayTitle = $derived.by(() => {
     if (taskLabel) {
-      return formatAojIcpcTitle(taskResult.title, taskLabel);
+      return formatAojTitle(taskResult.title, taskLabel);
     }
 
     if (isShownTaskIndex) {

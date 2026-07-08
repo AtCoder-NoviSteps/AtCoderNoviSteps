@@ -33,6 +33,7 @@ import {
   JOISemiFinalRoundProvider,
 } from './joi_providers';
 import { AojIcpcPrelimProvider, AojIcpcRegionalProvider } from './aoj_icpc_providers';
+import { JagPrelimProvider } from './aoj_jag_providers';
 import { ContestTableProviderGroup } from './contest_table_provider_group';
 
 export const ICPC_PRELIM_OLDEST_YEAR = 1998;
@@ -40,6 +41,12 @@ export const ICPC_PRELIM_LATEST_YEAR = 2026;
 
 export const ICPC_REGIONAL_OLDEST_YEAR = 1998;
 export const ICPC_REGIONAL_LATEST_YEAR = 2024;
+
+export const JAG_PRELIM_OLDEST_YEAR = 2005;
+export const JAG_PRELIM_LATEST_YEAR = 2026;
+// 2016 was held twice in the same year, split into JAGPrelim2016A / JAGPrelim2016B.
+// Kept as data so future split years only need to be added to this set.
+const JAG_PRELIM_YEARS_HELD_AS_A_AND_B = new Set([2016]);
 
 /**
  * Prepare predefined provider groups
@@ -260,6 +267,25 @@ export const prepareContestProviderPresets = () => {
 
       return group;
     },
+
+    AojJagPrelim: () => {
+      const group = new ContestTableProviderGroup('JAG 模擬国内', {
+        buttonLabel: 'JAG 模擬国内',
+        ariaLabel: 'Filter JAG Domestic Preliminary',
+      });
+      // Iterate from latest to oldest so the newest year's table renders on top.
+      // addProvider order = display order (first = top).
+      for (let year = JAG_PRELIM_LATEST_YEAR; year >= JAG_PRELIM_OLDEST_YEAR; year--) {
+        if (JAG_PRELIM_YEARS_HELD_AS_A_AND_B.has(year)) {
+          group.addProvider(new JagPrelimProvider(ContestType.AOJ_JAG, year, 'A')); // top
+          group.addProvider(new JagPrelimProvider(ContestType.AOJ_JAG, year, 'B')); // bottom
+        } else {
+          group.addProvider(new JagPrelimProvider(ContestType.AOJ_JAG, year));
+        }
+      }
+
+      return group;
+    },
   };
 };
 
@@ -287,6 +313,7 @@ export const contestTableProviderGroups = {
   joiSecondQualAndSemiFinalRound: presets.JOISecondQualAndSemiFinalRound(),
   aojIcpcPrelim: presets.AojIcpcPrelim(),
   aojIcpcRegional: presets.AojIcpcRegional(),
+  aojJagPrelim: presets.AojJagPrelim(),
 };
 
 export type ContestTableProviderGroups = keyof typeof contestTableProviderGroups;

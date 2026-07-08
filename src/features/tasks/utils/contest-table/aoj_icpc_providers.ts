@@ -7,11 +7,11 @@ import {
 
 import { ContestTableProviderBase } from './contest_table_provider_base';
 import {
-  buildAojIcpcLetterMap,
-  sortAojIcpcHeaderIds,
-  AOJ_ICPC_TITLE_STYLE,
-  buildAojIcpcDisplayConfig,
-} from './aoj_icpc_labels';
+  buildAojLetterMap,
+  sortAojHeaderIds,
+  AOJ_TITLE_STYLE,
+  buildAojDisplayConfig,
+} from './aoj_labels';
 
 export class AojIcpcPrelimProvider extends ContestTableProviderBase {
   private readonly year: number;
@@ -28,19 +28,19 @@ export class AojIcpcPrelimProvider extends ContestTableProviderBase {
   }
 
   getHeaderIdsForTask(filtered: TaskResults): string[] {
-    return sortAojIcpcHeaderIds(filtered);
+    return sortAojHeaderIds(filtered);
   }
 
   getMetadata(): ContestTableMetaData {
     return {
       title: `ICPC 国内予選 ${this.year}`,
       abbreviationName: `icpcPrelim${this.year}`,
-      titleStyle: AOJ_ICPC_TITLE_STYLE,
+      titleStyle: AOJ_TITLE_STYLE,
     };
   }
 
   getDisplayConfig(): ContestTableDisplayConfig {
-    return buildAojIcpcDisplayConfig();
+    return buildAojDisplayConfig();
   }
 
   getContestRoundLabel(_contestId: string): string {
@@ -48,7 +48,7 @@ export class AojIcpcPrelimProvider extends ContestTableProviderBase {
   }
 
   override getTaskLabels(filtered: TaskResults): Record<string, Record<string, string>> {
-    const letterMap = buildAojIcpcLetterMap(
+    const letterMap = buildAojLetterMap(
       this.contestId,
       filtered.map((taskResult) => taskResult.task_table_index),
     );
@@ -72,19 +72,19 @@ export class AojIcpcRegionalProvider extends ContestTableProviderBase {
   }
 
   getHeaderIdsForTask(filtered: TaskResults): string[] {
-    return sortAojIcpcHeaderIds(filtered);
+    return sortAojHeaderIds(filtered);
   }
 
   getMetadata(): ContestTableMetaData {
     return {
       title: `ICPC アジア地区 ${this.year}`,
       abbreviationName: `icpcRegional${this.year}`,
-      titleStyle: AOJ_ICPC_TITLE_STYLE,
+      titleStyle: AOJ_TITLE_STYLE,
     };
   }
 
   getDisplayConfig(): ContestTableDisplayConfig {
-    return buildAojIcpcDisplayConfig();
+    return buildAojDisplayConfig();
   }
 
   getContestRoundLabel(_contestId: string): string {
@@ -92,7 +92,7 @@ export class AojIcpcRegionalProvider extends ContestTableProviderBase {
   }
 
   override getTaskLabels(filtered: TaskResults): Record<string, Record<string, string>> {
-    const letterMap = buildAojIcpcLetterMap(
+    const letterMap = buildAojLetterMap(
       this.contestId,
       filtered.map((taskResult) => taskResult.task_table_index),
     );

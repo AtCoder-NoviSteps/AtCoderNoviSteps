@@ -35,6 +35,7 @@ import {
   MathAndAlgorithmProvider,
   AojIcpcPrelimProvider,
   AojIcpcRegionalProvider,
+  JagPrelimProvider,
   prepareContestProviderPresets,
 } from './contest_table_provider';
 import { TESSOKU_SECTIONS } from '$features/tasks/types/contest-table/contest_table_provider';
@@ -44,6 +45,8 @@ import {
   ICPC_PRELIM_LATEST_YEAR,
   ICPC_REGIONAL_OLDEST_YEAR,
   ICPC_REGIONAL_LATEST_YEAR,
+  JAG_PRELIM_OLDEST_YEAR,
+  JAG_PRELIM_LATEST_YEAR,
 } from './contest_table_provider_groups';
 
 describe('prepareContestProviderPresets', () => {
@@ -312,6 +315,21 @@ describe('prepareContestProviderPresets', () => {
     expect(group.getProvider(ContestType.AOJ_ICPC, '2023')).toBeInstanceOf(AojIcpcPrelimProvider);
   });
 
+  test('expects to create AojJagPrelim preset correctly', () => {
+    const group = prepareContestProviderPresets().AojJagPrelim();
+
+    expect(group.getGroupName()).toBe('JAG 模擬国内');
+    expect(group.getMetadata()).toEqual({
+      buttonLabel: 'JAG 模擬国内',
+      ariaLabel: 'Filter JAG Domestic Preliminary',
+    });
+    // 2016 was held twice (A/B), adding one extra table beyond the year span.
+    expect(group.getSize()).toBe(JAG_PRELIM_LATEST_YEAR - JAG_PRELIM_OLDEST_YEAR + 1 + 1); // 22 + 1 = 23
+    expect(group.getProvider(ContestType.AOJ_JAG, '2023')).toBeInstanceOf(JagPrelimProvider);
+    expect(group.getProvider(ContestType.AOJ_JAG, '2016A')).toBeInstanceOf(JagPrelimProvider);
+    expect(group.getProvider(ContestType.AOJ_JAG, '2016B')).toBeInstanceOf(JagPrelimProvider);
+  });
+
   test('expects to create AojIcpcRegional preset correctly', () => {
     const group = prepareContestProviderPresets().AojIcpcRegional();
 
@@ -348,6 +366,7 @@ describe('prepareContestProviderPresets', () => {
     expect(typeof presets.JOISecondQualAndSemiFinalRound).toBe('function');
     expect(typeof presets.AojIcpcPrelim).toBe('function');
     expect(typeof presets.AojIcpcRegional).toBe('function');
+    expect(typeof presets.AojJagPrelim).toBe('function');
   });
 
   test('expects each preset to create independent instances', () => {

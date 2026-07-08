@@ -3,7 +3,7 @@ import { describe, test, expect, beforeEach, afterEach } from 'vitest';
 import { ContestType } from '$lib/types/contest';
 import type { TaskResults } from '$lib/types/task';
 
-import { ICPC_LABEL_OVERRIDES } from './aoj_icpc_labels';
+import { AOJ_LABEL_OVERRIDES } from './aoj_labels';
 import { AojIcpcPrelimProvider, AojIcpcRegionalProvider } from './aoj_icpc_providers';
 
 const createProvider = (year: number) => new AojIcpcPrelimProvider(ContestType.AOJ_ICPC, year);
@@ -395,14 +395,14 @@ describe('AojIcpcPrelimProvider', () => {
     ] as TaskResults;
 
     beforeEach(() => {
-      ICPC_LABEL_OVERRIDES[TEST_CONTEST_ID] = {
+      AOJ_LABEL_OVERRIDES[TEST_CONTEST_ID] = {
         '9001': 'X',
         '9002': 'Y',
       };
     });
 
     afterEach(() => {
-      delete ICPC_LABEL_OVERRIDES[TEST_CONTEST_ID];
+      delete AOJ_LABEL_OVERRIDES[TEST_CONTEST_ID];
     });
 
     test('generateTable stores raw titles even when override map is active', () => {
@@ -464,17 +464,17 @@ describe('AojIcpcPrelimProvider', () => {
       ] as TaskResults;
 
       beforeEach(() => {
-        ICPC_LABEL_OVERRIDES[TEST_CONTEST_ID] = {
+        AOJ_LABEL_OVERRIDES[TEST_CONTEST_ID] = {
           '9001': 'X',
           '9002': 'Y',
         };
       });
 
       afterEach(() => {
-        delete ICPC_LABEL_OVERRIDES[TEST_CONTEST_ID];
+        delete AOJ_LABEL_OVERRIDES[TEST_CONTEST_ID];
       });
 
-      test('returns custom labels from ICPC_LABEL_OVERRIDES', () => {
+      test('returns custom labels from AOJ_LABEL_OVERRIDES', () => {
         const provider = createProvider(TEST_YEAR);
         const labels = provider.getTaskLabels(overrideTasks);
 
@@ -883,14 +883,14 @@ describe('AojIcpcRegionalProvider', () => {
       ] as TaskResults;
 
       beforeEach(() => {
-        ICPC_LABEL_OVERRIDES[TEST_CONTEST_ID] = { '8001': 'X', '8002': 'Y' };
+        AOJ_LABEL_OVERRIDES[TEST_CONTEST_ID] = { '8001': 'X', '8002': 'Y' };
       });
 
       afterEach(() => {
-        delete ICPC_LABEL_OVERRIDES[TEST_CONTEST_ID];
+        delete AOJ_LABEL_OVERRIDES[TEST_CONTEST_ID];
       });
 
-      test('returns custom labels from ICPC_LABEL_OVERRIDES', () => {
+      test('returns custom labels from AOJ_LABEL_OVERRIDES', () => {
         const provider = createRegionalProvider(TEST_YEAR);
         const labels = provider.getTaskLabels(overrideTasks);
 
