@@ -74,6 +74,34 @@ export const atCoderOthers = [
   }),
 ];
 
+export const atCoderMainOfficialOnsite = [
+  createTestCaseForContestNameLabel('World Tour Finals 2019')({
+    contestId: 'wtf19-open',
+    expected: 'World Tour Finals 2019',
+  }),
+  createTestCaseForContestNameLabel('World Tour Finals 2022 Day1')({
+    contestId: 'wtf22-day1-open',
+    expected: 'World Tour Finals 2022 Day1',
+  }),
+  // Note: Unlike wtf22-day1, the actual seeded contest_id has no "-open" suffix.
+  createTestCaseForContestNameLabel('World Tour Finals 2022 Day2')({
+    contestId: 'wtf22-day2',
+    expected: 'World Tour Finals 2022 Day2',
+  }),
+  createTestCaseForContestNameLabel('World Tour Finals 2024')({
+    contestId: 'awtf2024-open',
+    expected: 'World Tour Finals 2024',
+  }),
+  createTestCaseForContestNameLabel('World Tour Finals 2025 Algorithm')({
+    contestId: 'awtf2025algo-open',
+    expected: 'World Tour Finals 2025 Algorithm',
+  }),
+  createTestCaseForContestNameLabel('World Tour Finals 2026 Algorithm')({
+    contestId: 'awtf2026algo-open',
+    expected: 'World Tour Finals 2026 Algorithm',
+  }),
+];
+
 export const mathAndAlgorithm = [
   createTestCaseForContestNameLabel('Math and Algorithm')({
     contestId: 'math-and-algorithm',

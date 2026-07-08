@@ -318,6 +318,7 @@ enum ContestType {
   AWC // AtCoder Weekday Contest
   UNIVERSITY // University Programming Contests in AtCoder (e.g., UTPC)
   FPS_24 // 24 Problems on Formal Power Series
+  ATCODER_MAIN_OFFICIAL_ONSITE // AtCoder World Tour Finals (official onsite finals)
   OTHERS // AtCoder (その他)
   AOJ_COURSES // AIZU ONLINE JUDGE Courses
   AOJ_PCK // All-Japan High School Programming Contest (PCK)
