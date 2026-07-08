@@ -572,13 +572,37 @@ export const atCoderOthers = [
     contestId: 'DEGwer2023',
     expected: ContestType.OTHERS,
   }),
-  createTestCaseForContestType('World Tour Finals 2024')({
-    contestId: 'awtf2024',
-    expected: ContestType.OTHERS,
-  }),
   createTestCaseForContestType('Xmas Contest 2019')({
     contestId: 'xmascon19',
     expected: ContestType.OTHERS,
+  }),
+];
+
+export const atCoderMainOfficialOnsite = [
+  createTestCaseForContestType('World Tour Finals 2019')({
+    contestId: 'wtf19-open',
+    expected: ContestType.ATCODER_MAIN_OFFICIAL_ONSITE,
+  }),
+  createTestCaseForContestType('World Tour Finals 2022 Day1')({
+    contestId: 'wtf22-day1-open',
+    expected: ContestType.ATCODER_MAIN_OFFICIAL_ONSITE,
+  }),
+  // Note: Unlike wtf22-day1, the actual seeded contest_id has no "-open" suffix.
+  createTestCaseForContestType('World Tour Finals 2022 Day2')({
+    contestId: 'wtf22-day2',
+    expected: ContestType.ATCODER_MAIN_OFFICIAL_ONSITE,
+  }),
+  createTestCaseForContestType('World Tour Finals 2024')({
+    contestId: 'awtf2024-open',
+    expected: ContestType.ATCODER_MAIN_OFFICIAL_ONSITE,
+  }),
+  createTestCaseForContestType('World Tour Finals 2025 Algorithm')({
+    contestId: 'awtf2025algo-open',
+    expected: ContestType.ATCODER_MAIN_OFFICIAL_ONSITE,
+  }),
+  createTestCaseForContestType('World Tour Finals 2026 Algorithm')({
+    contestId: 'awtf2026algo-open',
+    expected: ContestType.ATCODER_MAIN_OFFICIAL_ONSITE,
   }),
 ];
 

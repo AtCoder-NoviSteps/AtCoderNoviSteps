@@ -1,5 +1,6 @@
 import { expect } from 'vitest';
 
+import { ContestType } from '$lib/types/contest';
 import { runTests } from '../common/test_helpers';
 import * as TestCasesForContestType from './test_cases/contest_type';
 import { type TestCaseForContestType } from './test_cases/contest_type';
@@ -185,6 +186,29 @@ describe('Contest', () => {
             expect(classifyContest(contestId)).toEqual(expected);
           });
         });
+      });
+
+      describe('when contest_id means AtCoder World Tour Finals (official onsite finals)', () => {
+        TestCasesForContestType.atCoderMainOfficialOnsite.forEach(({ name, value }) => {
+          runTests(`${name}`, [value], ({ contestId, expected }: TestCaseForContestType) => {
+            expect(classifyContest(contestId)).toEqual(expected);
+          });
+        });
+      });
+
+      describe('when contest_id is awtf2025heuristic (Heuristic division, out of scope)', () => {
+        test('returns null', () => {
+          expect(classifyContest('awtf2025heuristic')).toBeNull();
+        });
+      });
+
+      describe('when contest_id lacks the "-open" suffix seen in most seeded data', () => {
+        test.each(['wtf19', 'wtf22-day1', 'awtf2024', 'awtf2025algo'])(
+          'still classifies %s as ATCODER_MAIN_OFFICIAL_ONSITE',
+          (contestId) => {
+            expect(classifyContest(contestId)).toEqual(ContestType.ATCODER_MAIN_OFFICIAL_ONSITE);
+          },
+        );
       });
     });
 
@@ -409,6 +433,14 @@ describe('Contest', () => {
           });
         });
       });
+
+      describe('when contest_id means AtCoder World Tour Finals (official onsite finals)', () => {
+        TestCasesForContestType.atCoderMainOfficialOnsite.forEach(({ name, value }) => {
+          runTests(`${name}`, [value], ({ contestId, expected }: TestCaseForContestType) => {
+            expect(getContestPriority(contestId)).toEqual(contestTypePriorities.get(expected));
+          });
+        });
+      });
     });
 
     describe('AOJ', () => {
@@ -514,6 +546,14 @@ describe('Contest', () => {
 
       describe('when contest_id contains awc', () => {
         TestCasesForContestNameLabel.awc.forEach(({ name, value }) => {
+          runTests(`${name}`, [value], ({ contestId, expected }: TestCaseForContestNameLabel) => {
+            expect(getContestNameLabel(contestId)).toEqual(expected);
+          });
+        });
+      });
+
+      describe('when contest_id means AtCoder World Tour Finals (official onsite finals)', () => {
+        TestCasesForContestNameLabel.atCoderMainOfficialOnsite.forEach(({ name, value }) => {
           runTests(`${name}`, [value], ({ contestId, expected }: TestCaseForContestNameLabel) => {
             expect(getContestNameLabel(contestId)).toEqual(expected);
           });

@@ -71,6 +71,10 @@ export const classifyContest = (contest_id: string) => {
     return ContestType.FPS_24;
   }
 
+  if (isWorldTourFinals(contest_id)) {
+    return ContestType.ATCODER_MAIN_OFFICIAL_ONSITE;
+  }
+
   if (abcLikePrefixes.has(contest_id)) {
     return ContestType.ABC_LIKE;
   }
@@ -193,6 +197,50 @@ const ATCODER_UNIVERSITIES: ContestPrefix = {
 
 const atCoderUniversityPrefixes = getContestPrefixes(ATCODER_UNIVERSITIES);
 
+// World Tour Finals (AtCoder official onsite finals), Algorithm division only.
+//
+// Seeded contest_id values carry a trailing "-open" (e.g. wtf19-open), except
+// wtf22-day2 which AtCoder Problems records without it; strip it before matching
+// so both forms work and it never leaks into the display label.
+//
+// From 2025 the id gains an "algo" infix (awtf2025algo-open) to disambiguate
+// from the new Heuristic division (awtf2025heuristic), which stays out of scope.
+const regexForWorldTourFinals = /^(wtf19|wtf22-day[12]|awtf2024|awtf20\d{2}algo)$/;
+
+export const isWorldTourFinals = (contestId: string): boolean =>
+  regexForWorldTourFinals.test(stripOpenSuffix(contestId));
+
+export const getWorldTourFinalsLabel = (contestId: string): string => {
+  const base = 'World Tour Finals';
+  const id = stripOpenSuffix(contestId);
+
+  if (id === 'wtf19') {
+    return `${base} 2019`;
+  }
+
+  const dayMatch = /^wtf22-day([12])$/.exec(id);
+
+  if (dayMatch) {
+    return `${base} 2022 Day${dayMatch[1]}`;
+  }
+
+  if (id === 'awtf2024') {
+    return `${base} 2024`;
+  }
+
+  const algoMatch = /^awtf(20\d{2})algo$/.exec(id);
+
+  if (algoMatch) {
+    // "Algorithm" distinguishes from the Heuristic division, introduced in 2025.
+    return `${base} ${algoMatch[1]} Algorithm`;
+  }
+
+  return contestId.toUpperCase();
+};
+
+const stripOpenSuffix = (contestId: string): string =>
+  contestId.endsWith('-open') ? contestId.slice(0, -'-open'.length) : contestId;
+
 /**
  * Maps other AtCoder contest ID prefixes to their display names.
  * Includes special, corporate, and promotional contests that don't fit other categories.
@@ -248,7 +296,6 @@ const ATCODER_OTHERS: ContestPrefix = {
   'jsc2019-final': '第一回日本最強プログラマー学生選手権決勝',
   'jsc2025-final': '第六回日本最強プログラマー学生選手権 -決勝-',
   DEGwer2023: 'DEGwer さんの D 論応援コンテスト',
-  awtf2024: 'World Tour Finals 2024',
   xmascon19: 'Xmas Contest 2019',
 } as const;
 const atCoderOthersPrefixes = getContestPrefixes(ATCODER_OTHERS);
@@ -281,13 +328,13 @@ export function getContestPrefixes(contestPrefixes: Record<string, string>) {
 }
 
 /**
- * Contest type priorities (0 = Highest, 25 = Lowest)
+ * Contest type priorities (0 = Highest, 26 = Lowest)
  *
  * Priority assignment rationale:
  * - Educational contests (0-11, 17): ABS, ABC, APG4B and AWC etc.
  * - Contests for genius (12-16): ARC, AGC, and their variants
- * - Special contests (18-20): UNIVERSITY, FPS_24, OTHERS
- * - External platforms (21-25): AOJ_COURSES, AOJ_PCK, AOJ_ICPC, AOJ_JAG, AOJ_UNIVERSITY
+ * - Special contests (18-21): UNIVERSITY, FPS_24, ATCODER_MAIN_OFFICIAL_ONSITE, OTHERS
+ * - External platforms (22-26): AOJ_COURSES, AOJ_PCK, AOJ_ICPC, AOJ_JAG, AOJ_UNIVERSITY
  *
  * @remarks
  * HACK: The priorities for ARC, AGC, UNIVERSITY, AOJ_COURSES, and AOJ_PCK are temporary
@@ -317,12 +364,13 @@ export const contestTypePriorities: Map<ContestType, number> = new Map([
   [ContestType.AWC, 17],
   [ContestType.UNIVERSITY, 18],
   [ContestType.FPS_24, 19],
-  [ContestType.OTHERS, 20], // AtCoder (その他)
-  [ContestType.AOJ_COURSES, 21],
-  [ContestType.AOJ_PCK, 22],
-  [ContestType.AOJ_ICPC, 23],
-  [ContestType.AOJ_JAG, 24],
-  [ContestType.AOJ_UNIVERSITY, 25],
+  [ContestType.ATCODER_MAIN_OFFICIAL_ONSITE, 20],
+  [ContestType.OTHERS, 21], // AtCoder (その他)
+  [ContestType.AOJ_COURSES, 22],
+  [ContestType.AOJ_PCK, 23],
+  [ContestType.AOJ_ICPC, 24],
+  [ContestType.AOJ_JAG, 25],
+  [ContestType.AOJ_UNIVERSITY, 26],
 ]);
 
 export function getContestPriority(contestId: string): number {
@@ -440,6 +488,10 @@ export const getContestNameLabel = (contestId: string) => {
 
   if (contestId === 'fps-24') {
     return 'FPS 24 題';
+  }
+
+  if (isWorldTourFinals(contestId)) {
+    return getWorldTourFinalsLabel(contestId);
   }
 
   if (regexForAtCoderUniversity.exec(contestId)) {
