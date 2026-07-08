@@ -22,7 +22,7 @@ import {
  */
 export class JagPrelimProvider extends ContestTableProviderBase {
   private readonly year: number;
-  private readonly suffix: string; // '' | 'A' | 'B'
+  private readonly suffix: '' | 'A' | 'B';
   private readonly contestId: string;
 
   constructor(contestType: ContestType, year: number, suffix: '' | 'A' | 'B' = '') {
