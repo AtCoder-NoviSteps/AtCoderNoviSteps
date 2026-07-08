@@ -26,7 +26,7 @@
     removeTaskIndexFromTitle,
   } from '$lib/utils/task';
 
-  import { filterGradeTableTasks } from '../_utils/grade_table_filter';
+  import { filterGradeTableTasks, countPendingTasks } from '../_utils/grade_table_filter';
 
   const PAGE_SIZE = 50;
 
@@ -43,6 +43,7 @@
   const sortedTasks = $derived([...tasks].sort(compareByContestIdAndTaskId));
   const filteredTasks = $derived(filterGradeTableTasks(sortedTasks, search));
   const isSearchEmpty = $derived(search.trim() === '');
+  const pendingCount = $derived(countPendingTasks(tasks));
 
   $effect(() => {
     filteredTasks;
@@ -56,7 +57,7 @@
 </script>
 
 <h2 class="text-xl font-semibold mb-4 dark:text-white">
-  {title}（{filteredTasks.length} / {tasks.length} 問）
+  {title}（{filteredTasks.length} / {tasks.length} 問、Pending {pendingCount} 問）
 </h2>
 
 <div class="mb-4 flex items-center justify-between gap-4">

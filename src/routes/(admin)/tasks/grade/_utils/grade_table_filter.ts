@@ -1,4 +1,5 @@
 import type { TaskWithVoteInfo } from '$features/votes/services/vote_statistics';
+import { TaskGrade } from '$lib/types/task';
 import { filterTasksBySearch } from '$lib/utils/task_filter';
 
 /**
@@ -17,4 +18,12 @@ export function filterGradeTableTasks(
   }
 
   return filterTasksBySearch(tasks, query, Infinity);
+}
+
+/**
+ * Counts tasks whose confirmed grade is still PENDING (not yet graded by an admin),
+ * over the whole dataset — independent of the current search filter.
+ */
+export function countPendingTasks(tasks: TaskWithVoteInfo[]): number {
+  return tasks.filter((task) => task.grade === TaskGrade.PENDING).length;
 }
