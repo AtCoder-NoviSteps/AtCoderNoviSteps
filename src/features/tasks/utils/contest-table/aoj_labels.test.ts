@@ -1,6 +1,14 @@
 import { describe, test, expect, beforeEach, afterEach } from 'vitest';
 
-import { buildAojLetterMap, formatAojTitle, AOJ_LABEL_OVERRIDES } from './aoj_labels';
+import type { TaskResults } from '$lib/types/task';
+
+import {
+  buildAojLetterMap,
+  buildAojDisplayConfig,
+  formatAojTitle,
+  sortAojHeaderIds,
+  AOJ_LABEL_OVERRIDES,
+} from './aoj_labels';
 
 describe('formatAojTitle', () => {
   test('prepends the letter and a dot to the title (Prelim)', () => {
@@ -139,5 +147,40 @@ describe('buildAojLetterMap', () => {
         expect(result.has('1447')).toBe(false);
       });
     });
+  });
+});
+
+describe('sortAojHeaderIds', () => {
+  test('returns unique task_table_index values sorted numerically ascending', () => {
+    const filtered = [
+      { task_table_index: '1666' },
+      { task_table_index: '1664' },
+      { task_table_index: '1665' },
+    ] as TaskResults;
+
+    expect(sortAojHeaderIds(filtered)).toEqual(['1664', '1665', '1666']);
+  });
+
+  test('deduplicates repeated task_table_index values', () => {
+    const filtered = [{ task_table_index: '1664' }, { task_table_index: '1664' }] as TaskResults;
+
+    expect(sortAojHeaderIds(filtered)).toEqual(['1664']);
+  });
+
+  test('returns empty array for empty input', () => {
+    expect(sortAojHeaderIds([] as TaskResults)).toEqual([]);
+  });
+});
+
+describe('buildAojDisplayConfig', () => {
+  test('returns the shared AOJ display config', () => {
+    const config = buildAojDisplayConfig();
+
+    expect(config.isShownHeader).toBe(false);
+    expect(config.isShownRoundLabel).toBe(false);
+    expect(config.isShownTaskIndex).toBe(true);
+    expect(config.roundLabelWidth).toBe('');
+    expect(config.tableBodyCellsWidth).toBe('w-1/2 xs:w-1/3 sm:w-1/4 md:w-1/5 lg:w-1/6 px-1 py-2');
+    expect(config.columnWrapThreshold).toBe(6);
   });
 });
