@@ -45,6 +45,11 @@ Step 0 (seed check) is already done. Confirm the following before touching code:
 
 ## Layer 1 — Prisma schema
 
+> **Skip Layers 1–2** when an existing ContestType already covers this contest's family — e.g.
+> `AOJ_JAG` spans JAG Prelim / Regional / Camp, so adding Prelim-only reuses it with no schema /
+> priority / type change. Only add a new ContestType when no existing one fits; then Layer 3 is
+> also just a classify-regex tweak, not a new branch.
+
 - [ ] Add `XXX // Full Contest Name` to `prisma/schema.prisma` ContestType enum (after nearest neighbor)
 - [ ] `pnpm exec prisma generate` — non-interactive env; `migrate dev` requires interactive shell
 - [ ] `pnpm check` — expect a type error in `src/lib/types/contest.ts` (confirms client regenerated)
