@@ -3,7 +3,7 @@ import { describe, test, expect } from 'vitest';
 import { TaskGrade } from '$lib/types/task';
 import type { TaskWithVoteInfo } from '$features/votes/services/vote_statistics';
 
-import { filterGradeTableTasks } from './grade_table_filter';
+import { countPendingTasks, filterGradeTableTasks } from './grade_table_filter';
 
 function buildTask(overrides: Partial<TaskWithVoteInfo> = {}): TaskWithVoteInfo {
   return {
@@ -61,6 +61,44 @@ describe('filterGradeTableTasks', () => {
       const result = filterGradeTableTasks(tasks, 'abc300');
 
       expect(result).toHaveLength(25);
+    });
+  });
+});
+
+describe('countPendingTasks', () => {
+  describe('typical case', () => {
+    test('counts only PENDING tasks when PENDING and non-PENDING are mixed', () => {
+      const tasks = [
+        buildTask({ task_id: 'abc300_a', grade: TaskGrade.PENDING }),
+        buildTask({ task_id: 'abc300_b', grade: TaskGrade.Q1 }),
+        buildTask({ task_id: 'abc300_c', grade: TaskGrade.PENDING }),
+      ];
+
+      expect(countPendingTasks(tasks)).toBe(2);
+    });
+  });
+
+  describe('boundary cases', () => {
+    test('returns the array length when every task is PENDING', () => {
+      const tasks = [
+        buildTask({ task_id: 'abc300_a', grade: TaskGrade.PENDING }),
+        buildTask({ task_id: 'abc300_b', grade: TaskGrade.PENDING }),
+      ];
+
+      expect(countPendingTasks(tasks)).toBe(tasks.length);
+    });
+
+    test('returns 0 for an empty array', () => {
+      expect(countPendingTasks([])).toBe(0);
+    });
+
+    test('returns 0 when no task is PENDING', () => {
+      const tasks = [
+        buildTask({ task_id: 'abc300_a', grade: TaskGrade.Q1 }),
+        buildTask({ task_id: 'abc300_b', grade: TaskGrade.D6 }),
+      ];
+
+      expect(countPendingTasks(tasks)).toBe(0);
     });
   });
 });
