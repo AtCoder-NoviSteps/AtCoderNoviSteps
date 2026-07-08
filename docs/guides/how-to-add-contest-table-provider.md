@@ -208,7 +208,7 @@ protected setFilterCondition(): (taskResult: TaskResult) => boolean {
 
 ```typescript
 export const ICPC_PRELIM_OLDEST_YEAR = 1998;
-export const ICPC_PRELIM_LATEST_YEAR = 2025;
+export const ICPC_PRELIM_LATEST_YEAR = 2026;
 
 export class AojIcpcPrelimProvider extends ContestTableProviderBase {
   private readonly year: number;

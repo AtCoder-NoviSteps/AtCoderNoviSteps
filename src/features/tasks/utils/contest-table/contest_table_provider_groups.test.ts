@@ -308,7 +308,7 @@ describe('prepareContestProviderPresets', () => {
       buttonLabel: 'ICPC 国内予選',
       ariaLabel: 'Filter ICPC Domestic Preliminary',
     });
-    expect(group.getSize()).toBe(ICPC_PRELIM_LATEST_YEAR - ICPC_PRELIM_OLDEST_YEAR + 1); // 28
+    expect(group.getSize()).toBe(ICPC_PRELIM_LATEST_YEAR - ICPC_PRELIM_OLDEST_YEAR + 1); // 29
     expect(group.getProvider(ContestType.AOJ_ICPC, '2023')).toBeInstanceOf(AojIcpcPrelimProvider);
   });
 
