@@ -36,7 +36,7 @@ import { AojIcpcPrelimProvider, AojIcpcRegionalProvider } from './aoj_icpc_provi
 import { ContestTableProviderGroup } from './contest_table_provider_group';
 
 export const ICPC_PRELIM_OLDEST_YEAR = 1998;
-export const ICPC_PRELIM_LATEST_YEAR = 2025;
+export const ICPC_PRELIM_LATEST_YEAR = 2026;
 
 export const ICPC_REGIONAL_OLDEST_YEAR = 1998;
 export const ICPC_REGIONAL_LATEST_YEAR = 2024;
