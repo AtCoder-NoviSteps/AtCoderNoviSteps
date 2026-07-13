@@ -22,7 +22,8 @@ export default defineConfig({
       'dist/**',
       'node_modules/**',
     ],
-    environment: 'jsdom',
+    // Default to node; DOM-dependent tests opt in via `// @vitest-environment jsdom`.
+    environment: 'node',
     globals: true,
     coverage: {
       provider: 'v8',

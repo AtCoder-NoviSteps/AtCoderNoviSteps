@@ -28,6 +28,10 @@ E2E files: **must** use `.spec.ts` extension (`.test.ts` not detected).
 
 Route unit tests: `src/routes/**/*.test.ts` is included by `vite.config.ts`. **Never use `+` as a filename prefix** — SvelteKit reserves it and `pnpm check` will error. Name route test files `page_server.test.ts`, not `+page.server.test.ts`.
 
+## Test Environment
+
+Default is `node` (set in `vite.config.ts`). Only files touching the real DOM (`window` / `document` / `localStorage`) opt in with a top-of-file `// @vitest-environment jsdom`. **Never set jsdom globally** — most tests are pure units and per-file jsdom construction is ~5.5x slower. `$app/environment`'s `browser` is controllable via `vi.mock`, but keep jsdom on DOM-referencing files so browser-branch coverage isn't silently dropped.
+
 ## Unit Testing Patterns
 
 ### Assertions

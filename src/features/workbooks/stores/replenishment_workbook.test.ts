@@ -1,3 +1,5 @@
+// @vitest-environment jsdom
+
 import { expect, test, vi, type Mock } from 'vitest';
 
 import { replenishmentWorkBooksStore } from '$features/workbooks/stores/replenishment_workbook.svelte';

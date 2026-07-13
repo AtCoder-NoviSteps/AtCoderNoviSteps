@@ -1,3 +1,5 @@
+// @vitest-environment jsdom
+
 import { describe, test, expect, vi, beforeEach, afterEach } from 'vitest';
 
 import type { ContestTableProviderGroups } from '$features/tasks/utils/contest-table/contest_table_provider';
