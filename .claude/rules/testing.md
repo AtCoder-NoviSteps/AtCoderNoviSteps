@@ -30,7 +30,41 @@ Route unit tests: `src/routes/**/*.test.ts` is included by `vite.config.ts`. **N
 
 ## Test Environment
 
-Default is `node` (set in `vite.config.ts`). Only files touching the real DOM (`window` / `document` / `localStorage`) opt in with a top-of-file `// @vitest-environment jsdom`. **Never set jsdom globally** — most tests are pure units and per-file jsdom construction is ~5.5x slower. `$app/environment`'s `browser` is controllable via `vi.mock`, but keep jsdom on DOM-referencing files so browser-branch coverage isn't silently dropped.
+Default is `node` (set in `vite.config.ts`). Only files touching the real DOM (`window` / `document` / `localStorage`) opt in with a top-of-file `// @vitest-environment jsdom`. **Never set jsdom globally** — most tests are pure units and per-file jsdom construction is ~5.5x slower.
+
+### Toggling `browser` per describe
+
+**Never register `vi.mock('$app/environment')` twice in one file.** Every `vi.mock` is hoisted above the imports and runs once before any test, so a `{ browser: false }` mock written inside an SSR `describe`/`beforeEach` silently overwrites the `{ browser: true }` one at the top — the whole file ends up pinned to `browser = false`, the localStorage branches never execute, and tests that "verify" them become false-positives while still passing.
+
+Use **one dynamic mock** driven by a `vi.hoisted` flag, and toggle the flag in `beforeEach`. Default the flag to `false` so singletons constructed at import time stay SSR-safe:
+
+```typescript
+// @vitest-environment jsdom
+const browserState = vi.hoisted(() => ({ value: false }));
+
+vi.mock('$app/environment', () => ({
+  get browser() {
+    return browserState.value;
+  },
+}));
+
+describe('MyStore', () => {
+  beforeEach(() => {
+    browserState.value = true;
+    localStorage.clear();
+  });
+  // …
+});
+
+describe('MyStore in SSR', () => {
+  beforeEach(() => {
+    browserState.value = false;
+  });
+  // …
+});
+```
+
+In jsdom files, do **not** stub localStorage with `vi.stubGlobal` — use jsdom's real `Storage` and assert on state (`localStorage.getItem(key)`), not on spy calls. Assert SSR by constructing a fresh store with data already in localStorage: it must return the default and leave `getItem(key)` null.
 
 ## Unit Testing Patterns
 

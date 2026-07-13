@@ -1,38 +1,40 @@
 // @vitest-environment jsdom
 
-import { expect, test, vi, type Mock } from 'vitest';
+import { describe, test, expect, vi, beforeEach, afterEach } from 'vitest';
 
-import { replenishmentWorkBooksStore } from '$features/workbooks/stores/replenishment_workbook.svelte';
+import {
+  replenishmentWorkBooksStore,
+  ReplenishmentWorkBooksStore,
+} from '$features/workbooks/stores/replenishment_workbook.svelte';
+
+// WHY: a single dynamic mock is the only way to toggle `browser` per describe. Every vi.mock is
+// hoisted and the last registration for a module wins, so a second vi.mock of `$app/environment`
+// would silently clamp the whole file to one branch.
+// Defaults to false so the singleton constructed at import time stays SSR-safe (no localStorage).
+const browserState = vi.hoisted(() => ({ value: false }));
 
 vi.mock('$app/environment', () => ({
-  browser: true,
+  get browser() {
+    return browserState.value;
+  },
 }));
 
-describe('Replenishment workbooks store', () => {
-  const localStorageKey = 'is_shown_replenishment_workbooks';
-  const mockLocalStorage: Storage = {
-    getItem: vi.fn(),
-    setItem: vi.fn(),
-    removeItem: vi.fn(),
-    clear: vi.fn(),
-    length: 0,
-    key: vi.fn(),
-  };
+const localStorageKey = 'is_shown_replenishment_workbooks';
 
+afterEach(() => {
+  localStorage.clear();
+});
+
+describe('Replenishment workbooks store', () => {
   beforeEach(() => {
-    vi.clearAllMocks();
-    // Setup mock for localStorage
-    vi.stubGlobal('localStorage', mockLocalStorage);
+    browserState.value = true;
+    localStorage.clear();
 
     replenishmentWorkBooksStore.reset();
   });
 
-  afterEach(() => {
-    vi.unstubAllGlobals();
-  });
-
   test('expects to be invisible before toggling', () => {
-    expect(replenishmentWorkBooksStore.canView()).toBeFalsy();
+    expect(replenishmentWorkBooksStore.canView()).toBe(false);
   });
 
   test.each([
@@ -47,30 +49,47 @@ describe('Replenishment workbooks store', () => {
     expect(replenishmentWorkBooksStore.canView()).toBe(expected);
   });
 
-  // Note: This test is skipped because it is not possible to mock localStorage in JSDOM.
-  test.skip('persists state in localStorage', () => {
-    (mockLocalStorage.getItem as Mock).mockReturnValue(JSON.stringify(false));
+  test('expects to persist state in localStorage', () => {
+    replenishmentWorkBooksStore.toggleView();
+    expect(localStorage.getItem(localStorageKey)).toBe(JSON.stringify(true));
 
     replenishmentWorkBooksStore.toggleView();
-
-    expect(mockLocalStorage.setItem).toHaveBeenCalledTimes(1);
-    expect(mockLocalStorage.setItem).toHaveBeenCalledWith(localStorageKey, JSON.stringify(true));
+    expect(localStorage.getItem(localStorageKey)).toBe(JSON.stringify(false));
   });
 
-  test('handles invalid localStorage data', () => {
+  test('expects to be invisible when localStorage holds no state', () => {
+    expect(new ReplenishmentWorkBooksStore().canView()).toBe(false);
+  });
+
+  test('expects to restore the state persisted in localStorage', () => {
+    localStorage.setItem(localStorageKey, JSON.stringify(true));
+
+    expect(new ReplenishmentWorkBooksStore().canView()).toBe(true);
+  });
+
+  test('expects to be invisible when localStorage data is invalid', () => {
     localStorage.setItem(localStorageKey, 'invalid-json');
-    expect(replenishmentWorkBooksStore.canView()).toBeFalsy();
+
+    expect(new ReplenishmentWorkBooksStore().canView()).toBe(false);
   });
 });
 
 describe('Replenishment workbooks store in SSR', () => {
   beforeEach(() => {
-    vi.mock('$app/environment', () => ({
-      browser: false,
-    }));
+    browserState.value = false;
   });
 
-  test('handles SSR gracefully', () => {
-    expect(replenishmentWorkBooksStore.canView()).toBeFalsy();
+  test('expects to ignore localStorage and be invisible', () => {
+    localStorage.setItem(localStorageKey, JSON.stringify(true));
+
+    expect(new ReplenishmentWorkBooksStore().canView()).toBe(false);
+  });
+
+  test('expects not to persist state in localStorage when toggling', () => {
+    const store = new ReplenishmentWorkBooksStore();
+    store.toggleView();
+
+    expect(store.canView()).toBe(true);
+    expect(localStorage.getItem(localStorageKey)).toBeNull();
   });
 });

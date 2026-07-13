@@ -1,42 +1,39 @@
 // @vitest-environment jsdom
 
-import { describe, test, expect, vi, beforeEach } from 'vitest';
+import { describe, test, expect, vi, beforeEach, afterEach } from 'vitest';
 
 import {
   activeProblemListTabStore,
   ActiveProblemListTabStore,
 } from '$lib/stores/active_problem_list_tab.svelte';
 
+// WHY: a single dynamic mock is the only way to toggle `browser` per describe. Every vi.mock is
+// hoisted and the last registration for a module wins, so a second vi.mock of `$app/environment`
+// would silently clamp the whole file to one branch.
+// Defaults to false so the singleton constructed at import time stays SSR-safe (no localStorage).
+const browserState = vi.hoisted(() => ({ value: false }));
+
 vi.mock('$app/environment', () => ({
-  browser: true,
+  get browser() {
+    return browserState.value;
+  },
 }));
+
+const localStorageKey = 'active_problem_list_tab';
+
+afterEach(() => {
+  localStorage.clear();
+});
 
 describe('ActiveProblemListTabStore', () => {
   let store: ActiveProblemListTabStore;
 
-  const mockLocalStorage: Storage = {
-    getItem: vi.fn((key) => mockStorage[key] || null),
-    setItem: vi.fn((key, value) => {
-      mockStorage[key] = value;
-    }),
-    removeItem: vi.fn(),
-    clear: vi.fn(),
-    length: 0,
-    key: vi.fn(),
-  };
-  const mockStorage: Record<string, string> = {};
-
   beforeEach(() => {
-    vi.clearAllMocks();
-    // Setup mock for localStorage
-    vi.stubGlobal('localStorage', mockLocalStorage);
+    browserState.value = true;
+    localStorage.clear();
 
     store = new ActiveProblemListTabStore();
     store.reset();
-  });
-
-  afterEach(() => {
-    vi.unstubAllGlobals();
   });
 
   describe('constructor', () => {
@@ -47,6 +44,12 @@ describe('ActiveProblemListTabStore', () => {
     test('expects to initialize with provided value', () => {
       const customStore = new ActiveProblemListTabStore('listByGrade');
       expect(customStore.get()).toBe('listByGrade');
+    });
+
+    test('expects to restore the value persisted in localStorage', () => {
+      localStorage.setItem(localStorageKey, JSON.stringify('gradeGuidelineTable'));
+
+      expect(new ActiveProblemListTabStore().get()).toBe('gradeGuidelineTable');
     });
   });
 
@@ -63,6 +66,11 @@ describe('ActiveProblemListTabStore', () => {
 
       store.set('gradeGuidelineTable');
       expect(store.get()).toBe('gradeGuidelineTable');
+    });
+
+    test('expects to persist the active tab in localStorage', () => {
+      store.set('listByGrade');
+      expect(localStorage.getItem(localStorageKey)).toBe(JSON.stringify('listByGrade'));
     });
   });
 
@@ -92,17 +100,16 @@ describe('ActiveProblemListTabStore', () => {
 
 describe('Active problem list tab store in SSR', () => {
   beforeEach(() => {
-    vi.restoreAllMocks();
-    vi.mock('$app/environment', () => ({
-      browser: false,
-    }));
+    browserState.value = false;
   });
 
-  afterEach(() => {
-    vi.restoreAllMocks();
+  test('expects to ignore localStorage and initialize with default value', () => {
+    localStorage.setItem(localStorageKey, JSON.stringify('listByGrade'));
+
+    expect(new ActiveProblemListTabStore().get()).toBe('contestTable');
   });
 
-  test('handles SSR gracefully', () => {
+  test('expects the singleton constructed at import time to hold the default value', () => {
     expect(activeProblemListTabStore.get()).toBe('contestTable');
   });
 });
