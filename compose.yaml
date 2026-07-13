@@ -7,9 +7,7 @@ services:
     tty: true
     volumes:
       - .:/usr/src/app
-      # Named volume keeps node_modules on the Linux VM disk instead of crossing the
-      # virtiofs host boundary on every open/stat/read (`:cached` is a no-op on OrbStack).
-      - node_modules:/usr/src/app/node_modules
+      - ./node_modules:/usr/src/app/node_modules
     environment:
       - NODE_ENV=development
       - DATABASE_URL=postgresql://db_user:db_password@db:5432/test_db?pgbouncer=true&connection_limit=10&connect_timeout=60&statement_timeout=60000 # Note: Local server cannot start if port is set to db:6543.
@@ -33,6 +31,5 @@ services:
       - '6543:5432'
 
 volumes:
-  node_modules:
   postgres-data:
     driver: local
