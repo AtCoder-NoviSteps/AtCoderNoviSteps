@@ -28,6 +28,52 @@ E2E files: **must** use `.spec.ts` extension (`.test.ts` not detected).
 
 Route unit tests: `src/routes/**/*.test.ts` is included by `vite.config.ts`. **Never use `+` as a filename prefix** — SvelteKit reserves it and `pnpm check` will error. Name route test files `page_server.test.ts`, not `+page.server.test.ts`.
 
+## Test Environment
+
+Default is `node` (set in `vite.config.ts`). Only files touching the real DOM (`window` / `document` / `localStorage`) opt in with a top-of-file `// @vitest-environment jsdom`. **Never set jsdom globally** — most tests are pure units and per-file jsdom construction is ~5.5x slower.
+
+### Toggling `browser` per describe
+
+**Never register `vi.mock('$app/environment')` twice in one file.** Every `vi.mock` is hoisted above the imports and runs once before any test, so a `{ browser: false }` mock written inside an SSR `describe`/`beforeEach` silently overwrites the `{ browser: true }` one at the top — the whole file ends up pinned to `browser = false`, the localStorage branches never execute, and tests that "verify" them become false-positives while still passing.
+
+Use **one dynamic mock** driven by a `vi.hoisted` flag, and toggle the flag in `beforeEach`. Default the flag to `false` so singletons constructed at import time stay SSR-safe:
+
+```typescript
+// @vitest-environment jsdom
+const browserState = vi.hoisted(() => ({ value: false }));
+
+vi.mock('$app/environment', () => ({
+  get browser() {
+    return browserState.value;
+  },
+}));
+
+describe('MyStore', () => {
+  let store: MyStore;
+
+  beforeEach(() => {
+    browserState.value = true;
+    localStorage.clear();
+    store = new MyStore(); // constructed after the flag flips — reads localStorage
+  });
+  // …
+});
+
+describe('MyStore in SSR', () => {
+  beforeEach(() => {
+    browserState.value = false;
+  });
+  // …
+});
+```
+
+**Never assert a browser branch on the import-time singleton.** The flag is `false` while the module graph is evaluated, so the exported singleton is always built in SSR mode and never touches localStorage — asserting on it under `browser = true` is the same false-positive as the double-`vi.mock` above. Construct a fresh instance inside the browser `describe` (which is why the store class, not just the singleton, needs a named export). The singleton is still worth one assertion: that import-time construction is SSR-safe.
+
+In jsdom files, do **not** stub localStorage with `vi.stubGlobal` — use jsdom's real `Storage` and assert on state (`localStorage.getItem(key)`), not on spy calls. Cover both SSR guards with separate cases, since one assertion cannot carry both:
+
+- **read guard**: pre-seed localStorage, construct a fresh store, expect the _default_ (the pre-seeded value stays in storage, so do not expect `getItem(key)` to be null here)
+- **write guard**: start from empty localStorage, call the setter, expect `getItem(key)` to still be null
+
 ## Unit Testing Patterns
 
 ### Assertions

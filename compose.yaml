@@ -6,8 +6,8 @@ services:
       - '5555:5555'
     tty: true
     volumes:
-      - .:/usr/src/app:cached
-      - ./node_modules:/usr/src/app/node_modules:cached
+      - .:/usr/src/app
+      - ./node_modules:/usr/src/app/node_modules
     environment:
       - NODE_ENV=development
       - DATABASE_URL=postgresql://db_user:db_password@db:5432/test_db?pgbouncer=true&connection_limit=10&connect_timeout=60&statement_timeout=60000 # Note: Local server cannot start if port is set to db:6543.

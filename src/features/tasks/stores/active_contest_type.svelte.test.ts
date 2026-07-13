@@ -1,3 +1,5 @@
+// @vitest-environment jsdom
+
 import { describe, test, expect, vi, beforeEach, afterEach } from 'vitest';
 
 import type { ContestTableProviderGroups } from '$features/tasks/utils/contest-table/contest_table_provider';
@@ -6,38 +8,33 @@ import {
   ActiveContestTypeStore,
 } from '$features/tasks/stores/active_contest_type.svelte';
 
+// WHY: a single dynamic mock is the only way to toggle `browser` per describe. Every vi.mock is
+// hoisted and the last registration for a module wins, so a second vi.mock of `$app/environment`
+// would silently clamp the whole file to one branch.
+// Defaults to false so the singleton constructed at import time stays SSR-safe (no localStorage).
+const browserState = vi.hoisted(() => ({ value: false }));
+
 vi.mock('$app/environment', () => ({
-  browser: true,
+  get browser() {
+    return browserState.value;
+  },
 }));
+
+const localStorageKey = 'contest_table_providers';
+
+afterEach(() => {
+  localStorage.clear();
+});
 
 describe('ActiveContestTypeStore', () => {
   let store: ActiveContestTypeStore;
 
-  const mockLocalStorage: Storage = {
-    getItem: vi.fn((key) => mockStorage[key] || null),
-    setItem: vi.fn((key, value) => {
-      mockStorage[key] = value;
-    }),
-    removeItem: vi.fn(),
-    clear: vi.fn(),
-    length: 0,
-    key: vi.fn(),
-  };
-  const mockStorage: Record<string, string> = {};
-
   beforeEach(() => {
-    vi.clearAllMocks();
-    // Clear mockStorage before each test
-    Object.keys(mockStorage).forEach((key) => delete mockStorage[key]);
-    // Setup mock for localStorage
-    vi.stubGlobal('localStorage', mockLocalStorage);
+    browserState.value = true;
+    localStorage.clear();
 
     store = new ActiveContestTypeStore();
     store.reset();
-  });
-
-  afterEach(() => {
-    vi.unstubAllGlobals();
   });
 
   test('expects to initialize with default value', () => {
@@ -58,6 +55,17 @@ describe('ActiveContestTypeStore', () => {
 
     store.set('abc319Onwards' as ContestTableProviderGroups);
     expect(store.get()).toBe('abc319Onwards');
+  });
+
+  test('expects to persist the value in localStorage when calling set()', () => {
+    store.set('abc319Onwards' as ContestTableProviderGroups);
+    expect(localStorage.getItem(localStorageKey)).toBe(JSON.stringify('abc319Onwards'));
+  });
+
+  test('expects to restore the value persisted in localStorage', () => {
+    localStorage.setItem(localStorageKey, JSON.stringify('fromAbc212ToAbc318'));
+
+    expect(new ActiveContestTypeStore().get()).toBe('fromAbc212ToAbc318');
   });
 
   test('expects to correctly determine if contest type is the same with isSame()', () => {
@@ -94,15 +102,21 @@ describe('ActiveContestTypeStore', () => {
   });
 
   test('expects to reset to default when initialized with invalid localStorage key', () => {
-    // Simulate invalid key in localStorage
-    mockStorage['contest_table_providers'] = JSON.stringify('invalidContestType');
+    localStorage.setItem(localStorageKey, JSON.stringify('invalidContestType'));
+
+    const newStore = new ActiveContestTypeStore();
+    expect(newStore.get()).toBe('abs');
+  });
+
+  test('expects to reset to default when localStorage holds invalid JSON', () => {
+    localStorage.setItem(localStorageKey, 'invalid-json');
 
     const newStore = new ActiveContestTypeStore();
     expect(newStore.get()).toBe('abs');
   });
 
   test('expects to reset to default when initialized with null', () => {
-    mockStorage['contest_table_providers'] = JSON.stringify(null);
+    localStorage.setItem(localStorageKey, JSON.stringify(null));
 
     const newStore = new ActiveContestTypeStore();
     expect(newStore.get()).toBe('abs');
@@ -124,17 +138,24 @@ describe('ActiveContestTypeStore', () => {
 
 describe('Active contest type store in SSR', () => {
   beforeEach(() => {
-    vi.restoreAllMocks();
-    vi.mock('$app/environment', () => ({
-      browser: false,
-    }));
+    browserState.value = false;
   });
 
-  afterEach(() => {
-    vi.restoreAllMocks();
+  test('expects to ignore localStorage and initialize with default value', () => {
+    localStorage.setItem(localStorageKey, JSON.stringify('abc319Onwards'));
+
+    expect(new ActiveContestTypeStore().get()).toBe('abs');
   });
 
-  test('handles SSR gracefully', () => {
+  test('expects not to persist the value in localStorage when calling set()', () => {
+    const store = new ActiveContestTypeStore();
+    store.set('abc319Onwards' as ContestTableProviderGroups);
+
+    expect(store.get()).toBe('abc319Onwards');
+    expect(localStorage.getItem(localStorageKey)).toBeNull();
+  });
+
+  test('expects the singleton constructed at import time to hold the default value', () => {
     expect(activeContestTypeStore.get()).toBe('abs');
   });
 });

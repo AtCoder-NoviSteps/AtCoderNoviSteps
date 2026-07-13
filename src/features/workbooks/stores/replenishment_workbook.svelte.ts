@@ -7,7 +7,7 @@ import { browser } from '$app/environment';
 // https://svelte.dev/docs/svelte/$state
 const IS_SHOWN_REPLENISHMENT_WORKBOOKS = 'is_shown_replenishment_workbooks';
 
-class ReplenishmentWorkBooksStore {
+export class ReplenishmentWorkBooksStore {
   private isShown = $state<boolean>(this.loadInitialState());
 
   // Note:
