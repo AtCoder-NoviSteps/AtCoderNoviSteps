@@ -49,9 +49,12 @@ vi.mock('$app/environment', () => ({
 }));
 
 describe('MyStore', () => {
+  let store: MyStore;
+
   beforeEach(() => {
     browserState.value = true;
     localStorage.clear();
+    store = new MyStore(); // constructed after the flag flips — reads localStorage
   });
   // …
 });
@@ -64,7 +67,12 @@ describe('MyStore in SSR', () => {
 });
 ```
 
-In jsdom files, do **not** stub localStorage with `vi.stubGlobal` — use jsdom's real `Storage` and assert on state (`localStorage.getItem(key)`), not on spy calls. Assert SSR by constructing a fresh store with data already in localStorage: it must return the default and leave `getItem(key)` null.
+**Never assert a browser branch on the import-time singleton.** The flag is `false` while the module graph is evaluated, so the exported singleton is always built in SSR mode and never touches localStorage — asserting on it under `browser = true` is the same false-positive as the double-`vi.mock` above. Construct a fresh instance inside the browser `describe` (which is why the store class, not just the singleton, needs a named export). The singleton is still worth one assertion: that import-time construction is SSR-safe.
+
+In jsdom files, do **not** stub localStorage with `vi.stubGlobal` — use jsdom's real `Storage` and assert on state (`localStorage.getItem(key)`), not on spy calls. Cover both SSR guards with separate cases, since one assertion cannot carry both:
+
+- **read guard**: pre-seed localStorage, construct a fresh store, expect the _default_ (the pre-seeded value stays in storage, so do not expect `getItem(key)` to be null here)
+- **write guard**: start from empty localStorage, call the setter, expect `getItem(key)` to still be null
 
 ## Unit Testing Patterns
 
