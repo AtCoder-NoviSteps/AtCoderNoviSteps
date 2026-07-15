@@ -1,7 +1,6 @@
-// See:
-// https://lucia-auth.com/guidebook/sign-in-with-username-and-password/sveltekit/
-import { auth } from '$lib/server/auth';
 import { fail, redirect } from '@sveltejs/kit';
+
+import { invalidateSession } from '$lib/server/session';
 
 import { SEE_OTHER, UNAUTHORIZED } from '$lib/constants/http-response-status-codes';
 import { HOME_PAGE } from '$lib/constants/navbar-links';
@@ -20,7 +19,7 @@ export const actions: Actions = {
       return fail(UNAUTHORIZED);
     }
 
-    await auth.invalidateSession(session.sessionId); // invalidate session
+    await invalidateSession(session.sessionId); // invalidate session
     locals.auth.setSession(null); // remove cookie
 
     redirect(SEE_OTHER, HOME_PAGE);

@@ -1,12 +1,9 @@
-// See:
-// https://lucia-auth.com/guidebook/sign-in-with-username-and-password/sveltekit/
-
 // This route uses centralized helpers with fallback validation strategies.
 // See src/lib/utils/auth_forms.ts for the current form handling approach.
 import { fail, redirect } from '@sveltejs/kit';
-import { LuciaError } from 'lucia';
 
-import { auth } from '$lib/server/auth';
+import { createSession } from '$lib/server/session';
+import { authenticateUser } from '$features/auth/services/credentials';
 
 import { initializeAuthForm, validateAuthFormWithFallback } from '$lib/utils/auth_forms';
 import { isSameOriginRedirect } from '$lib/utils/url';
@@ -39,25 +36,11 @@ export const actions: Actions = {
     }
 
     try {
-      // find user by key
-      // and validate password
-      const key = await auth.useKey(
-        'username',
-        form.data.username.toLowerCase(),
-        form.data.password,
-      );
-      const session = await auth.createSession({
-        userId: key.userId,
-        attributes: {},
-      });
+      // find the user by username and validate the password
+      const authenticated = await authenticateUser(form.data.username, form.data.password);
 
-      locals.auth.setSession(session); // set session cookie
-    } catch (e) {
-      if (
-        e instanceof LuciaError &&
-        (e.message === 'AUTH_INVALID_KEY_ID' || e.message === 'AUTH_INVALID_PASSWORD')
-      ) {
-        // user does not exist or invalid password
+      // null means the user does not exist or the password is wrong (indistinguishable by design)
+      if (!authenticated) {
         return fail(BAD_REQUEST, {
           form: {
             ...form,
@@ -67,6 +50,10 @@ export const actions: Actions = {
         });
       }
 
+      const session = await createSession(authenticated.userId);
+      locals.auth.setSession(session); // set session cookie
+    } catch {
+      // unexpected failure (e.g. DB error); invalid credentials already map to null above
       return fail(INTERNAL_SERVER_ERROR, {
         form: {
           ...form,

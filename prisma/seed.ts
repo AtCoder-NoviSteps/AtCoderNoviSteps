@@ -19,7 +19,7 @@ import {
   defineWorkBookFactory,
 } from './.fabbrica';
 import PQueue from 'p-queue';
-import { generateLuciaPasswordHash } from 'lucia/utils';
+import { hashPassword } from '../src/lib/server/password';
 
 import { getTaskGrade } from '../src/lib/types/task';
 import type { PlacementCreate } from '../src/features/workbooks/types/workbook_placement';
@@ -62,7 +62,6 @@ const QUEUE_CONCURRENCY = {
 
 // See:
 // https://github.com/TeemuKoivisto/sveltekit-monorepo-template/blob/main/packages/db/prisma/seed.ts
-// https://lucia-auth.com/basics/keys/#password-hashing
 // https://www.prisma.io/docs/reference/api-reference/prisma-client-reference#findunique
 // https://github.com/sindresorhus/p-queue
 async function main() {
@@ -119,8 +118,6 @@ async function addUsers() {
   console.log('Finished adding users.');
 }
 
-// See:
-// https://lucia-auth.com/reference/lucia/modules/utils/#generateluciapasswordhash
 async function addUser(
   user: (typeof users)[number],
   password: string,
@@ -132,7 +129,7 @@ async function addUser(
     username: user.name,
     role: user.role,
   });
-  const hashed_password = await generateLuciaPasswordHash(password);
+  const hashed_password = await hashPassword(password);
 
   await keyFactory.create({
     user: { connect: currentUser },

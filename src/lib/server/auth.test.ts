@@ -11,11 +11,6 @@ vi.mock('$lib/server/session', () => ({
   validateSession: vi.fn(),
 }));
 
-// auth.ts still initializes lucia in Phase 3, which pulls in the database client; stub it out
-vi.mock('$lib/server/database', () => ({
-  default: { session: {}, key: {}, user: {} },
-}));
-
 import { createAuthRequest } from './auth';
 import { validateSession, SESSION_COOKIE_NAME } from '$lib/server/session';
 

@@ -21,19 +21,5 @@ declare global {
   }
 }
 
-// See:
-// https://lucia-auth.com/getting-started/sveltekit/
-/// <reference types="lucia" />
-declare global {
-  namespace Lucia {
-    type Auth = import('$lib/server/auth').Auth;
-    type UserAttributes = {
-      username: string;
-      role: Roles;
-    };
-    // type SessionAttributes = {};
-  }
-}
-
 // THIS IS IMPORTANT!!!
 export {};

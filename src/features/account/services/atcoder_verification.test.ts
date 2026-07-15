@@ -42,7 +42,8 @@ type UserWithAtCoderAccount = Awaited<ReturnType<typeof prisma.user.findUniqueOr
 // ---------------------------------------------------------------------------
 
 const SAMPLE_TIMESTAMP = new Date('2024-01-01T00:00:00Z');
-// Lucia (auth library) auto-generates User.id in UUID format
+// The auth service generates User.id as a 15-char [a-z0-9] random string; this fixture predates
+// that and uses a UUID, which is fine here since these tests never assert the id format.
 const SAMPLE_USER_ID = '550e8400-e29b-41d4-a716-446655440000';
 const SAMPLE_USERNAME = 'alice';
 const SAMPLE_HANDLE = 'alice_ac';

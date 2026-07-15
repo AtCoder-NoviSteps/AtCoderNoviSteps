@@ -73,12 +73,10 @@
   "dependencies": {
     "@dnd-kit/helpers": "0.5.0",
     "@dnd-kit/svelte": "0.5.0",
-    "@lucia-auth/adapter-prisma": "3.0.2",
     "@lucide/svelte": "1.24.0",
     "@prisma/client": "5.22.0",
     "@types/node": "25.9.5",
     "debug": "4.4.3",
-    "lucia": "2.7.7",
     "p-queue": "9.3.1",
     "playwright": "1.61.1",
     "svelte-eslint-parser": "1.8.0",

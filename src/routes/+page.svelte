@@ -1,5 +1,3 @@
-<!-- See: -->
-<!-- https://lucia-auth.com/guidebook/sign-in-with-username-and-password/sveltekit/ -->
 <script lang="ts">
   import { Heading, Button, Carousel } from 'flowbite-svelte';
   import ArrowRight from '@lucide/svelte/icons/arrow-right';
