@@ -133,7 +133,7 @@ async function addUser(
 
   await keyFactory.create({
     user: { connect: currentUser },
-    id: 'username:' + user.name.toLocaleLowerCase(),
+    id: 'username:' + user.name.toLowerCase(),
     hashed_password: hashed_password,
   });
 }

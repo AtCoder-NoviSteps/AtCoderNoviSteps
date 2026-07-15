@@ -19,9 +19,9 @@ test.describe('anonymous /problems response', () => {
     expect(headers['cache-control']).toContain('stale-while-revalidate=600');
 
     // set-cookie makes a response ineligible for CDN caching.
-    // Lucia must not attach a session cookie to anonymous requests.
-    // If this assertion fails after a Lucia upgrade, verify it does not
-    // set cookies on unauthenticated requests.
+    // The auth layer must not attach a session cookie to anonymous requests.
+    // If this assertion fails, verify the session handling does not set cookies
+    // on unauthenticated requests.
     expect(headers['set-cookie']).toBeUndefined();
   });
 });

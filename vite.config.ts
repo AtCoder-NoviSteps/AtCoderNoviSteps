@@ -5,7 +5,7 @@ import { defineConfig } from 'vitest/config';
 export default defineConfig({
   plugins: [tailwindcss(), sveltekit()],
   optimizeDeps: {
-    exclude: ['@prisma/client', '@lucia-auth/adapter-prisma'],
+    exclude: ['@prisma/client'],
   },
   test: {
     include: [
