@@ -7,7 +7,7 @@ declare global {
   namespace App {
     // interface Error {}
     interface Locals {
-      auth: import('lucia').AuthRequest;
+      auth: import('$lib/server/auth').AuthRequest;
       user: {
         id: string;
         name: string;
