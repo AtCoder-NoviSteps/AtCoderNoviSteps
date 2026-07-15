@@ -148,6 +148,24 @@ describe('validateSession', () => {
 
       expect(mockDb.session.update).toHaveBeenCalledOnce();
     });
+
+    test('returns null when the row is deleted concurrently during extension (P2025)', async () => {
+      // race: another request (logout / account deletion) deletes the row between findUnique and update
+      mockFindUnique(buildSessionRow(NOW - 1000, NOW + IDLE_PERIOD_MS));
+      mockDb.session.update.mockRejectedValue(
+        buildPrismaError('P2025', 'Record to update not found.'),
+      );
+
+      expect(await validateSession(SESSION_ID)).toBeNull();
+    });
+
+    test('re-throws update errors other than P2025', async () => {
+      mockFindUnique(buildSessionRow(NOW - 1000, NOW + IDLE_PERIOD_MS));
+      const error = buildPrismaError('P2003', 'Foreign key constraint failed.');
+      mockDb.session.update.mockRejectedValue(error);
+
+      await expect(validateSession(SESSION_ID)).rejects.toBe(error);
+    });
   });
 
   describe('dead session (now > idle_expires)', () => {

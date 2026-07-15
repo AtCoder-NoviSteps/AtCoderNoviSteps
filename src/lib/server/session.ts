@@ -55,13 +55,23 @@ export const validateSession = async (sessionId: string): Promise<ValidatedSessi
     // idle state: extend expirations keeping the same id (no rotation, cookie untouched)
     const { activePeriodExpiresAt, idlePeriodExpiresAt } = computeExpirations(now);
 
-    await client.session.update({
-      where: { id: sessionId },
-      data: {
-        active_expires: activePeriodExpiresAt.getTime(),
-        idle_expires: idlePeriodExpiresAt.getTime(),
-      },
-    });
+    try {
+      await client.session.update({
+        where: { id: sessionId },
+        data: {
+          active_expires: activePeriodExpiresAt.getTime(),
+          idle_expires: idlePeriodExpiresAt.getTime(),
+        },
+      });
+    } catch (error) {
+      // P2025: the row was deleted concurrently (e.g. logout) between findUnique and update.
+      // Treat the session as gone (unauthenticated) instead of surfacing a 500.
+      if (error instanceof PrismaClientKnownRequestError && error.code === 'P2025') {
+        return null;
+      }
+
+      throw error;
+    }
   }
 
   return {
