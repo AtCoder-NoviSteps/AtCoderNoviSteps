@@ -129,12 +129,12 @@ async function addUser(
     username: user.name,
     role: user.role,
   });
-  const hashed_password = await hashPassword(password);
+  const hashedPassword = await hashPassword(password);
 
   await keyFactory.create({
     user: { connect: currentUser },
     id: 'username:' + user.name.toLowerCase(),
-    hashed_password: hashed_password,
+    hashed_password: hashedPassword,
   });
 }
 
