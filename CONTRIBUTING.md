@@ -37,8 +37,8 @@
   - [Vitest](https://vitest.dev/): 単体テスト (ユーティリティ、コンポーネント)
   - [Playwright](https://playwright.dev/): e2eテスト
   - [Nock](https://github.com/nock/nock): API 統合テスト用の HTTP モック
-- 認証ライブラリ
-  - [Lucia](https://lucia-auth.com/)
+- 認証
+  - 自前実装（セッション管理・パスワードハッシュ）。旧 [Lucia](https://lucia-auth.com/) v2 のセッション / パスワード形式に準拠（互換性維持のため、cookie 名・ハッシュ形式は安易に変更しないこと）
 - ORM
   - [Prisma](https://www.prisma.io/)
 - バリデーション

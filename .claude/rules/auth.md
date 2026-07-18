@@ -10,10 +10,11 @@ paths:
 
 # Authentication
 
-## Lucia v2
+## Self-Managed Session Auth
 
-- Session validation in `src/hooks.server.ts`
-- Session data attached to `event.locals.user`
+Auth is a self-managed implementation (no external auth library), kept compatible with the retired lucia v2 so existing sessions and password hashes stay valid. See `## Key Files` for the module map.
+
+- Session validation in `src/hooks.server.ts`; session data attached to `event.locals.user`
 - User properties: `id`, `name`, `role`, `atcoder_name`, `is_validated`
 
 ## Protected Routes
@@ -30,7 +31,9 @@ paths:
 
 ## Key Files
 
-- `src/lib/server/auth.ts`: Lucia configuration
+- `src/lib/server/auth.ts`: `createAuthRequest` (request-scoped session handle)
+- `src/lib/server/session.ts` / `src/lib/server/password.ts`: self-managed session + password crypto
+- `src/features/auth/services/credentials.ts`: `registerUser` / `authenticateUser`
 - `src/hooks.server.ts`: Global request handler
 - `src/features/auth/services/session.ts`:
   - `getLoggedInUser(locals, url?)` — returns logged-in user or redirects to `/login`

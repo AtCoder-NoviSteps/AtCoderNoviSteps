@@ -1,14 +1,14 @@
 // See:
-// https://lucia-auth.com/getting-started/sveltekit/
 // https://github.com/joysofcode/sveltekit-deploy
 // https://tech-blog.rakus.co.jp/entry/20230209/sveltekit
-import { auth } from '$lib/server/auth';
 import type { Handle } from '@sveltejs/kit';
+
+import { createAuthRequest } from '$lib/server/auth';
 
 import * as userService from '$lib/services/users';
 
 export const handle: Handle = async ({ event, resolve }) => {
-  event.locals.auth = auth.handleRequest(event);
+  event.locals.auth = createAuthRequest(event);
   const session = await event.locals.auth.validate();
 
   if (!session) {

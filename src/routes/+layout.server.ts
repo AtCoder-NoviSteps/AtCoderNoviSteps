@@ -4,8 +4,6 @@ import {
   TWITTER_HANDLE_NAME,
 } from '$lib/constants/product-info';
 
-// See:
-// https://lucia-auth.com/guidebook/sign-in-with-username-and-password/sveltekit/
 import { Roles } from '$lib/types/user';
 
 const getBaseMetaTags = (url: URL) => {

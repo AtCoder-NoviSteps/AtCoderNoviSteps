@@ -33,9 +33,6 @@ importers:
       '@dnd-kit/svelte':
         specifier: 0.5.0
         version: 0.5.0(svelte@5.56.4(@typescript-eslint/types@8.64.0))
-      '@lucia-auth/adapter-prisma':
-        specifier: 3.0.2
-        version: 3.0.2(@prisma/client@5.22.0(prisma@5.22.0))(lucia@2.7.7)
       '@lucide/svelte':
         specifier: 1.24.0
         version: 1.24.0(svelte@5.56.4(@typescript-eslint/types@8.64.0))
@@ -48,9 +45,6 @@ importers:
       debug:
         specifier: 4.4.3
         version: 4.4.3
-      lucia:
-        specifier: 2.7.7
-        version: 2.7.7
       p-queue:
         specifier: 9.3.1
         version: 9.3.1
@@ -762,13 +756,6 @@ packages:
 
   '@jridgewell/trace-mapping@0.3.31':
     resolution: {integrity: sha512-zzNR+SdQSDJzc8joaeP8QQoCQr8NuYx2dIIytl1QeBEZHJ9uW6hebsrYgbz8hJwUQao3TWCMtmfV8Nu1twOLAw==}
-
-  '@lucia-auth/adapter-prisma@3.0.2':
-    resolution: {integrity: sha512-EyJWZene1/zasPwPctv8wwNErZt5mwwm5JATbhg+kXr3R8pbC7lJfVzDTAeeFClVH5k/FywRcsBl3JkPaNIcow==}
-    deprecated: This package has been deprecated. Please see https://lucia-auth.com/lucia-v3/migrate.
-    peerDependencies:
-      '@prisma/client': ^4.2.0 || ^5.0.0
-      lucia: ^2.0.0
 
   '@lucide/svelte@1.24.0':
     resolution: {integrity: sha512-yXwewA7ANQ5hfaSDrvsecosWjZn5RglzeXUZRSnxeANBskpNwblOkEJTqD0ujDdNKIKL8E9eVc2U/P3ziJr7OA==}
@@ -2909,10 +2896,6 @@ packages:
     resolution: {integrity: sha512-jumlc0BIUrS3qJGgIkWZsyfAM7NCWiBcCDhnd+3NNM5KbBmLTgHVfWBcg6W+rLUsIpzpERPsvwUP7CckAQSOoA==}
     engines: {node: '>=12'}
 
-  lucia@2.7.7:
-    resolution: {integrity: sha512-Hy1nMcLquLl3yDvV9zYA9fSBGUDy/Fw2zEUw2Ia4iGdk/O+hI/TvQ1tAfED/U1WE/c5DT1hEger3m7qIx1qbUg==}
-    deprecated: This package has been deprecated. Please see https://lucia-auth.com/lucia-v3/migrate.
-
   luxon@3.7.2:
     resolution: {integrity: sha512-vtEhXh/gNjI9Yg1u4jX/0YVPMvxzHuGgCm6tC5kZyb08yjGWGnqAjGJvcXbqQR2P3MyMEFnRbpcdFS6PBcLqew==}
     engines: {node: '>=12'}
@@ -4480,11 +4463,6 @@ snapshots:
     dependencies:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.5
-
-  '@lucia-auth/adapter-prisma@3.0.2(@prisma/client@5.22.0(prisma@5.22.0))(lucia@2.7.7)':
-    dependencies:
-      '@prisma/client': 5.22.0(prisma@5.22.0)
-      lucia: 2.7.7
 
   '@lucide/svelte@1.24.0(svelte@5.56.4(@typescript-eslint/types@8.64.0))':
     dependencies:
@@ -6688,8 +6666,6 @@ snapshots:
       yallist: 4.0.0
 
   lru-cache@7.18.3: {}
-
-  lucia@2.7.7: {}
 
   luxon@3.7.2: {}
 

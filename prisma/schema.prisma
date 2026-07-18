@@ -31,13 +31,9 @@ datasource db {
   directUrl = env("DIRECT_URL")
 }
 
-// Note: Lucia v3 + v3 Prisma adaperでは、全てのフィールドがキャメルケースであることが要求されている。
-//       段階的に移行を進めるため、modelを追加・修正する場合は、キャメルケースで記述する。
-// See:
-// https://lucia-auth.com/upgrade-v3/prisma/postgresql
-
-// See:
-// https://lucia-auth.com/database-adapters/prisma/
+// Note: write new models and fields in camelCase.
+//       The snake_case fields on User / Session / Key are legacy (from the old lucia adapter);
+//       kept as-is to avoid a DB migration.
 model User {
   id         String   @id @unique
   // here you can add custom fields for your user

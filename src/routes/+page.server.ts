@@ -1,5 +1,3 @@
-// See:
-// https://lucia-auth.com/guidebook/sign-in-with-username-and-password/sveltekit/
 import type { PageServerLoad } from './$types';
 import { Roles } from '$lib/types/user';
 

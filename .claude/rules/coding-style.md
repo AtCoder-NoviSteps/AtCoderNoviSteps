@@ -51,6 +51,15 @@ Delete function only if: (1) zero callers, (2) replacement exists, (3) dependent
 
 Before removing an import, grep the entire file for all usages — removing one call site doesn't mean no others exist.
 
+## Residual-Reference Sweeps
+
+When removing a dependency or renaming a symbol, sweep the **whole repo**, not just `src`:
+
+- `grep --include='*.{ts,svelte,md}'` does NOT brace-expand — it silently matches nothing.
+  Use `rg -ni 'name' -g '*.ts' -g '*.svelte' -g '*.md'` instead.
+- Include root files (CONTRIBUTING.md, README), `e2e/`, and config (`vite.config.ts`) —
+  not only `src prisma .claude`.
+
 ## Documentation
 
 - **Plans/dev-notes**: Japanese

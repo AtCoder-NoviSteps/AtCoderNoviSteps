@@ -1,13 +1,9 @@
-// See:
-// https://lucia-auth.com/guidebook/sign-in-with-username-and-password/sveltekit/
-
 // This route uses centralized helpers with fallback validation strategies.
 // See src/lib/utils/auth_forms.ts for the current form handling approach.
 import { fail, redirect } from '@sveltejs/kit';
-import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
-import { LuciaError } from 'lucia';
 
-import { auth } from '$lib/server/auth';
+import { createSession } from '$lib/server/session';
+import { registerUser } from '$features/auth/services/credentials';
 
 import { initializeAuthForm, validateAuthFormWithFallback } from '$lib/utils/auth_forms';
 import { isSameOriginRedirect } from '$lib/utils/url';
@@ -41,34 +37,10 @@ export const actions: Actions = {
     }
 
     try {
-      const user = await auth.createUser({
-        key: {
-          providerId: 'username', // auth method
-          providerUserId: form.data.username.toLowerCase(), // unique id when using "username" auth method
-          password: form.data.password, // hashed by Lucia
-        },
-        attributes: {
-          username: form.data.username,
-        },
-      });
+      const registered = await registerUser(form.data.username, form.data.password);
 
-      const session = await auth.createSession({
-        userId: user.userId,
-        attributes: {},
-      });
-
-      locals.auth.setSession(session); // set session cookie
-    } catch (e) {
-      // this part depends on the database you're using
-      // check for unique constraint error in user table
-      // See:
-      // https://www.prisma.io/docs/reference/api-reference/error-reference#prismaclientknownrequesterror
-      // https://www.prisma.io/docs/concepts/components/prisma-client/handling-exceptions-and-errors
-      // https://lucia-auth.com/basics/error-handling/
-      if (
-        (e instanceof PrismaClientKnownRequestError && e.code === 'P2002') ||
-        (e instanceof LuciaError && e.message === 'AUTH_DUPLICATE_KEY_ID')
-      ) {
+      // null means the username is already taken (duplicate user or key)
+      if (!registered) {
         return fail(BAD_REQUEST, {
           form: {
             ...form,
@@ -78,6 +50,10 @@ export const actions: Actions = {
         });
       }
 
+      const session = await createSession(registered.userId);
+      locals.auth.setSession(session); // set session cookie
+    } catch {
+      // unexpected failure (e.g. DB error); registerUser already maps duplicates to null above
       return fail(INTERNAL_SERVER_ERROR, {
         form: {
           ...form,
