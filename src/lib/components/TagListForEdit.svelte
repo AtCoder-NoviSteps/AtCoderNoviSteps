@@ -14,7 +14,6 @@
   //import { ATCODER_BASE_CONTEST_URL } from '$lib/constants/urls';
 
   import { newline } from '$lib/utils/newline';
-  //import { tasks } from '../server/sample_data';
 
   //gradeでソート済みのTaskのリストと、APIから取得したtasklistを表示する
   //xport let tasks: Task[];
