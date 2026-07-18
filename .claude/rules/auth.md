@@ -1,10 +1,10 @@
 ---
 description: Authentication rules
 paths:
-  - 'src/lib/server/auth.ts'
   - 'src/routes/(auth)/**'
-  - 'src/features/auth/**'
   - 'src/routes/(admin)/**'
+  - 'src/features/auth/**'
+  - 'src/features/auth/server/**'
   - 'src/hooks.server.ts'
 ---
 
@@ -31,11 +31,11 @@ Auth is a self-managed implementation (no external auth library), kept compatibl
 
 ## Key Files
 
-- `src/lib/server/auth.ts`: `createAuthRequest` (request-scoped session handle)
-- `src/lib/server/session.ts` / `src/lib/server/password.ts`: self-managed session + password crypto
-- `src/features/auth/services/credentials.ts`: `registerUser` / `authenticateUser`
 - `src/hooks.server.ts`: Global request handler
-- `src/features/auth/services/session.ts`:
+- `src/features/auth/server/auth.ts`: `createAuthRequest` (request-scoped session handle)
+- `src/features/auth/server/session.ts` / `src/features/auth/server/password.ts`: self-managed session + password crypto (`random.ts` provides salt/session-id generation)
+- `src/features/auth/services/credentials.ts`: `registerUser` / `authenticateUser`
+- `src/features/auth/services/session_guards.ts`:
   - `getLoggedInUser(locals, url?)` — returns logged-in user or redirects to `/login`
   - `ensureSessionOrRedirect(locals, url?)` — guard-only; redirects if no session
 - `src/features/auth/services/admin_access.ts`:

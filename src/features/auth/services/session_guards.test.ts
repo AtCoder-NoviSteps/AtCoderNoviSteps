@@ -16,7 +16,7 @@ afterEach(() => {
   vi.clearAllMocks();
 });
 
-import { ensureSessionOrRedirect, getLoggedInUser } from './session';
+import { ensureSessionOrRedirect, getLoggedInUser } from './session_guards';
 
 const createMockLocalsWithValidSession = (user = { id: 'test-user', name: 'Test User' }) =>
   ({

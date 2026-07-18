@@ -6,7 +6,7 @@ import {
   validateSession,
   type SessionCookieData,
   type ValidatedSession,
-} from '$lib/server/session';
+} from './session';
 
 export type AuthRequest = {
   validate: () => Promise<ValidatedSession | null>;

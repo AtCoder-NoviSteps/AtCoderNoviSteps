@@ -2,7 +2,7 @@ import { fail, type Actions, redirect } from '@sveltejs/kit';
 
 import * as crud from '$lib/services/task_results';
 import { getButtons } from '$lib/services/submission_status';
-import { getLoggedInUser } from '$features/auth/services/session';
+import { getLoggedInUser } from '$features/auth/services/session_guards';
 
 import { BAD_REQUEST, TEMPORARY_REDIRECT } from '$lib/constants/http-response-status-codes';
 
