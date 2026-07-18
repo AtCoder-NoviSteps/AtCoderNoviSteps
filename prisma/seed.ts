@@ -19,7 +19,7 @@ import {
   defineWorkBookFactory,
 } from './.fabbrica';
 import PQueue from 'p-queue';
-import { hashPassword } from '../src/lib/server/password';
+import { hashPassword } from '../src/features/auth/server/password';
 
 import { getTaskGrade } from '../src/lib/types/task';
 import type { PlacementCreate } from '../src/features/workbooks/types/workbook_placement';

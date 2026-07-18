@@ -3,7 +3,7 @@
 // https://tech-blog.rakus.co.jp/entry/20230209/sveltekit
 import type { Handle } from '@sveltejs/kit';
 
-import { createAuthRequest } from '$lib/server/auth';
+import { createAuthRequest } from '$features/auth/server/auth';
 
 import * as userService from '$lib/services/users';
 

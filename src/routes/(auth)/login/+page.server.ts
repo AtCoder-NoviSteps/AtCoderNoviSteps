@@ -2,7 +2,7 @@
 // See src/lib/utils/auth_forms.ts for the current form handling approach.
 import { fail, redirect } from '@sveltejs/kit';
 
-import { createSession } from '$lib/server/session';
+import { createSession } from '$features/auth/server/session';
 import { authenticateUser } from '$features/auth/services/credentials';
 
 import { initializeAuthForm, validateAuthFormWithFallback } from '$lib/utils/auth_forms';

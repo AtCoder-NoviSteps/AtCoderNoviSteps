@@ -1,6 +1,6 @@
 import { fail, redirect } from '@sveltejs/kit';
 
-import { invalidateSession } from '$lib/server/session';
+import { invalidateSession } from '$features/auth/server/session';
 
 import { SEE_OTHER, UNAUTHORIZED } from '$lib/constants/http-response-status-codes';
 import { HOME_PAGE } from '$lib/constants/navbar-links';
