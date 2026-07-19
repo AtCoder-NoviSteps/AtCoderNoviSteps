@@ -6,13 +6,13 @@ import { Roles } from '@prisma/client';
 // dev = false so `secure: !dev` resolves to true (the production-relevant cookie flag)
 vi.mock('$app/environment', () => ({ dev: false }));
 
-vi.mock('$lib/server/session', () => ({
+vi.mock('./session', () => ({
   SESSION_COOKIE_NAME: 'auth_session',
   validateSession: vi.fn(),
 }));
 
 import { createAuthRequest } from './auth';
-import { validateSession, SESSION_COOKIE_NAME } from '$lib/server/session';
+import { validateSession, SESSION_COOKIE_NAME } from './session';
 
 const mockValidateSession = validateSession as unknown as ReturnType<typeof vi.fn>;
 

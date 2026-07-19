@@ -91,6 +91,17 @@ src/features/
 - `detail/` — 詳細ページ用コンポーネント
 - `shared/` — feature 内で複数ページから使うコンポーネント
 
+**`server/` サブディレクトリ規約:**
+
+feature 内のサーバ専用・非サービスコード(リクエストスコープのハンドル、cookie 書き込み、
+crypto ユーティリティなど、`services/` の「純粋な値/`null` を返す framework 非依存」規約に
+収まらないもの)は `features/{feature}/server/` に置く(`votes/server/`・`workbooks/server/`・
+`auth/server/` が前例)。
+
+- `$lib/server/` を出るため SvelteKit のクライアント import 禁止(ビルド時エラー)は**効かない**。
+  保護は規約ベース + 推移的依存(`$lib/server/database` の import や `node:crypto` 依存)に委ねる
+- 2つ以上の feature で使うサーバコードは `src/lib/server/` に昇格させる(例: `database.ts`)
+
 ### ルート固有の `_types/` / `_utils/` ディレクトリ
 
 SvelteKit のルートディレクトリ内で、そのページ専用の型やユーティリティを colocate するために `_types/` と `_utils/` を使う。アンダースコアプレフィックスにより SvelteKit のルーティング対象外となる。
@@ -147,9 +158,9 @@ src/lib/
 ├── clients/        # 外部 API クライアント（AtCoder Problems, AOJ）
 ├── components/     # 共通 UI コンポーネント（GradeLabel, TaskGradeList, TaskList, FormWrapper 等）
 ├── constants/      # アプリ定数
-├── server/         # サーバー専用コード
-│   ├── auth.ts
-│   ├── database.ts
+├── server/         # サーバー専用の共有インフラ
+│   ├── database.ts # Prisma クライアント（14+ サービスが依存）
+│   ├── tasks/      # cache.ts など複数 feature 共有のサーバ処理
 │   └── services/   # 複数 feature で使うビジネスロジック
 ├── stores/         # 共通ストア（error_message 等）
 ├── types/          # 共通型定義

@@ -1,8 +1,8 @@
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 
 import client from '$lib/server/database';
-import { hashPassword, verifyPassword } from '$lib/server/password';
-import { generateRandomString } from '$lib/server/random';
+import { hashPassword, verifyPassword } from '../server/password';
+import { generateRandomString } from '../server/random';
 
 const USER_ID_LENGTH = 15; // lucia v2 createUser default
 

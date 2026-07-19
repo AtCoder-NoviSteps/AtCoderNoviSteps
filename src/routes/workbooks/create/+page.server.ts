@@ -2,14 +2,13 @@ import { error, fail, redirect } from '@sveltejs/kit';
 import { superValidate } from 'sveltekit-superforms/server';
 import { zod4 } from 'sveltekit-superforms/adapters';
 
-import { workBookSchema } from '$features/workbooks/zod/schema';
-
 import * as tasksCrud from '$lib/services/tasks';
+import { ensureSessionOrRedirect, getLoggedInUser } from '$features/auth/services/session_guards';
 import * as workBooksCrud from '$features/workbooks/services/workbooks';
+import { workBookSchema } from '$features/workbooks/zod/schema';
 
 import { Roles } from '$lib/types/user';
 
-import { ensureSessionOrRedirect, getLoggedInUser } from '$features/auth/services/session';
 import {
   BAD_REQUEST,
   FORBIDDEN,

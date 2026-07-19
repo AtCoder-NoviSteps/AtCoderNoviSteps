@@ -15,13 +15,13 @@ vi.mock('$lib/server/database', () => ({
   },
 }));
 
-vi.mock('$lib/server/password', () => ({
+vi.mock('../server/password', () => ({
   hashPassword: vi.fn(),
   verifyPassword: vi.fn(),
 }));
 
 import db from '$lib/server/database';
-import { hashPassword, verifyPassword } from '$lib/server/password';
+import { hashPassword, verifyPassword } from '../server/password';
 import { registerUser, authenticateUser } from './credentials';
 
 const mockDb = db as unknown as {

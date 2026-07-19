@@ -1,9 +1,15 @@
 import { error, redirect } from '@sveltejs/kit';
 
 import * as taskCrud from '$lib/services/tasks';
-import { buildTaskIdsFromWorkbooks } from '$features/workbooks/utils/workbooks';
 import * as taskResultsCrud from '$lib/services/task_results';
+import { getLoggedInUser } from '$features/auth/services/session_guards';
 import * as workBooksCrud from '$features/workbooks/services/workbooks';
+import {
+  getWorkbooksByPlacement,
+  getWorkBooksCreatedByUsers,
+  getAvailableSolutionCategories,
+  getSolutionCategoryMapByWorkbookId,
+} from '$features/workbooks/services/workbooks';
 
 import { Roles } from '$lib/types/user';
 import type { TaskGrade, TaskResult } from '$lib/types/task';
@@ -19,15 +25,8 @@ import {
   type SolutionCategory,
 } from '$features/workbooks/types/workbook_placement';
 
-import {
-  getWorkbooksByPlacement,
-  getWorkBooksCreatedByUsers,
-  getAvailableSolutionCategories,
-  getSolutionCategoryMapByWorkbookId,
-} from '$features/workbooks/services/workbooks';
-
 import { isAdmin, canDelete } from '$lib/utils/authorship';
-import { getLoggedInUser } from '$features/auth/services/session';
+import { buildTaskIdsFromWorkbooks } from '$features/workbooks/utils/workbooks';
 import {
   parseWorkBookTab,
   parseWorkBookGrade,

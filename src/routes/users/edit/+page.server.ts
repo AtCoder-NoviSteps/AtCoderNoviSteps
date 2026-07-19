@@ -6,8 +6,7 @@ import type { Roles } from '$lib/types/user';
 
 import * as userService from '$lib/services/users';
 import * as verificationService from '$features/account/services/atcoder_verification';
-
-import { getLoggedInUser } from '$features/auth/services/session';
+import { getLoggedInUser } from '$features/auth/services/session_guards';
 
 import {
   BAD_REQUEST,

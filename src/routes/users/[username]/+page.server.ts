@@ -2,11 +2,10 @@
 
 import * as userService from '$lib/services/users';
 import * as taskResultService from '$lib/services/task_results';
+import { getLoggedInUser } from '$features/auth/services/session_guards';
 
 import type { Roles } from '$lib/types/user';
 import type { TaskResult } from '$lib/types/task';
-
-import { getLoggedInUser } from '$features/auth/services/session';
 
 export async function load({ locals, params, url }) {
   const loggedInUser = await getLoggedInUser(locals, url);

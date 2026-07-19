@@ -4,15 +4,15 @@ import { zod4 } from 'sveltekit-superforms/adapters';
 
 import { Roles } from '$lib/types/user';
 
+import { getLoggedInUser } from '$features/auth/services/session_guards';
 import * as taskResultsCrud from '$lib/services/task_results';
-import { getWorkbookWithAuthor } from '$features/workbooks/services/workbooks';
 import * as action from '$lib/actions/update_task_result';
+import { getWorkbookWithAuthor } from '$features/workbooks/services/workbooks';
 import { getVoteGradeStatisticsForTaskIds } from '$features/votes/services/vote_statistics';
 import { voteAbsoluteGrade as voteAbsoluteGradeAction } from '$features/votes/actions/vote_actions';
 import { voteAbsoluteGradeSchema } from '$features/votes/zod/schema';
 
 import { isAdmin, canRead } from '$lib/utils/authorship';
-import { getLoggedInUser } from '$features/auth/services/session';
 import { parseWorkBookId, parseWorkBookUrlSlug } from '$features/workbooks/utils/workbook';
 
 import { BAD_REQUEST, FORBIDDEN, NOT_FOUND } from '$lib/constants/http-response-status-codes';

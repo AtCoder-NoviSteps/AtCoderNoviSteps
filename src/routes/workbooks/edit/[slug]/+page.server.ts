@@ -6,10 +6,10 @@ import { Roles } from '$lib/types/user';
 import { workBookSchema } from '$features/workbooks/zod/schema';
 
 import * as tasksCrud from '$lib/services/tasks';
+import { getLoggedInUser } from '$features/auth/services/session_guards';
 import * as workBooksCrud from '$features/workbooks/services/workbooks';
 
 import { canEdit, isAdmin } from '$lib/utils/authorship';
-import { getLoggedInUser } from '$features/auth/services/session';
 import { parseWorkBookId, parseWorkBookUrlSlug } from '$features/workbooks/utils/workbook';
 
 import {

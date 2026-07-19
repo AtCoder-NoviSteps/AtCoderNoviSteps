@@ -2,7 +2,7 @@ import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import type { Roles } from '@prisma/client';
 
 import client from '$lib/server/database';
-import { generateRandomString } from '$lib/server/random';
+import { generateRandomString } from './random';
 
 // lucia v2 defaults: active 24h, idle +14d
 const ACTIVE_PERIOD_MS = 1000 * 60 * 60 * 24;
