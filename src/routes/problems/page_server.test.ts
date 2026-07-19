@@ -60,33 +60,25 @@ beforeEach(() => {
 });
 
 describe('load() cache-control behaviour', () => {
-  describe('sets cache-control', () => {
-    test('anonymous users get a public shared-cache header when vote stats succeed', async () => {
+  // Shared caches key on URL + method + headers named by Vary only (RFC 9111), so an
+  // anonymous response cached without `Vary: Cookie` is served to logged-in users too.
+  describe('never sets a shared-cache header — shared caches ignore cookies without Vary (#3862)', () => {
+    test('anonymous users', async () => {
       const event = createMockEvent({ session: null });
 
       await load(event);
 
-      expect(event.setHeaders).toHaveBeenCalledOnce();
-      const headerArg = event.setHeaders.mock.calls[0][0] as Record<string, string>;
-      expect(headerArg['Cache-Control']).toBe(
-        'public, max-age=0, s-maxage=300, stale-while-revalidate=600',
-      );
+      expect(event.setHeaders).not.toHaveBeenCalled();
     });
 
-    test('anonymous users with tagIds also get a public shared-cache header', async () => {
+    test('anonymous users with tagIds', async () => {
       const event = createMockEvent({ session: null, tagIds: 'abc,dp' });
 
       await load(event);
 
-      expect(event.setHeaders).toHaveBeenCalledOnce();
-      const headerArg = event.setHeaders.mock.calls[0][0] as Record<string, string>;
-      expect(headerArg['Cache-Control']).toBe(
-        'public, max-age=0, s-maxage=300, stale-while-revalidate=600',
-      );
+      expect(event.setHeaders).not.toHaveBeenCalled();
     });
-  });
 
-  describe('does not set cache-control', () => {
     test('logged-in users — personalized response must never be shared-cached', async () => {
       const event = createMockEvent({ session: LOGGED_IN_SESSION });
 
@@ -95,7 +87,7 @@ describe('load() cache-control behaviour', () => {
       expect(event.setHeaders).not.toHaveBeenCalled();
     });
 
-    test('degraded response when vote stats fail — avoids pinning a broken page at the CDN', async () => {
+    test('degraded response when vote stats fail', async () => {
       mockGetVoteGradeStatistics.mockRejectedValue(new Error('DB timeout'));
       const event = createMockEvent({ session: null });
 
