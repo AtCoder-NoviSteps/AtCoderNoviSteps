@@ -11,7 +11,7 @@ import { voteAbsoluteGradeSchema } from '$features/votes/zod/schema';
 import { BAD_REQUEST } from '$lib/constants/http-response-status-codes';
 
 // 一覧表ページは、ログインしていなくても閲覧できるようにする
-export async function load({ locals, url, setHeaders }) {
+export async function load({ locals, url }) {
   const session = await locals.auth.validate();
   const params = await url.searchParams;
 
@@ -21,22 +21,11 @@ export async function load({ locals, url, setHeaders }) {
 
   // Degrade gracefully if vote stats are unavailable — the problems page must remain accessible.
   let voteResults = new Map();
-  let voteStatsOk = true;
 
   try {
     voteResults = await getVoteGradeStatistics();
   } catch (error) {
-    voteStatsOk = false;
     console.error('Failed to load vote statistics:', error);
-  }
-
-  // Anonymous responses are identical for all users and contain no per-user
-  // answer state, so they are safe to cache at the CDN. Logged-in responses
-  // are personalized and must never be shared-cached.
-  // Skip caching a degraded response (vote stats failed) to avoid pinning a
-  // broken page at the edge for the full TTL.
-  if (session === null && voteStatsOk) {
-    setHeaders({ 'Cache-Control': 'public, max-age=0, s-maxage=300, stale-while-revalidate=600' });
   }
 
   const taskResults = (

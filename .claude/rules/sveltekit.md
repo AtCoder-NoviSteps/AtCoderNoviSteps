@@ -25,6 +25,20 @@ All internal navigation must use `resolve()` from `$app/paths`:
 - **With search/hash**: `resolve(pathname + search + hash)` (concatenate inside, not outside)
 - **External**: no `resolve()`, use `rel="noreferrer external"`
 
+## HTTP Cache Headers (`setHeaders`)
+
+**Never set `s-maxage` / `stale-while-revalidate` on a route whose content varies by session.**
+Shared caches key on URL + method + the headers named by `Vary` (RFC 9111), so without
+`Vary: Cookie` an anonymous response is served to logged-in users (#3862).
+
+- Setting the header only when logged out controls the write side, not delivery of an
+  already-cached entry to a request with a session cookie.
+- `Vary: Cookie` matches the whole header; with `_ga` present every returning visitor gets a
+  unique key and the cache barely hits.
+- No `s-maxage` means no CDN caching, so `private` / `no-store` are unnecessary (YAGNI).
+- Estimate the saved invocations first. At this site's traffic the `/problems` header saved
+  single-digit dollars a month and cost two weeks of a production bug.
+
 ## Form Data Validation
 
 `formData.get()` returns `string | File | null`. Always validate before casting:
