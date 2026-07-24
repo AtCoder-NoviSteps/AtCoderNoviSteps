@@ -34,8 +34,8 @@ importers:
         specifier: 0.5.0
         version: 0.5.0(svelte@5.56.7(@typescript-eslint/types@8.65.0))
       '@lucide/svelte':
-        specifier: 1.25.0
-        version: 1.25.0(svelte@5.56.7(@typescript-eslint/types@8.65.0))
+        specifier: 1.26.0
+        version: 1.26.0(svelte@5.56.7(@typescript-eslint/types@8.65.0))
       '@prisma/client':
         specifier: 5.22.0
         version: 5.22.0(prisma@5.22.0)
@@ -757,8 +757,8 @@ packages:
   '@jridgewell/trace-mapping@0.3.31':
     resolution: {integrity: sha512-zzNR+SdQSDJzc8joaeP8QQoCQr8NuYx2dIIytl1QeBEZHJ9uW6hebsrYgbz8hJwUQao3TWCMtmfV8Nu1twOLAw==}
 
-  '@lucide/svelte@1.25.0':
-    resolution: {integrity: sha512-v9m+dD68jxVnqkU3K59mG/RSRFlPGzmKCGSyMfnXcaGv9jODDQMyQkcp1CGvk3Y/cUj9v7f8rw1n//K0B53xGQ==}
+  '@lucide/svelte@1.26.0':
+    resolution: {integrity: sha512-KUfLTlNRVrHZ460Um7jdrvh46hI/8Sw4+1k/Ttj4g6JI9bCrjD7HZVG4cqhh7LasjfDz5b+CuKrjd/k/3obYcA==}
     peerDependencies:
       svelte: ^5
 
@@ -4450,7 +4450,7 @@ snapshots:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.5
 
-  '@lucide/svelte@1.25.0(svelte@5.56.7(@typescript-eslint/types@8.65.0))':
+  '@lucide/svelte@1.26.0(svelte@5.56.7(@typescript-eslint/types@8.65.0))':
     dependencies:
       svelte: 5.56.7(@typescript-eslint/types@8.65.0)
 
