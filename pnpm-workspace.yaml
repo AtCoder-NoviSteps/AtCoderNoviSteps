@@ -28,6 +28,8 @@ minimumReleaseAgeExclude:
   # Vercel: To use in a CI/CD environment
   - vercel
   - '@vercel/*'
+  # Renovate security update: brace-expansion@5.0.7
+  - brace-expansion@5.0.7
 
 # Prevent transitive dependencies from Git/Tarball sources (enhanced security)
 blockExoticSubdeps: true
@@ -48,7 +50,7 @@ overrides:
   'devalue@<5.8.1': '5.8.1'
   # moderate
   'ajv@>=8.0.0 <8.18.0': '8.20.0'
-  'brace-expansion@>=1.0.0 <1.1.13': '1.1.16'
+  'brace-expansion@>=1.0.0 <1.1.13': '5.0.7'
   'js-yaml@>=4.0.0 <=4.1.1': '4.3.0'
   'postcss@>=8.0.0 <8.5.10': '8.5.20'
   'smol-toml@>=1.0.0 <1.6.1': '1.7.0'
