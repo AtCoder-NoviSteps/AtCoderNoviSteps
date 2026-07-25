@@ -11,7 +11,7 @@ overrides:
   minimatch@>=10.0.0 <10.2.3: 10.2.5
   undici@>=5.0.0 <5.28.5: 5.28.5
   undici@>=6.0.0 <6.27.0: 6.28.0
-  undici@>=7.0.0 <7.28.0: 7.28.0
+  undici@>=7.0.0 <7.28.0: 7.29.0
   effect@>=3.0.0 <3.20.0: 3.22.0
   defu@<6.1.5: 6.1.7
   devalue@<5.8.1: 5.8.2
@@ -3315,8 +3315,8 @@ packages:
     resolution: {integrity: sha512-LIY910g9TI13YS95lrMFrs8Rm/u/irgHeTWoKCoteeJ04CUJ92eEfj0rVn+7VKMPBpUPiUoBKfhNyLI23EE/KA==}
     engines: {node: '>=18.17'}
 
-  undici@7.28.0:
-    resolution: {integrity: sha512-cRZYrTDwWznlnRiPjggAGxZXanty6M8RV1ff8Wm4LWXBp7/IG8v5DnOm74DtUBp9OONpK75YlPnIjQqX0dBDtA==}
+  undici@7.29.0:
+    resolution: {integrity: sha512-IDxfleLmmbSskfWSUATiN1nfn2rDuvnMOqb5CWR92iIfojA0Ud+ulOAAEQ57LPr9rWmsreUyf5lwyao+7GNNVw==}
     engines: {node: '>=20.18.1'}
 
   universalify@2.0.1:
@@ -4864,7 +4864,7 @@ snapshots:
       ms: 2.1.3
       picocolors: 1.1.1
       tar-stream: 3.1.7
-      undici: 7.28.0
+      undici: 7.29.0
       xdg-app-paths: 5.1.0
       zod: 4.4.3
     transitivePeerDependencies:
@@ -5726,7 +5726,7 @@ snapshots:
       saxes: 6.0.0
       symbol-tree: 3.2.4
       tough-cookie: 6.0.1
-      undici: 7.28.0
+      undici: 7.29.0
       w3c-xmlserializer: 5.0.0
       webidl-conversions: 8.0.1
       whatwg-mimetype: 5.0.0
@@ -6614,7 +6614,7 @@ snapshots:
 
   undici@6.28.0: {}
 
-  undici@7.28.0: {}
+  undici@7.29.0: {}
 
   universalify@2.0.1: {}
 
