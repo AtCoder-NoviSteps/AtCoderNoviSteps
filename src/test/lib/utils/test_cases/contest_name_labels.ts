@@ -222,4 +222,16 @@ export const aojUniversity = [
     contestId: 'AOJ-UAPC2015-in-ACPC2015-day2',
     expected: '（ACPC 2015 in ACPC 2015 Day2）',
   }),
+  createTestCaseForContestNameLabel('AOJ, UAPC 2017 in ACPC 2017 Day2')({
+    contestId: 'AOJ-UAPC2017-in-ACPC2017-day2',
+    expected: '（ACPC 2017 in ACPC 2017 Day2）',
+  }),
+  createTestCaseForContestNameLabel('AOJ, RUPC 2025 in ACPC 2025 Day1')({
+    contestId: 'AOJ-RUPC2025-in-ACPC2025-day1',
+    expected: '（RUPC 2025 in ACPC 2025 Day1）',
+  }),
+  createTestCaseForContestNameLabel('AOJ, HUPC 2018 in ACPC 2018 Day3')({
+    contestId: 'AOJ-HUPC2018-in-ACPC2018-day3',
+    expected: '（HUPC 2018 in ACPC 2018 Day3）',
+  }),
 ];

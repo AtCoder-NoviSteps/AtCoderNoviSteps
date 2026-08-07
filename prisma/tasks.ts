@@ -16734,6 +16734,13 @@ export const tasks = [
     title: '1566. Movie',
   },
   {
+    id: '3022',
+    contest_id: 'AOJ-UAPC2017-in-ACPC2017-day2',
+    problem_index: '3022',
+    name: 'Cluster Network',
+    title: '3022. Cluster Network',
+  },
+  {
     id: '3047',
     contest_id: 'AOJ-UAPC2018-in-ACPC2018-day2',
     problem_index: '3047',
@@ -16783,11 +16790,25 @@ export const tasks = [
     title: '2943. Illumination',
   },
   {
+    id: '3426',
+    contest_id: 'AOJ-RUPC2025-in-ACPC2025-day1',
+    problem_index: '3426',
+    name: 'Nailed',
+    title: '3426. Nailed',
+  },
+  {
     id: '2581',
     contest_id: 'AOJ-HUPC2014-in-RUPC2014-day3',
     problem_index: '2581',
     name: 'Derangement',
     title: '2581. Derangement',
+  },
+  {
+    id: '2893',
+    contest_id: 'AOJ-HUPC2018-in-ACPC2018-day3',
+    problem_index: '2893',
+    name: 'Balanced Edge Deletion',
+    title: '2893. Balanced Edge Deletion',
   },
   {
     id: '2872',

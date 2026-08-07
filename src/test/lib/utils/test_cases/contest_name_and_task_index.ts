@@ -931,6 +931,21 @@ const AOJ_UNIVERSITY_TEST_DATA = [
     taskTableIndex: '1566',
     expected: 'AOJ 1566（ACPC 2015 in ACPC 2015 Day2）',
   },
+  {
+    contestId: 'AOJ-UAPC2017-in-ACPC2017-day2',
+    taskTableIndex: '3022',
+    expected: 'AOJ 3022（ACPC 2017 in ACPC 2017 Day2）',
+  },
+  {
+    contestId: 'AOJ-RUPC2025-in-ACPC2025-day1',
+    taskTableIndex: '3426',
+    expected: 'AOJ 3426（RUPC 2025 in ACPC 2025 Day1）',
+  },
+  {
+    contestId: 'AOJ-HUPC2018-in-ACPC2018-day3',
+    taskTableIndex: '2893',
+    expected: 'AOJ 2893（HUPC 2018 in ACPC 2018 Day3）',
+  },
 ];
 
 export const aojUniversity = AOJ_UNIVERSITY_TEST_DATA.map(
