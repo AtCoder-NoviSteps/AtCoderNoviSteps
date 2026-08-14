@@ -19,7 +19,7 @@ overrides:
   brace-expansion@>=1.0.0 <1.1.13: 1.1.16
   js-yaml@>=4.0.0 <=4.1.1: 4.3.1
   postcss@>=8.0.0 <8.5.10: 8.5.26
-  smol-toml@>=1.0.0 <1.6.1: 1.7.1
+  smol-toml@>=1.0.0 <1.6.1: 1.8.0
   cookie@<0.7.0: 0.7.2
   '@tootallnate/once@>=2.0.0 <2.0.1': 2.0.1
 
@@ -3537,8 +3537,8 @@ packages:
   sisteransi@1.0.5:
     resolution: {integrity: sha512-bLGGlR1QxBcynn2d5YmDX4MGjlZvy2MRBDRNHLJ8VI6l6+9FUiyTFNJ0IveOSP0bcXgVDPRcfGqA0pjaqUpfVg==}
 
-  smol-toml@1.7.1:
-    resolution: {integrity: sha512-PPlsspAZ4jbMBu5DMFhfUGDQLu/vrL4SyBROVS37x8ynnVmFIs1VPBz1Co8Xks3TvpIaZXmU85y4DrQ+UyVFoQ==}
+  smol-toml@1.8.0:
+    resolution: {integrity: sha512-kCZr2V3ch9i00x8zXRhjUNVcjG9ijES5dDudkXvUVCT5QlJNQWElSJdZqyPemffHoLNUYwOcou0Fy+ojN0uHSQ==}
     engines: {node: '>= 18'}
 
   source-map-js@1.2.1:
@@ -5524,7 +5524,7 @@ snapshots:
       fs-extra: 11.1.1
       js-yaml: 4.3.1
       minimatch: 10.2.6
-      smol-toml: 1.7.1
+      smol-toml: 1.8.0
       zod: 3.22.4
 
   '@vercel/python@6.55.3':
@@ -5561,7 +5561,7 @@ snapshots:
     dependencies:
       execa: 5.1.1
       get-port: 5.1.1
-      smol-toml: 1.7.1
+      smol-toml: 1.8.0
 
   '@vercel/sandbox@2.4.0':
     dependencies:
@@ -7224,7 +7224,7 @@ snapshots:
 
   sisteransi@1.0.5: {}
 
-  smol-toml@1.7.1: {}
+  smol-toml@1.8.0: {}
 
   source-map-js@1.2.1: {}
 
@@ -7568,7 +7568,7 @@ snapshots:
       jsonc-parser: 3.3.1
       luxon: 3.7.2
       sandbox: 3.4.0(supports-color@7.2.0)
-      smol-toml: 1.7.1
+      smol-toml: 1.8.0
       undici: 5.29.0
       zod: 4.1.11
     optionalDependencies:
