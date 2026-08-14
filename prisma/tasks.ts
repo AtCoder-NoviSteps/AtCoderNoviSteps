@@ -16720,6 +16720,13 @@ export const tasks = [
     title: '2349. World Trip',
   },
   {
+    id: '1088',
+    contest_id: 'AOJ-UAPC2012-day1',
+    problem_index: '1088',
+    name: 'School Excursion',
+    title: '1088. School Excursion',
+  },
+  {
     id: '1532',
     contest_id: 'AOJ-UAPC2014-in-RUPC2014-day2',
     problem_index: '1532',
@@ -16739,6 +16746,13 @@ export const tasks = [
     problem_index: '3022',
     name: 'Cluster Network',
     title: '3022. Cluster Network',
+  },
+  {
+    id: '3032',
+    contest_id: 'AOJ-UAPC2018-in-RUPC2018-day2',
+    problem_index: '3032',
+    name: 'Combine Two Elements',
+    title: '3032. Combine Two Elements',
   },
   {
     id: '3047',
@@ -16769,6 +16783,13 @@ export const tasks = [
     title: '2520. Bicycle',
   },
   {
+    id: '2835',
+    contest_id: 'AOJ-RUPC2017-in-ACPC2017-day1',
+    problem_index: '2835',
+    name: 'Protect from the enemy attack',
+    title: '2835. Protect from the enemy attack',
+  },
+  {
     id: '2880',
     contest_id: 'AOJ-RUPC2018-in-RUPC2018-day1',
     problem_index: '2880',
@@ -16788,6 +16809,13 @@ export const tasks = [
     problem_index: '2943',
     name: 'Illumination',
     title: '2943. Illumination',
+  },
+  {
+    id: '3417',
+    contest_id: 'AOJ-RUPC2025-in-ACPC2025-day1',
+    problem_index: '3417',
+    name: 'Sugar Water with Subarray',
+    title: '3417. Sugar Water with Subarray',
   },
   {
     id: '3426',
@@ -16816,6 +16844,13 @@ export const tasks = [
     problem_index: '2872',
     name: 'Ebi-chan Lengthens Shortest Paths',
     title: '2872. Ebi-chan Lengthens Shortest Paths',
+  },
+  {
+    id: '2959',
+    contest_id: 'AOJ-HUPC2019-in-HUPC2019-day2',
+    problem_index: '2959',
+    name: 'Revenge of UMG',
+    title: '2959. Revenge of UMG',
   },
   {
     id: '3168',
@@ -16851,5 +16886,19 @@ export const tasks = [
     problem_index: '2496',
     name: '1',
     title: '2496. 1',
+  },
+  {
+    id: '3215',
+    contest_id: 'AOJ-OUPC2020',
+    problem_index: '3215',
+    name: 'Construction Set',
+    title: '3215. Construction Set',
+  },
+  {
+    id: '3412',
+    contest_id: 'AOJ-OUPC2024-day1',
+    problem_index: '3412',
+    name: 'Ikomiki String',
+    title: '3412. Ikomiki String',
   },
 ];

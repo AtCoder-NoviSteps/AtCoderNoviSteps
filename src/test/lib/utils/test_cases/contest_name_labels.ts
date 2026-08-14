@@ -234,4 +234,24 @@ export const aojUniversity = [
     contestId: 'AOJ-HUPC2018-in-ACPC2018-day3',
     expected: '（HUPC 2018 in ACPC 2018 Day3）',
   }),
+  createTestCaseForContestNameLabel('AOJ, UAPC 2018 in RUPC 2018 Day2')({
+    contestId: 'AOJ-UAPC2018-in-RUPC2018-day2',
+    expected: '（ACPC 2018 in RUPC 2018 Day2）',
+  }),
+  createTestCaseForContestNameLabel('AOJ, RUPC 2017 in ACPC 2017 Day1')({
+    contestId: 'AOJ-RUPC2017-in-ACPC2017-day1',
+    expected: '（RUPC 2017 in ACPC 2017 Day1）',
+  }),
+  createTestCaseForContestNameLabel('AOJ, HUPC 2019 in HUPC 2019 Day2')({
+    contestId: 'AOJ-HUPC2019-in-HUPC2019-day2',
+    expected: '（HUPC 2019 in HUPC 2019 Day2）',
+  }),
+  createTestCaseForContestNameLabel('AOJ, OUPC 2020')({
+    contestId: 'AOJ-OUPC2020',
+    expected: '（OUPC 2020）',
+  }),
+  createTestCaseForContestNameLabel('AOJ, OUPC 2024 Day1')({
+    contestId: 'AOJ-OUPC2024-day1',
+    expected: '（OUPC 2024 Day1）',
+  }),
 ];

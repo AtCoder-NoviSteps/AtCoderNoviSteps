@@ -725,6 +725,11 @@ const aojUniversityContestData = [
   { name: 'AOJ, UAPC 2011 Summer', contestId: 'AOJ-UAPC2011-summer' },
   { name: 'AOJ, UAPC 2012 Day1', contestId: 'AOJ-UAPC2012-day1' },
   { name: 'AOJ, OUPC 2012 in RUPC 2012 Day2', contestId: 'AOJ-OUPC2012-in-RUPC2012-day2' },
+  { name: 'AOJ, OUPC 2020', contestId: 'AOJ-OUPC2020' },
+  { name: 'AOJ, OUPC 2024 Day1', contestId: 'AOJ-OUPC2024-day1' },
+  { name: 'AOJ, RUPC 2017 in ACPC 2017 Day1', contestId: 'AOJ-RUPC2017-in-ACPC2017-day1' },
+  { name: 'AOJ, HUPC 2019 in HUPC 2019 Day2', contestId: 'AOJ-HUPC2019-in-HUPC2019-day2' },
+  { name: 'AOJ, UAPC 2018 in RUPC 2018 Day2', contestId: 'AOJ-UAPC2018-in-RUPC2018-day2' },
 ];
 
 export const aojUniversity = aojUniversityContestData.map(({ name, contestId }) =>
