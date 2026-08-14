@@ -64,6 +64,14 @@ export const atCoderOthers = [
     contestId: 'code-festival-2015-exhibition',
     expected: 'CODE FESTIVAL 2015 エキシビション',
   }),
+  createTestCaseForContestNameLabel('codeFlyer （bitFlyer Programming Contest）')({
+    contestId: 'bitflyer2018-qual',
+    expected: 'codeFlyer （bitFlyer Programming Contest）',
+  }),
+  createTestCaseForContestNameLabel('技術室奥プログラミングコンテスト#4 Day2')({
+    contestId: 'tkppc4-2',
+    expected: '技術室奥プログラミングコンテスト#4 Day2',
+  }),
   createTestCaseForContestNameLabel('パ研合宿2024 第1日「SpeedRun」')({
     contestId: 'pakencamp-2024-day1',
     expected: 'パ研合宿2024 第1日「SpeedRun」',
@@ -246,6 +254,10 @@ export const aojUniversity = [
     contestId: 'AOJ-HUPC2019-in-HUPC2019-day2',
     expected: '（HUPC 2019 in HUPC 2019 Day2）',
   }),
+  createTestCaseForContestNameLabel('AOJ, HUPC 2020 in HUPC 2020 Day3')({
+    contestId: 'AOJ-HUPC2020-in-HUPC2020-day3',
+    expected: '（HUPC 2020 in HUPC 2020 Day3）',
+  }),
   createTestCaseForContestNameLabel('AOJ, OUPC 2020')({
     contestId: 'AOJ-OUPC2020',
     expected: '（OUPC 2020）',
@@ -253,5 +265,9 @@ export const aojUniversity = [
   createTestCaseForContestNameLabel('AOJ, OUPC 2024 Day1')({
     contestId: 'AOJ-OUPC2024-day1',
     expected: '（OUPC 2024 Day1）',
+  }),
+  createTestCaseForContestNameLabel('AOJ, UTPC 2010')({
+    contestId: 'AOJ-UTPC2010',
+    expected: '（UTPC 2010）',
   }),
 ];

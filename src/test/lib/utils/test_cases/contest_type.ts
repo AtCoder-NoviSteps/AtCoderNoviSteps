@@ -484,6 +484,10 @@ export const atCoderOthers = [
     contestId: 'indeednow-qualb',
     expected: ContestType.OTHERS,
   }),
+  createTestCaseForContestType('技術室奥プログラミングコンテスト#4 Day2')({
+    contestId: 'tkppc4-2',
+    expected: ContestType.OTHERS,
+  }),
   createTestCaseForContestType('第2回 ドワンゴからの挑戦状 予選')({
     contestId: 'dwango2016-prelims',
     expected: ContestType.OTHERS,
@@ -502,6 +506,10 @@ export const atCoderOthers = [
   }),
   createTestCaseForContestType('SoundHound Inc. Programming Contest 2018 (春)')({
     contestId: 'soundhound2018',
+    expected: ContestType.OTHERS,
+  }),
+  createTestCaseForContestType('codeFlyer （bitFlyer Programming Contest）')({
+    contestId: 'bitflyer2018-qual',
     expected: ContestType.OTHERS,
   }),
   createTestCaseForContestType('パ研合宿コンペティション 3日目')({
@@ -717,6 +725,7 @@ export const aojIcpc = aojIcpcContestData.map(({ name, contestId }) =>
 const aojUniversityContestData = [
   { name: 'AOJ, RUPC 2025 in ACPC 2025 Day1', contestId: 'AOJ-RUPC2025-in-ACPC2025-day1' },
   { name: 'AOJ, RUPC 2018 in ACPC 2018 Day1', contestId: 'AOJ-RUPC2018-in-ACPC2018-day1' },
+  { name: 'AOJ, HUPC 2020 in HUPC 2020 Day3', contestId: 'AOJ-HUPC2020-in-HUPC2020-day3' },
   { name: 'AOJ, HUPC 2020 in HUPC 2020 Day1', contestId: 'AOJ-HUPC2020-in-HUPC2020-day1' },
   { name: 'AOJ, HUPC 2018 in ACPC 2018 Day3', contestId: 'AOJ-HUPC2018-in-ACPC2018-day3' },
   { name: 'AOJ, UAPC 2019 in RUPC 2019 Day2', contestId: 'AOJ-UAPC2019-in-RUPC2019-day2' },
@@ -730,6 +739,7 @@ const aojUniversityContestData = [
   { name: 'AOJ, RUPC 2017 in ACPC 2017 Day1', contestId: 'AOJ-RUPC2017-in-ACPC2017-day1' },
   { name: 'AOJ, HUPC 2019 in HUPC 2019 Day2', contestId: 'AOJ-HUPC2019-in-HUPC2019-day2' },
   { name: 'AOJ, UAPC 2018 in RUPC 2018 Day2', contestId: 'AOJ-UAPC2018-in-RUPC2018-day2' },
+  { name: 'AOJ, UTPC 2010', contestId: 'AOJ-UTPC2010' },
 ];
 
 export const aojUniversity = aojUniversityContestData.map(({ name, contestId }) =>

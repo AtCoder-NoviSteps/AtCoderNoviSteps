@@ -967,6 +967,12 @@ const AOJ_UNIVERSITY_TEST_DATA = [
     taskTableIndex: '3412',
     expected: 'AOJ 3412（OUPC 2024 Day1）',
   },
+  {
+    contestId: 'AOJ-HUPC2020-in-HUPC2020-day3',
+    taskTableIndex: '3183',
+    expected: 'AOJ 3183（HUPC 2020 in HUPC 2020 Day3）',
+  },
+  { contestId: 'AOJ-UTPC2010', taskTableIndex: '2207', expected: 'AOJ 2207（UTPC 2010）' },
 ];
 
 export const aojUniversity = AOJ_UNIVERSITY_TEST_DATA.map(
