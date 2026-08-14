@@ -8845,6 +8845,20 @@ export const tasks = [
     title: 'D. Driving on a Tree',
   },
   {
+    id: 'bitflyer2018_qual_c',
+    contest_id: 'bitflyer2018-qual',
+    problem_index: 'C',
+    name: '徒歩圏内',
+    title: 'C. 徒歩圏内',
+  },
+  {
+    id: 'tkppc4_2_g',
+    contest_id: 'tkppc4-2',
+    problem_index: 'G',
+    name: '平均レーティング',
+    title: 'G. 平均レーティング',
+  },
+  {
     id: 'awtf2025_e',
     contest_id: 'awtf2025algo-open',
     problem_index: 'E',
@@ -16867,6 +16881,13 @@ export const tasks = [
     title: '3171. Traditional Company',
   },
   {
+    id: '3183',
+    contest_id: 'AOJ-HUPC2020-in-HUPC2020-day3',
+    problem_index: '3183',
+    name: 'Flipping a Path',
+    title: '3183. Flipping a Path',
+  },
+  {
     id: '3369',
     contest_id: 'AOJ-HUPC2023-in-OUPC2023-day2',
     problem_index: '3369',
@@ -16900,5 +16921,12 @@ export const tasks = [
     problem_index: '3412',
     name: 'Ikomiki String',
     title: '3412. Ikomiki String',
+  },
+  {
+    id: '2207',
+    contest_id: 'AOJ-UTPC2010',
+    problem_index: '2207',
+    name: 'Consistent Unit System',
+    title: '2207. Consistent Unit System',
   },
 ];
