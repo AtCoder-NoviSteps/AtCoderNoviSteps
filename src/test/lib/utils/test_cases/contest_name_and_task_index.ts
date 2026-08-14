@@ -946,6 +946,27 @@ const AOJ_UNIVERSITY_TEST_DATA = [
     taskTableIndex: '2893',
     expected: 'AOJ 2893（HUPC 2018 in ACPC 2018 Day3）',
   },
+  {
+    contestId: 'AOJ-UAPC2018-in-RUPC2018-day2',
+    taskTableIndex: '3032',
+    expected: 'AOJ 3032（ACPC 2018 in RUPC 2018 Day2）',
+  },
+  {
+    contestId: 'AOJ-RUPC2017-in-ACPC2017-day1',
+    taskTableIndex: '2835',
+    expected: 'AOJ 2835（RUPC 2017 in ACPC 2017 Day1）',
+  },
+  {
+    contestId: 'AOJ-HUPC2019-in-HUPC2019-day2',
+    taskTableIndex: '2959',
+    expected: 'AOJ 2959（HUPC 2019 in HUPC 2019 Day2）',
+  },
+  { contestId: 'AOJ-OUPC2020', taskTableIndex: '3215', expected: 'AOJ 3215（OUPC 2020）' },
+  {
+    contestId: 'AOJ-OUPC2024-day1',
+    taskTableIndex: '3412',
+    expected: 'AOJ 3412（OUPC 2024 Day1）',
+  },
 ];
 
 export const aojUniversity = AOJ_UNIVERSITY_TEST_DATA.map(
