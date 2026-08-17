@@ -79,7 +79,7 @@
     "debug": "4.4.3",
     "p-queue": "9.3.3",
     "playwright": "1.62.1",
-    "svelte-eslint-parser": "1.8.0",
+    "svelte-eslint-parser": "1.8.1",
     "tailwind-merge": "3.6.0",
     "xss": "1.0.15"
   },
