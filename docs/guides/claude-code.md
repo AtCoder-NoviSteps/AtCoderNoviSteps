@@ -72,6 +72,7 @@ paths:
 | `/refactor-plan`              | Issue 番号またはパスを渡してリファクタリング計画を出力（実装はしない）                                                                                          |
 | `/session-close`              | セッション終了時のルーティン：テスト確認 → plan.md 更新 → rules 候補提示 → 肥大化チェック → 繰り返し指示検出                                                    |
 | `/dep-upgrade`                | ライブラリのメジャーバージョンアップ分析：破壊的変更の整理・本プロジェクトへの影響・新機能提案 → plan.md 生成 → アップグレード実行                              |
+| `/extract-approach`           | 非自明な問題を解決した直後に、アプローチと教訓を `docs/dev-notes/YYYY-MM-DD/{task}/learning.md` へ問題単位で抽出（モデル自動起動可）                            |
 
 **`/dep-upgrade` の使い方:**
 
