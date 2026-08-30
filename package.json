@@ -67,7 +67,7 @@
     "vercel": "59.9.1",
     "vite": "8.2.2",
     "vitest": "4.1.11",
-    "zod": "4.4.3"
+    "zod": "4.5.2"
   },
   "type": "module",
   "dependencies": {
