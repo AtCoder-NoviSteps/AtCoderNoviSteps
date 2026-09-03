@@ -85,37 +85,37 @@ AOJ/JAG 固有の詳細（`AOJ_LABEL_OVERRIDES`、`titleStyle`、同一年2回�
 
 ### 単一ソース型
 
-| コンテスト                  | contest_id    | 問題数 | フォーマット |
-| --------------------------- | ------------- | ------ | ------------ |
-| EDPC                        | `'dp'`        | 26問   | A～Z         |
-| TDPC                        | `'tdpc'`      | 26問   | A～Z         |
-| NDPC                        | `'ndpc'`      | 20問   | A～T         |
-| FPS_24                      | `'fps-24'`    | 24問   | A～X         |
-| ACL_PRACTICE                | `'practice2'` | 12問   | A～L         |
-| ACL_BEGINNER / ACL_CONTEST1 | `'abl'`/`'acl1'` | 6問 | A～F         |
-| AWC0100 / AWC0150†          | `'awc0100'`/`'awc0150'` | 15問 | A～O   |
+| コンテスト                  | contest_id              | 問題数 | フォーマット |
+| --------------------------- | ----------------------- | ------ | ------------ |
+| EDPC                        | `'dp'`                  | 26問   | A～Z         |
+| TDPC                        | `'tdpc'`                | 26問   | A～Z         |
+| NDPC                        | `'ndpc'`                | 20問   | A～T         |
+| FPS_24                      | `'fps-24'`              | 24問   | A～X         |
+| ACL_PRACTICE                | `'practice2'`           | 12問   | A～L         |
+| ACL_BEGINNER / ACL_CONTEST1 | `'abl'`/`'acl1'`        | 6問    | A～F         |
+| AWC0100 / AWC0150†          | `'awc0100'`/`'awc0150'` | 15問   | A～O         |
 
 †注: ContestType.AWC を再利用し、section（`'0100'`, `'0150'`）で provider key を一意化。ACL 系は `Acl` グループ、DP 系は `dps` グループで統一管理。
 
 ### コンストラクタパラメータ型 / regex フィルタ型
 
-| コンテスト       | フィルタ方式      | 備考                                     |
-| ---------------- | ----------------- | ---------------------------------------- |
-| ICPC 国内予選    | 年度パラメータ    | `AojIcpcPrelimProvider(type, year)`      |
-| ICPC アジア地区  | 年度パラメータ    | `AojIcpcRegionalProvider(type, year)`    |
-| JAG 模擬国内     | 年度パラメータ    | 同一年2回開催は suffix 分割              |
-| JOI 一次予選     | regex             | `joi{YYYY}yo1{a|b|c}`                   |
-| JOI 二次予選     | regex + section   | 2020 以降 / 2006-2019 で Provider 分離   |
-| JOI 本選         | regex             | 2026 年より `ho` → `sf` サフィックス     |
+| コンテスト      | フィルタ方式    | 備考                                   |
+| --------------- | --------------- | -------------------------------------- |
+| ICPC 国内予選   | 年度パラメータ  | `AojIcpcPrelimProvider(type, year)`    |
+| ICPC アジア地区 | 年度パラメータ  | `AojIcpcRegionalProvider(type, year)`  |
+| JAG 模擬国内    | 年度パラメータ  | 同一年2回開催は suffix 分割            |
+| JOI 一次予選    | regex           | `joi{YYYY}yo1{a                        | b   | c}` |
+| JOI 二次予選    | regex + section | 2020 以降 / 2006-2019 で Provider 分離 |
+| JOI 本選        | regex           | 2026 年より `ho` → `sf` サフィックス   |
 
 ### 複合ソース型
 
-| コンテスト         | 問題数 | セクション   | 備考                                      |
-| ------------------ | ------ | ------------ | ----------------------------------------- |
-| ABS                | 11問   | A～K         | 11個の contest_id                         |
-| ABC-Like           | 2～8問 | A～H         | 14コンテスト、ABL は ACL と同区分         |
-| TESSOKU_BOOK       | 166問  | A(01-77)/B/C | セクション分割あり                        |
-| MATH_AND_ALGORITHM | 104問  | 001～104     | -                                         |
+| コンテスト         | 問題数 | セクション   | 備考                              |
+| ------------------ | ------ | ------------ | --------------------------------- |
+| ABS                | 11問   | A～K         | 11個の contest_id                 |
+| ABC-Like           | 2～8問 | A～H         | 14コンテスト、ABL は ACL と同区分 |
+| TESSOKU_BOOK       | 166問  | A(01-77)/B/C | セクション分割あり                |
+| MATH_AND_ALGORITHM | 104問  | 001～104     | -                                 |
 
 ---
 
