@@ -16,87 +16,6 @@ import {
   taskResultsForAWC0150Provider,
 } from '$features/tasks/fixtures/contest-table/contest_table_provider';
 
-describe('AWC0100Provider', () => {
-  test('expects to filter only awc0100 tasks', () => {
-    const provider = new AWC0100Provider(ContestType.AWC);
-    const combined = [...taskResultsForAWC0001To0099Provider, ...taskResultsForAWC0100Provider];
-    const filtered = provider.filter(combined);
-
-    expect(filtered.length).toBe(15);
-    expect(filtered.every((task) => task.contest_id === 'awc0100')).toBe(true);
-  });
-
-  test('expects to exclude awc0001 and awc0099', () => {
-    const provider = new AWC0100Provider(ContestType.AWC);
-    const combined = [...taskResultsForAWC0001To0099Provider, ...taskResultsForAWC0100Provider];
-    const filtered = provider.filter(combined);
-
-    expect(filtered.some((task) => task.contest_id === 'awc0001')).toBe(false);
-    expect(filtered.some((task) => task.contest_id === 'awc0099')).toBe(false);
-  });
-
-  test('expects to get correct metadata', () => {
-    const provider = new AWC0100Provider(ContestType.AWC);
-    const metadata = provider.getMetadata();
-
-    expect(metadata.title).toBe('AtCoder Weekday Contest 0100');
-    expect(metadata.abbreviationName).toBe('awc0100');
-  });
-
-  test('expects to return correct display config (EDPC format)', () => {
-    const provider = new AWC0100Provider(ContestType.AWC);
-    const config = provider.getDisplayConfig();
-
-    expect(config.isShownHeader).toBe(false);
-    expect(config.isShownRoundLabel).toBe(false);
-    expect(config.roundLabelWidth).toBe('');
-    expect(config.tableBodyCellsWidth).toBe(
-      'w-1/2 xs:w-1/3 sm:w-1/4 md:w-1/5 lg:w-1/6 2xl:w-1/7 px-1 py-2',
-    );
-    expect(config.isShownTaskIndex).toBe(true);
-  });
-
-  test('expects getContestRoundLabel to return empty string', () => {
-    const provider = new AWC0100Provider(ContestType.AWC);
-
-    expect(provider.getContestRoundLabel('awc0100')).toBe('');
-  });
-
-  test('expects generateTable to produce 15 tasks (A-O) for awc0100', () => {
-    const provider = new AWC0100Provider(ContestType.AWC);
-    const filtered = provider.filter(taskResultsForAWC0100Provider);
-    const table = provider.generateTable(filtered);
-
-    expect(table).toHaveProperty('awc0100');
-    const problems = table['awc0100'];
-    expect(Object.keys(problems)).toHaveLength(15);
-    expect(Object.keys(problems)).toEqual([
-      'A',
-      'B',
-      'C',
-      'D',
-      'E',
-      'F',
-      'G',
-      'H',
-      'I',
-      'J',
-      'K',
-      'L',
-      'M',
-      'N',
-      'O',
-    ]);
-  });
-
-  test('expects to handle empty task results', () => {
-    const provider = new AWC0100Provider(ContestType.AWC);
-    const filtered = provider.filter([] as TaskResults);
-
-    expect(filtered).toEqual([] as TaskResults);
-  });
-});
-
 describe('AWC0150Provider', () => {
   test('expects to filter only awc0150 tasks', () => {
     const provider = new AWC0150Provider(ContestType.AWC);
@@ -256,6 +175,87 @@ describe('AWC0101To0149Provider', () => {
 
   test('expects to handle empty task results', () => {
     const provider = new AWC0101To0149Provider(ContestType.AWC);
+    const filtered = provider.filter([] as TaskResults);
+
+    expect(filtered).toEqual([] as TaskResults);
+  });
+});
+
+describe('AWC0100Provider', () => {
+  test('expects to filter only awc0100 tasks', () => {
+    const provider = new AWC0100Provider(ContestType.AWC);
+    const combined = [...taskResultsForAWC0001To0099Provider, ...taskResultsForAWC0100Provider];
+    const filtered = provider.filter(combined);
+
+    expect(filtered.length).toBe(15);
+    expect(filtered.every((task) => task.contest_id === 'awc0100')).toBe(true);
+  });
+
+  test('expects to exclude awc0001 and awc0099', () => {
+    const provider = new AWC0100Provider(ContestType.AWC);
+    const combined = [...taskResultsForAWC0001To0099Provider, ...taskResultsForAWC0100Provider];
+    const filtered = provider.filter(combined);
+
+    expect(filtered.some((task) => task.contest_id === 'awc0001')).toBe(false);
+    expect(filtered.some((task) => task.contest_id === 'awc0099')).toBe(false);
+  });
+
+  test('expects to get correct metadata', () => {
+    const provider = new AWC0100Provider(ContestType.AWC);
+    const metadata = provider.getMetadata();
+
+    expect(metadata.title).toBe('AtCoder Weekday Contest 0100');
+    expect(metadata.abbreviationName).toBe('awc0100');
+  });
+
+  test('expects to return correct display config (EDPC format)', () => {
+    const provider = new AWC0100Provider(ContestType.AWC);
+    const config = provider.getDisplayConfig();
+
+    expect(config.isShownHeader).toBe(false);
+    expect(config.isShownRoundLabel).toBe(false);
+    expect(config.roundLabelWidth).toBe('');
+    expect(config.tableBodyCellsWidth).toBe(
+      'w-1/2 xs:w-1/3 sm:w-1/4 md:w-1/5 lg:w-1/6 2xl:w-1/7 px-1 py-2',
+    );
+    expect(config.isShownTaskIndex).toBe(true);
+  });
+
+  test('expects getContestRoundLabel to return empty string', () => {
+    const provider = new AWC0100Provider(ContestType.AWC);
+
+    expect(provider.getContestRoundLabel('awc0100')).toBe('');
+  });
+
+  test('expects generateTable to produce 15 tasks (A-O) for awc0100', () => {
+    const provider = new AWC0100Provider(ContestType.AWC);
+    const filtered = provider.filter(taskResultsForAWC0100Provider);
+    const table = provider.generateTable(filtered);
+
+    expect(table).toHaveProperty('awc0100');
+    const problems = table['awc0100'];
+    expect(Object.keys(problems)).toHaveLength(15);
+    expect(Object.keys(problems)).toEqual([
+      'A',
+      'B',
+      'C',
+      'D',
+      'E',
+      'F',
+      'G',
+      'H',
+      'I',
+      'J',
+      'K',
+      'L',
+      'M',
+      'N',
+      'O',
+    ]);
+  });
+
+  test('expects to handle empty task results', () => {
+    const provider = new AWC0100Provider(ContestType.AWC);
     const filtered = provider.filter([] as TaskResults);
 
     expect(filtered).toEqual([] as TaskResults);
