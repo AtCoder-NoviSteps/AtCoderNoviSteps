@@ -9,23 +9,62 @@ import { classifyContest, getContestNameLabel } from '$lib/utils/contest';
 
 import { ContestTableProviderBase, parseContestRound } from './contest_table_provider_base';
 
-// AWC0001 〜 0099 (2026/02/09 〜 2026/06/25)
-// 5 tasks per contest
-export class AWC0001To0099Provider extends ContestTableProviderBase {
+// AWC0150 (special edition, 15 tasks: A-O)
+export class AWC0150Provider extends ContestTableProviderBase {
+  constructor(contestType: ContestType) {
+    super(contestType, '0150');
+  }
+
   protected setFilterCondition(): (taskResult: TaskResult) => boolean {
     return (taskResult: TaskResult) => {
       if (classifyContest(taskResult.contest_id) !== this.contestType) {
         return false;
       }
+
+      return taskResult.contest_id === 'awc0150';
+    };
+  }
+
+  getMetadata(): ContestTableMetaData {
+    return { title: 'AtCoder Weekday Contest 0150', abbreviationName: 'awc0150' };
+  }
+
+  getDisplayConfig(): ContestTableDisplayConfig {
+    return {
+      isShownHeader: false,
+      isShownRoundLabel: false,
+      roundLabelWidth: '',
+      tableBodyCellsWidth: 'w-1/2 xs:w-1/3 sm:w-1/4 md:w-1/5 lg:w-1/6 2xl:w-1/7 px-1 py-2',
+      isShownTaskIndex: true,
+    };
+  }
+
+  getContestRoundLabel(_contestId: string): string {
+    return '';
+  }
+}
+
+// AWC0101 〜 0149 (5 tasks per contest)
+export class AWC0101To0149Provider extends ContestTableProviderBase {
+  constructor(contestType: ContestType) {
+    super(contestType, '0101To0149');
+  }
+
+  protected setFilterCondition(): (taskResult: TaskResult) => boolean {
+    return (taskResult: TaskResult) => {
+      if (classifyContest(taskResult.contest_id) !== this.contestType) {
+        return false;
+      }
+
       const contestRound = parseContestRound(taskResult.contest_id, 'awc');
-      return contestRound >= 1 && contestRound <= 99;
+      return contestRound >= 101 && contestRound <= 149;
     };
   }
 
   getMetadata(): ContestTableMetaData {
     return {
-      title: 'AtCoder Weekday Contest 0001 〜 0099',
-      abbreviationName: 'awc0001To0099',
+      title: 'AtCoder Weekday Contest 0101 〜 0149',
+      abbreviationName: 'awc0101To0149',
     };
   }
 
@@ -80,28 +119,23 @@ export class AWC0100Provider extends ContestTableProviderBase {
   }
 }
 
-// AWC0101 onwards (2026/06/29 〜 )
-// 5 tasks per contest. Upper bound 9999 = max of 4-digit format (cf. ARC104Onwards uses <= 999).
-export class AWC0101OnwardsProvider extends ContestTableProviderBase {
-  constructor(contestType: ContestType) {
-    super(contestType, '0101To9999');
-  }
-
+// AWC0001 〜 0099 (2026/02/09 〜 2026/06/25)
+// 5 tasks per contest
+export class AWC0001To0099Provider extends ContestTableProviderBase {
   protected setFilterCondition(): (taskResult: TaskResult) => boolean {
     return (taskResult: TaskResult) => {
       if (classifyContest(taskResult.contest_id) !== this.contestType) {
         return false;
       }
-
       const contestRound = parseContestRound(taskResult.contest_id, 'awc');
-      return contestRound >= 101 && contestRound <= 9999;
+      return contestRound >= 1 && contestRound <= 99;
     };
   }
 
   getMetadata(): ContestTableMetaData {
     return {
-      title: 'AtCoder Weekday Contest 0101 〜 ',
-      abbreviationName: 'awc0101Onwards',
+      title: 'AtCoder Weekday Contest 0001 〜 0099',
+      abbreviationName: 'awc0001To0099',
     };
   }
 
