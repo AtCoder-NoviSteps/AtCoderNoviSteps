@@ -104,7 +104,7 @@ AOJ/JAG 固有の詳細（`AOJ_LABEL_OVERRIDES`、`titleStyle`、同一年2回�
 | ICPC 国内予選   | 年度パラメータ  | `AojIcpcPrelimProvider(type, year)`    |
 | ICPC アジア地区 | 年度パラメータ  | `AojIcpcRegionalProvider(type, year)`  |
 | JAG 模擬国内    | 年度パラメータ  | 同一年2回開催は suffix 分割            |
-| JOI 一次予選    | regex           | `joi{YYYY}yo1{a\|b\|c}`               |
+| JOI 一次予選    | regex           | `joi{YYYY}yo1{a\|b\|c}`                |
 | JOI 二次予選    | regex + section | 2020 以降 / 2006-2019 で Provider 分離 |
 | JOI 本選        | regex           | 2026 年より `ho` → `sf` サフィックス   |
 
