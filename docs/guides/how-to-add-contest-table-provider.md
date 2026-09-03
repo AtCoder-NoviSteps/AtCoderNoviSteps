@@ -137,7 +137,7 @@ AOJ/JAG 固有の詳細（`AOJ_LABEL_OVERRIDES`、`titleStyle`、同一年2回�
 
 ## 参考資料
 
-- [Provider 実装・テスト・フィクスチャ](../src/features/tasks/utils/contest-table/)
+- [Provider 実装・テスト・フィクスチャ](../../src/features/tasks/utils/contest-table/)
 - 各 Provider の実装経緯: `git log --oneline --all --grep='#NNNN'`（issue 番号で検索）
 
 ---
