@@ -951,15 +951,16 @@ const [awc0102_a, awc0102_b, awc0102_c, awc0102_d, awc0102_e] = createContestTas
   { taskTableIndex: 'E', statusName: AC },
 ]);
 
-const [awc9999_a, awc9999_b, awc9999_c, awc9999_d, awc9999_e] = createContestTasks('awc9999', [
+// AWC 0101-0149: 5 tasks (A, B, C, D, E)
+const [awc0149_a, awc0149_b, awc0149_c, awc0149_d, awc0149_e] = createContestTasks('awc0149', [
   { taskTableIndex: 'A', statusName: AC },
-  { taskTableIndex: 'B', statusName: PENDING },
+  { taskTableIndex: 'B', statusName: AC_WITH_EDITORIAL },
   { taskTableIndex: 'C', statusName: AC },
-  { taskTableIndex: 'D', statusName: TRYING },
-  { taskTableIndex: 'E', statusName: AC_WITH_EDITORIAL },
+  { taskTableIndex: 'D', statusName: PENDING },
+  { taskTableIndex: 'E', statusName: TRYING },
 ]);
 
-export const taskResultsForAWC0101OnwardsProvider: TaskResults = [
+export const taskResultsForAWC0101To0149Provider: TaskResults = [
   awc0101_a,
   awc0101_b,
   awc0101_c,
@@ -970,9 +971,62 @@ export const taskResultsForAWC0101OnwardsProvider: TaskResults = [
   awc0102_c,
   awc0102_d,
   awc0102_e,
-  awc9999_a,
-  awc9999_b,
-  awc9999_c,
-  awc9999_d,
-  awc9999_e,
+  awc0149_a,
+  awc0149_b,
+  awc0149_c,
+  awc0149_d,
+  awc0149_e,
+];
+
+// AWC0150 (special edition): 15 tasks (A-O)
+const [
+  awc0150_a,
+  awc0150_b,
+  awc0150_c,
+  awc0150_d,
+  awc0150_e,
+  awc0150_f,
+  awc0150_g,
+  awc0150_h,
+  awc0150_i,
+  awc0150_j,
+  awc0150_k,
+  awc0150_l,
+  awc0150_m,
+  awc0150_n,
+  awc0150_o,
+] = createContestTasks('awc0150', [
+  { taskTableIndex: 'A', statusName: AC },
+  { taskTableIndex: 'B', statusName: AC },
+  { taskTableIndex: 'C', statusName: AC_WITH_EDITORIAL },
+  { taskTableIndex: 'D', statusName: AC },
+  { taskTableIndex: 'E', statusName: TRYING },
+  { taskTableIndex: 'F', statusName: AC_WITH_EDITORIAL },
+  { taskTableIndex: 'G', statusName: TRYING },
+  { taskTableIndex: 'H', statusName: PENDING },
+  { taskTableIndex: 'I', statusName: PENDING },
+  { taskTableIndex: 'J', statusName: PENDING },
+  { taskTableIndex: 'K', statusName: PENDING },
+  { taskTableIndex: 'L', statusName: PENDING },
+  { taskTableIndex: 'M', statusName: PENDING },
+  { taskTableIndex: 'N', statusName: PENDING },
+  { taskTableIndex: 'O', statusName: PENDING },
+]);
+
+export const taskResultsForAWC0150Provider: TaskResults = [
+  awc0150_a,
+  awc0150_b,
+  awc0150_c,
+  awc0150_d,
+  awc0150_e,
+  awc0150_f,
+  awc0150_g,
+  awc0150_h,
+  awc0150_i,
+  awc0150_j,
+  awc0150_k,
+  awc0150_l,
+  awc0150_m,
+  awc0150_n,
+  awc0150_o,
 ];
