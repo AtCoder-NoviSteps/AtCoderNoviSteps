@@ -133,7 +133,11 @@ When the same mock is called with different arguments in one test, use `vi.when(
 
 ```typescript
 vi.when(vi.mocked(prisma.workBook.findMany))
-  .calledWith(expect.objectContaining({ where: expect.objectContaining({ workBookType: WorkBookType.CURRICULUM }) }))
+  .calledWith(
+    expect.objectContaining({
+      where: expect.objectContaining({ workBookType: WorkBookType.CURRICULUM }),
+    }),
+  )
   .thenResolve(curriculumRows);
 ```
 
