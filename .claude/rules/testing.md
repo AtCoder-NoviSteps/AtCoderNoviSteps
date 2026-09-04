@@ -65,7 +65,7 @@ test.each([TaskGrade.PENDING, TaskGrade.Q11, TaskGrade.Q10, TaskGrade.D6])(
 
 ### Cleanup (Vitest v5)
 
-- `clearMocks: true` is the v5 default — **never add `vi.clearAllMocks()`**; use `mockResolvedValue` (not `Once`) since auto-clear handles reset
+- `clearMocks: true` is the v5 default — **never add `vi.clearAllMocks()`**; it clears call history only — `mockResolvedValue` / `vi.when()` implementations persist, so each test re-sets what it needs
 - `restoreMocks` is still `false` — `vi.restoreAllMocks()` remains needed for `vi.spyOn`
 
 ### Service Layer (Prisma)
