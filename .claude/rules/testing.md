@@ -115,6 +115,11 @@ describe('validate', () => {
 - Verify fixture alignment: test name "tie-break" must exercise that code path
 - Shared fixtures at `describe` scope avoid duplication (DRY + auto-sync)
 
+### Mock Cleanup (Vitest v5)
+
+- `clearMocks: true` is the v5 default — **never add `vi.clearAllMocks()`**; use `mockResolvedValue` (not `Once`) since auto-clear handles reset
+- `restoreMocks` is still `false` — `vi.restoreAllMocks()` remains needed for `vi.spyOn`
+
 ### Service Layer Mocking
 
 Mock Prisma with `vi.mock('$lib/server/database', ...)` — no real DB mutations. Use helpers:
@@ -122,6 +127,14 @@ Mock Prisma with `vi.mock('$lib/server/database', ...)` — no real DB mutations
 ```typescript
 const mockFindUnique = (data) => db.task.findUnique.mockResolvedValue(data);
 const mockFindMany = (data) => db.task.findMany.mockResolvedValue(data);
+```
+
+When the same mock is called with different arguments in one test, use `vi.when()` instead of `mockResolvedValueOnce` chains:
+
+```typescript
+vi.when(vi.mocked(prisma.workBook.findMany))
+  .calledWith(expect.objectContaining({ where: expect.objectContaining({ workBookType: WorkBookType.CURRICULUM }) }))
+  .thenResolve(curriculumRows);
 ```
 
 ### Cache Module Tests
