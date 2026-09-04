@@ -1,4 +1,4 @@
-import { expect, test, describe, vi, afterEach } from 'vitest';
+import { expect, test, describe, vi } from 'vitest';
 
 vi.mock('@sveltejs/kit', () => {
   const redirectImpl = (status: number, location: string) => {
@@ -12,9 +12,6 @@ vi.mock('@sveltejs/kit', () => {
   return { redirect: vi.fn(redirectImpl) };
 });
 
-afterEach(() => {
-  vi.clearAllMocks();
-});
 
 import { ensureSessionOrRedirect, getLoggedInUser } from './session_guards';
 

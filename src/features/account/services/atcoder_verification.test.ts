@@ -118,7 +118,6 @@ function mockFetch(body: unknown, ok = true): void {
 // ---------------------------------------------------------------------------
 
 beforeEach(() => {
-  vi.clearAllMocks();
   vi.stubEnv('CONFIRM_API_URL', SAMPLE_API_URL);
 });
 

@@ -155,5 +155,8 @@ vite.config.ts.timestamp-*
 # Prisma
 prisma/.fabbrica
 
+# Vitest
+.vitest/
+
 # Directory for playwright test results
 test-results

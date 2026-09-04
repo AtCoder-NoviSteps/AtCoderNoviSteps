@@ -1,4 +1,4 @@
-import { describe, test, expect, vi, beforeEach } from 'vitest';
+import { describe, test, expect, vi } from 'vitest';
 
 import {
   getWorkBook,
@@ -49,9 +49,6 @@ vi.mock('$features/workbooks/server/cache', () => ({
 import prisma from '$lib/server/database';
 import * as usersCrud from '$lib/services/users';
 
-beforeEach(() => {
-  vi.clearAllMocks();
-});
 
 function prepareWorkBook(overrides: Partial<WorkBook> = {}): WorkBook {
   return {

@@ -1,4 +1,4 @@
-import { describe, test, expect, beforeEach, vi } from 'vitest';
+import { describe, test, expect, vi } from 'vitest';
 
 import { Prisma } from '@prisma/client';
 
@@ -29,9 +29,6 @@ import { invalidateVoteCaches } from '$features/votes/server/cache';
 describe('updateTask', () => {
   const mockDb = db as unknown as { task: { update: ReturnType<typeof vi.fn> } };
 
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
 
   describe('successful case', () => {
     test('returns undefined when task is updated successfully', async () => {

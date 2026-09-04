@@ -1,4 +1,4 @@
-import { describe, test, expect, vi, beforeEach } from 'vitest';
+import { describe, test, expect, vi } from 'vitest';
 
 import { TaskGrade } from '$lib/types/task';
 import { WorkBookType } from '$features/workbooks/types/workbook';
@@ -42,31 +42,44 @@ vi.mock('$lib/server/database', () => ({
 
 import prisma from '$lib/server/database';
 
-beforeEach(() => {
-  vi.clearAllMocks();
-});
-
 function mockFindMany(placements: WorkBookPlacements) {
   vi.mocked(prisma.workBookPlacement.findMany).mockResolvedValue(
     placements as unknown as Awaited<ReturnType<typeof prisma.workBookPlacement.findMany>>,
   );
 }
 
-function mockPlacementFindManyOnce(placements: WorkBookPlacements) {
-  vi.mocked(prisma.workBookPlacement.findMany).mockResolvedValueOnce(
-    placements as unknown as Awaited<ReturnType<typeof prisma.workBookPlacement.findMany>>,
-  );
-}
+function mockUnplacedWorkbooks(
+  curriculum: { id: number }[],
+  solution: { id: number }[],
+) {
+  const mock = vi.mocked(prisma.workBook.findMany);
 
-function mockWorkBookFindManyOnce(result: { id: number }[]) {
-  vi.mocked(prisma.workBook.findMany).mockResolvedValueOnce(
-    result as unknown as Awaited<ReturnType<typeof prisma.workBook.findMany>>,
-  );
+  vi.when(mock)
+    .calledWith(
+      expect.objectContaining({
+        where: expect.objectContaining({ workBookType: WorkBookType.CURRICULUM }),
+      }),
+    )
+    .thenResolve(
+      curriculum as unknown as Awaited<ReturnType<typeof prisma.workBook.findMany>>,
+    );
+
+  vi.when(mock)
+    .calledWith(
+      expect.objectContaining({
+        where: expect.objectContaining({ workBookType: WorkBookType.SOLUTION }),
+      }),
+    )
+    .thenResolve(
+      solution as unknown as Awaited<ReturnType<typeof prisma.workBook.findMany>>,
+    );
 }
 
 describe('getWorkbooksWithPlacements', () => {
   test('returns workbooks of type CURRICULUM and SOLUTION with their placements', async () => {
-    mockWorkBookFindManyOnce(workbooksWithPlacements);
+    vi.mocked(prisma.workBook.findMany).mockResolvedValue(
+      workbooksWithPlacements as unknown as Awaited<ReturnType<typeof prisma.workBook.findMany>>,
+    );
 
     const result = await getWorkbooksWithPlacements();
 
@@ -184,8 +197,7 @@ describe('updateWorkBookPlacements', () => {
 
 describe('createInitialPlacements', () => {
   test('does nothing when all workbooks are already placed', async () => {
-    mockWorkBookFindManyOnce([]); // unplaced CURRICULUM
-    mockWorkBookFindManyOnce([]); // unplaced SOLUTION
+    mockUnplacedWorkbooks([], []);
 
     await createInitialPlacements();
 
@@ -195,8 +207,7 @@ describe('createInitialPlacements', () => {
   test('creates placements for unplaced curriculum and solution workbooks', async () => {
     // unplacedCurriculumRows: 2 workbooks → 2 curriculum placements
     // unplacedSolutionWorkbooks: 2 workbooks → 2 solution placements (PENDING)
-    mockWorkBookFindManyOnce(unplacedCurriculumRows);
-    mockWorkBookFindManyOnce(unplacedSolutionWorkbooks);
+    mockUnplacedWorkbooks(unplacedCurriculumRows, unplacedSolutionWorkbooks);
     vi.mocked(prisma.workBookPlacement.createMany).mockResolvedValue({ count: 4 });
 
     await createInitialPlacements();
@@ -207,8 +218,7 @@ describe('createInitialPlacements', () => {
   });
 
   test('calls createMany with skipDuplicates to tolerate concurrent double-submit', async () => {
-    mockWorkBookFindManyOnce(unplacedCurriculumRows);
-    mockWorkBookFindManyOnce(unplacedSolutionWorkbooks);
+    mockUnplacedWorkbooks(unplacedCurriculumRows, unplacedSolutionWorkbooks);
     vi.mocked(prisma.workBookPlacement.createMany).mockResolvedValue({ count: 4 });
 
     await createInitialPlacements();
@@ -220,7 +230,7 @@ describe('createInitialPlacements', () => {
 
 describe('validateAndUpdatePlacements', () => {
   test('returns null and calls upsert when all updates are valid', async () => {
-    mockPlacementFindManyOnce([curriculumPlacementRow]);
+    mockFindMany([curriculumPlacementRow]);
     vi.mocked(prisma.$transaction).mockResolvedValue([]);
 
     const result = await validateAndUpdatePlacements([
@@ -232,7 +242,7 @@ describe('validateAndUpdatePlacements', () => {
   });
 
   test('returns error when placement id does not exist', async () => {
-    mockPlacementFindManyOnce([]);
+    mockFindMany([]);
 
     const result = await validateAndUpdatePlacements([
       { id: 999, priority: 1, taskGrade: null, solutionCategory: SolutionCategory.GRAPH },
@@ -243,7 +253,7 @@ describe('validateAndUpdatePlacements', () => {
   });
 
   test('returns error for CURRICULUM → SOLUTION cross-type movement', async () => {
-    mockPlacementFindManyOnce([curriculumPlacementRow]);
+    mockFindMany([curriculumPlacementRow]);
 
     const result = await validateAndUpdatePlacements([
       { id: 1, priority: 1, taskGrade: null, solutionCategory: SolutionCategory.GRAPH },
@@ -254,7 +264,7 @@ describe('validateAndUpdatePlacements', () => {
   });
 
   test('returns error for SOLUTION → CURRICULUM cross-type movement', async () => {
-    mockPlacementFindManyOnce([solutionPlacementRow]);
+    mockFindMany([solutionPlacementRow]);
 
     const result = await validateAndUpdatePlacements([
       { id: 101, priority: 1, taskGrade: TaskGrade.Q10, solutionCategory: null },

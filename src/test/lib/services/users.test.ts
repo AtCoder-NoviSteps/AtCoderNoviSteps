@@ -1,4 +1,4 @@
-import { describe, test, expect, vi, beforeEach } from 'vitest';
+import { describe, test, expect, vi } from 'vitest';
 import { Roles, type User } from '@prisma/client';
 
 vi.mock('$lib/server/database', () => ({
@@ -61,24 +61,21 @@ function prepareUser(overrides: Partial<UserWithAccount> = {}): UserWithAccount 
 // ---------------------------------------------------------------------------
 
 function mockFindUnique(value: UserWithAccount | null): void {
-  vi.mocked(db.user.findUnique).mockResolvedValueOnce(value);
+  vi.mocked(db.user.findUnique).mockResolvedValue(value);
 }
 
 function mockDelete(value: UserWithAccount): void {
-  vi.mocked(db.user.delete).mockResolvedValueOnce(value);
+  vi.mocked(db.user.delete).mockResolvedValue(value);
 }
 
 function mockDeleteError(message: string = 'not found'): void {
-  vi.mocked(db.user.delete).mockRejectedValueOnce(new Error(message));
+  vi.mocked(db.user.delete).mockRejectedValue(new Error(message));
 }
 
 // ---------------------------------------------------------------------------
 // Setup
 // ---------------------------------------------------------------------------
 
-beforeEach(() => {
-  vi.clearAllMocks();
-});
 
 describe('getUser', () => {
   describe('successful case', () => {
