@@ -45,6 +45,10 @@ const grade = isValidTaskGrade(data.grade) ? data.grade : null;
 
 Extract to `src/lib/utils/` with adjacent tests.
 
+## Guard Clause Reachability
+
+Ensure guard clauses don't make later code unreachable. If an early return covers all remaining cases, delete the dead code below it rather than leaving it.
+
 ## Dead Code: Three-Condition Rule
 
 Delete function only if: (1) zero callers, (2) replacement exists, (3) dependent fields also deleted.
