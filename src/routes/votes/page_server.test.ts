@@ -29,7 +29,6 @@ const LOGGED_IN_SESSION: MockSession = {
 };
 
 beforeEach(() => {
-  vi.clearAllMocks();
   mockGetAllTasksWithVoteInfo.mockResolvedValue([]);
 });
 

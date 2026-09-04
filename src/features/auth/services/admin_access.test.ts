@@ -1,4 +1,4 @@
-import { expect, test, describe, vi, afterEach } from 'vitest';
+import { expect, test, describe, vi } from 'vitest';
 
 vi.mock('@sveltejs/kit', () => {
   const redirectImpl = (status: number, location: string) => {
@@ -22,10 +22,6 @@ vi.mock('@sveltejs/kit', () => {
 vi.mock('$lib/services/users', () => ({
   getUser: vi.fn(),
 }));
-
-afterEach(() => {
-  vi.clearAllMocks();
-});
 
 import * as userService from '$lib/services/users';
 import { Roles } from '$lib/types/user';

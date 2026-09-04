@@ -9,94 +9,39 @@ paths:
 
 # Testing
 
-## Core Principles
+## Principles
 
-- **Tests ship with implementation**: same commit, feature not done until tests pass
-- **English only**: describe expected behavior (e.g., `'returns empty array when workbooks is empty'`)
-- **Test integrity**: never weaken assertions to make tests pass; fix implementation instead
-- **Unused imports**: signal missing tests, not dead code—add the test case first
-- **TDD exceptions**: skip test-first for exploratory spikes, type-only changes, and config files with no branching logic; write tests before implementation for all service/util/store code
+- **Tests ship with implementation** — same commit; feature not done until tests pass. Never defer tests for non-trivial logic
+- **English only** — describe expected behavior (e.g., `'returns empty array when workbooks is empty'`)
+- **Test integrity** — never weaken assertions to make tests pass; fix implementation instead
+- **Unused imports** — signal missing tests, not dead code — add the test case first
+- **TDD exceptions** — skip test-first for exploratory spikes, type-only changes, and config files with no branching logic
+- **Component testing** — extract logic to `utils/`; omit component Vitest if template-only **and** E2E covers rendering paths
+- **Coverage** — cover happy path, error cases, and domain edge cases (empty arrays, null, enum extremes). Treat low coverage as a signal to review, not a target
 
-## Test Types
+## File Layout & Environment
 
 | Type | Tool       | Location                  | Command          |
 | ---- | ---------- | ------------------------- | ---------------- |
 | Unit | Vitest     | `src/test/` or co-located | `pnpm test:unit` |
 | E2E  | Playwright | `e2e/`                    | `pnpm test:e2e`  |
 
-E2E files: **must** use `.spec.ts` extension (`.test.ts` not detected).
+- E2E files **must** use `.spec.ts` (`.test.ts` not detected)
+- Route unit tests: name `page_server.test.ts`, never `+page.server.test.ts` (SvelteKit reserves `+` prefix)
+- Both centralized (`src/test/`) and co-located (`src/features/`, `src/lib/`) test locations are supported — see `vite.config.ts` `include`
 
-Route unit tests: `src/routes/**/*.test.ts` is included by `vite.config.ts`. **Never use `+` as a filename prefix** — SvelteKit reserves it and `pnpm check` will error. Name route test files `page_server.test.ts`, not `+page.server.test.ts`.
+**Environment:** Default `node`. Only opt in to jsdom (`// @vitest-environment jsdom` at file top) when touching `window` / `document` / `localStorage`. Never set jsdom globally — per-file construction is ~5.5× slower.
 
-## Test Environment
+## Assertions & Structure
 
-Default is `node` (set in `vite.config.ts`). Only files touching the real DOM (`window` / `document` / `localStorage`) opt in with a top-of-file `// @vitest-environment jsdom`. **Never set jsdom globally** — most tests are pure units and per-file jsdom construction is ~5.5x slower.
-
-### Toggling `browser` per describe
-
-**Never register `vi.mock('$app/environment')` twice in one file.** Every `vi.mock` is hoisted above the imports and runs once before any test, so a `{ browser: false }` mock written inside an SSR `describe`/`beforeEach` silently overwrites the `{ browser: true }` one at the top — the whole file ends up pinned to `browser = false`, the localStorage branches never execute, and tests that "verify" them become false-positives while still passing.
-
-Use **one dynamic mock** driven by a `vi.hoisted` flag, and toggle the flag in `beforeEach`. Default the flag to `false` so singletons constructed at import time stay SSR-safe:
-
-```typescript
-// @vitest-environment jsdom
-const browserState = vi.hoisted(() => ({ value: false }));
-
-vi.mock('$app/environment', () => ({
-  get browser() {
-    return browserState.value;
-  },
-}));
-
-describe('MyStore', () => {
-  let store: MyStore;
-
-  beforeEach(() => {
-    browserState.value = true;
-    localStorage.clear();
-    store = new MyStore(); // constructed after the flag flips — reads localStorage
-  });
-  // …
-});
-
-describe('MyStore in SSR', () => {
-  beforeEach(() => {
-    browserState.value = false;
-  });
-  // …
-});
-```
-
-**Never assert a browser branch on the import-time singleton.** The flag is `false` while the module graph is evaluated, so the exported singleton is always built in SSR mode and never touches localStorage — asserting on it under `browser = true` is the same false-positive as the double-`vi.mock` above. Construct a fresh instance inside the browser `describe` (which is why the store class, not just the singleton, needs a named export). The singleton is still worth one assertion: that import-time construction is SSR-safe.
-
-In jsdom files, do **not** stub localStorage with `vi.stubGlobal` — use jsdom's real `Storage` and assert on state (`localStorage.getItem(key)`), not on spy calls. Cover both SSR guards with separate cases, since one assertion cannot carry both:
-
-- **read guard**: pre-seed localStorage, construct a fresh store, expect the _default_ (the pre-seeded value stays in storage, so do not expect `getItem(key)` to be null here)
-- **write guard**: start from empty localStorage, call the setter, expect `getItem(key)` to still be null
-
-## Unit Testing Patterns
-
-### Assertions
-
-- Use `toBe(true)` / `toBe(false)` not `toBeTruthy()` / `toBeFalsy()`
+- `toBe(true)` / `toBe(false)`, not `toBeTruthy()` / `toBeFalsy()`
 - DB query tests: assert `orderBy`, `include` with `expect.objectContaining`, not just `where`
-- Enum membership: `Object.hasOwn(Enum, value)` not `in` (avoids prototype chain)
-- `Promise<void>`: `.resolves` requires a matcher — without one it does not assert and becomes a false-positive; use `await fn()` to assert no throw, or `.resolves.toBeUndefined()` for explicit form
+- Enum membership: `Object.hasOwn(Enum, value)`, not `in` (avoids prototype chain)
+- `Promise<void>`: use `await fn()` to assert no throw, or `.resolves.toBeUndefined()`. **Never** bare `.resolves` (false-positive)
+- **Stubs**: parameter types must match production signature — use domain types (`TaskGrade`), not `string`
+- **Test data**: realistic values (real task IDs, grade names). Extract shared fixtures to file/describe scope; inline for single-use
 
-```typescript
-// ✓ Preferred: simplest way to assert Promise<void> does not throw
-await ensureSessionOrRedirect(mockLocals);
-
-// ✓ Also correct: explicit resolves form
-await expect(ensureSessionOrRedirect(mockLocals)).resolves.toBeUndefined();
-
-// ✗ Wrong: .resolves without a matcher does not assert anything (false-positive)
-await expect(ensureSessionOrRedirect(mockLocals)).resolves;
-```
-
-### Describe Organization
-
-Group by scenario (successful vs error cases), not flat:
+Group by scenario, not flat:
 
 ```typescript
 describe('validate', () => {
@@ -108,43 +53,57 @@ describe('validate', () => {
 });
 ```
 
-### Test Data
+Parameterized: test enum boundaries + typical value, then separate test for distinct behavior:
 
-- Use realistic values (real task IDs, grade names), not `'t1'` placeholders
-- Extract shared fixture data to file scope; inline for single-use
-- Verify fixture alignment: test name "tie-break" must exercise that code path
-- Shared fixtures at `describe` scope avoid duplication (DRY + auto-sync)
+```typescript
+test.each([TaskGrade.PENDING, TaskGrade.Q11, TaskGrade.Q10, TaskGrade.D6])(
+  'returns grade %s', (grade) => { ... }
+);
+```
 
-### Service Layer Mocking
+## Mocking
 
-Mock Prisma with `vi.mock('$lib/server/database', ...)` — no real DB mutations. Use helpers:
+### Cleanup (Vitest v5)
+
+- `clearMocks: true` is the v5 default — **never add `vi.clearAllMocks()`**; it clears call history only — `mockResolvedValue` / `vi.when()` implementations persist, so each test re-sets what it needs
+- `restoreMocks` is still `false` — `vi.restoreAllMocks()` remains needed for `vi.spyOn`
+
+### Service Layer (Prisma)
+
+Mock with `vi.mock('$lib/server/database', ...)`. Use helpers:
 
 ```typescript
 const mockFindUnique = (data) => db.task.findUnique.mockResolvedValue(data);
-const mockFindMany = (data) => db.task.findMany.mockResolvedValue(data);
 ```
 
-### Cache Module Tests
+When the same mock is called with different arguments in one test, use `vi.when()` instead of `mockResolvedValueOnce` chains:
 
-Prevent timer leaks and test isolation:
+```typescript
+vi.when(vi.mocked(prisma.workBook.findMany))
+  .calledWith(
+    expect.objectContaining({
+      where: expect.objectContaining({ workBookType: WorkBookType.CURRICULUM }),
+    }),
+  )
+  .thenResolve(curriculumRows);
+```
+
+### Cache Modules
 
 ```typescript
 afterAll(() => disposeDomainCaches());
 beforeEach(() => invalidateDomainCaches());
-```
 
-Mock cache modules in service tests so caching is bypassed:
-
-```typescript
+// Bypass caching in service tests:
 vi.mock('$lib/server/tasks/cache', () => ({
   getCachedTasksMap: (fetchFn: () => Promise<unknown>) => fetchFn(),
   invalidateTaskCaches: vi.fn(),
 }));
 ```
 
-### HTTP Mocking (Nock)
+### HTTP (Nock)
 
-Extract setup into helpers, declare once at describe scope:
+Extract setup into helpers at describe scope:
 
 ```typescript
 const mockGetUser = (statusCode, user?) => {
@@ -154,52 +113,45 @@ const mockGetUser = (statusCode, user?) => {
 };
 ```
 
-### Parameterized Tests
-
-Test enum boundaries + typical value, then separate test for distinct behavior:
-
-```typescript
-test.each([TaskGrade.PENDING, TaskGrade.Q11, TaskGrade.Q10, TaskGrade.D6])(
-  'returns grade %s', (grade) => { ... }
-);
-test('returns null when no vote', () => { ... });
-```
-
 ### Environment Variables
 
-Use `vi.stubEnv()` + `vi.unstubAllEnvs()`:
+Use `vi.stubEnv()` + `vi.unstubAllEnvs()` in `afterEach`.
+
+### globalThis / Mutable Exports
+
+Save and restore `globalThis` state via `Object.defineProperty` in `beforeEach`/`afterEach`.
+
+For mutable module-level `const` objects (override maps), mutate directly in `beforeEach`/`afterEach` — no `vi.mock` needed.
+
+## SvelteKit-Specific
+
+### Browser Toggle per Describe
+
+**Never register `vi.mock('$app/environment')` twice in one file** — the second hoisted call silently overwrites the first, pinning the whole file to one value. Use one dynamic mock with a `vi.hoisted` flag:
 
 ```typescript
-beforeEach(() => {
-  vi.stubEnv('MY_VAR', 'value');
-});
-afterEach(() => {
-  vi.unstubAllEnvs();
-});
+// @vitest-environment jsdom
+const browserState = vi.hoisted(() => ({ value: false }));
+vi.mock('$app/environment', () => ({
+  get browser() {
+    return browserState.value;
+  },
+}));
+
+// In browser describe: browserState.value = true; construct fresh instance
+// In SSR describe: browserState.value = false
 ```
 
-### Mutable Module-Level Exports
+**Never assert a browser branch on the import-time singleton** — it is always constructed in SSR mode. Construct a fresh instance inside the browser `describe`.
 
-When a module exports a mutable `const` object (e.g. an override map), mutate it directly in `beforeEach`/`afterEach` to test override paths — no `vi.mock` needed:
+In jsdom files, use jsdom's real `Storage` and assert state (`localStorage.getItem(key)`), not spy calls. Cover SSR guards separately:
 
-```typescript
-import { buildFn, OVERRIDE_MAP } from './module';
+- **read guard**: pre-seed localStorage, construct store, expect the default
+- **write guard**: empty localStorage, call setter, expect `getItem(key)` still null
 
-beforeEach(() => {
-  OVERRIDE_MAP['testKey'] = { '100': 'A', '102': 'C' };
-});
-afterEach(() => {
-  delete OVERRIDE_MAP['testKey'];
-});
+### Route load() Tests
 
-test('uses override map when entry exists', () => {
-  expect(buildFn('testKey', ['100', '102']).get('100')).toBe('A');
-});
-```
-
-### Route load() Unit Tests
-
-`load` in `+page.server.ts` is a plain async function — call it directly with a mock event. Pass `setHeaders` as a `vi.fn()` spy to assert whether and how headers are set. What unit tests **cannot** verify: whether the header actually reaches the wire, or that `Set-Cookie` is absent (auth mocks bypass that) — cover those in E2E.
+Call `load` directly with a mock event. Pass `setHeaders` as `vi.fn()` to assert header behavior. Wire assertions cannot be verified in unit tests — cover in E2E.
 
 ```typescript
 const createMockEvent = ({ session = null } = {}) =>
@@ -209,67 +161,3 @@ const createMockEvent = ({ session = null } = {}) =>
     setHeaders: vi.fn(),
   }) as unknown as Parameters<typeof load>[0] & { setHeaders: ReturnType<typeof vi.fn> };
 ```
-
-### Test Stubs
-
-Parameter types **must match** production signature — use domain types (`TaskGrade`), not `string`. Mismatch compiles silently but breaks type safety.
-
-## Component Testing
-
-- Extract logic to `utils/` or `_utils/` and test there, not in component
-- Omit component Vitest if template-only **and** E2E covers rendering paths
-
-## Coverage
-
-Cover meaningful boundaries: happy path, error cases, and edge cases specific to the domain (e.g. empty arrays, null, enum extremes). Run `pnpm coverage` to spot untested branches — treat low coverage as a signal to review, not a target to hit mechanically.
-
-## Multiple Test Location Patterns
-
-During migration, support both centralized (`src/test/`) and co-located (`src/features/`, `src/lib/`) tests.
-Configure `vite.config.ts` with explicit ordering:
-
-```typescript
-include: [
-  'src/lib/**/*.test.ts',        // shared utilities (adjacent)
-  'src/test/**/*.test.ts',       // legacy centralized
-  'src/features/**/*.test.ts',   // feature co-location
-],
-```
-
-## Test Files Ship with Code
-
-Never defer tests. For non-trivial logic without explicit test requirement, add them anyway.
-
-## Mocking globalThis Properties
-
-Save and restore `globalThis` state to prevent test leaks:
-
-```typescript
-const original = globalThis.location;
-
-beforeEach(() => {
-  Object.defineProperty(globalThis, 'location', {
-    value: { origin: 'http://test' },
-    writable: true,
-  });
-});
-
-afterEach(() => {
-  if (original !== undefined) {
-    Object.defineProperty(globalThis, 'location', { value: original, writable: true });
-  }
-});
-```
-
-## Guard Clause Reachability
-
-Ensure guard clauses don't make later code unreachable. Example anti-pattern:
-
-```typescript
-// Bad: 'http://localhost' is unreachable
-if (location?.origin) return location.origin;
-if (!browser) return '';
-return 'http://localhost'; // Never reached in browser
-```
-
-Simplify to remove dead code after the final guard.

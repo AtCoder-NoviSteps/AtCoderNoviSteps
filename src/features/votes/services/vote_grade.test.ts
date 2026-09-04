@@ -1,4 +1,4 @@
-import { describe, test, expect, vi, beforeEach } from 'vitest';
+import { describe, test, expect, vi } from 'vitest';
 
 import { TaskGrade } from '@prisma/client';
 
@@ -31,10 +31,6 @@ vi.mock('$lib/server/database', () => ({
 
 import prisma from '$lib/server/database';
 import { invalidateVoteCaches } from '$features/votes/server/cache';
-
-beforeEach(() => {
-  vi.clearAllMocks();
-});
 
 // ---------------------------------------------------------------------------
 // Type aliases

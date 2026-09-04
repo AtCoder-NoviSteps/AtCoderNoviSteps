@@ -53,7 +53,6 @@ const LOGGED_IN_SESSION: MockSession = {
 };
 
 beforeEach(() => {
-  vi.clearAllMocks();
   mockGetTaskResults.mockResolvedValue([]);
   mockGetTasksWithTagIds.mockResolvedValue([]);
   mockGetVoteGradeStatistics.mockResolvedValue(new Map());

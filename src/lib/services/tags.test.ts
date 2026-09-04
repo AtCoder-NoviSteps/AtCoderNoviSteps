@@ -1,4 +1,4 @@
-import { describe, test, expect, beforeEach, vi } from 'vitest';
+import { describe, test, expect, vi } from 'vitest';
 
 import { getTag } from '$lib/services/tags';
 
@@ -14,10 +14,6 @@ import db from '$lib/server/database';
 
 describe('getTag', () => {
   const mockDb = db as unknown as { tag: { findUnique: ReturnType<typeof vi.fn> } };
-
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
 
   describe('successful case', () => {
     test('returns tag when tag exists', async () => {

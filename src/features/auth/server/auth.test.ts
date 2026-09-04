@@ -1,4 +1,4 @@
-import { describe, test, expect, beforeEach, vi } from 'vitest';
+import { describe, test, expect, vi } from 'vitest';
 
 import type { RequestEvent } from '@sveltejs/kit';
 import { Roles } from '@prisma/client';
@@ -36,10 +36,6 @@ const createMockEvent = (cookieValue?: string) => {
     };
   };
 };
-
-beforeEach(() => {
-  vi.clearAllMocks();
-});
 
 describe('createAuthRequest', () => {
   describe('validate', () => {

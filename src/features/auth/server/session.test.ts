@@ -56,7 +56,6 @@ const buildPrismaError = (code: string, message: string) =>
   new Prisma.PrismaClientKnownRequestError(message, { code, clientVersion: '5.0.0' });
 
 beforeEach(() => {
-  vi.clearAllMocks();
   vi.useFakeTimers();
   vi.setSystemTime(NOW);
 });

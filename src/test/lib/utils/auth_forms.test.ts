@@ -77,8 +77,6 @@ const createMockLocals = (hasSession: boolean = false) =>
 
 describe('auth_forms', () => {
   beforeEach(() => {
-    vi.clearAllMocks();
-
     // Mock console methods
     vi.stubGlobal('console', {
       ...console,
