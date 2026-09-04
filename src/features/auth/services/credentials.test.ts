@@ -42,7 +42,6 @@ const HASHED_PASSWORD = 's2:0123456789abcdef:' + 'a'.repeat(128);
 const buildPrismaError = (code: string, message: string) =>
   new Prisma.PrismaClientKnownRequestError(message, { code, clientVersion: '5.0.0' });
 
-
 describe('registerUser', () => {
   describe('successful case', () => {
     test('creates the user and key in a single transaction and returns the new user id', async () => {

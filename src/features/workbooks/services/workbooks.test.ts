@@ -49,7 +49,6 @@ vi.mock('$features/workbooks/server/cache', () => ({
 import prisma from '$lib/server/database';
 import * as usersCrud from '$lib/services/users';
 
-
 function prepareWorkBook(overrides: Partial<WorkBook> = {}): WorkBook {
   return {
     id: 1,

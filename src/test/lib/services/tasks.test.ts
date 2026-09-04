@@ -29,7 +29,6 @@ import { invalidateVoteCaches } from '$features/votes/server/cache';
 describe('updateTask', () => {
   const mockDb = db as unknown as { task: { update: ReturnType<typeof vi.fn> } };
 
-
   describe('successful case', () => {
     test('returns undefined when task is updated successfully', async () => {
       mockDb.task.update.mockResolvedValue({

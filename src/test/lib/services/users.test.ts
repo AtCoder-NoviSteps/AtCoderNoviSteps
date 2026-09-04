@@ -76,7 +76,6 @@ function mockDeleteError(message: string = 'not found'): void {
 // Setup
 // ---------------------------------------------------------------------------
 
-
 describe('getUser', () => {
   describe('successful case', () => {
     test('returns user with atCoderAccount when found', async () => {

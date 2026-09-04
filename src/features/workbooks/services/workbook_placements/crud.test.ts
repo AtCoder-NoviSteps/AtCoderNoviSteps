@@ -48,10 +48,7 @@ function mockFindMany(placements: WorkBookPlacements) {
   );
 }
 
-function mockUnplacedWorkbooks(
-  curriculum: { id: number }[],
-  solution: { id: number }[],
-) {
+function mockUnplacedWorkbooks(curriculum: { id: number }[], solution: { id: number }[]) {
   const mock = vi.mocked(prisma.workBook.findMany);
 
   vi.when(mock)
@@ -60,9 +57,7 @@ function mockUnplacedWorkbooks(
         where: expect.objectContaining({ workBookType: WorkBookType.CURRICULUM }),
       }),
     )
-    .thenResolve(
-      curriculum as unknown as Awaited<ReturnType<typeof prisma.workBook.findMany>>,
-    );
+    .thenResolve(curriculum as unknown as Awaited<ReturnType<typeof prisma.workBook.findMany>>);
 
   vi.when(mock)
     .calledWith(
@@ -70,9 +65,7 @@ function mockUnplacedWorkbooks(
         where: expect.objectContaining({ workBookType: WorkBookType.SOLUTION }),
       }),
     )
-    .thenResolve(
-      solution as unknown as Awaited<ReturnType<typeof prisma.workBook.findMany>>,
-    );
+    .thenResolve(solution as unknown as Awaited<ReturnType<typeof prisma.workBook.findMany>>);
 }
 
 describe('getWorkbooksWithPlacements', () => {

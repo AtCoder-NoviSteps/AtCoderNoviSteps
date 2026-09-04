@@ -32,7 +32,6 @@ vi.mock('$lib/server/database', () => ({
 import prisma from '$lib/server/database';
 import { invalidateVoteCaches } from '$features/votes/server/cache';
 
-
 // ---------------------------------------------------------------------------
 // Type aliases
 // ---------------------------------------------------------------------------

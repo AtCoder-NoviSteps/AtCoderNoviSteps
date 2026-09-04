@@ -12,7 +12,6 @@ vi.mock('@sveltejs/kit', () => {
   return { redirect: vi.fn(redirectImpl) };
 });
 
-
 import { ensureSessionOrRedirect, getLoggedInUser } from './session_guards';
 
 const createMockLocalsWithValidSession = (user = { id: 'test-user', name: 'Test User' }) =>

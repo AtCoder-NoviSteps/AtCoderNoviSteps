@@ -15,7 +15,6 @@ import db from '$lib/server/database';
 describe('getTag', () => {
   const mockDb = db as unknown as { tag: { findUnique: ReturnType<typeof vi.fn> } };
 
-
   describe('successful case', () => {
     test('returns tag when tag exists', async () => {
       const tag = { id: '1', name: 'DP', is_official: true, is_published: true };

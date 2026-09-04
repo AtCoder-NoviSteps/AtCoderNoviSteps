@@ -37,7 +37,6 @@ const createMockEvent = (cookieValue?: string) => {
   };
 };
 
-
 describe('createAuthRequest', () => {
   describe('validate', () => {
     test('returns null and skips validateSession when no cookie is present', async () => {

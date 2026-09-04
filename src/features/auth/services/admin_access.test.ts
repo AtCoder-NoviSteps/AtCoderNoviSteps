@@ -23,7 +23,6 @@ vi.mock('$lib/services/users', () => ({
   getUser: vi.fn(),
 }));
 
-
 import * as userService from '$lib/services/users';
 import { Roles } from '$lib/types/user';
 import { validateAdminAccess, validateAdminAccessForApi } from './admin_access';
