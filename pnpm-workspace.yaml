@@ -11,7 +11,7 @@ engineStrict: true
 resolutionMode: highest
 # necessary for a PNPM bug: https://github.com/pnpm/pnpm/issues/5152#issuecomment-1223449173
 strictPeerDependencies: false
-packageImportMethod: clone-or-copy
+packageImportMethod: auto
 
 # Security configuration: supply chain attack mitigation
 # Delay the adoption of newly released packages to allow detection of malicious code
@@ -32,6 +32,10 @@ minimumReleaseAgeExclude:
 
 # Prevent transitive dependencies from Git/Tarball sources (enhanced security)
 blockExoticSubdeps: true
+
+# Auto-remove GHSA entries from audit reports when they no longer appear
+audit:
+  ignorePrune: true
 
 # Security overrides: force transitive dependencies to patched versions
 # See: Issue #3761
