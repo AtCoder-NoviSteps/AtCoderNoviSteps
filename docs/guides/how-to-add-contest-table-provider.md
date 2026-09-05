@@ -20,7 +20,19 @@
 
 `contest_id` の数値部分で範囲フィルタ。ラウンド名・ヘッダー表示、問題 id 非表示。
 
+**AWC** は config-driven な `AWCRangeProvider` を使い、`minRound`/`maxRound` 等を config で渡してインスタンス化する（具象クラスの追加不要）。
+
 ```typescript
+// AWC: config-driven（新規追加時はインスタンス化のみ）
+new AWCRangeProvider(ContestType.AWC, {
+  section: '0001To0099',
+  minRound: 1,
+  maxRound: 99,
+  title: 'AtCoder Weekday Contest 0001 〜 0099',
+  abbreviationName: 'awc0001To0099',
+});
+
+// ABC 等: 具象クラスで実装（従来パターン）
 protected setFilterCondition(): (taskResult: TaskResult) => boolean {
   return (taskResult: TaskResult) => {
     if (classifyContest(taskResult.contest_id) !== this.contestType) return false;
@@ -34,7 +46,18 @@ protected setFilterCondition(): (taskResult: TaskResult) => boolean {
 
 単一 `contest_id` のみフィルタ。問題 id 表示、ラウンド名・ヘッダー非表示。
 
+**AWC 特殊回** は config-driven な `AWCSpecialContestProvider` を使い、`contestId` 等を config で渡してインスタンス化する（具象クラスの追加不要）。
+
 ```typescript
+// AWC 特殊回: config-driven（新規追加時はインスタンス化のみ）
+new AWCSpecialContestProvider(ContestType.AWC, {
+  section: '0100',
+  contestId: 'awc0100',
+  title: 'AtCoder Weekday Contest 0100',
+  abbreviationName: 'awc0100',
+});
+
+// EDPC 等: 具象クラスで実装（従来パターン）
 protected setFilterCondition(): (taskResult: TaskResult) => boolean {
   return (taskResult: TaskResult) => {
     if (classifyContest(taskResult.contest_id) !== this.contestType) return false;
@@ -61,7 +84,7 @@ AOJ/JAG 固有の詳細（`AOJ_LABEL_OVERRIDES`、`titleStyle`、同一年2回�
 
 ### 補足: 固定セクションによる同一 ContestType 内の共存
 
-同一 `ContestType` で異なるクラスを共存させる場合、`super(contestType, '0100')` のように固定文字列で provider key を一意化する（例: `AWC::0100`）。AWC0100 / AWC0150 はパターン2だが、範囲フィルタ型の AWC0001-0099 等と同じ `ContestType.AWC` グループに登録されている。
+同一 `ContestType` で異なるプロバイダを共存させる場合、config の `section` フィールドで provider key を一意化する（例: `AWC::0100`）。AWC は `AWCRangeProvider`（通常回）と `AWCSpecialContestProvider`（特殊回）の2クラスを config で使い分けており、すべて同じ `ContestType.AWC` グループに登録される。新しい AWC 回の追加は `contest_table_provider_groups.ts` で `new AWCRangeProvider(...)` または `new AWCSpecialContestProvider(...)` をインスタンス化するだけでよい。
 
 ---
 
