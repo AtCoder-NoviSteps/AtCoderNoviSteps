@@ -125,7 +125,10 @@ describe('AWCRangeProvider', () => {
       const filtered = provider.filter(testCase.fixtureData);
       const table = provider.generateTable(filtered);
 
-      Object.values(table).forEach((problems) => {
+      const contests = Object.values(table);
+      expect(contests.length).toBeGreaterThan(0);
+
+      contests.forEach((problems) => {
         expect(Object.keys(problems)).toEqual(RANGE_PROBLEMS);
       });
     });
