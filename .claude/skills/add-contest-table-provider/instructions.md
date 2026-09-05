@@ -76,13 +76,14 @@ Step 0 (seed check) is already done. Confirm the following before touching code:
 - [ ] Export `OLDEST_YEAR` / `LATEST_YEAR` constants. Use `super(contestType, String(param))` for unique provider key
 - [ ] Tests: `getSize() === LATEST - OLDEST + 1`, etc.
 - [ ] **RED** → implement → **GREEN**
+- [ ] If display label needed: use `getTaskLabels` — do NOT mutate title inside `generateTable` (optimistic update + `$derived` re-run causes prefix accumulation)
 - [ ] For AOJ-specific options (`getTaskLabels` / override map / `titleStyle` / `columnWrapThreshold`), see `aoj_icpc_providers.ts` / `aoj_jag_providers.ts`
 
 ---
 
 ## Layer 5 — Group registration (TDD)
 
-- [ ] `contest_table_provider_groups.test.ts`: add group name, `buttonLabel`, `ariaLabel`, `getSize()`, `getProvider()` assertions
+- [ ] `contest_table_provider_groups.test.ts`: add group name, `buttonLabel`, `ariaLabel`, `getSize()`, `getProvider()` assertions; for section-based providers use `getProvider(ContestType.XXX, 'section')`
 - [ ] **RED**
 - [ ] `contest_table_provider_groups.ts`: add import + `addProvider()` (**call order = display order; first = top**)
 - [ ] `pnpm test:unit src/features/tasks/utils/contest-table/` — **GREEN**
