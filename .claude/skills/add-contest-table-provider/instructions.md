@@ -20,6 +20,7 @@ Step 0 (seed check) is already done. Confirm the following before touching code:
 
 **Pattern 1 additional:**
 
+- **AWC config-driven check:** Can `AWCRangeProvider` cover this? If yes → skip Layer 4 (no new class); only add `new AWCRangeProvider(ContestType.AWC, { section, minRound, maxRound, title, abbreviationName })` in Layer 5. See `awc_provider.ts`.
 - Numeric range: start and end (open-ended if no upper bound)?
 - Splitting an existing "Onwards" provider? Rename to `{Start}To{End}Provider`; the new special-edition provider uses a fixed section string (e.g. `super(contestType, '0100')`) to coexist under the same ContestType.
 - Shared problems with another contest (e.g. ARC–ABC overlap)? Which contest_ids appear in both?
@@ -33,6 +34,10 @@ Step 0 (seed check) is already done. Confirm the following before touching code:
 - `task_table_index` values numeric strings? → override `getHeaderIdsForTask`; sort with `Number(a) - Number(b)`.
 - Display-only positional label needed (e.g. prepend "A. ")? → override `getTaskLabels` to return `{ [contestId]: { index: letter } }`; **never mutate title inside `generateTable`** (transformed objects written back via optimistic update cause prefix accumulation on the next `$derived` re-run).
 - Known edge cases where the default algorithm breaks? → add a `Record<string, Record<string, string>>` module-level override map keyed by contest_id; exercise the override path in tests by mutating the export in `beforeEach` and cleaning up in `afterEach`.
+
+**Pattern 2 additional:**
+
+- **AWC config-driven check:** Can `AWCSpecialContestProvider` cover this? (special AWC contest_id with section key) If yes → skip Layer 4; only add `new AWCSpecialContestProvider(ContestType.AWC, { section, contestId, title, abbreviationName })` in Layer 5. See `awc_provider.ts`.
 
 **Pattern 3 additional:**
 
