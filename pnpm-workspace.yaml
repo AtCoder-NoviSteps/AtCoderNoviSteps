@@ -3,6 +3,7 @@ allowBuilds:
   '@prisma/engines': true
   esbuild: true
   lefthook: true
+  pnpm: true
   prisma: true
   puppeteer: true
 
