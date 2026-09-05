@@ -14,11 +14,8 @@ import {
   ARC001ToARC057Provider,
   AGC001OnwardsProvider,
   ABCLikeProvider,
-  AWC0001To0099Provider,
-  AWC0100Provider,
-  AWC0101To0149Provider,
-  AWC0150Provider,
-  AWC0151OnwardsProvider,
+  AWCRangeProvider,
+  AWCSpecialContestProvider,
   ACLPracticeProvider,
   ACLBeginnerProvider,
   ACLProvider,
@@ -193,13 +190,11 @@ describe('prepareContestProviderPresets', () => {
       ariaLabel: 'Filter contests from AWC 0001 onwards',
     });
     expect(group.getSize()).toBe(5);
-    expect(group.getProvider(ContestType.AWC, '0151Onwards')).toBeInstanceOf(
-      AWC0151OnwardsProvider,
-    );
-    expect(group.getProvider(ContestType.AWC, '0150')).toBeInstanceOf(AWC0150Provider);
-    expect(group.getProvider(ContestType.AWC, '0101To0149')).toBeInstanceOf(AWC0101To0149Provider);
-    expect(group.getProvider(ContestType.AWC, '0100')).toBeInstanceOf(AWC0100Provider);
-    expect(group.getProvider(ContestType.AWC)).toBeInstanceOf(AWC0001To0099Provider);
+    expect(group.getProvider(ContestType.AWC, '0151Onwards')).toBeInstanceOf(AWCRangeProvider);
+    expect(group.getProvider(ContestType.AWC, '0150')).toBeInstanceOf(AWCSpecialContestProvider);
+    expect(group.getProvider(ContestType.AWC, '0101To0149')).toBeInstanceOf(AWCRangeProvider);
+    expect(group.getProvider(ContestType.AWC, '0100')).toBeInstanceOf(AWCSpecialContestProvider);
+    expect(group.getProvider(ContestType.AWC, '0001To0099')).toBeInstanceOf(AWCRangeProvider);
   });
 
   test('expects to create MathAndAlgorithm preset correctly', () => {

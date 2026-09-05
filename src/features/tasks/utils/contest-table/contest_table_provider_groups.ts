@@ -15,13 +15,7 @@ import {
 } from './arc_providers';
 import { AGC001OnwardsProvider } from './agc_provider';
 import { ABCLikeProvider } from './axc_like_provider';
-import {
-  AWC0001To0099Provider,
-  AWC0100Provider,
-  AWC0101To0149Provider,
-  AWC0150Provider,
-  AWC0151OnwardsProvider,
-} from './awc_provider';
+import { AWCRangeProvider, AWCSpecialContestProvider } from './awc_provider';
 import { Typical90Provider } from './typical90_provider';
 import {
   TessokuBookForExamplesProvider,
@@ -167,11 +161,49 @@ export const prepareContestProviderPresets = () => {
         buttonLabel: 'AWC 0001 〜 ',
         ariaLabel: 'Filter contests from AWC 0001 onwards',
       })
-        .addProvider(new AWC0151OnwardsProvider(ContestType.AWC))
-        .addProvider(new AWC0150Provider(ContestType.AWC))
-        .addProvider(new AWC0101To0149Provider(ContestType.AWC))
-        .addProvider(new AWC0100Provider(ContestType.AWC))
-        .addProvider(new AWC0001To0099Provider(ContestType.AWC)),
+        .addProvider(
+          new AWCRangeProvider(ContestType.AWC, {
+            section: '0151Onwards',
+            minRound: 151,
+            maxRound: 9999,
+            title: 'AtCoder Weekday Contest 0151 〜',
+            abbreviationName: 'awc0151Onwards',
+          }),
+        )
+        .addProvider(
+          new AWCSpecialContestProvider(ContestType.AWC, {
+            section: '0150',
+            contestId: 'awc0150',
+            title: 'AtCoder Weekday Contest 0150',
+            abbreviationName: 'awc0150',
+          }),
+        )
+        .addProvider(
+          new AWCRangeProvider(ContestType.AWC, {
+            section: '0101To0149',
+            minRound: 101,
+            maxRound: 149,
+            title: 'AtCoder Weekday Contest 0101 〜 0149',
+            abbreviationName: 'awc0101To0149',
+          }),
+        )
+        .addProvider(
+          new AWCSpecialContestProvider(ContestType.AWC, {
+            section: '0100',
+            contestId: 'awc0100',
+            title: 'AtCoder Weekday Contest 0100',
+            abbreviationName: 'awc0100',
+          }),
+        )
+        .addProvider(
+          new AWCRangeProvider(ContestType.AWC, {
+            section: '0001To0099',
+            minRound: 1,
+            maxRound: 99,
+            title: 'AtCoder Weekday Contest 0001 〜 0099',
+            abbreviationName: 'awc0001To0099',
+          }),
+        ),
 
     /**
      * Single group for Typical 90 Problems
