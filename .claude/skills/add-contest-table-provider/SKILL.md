@@ -1,6 +1,6 @@
 ---
 name: add-contest-table-provider
-description: Add a new ContestType and ContestTableProvider across 5 layers using TDD. Covers all 3 patterns. Asks targeted questions to gather pattern-specific requirements before touching code.
+description: Add a new ContestType and ContestTableProvider across 5 layers using TDD. Covers all 4 patterns. Asks targeted questions to gather pattern-specific requirements before touching code.
 argument-hint: '<ContestType> <contest_id>'
 ---
 
