@@ -8,13 +8,90 @@ import {
   AWC0100Provider,
   AWC0101To0149Provider,
   AWC0150Provider,
+  AWC0151OnwardsProvider,
 } from './awc_provider';
 import {
   taskResultsForAWC0001To0099Provider,
   taskResultsForAWC0100Provider,
   taskResultsForAWC0101To0149Provider,
   taskResultsForAWC0150Provider,
+  taskResultsForAWC0151OnwardsProvider,
 } from '$features/tasks/fixtures/contest-table/contest_table_provider';
+
+describe('AWC0151OnwardsProvider', () => {
+  test('expects to filter tasks to include only AWC 0151 onwards contests', () => {
+    const provider = new AWC0151OnwardsProvider(ContestType.AWC);
+    const combined = [
+      ...taskResultsForAWC0101To0149Provider,
+      ...taskResultsForAWC0150Provider,
+      ...taskResultsForAWC0151OnwardsProvider,
+    ];
+    const filtered = provider.filter(combined);
+
+    expect(filtered.length).toBeGreaterThan(0);
+    expect(filtered.every((task) => task.contest_id.startsWith('awc'))).toBe(true);
+  });
+
+  test('expects to include awc0151 and awc0152, exclude awc0150 and awc0149', () => {
+    const provider = new AWC0151OnwardsProvider(ContestType.AWC);
+    const combined = [
+      ...taskResultsForAWC0101To0149Provider,
+      ...taskResultsForAWC0150Provider,
+      ...taskResultsForAWC0151OnwardsProvider,
+    ];
+    const filtered = provider.filter(combined);
+
+    expect(filtered.some((task) => task.contest_id === 'awc0151')).toBe(true);
+    expect(filtered.some((task) => task.contest_id === 'awc0152')).toBe(true);
+    expect(filtered.some((task) => task.contest_id === 'awc0150')).toBe(false);
+    expect(filtered.some((task) => task.contest_id === 'awc0149')).toBe(false);
+  });
+
+  test('expects to get correct metadata', () => {
+    const provider = new AWC0151OnwardsProvider(ContestType.AWC);
+    const metadata = provider.getMetadata();
+
+    expect(metadata.title).toBe('AtCoder Weekday Contest 0151 〜');
+    expect(metadata.abbreviationName).toBe('awc0151Onwards');
+  });
+
+  test('expects to return correct display config (same as AWC0101To0149)', () => {
+    const provider = new AWC0151OnwardsProvider(ContestType.AWC);
+    const config = provider.getDisplayConfig();
+
+    expect(config.isShownHeader).toBe(true);
+    expect(config.isShownRoundLabel).toBe(true);
+    expect(config.roundLabelWidth).toBe('xl:w-16');
+    expect(config.tableBodyCellsWidth).toBe('w-1/2 sm:w-1/3 md:w-1/4 lg:w-1/5 px-1 py-1');
+    expect(config.isShownTaskIndex).toBe(false);
+  });
+
+  test('expects to format contest round label correctly', () => {
+    const provider = new AWC0151OnwardsProvider(ContestType.AWC);
+
+    expect(provider.getContestRoundLabel('awc0151')).toBe('0151');
+    expect(provider.getContestRoundLabel('awc0200')).toBe('0200');
+  });
+
+  test('expects each AWC contest to have 5 problems (A-E)', () => {
+    const provider = new AWC0151OnwardsProvider(ContestType.AWC);
+    const filtered = provider.filter(taskResultsForAWC0151OnwardsProvider);
+    const table = provider.generateTable(filtered);
+
+    Object.entries(table).forEach(([_contestId, problems]) => {
+      const problemCount = Object.keys(problems).length;
+      expect(problemCount).toBe(5);
+      expect(Object.keys(problems)).toEqual(['A', 'B', 'C', 'D', 'E']);
+    });
+  });
+
+  test('expects to handle empty task results', () => {
+    const provider = new AWC0151OnwardsProvider(ContestType.AWC);
+    const filtered = provider.filter([] as TaskResults);
+
+    expect(filtered).toEqual([] as TaskResults);
+  });
+});
 
 describe('AWC0150Provider', () => {
   test('expects to filter only awc0150 tasks', () => {

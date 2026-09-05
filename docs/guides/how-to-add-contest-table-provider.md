@@ -82,6 +82,7 @@ AOJ/JAG 固有の詳細（`AOJ_LABEL_OVERRIDES`、`titleStyle`、同一年2回�
 | AGC 001-      | 001～      | 4～7問     | -             |
 | AWC 0001-0099 | 0001～0099 | A～E       | -             |
 | AWC 0101-0149 | 0101～0149 | A～E       | -             |
+| AWC 0151-     | 0151～     | A～E       | -             |
 
 ### 単一ソース型
 
@@ -95,7 +96,7 @@ AOJ/JAG 固有の詳細（`AOJ_LABEL_OVERRIDES`、`titleStyle`、同一年2回�
 | ACL_BEGINNER / ACL_CONTEST1 | `'abl'`/`'acl1'`        | 6問    | A～F         |
 | AWC0100 / AWC0150†          | `'awc0100'`/`'awc0150'` | 15問   | A～O         |
 
-†注: ContestType.AWC を再利用し、section（`'0100'`, `'0150'`）で provider key を一意化。ACL 系は `Acl` グループ、DP 系は `dps` グループで統一管理。
+†注: ContestType.AWC を再利用し、section（`'0100'`, `'0150'`, `'0151Onwards'`）で provider key を一意化。ACL 系は `Acl` グループ、DP 系は `dps` グループで統一管理。
 
 ### コンストラクタパラメータ型 / regex フィルタ型
 
@@ -142,4 +143,4 @@ AOJ/JAG 固有の詳細（`AOJ_LABEL_OVERRIDES`、`titleStyle`、同一年2回�
 
 ---
 
-**最終更新**: 2026-09-03
+**最終更新**: 2026-09-05

@@ -20,6 +20,7 @@ import {
   AWC0100Provider,
   AWC0101To0149Provider,
   AWC0150Provider,
+  AWC0151OnwardsProvider,
 } from './awc_provider';
 import { Typical90Provider } from './typical90_provider';
 import {
@@ -166,6 +167,7 @@ export const prepareContestProviderPresets = () => {
         buttonLabel: 'AWC 0001 〜 ',
         ariaLabel: 'Filter contests from AWC 0001 onwards',
       })
+        .addProvider(new AWC0151OnwardsProvider(ContestType.AWC))
         .addProvider(new AWC0150Provider(ContestType.AWC))
         .addProvider(new AWC0101To0149Provider(ContestType.AWC))
         .addProvider(new AWC0100Provider(ContestType.AWC))
