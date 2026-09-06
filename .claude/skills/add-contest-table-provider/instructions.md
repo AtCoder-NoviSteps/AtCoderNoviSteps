@@ -33,16 +33,16 @@ Step 0 (seed check) is already done. Confirm the following before touching code:
 > Skip when an existing ContestType already covers this contest family (e.g. `AOJ_JAG` for JAG Prelim).
 
 - [ ] Add to `prisma/schema.prisma` ContestType enum → `pnpm exec prisma generate`
-- [ ] Add to `ContestType` in `src/lib/types/contest.ts` (same position as schema)
+- [ ] Add to `ContestType` in `src/lib/contests/types/contest.ts` (same position as schema)
 - [ ] `pnpm check` — confirm error resolved
 
 ## Layer 3 — Contest utilities (TDD)
 
 ### Tests first
 
-- [ ] Add exports to `src/test/lib/utils/test_cases/contest_type.ts` and `contest_name_labels.ts`
-- [ ] Add 3 `describe` blocks to `src/test/lib/utils/contest.test.ts`: classify / priority / name label
-- [ ] `pnpm test:unit src/test/lib/utils/contest.test.ts` — **RED**
+- [ ] Add exports to `src/lib/contests/fixtures/contest_type.ts` and `contest_name_labels.ts`
+- [ ] Add 3 `describe` blocks to `src/lib/contests/utils/contest.test.ts`: classify / priority / name label
+- [ ] `pnpm test:unit src/lib/contests/utils/contest.test.ts` — **RED**
 
 ### Implement
 

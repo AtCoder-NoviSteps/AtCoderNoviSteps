@@ -158,6 +158,7 @@ src/lib/
 ├── clients/        # 外部 API クライアント（AtCoder Problems, AOJ）
 ├── components/     # 共通 UI コンポーネント（GradeLabel, TaskGradeList, TaskList, FormWrapper 等）
 ├── constants/      # アプリ定数
+├── contests/       # コンテスト分類・ラベル生成・優先度（types/, utils/, fixtures/）
 ├── server/         # サーバー専用の共有インフラ
 │   ├── database.ts # Prisma クライアント（14+ サービスが依存）
 │   ├── tasks/      # cache.ts など複数 feature 共有のサーバ処理
