@@ -9,118 +9,63 @@ export const regexForAojUniversity = /^AOJ-[A-Z]+PC\d{4}/;
 
 // See:
 // https://github.com/kenkoooo/AtCoderProblems/blob/master/atcoder-problems-frontend/src/utils/ContestClassifier.ts
-export const classifyContest = (contest_id: string) => {
-  // AtCoder
-  if (/^abc\d{3}$/.exec(contest_id)) {
-    return ContestType.ABC;
-  }
 
-  if (/^arc\d{3}$/.exec(contest_id)) {
-    return ContestType.ARC;
-  }
+// Exact-match table: O(1) lookup for contest IDs that map to a single type.
+const CONTEST_TYPES_BY_ID: ReadonlyMap<string, ContestType> = new Map([
+  ['abs', ContestType.ABS],
+  ['typical90', ContestType.TYPICAL90],
+  ['dp', ContestType.EDPC],
+  ['tdpc', ContestType.TDPC],
+  ['ndpc', ContestType.NDPC],
+  ['practice2', ContestType.ACL_PRACTICE],
+  ['tessoku-book', ContestType.TESSOKU_BOOK],
+  ['math-and-algorithm', ContestType.MATH_AND_ALGORITHM],
+  ['fps-24', ContestType.FPS_24],
+]);
 
-  if (/^agc\d{3}$/.exec(contest_id)) {
-    return ContestType.AGC;
-  }
+type ClassificationRule = {
+  matches: (contestId: string) => boolean;
+  type: ContestType;
+};
 
-  if (/^awc\d{4}$/.exec(contest_id)) {
-    return ContestType.AWC;
-  }
+// Ordered rules: first match wins. Regex and prefix-based checks.
+const CLASSIFICATION_RULES: readonly ClassificationRule[] = [
+  // AtCoder numbered contests
+  { matches: (id) => /^abc\d{3}$/.test(id), type: ContestType.ABC },
+  { matches: (id) => /^arc\d{3}$/.test(id), type: ContestType.ARC },
+  { matches: (id) => /^agc\d{3}$/.test(id), type: ContestType.AGC },
+  { matches: (id) => /^awc\d{4}$/.test(id), type: ContestType.AWC },
+  { matches: (id) => id.startsWith('APG4b'), type: ContestType.APG4B },
+  { matches: (id) => id.startsWith('past'), type: ContestType.PAST },
+  { matches: (id) => id.startsWith('joi'), type: ContestType.JOI },
+  { matches: (id) => isWorldTourFinals(id), type: ContestType.ATCODER_MAIN_OFFICIAL_ONSITE },
+  // Set-based exact matches
+  { matches: (id) => abcLikePrefixes.has(id), type: ContestType.ABC_LIKE },
+  { matches: (id) => arcLikePrefixes.has(id), type: ContestType.ARC_LIKE },
+  // Prefix-based matches
+  { matches: (id) => agcLikePrefixes.some((p) => id.startsWith(p)), type: ContestType.AGC_LIKE },
+  {
+    matches: (id) => atCoderUniversityPrefixes.some((p) => id.startsWith(p)),
+    type: ContestType.UNIVERSITY,
+  },
+  {
+    matches: (id) => atCoderOthersPrefixes.some((p) => id.startsWith(p)),
+    type: ContestType.OTHERS,
+  },
+  // AOJ
+  { matches: (id) => aojCoursePrefixes.has(id), type: ContestType.AOJ_COURSES },
+  { matches: (id) => /^PCK(Prelim|Final)\d*$/.test(id), type: ContestType.AOJ_PCK },
+  { matches: (id) => /^ICPC(Prelim|Regional)\d*$/.test(id), type: ContestType.AOJ_ICPC },
+  { matches: (id) => regexForJag.test(id), type: ContestType.AOJ_JAG },
+  { matches: (id) => regexForAojUniversity.test(id), type: ContestType.AOJ_UNIVERSITY },
+];
 
-  if (contest_id.startsWith('APG4b')) {
-    return ContestType.APG4B;
-  }
+export const classifyContest = (contestId: string): ContestType | null => {
+  const exactMatch = CONTEST_TYPES_BY_ID.get(contestId);
+  if (exactMatch) return exactMatch;
 
-  if (contest_id === 'abs') {
-    return ContestType.ABS;
-  }
-
-  if (contest_id === 'typical90') {
-    return ContestType.TYPICAL90;
-  }
-
-  if (contest_id === 'dp') {
-    return ContestType.EDPC;
-  }
-
-  if (contest_id === 'tdpc') {
-    return ContestType.TDPC;
-  }
-
-  if (contest_id === 'ndpc') {
-    return ContestType.NDPC;
-  }
-
-  if (contest_id.startsWith('past')) {
-    return ContestType.PAST;
-  }
-
-  if (contest_id === 'practice2') {
-    return ContestType.ACL_PRACTICE;
-  }
-
-  if (contest_id.startsWith('joi')) {
-    return ContestType.JOI;
-  }
-
-  if (contest_id === 'tessoku-book') {
-    return ContestType.TESSOKU_BOOK;
-  }
-
-  if (contest_id === 'math-and-algorithm') {
-    return ContestType.MATH_AND_ALGORITHM;
-  }
-
-  if (contest_id === 'fps-24') {
-    return ContestType.FPS_24;
-  }
-
-  if (isWorldTourFinals(contest_id)) {
-    return ContestType.ATCODER_MAIN_OFFICIAL_ONSITE;
-  }
-
-  if (abcLikePrefixes.has(contest_id)) {
-    return ContestType.ABC_LIKE;
-  }
-
-  if (arcLikePrefixes.has(contest_id)) {
-    return ContestType.ARC_LIKE;
-  }
-
-  if (agcLikePrefixes.some((prefix) => contest_id.startsWith(prefix))) {
-    return ContestType.AGC_LIKE;
-  }
-
-  if (atCoderUniversityPrefixes.some((prefix) => contest_id.startsWith(prefix))) {
-    return ContestType.UNIVERSITY;
-  }
-
-  if (atCoderOthersPrefixes.some((prefix) => contest_id.startsWith(prefix))) {
-    return ContestType.OTHERS;
-  }
-
-  // AIZU ONLINE JUDGE
-  if (aojCoursePrefixes.has(contest_id)) {
-    return ContestType.AOJ_COURSES;
-  }
-
-  if (/^PCK(Prelim|Final)\d*$/.exec(contest_id)) {
-    return ContestType.AOJ_PCK;
-  }
-
-  if (/^ICPC(Prelim|Regional)\d*$/.exec(contest_id)) {
-    return ContestType.AOJ_ICPC;
-  }
-
-  if (regexForJag.exec(contest_id)) {
-    return ContestType.AOJ_JAG;
-  }
-
-  if (regexForAojUniversity.test(contest_id)) {
-    return ContestType.AOJ_UNIVERSITY;
-  }
-
-  return null;
+  const matchedRule = CLASSIFICATION_RULES.find((rule) => rule.matches(contestId));
+  return matchedRule?.type ?? null;
 };
 
 // HACK: As of December 2025, the following contests are applicable.
@@ -436,106 +381,74 @@ const regexForAwc = /^(awc)(\d{4})$/i;
  */
 const regexForAtCoderUniversity = /^(ku|qu|ut|tt|tu|wu)(pc)(\d{4})$/i;
 
-export const getContestNameLabel = (contestId: string) => {
-  // AtCoder
-  if (regexForAxc.exec(contestId)) {
-    return contestId.replace(
-      regexForAxc,
-      (_, contestType, contestNumber) => `${contestType.toUpperCase()} ${contestNumber}`,
-    );
-  }
+type LabelGenerator = (contestId: string) => string | null;
 
-  if (regexForAwc.exec(contestId)) {
-    return contestId.replace(
-      regexForAwc,
-      (_, contestType, contestNumber) => `${contestType.toUpperCase()} ${contestNumber}`,
-    );
-  }
+function generateAxcLabel(contestId: string): string {
+  return contestId.replace(
+    regexForAxc,
+    (_, contestType, contestNumber) => `${contestType.toUpperCase()} ${contestNumber}`,
+  );
+}
 
-  if (contestId === 'APG4b' || contestId === 'APG4bPython') {
-    return contestId;
-  }
+function generateAwcLabel(contestId: string): string {
+  return contestId.replace(
+    regexForAwc,
+    (_, contestType, contestNumber) => `${contestType.toUpperCase()} ${contestNumber}`,
+  );
+}
 
-  if (contestId === 'typical90') {
-    return '競プロ典型 90 問';
-  }
-
-  if (contestId === 'dp') {
-    return 'EDPC';
-  }
-
-  if (contestId === 'tdpc') {
-    return 'TDPC';
-  }
-
-  if (contestId === 'ndpc') {
-    return 'NDPC';
-  }
-
-  if (contestId.startsWith('past')) {
-    return getPastContestLabel(PAST_TRANSLATIONS, contestId);
-  }
-
-  if (contestId === 'practice2') {
-    return 'ACL Practice';
-  }
-
-  if (contestId.startsWith('joi')) {
-    return getJoiContestLabel(contestId);
-  }
-
-  if (contestId === 'tessoku-book') {
-    return '競技プログラミングの鉄則';
-  }
-
-  if (contestId === 'math-and-algorithm') {
-    return 'アルゴリズムと数学';
-  }
-
-  if (contestId === 'fps-24') {
-    return 'FPS 24 題';
-  }
-
-  if (isWorldTourFinals(contestId)) {
-    return getWorldTourFinalsLabel(contestId);
-  }
-
-  if (regexForAtCoderUniversity.exec(contestId)) {
-    return getAtCoderUniversityContestLabel(contestId);
+// Handles atc\d{3}, ATCODER_OTHERS dict, chokudai_S prefix, and uppercase fallback.
+// classifyContest maps these to OTHERS via prefix match, but the original
+// getContestNameLabel dispatched them independently — this chain preserves that behavior.
+function generateOthersLabel(contestId: string): string {
+  if (regexForAxc.test(contestId)) {
+    return generateAxcLabel(contestId);
   }
 
   const othersLabel = ATCODER_OTHERS[contestId as keyof typeof ATCODER_OTHERS];
-
-  if (othersLabel) {
-    return othersLabel;
-  }
+  if (othersLabel) return othersLabel;
 
   if (contestId.startsWith('chokudai_S')) {
     return contestId.replace('chokudai_S', 'Chokudai SpeedRun ');
   }
 
-  // AIZU ONLINE JUDGE
-  if (aojCoursePrefixes.has(contestId)) {
-    return getAojContestLabel(AOJ_COURSES, contestId);
-  }
-
-  if (contestId.startsWith('PCK')) {
-    return getAojContestLabel(PCK_TRANSLATIONS, contestId);
-  }
-
-  if (contestId.startsWith('ICPC')) {
-    return getAojContestLabel(ICPC_TRANSLATIONS, contestId);
-  }
-
-  if (regexForJag.exec(contestId)) {
-    return getAojContestLabel(JAG_TRANSLATIONS, contestId);
-  }
-
-  if (regexForAojUniversity.test(contestId)) {
-    return getAojUniversityContestLabel(contestId);
-  }
-
   return contestId.toUpperCase();
+}
+
+const LABEL_GENERATORS: ReadonlyMap<ContestType, LabelGenerator> = new Map([
+  [ContestType.ABC, generateAxcLabel],
+  [ContestType.ARC, generateAxcLabel],
+  [ContestType.AGC, generateAxcLabel],
+  [ContestType.AWC, generateAwcLabel],
+  [ContestType.APG4B, (id) => id],
+  [ContestType.TYPICAL90, () => '競プロ典型 90 問'],
+  [ContestType.EDPC, () => 'EDPC'],
+  [ContestType.TDPC, () => 'TDPC'],
+  [ContestType.NDPC, () => 'NDPC'],
+  [ContestType.PAST, (id) => getPastContestLabel(PAST_TRANSLATIONS, id)],
+  [ContestType.ACL_PRACTICE, () => 'ACL Practice'],
+  [ContestType.JOI, (id) => getJoiContestLabel(id)],
+  [ContestType.TESSOKU_BOOK, () => '競技プログラミングの鉄則'],
+  [ContestType.MATH_AND_ALGORITHM, () => 'アルゴリズムと数学'],
+  [ContestType.FPS_24, () => 'FPS 24 題'],
+  [ContestType.ATCODER_MAIN_OFFICIAL_ONSITE, (id) => getWorldTourFinalsLabel(id)],
+  [ContestType.UNIVERSITY, (id) => getAtCoderUniversityContestLabel(id)],
+  [ContestType.OTHERS, generateOthersLabel],
+  [ContestType.AOJ_COURSES, (id) => getAojContestLabel(AOJ_COURSES, id)],
+  [ContestType.AOJ_PCK, (id) => getAojContestLabel(PCK_TRANSLATIONS, id)],
+  [ContestType.AOJ_ICPC, (id) => getAojContestLabel(ICPC_TRANSLATIONS, id)],
+  [ContestType.AOJ_JAG, (id) => getAojContestLabel(JAG_TRANSLATIONS, id)],
+  [ContestType.AOJ_UNIVERSITY, (id) => getAojUniversityContestLabel(id)],
+]);
+
+export const getContestNameLabel = (contestId: string): string => {
+  const contestType = classifyContest(contestId);
+  if (!contestType) return contestId.toUpperCase();
+
+  const generator = LABEL_GENERATORS.get(contestType);
+  if (!generator) return contestId.toUpperCase();
+
+  return generator(contestId) ?? contestId.toUpperCase();
 };
 
 /**
