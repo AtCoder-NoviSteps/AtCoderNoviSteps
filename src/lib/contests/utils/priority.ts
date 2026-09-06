@@ -47,12 +47,14 @@ export const contestTypePriorities: Map<ContestType, number> = new Map([
   [ContestType.AOJ_UNIVERSITY, 26],
 ]);
 
+/** Priority given to a contest_id that no classification rule matches, so it sorts last. */
+export const UNCLASSIFIED_CONTEST_PRIORITY = 10 ** 3;
+
 export function getContestPriority(contestId: string): number {
   const contestType = classifyContest(contestId);
-  const INF: number = 10 ** 3;
 
   if (contestType === null || contestType === undefined) {
-    return INF;
+    return UNCLASSIFIED_CONTEST_PRIORITY;
   } else {
     return contestTypePriorities.get(contestType) as number;
   }

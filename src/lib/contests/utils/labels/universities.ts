@@ -19,12 +19,16 @@ const regexForAtCoderUniversity = /^(ku|qu|ut|tt|tu|wu)(pc)(\d{4})$/i;
 /**
  * Generates a formatted contest label for AtCoder University contests.
  *
+ * classifyContest matches university contests by prefix, so an ID such as
+ * `utpc24` reaches this function without a four-digit year. Returning null lets
+ * the caller fall back to the raw contest_id instead of breaking the whole page.
+ *
  * @param contestId - The ID of the contest to format (ex: utpc2023).
- * @returns The formatted contest label (ex: UTPC 2023).
+ * @returns The formatted contest label (ex: UTPC 2023), or null if the format is unknown.
  */
-export function getAtCoderUniversityContestLabel(contestId: string): string {
+export function getAtCoderUniversityContestLabel(contestId: string): string | null {
   if (!regexForAtCoderUniversity.test(contestId)) {
-    throw new Error(`Invalid university contest ID format: ${contestId}`);
+    return null;
   }
 
   return contestId.replace(

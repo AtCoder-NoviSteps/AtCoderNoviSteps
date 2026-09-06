@@ -12,11 +12,9 @@ describe('get AtCoder university contest label', () => {
     });
   });
 
-  describe('expected to be thrown an error if an invalid format is given', () => {
+  describe('expected to return null if an invalid format is given', () => {
     test.each(['utpc24', 'ttpc', 'tupc'])('when %s is given', (input) => {
-      expect(() => getAtCoderUniversityContestLabel(input)).toThrow(
-        `Invalid university contest ID format: ${input}`,
-      );
+      expect(getAtCoderUniversityContestLabel(input)).toBeNull();
     });
   });
 });

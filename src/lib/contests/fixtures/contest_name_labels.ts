@@ -139,6 +139,60 @@ export const fps24 = [
   }),
 ];
 
+export const aojCourses = [
+  createTestCaseForContestNameLabel('AOJ, ITP1')({
+    contestId: 'ITP1',
+    expected: '（プログラミング入門）',
+  }),
+  createTestCaseForContestNameLabel('AOJ, ALDS1')({
+    contestId: 'ALDS1',
+    expected: '（アルゴリズムとデータ構造入門）',
+  }),
+  createTestCaseForContestNameLabel('AOJ, ITP2')({
+    contestId: 'ITP2',
+    expected: '（プログラミング応用）',
+  }),
+  createTestCaseForContestNameLabel('AOJ, DPL')({
+    contestId: 'DPL',
+    expected: '（組み合わせ最適化）',
+  }),
+  createTestCaseForContestNameLabel('AOJ, GRL')({
+    contestId: 'GRL',
+    expected: '（グラフ）',
+  }),
+  createTestCaseForContestNameLabel('AOJ, DSL')({
+    contestId: 'DSL',
+    expected: '（データ構造）',
+  }),
+  createTestCaseForContestNameLabel('AOJ, CGL')({
+    contestId: 'CGL',
+    expected: '（計算幾何学）',
+  }),
+  createTestCaseForContestNameLabel('AOJ, NTL')({
+    contestId: 'NTL',
+    expected: '（整数論）',
+  }),
+];
+
+export const aojPck = [
+  createTestCaseForContestNameLabel('AOJ, PCK Prelim 2024')({
+    contestId: 'PCKPrelim2024',
+    expected: '（パソコン甲子園 予選 2024）',
+  }),
+  createTestCaseForContestNameLabel('AOJ, PCK Final 2023')({
+    contestId: 'PCKFinal2023',
+    expected: '（パソコン甲子園 本選 2023）',
+  }),
+  createTestCaseForContestNameLabel('AOJ, PCK Prelim 2005')({
+    contestId: 'PCKPrelim2005',
+    expected: '（パソコン甲子園 予選 2005）',
+  }),
+  createTestCaseForContestNameLabel('AOJ, PCK Final 2004')({
+    contestId: 'PCKFinal2004',
+    expected: '（パソコン甲子園 本選 2004）',
+  }),
+];
+
 export const aojJag = [
   createTestCaseForContestNameLabel('AOJ, JAG Prelim 2016 A')({
     contestId: 'JAGPrelim2016A',

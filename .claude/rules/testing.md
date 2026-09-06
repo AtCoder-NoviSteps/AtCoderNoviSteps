@@ -30,6 +30,8 @@ paths:
 - Route unit tests: name `page_server.test.ts`, never `+page.server.test.ts` (SvelteKit reserves `+` prefix)
 - Both centralized (`src/test/`) and co-located (`src/features/`, `src/lib/`) test locations are supported — see `vite.config.ts` `include`
 
+- **File-split refactors** — compare test count (`--reporter=verbose`) before and after. A count drop means a describe block was lost in the move
+
 **Environment:** Default `node`. Only opt in to jsdom (`// @vitest-environment jsdom` at file top) when touching `window` / `document` / `localStorage`. Never set jsdom globally — per-file construction is ~5.5× slower.
 
 ## Assertions & Structure

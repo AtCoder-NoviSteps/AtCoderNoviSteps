@@ -55,6 +55,10 @@ Delete function only if: (1) zero callers, (2) replacement exists, (3) dependent
 
 Before removing an import, grep the entire file for all usages — removing one call site doesn't mean no others exist.
 
+## Barrel Exports
+
+`index.ts` re-exports public API only. Files within the same module import each other directly — never through the barrel (circular dependency).
+
 ## Residual-Reference Sweeps
 
 When removing a dependency or renaming a symbol, sweep the **whole repo**, not just `src`:

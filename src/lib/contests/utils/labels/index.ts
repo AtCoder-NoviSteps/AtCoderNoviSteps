@@ -18,7 +18,7 @@ import {
 
 type LabelGenerator = (contestId: string) => string | null;
 
-const LABEL_GENERATORS: ReadonlyMap<ContestType, LabelGenerator> = new Map([
+export const LABEL_GENERATORS: ReadonlyMap<ContestType, LabelGenerator> = new Map([
   [ContestType.ABC, generateAxcLabel],
   [ContestType.ARC, generateAxcLabel],
   [ContestType.AGC, generateAxcLabel],
