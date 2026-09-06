@@ -1,4 +1,4 @@
-import type { ContestForImport } from '$lib/types/contest';
+import type { ContestForImport } from '$lib/contests/types/contest';
 
 import { PENDING } from './types';
 import type { AOJTaskAPI } from './types';

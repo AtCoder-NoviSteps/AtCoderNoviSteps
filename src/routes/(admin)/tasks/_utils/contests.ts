@@ -1,4 +1,4 @@
-import type { Contests } from '$lib/types/contest';
+import type { Contests } from '$lib/contests/types/contest';
 
 export function filterContests(contests: Contests, query: string): Contests {
   const hasNoQuery = !query || query.trim() === '';

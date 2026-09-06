@@ -8,7 +8,7 @@ import {
   AojChallengesApiClient,
 } from '$lib/clients/aizu_online_judge/clients';
 
-import type { ContestsForImport } from '$lib/types/contest';
+import type { ContestsForImport } from '$lib/contests/types/contest';
 import type { TasksForImport } from '$lib/types/task';
 import type { ChallengeParams } from '$lib/clients/aizu_online_judge/types';
 

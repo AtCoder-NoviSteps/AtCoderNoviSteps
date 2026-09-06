@@ -1,5 +1,5 @@
 import { type ContestTablesMetaData } from '$features/tasks/types/contest-table/contest_table_provider';
-import { ContestType } from '$lib/types/contest';
+import { ContestType } from '$lib/contests/types/contest';
 
 import { ContestTableProviderBase } from './contest_table_provider_base';
 

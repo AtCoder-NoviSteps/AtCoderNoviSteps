@@ -1,6 +1,6 @@
 import { describe, test, expect, beforeEach, afterEach } from 'vitest';
 
-import { ContestType } from '$lib/types/contest';
+import { ContestType } from '$lib/contests/types/contest';
 import type { TaskResults } from '$lib/types/task';
 
 import { AOJ_LABEL_OVERRIDES } from './aoj_labels';

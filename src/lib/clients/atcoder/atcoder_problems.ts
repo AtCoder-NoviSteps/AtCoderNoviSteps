@@ -1,6 +1,6 @@
 import { HttpRequestClient } from '$lib/clients/http_client';
 
-import type { ContestsForImport } from '$lib/types/contest';
+import type { ContestsForImport } from '$lib/contests/types/contest';
 import type { TasksForImport } from '$lib/types/task';
 
 import { ATCODER_PROBLEMS_API_BASE_URL } from '$lib/constants/urls';

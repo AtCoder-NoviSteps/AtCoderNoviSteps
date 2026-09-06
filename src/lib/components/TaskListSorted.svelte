@@ -12,7 +12,7 @@
   } from 'flowbite-svelte';
   import type { TaskResults } from '$lib/types/task';
 
-  import { addContestNameToTaskIndex } from '$lib/utils/contest';
+  import { addContestNameToTaskIndex } from '$lib/contests/utils/contest';
   import { removeTaskIndexFromTitle } from '$lib/utils/task';
 
   interface Props {

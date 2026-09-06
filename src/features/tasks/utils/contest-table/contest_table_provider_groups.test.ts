@@ -1,6 +1,6 @@
 import { describe, test, expect } from 'vitest';
 
-import { ContestType } from '$lib/types/contest';
+import { ContestType } from '$lib/contests/types/contest';
 
 import { TESSOKU_SECTIONS } from '$features/tasks/types/contest-table/contest_table_provider';
 
