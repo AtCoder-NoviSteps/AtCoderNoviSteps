@@ -8,7 +8,7 @@ import { validateAdminAccess } from '$features/auth/services/admin_access';
 
 import { fetchContests, fetchTasks, isContestTaskImportSource } from '$lib/clients';
 
-import { classifyContest } from '$lib/contests/utils/contest';
+import { classifyContest } from '$lib/contests';
 import { sha256 } from '$lib/utils/hash';
 
 import { BAD_REQUEST, INTERNAL_SERVER_ERROR } from '$lib/constants/http-response-status-codes';

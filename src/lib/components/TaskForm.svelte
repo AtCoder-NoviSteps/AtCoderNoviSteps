@@ -10,7 +10,7 @@
     Label,
     Button,
   } from 'flowbite-svelte';
-  import { addContestNameToTaskIndex } from '$lib/contests/utils/contest';
+  import { addContestNameToTaskIndex } from '$lib/contests';
   import { taskGradeValues, type Task } from '$lib/types/task';
   import { getTaskGradeLabel, removeTaskIndexFromTitle } from '$lib/utils/task';
 

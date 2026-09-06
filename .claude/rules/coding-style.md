@@ -49,11 +49,19 @@ Extract to `src/lib/utils/` with adjacent tests.
 
 Ensure guard clauses don't make later code unreachable. If an early return covers all remaining cases, delete the dead code below it rather than leaving it.
 
+## Dispatcher and Handler Domains
+
+A classifier must not match more broadly than its handler accepts (`startsWith` classifier → anchored-regex handler throws on the gap). Fix both sides: tighten the classifier, and return `null` instead of throwing.
+
 ## Dead Code: Three-Condition Rule
 
 Delete function only if: (1) zero callers, (2) replacement exists, (3) dependent fields also deleted.
 
 Before removing an import, grep the entire file for all usages — removing one call site doesn't mean no others exist.
+
+## Barrel Exports
+
+`index.ts` re-exports public API only. Files within the same module import each other directly — never through the barrel (circular dependency).
 
 ## Residual-Reference Sweeps
 

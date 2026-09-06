@@ -19,7 +19,7 @@
   import { taskGradeValues, TaskGrade } from '$lib/types/task';
   import type { TaskWithVoteInfo } from '$features/votes/services/vote_statistics';
 
-  import { addContestNameToTaskIndex } from '$lib/contests/utils/contest';
+  import { addContestNameToTaskIndex } from '$lib/contests';
   import {
     getTaskGradeLabel,
     compareByContestIdAndTaskId,

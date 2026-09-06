@@ -1,4 +1,4 @@
-import { getContestNameLabel } from '$lib/contests/utils/contest';
+import { getContestNameLabel } from '$lib/contests';
 import { getTaskUrl } from '$lib/utils/task';
 
 type SearchableTask = {

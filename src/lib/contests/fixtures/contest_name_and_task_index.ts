@@ -6,7 +6,7 @@ import {
   getAojContestLabel,
   PAST_TRANSLATIONS,
   AOJ_COURSES,
-} from '$lib/contests/utils/contest';
+} from '$lib/contests';
 
 export type TestCaseForContestNameAndTaskIndex = {
   contestId: string;

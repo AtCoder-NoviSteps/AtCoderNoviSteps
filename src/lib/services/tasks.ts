@@ -18,7 +18,7 @@ import {
 } from '$lib/server/tasks/cache';
 import { invalidateVoteCaches } from '$features/votes/server/cache';
 
-import { classifyContest } from '$lib/contests/utils/contest';
+import { classifyContest } from '$lib/contests';
 import { createContestTaskPairKey } from '$lib/utils/contest_task_pair';
 
 // See:

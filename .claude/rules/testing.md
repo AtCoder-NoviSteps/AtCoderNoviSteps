@@ -13,11 +13,11 @@ paths:
 
 - **Tests ship with implementation** — same commit; feature not done until tests pass. Never defer tests for non-trivial logic
 - **English only** — describe expected behavior (e.g., `'returns empty array when workbooks is empty'`)
-- **Test integrity** — never weaken assertions to make tests pass; fix implementation instead
+- **Test integrity** — never weaken assertions to make tests pass; fix implementation instead. Never let the expected value be computed by the code under test: `expect(f(x)).toBe(map.get(expected))` where `f` is `map.get(classify(x))`, or a fixture whose `expected` calls a production function. Both pass unconditionally. Expected values are literals
 - **Unused imports** — signal missing tests, not dead code — add the test case first
 - **TDD exceptions** — skip test-first for exploratory spikes, type-only changes, and config files with no branching logic
 - **Component testing** — extract logic to `utils/`; omit component Vitest if template-only **and** E2E covers rendering paths
-- **Coverage** — cover happy path, error cases, and domain edge cases (empty arrays, null, enum extremes). Treat low coverage as a signal to review, not a target
+- **Coverage** — cover happy path, error cases, and domain edge cases of the input values (empty arrays, null, enum extremes); for registry coverage see Assertions & Structure. Treat low coverage as a signal to review, not a target
 
 ## File Layout & Environment
 
@@ -40,6 +40,8 @@ paths:
 - `Promise<void>`: use `await fn()` to assert no throw, or `.resolves.toBeUndefined()`. **Never** bare `.resolves` (false-positive)
 - **Stubs**: parameter types must match production signature — use domain types (`TaskGrade`), not `string`
 - **Test data**: realistic values (real task IDs, grade names). Extract shared fixtures to file/describe scope; inline for single-use
+- **Registry exhaustiveness**: `Record<string, T>` and `new Map([...])` give no compile-time enum coverage — assert it at runtime, with a named, commented exception list so deliberate gaps stay documented: `expect(Object.values(Enum).filter((key) => !REGISTRY.has(key))).toEqual(KNOWN_GAPS)` (`Record` registries: swap `REGISTRY.has(key)` for the `Object.hasOwn` form above)
+- **Test count as a proxy**: after a file split, compare counts (`--reporter=verbose`) — a drop means a describe block was lost in the move. A deliberate drop is valid only when mutation analysis shows detection is unchanged; record the evidence in the commit
 
 Group by scenario, not flat:
 

@@ -6,7 +6,7 @@ import {
 import { ContestType } from '$lib/contests/types/contest';
 import type { TaskResult } from '$lib/types/task';
 
-import { classifyContest } from '$lib/contests/utils/contest';
+import { classifyContest } from '$lib/contests';
 
 import { ContestTableProviderBase } from './contest_table_provider_base';
 

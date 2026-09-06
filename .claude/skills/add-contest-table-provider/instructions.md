@@ -41,14 +41,18 @@ Step 0 (seed check) is already done. Confirm the following before touching code:
 ### Tests first
 
 - [ ] Add exports to `src/lib/contests/fixtures/contest_type.ts` and `contest_name_labels.ts`
-- [ ] Add 3 `describe` blocks to `src/lib/contests/utils/contest.test.ts`: classify / priority / name label
-- [ ] `pnpm test:unit src/lib/contests/utils/contest.test.ts` — **RED**
+- [ ] Add `describe` block to `src/lib/contests/utils/classification.test.ts` (classify)
+- [ ] Add `describe` block to `src/lib/contests/utils/priority.test.ts` (priority)
+- [ ] Add `describe` block to `src/lib/contests/utils/labels/index.test.ts` (name label)
+- [ ] `pnpm test:unit src/lib/contests/` — **RED**
 
 ### Implement
 
-- [ ] Add branches to `classifyContest` / `contestTypePriorities` / `getContestNameLabel`
+- [ ] `CONTEST_TYPES_BY_ID` or `CLASSIFICATION_RULES` in `src/lib/contests/utils/classification.ts`
+- [ ] `contestTypePriorities` in `src/lib/contests/utils/priority.ts`
   - After priority insertion, all later entries shift +1 → **update JSDoc numeric ranges** (4 category names are immutable)
   - Fix hardcoded priority-diff expected values in `src/test/lib/utils/task.test.ts` (-1 per shifted entry)
+- [ ] `LABEL_GENERATORS` in `src/lib/contests/utils/labels/index.ts` (add label generator, create per-type file if complex)
 - [ ] **GREEN**
 
 ---

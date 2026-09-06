@@ -615,7 +615,7 @@ export const atCoderMainOfficialOnsite = [
 ];
 
 // See:
-// getPrefixForAojCourses() in src/lib/contests/utils/contest.ts
+// getPrefixForAojCourses() in src/lib/contests/
 const aojCoursesData = [
   { name: 'AOJ Courses, ITP1', contestId: 'ITP1' },
   { name: 'AOJ Courses, ALDS1', contestId: 'ALDS1' },
