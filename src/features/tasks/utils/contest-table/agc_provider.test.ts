@@ -1,6 +1,6 @@
 import { describe, test, expect } from 'vitest';
 
-import { ContestType } from '$lib/types/contest';
+import { ContestType } from '$lib/contests/types/contest';
 import type { TaskResults } from '$lib/types/task';
 
 import { AGC001OnwardsProvider } from './agc_provider';

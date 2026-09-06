@@ -24,7 +24,7 @@ import { hashPassword } from '../src/features/auth/server/password';
 import { getTaskGrade } from '../src/lib/types/task';
 import type { PlacementCreate } from '../src/features/workbooks/types/workbook_placement';
 
-import { classifyContest } from '../src/lib/utils/contest';
+import { classifyContest } from '../src/lib/contests/utils/contest';
 
 import { users, USER_PASSWORD_FOR_SEED } from './users';
 import { tasks } from './tasks';

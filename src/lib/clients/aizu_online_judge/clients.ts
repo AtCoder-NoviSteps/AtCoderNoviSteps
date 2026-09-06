@@ -2,7 +2,7 @@ import { HttpRequestClient } from '$lib/clients/http_client';
 import { ContestTaskCache } from '$lib/clients/cache_strategy';
 import { getCachedOrFetchContests, getCachedOrFetchTasks } from '$lib/clients/contest_task_fetcher';
 
-import type { ContestsForImport } from '$lib/types/contest';
+import type { ContestsForImport } from '$lib/contests/types/contest';
 import type { TasksForImport } from '$lib/types/task';
 
 import type {

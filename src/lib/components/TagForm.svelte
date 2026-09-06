@@ -14,7 +14,7 @@
   import type { Task } from '$lib/types/task';
   import type { Tag } from '$lib/types/tag';
 
-  import { getContestNameLabel } from '$lib/utils/contest';
+  import { getContestNameLabel } from '$lib/contests/utils/contest';
   import { ATCODER_BASE_CONTEST_URL } from '$lib/constants/urls';
 
   interface Props {

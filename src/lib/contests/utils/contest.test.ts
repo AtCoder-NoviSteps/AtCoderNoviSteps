@@ -1,13 +1,13 @@
 import { expect } from 'vitest';
 
-import { ContestType } from '$lib/types/contest';
-import { runTests } from '../common/test_helpers';
-import * as TestCasesForContestType from './test_cases/contest_type';
-import { type TestCaseForContestType } from './test_cases/contest_type';
-import * as TestCasesForContestNameLabel from './test_cases/contest_name_labels';
-import { type TestCaseForContestNameLabel } from './test_cases/contest_name_labels';
-import * as TestCasesForContestNameAndTaskIndex from './test_cases/contest_name_and_task_index';
-import { type TestCaseForContestNameAndTaskIndex } from './test_cases/contest_name_and_task_index';
+import { ContestType } from '$lib/contests/types/contest';
+import { runTests } from '../../../test/lib/common/test_helpers';
+import * as TestCasesForContestType from '$lib/contests/fixtures/contest_type';
+import { type TestCaseForContestType } from '$lib/contests/fixtures/contest_type';
+import * as TestCasesForContestNameLabel from '$lib/contests/fixtures/contest_name_labels';
+import { type TestCaseForContestNameLabel } from '$lib/contests/fixtures/contest_name_labels';
+import * as TestCasesForContestNameAndTaskIndex from '$lib/contests/fixtures/contest_name_and_task_index';
+import { type TestCaseForContestNameAndTaskIndex } from '$lib/contests/fixtures/contest_name_and_task_index';
 import {
   classifyContest,
   getContestPriority,
@@ -15,7 +15,7 @@ import {
   getContestNameLabel,
   addContestNameToTaskIndex,
   getAtCoderUniversityContestLabel,
-} from '$lib/utils/contest';
+} from '$lib/contests/utils/contest';
 
 describe('Contest', () => {
   describe('classify contest', () => {

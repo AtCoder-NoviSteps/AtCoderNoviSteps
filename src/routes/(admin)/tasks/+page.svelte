@@ -5,7 +5,7 @@
 
   import { Select, Label, Button, PaginationNav } from 'flowbite-svelte';
 
-  import type { Contests } from '$lib/types/contest';
+  import type { Contests } from '$lib/contests/types/contest';
 
   import { importSourceEntries, type ContestTaskImportSource } from '$lib/clients';
 

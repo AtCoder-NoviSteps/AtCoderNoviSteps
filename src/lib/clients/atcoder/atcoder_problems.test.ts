@@ -5,7 +5,7 @@ vi.mock('$lib/utils/time', () => ({
   delay: vi.fn().mockResolvedValue(undefined),
 }));
 
-import type { ContestsForImport } from '$lib/types/contest';
+import type { ContestsForImport } from '$lib/contests/types/contest';
 import type { TasksForImport } from '$lib/types/task';
 
 import { AtCoderProblemsApiClient } from '$lib/clients/atcoder/atcoder_problems';

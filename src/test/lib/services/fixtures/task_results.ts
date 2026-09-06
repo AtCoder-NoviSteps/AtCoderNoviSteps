@@ -1,4 +1,4 @@
-import { ContestType } from '$lib/types/contest';
+import { ContestType } from '$lib/contests/types/contest';
 import { TaskGrade } from '$lib/types/task';
 
 type MockedSubmissionStatus = {

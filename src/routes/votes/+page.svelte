@@ -20,7 +20,7 @@
   import { TaskGrade } from '$lib/types/task';
   import { MIN_VOTES_FOR_PROVISIONAL_GRADE } from '$features/votes/constants/statistics';
 
-  import { getContestNameLabel } from '$lib/utils/contest';
+  import { getContestNameLabel } from '$lib/contests/utils/contest';
   import { getTaskUrl, compareByContestIdAndTaskId } from '$lib/utils/task';
   import { filterTasksBySearch } from '$lib/utils/task_filter';
   import { resolveDisplayGrade } from '$features/votes/utils/grade_options';

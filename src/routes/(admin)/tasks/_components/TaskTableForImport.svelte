@@ -13,9 +13,9 @@
     Label,
   } from 'flowbite-svelte';
 
-  import type { Contests } from '$lib/types/contest';
+  import type { Contests } from '$lib/contests/types/contest';
   import type { ContestTaskImportSource } from '$lib/clients';
-  import { getContestNameLabel } from '$lib/utils/contest';
+  import { getContestNameLabel } from '$lib/contests/utils/contest';
   import { newline } from '$lib/utils/newline';
 
   interface Props {

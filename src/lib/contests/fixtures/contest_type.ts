@@ -1,5 +1,5 @@
-import { createTestCase } from '../../common/test_helpers';
-import { ContestType } from '$lib/types/contest';
+import { createTestCase } from '../../../test/lib/common/test_helpers';
+import { ContestType } from '$lib/contests/types/contest';
 
 export type TestCaseForContestType = {
   contestId: string;
@@ -615,7 +615,7 @@ export const atCoderMainOfficialOnsite = [
 ];
 
 // See:
-// getPrefixForAojCourses() in src/lib/utils/contest.ts
+// getPrefixForAojCourses() in src/lib/contests/utils/contest.ts
 const aojCoursesData = [
   { name: 'AOJ Courses, ITP1', contestId: 'ITP1' },
   { name: 'AOJ Courses, ALDS1', contestId: 'ALDS1' },

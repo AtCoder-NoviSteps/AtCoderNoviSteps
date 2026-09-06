@@ -1,4 +1,4 @@
-import { ContestType } from '$lib/types/contest';
+import { ContestType } from '$lib/contests/types/contest';
 import { type TaskResult, type TaskResults, TaskGrade, type TaskGrades } from '$lib/types/task';
 import type { UrlGenerator, UrlGenerators } from '$lib/types/url';
 
@@ -10,7 +10,7 @@ import {
   getContestPriority,
   regexForAojUniversity,
   regexForJag,
-} from '$lib/utils/contest';
+} from '$lib/contests/utils/contest';
 
 // TODO: Codeforces、yukicoder、BOJなどに対応できるようにする
 /**
@@ -89,7 +89,7 @@ export function compareByContestIdAndTaskId(
   // 1. コンテスト種類別の優先度(昇順)
   //
   // See:
-  // contestTypePriorities in src/lib/utils/contest.ts
+  // contestTypePriorities in src/lib/contests/utils/contest.ts
   if (firstContestPriority !== secondContestPriority) {
     return firstContestPriority - secondContestPriority;
   }

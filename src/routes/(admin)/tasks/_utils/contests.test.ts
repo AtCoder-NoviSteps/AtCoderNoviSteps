@@ -1,6 +1,6 @@
 import { describe, test, expect } from 'vitest';
 import { filterContests } from './contests';
-import type { Contests } from '$lib/types/contest';
+import type { Contests } from '$lib/contests/types/contest';
 
 const contests: Contests = [
   {

@@ -2,10 +2,10 @@ import {
   type ContestTableMetaData,
   type ContestTableDisplayConfig,
 } from '$features/tasks/types/contest-table/contest_table_provider';
-import { ContestType } from '$lib/types/contest';
+import { ContestType } from '$lib/contests/types/contest';
 import type { TaskResult } from '$lib/types/task';
 
-import { classifyContest, getContestNameLabel } from '$lib/utils/contest';
+import { classifyContest, getContestNameLabel } from '$lib/contests/utils/contest';
 
 import { ContestTableProviderBase, parseContestRound } from './contest_table_provider_base';
 

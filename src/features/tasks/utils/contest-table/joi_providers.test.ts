@@ -1,6 +1,6 @@
 import { describe, test, expect } from 'vitest';
 
-import { ContestType } from '$lib/types/contest';
+import { ContestType } from '$lib/contests/types/contest';
 import type { TaskResults } from '$lib/types/task';
 
 import {
@@ -81,7 +81,7 @@ describe('JOIFirstQualRoundProvider', () => {
   test('expects to handle invalid contest IDs gracefully', () => {
     const provider = new JOIFirstQualRoundProvider(ContestType.JOI);
 
-    expect(provider.getContestRoundLabel('invalid-id')).toBe('INVALID-ID'); // See: getContestNameLabel() in src/lib/utils/contest.ts
+    expect(provider.getContestRoundLabel('invalid-id')).toBe('INVALID-ID'); // See: getContestNameLabel() in src/lib/contests/utils/contest.ts
     expect(provider.getContestRoundLabel('joi2024yo1d')).toBe('2024d'); // 'd' doesn't match valid round (a|b|c)
   });
 

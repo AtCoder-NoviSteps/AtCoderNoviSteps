@@ -20,7 +20,7 @@
   import CommentAndHint from '$features/workbooks/components/detail/CommentAndHint.svelte';
   import { getBackgroundColorFrom } from '$lib/services/submission_status';
 
-  import { addContestNameToTaskIndex } from '$lib/utils/contest';
+  import { addContestNameToTaskIndex } from '$lib/contests/utils/contest';
   import { getTaskUrl, removeTaskIndexFromTitle } from '$lib/utils/task';
 
   import type { TaskResult } from '$lib/types/task';

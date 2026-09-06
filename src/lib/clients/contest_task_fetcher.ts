@@ -1,6 +1,6 @@
 import type { HttpRequestClient } from '$lib/clients/http_client';
 import type { ContestTaskCache } from '$lib/clients/cache_strategy';
-import type { ContestsForImport } from '$lib/types/contest';
+import type { ContestsForImport } from '$lib/contests/types/contest';
 import type { TasksForImport } from '$lib/types/task';
 
 type FetchContestsConfig<T> = {

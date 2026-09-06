@@ -1,4 +1,4 @@
-import type { ContestsForImport } from '$lib/types/contest';
+import type { ContestsForImport } from '$lib/contests/types/contest';
 import type { TasksForImport } from '$lib/types/task';
 import { delay } from '$lib/utils/time';
 

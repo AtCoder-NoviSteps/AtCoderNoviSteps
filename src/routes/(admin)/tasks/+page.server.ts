@@ -1,6 +1,6 @@
 import { fail, type Actions } from '@sveltejs/kit';
 
-import type { Contests, ContestForImport, ContestsForImport } from '$lib/types/contest';
+import type { Contests, ContestForImport, ContestsForImport } from '$lib/contests/types/contest';
 import { type Task, type Tasks, type TaskForImport, type TasksForImport } from '$lib/types/task';
 
 import * as taskService from '$lib/services/tasks';
@@ -8,7 +8,7 @@ import { validateAdminAccess } from '$features/auth/services/admin_access';
 
 import { fetchContests, fetchTasks, isContestTaskImportSource } from '$lib/clients';
 
-import { classifyContest } from '$lib/utils/contest';
+import { classifyContest } from '$lib/contests/utils/contest';
 import { sha256 } from '$lib/utils/hash';
 
 import { BAD_REQUEST, INTERNAL_SERVER_ERROR } from '$lib/constants/http-response-status-codes';

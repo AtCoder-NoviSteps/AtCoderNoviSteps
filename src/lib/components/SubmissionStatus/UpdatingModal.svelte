@@ -8,7 +8,7 @@
   import { submission_statuses } from '$lib/services/submission_status';
   import { errorMessageStore } from '$lib/stores/error_message';
 
-  import { getContestNameLabel } from '$lib/utils/contest';
+  import { getContestNameLabel } from '$lib/contests/utils/contest';
   import InputFieldWrapper from '$lib/components/InputFieldWrapper.svelte';
 
   interface Props {

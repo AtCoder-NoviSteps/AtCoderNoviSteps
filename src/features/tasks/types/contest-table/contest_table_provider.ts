@@ -1,4 +1,4 @@
-import type { ContestType } from '$lib/types/contest';
+import type { ContestType } from '$lib/contests/types/contest';
 import type { TaskResults, TaskResult } from '$lib/types/task';
 
 /**

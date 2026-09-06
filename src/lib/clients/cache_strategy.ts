@@ -1,6 +1,6 @@
 import { Cache } from '$lib/clients/cache';
 
-import type { ContestsForImport } from '$lib/types/contest';
+import type { ContestsForImport } from '$lib/contests/types/contest';
 import type { TasksForImport } from '$lib/types/task';
 
 export class ContestTaskCache {

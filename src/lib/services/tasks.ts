@@ -3,7 +3,7 @@ import { default as db } from '$lib/server/database';
 
 import { getContestTaskPairs } from '$lib/services/contest_task_pairs';
 
-import { ContestType } from '$lib/types/contest';
+import { ContestType } from '$lib/contests/types/contest';
 import type { Task, Tasks, TaskGrade } from '$lib/types/task';
 import type {
   ContestTaskPair,
@@ -18,7 +18,7 @@ import {
 } from '$lib/server/tasks/cache';
 import { invalidateVoteCaches } from '$features/votes/server/cache';
 
-import { classifyContest } from '$lib/utils/contest';
+import { classifyContest } from '$lib/contests/utils/contest';
 import { createContestTaskPairKey } from '$lib/utils/contest_task_pair';
 
 // See:
