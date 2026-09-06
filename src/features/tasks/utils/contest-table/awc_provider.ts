@@ -5,7 +5,7 @@ import {
 import { ContestType } from '$lib/contests/types/contest';
 import type { TaskResult } from '$lib/types/task';
 
-import { classifyContest, getContestNameLabel } from '$lib/contests/utils/contest';
+import { classifyContest, getContestNameLabel } from '$lib/contests';
 
 import { ContestTableProviderBase, parseContestRound } from './contest_table_provider_base';
 

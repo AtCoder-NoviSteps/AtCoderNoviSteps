@@ -10,7 +10,7 @@ import {
   getContestPriority,
   regexForAojUniversity,
   regexForJag,
-} from '$lib/contests/utils/contest';
+} from '$lib/contests';
 
 // TODO: Codeforces、yukicoder、BOJなどに対応できるようにする
 /**
@@ -89,7 +89,7 @@ export function compareByContestIdAndTaskId(
   // 1. コンテスト種類別の優先度(昇順)
   //
   // See:
-  // contestTypePriorities in src/lib/contests/utils/contest.ts
+  // contestTypePriorities in src/lib/contests/
   if (firstContestPriority !== secondContestPriority) {
     return firstContestPriority - secondContestPriority;
   }

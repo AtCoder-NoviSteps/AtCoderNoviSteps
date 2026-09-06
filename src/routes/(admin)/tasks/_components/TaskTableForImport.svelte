@@ -15,7 +15,7 @@
 
   import type { Contests } from '$lib/contests/types/contest';
   import type { ContestTaskImportSource } from '$lib/clients';
-  import { getContestNameLabel } from '$lib/contests/utils/contest';
+  import { getContestNameLabel } from '$lib/contests';
   import { newline } from '$lib/utils/newline';
 
   interface Props {

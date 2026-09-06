@@ -14,7 +14,7 @@
   import GradeLabel from '$lib/components/GradeLabel.svelte';
   import ExternalLinkWrapper from '$lib/components/ExternalLinkWrapper.svelte';
 
-  import { addContestNameToTaskIndex } from '$lib/contests/utils/contest';
+  import { addContestNameToTaskIndex } from '$lib/contests';
   import { getTaskUrl, removeTaskIndexFromTitle } from '$lib/utils/task';
 
   import type {

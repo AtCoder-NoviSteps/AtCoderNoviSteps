@@ -21,7 +21,7 @@
 
   import { getBackgroundColorFrom } from '$lib/services/submission_status';
 
-  import { addContestNameToTaskIndex } from '$lib/contests/utils/contest';
+  import { addContestNameToTaskIndex } from '$lib/contests';
   import {
     countAcceptedTasks,
     countAllTasks,
