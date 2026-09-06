@@ -7,7 +7,7 @@
 ## 事前確認
 
 - [ ] `ContestType`（`src/lib/contests/types/contest.ts`）— 既存で対応できるか？複数 contest_id を統一表示するなら複合型
-- [ ] `classifyContest()`（`src/lib/contests/utils/contest.ts`）— 新 contest_id に正しい ContestType を返すか
+- [ ] `classifyContest()`（`src/lib/contests/utils/classification.ts`）— 新 contest_id に正しい ContestType を返すか
 - [ ] `prisma/tasks.ts` にデータが存在するか（複合型は `prisma/contest_task_pairs.ts` も）
 - [ ] 実装パターン判定（後述4パターン）
 - [ ] JOI: 2026 年より `joi{YYYY}ho` → `joi{YYYY}sf`。regex は `(ho|sf)` 対応済み
