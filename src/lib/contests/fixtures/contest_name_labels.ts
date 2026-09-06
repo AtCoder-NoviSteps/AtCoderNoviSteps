@@ -1,4 +1,4 @@
-import { createTestCase } from '../../common/test_helpers';
+import { createTestCase } from '../../../test/lib/common/test_helpers';
 
 export type TestCaseForContestNameLabel = {
   contestId: string;

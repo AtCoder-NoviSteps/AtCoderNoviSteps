@@ -1,5 +1,5 @@
-import { createTestCase } from '../../common/test_helpers';
-import { ContestType } from '$lib/types/contest';
+import { createTestCase } from '../../../test/lib/common/test_helpers';
+import { ContestType } from '$lib/contests/types/contest';
 
 export type TestCaseForContestType = {
   contestId: string;

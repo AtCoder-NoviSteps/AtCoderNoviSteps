@@ -1,4 +1,4 @@
-import { createTestCase, zip } from '../../common/test_helpers';
+import { createTestCase, zip } from '../../../test/lib/common/test_helpers';
 import {
   getPastContestLabel,
   getJoiContestLabel,
@@ -6,7 +6,7 @@ import {
   getAojContestLabel,
   PAST_TRANSLATIONS,
   AOJ_COURSES,
-} from '$lib/utils/contest';
+} from '$lib/contests/utils/contest';
 
 export type TestCaseForContestNameAndTaskIndex = {
   contestId: string;
