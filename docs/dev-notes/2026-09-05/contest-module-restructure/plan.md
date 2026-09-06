@@ -1,49 +1,46 @@
-# contest モジュール再編 実装計画
+# contest モジュール再編
 
-**Goal:** `src/lib/utils/contest.ts`（826行）を `src/lib/contests/` に集約し、if hell を Map/Record ルックアップに置換、ラベル生成をコンテスト種別ごとにファイル分割。
-
-**実施:** 3フェーズ × 3ブランチ × 3 PR。全フェーズ完了済み。
+`src/lib/utils/contest.ts`（826行）を `src/lib/contests/` に集約し、if hell を Map/Record ルックアップに置換、ラベル生成をコンテスト種別ごとにファイル分割。3フェーズ × 3ブランチ × 3 PR。全フェーズ完了済み。
 
 ---
 
-## 設計根拠
+## 設計判断
 
-### なぜ `src/lib/contests/` か（`src/features/contests/` ではなく）
+### 配置: `src/lib/contests/`（`src/features/contests/` ではなく）
 
 コンテスト分類・ラベル生成は tasks, workbooks, votes, admin の4+ feature から横断的に参照される共有ロジック。architecture.md の判定基準「複数の機能ドメインで使う → `lib/` に配置」に該当。PR #3194 の workbooks 移動は単一ドメインだったが、contests は共通基盤。
 
-### なぜ Phase 2（if hell 解消）→ Phase 3（種別分割）の順序か
+class ベースの Strategy パターンも検討したが、TypeScript では冗長。Map dispatch + 小関数群の方がテストしやすく tree-shaking にも有利。
 
-- Phase 2 で `classifyContest` / `getContestNameLabel` のシグネチャと内部構造が確定する
-- 確定後にファイル分割すれば、分割判断の材料が揃い二度手間を避けられる
+### フェーズ順序: ロジック変更（Phase 2）→ ファイル分割（Phase 3）
+
+- Phase 2 で `classifyContest` / `getContestNameLabel` の内部構造が確定してから分割すれば二度手間を避けられる
 - 各 PR の diff が「ロジック変更」と「ファイル移動」に明確に分離される
 
-### 却下した代替案
+### スコープ外
 
-1. **class ベースの Strategy パターン**: TypeScript では class による多態は冗長。Map dispatch + 小関数群の方がテストしやすく、tree-shaking にも有利
-2. **`src/features/contests/`**: 上述の通り、複数 feature から参照される共有コードは `lib/` が適切
-3. **Phase 2 と 3 の同時実施**: diff が巨大になりレビュー困難
+- `src/lib/clients/`（API 通信層）: 別レイヤーなので `clients/` に残す
+- `src/lib/utils/task.ts` の `getTaskUrl` / `compareByContestIdAndTaskId`: task 側の責務
+- `src/lib/utils/contest_task_pair.ts`: タスク識別キー生成であり contest の責務ではない
+- `src/features/tasks/utils/contest-table/` の provider 群: 既に適切に分割済み。import パスのみ更新
 
-### `classifyContest` と `getContestNameLabel` の不整合（実装時の要注意点）
+---
+
+## 実装時に発見した落とし穴
+
+### `classifyContest` と `getContestNameLabel` の不整合
 
 Phase 2 以前、`getContestNameLabel` は `classifyContest` を経由**せず**、独自の if 連鎖で直接ラベルを生成していた。不整合の例:
 
 - `atc001`: `classifyContest` → `ContestType.OTHERS` だが、`getContestNameLabel` → `'ATC 001'`（`regexForAxc` で先に捕捉）
 - `chokudai_S001`: `classifyContest` → `ContestType.OTHERS` だが、`getContestNameLabel` では `startsWith('chokudai_S')` 分岐で `'Chokudai SpeedRun 001'`
 
-Phase 2 で `getContestNameLabel` を `classifyContest` の結果で dispatch する設計に変更した際、`ContestType.OTHERS` のラベル生成関数にフォールバックチェーンを組み込んで解決:
+`getContestNameLabel` を `classifyContest` の結果で dispatch する設計に変更した際、`ContestType.OTHERS` のラベル生成関数にフォールバックチェーンを組み込んで解決:
 
 1. `regexForAxc` による ATC 形式チェック
 2. ATCODER_OTHERS 辞書の完全一致
 3. `chokudai_S` prefix マッチ
 4. `contestId.toUpperCase()` フォールバック
-
-### スコープ外とした判断
-
-- `src/lib/clients/`（API 通信層）: 別レイヤーなので `clients/` に残す
-- `src/lib/utils/task.ts` の `getTaskUrl` / `compareByContestIdAndTaskId`: task 側の責務
-- `src/lib/utils/contest_task_pair.ts`: タスク識別キー生成であり contest の責務ではない
-- `src/features/tasks/utils/contest-table/` の provider 群: 既に適切に分割済み。import パスのみ更新
 
 ---
 
