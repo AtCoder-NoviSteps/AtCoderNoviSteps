@@ -49,8 +49,8 @@ Phase 2 で `getContestNameLabel` を `classifyContest` の結果で dispatch �
 
 ## リスクと対策
 
-| リスク | 対策 |
-| --- | --- |
-| import 書き換え漏れ | re-export を一時的に残して検証 → 削除時に `pnpm build` で検出 |
-| Phase 2 で挙動変化 | 既存テスト 825 件が退行検知。テスト件数の前後比較を必須とした |
+| リスク                               | 対策                                                                                         |
+| ------------------------------------ | -------------------------------------------------------------------------------------------- |
+| import 書き換え漏れ                  | re-export を一時的に残して検証 → 削除時に `pnpm build` で検出                                |
+| Phase 2 で挙動変化                   | 既存テスト 825 件が退行検知。テスト件数の前後比較を必須とした                                |
 | barrel export の circular dependency | `index.ts` は公開 API のみ re-export。内部ファイル間は直接 import を使い barrel を経由しない |
