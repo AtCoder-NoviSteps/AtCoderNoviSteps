@@ -16,7 +16,7 @@ devcontainer で Claude Code と Codex のどちらも利用できる状態を�
 - Codex の Linux sandbox に必要な `bubblewrap` と container runtime 権限は、OpenAI 公式の secure devcontainer 構成を基準に image / compose で用意する。
 - RTK は agent 非依存の CLI としてインストールを検証し、失敗を成功扱いにしない。`rtk init` による agent 統合とは別の完了条件として扱う。
 - Codex の状態はプロジェクト専用の `~/.codex-devcontainer/AtCoderNoviSteps` に分離する。
-- Codexのproject設定はGit管理する `.codex/config.toml` を正本とし、`CODEX_HOME/config.toml` へread-only bind mountして直接適用する。
+- Codexのproject設定はGit管理する `.codex/config.toml` を唯一の実体とし、`CODEX_HOME/config.toml` へ書き込み可能なbind mountとして直接適用する。
 - `~/.ssh` は mount せず、VS Code Dev Containers の SSH agent forwarding を使う。
 - `.env` はローカル実行用として残すが、Docker image には含めず、agent からの読み取りも拒否する。
 - rules本文は `docs/guides/agent-rules/`、project固有skillは `.agents/skills` を正本として両agentで共有する。
@@ -50,7 +50,7 @@ devcontainer で Claude Code と Codex のどちらも利用できる状態を�
 - host `~/.codex-devcontainer/AtCoderNoviSteps` をcontainer `/home/node/.codex` へmountし、認証、session、log、SQLiteなどの永続状態だけを保持
 - `CODEX_HOME=/home/node/.codex`
 - host directoryは `0700`、認証ファイルは `0600`
-- Codexのproject設定はrepositoryの `.codex/config.toml` を正本とし、`CODEX_HOME/config.toml` へread-only bind mountする（Codexが読むのはCODEX_HOME側だけであるため）。実効設定を原本そのものに固定し、CodexによるUI状態やtrust状態の追記を許可しない。
+- Codexのproject設定はrepositoryの `.codex/config.toml` を唯一の実体とし、`CODEX_HOME/config.toml` へ書き込み可能なbind mountとして直接公開する（Codexが読むのはCODEX_HOME側のpathだけであるため）。CodexによるUI状態やtrust状態の追記もGit差分として可視化する。
 - API keyやtokenを `containerEnv` やGit管理ファイルへ書かない
 
 `.env` には二段階で対応する。
@@ -173,12 +173,13 @@ Codex固有設定は共通指示・rules・skillsとは分離して次を管理�
 4. **`~/.ssh` をread-only mount**: writeは防げるが、秘密鍵自体はcontainerから見えるため複製できる。agent forwardingなら複製は不可能で、残るリスクは転送中の署名依頼だけになる。設計 §2 を参照。
 5. **Superpowersをimageへseed**: Claude利用者だけが必要な任意機能を全員へ配布することになる。
 6. **rules / skills本文をClaude用とCodex用に複製**: 更新先が増えて内容が乖離する。rulesは `docs/guides/agent-rules/`、skillsは `.agents/skills` を単一ソースとし、Claude側は参照だけを持つ。
-7. **~~Codex設定を `CODEX_HOME/config.toml` へ初回copy~~（撤回）**: 初回のみのcopyでは既存環境へ更新が反映されず乖離する。実測で `CODEX_HOME` が唯一の読込先と判明した後はsetupごとの上書きcopyを一時採用したが、Codex自身による追記で再び乖離したため、最終的にread-only bind mountへ置き換えた。
+7. **~~Codex設定を `CODEX_HOME/config.toml` へ初回copy~~（撤回）**: 初回のみのcopyでは既存環境へ更新が反映されず乖離する。実測で `CODEX_HOME` が唯一の読込先と判明した後はsetupごとの上書きcopyを一時採用したが、Codex自身による追記で再び乖離したため、最終的にwriteable bind mountへ置き換えた。
 8. **~~未使用credentialの包括denyを外す~~（撤回）**: devcontainerに実在しない秘密の列挙は設定を読みにくくすると判断して既存denyを外したが、`.claude/settings.json` はproject scopeで host clone や cloud agent にも適用されるため撤回し、HEAD時点のdenyを復帰させた。
 9. **MCPを先行導入**: 現在のCLIと公式連携で足りており、認証・常駐process・供給網リスクだけが増える。
 10. **毎回クロスレビュー**: 小変更でもtokenと待ち時間を消費する。
 11. **`CODEX_HOME/config.toml` へのcopy**: Codexがcopy先へ動的状態を追記し、Git管理の原本と実効設定が乖離する。
 12. **copy後の `chmod 400`**: file ownerであるCodex process自身が権限を戻せるため、書き込み禁止の境界にならない。
+13. **`.codex/config.toml` のread-only mount**: Codexがtrust状態を同じfileへ永続化できず、`config/batchWrite failed` でTUIを正常起動できない。
 
 ## 実装フェーズ
 
@@ -225,7 +226,7 @@ Phase summary: どちらかのagentが利用不能でも開発環境を作れ、
 - [ ] Codex CLIでfresh sessionを開始できることを確認する。現状は `thread/start` 時のsandbox helper初期化に失敗する。
 - [x] 片方のCLI install失敗が全体を停止しないことを確認する。
 - [x] Codex CLI / IDE拡張がproject専用 `CODEX_HOME` を共有することを確認する。
-- [ ] Codex CLI / IDE拡張がrepositoryの `.codex/config.toml` をread-only mount経由でproject設定として読み込むことを確認する。設定は変更済みで、次回rebuild後の実測待ち。
+- [ ] Codex CLI / IDE拡張がrepositoryの `.codex/config.toml` をwriteable mount経由でproject設定として読み書きすることを確認する。設定は変更済みで、次回rebuild後の実測待ち。
 - [x] Claude Code / Codexが同じrules本文とproject固有skillsを利用できることを確認する。Claude側は symlink 解決、Codex側は `codex debug prompt-input` の skill roots で確認した。
 - [x] hostの通常の `~/.codex` と `~/.ssh` がcontainerへ公開されていないことを確認する。
 - [x] Claudeでdummy secretの `.env` read拒否とsandbox fail-closedを確認する。実際の秘密は表示しない。
@@ -246,7 +247,7 @@ container 内で確認できた項目の実測値。
 | VS Code拡張            | `anthropic.claude-code` と `openai.chatgpt` の両方がcontainerにinstall済みで、起動確認済み                                                                                               |
 | install失敗の非block化 | `coderabbit` の install が失敗しても他CLIと `pnpm install` は完了。`npm` 失敗を模した `set -euo pipefail` 下の simulation も exit 0                                                      |
 | `CODEX_HOME`           | `/home/node/.codex`。`codex doctor` の state / log / goals / memories DB が全て同 directory 下にあり、CLIとIDE拡張が同じ永続状態を共有                                                   |
-| project設定の読込      | copy方式では11件 / 8件 / depth 8の読込を確認したが、Codexによる動的追記を許した。read-only bind mountへ変更済みで、次回rebuild後の実測待ち                                                     |
+| project設定の読込      | copy方式では11件 / 8件 / depth 8の読込を確認したが、原本と実効設定が乖離した。writeable bind mountへ変更済みで、次回rebuild後の実測待ち                                                  |
 | rules共有              | `.claude/rules` 11件の symlink が全て `docs/guides/agent-rules/` の正本へ解決。Codex側は `AGENTS.md` の path 対応表から同じ正本を読む                                                    |
 | skills共有             | `codex debug prompt-input` の skill roots が `r1 = /usr/src/app/.agents/skills` を含み、project固有skill 4件が全て列挙される。Claude側は `.claude/skills` の symlink 4件が同じ正本へ解決 |
 | host状態の非公開       | 秘密鍵は不在。`~/.ssh` には検証時に生成された `known_hosts` のみで、rebuildで消える。`~/.codex` はproject専用 directory のみ                                                             |
@@ -309,7 +310,7 @@ OpenAI 公式文書は Linux / WSL2 の sandbox 前提として `bubblewrap` を
 2. Codex 側の permission 設定を諦め、`approval_policy` の承認と Claude 側 deny のみに依存する。`.codex/config.toml` は削除する。
 3. Codex CLI が repository 設定を読む仕様になるまで保留し、既知の制約として記録する。
 
-案1を一時採用したが、Codexがcopy先へtrustとTUI状態を追記し、原本と実効設定が再び乖離した。このためcopyを廃止し、`.codex/config.toml` を `$CODEX_HOME/config.toml` へread-only bind mountする方式へ置き換えた。
+案1を一時採用したが、Codexがcopy先へtrustとTUI状態を追記し、原本と実効設定が再び乖離した。このためcopyを廃止し、`.codex/config.toml` を `$CODEX_HOME/config.toml` へwriteable bind mountする方式へ置き換えた。
 
 旧copy方式での実測:
 
@@ -319,7 +320,7 @@ install -m 600 .codex/config.toml "${codex_home}/config.toml"   # setup-devconta
 
 copy 後の `codex --strict-config doctor` は `config.toml parse ok`、denied-read rules 11件、glob rules 8件、glob scan max depth 8 を報告した。copy 前は 0 / 0 / unbounded だった。
 
-read-only mount方式では `$CODEX_HOME/config.toml` が原本そのものを参照するため同期操作は不要で、Codexによる追記も拒否される。次回rebuild後にmountのread-only属性とCLI / IDE拡張からの読込を実測する。
+writeable mount方式では `$CODEX_HOME/config.toml` が原本そのものを参照するため同期操作は不要で、Codexによる追記も `.codex/config.toml` のGit差分として現れる。次回rebuild後にmountのread-write属性とCLI / IDE拡張からの読み書きを実測する。
 
 ### 撤回した `proseWrap: "never"`
 
@@ -368,7 +369,7 @@ Claude による指摘。全件を container 内で実測確認し、ユーザ�
 
 1. **repository の `.codex/config.toml` が読み込まれておらず、Codex の permission 層が無効だった** — 修正済み
 
-   1回目の finding 2 で Claude 側の deny を戻した一方、Codex 側は設定そのものが適用されていなかった。当初はsetup scriptによるcopyで解消し、その後、原本との乖離を防ぐread-only bind mountへ置き換えた。別節「`.codex/config.toml` の読込先」を参照。
+   1回目の finding 2 で Claude 側の deny を戻した一方、Codex 側は設定そのものが適用されていなかった。当初はsetup scriptによるcopyで解消し、その後、原本を唯一の実体にするwriteable bind mountへ置き換えた。別節「`.codex/config.toml` の読込先」を参照。
 
 ### Severe
 
@@ -421,7 +422,7 @@ Claude による指摘。全件を container 内で実測確認し、ユーザ�
 
 - [x] Claude Code / Codexの両方を選択でき、片方のinstall失敗だけでは環境構築が止まらない。両CLIのPATH上での起動と、各install失敗時に後続処理へ進むことを確認済み。
 - [x] Codex状態が `~/.codex-devcontainer/AtCoderNoviSteps` に分離される。
-- [ ] `.codex/config.toml` がGit管理のCodex project設定の正本であり、`CODEX_HOME/config.toml` へのread-only mountを通じて直接適用される。設定変更済みで、次回rebuild後の実測待ち。
+- [ ] `.codex/config.toml` がGit管理のCodex project設定の唯一の実体であり、`CODEX_HOME/config.toml` へのwriteable mountを通じて直接読み書きされる。設定変更済みで、次回rebuild後の実測待ち。
 - [x] SSH秘密鍵はcontainerへmountされず、`.env` とproject scopeでdenyしたcredentialをagentが読めない。秘密鍵非mount、SSH agent forwarding、Claude denyに加え、Codexがdeny対象を読み取り不能なmountへ置換することを確認済み。
 - [x] `.env` やlocal設定がDocker imageへ入らない。
 - [x] SuperpowersとMCPが暗黙に有効化されない。

@@ -8,9 +8,9 @@ devcontainer は host の `~/.codex-devcontainer/AtCoderNoviSteps` を container
 
 ## project 設定の正本と適用
 
-repository 共通設定は `.codex/config.toml` である。ただし Codex が読むのは `$CODEX_HOME/config.toml` だけで、repository 直下の `.codex/config.toml` は読み込まれない（codex-cli 0.154.0 で確認）。このため devcontainer は原本を `$CODEX_HOME/config.toml` へread-only bind mountする。
+repository 共通設定の唯一の実体は `.codex/config.toml` である。ただし Codex が読むのは `$CODEX_HOME/config.toml` だけで、repository 直下のpathからは読み込まれない（codex-cli 0.154.0 で確認）。このため devcontainer は `.codex/config.toml` を `$CODEX_HOME/config.toml` へ書き込み可能なbind mountとして直接公開する。
 
-実効設定はGit管理の原本そのものであり、CodexによるtrustやTUI状態の追記もfilesystem側で拒否する。設定変更は `.codex/config.toml` だけに行う。mount設定を変更しない限り、内容の変更にrebuildや手動同期は不要である。
+sourceとtargetは同じ実体を参照するため、同期操作は不要である。CodexによるtrustやTUI状態の追記も `.codex/config.toml` のGit差分として現れる。設定変更は常に `.codex/config.toml` に対して行い、動的状態をcommitするかは差分を確認して判断する。
 
 ## permissions
 
