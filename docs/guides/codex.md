@@ -8,9 +8,9 @@ devcontainer は host の `~/.codex-devcontainer/AtCoderNoviSteps` を container
 
 ## project 設定の正本と適用
 
-repository 共通設定の唯一の実体は `.codex/config.toml` である。ただし Codex が読むのは `$CODEX_HOME/config.toml` だけで、repository 直下のpathからは読み込まれない（codex-cli 0.154.0 で確認）。このため devcontainer は `.codex/config.toml` を `$CODEX_HOME/config.toml` へ書き込み可能なbind mountとして直接公開する。
+repository 共通設定は `.codex/config.toml` に置く。Codexはtrusted projectのproject configを直接読み、CLIとIDE拡張で共有する。project configはuser configより優先される。
 
-sourceとtargetは同じ実体を参照するため、同期操作は不要である。CodexによるtrustやTUI状態の追記も `.codex/config.toml` のGit差分として現れる。設定変更は常に `.codex/config.toml` に対して行い、動的状態をcommitするかは差分を確認して判断する。
+`$CODEX_HOME/config.toml` はuser configであり、projectのtrustやTUI状態などCodex自身が永続化する情報を保持する。project configをこのpathへcopyまたはmountしない。project共通設定は必ず `.codex/config.toml` を変更する。
 
 ## permissions
 
