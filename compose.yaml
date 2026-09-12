@@ -1,6 +1,18 @@
 services:
   web:
     build: .
+    # Codex creates its narrower bubblewrap sandbox inside this development container.
+    # Keep these aligned with OpenAI's secure devcontainer requirements.
+    cap_add:
+      - NET_ADMIN
+      - SETGID
+      - SETUID
+      - SYS_ADMIN
+      - SYS_CHROOT
+      - SYS_PTRACE
+    security_opt:
+      - apparmor=unconfined
+      - seccomp=unconfined
     ports:
       - '5173:5173'
       - '5555:5555'

@@ -27,11 +27,21 @@ project の `project-edit` profile は built-in `:workspace` を継承する。w
 
 子 process へ渡す環境変数は `shell_environment_policy` で core variables を基準にし、既定の secret 名 filter を有効にする。filesystem deny と環境変数 filter は別々の防御であり、どちらか一方で代用しない。
 
-## devcontainer では `codex sandbox` を使わない
+## devcontainer の Linux sandbox
 
-`codex sandbox` は bubblewrap に unprivileged user namespace の作成を要求するが、compose の web service は Docker 既定の seccomp profile で起動し effective capability を持たないため、この操作が拒否される。結果として `codex sandbox <command>` は deny 対象かどうかに関わらず常に失敗する。使えないことが確定しているため `bubblewrap` は image に含めない。
+Codex CLIとVS Code拡張はLinux上のlocal commandに `bubblewrap` sandboxを使用する。Dockerfileはdistribution提供の `bubblewrap` をsetuidで導入し、composeはOpenAI公式のsecure devcontainerを基準に、nested sandbox構築に必要なcapabilityとDocker外側のseccomp / AppArmor緩和をweb serviceだけへ設定する。
 
-fail-closed 側へ倒れるため秘密が露出する経路にはならない。devcontainer では `approval_policy = "on-request"` による承認を主たる防御とし、`codex sandbox` には依存しない。seccomp profile は container 自体の防御層であり、この機能のために緩めない。
+`approval_policy = "on-request"` はsandbox境界を越える操作の確認方針であり、filesystem denyを実装するsandboxの代替ではない。`danger-full-access` と `--dangerously-bypass-approvals-and-sandbox` は、containerから見えるcredentialにもCodexが到達できるため使用しない。
+
+変更後はclean rebuildし、次を確認する。
+
+```bash
+command -v bwrap
+bwrap --unshare-user --dev-bind / / true
+codex sandbox -- true
+```
+
+CLIの確認だけで完了とはせず、VS Code拡張でfresh sessionを開始し、dummy credentialのdenyも確認する。
 
 ## SSH と MCP
 

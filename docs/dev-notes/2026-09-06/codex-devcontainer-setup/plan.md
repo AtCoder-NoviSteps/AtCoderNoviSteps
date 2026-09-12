@@ -13,6 +13,8 @@ devcontainer で Claude Code と Codex のどちらも利用できる状態を�
 - Claude Code / Codex の両方を `postCreateCommand` でインストールする。
 - 片方のインストール失敗だけで devcontainer の準備全体を止めない。
 - CLI を Dockerfile へ移さない。月単位のモデル性能変化に対応しやすくする。
+- Codex の Linux sandbox に必要な `bubblewrap` と container runtime 権限は、OpenAI 公式の secure devcontainer 構成を基準に image / compose で用意する。
+- RTK は agent 非依存の CLI としてインストールを検証し、失敗を成功扱いにしない。`rtk init` による agent 統合とは別の完了条件として扱う。
 - Codex の状態はプロジェクト専用の `~/.codex-devcontainer/AtCoderNoviSteps` に分離する。
 - Codexのproject設定はGit管理する `.codex/config.toml` を正本とし、setupごとに `CODEX_HOME` へcopyして適用する。
 - `~/.ssh` は mount せず、VS Code Dev Containers の SSH agent forwarding を使う。
@@ -202,7 +204,8 @@ Phase summary: 現行モデルでも必要なproject固有規約だけを残し�
 - [x] `.dockerignore` から秘密情報とGit metadataを除外する。
 - [x] 両CLIをsetup scriptに残し、各install失敗を非block化する。
 - [x] VS CodeのMarkdown設定でsoft wrapを有効にする。
-- [x] Claudeのfail-closed設定を追加する。`bubblewrap` は追加後にcontainerで機能しないことを確認したため削除した（「`bubblewrap` を削除した理由」を参照）。
+- [x] Claudeのfail-closed設定を追加する。
+- [x] CodexのLinux sandbox用に `bubblewrap` とcontainer runtime権限を追加する（「`bubblewrap` 削除判断の撤回」を参照）。
 - [x] Claude / Codexで `.env*` とmount・公開されるcredentialのreadをdenyし、project scopeで効く既存denyは維持する。どの環境でも使わないAWS / npm / cloud設定は追加しない。
 - [x] projectのSuperpowers marketplace設定を削除する。
 - [x] MCP設定を追加しない。
@@ -216,13 +219,16 @@ Phase summary: どちらかのagentが利用不能でも開発環境を作れ、
 対象: devcontainer runtime。アプリコード変更なし。
 
 - [x] clean rebuild後にproject依存のinstallと開発server起動を確認する。host側で rebuild し、`pnpm install` 完了と `pnpm dev` によるローカルserver起動を確認した。
-- [x] Claude / Codex CLIとVS Code拡張を個別に確認する。
+- [x] Claude CLI / VS Code拡張とCodex VS Code拡張の起動を個別に確認する。
+- [ ] Codex CLIでfresh sessionを開始できることを確認する。現状は `thread/start` 時のsandbox helper初期化に失敗する。
 - [x] 片方のCLI install失敗が全体を停止しないことを確認する。
 - [x] Codex CLI / IDE拡張がproject専用 `CODEX_HOME` を共有することを確認する。
 - [x] Codex CLI / IDE拡張がrepositoryの `.codex/config.toml` をproject設定として読み込むことを確認する。codex-cli 0.154.0 はrepository直下を読まないため、setup scriptで `CODEX_HOME` へcopyする方式へ変更した（「`.codex/config.toml` の読込先」を参照）。
 - [x] Claude Code / Codexが同じrules本文とproject固有skillsを利用できることを確認する。Claude側は symlink 解決、Codex側は `codex debug prompt-input` の skill roots で確認した。
 - [x] hostの通常の `~/.codex` と `~/.ssh` がcontainerへ公開されていないことを確認する。
-- [x] dummy secretで `.env` read拒否とsandbox fail-closedを確認する。実際の秘密は表示しない。
+- [x] Claudeでdummy secretの `.env` read拒否とsandbox fail-closedを確認する。実際の秘密は表示しない。
+- [ ] Codexでdummy secretの `.env` read拒否を確認する。現状はsandbox helper自体が初期化できないため未確認。
+- [ ] RTK CLIがPATH上に存在し、`rtk --version` と `rtk gain` が成功することを確認する。現状は `command not found`。
 - [x] SSH agent forwarding経由でGitHubへのread-only接続を確認する。container内に秘密鍵が存在しない状態で `ssh -T git@github.com` が認証され、`git ls-remote origin HEAD` が成功した。
 - [x] `pnpm format`、`pnpm lint`、`git diff --check` を実行する。
 
@@ -234,8 +240,8 @@ container 内で確認できた項目の実測値。
 
 | 項目                   | 結果                                                                                                                                                                                     |
 | ---------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| CLI                    | `claude` / `codex` ともPATH上に存在。`coderabbit` は install 失敗で不在                                                                                                                  |
-| VS Code拡張            | `anthropic.claude-code` と `openai.chatgpt` の両方が container に install 済み                                                                                                           |
+| CLI                    | `claude` は起動確認済み。`codex` はPATH上に存在するがfresh sessionの `thread/start` でsandbox helper初期化に失敗。`rtk` と `coderabbit` はinstall失敗で不在                              |
+| VS Code拡張            | `anthropic.claude-code` と `openai.chatgpt` の両方がcontainerにinstall済みで、起動確認済み                                                                                               |
 | install失敗の非block化 | `coderabbit` の install が失敗しても他CLIと `pnpm install` は完了。`npm` 失敗を模した `set -euo pipefail` 下の simulation も exit 0                                                      |
 | `CODEX_HOME`           | `/home/node/.codex`。`codex doctor` の state / log / goals / memories DB が全て同 directory 下にあり、CLIとIDE拡張が同じ永続状態を共有                                                   |
 | project設定の読込      | repository直下では denied-read rules 0件。`CODEX_HOME` へcopy後は 11件 / glob rules 8件 / glob scan max depth 8 で `.codex/config.toml` と一致。後述の別節を参照                         |
@@ -243,7 +249,7 @@ container 内で確認できた項目の実測値。
 | skills共有             | `codex debug prompt-input` の skill roots が `r1 = /usr/src/app/.agents/skills` を含み、project固有skill 4件が全て列挙される。Claude側は `.claude/skills` の symlink 4件が同じ正本へ解決 |
 | host状態の非公開       | 秘密鍵は不在。`~/.ssh` には検証時に生成された `known_hosts` のみで、rebuildで消える。`~/.codex` はproject専用 directory のみ                                                             |
 | SSH agent forwarding   | container内に秘密鍵が無い状態で `ssh -T git@github.com` が認証され、`git ls-remote origin HEAD` が成功                                                                                   |
-| `.env` read拒否        | Claude / Codex の両方で拒否。dummy secret のみ使用し実ファイルは開いていない                                                                                                             |
+| `.env` read拒否        | Claudeは拒否を確認済み。Codexはsandbox helper自体が初期化できないため、設定のrule数だけでは機能確認済みと扱わない                                                                        |
 | 機械的gate             | `pnpm exec prettier --check`（in-scope分）、`oxlint`、`eslint`、`pnpm check`（0 errors / 30 warnings）、`git diff --check` が通過                                                        |
 
 `pnpm lint` は未追跡かつ本PR範囲外の `docs/dev-notes/2026-08-01/contest-discussion-automation-review/qa.md` 1件だけで失敗する。prettierが整形結果を収束させられないファイルで、本PRのcommit対象に含めないため対応しない。
@@ -254,18 +260,33 @@ container 内に秘密鍵が無い状態（`~/.ssh` は `known_hosts` のみ）�
 
 つまずいた点と対処は `CONTRIBUTING.md` の「(SSH で GitHub を利用する場合) ホスト側で鍵を ssh-agent へ登録」に記載した。要点は、`AddKeysToAgent yes` は host で `ssh` を実行したときだけ発火し、container 発の接続では自動登録が起きないこと。host で一度 `ssh -T git@github.com` を実行すれば転送済み socket 経由で container からも見える（rebuild 不要）。
 
-### `bubblewrap` を削除した理由
+### `bubblewrap` 削除判断の撤回
 
-Dockerfile へ sandbox 実行基盤として追加したが、container 内で機能しないことを確認したため削除した。
+Dockerfile へ sandbox 実行基盤として追加した際、container 内で次の失敗を確認して削除していた。
 
 ```text
 $ bwrap --unshare-user --dev-bind / / true
 bwrap: No permissions to create a new namespace, likely because the kernel does not allow non-privileged user namespaces.
 ```
 
-compose の web service は Docker 既定の seccomp profile で起動し effective capability を持たないため、unprivileged user namespace を作れない。したがって `codex sandbox <command>` は deny 対象か否かに関わらず常に失敗する。Claude Code の Linux sandbox は bubblewrap に依存しないため（`allowUnsandboxedCommands: false` のまま Bash が動作する）、このパッケージはどちらの agent にも使われていない。
+compose の web service は Docker 既定の seccomp profile で起動し effective capability を持たないため、unprivileged user namespace を作れない。この実測が示すのは `bubblewrap` が不要ということではなく、container runtime の条件が不足していることである。
 
-container 自体の防御層である seccomp profile をこの機能のために緩めない方針は維持する。Codex では `approval_policy = "on-request"` の承認を主たる防御とする。将来 seccomp を緩める判断をした場合は、その時点で `bubblewrap` を再追加する。
+OpenAI 公式文書は Linux / WSL2 の sandbox 前提として `bubblewrap` を指定している。OpenAI 公式 Codex repository の secure devcontainer も、非root userでnested sandboxを構築するため、setuid `bubblewrap`、必要なcapability、Docker外側のseccomp / AppArmor緩和を組み合わせている。Codex CLI 0.154.0 と VS Code拡張でも同じ不足によりsandbox helperが初期化できず、VS Code側は `thread/start` に失敗した。
+
+`approval_policy` はsandbox境界の外へ出る際の確認方針であり、filesystem denyを実装するsandboxの代替にはならない。`danger-full-access` はこのcontainerから見える `.env`、認証情報、SSH agent socketをCodexにも公開するため採用しない。
+
+修正は低riskから順に次のphaseで行う。
+
+1. **文書訂正**: 本節と `docs/guides/codex.md` を公式仕様および実測に合わせる。
+2. **sandbox runtime**: Dockerfileへdistribution提供の `bubblewrap` を追加してsetuidを設定し、composeのweb serviceへOpenAI公式構成に必要なcapabilityと `seccomp=unconfined` / `apparmor=unconfined` を追加する。
+3. **RTK install検証**: agent非依存のRTK CLIをinstall後に `rtk --version` と `rtk gain` で検証する。install失敗を握りつぶさない。既存の `rtk init -g --auto-patch` はagent統合の設定であり、CLIの導入確認とは分離する。
+4. **clean rebuild検証**: rebuild後に `bwrap`、Codex CLIのsandbox command、Codex VS Codeのfresh session、dummy credentialのdeny、`rtk --version`、`rtk gain` を確認する。
+
+却下案:
+
+- `danger-full-access` または `--dangerously-bypass-approvals-and-sandbox`: credential denyの完了条件を満たさない。
+- `bubblewrap` のpackage追加だけ: 現在のcontainerでは `unshare --user` が `Operation not permitted` となるためruntime権限の不足が残る。
+- RTK install失敗のwarning継続: rebuildが成功したように見えたままCLIが欠落する今回の状態を再発させる。
 
 ### `.codex/config.toml` の読込先
 
@@ -361,9 +382,9 @@ Claude による指摘。全件を container 内で実測確認し、ユーザ�
 
    `.codex/config.toml` の deny は `.env*` と `~/.codex/auth.json` だけで、mount される `~/.claude/.credentials.json` と workspace 内の `secrets/**`、`config/credentials.json`、`*.pem`、`*.key` が抜けていた。1回目の finding 2 の論拠（committed な設定は host clone や cloud agent にも適用される）は `.codex/config.toml` にも等しく当たるため、Claude 側に合わせて追加した。`codex --strict-config doctor` で denied-read rules 11件、glob rules 8件を確認した。
 
-4. **`bubblewrap` がどちらの agent にも使われていない** — 削除済み
+4. **`bubblewrap` がどちらの agent にも使われていない** — 誤りのため撤回
 
-   別節「`bubblewrap` を削除した理由」を参照。
+   CodexのLinux sandboxで使用される。別節「`bubblewrap` 削除判断の撤回」を参照。
 
 ### Moderate
 
@@ -400,15 +421,17 @@ Claude による指摘。全件を container 内で実測確認し、ユーザ�
 
 ## 完了条件
 
-- Claude Code / Codexの両方を選択でき、片方のinstall失敗だけでは環境構築が止まらない。
-- Codex状態が `~/.codex-devcontainer/AtCoderNoviSteps` に分離される。
-- `.codex/config.toml` がGit管理のCodex project設定の正本であり、`CODEX_HOME` へのcopyを通じて適用される。導出物を手で編集しない。
-- SSH秘密鍵はcontainerへmountされず、`.env` とproject scopeでdenyしたcredentialをagentが読めない。
-- `.env` やlocal設定がDocker imageへ入らない。
-- SuperpowersとMCPが暗黙に有効化されない。
-- `docs/guides/agent-rules/` と `.agents/skills` が単一ソースになり、Claude Code / Codexの両方から利用できる。
-- `AGENTS.md`、共通rules / skills、`CONTRIBUTING.md`、関連guideが簡潔で現状と矛盾しない。
-- 大規模・重要変更だけクロスレビューが必須になる。
+- [ ] Claude Code / Codexの両方を選択でき、片方のinstall失敗だけでは環境構築が止まらない。Claude両surfaceとCodex VSCodeは確認済み。Codex VS CLIだけ未達。
+- [x] Codex状態が `~/.codex-devcontainer/AtCoderNoviSteps` に分離される。
+- [x] `.codex/config.toml` がGit管理のCodex project設定の正本であり、`CODEX_HOME` へのcopyを通じて適用される。導出物を手で編集しない。
+- [ ] SSH秘密鍵はcontainerへmountされず、`.env` とproject scopeでdenyしたcredentialをagentが読めない。秘密鍵非mountとSSH agent forwarding、Claude denyは確認済み。Codex denyだけ再確認待ち。
+- [x] `.env` やlocal設定がDocker imageへ入らない。
+- [x] SuperpowersとMCPが暗黙に有効化されない。
+- [x] `docs/guides/agent-rules/` と `.agents/skills` が単一ソースになり、Claude Code / Codexの両方から利用できる。
+- [x] `AGENTS.md`、共通rules / skills、`CONTRIBUTING.md`、関連guideが簡潔で現状と矛盾しない。
+- [x] 大規模・重要変更だけクロスレビューが必須になる。
+- [ ] Codex CLI / VS Code拡張の両方がLinux sandboxを初期化できる。
+- [ ] RTK CLIがPATH上に存在し、`rtk --version` と `rtk gain` が成功する。
 
 ## 参考資料
 
@@ -418,6 +441,8 @@ Claude による指摘。全件を container 内で実測確認し、ユーザ�
 - [Codex project configuration](https://learn.chatgpt.com/docs/config-file/config-basic)
 - [Codex permissions](https://learn.chatgpt.com/docs/permissions)
 - [Codex environment variables](https://learn.chatgpt.com/docs/config-file/environment-variables)
+- [Codex sandbox](https://learn.chatgpt.com/docs/sandboxing)
+- [Codex secure devcontainer](https://github.com/openai/codex/blob/main/.devcontainer/README.md)
 - [VS Code: Sharing Git credentials](https://code.visualstudio.com/remote/advancedcontainers/sharing-git-credentials)
 - [Docker build context](https://docs.docker.com/build/concepts/context/)
 - [Claude Code sandboxing](https://code.claude.com/docs/en/sandboxing)

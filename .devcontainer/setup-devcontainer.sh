@@ -24,8 +24,12 @@ install -m 600 .codex/config.toml "${codex_home}/config.toml" || echo 'Could not
 # Install CodeRabbit CLI (continue if fails)
 curl -fsSL https://cli.coderabbit.ai/install.sh | sh || echo 'CodeRabbit CLI installation failed, continuing...'
 
-# Install RTK — token optimization proxy for AI coding assistants (60-90% reduction)
-curl -fsSL https://raw.githubusercontent.com/rtk-ai/rtk/master/install.sh | sh || echo 'RTK installation failed, continuing...'
+# RTK is an agent-independent CLI. Do not report setup success when its binary is absent.
+curl -fsSL https://raw.githubusercontent.com/rtk-ai/rtk/master/install.sh | sh
+rtk --version
+rtk gain >/dev/null
+
+# Agent integration is optional and separate from installing the RTK CLI.
 rtk init -g --auto-patch || echo 'RTK init failed, continuing...'
 
 # Install project dependencies
