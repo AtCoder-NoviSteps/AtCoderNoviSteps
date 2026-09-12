@@ -8,14 +8,9 @@ devcontainer は host の `~/.codex-devcontainer/AtCoderNoviSteps` を container
 
 ## project 設定の正本と適用
 
-repository 共通設定は `.codex/config.toml` である。ただし Codex が読むのは `$CODEX_HOME/config.toml` だけで、repository 直下の `.codex/config.toml` は読み込まれない（codex-cli 0.154.0 で確認）。このため setup script が setup ごとに copy する。
+repository 共通設定は `.codex/config.toml` である。ただし Codex が読むのは `$CODEX_HOME/config.toml` だけで、repository 直下の `.codex/config.toml` は読み込まれない（codex-cli 0.154.0 で確認）。このため devcontainer は原本を `$CODEX_HOME/config.toml` へread-only bind mountする。
 
-`$CODEX_HOME/config.toml` は導出物であり、直接編集しない。次の setup で上書きされる。`.codex/config.toml` を更新したときは、container を rebuild するか、次を1回実行して同期する。
-
-```bash
-install -m 600 .codex/config.toml "${CODEX_HOME}/config.toml"
-codex --strict-config doctor   # denied-read rules の件数が .codex/config.toml と一致すること
-```
+実効設定はGit管理の原本そのものであり、CodexによるtrustやTUI状態の追記もfilesystem側で拒否する。設定変更は `.codex/config.toml` だけに行う。mount設定を変更しない限り、内容の変更にrebuildや手動同期は不要である。
 
 ## permissions
 
@@ -41,7 +36,7 @@ bwrap --unshare-user --dev-bind / / true
 codex sandbox -- true
 ```
 
-CLIの確認だけで完了とはせず、VS Code拡張でfresh sessionを開始し、dummy credentialのdenyも確認する。
+CLIとVS Code拡張の両方でfresh sessionを開始し、dummy credentialのdenyも確認する。
 
 ## SSH と MCP
 

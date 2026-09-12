@@ -17,15 +17,15 @@ if [[ -e "${codex_home}/auth.json" ]]; then
   chmod 600 "${codex_home}/auth.json" || echo 'Could not secure the Codex auth file, continuing...'
 fi
 
-# Codex reads project settings only from CODEX_HOME, so copy the repository source of truth
-# there. Overwriting on every setup keeps the two from drifting apart.
-install -m 600 .codex/config.toml "${codex_home}/config.toml" || echo 'Could not install the Codex project config, continuing...'
-
 # Install CodeRabbit CLI (continue if fails)
 curl -fsSL https://cli.coderabbit.ai/install.sh | sh || echo 'CodeRabbit CLI installation failed, continuing...'
 
 # RTK is an agent-independent CLI. Do not report setup success when its binary is absent.
 curl -fsSL https://raw.githubusercontent.com/rtk-ai/rtk/master/install.sh | sh
+
+# Disable telemetry both for this setup process and persistently for later RTK invocations.
+export RTK_TELEMETRY_DISABLED=1
+rtk telemetry disable
 rtk --version
 rtk gain >/dev/null
 
