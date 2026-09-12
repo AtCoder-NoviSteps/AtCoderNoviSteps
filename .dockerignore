@@ -1,4 +1,9 @@
 .history
+.git
+.claude/settings.local.json
+.env
+.env.*
+!.env.example
 .pnpm-store
 .svelte-kit
 node_modules

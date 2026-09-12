@@ -1,0 +1,20 @@
+approval_policy = "on-request"
+default_permissions = "project-edit"
+
+[permissions.project-edit]
+description = "Edit this project without exposing mounted credentials."
+extends = ":workspace"
+
+[permissions.project-edit.filesystem]
+glob_scan_max_depth = 8
+"~/.codex/auth.json" = "deny"
+
+[permissions.project-edit.filesystem.":workspace_roots"]
+".env" = "deny"
+".env.*" = "deny"
+"**/.env" = "deny"
+"**/.env.*" = "deny"
+
+[shell_environment_policy]
+inherit = "core"
+ignore_default_excludes = false

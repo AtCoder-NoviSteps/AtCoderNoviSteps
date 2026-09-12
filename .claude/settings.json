@@ -3,7 +3,7 @@
     "enabled": true,
     "allowUnsandboxedCommands": false,
     "filesystem": {
-      "denyRead": ["~/.ssh"]
+      "denyRead": ["~/.ssh", "~/.claude/.credentials.json", "**/.env", "**/.env.*"]
     }
   },
   "permissions": {
@@ -27,16 +27,5 @@
       "Read(**/*.pem)",
       "Read(**/*.key)"
     ]
-  },
-  "enabledPlugins": {
-    "superpowers@superpowers-dev": true
-  },
-  "extraKnownMarketplaces": {
-    "superpowers-dev": {
-      "source": {
-        "source": "git",
-        "url": "https://github.com/obra/superpowers.git"
-      }
-    }
   }
 }

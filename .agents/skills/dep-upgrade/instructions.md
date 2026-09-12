@@ -2,8 +2,7 @@
 
 ## 1. Breaking Changes Analysis
 
-Fetch the official migration guide via WebFetch. For each breaking change, grep `src/`, config files,
-and `package.json` to determine applicability. Produce two tables:
+Fetch the official migration guide via WebFetch. For each breaking change, grep `src/`, config files, and `package.json` to determine applicability. Produce two tables:
 
 **問題なし（対応不要）**
 
@@ -26,14 +25,12 @@ Key areas to check:
 
 ## 2. Companion Package Check
 
-Some packages must be upgraded together in the same commit to avoid version mismatch.
-Check `package.json` for known companion pairs:
+Some packages must be upgraded together in the same commit to avoid version mismatch. Check `package.json` for known companion pairs:
 
 - `@sveltejs/kit` + `@sveltejs/vite-plugin-svelte`
 - `eslint` + `@eslint/js`
 
-Also verify peer dependency compatibility (`"eslint": "^8 || ^9 || ^10"` style) for all
-related packages already installed.
+Also verify peer dependency compatibility (`"eslint": "^8 || ^9 || ^10"` style) for all related packages already installed.
 
 If companion packages are found, include them in the upgrade scope.
 
@@ -66,9 +63,6 @@ pnpm check
 pnpm test:unit
 ```
 
-> **`pnpm check` tip:** If type errors appear and you have uncommitted changes, run
-> `git stash && pnpm check 2>&1 | tail -5` to confirm whether errors are pre-existing.
-> Restore with `git stash pop`. If there is nothing to stash, skip this check — without
-> a baseline to compare against, it gives no useful signal.
+> **`pnpm check` tip:** If type errors appear and you have uncommitted changes, run `git stash && pnpm check 2>&1 | tail -5` to confirm whether errors are pre-existing. Restore with `git stash pop`. If there is nothing to stash, skip this check — without a baseline to compare against, it gives no useful signal.
 
 Update the plan.md `- [ ]` checklist and add a verification results table when done.

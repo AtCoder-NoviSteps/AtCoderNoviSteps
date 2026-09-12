@@ -1,6 +1,6 @@
 # ContestTableProvider 実装・テストガイド
 
-タスク一覧をコンテスト別テーブルとして描画するための `ContestTableProvider`（フィルタ条件 + メタデータ + レイアウト定義）を新規に追加するときのリファレンス。基底クラスは `ContestTableProviderBase`。TDD フロー・テスト規約は AGENTS.md、コーディングスタイルは `.claude/rules/` を参照。
+タスク一覧をコンテスト別テーブルとして描画するための `ContestTableProvider`（フィルタ条件 + メタデータ + レイアウト定義）を新規に追加するときのリファレンス。基底クラスは `ContestTableProviderBase`。TDD・コーディング規約は `AGENTS.md`、配置規約は `docs/guides/architecture.md` を参照。
 
 ---
 
