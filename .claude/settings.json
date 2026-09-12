@@ -20,6 +20,8 @@
       "Bash(gh release delete *)",
       "Bash(gh repo delete *)",
       "Bash(chmod 777 *)",
+      "Read(~/.ssh/**)",
+      "Read(~/.claude/.credentials.json)",
       "Read(**/.env)",
       "Read(**/.env.*)",
       "Read(**/secrets/**)",

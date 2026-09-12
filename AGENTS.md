@@ -23,17 +23,7 @@ Before adding a function, search `src/lib/utils/`, `src/lib/services/`, `src/fea
 
 SvelteKit 2 + Svelte 5 Runes + TypeScript | PostgreSQL + Prisma | Flowbite Svelte + Tailwind 4 | Vitest + Playwright | oxlint + ESLint
 
-| Layer            | Location                                        | Rule                                      |
-| ---------------- | ----------------------------------------------- | ----------------------------------------- |
-| Prisma           | `prisma/`                                       | Keep applied migrations immutable         |
-| Server           | `src/lib/server/`, `src/features/*/server/`     | Never import into client code             |
-| Zod              | `src/**/zod/`                                   | Validate at system boundaries             |
-| Types / fixtures | `src/**/types/`, `src/**/fixtures/`             | Keep domain-scoped assets with the domain |
-| Services         | `src/lib/services/`, `src/features/*/services/` | Framework-agnostic business logic         |
-| Utils            | `src/lib/utils/`, `src/features/*/utils/`       | Pure functions with adjacent tests        |
-| Stores           | `src/**/stores/`                                | Svelte runes in `.svelte.ts`              |
-| Routes           | `src/routes/`                                   | Thin HTTP and navigation boundary         |
-| Components       | `src/**/*.svelte`                               | Svelte 5 Runes; move business logic out   |
+Layers: `prisma/` | `src/**/server/` | `src/**/zod/` | `src/**/types/`, `src/**/fixtures/` | `src/**/services/` | `src/**/utils/` | `src/**/stores/` | `src/routes/` | `src/**/*.svelte`. Each layer's constraints are in the layer table of `coding-style.md`; read it before writing logic.
 
 - Put code used by one domain in `src/features/{feature}/`; put code shared by two or more domains in `src/lib/`.
 - Feature-to-feature imports are not allowed. Move shared code to `src/lib/`.

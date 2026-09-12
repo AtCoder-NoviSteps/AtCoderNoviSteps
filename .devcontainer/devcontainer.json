@@ -25,7 +25,7 @@
   // "shutdownAction": "none",
   //
   // Use 'initializeCommand' to run commands before the container is created.
-  "initializeCommand": "mkdir -p ~/.claude ~/.codex-devcontainer/AtCoderNoviSteps && chmod 700 ~/.codex-devcontainer ~/.codex-devcontainer/AtCoderNoviSteps && touch ~/.gitconfig",
+  "initializeCommand": "mkdir -p ~/.claude ~/.codex-devcontainer/AtCoderNoviSteps && touch ~/.gitconfig",
   //
   // Use 'postCreateCommand' to run commands after the container is created.
   "postCreateCommand": "bash .devcontainer/setup-devcontainer.sh",

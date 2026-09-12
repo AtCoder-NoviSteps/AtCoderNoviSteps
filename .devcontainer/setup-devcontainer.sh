@@ -6,13 +6,20 @@ npm install -g @anthropic-ai/claude-code || echo 'Claude Code CLI installation f
 
 npm install -g @openai/codex || echo 'OpenAI Codex CLI installation failed, continuing...'
 
-# Keep the mounted Codex state private. Project settings live in .codex/config.toml.
+# Keep the mounted Codex state private.
 # Non-blocking: a mount whose owner does not match must not stop `pnpm install` below.
-install -d -m 700 "${CODEX_HOME}" || echo "Could not secure ${CODEX_HOME}, continuing..."
+# A default is required because `set -u` aborts on an unset variable before `||` can run.
+codex_home="${CODEX_HOME:-/home/node/.codex}"
 
-if [[ -e "${CODEX_HOME}/auth.json" ]]; then
-  chmod 600 "${CODEX_HOME}/auth.json" || echo 'Could not secure the Codex auth file, continuing...'
+install -d -m 700 "${codex_home}" || echo "Could not secure ${codex_home}, continuing..."
+
+if [[ -e "${codex_home}/auth.json" ]]; then
+  chmod 600 "${codex_home}/auth.json" || echo 'Could not secure the Codex auth file, continuing...'
 fi
+
+# Codex reads project settings only from CODEX_HOME, so copy the repository source of truth
+# there. Overwriting on every setup keeps the two from drifting apart.
+install -m 600 .codex/config.toml "${codex_home}/config.toml" || echo 'Could not install the Codex project config, continuing...'
 
 # Install CodeRabbit CLI (continue if fails)
 curl -fsSL https://cli.coderabbit.ai/install.sh | sh || echo 'CodeRabbit CLI installation failed, continuing...'

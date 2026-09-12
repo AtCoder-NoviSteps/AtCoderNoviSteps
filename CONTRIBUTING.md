@@ -73,7 +73,7 @@
 - [RTK](https://github.com/rtk-ai/rtk) - AI コーディングアシスタント向けトークン最適化プロキシ
 - [CodeRabbit](https://coderabbit.ai/) - AI コードレビュー
 
-Claude Code と Codex は用途や利用可能な契約に応じて選択でき、同時利用は必須ではありません。共通規約は `AGENTS.md`、固有の設定は `docs/guides/claude-code.md` と `docs/guides/codex.md` を参照してください。Superpowers は必要な場合に導入します。
+Claude Code と Codex は用途や利用可能な契約に応じて選択でき、同時利用は必須ではありません。共通規約は `AGENTS.md`、固有の設定は `docs/guides/claude-code.md` と `docs/guides/codex.md` を参照してください。[Superpowers plugin](https://github.com/obra/superpowers) はプロジェクトでは有効化せず、必要な場合に各自で導入します。
 
 ### ホスティング、CI・CD関連
 
@@ -162,38 +162,24 @@ Claude Code と Codex は用途や利用可能な契約に応じて選択でき�
 
 #### (SSH で GitHub を利用する場合) ホスト側で鍵を ssh-agent へ登録
 
-秘密鍵はコンテナに mount せず、SSH agent forwarding でホストの `ssh-agent` に署名だけを依頼します。そのためホスト側での鍵の登録が前提で、未登録だとコンテナ内の Git 操作が `Permission denied (publickey)` で失敗します。HTTPS 利用時は不要です。
+秘密鍵はコンテナに mount せず、SSH agent forwarding でホストの `ssh-agent` に署名だけを依頼します。ホスト側で鍵が agent に載っていないと、コンテナ内の Git 操作が `Permission denied (publickey)` で失敗します。HTTPS 利用時は不要です。
 
-先に鍵ファイル名を確認してください。`id_ed25519` 以外の名前のこともあります。`.pub` が付かない方が秘密鍵です。
+ホストの `~/.ssh/config` に次を書いておくと、ホストで `ssh` を使うたびに鍵が自動で agent に載ります。`IdentityFile` は実際の鍵の path に置き換えてください（`ls -la ~/.ssh/` で確認。`.pub` が付かない方が秘密鍵）。
 
-```bash
-ls -la ~/.ssh/                    # ファイル一覧。NAME と NAME.pub のペアを探す
-grep -i identityfile ~/.ssh/config  # config があれば使用中の鍵が書かれている
-ssh-add -l                        # agent への登録状況
-```
-
-以下は鍵が `~/.ssh/id_ed25519` の場合の例です。ホスト側で一度だけ実行してください。
-
-| ホスト      | 登録コマンド                                                                                                                                    | 再起動後                              |
-| ----------- | ----------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------- |
-| macOS       | `ssh-add --apple-use-keychain ~/.ssh/id_ed25519`                                                                                                | Keychain から復元されるため再登録不要 |
-| Windows     | 初回のみ `Set-Service ssh-agent -StartupType Automatic; Start-Service ssh-agent`（既定で無効）。以降 `ssh-add $env:USERPROFILE\.ssh\id_ed25519` | サービスが保持するため再登録不要      |
-| Linux / WSL | `ssh-add ~/.ssh/id_ed25519`                                                                                                                     | agent が終了するため再登録が必要      |
-
-鍵が見つからない場合は、1Password などの外部 SSH agent を使っているか（`ssh-add` ではなくその agent の socket 転送設定が必要）、鍵が未作成です。未作成なら `ssh-keygen -t ed25519` で生成し、`~/.ssh/id_ed25519.pub` の内容を GitHub の Settings > SSH and GPG keys に登録します。
-
-`ssh-agent` はホスト側のプロセスなので、**コンテナを rebuild しても再登録は不要**です。
-
-上の手動登録の代わりに、ホストの `~/.ssh/config` に次を書いておく方法もあります。
-
-```
+```text
 Host *
   AddKeysToAgent yes              # ssh-add 相当を自動実行する
   UseKeychain yes                 # macOS のみ。passphrase を Keychain から読む
   IdentityFile ~/.ssh/id_ed25519
 ```
 
-ただし `AddKeysToAgent yes` が発火するのは**ホスト側で `ssh` を実行したとき**だけです。コンテナ内の `ssh` はホストの設定も鍵も読まず `ssh-agent` に問い合わせるだけなので、この設定があってもホストで一度も ssh を使っていなければ agent は空のままです。その場合はホストで `ssh -T git@github.com` を一度実行すれば登録され、転送済みの socket 経由でコンテナからも即座に見えます（rebuild 不要）。
+この設定が有効になるのは**ホストで `ssh` を実行したとき**だけです。コンテナ内の `ssh` はホストの設定も鍵も読まず agent に問い合わせるだけなので、ホストで一度 `ssh -T git@github.com` を実行して agent に載せてください。以降は転送済みの socket 経由でコンテナからも見えます。`ssh-agent` はホスト側のプロセスなので、**コンテナを rebuild するときには再登録不要**です。
+
+macOS では `ssh-agent` が launchd により自動起動するため、起動操作は不要です。Windows では `ssh-agent` サービスが既定で無効なため、初回だけ PowerShell で有効化します。
+
+```powershell
+Set-Service ssh-agent -StartupType Automatic; Start-Service ssh-agent
+```
 
 ### (共通) ローカルの開発サーバを起動
 
@@ -354,7 +340,7 @@ pnpm exec lefthook install
 
 - エラー: コンテナ内の `git fetch` / `git push` が `Permission denied (publickey)` で失敗する
   - 原因: ホストの `ssh-agent` に鍵が未登録。コンテナ内の `ssh-add -l` が `The agent has no identities` を返すかで判別できる
-  - 対処方法: ホストで `ssh -T git@github.com` を一度実行するか `ssh-add <秘密鍵のパス>` を実行する。詳細は「(SSH で GitHub を利用する場合) ホスト側で鍵を ssh-agent へ登録」を参照
+  - 対処方法: ホストで `ssh -T git@github.com` を一度実行する。詳細は「(SSH で GitHub を利用する場合) ホスト側で鍵を ssh-agent へ登録」を参照
   - Note: `~/.ssh/config` に `AddKeysToAgent yes` があってもホストで ssh を使うまで発火しない。rebuild では再登録は不要
 
 - エラー: ローカル環境で開発用サーバを立ち上げても、ブラウザに表示されない

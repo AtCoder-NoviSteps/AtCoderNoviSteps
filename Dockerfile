@@ -7,7 +7,7 @@ WORKDIR /usr/src/app
 COPY . /usr/src/app
 
 RUN apt-get update \
-    && apt-get -y install --no-install-recommends bubblewrap fish \
+    && apt-get -y install --no-install-recommends fish \
     && rm -rf /var/lib/apt/lists/*
 
 ENV NODE_PATH=/node_modules
