@@ -3,7 +3,7 @@
     "enabled": true,
     "allowUnsandboxedCommands": false,
     "filesystem": {
-      "denyRead": ["~/.ssh", "~/.claude/.credentials.json", "**/.env", "**/.env.*"]
+      "denyRead": ["~/.ssh", "~/.claude/.credentials.json", "~/.codex/auth.json", "**/.env", "**/.env.*"]
     }
   },
   "permissions": {
@@ -22,6 +22,7 @@
       "Bash(chmod 777 *)",
       "Read(~/.ssh/**)",
       "Read(~/.claude/.credentials.json)",
+      "Read(~/.codex/auth.json)",
       "Read(**/.env)",
       "Read(**/.env.*)",
       "Read(**/secrets/**)",
