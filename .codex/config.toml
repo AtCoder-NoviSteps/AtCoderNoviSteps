@@ -1,0 +1,31 @@
+approval_policy = "on-request"
+default_permissions = "project-edit"
+
+[permissions.project-edit]
+description = "Edit this project without exposing mounted credentials."
+extends = ":workspace"
+
+[permissions.project-edit.filesystem]
+glob_scan_max_depth = 8
+"~/.codex/auth.json" = "deny"
+"~/.claude/.credentials.json" = "deny"
+"~/.ssh/**" = "deny"
+
+# Keep the denied set aligned with `.claude/settings.json`. Both files are committed and
+# therefore apply to host clones and cloud agents, not only to this devcontainer.
+[permissions.project-edit.filesystem.":workspace_roots"]
+".env" = "deny"
+".env.*" = "deny"
+# A leading `**/` does not match a top-level path in every glob implementation, so the
+# bare and recursive forms are both listed on purpose.
+"**/.env" = "deny"
+"**/.env.*" = "deny"
+"**/secrets/**" = "deny"
+"**/config/credentials.json" = "deny"
+"**/*.pem" = "deny"
+"**/*.key" = "deny"
+
+[shell_environment_policy]
+inherit = "core"
+# Same as the current default; stated explicitly to pin the intent if that default ever changes.
+ignore_default_excludes = false

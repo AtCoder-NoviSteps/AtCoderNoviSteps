@@ -3,7 +3,13 @@
     "enabled": true,
     "allowUnsandboxedCommands": false,
     "filesystem": {
-      "denyRead": ["~/.ssh"]
+      "denyRead": [
+        "~/.ssh",
+        "~/.claude/.credentials.json",
+        "~/.codex/auth.json",
+        "**/.env",
+        "**/.env.*"
+      ]
     }
   },
   "permissions": {
@@ -20,6 +26,9 @@
       "Bash(gh release delete *)",
       "Bash(gh repo delete *)",
       "Bash(chmod 777 *)",
+      "Read(~/.ssh/**)",
+      "Read(~/.claude/.credentials.json)",
+      "Read(~/.codex/auth.json)",
       "Read(**/.env)",
       "Read(**/.env.*)",
       "Read(**/secrets/**)",
@@ -27,16 +36,5 @@
       "Read(**/*.pem)",
       "Read(**/*.key)"
     ]
-  },
-  "enabledPlugins": {
-    "superpowers@superpowers-dev": true
-  },
-  "extraKnownMarketplaces": {
-    "superpowers-dev": {
-      "source": {
-        "source": "git",
-        "url": "https://github.com/obra/superpowers.git"
-      }
-    }
   }
 }

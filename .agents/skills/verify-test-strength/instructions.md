@@ -36,4 +36,4 @@ Read stdout from `--reporter=default` / `--reporter=verbose`. **Never read a cac
 - **A test catching nothing that other tests miss** — a deletion candidate. Confirm by re-running the full mutant set without it.
 - **N tests failing on one mutant** — not N times the value. Parameterized cases over one fixture usually report the same fact N times; the count is a proxy, not evidence.
 
-Record the matrix in the commit message or `plan.md` when it justifies removing tests — it is the evidence `.claude/rules/testing.md` requires for a deliberate test-count drop.
+Record the matrix in the commit message or `plan.md` when it justifies removing tests — it is the evidence `docs/guides/agent-rules/testing.md` requires for a deliberate test-count drop.

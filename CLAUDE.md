@@ -5,5 +5,5 @@
 ## Claude Code Specific
 
 - Path-specific rules are in `.claude/rules/`
-- Run `pnpm format` before committing
-- When uncertain about project conventions, see existing code in `src/lib/`
+- Project-specific workflows are symlinked from `.agents/skills/` into `.claude/skills/`
+- Setup details are in `docs/guides/claude-code.md`

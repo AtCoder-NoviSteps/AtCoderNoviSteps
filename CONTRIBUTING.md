@@ -68,12 +68,12 @@
 
 ### AI 支援ツール
 
-- [Claude Code](https://docs.anthropic.com/en/docs/claude-code) - AI コーディングアシスタント（VS Code 拡張: `anthropic.claude-code`）
-  - [superpowers plugin](https://github.com/obra/superpowers) - `/writing-plans` スキルによる実装前の詳細計画生成
-  - [RTK](https://github.com/rtk-ai/rtk) - AI コーディングアシスタント向けトークン最適化プロキシ（60–90% 削減）
+- [Claude Code](https://docs.anthropic.com/en/docs/claude-code)（VS Code 拡張: `anthropic.claude-code`）
+- [Codex](https://developers.openai.com/codex/)（VS Code 拡張: `openai.chatgpt`）
+- [RTK](https://github.com/rtk-ai/rtk) - AI コーディングアシスタント向けトークン最適化プロキシ
 - [CodeRabbit](https://coderabbit.ai/) - AI コードレビュー
-  - CodeRabbit CLI (`coderabbit review --plain`) — milestone 区切りでのローカルレビュー
-  - CodeRabbit CI — PR 作成後の自動レビュー（最終品質ゲート）
+
+Claude Code と Codex は用途や利用可能な契約に応じて選択でき、同時利用は必須ではありません。共通規約は `AGENTS.md`、固有の設定は `docs/guides/claude-code.md` と `docs/guides/codex.md` を参照してください。[Superpowers plugin](https://github.com/obra/superpowers) はプロジェクトでは有効化せず、必要な場合に各自で導入します。
 
 ### ホスティング、CI・CD関連
 
@@ -160,6 +160,27 @@
    - Windows: `Ctrl + Shift + P`
 3. ローカルサーバを動作させるために必要な環境が自動的に構築され、VS Codeの拡張機能もインストールされます。
 
+#### (SSH で GitHub を利用する場合) ホスト側で鍵を ssh-agent へ登録
+
+秘密鍵はコンテナに mount せず、SSH agent forwarding でホストの `ssh-agent` に署名だけを依頼します。ホスト側で鍵が agent に載っていないと、コンテナ内の Git 操作が `Permission denied (publickey)` で失敗します。HTTPS 利用時は不要です。
+
+ホストの `~/.ssh/config` に次を書いておくと、ホストで `ssh` を使うたびに鍵が自動で agent に載ります。`IdentityFile` は実際の鍵の path に置き換えてください（`ls -la ~/.ssh/` で確認。`.pub` が付かない方が秘密鍵）。
+
+```text
+Host *
+  AddKeysToAgent yes              # ssh-add 相当を自動実行する
+  UseKeychain yes                 # macOS のみ。passphrase を Keychain から読む
+  IdentityFile ~/.ssh/id_ed25519
+```
+
+この設定が有効になるのは**ホストで `ssh` を実行したとき**だけです。コンテナ内の `ssh` はホストの設定も鍵も読まず agent に問い合わせるだけなので、ホストで一度 `ssh -T git@github.com` を実行して agent に載せてください。以降は転送済みの socket 経由でコンテナからも見えます。`ssh-agent` はホスト側のプロセスなので、**コンテナを rebuild するときには再登録不要**です。
+
+macOS では `ssh-agent` が launchd により自動起動するため、起動操作は不要です。Windows では `ssh-agent` サービスが既定で無効なため、初回だけ PowerShell で有効化します。
+
+```powershell
+Set-Service ssh-agent -StartupType Automatic; Start-Service ssh-agent
+```
+
 ### (共通) ローカルの開発サーバを起動
 
 - 新しいターミナルを開いてください。
@@ -243,11 +264,15 @@
 
   `pnpm dev`
 
-- 文法・フォーマットの確認および自動修正
+- フォーマットの自動修正と、全PRで必須の機械的検証
+
+  `pnpm format`
 
   `pnpm lint`
 
-  `pnpm format`
+  `pnpm check`
+
+  `pnpm test:unit`
 
 - アプリの製品バージョンの作成と動作確認
 
@@ -272,6 +297,8 @@
 4. プルリクエストを作成する前に、加筆・修正した内容を確認します。
 
    `git diff origin <your-current-branch>`
+
+   CI の build、lint、check、unit test は全PRで必須です。AI 主導の非軽微な変更では、30ファイル以上の編集、認証・認可・秘密情報、DB schema・migration・データ変換、共通 architecture・公開 interface のいずれかを変更した場合に、実装した agent とは別の agent でレビューします。この条件に該当しない軽微な変更のAIレビューは任意です。別 agent を利用できない場合は `coderabbit review --plain` で代用できます。指摘は自動修正せず、対応項目を選んでから修正します。
 
 5. 本レポジトリに更新内容を反映させます。
 
@@ -310,6 +337,10 @@ pnpm exec lefthook install
 これにより、古い husky の設定をクリアして lefthook に切り替わります。
 
 ### トラブルシューティング
+
+- エラー: コンテナ内の `git fetch` / `git push` が `Permission denied (publickey)` で失敗する
+  - 原因: ホストの `ssh-agent` に鍵が未登録。コンテナ内の `ssh-add -l` が `The agent has no identities` を返すかで判別できる
+  - 対処方法: ホストで `ssh -T git@github.com` を一度実行する。手順と注意点は「(SSH で GitHub を利用する場合) ホスト側で鍵を ssh-agent へ登録」を参照
 
 - エラー: ローカル環境で開発用サーバを立ち上げても、ブラウザに表示されない
   - 前提条件: Docker Desktop 4.30.0 以上、かつ、VSCode DevContainer で Vite を動かす場合。Windows、macOS で発生する

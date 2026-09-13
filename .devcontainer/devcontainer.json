@@ -7,8 +7,8 @@
   // Use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
   "dockerComposeFile": ["../compose.yaml"],
   "mounts": [
-    "source=${localEnv:HOME}/.ssh,target=/home/node/.ssh,type=bind,consistency=cached",
     "source=${localEnv:HOME}/.claude,target=/home/node/.claude,type=bind,consistency=cached",
+    "source=${localEnv:HOME}/.codex-devcontainer/AtCoderNoviSteps,target=/home/node/.codex,type=bind,consistency=cached",
     "source=${localEnv:HOME}/.gitconfig,target=/home/node/.gitconfig,type=bind,consistency=cached"
   ],
   // Features to add to the dev container. More info: https://containers.dev/features.
@@ -25,7 +25,7 @@
   // "shutdownAction": "none",
   //
   // Use 'initializeCommand' to run commands before the container is created.
-  "initializeCommand": "mkdir -p ~/.claude && touch ~/.gitconfig",
+  "initializeCommand": "mkdir -p ~/.claude ~/.codex-devcontainer/AtCoderNoviSteps && touch ~/.gitconfig",
   //
   // Use 'postCreateCommand' to run commands after the container is created.
   "postCreateCommand": "bash .devcontainer/setup-devcontainer.sh",
@@ -76,7 +76,8 @@
           "editor.defaultFormatter": "Prisma.prisma"
         },
         "[markdown]": {
-          "editor.formatOnSave": false
+          "editor.formatOnSave": false,
+          "editor.wordWrap": "on"
         },
         "svelte.enable-ts-plugin": true
       },
@@ -89,6 +90,7 @@
         "esbenp.prettier-vscode",
         "formulahendry.auto-rename-tag",
         "ms-playwright.playwright",
+        "openai.chatgpt",
         "Prisma.prisma",
         "streetsidesoftware.code-spell-checker",
         "svelte.svelte-vscode",
@@ -98,7 +100,8 @@
   },
   "containerEnv": {
     "NODE_OPTIONS": "--max-old-space-size=4096 --dns-result-order=ipv4first",
-    "CLAUDE_CONFIG_DIR": "/home/node/.claude"
+    "CLAUDE_CONFIG_DIR": "/home/node/.claude",
+    "CODEX_HOME": "/home/node/.codex"
   }
   //
   // Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.

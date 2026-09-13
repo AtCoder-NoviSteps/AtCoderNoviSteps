@@ -2,115 +2,97 @@
 
 A web service for tracking submissions on AtCoder and other competitive programming sites, which are graded by difficulty (Q11-D6).
 
-## Guidelines
+## Principles
 
-Always prefer simplicity over pathological correctness. YAGNI, KISS, DRY. No backward-compat shims or fallback paths unless they come free without adding cyclomatic complexity.
+- Prefer simple designs: YAGNI, KISS, DRY.
+- Do not add compatibility shims or fallback paths unless they are effectively free.
+- Write plans and dev notes in Japanese. Write source comments, test names, and commits in English.
+- Write Markdown with one semantic paragraph or list item per line; rely on editor soft wrapping instead of width-based hard line breaks.
 
-**When implementing:**
+## Implementation Workflow
 
-1. Use `/writing-plans` to generate a phased plan (lower risk → higher risk order). Store the plan at `docs/dev-notes/YYYY-MM-DD/{task-name-en}/plan.md`. Split into `phase-N.md` files when the plan exceeds 200 lines or has 5+ phases. Each plan must include: overview, design rationale, rejected alternatives, and a per-phase summary. Write plans in Japanese; source code comments in English. Verify each task before starting:
-   - Which layer? (prisma / server / zod / types / fixtures / services / utils / stores / routes / components) — split if 2+ layers
-   - Single responsibility: one purpose per task
-   - Existing util/service/type? Search before creating
-   - Test name: state it in the task description
-2. Before writing a new function, search `src/lib/utils/`, `src/lib/services/`, `src/features/*/utils/` and `src/features/*/services/` for existing implementations; extract shared logic there when it appears in 2+ places
-3. Write tests first, then implement production code, then verify with `pnpm test:unit`
-4. Review critically after implementing: flag YAGNI violations, over-abstraction, missing tests
-5. After all phases complete (feature and refactor branches only — not hotfixes or dependency bumps): run a mandatory refactor cycle. Write to `plan.md`: novel lessons (implementation blockers, non-obvious patterns not already in rules) and remaining tasks. Discard `phase-N.md` files. Run `coderabbit review --plain`; write all findings of `critical` / `high` / `potential_issue` (medium) to a `## CodeRabbit Findings` section in `plan.md`. The user decides which to fix before opening a PR; do not fix any finding unilaterally. `nitpick` findings defer to PR CI.
-6. Run `/session-close` at the end of feature and refactor branches (not hotfixes, deps bumps, or single-session fixes): updates plan checklist, proposes rule/skill additions, checks for bloat, and detects repeated instructions
+1. Before implementation, create a lower-risk-to-higher-risk phased plan at `docs/dev-notes/YYYY-MM-DD/{task-name-en}/plan.md`. Keep it concise without omitting the overview, design rationale, rejected alternatives, or per-phase summary; split it only when that makes the plan easier to understand. For new features, show the proposed signatures of key functions and interfaces, and the props and events contracts of key components.
+2. Planning does not authorize implementation. Wait for explicit approval such as "implement" or "let's start".
+3. Before each task, identify its layer and single responsibility, search for an existing util/service/type, and state the test name. Split tasks that span multiple layers.
+4. Write tests first, implement production code, then run `pnpm test:unit`. Configuration, documentation, type-only changes, and exploratory spikes may skip test-first when they have no branching behavior.
+5. Review the result for YAGNI violations, over-abstraction, and missing tests.
 
-**Plan Approval ≠ Implementation Start:** Generating a plan (`/writing-plans`) does NOT authorize implementation. Always:
+Before adding a function, search `src/lib/utils/`, `src/lib/services/`, `src/features/*/utils/`, and `src/features/*/services/`. Extract shared logic when it is used in two or more places.
 
-- Wait for explicit user consent ("let's start", "implement", etc.)
-- Use AskUserQuestion before starting if requirements are ambiguous (data model, preferences, test scope, etc.)
+## Architecture
 
-## Working with the User
+SvelteKit 2 + Svelte 5 Runes + TypeScript | PostgreSQL + Prisma | Flowbite Svelte + Tailwind 4 | Vitest + Playwright | oxlint + ESLint
 
-### Communication
+Layers: `prisma/` | `src/**/server/` | `src/**/zod/` | `src/**/types/`, `src/**/fixtures/` | `src/**/services/` | `src/**/utils/` | `src/**/stores/` | `src/routes/` | `src/**/*.svelte`. Each layer's constraints are in the layer table of `coding-style.md`; read it before writing logic.
 
-- **No social pleasantries:** Skip opening remarks like "お疲れ様です", "了解しました", "ありがとうございます"
-- **Direct & concise:** Lead with substance (findings, next steps, decisions)
-- **Task-focused:** Avoid flattery, apologizing, or performative agreement
-- **Respect the work:** Speak plainly about tradeoffs and real issues; don't sugar-coat
+- Put code used by one domain in `src/features/{feature}/`; put code shared by two or more domains in `src/lib/`.
+- Feature-to-feature imports are not allowed. Move shared code to `src/lib/`.
+- Route-local `_components/`, `_types/`, `_fixtures/`, and `_utils/` are exceptions for an admin page whose code is tightly coupled to that route's authorization or layout.
+- Services return data or `null`; they never call `error()`, `redirect()`, or return HTTP responses. Routes translate service results into HTTP behavior.
+- Route handlers do not import Prisma directly.
+- Use `$props()`, `$state()`, and `$derived()` in new Svelte components.
+- Load server data in `+page.server.ts` and consume it through the `data` prop.
+- Use Superforms with Zod for forms.
 
-### Responding to Feedback
+See `docs/guides/architecture.md` for detailed placement rules.
 
-- **Verify before accepting:** Check for misunderstanding, missing context, or counterpoints
-- **Question, don't defer:** Ask clarifying questions or offer alternatives with reasoning—don't blindly follow
+## Path-specific Rules
 
-### Critical Review as Default
+Before planning or changing a matching path, read the corresponding document under `docs/guides/agent-rules/`.
 
-When proposing approaches, designs, or solutions:
+| Path                                 | Rules                                                         |
+| ------------------------------------ | ------------------------------------------------------------- |
+| All source and plans                 | `coding-style.md`                                             |
+| `prisma/**`, server and service code | `prisma-db.md`                                                |
+| `**/*.test.ts`, `src/test/**`        | `testing.md`                                                  |
+| `**/*.spec.ts`, `e2e/**`             | `testing-e2e.md`                                              |
+| Svelte components and stores         | `svelte-components.md`, `svelte-runes.md`, `accessibility.md` |
+| SvelteKit routes                     | `sveltekit.md`                                                |
+| Authentication and admin paths       | `auth.md`                                                     |
+| Server cache modules                 | `server-cache.md`                                             |
+| `.github/workflows/**`               | `github-actions.md`                                           |
 
-- **Lead with the proposal:** State the recommendation clearly
-- **Then critique it:** Point out tradeoffs, risks, limitations, and when it fails
-- **Offer alternatives:** Present 2–3 viable options with reasoning for each
-- **Let user decide:** Don't pretend one option is obviously best if it isn't
+Use project-specific workflows from `.agents/skills/` when a task matches a skill description. Each `.agents/skills/<name>/instructions.md` is a plain Markdown checklist — read it directly when doing that task by hand, not only when an agent loads it automatically.
 
-## Tech Stack
+| Skill                        | Purpose                                          |
+| ---------------------------- | ------------------------------------------------ |
+| `add-contest-table-provider` | Add a ContestType / ContestTableProvider via TDD |
+| `dep-upgrade`                | Analyze and execute a major dependency upgrade   |
+| `extract-approach`           | Extract learnings from a just-solved problem     |
+| `verify-test-strength`       | Verify test detection power via mutation testing |
 
-SvelteKit 2 + Svelte 5 (Runes) + TypeScript | PostgreSQL + Prisma | Flowbite Svelte + Tailwind 4 | Vitest + Playwright | oxlint (JS/TS) + ESLint (Svelte)
+Add a row here whenever a skill is added, renamed, or removed.
+
+## Testing
+
+Test layout, mocking, and assertion rules are in `testing.md` and `testing-e2e.md`. Use `@quramy/prisma-fabbrica` only in `prisma/seed.ts`, never in service unit tests.
 
 ## Commands
 
+Scripts are defined in `package.json`; run them with `pnpm <script>` (`dev`, `build`, `test`, `test:unit`, `test:e2e`, `coverage`, `lint`, `format`, `check`, `db:seed`). Prisma commands are not scripts:
+
 ```bash
-pnpm dev              # Start dev server (localhost:5174)
-pnpm build            # Build for production
-pnpm test             # Run all tests
-pnpm test:unit        # Vitest unit tests
-pnpm test:e2e         # Playwright E2E tests
-pnpm coverage         # Report test coverage
-pnpm lint             # Prettier + oxlint (JS/TS) + ESLint (.svelte) check
-pnpm format           # Prettier format
-pnpm check            # Svelte type check
-pnpm exec prisma generate           # Generate Prisma client
-pnpm exec prisma migrate dev --name # Create migration (with description)
-pnpm db:seed          # Seed database
+pnpm exec prisma generate
+pnpm exec prisma migrate dev --name <description>
 ```
 
-## Project Structure
+Lefthook runs Prettier, oxlint for JS/TS, and ESLint for Svelte before commit.
 
-```md
-src/routes/ # SvelteKit file-based routing
-src/lib/
-├── actions/ # SvelteKit actions
-├── clients/ # External API clients (AtCoder Problems, AOJ)
-├── components/ # Svelte components
-├── constants/
-├── server/ # Server-only (auth.ts, database.ts)
-├── services/ # Business logic
-├── stores/ # Svelte stores (.svelte.ts with Runes)
-├── types/ # TypeScript types
-├── utils/ # Pure utility functions
-└── zod/ # Validation schemas
-src/features/ # Feature-scoped code (single domain)
-├── {feature}/
-│ ├── components/ # Feature UI (list/, detail/, shared/)
-│ ├── fixtures/ # Test data
-│ ├── services/ # Feature business logic (CRUD via Prisma)
-│ │ └── _.test.ts # Tests co-located next to source (not in src/test/)
-│ ├── stores/ # Feature stores
-│ ├── types/ # Feature types
-│ └── utils/ # Feature utilities
-│ └── _.test.ts # Tests co-located next to source
-src/test/ # Unit tests (mirrors src/lib/)
-e2e/ # E2E tests (Playwright)
-prisma/schema.prisma # Database schema
-```
+## Verification and Cross-review Before a PR
 
-## Key Conventions
+Every PR must pass the CI build, lint, type/Svelte check, and unit test jobs. Before handing work off, run `pnpm format`, `pnpm lint`, `pnpm check`, relevant tests, and `git diff --check`.
 
-- **Svelte 5 Runes**: Use `$props()`, `$state()`, `$derived()` in all new components
-- **Service layer**: Services return data or `null`; never call `error()` or `redirect()`. HTTP error translation belongs in the route handler — the service must stay framework-agnostic and unit-testable.
-- **Server data**: `+page.server.ts` → `+page.svelte` via `data` prop
-- **Forms**: Superforms + Zod validation
-- **Tests**: Write tests before implementation (TDD). Use `@quramy/prisma-fabbrica` for factories only in `prisma/seed.ts`. For service-layer unit tests, mock the DB with `vi.mock('$lib/server/database', ...)` — do not use fabbrica there. Use Nock for HTTP mocking
-- **Naming**: `camelCase` variables, `PascalCase` types/components, `snake_case` files/routes, `kebab-case` directories
-- **Pre-commit**: Lefthook runs Prettier + oxlint (JS/TS) + ESLint (.svelte only) (bypass: `LEFTHOOK=0 git commit`)
+Cross-review is required for AI-led non-trivial changes when any of these apply:
+
+- 30 or more hand-edited source, test, or configuration files
+- Authentication, authorization, or secret handling changes
+- DB schema, migrations, or data transformations
+- Shared architecture or public interface changes
+
+Exclude typo-only, formatting-only, generated, lockfile, snapshot, and other trivial changes from the file count. AI review is optional for changes outside these conditions because the mechanical gate still applies. Codex-led work is reviewed with Claude; Claude-led work is reviewed with Codex. If the other agent is unavailable, use `coderabbit review --plain`. Do not fix review findings without the user's selection; prioritize Critical/Severe findings when recording them in a plan.
 
 ## References
 
-- See `package.json` for versions and scripts
-- See `prisma/schema.prisma` for database models
-- See `docs/guides/` for detailed documentation
-- See `docs/guides/architecture.md` for directory structure and colocation guide
+- `package.json`: dependency versions and scripts
+- `prisma/schema.prisma`: database models
+- `docs/guides/`: detailed project guides

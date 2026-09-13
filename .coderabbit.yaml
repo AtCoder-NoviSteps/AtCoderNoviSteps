@@ -29,7 +29,7 @@ reviews:
     # --- Schema / validation ---
     - path: 'src/**/zod/**'
       instructions: |
-        - Use `z.number().int().positive()` for Prisma `Int` fields (not `z.number().positive()`, which passes decimals).
+        - Use `z.number().int()` for Prisma `Int` fields (not `z.number().positive()`, which passes decimals); add `.positive()` only where the domain requires a positive value.
         - When a Zod constraint mirrors a SQL CHECK, add an inline comment noting both layers and the obligation to keep them in sync.
     # --- Domain types ---
     - path: 'src/**/*types/**'
