@@ -31,7 +31,7 @@ All internal navigation must use `resolve()` from `$app/paths`:
 
 - Setting the header only when logged out controls the write side, not delivery of an already-cached entry to a request with a session cookie.
 - `Vary: Cookie` matches the whole header; with `_ga` present every returning visitor gets a unique key and the cache barely hits.
-- No `s-maxage` means no CDN caching, so `private` / `no-store` are unnecessary (YAGNI).
+- The absence of `s-maxage` is not proof a shared cache won't store the response — RFC 9111 allows heuristic freshness without explicit directives. For session-dependent routes, set `private` or `no-store` explicitly rather than relying on omission; skip them only when the response genuinely doesn't depend on session.
 - Estimate the saved invocations first. At this site's traffic the `/problems` header saved single-digit dollars a month and cost two weeks of a production bug.
 
 ## Form Data Validation

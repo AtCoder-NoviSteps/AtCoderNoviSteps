@@ -38,6 +38,7 @@ Use `$props()`, `$state()`, `$derived()`, `$effect()` in all components:
 
 - Always key: `(item.id)` or `(i)`
 - **Key MUST be unique per iteration** — if domain allows duplicates, use composite key (e.g. `contest_id + '-' + task_id`)
+- `(i)` is only safe when the list's order and length never change (e.g. a fixed split of a string into lines). For a mutable list — reorderable, insertable, or deletable — use a persistent unique ID or composite key; `(i)` there causes Svelte to reuse DOM/state across the wrong items after a mutation.
 - Filter **before**, not inside with `{#if}`
 - Use `{:else}` for empty lists
 

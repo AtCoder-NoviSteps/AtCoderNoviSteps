@@ -84,7 +84,7 @@ When removing a dependency or renaming a symbol, sweep the **whole repo**, not j
 - No user-identifiable data in logs
 - No Prisma imports in route handlers
 - Validate input at system boundaries
-- Return safe defaults on service errors
+- Convert expected domain errors (e.g. Prisma `P2025`) to safe default values; re-throw unexpected service errors (see prisma-db.md Service Layer Error Handling)
 
 ## Comments: Why, Not What
 

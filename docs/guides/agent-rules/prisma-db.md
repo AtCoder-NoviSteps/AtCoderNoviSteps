@@ -20,8 +20,9 @@ paths:
 
 ## Server-Only Code
 
-- Import DB client only in `src/lib/server/` via `$lib/server/database`
-- Never import server code in client components
+- Import the DB client (`$lib/server/database`) only in `src/lib/server/**` and in server-only services under `src/lib/services/**` and `src/features/**/services/**`
+- Route handlers must not import the DB client directly — call service methods instead
+- Never import server-only code in client components
 
 ## Service Layer
 
@@ -72,7 +73,7 @@ Prefer `createMany({ skipDuplicates: true })` over catching P2002 for expected u
 
 ## Zod Schema for Int Fields
 
-`z.number().positive()` passes decimals. For Prisma `Int` fields use `z.number().int().positive()`.
+`z.number().positive()` passes decimals. For Prisma `Int` fields default to `z.number().int()`, adding `.positive()` only where the domain explicitly requires a positive value (e.g. a 1-based `priority`) — many `Int` fields (e.g. a `count` guarded by `CHECK count >= 0`) allow zero.
 
 ## Relation Filter Exclusion
 
@@ -132,9 +133,14 @@ ALTER TABLE "votedgradecounter" ADD CONSTRAINT ...
 
 When a migration leaves `finished_at = NULL` in `_prisma_migrations`:
 
-1. **Delete the broken migration file** from git (`git rm -r prisma/migrations/<name>/`) — leaving it causes `migrate dev` to fail on other machines.
-2. Mark it as rolled back: `pnpm exec prisma migrate resolve --rolled-back <name>`
-3. Create a **new migration with a new timestamp** containing the corrected SQL and deploy it.
+**Shared environments** (staging/production, or any DB other developers also migrate):
+
+1. Keep the migration directory — other machines already have it; deleting it causes drift.
+2. Manually roll back whatever the failed migration partially applied.
+3. Mark it as rolled back: `pnpm exec prisma migrate resolve --rolled-back <name>`
+4. Create a **new migration with a new timestamp** containing the corrected SQL and deploy it.
+
+**Local-only database** (no one else depends on its migration history): reset the database (`pnpm exec prisma migrate reset`) and recreate the migration as needed.
 
 A `--rolled-back` migration is permanently skipped by `migrate deploy`; fixing the original file has no effect.
 
