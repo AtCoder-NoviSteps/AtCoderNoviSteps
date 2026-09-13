@@ -113,7 +113,7 @@ overrides:
   undici@>=5.0.0 <5.28.5: 5.29.0
   undici@>=6.0.0 <6.27.0: 6.28.1
   undici@>=7.0.0 <7.28.0: 7.29.1
-  effect@>=3.0.0 <3.20.0: 3.22.1
+  effect@>=3.0.0 <3.20.0: 3.22.2
   defu@<6.1.5: 6.1.7
   devalue@<5.8.1: 5.9.2
   ajv@>=8.0.0 <8.18.0: 8.20.0
@@ -2557,8 +2557,8 @@ packages:
   effect@3.21.4:
     resolution: {integrity: sha512-B89v/xSgPbl1J2Ai2u18jxq3odpFauU1rC6/eSs4FeNHi72kwKdJp12VGigvRV2lK+kRnx+OOz41XV8guZd4gQ==}
 
-  effect@3.22.1:
-    resolution: {integrity: sha512-TNoXushmPOBAjJlthF5d2QwnX2xBPEtcNJr5XKNKbRLbDvBcOYkXlYDfvGfSA0zriwLFuCll5MDtNMAdZL17PQ==}
+  effect@3.22.2:
+    resolution: {integrity: sha512-fm1CQXCs7GTMwpadZxwU5rnAb2bN6mbQpknq/pXBGCzSKkosNYb9k0wsoL0TfB10rSa5xOEZJjo77u/KLXSANg==}
 
   empathic@2.0.0:
     resolution: {integrity: sha512-i6UzDscO/XfAcNYD75CfICkmfLedpyPDdozrLMmQc5ORaQcdMoc21OnlEylMIqI7U8eniKrPMxxtj8k0vhmJhA==}
@@ -5190,7 +5190,7 @@ snapshots:
     dependencies:
       c12: 3.1.0
       deepmerge-ts: 7.1.5
-      effect: 3.22.1
+      effect: 3.22.2
       empathic: 2.0.0
     transitivePeerDependencies:
       - magicast
@@ -6451,7 +6451,7 @@ snapshots:
       fast-check: 3.23.2
     optional: true
 
-  effect@3.22.1:
+  effect@3.22.2:
     dependencies:
       '@standard-schema/spec': 1.1.0
       fast-check: 3.23.2
