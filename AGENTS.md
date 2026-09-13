@@ -52,7 +52,16 @@ Before planning or changing a matching path, read the corresponding document und
 | Server cache modules                 | `server-cache.md`                                             |
 | `.github/workflows/**`               | `github-actions.md`                                           |
 
-Use project-specific workflows from `.agents/skills/` when a task matches a skill description.
+Use project-specific workflows from `.agents/skills/` when a task matches a skill description. Each `.agents/skills/<name>/instructions.md` is a plain Markdown checklist — read it directly when doing that task by hand, not only when an agent loads it automatically.
+
+| Skill                         | Purpose                                             |
+| ------------------------------ | ---------------------------------------------------- |
+| `add-contest-table-provider`   | Add a ContestType / ContestTableProvider via TDD    |
+| `dep-upgrade`                  | Analyze and execute a major dependency upgrade      |
+| `extract-approach`             | Extract learnings from a just-solved problem        |
+| `verify-test-strength`         | Verify test detection power via mutation testing    |
+
+Add a row here whenever a skill is added, renamed, or removed.
 
 ## Testing
 

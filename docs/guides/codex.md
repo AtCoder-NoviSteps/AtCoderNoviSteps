@@ -7,6 +7,7 @@
 - 共通設定は原本 [.codex/config.toml](../../.codex/config.toml) だけで管理する。CLIとVS Code拡張が直接読み、trusted projectではuser設定より優先される。コピーや別のlocal設定fileは作らない。
 - `$CODEX_HOME/config.toml` は個人のmodel設定、trust、TUI状態の保存用とし、共通設定を重複させない。
 - devcontainerではhostの `~/.codex-devcontainer/AtCoderNoviSteps` を `/home/node/.codex`（`CODEX_HOME`）へmountする。CLIと拡張の認証・sessionなどを共有し、rebuild後も保持する。hostの通常の `~/.codex` とは分離する。
+- CodexにはClaude Codeの `.claude/skills/` のようなsymlink層はない（`.codex/skills/` は存在しない）。project固有workflowは正本 `.agents/skills/<name>/instructions.md` を直接参照する。
 
 ## 実行権限
 
