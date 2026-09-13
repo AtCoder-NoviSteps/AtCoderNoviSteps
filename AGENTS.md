@@ -56,27 +56,15 @@ Use project-specific workflows from `.agents/skills/` when a task matches a skil
 
 ## Testing
 
-- Co-locate feature and utility tests with their source. Existing shared tests may remain in `src/test/`; E2E tests live in `e2e/`.
-- Mock the DB in service tests with `vi.mock('$lib/server/database', ...)`.
-- Use `@quramy/prisma-fabbrica` only in `prisma/seed.ts`, not service unit tests.
-- Use Nock for HTTP mocking.
-- Use realistic fixtures and literal expected values; never compute expectations with the code under test.
+Test layout, mocking, and assertion rules are in `testing.md` and `testing-e2e.md`. Use `@quramy/prisma-fabbrica` only in `prisma/seed.ts`, never in service unit tests.
 
 ## Commands
 
+Scripts are defined in `package.json`; run them with `pnpm <script>` (`dev`, `build`, `test`, `test:unit`, `test:e2e`, `coverage`, `lint`, `format`, `check`, `db:seed`). Prisma commands are not scripts:
+
 ```bash
-pnpm dev
-pnpm build
-pnpm test
-pnpm test:unit
-pnpm test:e2e
-pnpm coverage
-pnpm lint
-pnpm format
-pnpm check
 pnpm exec prisma generate
 pnpm exec prisma migrate dev --name <description>
-pnpm db:seed
 ```
 
 Lefthook runs Prettier, oxlint for JS/TS, and ESLint for Svelte before commit.

@@ -1,3 +1,5 @@
+<!-- No `paths` frontmatter on purpose: this rule applies to all source and plans, so it must be loaded at all times. The other rules in this directory are path-scoped. -->
+
 # Coding Style
 
 ## Pre-Implementation Layer Check

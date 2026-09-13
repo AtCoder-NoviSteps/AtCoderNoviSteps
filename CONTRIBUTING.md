@@ -340,8 +340,7 @@ pnpm exec lefthook install
 
 - エラー: コンテナ内の `git fetch` / `git push` が `Permission denied (publickey)` で失敗する
   - 原因: ホストの `ssh-agent` に鍵が未登録。コンテナ内の `ssh-add -l` が `The agent has no identities` を返すかで判別できる
-  - 対処方法: ホストで `ssh -T git@github.com` を一度実行する。詳細は「(SSH で GitHub を利用する場合) ホスト側で鍵を ssh-agent へ登録」を参照
-  - Note: `~/.ssh/config` に `AddKeysToAgent yes` があってもホストで ssh を使うまで発火しない。rebuild では再登録は不要
+  - 対処方法: ホストで `ssh -T git@github.com` を一度実行する。手順と注意点は「(SSH で GitHub を利用する場合) ホスト側で鍵を ssh-agent へ登録」を参照
 
 - エラー: ローカル環境で開発用サーバを立ち上げても、ブラウザに表示されない
   - 前提条件: Docker Desktop 4.30.0 以上、かつ、VSCode DevContainer で Vite を動かす場合。Windows、macOS で発生する

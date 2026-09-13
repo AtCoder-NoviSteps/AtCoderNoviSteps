@@ -1,26 +1,30 @@
 # Claude Code 設定ガイド
 
-共通の開発規約はルートの `AGENTS.md` を参照する。この文書は Claude Code 固有の設定だけを扱う。
+共通規約とrules / skillsの利用方法は [AGENTS.md](../../AGENTS.md) を参照する。
 
-## 読み込む設定
+## 設定と保存先
 
-- `CLAUDE.md` は `AGENTS.md` を import し、Claude 固有の入口だけを定義する。
-- `.claude/rules/*.md` は `docs/guides/agent-rules/` の共通本文への symlink である。path ごとの補足規約を定義し、`coding-style.md` は計画時にも必要なため常時読み込む。
-- `.claude/skills/` は `.agents/skills/` の共通 skill への symlink である。project 固有の繰り返し workflow を必要な時だけ読み込む。
-- `.claude/settings.json` は sandbox と deny rules を repository 共通設定として定義する。
-- `.claude/settings.local.json` は個人設定であり、Git と Docker build context に含めない。
+- project共通設定は原本 [.claude/settings.json](../../.claude/settings.json) だけで管理し、sandboxとdenyを定義する。個人設定と環境固有の緩和は `.claude/settings.local.json` へ置き、Gitとdocker build contextに含めない。
+- `CLAUDE.md` は `AGENTS.md` をimportし、Claude固有の入口だけを定義する。
+- `.claude/rules/` は `docs/guides/agent-rules/` の共通本文へのsymlinkで、`paths` frontmatterでpathごとに読み込む。`coding-style.md` は計画時にも必要なため常時適用する。
+- `.claude/skills/` は `.agents/skills/` の共通skillへのsymlinkで、project固有workflowを必要な時だけ読み込む。本文をLLM別に複製しない。
+- devcontainerではhostの `~/.claude` を `/home/node/.claude`（`CLAUDE_CONFIG_DIR`）へmountし、認証やsessionをrebuild後も保持する。
 
-## sandbox と credential
+## 実行権限
 
-Claude sandbox は有効化し、sandbox が利用できない場合の unsandboxed fallback を禁止する。workspace 内の `.env*`、mount される Claude credential file、`~/.ssh`、`secrets/**` や `*.pem` などの秘密鍵 pattern は read deny にする。
+sandboxは有効化し、利用できない場合のunsandboxed実行へのfallbackを禁止する。具体的なdeny対象は原本を参照し、`.codex/config.toml` と揃える。denyはsandbox層（`sandbox.filesystem.denyRead`）とRead tool層（`permissions.deny`）の両方へ書く。sandboxはbash経路しか止めない。
 
-`.claude/settings.json` は Git 管理され project scope で適用されるため、deny は devcontainer だけでなく host clone や cloud agent にも効く。devcontainer に存在しない秘密でも、他環境で実在するものは deny を外さない。環境固有の緩和は `.claude/settings.local.json` へ置く。
+`.claude/settings.json` はGit管理されproject scopeで適用されるため、denyはdevcontainerだけでなくhost cloneやcloud agentにも効く。devcontainerに存在しない秘密でも、他環境で実在するものはdenyを外さない。
 
-Linux container には sandbox 実行基盤として `bubblewrap` を入れる。設定変更後は dummy secret だけを使って deny を検証し、実 credential の内容を表示しない。
+Linux sandboxには `bubblewrap` を使い、Dockerfileで導入する。SSH秘密鍵はmountせず、hostの `ssh-agent` からDev Containersのagent forwardingを使う。projectのMCP serverは登録しない。
 
-## Skills と Superpowers
+## Skillsとplugin
 
-project 固有 skill の正本は `.agents/skills/` に置く。Superpowers は project 設定で自動導入せず、必要な利用者だけが user scope で導入する。標準の plan / review / subagent 機能で足りない場合は、重複の少ない `systematic-debugging` や `verification-before-completion` を個別に検討する。
+project固有skillの正本は `.agents/skills/` に置く。Superpowersはproject設定で自動導入せず、必要な利用者だけがuser scopeで導入する。標準のplan / review / subagent機能で足りない場合は、重複の少ない `systematic-debugging` や `verification-before-completion` を個別に検討する。
+
+## 動作確認
+
+設定変更後はdummy secretだけを使って検証し、実credentialの内容は表示しない。`.env` とmountされる認証fileのreadが、bash経路とRead tool経路の両方で拒否されることを確認する。
 
 ## 参考
 
