@@ -295,8 +295,8 @@ importers:
         specifier: 5.0.0
         version: 5.0.0(@edge-runtime/vm@3.2.0)(@types/node@25.9.5)(@vitest/coverage-v8@5.0.0)(@vitest/ui@5.0.0)(jsdom@29.1.1)(vite@8.2.2(@types/node@25.9.5)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.23.13))
       zod:
-        specifier: 4.5.4
-        version: 4.5.4
+        specifier: 4.6.4
+        version: 4.6.4
 
 packages:
 
@@ -4410,8 +4410,8 @@ packages:
   zod@4.1.11:
     resolution: {integrity: sha512-WPsqwxITS2tzx1bzhIKsEs19ABD5vmCVa4xBo2tq/SrV4RNZtfws1EnCWQXM6yh8bD08a1idvkB5MZSBiZsjwg==}
 
-  zod@4.5.4:
-    resolution: {integrity: sha512-sC95tT5iHHH9gtpj6A81kh+NEaRAUFN+qlUPDUbRfOMvNf5QCBqsb3WgvnpVtK5Y+4UfA6KqufotuTvMGiTlsA==}
+  zod@4.6.4:
+    resolution: {integrity: sha512-AXSD6hvGdvRjajG/l1cC+d6IrhH+sjmPKtYeQdJIK8MFJl3LyClzS+o/YsVC+zQZPupAaeH5skwwm8YqYH7BqA==}
 
 snapshots:
 
@@ -6083,7 +6083,7 @@ snapshots:
       tar-stream: 3.1.7
       undici: 7.29.1
       xdg-app-paths: 5.1.0
-      zod: 4.5.4
+      zod: 4.6.4
     transitivePeerDependencies:
       - bare-abort-controller
       - react-native-b4a
@@ -7699,7 +7699,7 @@ snapshots:
       async-retry: 1.3.3
       debug: 4.4.3(supports-color@7.2.0)
       ws: 8.21.0
-      zod: 4.5.4
+      zod: 4.6.4
     transitivePeerDependencies:
       - bare-abort-controller
       - bufferutil
@@ -7885,8 +7885,8 @@ snapshots:
       typebox: 1.3.4
       valibot: 1.4.2(typescript@6.0.3)
       yup: 1.7.1
-      zod: 4.5.4
-      zod-v3-to-json-schema: 4.0.0(zod@4.5.4)
+      zod: 4.6.4
+      zod-v3-to-json-schema: 4.0.0(zod@4.6.4)
     transitivePeerDependencies:
       - '@types/json-schema'
       - typescript
@@ -8260,13 +8260,13 @@ snapshots:
 
   zimmerframe@1.1.4: {}
 
-  zod-v3-to-json-schema@4.0.0(zod@4.5.4):
+  zod-v3-to-json-schema@4.0.0(zod@4.6.4):
     dependencies:
-      zod: 4.5.4
+      zod: 4.6.4
     optional: true
 
   zod@3.22.4: {}
 
   zod@4.1.11: {}
 
-  zod@4.5.4: {}
+  zod@4.6.4: {}
