@@ -80,7 +80,7 @@
     "p-queue": "9.3.3",
     "playwright": "1.63.0",
     "svelte-eslint-parser": "1.8.1",
-    "tailwind-merge": "3.6.0",
+    "tailwind-merge": "3.7.0",
     "xss": "1.0.15"
   },
   "packageManager": "pnpm@12.3.4",
