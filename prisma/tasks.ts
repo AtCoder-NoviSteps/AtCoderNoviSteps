@@ -17069,4 +17069,11 @@ export const tasks = [
     name: 'Consistent Unit System',
     title: '2207. Consistent Unit System',
   },
+  {
+    id: '2279',
+    contest_id: 'AOJ-KUPC2011',
+    problem_index: 'I',
+    name: 'Mountain',
+    title: 'I. Mountain',
+  },
 ];

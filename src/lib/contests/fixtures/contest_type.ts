@@ -740,6 +740,7 @@ const aojUniversityContestData = [
   { name: 'AOJ, HUPC 2019 in HUPC 2019 Day2', contestId: 'AOJ-HUPC2019-in-HUPC2019-day2' },
   { name: 'AOJ, UAPC 2018 in RUPC 2018 Day2', contestId: 'AOJ-UAPC2018-in-RUPC2018-day2' },
   { name: 'AOJ, UTPC 2010', contestId: 'AOJ-UTPC2010' },
+  { name: 'AOJ, KUPC 2011', contestId: 'AOJ-KUPC2011' },
 ];
 
 export const aojUniversity = aojUniversityContestData.map(({ name, contestId }) =>
