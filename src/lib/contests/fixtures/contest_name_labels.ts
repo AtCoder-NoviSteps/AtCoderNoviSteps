@@ -324,4 +324,8 @@ export const aojUniversity = [
     contestId: 'AOJ-UTPC2010',
     expected: '（UTPC 2010）',
   }),
+  createTestCaseForContestNameLabel('AOJ, KUPC 2011')({
+    contestId: 'AOJ-KUPC2011',
+    expected: '（KUPC 2011）',
+  }),
 ];
