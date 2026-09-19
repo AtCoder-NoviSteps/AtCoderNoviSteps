@@ -11,22 +11,12 @@
 
 ## 実行権限
 
-`project-edit` profileはworkspaceの編集を許可し、`.env*`、credential、秘密鍵などのreadを拒否する。具体的なdeny対象は原本を参照し、`.claude/settings.json` と揃える。子processの環境変数は `core` を基準に、既定のsecret名filterも有効にする。
+`project-edit` profileはworkspaceの編集を許可し、`.env`、credential、秘密鍵などのreadを拒否する。具体的なdeny対象は原本を参照し、`.claude/settings.json` と揃える。子processの環境変数は `core` を基準に、既定のsecret名filterも有効にする。
 
-Linux sandboxには `bubblewrap` を使う。Dockerfileでsetuid付きで導入し、composeのweb serviceにnested sandbox用のcapabilityとseccomp / AppArmorの緩和を設定する。
+hostでは `project-edit` profileのsandboxが境界で、`danger-full-access` は使用しない。devcontainerではcontainerが境界で、[managed config](../../.devcontainer/codex-managed-config.toml)がsandboxを無効にし、agent自身のlogin情報以外の秘密はcontainerに置かない。Codexは `bwrap` がないと同梱版を使うため、bubblewrapを外すだけではsandboxは止まらない。
 
-`on-request` はsandbox外の操作に対する承認方針であり、sandboxの代替ではない。credentialを保護するため、`danger-full-access` と `--dangerously-bypass-approvals-and-sandbox` は使用しない。
-
-SSH秘密鍵はmountせず、hostの `ssh-agent` からDev Containersのagent forwardingを使う。projectのMCP serverは登録しない。
+SSH秘密鍵はmountせず、hostの `ssh-agent` からDev Containersのagent forwardingを使う。projectのMCP serverは登録しない。外向き通信は [init-firewall.sh](../../.devcontainer/init-firewall.sh) で制限し、analyticsはmanaged configで止める。
 
 ## 動作確認
 
-sandboxの実行基盤を変更したらclean rebuildし、通常のcontainer terminalで確認する。
-
-```bash
-command -v bwrap
-bwrap --unshare-user --dev-bind / / true
-codex sandbox -- true
-```
-
-CLIとVS Code拡張の両方で新規sessionを開始し、command実行とdummy credentialのread拒否を確認する。
+実行基盤を変更したらclean rebuildし、常駐のapp serverも再起動してから、CLIとVS Code拡張の両方でcommandを実行できることを確認する。hostではdummy credentialのread拒否を確認する。
