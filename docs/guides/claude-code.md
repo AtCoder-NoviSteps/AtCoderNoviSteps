@@ -16,7 +16,7 @@ sandboxは有効化し、利用できない場合のunsandboxed実行へのfallb
 
 `.claude/settings.json` はGit管理されproject scopeで適用されるため、denyはdevcontainerだけでなくhost cloneやcloud agentにも効く。devcontainerに存在しない秘密でも、他環境で実在するものはdenyを外さない。
 
-Linux sandboxには `bubblewrap` を使い、Dockerfileで導入する。SSH秘密鍵はmountせず、hostの `ssh-agent` からDev Containersのagent forwardingを使う。projectのMCP serverは登録しない。
+hostではproject設定のsandboxが境界になる。devcontainerではcontainerが境界で、[managed settings](../../.devcontainer/claude-managed-settings.json)がsandboxを無効にし、秘密はcontainerに置かない。SSH秘密鍵はmountせずagent forwardingを使い、agentはpushしない。projectのMCP serverは登録しない。
 
 ## Skillsとplugin
 
@@ -24,7 +24,7 @@ project固有skillの正本は `.agents/skills/` に置く。Superpowersはproje
 
 ## 動作確認
 
-設定変更後はdummy secretだけを使って検証し、実credentialの内容は表示しない。`.env` とmountされる認証fileのreadが、bash経路とRead tool経路の両方で拒否されることを確認する。
+設定変更後はdummy secretだけを使って検証し、実credentialの内容は表示しない。hostでは `.env` と認証fileのreadがbashとRead toolの両方で拒否されること、devcontainerではrebuild後に `printenv CONFIRM_API_URL` と `.env` が空であることを確認する。
 
 ## 参考
 

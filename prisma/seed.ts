@@ -69,6 +69,7 @@ async function main() {
     console.log('Seeding has been started.');
 
     await addUsers();
+    await addAtCoderAccounts();
     await addTasks();
     await addContestTaskPairs();
     await addWorkBooks();
@@ -135,6 +136,45 @@ async function addUser(
     user: { connect: currentUser },
     id: 'username:' + user.name.toLowerCase(),
     hashed_password: hashedPassword,
+  });
+}
+
+// Separate from addUsers, which skips registered users, so existing databases also get verified accounts.
+async function addAtCoderAccounts() {
+  console.log('Start adding AtCoder accounts...');
+
+  for (const user of users) {
+    if (!user.atCoderHandle) {
+      continue;
+    }
+
+    try {
+      const registeredUser = await prisma.user.findUnique({
+        where: {
+          username: user.name,
+        },
+      });
+
+      if (!registeredUser) {
+        console.error('Failed to add AtCoder account: user', user.name, 'is not registered.');
+        continue;
+      }
+
+      await addAtCoderAccount(registeredUser.id, user.atCoderHandle);
+      console.log('AtCoder account:', user.atCoderHandle, 'was verified for', user.name);
+    } catch (e) {
+      console.error('Failed to add AtCoder account for', user.name, e);
+    }
+  }
+
+  console.log('Finished adding AtCoder accounts.');
+}
+
+async function addAtCoderAccount(userId: string, handle: string) {
+  await prisma.atCoderAccount.upsert({
+    where: { userId },
+    update: { handle, isValidated: true, validationCode: '' },
+    create: { userId, handle, isValidated: true },
   });
 }
 

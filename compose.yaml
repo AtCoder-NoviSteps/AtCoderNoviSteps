@@ -1,21 +1,10 @@
 services:
   web:
     build: .
-    # Codex creates its narrower bubblewrap sandbox inside this development container.
-    # Keep these aligned with OpenAI's secure devcontainer requirements.
+    # No nested agent sandbox runs here, so Docker's default capabilities and profiles stay in place.
+    # NET_ADMIN is reserved for the planned egress firewall.
     cap_add:
       - NET_ADMIN
-      - SETGID
-      - SETUID
-      - SYS_ADMIN
-      - SYS_CHROOT
-      - SYS_PTRACE
-    security_opt:
-      - apparmor=unconfined
-      - seccomp=unconfined
-      # Unmask /proc so bubblewrap 0.12.0 can mount a fresh procfs without setuid; Codex's
-      # retry-without-/proc fallback misses the new error text (openai/codex#44329).
-      - systempaths=unconfined
     ports:
       - '5173:5173'
       - '5555:5555'
@@ -23,11 +12,13 @@ services:
     volumes:
       - .:/usr/src/app
       - ./node_modules:/usr/src/app/node_modules
+      # Hide the host .env from the container; compose still reads it on the host for substitution.
+      - ./.devcontainer/empty.env:/usr/src/app/.env:ro
     environment:
       - NODE_ENV=development
       - DATABASE_URL=postgresql://db_user:db_password@db:5432/test_db?pgbouncer=true&connection_limit=10&connect_timeout=60&statement_timeout=60000 # Note: Local server cannot start if port is set to db:6543.
       - DIRECT_URL=postgresql://db_user:db_password@db:5432/test_db
-      - CONFIRM_API_URL=${CONFIRM_API_URL:?CONFIRM_API_URL environment variable is required} # AtCoder affiliation confirmation API endpoint
+      - CONFIRM_API_URL=${CONFIRM_API_URL:-} # Unset by default; set only for a real verification session without agents
     command: sleep infinity
     depends_on:
       - db

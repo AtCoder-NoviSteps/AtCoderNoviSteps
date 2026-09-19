@@ -2,7 +2,6 @@
   "sandbox": {
     "enabled": true,
     "allowUnsandboxedCommands": false,
-    "enableWeakerNestedSandbox": true,
     "filesystem": {
       "denyRead": ["~/.ssh", "~/.claude/.credentials.json", "~/.codex/auth.json", "**/.env"]
     }

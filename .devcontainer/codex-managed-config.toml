@@ -1,0 +1,5 @@
+# Despite its name, ":danger-full-access" grants nothing beyond the container user's own access;
+# it only skips Codex's bwrap sandbox ("No sandbox"), so the container is the boundary here.
+# See https://learn.chatgpt.com/docs/agent-approvals-security
+# This managed layer overrides `default_permissions` in `.codex/config.toml`, which still applies to host clones.
+default_permissions = ":danger-full-access"

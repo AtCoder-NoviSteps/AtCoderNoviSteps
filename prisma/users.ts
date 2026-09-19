@@ -1,8 +1,10 @@
 import { Roles } from '@prisma/client';
 
 export const users = [
-  { id: '1', name: 'admin', role: Roles.ADMIN },
-  { id: '2', name: 'guest', role: Roles.USER },
+  // Verified with fictional handles so verified-only features work without the real confirm API.
+  { id: '1', name: 'admin', role: Roles.ADMIN, atCoderHandle: 'novisteps_admin' },
+  { id: '2', name: 'guest', role: Roles.USER, atCoderHandle: 'novisteps_guest' },
+  // Other users stay unverified so the unverified path remains testable.
   { id: '3', name: 'Alice', role: Roles.USER },
   { id: '4', name: 'Bob23', role: Roles.USER },
   { id: '5', name: 'Carol', role: Roles.USER },

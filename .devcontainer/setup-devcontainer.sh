@@ -1,6 +1,12 @@
 #!/bin/bash
 set -euo pipefail
 
+# Compose reads the host `.env` for substitution, so a forgotten value would be injected silently.
+if [[ -n "${CONFIRM_API_URL:-}" ]]; then
+  echo 'WARNING: The real CONFIRM_API_URL is injected into this container.' >&2
+  echo 'WARNING: Do not use Claude / Codex. After checking, remove the value on the host and rebuild.' >&2
+fi
+
 # Install agent CLIs independently so one unavailable registry package does not block setup.
 npm install -g @anthropic-ai/claude-code || echo 'Claude Code CLI installation failed, continuing...'
 

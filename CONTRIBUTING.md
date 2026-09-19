@@ -94,7 +94,9 @@ Claude Code と Codex は用途や利用可能な契約に応じて選択でき�
 0. [AtCoder NoviSteps](https://github.com/AtCoder-NoviSteps)にメンバー申請をします。[@KATO-Hiro](https://twitter.com/k_hiro1818)にDMなどでご連絡いただければ、GitHubで登録しているメールアドレスに招待メールが届きますので、承認してください。
 1. ターミナルなどを利用して、[本レポジトリ](https://github.com/AtCoder-NoviSteps/AtCoderNoviSteps)の内容をローカル環境にダウンロードします。
 
-   `git clone https://github.com/AtCoder-NoviSteps/AtCoderNoviSteps.git`
+   `git clone git@github.com:AtCoder-NoviSteps/AtCoderNoviSteps.git`
+
+   - HTTPS で clone 済みの場合は `git remote set-url origin <上の URL>` で SSH に切り替えてください。
 
 2. 作業ディレクトリを`AtCoderNovisteps`に変更します。
 
@@ -160,9 +162,14 @@ Claude Code と Codex は用途や利用可能な契約に応じて選択でき�
    - Windows: `Ctrl + Shift + P`
 3. ローカルサーバを動作させるために必要な環境が自動的に構築され、VS Codeの拡張機能もインストールされます。
 
-#### (SSH で GitHub を利用する場合) ホスト側で鍵を ssh-agent へ登録
+エージェントはコンテナを境界として動くため、コンテナに秘密を置きません。
 
-秘密鍵はコンテナに mount せず、SSH agent forwarding でホストの `ssh-agent` に署名だけを依頼します。ホスト側で鍵が agent に載っていないと、コンテナ内の Git 操作が `Permission denied (publickey)` で失敗します。HTTPS 利用時は不要です。
+- `CONFIRM_API_URL` はローカル開発では不要です（連携済みユーザーはシードで作れます）。ホストの `.env` とシェルに設定しないでください。本物の値で確認するときだけ設定して Rebuild し、エージェントを使わずに確認後、値を外して再度 Rebuild します。
+- ホストの VS Code のユーザー設定に `"dev.containers.gitCredentialHelperConfigLocation": "none"` を追加し、GitHub のトークンをコンテナに共有しないようにします。
+
+#### ホスト側で SSH の鍵を ssh-agent へ登録
+
+秘密鍵はコンテナに mount せず、SSH agent forwarding でホストの `ssh-agent` に署名だけを依頼します。ホスト側で鍵が agent に載っていないと、コンテナ内の Git 操作が `Permission denied (publickey)` で失敗します。
 
 ホストの `~/.ssh/config` に次を書いておくと、ホストで `ssh` を使うたびに鍵が自動で agent に載ります。`IdentityFile` は実際の鍵の path に置き換えてください（`ls -la ~/.ssh/` で確認。`.pub` が付かない方が秘密鍵）。
 
@@ -207,6 +214,8 @@ Set-Service ssh-agent -StartupType Automatic; Start-Service ssh-agent
 - 先ほどとは異なるターミナルで以下のコマンドをそれぞれ実行すると、データベースの初期データ投入やローカル環境でのテーブル・サンプルデータが閲覧できます。
 
   `pnpm db:seed`
+
+  - `admin` と `guest` は AtCoder アカウント連携済みになります（既存の DB も再実行で反映）。
 
   `sh -lc "pkill -f 'prisma.*studio' || true"`
 
