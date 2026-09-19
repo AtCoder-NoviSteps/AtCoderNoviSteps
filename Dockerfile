@@ -8,7 +8,6 @@ COPY . /usr/src/app
 
 RUN apt-get update \
     && apt-get -y install --no-install-recommends bubblewrap fish \
-    && chmod u+s /usr/bin/bwrap \
     && rm -rf /var/lib/apt/lists/*
 
 ENV NODE_PATH=/node_modules

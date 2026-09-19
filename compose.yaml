@@ -13,6 +13,9 @@ services:
     security_opt:
       - apparmor=unconfined
       - seccomp=unconfined
+      # Unmask /proc so bubblewrap 0.12.0 can mount a fresh procfs without setuid; Codex's
+      # retry-without-/proc fallback misses the new error text (openai/codex#44329).
+      - systempaths=unconfined
     ports:
       - '5173:5173'
       - '5555:5555'

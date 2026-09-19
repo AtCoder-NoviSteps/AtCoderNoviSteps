@@ -32,5 +32,10 @@ rtk gain >/dev/null
 # Agent integration is optional and separate from installing the RTK CLI.
 rtk init -g --auto-patch || echo 'RTK init failed, continuing...'
 
+# Match the global pnpm to `packageManager`; a mismatch makes pnpm download the pinned version,
+# which the agent sandboxes cannot write, so every sandboxed `pnpm` command fails.
+pnpm_version="$(node -p "require('./package.json').packageManager.split('@')[1].split('+')[0]")"
+npm install -g "pnpm@${pnpm_version}"
+
 # Install project dependencies
 pnpm install
