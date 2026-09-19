@@ -11,9 +11,9 @@
 
 ## 実行権限
 
-`project-edit` profileはworkspaceの編集を許可し、`.env*`、credential、秘密鍵などのreadを拒否する。具体的なdeny対象は原本を参照し、`.claude/settings.json` と揃える。子processの環境変数は `core` を基準に、既定のsecret名filterも有効にする。
+`project-edit` profileはworkspaceの編集を許可し、`.env`、credential、秘密鍵などのreadを拒否する。具体的なdeny対象は原本を参照し、`.claude/settings.json` と揃える。子processの環境変数は `core` を基準に、既定のsecret名filterも有効にする。
 
-hostでは `project-edit` profileのsandboxが境界で、`danger-full-access` は使用しない。devcontainerではcontainerが境界で、[managed config](../../.devcontainer/codex-managed-config.toml)がsandboxを無効にし、秘密はcontainerに置かない。Codexは `bwrap` がないと同梱版を使うため、bubblewrapを外すだけではsandboxは止まらない。
+hostでは `project-edit` profileのsandboxが境界で、`danger-full-access` は使用しない。devcontainerではcontainerが境界で、[managed config](../../.devcontainer/codex-managed-config.toml)がsandboxを無効にし、agent自身のlogin情報以外の秘密はcontainerに置かない。Codexは `bwrap` がないと同梱版を使うため、bubblewrapを外すだけではsandboxは止まらない。
 
 SSH秘密鍵はmountせず、hostの `ssh-agent` からDev Containersのagent forwardingを使う。projectのMCP serverは登録しない。外向き通信は [init-firewall.sh](../../.devcontainer/init-firewall.sh) で制限し、analyticsはmanaged configで止める。
 

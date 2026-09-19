@@ -7,7 +7,7 @@
   // Use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
   "dockerComposeFile": ["../compose.yaml"],
   "mounts": [
-    "source=${localEnv:HOME}/.claude,target=/home/node/.claude,type=bind,consistency=cached",
+    "source=${localEnv:HOME}/.claude-devcontainer/AtCoderNoviSteps,target=/home/node/.claude,type=bind,consistency=cached",
     "source=${localEnv:HOME}/.codex-devcontainer/AtCoderNoviSteps,target=/home/node/.codex,type=bind,consistency=cached",
     "source=${localEnv:HOME}/.gitconfig,target=/home/node/.gitconfig,type=bind,consistency=cached"
   ],
@@ -25,7 +25,7 @@
   // "shutdownAction": "none",
   //
   // Use 'initializeCommand' to run commands before the container is created.
-  "initializeCommand": "mkdir -p ~/.claude ~/.codex-devcontainer/AtCoderNoviSteps && touch ~/.gitconfig",
+  "initializeCommand": "mkdir -p ~/.claude-devcontainer/AtCoderNoviSteps ~/.codex-devcontainer/AtCoderNoviSteps && touch ~/.gitconfig",
   //
   // Use 'postCreateCommand' to run commands after the container is created.
   "postCreateCommand": "bash .devcontainer/setup-devcontainer.sh",

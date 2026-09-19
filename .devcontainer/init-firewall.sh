@@ -65,7 +65,9 @@ host_network="$(ip route | awk '/^default/ {print $3}' | sed 's/\.[0-9]*$/.0\/24
 
 iptables -A INPUT -i lo -j ACCEPT
 iptables -A OUTPUT -o lo -j ACCEPT
-iptables -A OUTPUT -p udp --dport 53 -j ACCEPT
+# Only Docker's embedded DNS; port 53 to any other IP would bypass the allowlist.
+iptables -A OUTPUT -p udp -d 127.0.0.11/32 --dport 53 -j ACCEPT
+iptables -A OUTPUT -p tcp -d 127.0.0.11/32 --dport 53 -j ACCEPT
 iptables -A INPUT -s "${host_network}" -j ACCEPT
 iptables -A OUTPUT -d "${host_network}" -j ACCEPT
 

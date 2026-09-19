@@ -8,7 +8,7 @@
 - `CLAUDE.md` は `AGENTS.md` をimportし、Claude固有の入口だけを定義する。
 - `.claude/rules/` は `docs/guides/agent-rules/` の共通本文へのsymlinkで、`paths` frontmatterでpathごとに読み込む。`coding-style.md` は計画時にも必要なため常時適用する。
 - `.claude/skills/` は `.agents/skills/` の共通skillへのsymlinkで、project固有workflowを必要な時だけ読み込む。本文をLLM別に複製しない。
-- devcontainerではhostの `~/.claude` を `/home/node/.claude`（`CLAUDE_CONFIG_DIR`）へmountし、認証やsessionをrebuild後も保持する。
+- devcontainerではhostの `~/.claude-devcontainer/AtCoderNoviSteps` を `/home/node/.claude`（`CLAUDE_CONFIG_DIR`）へmountし、認証やsessionをrebuild後も保持する。hostの通常の `~/.claude` とは分離し、他projectの会話やmemoryをcontainerから読めないようにする。
 
 ## 実行権限
 
@@ -16,7 +16,7 @@ sandboxは有効化し、利用できない場合のunsandboxed実行へのfallb
 
 `.claude/settings.json` はGit管理されproject scopeで適用されるため、denyはdevcontainerだけでなくhost cloneやcloud agentにも効く。devcontainerに存在しない秘密でも、他環境で実在するものはdenyを外さない。
 
-hostではproject設定のsandboxが境界になる。devcontainerではcontainerが境界で、[managed settings](../../.devcontainer/claude-managed-settings.json)がsandboxを無効にし、秘密はcontainerに置かない。SSH秘密鍵はmountせずagent forwardingを使い、agentはpushしない。projectのMCP serverは登録しない。外向き通信は [init-firewall.sh](../../.devcontainer/init-firewall.sh) で制限する。
+hostではproject設定のsandboxが境界になる。devcontainerではcontainerが境界で、[managed settings](../../.devcontainer/claude-managed-settings.json)がsandboxを無効にし、agent自身のlogin情報以外の秘密はcontainerに置かない。SSH秘密鍵はmountせずagent forwardingを使い、agentはpushしない。projectのMCP serverは登録しない。外向き通信は [init-firewall.sh](../../.devcontainer/init-firewall.sh) で制限する。
 
 ## Skillsとplugin
 

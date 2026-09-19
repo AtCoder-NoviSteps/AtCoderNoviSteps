@@ -96,7 +96,7 @@ Claude Code と Codex は用途や利用可能な契約に応じて選択でき�
 
    `git clone git@github.com:AtCoder-NoviSteps/AtCoderNoviSteps.git`
 
-   - HTTPS で clone 済みの場合は `git remote set-url origin <上の URL>` で SSH に切り替えてください。
+   - HTTPS で clone 済みの場合は `git remote set-url origin git@github.com:AtCoder-NoviSteps/AtCoderNoviSteps.git` で SSH に切り替えてください。
 
 2. 作業ディレクトリを`AtCoderNovisteps`に変更します。
 
@@ -158,7 +158,7 @@ Claude Code と Codex は用途や利用可能な契約に応じて選択でき�
    - Windows: `Ctrl + Shift + P`
 3. ローカルサーバを動作させるために必要な環境が自動的に構築され、VS Codeの拡張機能もインストールされます。
 
-エージェントはコンテナを境界として動くため、コンテナに秘密を置きません。
+エージェントはコンテナを境界として動くため、エージェント自身のログイン情報以外はコンテナに置きません。
 
 - `CONFIRM_API_URL` はローカル開発では不要です（連携済みユーザーはシードで作れます）。ホストの `.env` とシェルに設定しないでください。本物の値で確認するときだけ設定して Rebuild し、エージェントを使わずに確認後、値を外して再度 Rebuild します。
 - ホストの VS Code のユーザー設定に `"dev.containers.gitCredentialHelperConfigLocation": "none"` を追加し、GitHub のトークンをコンテナに共有しないようにします。
