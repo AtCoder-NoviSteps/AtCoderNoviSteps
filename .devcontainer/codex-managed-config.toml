@@ -3,3 +3,10 @@
 # See https://learn.chatgpt.com/docs/agent-approvals-security
 # This managed layer overrides `default_permissions` in `.codex/config.toml`, which still applies to host clones.
 default_permissions = ":danger-full-access"
+
+# Analytics share chatgpt.com with inference, so the firewall cannot block them.
+[analytics]
+enabled = false
+
+[otel]
+metrics_exporter = "none"

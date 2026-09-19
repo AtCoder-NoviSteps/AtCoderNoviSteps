@@ -16,7 +16,7 @@ sandboxは有効化し、利用できない場合のunsandboxed実行へのfallb
 
 `.claude/settings.json` はGit管理されproject scopeで適用されるため、denyはdevcontainerだけでなくhost cloneやcloud agentにも効く。devcontainerに存在しない秘密でも、他環境で実在するものはdenyを外さない。
 
-hostではproject設定のsandboxが境界になる。devcontainerではcontainerが境界で、[managed settings](../../.devcontainer/claude-managed-settings.json)がsandboxを無効にし、秘密はcontainerに置かない。SSH秘密鍵はmountせずagent forwardingを使い、agentはpushしない。projectのMCP serverは登録しない。
+hostではproject設定のsandboxが境界になる。devcontainerではcontainerが境界で、[managed settings](../../.devcontainer/claude-managed-settings.json)がsandboxを無効にし、秘密はcontainerに置かない。SSH秘密鍵はmountせずagent forwardingを使い、agentはpushしない。projectのMCP serverは登録しない。外向き通信は [init-firewall.sh](../../.devcontainer/init-firewall.sh) で制限する。
 
 ## Skillsとplugin
 

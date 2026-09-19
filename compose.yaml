@@ -2,7 +2,7 @@ services:
   web:
     build: .
     # No nested agent sandbox runs here, so Docker's default capabilities and profiles stay in place.
-    # NET_ADMIN is reserved for the planned egress firewall.
+    # NET_ADMIN is for .devcontainer/init-firewall.sh.
     cap_add:
       - NET_ADMIN
     ports:

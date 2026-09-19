@@ -15,7 +15,7 @@
 
 hostでは `project-edit` profileのsandboxが境界で、`danger-full-access` は使用しない。devcontainerではcontainerが境界で、[managed config](../../.devcontainer/codex-managed-config.toml)がsandboxを無効にし、秘密はcontainerに置かない。Codexは `bwrap` がないと同梱版を使うため、bubblewrapを外すだけではsandboxは止まらない。
 
-SSH秘密鍵はmountせず、hostの `ssh-agent` からDev Containersのagent forwardingを使う。projectのMCP serverは登録しない。
+SSH秘密鍵はmountせず、hostの `ssh-agent` からDev Containersのagent forwardingを使う。projectのMCP serverは登録しない。外向き通信は [init-firewall.sh](../../.devcontainer/init-firewall.sh) で制限し、analyticsはmanaged configで止める。
 
 ## 動作確認
 

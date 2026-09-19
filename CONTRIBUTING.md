@@ -131,10 +131,6 @@ Claude Code と Codex は用途や利用可能な契約に応じて選択でき�
 
   `docker compose exec web pnpm install`
 
-  `docker compose exec web pnpm exec playwright install`
-
-  `docker compose exec web pnpm exec playwright install-deps`
-
   `docker compose exec -e DATABASE_URL=postgresql://db_user:db_password@db:5432/test_db?pgbouncer=true&connection_limit=10&connect_timeout=60&statement_timeout=60000 -e DIRECT_URL=postgresql://db_user:db_password@db:5432/test_db web pnpm prisma db push`
 
   `docker compose exec web pnpm prisma generate`
@@ -166,6 +162,8 @@ Claude Code と Codex は用途や利用可能な契約に応じて選択でき�
 
 - `CONFIRM_API_URL` はローカル開発では不要です（連携済みユーザーはシードで作れます）。ホストの `.env` とシェルに設定しないでください。本物の値で確認するときだけ設定して Rebuild し、エージェントを使わずに確認後、値を外して再度 Rebuild します。
 - ホストの VS Code のユーザー設定に `"dev.containers.gitCredentialHelperConfigLocation": "none"` を追加し、GitHub のトークンをコンテナに共有しないようにします。
+- コンテナ内の `sudo` はファイアウォール専用です。apt のパッケージや Playwright のブラウザは `Dockerfile` を変更して Rebuild します。
+- 外部通信は [init-firewall.sh](.devcontainer/init-firewall.sh) の許可リストに限られます。許可リストの宛先が突然つながらないときは CDN の IP が変わった可能性があるので、コンテナを Rebuild します。宛先の追加は、持ち出し経路が増えるため必要なものだけにします。
 
 #### ホスト側で SSH の鍵を ssh-agent へ登録
 
@@ -194,10 +192,6 @@ Set-Service ssh-agent -StartupType Automatic; Start-Service ssh-agent
 - 依存関係にあるライブラリのインストールとデータベースの初期化を行い、開発サーバを起動します。
 
   `pnpm install`
-
-  `pnpm exec playwright install`
-
-  `pnpm exec playwright install-deps`
 
   `pnpm exec prisma db push`
 
