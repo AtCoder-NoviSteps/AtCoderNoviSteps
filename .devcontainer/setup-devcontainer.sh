@@ -1,6 +1,12 @@
 #!/bin/bash
 set -euo pipefail
 
+# Compose reads the host `.env` for substitution, so a forgotten value would be injected silently.
+if [[ -n "${CONFIRM_API_URL:-}" ]]; then
+  echo 'WARNING: The real CONFIRM_API_URL is injected into this container.' >&2
+  echo 'WARNING: Do not use Claude / Codex. After checking, remove the value on the host and rebuild.' >&2
+fi
+
 # Install agent CLIs independently so one unavailable registry package does not block setup.
 npm install -g @anthropic-ai/claude-code || echo 'Claude Code CLI installation failed, continuing...'
 
@@ -31,6 +37,11 @@ rtk gain >/dev/null
 
 # Agent integration is optional and separate from installing the RTK CLI.
 rtk init -g --auto-patch || echo 'RTK init failed, continuing...'
+
+# Match the global pnpm to `packageManager`; a mismatch makes pnpm download the pinned version,
+# which the agent sandboxes cannot write, so every sandboxed `pnpm` command fails.
+pnpm_version="$(node -p "require('./package.json').packageManager.split('@')[1].split('+')[0]")"
+npm install -g "pnpm@${pnpm_version}"
 
 # Install project dependencies
 pnpm install

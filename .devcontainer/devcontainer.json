@@ -7,7 +7,7 @@
   // Use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
   "dockerComposeFile": ["../compose.yaml"],
   "mounts": [
-    "source=${localEnv:HOME}/.claude,target=/home/node/.claude,type=bind,consistency=cached",
+    "source=${localEnv:HOME}/.claude-devcontainer/AtCoderNoviSteps,target=/home/node/.claude,type=bind,consistency=cached",
     "source=${localEnv:HOME}/.codex-devcontainer/AtCoderNoviSteps,target=/home/node/.codex,type=bind,consistency=cached",
     "source=${localEnv:HOME}/.gitconfig,target=/home/node/.gitconfig,type=bind,consistency=cached"
   ],
@@ -25,10 +25,13 @@
   // "shutdownAction": "none",
   //
   // Use 'initializeCommand' to run commands before the container is created.
-  "initializeCommand": "mkdir -p ~/.claude ~/.codex-devcontainer/AtCoderNoviSteps && touch ~/.gitconfig",
+  "initializeCommand": "mkdir -p ~/.claude-devcontainer/AtCoderNoviSteps ~/.codex-devcontainer/AtCoderNoviSteps && touch ~/.gitconfig",
   //
   // Use 'postCreateCommand' to run commands after the container is created.
   "postCreateCommand": "bash .devcontainer/setup-devcontainer.sh",
+  //
+  "postStartCommand": "sudo /usr/local/bin/init-firewall.sh",
+  "waitFor": "postStartCommand",
   //
   // Configure tool-specific properties.
   "customizations": {
@@ -101,7 +104,11 @@
   "containerEnv": {
     "NODE_OPTIONS": "--max-old-space-size=4096 --dns-result-order=ipv4first",
     "CLAUDE_CONFIG_DIR": "/home/node/.claude",
-    "CODEX_HOME": "/home/node/.codex"
+    "CODEX_HOME": "/home/node/.codex",
+    // Opt out so blocked sends do not retry; this also disables Remote Control.
+    "DISABLE_TELEMETRY": "1",
+    "DISABLE_ERROR_REPORTING": "1",
+    "CHECKPOINT_DISABLE": "1" // Prisma
   }
   //
   // Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.

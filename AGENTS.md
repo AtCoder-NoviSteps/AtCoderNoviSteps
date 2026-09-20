@@ -80,6 +80,8 @@ Lefthook runs Prettier, oxlint for JS/TS, and ESLint for Svelte before commit.
 
 ## Verification and Cross-review Before a PR
 
+Agents never run `git push`; the human pushes after reviewing the work.
+
 Every PR must pass the CI build, lint, type/Svelte check, and unit test jobs. Before handing work off, run `pnpm format`, `pnpm lint`, `pnpm check`, relevant tests, and `git diff --check`.
 
 Cross-review is required for AI-led non-trivial changes when any of these apply:

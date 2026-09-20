@@ -3,13 +3,7 @@
     "enabled": true,
     "allowUnsandboxedCommands": false,
     "filesystem": {
-      "denyRead": [
-        "~/.ssh",
-        "~/.claude/.credentials.json",
-        "~/.codex/auth.json",
-        "**/.env",
-        "**/.env.*"
-      ]
+      "denyRead": ["~/.ssh", "~/.claude/.credentials.json", "~/.codex/auth.json", "**/.env"]
     }
   },
   "permissions": {
@@ -30,7 +24,6 @@
       "Read(~/.claude/.credentials.json)",
       "Read(~/.codex/auth.json)",
       "Read(**/.env)",
-      "Read(**/.env.*)",
       "Read(**/secrets/**)",
       "Read(**/config/credentials.json)",
       "Read(**/*.pem)",

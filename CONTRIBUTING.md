@@ -94,7 +94,9 @@ Claude Code と Codex は用途や利用可能な契約に応じて選択でき�
 0. [AtCoder NoviSteps](https://github.com/AtCoder-NoviSteps)にメンバー申請をします。[@KATO-Hiro](https://twitter.com/k_hiro1818)にDMなどでご連絡いただければ、GitHubで登録しているメールアドレスに招待メールが届きますので、承認してください。
 1. ターミナルなどを利用して、[本レポジトリ](https://github.com/AtCoder-NoviSteps/AtCoderNoviSteps)の内容をローカル環境にダウンロードします。
 
-   `git clone https://github.com/AtCoder-NoviSteps/AtCoderNoviSteps.git`
+   `git clone git@github.com:AtCoder-NoviSteps/AtCoderNoviSteps.git`
+
+   - HTTPS で clone 済みの場合は `git remote set-url origin git@github.com:AtCoder-NoviSteps/AtCoderNoviSteps.git` で SSH に切り替えてください。
 
 2. 作業ディレクトリを`AtCoderNovisteps`に変更します。
 
@@ -129,20 +131,16 @@ Claude Code と Codex は用途や利用可能な契約に応じて選択でき�
 
   `docker compose exec web pnpm install`
 
-  `docker compose exec web pnpm exec playwright install`
-
-  `docker compose exec web pnpm exec playwright install-deps`
-
   `docker compose exec -e DATABASE_URL=postgresql://db_user:db_password@db:5432/test_db?pgbouncer=true&connection_limit=10&connect_timeout=60&statement_timeout=60000 -e DIRECT_URL=postgresql://db_user:db_password@db:5432/test_db web pnpm prisma db push`
 
   `docker compose exec web pnpm prisma generate`
 
-- 開発サーバ(port番号: 5174)を起動します。その後、以下のリンクを順番にクリックしてください。
-  - Note: リンクのアドレス・ポート番号は、環境によって変わる可能性もあります。
+- 開発サーバ(port番号: 5173)を起動します。その後、以下のリンクを順番にクリックしてください。
+  - Note: 5173 番ポートが使用中なら、使用中のプロセスを停止してから起動してください。自動的に切り替わる 5174 番は Compose で公開していません。
 
   `docker compose exec web pnpm dev --host`
 
-  [http://localhost:5174/](http://localhost:5174/)
+  [http://localhost:5173/](http://localhost:5173/)
 
 - ホーム画面が起動し、ユーザの登録・ログインができれば、環境構築は完了です。
 
@@ -160,9 +158,17 @@ Claude Code と Codex は用途や利用可能な契約に応じて選択でき�
    - Windows: `Ctrl + Shift + P`
 3. ローカルサーバを動作させるために必要な環境が自動的に構築され、VS Codeの拡張機能もインストールされます。
 
-#### (SSH で GitHub を利用する場合) ホスト側で鍵を ssh-agent へ登録
+エージェントはコンテナを境界として動くため、エージェント自身のログイン情報以外はコンテナに置きません。
 
-秘密鍵はコンテナに mount せず、SSH agent forwarding でホストの `ssh-agent` に署名だけを依頼します。ホスト側で鍵が agent に載っていないと、コンテナ内の Git 操作が `Permission denied (publickey)` で失敗します。HTTPS 利用時は不要です。
+- `CONFIRM_API_URL` はローカル開発では不要です（連携済みユーザーはシードで作れます）。ホストの `.env` とシェルに設定しないでください。本物の値で確認するときだけ設定して Rebuild し、エージェントを使わずに確認後、値を外して再度 Rebuild します。
+- ホストの VS Code のユーザー設定に `"dev.containers.gitCredentialHelperConfigLocation": "none"` を追加し、GitHub のトークンをコンテナに共有しないようにします。
+- コンテナ内の `sudo` はファイアウォール専用です。apt のパッケージや Playwright のブラウザは `Dockerfile` を変更して Rebuild します。
+- インターネット向けの通信は [init-firewall.sh](.devcontainer/init-firewall.sh) の許可リストに限られ、Docker ネットワーク内では `web` から `db:5432` への通信を許可します。許可リストの宛先が突然つながらないときは CDN の IP が変わった可能性があるので、コンテナを Rebuild します。スクリプトを変更した場合も Rebuild が必要です。宛先の追加は、持ち出し経路が増えるため必要なものだけにします。
+- `devcontainer.json` に VS Code の拡張機能を追加したときは、`init-firewall.sh` の `vscode_extension_publishers` にも発行者 ID（`esbenp.prettier-vscode` なら `esbenp`）を追加します。
+
+#### ホスト側で SSH の鍵を ssh-agent へ登録
+
+秘密鍵はコンテナに mount せず、SSH agent forwarding でホストの `ssh-agent` に署名だけを依頼します。ホスト側で鍵が agent に載っていないと、コンテナ内の Git 操作が `Permission denied (publickey)` で失敗します。
 
 ホストの `~/.ssh/config` に次を書いておくと、ホストで `ssh` を使うたびに鍵が自動で agent に載ります。`IdentityFile` は実際の鍵の path に置き換えてください（`ls -la ~/.ssh/` で確認。`.pub` が付かない方が秘密鍵）。
 
@@ -188,17 +194,13 @@ Set-Service ssh-agent -StartupType Automatic; Start-Service ssh-agent
 
   `pnpm install`
 
-  `pnpm exec playwright install`
-
-  `pnpm exec playwright install-deps`
-
   `pnpm exec prisma db push`
 
   `pnpm dev`
 
 - 以下のリンクをクリックしてください。
 
-  <http://localhost:5174/>
+  <http://localhost:5173/>
 
 - また、開発サーバの起動と同時に新しいブラウザタブでアプリを開くこともできます。
 
@@ -207,6 +209,8 @@ Set-Service ssh-agent -StartupType Automatic; Start-Service ssh-agent
 - 先ほどとは異なるターミナルで以下のコマンドをそれぞれ実行すると、データベースの初期データ投入やローカル環境でのテーブル・サンプルデータが閲覧できます。
 
   `pnpm db:seed`
+
+  - `admin` と `guest` は AtCoder アカウント連携済みになります（既存の DB も再実行で反映）。
 
   `sh -lc "pkill -f 'prisma.*studio' || true"`
 
