@@ -75,7 +75,7 @@
     "@dnd-kit/svelte": "0.5.0",
     "@lucide/svelte": "1.47.0",
     "@prisma/client": "5.22.0",
-    "@types/node": "25.9.7",
+    "@types/node": "25.9.8",
     "debug": "4.4.3",
     "p-queue": "9.3.3",
     "playwright": "1.63.0",
