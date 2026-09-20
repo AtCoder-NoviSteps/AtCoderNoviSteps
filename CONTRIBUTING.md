@@ -135,12 +135,12 @@ Claude Code と Codex は用途や利用可能な契約に応じて選択でき�
 
   `docker compose exec web pnpm prisma generate`
 
-- 開発サーバ(port番号: 5174)を起動します。その後、以下のリンクを順番にクリックしてください。
-  - Note: リンクのアドレス・ポート番号は、環境によって変わる可能性もあります。
+- 開発サーバ(port番号: 5173)を起動します。その後、以下のリンクを順番にクリックしてください。
+  - Note: 5173 番ポートが使用中なら、使用中のプロセスを停止してから起動してください。自動的に切り替わる 5174 番は Compose で公開していません。
 
   `docker compose exec web pnpm dev --host`
 
-  [http://localhost:5174/](http://localhost:5174/)
+  [http://localhost:5173/](http://localhost:5173/)
 
 - ホーム画面が起動し、ユーザの登録・ログインができれば、環境構築は完了です。
 
@@ -163,7 +163,8 @@ Claude Code と Codex は用途や利用可能な契約に応じて選択でき�
 - `CONFIRM_API_URL` はローカル開発では不要です（連携済みユーザーはシードで作れます）。ホストの `.env` とシェルに設定しないでください。本物の値で確認するときだけ設定して Rebuild し、エージェントを使わずに確認後、値を外して再度 Rebuild します。
 - ホストの VS Code のユーザー設定に `"dev.containers.gitCredentialHelperConfigLocation": "none"` を追加し、GitHub のトークンをコンテナに共有しないようにします。
 - コンテナ内の `sudo` はファイアウォール専用です。apt のパッケージや Playwright のブラウザは `Dockerfile` を変更して Rebuild します。
-- 外部通信は [init-firewall.sh](.devcontainer/init-firewall.sh) の許可リストに限られます。許可リストの宛先が突然つながらないときは CDN の IP が変わった可能性があるので、コンテナを Rebuild します。宛先の追加は、持ち出し経路が増えるため必要なものだけにします。
+- インターネット向けの通信は [init-firewall.sh](.devcontainer/init-firewall.sh) の許可リストに限られ、Docker ネットワーク内では `web` から `db:5432` への通信を許可します。許可リストの宛先が突然つながらないときは CDN の IP が変わった可能性があるので、コンテナを Rebuild します。スクリプトを変更した場合も Rebuild が必要です。宛先の追加は、持ち出し経路が増えるため必要なものだけにします。
+- `devcontainer.json` に VS Code の拡張機能を追加したときは、`init-firewall.sh` の `vscode_extension_publishers` にも発行者 ID（`esbenp.prettier-vscode` なら `esbenp`）を追加します。
 
 #### ホスト側で SSH の鍵を ssh-agent へ登録
 
@@ -199,7 +200,7 @@ Set-Service ssh-agent -StartupType Automatic; Start-Service ssh-agent
 
 - 以下のリンクをクリックしてください。
 
-  <http://localhost:5174/>
+  <http://localhost:5173/>
 
 - また、開発サーバの起動と同時に新しいブラウザタブでアプリを開くこともできます。
 

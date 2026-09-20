@@ -14,10 +14,11 @@ allowed_domains=(
   # Codex (ChatGPT sign-in)
   chatgpt.com
   auth.openai.com
-  # VS Code
+  # VS Code: the gallery API, and the two hosts the server download redirects to
   marketplace.visualstudio.com
   vscode.blob.core.windows.net
   update.code.visualstudio.com
+  vscode.download.prss.microsoft.com
   # External APIs the app calls (src/lib/constants/urls.ts)
   kenkoooo.com
   judgeapi.u-aizu.ac.jp
@@ -26,6 +27,28 @@ allowed_domains=(
   app.coderabbit.ai
   ide.coderabbit.ai
 )
+
+# The gallery API only returns metadata; each VSIX is served from its publisher's own CDN host.
+# Those hosts may well share one set of IPs, but that is unverified, so list every publisher.
+vscode_extension_publishers=(
+  anthropic
+  bradlc
+  christian-kohler
+  csstools
+  dbaeumer
+  esbenp
+  formulahendry
+  ms-playwright
+  openai
+  prisma
+  streetsidesoftware
+  svelte
+  vscode-icons-team
+)
+
+for publisher in "${vscode_extension_publishers[@]}"; do
+  allowed_domains+=("${publisher}.gallerycdn.vsassets.io")
+done
 
 temporary_set="allowed-domains-$$"
 swapped=0
@@ -82,44 +105,54 @@ else
   temporary_set=''
 fi
 
-# An existing installation only needs an ipset swap; the rules remain in place.
-# Known gap: an interruption after the IPv4 OUTPUT jump but before the IPv6 jump leaves IPv6 open on reruns.
-# Accepted as unlikely: those steps are plain -I/-P after ip6tables already succeeded, and a container restart presumably gets a fresh netns (unverified).
-if ! iptables -C OUTPUT -j NOVISTEPS_OUTPUT 2>/dev/null; then
-  host_network="$(ip route | awk '/^default/ {print $3}' | sed 's/\.[0-9]*$/.0\/24/')"
-
-  # Flush chains left by an interrupted installation so the next start can finish it.
-  iptables -N NOVISTEPS_INPUT 2>/dev/null || iptables -F NOVISTEPS_INPUT
-  iptables -N NOVISTEPS_OUTPUT 2>/dev/null || iptables -F NOVISTEPS_OUTPUT
-  iptables -N NOVISTEPS_FORWARD 2>/dev/null || iptables -F NOVISTEPS_FORWARD
-  iptables -A NOVISTEPS_INPUT -i lo -j ACCEPT
-  iptables -A NOVISTEPS_INPUT -s "${host_network}" -j ACCEPT
-  iptables -A NOVISTEPS_INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
-  iptables -A NOVISTEPS_INPUT -j DROP
-  iptables -A NOVISTEPS_OUTPUT -o lo -j ACCEPT
-  # Only Docker's embedded DNS; port 53 to any other IP would bypass the allowlist.
-  iptables -A NOVISTEPS_OUTPUT -p udp -d 127.0.0.11/32 --dport 53 -j ACCEPT
-  iptables -A NOVISTEPS_OUTPUT -p tcp -d 127.0.0.11/32 --dport 53 -j ACCEPT
-  iptables -A NOVISTEPS_OUTPUT -d "${host_network}" -j ACCEPT
-  iptables -A NOVISTEPS_OUTPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
-  iptables -A NOVISTEPS_OUTPUT -m set --match-set allowed-domains dst -j ACCEPT
-  # Reject blocked requests immediately instead of waiting for a timeout.
-  iptables -A NOVISTEPS_OUTPUT -j REJECT --reject-with icmp-admin-prohibited
-  iptables -A NOVISTEPS_FORWARD -j DROP
-
-  ip6tables -N NOVISTEPS_IPV6 2>/dev/null || ip6tables -F NOVISTEPS_IPV6
-  ip6tables -A NOVISTEPS_IPV6 -o lo -j ACCEPT
-  ip6tables -A NOVISTEPS_IPV6 -j REJECT --reject-with icmp6-adm-prohibited
-
-  iptables -I INPUT 1 -j NOVISTEPS_INPUT
-  iptables -I OUTPUT 1 -j NOVISTEPS_OUTPUT
-  iptables -I FORWARD 1 -j NOVISTEPS_FORWARD
-  ip6tables -I OUTPUT 1 -j NOVISTEPS_IPV6
-  iptables -P INPUT DROP
-  iptables -P FORWARD DROP
-  iptables -P OUTPUT DROP
-  ip6tables -P OUTPUT DROP
+# Docker DNS resolves the Compose service to its current container address.
+if ! db_addresses="$(getent ahostsv4 db | awk '$2 == "STREAM" { print $1 }' | sort -u)" || [[ -z "${db_addresses}" ]]; then
+  echo 'Failed to resolve the Compose database' >&2
+  exit 1
 fi
+
+# Rebuild on every start so an interrupted IPv4 or IPv6 installation is repaired.
+# Set policies first so a failed rule insertion leaves outbound traffic blocked.
+ip6tables -P OUTPUT DROP
+iptables -P INPUT DROP
+iptables -P FORWARD DROP
+iptables -P OUTPUT DROP
+
+iptables -N NOVISTEPS_INPUT 2>/dev/null || iptables -F NOVISTEPS_INPUT
+iptables -N NOVISTEPS_OUTPUT 2>/dev/null || iptables -F NOVISTEPS_OUTPUT
+iptables -N NOVISTEPS_FORWARD 2>/dev/null || iptables -F NOVISTEPS_FORWARD
+iptables -A NOVISTEPS_INPUT -i lo -j ACCEPT
+
+# The web service publishes these two TCP ports in compose.yaml.
+iptables -A NOVISTEPS_INPUT -p tcp --dport 5173 -j ACCEPT
+iptables -A NOVISTEPS_INPUT -p tcp --dport 5555 -j ACCEPT
+iptables -A NOVISTEPS_INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
+iptables -A NOVISTEPS_INPUT -j DROP
+iptables -A NOVISTEPS_OUTPUT -o lo -j ACCEPT
+
+# Only Docker's embedded DNS; port 53 to any other IP would bypass the allowlist.
+iptables -A NOVISTEPS_OUTPUT -p udp -d 127.0.0.11/32 --dport 53 -j ACCEPT
+iptables -A NOVISTEPS_OUTPUT -p tcp -d 127.0.0.11/32 --dport 53 -j ACCEPT
+
+while IFS= read -r db_address; do
+  iptables -A NOVISTEPS_OUTPUT -p tcp -d "${db_address}" --dport 5432 -j ACCEPT
+done <<<"${db_addresses}"
+
+iptables -A NOVISTEPS_OUTPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
+iptables -A NOVISTEPS_OUTPUT -m set --match-set allowed-domains dst -j ACCEPT
+
+# Reject blocked requests immediately instead of waiting for a timeout.
+iptables -A NOVISTEPS_OUTPUT -j REJECT --reject-with icmp-admin-prohibited
+iptables -A NOVISTEPS_FORWARD -j DROP
+
+ip6tables -N NOVISTEPS_IPV6 2>/dev/null || ip6tables -F NOVISTEPS_IPV6
+ip6tables -A NOVISTEPS_IPV6 -o lo -j ACCEPT
+ip6tables -A NOVISTEPS_IPV6 -j REJECT --reject-with icmp6-adm-prohibited
+
+iptables -C INPUT -j NOVISTEPS_INPUT 2>/dev/null || iptables -I INPUT 1 -j NOVISTEPS_INPUT
+iptables -C OUTPUT -j NOVISTEPS_OUTPUT 2>/dev/null || iptables -I OUTPUT 1 -j NOVISTEPS_OUTPUT
+iptables -C FORWARD -j NOVISTEPS_FORWARD 2>/dev/null || iptables -I FORWARD 1 -j NOVISTEPS_FORWARD
+ip6tables -C OUTPUT -j NOVISTEPS_IPV6 2>/dev/null || ip6tables -I OUTPUT 1 -j NOVISTEPS_IPV6
 
 # An HTTP error status still proves the connection was allowed, so omit -f.
 # Keep the body to one command: set -e is disabled inside functions called from conditionals.
