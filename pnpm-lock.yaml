@@ -168,7 +168,7 @@ overrides:
   tar@>=7.0.0 <7.5.8: 7.5.22
   minimatch@>=10.0.0 <10.2.3: 10.2.6
   undici@>=5.0.0 <5.28.5: 5.29.0
-  undici@>=6.0.0 <6.27.0: 6.28.1
+  undici@>=6.0.0 <6.27.0: 6.29.0
   undici@>=7.0.0 <7.28.0: 7.29.1
   effect@>=3.0.0 <3.20.0: 3.22.2
   defu@<6.1.5: 6.1.7
@@ -4247,8 +4247,8 @@ packages:
     resolution: {integrity: sha512-raqeBD6NQK4SkWhQzeYKd1KmIG6dllBOTt55Rmkt4HtI9mwdWtJljnrXjAFUBLTSN67HWrOIZ3EPF4kjUw80Bg==}
     engines: {node: '>=14.0'}
 
-  undici@6.28.1:
-    resolution: {integrity: sha512-zWpdTVD54H48CIybL0rWQ3ukpb9d23wM7eH5RtfdmeP70cWHNjtfo7P4vZX+5CoDcO53J4Pu5uXp7lNfjc6DRA==}
+  undici@6.29.0:
+    resolution: {integrity: sha512-R+RODBqp6i2pPflGdq+xIOUkl+RNfGgHwoinecKu/JCuf2uO06cOKoDbI2P7Dn6KcswdKwrczbU6IYJ6K8X+wg==}
     engines: {node: '>=18.17'}
 
   undici@7.29.1:
@@ -5859,7 +5859,7 @@ snapshots:
       is-buffer: 2.0.5
       is-node-process: 1.2.0
       throttleit: 2.1.0
-      undici: 6.28.1
+      undici: 6.29.0
 
   '@vercel/build-utils@14.12.0':
     dependencies:
@@ -8182,7 +8182,7 @@ snapshots:
     dependencies:
       '@fastify/busboy': 2.1.1
 
-  undici@6.28.1: {}
+  undici@6.29.0: {}
 
   undici@7.29.1: {}
 
