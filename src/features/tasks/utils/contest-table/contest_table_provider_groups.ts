@@ -25,6 +25,7 @@ import {
 import { MathAndAlgorithmProvider } from './math_and_algorithm_provider';
 import { EDPCProvider, TDPCProvider, NDPCProvider } from './dp_providers';
 import { FPS24Provider } from './fps24_provider';
+import { Game24Provider } from './game24_provider';
 import { ACLPracticeProvider, ACLBeginnerProvider, ACLProvider } from './acl_providers';
 import {
   JOIFirstQualRoundProvider,
@@ -239,17 +240,18 @@ export const prepareContestProviderPresets = () => {
       }).addProvider(new MathAndAlgorithmProvider(ContestType.MATH_AND_ALGORITHM)),
 
     /**
-     * DP group (EDPC, TDPC, NDPC, and FPS 24)
+     * DP group (EDPC, TDPC, NDPC, FPS 24, and Game 24)
      */
     dps: () =>
-      new ContestTableProviderGroup(`xDPC・FPS 24`, {
-        buttonLabel: 'xDPC・FPS 24',
-        ariaLabel: 'xDPC and FPS 24 contests',
+      new ContestTableProviderGroup(`xDPC・x 24 題`, {
+        buttonLabel: 'xDPC・x 24 題',
+        ariaLabel: 'xDPC and x 24 contests',
       }).addProviders(
         new EDPCProvider(ContestType.EDPC),
         new TDPCProvider(ContestType.TDPC),
         new NDPCProvider(ContestType.NDPC),
         new FPS24Provider(ContestType.FPS_24),
+        new Game24Provider(ContestType.GAME_24),
       ),
 
     /**

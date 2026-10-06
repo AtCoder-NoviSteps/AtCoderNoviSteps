@@ -8,6 +8,6 @@ Add a new contest table provider for: $ARGUMENTS
 
 > When in doubt at any step, use AskUserQuestion before proceeding.
 
-0. **Seed check** — grep `prisma/tasks.ts` for the contest_id(s); report count + task_ids; if absent or incomplete, ask the user to add missing rows (reference: `https://kenkoooo.com/atcoder/resources/problems.json`)
+0. **Seed check** — grep `prisma/tasks.ts` for the contest_id(s); report count + task_ids; if absent or incomplete, ask the user to paste the missing rows (source: `https://kenkoooo.com/atcoder/resources/problems.json`). Do not fetch it yourself: atcoder.jp is unreachable, and WebFetch truncates problems.json, so a miss there is not evidence of absence
 1. **Gather requirements** — infer the implementation pattern; confirm per [instructions.md §Requirements](instructions.md)
 2. **Implement** — follow [instructions.md](instructions.md) for the confirmed pattern across 5 layers (TDD)

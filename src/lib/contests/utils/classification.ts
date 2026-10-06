@@ -31,6 +31,7 @@ const CONTEST_TYPES_BY_ID: ReadonlyMap<string, ContestType> = new Map([
   ['tessoku-book', ContestType.TESSOKU_BOOK],
   ['math-and-algorithm', ContestType.MATH_AND_ALGORITHM],
   ['fps-24', ContestType.FPS_24],
+  ['game-24', ContestType.GAME_24],
 ]);
 
 type ClassificationRule = {

@@ -13,6 +13,7 @@ paths:
 
 1. Edit `prisma/schema.prisma`
 2. Run `pnpm exec prisma migrate dev --name <snake_case_description>`
+3. Production needs no manual step: CI (`.github/workflows/ci.yml`) runs `prisma migrate deploy` on push to `main`, before deploying. Do not add a manual deploy step to plans
 
 ## Naming
 
@@ -21,7 +22,6 @@ paths:
 ## Server-Only Code
 
 - Import the DB client (`$lib/server/database`) only in `src/lib/server/**` and in server-only services under `src/lib/services/**` and `src/features/**/services/**`
-- Route handlers must not import the DB client directly — call service methods instead
 - Never import server-only code in client components
 
 ## Service Layer

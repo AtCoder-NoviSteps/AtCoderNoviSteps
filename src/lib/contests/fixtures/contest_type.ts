@@ -170,6 +170,13 @@ export const fps24 = [
   }),
 ];
 
+export const game24 = [
+  createTestCaseForContestType('Game 24')({
+    contestId: 'game-24',
+    expected: ContestType.GAME_24,
+  }),
+];
+
 const arcContestIds = [
   'arc001',
   'arc002',

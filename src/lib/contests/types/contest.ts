@@ -48,6 +48,7 @@ export const ContestType: { [key in ContestTypeOrigin]: key } = {
   AWC: 'AWC', // AtCoder Weekday Contest
   UNIVERSITY: 'UNIVERSITY', // University Programming Contests in AtCoder (e.g., UTPC)
   FPS_24: 'FPS_24', // 24 Problems on Formal Power Series
+  GAME_24: 'GAME_24', // 24 Problems on Combinatorial Games
   ATCODER_MAIN_OFFICIAL_ONSITE: 'ATCODER_MAIN_OFFICIAL_ONSITE', // AtCoder World Tour Finals (official onsite finals)
   OTHERS: 'OTHERS', // AtCoder (その他)
   AOJ_COURSES: 'AOJ_COURSES', // AIZU ONLINE JUDGE Courses

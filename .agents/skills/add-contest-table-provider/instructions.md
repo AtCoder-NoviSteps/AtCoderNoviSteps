@@ -15,6 +15,7 @@ Step 0 (seed check) is already done. Confirm the following before touching code:
   - Pattern 2: single fixed contest_id (e.g. NDPC, TDPC, FPS_24)
   - Pattern 3: multiple contest_ids unified in one table (e.g. ABS, ABC-Like)
   - Pattern 4: one class instantiated N times via constructor parameter (e.g. ICPC by year)
+- task_id format? Do not derive it from contest_id (`game-24` → `game_a`, but `fps-24` → `fps_24_a`)
 - Nearest neighbor ContestType for insertion order in `contestTypePriorities`?
 - New group or merge into existing? If new: group name / `buttonLabel` / `ariaLabel`?
 
@@ -32,7 +33,7 @@ Step 0 (seed check) is already done. Confirm the following before touching code:
 
 > Skip when an existing ContestType already covers this contest family (e.g. `AOJ_JAG` for JAG Prelim).
 
-- [ ] Add to `prisma/schema.prisma` ContestType enum → `pnpm exec prisma generate`
+- [ ] Add to `prisma/schema.prisma` ContestType enum → `pnpm exec prisma migrate dev --name add_<type>_to_contest_type` (also regenerates the client)
 - [ ] Add to `ContestType` in `src/lib/contests/types/contest.ts` (same position as schema)
 - [ ] `pnpm check` — confirm error resolved
 
@@ -51,7 +52,7 @@ Step 0 (seed check) is already done. Confirm the following before touching code:
 - [ ] `CONTEST_TYPES_BY_ID` or `CLASSIFICATION_RULES` in `src/lib/contests/utils/classification.ts`
 - [ ] `contestTypePriorities` in `src/lib/contests/utils/priority.ts`
   - After priority insertion, all later entries shift +1 → **update JSDoc numeric ranges** (4 category names are immutable)
-  - Fix hardcoded priority-diff expected values in `src/test/lib/utils/task.test.ts` (-1 per shifted entry)
+  - Fix hardcoded priority-diff expected values in `src/test/lib/utils/task.test.ts` only when they involve a shifted entry (±1 each)
 - [ ] `LABEL_GENERATORS` in `src/lib/contests/utils/labels/index.ts` (add label generator, create per-type file if complex)
 - [ ] **GREEN**
 

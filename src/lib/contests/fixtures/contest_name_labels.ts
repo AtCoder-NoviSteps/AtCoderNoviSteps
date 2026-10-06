@@ -139,6 +139,13 @@ export const fps24 = [
   }),
 ];
 
+export const game24 = [
+  createTestCaseForContestNameLabel('Game 24')({
+    contestId: 'game-24',
+    expected: '組合せゲーム 24 題',
+  }),
+];
+
 export const aojCourses = [
   createTestCaseForContestNameLabel('AOJ, ITP1')({
     contestId: 'ITP1',
