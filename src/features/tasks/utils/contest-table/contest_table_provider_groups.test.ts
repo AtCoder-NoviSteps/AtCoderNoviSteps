@@ -168,21 +168,22 @@ describe('prepareContestProviderPresets', () => {
       }
     });
 
-    test('dps registers EDPC, TDPC, NDPC, and FPS 24 providers', () => {
+    test('dps registers EDPC, TDPC, NDPC, FPS 24, and Game 24 providers', () => {
       const group = presets.dps();
 
-      expect(group.getGroupName()).toBe('xDPC・FPS 24');
+      expect(group.getGroupName()).toBe('xDPC・x 24 題');
       expect(group.getMetadata()).toEqual({
-        buttonLabel: 'xDPC・FPS 24',
-        ariaLabel: 'xDPC and FPS 24 contests',
+        buttonLabel: 'xDPC・x 24 題',
+        ariaLabel: 'xDPC and x 24 contests',
       });
-      expect(group.getSize()).toBe(4);
+      expect(group.getSize()).toBe(5);
 
       const contestTypes = [
         ContestType.EDPC,
         ContestType.TDPC,
         ContestType.NDPC,
         ContestType.FPS_24,
+        ContestType.GAME_24,
       ];
 
       for (const contestType of contestTypes) {

@@ -100,7 +100,7 @@ dps: () =>
 レイヤー: Utilities（`src/features/tasks/utils/contest-table/`）と Test data。
 
 1. テストを先に書く（RED）。
-   - `src/features/tasks/fixtures/contest-table/contest_table_provider.ts` に `taskResultsForGame24Provider` を追加する（`game_a`、`game_b`、`game_m`、`game_x` の 4 問。ステータスは FPS 24 と同じ組み合わせにする）。
+   - （実装時に見送り）`taskResultsForGame24Provider` フィクスチャは追加しない。既存の `taskResultsForFPS24Provider` はどのテストからも参照されておらず、Provider テストはデータをテスト内に直接書いているため（YAGNI）。
    - `game24_provider.test.ts` を `fps24_provider.test.ts` に倣って作る。テスト名は `expects to get correct metadata`、`expects to get correct display configuration`、`expects to format contest round label correctly`、`expects to filter tasks to include only game-24 contest`、`expects to generate correct table structure` など。フィルタのテストでは `fps-24` を混ぜ、除外されることを確認する。
    - `contest_table_provider_groups.test.ts` のテスト名を `dps registers EDPC, TDPC, NDPC, FPS 24, and Game 24 providers` に変え、グループ名・`buttonLabel`・`ariaLabel`・`getSize() === 5`・`getProvider(ContestType.GAME_24)` を検証する。
 2. 実装する（GREEN）。`game24_provider.ts` を作成し、`contest_table_provider_groups.ts` で import と `addProviders` の末尾への追加、JSDoc（`DP group (EDPC, TDPC, NDPC, FPS 24, and Game 24)`）の更新を行う。
