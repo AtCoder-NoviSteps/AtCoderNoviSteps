@@ -26,6 +26,7 @@ Use `$props()`, `$state()`, `$derived()`, `$effect()` in all components:
 
 - Components: `PascalCase.svelte`
 - Stores: `snake_case.svelte.ts`; class-based with `$state()`, singleton export
+- Values persisted to `localStorage` or URL params are a contract: rename display labels freely, but changing a stored key/value (e.g. preset key `dps`) silently drops users' saved state
 
 ## Props & Reactivity
 
@@ -37,7 +38,7 @@ Use `$props()`, `$state()`, `$derived()`, `$effect()` in all components:
 ## `{#each}` Patterns
 
 - Always key: `(item.id)` or `(i)`
-- **Key MUST be unique per iteration** — if domain allows duplicates, use composite key (e.g. `contest_id + '-' + task_id`)
+- **Key MUST be unique per iteration** — if domain allows duplicates, use composite key. Trap: `task_id` alone repeats when a task appears in multiple contests; use `contest_id + '-' + task_id` (#3460, #3442)
 - `(i)` is only safe when the list's order and length never change (e.g. a fixed split of a string into lines). For a mutable list — reorderable, insertable, or deletable — use a persistent unique ID or composite key; `(i)` there causes Svelte to reuse DOM/state across the wrong items after a mutation.
 - Filter **before**, not inside with `{#if}`
 - Use `{:else}` for empty lists
@@ -49,8 +50,6 @@ Use `$props()`, `$state()`, `$derived()`, `$effect()` in all components:
   <p>No items.</p>
 {/each}
 ```
-
-**Common Trap:** `task_id` alone is NOT unique when same task appears in multiple contests. Use `contest_id + '-' + task_id` as composite key (see issue #3460 & PR #3442).
 
 ## Snippets vs Components
 

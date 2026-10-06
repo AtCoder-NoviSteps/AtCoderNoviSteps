@@ -37,7 +37,7 @@ paths:
 - Enum membership: `Object.hasOwn(Enum, value)`, not `in` (avoids prototype chain)
 - `Promise<void>`: use `await fn()` to assert no throw, or `.resolves.toBeUndefined()`. **Never** bare `.resolves` (false-positive)
 - **Stubs**: parameter types must match production signature — use domain types (`TaskGrade`), not `string`
-- **Test data**: realistic values (real task IDs, grade names). Extract shared fixtures to file/describe scope; inline for single-use
+- **Test data**: realistic values (real task IDs, grade names). Extract shared fixtures to file/describe scope; inline for single-use. When copying a neighbor's tests, grep each fixture/helper's usages first — do not replicate unreferenced ones
 - **Registry exhaustiveness**: `Record<string, T>` and `new Map([...])` give no compile-time enum coverage — assert it at runtime, with a named, commented exception list so deliberate gaps stay documented: `expect(Object.values(Enum).filter((key) => !REGISTRY.has(key))).toEqual(KNOWN_GAPS)` (`Record` registries: swap `REGISTRY.has(key)` for the `Object.hasOwn` form above)
 - **Test count as a proxy**: after a file split, compare counts (`--reporter=verbose`) — a drop means a describe block was lost in the move. A deliberate drop is valid only when mutation analysis shows detection is unchanged; record the evidence in the commit
 
