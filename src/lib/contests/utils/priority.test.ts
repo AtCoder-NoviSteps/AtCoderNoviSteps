@@ -124,5 +124,9 @@ describe('contest type priorities', () => {
       expect(priorityOf(ContestType.ARC_LIKE)).toBeGreaterThan(priorityOf(ContestType.ARC));
       expect(priorityOf(ContestType.AGC_LIKE)).toBeGreaterThan(priorityOf(ContestType.AGC));
     });
+
+    test('ranks GAME_24 directly below FPS_24', () => {
+      expect(priorityOf(ContestType.GAME_24)).toBe(priorityOf(ContestType.FPS_24) + 1);
+    });
   });
 });

@@ -112,6 +112,14 @@ describe('classify contest', () => {
       });
     });
 
+    describe('when contest_id is game-24', () => {
+      TestCasesForContestType.game24.forEach(({ name, value }) => {
+        runTests(`${name}`, [value], ({ contestId, expected }: TestCaseForContestType) => {
+          expect(classifyContest(contestId)).toEqual(expected);
+        });
+      });
+    });
+
     describe('when contest_id contains arc', () => {
       TestCasesForContestType.arc.forEach(({ name, value }) => {
         runTests(`${name}`, [value], ({ contestId, expected }: TestCaseForContestType) => {

@@ -34,6 +34,7 @@ export const LABEL_GENERATORS: ReadonlyMap<ContestType, LabelGenerator> = new Ma
   [ContestType.TESSOKU_BOOK, () => '競技プログラミングの鉄則'],
   [ContestType.MATH_AND_ALGORITHM, () => 'アルゴリズムと数学'],
   [ContestType.FPS_24, () => 'FPS 24 題'],
+  [ContestType.GAME_24, () => '組合せゲーム 24 題'],
   [ContestType.ATCODER_MAIN_OFFICIAL_ONSITE, (id) => getWorldTourFinalsLabel(id)],
   [ContestType.UNIVERSITY, (id) => getAtCoderUniversityContestLabel(id)],
   [ContestType.OTHERS, generateOthersLabel],

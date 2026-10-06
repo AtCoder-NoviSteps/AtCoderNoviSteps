@@ -98,6 +98,14 @@ describe('get contest name label', () => {
       });
     });
 
+    describe('when contest_id is game-24', () => {
+      TestCasesForContestNameLabel.game24.forEach(({ name, value }) => {
+        runTests(`${name}`, [value], ({ contestId, expected }: TestCaseForContestNameLabel) => {
+          expect(getContestNameLabel(contestId)).toEqual(expected);
+        });
+      });
+    });
+
     describe('when contest_id contains awc', () => {
       TestCasesForContestNameLabel.awc.forEach(({ name, value }) => {
         runTests(`${name}`, [value], ({ contestId, expected }: TestCaseForContestNameLabel) => {
