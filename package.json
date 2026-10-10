@@ -49,7 +49,7 @@
     "lefthook": "2.2.1",
     "nock": "14.0.17",
     "oxlint": "1.87.0",
-    "pnpm": "12.10.1",
+    "pnpm": "12.11.1",
     "prettier": "3.9.9",
     "prettier-plugin-svelte": "4.1.1",
     "prettier-plugin-tailwindcss": "0.8.1",
@@ -83,7 +83,7 @@
     "tailwind-merge": "3.7.0",
     "xss": "1.0.15"
   },
-  "packageManager": "pnpm@12.10.1",
+  "packageManager": "pnpm@12.11.1",
   "engines": {
     "node": "24.x"
   }
