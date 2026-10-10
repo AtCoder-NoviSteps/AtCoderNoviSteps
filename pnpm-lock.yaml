@@ -177,7 +177,7 @@ overrides:
   brace-expansion@>=1.0.0 <1.1.13: 1.1.18
   js-yaml@>=4.0.0 <=4.1.1: 4.3.2
   postcss@>=8.0.0 <8.5.10: 8.5.29
-  smol-toml@>=1.0.0 <1.6.1: 1.9.0
+  smol-toml@>=1.0.0 <1.6.1: 1.9.1
   cookie@<0.7.0: 0.7.2
   '@tootallnate/once@>=2.0.0 <2.0.1': 2.0.1
 
@@ -3961,8 +3961,8 @@ packages:
   sisteransi@1.0.5:
     resolution: {integrity: sha512-bLGGlR1QxBcynn2d5YmDX4MGjlZvy2MRBDRNHLJ8VI6l6+9FUiyTFNJ0IveOSP0bcXgVDPRcfGqA0pjaqUpfVg==}
 
-  smol-toml@1.9.0:
-    resolution: {integrity: sha512-hpd+HLON7HdZXqYchMM/+LaTTbdK0AU3NngIJ4KVyWbY9bfQqdL9cD+4yf6dUoU2Ap4VsU0JkQi6FxAI1B2mXQ==}
+  smol-toml@1.9.1:
+    resolution: {integrity: sha512-j7WyPdf0CJoutMzMoPLF/bVXHtKZIT9Rb4eGeEbWw8X2t5oirjPgpL+OpaENZrILYaXqYwnVH+qgUwVbl+pUJQ==}
     engines: {node: '>= 18'}
 
   source-map-js@1.2.1:
@@ -5880,7 +5880,7 @@ snapshots:
   '@vercel/container@18.0.1(@vercel/build-utils@14.20.1)':
     dependencies:
       '@vercel/build-utils': 14.20.1
-      smol-toml: 1.9.0
+      smol-toml: 1.9.1
       tar: 7.5.11
 
   '@vercel/detect-agent@1.2.6': {}
@@ -6124,7 +6124,7 @@ snapshots:
       fs-extra: 11.1.1
       js-yaml: 4.3.2
       minimatch: 10.2.6
-      smol-toml: 1.9.0
+      smol-toml: 1.9.1
       zod: 3.22.4
 
   '@vercel/python@24.0.1(@vercel/build-utils@14.20.1)':
@@ -6171,7 +6171,7 @@ snapshots:
       '@vercel/build-utils': 14.20.1
       execa: 5.1.1
       get-port: 5.1.1
-      smol-toml: 1.9.0
+      smol-toml: 1.9.1
 
   '@vercel/sandbox@3.3.0':
     dependencies:
@@ -7854,7 +7854,7 @@ snapshots:
 
   sisteransi@1.0.5: {}
 
-  smol-toml@1.9.0: {}
+  smol-toml@1.9.1: {}
 
   source-map-js@1.2.1: {}
 
@@ -8195,7 +8195,7 @@ snapshots:
       jsonc-parser: 3.3.1
       luxon: 3.7.2
       sandbox: 4.4.0(supports-color@7.2.0)
-      smol-toml: 1.9.0
+      smol-toml: 1.9.1
       undici: 5.29.0
       uuid: 14.0.1
       zod: 4.1.11
