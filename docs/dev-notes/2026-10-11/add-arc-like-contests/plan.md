@@ -2,75 +2,39 @@
 
 ## 概要
 
-[#4140](https://github.com/AtCoder-NoviSteps/AtCoderNoviSteps/issues/4140) で、以下 3 コンテストの問題を追加する。
-いずれも ARC 相当（`ContestType.ARC_LIKE`）として分類する。
-
-- `nikkei2019-2-qual`（第二回全国統一プログラミング王決定戦予選）
-- `ddcc2020-qual`（DISCO presents ディスカバリーチャンネル コードコンテスト2020 予選）
-- `diverta2019-2`（diverta 2019 Programming Contest 2）
-
-参考 PR：[#3951](https://github.com/AtCoder-NoviSteps/AtCoderNoviSteps/pull/3951)（コンテスト名マッピング + `prisma/tasks.ts` + テストケースの追加）。
-#3951 以降、コンテスト関連のユーティリティは `src/lib/utils/contest.ts` から `src/lib/contests/utils/` へ、テストケースは `src/lib/contests/fixtures/` へ移動している。
+[#4140](https://github.com/AtCoder-NoviSteps/AtCoderNoviSteps/issues/4140) で、`nikkei2019-2-qual`・`ddcc2020-qual`・`diverta2019-2` の全問題を `prisma/tasks.ts` に追加し、`ContestType.ARC_LIKE` に分類した。
+3 件とも ARC 相当とするのはユーザーの判断による（コンテスト ID や問題構成からは機械的に決まらない）。
 
 ## 決定事項
 
-| 項目                | 決定                                                    |
-| ------------------- | ------------------------------------------------------- |
-| `prisma/tasks.ts`   | 各コンテストの全問題を追加                              |
-| `ARC_LIKE` の表示名 | 公式の日本語名（既存の `nikkei2019-qual` と同じ書き方） |
-| 本戦（`*-final`）   | スコープ外（YAGNI）                                     |
+| 項目                      | 決定                                         | 理由                                                                                       |
+| ------------------------- | -------------------------------------------- | ------------------------------------------------------------------------------------------ |
+| 追加する問題              | 各コンテストの全問題（A〜F）                 | `tenka1-2019` のように一部だけ載せる前例もあるが、本件は全問題を対象とした                 |
+| `ARC_LIKE` のコンテスト名 | 公式名（日本語名があれば日本語）             | 既存の `nikkei2019-qual` に合わせた。名前は AtCoder のコンテストページでユーザーが確認済み |
+| 本戦（`*-final`）         | スコープ外                                   | Issue の対象外（YAGNI）                                                                    |
+| 表示ラベル                | 変更しない（コンテスト ID の大文字化のまま） | `ARC_LIKE` にはラベル生成関数がなく、既存の ARC-Like と同じ扱いにそろえる                  |
 
-## 設計の根拠
+## 前提として判明したこと
 
-- `ARC_LIKE` は `arcLikePrefixes.has(id)` による完全一致で判定する（[classification.ts](../../../../src/lib/contests/utils/classification.ts)）。既存の `diverta2019` キーでは `diverta2019-2` にマッチしないため、3 件ともキーを追加する必要がある。
-- `ARC_LIKE` にはラベル生成関数がないため、表示ラベルはコンテスト ID の大文字化（例：`DDCC2020-QUAL`）になる。既存の ARC-Like と同じ扱いなので、ラベル生成側は変更しない。
-- 分類ルールは先にマッチしたものが優先される。新しい ID が `ARC_LIKE` より前のルール（`abc\d{3}`、`past`、`joi` などのプレフィックス）にマッチしないことを確認済み。
+- `ABC_LIKE` / `ARC_LIKE` は完全一致、その他のグループは前方一致で判定する。そのため、既存の `diverta2019` キーでは `diverta2019-2` を拾えず、続編にも個別のキーが要る。変数名（`ContestPrefix`、`arcLikePrefixes`）からは前方一致に見えるので、`prefixes.ts` にコメントを追加した。
+- 問題データの取得元は [problems.json](https://kenkoooo.com/atcoder/resources/problems.json) だが、エージェントからは atcoder.jp に到達できず、WebFetch は problems.json を途中で切り捨てる。今回は該当行をユーザーに貼ってもらった。
+- 参考にした #3951 以降、コンテスト関連のユーティリティは `src/lib/contests/utils/`、テストケースは `src/lib/contests/fixtures/` へ移動している。
 
-### 採用しなかった案
+## 採用しなかった案
 
-- `ARC_LIKE` をプレフィックス一致に変更する：`diverta2019` などのキーで想定外の ID まで拾ってしまうため不採用。完全一致の方針を維持する。
-- ARC-Like 用のラベル生成関数を追加する：本件の要件外で、既存の ARC-Like コンテストの表示も変わってしまうため不採用。
+- `ARC_LIKE` を前方一致に変更する：`diverta2019` などのキーが想定外の ID まで拾ってしまう。
+- ARC-Like 用のラベル生成関数を追加する：要件外で、既存の ARC-Like コンテストの表示まで変わる。
 
-## Phase 1：分類（テスト → 実装）
+## 派生した変更
 
-レイヤー：Utilities（`src/lib/contests/utils/`）+ テストデータ（`src/lib/contests/fixtures/`）。
+同種の Issue（「問題を追加しましょう」）は繰り返し起きるが、既存の `add-contest-table-provider` skill は ContestType や Provider を新しく追加するときにしか読み込まれない。そこで以下を整備した。
 
-1. [contest_type.ts](../../../../src/lib/contests/fixtures/contest_type.ts) の `arcLike` に 3 件を追加する（`nikkei2019-qual` の後、`acl1` の前）。
-   ```typescript
-   createTestCaseForContestType('NIKKEI2019-2 QUAL')({
-     contestId: 'nikkei2019-2-qual',
-     expected: ContestType.ARC_LIKE,
-   }),
-   createTestCaseForContestType('DDCC2020 QUAL')({
-     contestId: 'ddcc2020-qual',
-     expected: ContestType.ARC_LIKE,
-   }),
-   createTestCaseForContestType('diverta 2019 Programming Contest 2')({
-     contestId: 'diverta2019-2',
-     expected: ContestType.ARC_LIKE,
-   }),
-   ```
-2. `pnpm test:unit src/lib/contests/utils/classification.test.ts` を実行し、失敗すること（Red）を確認する。
-3. [prefixes.ts](../../../../src/lib/contests/utils/prefixes.ts) の `ARC_LIKE` に以下を追加する（開催順に並べる）。
-   ```typescript
-   'diverta2019-2': 'diverta 2019 Programming Contest 2',
-   'nikkei2019-2-qual': '第二回全国統一プログラミング王決定戦予選',
-   'ddcc2020-qual': 'DISCO presents ディスカバリーチャンネル コードコンテスト2020 予選',
-   ```
-4. テストが通ること（Green）を確認する。
+- `add-tasks` skill を新設した（`SKILL.md` に概略、`instructions.md` に詳細）。AOJ 側の手順は #3951 の差分から読み取った下書きで、未検証。必要になったときに直す。
+- `add-contest-table-provider` の手順 0 と Layer 3 から `add-tasks` を参照するようにし、データ取得と照合方法の説明を一か所にまとめた。
+- `how-to-add-contest-table-provider.md` の「事前確認」に、完全一致と前方一致の違いを 1 行追記した。
+- Claude は `.claude/skills/` のシンボリックリンクから、Codex は AGENTS.md の skill 一覧から参照する。
 
-## Phase 2：問題データ（`prisma/tasks.ts`）
+## 検証
 
-レイヤー：DB シード。分岐を含まないデータ追加なので、テストファーストは省略する。
-
-- ARC-Like ブロックの `acl1` の後、`tenka1-2019` の前に、開催日の新しい順で追加する：`ddcc2020-qual` → `nikkei2019-2-qual` → `diverta2019-2`。
-- 各ブロックの中は既存と同じく問題番号の降順（F → A）で並べる。
-- `id` / `problem_index` / `name` / `title` は [problems.json](https://kenkoooo.com/atcoder/resources/problems.json) の値をそのまま使う。
-  - `ddcc2020-qual`：A〜F（ユーザー提供の値で確定済み）
-  - `diverta2019-2`：A〜F（ユーザー提供の値で確定済み）
-  - `nikkei2019-2-qual`：A〜F（ユーザー提供の値で確定済み）
-
-## Phase 3：検証
-
-- `pnpm format`、`pnpm lint`、`pnpm check`、`pnpm test:unit`、`git diff --check` を実行する。
-- クロスレビュー：対象外（手で編集するファイルは 3 件で、認証・スキーマ・公開インターフェースの変更もない）。
+- format、lint、check、unit test（2697 件）、`git diff --check` がすべて通った。
+- クロスレビューは対象外（手で編集したソースは 3 ファイルで、認証・スキーマ・公開インターフェースの変更もない）。
