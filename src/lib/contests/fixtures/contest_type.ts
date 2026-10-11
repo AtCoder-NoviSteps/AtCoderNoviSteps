@@ -300,6 +300,10 @@ export const arcLike = [
     contestId: 'diverta2019',
     expected: ContestType.ARC_LIKE,
   }),
+  createTestCaseForContestType('diverta 2019 Programming Contest 2')({
+    contestId: 'diverta2019-2',
+    expected: ContestType.ARC_LIKE,
+  }),
   createTestCaseForContestType('KEYENCE2019')({
     contestId: 'keyence2019',
     expected: ContestType.ARC_LIKE,
@@ -318,6 +322,14 @@ export const arcLike = [
   }),
   createTestCaseForContestType('NIKKEI2019 QUAL')({
     contestId: 'nikkei2019-qual',
+    expected: ContestType.ARC_LIKE,
+  }),
+  createTestCaseForContestType('NIKKEI2019-2 QUAL')({
+    contestId: 'nikkei2019-2-qual',
+    expected: ContestType.ARC_LIKE,
+  }),
+  createTestCaseForContestType('DDCC2020 QUAL')({
+    contestId: 'ddcc2020-qual',
     expected: ContestType.ARC_LIKE,
   }),
   createTestCaseForContestType('ACL1')({
