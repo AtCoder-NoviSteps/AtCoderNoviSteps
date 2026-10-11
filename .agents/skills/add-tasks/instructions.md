@@ -8,7 +8,7 @@
   - `ABC_LIKE` / `ARC_LIKE`: exact match — a sequel (e.g. `diverta2019-2` next to `diverta2019`) needs its own key
   - `AGC_LIKE` / `ATCODER_UNIVERSITIES` / `ATCODER_OTHERS`: prefix match — check an existing key does not already swallow the new id with the wrong type
   - AOJ: regex (`regexForJag`, `regexForAojUniversity`) — no map edit if the id already matches; otherwise widening the regex also affects `getContestNameLabel` and `AojGenerator.canHandle`, so switch to `add-contest-table-provider`
-- Rules are first-match-wins (`CLASSIFICATION_RULES` in `classification.ts`); confirm no earlier rule (`abc\d{3}`, `past`, `joi`, ...) catches the id
+- `classifyContest` checks the exact-match `CONTEST_TYPES_BY_ID` first, then first-match-wins `CLASSIFICATION_RULES`; confirm no earlier rule (`abc\d{3}`, `past`, `joi`, ...) catches the id. If it already returns the intended type (e.g. adding tasks to `typical90`), skip the `prefixes.ts` edit
 - Use the official contest name; Japanese if one exists
 
 ## Collect rows
