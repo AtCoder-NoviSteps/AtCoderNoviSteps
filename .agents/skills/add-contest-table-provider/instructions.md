@@ -49,7 +49,7 @@ Step 0 (seed check) is already done. Confirm the following before touching code:
 
 ### Implement
 
-- [ ] `CONTEST_TYPES_BY_ID` or `CLASSIFICATION_RULES` in `src/lib/contests/utils/classification.ts`
+- [ ] `CONTEST_TYPES_BY_ID` or `CLASSIFICATION_RULES` in `src/lib/contests/utils/classification.ts`, or the maps in `prefixes.ts` (exact vs prefix match: see `add-tasks` [§Classify](../add-tasks/instructions.md))
 - [ ] `contestTypePriorities` in `src/lib/contests/utils/priority.ts`
   - After priority insertion, all later entries shift +1 → **update JSDoc numeric ranges** (4 category names are immutable)
   - Fix hardcoded priority-diff expected values in `src/test/lib/utils/task.test.ts` only when they involve a shifted entry (±1 each)
