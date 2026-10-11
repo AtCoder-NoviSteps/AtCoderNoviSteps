@@ -3,8 +3,9 @@ import type { ContestPrefix } from '$lib/contests/types/contest';
 export const regexForJag = /^JAG(Prelim|Regional|Summer|Winter|Spring)\d{4}(-day\d+)?[A-Z]?$/;
 export const regexForAojUniversity = /^AOJ-[A-Z]+PC\d{4}/;
 
-// HACK: As of December 2025, the following contests are applicable.
+// HACK: As of October 2026, the following contests are applicable.
 // Note: The classification logic may need to be revised when new contests are added.
+// ABC_LIKE / ARC_LIKE: exact match — add sequels (e.g. diverta2019-2) explicitly. Others: prefix match.
 export const ABC_LIKE: ContestPrefix = {
   'tenka1-2017-beginner': 'Tenka1 Programmer Beginner Contest 2017',
   abl: 'ACL Beginner Contest',
@@ -31,11 +32,14 @@ export const ARC_LIKE: ContestPrefix = {
   'dwacon5th-prelims': '第5回 ドワンゴからの挑戦状 予選',
   'dwacon6th-prelims': '第6回 ドワンゴからの挑戦状 予選',
   diverta2019: 'diverta 2019 Programming Contest',
+  'diverta2019-2': 'diverta 2019 Programming Contest 2',
   keyence2019: 'キーエンス プログラミング コンテスト 2019',
   keyence2020: 'キーエンス プログラミング コンテスト 2020',
   keyence2021: 'キーエンス プログラミング コンテスト 2021',
   'jsc2019-qual': '第一回日本最強プログラマー学生選手権-予選-',
   'nikkei2019-qual': '全国統一プログラミング王決定戦予選',
+  'nikkei2019-2-qual': '第二回全国統一プログラミング王決定戦予選',
+  'ddcc2020-qual': 'DISCO presents ディスカバリーチャンネル コードコンテスト2020 予選',
   acl1: 'ACL Contest 1',
 } as const;
 
