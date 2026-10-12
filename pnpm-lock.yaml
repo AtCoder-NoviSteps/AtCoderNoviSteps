@@ -204,8 +204,8 @@ importers:
         specifier: 4.4.3
         version: 4.4.3(supports-color@7.2.0)
       p-queue:
-        specifier: 9.3.4
-        version: 9.3.4
+        specifier: 9.3.5
+        version: 9.3.5
       playwright:
         specifier: 1.63.0
         version: 1.63.0
@@ -3598,8 +3598,8 @@ packages:
     resolution: {integrity: sha512-LaNjtRWUBY++zB5nE/NwcaoMylSPk+S+ZHNB1TzdbMJMny6dynpAGt7X/tl/QYq3TIeE6nxHppbo2LGymrG5Pw==}
     engines: {node: '>=10'}
 
-  p-queue@9.3.4:
-    resolution: {integrity: sha512-bpTeG3CuPiOgPcDqn51QUsRYshkiKiaG+hP49tCGI0+nT92h7rqD4LPKZzP8kwab/OniQf+ntA4ta6yCp1eA0Q==}
+  p-queue@9.3.5:
+    resolution: {integrity: sha512-Lki/zhXFVmDhesBUn/yHRLW9Bte7mE7xoFHzTR8sIomV7a2z+LxYAPkGvdfidNiu4fKSfjtawixxSHcZci5QcQ==}
     engines: {node: '>=20'}
 
   p-timeout@7.0.1:
@@ -7545,7 +7545,7 @@ snapshots:
     dependencies:
       p-limit: 3.1.0
 
-  p-queue@9.3.4:
+  p-queue@9.3.5:
     dependencies:
       eventemitter3: 5.0.4
       p-timeout: 7.0.1
