@@ -7,10 +7,13 @@ const XDPC_GROUP_TABLE_TITLES = [
   'Next DP Contest',
   'FPS 24 題',
   '組合せゲーム 24 題',
+  "AAL Contest 001: Let's use segtree!",
 ];
 
 test.describe('xDPC group in contest table', () => {
-  test('shows Game 24 table right after FPS 24 in the xDPC group', async ({ page }) => {
+  test('shows Game 24 and AAL Contest 001 tables after FPS 24 in the xDPC group', async ({
+    page,
+  }) => {
     await page.goto('/problems');
 
     await page.getByRole('button', { name: XDPC_GROUP_ARIA_LABEL }).click();
