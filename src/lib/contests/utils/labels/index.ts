@@ -35,6 +35,7 @@ export const LABEL_GENERATORS: ReadonlyMap<ContestType, LabelGenerator> = new Ma
   [ContestType.MATH_AND_ALGORITHM, () => 'アルゴリズムと数学'],
   [ContestType.FPS_24, () => 'FPS 24 題'],
   [ContestType.GAME_24, () => '組合せゲーム 24 題'],
+  [ContestType.AALC, () => "AAL Contest 001: Let's use segtree!"],
   [ContestType.ATCODER_MAIN_OFFICIAL_ONSITE, (id) => getWorldTourFinalsLabel(id)],
   [ContestType.UNIVERSITY, (id) => getAtCoderUniversityContestLabel(id)],
   [ContestType.OTHERS, generateOthersLabel],

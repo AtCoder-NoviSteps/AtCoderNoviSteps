@@ -128,5 +128,9 @@ describe('contest type priorities', () => {
     test('ranks GAME_24 directly below FPS_24', () => {
       expect(priorityOf(ContestType.GAME_24)).toBe(priorityOf(ContestType.FPS_24) + 1);
     });
+
+    test('ranks AALC directly below GAME_24', () => {
+      expect(priorityOf(ContestType.AALC)).toBe(priorityOf(ContestType.GAME_24) + 1);
+    });
   });
 });

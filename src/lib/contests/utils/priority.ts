@@ -2,13 +2,13 @@ import { ContestType } from '$lib/contests/types/contest';
 import { classifyContest } from './classification';
 
 /**
- * Contest type priorities (0 = Highest, 27 = Lowest)
+ * Contest type priorities (0 = Highest, 28 = Lowest)
  *
  * Priority assignment rationale:
  * - Educational contests (0-11, 17): ABS, ABC, APG4B and AWC etc.
  * - Contests for genius (12-16): ARC, AGC, and their variants
- * - Special contests (18-22): UNIVERSITY, FPS_24, GAME_24, ATCODER_MAIN_OFFICIAL_ONSITE, OTHERS
- * - External platforms (23-27): AOJ_COURSES, AOJ_PCK, AOJ_ICPC, AOJ_JAG, AOJ_UNIVERSITY
+ * - Special contests (18-23): UNIVERSITY, FPS_24, GAME_24, AALC, ATCODER_MAIN_OFFICIAL_ONSITE, OTHERS
+ * - External platforms (24-28): AOJ_COURSES, AOJ_PCK, AOJ_ICPC, AOJ_JAG, AOJ_UNIVERSITY
  *
  * @remarks
  * HACK: The priorities for ARC, AGC, UNIVERSITY, AOJ_COURSES, and AOJ_PCK are temporary
@@ -39,13 +39,14 @@ export const contestTypePriorities: Map<ContestType, number> = new Map([
   [ContestType.UNIVERSITY, 18],
   [ContestType.FPS_24, 19],
   [ContestType.GAME_24, 20],
-  [ContestType.ATCODER_MAIN_OFFICIAL_ONSITE, 21],
-  [ContestType.OTHERS, 22], // AtCoder (その他)
-  [ContestType.AOJ_COURSES, 23],
-  [ContestType.AOJ_PCK, 24],
-  [ContestType.AOJ_ICPC, 25],
-  [ContestType.AOJ_JAG, 26],
-  [ContestType.AOJ_UNIVERSITY, 27],
+  [ContestType.AALC, 21],
+  [ContestType.ATCODER_MAIN_OFFICIAL_ONSITE, 22],
+  [ContestType.OTHERS, 23], // AtCoder (その他)
+  [ContestType.AOJ_COURSES, 24],
+  [ContestType.AOJ_PCK, 25],
+  [ContestType.AOJ_ICPC, 26],
+  [ContestType.AOJ_JAG, 27],
+  [ContestType.AOJ_UNIVERSITY, 28],
 ]);
 
 /** Priority given to a contest_id that no classification rule matches, so it sorts last. */

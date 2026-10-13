@@ -177,6 +177,13 @@ export const game24 = [
   }),
 ];
 
+export const aalc001 = [
+  createTestCaseForContestType('AAL Contest 001')({
+    contestId: 'aalc001',
+    expected: ContestType.AALC,
+  }),
+];
+
 const arcContestIds = [
   'arc001',
   'arc002',
