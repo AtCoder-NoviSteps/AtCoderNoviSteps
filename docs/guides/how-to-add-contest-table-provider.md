@@ -116,11 +116,12 @@ AOJ/JAG 固有の詳細（`AOJ_LABEL_OVERRIDES`、`titleStyle`、同一年2回�
 | NDPC                        | `'ndpc'`                | 20問   | A～T         |
 | FPS_24                      | `'fps-24'`              | 24問   | A～X         |
 | GAME_24‡                    | `'game-24'`             | 24問   | A～X         |
+| AALC                        | `'aalc001'`             | 24問   | A～X         |
 | ACL_PRACTICE                | `'practice2'`           | 12問   | A～L         |
 | ACL_BEGINNER / ACL_CONTEST1 | `'abl'`/`'acl1'`        | 6問    | A～F         |
 | AWC0100 / AWC0150†          | `'awc0100'`/`'awc0150'` | 15問   | A～O         |
 
-†注: ContestType.AWC を再利用し、section（`'0100'`, `'0150'`, `'0151Onwards'`）で provider key を一意化。ACL 系は `Acl` グループ、DP 系は `dps` グループで統一管理。
+†注: ContestType.AWC を再利用し、section（`'0100'`, `'0150'`, `'0151Onwards'`）で provider key を一意化。ACL 系は `Acl` グループ、DP 系と x 24 題系（FPS_24 / GAME_24 / AALC）は `dps` グループで統一管理。
 
 ‡注: task_id は `game_a`〜`game_x` で、contest_id の数字を含まない（`fps-24` は `fps_24_a`）。
 
@@ -169,4 +170,4 @@ AOJ/JAG 固有の詳細（`AOJ_LABEL_OVERRIDES`、`titleStyle`、同一年2回�
 
 ---
 
-**最終更新**: 2026-09-05
+**最終更新**: 2026-10-13
