@@ -106,6 +106,14 @@ describe('get contest name label', () => {
       });
     });
 
+    describe('when contest_id is aalc001', () => {
+      TestCasesForContestNameLabel.aalc001.forEach(({ name, value }) => {
+        runTests(`${name}`, [value], ({ contestId, expected }: TestCaseForContestNameLabel) => {
+          expect(getContestNameLabel(contestId)).toEqual(expected);
+        });
+      });
+    });
+
     describe('when contest_id contains awc', () => {
       TestCasesForContestNameLabel.awc.forEach(({ name, value }) => {
         runTests(`${name}`, [value], ({ contestId, expected }: TestCaseForContestNameLabel) => {

@@ -146,6 +146,13 @@ export const game24 = [
   }),
 ];
 
+export const aalc001 = [
+  createTestCaseForContestNameLabel('AAL Contest 001')({
+    contestId: 'aalc001',
+    expected: "AAL Contest 001: Let's use segtree!",
+  }),
+];
+
 export const aojCourses = [
   createTestCaseForContestNameLabel('AOJ, ITP1')({
     contestId: 'ITP1',
