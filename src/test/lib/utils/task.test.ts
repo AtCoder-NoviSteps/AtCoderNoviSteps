@@ -13,8 +13,8 @@ import {
 } from './test_cases/task_results';
 import { taskResultsForTaskTableHeaderName } from './test_cases/task_table_header_name';
 
-import { ContestType } from '$lib/contests/types/contest';
-import { type TaskResult, type TaskResults } from '$lib/types/task';
+import { ContestType } from '#lib/contests/types/contest.js';
+import { type TaskResult, type TaskResults } from '#lib/types/task.js';
 import type { WorkBookTaskBase } from '$features/workbooks/types/workbook';
 
 import {
@@ -25,7 +25,7 @@ import {
   compareByContestIdAndTaskId,
   removeTaskIndexFromTitle,
   getTaskTableHeaderName,
-} from '$lib/utils/task';
+} from '#lib/utils/task.js';
 
 type TestCaseForTaskResults = {
   taskResults: TaskResults;

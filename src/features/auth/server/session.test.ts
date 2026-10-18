@@ -2,7 +2,7 @@ import { describe, test, expect, beforeEach, afterEach, vi } from 'vitest';
 
 import { Prisma, Roles } from '@prisma/client';
 
-vi.mock('$lib/server/database', () => ({
+vi.mock('#lib/server/database.js', () => ({
   default: {
     session: {
       create: vi.fn(),
@@ -13,7 +13,7 @@ vi.mock('$lib/server/database', () => ({
   },
 }));
 
-import db from '$lib/server/database';
+import db from '#lib/server/database.js';
 import { createSession, validateSession, invalidateSession, SESSION_COOKIE_NAME } from './session';
 
 const mockDb = db as unknown as {

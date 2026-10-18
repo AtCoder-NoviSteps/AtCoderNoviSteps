@@ -10,24 +10,24 @@
     TableHeadCell,
   } from 'flowbite-svelte';
 
-  import { type TaskResult, type TaskResults } from '$lib/types/task';
+  import { type TaskResult, type TaskResults } from '#lib/types/task.js';
 
-  import GradeLabel from '$lib/components/GradeLabel.svelte';
-  import ThermometerProgressBar from '$lib/components/ThermometerProgressBar.svelte';
-  import UpdatingModal from '$lib/components/SubmissionStatus/UpdatingModal.svelte';
-  import SubmissionStatusImage from '$lib/components/SubmissionStatus/SubmissionStatusImage.svelte';
-  import ExternalLinkWrapper from '$lib/components/ExternalLinkWrapper.svelte';
-  import AcceptedCounter from '$lib/components/SubmissionStatus/AcceptedCounter.svelte';
+  import GradeLabel from '#lib/components/GradeLabel.svelte';
+  import ThermometerProgressBar from '#lib/components/ThermometerProgressBar.svelte';
+  import UpdatingModal from '#lib/components/SubmissionStatus/UpdatingModal.svelte';
+  import SubmissionStatusImage from '#lib/components/SubmissionStatus/SubmissionStatusImage.svelte';
+  import ExternalLinkWrapper from '#lib/components/ExternalLinkWrapper.svelte';
+  import AcceptedCounter from '#lib/components/SubmissionStatus/AcceptedCounter.svelte';
 
-  import { getBackgroundColorFrom } from '$lib/services/submission_status';
+  import { getBackgroundColorFrom } from '#lib/services/submission_status.js';
 
-  import { addContestNameToTaskIndex } from '$lib/contests';
+  import { addContestNameToTaskIndex } from '#lib/contests/index.js';
   import {
     countAcceptedTasks,
     countAllTasks,
     getTaskUrl,
     removeTaskIndexFromTitle,
-  } from '$lib/utils/task';
+  } from '#lib/utils/task.js';
 
   interface Props {
     grade: string;

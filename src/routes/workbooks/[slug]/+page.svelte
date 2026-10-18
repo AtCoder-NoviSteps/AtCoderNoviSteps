@@ -10,20 +10,20 @@
     TableBodyRow,
   } from 'flowbite-svelte';
 
-  import CompletedTasks from '$lib/components/Trophies/CompletedTasks.svelte';
-  import HeadingOne from '$lib/components/HeadingOne.svelte';
-  import UpdatingModal from '$lib/components/SubmissionStatus/UpdatingModal.svelte';
-  import SubmissionStatusImage from '$lib/components/SubmissionStatus/SubmissionStatusImage.svelte';
-  import ExternalLinkWrapper from '$lib/components/ExternalLinkWrapper.svelte';
+  import CompletedTasks from '#lib/components/Trophies/CompletedTasks.svelte';
+  import HeadingOne from '#lib/components/HeadingOne.svelte';
+  import UpdatingModal from '#lib/components/SubmissionStatus/UpdatingModal.svelte';
+  import SubmissionStatusImage from '#lib/components/SubmissionStatus/SubmissionStatusImage.svelte';
+  import ExternalLinkWrapper from '#lib/components/ExternalLinkWrapper.svelte';
   import VotableGrade from '$features/votes/components/VotableGrade.svelte';
   import PublicationStatusLabel from '$features/workbooks/components/shared/PublicationStatusLabel.svelte';
   import CommentAndHint from '$features/workbooks/components/detail/CommentAndHint.svelte';
-  import { getBackgroundColorFrom } from '$lib/services/submission_status';
+  import { getBackgroundColorFrom } from '#lib/services/submission_status.js';
 
-  import { addContestNameToTaskIndex } from '$lib/contests';
-  import { getTaskUrl, removeTaskIndexFromTitle } from '$lib/utils/task';
+  import { addContestNameToTaskIndex } from '#lib/contests/index.js';
+  import { getTaskUrl, removeTaskIndexFromTitle } from '#lib/utils/task.js';
 
-  import type { TaskResult } from '$lib/types/task';
+  import type { TaskResult } from '#lib/types/task.js';
   import type { WorkBookTaskBase } from '$features/workbooks/types/workbook';
 
   let { data } = $props();

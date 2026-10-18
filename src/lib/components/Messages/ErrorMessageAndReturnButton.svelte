@@ -1,6 +1,6 @@
 <script lang="ts">
   import { Heading, Button } from 'flowbite-svelte';
-  import HeadingOne from '$lib/components/HeadingOne.svelte';
+  import HeadingOne from '#lib/components/HeadingOne.svelte';
 
   interface Props {
     errorStatus: number | undefined;

@@ -1,7 +1,7 @@
 import { describe, test, expect, beforeEach, afterEach } from 'vitest';
 
-import { ContestType } from '$lib/contests/types/contest';
-import type { TaskResults } from '$lib/types/task';
+import { ContestType } from '#lib/contests/types/contest.js';
+import type { TaskResults } from '#lib/types/task.js';
 
 import { AOJ_LABEL_OVERRIDES } from './aoj_labels';
 import { AojIcpcPrelimProvider, AojIcpcRegionalProvider } from './aoj_icpc_providers';

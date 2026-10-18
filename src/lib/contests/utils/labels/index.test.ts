@@ -1,10 +1,10 @@
 import { expect } from 'vitest';
 
-import { ContestType } from '$lib/contests/types/contest';
+import { ContestType } from '#lib/contests/types/contest.js';
 import { runTests } from '../../../../test/lib/common/test_helpers';
-import * as TestCasesForContestNameLabel from '$lib/contests/fixtures/contest_name_labels';
-import { type TestCaseForContestNameLabel } from '$lib/contests/fixtures/contest_name_labels';
-import { getContestNameLabel, LABEL_GENERATORS } from '$lib/contests/utils/labels/index';
+import * as TestCasesForContestNameLabel from '#lib/contests/fixtures/contest_name_labels.js';
+import { type TestCaseForContestNameLabel } from '#lib/contests/fixtures/contest_name_labels.js';
+import { getContestNameLabel, LABEL_GENERATORS } from '#lib/contests/utils/labels/index.js';
 
 /**
  * Contest types that classifyContest can return but LABEL_GENERATORS deliberately

@@ -1,7 +1,7 @@
 import type { User } from '@prisma/client';
-import { Roles } from '$lib/types/user';
-import type { TaskResult } from '$lib/types/task';
-import type { FloatingMessages } from '$lib/types/floating_message';
+import { Roles } from '#lib/types/user.js';
+import type { TaskResult } from '#lib/types/task.js';
+import type { FloatingMessages } from '#lib/types/floating_message.js';
 
 import { createTestCase } from '../../common/test_helpers';
 import { taskResultsForUserId3 } from './task_results';

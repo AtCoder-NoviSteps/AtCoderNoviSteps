@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'vitest';
 
-import { TaskGrade } from '$lib/types/task';
+import { TaskGrade } from '#lib/types/task.js';
 import {
   calcGradeDiff,
   getRelativeEvaluationLabel,

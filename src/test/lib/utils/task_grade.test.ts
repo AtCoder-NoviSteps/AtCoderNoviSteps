@@ -8,9 +8,9 @@ import {
   getTaskGradeLabel,
   toChangeTextColorIfNeeds,
   toChangeBorderColorIfNeeds,
-} from '$lib/utils/task';
+} from '#lib/utils/task.js';
 
-import { TaskGrade, type TaskGrades } from '$lib/types/task';
+import { TaskGrade, type TaskGrades } from '#lib/types/task.js';
 
 type TestCaseForTaskGradeOrder = {
   taskGrade: TaskGrade;

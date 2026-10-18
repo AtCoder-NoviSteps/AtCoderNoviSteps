@@ -1,6 +1,6 @@
 import { error } from '@sveltejs/kit';
 
-import { FORBIDDEN } from '$lib/constants/http-response-status-codes';
+import { FORBIDDEN } from '#lib/constants/http-response-status-codes.js';
 
 export async function load({ locals }) {
   const session = await locals.auth.validate();

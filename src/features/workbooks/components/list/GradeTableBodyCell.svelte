@@ -1,9 +1,9 @@
 <script lang="ts">
   import { TableBodyCell } from 'flowbite-svelte';
 
-  import type { TaskGrade } from '$lib/types/task';
+  import type { TaskGrade } from '#lib/types/task.js';
 
-  import GradeLabel from '$lib/components/GradeLabel.svelte';
+  import GradeLabel from '#lib/components/GradeLabel.svelte';
 
   interface Props {
     taskGrade: TaskGrade;

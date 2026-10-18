@@ -1,6 +1,6 @@
 import { createTestCase } from '../../common/test_helpers';
 
-import { ATCODER_BASE_CONTEST_URL, AOJ_TASKS_URL } from '$lib/constants/urls';
+import { ATCODER_BASE_CONTEST_URL, AOJ_TASKS_URL } from '#lib/constants/urls.js';
 
 /** Represents a test case for task URL generation.
  *

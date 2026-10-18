@@ -2,9 +2,9 @@ import {
   PRODUCT_DESCRIPTION,
   PRODUCT_NAME,
   TWITTER_HANDLE_NAME,
-} from '$lib/constants/product-info';
+} from '#lib/constants/product-info.js';
 
-import { Roles } from '$lib/types/user';
+import { Roles } from '#lib/types/user.js';
 
 const getBaseMetaTags = (url: URL) => {
   const title: string = PRODUCT_NAME;

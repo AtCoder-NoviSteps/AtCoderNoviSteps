@@ -1,4 +1,4 @@
-import { Cache } from '$lib/clients/cache';
+import { Cache } from '#lib/clients/cache.js';
 
 import type { VotedGradeStatistics } from '@prisma/client';
 

@@ -1,7 +1,7 @@
 import { describe, test, expect } from 'vitest';
 
-import { taskGradeValues, TaskGrade } from '$lib/types/task';
-import { isValidTaskGrade } from '$lib/utils/task_grade';
+import { taskGradeValues, TaskGrade } from '#lib/types/task.js';
+import { isValidTaskGrade } from '#lib/utils/task_grade.js';
 
 describe('isValidTaskGrade', () => {
   describe('successful cases', () => {

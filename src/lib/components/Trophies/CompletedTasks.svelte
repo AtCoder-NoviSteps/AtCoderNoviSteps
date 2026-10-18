@@ -1,10 +1,10 @@
 <script lang="ts">
   import { Img } from 'flowbite-svelte';
 
-  import type { TaskResults } from '$lib/types/task';
+  import type { TaskResults } from '#lib/types/task.js';
   import type { WorkBookTaskBase } from '$features/workbooks/types/workbook';
 
-  import { areAllTasksAccepted } from '$lib/utils/task';
+  import { areAllTasksAccepted } from '#lib/utils/task.js';
 
   /**
    * Props for the CompletedTasks component

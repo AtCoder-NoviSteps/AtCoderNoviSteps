@@ -1,7 +1,7 @@
 <script lang="ts">
-  import MessageHelperWrapper from '$lib/components/MessageHelperWrapper.svelte';
-  import InputFieldWrapper from '$lib/components/InputFieldWrapper.svelte';
-  import SelectWrapper from '$lib/components/SelectWrapper.svelte';
+  import MessageHelperWrapper from '#lib/components/MessageHelperWrapper.svelte';
+  import InputFieldWrapper from '#lib/components/InputFieldWrapper.svelte';
+  import SelectWrapper from '#lib/components/SelectWrapper.svelte';
   import { WorkBookType } from '$features/workbooks/types/workbook';
 
   interface Props {

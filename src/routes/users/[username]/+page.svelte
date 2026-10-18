@@ -1,10 +1,10 @@
 <script lang="ts">
   import { resolve } from '$app/paths';
 
-  import UserProfile from '$lib/components/UserProfile.svelte';
-  import HeadingOne from '$lib/components/HeadingOne.svelte';
-  import TaskListSorted from '$lib/components/TaskListSorted.svelte';
-  import { PROBLEMS_PAGE } from '$lib/constants/navbar-links';
+  import UserProfile from '#lib/components/UserProfile.svelte';
+  import HeadingOne from '#lib/components/HeadingOne.svelte';
+  import TaskListSorted from '#lib/components/TaskListSorted.svelte';
+  import { PROBLEMS_PAGE } from '#lib/constants/navbar-links.js';
 
   let { data } = $props();
 

@@ -7,11 +7,11 @@
     TableHead,
     TableHeadCell,
   } from 'flowbite-svelte';
-  import ExternalLinkWrapper from '$lib/components/ExternalLinkWrapper.svelte';
-  import { gradeGuidelineTableData } from '$lib/components/TaskGrades/grade_guideline_table_data';
-  import GradeLabel from '$lib/components/GradeLabel.svelte';
+  import ExternalLinkWrapper from '#lib/components/ExternalLinkWrapper.svelte';
+  import { gradeGuidelineTableData } from '#lib/components/TaskGrades/grade_guideline_table_data.js';
+  import GradeLabel from '#lib/components/GradeLabel.svelte';
 
-  import { TASK_GRADE_CRITERIA_SHEET_URL } from '$lib/constants/urls';
+  import { TASK_GRADE_CRITERIA_SHEET_URL } from '#lib/constants/urls.js';
 </script>
 
 <div class="container mx-auto w-5/6 lg:w-2/3 mt-4 text-gray-800 dark:text-gray-300">

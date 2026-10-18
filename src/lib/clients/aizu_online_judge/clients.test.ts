@@ -1,18 +1,18 @@
 import { describe, test, expect, beforeEach, afterEach, vi } from 'vitest';
 import nock from 'nock';
 
-vi.mock('$lib/utils/time', () => ({
+vi.mock('#lib/utils/time.js', () => ({
   delay: vi.fn().mockResolvedValue(undefined),
 }));
 
-import { HttpRequestClient } from '$lib/clients/http_client';
-import { ContestTaskCache } from '$lib/clients/cache_strategy';
-import { Cache } from '$lib/clients/cache';
+import { HttpRequestClient } from '#lib/clients/http_client.js';
+import { ContestTaskCache } from '#lib/clients/cache_strategy.js';
+import { Cache } from '#lib/clients/cache.js';
 
 import { AojCoursesApiClient, AojChallengesApiClient } from './clients';
 
-import type { ContestsForImport } from '$lib/contests/types/contest';
-import type { TasksForImport } from '$lib/types/task';
+import type { ContestsForImport } from '#lib/contests/types/contest.js';
+import type { TasksForImport } from '#lib/types/task.js';
 import type { AOJCourseAPI, AOJChallengeContestAPI, AOJTaskAPIs } from './types';
 
 import { loadMockData } from '../fixtures/helpers';

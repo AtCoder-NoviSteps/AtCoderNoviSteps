@@ -12,11 +12,11 @@
 
 import { describe, test, expect, vi, beforeEach } from 'vitest';
 
-import { getTasks } from '$lib/services/tasks';
-import { getAnswers } from '$lib/services/answers';
-import { getTaskResults, getTaskResultsOnlyResultExists } from '$lib/services/task_results';
+import { getTasks } from '#lib/services/tasks.js';
+import { getAnswers } from '#lib/services/answers.js';
+import { getTaskResults, getTaskResultsOnlyResultExists } from '#lib/services/task_results.js';
 
-import type { TaskResult, TaskResults, Tasks } from '$lib/types/task';
+import type { TaskResult, TaskResults, Tasks } from '#lib/types/task.js';
 
 import {
   MOCK_TASKS_DATA,
@@ -28,11 +28,11 @@ import {
 // Note: Vitest's vi.mock() factory functions are hoisted before module initialization,
 // so we cannot import constants from fixtures directly. However, the mock data below
 // corresponds to MOCK_SUBMISSION_STATUSES_DATA in ./fixtures/task_results.ts
-vi.mock('$lib/server/database', () => ({
+vi.mock('#lib/server/database.js', () => ({
   default: {},
 }));
 
-vi.mock('$lib/services/submission_status', () => ({
+vi.mock('#lib/services/submission_status.js', () => ({
   getSubmissionStatusMapWithId: vi.fn().mockResolvedValue(
     new Map([
       [
@@ -80,7 +80,7 @@ vi.mock('$lib/services/submission_status', () => ({
   getSubmissionStatusMapWithName: vi.fn().mockResolvedValue(new Map()),
 }));
 
-vi.mock('$lib/services/tasks', () => {
+vi.mock('#lib/services/tasks.js', () => {
   // Note: Mock data corresponds to MOCK_TASKS_DATA in ./fixtures/task_results.ts
   const mockTasksData = [
     {
@@ -315,13 +315,13 @@ vi.mock('$lib/services/tasks', () => {
   };
 });
 
-vi.mock('$lib/services/users', () => ({
+vi.mock('#lib/services/users.js', () => ({
   getUser: vi.fn(),
 }));
 
 let mockAnswersForTest = new Map();
 
-vi.mock('$lib/services/answers', () => ({
+vi.mock('#lib/services/answers.js', () => ({
   getAnswers: vi.fn(async () => mockAnswersForTest),
   getAnswersWithSelectedTaskIds: vi.fn(),
   getAnswer: vi.fn(),

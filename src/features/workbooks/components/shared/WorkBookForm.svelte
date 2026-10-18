@@ -1,16 +1,16 @@
 <script lang="ts">
   import { Breadcrumb, BreadcrumbItem } from 'flowbite-svelte';
 
-  import HeadingOne from '$lib/components/HeadingOne.svelte';
+  import HeadingOne from '#lib/components/HeadingOne.svelte';
   import WorkBookInputFields from '$features/workbooks/components/shared/WorkBookInputFields.svelte';
   import WorkBookTasksTable from '$features/workbooks/components/detail/WorkBookTasksTable.svelte';
-  import TaskSearchBox from '$lib/components/TaskSearchBox.svelte';
-  import InputFieldWrapper from '$lib/components/InputFieldWrapper.svelte';
-  import SubmissionButton from '$lib/components/SubmissionButton.svelte';
+  import TaskSearchBox from '#lib/components/TaskSearchBox.svelte';
+  import InputFieldWrapper from '#lib/components/InputFieldWrapper.svelte';
+  import SubmissionButton from '#lib/components/SubmissionButton.svelte';
 
-  import { preventEnterKey } from '$lib/actions/prevent_enter_key';
+  import { preventEnterKey } from '#lib/actions/prevent_enter_key.js';
 
-  import type { Task, Tasks } from '$lib/types/task';
+  import type { Task, Tasks } from '#lib/types/task.js';
   import type {
     WorkBookTaskCreate,
     WorkBookTasksCreate,

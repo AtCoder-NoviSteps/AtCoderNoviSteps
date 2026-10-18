@@ -1,4 +1,4 @@
-import { default as prisma } from '$lib/server/database';
+import { default as prisma } from '#lib/server/database.js';
 import { getCachedVoteStats, getCachedAllTasksWithVoteInfo } from '$features/votes/server/cache';
 
 import type { VotedGradeStatistics, VotedGradeCounter, TaskGrade } from '@prisma/client';

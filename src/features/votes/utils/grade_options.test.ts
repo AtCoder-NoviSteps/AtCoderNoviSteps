@@ -1,6 +1,6 @@
 import { describe, expect, it, test } from 'vitest';
 
-import { TaskGrade, taskGradeValues } from '$lib/types/task';
+import { TaskGrade, taskGradeValues } from '#lib/types/task.js';
 
 import { resolveDisplayGrade, nonPendingGrades, qGrades, dGrades } from './grade_options';
 

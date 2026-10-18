@@ -1,5 +1,5 @@
-import { default as db } from '$lib/server/database';
-import { sha256 } from '$lib/utils/hash';
+import { default as db } from '#lib/server/database.js';
+import { sha256 } from '#lib/utils/hash.js';
 
 const EXTERNAL_API_TIMEOUT_MS = 5000;
 

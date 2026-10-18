@@ -1,4 +1,4 @@
-import { default as db } from '$lib/server/database';
+import { default as db } from '#lib/server/database.js';
 
 export async function getUser(username: string) {
   return await db.user.findUnique({

@@ -1,4 +1,4 @@
-import { Roles } from '$lib/types/user';
+import { Roles } from '#lib/types/user.js';
 
 /**
  * Validate if the user has admin role

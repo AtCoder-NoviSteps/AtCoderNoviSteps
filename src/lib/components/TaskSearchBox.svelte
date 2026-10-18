@@ -3,18 +3,18 @@
 <script lang="ts">
   import { Input, Listgroup } from 'flowbite-svelte';
 
-  import SelectWrapper from '$lib/components/SelectWrapper.svelte';
-  import LabelWithTooltips from '$lib/components/LabelWithTooltips.svelte';
-  import GradeLabel from '$lib/components/GradeLabel.svelte';
+  import SelectWrapper from '#lib/components/SelectWrapper.svelte';
+  import LabelWithTooltips from '#lib/components/LabelWithTooltips.svelte';
+  import GradeLabel from '#lib/components/GradeLabel.svelte';
 
-  import type { Task, Tasks } from '$lib/types/task';
+  import type { Task, Tasks } from '#lib/types/task.js';
   import type {
     WorkBookTasksBase,
     WorkBookTasksCreate,
     WorkBookTasksEdit,
   } from '$features/workbooks/types/workbook';
 
-  import { getTaskUrl } from '$lib/utils/task';
+  import { getTaskUrl } from '#lib/utils/task.js';
   import {
     generateWorkBookTaskOrders,
     addTaskToWorkBook,

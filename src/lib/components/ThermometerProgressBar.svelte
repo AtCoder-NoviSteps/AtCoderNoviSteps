@@ -1,13 +1,13 @@
 <script lang="ts">
   import { Tooltip } from 'flowbite-svelte';
 
-  import type { TaskResult, TaskResults } from '$lib/types/task';
-  import type { SubmissionRatios, SubmissionCounts } from '$lib/types/submission';
+  import type { TaskResult, TaskResults } from '#lib/types/task.js';
+  import type { SubmissionRatios, SubmissionCounts } from '#lib/types/submission.js';
   import type { WorkBookTaskBase } from '$features/workbooks/types/workbook';
 
-  import { submission_statuses } from '$lib/services/submission_status';
+  import { submission_statuses } from '#lib/services/submission_status.js';
 
-  import { TOOLTIP_CLASS_BASE } from '$lib/constants/tailwind-helper';
+  import { TOOLTIP_CLASS_BASE } from '#lib/constants/tailwind-helper.js';
 
   interface Props {
     workBookTasks?: WorkBookTaskBase[];

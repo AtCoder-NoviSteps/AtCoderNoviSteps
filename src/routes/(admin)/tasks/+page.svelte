@@ -5,12 +5,12 @@
 
   import { Select, Label, Button, PaginationNav } from 'flowbite-svelte';
 
-  import type { Contests } from '$lib/contests/types/contest';
+  import type { Contests } from '#lib/contests/types/contest.js';
 
-  import { importSourceEntries, type ContestTaskImportSource } from '$lib/clients';
+  import { importSourceEntries, type ContestTaskImportSource } from '#lib/clients/index.js';
 
-  import HeadingOne from '$lib/components/HeadingOne.svelte';
-  import SpinnerWrapper from '$lib/components/SpinnerWrapper.svelte';
+  import HeadingOne from '#lib/components/HeadingOne.svelte';
+  import SpinnerWrapper from '#lib/components/SpinnerWrapper.svelte';
   import TaskTableForImport from './_components/TaskTableForImport.svelte';
   import TaskSearchBox from './_components/TaskSearchBox.svelte';
 

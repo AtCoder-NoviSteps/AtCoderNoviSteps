@@ -5,7 +5,7 @@ import { describe, test, expect, vi, beforeEach, afterEach } from 'vitest';
 import {
   activeProblemListTabStore,
   ActiveProblemListTabStore,
-} from '$lib/stores/active_problem_list_tab.svelte';
+} from '#lib/stores/active_problem_list_tab.svelte.js';
 
 // WHY: a single dynamic mock is the only way to toggle `browser` per describe. Every vi.mock is
 // hoisted and the last registration for a module wins, so a second vi.mock of `$app/environment`

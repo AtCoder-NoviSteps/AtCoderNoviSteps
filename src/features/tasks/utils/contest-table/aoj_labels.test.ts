@@ -1,6 +1,6 @@
 import { describe, test, expect, beforeEach, afterEach } from 'vitest';
 
-import type { TaskResults } from '$lib/types/task';
+import type { TaskResults } from '#lib/types/task.js';
 
 import {
   buildAojLetterMap,

@@ -1,6 +1,6 @@
 // Import original enum as type.
 import type { TaskGrade as TaskGradeOrigin } from '@prisma/client';
-import type { ContestType } from '$lib/contests/types/contest';
+import type { ContestType } from '#lib/contests/types/contest.js';
 
 export interface Task {
   contest_type?: ContestType;

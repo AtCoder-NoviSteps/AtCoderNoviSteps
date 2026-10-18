@@ -1,6 +1,6 @@
 import { describe, test, expect } from 'vitest';
 
-import { TaskGrade } from '$lib/types/task';
+import { TaskGrade } from '#lib/types/task.js';
 import { buildDonutSegments, buildArcPath, calcPointOnCircle, MIN_LABEL_PCT } from './donut_chart';
 
 const GRADE_A = TaskGrade.Q1;

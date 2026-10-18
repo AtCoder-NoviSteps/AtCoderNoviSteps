@@ -13,18 +13,18 @@
     PaginationNav,
   } from 'flowbite-svelte';
 
-  import GradeLabel from '$lib/components/GradeLabel.svelte';
+  import GradeLabel from '#lib/components/GradeLabel.svelte';
   import RelativeEvaluationBadge from '$features/votes/components/RelativeEvaluationBadge.svelte';
 
-  import { taskGradeValues, TaskGrade } from '$lib/types/task';
+  import { taskGradeValues, TaskGrade } from '#lib/types/task.js';
   import type { TaskWithVoteInfo } from '$features/votes/services/vote_statistics';
 
-  import { addContestNameToTaskIndex } from '$lib/contests';
+  import { addContestNameToTaskIndex } from '#lib/contests/index.js';
   import {
     getTaskGradeLabel,
     compareByContestIdAndTaskId,
     removeTaskIndexFromTitle,
-  } from '$lib/utils/task';
+  } from '#lib/utils/task.js';
 
   import { filterGradeTableTasks, countPendingTasks } from '../_utils/grade_table_filter';
 

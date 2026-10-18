@@ -5,9 +5,9 @@
 
   import { Button, Tabs } from 'flowbite-svelte';
 
-  import { Roles } from '$lib/types/user';
-  import { isAdmin } from '$lib/utils/authorship';
-  import { type Task, TaskGrade, type TaskResult } from '$lib/types/task';
+  import { Roles } from '#lib/types/user.js';
+  import { isAdmin } from '#lib/utils/authorship.js';
+  import { type Task, TaskGrade, type TaskResult } from '#lib/types/task.js';
   import {
     type WorkbooksList,
     WorkBookType,
@@ -15,7 +15,7 @@
   } from '$features/workbooks/types/workbook';
   import { type SelectedSolutionCategory } from '$features/workbooks/types/workbook_placement';
 
-  import HeadingOne from '$lib/components/HeadingOne.svelte';
+  import HeadingOne from '#lib/components/HeadingOne.svelte';
   import WorkbookTabItem from '$features/workbooks/components/list/WorkbookTabItem.svelte';
   import WorkBookList from '$features/workbooks/components/list/WorkBookList.svelte';
 

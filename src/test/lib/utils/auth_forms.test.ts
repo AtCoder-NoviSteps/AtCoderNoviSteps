@@ -23,7 +23,7 @@ vi.mock('sveltekit-superforms/adapters', () => ({
   zod4: vi.fn(),
 }));
 
-vi.mock('$lib/zod/schema', () => ({
+vi.mock('#lib/zod/schema.js', () => ({
   authSchema: {
     _type: 'ZodObject',
     shape: {
@@ -33,11 +33,11 @@ vi.mock('$lib/zod/schema', () => ({
   },
 }));
 
-vi.mock('$lib/constants/http-response-status-codes', () => ({
+vi.mock('#lib/constants/http-response-status-codes.js', () => ({
   SEE_OTHER: 303,
 }));
 
-vi.mock('$lib/constants/navbar-links', () => ({
+vi.mock('#lib/constants/navbar-links.js', () => ({
   HOME_PAGE: '/',
 }));
 
@@ -50,7 +50,7 @@ import {
   initializeAuthForm,
   createAuthFormWithFallback,
   validateAuthFormWithFallback,
-} from '$lib/utils/auth_forms';
+} from '#lib/utils/auth_forms.js';
 
 // Mock console methods
 const mockConsoleWarn = vi.fn();

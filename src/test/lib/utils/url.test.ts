@@ -1,6 +1,6 @@
 import { expect, test } from 'vitest';
 
-import { isValidUrl, isValidUrlSlug, sanitizeUrl } from '$lib/utils/url';
+import { isValidUrl, isValidUrlSlug, sanitizeUrl } from '#lib/utils/url.js';
 
 type TestCaseForUrlValidation = {
   rawUrl: string;

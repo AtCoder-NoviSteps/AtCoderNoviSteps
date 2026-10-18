@@ -2,7 +2,7 @@
   import { Label, Tooltip } from 'flowbite-svelte';
   import CircleQuestionMark from '@lucide/svelte/icons/circle-question-mark';
 
-  import { TOOLTIP_CLASS_BASE } from '$lib/constants/tailwind-helper';
+  import { TOOLTIP_CLASS_BASE } from '#lib/constants/tailwind-helper.js';
 
   interface Props {
     labelName: string;

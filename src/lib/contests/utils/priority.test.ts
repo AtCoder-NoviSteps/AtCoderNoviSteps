@@ -1,11 +1,11 @@
 import { expect } from 'vitest';
 
-import { ContestType } from '$lib/contests/types/contest';
+import { ContestType } from '#lib/contests/types/contest.js';
 import {
   getContestPriority,
   contestTypePriorities,
   UNCLASSIFIED_CONTEST_PRIORITY,
-} from '$lib/contests/utils/priority';
+} from '#lib/contests/utils/priority.js';
 
 /** One representative contest_id per category, listed from highest to lowest priority. */
 const contestIdsInDisplayOrder = [

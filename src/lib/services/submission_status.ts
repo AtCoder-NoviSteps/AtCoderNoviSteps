@@ -1,4 +1,4 @@
-//import client from '$lib/server/database';
+//import client from '#lib/server/database.js';
 
 // CI: 提出状況に関するCRUDを実行する部分で原因不明のビルドエラーが発生する
 // 現時点での対処方法: 暫定的にベタ打ちの値を使用

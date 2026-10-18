@@ -1,4 +1,4 @@
-import { useLocalStorage } from '$lib/stores/local_storage_helper.svelte';
+import { useLocalStorage } from '#lib/stores/local_storage_helper.svelte.js';
 import {
   type ContestTableProviderGroups,
   contestTableProviderGroups,

@@ -1,9 +1,9 @@
 <script lang="ts">
   import type { VotedGradeCounter } from '@prisma/client';
-  import { TaskGrade } from '$lib/types/task';
+  import { TaskGrade } from '#lib/types/task.js';
   import type { DonutSegment } from '$features/votes/types/donut_graph';
 
-  import { getTaskGradeColor, getTaskGradeLabel } from '$lib/utils/task';
+  import { getTaskGradeColor, getTaskGradeLabel } from '#lib/utils/task.js';
   import { nonPendingGrades } from '$features/votes/utils/grade_options';
   import {
     buildDonutSegments,

@@ -1,5 +1,5 @@
 import { describe, test, expect } from 'vitest';
-import { filterTasksBySearch } from '$lib/utils/task_filter';
+import { filterTasksBySearch } from '#lib/utils/task_filter.js';
 
 const tasks = [
   { title: 'ABC 300 A - N-choice question', task_id: 'abc300_a', contest_id: 'abc300' },

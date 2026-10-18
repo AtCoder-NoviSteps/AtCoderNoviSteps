@@ -12,11 +12,11 @@ import {
   getAvailableSolutionCategories,
   getSolutionCategoryMapByWorkbookId,
 } from './workbooks';
-import { TaskGrade } from '$lib/types/task';
+import { TaskGrade } from '#lib/types/task.js';
 import { WorkBookType, type WorkBook } from '$features/workbooks/types/workbook';
 import { SolutionCategory } from '$features/workbooks/types/workbook_placement';
 
-vi.mock('$lib/server/database', () => ({
+vi.mock('#lib/server/database.js', () => ({
   default: {
     workBook: {
       findMany: vi.fn(),
@@ -36,7 +36,7 @@ vi.mock('$lib/server/database', () => ({
   },
 }));
 
-vi.mock('$lib/services/users', () => ({
+vi.mock('#lib/services/users.js', () => ({
   getUserById: vi.fn(),
 }));
 
@@ -46,8 +46,8 @@ vi.mock('$features/workbooks/server/cache', () => ({
   invalidateWorkbookCaches: vi.fn(),
 }));
 
-import prisma from '$lib/server/database';
-import * as usersCrud from '$lib/services/users';
+import prisma from '#lib/server/database.js';
+import * as usersCrud from '#lib/services/users.js';
 
 function prepareWorkBook(overrides: Partial<WorkBook> = {}): WorkBook {
   return {

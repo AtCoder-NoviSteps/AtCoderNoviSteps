@@ -1,4 +1,4 @@
-import type { ContestLabelTranslations } from '$lib/contests/types/contest';
+import type { ContestLabelTranslations } from '#lib/contests/types/contest.js';
 
 /**
  * Maps PCK contest type abbreviations to their Japanese translations.

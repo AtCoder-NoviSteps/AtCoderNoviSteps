@@ -3,11 +3,11 @@
   import { page } from '$app/state';
   import { superForm } from 'sveltekit-superforms/client';
 
-  import AuthForm from '$lib/components/AuthForm.svelte';
+  import AuthForm from '#lib/components/AuthForm.svelte';
 
   import { buildSignupPath } from '$features/auth/utils/signup';
 
-  import { CREATE_ACCOUNT_LABEL, LOGIN_LABEL } from '$lib/constants/forms';
+  import { CREATE_ACCOUNT_LABEL, LOGIN_LABEL } from '#lib/constants/forms.js';
 
   interface Props {
     data: PageData;

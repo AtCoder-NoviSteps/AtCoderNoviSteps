@@ -1,6 +1,6 @@
 import { describe, test, expect, vi, beforeEach } from 'vitest';
 
-import { Roles } from '$lib/types/user';
+import { Roles } from '#lib/types/user.js';
 
 vi.mock('$features/votes/services/vote_statistics', () => ({
   getAllTasksWithVoteInfo: vi.fn(),

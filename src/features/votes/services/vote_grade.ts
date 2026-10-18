@@ -1,6 +1,6 @@
-import { default as prisma } from '$lib/server/database';
+import { default as prisma } from '#lib/server/database.js';
 import { TaskGrade } from '@prisma/client';
-import { sha256 } from '$lib/utils/hash';
+import { sha256 } from '#lib/utils/hash.js';
 import type { VoteGradeResult } from '$features/votes/types/vote_result';
 import { computeMedianGrade } from '$features/votes/utils/median';
 import {

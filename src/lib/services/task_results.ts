@@ -1,32 +1,32 @@
 import { error } from '@sveltejs/kit';
 
-import { default as db } from '$lib/server/database';
+import { default as db } from '#lib/server/database.js';
 import {
   getTasks,
   getMergedTasksMap,
   getTasksWithSelectedTaskIds,
   getTask,
-} from '$lib/services/tasks';
+} from '#lib/services/tasks.js';
 import {
   getSubmissionStatusMapWithId,
   getSubmissionStatusMapWithName,
-} from '$lib/services/submission_status';
-import { getUser } from '$lib/services/users';
-import * as answer_crud from '$lib/services/answers';
+} from '#lib/services/submission_status.js';
+import { getUser } from '#lib/services/users.js';
+import * as answer_crud from '#lib/services/answers.js';
 
 import {
   validateUserAnswersTransferability,
   isExistingUser,
   isSameUser,
-} from '$lib/utils/account_transfer';
+} from '#lib/utils/account_transfer.js';
 
 import type { User } from '@prisma/client';
-import type { TaskResult, TaskResults, Task, Tasks } from '$lib/types/task';
-import type { TaskAnswer } from '$lib/types/answer';
-import type { FloatingMessages } from '$lib/types/floating_message';
+import type { TaskResult, TaskResults, Task, Tasks } from '#lib/types/task.js';
+import type { TaskAnswer } from '#lib/types/answer.js';
+import type { FloatingMessages } from '#lib/types/floating_message.js';
 import type { WorkBookTasksBase } from '$features/workbooks/types/workbook';
 
-import { NOT_FOUND } from '$lib/constants/http-response-status-codes';
+import { NOT_FOUND } from '#lib/constants/http-response-status-codes.js';
 
 // DBから取得した問題とログインしているユーザの回答を紐付けしたデータ保持
 const statusById = await getSubmissionStatusMapWithId();

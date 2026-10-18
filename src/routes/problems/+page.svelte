@@ -1,20 +1,20 @@
 <script lang="ts">
   import { Tabs } from 'flowbite-svelte';
 
-  import type { TaskResults } from '$lib/types/task';
+  import type { TaskResults } from '#lib/types/task.js';
 
-  import { compareByContestIdAndTaskId } from '$lib/utils/task';
+  import { compareByContestIdAndTaskId } from '#lib/utils/task.js';
 
-  import HeadingOne from '$lib/components/HeadingOne.svelte';
-  import ProblemListTabItem from '$lib/components/Tabs/ProblemListTabItem.svelte';
+  import HeadingOne from '#lib/components/HeadingOne.svelte';
+  import ProblemListTabItem from '#lib/components/Tabs/ProblemListTabItem.svelte';
   import TaskTable from '$features/tasks/components/contest-table/TaskTable.svelte';
-  import TaskGradeList from '$lib/components/TaskGradeList.svelte';
-  import GradeGuidelineTable from '$lib/components/TaskGrades/GradeGuidelineTable.svelte';
+  import TaskGradeList from '#lib/components/TaskGradeList.svelte';
+  import GradeGuidelineTable from '#lib/components/TaskGrades/GradeGuidelineTable.svelte';
 
   import {
     activeProblemListTabStore,
     type ActiveProblemListTab,
-  } from '$lib/stores/active_problem_list_tab.svelte';
+  } from '#lib/stores/active_problem_list_tab.svelte.js';
 
   let { data } = $props();
 

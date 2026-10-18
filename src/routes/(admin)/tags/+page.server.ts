@@ -1,8 +1,8 @@
 import { redirect, type Actions } from '@sveltejs/kit';
 
-import type { Tag } from '$lib/types/tag';
+import type { Tag } from '#lib/types/tag.js';
 
-import * as tagService from '$lib/services/tags';
+import * as tagService from '#lib/services/tags.js';
 
 import { validateAdminAccess } from '$features/auth/services/admin_access';
 

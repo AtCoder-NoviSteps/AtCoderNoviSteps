@@ -1,4 +1,4 @@
-import type { TaskGrade } from '$lib/types/task';
+import type { TaskGrade } from '#lib/types/task.js';
 
 /** A single arc segment of the vote distribution donut chart. */
 export type DonutSegment = {

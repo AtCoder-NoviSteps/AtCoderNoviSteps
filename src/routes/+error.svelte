@@ -2,9 +2,9 @@
   import { page } from '$app/state';
 
   import { Heading, Button } from 'flowbite-svelte';
-  import HeadingOne from '$lib/components/HeadingOne.svelte';
+  import HeadingOne from '#lib/components/HeadingOne.svelte';
 
-  import { HOME_PAGE } from '$lib/constants/navbar-links';
+  import { HOME_PAGE } from '#lib/constants/navbar-links.js';
 </script>
 
 <div

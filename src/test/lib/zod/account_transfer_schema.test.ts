@@ -1,7 +1,7 @@
 import { expect, test } from 'vitest';
 import { type ZodSchema } from 'zod';
 
-import { accountTransferSchema } from '$lib/zod/schema';
+import { accountTransferSchema } from '#lib/zod/schema.js';
 
 describe('Account Transfer schema', () => {
   describe('Correct source and destination user are given', () => {

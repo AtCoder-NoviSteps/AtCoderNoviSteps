@@ -6,7 +6,7 @@ import { updatePlacementsSchema } from '$features/workbooks/zod/schema';
 
 import { validateAdminAccessForApi } from '$features/auth/services/admin_access';
 
-import { BAD_REQUEST } from '$lib/constants/http-response-status-codes';
+import { BAD_REQUEST } from '#lib/constants/http-response-status-codes.js';
 
 export async function POST({ request, locals }: RequestEvent) {
   await validateAdminAccessForApi(locals);

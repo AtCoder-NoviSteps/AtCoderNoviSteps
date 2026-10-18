@@ -10,15 +10,15 @@
   import Eye from '@lucide/svelte/icons/eye';
   import EyeOff from '@lucide/svelte/icons/eye-off';
 
-  import MessageHelperWrapper from '$lib/components/MessageHelperWrapper.svelte';
+  import MessageHelperWrapper from '#lib/components/MessageHelperWrapper.svelte';
 
   import {
     GUEST_USER_NAME,
     GUEST_USER_PASSWORD,
     // GUEST_USER_PASSWORD_FOR_LOCAL,
     LOGIN_LABEL,
-  } from '$lib/constants/forms';
-  import { HOME_PAGE, FORGOT_PASSWORD_PAGE, LOGIN_PAGE } from '$lib/constants/navbar-links';
+  } from '#lib/constants/forms.js';
+  import { HOME_PAGE, FORGOT_PASSWORD_PAGE, LOGIN_PAGE } from '#lib/constants/navbar-links.js';
 
   interface Props {
     // FIXME: 構造体に相当するものを利用した方が拡張・修正がしやすくなるかもしれせまん

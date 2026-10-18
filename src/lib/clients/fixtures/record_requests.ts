@@ -1,16 +1,16 @@
 import path from 'path';
 import fs from 'fs';
 
-import { AtCoderProblemsApiClient } from '$lib/clients/atcoder/atcoder_problems';
-import { HttpRequestClient } from '$lib/clients/http_client';
+import { AtCoderProblemsApiClient } from '#lib/clients/atcoder/atcoder_problems.js';
+import { HttpRequestClient } from '#lib/clients/http_client.js';
 
 import type {
   AOJCourseAPI,
   AOJTaskAPIs,
   AOJChallengeContestAPI,
-} from '$lib/clients/aizu_online_judge/types';
+} from '#lib/clients/aizu_online_judge/types.js';
 
-import { AOJ_API_BASE_URL } from '$lib/constants/urls';
+import { AOJ_API_BASE_URL } from '#lib/constants/urls.js';
 
 // Run the main function if you add a contest site.
 // Usage:

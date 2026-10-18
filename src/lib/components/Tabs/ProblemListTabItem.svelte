@@ -6,7 +6,7 @@
   import {
     activeProblemListTabStore,
     type ActiveProblemListTab,
-  } from '$lib/stores/active_problem_list_tab.svelte';
+  } from '#lib/stores/active_problem_list_tab.svelte.js';
 
   interface Props {
     activeProblemList: ActiveProblemListTab;

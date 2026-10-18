@@ -19,12 +19,12 @@ vi.mock('@sveltejs/kit', () => {
   return { redirect: vi.fn(redirectImpl), error: vi.fn(errorImpl) };
 });
 
-vi.mock('$lib/services/users', () => ({
+vi.mock('#lib/services/users.js', () => ({
   getUser: vi.fn(),
 }));
 
-import * as userService from '$lib/services/users';
-import { Roles } from '$lib/types/user';
+import * as userService from '#lib/services/users.js';
+import { Roles } from '#lib/types/user.js';
 import { validateAdminAccess, validateAdminAccessForApi } from './admin_access';
 
 const createMockLocalsWithSession = (username = 'admin-user') =>

@@ -1,7 +1,7 @@
-import type { HttpRequestClient } from '$lib/clients/http_client';
-import type { ContestTaskCache } from '$lib/clients/cache_strategy';
-import type { ContestsForImport } from '$lib/contests/types/contest';
-import type { TasksForImport } from '$lib/types/task';
+import type { HttpRequestClient } from '#lib/clients/http_client.js';
+import type { ContestTaskCache } from '#lib/clients/cache_strategy.js';
+import type { ContestsForImport } from '#lib/contests/types/contest.js';
+import type { TasksForImport } from '#lib/types/task.js';
 
 type FetchContestsConfig<T> = {
   cacheKey: string;

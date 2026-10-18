@@ -1,9 +1,9 @@
 import { expect } from 'vitest';
 
 import { runTests } from '../../../test/lib/common/test_helpers';
-import * as TestCasesForContestNameAndTaskIndex from '$lib/contests/fixtures/contest_name_and_task_index';
-import { type TestCaseForContestNameAndTaskIndex } from '$lib/contests/fixtures/contest_name_and_task_index';
-import { addContestNameToTaskIndex } from '$lib/contests/utils/task_index_label';
+import * as TestCasesForContestNameAndTaskIndex from '#lib/contests/fixtures/contest_name_and_task_index.js';
+import { type TestCaseForContestNameAndTaskIndex } from '#lib/contests/fixtures/contest_name_and_task_index.js';
+import { addContestNameToTaskIndex } from '#lib/contests/utils/task_index_label.js';
 
 describe('add contest name to task index', () => {
   describe('AtCoder', () => {

@@ -1,11 +1,11 @@
-import { Roles } from '$lib/types/user';
+import { Roles } from '#lib/types/user.js';
 import {
   TaskGrade,
   type Task,
   type TaskGrades,
   type TaskResult,
   type TaskResults,
-} from '$lib/types/task';
+} from '#lib/types/task.js';
 import type {
   WorkBook,
   WorkbookList,
@@ -16,8 +16,8 @@ import type {
 import { WorkBookType as WorkBookTypeConst } from '$features/workbooks/types/workbook';
 import type { PlacementQuery } from '$features/workbooks/types/workbook_placement';
 
-import { isAdmin, canRead } from '$lib/utils/authorship';
-import { calcGradeMode } from '$lib/utils/task';
+import { isAdmin, canRead } from '#lib/utils/authorship.js';
+import { calcGradeMode } from '#lib/utils/task.js';
 
 export function buildPlacementKey(query: PlacementQuery, includeUnpublished: boolean): string {
   if (query.workBookType === WorkBookTypeConst.CURRICULUM) {

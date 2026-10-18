@@ -1,6 +1,6 @@
 import { expect } from 'vitest';
 
-import { getJoiContestLabel } from '$lib/contests/utils/labels/joi';
+import { getJoiContestLabel } from '#lib/contests/utils/labels/joi.js';
 
 describe('get JOI contest label', () => {
   describe('qualifying rounds', () => {

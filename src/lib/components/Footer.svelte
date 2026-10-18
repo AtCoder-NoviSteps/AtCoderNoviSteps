@@ -1,7 +1,7 @@
 <script lang="ts">
   import { Footer, FooterCopyright } from 'flowbite-svelte';
 
-  import { PRODUCT_TEAM_URL, PRODUCT_NAME } from '$lib/constants/product-info';
+  import { PRODUCT_TEAM_URL, PRODUCT_NAME } from '#lib/constants/product-info.js';
 </script>
 
 <!-- See: -->

@@ -13,7 +13,7 @@ import * as sitemap from 'super-sitemap';
 import * as workBooksCrud from '$features/workbooks/services/workbooks';
 
 import { getUrlSlugFrom } from '$features/workbooks/utils/workbooks';
-import { INTERNAL_SERVER_ERROR } from '$lib/constants/http-response-status-codes';
+import { INTERNAL_SERVER_ERROR } from '#lib/constants/http-response-status-codes.js';
 
 /**
  * Handles the GET request to generate a sitemap.

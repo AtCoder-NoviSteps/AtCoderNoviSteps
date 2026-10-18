@@ -1,4 +1,4 @@
-import { Roles } from '$lib/types/user';
+import { Roles } from '#lib/types/user.js';
 import type { WorkbooksList } from '$features/workbooks/types/workbook';
 import { SolutionCategory } from '$features/workbooks/types/workbook_placement';
 

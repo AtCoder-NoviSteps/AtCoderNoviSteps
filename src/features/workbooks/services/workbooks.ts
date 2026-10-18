@@ -1,4 +1,4 @@
-import { default as db } from '$lib/server/database';
+import { default as db } from '#lib/server/database.js';
 
 import type {
   WorkBook,
@@ -19,7 +19,7 @@ import {
   getWorkBookTasks,
   validateRequiredFields,
 } from '$features/workbooks/services/workbook_tasks';
-import * as userCrud from '$lib/services/users';
+import * as userCrud from '#lib/services/users.js';
 
 import {
   getCachedWorkbooksByPlacement,
@@ -27,7 +27,7 @@ import {
   invalidateWorkbookCaches,
 } from '$features/workbooks/server/cache';
 
-import { sanitizeUrl } from '$lib/utils/url';
+import { sanitizeUrl } from '#lib/utils/url.js';
 import { parseWorkBookId, parseWorkBookUrlSlug } from '$features/workbooks/utils/workbook';
 import { buildPlacementKey } from '$features/workbooks/utils/workbooks';
 

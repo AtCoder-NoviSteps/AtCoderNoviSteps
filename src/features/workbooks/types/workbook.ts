@@ -1,6 +1,6 @@
 import type { WorkBookType as WorkBookTypeOrigin } from '@prisma/client';
-import type { Roles } from '$lib/types/user';
-import type { TaskGrade, TaskResults } from '$lib/types/task';
+import type { Roles } from '#lib/types/user.js';
+import type { TaskGrade, TaskResults } from '#lib/types/task.js';
 
 export type WorkBookBase = {
   title: string;

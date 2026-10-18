@@ -10,10 +10,10 @@
     TableHeadCell,
     Label,
   } from 'flowbite-svelte';
-  import type { Tag } from '$lib/types/tag';
-  //import { ATCODER_BASE_CONTEST_URL } from '$lib/constants/urls';
+  import type { Tag } from '#lib/types/tag.js';
+  //import { ATCODER_BASE_CONTEST_URL } from '#lib/constants/urls.js';
 
-  import { newline } from '$lib/utils/newline';
+  import { newline } from '#lib/utils/newline.js';
 
   //gradeでソート済みのTaskのリストと、APIから取得したtasklistを表示する
   //xport let tasks: Task[];

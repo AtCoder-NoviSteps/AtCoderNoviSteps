@@ -70,7 +70,7 @@ test.each([TaskGrade.PENDING, TaskGrade.Q11, TaskGrade.Q10, TaskGrade.D6])(
 
 ### Service Layer (Prisma)
 
-Mock with `vi.mock('$lib/server/database', ...)`. Use helpers:
+Mock with `vi.mock('#lib/server/database.js', ...)`. Use helpers:
 
 ```typescript
 const mockFindUnique = (data) => db.task.findUnique.mockResolvedValue(data);
@@ -95,7 +95,7 @@ afterAll(() => disposeDomainCaches());
 beforeEach(() => invalidateDomainCaches());
 
 // Bypass caching in service tests:
-vi.mock('$lib/server/tasks/cache', () => ({
+vi.mock('#lib/server/tasks/cache.js', () => ({
   getCachedTasksMap: (fetchFn: () => Promise<unknown>) => fetchFn(),
   invalidateTaskCaches: vi.fn(),
 }));

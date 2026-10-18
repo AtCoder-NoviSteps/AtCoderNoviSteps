@@ -8,7 +8,7 @@ vi.mock('$features/votes/server/cache', () => ({
   invalidateVoteCaches: vi.fn(),
 }));
 
-vi.mock('$lib/server/database', () => ({
+vi.mock('#lib/server/database.js', () => ({
   default: {
     voteGrade: {
       findUnique: vi.fn(),
@@ -29,7 +29,7 @@ vi.mock('$lib/server/database', () => ({
   },
 }));
 
-import prisma from '$lib/server/database';
+import prisma from '#lib/server/database.js';
 import { invalidateVoteCaches } from '$features/votes/server/cache';
 
 // ---------------------------------------------------------------------------

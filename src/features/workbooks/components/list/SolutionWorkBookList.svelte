@@ -1,8 +1,8 @@
 <script lang="ts">
   import { Button } from 'flowbite-svelte';
 
-  import type { Roles } from '$lib/types/user';
-  import type { TaskResults } from '$lib/types/task';
+  import type { Roles } from '#lib/types/user.js';
+  import type { TaskResults } from '#lib/types/task.js';
   import type { WorkbooksList } from '$features/workbooks/types/workbook';
   import {
     SolutionCategory,

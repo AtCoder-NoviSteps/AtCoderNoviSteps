@@ -1,4 +1,4 @@
-import type { ContestTaskPairKey } from '$lib/types/contest_task_pair';
+import type { ContestTaskPairKey } from '#lib/types/contest_task_pair.js';
 
 /**
  * Creates a unique key for a ContestTaskPair using contestId and taskId.

@@ -1,7 +1,7 @@
 <script lang="ts">
   import { Tooltip } from 'flowbite-svelte';
 
-  import type { TaskGrade } from '$lib/types/task';
+  import type { TaskGrade } from '#lib/types/task.js';
   import {
     calcGradeDiff,
     getRelativeEvaluationLabel,

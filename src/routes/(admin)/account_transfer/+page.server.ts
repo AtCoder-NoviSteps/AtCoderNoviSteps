@@ -4,10 +4,10 @@ import { type Actions } from '@sveltejs/kit';
 import { superValidate } from 'sveltekit-superforms/server';
 import { zod4 } from 'sveltekit-superforms/adapters';
 
-import * as taskResultService from '$lib/services/task_results';
+import * as taskResultService from '#lib/services/task_results.js';
 
-import { accountTransferSchema } from '$lib/zod/schema';
-import type { FloatingMessage } from '$lib/types/floating_message';
+import { accountTransferSchema } from '#lib/zod/schema.js';
+import type { FloatingMessage } from '#lib/types/floating_message.js';
 
 import { validateAdminAccess } from '$features/auth/services/admin_access';
 

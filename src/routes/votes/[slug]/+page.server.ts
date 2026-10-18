@@ -3,7 +3,7 @@ import { superValidate } from 'sveltekit-superforms';
 import { zod4 } from 'sveltekit-superforms/adapters';
 import type { Actions, PageServerLoad } from './$types';
 
-import { getTask } from '$lib/services/tasks';
+import { getTask } from '#lib/services/tasks.js';
 import { getVoteGrade } from '$features/votes/services/vote_grade';
 import {
   getVoteCountersByTaskId,
@@ -11,7 +11,7 @@ import {
 } from '$features/votes/services/vote_statistics';
 import { voteAbsoluteGrade } from '$features/votes/actions/vote_actions';
 import { voteAbsoluteGradeSchema } from '$features/votes/zod/schema';
-import { BAD_REQUEST } from '$lib/constants/http-response-status-codes';
+import { BAD_REQUEST } from '#lib/constants/http-response-status-codes.js';
 
 export const load: PageServerLoad = async ({ locals, params }) => {
   const session = await locals.auth.validate();

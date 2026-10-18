@@ -2,9 +2,9 @@
 import { error, fail } from '@sveltejs/kit';
 
 import type { Actions } from './$types';
-import type { Roles } from '$lib/types/user';
+import type { Roles } from '#lib/types/user.js';
 
-import * as userService from '$lib/services/users';
+import * as userService from '#lib/services/users.js';
 import * as verificationService from '$features/account/services/atcoder_verification';
 import { getLoggedInUser } from '$features/auth/services/session_guards';
 
@@ -13,7 +13,7 @@ import {
   UNAUTHORIZED,
   FORBIDDEN,
   INTERNAL_SERVER_ERROR,
-} from '$lib/constants/http-response-status-codes';
+} from '#lib/constants/http-response-status-codes.js';
 
 export async function load({ locals, url }) {
   const loggedInUser = await getLoggedInUser(locals, url);

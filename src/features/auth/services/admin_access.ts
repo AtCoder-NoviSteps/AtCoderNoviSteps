@@ -1,15 +1,15 @@
 import { redirect, error } from '@sveltejs/kit';
 
-import * as userService from '$lib/services/users';
+import * as userService from '#lib/services/users.js';
 
-import { Roles } from '$lib/types/user';
+import { Roles } from '#lib/types/user.js';
 
-import { isAdmin } from '$lib/utils/authorship';
+import { isAdmin } from '#lib/utils/authorship.js';
 import {
   TEMPORARY_REDIRECT,
   UNAUTHORIZED,
   FORBIDDEN,
-} from '$lib/constants/http-response-status-codes';
+} from '#lib/constants/http-response-status-codes.js';
 
 import { buildLoginPath } from '../utils/login';
 

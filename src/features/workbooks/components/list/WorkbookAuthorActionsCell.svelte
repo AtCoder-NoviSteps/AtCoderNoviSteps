@@ -4,10 +4,10 @@
 
   import { TableBodyCell } from 'flowbite-svelte';
 
-  import type { Roles } from '$lib/types/user';
+  import type { Roles } from '#lib/types/user.js';
   import type { WorkbookList } from '$features/workbooks/types/workbook';
 
-  import { canEdit, canDelete } from '$lib/utils/authorship';
+  import { canEdit, canDelete } from '#lib/utils/authorship.js';
   import { getUrlSlugFrom } from '$features/workbooks/utils/workbooks';
 
   interface Props {

@@ -7,11 +7,11 @@ import type {
   AuthForm,
   AuthFormCreationStrategies,
   AuthFormValidationStrategies,
-} from '$lib/types/auth_forms';
+} from '#lib/types/auth_forms.js';
 
-import { authSchema } from '$lib/zod/schema';
-import { SEE_OTHER } from '$lib/constants/http-response-status-codes';
-import { HOME_PAGE } from '$lib/constants/navbar-links';
+import { authSchema } from '#lib/zod/schema.js';
+import { SEE_OTHER } from '#lib/constants/http-response-status-codes.js';
+import { HOME_PAGE } from '#lib/constants/navbar-links.js';
 
 /**
  * Initialize authentication form pages (login/signup)

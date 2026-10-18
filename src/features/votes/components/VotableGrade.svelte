@@ -7,15 +7,15 @@
   import Check from '@lucide/svelte/icons/check';
   import FlaskConical from '@lucide/svelte/icons/flask-conical';
 
-  import { TaskGrade, getTaskGrade, type TaskResult } from '$lib/types/task';
-  import { errorMessageStore } from '$lib/stores/error_message';
+  import { TaskGrade, getTaskGrade, type TaskResult } from '#lib/types/task.js';
+  import { errorMessageStore } from '#lib/stores/error_message.js';
   import {
     fetchMyVote,
     submitVote,
     fetchMedianVote,
   } from '$features/votes/internal_clients/vote_grade';
 
-  import { getTaskGradeLabel } from '$lib/utils/task';
+  import { getTaskGradeLabel } from '#lib/utils/task.js';
   import { nonPendingGrades, resolveDisplayGrade } from '$features/votes/utils/grade_options';
   import { calcCenteredScrollTop } from '$features/votes/utils/grade_scroll_position';
   import {
@@ -24,10 +24,10 @@
     getRelativeEvaluationJapaneseLabel,
     getRelativeEvaluationColorClass,
   } from '$features/votes/utils/relative_evaluation';
-  import { SIGNUP_PAGE, LOGIN_PAGE, EDIT_PROFILE_PAGE } from '$lib/constants/navbar-links';
+  import { SIGNUP_PAGE, LOGIN_PAGE, EDIT_PROFILE_PAGE } from '#lib/constants/navbar-links.js';
 
-  import GradeLabel from '$lib/components/GradeLabel.svelte';
-  import InputFieldWrapper from '$lib/components/InputFieldWrapper.svelte';
+  import GradeLabel from '#lib/components/GradeLabel.svelte';
+  import InputFieldWrapper from '#lib/components/InputFieldWrapper.svelte';
   import RelativeEvaluationBadge from '$features/votes/components/RelativeEvaluationBadge.svelte';
 
   interface Props {

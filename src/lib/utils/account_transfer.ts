@@ -1,11 +1,11 @@
 import type { User } from '@prisma/client';
 
-import type { Roles } from '$lib/types/user';
-import type { TaskResult } from '$lib/types/task';
-import type { FloatingMessages } from '$lib/types/floating_message';
+import type { Roles } from '#lib/types/user.js';
+import type { TaskResult } from '#lib/types/task.js';
+import type { FloatingMessages } from '#lib/types/floating_message.js';
 
-import { sanitizeHTML } from '$lib/utils/html';
-import { isAdmin } from '$lib/utils/authorship';
+import { sanitizeHTML } from '#lib/utils/html.js';
+import { isAdmin } from '#lib/utils/authorship.js';
 
 export function isSameUser(source: User, destination: User): boolean {
   return source.username.toLocaleLowerCase() === destination.username.toLocaleLowerCase();

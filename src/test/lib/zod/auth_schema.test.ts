@@ -1,7 +1,7 @@
 import { expect, test } from 'vitest';
 import { type ZodSchema } from 'zod';
 
-import { authSchema } from '$lib/zod/schema';
+import { authSchema } from '#lib/zod/schema.js';
 
 describe('Auth schema', () => {
   describe('a correct user is given', () => {

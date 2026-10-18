@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { delay } from '$lib/utils/time';
+import { delay } from '#lib/utils/time.js';
 
 describe('Delay', () => {
   it('expected to be resolved after the specified delay', async () => {

@@ -1,5 +1,5 @@
 import type { PageServerLoad } from './$types';
-import { Roles } from '$lib/types/user';
+import { Roles } from '#lib/types/user.js';
 
 export const load: PageServerLoad = async ({ locals }) => {
   const session = await locals.auth.validate();

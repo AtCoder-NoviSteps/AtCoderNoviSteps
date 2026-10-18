@@ -2,20 +2,20 @@ import { error, fail, type Actions } from '@sveltejs/kit';
 import { superValidate } from 'sveltekit-superforms';
 import { zod4 } from 'sveltekit-superforms/adapters';
 
-import { Roles } from '$lib/types/user';
+import { Roles } from '#lib/types/user.js';
 
 import { getLoggedInUser } from '$features/auth/services/session_guards';
-import * as taskResultsCrud from '$lib/services/task_results';
-import * as action from '$lib/actions/update_task_result';
+import * as taskResultsCrud from '#lib/services/task_results.js';
+import * as action from '#lib/actions/update_task_result.js';
 import { getWorkbookWithAuthor } from '$features/workbooks/services/workbooks';
 import { getVoteGradeStatisticsForTaskIds } from '$features/votes/services/vote_statistics';
 import { voteAbsoluteGrade as voteAbsoluteGradeAction } from '$features/votes/actions/vote_actions';
 import { voteAbsoluteGradeSchema } from '$features/votes/zod/schema';
 
-import { isAdmin, canRead } from '$lib/utils/authorship';
+import { isAdmin, canRead } from '#lib/utils/authorship.js';
 import { parseWorkBookId, parseWorkBookUrlSlug } from '$features/workbooks/utils/workbook';
 
-import { BAD_REQUEST, FORBIDDEN, NOT_FOUND } from '$lib/constants/http-response-status-codes';
+import { BAD_REQUEST, FORBIDDEN, NOT_FOUND } from '#lib/constants/http-response-status-codes.js';
 
 export async function load({ locals, params, url }) {
   const loggedInUser = await getLoggedInUser(locals, url);

@@ -1,4 +1,4 @@
-import type { ContestLabelTranslations } from '$lib/contests/types/contest';
+import type { ContestLabelTranslations } from '#lib/contests/types/contest.js';
 
 /**
  * A mapping of contest dates to their respective Japanese translations.

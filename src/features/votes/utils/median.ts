@@ -1,5 +1,5 @@
 import { TaskGrade } from '@prisma/client';
-import { getGradeOrder, taskGradeOrderInfinity } from '$lib/utils/task';
+import { getGradeOrder, taskGradeOrderInfinity } from '#lib/utils/task.js';
 import { MIN_VOTES_FOR_STATISTICS } from '$features/votes/constants/statistics';
 
 /** Maps grade order (1=Q11 … 17=D6) back to the corresponding TaskGrade enum value. */

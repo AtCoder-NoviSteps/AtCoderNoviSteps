@@ -1,6 +1,6 @@
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 
-import client from '$lib/server/database';
+import client from '#lib/server/database.js';
 import { hashPassword, verifyPassword } from '../server/password';
 import { generateRandomString } from '../server/random';
 

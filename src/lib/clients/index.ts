@@ -1,18 +1,18 @@
-import { HttpRequestClient } from '$lib/clients/http_client';
-import { ContestTaskCache } from '$lib/clients/cache_strategy';
-import { Cache } from '$lib/clients/cache';
+import { HttpRequestClient } from '#lib/clients/http_client.js';
+import { ContestTaskCache } from '#lib/clients/cache_strategy.js';
+import { Cache } from '#lib/clients/cache.js';
 
-import { AtCoderProblemsApiClient } from '$lib/clients/atcoder/atcoder_problems';
+import { AtCoderProblemsApiClient } from '#lib/clients/atcoder/atcoder_problems.js';
 import {
   AojCoursesApiClient,
   AojChallengesApiClient,
-} from '$lib/clients/aizu_online_judge/clients';
+} from '#lib/clients/aizu_online_judge/clients.js';
 
-import type { ContestsForImport } from '$lib/contests/types/contest';
-import type { TasksForImport } from '$lib/types/task';
-import type { ChallengeParams } from '$lib/clients/aizu_online_judge/types';
+import type { ContestsForImport } from '#lib/contests/types/contest.js';
+import type { TasksForImport } from '#lib/types/task.js';
+import type { ChallengeParams } from '#lib/clients/aizu_online_judge/types.js';
 
-import { AOJ_API_BASE_URL } from '$lib/constants/urls';
+import { AOJ_API_BASE_URL } from '#lib/constants/urls.js';
 
 // Supported contest data sources for task import.
 export type ContestTaskImportSource =

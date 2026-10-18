@@ -1,4 +1,4 @@
-import { ContestType } from '$lib/contests/types/contest';
+import { ContestType } from '#lib/contests/types/contest.js';
 import {
   regexForJag,
   regexForAojUniversity,

@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { Snippet } from 'svelte';
-  import TabItemWrapper from '$lib/components/Tabs/TabItemWrapper.svelte';
+  import TabItemWrapper from '#lib/components/Tabs/TabItemWrapper.svelte';
 
   interface Props {
     isOpen?: boolean;

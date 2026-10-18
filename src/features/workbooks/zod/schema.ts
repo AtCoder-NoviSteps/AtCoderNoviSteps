@@ -4,11 +4,11 @@
 // https://qiita.com/mpyw/items/886218e7b418dfed254b
 import { z } from 'zod';
 
-import { TaskGrade } from '$lib/types/task';
+import { TaskGrade } from '#lib/types/task.js';
 import { WorkBookType } from '$features/workbooks/types/workbook';
 import { SolutionCategory } from '$features/workbooks/types/workbook_placement';
 
-import { isValidUrl, isValidUrlSlug } from '$lib/utils/url';
+import { isValidUrl, isValidUrlSlug } from '#lib/utils/url.js';
 
 const workBookTaskSchema = z.object({
   workBookId: z.number().positive().optional(),

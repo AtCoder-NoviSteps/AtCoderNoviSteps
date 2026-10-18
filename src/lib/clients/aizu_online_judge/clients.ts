@@ -1,9 +1,12 @@
-import { HttpRequestClient } from '$lib/clients/http_client';
-import { ContestTaskCache } from '$lib/clients/cache_strategy';
-import { getCachedOrFetchContests, getCachedOrFetchTasks } from '$lib/clients/contest_task_fetcher';
+import { HttpRequestClient } from '#lib/clients/http_client.js';
+import { ContestTaskCache } from '#lib/clients/cache_strategy.js';
+import {
+  getCachedOrFetchContests,
+  getCachedOrFetchTasks,
+} from '#lib/clients/contest_task_fetcher.js';
 
-import type { ContestsForImport } from '$lib/contests/types/contest';
-import type { TasksForImport } from '$lib/types/task';
+import type { ContestsForImport } from '#lib/contests/types/contest.js';
+import type { TasksForImport } from '#lib/types/task.js';
 
 import type {
   AOJCourseAPI,

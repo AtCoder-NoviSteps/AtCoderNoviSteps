@@ -1,11 +1,11 @@
 <script lang="ts">
-  import { TaskGrade } from '$lib/types/task';
+  import { TaskGrade } from '#lib/types/task.js';
   import {
     getTaskGradeColor,
     getTaskGradeLabel,
     toChangeTextColorIfNeeds,
     toChangeBorderColorIfNeeds,
-  } from '$lib/utils/task';
+  } from '#lib/utils/task.js';
 
   interface Props {
     taskGrade: TaskGrade | string;

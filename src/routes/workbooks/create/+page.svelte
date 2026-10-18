@@ -1,7 +1,7 @@
 <script lang="ts">
   import { superForm } from 'sveltekit-superforms/client';
 
-  import type { Task } from '$lib/types/task';
+  import type { Task } from '#lib/types/task.js';
   import { WorkBookType, type WorkBookTasksBase } from '$features/workbooks/types/workbook';
 
   import WorkBookForm from '$features/workbooks/components/shared/WorkBookForm.svelte';

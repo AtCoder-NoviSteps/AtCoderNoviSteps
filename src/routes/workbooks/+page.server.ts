@@ -1,7 +1,7 @@
 import { error, redirect } from '@sveltejs/kit';
 
-import * as taskCrud from '$lib/services/tasks';
-import * as taskResultsCrud from '$lib/services/task_results';
+import * as taskCrud from '#lib/services/tasks.js';
+import * as taskResultsCrud from '#lib/services/task_results.js';
 import { getLoggedInUser } from '$features/auth/services/session_guards';
 import * as workBooksCrud from '$features/workbooks/services/workbooks';
 import {
@@ -11,8 +11,8 @@ import {
   getSolutionCategoryMapByWorkbookId,
 } from '$features/workbooks/services/workbooks';
 
-import { Roles } from '$lib/types/user';
-import type { TaskGrade, TaskResult } from '$lib/types/task';
+import { Roles } from '#lib/types/user.js';
+import type { TaskGrade, TaskResult } from '#lib/types/task.js';
 import {
   WorkBookTab,
   type WorkBookTab as WorkBookTabType,
@@ -25,7 +25,7 @@ import {
   type SolutionCategory,
 } from '$features/workbooks/types/workbook_placement';
 
-import { isAdmin, canDelete } from '$lib/utils/authorship';
+import { isAdmin, canDelete } from '#lib/utils/authorship.js';
 import { buildTaskIdsFromWorkbooks } from '$features/workbooks/utils/workbooks';
 import {
   parseWorkBookTab,
@@ -40,7 +40,7 @@ import {
   FOUND,
   NOT_FOUND,
   INTERNAL_SERVER_ERROR,
-} from '$lib/constants/http-response-status-codes';
+} from '#lib/constants/http-response-status-codes.js';
 
 export async function load({ locals, url }) {
   const loggedInUser = await getLoggedInUser(locals, url);

@@ -1,5 +1,5 @@
 import { describe, test, expect, vi, beforeEach, afterEach } from 'vitest';
-import { Cache } from '$lib/clients/cache';
+import { Cache } from '#lib/clients/cache.js';
 
 describe('Cache', () => {
   // Mock time functions
