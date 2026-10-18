@@ -143,6 +143,7 @@ include: [
 
 `src/lib` は `package.json#imports` の `#lib/*` で参照する。SvelteKit 3 で組み込みの `$lib` が削除されるため `$lib` は使わず、oxlint と ESLint の `no-restricted-imports` で禁止している。
 `#lib` には明示的な拡張子が必要で、TS モジュールは `.js`、コンポーネントは `.svelte`、runes モジュール（`.svelte.ts`）は `.svelte.js` と書く。`vi.mock` の specifier も同じ形にする。
+lint が検出するのは import・export 宣言（`import type`・`export … from` を含む）と `.ts` の動的 `import()` で、`vi.mock('$lib/...')` と `.svelte` 内の動的 `import()` は検出しない。import の specifier をまとめて変えたときは、`rg -n '\$lib' src e2e prisma` で残りが無いことも確かめる。
 `$features` は `svelte.config.js` の alias で定義している。
 
 ```typescript
