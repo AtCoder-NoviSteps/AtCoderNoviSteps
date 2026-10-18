@@ -4,12 +4,12 @@ import {
   WorkBookType,
   type WorkBook,
   type WorkBookTasksBase,
-} from '$features/workbooks/types/workbook';
+} from '#features/workbooks/types/workbook.js';
 
 import {
   getWorkBookTasks,
   validateRequiredFields,
-} from '$features/workbooks/services/workbook_tasks';
+} from '#features/workbooks/services/workbook_tasks.js';
 
 function createWorkBook(overrides: Partial<Omit<WorkBook, 'id'>> = {}): Omit<WorkBook, 'id'> {
   return {

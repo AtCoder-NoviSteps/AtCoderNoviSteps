@@ -25,7 +25,7 @@ reviews:
     - path: 'src/lib/server/**'
       instructions: |
         - This directory is server-only. Never import from client-side code or Svelte components.
-        - DB client must be accessed only via `$lib/server/database`.
+        - DB client must be accessed only via `#lib/server/database.js`.
     # --- Schema / validation ---
     - path: 'src/**/zod/**'
       instructions: |

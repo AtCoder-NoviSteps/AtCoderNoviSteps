@@ -3,7 +3,7 @@ import type { TaskResult, TaskResults } from '#lib/types/task.js';
 import {
   type ContestTableMetaData,
   type ContestTableDisplayConfig,
-} from '$features/tasks/types/contest-table/contest_table_provider';
+} from '#features/tasks/types/contest-table/contest_table_provider.js';
 
 import { ContestTableProviderBase } from './contest_table_provider_base';
 import {

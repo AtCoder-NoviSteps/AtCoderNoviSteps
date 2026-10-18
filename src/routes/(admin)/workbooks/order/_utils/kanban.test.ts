@@ -1,6 +1,6 @@
 import { describe, test, expect } from 'vitest';
 
-import { SolutionCategory } from '$features/workbooks/types/workbook_placement';
+import { SolutionCategory } from '#features/workbooks/types/workbook_placement.js';
 import { TaskGrade } from '#lib/types/task.js';
 
 import { workbooks, solutionColumnsBefore, solutionColumnsGraphSwapped } from '../_fixtures/kanban';

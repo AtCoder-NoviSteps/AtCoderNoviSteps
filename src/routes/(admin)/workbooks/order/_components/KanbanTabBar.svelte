@@ -4,7 +4,10 @@
   import { Tabs } from 'flowbite-svelte';
 
   import { TaskGrade } from '#lib/types/task.js';
-  import { SolutionCategory, SOLUTION_LABELS } from '$features/workbooks/types/workbook_placement';
+  import {
+    SolutionCategory,
+    SOLUTION_LABELS,
+  } from '#features/workbooks/types/workbook_placement.js';
   import type { ActiveTab } from '../_types/kanban';
 
   import TabItemWrapper from '#lib/components/Tabs/TabItemWrapper.svelte';

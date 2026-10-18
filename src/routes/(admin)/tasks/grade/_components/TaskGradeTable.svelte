@@ -14,10 +14,10 @@
   } from 'flowbite-svelte';
 
   import GradeLabel from '#lib/components/GradeLabel.svelte';
-  import RelativeEvaluationBadge from '$features/votes/components/RelativeEvaluationBadge.svelte';
+  import RelativeEvaluationBadge from '#features/votes/components/RelativeEvaluationBadge.svelte';
 
   import { taskGradeValues, TaskGrade } from '#lib/types/task.js';
-  import type { TaskWithVoteInfo } from '$features/votes/services/vote_statistics';
+  import type { TaskWithVoteInfo } from '#features/votes/services/vote_statistics.js';
 
   import { addContestNameToTaskIndex } from '#lib/contests/index.js';
   import {

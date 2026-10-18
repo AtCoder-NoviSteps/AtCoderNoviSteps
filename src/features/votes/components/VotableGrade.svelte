@@ -13,22 +13,22 @@
     fetchMyVote,
     submitVote,
     fetchMedianVote,
-  } from '$features/votes/internal_clients/vote_grade';
+  } from '#features/votes/internal_clients/vote_grade.js';
 
   import { getTaskGradeLabel } from '#lib/utils/task.js';
-  import { nonPendingGrades, resolveDisplayGrade } from '$features/votes/utils/grade_options';
-  import { calcCenteredScrollTop } from '$features/votes/utils/grade_scroll_position';
+  import { nonPendingGrades, resolveDisplayGrade } from '#features/votes/utils/grade_options.js';
+  import { calcCenteredScrollTop } from '#features/votes/utils/grade_scroll_position.js';
   import {
     calcGradeDiff,
     getRelativeEvaluationLabel,
     getRelativeEvaluationJapaneseLabel,
     getRelativeEvaluationColorClass,
-  } from '$features/votes/utils/relative_evaluation';
+  } from '#features/votes/utils/relative_evaluation.js';
   import { SIGNUP_PAGE, LOGIN_PAGE, EDIT_PROFILE_PAGE } from '#lib/constants/navbar-links.js';
 
   import GradeLabel from '#lib/components/GradeLabel.svelte';
   import InputFieldWrapper from '#lib/components/InputFieldWrapper.svelte';
-  import RelativeEvaluationBadge from '$features/votes/components/RelativeEvaluationBadge.svelte';
+  import RelativeEvaluationBadge from '#features/votes/components/RelativeEvaluationBadge.svelte';
 
   interface Props {
     taskResult: TaskResult;

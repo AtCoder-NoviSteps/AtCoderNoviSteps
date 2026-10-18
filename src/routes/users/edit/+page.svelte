@@ -1,8 +1,8 @@
 <script lang="ts">
   import { Tabs, TabItem, Alert } from 'flowbite-svelte';
 
-  import AtCoderVerificationForm from '$features/account/components/settings/AtCoderVerificationForm.svelte';
-  import AccountDeletionForm from '$features/account/components/delete/AccountDeletionForm.svelte';
+  import AtCoderVerificationForm from '#features/account/components/settings/AtCoderVerificationForm.svelte';
+  import AccountDeletionForm from '#features/account/components/delete/AccountDeletionForm.svelte';
   import ContainerWrapper from '#lib/components/ContainerWrapper.svelte';
   import FormWrapper from '#lib/components/FormWrapper.svelte';
   import LabelWrapper from '#lib/components/LabelWrapper.svelte';

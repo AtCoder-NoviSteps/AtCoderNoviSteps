@@ -2,7 +2,7 @@ import { ContestType } from '#lib/contests/types/contest.js';
 import { type TaskResult, type TaskResults, TaskGrade, type TaskGrades } from '#lib/types/task.js';
 import type { UrlGenerator, UrlGenerators } from '#lib/types/url.js';
 
-import { type WorkBookTaskBase } from '$features/workbooks/types/workbook';
+import { type WorkBookTaskBase } from '#features/workbooks/types/workbook.js';
 
 import { ATCODER_BASE_CONTEST_URL, AOJ_TASKS_URL } from '#lib/constants/urls.js';
 import {

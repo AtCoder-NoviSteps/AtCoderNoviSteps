@@ -2,7 +2,7 @@
 
 import * as userService from '#lib/services/users.js';
 import * as taskResultService from '#lib/services/task_results.js';
-import { getLoggedInUser } from '$features/auth/services/session_guards';
+import { getLoggedInUser } from '#features/auth/services/session_guards.js';
 
 import type { Roles } from '#lib/types/user.js';
 import type { TaskResult } from '#lib/types/task.js';

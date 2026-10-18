@@ -11,7 +11,7 @@ import {
   ABC001ToABC041Provider,
 } from './abc_providers';
 import { parseContestRound } from './contest_table_provider_base';
-import { taskResultsForContestTableProvider } from '$features/tasks/fixtures/contest-table/contest_table_provider';
+import { taskResultsForContestTableProvider } from '#features/tasks/fixtures/contest-table/contest_table_provider.js';
 
 describe('ABC providers', () => {
   const mockTaskResults: TaskResults = taskResultsForContestTableProvider;

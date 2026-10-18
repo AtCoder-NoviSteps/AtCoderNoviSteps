@@ -24,7 +24,7 @@ import type { User } from '@prisma/client';
 import type { TaskResult, TaskResults, Task, Tasks } from '#lib/types/task.js';
 import type { TaskAnswer } from '#lib/types/answer.js';
 import type { FloatingMessages } from '#lib/types/floating_message.js';
-import type { WorkBookTasksBase } from '$features/workbooks/types/workbook';
+import type { WorkBookTasksBase } from '#features/workbooks/types/workbook.js';
 
 import { NOT_FOUND } from '#lib/constants/http-response-status-codes.js';
 

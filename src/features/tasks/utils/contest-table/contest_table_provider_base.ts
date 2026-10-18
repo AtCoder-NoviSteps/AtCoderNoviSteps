@@ -4,7 +4,7 @@ import {
   type ContestTableMetaData,
   type ContestTableDisplayConfig,
   type ProviderKey,
-} from '$features/tasks/types/contest-table/contest_table_provider';
+} from '#features/tasks/types/contest-table/contest_table_provider.js';
 import { ContestType } from '#lib/contests/types/contest.js';
 import type { TaskResults, TaskResult } from '#lib/types/task.js';
 

@@ -12,9 +12,9 @@ import type {
   WorkbooksList,
   WorkBookTaskBase,
   WorkBookType,
-} from '$features/workbooks/types/workbook';
-import { WorkBookType as WorkBookTypeConst } from '$features/workbooks/types/workbook';
-import type { PlacementQuery } from '$features/workbooks/types/workbook_placement';
+} from '#features/workbooks/types/workbook.js';
+import { WorkBookType as WorkBookTypeConst } from '#features/workbooks/types/workbook.js';
+import type { PlacementQuery } from '#features/workbooks/types/workbook_placement.js';
 
 import { isAdmin, canRead } from '#lib/utils/authorship.js';
 import { calcGradeMode } from '#lib/utils/task.js';

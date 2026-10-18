@@ -30,7 +30,7 @@ vi.mock('#lib/server/database.js', () => ({
   },
 }));
 
-vi.mock('$features/votes/server/cache', () => ({
+vi.mock('#features/votes/server/cache.js', () => ({
   getCachedVoteStats: (fetchFn: () => Promise<unknown>) => fetchFn(),
   getCachedAllTasksWithVoteInfo: (fetchFn: () => Promise<unknown>) => fetchFn(),
 }));

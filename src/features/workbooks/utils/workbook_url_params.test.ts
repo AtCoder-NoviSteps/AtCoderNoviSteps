@@ -1,7 +1,7 @@
 import { describe, test, expect } from 'vitest';
 import { TaskGrade } from '#lib/types/task.js';
-import { SolutionCategory } from '$features/workbooks/types/workbook_placement';
-import { WorkBookTab } from '$features/workbooks/types/workbook';
+import { SolutionCategory } from '#features/workbooks/types/workbook_placement.js';
+import { WorkBookTab } from '#features/workbooks/types/workbook.js';
 import {
   parseWorkBookTab,
   parseWorkBookGrade,

@@ -1,17 +1,17 @@
 <script lang="ts">
   import { Table, TableBody, TableBodyRow, TableHead, TableHeadCell } from 'flowbite-svelte';
 
-  import type { WorkbookTableProps } from '$features/workbooks/types/workbook';
+  import type { WorkbookTableProps } from '#features/workbooks/types/workbook.js';
 
-  import TitleTableHeadCell from '$features/workbooks/components/list/TitleTableHeadCell.svelte';
-  import TitleTableBodyCell from '$features/workbooks/components/list/TitleTableBodyCell.svelte';
-  import GradeTableBodyCell from '$features/workbooks/components/list/GradeTableBodyCell.svelte';
-  import WorkbookProgressCell from '$features/workbooks/components/list/WorkbookProgressCell.svelte';
-  import WorkbookCompletionCell from '$features/workbooks/components/list/WorkbookCompletionCell.svelte';
-  import WorkbookAuthorActionsCell from '$features/workbooks/components/list/WorkbookAuthorActionsCell.svelte';
+  import TitleTableHeadCell from '#features/workbooks/components/list/TitleTableHeadCell.svelte';
+  import TitleTableBodyCell from '#features/workbooks/components/list/TitleTableBodyCell.svelte';
+  import GradeTableBodyCell from '#features/workbooks/components/list/GradeTableBodyCell.svelte';
+  import WorkbookProgressCell from '#features/workbooks/components/list/WorkbookProgressCell.svelte';
+  import WorkbookCompletionCell from '#features/workbooks/components/list/WorkbookCompletionCell.svelte';
+  import WorkbookAuthorActionsCell from '#features/workbooks/components/list/WorkbookAuthorActionsCell.svelte';
 
   import { canRead } from '#lib/utils/authorship.js';
-  import { getGradeMode, getTaskResult } from '$features/workbooks/utils/workbooks';
+  import { getGradeMode, getTaskResult } from '#features/workbooks/utils/workbooks.js';
 
   let { workbooks, gradeModesEachWorkbook, userId, role, taskResults }: WorkbookTableProps =
     $props();

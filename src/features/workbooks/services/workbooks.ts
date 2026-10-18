@@ -6,30 +6,30 @@ import type {
   WorkbooksWithAuthors,
   WorkBookTasksBase,
   WorkBookType,
-} from '$features/workbooks/types/workbook';
-import { WorkBookType as WorkBookTypeConst } from '$features/workbooks/types/workbook';
+} from '#features/workbooks/types/workbook.js';
+import { WorkBookType as WorkBookTypeConst } from '#features/workbooks/types/workbook.js';
 import {
   type PlacementQuery,
   SolutionCategory,
   type SolutionCategories,
   ALL_SOLUTION_CATEGORIES,
-} from '$features/workbooks/types/workbook_placement';
+} from '#features/workbooks/types/workbook_placement.js';
 
 import {
   getWorkBookTasks,
   validateRequiredFields,
-} from '$features/workbooks/services/workbook_tasks';
+} from '#features/workbooks/services/workbook_tasks.js';
 import * as userCrud from '#lib/services/users.js';
 
 import {
   getCachedWorkbooksByPlacement,
   getCachedWorkbooksByUser,
   invalidateWorkbookCaches,
-} from '$features/workbooks/server/cache';
+} from '#features/workbooks/server/cache.js';
 
 import { sanitizeUrl } from '#lib/utils/url.js';
-import { parseWorkBookId, parseWorkBookUrlSlug } from '$features/workbooks/utils/workbook';
-import { buildPlacementKey } from '$features/workbooks/utils/workbooks';
+import { parseWorkBookId, parseWorkBookUrlSlug } from '#features/workbooks/utils/workbook.js';
+import { buildPlacementKey } from '#features/workbooks/utils/workbooks.js';
 
 export async function getWorkBooks(): Promise<WorkBooks> {
   const workbooks = await db.workBook.findMany({

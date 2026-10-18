@@ -4,16 +4,16 @@ import { zod4 } from 'sveltekit-superforms/adapters';
 
 import { Roles } from '#lib/types/user.js';
 
-import { getLoggedInUser } from '$features/auth/services/session_guards';
+import { getLoggedInUser } from '#features/auth/services/session_guards.js';
 import * as taskResultsCrud from '#lib/services/task_results.js';
 import * as action from '#lib/actions/update_task_result.js';
-import { getWorkbookWithAuthor } from '$features/workbooks/services/workbooks';
-import { getVoteGradeStatisticsForTaskIds } from '$features/votes/services/vote_statistics';
-import { voteAbsoluteGrade as voteAbsoluteGradeAction } from '$features/votes/actions/vote_actions';
-import { voteAbsoluteGradeSchema } from '$features/votes/zod/schema';
+import { getWorkbookWithAuthor } from '#features/workbooks/services/workbooks.js';
+import { getVoteGradeStatisticsForTaskIds } from '#features/votes/services/vote_statistics.js';
+import { voteAbsoluteGrade as voteAbsoluteGradeAction } from '#features/votes/actions/vote_actions.js';
+import { voteAbsoluteGradeSchema } from '#features/votes/zod/schema.js';
 
 import { isAdmin, canRead } from '#lib/utils/authorship.js';
-import { parseWorkBookId, parseWorkBookUrlSlug } from '$features/workbooks/utils/workbook';
+import { parseWorkBookId, parseWorkBookUrlSlug } from '#features/workbooks/utils/workbook.js';
 
 import { BAD_REQUEST, FORBIDDEN, NOT_FOUND } from '#lib/constants/http-response-status-codes.js';
 

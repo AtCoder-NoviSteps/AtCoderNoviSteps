@@ -2,14 +2,14 @@ import { error, redirect } from '@sveltejs/kit';
 
 import * as taskCrud from '#lib/services/tasks.js';
 import * as taskResultsCrud from '#lib/services/task_results.js';
-import { getLoggedInUser } from '$features/auth/services/session_guards';
-import * as workBooksCrud from '$features/workbooks/services/workbooks';
+import { getLoggedInUser } from '#features/auth/services/session_guards.js';
+import * as workBooksCrud from '#features/workbooks/services/workbooks.js';
 import {
   getWorkbooksByPlacement,
   getWorkBooksCreatedByUsers,
   getAvailableSolutionCategories,
   getSolutionCategoryMapByWorkbookId,
-} from '$features/workbooks/services/workbooks';
+} from '#features/workbooks/services/workbooks.js';
 
 import { Roles } from '#lib/types/user.js';
 import type { TaskGrade, TaskResult } from '#lib/types/task.js';
@@ -17,22 +17,22 @@ import {
   WorkBookTab,
   type WorkBookTab as WorkBookTabType,
   WorkBookType,
-} from '$features/workbooks/types/workbook';
+} from '#features/workbooks/types/workbook.js';
 import {
   type PlacementQuery,
   ALL_SOLUTION_CATEGORIES,
   type SelectedSolutionCategory,
   type SolutionCategory,
-} from '$features/workbooks/types/workbook_placement';
+} from '#features/workbooks/types/workbook_placement.js';
 
 import { isAdmin, canDelete } from '#lib/utils/authorship.js';
-import { buildTaskIdsFromWorkbooks } from '$features/workbooks/utils/workbooks';
+import { buildTaskIdsFromWorkbooks } from '#features/workbooks/utils/workbooks.js';
 import {
   parseWorkBookTab,
   parseWorkBookGrade,
   parseWorkBookCategory,
-} from '$features/workbooks/utils/workbook_url_params';
-import { parseWorkBookId } from '$features/workbooks/utils/workbook';
+} from '#features/workbooks/utils/workbook_url_params.js';
+import { parseWorkBookId } from '#features/workbooks/utils/workbook.js';
 
 import {
   BAD_REQUEST,

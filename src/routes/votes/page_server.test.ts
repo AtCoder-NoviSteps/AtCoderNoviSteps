@@ -2,11 +2,11 @@ import { describe, test, expect, vi, beforeEach } from 'vitest';
 
 import { Roles } from '#lib/types/user.js';
 
-vi.mock('$features/votes/services/vote_statistics', () => ({
+vi.mock('#features/votes/services/vote_statistics.js', () => ({
   getAllTasksWithVoteInfo: vi.fn(),
 }));
 
-import * as voteStatsModule from '$features/votes/services/vote_statistics';
+import * as voteStatsModule from '#features/votes/services/vote_statistics.js';
 import { load } from './+page.server';
 
 const mockGetAllTasksWithVoteInfo = vi.mocked(voteStatsModule.getAllTasksWithVoteInfo);

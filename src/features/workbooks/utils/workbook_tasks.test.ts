@@ -6,14 +6,14 @@ import type {
   WorkBookTasksBase,
   WorkBookTasksCreate,
   WorkBookTasksEdit,
-} from '$features/workbooks/types/workbook';
+} from '#features/workbooks/types/workbook.js';
 
 import {
   generateWorkBookTaskOrders,
   addTaskToWorkBook,
   updateWorkBookTasks,
   updateWorkBookTaskForTable,
-} from '$features/workbooks/utils/workbook_tasks';
+} from '#features/workbooks/utils/workbook_tasks.js';
 
 type TestCaseForWorkBookTaskOrders = {
   workBookTaskCount: number;

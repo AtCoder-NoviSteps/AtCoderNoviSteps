@@ -3,7 +3,7 @@ import {
   type ContestTableDisplayConfig,
   JOI_SECOND_QUAL_ROUND_SECTIONS,
   JOI_FINAL_ROUND_SECTIONS,
-} from '$features/tasks/types/contest-table/contest_table_provider';
+} from '#features/tasks/types/contest-table/contest_table_provider.js';
 import { ContestType } from '#lib/contests/types/contest.js';
 import type { TaskResult } from '#lib/types/task.js';
 

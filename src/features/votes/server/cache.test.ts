@@ -2,7 +2,7 @@ import { describe, test, expect, vi, beforeEach, afterEach, afterAll } from 'vit
 
 import type { VotedGradeStatistics } from '@prisma/client';
 import { TaskGrade } from '#lib/types/task.js';
-import type { TaskWithVoteInfo } from '$features/votes/services/vote_statistics';
+import type { TaskWithVoteInfo } from '#features/votes/services/vote_statistics.js';
 import {
   getCachedVoteStats,
   getCachedAllTasksWithVoteInfo,

@@ -2,10 +2,10 @@
   import { TableBodyCell } from 'flowbite-svelte';
 
   import type { TaskResults } from '#lib/types/task.js';
-  import type { WorkBookTasksBase } from '$features/workbooks/types/workbook';
+  import type { WorkBookTasksBase } from '#features/workbooks/types/workbook.js';
 
   import ThermometerProgressBar from '#lib/components/ThermometerProgressBar.svelte';
-  import AcceptedCounter from '$features/workbooks/components/list/AcceptedCounter.svelte';
+  import AcceptedCounter from '#features/workbooks/components/list/AcceptedCounter.svelte';
 
   interface Props {
     workBookTasks: WorkBookTasksBase;

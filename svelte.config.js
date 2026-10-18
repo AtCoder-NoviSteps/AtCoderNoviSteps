@@ -1,4 +1,3 @@
-import { resolve } from 'path';
 import adapter from '@sveltejs/adapter-vercel';
 import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
 
@@ -16,15 +15,7 @@ const config = {
       memory: 3008, // To avoid OOM errors on /workbooks/{slug}
       maxDuration: 30,
     }),
-    // See:
-    // https://kit.svelte.dev/docs/configuration#alias
-    alias: {
-      '@': resolve('./src'),
-      $lib: resolve('./src/lib'),
-      '$lib/*': resolve('./src/lib/*'),
-      $features: resolve('./src/features'),
-      '$features/*': resolve('./src/features/*'),
-    },
+    // Module paths use package.json#imports (#lib, #features); SvelteKit 3 deprecates kit.alias
   },
 
   compilerOptions: {

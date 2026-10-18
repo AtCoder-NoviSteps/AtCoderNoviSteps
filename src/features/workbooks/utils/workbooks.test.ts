@@ -2,9 +2,9 @@ import { describe, expect, test } from 'vitest';
 
 import { Roles } from '#lib/types/user.js';
 import { TaskGrade, type Task, type TaskResult } from '#lib/types/task.js';
-import { type WorkbookList, WorkBookType } from '$features/workbooks/types/workbook';
-import { SolutionCategory } from '$features/workbooks/types/workbook_placement';
-import type { PlacementQuery } from '$features/workbooks/types/workbook_placement';
+import { type WorkbookList, WorkBookType } from '#features/workbooks/types/workbook.js';
+import { SolutionCategory } from '#features/workbooks/types/workbook_placement.js';
+import type { PlacementQuery } from '#features/workbooks/types/workbook_placement.js';
 
 import {
   buildPlacementKey,
@@ -18,7 +18,7 @@ import {
   getTaskResult,
   countReadableWorkbooks,
   partitionWorkbooksAsMainAndReplenished,
-} from '$features/workbooks/utils/workbooks';
+} from '#features/workbooks/utils/workbooks.js';
 
 function createTask(taskId: string, grade: TaskGrade): Task {
   return {

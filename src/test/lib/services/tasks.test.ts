@@ -19,12 +19,12 @@ vi.mock('#lib/server/tasks/cache.js', () => ({
   invalidateTaskCaches: vi.fn(),
 }));
 
-vi.mock('$features/votes/server/cache', () => ({
+vi.mock('#features/votes/server/cache.js', () => ({
   invalidateVoteCaches: vi.fn(),
 }));
 
 import db from '#lib/server/database.js';
-import { invalidateVoteCaches } from '$features/votes/server/cache';
+import { invalidateVoteCaches } from '#features/votes/server/cache.js';
 
 describe('updateTask', () => {
   const mockDb = db as unknown as { task: { update: ReturnType<typeof vi.fn> } };

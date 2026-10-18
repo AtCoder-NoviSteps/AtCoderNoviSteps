@@ -1,11 +1,11 @@
 import { describe, test, expect, vi } from 'vitest';
 
 import { TaskGrade } from '#lib/types/task.js';
-import { WorkBookType } from '$features/workbooks/types/workbook';
+import { WorkBookType } from '#features/workbooks/types/workbook.js';
 import {
   SolutionCategory,
   type WorkBookPlacements,
-} from '$features/workbooks/types/workbook_placement';
+} from '#features/workbooks/types/workbook_placement.js';
 
 import {
   getWorkbooksWithPlacements,
@@ -24,7 +24,7 @@ import {
   solutionPlacementRow,
   unplacedCurriculumRows,
   unplacedSolutionWorkbooks,
-} from '$features/workbooks/fixtures/workbook_placements';
+} from '#features/workbooks/fixtures/workbook_placements.js';
 
 vi.mock('#lib/server/database.js', () => ({
   default: {

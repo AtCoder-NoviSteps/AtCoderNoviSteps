@@ -3,10 +3,10 @@
 
   import { TableBodyCell } from 'flowbite-svelte';
 
-  import type { WorkbookList } from '$features/workbooks/types/workbook';
+  import type { WorkbookList } from '#features/workbooks/types/workbook.js';
 
-  import { getUrlSlugFrom } from '$features/workbooks/utils/workbooks';
-  import PublicationStatusLabel from '$features/workbooks/components/shared/PublicationStatusLabel.svelte';
+  import { getUrlSlugFrom } from '#features/workbooks/utils/workbooks.js';
+  import PublicationStatusLabel from '#features/workbooks/components/shared/PublicationStatusLabel.svelte';
 
   interface Props {
     paddingLeft?: string;

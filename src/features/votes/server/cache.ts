@@ -2,7 +2,7 @@ import { Cache } from '#lib/clients/cache.js';
 
 import type { VotedGradeStatistics } from '@prisma/client';
 
-import type { TaskWithVoteInfo } from '$features/votes/services/vote_statistics';
+import type { TaskWithVoteInfo } from '#features/votes/services/vote_statistics.js';
 
 const VOTE_STATS_TTL_MS = 10 * 60 * 1000;
 const VOTE_STATS_KEY = 'vote_grade_statistics';

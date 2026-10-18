@@ -1,7 +1,7 @@
 import type { SolutionCategory as SolutionCategoryOrigin } from '@prisma/client';
 import type { TaskGrade } from '#lib/types/task.js';
-import type { WorkBookTaskBase } from '$features/workbooks/types/workbook';
-import { WorkBookType as WorkBookTypeConst } from '$features/workbooks/types/workbook';
+import type { WorkBookTaskBase } from '#features/workbooks/types/workbook.js';
+import { WorkBookType as WorkBookTypeConst } from '#features/workbooks/types/workbook.js';
 
 // Categories for solution placement.
 export const SolutionCategory: { [key in SolutionCategoryOrigin]: key } = {

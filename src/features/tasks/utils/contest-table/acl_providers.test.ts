@@ -9,7 +9,7 @@ import {
   taskResultsForACLBeginnerProvider,
   taskResultsForACLProvider,
   taskResultsForContestTableProvider,
-} from '$features/tasks/fixtures/contest-table/contest_table_provider';
+} from '#features/tasks/fixtures/contest-table/contest_table_provider.js';
 
 describe('ACLPracticeProvider', () => {
   test('expects to filter tasks with contest_id "practice2"', () => {

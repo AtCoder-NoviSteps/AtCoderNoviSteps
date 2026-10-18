@@ -18,18 +18,18 @@
     ContestTableProvider,
     ContestTableDisplayConfig,
     ContestTableMetaData,
-  } from '$features/tasks/types/contest-table/contest_table_provider';
+  } from '#features/tasks/types/contest-table/contest_table_provider.js';
   import type { ContestTaskPairKey } from '#lib/types/contest_task_pair.js';
-  import type { VoteStatisticsMap } from '$features/votes/types/vote_result';
+  import type { VoteStatisticsMap } from '#features/votes/types/vote_result.js';
 
   import TaskTableBodyCell from './TaskTableBodyCell.svelte';
 
-  import { activeContestTypeStore } from '$features/tasks/stores/active_contest_type.svelte';
+  import { activeContestTypeStore } from '#features/tasks/stores/active_contest_type.svelte.js';
   import {
     contestTableProviderGroups,
     type ContestTableProviderGroup,
     type ContestTableProviderGroups,
-  } from '$features/tasks/utils/contest-table/contest_table_provider';
+  } from '#features/tasks/utils/contest-table/contest_table_provider.js';
 
   import { useLocalStorage } from '#lib/stores/local_storage_helper.svelte.js';
 

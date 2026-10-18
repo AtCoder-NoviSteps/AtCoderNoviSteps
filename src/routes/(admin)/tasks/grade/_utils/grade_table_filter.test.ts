@@ -1,7 +1,7 @@
 import { describe, test, expect } from 'vitest';
 
 import { TaskGrade } from '#lib/types/task.js';
-import type { TaskWithVoteInfo } from '$features/votes/services/vote_statistics';
+import type { TaskWithVoteInfo } from '#features/votes/services/vote_statistics.js';
 
 import { countPendingTasks, filterGradeTableTasks } from './grade_table_filter';
 

@@ -1,12 +1,12 @@
 import { TaskGrade, type Task } from '#lib/types/task.js';
-import { WorkBookType } from '$features/workbooks/types/workbook';
+import { WorkBookType } from '#features/workbooks/types/workbook.js';
 import {
   SolutionCategory,
   type WorkBookPlacements,
   type WorkbooksWithPlacement,
   type WorkBooksWithTasks,
   type UnplacedCurriculumRows,
-} from '$features/workbooks/types/workbook_placement';
+} from '#features/workbooks/types/workbook_placement.js';
 
 // ---------------------------------------------------------------------------
 // Placement records (WorkBookPlacement shape)

@@ -1,10 +1,10 @@
 import { json, type RequestEvent } from '@sveltejs/kit';
 
-import { validateAndUpdatePlacements } from '$features/workbooks/services/workbook_placements/crud';
+import { validateAndUpdatePlacements } from '#features/workbooks/services/workbook_placements/crud.js';
 
-import { updatePlacementsSchema } from '$features/workbooks/zod/schema';
+import { updatePlacementsSchema } from '#features/workbooks/zod/schema.js';
 
-import { validateAdminAccessForApi } from '$features/auth/services/admin_access';
+import { validateAdminAccessForApi } from '#features/auth/services/admin_access.js';
 
 import { BAD_REQUEST } from '#lib/constants/http-response-status-codes.js';
 

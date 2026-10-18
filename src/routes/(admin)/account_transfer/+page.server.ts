@@ -9,7 +9,7 @@ import * as taskResultService from '#lib/services/task_results.js';
 import { accountTransferSchema } from '#lib/zod/schema.js';
 import type { FloatingMessage } from '#lib/types/floating_message.js';
 
-import { validateAdminAccess } from '$features/auth/services/admin_access';
+import { validateAdminAccess } from '#features/auth/services/admin_access.js';
 
 let accountTransferMessages: FloatingMessage[] = [];
 

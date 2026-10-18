@@ -1,4 +1,4 @@
-import type { TaskWithVoteInfo } from '$features/votes/services/vote_statistics';
+import type { TaskWithVoteInfo } from '#features/votes/services/vote_statistics.js';
 import { TaskGrade } from '#lib/types/task.js';
 import { filterTasksBySearch } from '#lib/utils/task_filter.js';
 

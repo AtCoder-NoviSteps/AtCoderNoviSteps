@@ -4,7 +4,7 @@ import type { Tag } from '#lib/types/tag.js';
 
 import * as tagService from '#lib/services/tags.js';
 
-import { validateAdminAccess } from '$features/auth/services/admin_access';
+import { validateAdminAccess } from '#features/auth/services/admin_access.js';
 
 export async function load({ locals, url }) {
   await validateAdminAccess(locals, url);

@@ -1,5 +1,5 @@
 import { TaskGrade } from '#lib/types/task.js';
-import type { DonutSegment, DonutSegments } from '$features/votes/types/donut_graph';
+import type { DonutSegment, DonutSegments } from '#features/votes/types/donut_graph.js';
 
 export type { DonutSegment, DonutSegments };
 

@@ -5,8 +5,8 @@
 import { z } from 'zod';
 
 import { TaskGrade } from '#lib/types/task.js';
-import { WorkBookType } from '$features/workbooks/types/workbook';
-import { SolutionCategory } from '$features/workbooks/types/workbook_placement';
+import { WorkBookType } from '#features/workbooks/types/workbook.js';
+import { SolutionCategory } from '#features/workbooks/types/workbook_placement.js';
 
 import { isValidUrl, isValidUrlSlug } from '#lib/utils/url.js';
 

@@ -7,7 +7,7 @@
     getRelativeEvaluationLabel,
     getRelativeEvaluationTooltipText,
     getRelativeEvaluationBadgeColorClass,
-  } from '$features/votes/utils/relative_evaluation';
+  } from '#features/votes/utils/relative_evaluation.js';
 
   interface Props {
     officialGrade: TaskGrade;

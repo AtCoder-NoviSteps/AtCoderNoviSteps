@@ -12,18 +12,18 @@
     type WorkbooksList,
     WorkBookType,
     WorkBookTab,
-  } from '$features/workbooks/types/workbook';
-  import { type SelectedSolutionCategory } from '$features/workbooks/types/workbook_placement';
+  } from '#features/workbooks/types/workbook.js';
+  import { type SelectedSolutionCategory } from '#features/workbooks/types/workbook_placement.js';
 
   import HeadingOne from '#lib/components/HeadingOne.svelte';
-  import WorkbookTabItem from '$features/workbooks/components/list/WorkbookTabItem.svelte';
-  import WorkBookList from '$features/workbooks/components/list/WorkBookList.svelte';
+  import WorkbookTabItem from '#features/workbooks/components/list/WorkbookTabItem.svelte';
+  import WorkBookList from '#features/workbooks/components/list/WorkBookList.svelte';
 
   import {
     calcWorkBookGradeModes,
     buildTaskResultsByWorkBookId,
-  } from '$features/workbooks/utils/workbooks';
-  import { buildWorkbooksUrl } from '$features/workbooks/utils/workbook_url_params';
+  } from '#features/workbooks/utils/workbooks.js';
+  import { buildWorkbooksUrl } from '#features/workbooks/utils/workbook_url_params.js';
 
   const WORKBOOKS_URL_KEY = 'workbooks-last-url';
 

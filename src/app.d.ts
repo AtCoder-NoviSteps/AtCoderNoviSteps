@@ -7,7 +7,7 @@ declare global {
   namespace App {
     // interface Error {}
     interface Locals {
-      auth: import('$features/auth/server/auth').AuthRequest;
+      auth: import('#features/auth/server/auth.js').AuthRequest;
       user: {
         id: string;
         name: string;

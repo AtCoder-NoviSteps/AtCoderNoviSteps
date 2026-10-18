@@ -1,14 +1,14 @@
 import { fail } from '@sveltejs/kit';
 import type { TaskGrade } from '@prisma/client';
 
-import { upsertVoteGradeTables } from '$features/votes/services/vote_grade';
+import { upsertVoteGradeTables } from '#features/votes/services/vote_grade.js';
 import {
   FORBIDDEN,
   INTERNAL_SERVER_ERROR,
   UNAUTHORIZED,
 } from '#lib/constants/http-response-status-codes.js';
 
-import type { VoteAbsoluteGradeInput } from '$features/votes/zod/schema';
+import type { VoteAbsoluteGradeInput } from '#features/votes/zod/schema.js';
 
 export const voteAbsoluteGrade = async ({
   locals,

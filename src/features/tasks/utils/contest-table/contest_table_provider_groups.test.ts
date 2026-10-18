@@ -2,7 +2,7 @@ import { describe, test, expect } from 'vitest';
 
 import { ContestType } from '#lib/contests/types/contest.js';
 
-import { TESSOKU_SECTIONS } from '$features/tasks/types/contest-table/contest_table_provider';
+import { TESSOKU_SECTIONS } from '#features/tasks/types/contest-table/contest_table_provider.js';
 
 import {
   ICPC_PRELIM_OLDEST_YEAR,

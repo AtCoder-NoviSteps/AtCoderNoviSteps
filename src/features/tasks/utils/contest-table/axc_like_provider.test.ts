@@ -4,7 +4,7 @@ import { ContestType } from '#lib/contests/types/contest.js';
 import type { TaskResults } from '#lib/types/task.js';
 
 import { ABCLikeProvider } from './axc_like_provider';
-import { taskResultsForABCLikeProvider } from '$features/tasks/fixtures/contest-table/contest_table_provider';
+import { taskResultsForABCLikeProvider } from '#features/tasks/fixtures/contest-table/contest_table_provider.js';
 
 describe('ABCLikeProvider', () => {
   test('expects to filter tasks to include only ABC-Like contests', () => {

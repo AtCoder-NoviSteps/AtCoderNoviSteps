@@ -3,8 +3,8 @@ import type { Actions, PageServerLoad } from './$types';
 import { type TaskGrade, TaskGrade as TaskGradeEnum } from '#lib/types/task.js';
 
 import { updateTask } from '#lib/services/tasks.js';
-import { getAllTasksWithVoteInfo } from '$features/votes/services/vote_statistics';
-import { validateAdminAccess } from '$features/auth/services/admin_access';
+import { getAllTasksWithVoteInfo } from '#features/votes/services/vote_statistics.js';
+import { validateAdminAccess } from '#features/auth/services/admin_access.js';
 
 export const load: PageServerLoad = async ({ locals, url }) => {
   await validateAdminAccess(locals, url);

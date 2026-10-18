@@ -5,7 +5,7 @@ import type { TaskResults } from '#lib/types/task.js';
 
 import { AGC001OnwardsProvider } from './agc_provider';
 import { parseContestRound } from './contest_table_provider_base';
-import { taskResultsForAGC001OnwardsProvider } from '$features/tasks/fixtures/contest-table/contest_table_provider';
+import { taskResultsForAGC001OnwardsProvider } from '#features/tasks/fixtures/contest-table/contest_table_provider.js';
 
 describe('AGC001OnwardsProvider', () => {
   test('expects to filter tasks to include only AGC001 and later', () => {

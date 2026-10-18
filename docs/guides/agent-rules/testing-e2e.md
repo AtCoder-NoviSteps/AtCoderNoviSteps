@@ -10,14 +10,14 @@ paths:
 ## Setup
 
 - File extension: **must** be `.spec.ts` (`.test.ts` not detected by `playwright.config.ts`)
-- No path aliases or subpath imports (`$features` is resolved only by Vite; `#lib/*.js` resolves to `src/lib/*.js`, but the Playwright runner does not map it to the `.ts` source). Use type-only imports for types:
+- No runtime imports through subpath imports (`#lib/*.js` and `#features/*.js` resolve to `src/**/*.js`, but the Playwright runner does not map them to the `.ts` source). Use relative imports, or type-only imports for types:
 
 ```typescript
 // Bad: runtime import fails in E2E
-import { TAB_SOLUTION } from '$features/workbooks/types/workbook';
+import { TAB_SOLUTION } from '#features/workbooks/types/workbook.js';
 
 // Good: type-only import + local constant
-import type { WorkBookTab } from '$features/workbooks/types/workbook';
+import type { WorkBookTab } from '#features/workbooks/types/workbook.js';
 
 const TAB_SOLUTION: WorkBookTab = 'solution';
 ```

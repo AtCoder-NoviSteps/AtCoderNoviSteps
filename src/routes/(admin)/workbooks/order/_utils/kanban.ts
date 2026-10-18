@@ -4,7 +4,7 @@ import {
   SOLUTION_LABELS,
   type WorkbooksWithPlacement,
   type WorkbookWithPlacement,
-} from '$features/workbooks/types/workbook_placement';
+} from '#features/workbooks/types/workbook_placement.js';
 import type {
   ActiveTab,
   KanbanColumns,

@@ -16,7 +16,7 @@
     "types": ["node", "vitest/globals"], // Note: "node" is required because "types" is replaced (not merged) when extending tsconfig
     "verbatimModuleSyntax": true
   },
-  // Path aliases are handled by https://kit.svelte.dev/docs/configuration#alias
+  // Module paths are resolved by package.json#imports (#lib, #features), not path aliases
   //
   // If you want to overwrite includes/excludes, make sure to copy over the relevant includes/excludes
   // from the referenced tsconfig.json - TypeScript does not merge them in

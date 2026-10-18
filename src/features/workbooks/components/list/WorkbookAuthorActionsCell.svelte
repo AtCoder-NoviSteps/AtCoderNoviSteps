@@ -5,10 +5,10 @@
   import { TableBodyCell } from 'flowbite-svelte';
 
   import type { Roles } from '#lib/types/user.js';
-  import type { WorkbookList } from '$features/workbooks/types/workbook';
+  import type { WorkbookList } from '#features/workbooks/types/workbook.js';
 
   import { canEdit, canDelete } from '#lib/utils/authorship.js';
-  import { getUrlSlugFrom } from '$features/workbooks/utils/workbooks';
+  import { getUrlSlugFrom } from '#features/workbooks/utils/workbooks.js';
 
   interface Props {
     workbook: WorkbookList;

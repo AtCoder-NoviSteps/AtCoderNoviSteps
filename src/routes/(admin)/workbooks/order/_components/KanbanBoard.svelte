@@ -13,7 +13,7 @@
   import {
     SolutionCategory,
     type WorkbooksWithPlacement,
-  } from '$features/workbooks/types/workbook_placement';
+  } from '#features/workbooks/types/workbook_placement.js';
   import { TaskGrade } from '#lib/types/task.js';
   import type {
     KanbanColumns,

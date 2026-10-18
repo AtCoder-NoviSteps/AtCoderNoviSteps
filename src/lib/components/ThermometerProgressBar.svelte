@@ -3,7 +3,7 @@
 
   import type { TaskResult, TaskResults } from '#lib/types/task.js';
   import type { SubmissionRatios, SubmissionCounts } from '#lib/types/submission.js';
-  import type { WorkBookTaskBase } from '$features/workbooks/types/workbook';
+  import type { WorkBookTaskBase } from '#features/workbooks/types/workbook.js';
 
   import { submission_statuses } from '#lib/services/submission_status.js';
 

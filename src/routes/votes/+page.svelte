@@ -15,15 +15,15 @@
 
   import HeadingOne from '#lib/components/HeadingOne.svelte';
   import GradeLabel from '#lib/components/GradeLabel.svelte';
-  import RelativeEvaluationBadge from '$features/votes/components/RelativeEvaluationBadge.svelte';
+  import RelativeEvaluationBadge from '#features/votes/components/RelativeEvaluationBadge.svelte';
 
   import { TaskGrade } from '#lib/types/task.js';
-  import { MIN_VOTES_FOR_PROVISIONAL_GRADE } from '$features/votes/constants/statistics';
+  import { MIN_VOTES_FOR_PROVISIONAL_GRADE } from '#features/votes/constants/statistics.js';
 
   import { getContestNameLabel } from '#lib/contests/index.js';
   import { getTaskUrl, compareByContestIdAndTaskId } from '#lib/utils/task.js';
   import { filterTasksBySearch } from '#lib/utils/task_filter.js';
-  import { resolveDisplayGrade } from '$features/votes/utils/grade_options';
+  import { resolveDisplayGrade } from '#features/votes/utils/grade_options.js';
 
   const MAX_SEARCH_RESULTS = 20;
 
