@@ -30,6 +30,12 @@ export type PlacementUpdate = {
 
 export type PlacementUpdates = PlacementUpdate[];
 
+// What the board does when a drag ends
+export type DragEndAction =
+  | { kind: 'none' }
+  | { kind: 'restore'; columns: KanbanColumns }
+  | { kind: 'save'; updates: PlacementUpdates };
+
 // Props required for dnd-kit sortable positioning
 export type SortableProps = {
   columnId: string; // droppable zone ID (the column this card belongs to)

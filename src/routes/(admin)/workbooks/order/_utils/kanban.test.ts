@@ -3,7 +3,7 @@ import { describe, test, expect } from 'vitest';
 import { SolutionCategory } from '$features/workbooks/types/workbook_placement';
 import { TaskGrade } from '$lib/types/task';
 
-import { workbooks, solutionColumnsBefore } from '../_fixtures/kanban';
+import { workbooks, solutionColumnsBefore, solutionColumnsGraphSwapped } from '../_fixtures/kanban';
 import {
   buildKanbanItems,
   buildUpdatedUrl,
@@ -11,6 +11,7 @@ import {
   parseInitialGrades,
   parseTab,
   reCalcPriorities,
+  resolveDragEndAction,
 } from './kanban';
 
 describe('parseTab', () => {
@@ -234,15 +235,7 @@ describe('reCalcPriorities', () => {
   });
 
   test('returns updates for reordered cards within a column', () => {
-    const after = {
-      ...before,
-      [SolutionCategory.GRAPH]: [
-        before[SolutionCategory.GRAPH][1],
-        before[SolutionCategory.GRAPH][0],
-      ], // swapped
-    };
-
-    const updates = reCalcPriorities(before, after, 'solutionCategory');
+    const updates = reCalcPriorities(before, solutionColumnsGraphSwapped, 'solutionCategory');
     expect(updates).toHaveLength(2);
     expect(updates[0]).toMatchObject({
       id: 102,
@@ -259,15 +252,8 @@ describe('reCalcPriorities', () => {
   });
 
   test('returns updates only for changed columns', () => {
-    const after = {
-      [SolutionCategory.GRAPH]: [
-        before[SolutionCategory.GRAPH][1],
-        before[SolutionCategory.GRAPH][0],
-      ], // changed
-      [SolutionCategory.PENDING]: before[SolutionCategory.PENDING], // unchanged
-    };
-
-    const updates = reCalcPriorities(before, after, 'solutionCategory');
+    // GRAPH is swapped, PENDING is unchanged
+    const updates = reCalcPriorities(before, solutionColumnsGraphSwapped, 'solutionCategory');
     const updatedIds = updates.map((update) => update.id);
     expect(updatedIds).not.toContain(103);
     expect(updatedIds).toContain(101);
@@ -334,5 +320,90 @@ describe('reCalcPriorities', () => {
 
   test('returns empty array when after is empty and before is empty', () => {
     expect(reCalcPriorities({}, {}, 'solutionCategory')).toEqual([]);
+  });
+});
+
+describe('resolveDragEndAction', () => {
+  const before = solutionColumnsBefore;
+
+  describe('canceled drag', () => {
+    test('returns restore with the snapshot when a reordered drag is canceled', () => {
+      const action = resolveDragEndAction({
+        canceled: true,
+        before,
+        after: solutionColumnsGraphSwapped,
+        columnKey: 'solutionCategory',
+      });
+
+      expect(action).toEqual({
+        kind: 'restore',
+        columns: {
+          [SolutionCategory.GRAPH]: [
+            { id: 101, workBookId: 1, title: 'Graph Basics', isPublished: true },
+            { id: 102, workBookId: 2, title: 'Graph Advanced', isPublished: false },
+          ],
+          [SolutionCategory.PENDING]: [
+            { id: 103, workBookId: 3, title: 'Pending Book', isPublished: true },
+          ],
+        },
+      });
+    });
+
+    test('returns none when the drag is canceled without a snapshot', () => {
+      const action = resolveDragEndAction({
+        canceled: true,
+        before: null,
+        after: solutionColumnsGraphSwapped,
+        columnKey: 'solutionCategory',
+      });
+
+      expect(action).toEqual({ kind: 'none' });
+    });
+  });
+
+  describe('completed drag', () => {
+    test('returns none when the order is unchanged', () => {
+      const action = resolveDragEndAction({
+        canceled: false,
+        before,
+        after: structuredClone(before),
+        columnKey: 'solutionCategory',
+      });
+
+      expect(action).toEqual({ kind: 'none' });
+    });
+
+    test('returns save with recalculated updates when cards were reordered', () => {
+      const action = resolveDragEndAction({
+        canceled: false,
+        before,
+        after: solutionColumnsGraphSwapped,
+        columnKey: 'solutionCategory',
+      });
+
+      expect(action).toEqual({
+        kind: 'save',
+        updates: [
+          { id: 102, priority: 1, solutionCategory: SolutionCategory.GRAPH, taskGrade: null },
+          { id: 101, priority: 2, solutionCategory: SolutionCategory.GRAPH, taskGrade: null },
+        ],
+      });
+    });
+
+    test('treats a missing snapshot as an empty board when not canceled', () => {
+      const action = resolveDragEndAction({
+        canceled: false,
+        before: null,
+        after: {
+          [TaskGrade.Q10]: [{ id: 201, workBookId: 4, title: 'Curriculum Q10', isPublished: true }],
+        },
+        columnKey: 'taskGrade',
+      });
+
+      expect(action).toEqual({
+        kind: 'save',
+        updates: [{ id: 201, priority: 1, solutionCategory: null, taskGrade: TaskGrade.Q10 }],
+      });
+    });
   });
 });
