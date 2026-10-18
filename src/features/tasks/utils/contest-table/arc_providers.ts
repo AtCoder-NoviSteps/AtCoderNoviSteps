@@ -1,7 +1,7 @@
 import {
   type ContestTableMetaData,
   type ContestTableDisplayConfig,
-} from '$features/tasks/types/contest-table/contest_table_provider';
+} from '#features/tasks/types/contest-table/contest_table_provider.js';
 import type { TaskResult } from '#lib/types/task.js';
 
 import { classifyContest, getContestNameLabel } from '#lib/contests/index.js';

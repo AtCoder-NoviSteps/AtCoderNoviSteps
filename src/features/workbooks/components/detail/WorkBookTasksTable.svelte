@@ -24,7 +24,7 @@
     WorkBookTaskCreate,
     WorkBookTasksEdit,
     WorkBookTaskEdit,
-  } from '$features/workbooks/types/workbook';
+  } from '#features/workbooks/types/workbook.js';
   import type { Task } from '#lib/types/task.js';
 
   interface Props {

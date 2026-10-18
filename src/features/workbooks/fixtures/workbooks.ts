@@ -1,4 +1,4 @@
-import { WorkBookType, type WorkBook } from '$features/workbooks/types/workbook';
+import { WorkBookType, type WorkBook } from '#features/workbooks/types/workbook.js';
 
 function createWorkBookBase(overrides: Partial<WorkBook> = {}): WorkBook {
   return {

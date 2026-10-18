@@ -1,13 +1,13 @@
 import { default as prisma } from '#lib/server/database.js';
 import { TaskGrade } from '@prisma/client';
 import { sha256 } from '#lib/utils/hash.js';
-import type { VoteGradeResult } from '$features/votes/types/vote_result';
-import { computeMedianGrade } from '$features/votes/utils/median';
+import type { VoteGradeResult } from '#features/votes/types/vote_result.js';
+import { computeMedianGrade } from '#features/votes/utils/median.js';
 import {
   MIN_VOTES_FOR_STATISTICS,
   MIN_VOTES_FOR_PROVISIONAL_GRADE,
-} from '$features/votes/constants/statistics';
-import { invalidateVoteCaches } from '$features/votes/server/cache';
+} from '#features/votes/constants/statistics.js';
+import { invalidateVoteCaches } from '#features/votes/server/cache.js';
 
 export async function getVoteGrade(userId: string, taskId: string): Promise<VoteGradeResult> {
   const voteRecord = await prisma.voteGrade.findUnique({

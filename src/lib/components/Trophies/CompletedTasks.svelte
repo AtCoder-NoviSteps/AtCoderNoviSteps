@@ -2,7 +2,7 @@
   import { Img } from 'flowbite-svelte';
 
   import type { TaskResults } from '#lib/types/task.js';
-  import type { WorkBookTaskBase } from '$features/workbooks/types/workbook';
+  import type { WorkBookTaskBase } from '#features/workbooks/types/workbook.js';
 
   import { areAllTasksAccepted } from '#lib/utils/task.js';
 

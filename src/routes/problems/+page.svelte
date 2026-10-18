@@ -7,7 +7,7 @@
 
   import HeadingOne from '#lib/components/HeadingOne.svelte';
   import ProblemListTabItem from '#lib/components/Tabs/ProblemListTabItem.svelte';
-  import TaskTable from '$features/tasks/components/contest-table/TaskTable.svelte';
+  import TaskTable from '#features/tasks/components/contest-table/TaskTable.svelte';
   import TaskGradeList from '#lib/components/TaskGradeList.svelte';
   import GradeGuidelineTable from '#lib/components/TaskGrades/GradeGuidelineTable.svelte';
 

@@ -1,16 +1,16 @@
 <script lang="ts">
   import { Roles } from '#lib/types/user.js';
   import { TaskGrade, type TaskResults } from '#lib/types/task.js';
-  import { WorkBookType, type WorkbooksList } from '$features/workbooks/types/workbook';
+  import { WorkBookType, type WorkbooksList } from '#features/workbooks/types/workbook.js';
   import {
     type SolutionCategory,
     type SolutionCategories,
     type SelectedSolutionCategory,
-  } from '$features/workbooks/types/workbook_placement';
+  } from '#features/workbooks/types/workbook_placement.js';
 
-  import CurriculumWorkBookList from '$features/workbooks/components/list/CurriculumWorkBookList.svelte';
-  import SolutionWorkBookList from '$features/workbooks/components/list/SolutionWorkBookList.svelte';
-  import CreatedByUserTable from '$features/workbooks/components/list/CreatedByUserTable.svelte';
+  import CurriculumWorkBookList from '#features/workbooks/components/list/CurriculumWorkBookList.svelte';
+  import SolutionWorkBookList from '#features/workbooks/components/list/SolutionWorkBookList.svelte';
+  import CreatedByUserTable from '#features/workbooks/components/list/CreatedByUserTable.svelte';
 
   type CommonProps = {
     workbooks: WorkbooksList;

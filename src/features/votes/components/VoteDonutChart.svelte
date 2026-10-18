@@ -1,15 +1,15 @@
 <script lang="ts">
   import type { VotedGradeCounter } from '@prisma/client';
   import { TaskGrade } from '#lib/types/task.js';
-  import type { DonutSegment } from '$features/votes/types/donut_graph';
+  import type { DonutSegment } from '#features/votes/types/donut_graph.js';
 
   import { getTaskGradeColor, getTaskGradeLabel } from '#lib/utils/task.js';
-  import { nonPendingGrades } from '$features/votes/utils/grade_options';
+  import { nonPendingGrades } from '#features/votes/utils/grade_options.js';
   import {
     buildDonutSegments,
     buildArcPath,
     calcPointOnCircle,
-  } from '$features/votes/utils/donut_chart';
+  } from '#features/votes/utils/donut_chart.js';
 
   type VotedGradeCounters = VotedGradeCounter[];
 

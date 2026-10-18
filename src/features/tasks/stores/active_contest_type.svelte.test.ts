@@ -2,11 +2,11 @@
 
 import { describe, test, expect, vi, beforeEach, afterEach } from 'vitest';
 
-import type { ContestTableProviderGroups } from '$features/tasks/utils/contest-table/contest_table_provider';
+import type { ContestTableProviderGroups } from '#features/tasks/utils/contest-table/contest_table_provider.js';
 import {
   activeContestTypeStore,
   ActiveContestTypeStore,
-} from '$features/tasks/stores/active_contest_type.svelte';
+} from '#features/tasks/stores/active_contest_type.svelte.js';
 
 // WHY: a single dynamic mock is the only way to toggle `browser` per describe. Every vi.mock is
 // hoisted and the last registration for a module wins, so a second vi.mock of `$app/environment`

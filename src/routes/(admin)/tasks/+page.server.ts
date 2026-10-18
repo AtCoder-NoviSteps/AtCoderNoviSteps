@@ -4,7 +4,7 @@ import type { Contests, ContestForImport, ContestsForImport } from '#lib/contest
 import { type Task, type Tasks, type TaskForImport, type TasksForImport } from '#lib/types/task.js';
 
 import * as taskService from '#lib/services/tasks.js';
-import { validateAdminAccess } from '$features/auth/services/admin_access';
+import { validateAdminAccess } from '#features/auth/services/admin_access.js';
 
 import { fetchContests, fetchTasks, isContestTaskImportSource } from '#lib/clients/index.js';
 

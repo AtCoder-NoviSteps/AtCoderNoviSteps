@@ -2,10 +2,10 @@
   import { superForm } from 'sveltekit-superforms/client';
 
   import ErrorMessageAndReturnButton from '#lib/components/Messages/ErrorMessageAndReturnButton.svelte';
-  import WorkBookForm from '$features/workbooks/components/shared/WorkBookForm.svelte';
+  import WorkBookForm from '#features/workbooks/components/shared/WorkBookForm.svelte';
 
   import type { Task } from '#lib/types/task.js';
-  import type { WorkBookTasksBase } from '$features/workbooks/types/workbook';
+  import type { WorkBookTasksBase } from '#features/workbooks/types/workbook.js';
 
   import { FORBIDDEN } from '#lib/constants/http-response-status-codes.js';
   import { WORKBOOKS_PAGE } from '#lib/constants/navbar-links.js';

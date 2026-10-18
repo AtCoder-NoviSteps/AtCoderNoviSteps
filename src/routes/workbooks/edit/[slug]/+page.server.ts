@@ -3,14 +3,14 @@ import { superValidate } from 'sveltekit-superforms/server';
 import { zod4 } from 'sveltekit-superforms/adapters';
 
 import { Roles } from '#lib/types/user.js';
-import { workBookSchema } from '$features/workbooks/zod/schema';
+import { workBookSchema } from '#features/workbooks/zod/schema.js';
 
 import * as tasksCrud from '#lib/services/tasks.js';
-import { getLoggedInUser } from '$features/auth/services/session_guards';
-import * as workBooksCrud from '$features/workbooks/services/workbooks';
+import { getLoggedInUser } from '#features/auth/services/session_guards.js';
+import * as workBooksCrud from '#features/workbooks/services/workbooks.js';
 
 import { canEdit, isAdmin } from '#lib/utils/authorship.js';
-import { parseWorkBookId, parseWorkBookUrlSlug } from '$features/workbooks/utils/workbook';
+import { parseWorkBookId, parseWorkBookUrlSlug } from '#features/workbooks/utils/workbook.js';
 
 import {
   BAD_REQUEST,

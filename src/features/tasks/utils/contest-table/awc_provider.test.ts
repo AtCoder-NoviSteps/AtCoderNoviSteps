@@ -10,7 +10,7 @@ import {
   taskResultsForAWC0101To0149Provider,
   taskResultsForAWC0150Provider,
   taskResultsForAWC0151OnwardsProvider,
-} from '$features/tasks/fixtures/contest-table/contest_table_provider';
+} from '#features/tasks/fixtures/contest-table/contest_table_provider.js';
 
 const allAWCTaskResults: TaskResults = [
   ...taskResultsForAWC0001To0099Provider,

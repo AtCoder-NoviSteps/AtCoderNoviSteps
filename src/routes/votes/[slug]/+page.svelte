@@ -5,7 +5,7 @@
   import { Button, Tooltip } from 'flowbite-svelte';
   import FlaskConical from '@lucide/svelte/icons/flask-conical';
   import GradeLabel from '#lib/components/GradeLabel.svelte';
-  import RelativeEvaluationBadge from '$features/votes/components/RelativeEvaluationBadge.svelte';
+  import RelativeEvaluationBadge from '#features/votes/components/RelativeEvaluationBadge.svelte';
 
   import { TaskGrade } from '#lib/types/task.js';
   import {
@@ -15,13 +15,13 @@
     toChangeTextColorIfNeeds,
   } from '#lib/utils/task.js';
 
-  import VoteDonutChart from '$features/votes/components/VoteDonutChart.svelte';
-  import { qGrades, dGrades } from '$features/votes/utils/grade_options';
-  import { MIN_VOTES_FOR_PROVISIONAL_GRADE } from '$features/votes/constants/statistics';
+  import VoteDonutChart from '#features/votes/components/VoteDonutChart.svelte';
+  import { qGrades, dGrades } from '#features/votes/utils/grade_options.js';
+  import { MIN_VOTES_FOR_PROVISIONAL_GRADE } from '#features/votes/constants/statistics.js';
 
   import { EDIT_PROFILE_PAGE } from '#lib/constants/navbar-links.js';
-  import { buildLoginPath } from '$features/auth/utils/login';
-  import { buildSignupPath } from '$features/auth/utils/signup';
+  import { buildLoginPath } from '#features/auth/utils/login.js';
+  import { buildSignupPath } from '#features/auth/utils/signup.js';
 
   let { data } = $props();
 

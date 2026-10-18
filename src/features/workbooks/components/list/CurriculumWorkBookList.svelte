@@ -3,20 +3,20 @@
 
   import type { Roles } from '#lib/types/user.js';
   import { TaskGrade, type TaskResults } from '#lib/types/task.js';
-  import { type WorkbooksList } from '$features/workbooks/types/workbook';
+  import { type WorkbooksList } from '#features/workbooks/types/workbook.js';
 
-  import { replenishmentWorkBooksStore } from '$features/workbooks/stores/replenishment_workbook.svelte';
+  import { replenishmentWorkBooksStore } from '#features/workbooks/stores/replenishment_workbook.svelte.js';
 
   import { getTaskGradeLabel } from '#lib/utils/task.js';
   import {
     countReadableWorkbooks,
     partitionWorkbooksAsMainAndReplenished,
-  } from '$features/workbooks/utils/workbooks';
+  } from '#features/workbooks/utils/workbooks.js';
 
   import TooltipWrapper from '#lib/components/TooltipWrapper.svelte';
   import LabelWithTooltips from '#lib/components/LabelWithTooltips.svelte';
-  import CurriculumTable from '$features/workbooks/components/list/CurriculumTable.svelte';
-  import EmptyWorkbookList from '$features/workbooks/components/list/EmptyWorkbookList.svelte';
+  import CurriculumTable from '#features/workbooks/components/list/CurriculumTable.svelte';
+  import EmptyWorkbookList from '#features/workbooks/components/list/EmptyWorkbookList.svelte';
 
   interface Props {
     workbooks: WorkbooksList;

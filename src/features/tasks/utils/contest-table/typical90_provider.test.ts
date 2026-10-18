@@ -4,7 +4,7 @@ import { ContestType } from '#lib/contests/types/contest.js';
 import type { TaskResults } from '#lib/types/task.js';
 
 import { Typical90Provider } from './typical90_provider';
-import { taskResultsForContestTableProvider } from '$features/tasks/fixtures/contest-table/contest_table_provider';
+import { taskResultsForContestTableProvider } from '#features/tasks/fixtures/contest-table/contest_table_provider.js';
 
 describe('Typical90Provider', () => {
   const mockTaskResults: TaskResults = taskResultsForContestTableProvider;

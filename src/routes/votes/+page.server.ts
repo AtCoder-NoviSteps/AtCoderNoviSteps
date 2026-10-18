@@ -2,7 +2,7 @@ import type { PageServerLoad } from './$types';
 import {
   getAllTasksWithVoteInfo,
   type TaskWithVoteInfo,
-} from '$features/votes/services/vote_statistics';
+} from '#features/votes/services/vote_statistics.js';
 
 export const load: PageServerLoad = async ({ locals, setHeaders }) => {
   const session = await locals.auth.validate();

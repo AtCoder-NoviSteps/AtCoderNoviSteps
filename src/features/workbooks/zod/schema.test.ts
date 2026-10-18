@@ -4,10 +4,10 @@ import { superValidate } from 'sveltekit-superforms/server';
 import { zod4 } from 'sveltekit-superforms/adapters';
 
 import { TaskGrade } from '#lib/types/task.js';
-import { WorkBookType, type WorkBookTasks } from '$features/workbooks/types/workbook';
-import { SolutionCategory } from '$features/workbooks/types/workbook_placement';
+import { WorkBookType, type WorkBookTasks } from '#features/workbooks/types/workbook.js';
+import { SolutionCategory } from '#features/workbooks/types/workbook_placement.js';
 
-import { workBookSchema, workBookPlacementSchema } from '$features/workbooks/zod/schema';
+import { workBookSchema, workBookPlacementSchema } from '#features/workbooks/zod/schema.js';
 
 type WorkBook = {
   authorId: string;

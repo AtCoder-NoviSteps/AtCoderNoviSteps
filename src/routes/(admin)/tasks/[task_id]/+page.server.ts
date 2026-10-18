@@ -8,7 +8,7 @@ import * as taskService from '#lib/services/tasks.js';
 import * as taskTagsApiService from '#lib/services/tasktagsApiService.js';
 import * as taskTagsService from '#lib/services/task_tags.js';
 
-import { validateAdminAccess } from '$features/auth/services/admin_access';
+import { validateAdminAccess } from '#features/auth/services/admin_access.js';
 
 import { BAD_REQUEST, INTERNAL_SERVER_ERROR } from '#lib/constants/http-response-status-codes.js';
 

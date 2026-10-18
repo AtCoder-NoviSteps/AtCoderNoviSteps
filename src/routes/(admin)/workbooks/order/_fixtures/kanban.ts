@@ -1,9 +1,9 @@
 import { TaskGrade } from '#lib/types/task.js';
-import { WorkBookType } from '$features/workbooks/types/workbook';
+import { WorkBookType } from '#features/workbooks/types/workbook.js';
 import {
   SolutionCategory,
   type WorkbooksWithPlacement,
-} from '$features/workbooks/types/workbook_placement';
+} from '#features/workbooks/types/workbook_placement.js';
 import type { KanbanColumns } from '../_types/kanban';
 
 // Workbooks used in buildKanbanItems tests.

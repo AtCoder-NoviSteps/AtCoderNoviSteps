@@ -4,13 +4,13 @@ import { zod4 } from 'sveltekit-superforms/adapters';
 import type { Actions, PageServerLoad } from './$types';
 
 import { getTask } from '#lib/services/tasks.js';
-import { getVoteGrade } from '$features/votes/services/vote_grade';
+import { getVoteGrade } from '#features/votes/services/vote_grade.js';
 import {
   getVoteCountersByTaskId,
   getVoteStatsByTaskId,
-} from '$features/votes/services/vote_statistics';
-import { voteAbsoluteGrade } from '$features/votes/actions/vote_actions';
-import { voteAbsoluteGradeSchema } from '$features/votes/zod/schema';
+} from '#features/votes/services/vote_statistics.js';
+import { voteAbsoluteGrade } from '#features/votes/actions/vote_actions.js';
+import { voteAbsoluteGradeSchema } from '#features/votes/zod/schema.js';
 import { BAD_REQUEST } from '#lib/constants/http-response-status-codes.js';
 
 export const load: PageServerLoad = async ({ locals, params }) => {

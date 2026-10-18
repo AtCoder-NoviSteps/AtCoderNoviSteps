@@ -2,7 +2,7 @@ import { error } from '@sveltejs/kit';
 
 import type { Tasks } from '#lib/types/task.js';
 
-import { validateAdminAccess } from '$features/auth/services/admin_access';
+import { validateAdminAccess } from '#features/auth/services/admin_access.js';
 import * as tagService from '#lib/services/tags.js';
 import * as taskTagService from '#lib/services/task_tags.js';
 

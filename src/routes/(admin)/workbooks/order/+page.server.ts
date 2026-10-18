@@ -3,9 +3,9 @@ import { type Actions } from '@sveltejs/kit';
 import {
   getWorkbooksWithPlacements,
   createInitialPlacements,
-} from '$features/workbooks/services/workbook_placements/crud';
+} from '#features/workbooks/services/workbook_placements/crud.js';
 
-import { validateAdminAccess } from '$features/auth/services/admin_access';
+import { validateAdminAccess } from '#features/auth/services/admin_access.js';
 
 export async function load({ locals, url }) {
   await validateAdminAccess(locals, url);

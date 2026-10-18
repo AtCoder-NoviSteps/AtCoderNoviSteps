@@ -1,4 +1,4 @@
-import type { WorkBook, WorkBookTasksBase } from '$features/workbooks/types/workbook';
+import type { WorkBook, WorkBookTasksBase } from '#features/workbooks/types/workbook.js';
 
 /** Extracts the task list (taskId, priority, comment) from a workbook. */
 export function getWorkBookTasks(workBook: Omit<WorkBook, 'id'>): WorkBookTasksBase {

@@ -3,8 +3,8 @@
 
   import type { Card, SortableProps } from '../_types/kanban';
 
-  import PublicationStatusLabel from '$features/workbooks/components/shared/PublicationStatusLabel.svelte';
-  import WorkbookLink from '$features/workbooks/components/shared/WorkbookLink.svelte';
+  import PublicationStatusLabel from '#features/workbooks/components/shared/PublicationStatusLabel.svelte';
+  import WorkbookLink from '#features/workbooks/components/shared/WorkbookLink.svelte';
 
   let {
     id: placementId,

@@ -4,9 +4,9 @@ import {
   type WorkBooksWithTasks,
   type PlacementCreates,
   type UnplacedCurriculumRows,
-} from '$features/workbooks/types/workbook_placement';
+} from '#features/workbooks/types/workbook_placement.js';
 
-import { calcWorkBookGradeModes } from '$features/workbooks/utils/workbooks';
+import { calcWorkBookGradeModes } from '#features/workbooks/utils/workbooks.js';
 
 // --- Curriculum-specific initialization ---
 

@@ -1,7 +1,7 @@
 import { describe, expect, test } from 'vitest';
 import { TaskGrade } from '@prisma/client';
 
-import { voteAbsoluteGradeSchema } from '$features/votes/zod/schema';
+import { voteAbsoluteGradeSchema } from '#features/votes/zod/schema.js';
 
 describe('voteAbsoluteGradeSchema', () => {
   function validate(data: unknown): boolean {

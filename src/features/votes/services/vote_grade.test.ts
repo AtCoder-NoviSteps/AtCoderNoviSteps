@@ -4,7 +4,7 @@ import { TaskGrade } from '@prisma/client';
 
 import { getVoteGrade, upsertVoteGradeTables } from './vote_grade';
 
-vi.mock('$features/votes/server/cache', () => ({
+vi.mock('#features/votes/server/cache.js', () => ({
   invalidateVoteCaches: vi.fn(),
 }));
 
@@ -30,7 +30,7 @@ vi.mock('#lib/server/database.js', () => ({
 }));
 
 import prisma from '#lib/server/database.js';
-import { invalidateVoteCaches } from '$features/votes/server/cache';
+import { invalidateVoteCaches } from '#features/votes/server/cache.js';
 
 // ---------------------------------------------------------------------------
 // Type aliases

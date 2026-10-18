@@ -2,7 +2,7 @@ import type { TaskResults } from '#lib/types/task.js';
 import type {
   ContestTableDisplayConfig,
   ContestTableTitleStyle,
-} from '$features/tasks/types/contest-table/contest_table_provider';
+} from '#features/tasks/types/contest-table/contest_table_provider.js';
 
 // contest_id -> (task_table_index -> letter). Used only for years with judge gaps.
 // Keyed by full contest_id so AOJ contests (ICPC, JAG) can share one map.

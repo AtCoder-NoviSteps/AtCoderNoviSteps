@@ -13,8 +13,8 @@ import {
   getSolutionCategoryMapByWorkbookId,
 } from './workbooks';
 import { TaskGrade } from '#lib/types/task.js';
-import { WorkBookType, type WorkBook } from '$features/workbooks/types/workbook';
-import { SolutionCategory } from '$features/workbooks/types/workbook_placement';
+import { WorkBookType, type WorkBook } from '#features/workbooks/types/workbook.js';
+import { SolutionCategory } from '#features/workbooks/types/workbook_placement.js';
 
 vi.mock('#lib/server/database.js', () => ({
   default: {
@@ -40,7 +40,7 @@ vi.mock('#lib/services/users.js', () => ({
   getUserById: vi.fn(),
 }));
 
-vi.mock('$features/workbooks/server/cache', () => ({
+vi.mock('#features/workbooks/server/cache.js', () => ({
   getCachedWorkbooksByPlacement: (_key: string, fetchFn: () => Promise<unknown>) => fetchFn(),
   getCachedWorkbooksByUser: (fetchFn: () => Promise<unknown>) => fetchFn(),
   invalidateWorkbookCaches: vi.fn(),

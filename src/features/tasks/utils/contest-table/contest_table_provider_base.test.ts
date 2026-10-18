@@ -3,7 +3,7 @@ import { describe, test, expect } from 'vitest';
 import { ContestType } from '#lib/contests/types/contest.js';
 
 import { ABSProvider } from './contest_table_provider';
-import { taskResultsForABS } from '$features/tasks/fixtures/contest-table/contest_table_provider';
+import { taskResultsForABS } from '#features/tasks/fixtures/contest-table/contest_table_provider.js';
 
 describe('ContestTableProviderBase', () => {
   describe('Common provider functionality', () => {

@@ -9,7 +9,7 @@ import {
   ARC001ToARC057Provider,
 } from './arc_providers';
 import { parseContestRound } from './contest_table_provider_base';
-import { taskResultsForARC104OnwardsProvider } from '$features/tasks/fixtures/contest-table/contest_table_provider';
+import { taskResultsForARC104OnwardsProvider } from '#features/tasks/fixtures/contest-table/contest_table_provider.js';
 
 describe('ARC providers', () => {
   // ARC 104 Onwards only

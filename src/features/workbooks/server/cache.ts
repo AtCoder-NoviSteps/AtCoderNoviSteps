@@ -1,5 +1,5 @@
 import { Cache, DEFAULT_CACHE_TTL } from '#lib/clients/cache.js';
-import type { WorkbooksWithAuthors } from '$features/workbooks/types/workbook';
+import type { WorkbooksWithAuthors } from '#features/workbooks/types/workbook.js';
 
 const BY_USER_KEY = 'workbooks_by_user';
 

@@ -71,7 +71,8 @@
   },
   "type": "module",
   "imports": {
-    "#lib/*": "./src/lib/*"
+    "#lib/*": "./src/lib/*",
+    "#features/*": "./src/features/*"
   },
   "dependencies": {
     "@dnd-kit/helpers": "0.5.1",

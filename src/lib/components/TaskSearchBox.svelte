@@ -12,14 +12,14 @@
     WorkBookTasksBase,
     WorkBookTasksCreate,
     WorkBookTasksEdit,
-  } from '$features/workbooks/types/workbook';
+  } from '#features/workbooks/types/workbook.js';
 
   import { getTaskUrl } from '#lib/utils/task.js';
   import {
     generateWorkBookTaskOrders,
     addTaskToWorkBook,
     PENDING,
-  } from '$features/workbooks/utils/workbook_tasks';
+  } from '#features/workbooks/utils/workbook_tasks.js';
 
   interface Props {
     tasks?: Tasks;

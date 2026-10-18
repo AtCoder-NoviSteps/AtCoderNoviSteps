@@ -1,7 +1,7 @@
 import { describe, test, expect } from 'vitest';
 import { Roles } from '#lib/types/user.js';
-import { SolutionCategory } from '$features/workbooks/types/workbook_placement';
-import type { WorkbooksList } from '$features/workbooks/types/workbook';
+import { SolutionCategory } from '#features/workbooks/types/workbook_placement.js';
+import type { WorkbooksList } from '#features/workbooks/types/workbook.js';
 import { groupBySolutionCategory, filterGroupsByRole } from './solution_category_group';
 
 // groupBySolutionCategory references only the workbook id, so minimal fixtures are sufficient.

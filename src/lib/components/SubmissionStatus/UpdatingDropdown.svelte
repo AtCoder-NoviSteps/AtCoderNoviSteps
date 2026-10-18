@@ -33,8 +33,8 @@
   import { submission_statuses } from '#lib/services/submission_status.js';
   import { errorMessageStore } from '#lib/stores/error_message.js';
 
-  import { buildLoginPath } from '$features/auth/utils/login';
-  import { buildSignupPath } from '$features/auth/utils/signup';
+  import { buildLoginPath } from '#features/auth/utils/login.js';
+  import { buildSignupPath } from '#features/auth/utils/signup.js';
 
   interface Props {
     taskResult: TaskResult;

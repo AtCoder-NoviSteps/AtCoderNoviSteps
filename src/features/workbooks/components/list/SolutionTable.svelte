@@ -1,16 +1,16 @@
 <script lang="ts">
   import { Table, TableBody, TableBodyRow, TableHead, TableHeadCell } from 'flowbite-svelte';
 
-  import type { SolutionTableProps } from '$features/workbooks/types/workbook';
+  import type { SolutionTableProps } from '#features/workbooks/types/workbook.js';
 
-  import TitleTableHeadCell from '$features/workbooks/components/list/TitleTableHeadCell.svelte';
-  import TitleTableBodyCell from '$features/workbooks/components/list/TitleTableBodyCell.svelte';
-  import WorkbookProgressCell from '$features/workbooks/components/list/WorkbookProgressCell.svelte';
-  import WorkbookCompletionCell from '$features/workbooks/components/list/WorkbookCompletionCell.svelte';
-  import WorkbookAuthorActionsCell from '$features/workbooks/components/list/WorkbookAuthorActionsCell.svelte';
+  import TitleTableHeadCell from '#features/workbooks/components/list/TitleTableHeadCell.svelte';
+  import TitleTableBodyCell from '#features/workbooks/components/list/TitleTableBodyCell.svelte';
+  import WorkbookProgressCell from '#features/workbooks/components/list/WorkbookProgressCell.svelte';
+  import WorkbookCompletionCell from '#features/workbooks/components/list/WorkbookCompletionCell.svelte';
+  import WorkbookAuthorActionsCell from '#features/workbooks/components/list/WorkbookAuthorActionsCell.svelte';
 
   import { canRead } from '#lib/utils/authorship.js';
-  import { getTaskResult } from '$features/workbooks/utils/workbooks';
+  import { getTaskResult } from '#features/workbooks/utils/workbooks.js';
 
   let { workbooks, userId, role, taskResults }: SolutionTableProps = $props();
 </script>

@@ -5,8 +5,8 @@ import type { Actions } from './$types';
 import type { Roles } from '#lib/types/user.js';
 
 import * as userService from '#lib/services/users.js';
-import * as verificationService from '$features/account/services/atcoder_verification';
-import { getLoggedInUser } from '$features/auth/services/session_guards';
+import * as verificationService from '#features/account/services/atcoder_verification.js';
+import { getLoggedInUser } from '#features/auth/services/session_guards.js';
 
 import {
   BAD_REQUEST,

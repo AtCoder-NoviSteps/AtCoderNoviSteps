@@ -1,5 +1,5 @@
 import { json, type RequestHandler } from '@sveltejs/kit';
-import { getVoteGrade } from '$features/votes/services/vote_grade';
+import { getVoteGrade } from '#features/votes/services/vote_grade.js';
 
 export const GET: RequestHandler = async ({ url, locals }) => {
   const taskId = url.searchParams.get('taskId');

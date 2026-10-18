@@ -6,7 +6,7 @@ import type {
   WorkBookTasksCreate,
   WorkBookTaskEdit,
   WorkBookTasksEdit,
-} from '$features/workbooks/types/workbook';
+} from '#features/workbooks/types/workbook.js';
 
 // Note: 0-indexed for both display and internal use
 export function generateWorkBookTaskOrders(workBookTaskCount: number) {

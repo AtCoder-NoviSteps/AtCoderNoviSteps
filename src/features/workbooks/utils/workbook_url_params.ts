@@ -1,10 +1,10 @@
 import { TaskGrade } from '#lib/types/task.js';
-import { WorkBookTab, DEFAULT_WORKBOOK_TAB } from '$features/workbooks/types/workbook';
+import { WorkBookTab, DEFAULT_WORKBOOK_TAB } from '#features/workbooks/types/workbook.js';
 import {
   SolutionCategory,
   ALL_SOLUTION_CATEGORIES,
   type SelectedSolutionCategory,
-} from '$features/workbooks/types/workbook_placement';
+} from '#features/workbooks/types/workbook_placement.js';
 
 const DEFAULT_CURRICULUM_GRADE = TaskGrade.Q10;
 const EXISTING_TABS = new Set<string>(Object.values(WorkBookTab));

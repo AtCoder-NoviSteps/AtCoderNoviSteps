@@ -6,9 +6,9 @@ import {
   type WorkbooksWithPlacement,
   type PlacementInputs,
   type PlacementCreates,
-} from '$features/workbooks/types/workbook_placement';
+} from '#features/workbooks/types/workbook_placement.js';
 
-import { WorkBookType } from '$features/workbooks/types/workbook';
+import { WorkBookType } from '#features/workbooks/types/workbook.js';
 
 import {
   buildTaskMapFromCurriculumRows,

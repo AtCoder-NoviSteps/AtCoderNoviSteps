@@ -7,7 +7,7 @@ import {
   ContestTableProviderBase,
   ContestTableProviderGroup,
 } from './contest_table_provider';
-import { TESSOKU_SECTIONS } from '$features/tasks/types/contest-table/contest_table_provider';
+import { TESSOKU_SECTIONS } from '#features/tasks/types/contest-table/contest_table_provider.js';
 import { EDPCProvider, TDPCProvider } from './dp_providers';
 import {
   TessokuBookForExamplesProvider,

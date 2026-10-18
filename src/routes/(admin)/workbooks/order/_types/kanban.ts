@@ -1,7 +1,7 @@
 import type { DragDropManager, Draggable, Droppable } from '@dnd-kit/dom';
 import type { DragDropEventMap } from '@dnd-kit/abstract';
 
-import type { WorkBookTab } from '$features/workbooks/types/workbook';
+import type { WorkBookTab } from '#features/workbooks/types/workbook.js';
 
 export type DragOverEventArg = DragDropEventMap<Draggable, Droppable, DragDropManager>['dragover'];
 export type DragEndEventArg = DragDropEventMap<Draggable, Droppable, DragDropManager>['dragend'];

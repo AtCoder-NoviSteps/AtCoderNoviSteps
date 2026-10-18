@@ -3,24 +3,24 @@
 
   import type { Roles } from '#lib/types/user.js';
   import type { TaskResults } from '#lib/types/task.js';
-  import type { WorkbooksList } from '$features/workbooks/types/workbook';
+  import type { WorkbooksList } from '#features/workbooks/types/workbook.js';
   import {
     SolutionCategory,
     type SolutionCategories,
     SOLUTION_LABELS,
     ALL_SOLUTION_CATEGORIES,
     type SelectedSolutionCategory,
-  } from '$features/workbooks/types/workbook_placement';
+  } from '#features/workbooks/types/workbook_placement.js';
 
-  import { countReadableWorkbooks } from '$features/workbooks/utils/workbooks';
+  import { countReadableWorkbooks } from '#features/workbooks/utils/workbooks.js';
   import {
     groupBySolutionCategory,
     filterGroupsByRole,
     type WorkbookGroup,
-  } from '$features/workbooks/utils/solution_category_group';
+  } from '#features/workbooks/utils/solution_category_group.js';
 
-  import SolutionTable from '$features/workbooks/components/list/SolutionTable.svelte';
-  import EmptyWorkbookList from '$features/workbooks/components/list/EmptyWorkbookList.svelte';
+  import SolutionTable from '#features/workbooks/components/list/SolutionTable.svelte';
+  import EmptyWorkbookList from '#features/workbooks/components/list/EmptyWorkbookList.svelte';
 
   interface Props {
     workbooks: WorkbooksList;

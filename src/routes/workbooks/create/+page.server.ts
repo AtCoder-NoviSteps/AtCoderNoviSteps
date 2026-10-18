@@ -3,9 +3,12 @@ import { superValidate } from 'sveltekit-superforms/server';
 import { zod4 } from 'sveltekit-superforms/adapters';
 
 import * as tasksCrud from '#lib/services/tasks.js';
-import { ensureSessionOrRedirect, getLoggedInUser } from '$features/auth/services/session_guards';
-import * as workBooksCrud from '$features/workbooks/services/workbooks';
-import { workBookSchema } from '$features/workbooks/zod/schema';
+import {
+  ensureSessionOrRedirect,
+  getLoggedInUser,
+} from '#features/auth/services/session_guards.js';
+import * as workBooksCrud from '#features/workbooks/services/workbooks.js';
+import { workBookSchema } from '#features/workbooks/zod/schema.js';
 
 import { Roles } from '#lib/types/user.js';
 

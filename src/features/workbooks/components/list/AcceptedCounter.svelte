@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { TaskResults } from '#lib/types/task.js';
-  import type { WorkBookTaskBase } from '$features/workbooks/types/workbook';
+  import type { WorkBookTaskBase } from '#features/workbooks/types/workbook.js';
 
   import AcceptedCounter from '#lib/components/SubmissionStatus/AcceptedCounter.svelte';
 

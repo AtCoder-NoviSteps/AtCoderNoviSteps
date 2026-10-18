@@ -4,7 +4,7 @@ import { TaskGrade } from '#lib/types/task.js';
 import {
   SolutionCategory,
   type UnplacedCurriculumRows,
-} from '$features/workbooks/types/workbook_placement';
+} from '#features/workbooks/types/workbook_placement.js';
 
 import {
   buildTaskMapFromCurriculumRows,
@@ -18,7 +18,7 @@ import {
 import {
   tasksMapByIds,
   curriculumWorkbooksForInit,
-} from '$features/workbooks/fixtures/workbook_placements';
+} from '#features/workbooks/fixtures/workbook_placements.js';
 
 describe('buildTaskMapFromCurriculumRows', () => {
   test('builds a task_id → Task map from nested workbook rows', () => {

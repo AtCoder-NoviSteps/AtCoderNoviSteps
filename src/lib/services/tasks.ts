@@ -16,7 +16,7 @@ import {
   getCachedMergedTasksMap,
   invalidateTaskCaches,
 } from '#lib/server/tasks/cache.js';
-import { invalidateVoteCaches } from '$features/votes/server/cache';
+import { invalidateVoteCaches } from '#features/votes/server/cache.js';
 
 import { classifyContest } from '#lib/contests/index.js';
 import { createContestTaskPairKey } from '#lib/utils/contest_task_pair.js';

@@ -1,6 +1,6 @@
 import { json, type RequestHandler } from '@sveltejs/kit';
-import { getVoteStatsByTaskId } from '$features/votes/services/vote_statistics';
-import { getVoteGrade } from '$features/votes/services/vote_grade';
+import { getVoteStatsByTaskId } from '#features/votes/services/vote_statistics.js';
+import { getVoteGrade } from '#features/votes/services/vote_grade.js';
 
 export const GET: RequestHandler = async ({ url, locals }) => {
   const taskId = url.searchParams.get('taskId');

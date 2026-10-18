@@ -1,6 +1,6 @@
 import { Roles } from '#lib/types/user.js';
-import type { WorkbooksList } from '$features/workbooks/types/workbook';
-import { SolutionCategory } from '$features/workbooks/types/workbook_placement';
+import type { WorkbooksList } from '#features/workbooks/types/workbook.js';
+import { SolutionCategory } from '#features/workbooks/types/workbook_placement.js';
 
 export type WorkbookGroup = {
   category: SolutionCategory;

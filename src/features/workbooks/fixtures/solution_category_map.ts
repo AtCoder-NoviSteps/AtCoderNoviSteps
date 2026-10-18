@@ -1,4 +1,4 @@
-import { SolutionCategory } from '$features/workbooks/types/workbook_placement';
+import { SolutionCategory } from '#features/workbooks/types/workbook_placement.js';
 
 /**
  * Maps urlSlug → SolutionCategory for seeding.

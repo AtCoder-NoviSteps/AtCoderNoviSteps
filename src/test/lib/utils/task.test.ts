@@ -15,7 +15,7 @@ import { taskResultsForTaskTableHeaderName } from './test_cases/task_table_heade
 
 import { ContestType } from '#lib/contests/types/contest.js';
 import { type TaskResult, type TaskResults } from '#lib/types/task.js';
-import type { WorkBookTaskBase } from '$features/workbooks/types/workbook';
+import type { WorkBookTaskBase } from '#features/workbooks/types/workbook.js';
 
 import {
   getTaskUrl,
