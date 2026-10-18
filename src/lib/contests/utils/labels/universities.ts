@@ -1,3 +1,5 @@
+import { ATCODER_UNIVERSITIES } from '../prefixes';
+
 /**
  * Regular expression to match AtCoder University contest identifiers.
  *
@@ -19,6 +21,9 @@ const regexForAtCoderUniversity = /^(ku|qu|ut|tt|tu|wu)(pc)(\d{4})$/i;
 /**
  * Generates a formatted contest label for AtCoder University contests.
  *
+ * IDs outside the `xxpc{year}` format (ex: bogosortcontest_div1) are looked up
+ * in ATCODER_UNIVERSITIES by exact match.
+ *
  * classifyContest matches university contests by prefix, so an ID such as
  * `utpc24` reaches this function without a four-digit year. Returning null lets
  * the caller fall back to the raw contest_id instead of breaking the whole page.
@@ -27,13 +32,13 @@ const regexForAtCoderUniversity = /^(ku|qu|ut|tt|tu|wu)(pc)(\d{4})$/i;
  * @returns The formatted contest label (ex: UTPC 2023), or null if the format is unknown.
  */
 export function getAtCoderUniversityContestLabel(contestId: string): string | null {
-  if (!regexForAtCoderUniversity.test(contestId)) {
-    return null;
+  if (regexForAtCoderUniversity.test(contestId)) {
+    return contestId.replace(
+      regexForAtCoderUniversity,
+      (_, contestType, common, contestYear) =>
+        `${(contestType + common).toUpperCase()} ${contestYear}`,
+    );
   }
 
-  return contestId.replace(
-    regexForAtCoderUniversity,
-    (_, contestType, common, contestYear) =>
-      `${(contestType + common).toUpperCase()} ${contestYear}`,
-  );
+  return Object.hasOwn(ATCODER_UNIVERSITIES, contestId) ? ATCODER_UNIVERSITIES[contestId] : null;
 }

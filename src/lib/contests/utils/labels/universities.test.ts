@@ -17,12 +17,28 @@ describe('get AtCoder university contest label', () => {
     });
   });
 
+  describe('expected to return the registered name for contests listed in ATCODER_UNIVERSITIES', () => {
+    test.each([
+      ['bogosortcontest_div1', 'bogosort Programming Contest (Div. 1)'],
+      ['bogosortcontest_div2', 'bogosort Programming Contest (Div. 2)'],
+      ['ttpc', 'TTPC'],
+      ['tupc', 'TUPC'],
+    ])('when %s is given', (input, expected) => {
+      expect(getAtCoderUniversityContestLabel(input)).toBe(expected);
+    });
+  });
+
   describe('expected to return null if an invalid format is given', () => {
-    test.each(['utpc24', 'ttpc', 'tupc', 'xxpc2024', 'utpc20245', '2024utpc', ''])(
-      'when %s is given',
-      (input) => {
-        expect(getAtCoderUniversityContestLabel(input)).toBeNull();
-      },
-    );
+    test.each([
+      'utpc24',
+      'xxpc2024',
+      'utpc20245',
+      '2024utpc',
+      'bogosortcontest_div3',
+      'constructor',
+      '',
+    ])('when %s is given', (input) => {
+      expect(getAtCoderUniversityContestLabel(input)).toBeNull();
+    });
   });
 });
