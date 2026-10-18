@@ -15,9 +15,14 @@ export async function loginAsAdmin(page: Page): Promise<void> {
   await loginAs(page, 'admin');
 }
 
-/** Logs in as a general (non-admin) user and waits for redirect to home. */
+/** Logs in as a general (non-admin) user verified with a fictional AtCoder handle. */
 export async function loginAsUser(page: Page): Promise<void> {
   await loginAs(page, 'guest');
+}
+
+/** Logs in as a general user without AtCoder verification and waits for redirect to home. */
+export async function loginAsUnverifiedUser(page: Page): Promise<void> {
+  await loginAs(page, 'Alice');
 }
 
 /**
