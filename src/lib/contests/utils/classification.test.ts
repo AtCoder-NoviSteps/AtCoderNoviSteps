@@ -192,7 +192,7 @@ describe('classify contest', () => {
       });
     });
 
-    describe('when contest_id means AtCoder World Tour Finals (official onsite finals)', () => {
+    describe('when contest_id means AtCoder official onsite finals (e.g., World Tour Finals, CodeQUEEN)', () => {
       TestCasesForContestType.atCoderMainOfficialOnsite.forEach(({ name, value }) => {
         runTests(`${name}`, [value], ({ contestId, expected }: TestCaseForContestType) => {
           expect(classifyContest(contestId)).toEqual(expected);

@@ -50,7 +50,7 @@ export const ContestType: { [key in ContestTypeOrigin]: key } = {
   FPS_24: 'FPS_24', // 24 Problems on Formal Power Series
   GAME_24: 'GAME_24', // 24 Problems on Combinatorial Games
   AALC: 'AALC', // AAL Contest 001: Let's use segtree!
-  ATCODER_MAIN_OFFICIAL_ONSITE: 'ATCODER_MAIN_OFFICIAL_ONSITE', // AtCoder World Tour Finals (official onsite finals)
+  ATCODER_MAIN_OFFICIAL_ONSITE: 'ATCODER_MAIN_OFFICIAL_ONSITE', // AtCoder official onsite finals (e.g., World Tour Finals, CodeQUEEN)
   OTHERS: 'OTHERS', // AtCoder (その他)
   AOJ_COURSES: 'AOJ_COURSES', // AIZU ONLINE JUDGE Courses
   AOJ_PCK: 'AOJ_PCK', // All-Japan High School Programming Contest (PCK)

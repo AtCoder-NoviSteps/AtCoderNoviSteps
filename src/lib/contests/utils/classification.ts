@@ -7,6 +7,7 @@ import {
   agcLikePrefixes,
   atCoderUniversityPrefixes,
   atCoderOthersPrefixes,
+  atCoderMainOfficialOnsitePrefixes,
   aojCoursePrefixes,
 } from './prefixes';
 import { isWorldTourFinals } from './labels/world_tour_finals';
@@ -51,6 +52,10 @@ const CLASSIFICATION_RULES: readonly ClassificationRule[] = [
   { matches: (id) => id.startsWith('past'), type: ContestType.PAST },
   { matches: (id) => id.startsWith('joi'), type: ContestType.JOI },
   { matches: (id) => isWorldTourFinals(id), type: ContestType.ATCODER_MAIN_OFFICIAL_ONSITE },
+  {
+    matches: (id) => atCoderMainOfficialOnsitePrefixes.has(id),
+    type: ContestType.ATCODER_MAIN_OFFICIAL_ONSITE,
+  },
   // Set-based exact matches
   { matches: (id) => abcLikePrefixes.has(id), type: ContestType.ABC_LIKE },
   { matches: (id) => arcLikePrefixes.has(id), type: ContestType.ARC_LIKE },

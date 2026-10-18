@@ -1,10 +1,10 @@
 import { ContestType } from '$lib/contests/types/contest';
 
 import { classifyContest } from '../classification';
-import { AOJ_COURSES } from '../prefixes';
+import { AOJ_COURSES, ATCODER_MAIN_OFFICIAL_ONSITE } from '../prefixes';
 import { generateAxcLabel, generateAwcLabel } from './axc';
 import { getAtCoderUniversityContestLabel } from './universities';
-import { getWorldTourFinalsLabel } from './world_tour_finals';
+import { getWorldTourFinalsLabel, isWorldTourFinals } from './world_tour_finals';
 import { generateOthersLabel } from './atcoder_others';
 import { getJoiContestLabel } from './joi';
 import { getPastContestLabel, PAST_TRANSLATIONS } from './past';
@@ -36,7 +36,11 @@ export const LABEL_GENERATORS: ReadonlyMap<ContestType, LabelGenerator> = new Ma
   [ContestType.FPS_24, () => 'FPS 24 題'],
   [ContestType.GAME_24, () => '組合せゲーム 24 題'],
   [ContestType.AALC, () => "AAL Contest 001: Let's use segtree!"],
-  [ContestType.ATCODER_MAIN_OFFICIAL_ONSITE, (id) => getWorldTourFinalsLabel(id)],
+  [
+    ContestType.ATCODER_MAIN_OFFICIAL_ONSITE,
+    (id) =>
+      isWorldTourFinals(id) ? getWorldTourFinalsLabel(id) : ATCODER_MAIN_OFFICIAL_ONSITE[id],
+  ],
   [ContestType.UNIVERSITY, (id) => getAtCoderUniversityContestLabel(id)],
   [ContestType.OTHERS, generateOthersLabel],
   [ContestType.AOJ_COURSES, (id) => getAojContestLabel(AOJ_COURSES, id)],
