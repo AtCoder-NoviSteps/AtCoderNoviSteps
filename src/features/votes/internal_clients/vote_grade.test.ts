@@ -1,4 +1,4 @@
-import { describe, test, expect, beforeEach, afterEach } from 'vitest';
+import { describe, test, expect, beforeEach, afterEach, vi } from 'vitest';
 import nock from 'nock';
 
 import { TaskGrade } from '$lib/types/task';
@@ -22,6 +22,7 @@ beforeEach(() => {
 });
 
 afterEach(() => {
+  vi.restoreAllMocks();
   nock.cleanAll();
   // Restore original location to prevent test state leak
   if (originalLocation !== undefined) {
@@ -123,10 +124,16 @@ describe('submitVote', () => {
     test('returns false when request is aborted', async () => {
       const controller = new AbortController();
       controller.abort();
+      // Stub fetch: undici leaks an unhandled rejection for a pre-aborted multi-field FormData body.
+      const fetchSpy = vi.spyOn(globalThis, 'fetch').mockRejectedValue(controller.signal.reason);
 
       const result = await submitVote(actionUrl, formData, controller.signal);
 
       expect(result).toBe(false);
+      expect(fetchSpy).toHaveBeenCalledWith(
+        actionUrl,
+        expect.objectContaining({ signal: controller.signal }),
+      );
     });
   });
 });
