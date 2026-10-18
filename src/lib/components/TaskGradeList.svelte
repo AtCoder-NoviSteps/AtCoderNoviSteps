@@ -1,8 +1,8 @@
 <script lang="ts">
-  import TaskList from '$lib/components/TaskList.svelte';
+  import TaskList from '#lib/components/TaskList.svelte';
 
-  import type { TaskResults, TaskResult } from '$lib/types/task';
-  import { TaskGrade, taskGradeValues } from '$lib/types/task';
+  import type { TaskResults, TaskResult } from '#lib/types/task.js';
+  import { TaskGrade, taskGradeValues } from '#lib/types/task.js';
 
   interface Props {
     taskResults: TaskResults;

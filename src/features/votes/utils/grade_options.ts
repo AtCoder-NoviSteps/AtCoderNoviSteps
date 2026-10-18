@@ -1,4 +1,4 @@
-import { taskGradeValues, TaskGrade } from '$lib/types/task';
+import { taskGradeValues, TaskGrade } from '#lib/types/task.js';
 
 /** All grade values except PENDING, used for vote buttons and distribution display. */
 /** All task grades excluding PENDING, in display order (Q11 → D6). */

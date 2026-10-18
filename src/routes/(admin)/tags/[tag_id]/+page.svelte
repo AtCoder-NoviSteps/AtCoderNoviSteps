@@ -1,5 +1,5 @@
 <script lang="ts">
-  import TagForm from '$lib/components/TagForm.svelte';
+  import TagForm from '#lib/components/TagForm.svelte';
 
   let { data } = $props();
 

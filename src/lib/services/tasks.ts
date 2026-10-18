@@ -1,25 +1,25 @@
 import { Prisma } from '@prisma/client';
-import { default as db } from '$lib/server/database';
+import { default as db } from '#lib/server/database.js';
 
-import { getContestTaskPairs } from '$lib/services/contest_task_pairs';
+import { getContestTaskPairs } from '#lib/services/contest_task_pairs.js';
 
-import { ContestType } from '$lib/contests/types/contest';
-import type { Task, Tasks, TaskGrade } from '$lib/types/task';
+import { ContestType } from '#lib/contests/types/contest.js';
+import type { Task, Tasks, TaskGrade } from '#lib/types/task.js';
 import type {
   ContestTaskPair,
   ContestTaskPairKey,
   TaskMapByContestTaskPair,
-} from '$lib/types/contest_task_pair';
+} from '#lib/types/contest_task_pair.js';
 
 import {
   getCachedTasksMap,
   getCachedMergedTasksMap,
   invalidateTaskCaches,
-} from '$lib/server/tasks/cache';
+} from '#lib/server/tasks/cache.js';
 import { invalidateVoteCaches } from '$features/votes/server/cache';
 
-import { classifyContest } from '$lib/contests';
-import { createContestTaskPairKey } from '$lib/utils/contest_task_pair';
+import { classifyContest } from '#lib/contests/index.js';
+import { createContestTaskPairKey } from '#lib/utils/contest_task_pair.js';
 
 // See:
 // https://www.prisma.io/docs/concepts/components/prisma-client/filtering-and-sorting

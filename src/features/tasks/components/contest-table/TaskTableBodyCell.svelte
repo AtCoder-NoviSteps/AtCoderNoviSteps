@@ -1,12 +1,12 @@
 <script lang="ts">
-  import type { TaskResult } from '$lib/types/task';
+  import type { TaskResult } from '#lib/types/task.js';
   import type { VoteStatisticsMap } from '$features/votes/types/vote_result';
 
   import VotableGrade from '@/features/votes/components/VotableGrade.svelte';
-  import ExternalLinkWrapper from '$lib/components/ExternalLinkWrapper.svelte';
-  import UpdatingDropdown from '$lib/components/SubmissionStatus/UpdatingDropdown.svelte';
+  import ExternalLinkWrapper from '#lib/components/ExternalLinkWrapper.svelte';
+  import UpdatingDropdown from '#lib/components/SubmissionStatus/UpdatingDropdown.svelte';
 
-  import { getTaskUrl, removeTaskIndexFromTitle } from '$lib/utils/task';
+  import { getTaskUrl, removeTaskIndexFromTitle } from '#lib/utils/task.js';
   import { formatAojTitle } from '$features/tasks/utils/contest-table/aoj_labels';
 
   interface Props {

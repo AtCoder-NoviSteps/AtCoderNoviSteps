@@ -2,7 +2,7 @@
 //
 // 1. 任意のSvelteコンポーネントにインポート
 // <script>
-//   import { preventEnterKey } from '$lib/actions/prevent_enter_key';
+//   import { preventEnterKey } from '#lib/actions/prevent_enter_key.js';
 // </script>
 
 // 2. formに use:preventEnterKey を追加

@@ -12,7 +12,7 @@ import {
   getAllVoteCounters,
 } from './vote_statistics';
 
-vi.mock('$lib/server/database', () => ({
+vi.mock('#lib/server/database.js', () => ({
   default: {
     voteGrade: {
       findUnique: vi.fn(),
@@ -35,7 +35,7 @@ vi.mock('$features/votes/server/cache', () => ({
   getCachedAllTasksWithVoteInfo: (fetchFn: () => Promise<unknown>) => fetchFn(),
 }));
 
-import prisma from '$lib/server/database';
+import prisma from '#lib/server/database.js';
 
 // ---------------------------------------------------------------------------
 // Type aliases

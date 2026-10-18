@@ -6,9 +6,9 @@ import {
   validateUserAnswersTransferability,
   isExistingUser,
   isAdminUser,
-} from '$lib/utils/account_transfer';
+} from '#lib/utils/account_transfer.js';
 
-import type { FloatingMessages } from '$lib/types/floating_message';
+import type { FloatingMessages } from '#lib/types/floating_message.js';
 
 import {
   type TestCaseForTransferValidation,

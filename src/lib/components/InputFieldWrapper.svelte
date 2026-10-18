@@ -3,7 +3,7 @@
 
   import { Label, Input } from 'flowbite-svelte';
 
-  import MessageHelperWrapper from '$lib/components/MessageHelperWrapper.svelte';
+  import MessageHelperWrapper from '#lib/components/MessageHelperWrapper.svelte';
 
   // HACK: Use any type out of necessity to maintain compatibility with existing code.
   interface Props {

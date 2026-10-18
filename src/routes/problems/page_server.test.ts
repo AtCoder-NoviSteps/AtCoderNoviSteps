@@ -1,18 +1,18 @@
 import { describe, test, expect, vi, beforeEach } from 'vitest';
 
-import { Roles } from '$lib/types/user';
+import { Roles } from '#lib/types/user.js';
 
 vi.mock('$features/votes/services/vote_statistics', () => ({
   getVoteGradeStatistics: vi.fn(),
 }));
 
-vi.mock('$lib/services/task_results', () => ({
+vi.mock('#lib/services/task_results.js', () => ({
   getTaskResults: vi.fn(),
   getTasksWithTagIds: vi.fn(),
 }));
 
 import * as voteStatsModule from '$features/votes/services/vote_statistics';
-import * as taskCrud from '$lib/services/task_results';
+import * as taskCrud from '#lib/services/task_results.js';
 import { load } from './+page.server';
 
 const mockGetVoteGradeStatistics = vi.mocked(voteStatsModule.getVoteGradeStatistics);

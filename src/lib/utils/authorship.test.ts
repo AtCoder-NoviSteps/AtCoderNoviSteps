@@ -1,15 +1,15 @@
 import { expect, test, describe } from 'vitest';
 
-import { Roles } from '$lib/types/user';
+import { Roles } from '#lib/types/user.js';
 
 import type {
   Authorship,
   AuthorshipForRead,
   AuthorshipForEdit,
   AuthorshipForDelete,
-} from '$lib/types/authorship';
+} from '#lib/types/authorship.js';
 
-import { isAdmin, hasAuthority, canRead, canEdit, canDelete } from '$lib/utils/authorship';
+import { isAdmin, hasAuthority, canRead, canEdit, canDelete } from '#lib/utils/authorship.js';
 
 const adminId = '1';
 const userId1 = '2';

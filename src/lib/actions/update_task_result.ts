@@ -1,7 +1,7 @@
 import { fail } from '@sveltejs/kit';
 
-import * as crud from '$lib/services/task_results';
-import { BAD_REQUEST, UNAUTHORIZED } from '$lib/constants/http-response-status-codes';
+import * as crud from '#lib/services/task_results.js';
+import { BAD_REQUEST, UNAUTHORIZED } from '#lib/constants/http-response-status-codes.js';
 
 // HACK: clickを1回実行するとactionsが2回実行されてしまう。原因と修正方法が分かっていない状態。
 export const updateTaskResult = async (

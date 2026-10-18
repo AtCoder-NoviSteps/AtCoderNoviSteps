@@ -1,14 +1,14 @@
 import { describe, test, expect, beforeAll, beforeEach, afterEach, vi } from 'vitest';
 import nock from 'nock';
 
-vi.mock('$lib/utils/time', () => ({
+vi.mock('#lib/utils/time.js', () => ({
   delay: vi.fn().mockResolvedValue(undefined),
 }));
 
-import type { ContestsForImport } from '$lib/contests/types/contest';
-import type { TasksForImport } from '$lib/types/task';
+import type { ContestsForImport } from '#lib/contests/types/contest.js';
+import type { TasksForImport } from '#lib/types/task.js';
 
-import { AtCoderProblemsApiClient } from '$lib/clients/atcoder/atcoder_problems';
+import { AtCoderProblemsApiClient } from '#lib/clients/atcoder/atcoder_problems.js';
 
 import { loadMockData } from '../fixtures/helpers';
 

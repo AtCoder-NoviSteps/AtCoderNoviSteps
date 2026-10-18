@@ -1,4 +1,4 @@
-import { TaskGrade } from '$lib/types/task';
+import { TaskGrade } from '#lib/types/task.js';
 import type { DonutSegment, DonutSegments } from '$features/votes/types/donut_graph';
 
 export type { DonutSegment, DonutSegments };

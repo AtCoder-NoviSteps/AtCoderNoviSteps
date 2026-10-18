@@ -2,9 +2,9 @@
   import { Input, Button, Alert, Checkbox, Modal } from 'flowbite-svelte';
   import Info from '@lucide/svelte/icons/info';
 
-  import ContainerWrapper from '$lib/components/ContainerWrapper.svelte';
-  import FormWrapper from '$lib/components/FormWrapper.svelte';
-  import LabelWrapper from '$lib/components/LabelWrapper.svelte';
+  import ContainerWrapper from '#lib/components/ContainerWrapper.svelte';
+  import FormWrapper from '#lib/components/FormWrapper.svelte';
+  import LabelWrapper from '#lib/components/LabelWrapper.svelte';
   import WarningMessageOnDeletingAccount from './WarningMessageOnDeletingAccount.svelte';
 
   interface Props {

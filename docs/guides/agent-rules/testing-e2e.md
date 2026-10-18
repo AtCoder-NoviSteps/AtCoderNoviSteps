@@ -10,7 +10,7 @@ paths:
 ## Setup
 
 - File extension: **must** be `.spec.ts` (`.test.ts` not detected by `playwright.config.ts`)
-- No path aliases (`$lib`, `$features` not resolved outside SvelteKit). Use type-only imports for types:
+- No path aliases or subpath imports (`$features` is resolved only by Vite; `#lib/*.js` resolves to `src/lib/*.js`, but the Playwright runner does not map it to the `.ts` source). Use type-only imports for types:
 
 ```typescript
 // Bad: runtime import fails in E2E

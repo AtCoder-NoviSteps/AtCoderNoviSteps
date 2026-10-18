@@ -1,9 +1,9 @@
 <!-- Usage
 // Script
 <script lang="ts">
-  import type { TaskResult } from '$lib/types/task';
+  import type { TaskResult } from '#lib/types/task.js';
 
-  import UpdatingDropdown from '$lib/components/SubmissionStatus/UpdatingDropdown.svelte';
+  import UpdatingDropdown from '#lib/components/SubmissionStatus/UpdatingDropdown.svelte';
 
   interface Props {
     taskResult: TaskResult;
@@ -26,12 +26,12 @@
   import Check from '@lucide/svelte/icons/check';
   import ChevronDown from '@lucide/svelte/icons/chevron-down';
 
-  import type { TaskResult } from '$lib/types/task';
+  import type { TaskResult } from '#lib/types/task.js';
 
-  import InputFieldWrapper from '$lib/components/InputFieldWrapper.svelte';
+  import InputFieldWrapper from '#lib/components/InputFieldWrapper.svelte';
 
-  import { submission_statuses } from '$lib/services/submission_status';
-  import { errorMessageStore } from '$lib/stores/error_message';
+  import { submission_statuses } from '#lib/services/submission_status.js';
+  import { errorMessageStore } from '#lib/stores/error_message.js';
 
   import { buildLoginPath } from '$features/auth/utils/login';
   import { buildSignupPath } from '$features/auth/utils/signup';

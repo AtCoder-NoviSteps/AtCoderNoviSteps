@@ -2,7 +2,7 @@
   import { getContext } from 'svelte';
 
   import { Button } from 'flowbite-svelte';
-  import type { ButtonColor } from '$lib/types/flowbite-svelte-wrapper';
+  import type { ButtonColor } from '#lib/types/flowbite-svelte-wrapper.js';
 
   interface Props {
     width?: string;

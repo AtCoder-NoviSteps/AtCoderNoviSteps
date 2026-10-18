@@ -1,4 +1,4 @@
-import { TaskGrade } from '$lib/types/task';
+import { TaskGrade } from '#lib/types/task.js';
 import {
   SolutionCategory,
   SOLUTION_LABELS,
@@ -14,7 +14,7 @@ import type {
   TabConfig,
 } from '../_types/kanban';
 
-import { getTaskGradeLabel } from '$lib/utils/task';
+import { getTaskGradeLabel } from '#lib/utils/task.js';
 
 // Per-tab static configuration; eliminates activeTab === 'solution' branches in DnD handlers
 export const TAB_CONFIGS: Record<ActiveTab, TabConfig> = {

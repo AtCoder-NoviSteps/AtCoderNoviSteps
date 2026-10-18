@@ -1,4 +1,4 @@
-import { SIGNUP_PAGE } from '$lib/constants/navbar-links';
+import { SIGNUP_PAGE } from '#lib/constants/navbar-links.js';
 
 /**
  * Builds the signup path with an optional redirect parameter.

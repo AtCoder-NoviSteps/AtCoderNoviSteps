@@ -5,7 +5,7 @@ import type { Handle } from '@sveltejs/kit';
 
 import { createAuthRequest } from '$features/auth/server/auth';
 
-import * as userService from '$lib/services/users';
+import * as userService from '#lib/services/users.js';
 
 export const handle: Handle = async ({ event, resolve }) => {
   event.locals.auth = createAuthRequest(event);

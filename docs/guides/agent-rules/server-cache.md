@@ -78,7 +78,7 @@ Services call `getCached*()` with a `fetchFn` that performs the DB query. The se
 
 ```typescript
 // In service file
-import { getCachedTasksMap } from '$lib/server/tasks/cache';
+import { getCachedTasksMap } from '#lib/server/tasks/cache.js';
 
 export async function getTasksByTaskId(): Promise<Map<string, Task>> {
   return getCachedTasksMap(async () => {
@@ -91,7 +91,7 @@ export async function getTasksByTaskId(): Promise<Map<string, Task>> {
 Mock cache in service tests to bypass caching:
 
 ```typescript
-vi.mock('$lib/server/tasks/cache', () => ({
+vi.mock('#lib/server/tasks/cache.js', () => ({
   getCachedTasksMap: (fetchFn: () => Promise<unknown>) => fetchFn(),
   invalidateTaskCaches: vi.fn(),
 }));

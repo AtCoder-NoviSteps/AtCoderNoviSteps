@@ -17,9 +17,9 @@
   import type { Snippet } from 'svelte';
   import { Heading, Li, List } from 'flowbite-svelte';
 
-  import ExternalLinkWrapper from '$lib/components/ExternalLinkWrapper.svelte';
+  import ExternalLinkWrapper from '#lib/components/ExternalLinkWrapper.svelte';
 
-  import { features, members } from '$lib/constants/product-info';
+  import { features, members } from '#lib/constants/product-info.js';
 </script>
 
 <!-- See: -->

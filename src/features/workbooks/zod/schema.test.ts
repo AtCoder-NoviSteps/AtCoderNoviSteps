@@ -3,7 +3,7 @@ import { type ZodSchema } from 'zod';
 import { superValidate } from 'sveltekit-superforms/server';
 import { zod4 } from 'sveltekit-superforms/adapters';
 
-import { TaskGrade } from '$lib/types/task';
+import { TaskGrade } from '#lib/types/task.js';
 import { WorkBookType, type WorkBookTasks } from '$features/workbooks/types/workbook';
 import { SolutionCategory } from '$features/workbooks/types/workbook_placement';
 

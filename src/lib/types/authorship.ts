@@ -1,4 +1,4 @@
-import type { Roles } from '$lib/types/user';
+import type { Roles } from '#lib/types/user.js';
 
 export type Authorship = {
   authorId: string;

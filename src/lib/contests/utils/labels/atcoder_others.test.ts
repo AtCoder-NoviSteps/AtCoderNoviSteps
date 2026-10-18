@@ -1,6 +1,6 @@
 import { expect } from 'vitest';
 
-import { generateOthersLabel } from '$lib/contests/utils/labels/atcoder_others';
+import { generateOthersLabel } from '#lib/contests/utils/labels/atcoder_others.js';
 
 describe('generate AtCoder others label', () => {
   describe('when the contest_id matches the AxC pattern', () => {

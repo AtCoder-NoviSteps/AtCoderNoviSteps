@@ -1,13 +1,13 @@
 <script lang="ts">
   import { Heading, Card, Alert, Button, List, Li } from 'flowbite-svelte';
 
-  import HeadingOne from '$lib/components/HeadingOne.svelte';
+  import HeadingOne from '#lib/components/HeadingOne.svelte';
 
-  import ExternalLinkWrapper from '$lib/components/ExternalLinkWrapper.svelte';
+  import ExternalLinkWrapper from '#lib/components/ExternalLinkWrapper.svelte';
 
-  import { X_OFFICIAL_ACCOUNT_URL } from '$lib/constants/product-info';
-  import { LOGIN_PAGE } from '$lib/constants/navbar-links';
-  import { LOGIN_LABEL } from '$lib/constants/forms';
+  import { X_OFFICIAL_ACCOUNT_URL } from '#lib/constants/product-info.js';
+  import { LOGIN_PAGE } from '#lib/constants/navbar-links.js';
+  import { LOGIN_LABEL } from '#lib/constants/forms.js';
 </script>
 
 <!-- See: -->

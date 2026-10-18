@@ -1,4 +1,4 @@
-import { TaskGrade, type Task } from '$lib/types/task';
+import { TaskGrade, type Task } from '#lib/types/task.js';
 import { WorkBookType } from '$features/workbooks/types/workbook';
 import {
   SolutionCategory,

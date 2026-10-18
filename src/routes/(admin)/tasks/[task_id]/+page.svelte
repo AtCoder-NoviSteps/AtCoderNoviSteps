@@ -1,7 +1,7 @@
 <script lang="ts">
-  import HeadingOne from '$lib/components/HeadingOne.svelte';
-  import TaskForm from '$lib/components/TaskForm.svelte';
-  import TagListForEdit from '$lib/components/TagListForEdit.svelte';
+  import HeadingOne from '#lib/components/HeadingOne.svelte';
+  import TaskForm from '#lib/components/TaskForm.svelte';
+  import TagListForEdit from '#lib/components/TagListForEdit.svelte';
 
   let { data } = $props();
 

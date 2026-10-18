@@ -1,7 +1,7 @@
 import { describe, test, expect, vi } from 'vitest';
 import { Roles, type User } from '@prisma/client';
 
-vi.mock('$lib/server/database', () => ({
+vi.mock('#lib/server/database.js', () => ({
   default: {
     user: {
       findUnique: vi.fn(),
@@ -10,8 +10,8 @@ vi.mock('$lib/server/database', () => ({
   },
 }));
 
-import db from '$lib/server/database';
-import { getUser, getUserById, deleteUser } from '$lib/services/users';
+import db from '#lib/server/database.js';
+import { getUser, getUserById, deleteUser } from '#lib/services/users.js';
 
 // ---------------------------------------------------------------------------
 // Type aliases

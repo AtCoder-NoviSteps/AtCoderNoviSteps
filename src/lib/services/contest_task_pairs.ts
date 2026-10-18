@@ -1,13 +1,13 @@
 import { Prisma } from '@prisma/client';
 
-import { default as db } from '$lib/server/database';
+import { default as db } from '#lib/server/database.js';
 
 import type {
   ContestTaskPair,
   ContestTaskPairs,
   ContestTaskPairCreate,
   ContestTaskPairUpdate,
-} from '$lib/types/contest_task_pair';
+} from '#lib/types/contest_task_pair.js';
 
 /**
  * Retrieves all ContestTaskPair records from the database.

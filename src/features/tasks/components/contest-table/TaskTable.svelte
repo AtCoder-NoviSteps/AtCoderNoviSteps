@@ -13,13 +13,13 @@
     TableHeadCell,
   } from 'flowbite-svelte';
 
-  import type { TaskResults, TaskResult } from '$lib/types/task';
+  import type { TaskResults, TaskResult } from '#lib/types/task.js';
   import type {
     ContestTableProvider,
     ContestTableDisplayConfig,
     ContestTableMetaData,
   } from '$features/tasks/types/contest-table/contest_table_provider';
-  import type { ContestTaskPairKey } from '$lib/types/contest_task_pair';
+  import type { ContestTaskPairKey } from '#lib/types/contest_task_pair.js';
   import type { VoteStatisticsMap } from '$features/votes/types/vote_result';
 
   import TaskTableBodyCell from './TaskTableBodyCell.svelte';
@@ -31,11 +31,11 @@
     type ContestTableProviderGroups,
   } from '$features/tasks/utils/contest-table/contest_table_provider';
 
-  import { useLocalStorage } from '$lib/stores/local_storage_helper.svelte';
+  import { useLocalStorage } from '#lib/stores/local_storage_helper.svelte.js';
 
-  import { getBackgroundColorFrom } from '$lib/services/submission_status';
-  import { areAllTasksAccepted } from '$lib/utils/task';
-  import { createContestTaskPairKey } from '$lib/utils/contest_task_pair';
+  import { getBackgroundColorFrom } from '#lib/services/submission_status.js';
+  import { areAllTasksAccepted } from '#lib/utils/task.js';
+  import { createContestTaskPairKey } from '#lib/utils/contest_task_pair.js';
   import { getBodyRowClasses } from './_utils/contest_table_layout';
 
   interface Props {

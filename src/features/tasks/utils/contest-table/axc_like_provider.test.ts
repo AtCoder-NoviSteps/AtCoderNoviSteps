@@ -1,7 +1,7 @@
 import { describe, test, expect } from 'vitest';
 
-import { ContestType } from '$lib/contests/types/contest';
-import type { TaskResults } from '$lib/types/task';
+import { ContestType } from '#lib/contests/types/contest.js';
+import type { TaskResults } from '#lib/types/task.js';
 
 import { ABCLikeProvider } from './axc_like_provider';
 import { taskResultsForABCLikeProvider } from '$features/tasks/fixtures/contest-table/contest_table_provider';

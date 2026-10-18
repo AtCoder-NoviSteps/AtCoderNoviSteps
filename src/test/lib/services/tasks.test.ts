@@ -2,10 +2,10 @@ import { describe, test, expect, vi } from 'vitest';
 
 import { Prisma } from '@prisma/client';
 
-import { TaskGrade } from '$lib/types/task';
-import { updateTask } from '$lib/services/tasks';
+import { TaskGrade } from '#lib/types/task.js';
+import { updateTask } from '#lib/services/tasks.js';
 
-vi.mock('$lib/server/database', () => ({
+vi.mock('#lib/server/database.js', () => ({
   default: {
     task: {
       update: vi.fn(),
@@ -13,7 +13,7 @@ vi.mock('$lib/server/database', () => ({
   },
 }));
 
-vi.mock('$lib/server/tasks/cache', () => ({
+vi.mock('#lib/server/tasks/cache.js', () => ({
   getCachedTasksMap: (fetchFn: () => Promise<unknown>) => fetchFn(),
   getCachedMergedTasksMap: (fetchFn: () => Promise<unknown>) => fetchFn(),
   invalidateTaskCaches: vi.fn(),
@@ -23,7 +23,7 @@ vi.mock('$features/votes/server/cache', () => ({
   invalidateVoteCaches: vi.fn(),
 }));
 
-import db from '$lib/server/database';
+import db from '#lib/server/database.js';
 import { invalidateVoteCaches } from '$features/votes/server/cache';
 
 describe('updateTask', () => {

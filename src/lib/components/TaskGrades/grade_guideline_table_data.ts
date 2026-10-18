@@ -1,4 +1,4 @@
-import { TaskGrade } from '$lib/types/task';
+import { TaskGrade } from '#lib/types/task.js';
 
 type TaskGradeGuideline = {
   point: string;

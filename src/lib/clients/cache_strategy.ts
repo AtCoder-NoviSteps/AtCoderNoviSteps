@@ -1,7 +1,7 @@
-import { Cache } from '$lib/clients/cache';
+import { Cache } from '#lib/clients/cache.js';
 
-import type { ContestsForImport } from '$lib/contests/types/contest';
-import type { TasksForImport } from '$lib/types/task';
+import type { ContestsForImport } from '#lib/contests/types/contest.js';
+import type { TasksForImport } from '#lib/types/task.js';
 
 export class ContestTaskCache {
   constructor(

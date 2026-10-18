@@ -1,5 +1,5 @@
 <script lang="ts">
-  import HeadingOne from '$lib/components/HeadingOne.svelte';
+  import HeadingOne from '#lib/components/HeadingOne.svelte';
   import TaskGradeTable from './_components/TaskGradeTable.svelte';
 
   let { data } = $props();

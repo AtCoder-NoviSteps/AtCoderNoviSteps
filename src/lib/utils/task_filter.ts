@@ -1,5 +1,5 @@
-import { getContestNameLabel } from '$lib/contests';
-import { getTaskUrl } from '$lib/utils/task';
+import { getContestNameLabel } from '#lib/contests/index.js';
+import { getTaskUrl } from '#lib/utils/task.js';
 
 type SearchableTask = {
   title: string;

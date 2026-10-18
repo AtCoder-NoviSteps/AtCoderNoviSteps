@@ -1,9 +1,9 @@
-import { HttpRequestClient } from '$lib/clients/http_client';
+import { HttpRequestClient } from '#lib/clients/http_client.js';
 
-import type { ContestsForImport } from '$lib/contests/types/contest';
-import type { TasksForImport } from '$lib/types/task';
+import type { ContestsForImport } from '#lib/contests/types/contest.js';
+import type { TasksForImport } from '#lib/types/task.js';
 
-import { ATCODER_PROBLEMS_API_BASE_URL } from '$lib/constants/urls';
+import { ATCODER_PROBLEMS_API_BASE_URL } from '#lib/constants/urls.js';
 
 /**
  * The `AtCoderProblemsApiClient` class provides methods to interact with the AtCoder Problems API.

@@ -11,11 +11,11 @@
     TableHead,
     TableHeadCell,
   } from 'flowbite-svelte';
-  import type { Task } from '$lib/types/task';
-  import type { Tag } from '$lib/types/tag';
+  import type { Task } from '#lib/types/task.js';
+  import type { Tag } from '#lib/types/tag.js';
 
-  import { getContestNameLabel } from '$lib/contests';
-  import { ATCODER_BASE_CONTEST_URL } from '$lib/constants/urls';
+  import { getContestNameLabel } from '#lib/contests/index.js';
+  import { ATCODER_BASE_CONTEST_URL } from '#lib/constants/urls.js';
 
   interface Props {
     tag: Tag;

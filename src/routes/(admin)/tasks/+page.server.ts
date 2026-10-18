@@ -1,17 +1,17 @@
 import { fail, type Actions } from '@sveltejs/kit';
 
-import type { Contests, ContestForImport, ContestsForImport } from '$lib/contests/types/contest';
-import { type Task, type Tasks, type TaskForImport, type TasksForImport } from '$lib/types/task';
+import type { Contests, ContestForImport, ContestsForImport } from '#lib/contests/types/contest.js';
+import { type Task, type Tasks, type TaskForImport, type TasksForImport } from '#lib/types/task.js';
 
-import * as taskService from '$lib/services/tasks';
+import * as taskService from '#lib/services/tasks.js';
 import { validateAdminAccess } from '$features/auth/services/admin_access';
 
-import { fetchContests, fetchTasks, isContestTaskImportSource } from '$lib/clients';
+import { fetchContests, fetchTasks, isContestTaskImportSource } from '#lib/clients/index.js';
 
-import { classifyContest } from '$lib/contests';
-import { sha256 } from '$lib/utils/hash';
+import { classifyContest } from '#lib/contests/index.js';
+import { sha256 } from '#lib/utils/hash.js';
 
-import { BAD_REQUEST, INTERNAL_SERVER_ERROR } from '$lib/constants/http-response-status-codes';
+import { BAD_REQUEST, INTERNAL_SERVER_ERROR } from '#lib/constants/http-response-status-codes.js';
 
 export async function load({ locals, url }) {
   await validateAdminAccess(locals, url);

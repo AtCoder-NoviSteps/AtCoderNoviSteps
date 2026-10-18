@@ -1,4 +1,4 @@
-import { LOGIN_PAGE } from '$lib/constants/navbar-links';
+import { LOGIN_PAGE } from '#lib/constants/navbar-links.js';
 
 /**
  * Builds the login path with an optional redirect parameter.

@@ -1,4 +1,4 @@
-import { taskGradeValues, type TaskGrade } from '$lib/types/task';
+import { taskGradeValues, type TaskGrade } from '#lib/types/task.js';
 
 /**
  * Type guard to validate if an unknown value is a valid TaskGrade.

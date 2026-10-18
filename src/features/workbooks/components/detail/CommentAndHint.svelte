@@ -2,7 +2,7 @@
   import { Tooltip } from 'flowbite-svelte';
   import Lightbulb from '@lucide/svelte/icons/lightbulb';
 
-  import { TOOLTIP_CLASS_BASE } from '$lib/constants/tailwind-helper';
+  import { TOOLTIP_CLASS_BASE } from '#lib/constants/tailwind-helper.js';
 
   interface Props {
     uniqueId: string;

@@ -13,16 +13,16 @@
   import ExternalLink from '@lucide/svelte/icons/external-link';
   import FlaskConical from '@lucide/svelte/icons/flask-conical';
 
-  import HeadingOne from '$lib/components/HeadingOne.svelte';
-  import GradeLabel from '$lib/components/GradeLabel.svelte';
+  import HeadingOne from '#lib/components/HeadingOne.svelte';
+  import GradeLabel from '#lib/components/GradeLabel.svelte';
   import RelativeEvaluationBadge from '$features/votes/components/RelativeEvaluationBadge.svelte';
 
-  import { TaskGrade } from '$lib/types/task';
+  import { TaskGrade } from '#lib/types/task.js';
   import { MIN_VOTES_FOR_PROVISIONAL_GRADE } from '$features/votes/constants/statistics';
 
-  import { getContestNameLabel } from '$lib/contests';
-  import { getTaskUrl, compareByContestIdAndTaskId } from '$lib/utils/task';
-  import { filterTasksBySearch } from '$lib/utils/task_filter';
+  import { getContestNameLabel } from '#lib/contests/index.js';
+  import { getTaskUrl, compareByContestIdAndTaskId } from '#lib/utils/task.js';
+  import { filterTasksBySearch } from '#lib/utils/task_filter.js';
   import { resolveDisplayGrade } from '$features/votes/utils/grade_options';
 
   const MAX_SEARCH_RESULTS = 20;

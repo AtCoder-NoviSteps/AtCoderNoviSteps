@@ -1,4 +1,4 @@
-import type { ContestPrefix } from '$lib/contests/types/contest';
+import type { ContestPrefix } from '#lib/contests/types/contest.js';
 
 export const regexForJag = /^JAG(Prelim|Regional|Summer|Winter|Spring)\d{4}(-day\d+)?[A-Z]?$/;
 export const regexForAojUniversity = /^AOJ-[A-Z]+PC\d{4}/;

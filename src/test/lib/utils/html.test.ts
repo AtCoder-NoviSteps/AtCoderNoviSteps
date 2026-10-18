@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { sanitizeHTML } from '$lib/utils/html';
+import { sanitizeHTML } from '#lib/utils/html.js';
 
 describe('sanitizeHTML', () => {
   it('expects to be removed dangerous HTML', () => {

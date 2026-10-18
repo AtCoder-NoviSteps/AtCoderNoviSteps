@@ -1,7 +1,7 @@
 import { expect, test } from 'vitest';
 
-import type { Task, Tasks } from '$lib/types/task';
-import { TaskGrade } from '$lib/types/task';
+import type { Task, Tasks } from '#lib/types/task.js';
+import { TaskGrade } from '#lib/types/task.js';
 import type {
   WorkBookTasksBase,
   WorkBookTasksCreate,

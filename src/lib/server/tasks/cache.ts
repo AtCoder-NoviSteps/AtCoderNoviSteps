@@ -1,7 +1,7 @@
-import type { Task } from '$lib/types/task';
-import type { TaskMapByContestTaskPair } from '$lib/types/contest_task_pair';
+import type { Task } from '#lib/types/task.js';
+import type { TaskMapByContestTaskPair } from '#lib/types/contest_task_pair.js';
 
-import { Cache, DEFAULT_CACHE_TTL } from '$lib/clients/cache';
+import { Cache, DEFAULT_CACHE_TTL } from '#lib/clients/cache.js';
 
 const TASK_MAP_KEY = 'tasks_by_task_id';
 const MERGED_KEY = 'merged_tasks_map';

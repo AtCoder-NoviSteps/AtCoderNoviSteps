@@ -2,9 +2,9 @@ import {
   type ContestTableMetaData,
   type ContestTableDisplayConfig,
 } from '$features/tasks/types/contest-table/contest_table_provider';
-import type { TaskResult } from '$lib/types/task';
+import type { TaskResult } from '#lib/types/task.js';
 
-import { classifyContest } from '$lib/contests';
+import { classifyContest } from '#lib/contests/index.js';
 
 import { ContestTableProviderBase } from './contest_table_provider_base';
 

@@ -1,6 +1,6 @@
 import type { ContestTaskPair as ContestTaskPairOrigin } from '@prisma/client';
 
-import type { Task, TaskResult } from '$lib/types/task';
+import type { Task, TaskResult } from '#lib/types/task.js';
 
 export type ContestTaskPair = ContestTaskPairOrigin;
 

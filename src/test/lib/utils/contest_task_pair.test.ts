@@ -1,6 +1,6 @@
 import { describe, test, expect } from 'vitest';
 
-import { createContestTaskPairKey } from '$lib/utils/contest_task_pair';
+import { createContestTaskPairKey } from '#lib/utils/contest_task_pair.js';
 
 describe('createContestTaskPairKey', () => {
   // Test data structure

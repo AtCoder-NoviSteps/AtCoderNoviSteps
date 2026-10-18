@@ -11,11 +11,11 @@
   } from 'flowbite-svelte';
   import Trash from '@lucide/svelte/icons/trash';
 
-  import GradeLabel from '$lib/components/GradeLabel.svelte';
-  import ExternalLinkWrapper from '$lib/components/ExternalLinkWrapper.svelte';
+  import GradeLabel from '#lib/components/GradeLabel.svelte';
+  import ExternalLinkWrapper from '#lib/components/ExternalLinkWrapper.svelte';
 
-  import { addContestNameToTaskIndex } from '$lib/contests';
-  import { getTaskUrl, removeTaskIndexFromTitle } from '$lib/utils/task';
+  import { addContestNameToTaskIndex } from '#lib/contests/index.js';
+  import { getTaskUrl, removeTaskIndexFromTitle } from '#lib/utils/task.js';
 
   import type {
     WorkBookTasksBase,
@@ -25,7 +25,7 @@
     WorkBookTasksEdit,
     WorkBookTaskEdit,
   } from '$features/workbooks/types/workbook';
-  import type { Task } from '$lib/types/task';
+  import type { Task } from '#lib/types/task.js';
 
   interface Props {
     tasksMapByIds: Map<string, Task>;

@@ -1,8 +1,8 @@
 <script lang="ts">
   import type { PageData } from './$types';
 
-  import ContainerWrapper from '$lib/components/ContainerWrapper.svelte';
-  import HeadingOne from '$lib/components/HeadingOne.svelte';
+  import ContainerWrapper from '#lib/components/ContainerWrapper.svelte';
+  import HeadingOne from '#lib/components/HeadingOne.svelte';
   import KanbanBoard from './_components/KanbanBoard.svelte';
 
   let { data }: { data: PageData } = $props();

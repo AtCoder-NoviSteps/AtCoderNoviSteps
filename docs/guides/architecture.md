@@ -75,7 +75,7 @@ feature 内は技術的な役割で分ける。必要なディレクトリだけ
 - `utils/`: 副作用のない関数。テストを隣接配置する。
 - `stores/`: Svelte Runes を使う `.svelte.ts`。
 
-`features/{feature}/server/` は `$lib/server/` と違い、SvelteKit が client import を自動では禁止しない。規約と推移的な server-only dependency により client から分離する。複数 feature で使うサーバコードは `src/lib/server/` へ移す。
+`features/{feature}/server/` は `src/lib/server/` と違い、SvelteKit が client import を自動では禁止しない。規約と推移的な server-only dependency により client から分離する。複数 feature で使うサーバコードは `src/lib/server/` へ移す。
 
 ### 3. src/lib
 
@@ -139,12 +139,14 @@ include: [
 ];
 ```
 
-### 6. path alias
+### 6. path alias と subpath imports
 
-`svelte.config.js` で `$lib` と `$features` を定義している。
+`src/lib` は `package.json#imports` の `#lib/*` で参照する。SvelteKit 3 で組み込みの `$lib` が削除されるため `$lib` は使わず、oxlint と ESLint の `no-restricted-imports` で禁止している。
+`#lib` には明示的な拡張子が必要で、TS モジュールは `.js`、コンポーネントは `.svelte`、runes モジュール（`.svelte.ts`）は `.svelte.js` と書く。`vi.mock` の specifier も同じ形にする。
+`$features` は `svelte.config.js` の alias で定義している。
 
 ```typescript
-import { formatDate } from '$lib/utils/format';
+import { formatDate } from '#lib/utils/format.js';
 import WorkBookForm from '$features/workbooks/components/shared/WorkBookForm.svelte';
 import type { PageServerLoad } from './$types';
 ```

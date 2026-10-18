@@ -10,10 +10,10 @@
     TableHead,
     TableHeadCell,
   } from 'flowbite-svelte';
-  import type { TaskResults } from '$lib/types/task';
+  import type { TaskResults } from '#lib/types/task.js';
 
-  import { addContestNameToTaskIndex } from '$lib/contests';
-  import { removeTaskIndexFromTitle } from '$lib/utils/task';
+  import { addContestNameToTaskIndex } from '#lib/contests/index.js';
+  import { removeTaskIndexFromTitle } from '#lib/utils/task.js';
 
   interface Props {
     taskResults: TaskResults;

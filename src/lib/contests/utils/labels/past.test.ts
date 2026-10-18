@@ -1,6 +1,6 @@
 import { expect } from 'vitest';
 
-import { getPastContestLabel, PAST_TRANSLATIONS } from '$lib/contests/utils/labels/past';
+import { getPastContestLabel, PAST_TRANSLATIONS } from '#lib/contests/utils/labels/past.js';
 
 describe('get PAST contest label', () => {
   describe('contests identified by year and month (1st to 14th)', () => {

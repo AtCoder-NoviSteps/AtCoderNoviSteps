@@ -1,8 +1,8 @@
 import { describe, test, expect, vi } from 'vitest';
 
-import { getTag } from '$lib/services/tags';
+import { getTag } from '#lib/services/tags.js';
 
-vi.mock('$lib/server/database', () => ({
+vi.mock('#lib/server/database.js', () => ({
   default: {
     tag: {
       findUnique: vi.fn(),
@@ -10,7 +10,7 @@ vi.mock('$lib/server/database', () => ({
   },
 }));
 
-import db from '$lib/server/database';
+import db from '#lib/server/database.js';
 
 describe('getTag', () => {
   const mockDb = db as unknown as { tag: { findUnique: ReturnType<typeof vi.fn> } };

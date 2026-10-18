@@ -1,4 +1,4 @@
-import type { TasksForImport } from '$lib/types/task';
+import type { TasksForImport } from '#lib/types/task.js';
 
 export interface Contest {
   id: string;

@@ -1,5 +1,5 @@
-import { default as db } from '$lib/server/database';
-import type { Tag } from '$lib/types/tag';
+import { default as db } from '#lib/server/database.js';
+import type { Tag } from '#lib/types/tag.js';
 
 // See:
 // https://www.prisma.io/docs/concepts/components/prisma-client/filtering-and-sorting

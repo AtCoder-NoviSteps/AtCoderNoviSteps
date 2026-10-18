@@ -1,10 +1,10 @@
 <script lang="ts">
-  import type { TaskResults } from '$lib/types/task';
+  import type { TaskResults } from '#lib/types/task.js';
   import type { WorkBookTaskBase } from '$features/workbooks/types/workbook';
 
-  import AcceptedCounter from '$lib/components/SubmissionStatus/AcceptedCounter.svelte';
+  import AcceptedCounter from '#lib/components/SubmissionStatus/AcceptedCounter.svelte';
 
-  import { countAcceptedTasks, countAllTasks } from '$lib/utils/task';
+  import { countAcceptedTasks, countAllTasks } from '#lib/utils/task.js';
 
   interface Props {
     workBookTasks: WorkBookTaskBase[];

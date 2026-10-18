@@ -1,5 +1,5 @@
 import { describe, test, expect } from 'vitest';
-import { Roles } from '$lib/types/user';
+import { Roles } from '#lib/types/user.js';
 import { SolutionCategory } from '$features/workbooks/types/workbook_placement';
 import type { WorkbooksList } from '$features/workbooks/types/workbook';
 import { groupBySolutionCategory, filterGroupsByRole } from './solution_category_group';

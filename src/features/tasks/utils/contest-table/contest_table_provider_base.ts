@@ -5,10 +5,10 @@ import {
   type ContestTableDisplayConfig,
   type ProviderKey,
 } from '$features/tasks/types/contest-table/contest_table_provider';
-import { ContestType } from '$lib/contests/types/contest';
-import type { TaskResults, TaskResult } from '$lib/types/task';
+import { ContestType } from '#lib/contests/types/contest.js';
+import type { TaskResults, TaskResult } from '#lib/types/task.js';
 
-import { getTaskTableHeaderName } from '$lib/utils/task';
+import { getTaskTableHeaderName } from '#lib/utils/task.js';
 
 export abstract class ContestTableProviderBase implements ContestTableProvider {
   protected readonly contestType: ContestType;

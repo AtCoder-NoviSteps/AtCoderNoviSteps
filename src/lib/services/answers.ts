@@ -1,8 +1,8 @@
 import { initialize } from '@quramy/prisma-fabbrica/lib/internal';
 
-import { default as prisma } from '$lib/server/database';
+import { default as prisma } from '#lib/server/database.js';
 import type { TaskAnswer } from '@prisma/client';
-import { sha256 } from '$lib/utils/hash';
+import { sha256 } from '#lib/utils/hash.js';
 
 initialize({ prisma });
 

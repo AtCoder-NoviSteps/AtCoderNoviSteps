@@ -2,16 +2,16 @@
   import { Heading, Button, Carousel } from 'flowbite-svelte';
   import ArrowRight from '@lucide/svelte/icons/arrow-right';
 
-  import ExternalLinkWrapper from '$lib/components/ExternalLinkWrapper.svelte';
+  import ExternalLinkWrapper from '#lib/components/ExternalLinkWrapper.svelte';
 
-  import { PRODUCT_CATCH_PHRASE } from '$lib/constants/product-info';
-  import { ATCODER_BASE_URL, TASK_GRADE_CRITERIA_SHEET_URL } from '$lib/constants/urls';
+  import { PRODUCT_CATCH_PHRASE } from '#lib/constants/product-info.js';
+  import { ATCODER_BASE_URL, TASK_GRADE_CRITERIA_SHEET_URL } from '#lib/constants/urls.js';
   import {
     WORKBOOKS_PAGE,
     PROBLEMS_PAGE,
     VOTES_PAGE,
     ABOUT_PAGE,
-  } from '$lib/constants/navbar-links';
+  } from '#lib/constants/navbar-links.js';
 
   const problemImages = [
     {

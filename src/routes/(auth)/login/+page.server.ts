@@ -5,15 +5,15 @@ import { fail, redirect } from '@sveltejs/kit';
 import { createSession } from '$features/auth/server/session';
 import { authenticateUser } from '$features/auth/services/credentials';
 
-import { initializeAuthForm, validateAuthFormWithFallback } from '$lib/utils/auth_forms';
-import { isSameOriginRedirect } from '$lib/utils/url';
+import { initializeAuthForm, validateAuthFormWithFallback } from '#lib/utils/auth_forms.js';
+import { isSameOriginRedirect } from '#lib/utils/url.js';
 
 import {
   BAD_REQUEST,
   SEE_OTHER,
   INTERNAL_SERVER_ERROR,
-} from '$lib/constants/http-response-status-codes';
-import { HOME_PAGE } from '$lib/constants/navbar-links';
+} from '#lib/constants/http-response-status-codes.js';
+import { HOME_PAGE } from '#lib/constants/navbar-links.js';
 
 import type { Actions, PageServerLoad } from './$types';
 

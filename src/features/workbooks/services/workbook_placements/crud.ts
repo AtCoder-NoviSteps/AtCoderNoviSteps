@@ -1,4 +1,4 @@
-import prisma from '$lib/server/database';
+import prisma from '#lib/server/database.js';
 
 import {
   type WorkBookPlacement,

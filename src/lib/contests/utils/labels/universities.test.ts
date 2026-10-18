@@ -1,6 +1,6 @@
 import { expect } from 'vitest';
 
-import { getAtCoderUniversityContestLabel } from '$lib/contests/utils/labels/universities';
+import { getAtCoderUniversityContestLabel } from '#lib/contests/utils/labels/universities.js';
 
 describe('get AtCoder university contest label', () => {
   describe('expected to return correct label for valid format', () => {

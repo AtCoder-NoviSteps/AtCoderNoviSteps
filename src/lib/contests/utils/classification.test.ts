@@ -1,10 +1,10 @@
 import { expect } from 'vitest';
 
-import { ContestType } from '$lib/contests/types/contest';
+import { ContestType } from '#lib/contests/types/contest.js';
 import { runTests } from '../../../test/lib/common/test_helpers';
-import * as TestCasesForContestType from '$lib/contests/fixtures/contest_type';
-import { type TestCaseForContestType } from '$lib/contests/fixtures/contest_type';
-import { classifyContest } from '$lib/contests/utils/classification';
+import * as TestCasesForContestType from '#lib/contests/fixtures/contest_type.js';
+import { type TestCaseForContestType } from '#lib/contests/fixtures/contest_type.js';
+import { classifyContest } from '#lib/contests/utils/classification.js';
 
 describe('classify contest', () => {
   describe('AtCoder', () => {

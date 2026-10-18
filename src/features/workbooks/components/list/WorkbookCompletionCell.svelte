@@ -1,10 +1,10 @@
 <script lang="ts">
   import { TableBodyCell } from 'flowbite-svelte';
 
-  import type { TaskResults } from '$lib/types/task';
+  import type { TaskResults } from '#lib/types/task.js';
   import type { WorkBookTaskBase } from '$features/workbooks/types/workbook';
 
-  import CompletedTasks from '$lib/components/Trophies/CompletedTasks.svelte';
+  import CompletedTasks from '#lib/components/Trophies/CompletedTasks.svelte';
 
   interface Props {
     workBookTasks: WorkBookTaskBase[];

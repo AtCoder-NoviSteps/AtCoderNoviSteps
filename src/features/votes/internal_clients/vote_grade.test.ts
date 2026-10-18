@@ -1,11 +1,11 @@
 import { describe, test, expect, beforeEach, afterEach, vi } from 'vitest';
 import nock from 'nock';
 
-import { TaskGrade } from '$lib/types/task';
+import { TaskGrade } from '#lib/types/task.js';
 
 import { fetchMyVote, submitVote, fetchMedianVote } from './vote_grade';
 
-import * as statusCodes from '$lib/constants/http-response-status-codes';
+import * as statusCodes from '#lib/constants/http-response-status-codes.js';
 
 const BASE_URL = 'http://localhost';
 const TASK_ID = 'abc_a';

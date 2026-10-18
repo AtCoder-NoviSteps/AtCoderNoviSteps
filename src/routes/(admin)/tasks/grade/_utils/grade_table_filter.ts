@@ -1,6 +1,6 @@
 import type { TaskWithVoteInfo } from '$features/votes/services/vote_statistics';
-import { TaskGrade } from '$lib/types/task';
-import { filterTasksBySearch } from '$lib/utils/task_filter';
+import { TaskGrade } from '#lib/types/task.js';
+import { filterTasksBySearch } from '#lib/utils/task_filter.js';
 
 /**
  * Applies the grade-table search rule.

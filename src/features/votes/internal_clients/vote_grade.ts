@@ -1,5 +1,5 @@
-import type { TaskGrade } from '$lib/types/task';
-import { isValidTaskGrade } from '$lib/utils/task_grade';
+import type { TaskGrade } from '#lib/types/task.js';
+import { isValidTaskGrade } from '#lib/utils/task_grade.js';
 
 /**
  * Fetches the current user's vote grade for a given task.

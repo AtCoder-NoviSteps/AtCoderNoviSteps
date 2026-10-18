@@ -3,13 +3,13 @@
 
   import { Button, Modal, Select } from 'flowbite-svelte';
 
-  import type { TaskResult } from '$lib/types/task';
+  import type { TaskResult } from '#lib/types/task.js';
 
-  import { submission_statuses } from '$lib/services/submission_status';
-  import { errorMessageStore } from '$lib/stores/error_message';
+  import { submission_statuses } from '#lib/services/submission_status.js';
+  import { errorMessageStore } from '#lib/stores/error_message.js';
 
-  import { getContestNameLabel } from '$lib/contests';
-  import InputFieldWrapper from '$lib/components/InputFieldWrapper.svelte';
+  import { getContestNameLabel } from '#lib/contests/index.js';
+  import InputFieldWrapper from '#lib/components/InputFieldWrapper.svelte';
 
   interface Props {
     isLoggedIn: boolean;

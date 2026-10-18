@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { Roles } from '$lib/types/user';
-  import { TaskGrade, type TaskResults } from '$lib/types/task';
+  import { Roles } from '#lib/types/user.js';
+  import { TaskGrade, type TaskResults } from '#lib/types/task.js';
   import { WorkBookType, type WorkbooksList } from '$features/workbooks/types/workbook';
   import {
     type SolutionCategory,

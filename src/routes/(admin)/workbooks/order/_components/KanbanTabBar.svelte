@@ -3,14 +3,14 @@
 
   import { Tabs } from 'flowbite-svelte';
 
-  import { TaskGrade } from '$lib/types/task';
+  import { TaskGrade } from '#lib/types/task.js';
   import { SolutionCategory, SOLUTION_LABELS } from '$features/workbooks/types/workbook_placement';
   import type { ActiveTab } from '../_types/kanban';
 
-  import TabItemWrapper from '$lib/components/Tabs/TabItemWrapper.svelte';
+  import TabItemWrapper from '#lib/components/Tabs/TabItemWrapper.svelte';
   import ColumnSelector from './ColumnSelector.svelte';
 
-  import { getTaskGradeLabel } from '$lib/utils/task';
+  import { getTaskGradeLabel } from '#lib/utils/task.js';
 
   const SOLUTION_CATEGORY_OPTIONS = Object.entries(SolutionCategory)
     .filter(([category]) => category !== SolutionCategory.PENDING)

@@ -2,7 +2,7 @@
   import { Img } from 'flowbite-svelte';
   import ChevronDown from '@lucide/svelte/icons/chevron-down';
 
-  import type { TaskResult } from '$lib/types/task';
+  import type { TaskResult } from '#lib/types/task.js';
 
   interface Props {
     taskResult: TaskResult;

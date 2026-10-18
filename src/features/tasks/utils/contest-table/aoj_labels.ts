@@ -1,4 +1,4 @@
-import type { TaskResults } from '$lib/types/task';
+import type { TaskResults } from '#lib/types/task.js';
 import type {
   ContestTableDisplayConfig,
   ContestTableTitleStyle,

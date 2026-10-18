@@ -1,6 +1,6 @@
 import { redirect } from '@sveltejs/kit';
 
-import { TEMPORARY_REDIRECT } from '$lib/constants/http-response-status-codes';
+import { TEMPORARY_REDIRECT } from '#lib/constants/http-response-status-codes.js';
 
 import { buildLoginPath } from '../utils/login';
 

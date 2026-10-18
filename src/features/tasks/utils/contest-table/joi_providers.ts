@@ -4,10 +4,10 @@ import {
   JOI_SECOND_QUAL_ROUND_SECTIONS,
   JOI_FINAL_ROUND_SECTIONS,
 } from '$features/tasks/types/contest-table/contest_table_provider';
-import { ContestType } from '$lib/contests/types/contest';
-import type { TaskResult } from '$lib/types/task';
+import { ContestType } from '#lib/contests/types/contest.js';
+import type { TaskResult } from '#lib/types/task.js';
 
-import { classifyContest, getContestNameLabel } from '$lib/contests';
+import { classifyContest, getContestNameLabel } from '#lib/contests/index.js';
 
 import { ContestTableProviderBase } from './contest_table_provider_base';
 

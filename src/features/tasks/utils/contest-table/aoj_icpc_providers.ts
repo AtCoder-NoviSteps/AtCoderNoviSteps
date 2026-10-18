@@ -1,5 +1,5 @@
-import { ContestType } from '$lib/contests/types/contest';
-import type { TaskResult, TaskResults } from '$lib/types/task';
+import { ContestType } from '#lib/contests/types/contest.js';
+import type { TaskResult, TaskResults } from '#lib/types/task.js';
 import {
   type ContestTableMetaData,
   type ContestTableDisplayConfig,

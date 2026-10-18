@@ -3,10 +3,10 @@
   import { Label, Input, P, Clipboard } from 'flowbite-svelte';
   import ClipboardCopy from '@lucide/svelte/icons/clipboard-copy';
   import Check from '@lucide/svelte/icons/check';
-  import ContainerWrapper from '$lib/components/ContainerWrapper.svelte';
-  import FormWrapper from '$lib/components/FormWrapper.svelte';
-  import LabelWrapper from '$lib/components/LabelWrapper.svelte';
-  import SubmissionButton from '$lib/components/SubmissionButton.svelte';
+  import ContainerWrapper from '#lib/components/ContainerWrapper.svelte';
+  import FormWrapper from '#lib/components/FormWrapper.svelte';
+  import LabelWrapper from '#lib/components/LabelWrapper.svelte';
+  import SubmissionButton from '#lib/components/SubmissionButton.svelte';
 
   interface Props {
     username: string;

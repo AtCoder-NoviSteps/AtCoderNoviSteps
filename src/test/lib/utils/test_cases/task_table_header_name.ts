@@ -1,5 +1,5 @@
-import { TaskGrade } from '$lib/types/task';
-import type { TaskResult } from '$lib/types/task';
+import { TaskGrade } from '#lib/types/task.js';
+import type { TaskResult } from '#lib/types/task.js';
 
 // Default task result with minimal initialization.
 // Most fields are empty strings as they're not relevant for these tests.

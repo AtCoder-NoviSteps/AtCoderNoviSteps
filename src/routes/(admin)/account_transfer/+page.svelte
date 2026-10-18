@@ -15,11 +15,11 @@
   import BadgeCheck from '@lucide/svelte/icons/badge-check';
   import Ban from '@lucide/svelte/icons/ban';
 
-  import HeadingOne from '$lib/components/HeadingOne.svelte';
-  import ContainerWrapper from '$lib/components/ContainerWrapper.svelte';
-  import MessageHelperWrapper from '$lib/components/MessageHelperWrapper.svelte';
+  import HeadingOne from '#lib/components/HeadingOne.svelte';
+  import ContainerWrapper from '#lib/components/ContainerWrapper.svelte';
+  import MessageHelperWrapper from '#lib/components/MessageHelperWrapper.svelte';
 
-  import type { FloatingMessages } from '$lib/types/floating_message';
+  import type { FloatingMessages } from '#lib/types/floating_message.js';
 
   interface Props {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

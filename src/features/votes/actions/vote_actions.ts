@@ -6,7 +6,7 @@ import {
   FORBIDDEN,
   INTERNAL_SERVER_ERROR,
   UNAUTHORIZED,
-} from '$lib/constants/http-response-status-codes';
+} from '#lib/constants/http-response-status-codes.js';
 
 import type { VoteAbsoluteGradeInput } from '$features/votes/zod/schema';
 

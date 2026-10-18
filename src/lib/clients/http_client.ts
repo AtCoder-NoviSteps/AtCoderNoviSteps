@@ -1,6 +1,6 @@
-import type { ContestsForImport } from '$lib/contests/types/contest';
-import type { TasksForImport } from '$lib/types/task';
-import { delay } from '$lib/utils/time';
+import type { ContestsForImport } from '#lib/contests/types/contest.js';
+import type { TasksForImport } from '#lib/types/task.js';
+import { delay } from '#lib/utils/time.js';
 
 /**
  * Client interface for interacting with tasks and contests API endpoints.

@@ -2,14 +2,14 @@ import { error, redirect, fail } from '@sveltejs/kit';
 import { superValidate } from 'sveltekit-superforms/server';
 import { zod4 } from 'sveltekit-superforms/adapters';
 
-import { Roles } from '$lib/types/user';
+import { Roles } from '#lib/types/user.js';
 import { workBookSchema } from '$features/workbooks/zod/schema';
 
-import * as tasksCrud from '$lib/services/tasks';
+import * as tasksCrud from '#lib/services/tasks.js';
 import { getLoggedInUser } from '$features/auth/services/session_guards';
 import * as workBooksCrud from '$features/workbooks/services/workbooks';
 
-import { canEdit, isAdmin } from '$lib/utils/authorship';
+import { canEdit, isAdmin } from '#lib/utils/authorship.js';
 import { parseWorkBookId, parseWorkBookUrlSlug } from '$features/workbooks/utils/workbook';
 
 import {
@@ -18,7 +18,7 @@ import {
   NOT_FOUND,
   TEMPORARY_REDIRECT,
   INTERNAL_SERVER_ERROR,
-} from '$lib/constants/http-response-status-codes';
+} from '#lib/constants/http-response-status-codes.js';
 
 export async function load({ locals, params, url }) {
   const loggedInUser = await getLoggedInUser(locals, url);

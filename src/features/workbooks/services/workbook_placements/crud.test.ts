@@ -1,6 +1,6 @@
 import { describe, test, expect, vi } from 'vitest';
 
-import { TaskGrade } from '$lib/types/task';
+import { TaskGrade } from '#lib/types/task.js';
 import { WorkBookType } from '$features/workbooks/types/workbook';
 import {
   SolutionCategory,
@@ -26,7 +26,7 @@ import {
   unplacedSolutionWorkbooks,
 } from '$features/workbooks/fixtures/workbook_placements';
 
-vi.mock('$lib/server/database', () => ({
+vi.mock('#lib/server/database.js', () => ({
   default: {
     workBook: {
       findMany: vi.fn(),
@@ -40,7 +40,7 @@ vi.mock('$lib/server/database', () => ({
   },
 }));
 
-import prisma from '$lib/server/database';
+import prisma from '#lib/server/database.js';
 
 function mockFindMany(placements: WorkBookPlacements) {
   vi.mocked(prisma.workBookPlacement.findMany).mockResolvedValue(

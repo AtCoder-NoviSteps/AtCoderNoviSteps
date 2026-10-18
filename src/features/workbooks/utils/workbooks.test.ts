@@ -1,7 +1,7 @@
 import { describe, expect, test } from 'vitest';
 
-import { Roles } from '$lib/types/user';
-import { TaskGrade, type Task, type TaskResult } from '$lib/types/task';
+import { Roles } from '#lib/types/user.js';
+import { TaskGrade, type Task, type TaskResult } from '#lib/types/task.js';
 import { type WorkbookList, WorkBookType } from '$features/workbooks/types/workbook';
 import { SolutionCategory } from '$features/workbooks/types/workbook_placement';
 import type { PlacementQuery } from '$features/workbooks/types/workbook_placement';

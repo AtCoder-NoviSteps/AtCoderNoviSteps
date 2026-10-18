@@ -1,13 +1,13 @@
 import { expect } from 'vitest';
 
-import { AOJ_COURSES } from '$lib/contests/utils/prefixes';
+import { AOJ_COURSES } from '#lib/contests/utils/prefixes.js';
 import {
   getAojContestLabel,
   getAojUniversityContestLabel,
   PCK_TRANSLATIONS,
   JAG_TRANSLATIONS,
   ICPC_TRANSLATIONS,
-} from '$lib/contests/utils/labels/aoj';
+} from '#lib/contests/utils/labels/aoj.js';
 
 describe('get AOJ contest label', () => {
   describe('AOJ courses', () => {

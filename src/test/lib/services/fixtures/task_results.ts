@@ -1,5 +1,5 @@
-import { ContestType } from '$lib/contests/types/contest';
-import { TaskGrade } from '$lib/types/task';
+import { ContestType } from '#lib/contests/types/contest.js';
+import { TaskGrade } from '#lib/types/task.js';
 
 type MockedSubmissionStatus = {
   id: string;

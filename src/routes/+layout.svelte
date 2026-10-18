@@ -8,13 +8,13 @@
 
   import '../app.css';
 
-  import Header from '$lib/components/Header.svelte';
-  import GoogleAnalytics from '$lib/components/GoogleAnalytics.svelte';
-  import ErrorMessageToast from '$lib/components/ToastWrapper/ErrorMessageToast.svelte';
-  import SpinnerWrapper from '$lib/components/SpinnerWrapper.svelte';
-  import Footer from '$lib/components/Footer.svelte';
+  import Header from '#lib/components/Header.svelte';
+  import GoogleAnalytics from '#lib/components/GoogleAnalytics.svelte';
+  import ErrorMessageToast from '#lib/components/ToastWrapper/ErrorMessageToast.svelte';
+  import SpinnerWrapper from '#lib/components/SpinnerWrapper.svelte';
+  import Footer from '#lib/components/Footer.svelte';
 
-  import { errorMessageStore } from '$lib/stores/error_message';
+  import { errorMessageStore } from '#lib/stores/error_message.js';
 
   let { data, children } = $props();
 

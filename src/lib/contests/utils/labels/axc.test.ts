@@ -1,6 +1,6 @@
 import { expect } from 'vitest';
 
-import { generateAxcLabel, generateAwcLabel } from '$lib/contests/utils/labels/axc';
+import { generateAxcLabel, generateAwcLabel } from '#lib/contests/utils/labels/axc.js';
 
 describe('generate AxC label', () => {
   describe('when a three-digit contest_id is given', () => {

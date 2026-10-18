@@ -70,6 +70,9 @@
     "zod": "4.6.7"
   },
   "type": "module",
+  "imports": {
+    "#lib/*": "./src/lib/*"
+  },
   "dependencies": {
     "@dnd-kit/helpers": "0.5.1",
     "@dnd-kit/svelte": "0.5.1",

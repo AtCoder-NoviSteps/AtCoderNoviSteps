@@ -1,7 +1,7 @@
 import { describe, test, expect } from 'vitest';
 
-import { ContestType } from '$lib/contests/types/contest';
-import type { TaskResults } from '$lib/types/task';
+import { ContestType } from '#lib/contests/types/contest.js';
+import type { TaskResults } from '#lib/types/task.js';
 
 import { Game24Provider } from './game24_provider';
 

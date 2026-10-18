@@ -14,7 +14,7 @@
     SolutionCategory,
     type WorkbooksWithPlacement,
   } from '$features/workbooks/types/workbook_placement';
-  import { TaskGrade } from '$lib/types/task';
+  import { TaskGrade } from '#lib/types/task.js';
   import type {
     KanbanColumns,
     DragOverEventArg,

@@ -1,4 +1,4 @@
-import { isValidUrlSlug } from '$lib/utils/url';
+import { isValidUrlSlug } from '#lib/utils/url.js';
 
 // See:
 // https://developer.mozilla.org/ja/docs/Web/JavaScript/Reference/Global_Objects/parseInt

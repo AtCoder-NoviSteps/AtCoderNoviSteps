@@ -4,11 +4,11 @@
   import { Breadcrumb, BreadcrumbItem, Img } from 'flowbite-svelte';
   import ExternalLink from '@lucide/svelte/icons/external-link';
 
-  import SubmissionStatusButton from '$lib/components/SubmissionStatusButton.svelte';
+  import SubmissionStatusButton from '#lib/components/SubmissionStatusButton.svelte';
 
-  import { getBackgroundColorFrom } from '$lib/services/submission_status';
+  import { getBackgroundColorFrom } from '#lib/services/submission_status.js';
 
-  import { getTaskGradeLabel, getTaskUrl } from '$lib/utils/task';
+  import { getTaskGradeLabel, getTaskUrl } from '#lib/utils/task.js';
 
   let { data } = $props();
 

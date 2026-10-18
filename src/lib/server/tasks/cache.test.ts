@@ -1,6 +1,6 @@
 import { describe, test, expect, vi, beforeEach, afterEach, afterAll } from 'vitest';
 
-import type { Task } from '$lib/types/task';
+import type { Task } from '#lib/types/task.js';
 import {
   getCachedTasksMap,
   getCachedMergedTasksMap,

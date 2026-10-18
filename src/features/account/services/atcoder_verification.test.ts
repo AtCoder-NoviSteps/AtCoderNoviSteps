@@ -1,6 +1,6 @@
 import { describe, test, expect, vi, beforeEach, afterEach } from 'vitest';
 
-vi.mock('$lib/server/database', () => ({
+vi.mock('#lib/server/database.js', () => ({
   default: {
     user: {
       findUniqueOrThrow: vi.fn(),
@@ -13,13 +13,13 @@ vi.mock('$lib/server/database', () => ({
   },
 }));
 
-vi.mock('$lib/utils/hash', () => ({
+vi.mock('#lib/utils/hash.js', () => ({
   sha256: vi.fn().mockResolvedValue('mocked-hash'),
 }));
 
 import { Roles, type AtCoderAccount } from '@prisma/client';
 
-import prisma from '$lib/server/database';
+import prisma from '#lib/server/database.js';
 import { generate, validate, reset } from './atcoder_verification';
 
 // ---------------------------------------------------------------------------

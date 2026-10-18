@@ -1,4 +1,4 @@
-import { type Task, type TaskGrade } from '$lib/types/task';
+import { type Task, type TaskGrade } from '#lib/types/task.js';
 import {
   SolutionCategory,
   type WorkBooksWithTasks,

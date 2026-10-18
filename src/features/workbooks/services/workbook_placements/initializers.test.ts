@@ -1,6 +1,6 @@
 import { describe, test, expect } from 'vitest';
 
-import { TaskGrade } from '$lib/types/task';
+import { TaskGrade } from '#lib/types/task.js';
 import {
   SolutionCategory,
   type UnplacedCurriculumRows,

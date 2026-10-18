@@ -1,5 +1,5 @@
-import { TaskGrade } from '$lib/types/task';
-import type { TaskResult, TaskResults } from '$lib/types/task';
+import { TaskGrade } from '#lib/types/task.js';
+import type { TaskResult, TaskResults } from '#lib/types/task.js';
 import type { WorkBookTaskBase } from '$features/workbooks/types/workbook';
 
 const userId2 = '2';

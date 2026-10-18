@@ -1,5 +1,5 @@
-import type { TaskGrade } from '$lib/types/task';
-import { getGradeOrder } from '$lib/utils/task';
+import type { TaskGrade } from '#lib/types/task.js';
+import { getGradeOrder } from '#lib/utils/task.js';
 
 /**
  * Computes the difference in grade order between the median vote and the official grade.

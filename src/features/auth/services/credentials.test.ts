@@ -2,7 +2,7 @@ import { describe, test, expect, vi } from 'vitest';
 
 import { Prisma } from '@prisma/client';
 
-vi.mock('$lib/server/database', () => ({
+vi.mock('#lib/server/database.js', () => ({
   default: {
     $transaction: vi.fn(),
     user: {
@@ -20,7 +20,7 @@ vi.mock('../server/password', () => ({
   verifyPassword: vi.fn(),
 }));
 
-import db from '$lib/server/database';
+import db from '#lib/server/database.js';
 import { hashPassword, verifyPassword } from '../server/password';
 import { registerUser, authenticateUser } from './credentials';
 

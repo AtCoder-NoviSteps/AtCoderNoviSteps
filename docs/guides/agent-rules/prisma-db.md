@@ -21,7 +21,7 @@ paths:
 
 ## Server-Only Code
 
-- Import the DB client (`$lib/server/database`) only in `src/lib/server/**` and in server-only services under `src/lib/services/**` and `src/features/**/services/**`
+- Import the DB client (`#lib/server/database.js`) only in `src/lib/server/**` and in server-only services under `src/lib/services/**` and `src/features/**/services/**`
 - Never import server-only code in client components
 
 ## Service Layer

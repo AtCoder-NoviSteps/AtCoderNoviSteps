@@ -10,7 +10,7 @@
   import WorkbookCompletionCell from '$features/workbooks/components/list/WorkbookCompletionCell.svelte';
   import WorkbookAuthorActionsCell from '$features/workbooks/components/list/WorkbookAuthorActionsCell.svelte';
 
-  import { canRead } from '$lib/utils/authorship';
+  import { canRead } from '#lib/utils/authorship.js';
   import { getGradeMode, getTaskResult } from '$features/workbooks/utils/workbooks';
 
   let { workbooks, gradeModesEachWorkbook, userId, role, taskResults }: WorkbookTableProps =

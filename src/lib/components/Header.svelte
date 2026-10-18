@@ -17,9 +17,9 @@
   } from 'flowbite-svelte';
   import ChevronDown from '@lucide/svelte/icons/chevron-down';
 
-  import { PRODUCT_NAME } from '$lib/constants/product-info';
-  import { navbarDashboardLinks, navbarLinks } from '$lib/constants/navbar-links';
-  import { externalLinks } from '$lib/constants/external-links';
+  import { PRODUCT_NAME } from '#lib/constants/product-info.js';
+  import { navbarDashboardLinks, navbarLinks } from '#lib/constants/navbar-links.js';
+  import { externalLinks } from '#lib/constants/external-links.js';
 
   let activeUrl = $derived(page.url.pathname);
 
