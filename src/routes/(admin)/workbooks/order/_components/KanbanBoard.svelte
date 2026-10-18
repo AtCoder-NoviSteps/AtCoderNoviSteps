@@ -31,7 +31,7 @@
     parseInitialCategories,
     parseInitialGrades,
     parseTab,
-    reCalcPriorities,
+    resolveDragEndAction,
     saveUpdates,
     TAB_CONFIGS,
   } from '../_utils/kanban';
@@ -92,34 +92,35 @@
   }
 
   async function onDragEnd(event: DragEndEventArg) {
-    if (!event.operation?.source || !event.operation?.target) {
+    const capturedTab = activeTab;
+    const capturedSnapshot = snapshot;
+    // Clear before awaiting so a drag started during the save keeps its own snapshot
+    snapshot = null;
+
+    const action = resolveDragEndAction({
+      canceled: event.canceled,
+      before: capturedSnapshot,
+      after: allItems[capturedTab],
+      columnKey: TAB_CONFIGS[capturedTab].columnKey,
+    });
+
+    if (action.kind === 'restore') {
+      allItems[capturedTab] = action.columns;
       return;
     }
 
-    const capturedTab = activeTab;
-    const capturedSnapshot = snapshot;
-
-    const updates = reCalcPriorities(
-      capturedSnapshot ?? {},
-      allItems[capturedTab],
-      TAB_CONFIGS[capturedTab].columnKey,
-    );
-
-    if (updates.length === 0) {
-      snapshot = null;
+    if (action.kind === 'none') {
       return;
     }
 
     try {
-      await saveUpdates(updates);
+      await saveUpdates(action.updates);
     } catch {
       if (capturedSnapshot) {
         allItems[capturedTab] = capturedSnapshot;
       }
 
       errorMessage = '保存に失敗しました';
-    } finally {
-      snapshot = null;
     }
   }
 </script>

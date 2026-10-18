@@ -70,7 +70,7 @@ export const workbooks: WorkbooksWithPlacement = [
   },
 ];
 
-// KanbanColumns snapshot used as the "before drag" baseline in reCalcPriorities tests.
+// KanbanColumns snapshot used as the "before drag" baseline in reCalcPriorities and resolveDragEndAction tests.
 export const solutionColumnsBefore: KanbanColumns = {
   [SolutionCategory.GRAPH]: [
     { id: 101, workBookId: 1, title: 'Graph Basics', isPublished: true },

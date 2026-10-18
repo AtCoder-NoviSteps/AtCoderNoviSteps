@@ -9,6 +9,7 @@ import type {
   ActiveTab,
   KanbanColumns,
   ColumnKey,
+  DragEndAction,
   PlacementUpdates,
   TabConfig,
 } from '../_types/kanban';
@@ -172,6 +173,36 @@ export function reCalcPriorities(
       [columnKey]: columnId,
     }));
   });
+}
+
+/**
+ * Decides what the board does when a drag ends.
+ *
+ * A canceled drag restores the snapshot, because dnd-kit skips its own DOM revert once
+ * onDragOver has changed the app state. A drop outside every column saves the order as displayed.
+ *
+ * @param params.before - Snapshot taken on drag start, or `null` if none was taken
+ * @param params.after - Current state after the drag operation
+ */
+export function resolveDragEndAction(params: {
+  canceled: boolean;
+  before: KanbanColumns | null;
+  after: KanbanColumns;
+  columnKey: ColumnKey;
+}): DragEndAction {
+  const { canceled, before, after, columnKey } = params;
+
+  if (canceled) {
+    return before ? { kind: 'restore', columns: before } : { kind: 'none' };
+  }
+
+  const updates = reCalcPriorities(before ?? {}, after, columnKey);
+
+  if (updates.length === 0) {
+    return { kind: 'none' };
+  }
+
+  return { kind: 'save', updates };
 }
 
 /**
