@@ -19,10 +19,11 @@ describe('get AtCoder university contest label', () => {
 
   describe('expected to return the registered name for contests listed in ATCODER_UNIVERSITIES', () => {
     test.each([
-      ['bogosortcontest_div1', 'bogosort Programming Contest (Div. 1)'],
-      ['bogosortcontest_div2', 'bogosort Programming Contest (Div. 2)'],
+      ['fuka5', 'ふか杯 5th Contest'],
       ['ttpc', 'TTPC'],
       ['tupc', 'TUPC'],
+      ['bogosortcontest_div1', 'bogosort Programming Contest (Div. 1)'],
+      ['bogosortcontest_div2', 'bogosort Programming Contest (Div. 2)'],
     ])('when %s is given', (input, expected) => {
       expect(getAtCoderUniversityContestLabel(input)).toBe(expected);
     });

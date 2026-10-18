@@ -400,6 +400,7 @@ export const awc = awcContestIds.map((contestId) =>
 // See:
 // https://kenkoooo.com/atcoder/resources/contests.json
 const universityContestIds = [
+  'fuka5',
   'kupc2012',
   'kupc2013',
   'kupc2014',
@@ -642,6 +643,10 @@ export const atCoderMainOfficialOnsite = [
   }),
   createTestCaseForContestType('World Tour Finals 2026 Algorithm')({
     contestId: 'awtf2026algo-open',
+    expected: ContestType.ATCODER_MAIN_OFFICIAL_ONSITE,
+  }),
+  createTestCaseForContestType('CodeQUEEN 2023 決勝')({
+    contestId: 'codequeen2023-final-open',
     expected: ContestType.ATCODER_MAIN_OFFICIAL_ONSITE,
   }),
 ];

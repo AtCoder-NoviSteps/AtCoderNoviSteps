@@ -108,6 +108,10 @@ export const atCoderMainOfficialOnsite = [
     contestId: 'awtf2026algo-open',
     expected: 'World Tour Finals 2026 Algorithm',
   }),
+  createTestCaseForContestNameLabel('CodeQUEEN 2023 決勝')({
+    contestId: 'codequeen2023-final-open',
+    expected: 'CodeQUEEN 2023 決勝',
+  }),
 ];
 
 export const mathAndAlgorithm = [

@@ -122,7 +122,7 @@ describe('get contest name label', () => {
       });
     });
 
-    describe('when contest_id means AtCoder World Tour Finals (official onsite finals)', () => {
+    describe('when contest_id means AtCoder official onsite finals (e.g., World Tour Finals, CodeQUEEN)', () => {
       TestCasesForContestNameLabel.atCoderMainOfficialOnsite.forEach(({ name, value }) => {
         runTests(`${name}`, [value], ({ contestId, expected }: TestCaseForContestNameLabel) => {
           expect(getContestNameLabel(contestId)).toEqual(expected);

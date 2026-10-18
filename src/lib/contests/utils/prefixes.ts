@@ -5,7 +5,7 @@ export const regexForAojUniversity = /^AOJ-[A-Z]+PC\d{4}/;
 
 // HACK: As of October 2026, the following contests are applicable.
 // Note: The classification logic may need to be revised when new contests are added.
-// ABC_LIKE / ARC_LIKE: exact match — add sequels (e.g. diverta2019-2) explicitly. Others: prefix match.
+// ABC_LIKE / ARC_LIKE / ATCODER_MAIN_OFFICIAL_ONSITE: exact match — add sequels (e.g. diverta2019-2) explicitly. Others: prefix match.
 export const ABC_LIKE: ContestPrefix = {
   'tenka1-2017-beginner': 'Tenka1 Programmer Beginner Contest 2017',
   abl: 'ACL Beginner Contest',
@@ -51,7 +51,7 @@ export const AGC_LIKE: ContestPrefix = {
   'cf17-final': 'CODE FESTIVAL 2017 final',
 } as const;
 
-// HACK: As of October 2026, KUPC, QUPC, UTPC, TTPC, TUPC, WUPC and bogosort contests are included.
+// HACK: As of October 2026, KUPC, QUPC, UTPC, TTPC, TUPC, WUPC, fuka and bogosort contests are included.
 // More university contests may be added in the future.
 // Values serve as labels for contest IDs that don't match the `xxpc{year}` label regex.
 export const ATCODER_UNIVERSITIES: ContestPrefix = {
@@ -61,6 +61,7 @@ export const ATCODER_UNIVERSITIES: ContestPrefix = {
   ttpc: 'TTPC',
   tupc: 'TUPC',
   wupc: 'WUPC',
+  fuka5: 'ふか杯 5th Contest',
   bogosortcontest_div1: 'bogosort Programming Contest (Div. 1)',
   bogosortcontest_div2: 'bogosort Programming Contest (Div. 2)',
 } as const;
@@ -108,6 +109,11 @@ export const ATCODER_OTHERS: ContestPrefix = {
   xmascon19: 'Xmas Contest 2019',
 } as const;
 
+// World Tour Finals are matched by regex in labels/world_tour_finals.ts; other onsite finals are listed here.
+export const ATCODER_MAIN_OFFICIAL_ONSITE: ContestPrefix = {
+  'codequeen2023-final-open': 'CodeQUEEN 2023 決勝',
+} as const;
+
 // AIZU ONLINE JUDGE AOJ Courses
 export const AOJ_COURSES: ContestPrefix = {
   ITP1: 'プログラミング入門',
@@ -139,4 +145,7 @@ export const arcLikePrefixes = new Set(getContestPrefixes(ARC_LIKE));
 export const agcLikePrefixes = getContestPrefixes(AGC_LIKE);
 export const atCoderUniversityPrefixes = getContestPrefixes(ATCODER_UNIVERSITIES);
 export const atCoderOthersPrefixes = getContestPrefixes(ATCODER_OTHERS);
+export const atCoderMainOfficialOnsitePrefixes = new Set(
+  getContestPrefixes(ATCODER_MAIN_OFFICIAL_ONSITE),
+);
 export const aojCoursePrefixes = new Set(getPrefixForAojCourses());
