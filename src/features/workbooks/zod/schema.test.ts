@@ -1,5 +1,7 @@
 import { expect, test } from 'vitest';
 import { type ZodSchema } from 'zod';
+import { superValidate } from 'sveltekit-superforms/server';
+import { zod4 } from 'sveltekit-superforms/adapters';
 
 import { TaskGrade } from '$lib/types/task';
 import { WorkBookType, type WorkBookTasks } from '$features/workbooks/types/workbook';
@@ -154,20 +156,9 @@ describe('workbook schema', () => {
     });
 
     test('when workbook tasks are given 200 tasks', () => {
-      const workBookTasks = [];
-
-      for (let index = 1; index <= 200; index++) {
-        workBookTasks.push({
-          workBookId: index,
-          taskId: generateRandomTaskId(),
-          priority: index,
-          comment: '',
-        });
-      }
-
       const workbook: WorkBook = createWorkBookBase({
         isPublished: true,
-        workBookTasks: workBookTasks,
+        workBookTasks: createWorkBookTasksWithCount(200),
       });
       validateWorkBookSchema(workBookSchema, workbook);
     });
@@ -370,21 +361,19 @@ describe('workbook schema', () => {
     });
 
     test('when workbook tasks are given more than 200 tasks', () => {
-      const workBookTasks = [];
-
-      for (let index = 1; index <= 201; index++) {
-        workBookTasks.push({
-          workBookId: index,
-          taskId: generateRandomTaskId(),
-          priority: index,
-          comment: '',
-        });
-      }
-
       const workbook: WorkBook = createWorkBookBase({
-        workBookTasks: workBookTasks,
+        workBookTasks: createWorkBookTasksWithCount(201),
       });
-      validateWorkBookSchema(workBookSchema, workbook);
+      const result = workBookSchema.safeParse(workbook);
+
+      expect(result.success).toBe(false);
+      expect(result.error?.issues).toEqual([
+        expect.objectContaining({
+          code: 'too_big',
+          path: ['workBookTasks'],
+          message: '200問以下になるまで削除してください',
+        }),
+      ]);
     });
 
     test('when a negative value is given as the workbook id', () => {
@@ -459,6 +448,27 @@ describe('workbook schema', () => {
       expect(result.success).toBe(false);
     }
   });
+
+  describe('with the Superforms adapter', () => {
+    test('returns the task count error in workBookTasks._errors when more than 200 tasks are given', async () => {
+      const workbook: WorkBook = createWorkBookBase({
+        workBookTasks: createWorkBookTasksWithCount(201),
+      });
+      const form = await superValidate(workbook, zod4(workBookSchema));
+
+      expect(form.valid).toBe(false);
+      expect(form.errors.workBookTasks?._errors).toEqual(['200問以下になるまで削除してください']);
+    });
+  });
+
+  function createWorkBookTasksWithCount(count: number): WorkBookTasks {
+    return Array.from({ length: count }, (_, index) => ({
+      workBookId: index + 1,
+      taskId: generateRandomTaskId(),
+      priority: index + 1,
+      comment: '',
+    }));
+  }
 
   // abcXXX_Y
   function generateRandomTaskId(): string {
