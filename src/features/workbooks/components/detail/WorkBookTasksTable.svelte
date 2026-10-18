@@ -9,7 +9,7 @@
     TableHead,
     TableHeadCell,
   } from 'flowbite-svelte';
-  import Trash2 from '@lucide/svelte/icons/trash-2';
+  import Trash from '@lucide/svelte/icons/trash';
 
   import GradeLabel from '$lib/components/GradeLabel.svelte';
   import ExternalLinkWrapper from '$lib/components/ExternalLinkWrapper.svelte';
@@ -238,7 +238,7 @@
                 }}
                 disabled={isDeleting}
               >
-                <Trash2 class="w-5 h-5 xs:w-6 xs:h-6" />
+                <Trash class="w-5 h-5 xs:w-6 xs:h-6" />
                 <span class="sr-only">削除</span>
               </button>
             </TableBodyCell>

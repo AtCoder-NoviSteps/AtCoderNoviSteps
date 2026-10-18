@@ -2,7 +2,7 @@
   import { onMount } from 'svelte';
 
   import { Tooltip } from 'flowbite-svelte';
-  import CircleHelp from '@lucide/svelte/icons/circle-help';
+  import CircleQuestionMark from '@lucide/svelte/icons/circle-question-mark';
 
   import { TOOLTIP_CLASS_BASE } from '$lib/constants/tailwind-helper';
 
@@ -25,6 +25,6 @@
   </Tooltip>
 
   <span id={titleId}>
-    <CircleHelp class="w-5 h-5 dark:text-gray-200" />
+    <CircleQuestionMark class="w-5 h-5 dark:text-gray-200" />
   </span>
 {/if}
