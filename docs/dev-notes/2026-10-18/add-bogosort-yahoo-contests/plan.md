@@ -44,6 +44,8 @@
   - `yahoo-procon2019-qual` も `ARC_LIKE` より前のルールにマッチしない。`ATCODER_OTHERS` / `ATCODER_UNIVERSITIES` のプレフィックスにも先頭が `yahoo` のものはない。
 - ラベル：`getAtCoderUniversityContestLabel` は `^(ku|qu|ut|tt|tu|wu)pc\d{4}$` にしかマッチしない（[universities.ts](../../../../src/lib/contests/utils/labels/universities.ts)）。このままだと `null` が返り、表示は `BOGOSORTCONTEST_DIV1` になる。そこで、正規表現に合わない ID は `ATCODER_UNIVERSITIES` を完全一致で引くフォールバックを追加する。`OTHERS` の `generateOthersLabel` と同じやり方。
   - 既存キー（`kupc` → `KUPC` など）が完全一致で引かれるのは、年のない ID が渡されたときだけ。その場合も結果は従来の大文字化フォールバックと同じなので、既存の表示は変わらない。
+  - ただし関数単体の戻り値は変わる（`ttpc` / `tupc`：`null` → `'TTPC'` / `'TUPC'`）。実装中に既存テストとの矛盾が分かったため、ユーザーに確認した上で期待値を更新した。
+  - `constructor` などのプロトタイプのプロパティを拾わないよう、`Object.hasOwn` で判定する。
 - yahoo のラベル：`ARC_LIKE` にはラベル生成関数がないため、表示は `YAHOO-PROCON2019-QUAL` になる。既存の ARC-Like と同じ扱いなので変更しない（#4143 と同じ判断）。
 - 問題名からの表示（`task_index_label`）は `getContestNameLabel` を使うので、ラベルを直せば `bogosort Programming Contest (Div. 1) - A` のように表示される。
 
@@ -67,7 +69,7 @@ export function getAtCoderUniversityContestLabel(contestId: string): string | nu
     return contestId.replace(/* 既存のまま */);
   }
 
-  return ATCODER_UNIVERSITIES[contestId] ?? null;
+  return Object.hasOwn(ATCODER_UNIVERSITIES, contestId) ? ATCODER_UNIVERSITIES[contestId] : null;
 }
 ```
 
@@ -77,7 +79,7 @@ export function getAtCoderUniversityContestLabel(contestId: string): string | nu
 
 1. [contest_type.ts](../../../../src/lib/contests/fixtures/contest_type.ts) にテストケースを追加する。
    - `universityContestIds` の末尾に `'bogosortcontest_div1'`、`'bogosortcontest_div2'` を追加する（期待値 `ContestType.UNIVERSITY`）。
-   - `arcLike` の `keyence2019` の後に追加する。
+   - `arcLike` の `diverta2019-2` の後（`keyence2019` の前）に追加する。
      ```typescript
      createTestCaseForContestType('みんなのプロコン 2019')({
        contestId: 'yahoo-procon2019-qual',
@@ -86,7 +88,7 @@ export function getAtCoderUniversityContestLabel(contestId: string): string | nu
      ```
 2. `pnpm test:unit src/lib/contests/utils/classification.test.ts` で失敗すること（Red）を確認する。
 3. [prefixes.ts](../../../../src/lib/contests/utils/prefixes.ts) に追加する。
-   - `ARC_LIKE`：`'yahoo-procon2019-qual': 'みんなのプロコン 2019'`（`keyence2019` の後）
+   - `ARC_LIKE`：`'yahoo-procon2019-qual': 'みんなのプロコン 2019'`（`diverta2019-2` の後、`keyence2019` の前）
    - `ATCODER_UNIVERSITIES`：`bogosortcontest_div1: 'bogosort Programming Contest (Div. 1)'`、`bogosortcontest_div2: 'bogosort Programming Contest (Div. 2)'`
    - `ATCODER_UNIVERSITIES` の上にある HACK コメント（「As of September 2025, KUPC, QUPC, ...」）を現状に合わせて更新する。
 4. テストが通ること（Green）を確認する。
@@ -99,8 +101,9 @@ export function getAtCoderUniversityContestLabel(contestId: string): string | nu
    - テスト名：`expected to return the registered name for contests listed in ATCODER_UNIVERSITIES`
      - `['bogosortcontest_div1', 'bogosort Programming Contest (Div. 1)']`
      - `['bogosortcontest_div2', 'bogosort Programming Contest (Div. 2)']`
-   - 既存の「invalid format なら `null`」のケースはそのまま通ること（`utpc24`、`xxpc2024` などは辞書にないので `null`）。
-   - `bogosortcontest_div3` が `null` になるケースを invalid 側に追加する。
+     - `['ttpc', 'TTPC']`、`['tupc', 'TUPC']`（既存の null 側から移動）
+   - null 側には `utpc24`、`xxpc2024` など辞書にない ID を残す。
+   - `bogosortcontest_div3`、`constructor` が `null` になるケースを null 側に追加する。
 2. 失敗すること（Red）を確認する。
 3. `getAtCoderUniversityContestLabel` に辞書フォールバックを追加し、TSDoc（正規表現の説明、`null` を返す条件）を更新する。
 4. `pnpm test:unit src/lib/contests/` が通ること（Green）を確認する。`task_index_label.test.ts` の大学系ケースが壊れていないことも確認する。
