@@ -311,6 +311,10 @@ export const arcLike = [
     contestId: 'diverta2019-2',
     expected: ContestType.ARC_LIKE,
   }),
+  createTestCaseForContestType('みんなのプロコン 2019')({
+    contestId: 'yahoo-procon2019-qual',
+    expected: ContestType.ARC_LIKE,
+  }),
   createTestCaseForContestType('KEYENCE2019')({
     contestId: 'keyence2019',
     expected: ContestType.ARC_LIKE,
@@ -420,6 +424,8 @@ const universityContestIds = [
   'tupc2022',
   'tupc2023',
   'wupc2019',
+  'bogosortcontest_div1',
+  'bogosortcontest_div2',
 ];
 
 export const universities = universityContestIds.map((contestId) =>

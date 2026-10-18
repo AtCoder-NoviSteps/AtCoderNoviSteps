@@ -33,6 +33,7 @@ export const ARC_LIKE: ContestPrefix = {
   'dwacon6th-prelims': '第6回 ドワンゴからの挑戦状 予選',
   diverta2019: 'diverta 2019 Programming Contest',
   'diverta2019-2': 'diverta 2019 Programming Contest 2',
+  'yahoo-procon2019-qual': 'みんなのプロコン 2019',
   keyence2019: 'キーエンス プログラミング コンテスト 2019',
   keyence2020: 'キーエンス プログラミング コンテスト 2020',
   keyence2021: 'キーエンス プログラミング コンテスト 2021',
@@ -50,8 +51,9 @@ export const AGC_LIKE: ContestPrefix = {
   'cf17-final': 'CODE FESTIVAL 2017 final',
 } as const;
 
-// HACK: As of September 2025, KUPC, QUPC, UTPC, TTPC and TUPC are included.
+// HACK: As of October 2026, KUPC, QUPC, UTPC, TTPC, TUPC, WUPC and bogosort contests are included.
 // More university contests may be added in the future.
+// Values serve as labels for contest IDs that don't match the `xxpc{year}` label regex.
 export const ATCODER_UNIVERSITIES: ContestPrefix = {
   kupc: 'KUPC',
   qupc: 'QUPC',
@@ -59,6 +61,8 @@ export const ATCODER_UNIVERSITIES: ContestPrefix = {
   ttpc: 'TTPC',
   tupc: 'TUPC',
   wupc: 'WUPC',
+  bogosortcontest_div1: 'bogosort Programming Contest (Div. 1)',
+  bogosortcontest_div2: 'bogosort Programming Contest (Div. 2)',
 } as const;
 
 export const ATCODER_OTHERS: ContestPrefix = {
