@@ -3,7 +3,7 @@ import { describe, test, expect } from 'vitest';
 import { SolutionCategory } from '$features/workbooks/types/workbook_placement';
 import { TaskGrade } from '$lib/types/task';
 
-import { workbooks, solutionColumnsBefore } from '../_fixtures/kanban';
+import { workbooks, solutionColumnsBefore, solutionColumnsGraphSwapped } from '../_fixtures/kanban';
 import {
   buildKanbanItems,
   buildUpdatedUrl,
@@ -235,15 +235,7 @@ describe('reCalcPriorities', () => {
   });
 
   test('returns updates for reordered cards within a column', () => {
-    const after = {
-      ...before,
-      [SolutionCategory.GRAPH]: [
-        before[SolutionCategory.GRAPH][1],
-        before[SolutionCategory.GRAPH][0],
-      ], // swapped
-    };
-
-    const updates = reCalcPriorities(before, after, 'solutionCategory');
+    const updates = reCalcPriorities(before, solutionColumnsGraphSwapped, 'solutionCategory');
     expect(updates).toHaveLength(2);
     expect(updates[0]).toMatchObject({
       id: 102,
@@ -260,15 +252,8 @@ describe('reCalcPriorities', () => {
   });
 
   test('returns updates only for changed columns', () => {
-    const after = {
-      [SolutionCategory.GRAPH]: [
-        before[SolutionCategory.GRAPH][1],
-        before[SolutionCategory.GRAPH][0],
-      ], // changed
-      [SolutionCategory.PENDING]: before[SolutionCategory.PENDING], // unchanged
-    };
-
-    const updates = reCalcPriorities(before, after, 'solutionCategory');
+    // GRAPH is swapped, PENDING is unchanged
+    const updates = reCalcPriorities(before, solutionColumnsGraphSwapped, 'solutionCategory');
     const updatedIds = updates.map((update) => update.id);
     expect(updatedIds).not.toContain(103);
     expect(updatedIds).toContain(101);
@@ -340,20 +325,13 @@ describe('reCalcPriorities', () => {
 
 describe('resolveDragEndAction', () => {
   const before = solutionColumnsBefore;
-  const swapped = {
-    ...before,
-    [SolutionCategory.GRAPH]: [
-      before[SolutionCategory.GRAPH][1],
-      before[SolutionCategory.GRAPH][0],
-    ],
-  };
 
   describe('canceled drag', () => {
     test('returns restore with the snapshot when a reordered drag is canceled', () => {
       const action = resolveDragEndAction({
         canceled: true,
         before,
-        after: swapped,
+        after: solutionColumnsGraphSwapped,
         columnKey: 'solutionCategory',
       });
 
@@ -375,7 +353,7 @@ describe('resolveDragEndAction', () => {
       const action = resolveDragEndAction({
         canceled: true,
         before: null,
-        after: swapped,
+        after: solutionColumnsGraphSwapped,
         columnKey: 'solutionCategory',
       });
 
@@ -399,7 +377,7 @@ describe('resolveDragEndAction', () => {
       const action = resolveDragEndAction({
         canceled: false,
         before,
-        after: swapped,
+        after: solutionColumnsGraphSwapped,
         columnKey: 'solutionCategory',
       });
 

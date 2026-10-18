@@ -70,7 +70,7 @@ export const workbooks: WorkbooksWithPlacement = [
   },
 ];
 
-// KanbanColumns snapshot used as the "before drag" baseline in reCalcPriorities and resolveDragEndAction tests.
+// "Before drag" baseline: GRAPH has two cards and PENDING has one.
 export const solutionColumnsBefore: KanbanColumns = {
   [SolutionCategory.GRAPH]: [
     { id: 101, workBookId: 1, title: 'Graph Basics', isPublished: true },
@@ -78,5 +78,14 @@ export const solutionColumnsBefore: KanbanColumns = {
   ],
   [SolutionCategory.PENDING]: [
     { id: 103, workBookId: 3, title: 'Pending Book', isPublished: true },
+  ],
+};
+
+// solutionColumnsBefore with the two GRAPH cards swapped; PENDING is unchanged.
+export const solutionColumnsGraphSwapped: KanbanColumns = {
+  ...solutionColumnsBefore,
+  [SolutionCategory.GRAPH]: [
+    solutionColumnsBefore[SolutionCategory.GRAPH][1],
+    solutionColumnsBefore[SolutionCategory.GRAPH][0],
   ],
 };
