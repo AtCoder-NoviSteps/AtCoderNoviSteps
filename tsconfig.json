@@ -1,20 +1,11 @@
 {
-  "extends": "./.svelte-kit/tsconfig.json",
+  "extends": "$app/tsconfig",
   "compilerOptions": {
-    "allowJs": true,
-    "checkJs": true,
-    "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
     "incremental": true,
-    "isolatedModules": true,
-    "moduleResolution": "bundler",
     "outDir": "build",
-    "resolveJsonModule": true,
-    "skipLibCheck": true,
     "sourceMap": true,
     "strict": true,
-    "types": ["node", "vitest/globals"], // Note: "node" is required because "types" is replaced (not merged) when extending tsconfig
-    "verbatimModuleSyntax": true
+    "types": ["$app/types", "node", "vitest/globals"] // Note: "types" is replaced (not merged) when extending tsconfig, so keep "$app/types" and add "node"
   },
   // Module paths are resolved by package.json#imports (#lib, #features), not path aliases
   //
