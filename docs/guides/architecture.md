@@ -75,7 +75,7 @@ feature 内は技術的な役割で分ける。必要なディレクトリだけ
 - `utils/`: 副作用のない関数。テストを隣接配置する。
 - `stores/`: Svelte Runes を使う `.svelte.ts`。
 
-`features/{feature}/server/` は `src/lib/server/` と違い、SvelteKit が client import を自動では禁止しない。規約と推移的な server-only dependency により client から分離する。複数 feature で使うサーバコードは `src/lib/server/` へ移す。
+SvelteKit 3 は、`src/routes`・`static` 内を除くすべての `server/` ディレクトリと、ファイル名に `server` セグメントを持つファイル（`server.ts`・`*.server.ts`）を server-only として扱い、client から import すると build で失敗させる。`features/{feature}/server/` も対象になる。複数 feature で使うサーバコードは `src/lib/server/` へ移す。
 
 ### 3. src/lib
 
@@ -141,9 +141,9 @@ include: [
 
 ### 6. subpath imports（`#lib`・`#features`）
 
-`src/lib` は `package.json#imports` の `#lib/*`、`src/features` は `#features/*` で参照する。SvelteKit 3 は組み込みの `$lib` を削除し、`kit.alias` も非推奨にするため、`svelte.config.js` に alias は置かない。
+`src/lib` は `package.json#imports` の `#lib/*`、`src/features` は `#features/*` で参照する。SvelteKit 3 は組み込みの `$lib` を削除し、`alias` オプションも非推奨にしたため、`vite.config.ts` の `sveltekit()` に alias は置かない。
 拡張子は明示する。TS モジュールは `.js`、コンポーネントは `.svelte`、runes モジュール（`.svelte.ts`）は `.svelte.js` と書く。`vi.mock` の specifier も同じ形にする。
-`$lib` は Kit 2 が組み込みで解決してしまうため、oxlint と ESLint の `no-restricted-imports` で禁止している。lint が検出するのは import・export 宣言（`import type`・`export … from` を含む）と `.ts` の動的 `import()` で、`vi.mock('$lib/...')` と `.svelte` 内の動的 `import()` は検出しない。`$features` と `@/` は alias が無いので、import すると型チェックで失敗する。
+`$lib`・`$features`・`@/` は alias が無いので、import すると型チェックと build で失敗する。`$lib` は Kit 2 の習慣で書かれやすいため、oxlint と ESLint の `no-restricted-imports` でも禁止し、`#lib` への書き換えを案内している。lint が検出するのは import・export 宣言（`import type`・`export … from` を含む）と `.ts` の動的 `import()` で、`vi.mock('$lib/...')` と `.svelte` 内の動的 `import()` は検出しない。
 import の specifier をまとめて変えたときは、`rg -n '\$lib|\$features|@/' src e2e prisma` で残りが無いことも確かめる。
 
 ```typescript

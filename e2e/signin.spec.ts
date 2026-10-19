@@ -12,6 +12,14 @@ const LOGIN_FAILURE_MESSAGE =
   'ログインできませんでした。登録したユーザ名 / パスワードとなるように修正してください。';
 const SESSION_COOKIE_NAME = 'auth_session';
 
+// Mirrors SvelteKit's ActionResult — $app/forms is not resolvable in Playwright.
+type ActionFailure = { type: 'failure'; status: number };
+type ActionResultLike = ActionFailure | { type: 'success' | 'redirect' | 'error' };
+
+function deserializeActionResult(text: string): ActionResultLike {
+  return JSON.parse(text) as ActionResultLike;
+}
+
 // TODO: Make available in global.setup.ts
 async function login(page: Page, username: string, password: string): Promise<void> {
   // Navigate to login page
@@ -119,6 +127,9 @@ test.describe('login failure', () => {
 
     // SvelteKit 2 answered 200 here; SvelteKit 3 uses the status passed to fail()
     expect(result.status).toBe(BAD_REQUEST);
-    expect(JSON.parse(result.body)).toMatchObject({ type: 'failure', status: BAD_REQUEST });
+    expect(deserializeActionResult(result.body)).toMatchObject({
+      type: 'failure',
+      status: BAD_REQUEST,
+    });
   });
 });

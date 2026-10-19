@@ -1,4 +1,4 @@
-// See https://kit.svelte.dev/docs/types#app
+// See https://svelte.dev/docs/kit/types#app
 
 import type { Roles } from '@prisma/client';
 

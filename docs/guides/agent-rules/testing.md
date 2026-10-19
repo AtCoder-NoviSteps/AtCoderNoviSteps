@@ -127,12 +127,12 @@ For mutable module-level `const` objects (override maps), mutate directly in `be
 
 ### Browser Toggle per Describe
 
-**Never register `vi.mock('$app/environment')` twice in one file** — the second hoisted call silently overwrites the first, pinning the whole file to one value. Use one dynamic mock with a `vi.hoisted` flag:
+**Never register `vi.mock('$app/env')` twice in one file** — the second hoisted call silently overwrites the first, pinning the whole file to one value. Use one dynamic mock with a `vi.hoisted` flag:
 
 ```typescript
 // @vitest-environment jsdom
 const browserState = vi.hoisted(() => ({ value: false }));
-vi.mock('$app/environment', () => ({
+vi.mock('$app/env', () => ({
   get browser() {
     return browserState.value;
   },

@@ -21,7 +21,7 @@ Before adding a function, search `src/lib/utils/`, `src/lib/services/`, `src/fea
 
 ## Architecture
 
-SvelteKit 2 + Svelte 5 Runes + TypeScript | PostgreSQL + Prisma | Flowbite Svelte + Tailwind 4 | Vitest + Playwright | oxlint + ESLint
+SvelteKit 3 + Svelte 5 Runes + TypeScript | PostgreSQL + Prisma | Flowbite Svelte + Tailwind 4 | Vitest + Playwright | oxlint + ESLint
 
 Layers: `prisma/` | `src/**/server/` | `src/**/zod/` | `src/**/types/`, `src/**/fixtures/` | `src/**/services/` | `src/**/utils/` | `src/**/stores/` | `src/routes/` | `src/**/*.svelte`. Each layer's constraints are in the layer table of `coding-style.md`; read it before writing logic.
 

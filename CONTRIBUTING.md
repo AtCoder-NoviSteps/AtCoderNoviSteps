@@ -27,7 +27,7 @@
   - [Node.js](https://nodejs.org): v24.x
 - 汎用フレームワーク
   - [Svelte](https://svelte.dev/): v5.x。Runes mode で運用中
-  - [SvelteKit](https://svelte.dev/): v2.x
+  - [SvelteKit](https://svelte.dev/docs/kit): v3.x。設定は `vite.config.ts` の `sveltekit()` に書く（`svelte.config.js` は無い）
 - UIライブラリ
   - [Flowbite Svelte](https://flowbite-svelte.com/) - コンポーネントライブラリ
     - [Flowbite](https://flowbite.com/)も利用可能
