@@ -58,13 +58,23 @@ test.describe('workbook edit page access control (load)', () => {
 });
 
 test.describe('workbook edit form', () => {
-  test('keeps nested workbook tasks after a failed submission', async ({ page }) => {
+  test('keeps edited nested workbook tasks after a failed submission', async ({ page }) => {
     await loginAsAdmin(page);
     await page.goto(WORKBOOK_EDIT_URL);
 
     const taskRows = page.getByRole('table', { name: 'Workbook tasks' }).locator('tbody tr');
     await expect(taskRows.first()).toBeVisible({ timeout: TIMEOUT });
     const taskRowTexts = await taskRows.allTextContents();
+
+    // Removing the last row leaves the other row numbers unchanged
+    const lastRowNumber = String(taskRowTexts.length);
+    const editedRowTexts = taskRowTexts.slice(0, -1);
+    page.once('dialog', (dialog) => dialog.accept());
+    await taskRows
+      .filter({ has: page.getByRole('cell', { name: lastRowNumber, exact: true }) })
+      .getByRole('button', { name: '削除' })
+      .click();
+    await expect(taskRows).toHaveText(editedRowTexts);
 
     // A two-character title fails server validation, so nothing is saved
     await page.locator('input[name="title"]').fill('ab');
@@ -73,6 +83,7 @@ test.describe('workbook edit form', () => {
     await expect(page.getByText('3文字以上入力してください')).toBeVisible({ timeout: TIMEOUT });
     await expect(page).toHaveURL(WORKBOOK_EDIT_URL);
     await expect(page.locator('input[name="title"]')).toHaveValue('ab');
-    await expect(taskRows).toHaveText(taskRowTexts);
+    // The table must show the submitted tasks, not the workbook's original tasks
+    await expect(taskRows).toHaveText(editedRowTexts);
   });
 });

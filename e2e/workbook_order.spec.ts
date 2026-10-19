@@ -216,7 +216,7 @@ test.describe('workbook order page', () => {
     expect(categories.split(',')).toContain(SolutionCategory.GRAPH);
   });
 
-  test('keeps kanban state while replacing filter URL', async ({ page }) => {
+  test('replaces filter URL without reloading data or adding history', async ({ page }) => {
     await page.goto(
       `${ORDER_URL}?tab=solution&categories=${SolutionCategory.PENDING},${SolutionCategory.GRAPH},${SolutionCategory.DATA_STRUCTURE}`,
     );
