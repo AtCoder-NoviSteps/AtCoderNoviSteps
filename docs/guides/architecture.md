@@ -155,8 +155,8 @@ import type { PageServerLoad } from './$types';
 import { formatDate } from '$lib/utils/format';
 ```
 
-`$lib` は SvelteKit 2 の習慣で書かれやすいため、oxlint と ESLint の `no-restricted-imports` でも禁止し、`#lib` への書き換えを案内している。lint が検出するのは import・export 宣言（`import type`・`export … from` を含む）と `.ts` の動的 `import()` で、`vi.mock('$lib/...')` と `.svelte` 内の動的 `import()` は検出しない。
-import の specifier をまとめて変えたときは、`rg -n '\$lib|\$features|@/' src e2e prisma` で残りが無いことも確かめる。
+`$lib` は、静的・動的 import、`.ts`・`.svelte`、`vi.mock` のどれで書いても型チェックか Vite（dev・build・Vitest）で失敗し、SvelteKit が `module_removed_lib` で `#lib` への書き換えを案内する。oxlint と ESLint の `no-restricted-imports` でも禁止しているので、commit 前の lint でも止まる。
+`$features`・`@/` は import なら型チェックで失敗するが、`vi.mock('$features/...')` は解決されないまま無視され、mock が効かずに本物のモジュールが使われる。specifier をまとめて変えたときは、`rg -n '\$lib|\$features|@/' src e2e prisma` で残りが無いことを確かめる。
 
 `$types` は SvelteKit が生成する route 型専用で、domain type は `src/**/types/` に置く。
 
