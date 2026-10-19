@@ -1,6 +1,6 @@
 // See:
-// https://svelte.dev/docs/kit/$app-environment#browser
-import { browser } from '$app/environment';
+// https://svelte.dev/docs/kit/$app-env#browser
+import { browser } from '$app/env';
 
 // See:
 // https://svelte.dev/docs/svelte/stores

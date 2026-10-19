@@ -13,7 +13,6 @@
   let isLoggedIn = data.isLoggedIn;
   let taskResults = data.taskResults;
 
-  // @ts-expect-error svelte-check TS2554: AppTypes declaration merging causes RouteId to resolve as string, requiring params. Runtime behavior is correct.
   const problemsHref = resolve(PROBLEMS_PAGE);
 </script>
 

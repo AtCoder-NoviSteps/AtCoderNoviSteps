@@ -8,12 +8,12 @@ import {
 } from '#features/workbooks/stores/replenishment_workbook.svelte.js';
 
 // WHY: a single dynamic mock is the only way to toggle `browser` per describe. Every vi.mock is
-// hoisted and the last registration for a module wins, so a second vi.mock of `$app/environment`
+// hoisted and the last registration for a module wins, so a second vi.mock of `$app/env`
 // would silently clamp the whole file to one branch.
 // Defaults to false so the singleton constructed at import time stays SSR-safe (no localStorage).
 const browserState = vi.hoisted(() => ({ value: false }));
 
-vi.mock('$app/environment', () => ({
+vi.mock('$app/env', () => ({
   get browser() {
     return browserState.value;
   },

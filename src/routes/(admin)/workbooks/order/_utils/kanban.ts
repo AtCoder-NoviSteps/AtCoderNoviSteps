@@ -54,7 +54,7 @@ const DEFAULT_SOLUTION_CATEGORIES: string[] = [SolutionCategory.PENDING, Solutio
  * @returns Validated category keys. Falls back to `DEFAULT_SOLUTION_CATEGORIES` when the param is
  *   absent; invalid values are silently dropped.
  */
-export function parseInitialCategories(params: URLSearchParams): string[] {
+export function parseInitialCategories(params: Pick<URLSearchParams, 'get'>): string[] {
   return (
     params.get('categories')?.split(',').filter(Boolean) ?? DEFAULT_SOLUTION_CATEGORIES
   ).filter((category) => Object.hasOwn(SolutionCategory, category));
@@ -70,7 +70,7 @@ const DEFAULT_GRADES: string[] = [TaskGrade.Q10, TaskGrade.Q9];
  * @returns Validated grade keys. Falls back to `DEFAULT_GRADES` when the param is absent;
  *   `PENDING` and invalid values are silently dropped.
  */
-export function parseInitialGrades(params: URLSearchParams): string[] {
+export function parseInitialGrades(params: Pick<URLSearchParams, 'get'>): string[] {
   return (params.get('grades')?.split(',').filter(Boolean) ?? DEFAULT_GRADES).filter(
     (grade) => Object.hasOwn(TaskGrade, grade) && grade !== TaskGrade.PENDING,
   );
@@ -78,15 +78,15 @@ export function parseInitialGrades(params: URLSearchParams): string[] {
 
 /**
  * Returns a new URL with tab/category/grade search params updated.
- * Pure function — does not call replaceState.
+ * Pure function — does not navigate. Accepts the read-only `page.url` of `$app/state`.
  */
 export function buildUpdatedUrl(
-  url: URL,
+  url: Pick<URL, 'href'>,
   activeTab: ActiveTab,
   selectedSolutionCategories: string[],
   selectedGrades: string[],
 ): URL {
-  const updatedUrl = new URL(url);
+  const updatedUrl = new URL(url.href);
   updatedUrl.searchParams.set('tab', activeTab);
 
   if (activeTab === 'solution') {

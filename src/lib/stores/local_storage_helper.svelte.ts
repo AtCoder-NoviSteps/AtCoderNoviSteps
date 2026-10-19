@@ -1,6 +1,6 @@
 // See:
-// https://svelte.dev/docs/kit/$app-environment#browser
-import { browser } from '$app/environment';
+// https://svelte.dev/docs/kit/$app-env#browser
+import { browser } from '$app/env';
 
 export function useLocalStorage<T>(key: string, initialValue: T) {
   return new LocalStorageWrapper<T>(key, initialValue);

@@ -60,13 +60,13 @@ export function parseWorkBookCategory(params: URLSearchParams): SelectedSolution
  * @param tab - Active tab
  * @param grade - Selected grade (only appended when tab === CURRICULUM)
  * @param category - Selected category (only appended when tab === SOLUTION)
- * @returns URL string suitable for use with goto()
+ * @returns URL string suitable for use with goto(); typed as a route ID with search so `resolve()` accepts it
  */
 export function buildWorkbooksUrl(
   tab: WorkBookTab,
   grade?: TaskGrade,
   category?: SelectedSolutionCategory,
-): string {
+): `/workbooks?${string}` {
   const params = new URLSearchParams();
   params.set('tab', tab);
 

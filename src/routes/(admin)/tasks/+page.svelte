@@ -1,6 +1,5 @@
 <script lang="ts">
-  import type { SubmitFunction } from '@sveltejs/kit';
-  import { enhance } from '$app/forms';
+  import { enhance, type SubmitFunction } from '$app/forms';
   import { goto } from '$app/navigation';
 
   import { Select, Label, Button, PaginationNav } from 'flowbite-svelte';

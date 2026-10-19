@@ -1,7 +1,7 @@
 // See:
 // https://github.com/joysofcode/sveltekit-deploy
 // https://tech-blog.rakus.co.jp/entry/20230209/sveltekit
-import type { Handle } from '@sveltejs/kit';
+import type { Handle } from '@sveltejs/kit/hooks';
 
 import { createAuthRequest } from '#features/auth/server/auth.js';
 

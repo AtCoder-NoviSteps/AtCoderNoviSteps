@@ -225,6 +225,27 @@ test.describe('logged-in user (general)', () => {
         timeout: TIMEOUT,
       });
     });
+
+    test('restores saved workbook filters without adding a history entry', async ({ page }) => {
+      await page.goto(`${WORKBOOK_LIST_URL}?tab=${TAB_SOLUTION}&categories=${CATEGORY_GRAPH}`);
+      await expect(page.getByRole('tab', { name: '解法別' })).toHaveAttribute(
+        'aria-selected',
+        'true',
+        { timeout: TIMEOUT },
+      );
+
+      await page.goto('/');
+      await expect(page).toHaveURL('/', { timeout: TIMEOUT });
+
+      await page.getByRole('link', { name: '問題集', exact: true }).click();
+      await expect(page).toHaveURL(new RegExp(`categories=${CATEGORY_GRAPH}`), {
+        timeout: TIMEOUT,
+      });
+
+      // The restore replaces the bare /workbooks entry, so going back returns to the previous page
+      await page.goBack();
+      await expect(page).toHaveURL('/', { timeout: TIMEOUT });
+    });
   });
 
   test('toggling replenishment workbooks shows/hides the section when it exists', async ({
