@@ -102,20 +102,18 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
-      - name: Build
-        run: pnpm build
-
-      - name: Apply all pending migrations to the database
-        run: pnpm exec prisma migrate deploy
-        env:
-          DATABASE_URL: ${{ secrets.PREVIEW_DATABASE_URL }}
-          DIRECT_URL: ${{ secrets.PREVIEW_DIRECT_URL }}
-
       - name: Pull Vercel Environment Information
         run: pnpm vercel pull --yes --environment=preview --token=${{ secrets.VERCEL_TOKEN }}
 
       - name: Build Project Artifacts
         run: pnpm vercel build --token=${{ secrets.VERCEL_TOKEN }}
+
+      # Migrate only after the build succeeds, so a broken build leaves the DB untouched
+      - name: Apply all pending migrations to the database
+        run: pnpm exec prisma migrate deploy
+        env:
+          DATABASE_URL: ${{ secrets.PREVIEW_DATABASE_URL }}
+          DIRECT_URL: ${{ secrets.PREVIEW_DIRECT_URL }}
 
       - name: Deploy Project Artifacts to Vercel
         id: deploy
@@ -154,20 +152,18 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
-      - name: Build
-        run: pnpm build
-
-      - name: Apply all pending migrations to the database
-        run: pnpm exec prisma migrate deploy
-        env:
-          DATABASE_URL: ${{ secrets.PRODUCTION_DATABASE_URL }}
-          DIRECT_URL: ${{ secrets.PRODUCTION_DIRECT_URL }}
-
       - name: Pull Vercel Environment Information
         run: pnpm vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
 
       - name: Build Project Artifacts
         run: pnpm vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
+
+      # Migrate only after the build succeeds, so a broken build leaves the DB untouched
+      - name: Apply all pending migrations to the database
+        run: pnpm exec prisma migrate deploy
+        env:
+          DATABASE_URL: ${{ secrets.PRODUCTION_DATABASE_URL }}
+          DIRECT_URL: ${{ secrets.PRODUCTION_DIRECT_URL }}
 
       - name: Deploy Project Artifacts to Vercel
         run: pnpm vercel deploy --prod --prebuilt --token=${{ secrets.VERCEL_TOKEN }}
