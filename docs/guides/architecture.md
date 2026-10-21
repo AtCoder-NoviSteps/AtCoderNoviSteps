@@ -75,7 +75,7 @@ feature 内は技術的な役割で分ける。必要なディレクトリだけ
 - `utils/`: 副作用のない関数。テストを隣接配置する。
 - `stores/`: Svelte Runes を使う `.svelte.ts`。
 
-`features/{feature}/server/` は `src/lib/server/` と違い、SvelteKit が client import を自動では禁止しない。規約と推移的な server-only dependency により client から分離する。複数 feature で使うサーバコードは `src/lib/server/` へ移す。
+SvelteKit 3 は server-only のモジュールを client から import すると build で失敗させる。ファイル名が `server.*`・`*.server.*` のモジュールは場所を問わず server-only になる。`server/` ディレクトリ内のモジュールは、`src/routes`・`static` 内を除いて server-only になり、`features/{feature}/server/` も対象になる。複数 feature で使うサーバコードは `src/lib/server/` へ移す。
 
 ### 3. src/lib
 
@@ -141,16 +141,22 @@ include: [
 
 ### 6. subpath imports（`#lib`・`#features`）
 
-`src/lib` は `package.json#imports` の `#lib/*`、`src/features` は `#features/*` で参照する。SvelteKit 3 は組み込みの `$lib` を削除し、`kit.alias` も非推奨にするため、`svelte.config.js` に alias は置かない。
-拡張子は明示する。TS モジュールは `.js`、コンポーネントは `.svelte`、runes モジュール（`.svelte.ts`）は `.svelte.js` と書く。`vi.mock` の specifier も同じ形にする。
-`$lib` は Kit 2 が組み込みで解決してしまうため、oxlint と ESLint の `no-restricted-imports` で禁止している。lint が検出するのは import・export 宣言（`import type`・`export … from` を含む）と `.ts` の動的 `import()` で、`vi.mock('$lib/...')` と `.svelte` 内の動的 `import()` は検出しない。`$features` と `@/` は alias が無いので、import すると型チェックで失敗する。
-import の specifier をまとめて変えたときは、`rg -n '\$lib|\$features|@/' src e2e prisma` で残りが無いことも確かめる。
+- **使う:** `src/lib` は `#lib/*`、`src/features` は `#features/*`（`package.json#imports` で定義）。
+- **使わない:** `$lib`・`$features`・`@/`。SvelteKit 3 は組み込みの `$lib` を削除し、`alias` オプションも非推奨にしたため、どれも解決されず型チェックと build で失敗する。`vite.config.ts` の `sveltekit()` にも alias を足さない。
+- **拡張子は明示する:** TS モジュールは `.js`、コンポーネントは `.svelte`、runes モジュール（`.svelte.ts`）は `.svelte.js`。`vi.mock` の specifier も同じ形にする。
 
 ```typescript
+// OK
 import { formatDate } from '#lib/utils/format.js';
 import WorkBookForm from '#features/workbooks/components/shared/WorkBookForm.svelte';
 import type { PageServerLoad } from './$types';
+
+// NG: SvelteKit 3 では解決されない
+import { formatDate } from '$lib/utils/format';
 ```
+
+`$lib` は、静的・動的 import、`.ts`・`.svelte`、`vi.mock` のどれで書いても型チェックか Vite（dev・build・Vitest）で失敗し、SvelteKit が `module_removed_lib` で `#lib` への書き換えを案内する。oxlint と ESLint の `no-restricted-imports` でも禁止しているので、commit 前の lint でも止まる。
+`$features`・`@/` は import なら型チェックで失敗するが、`vi.mock('$features/...')` は解決されないまま無視され、mock が効かずに本物のモジュールが使われる。specifier をまとめて変えたときは、`rg -n '\$lib|\$features|@/' src e2e prisma` で残りが無いことを確かめる。
 
 `$types` は SvelteKit が生成する route 型専用で、domain type は `src/**/types/` に置く。
 

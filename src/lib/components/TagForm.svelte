@@ -29,7 +29,6 @@
 
   //export const isAdmin: boolean; // Admin権限がある場合は、編集リンクを表示する
 
-  // @ts-expect-error svelte-check TS2554: AppTypes declaration merging causes RouteId to resolve as string, requiring params. Runtime behavior is correct.
   const tagsHref = resolve('/(admin)/tags');
 </script>
 

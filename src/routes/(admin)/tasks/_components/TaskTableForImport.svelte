@@ -1,6 +1,5 @@
 <script lang="ts">
-  import { enhance } from '$app/forms';
-  import type { SubmitFunction } from '@sveltejs/kit';
+  import { enhance, type SubmitFunction } from '$app/forms';
 
   import {
     Table,

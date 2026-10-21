@@ -57,4 +57,4 @@ After login/signup, redirect users back to their original intended page instead 
 - Never expose session secrets in client code
 - Use HTTPS in production
 - Validate all user inputs server-side
-- **SvelteKit's `redirect()` does not validate origin** — always validate user-provided redirect destinations with `isSameOriginRedirect()`
+- **SvelteKit 3's `redirect()` throws for an external location unless `external` is passed** — a hostile user-provided destination would turn into a 500, so always validate it with `isSameOriginRedirect()` and fall back to the default page

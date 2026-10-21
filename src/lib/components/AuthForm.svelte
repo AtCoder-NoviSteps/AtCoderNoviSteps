@@ -42,11 +42,9 @@
 
   const { form, message, errors, submitting, enhance } = formProperties;
 
-  // @ts-expect-error svelte-check TS2554: AppTypes declaration merging causes RouteId to resolve as string, requiring params. Runtime behavior is correct.
   const homeHref = resolve(HOME_PAGE);
-  // @ts-expect-error svelte-check TS2554: same declaration merging issue
   const forgotPasswordHref = resolve(FORGOT_PASSWORD_PAGE);
-  // @ts-expect-error svelte-check TS2554: AppTypes declaration merging causes RouteId to resolve as string, requiring params. Runtime behavior is correct.
+  // @ts-expect-error alternativePageLink is a runtime pathname such as '/signup?redirectTo=...'; Kit 3 types only known route IDs, but resolve() returns group-less static paths as is
   const alternativeHref = $derived(resolve(alternativePageLink));
 
   let isSubmitting = $state(false);

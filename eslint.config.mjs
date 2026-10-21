@@ -80,7 +80,7 @@ export default [
       'svelte/no-useless-mustaches': 'warn',
       'svelte/prefer-writable-derived': 'warn', // New in 3.6.0 - prefer $derived over $state+$effect
       'svelte/valid-prop-names-in-kit-pages': 'warn', // Allow props other than data/errors in pages
-      // Kit 2 still resolves $lib, so new imports would only break on Kit 3; oxlint covers JS/TS files
+      // Stops $lib at pre-commit, before svelte-check or Vite reports it; oxlint covers JS/TS files
       'no-restricted-imports': [
         'error',
         {

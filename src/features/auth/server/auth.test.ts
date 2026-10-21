@@ -4,7 +4,7 @@ import type { RequestEvent } from '@sveltejs/kit';
 import { Roles } from '@prisma/client';
 
 // dev = false so `secure: !dev` resolves to true (the production-relevant cookie flag)
-vi.mock('$app/environment', () => ({ dev: false }));
+vi.mock('$app/env', () => ({ dev: false }));
 
 vi.mock('./session', () => ({
   SESSION_COOKIE_NAME: 'auth_session',

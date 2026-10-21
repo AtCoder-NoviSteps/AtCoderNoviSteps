@@ -14,15 +14,16 @@ paths:
 
 ## User-Provided Redirect Destinations
 
-**SvelteKit's `redirect()` does NOT validate origin.** If the redirect destination comes from user input (URL query params, form data), always validate with `isSameOriginRedirect(redirectTo, url.origin)` from `src/lib/utils/url.ts` before redirecting.
+**SvelteKit 3's `redirect()` throws for a location outside the current origin unless `external` is passed**, so a hostile destination becomes a 500 instead of a safe fallback. If the redirect destination comes from user input (URL query params, form data), always validate with `isSameOriginRedirect(redirectTo, url.origin)` from `src/lib/utils/url.ts` and fall back to the default page.
 
 ## Internal Navigation: `resolve()`
 
-All internal navigation must use `resolve()` from `$app/paths`:
+All internal navigation must use `resolve()` from `$app/paths`. An argument starting with `/` is a route ID (groups such as `(admin)` are stripped, `[param]` is filled); otherwise it is a pathname without the leading slash. The type accepts only known route IDs and pathnames, optionally followed by `?…` or `#…` — never a plain `string`.
 
 - **Parameterized** (preferred): `resolve('/workbooks/[slug]', { slug: workbook.slug })`
-- **Static**: `resolve('/')` + `@ts-expect-error` (AppTypes merging quirk)
-- **With search/hash**: `resolve(pathname + search + hash)` (concatenate inside, not outside)
+- **Static**: `resolve('/votes')`, `resolve('/(admin)/tags')` — write the route ID including its group; no `@ts-expect-error`
+- **With search/hash**: ``resolve(`/workbooks?${params}`)`` (concatenate inside, not outside); a URL builder returns a template literal type such as `` `/workbooks?${string}` `` so `resolve()` accepts it
+- **Runtime pathname** (e.g. a prop holding `/signup?redirectTo=…`): the type cannot be proven, so add `@ts-expect-error` with the reason; this works only for group-less static paths
 - **External**: no `resolve()`, use `rel="noreferrer external"`
 
 ## HTTP Cache Headers (`setHeaders`)

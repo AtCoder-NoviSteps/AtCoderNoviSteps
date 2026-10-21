@@ -215,6 +215,35 @@ test.describe('workbook order page', () => {
     expect(categories.split(',')).not.toContain(SolutionCategory.DATA_STRUCTURE);
     expect(categories.split(',')).toContain(SolutionCategory.GRAPH);
   });
+
+  test('replaces filter URL without reloading data or adding history', async ({ page }) => {
+    await page.goto(
+      `${ORDER_URL}?tab=solution&categories=${SolutionCategory.PENDING},${SolutionCategory.GRAPH},${SolutionCategory.DATA_STRUCTURE}`,
+    );
+    await expect(page.getByRole('heading', { name: 'データ構造' })).toBeVisible({
+      timeout: TIMEOUT,
+    });
+
+    const historyLength = await page.evaluate(() => history.length);
+    const graphCards = await getCardsInColumn(page, SolutionCategory.GRAPH);
+    // Unsaved drag results live only in the board's local state, so a data reload would discard them
+    const dataRequests: string[] = [];
+
+    page.on('request', (request) => {
+      if (request.url().includes('__data.json')) {
+        dataRequests.push(request.url());
+      }
+    });
+
+    await page.getByRole('button', { name: 'データ構造' }).click();
+    await expect(page.getByRole('heading', { name: 'データ構造' })).not.toBeVisible();
+    await expect(page).not.toHaveURL(new RegExp(SolutionCategory.DATA_STRUCTURE));
+    await expect(page).toHaveURL(new RegExp(`categories=[^&]*${SolutionCategory.GRAPH}`));
+
+    expect(await page.evaluate(() => history.length)).toBe(historyLength);
+    expect(dataRequests).toEqual([]);
+    expect(await getCardsInColumn(page, SolutionCategory.GRAPH)).toEqual(graphCards);
+  });
 });
 
 test.describe('API error handling', () => {

@@ -50,8 +50,8 @@
 
     if (saved) {
       const savedUrl = new URL(saved, window.location.origin);
-      // @ts-expect-error svelte-check TS2554: AppTypes declaration merging causes RouteId to resolve as string, requiring params. Runtime behavior is correct.
-      goto(resolve(savedUrl.pathname + savedUrl.search), { replaceState: true });
+      // The saved value always comes from buildWorkbooksUrl, so only its query is restored
+      goto(resolve(`/workbooks?${savedUrl.searchParams}`), { replace: true });
     }
   });
 
@@ -61,7 +61,7 @@
   });
 
   // Each lambda closes over the reactive `data` binding at call time
-  const TAB_URL_BUILDERS: Record<WorkBookTab, () => string> = {
+  const TAB_URL_BUILDERS: Record<WorkBookTab, () => ReturnType<typeof buildWorkbooksUrl>> = {
     [WorkBookTab.CURRICULUM]: () => buildWorkbooksUrl(WorkBookTab.CURRICULUM, data.selectedGrade),
     [WorkBookTab.SOLUTION]: () =>
       buildWorkbooksUrl(WorkBookTab.SOLUTION, undefined, data.selectedCategory),
@@ -69,17 +69,14 @@
   };
 
   function handleTabChange(tab: WorkBookTab) {
-    // @ts-expect-error svelte-check TS2554: same declaration merging issue
     goto(resolve(TAB_URL_BUILDERS[tab]()));
   }
 
   function handleGradeChange(grade: TaskGrade) {
-    // @ts-expect-error svelte-check TS2554: same declaration merging issue
     goto(resolve(buildWorkbooksUrl(WorkBookTab.CURRICULUM, grade)));
   }
 
   function handleCategoryChange(category: SelectedSolutionCategory) {
-    // @ts-expect-error svelte-check TS2554: same declaration merging issue
     goto(resolve(buildWorkbooksUrl(WorkBookTab.SOLUTION, undefined, category)));
   }
 </script>

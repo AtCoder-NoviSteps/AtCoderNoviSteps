@@ -1,9 +1,42 @@
+import adapter from '@sveltejs/adapter-vercel';
+import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
 import tailwindcss from '@tailwindcss/vite';
 import { sveltekit } from '@sveltejs/kit/vite';
 import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
-  plugins: [tailwindcss(), sveltekit()],
+  plugins: [
+    tailwindcss(),
+    // SvelteKit 3 takes the former svelte.config.js options here
+    sveltekit({
+      // Consult https://svelte.dev/docs/kit/integrations#preprocessors
+      // for more information about preprocessors
+      preprocess: vitePreprocess(),
+
+      // See:
+      // https://svelte.dev/docs/kit/adapter-vercel
+      adapter: adapter({
+        regions: ['hnd1'], // Tokyo, Japan.
+        memory: 3008, // To avoid OOM errors on /workbooks/{slug}
+        maxDuration: 30,
+      }),
+
+      compilerOptions: {
+        runes: true,
+      },
+
+      // [Work around]
+      // SuperDebug.svelte: Cannot use `export let` in runes mode — use `$props()` instead.
+      //
+      // See:
+      // https://github.com/ciscoheat/sveltekit-superforms/issues/306#issuecomment-1891015986
+      dynamicCompileOptions({ filename }) {
+        if (filename.includes('node_modules')) {
+          return { runes: undefined }; // or false, check what works
+        }
+      },
+    }),
+  ],
   optimizeDeps: {
     exclude: ['@prisma/client'],
   },

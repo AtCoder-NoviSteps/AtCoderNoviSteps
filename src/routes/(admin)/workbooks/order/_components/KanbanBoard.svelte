@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { page } from '$app/stores';
-  import { replaceState } from '$app/navigation';
+  import { page } from '$app/state';
+  import { goto } from '$app/navigation';
   import { resolve } from '$app/paths';
   import { untrack } from 'svelte';
 
@@ -42,7 +42,8 @@
 
   let { workbooks }: Props = $props();
 
-  const { searchParams } = $page.url;
+  // Read once: later filter changes are written to the URL, not read back from it
+  const { searchParams } = page.url;
   let activeTab = $state<ActiveTab>(parseTab(searchParams.get('tab')));
   let selectedSolutionCategories = $state(parseInitialCategories(searchParams));
   let selectedGrades = $state(parseInitialGrades(searchParams));
@@ -55,13 +56,17 @@
 
   function updateUrl() {
     const updatedUrl = buildUpdatedUrl(
-      $page.url,
+      page.url,
       activeTab,
       selectedSolutionCategories,
       selectedGrades,
     );
-    // @ts-expect-error svelte-check TS2554: AppTypes declaration merging causes RouteId to resolve as string, requiring params. Runtime behavior is correct.
-    replaceState(resolve(updatedUrl.pathname + updatedUrl.search + updatedUrl.hash), $page.state);
+    // Shallow keeps the board's local drag state; a full navigation would re-run load
+    goto(resolve(`/(admin)/workbooks/order?${updatedUrl.searchParams}${updatedUrl.hash}`), {
+      shallow: true,
+      replace: true,
+      state: page.state,
+    });
   }
 
   let allItems = $state<Record<string, KanbanColumns>>(

@@ -1,4 +1,4 @@
-import { fail, type Actions } from '@sveltejs/kit';
+import { fail } from '@sveltejs/kit';
 
 import { type Tasks, type TaskGrade, getTaskGrade } from '#lib/types/task.js';
 import type { Tag } from '#lib/types/tag.js';
@@ -11,6 +11,8 @@ import * as taskTagsService from '#lib/services/task_tags.js';
 import { validateAdminAccess } from '#features/auth/services/admin_access.js';
 
 import { BAD_REQUEST, INTERNAL_SERVER_ERROR } from '#lib/constants/http-response-status-codes.js';
+
+import type { Actions } from './$types';
 
 export async function load({ locals, params, url }) {
   await validateAdminAccess(locals, url);
