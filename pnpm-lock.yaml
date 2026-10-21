@@ -292,8 +292,8 @@ importers:
         specifier: 2.2.2
         version: 2.2.2
       nock:
-        specifier: 15.0.4
-        version: 15.0.4(supports-color@7.2.0)
+        specifier: 15.0.5
+        version: 15.0.5(supports-color@7.2.0)
       oxlint:
         specifier: 1.89.0
         version: 1.89.0
@@ -3468,8 +3468,8 @@ packages:
   natural-compare@1.4.0:
     resolution: {integrity: sha512-OWND8ei3VtNC9h7V60qff3SVobHr996CTwgxubgyQYEpg290h9J0buyECNNJexkFm5sOajh5G116RYA1c8ZMSw==}
 
-  nock@15.0.4:
-    resolution: {integrity: sha512-quP113SfbjFQCvYCE8eKjEFYqFuHoNTnz+JOfwUnTbqwvH7bB/Z1yLS6xxfI0s+7x86V+EptbHv22CxH065FYw==}
+  nock@15.0.5:
+    resolution: {integrity: sha512-nVeuZGS2we1PyvqbW082Qj0EB4bd//6pZk/zOPDlaTPU72qcWrqfHg3kx9JcBcH1fJxwJHjmsfuQ4mss42su4w==}
     engines: {node: '>=22.20.0'}
 
   node-fetch-native@1.6.7:
@@ -7360,7 +7360,7 @@ snapshots:
 
   natural-compare@1.4.0: {}
 
-  nock@15.0.4(supports-color@7.2.0):
+  nock@15.0.5(supports-color@7.2.0):
     dependencies:
       '@mswjs/interceptors': 0.44.0(supports-color@7.2.0)
     transitivePeerDependencies:
