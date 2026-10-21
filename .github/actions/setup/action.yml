@@ -1,0 +1,29 @@
+name: Setup pnpm and Node.js
+description: Install pnpm and Node.js, then install dependencies
+
+inputs:
+  node-version:
+    description: Node.js version to install
+    default: '24'
+
+runs:
+  using: composite
+  steps:
+    - name: Setup pnpm
+      uses: pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86 # v6.0.10
+      with:
+        # Auto-detect pnpm version from package.json (requires packageManager in package.json)
+        package_json_file: package.json
+        run_install: false
+
+    - name: Use Node.js ${{ inputs.node-version }}
+      uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+      with:
+        node-version: ${{ inputs.node-version }}
+        check-latest: true
+        cache: 'pnpm'
+        cache-dependency-path: pnpm-lock.yaml
+
+    - name: Install dependencies
+      run: pnpm install # postinstall runs prisma generate
+      shell: bash

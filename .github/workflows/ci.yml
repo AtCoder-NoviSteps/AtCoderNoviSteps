@@ -33,34 +33,52 @@ jobs:
 
     steps:
       - name: Check out Git repository
-        uses: actions/checkout@v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v6
-        with:
-          # Auto-detect pnpm version from package.json (requires packageManager in package.json)
-          package_json_file: package.json
-          run_install: false
-
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v7
+      - name: Setup pnpm and Node.js
+        uses: ./.github/actions/setup
         with:
           node-version: ${{ matrix.node-version }}
-          check-latest: true
-          cache: 'pnpm'
-          cache-dependency-path: pnpm-lock.yaml
-
-      - name: Install dependencies
-        run: pnpm install
 
       - name: Build
         run: pnpm build
 
+  # lint, check, and unit-test do not use the build output, so they run in parallel with build
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out Git repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Setup pnpm and Node.js
+        uses: ./.github/actions/setup
+
       - name: Lint
         run: pnpm lint
 
+  check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out Git repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Setup pnpm and Node.js
+        uses: ./.github/actions/setup
+
       - name: Check
         run: pnpm check
+
+  unit-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out Git repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Setup pnpm and Node.js
+        uses: ./.github/actions/setup
 
       - name: Unit test
         run: pnpm test:unit
@@ -72,7 +90,7 @@ jobs:
   preview:
     if: ${{ github.ref != 'refs/heads/main' }}
 
-    needs: build
+    needs: [build, lint, check, unit-test]
 
     runs-on: ubuntu-latest
 
@@ -82,40 +100,23 @@ jobs:
 
     steps:
       - name: Check out Git repository
-        uses: actions/checkout@v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v6
-        with:
-          # Auto-detect pnpm version from package.json (requires packageManager in package.json)
-          package_json_file: package.json
-          run_install: false
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v7
-        with:
-          node-version: 24
-          check-latest: true
-          cache: 'pnpm'
-          cache-dependency-path: pnpm-lock.yaml
-
-      - name: Install dependencies
-        run: pnpm install
-
-      - name: Build
-        run: pnpm build
-
-      - name: Apply all pending migrations to the database
-        run: pnpm exec prisma migrate deploy
-        env:
-          DATABASE_URL: ${{ secrets.PREVIEW_DATABASE_URL }}
-          DIRECT_URL: ${{ secrets.PREVIEW_DIRECT_URL }}
+      - name: Setup pnpm and Node.js
+        uses: ./.github/actions/setup
 
       - name: Pull Vercel Environment Information
         run: pnpm vercel pull --yes --environment=preview --token=${{ secrets.VERCEL_TOKEN }}
 
       - name: Build Project Artifacts
         run: pnpm vercel build --token=${{ secrets.VERCEL_TOKEN }}
+
+      # Migrate only after the build succeeds, so a broken build leaves the DB untouched
+      - name: Apply all pending migrations to the database
+        run: pnpm exec prisma migrate deploy
+        env:
+          DATABASE_URL: ${{ secrets.PREVIEW_DATABASE_URL }}
+          DIRECT_URL: ${{ secrets.PREVIEW_DIRECT_URL }}
 
       - name: Deploy Project Artifacts to Vercel
         id: deploy
@@ -128,46 +129,29 @@ jobs:
   production:
     if: ${{ github.ref == 'refs/heads/main' }}
 
-    needs: build
+    needs: [build, lint, check, unit-test]
 
     runs-on: ubuntu-latest
 
     steps:
       - name: Check out Git repository
-        uses: actions/checkout@v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v6
-        with:
-          # Auto-detect pnpm version from package.json (requires packageManager in package.json)
-          package_json_file: package.json
-          run_install: false
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v7
-        with:
-          node-version: 24
-          check-latest: true
-          cache: 'pnpm'
-          cache-dependency-path: pnpm-lock.yaml
-
-      - name: Install dependencies
-        run: pnpm install
-
-      - name: Build
-        run: pnpm build
-
-      - name: Apply all pending migrations to the database
-        run: pnpm exec prisma migrate deploy
-        env:
-          DATABASE_URL: ${{ secrets.PRODUCTION_DATABASE_URL }}
-          DIRECT_URL: ${{ secrets.PRODUCTION_DIRECT_URL }}
+      - name: Setup pnpm and Node.js
+        uses: ./.github/actions/setup
 
       - name: Pull Vercel Environment Information
         run: pnpm vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
 
       - name: Build Project Artifacts
         run: pnpm vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
+
+      # Migrate only after the build succeeds, so a broken build leaves the DB untouched
+      - name: Apply all pending migrations to the database
+        run: pnpm exec prisma migrate deploy
+        env:
+          DATABASE_URL: ${{ secrets.PRODUCTION_DATABASE_URL }}
+          DIRECT_URL: ${{ secrets.PRODUCTION_DIRECT_URL }}
 
       - name: Deploy Project Artifacts to Vercel
         run: pnpm vercel deploy --prod --prebuilt --token=${{ secrets.VERCEL_TOKEN }}
