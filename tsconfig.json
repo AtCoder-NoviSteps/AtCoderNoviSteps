@@ -1,9 +1,6 @@
 {
   "extends": "$app/tsconfig",
   "compilerOptions": {
-    "incremental": true,
-    "outDir": "build",
-    "sourceMap": true,
     "strict": true,
     "types": ["$app/types", "node", "vitest/globals"] // Note: "types" is replaced (not merged) when extending tsconfig, so keep "$app/types" and add "node"
   },
