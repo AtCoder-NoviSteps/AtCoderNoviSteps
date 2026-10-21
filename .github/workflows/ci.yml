@@ -43,11 +43,42 @@ jobs:
       - name: Build
         run: pnpm build
 
+  # lint, check, and unit-test do not use the build output, so they run in parallel with build
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out Git repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Setup pnpm and Node.js
+        uses: ./.github/actions/setup
+
       - name: Lint
         run: pnpm lint
 
+  check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out Git repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Setup pnpm and Node.js
+        uses: ./.github/actions/setup
+
       - name: Check
         run: pnpm check
+
+  unit-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out Git repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Setup pnpm and Node.js
+        uses: ./.github/actions/setup
 
       - name: Unit test
         run: pnpm test:unit
@@ -59,7 +90,7 @@ jobs:
   preview:
     if: ${{ github.ref != 'refs/heads/main' }}
 
-    needs: build
+    needs: [build, lint, check, unit-test]
 
     runs-on: ubuntu-latest
 
@@ -98,7 +129,7 @@ jobs:
   production:
     if: ${{ github.ref == 'refs/heads/main' }}
 
-    needs: build
+    needs: [build, lint, check, unit-test]
 
     runs-on: ubuntu-latest
 
