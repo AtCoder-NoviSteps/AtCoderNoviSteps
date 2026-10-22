@@ -49,16 +49,15 @@ export function getAojContestLabel(
     label = label.replace(abbrEnglish, japanese);
   });
 
-  return '（' + label + '）';
+  return label;
 }
 
 export function getAojUniversityContestLabel(contestId: string): string {
-  const label = contestId
+  return contestId
     .replace(/^AOJ-/, '')
     .replace(/UAPC/g, 'ACPC')
     .replace(/([A-Z]{2,})(\d{4})/g, '$1 $2')
     .replace(/-in-/, ' in ')
     .replace(/-day(\d+)/, ' Day$1')
     .replace(/-summer/, ' Summer');
-  return '（' + label + '）';
 }
