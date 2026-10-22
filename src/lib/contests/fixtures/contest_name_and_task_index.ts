@@ -3,9 +3,7 @@ import {
   getPastContestLabel,
   getJoiContestLabel,
   getAtCoderUniversityContestLabel,
-  getAojContestLabel,
   PAST_TRANSLATIONS,
-  AOJ_COURSES,
 } from '#lib/contests/index.js';
 
 export type TestCaseForContestNameAndTaskIndex = {
@@ -633,6 +631,18 @@ const AOJ_COURSES_TEST_DATA = {
   },
 };
 
+// Literal labels so the expected values do not depend on getAojContestLabel.
+const AOJ_COURSE_LABELS: Record<string, string> = {
+  ITP1: 'プログラミング入門',
+  ALDS1: 'アルゴリズムとデータ構造入門',
+  ITP2: 'プログラミング応用',
+  DPL: '組み合わせ最適化',
+  GRL: 'グラフ',
+  DSL: 'データ構造',
+  CGL: '計算幾何学',
+  NTL: '整数論',
+};
+
 const generateAojCoursesTestCases = (
   contestIds: string[],
   taskIndices: string[],
@@ -643,7 +653,7 @@ const generateAojCoursesTestCases = (
     )({
       contestId: `${contestId}`,
       taskTableIndex: `${contestId}_${taskIndex}`,
-      expected: `AOJ ${contestId}_${taskIndex}${getAojContestLabel(AOJ_COURSES, contestId)}`,
+      expected: `${AOJ_COURSE_LABELS[contestId]} - ${contestId}_${taskIndex}（AOJ）`,
     });
 
     return testCase;
@@ -709,7 +719,7 @@ const generateAojPckTestCases = (
     )({
       contestId: `PCK${contestId}`,
       taskTableIndex: taskIndex,
-      expected: `AOJ ${taskIndex}（パソコン甲子園${contestId.replace('Prelim', ' 予選 ').replace('Final', ' 本選 ')}）`,
+      expected: `パソコン甲子園${contestId.replace('Prelim', ' 予選 ').replace('Final', ' 本選 ')} - ${taskIndex}（AOJ）`,
     });
 
     return testCase;
@@ -801,7 +811,7 @@ const generateAojJagTestCases = (contestIds: JagContestIds, taskIndices: string[
     taskIndices,
     (contestId, taskIndex) => `AOJ, JAG${contestId} - ${taskIndex}`,
     (contestId, taskIndex) =>
-      `AOJ ${taskIndex}（JAG${contestId.replace('Prelim', ' 模擬国内 ').replace('Regional', ' 模擬地区 ')}）`,
+      `JAG${contestId.replace('Prelim', ' 模擬国内 ').replace('Regional', ' 模擬地区 ')} - ${taskIndex}（AOJ）`,
   );
 
 const generateAojJagCampTestCases = (contestIds: string[], taskIndices: string[]) =>
@@ -810,11 +820,11 @@ const generateAojJagCampTestCases = (contestIds: string[], taskIndices: string[]
     taskIndices,
     (contestId, taskIndex) => `AOJ, JAG${contestId} - ${taskIndex}`,
     (contestId, taskIndex) =>
-      `AOJ ${taskIndex}（JAG${contestId
+      `JAG${contestId
         .replace('Summer', ' 夏合宿 ')
         .replace('Winter', ' 冬合宿 ')
         .replace('Spring', ' 春合宿 ')
-        .replace('-day', ' Day')}）`,
+        .replace('-day', ' Day')} - ${taskIndex}（AOJ）`,
   );
 
 const AOJ_JAG_CAMP_TEST_DATA: Record<string, { tasks: string[] }> = {
@@ -870,7 +880,7 @@ const generateAojIcpcTestCases = (
     return createTestCaseForContestNameAndTaskIndex(`AOJ, ICPC${contestId} - ${taskIndex}`)({
       contestId: `ICPC${contestId}`,
       taskTableIndex: taskIndex,
-      expected: `AOJ ${taskIndex}（ICPC${contestId.replace('Prelim', ' 国内予選 ').replace('Regional', ' アジア地区 ')}）`,
+      expected: `ICPC${contestId.replace('Prelim', ' 国内予選 ').replace('Regional', ' アジア地区 ')} - ${taskIndex}（AOJ）`,
     });
   });
 };
@@ -883,97 +893,97 @@ const AOJ_UNIVERSITY_TEST_DATA = [
   {
     contestId: 'AOJ-RUPC2018-in-ACPC2018-day1',
     taskTableIndex: '2903',
-    expected: 'AOJ 2903（RUPC 2018 in ACPC 2018 Day1）',
+    expected: 'RUPC 2018 in ACPC 2018 Day1 - 2903（AOJ）',
   },
   {
     contestId: 'AOJ-UAPC2019-in-RUPC2019-day2',
     taskTableIndex: '3058',
-    expected: 'AOJ 3058（ACPC 2019 in RUPC 2019 Day2）',
+    expected: 'ACPC 2019 in RUPC 2019 Day2 - 3058（AOJ）',
   },
   {
     contestId: 'AOJ-HUPC2020-in-HUPC2020-day1',
     taskTableIndex: '3171',
-    expected: 'AOJ 3171（HUPC 2020 in HUPC 2020 Day1）',
+    expected: 'HUPC 2020 in HUPC 2020 Day1 - 3171（AOJ）',
   },
-  { contestId: 'AOJ-UAPC2003', taskTableIndex: '1000', expected: 'AOJ 1000（ACPC 2003）' },
+  { contestId: 'AOJ-UAPC2003', taskTableIndex: '1000', expected: 'ACPC 2003 - 1000（AOJ）' },
   {
     contestId: 'AOJ-UAPC2011-summer',
     taskTableIndex: '1001',
-    expected: 'AOJ 1001（ACPC 2011 Summer）',
+    expected: 'ACPC 2011 Summer - 1001（AOJ）',
   },
   {
     contestId: 'AOJ-UAPC2012-day1',
     taskTableIndex: '1002',
-    expected: 'AOJ 1002（ACPC 2012 Day1）',
+    expected: 'ACPC 2012 Day1 - 1002（AOJ）',
   },
   {
     contestId: 'AOJ-OUPC2012-in-RUPC2012-day2',
     taskTableIndex: '2352',
-    expected: 'AOJ 2352（OUPC 2012 in RUPC 2012 Day2）',
+    expected: 'OUPC 2012 in RUPC 2012 Day2 - 2352（AOJ）',
   },
   {
     contestId: 'AOJ-HUPC2014-in-RUPC2014-day3',
     taskTableIndex: '2581',
-    expected: 'AOJ 2581（HUPC 2014 in RUPC 2014 Day3）',
+    expected: 'HUPC 2014 in RUPC 2014 Day3 - 2581（AOJ）',
   },
   {
     contestId: 'AOJ-RUPC2018-in-RUPC2018-day1',
     taskTableIndex: '2880',
-    expected: 'AOJ 2880（RUPC 2018 in RUPC 2018 Day1）',
+    expected: 'RUPC 2018 in RUPC 2018 Day1 - 2880（AOJ）',
   },
   {
     contestId: 'AOJ-HUPC2023-in-OUPC2023-day2',
     taskTableIndex: '3369',
-    expected: 'AOJ 3369（HUPC 2023 in OUPC 2023 Day2）',
+    expected: 'HUPC 2023 in OUPC 2023 Day2 - 3369（AOJ）',
   },
   {
     contestId: 'AOJ-UAPC2015-in-ACPC2015-day2',
     taskTableIndex: '1566',
-    expected: 'AOJ 1566（ACPC 2015 in ACPC 2015 Day2）',
+    expected: 'ACPC 2015 in ACPC 2015 Day2 - 1566（AOJ）',
   },
   {
     contestId: 'AOJ-UAPC2017-in-ACPC2017-day2',
     taskTableIndex: '3022',
-    expected: 'AOJ 3022（ACPC 2017 in ACPC 2017 Day2）',
+    expected: 'ACPC 2017 in ACPC 2017 Day2 - 3022（AOJ）',
   },
   {
     contestId: 'AOJ-RUPC2025-in-ACPC2025-day1',
     taskTableIndex: '3426',
-    expected: 'AOJ 3426（RUPC 2025 in ACPC 2025 Day1）',
+    expected: 'RUPC 2025 in ACPC 2025 Day1 - 3426（AOJ）',
   },
   {
     contestId: 'AOJ-HUPC2018-in-ACPC2018-day3',
     taskTableIndex: '2893',
-    expected: 'AOJ 2893（HUPC 2018 in ACPC 2018 Day3）',
+    expected: 'HUPC 2018 in ACPC 2018 Day3 - 2893（AOJ）',
   },
   {
     contestId: 'AOJ-UAPC2018-in-RUPC2018-day2',
     taskTableIndex: '3032',
-    expected: 'AOJ 3032（ACPC 2018 in RUPC 2018 Day2）',
+    expected: 'ACPC 2018 in RUPC 2018 Day2 - 3032（AOJ）',
   },
   {
     contestId: 'AOJ-RUPC2017-in-ACPC2017-day1',
     taskTableIndex: '2835',
-    expected: 'AOJ 2835（RUPC 2017 in ACPC 2017 Day1）',
+    expected: 'RUPC 2017 in ACPC 2017 Day1 - 2835（AOJ）',
   },
   {
     contestId: 'AOJ-HUPC2019-in-HUPC2019-day2',
     taskTableIndex: '2959',
-    expected: 'AOJ 2959（HUPC 2019 in HUPC 2019 Day2）',
+    expected: 'HUPC 2019 in HUPC 2019 Day2 - 2959（AOJ）',
   },
-  { contestId: 'AOJ-OUPC2020', taskTableIndex: '3215', expected: 'AOJ 3215（OUPC 2020）' },
+  { contestId: 'AOJ-OUPC2020', taskTableIndex: '3215', expected: 'OUPC 2020 - 3215（AOJ）' },
   {
     contestId: 'AOJ-OUPC2024-day1',
     taskTableIndex: '3412',
-    expected: 'AOJ 3412（OUPC 2024 Day1）',
+    expected: 'OUPC 2024 Day1 - 3412（AOJ）',
   },
   {
     contestId: 'AOJ-HUPC2020-in-HUPC2020-day3',
     taskTableIndex: '3183',
-    expected: 'AOJ 3183（HUPC 2020 in HUPC 2020 Day3）',
+    expected: 'HUPC 2020 in HUPC 2020 Day3 - 3183（AOJ）',
   },
-  { contestId: 'AOJ-UTPC2010', taskTableIndex: '2207', expected: 'AOJ 2207（UTPC 2010）' },
-  { contestId: 'AOJ-KUPC2011', taskTableIndex: 'I', expected: 'AOJ I（KUPC 2011）' },
+  { contestId: 'AOJ-UTPC2010', taskTableIndex: '2207', expected: 'UTPC 2010 - 2207（AOJ）' },
+  { contestId: 'AOJ-KUPC2011', taskTableIndex: 'I', expected: 'KUPC 2011 - I（AOJ）' },
 ];
 
 export const aojUniversity = AOJ_UNIVERSITY_TEST_DATA.map(

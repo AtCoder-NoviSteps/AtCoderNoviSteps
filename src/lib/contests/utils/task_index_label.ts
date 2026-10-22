@@ -5,7 +5,7 @@ export const addContestNameToTaskIndex = (contestId: string, taskTableIndex: str
   const contestName = getContestNameLabel(contestId);
 
   if (isAojContest(contestId)) {
-    return `AOJ ${taskTableIndex}${contestName}`;
+    return `${contestName} - ${taskTableIndex}（AOJ）`;
   }
 
   return `${contestName} - ${taskTableIndex}`;

@@ -181,7 +181,7 @@ describe('add contest name to task index', () => {
       test.each(['JAGSummer-day2', 'JAGPrelim', 'JAGRegional-day1'])(
         'does not produce AOJ format for %s',
         (contestId) => {
-          expect(addContestNameToTaskIndex(contestId, '1')).not.toMatch(/^AOJ /);
+          expect(addContestNameToTaskIndex(contestId, '1')).not.toMatch(/（AOJ）$/);
         },
       );
     });
