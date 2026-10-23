@@ -163,7 +163,7 @@ settings:
   excludeLinksFromLockfile: false
 
 overrides:
-  path-to-regexp@>=6.0.0 <6.3.0: 6.3.0
+  path-to-regexp@>=6.0.0 <6.3.0: 9.0.0
   path-to-regexp@>=8.0.0 <8.4.0: 8.4.2
   tar@>=7.0.0 <7.5.8: 7.5.22
   minimatch@>=10.0.0 <10.2.3: 10.2.6
@@ -3629,6 +3629,9 @@ packages:
   path-to-regexp@8.4.2:
     resolution: {integrity: sha512-qRcuIdP69NPm4qbACK+aDogI5CBDMi1jKe0ry5rSQJz8JVLsC7jV8XpiJjGRLLol3N+R5ihGYcrPLTno6pAdBA==}
 
+  path-to-regexp@9.0.0:
+    resolution: {integrity: sha512-kfo5HIFCfEH24bcHSWEFIfrwiCsm/DXR+j1fc0696VIdWkICdAcKH2LxRClvz5HQcG4iCQpb4qBZ7pttGPG/dA==}
+
   pathe@2.0.3:
     resolution: {integrity: sha512-WUjGcAqP1gQacoQe+OBJsFA7Ld4DyXuUIjZ5cc75cLHvJ7dtNsTugphxIADwspS+AraAUePCKrSVtPLFj/F88w==}
 
@@ -6060,7 +6063,7 @@ snapshots:
       etag: 1.8.1
       mime-types: 2.1.35
       node-fetch: 2.6.9
-      path-to-regexp: 6.3.0
+      path-to-regexp: 9.0.0
       path-to-regexp-updated: path-to-regexp@6.3.0
       ts-morph: 12.0.0
       tsx: 4.21.0
@@ -6117,7 +6120,7 @@ snapshots:
       '@vercel/error-utils': 2.2.1
       '@vercel/nft': 1.10.0(supports-color@7.2.0)
       '@vercel/static-config': 3.4.4(@emnapi/core@2.0.0-alpha.3)(@emnapi/runtime@2.0.0-alpha.3)
-      path-to-regexp: 6.3.0
+      path-to-regexp: 9.0.0
       path-to-regexp-updated: path-to-regexp@6.3.0
       ts-morph: 12.0.0
     transitivePeerDependencies:
@@ -7544,6 +7547,8 @@ snapshots:
   path-to-regexp@6.3.0: {}
 
   path-to-regexp@8.4.2: {}
+
+  path-to-regexp@9.0.0: {}
 
   pathe@2.0.3: {}
 
