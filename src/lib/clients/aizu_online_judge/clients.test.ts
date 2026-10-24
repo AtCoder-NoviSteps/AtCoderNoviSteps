@@ -1,4 +1,4 @@
-import { describe, test, expect, beforeEach, afterEach, vi } from 'vitest';
+import { describe, test, expect, beforeAll, afterAll, beforeEach, afterEach, vi } from 'vitest';
 import nock from 'nock';
 
 vi.mock('#lib/utils/time.js', () => ({
@@ -8,6 +8,7 @@ vi.mock('#lib/utils/time.js', () => ({
 import { HttpRequestClient } from '#lib/clients/http_client.js';
 import { ContestTaskCache } from '#lib/clients/cache_strategy.js';
 import { Cache } from '#lib/clients/cache.js';
+import { AOJ_API_BASE_URL } from '#lib/constants/urls.js';
 
 import { AojCoursesApiClient, AojChallengesApiClient } from './clients';
 
@@ -17,19 +18,29 @@ import type { AOJCourseAPI, AOJChallengeContestAPI, AOJTaskAPIs } from './types'
 
 import { loadMockData } from '../fixtures/helpers';
 
-const AOJ_API_BASE = 'https://judgeapi.u-aizu.ac.jp';
+// Literal on purpose: a wrong AOJ_API_BASE_URL (e.g. no trailing slash) misses the interceptors.
+const AOJ_API_ORIGIN = 'https://onlinejudge.u-aizu.ac.jp';
+
+// Keep CI off the real AOJ API: a request without a matching interceptor fails.
+beforeAll(() => {
+  nock.disableNetConnect();
+});
+
+afterAll(() => {
+  nock.enableNetConnect();
+});
 
 function buildCache(): ContestTaskCache {
   return new ContestTaskCache(new Cache<ContestsForImport>(), new Cache<TasksForImport>());
 }
 
 function buildCoursesClient(): AojCoursesApiClient {
-  const httpClient = new HttpRequestClient(`${AOJ_API_BASE}/`);
+  const httpClient = new HttpRequestClient(AOJ_API_BASE_URL);
   return new AojCoursesApiClient(httpClient, buildCache());
 }
 
 function buildChallengesClient(): AojChallengesApiClient {
-  const httpClient = new HttpRequestClient(`${AOJ_API_BASE}/`);
+  const httpClient = new HttpRequestClient(AOJ_API_BASE_URL);
   return new AojChallengesApiClient(httpClient, buildCache());
 }
 
@@ -87,7 +98,7 @@ describe('AojCoursesApiClient', () => {
 
   describe('getContests', () => {
     test('fetches and transforms course contests', async () => {
-      nock(AOJ_API_BASE).get('/courses').reply(200, courseContestsMock);
+      nock(AOJ_API_ORIGIN).get('/api/courses').reply(200, courseContestsMock);
       const client = buildCoursesClient();
       const contests = await client.getContests();
 
@@ -95,7 +106,7 @@ describe('AojCoursesApiClient', () => {
     });
 
     test('each contest has id and title', async () => {
-      nock(AOJ_API_BASE).get('/courses').reply(200, courseContestsMock);
+      nock(AOJ_API_ORIGIN).get('/api/courses').reply(200, courseContestsMock);
       const client = buildCoursesClient();
       const contests = await client.getContests();
 
@@ -106,7 +117,7 @@ describe('AojCoursesApiClient', () => {
     });
 
     test('contest id matches course shortName', async () => {
-      nock(AOJ_API_BASE).get('/courses').reply(200, courseContestsMock);
+      nock(AOJ_API_ORIGIN).get('/api/courses').reply(200, courseContestsMock);
       const client = buildCoursesClient();
       const contests = await client.getContests();
 
@@ -119,7 +130,10 @@ describe('AojCoursesApiClient', () => {
 
   describe('getTasks', () => {
     test('fetches and transforms course tasks (only course-format ids)', async () => {
-      nock(AOJ_API_BASE).get('/problems').query({ size: '10000' }).reply(200, courseTasksMock);
+      nock(AOJ_API_ORIGIN)
+        .get('/api/problems')
+        .query({ size: '10000' })
+        .reply(200, courseTasksMock);
       const client = buildCoursesClient();
       const tasks = await client.getTasks();
 
@@ -131,7 +145,10 @@ describe('AojCoursesApiClient', () => {
     });
 
     test('each task has id, contest_id, problem_index, and title', async () => {
-      nock(AOJ_API_BASE).get('/problems').query({ size: '10000' }).reply(200, courseTasksMock);
+      nock(AOJ_API_ORIGIN)
+        .get('/api/problems')
+        .query({ size: '10000' })
+        .reply(200, courseTasksMock);
       const client = buildCoursesClient();
       const tasks = await client.getTasks();
 
@@ -144,7 +161,10 @@ describe('AojCoursesApiClient', () => {
     });
 
     test('task contest_id is derived from task id prefix', async () => {
-      nock(AOJ_API_BASE).get('/problems').query({ size: '10000' }).reply(200, courseTasksMock);
+      nock(AOJ_API_ORIGIN)
+        .get('/api/problems')
+        .query({ size: '10000' })
+        .reply(200, courseTasksMock);
       const client = buildCoursesClient();
       const tasks = await client.getTasks();
 
@@ -170,7 +190,7 @@ describe('AojChallengesApiClient', () => {
     let client: AojChallengesApiClient;
 
     beforeEach(() => {
-      nock(AOJ_API_BASE).get('/challenges/cl/PCK/PRELIM').reply(200, contestsMock);
+      nock(AOJ_API_ORIGIN).get('/api/challenges/cl/PCK/PRELIM').reply(200, contestsMock);
       client = buildChallengesClient();
     });
 
@@ -209,7 +229,7 @@ describe('AojChallengesApiClient', () => {
     let client: AojChallengesApiClient;
 
     beforeEach(() => {
-      nock(AOJ_API_BASE).get('/challenges/cl/PCK/FINAL').reply(200, contestsMock);
+      nock(AOJ_API_ORIGIN).get('/api/challenges/cl/PCK/FINAL').reply(200, contestsMock);
       client = buildChallengesClient();
     });
 
@@ -233,7 +253,7 @@ describe('AojChallengesApiClient', () => {
     let client: AojChallengesApiClient;
 
     beforeEach(() => {
-      nock(AOJ_API_BASE).get('/challenges/cl/JAG/PRELIM').reply(200, contestsMock);
+      nock(AOJ_API_ORIGIN).get('/api/challenges/cl/JAG/PRELIM').reply(200, contestsMock);
       client = buildChallengesClient();
     });
 
@@ -283,7 +303,7 @@ describe('AojChallengesApiClient', () => {
     let client: AojChallengesApiClient;
 
     beforeEach(() => {
-      nock(AOJ_API_BASE).get('/challenges/cl/JAG/REGIONAL').reply(200, contestsMock);
+      nock(AOJ_API_ORIGIN).get('/api/challenges/cl/JAG/REGIONAL').reply(200, contestsMock);
       client = buildChallengesClient();
     });
 
@@ -320,7 +340,7 @@ describe('AojChallengesApiClient', () => {
     let client: AojChallengesApiClient;
 
     beforeEach(() => {
-      nock(AOJ_API_BASE).get('/challenges/cl/ICPC/PRELIM').reply(200, contestsMock);
+      nock(AOJ_API_ORIGIN).get('/api/challenges/cl/ICPC/PRELIM').reply(200, contestsMock);
       client = buildChallengesClient();
     });
 
@@ -366,7 +386,7 @@ describe('AojChallengesApiClient', () => {
     let client: AojChallengesApiClient;
 
     beforeEach(() => {
-      nock(AOJ_API_BASE).get('/challenges/cl/ICPC/REGIONAL').reply(200, contestsMock);
+      nock(AOJ_API_ORIGIN).get('/api/challenges/cl/ICPC/REGIONAL').reply(200, contestsMock);
       client = buildChallengesClient();
     });
 
