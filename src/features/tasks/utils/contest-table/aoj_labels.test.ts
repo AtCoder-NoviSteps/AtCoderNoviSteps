@@ -1,170 +1,45 @@
-import { describe, test, expect, beforeEach, afterEach } from 'vitest';
+import { describe, test, expect } from 'vitest';
 
 import type { TaskResults } from '#lib/types/task.js';
 
-import {
-  buildAojLetterMap,
-  buildAojDisplayConfig,
-  formatAojTitle,
-  sortAojHeaderIds,
-  AOJ_LABEL_OVERRIDES,
-} from './aoj_labels';
-
-describe('formatAojTitle', () => {
-  test('prepends the letter and a dot to the title (Prelim)', () => {
-    expect(formatAojTitle('Amidakuji', 'B')).toBe('B. Amidakuji');
-  });
-
-  test('prepends the letter and a dot to the title (Regional)', () => {
-    expect(formatAojTitle('Yokohama Phenomena', 'A')).toBe('A. Yokohama Phenomena');
-  });
-});
-
-describe('buildAojLetterMap', () => {
-  describe('Prelim', () => {
-    test('sorts indices numerically ascending and assigns letters A, B, C...', () => {
-      const result = buildAojLetterMap('ICPCPrelim2023', ['1665', '1664']);
-
-      expect(result.get('1664')).toBe('A');
-      expect(result.get('1665')).toBe('B');
-      expect(result.size).toBe(2);
-    });
-
-    test('returns empty Map for empty input', () => {
-      const result = buildAojLetterMap('ICPCPrelim2023', []);
-
-      expect(result.size).toBe(0);
-    });
-
-    test('returns Map with single entry assigned letter A', () => {
-      const result = buildAojLetterMap('ICPCPrelim2023', ['1000']);
-
-      expect(result.get('1000')).toBe('A');
-      expect(result.size).toBe(1);
-    });
-
-    describe('override path', () => {
-      beforeEach(() => {
-        AOJ_LABEL_OVERRIDES['ICPCPrelimTest'] = {
-          '1150': 'A',
-          '1152': 'C',
-          '1155': 'E',
-        };
-      });
-
-      afterEach(() => {
-        delete AOJ_LABEL_OVERRIDES['ICPCPrelimTest'];
-      });
-
-      test('uses override map when contest_id has an entry in AOJ_LABEL_OVERRIDES', () => {
-        const result = buildAojLetterMap('ICPCPrelimTest', ['1150', '1152', '1155']);
-
-        expect(result.get('1150')).toBe('A');
-        expect(result.get('1152')).toBe('C');
-        expect(result.get('1155')).toBe('E');
-        expect(result.size).toBe(3);
-      });
-
-      test('ignores the input indices and uses only the override map entries', () => {
-        const result = buildAojLetterMap('ICPCPrelimTest', ['1150', '1152', '1155']);
-
-        expect(result.has('1151')).toBe(false);
-        expect(result.has('1153')).toBe(false);
-      });
-    });
-  });
-
-  describe('Regional', () => {
-    test('sorts indices numerically ascending and assigns letters A, B, C...', () => {
-      const result = buildAojLetterMap('ICPCRegional2023', ['1445', '1444']);
-
-      expect(result.get('1444')).toBe('A');
-      expect(result.get('1445')).toBe('B');
-      expect(result.size).toBe(2);
-    });
-
-    test('assigns letters A through L for the 12 problems of 2024', () => {
-      const indices = [
-        '1455',
-        '1456',
-        '1457',
-        '1458',
-        '1459',
-        '1460',
-        '1461',
-        '1462',
-        '1463',
-        '1464',
-        '1465',
-        '1466',
-      ];
-      const result = buildAojLetterMap('ICPCRegional2024', indices);
-
-      expect(result.get('1455')).toBe('A');
-      expect(result.get('1466')).toBe('L');
-      expect(result.size).toBe(12);
-    });
-
-    test('returns empty Map for empty input', () => {
-      const result = buildAojLetterMap('ICPCRegional2023', []);
-
-      expect(result.size).toBe(0);
-    });
-
-    test('returns Map with single entry assigned letter A', () => {
-      const result = buildAojLetterMap('ICPCRegional2023', ['1444']);
-
-      expect(result.get('1444')).toBe('A');
-      expect(result.size).toBe(1);
-    });
-
-    describe('override path', () => {
-      beforeEach(() => {
-        AOJ_LABEL_OVERRIDES['ICPCRegionalTest'] = {
-          '1444': 'A',
-          '1446': 'C',
-          '1448': 'E',
-        };
-      });
-
-      afterEach(() => {
-        delete AOJ_LABEL_OVERRIDES['ICPCRegionalTest'];
-      });
-
-      test('uses override map when contest_id has an entry in AOJ_LABEL_OVERRIDES', () => {
-        const result = buildAojLetterMap('ICPCRegionalTest', ['1444', '1446', '1448']);
-
-        expect(result.get('1444')).toBe('A');
-        expect(result.get('1446')).toBe('C');
-        expect(result.get('1448')).toBe('E');
-        expect(result.size).toBe(3);
-      });
-
-      test('ignores the input indices and uses only the override map entries', () => {
-        const result = buildAojLetterMap('ICPCRegionalTest', ['1444', '1446', '1448']);
-
-        expect(result.has('1445')).toBe(false);
-        expect(result.has('1447')).toBe(false);
-      });
-    });
-  });
-});
+import { buildAojDisplayConfig, sortAojHeaderIds } from './aoj_labels';
 
 describe('sortAojHeaderIds', () => {
-  test('returns unique task_table_index values sorted numerically ascending', () => {
+  test('returns unique task_table_index values in ascending letter order', () => {
     const filtered = [
-      { task_table_index: '1666' },
-      { task_table_index: '1664' },
-      { task_table_index: '1665' },
+      { task_table_index: 'C' },
+      { task_table_index: 'A' },
+      { task_table_index: 'B' },
     ] as TaskResults;
 
-    expect(sortAojHeaderIds(filtered)).toEqual(['1664', '1665', '1666']);
+    expect(sortAojHeaderIds(filtered)).toEqual(['A', 'B', 'C']);
+  });
+
+  test('sorts letters A through L for the 12 problems of ICPC Regional 2024', () => {
+    const filtered = ['L', 'K', 'J', 'I', 'H', 'G', 'F', 'E', 'D', 'C', 'B', 'A'].map((letter) => ({
+      task_table_index: letter,
+    })) as TaskResults;
+
+    expect(sortAojHeaderIds(filtered)).toEqual([
+      'A',
+      'B',
+      'C',
+      'D',
+      'E',
+      'F',
+      'G',
+      'H',
+      'I',
+      'J',
+      'K',
+      'L',
+    ]);
   });
 
   test('deduplicates repeated task_table_index values', () => {
-    const filtered = [{ task_table_index: '1664' }, { task_table_index: '1664' }] as TaskResults;
+    const filtered = [{ task_table_index: 'A' }, { task_table_index: 'A' }] as TaskResults;
 
-    expect(sortAojHeaderIds(filtered)).toEqual(['1664']);
+    expect(sortAojHeaderIds(filtered)).toEqual(['A']);
   });
 
   test('returns empty array for empty input', () => {

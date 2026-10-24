@@ -6,12 +6,7 @@ import {
 } from '#features/tasks/types/contest-table/contest_table_provider.js';
 
 import { ContestTableProviderBase } from './contest_table_provider_base';
-import {
-  buildAojLetterMap,
-  sortAojHeaderIds,
-  AOJ_TITLE_STYLE,
-  buildAojDisplayConfig,
-} from './aoj_labels';
+import { sortAojHeaderIds, AOJ_TITLE_STYLE, buildAojDisplayConfig } from './aoj_labels';
 
 export class AojIcpcPrelimProvider extends ContestTableProviderBase {
   private readonly year: number;
@@ -45,15 +40,6 @@ export class AojIcpcPrelimProvider extends ContestTableProviderBase {
 
   getContestRoundLabel(_contestId: string): string {
     return `ICPC 国内予選 ${this.year}`;
-  }
-
-  override getTaskLabels(filtered: TaskResults): Record<string, Record<string, string>> {
-    const letterMap = buildAojLetterMap(
-      this.contestId,
-      filtered.map((taskResult) => taskResult.task_table_index),
-    );
-
-    return { [this.contestId]: Object.fromEntries(letterMap) };
   }
 }
 
@@ -89,14 +75,5 @@ export class AojIcpcRegionalProvider extends ContestTableProviderBase {
 
   getContestRoundLabel(_contestId: string): string {
     return `ICPC アジア地区 ${this.year}`;
-  }
-
-  override getTaskLabels(filtered: TaskResults): Record<string, Record<string, string>> {
-    const letterMap = buildAojLetterMap(
-      this.contestId,
-      filtered.map((taskResult) => taskResult.task_table_index),
-    );
-
-    return { [this.contestId]: Object.fromEntries(letterMap) };
   }
 }

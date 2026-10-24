@@ -1,9 +1,8 @@
-import { describe, test, expect, beforeEach, afterEach } from 'vitest';
+import { describe, test, expect } from 'vitest';
 
 import { ContestType } from '#lib/contests/types/contest.js';
 import type { TaskResults } from '#lib/types/task.js';
 
-import { AOJ_LABEL_OVERRIDES } from './aoj_labels';
 import { AojIcpcPrelimProvider, AojIcpcRegionalProvider } from './aoj_icpc_providers';
 
 const createProvider = (year: number) => new AojIcpcPrelimProvider(ContestType.AOJ_ICPC, year);
@@ -13,25 +12,25 @@ const tasks1998: TaskResults = [
   {
     contest_id: 'ICPCPrelim1998',
     task_id: '1100',
-    task_table_index: '1100',
+    task_table_index: 'A',
     title: 'Area of Polygons',
   },
   {
     contest_id: 'ICPCPrelim1998',
     task_id: '1101',
-    task_table_index: '1101',
+    task_table_index: 'B',
     title: 'A Simple Offline Text Editor',
   },
   {
     contest_id: 'ICPCPrelim1998',
     task_id: '1102',
-    task_table_index: '1102',
+    task_table_index: 'C',
     title: 'Calculation of Expressions',
   },
   {
     contest_id: 'ICPCPrelim1998',
     task_id: '1103',
-    task_table_index: '1103',
+    task_table_index: 'D',
     title: 'Board Arrangements for Concentration Games',
   },
 ] as TaskResults;
@@ -41,44 +40,44 @@ const tasks2023: TaskResults = [
   {
     contest_id: 'ICPCPrelim2023',
     task_id: '1664',
-    task_table_index: '1664',
+    task_table_index: 'A',
     title: 'Which Team Should Receive the Sponsor Prize?',
   },
-  { contest_id: 'ICPCPrelim2023', task_id: '1665', task_table_index: '1665', title: 'Amidakuji' },
+  { contest_id: 'ICPCPrelim2023', task_id: '1665', task_table_index: 'B', title: 'Amidakuji' },
   {
     contest_id: 'ICPCPrelim2023',
     task_id: '1666',
-    task_table_index: '1666',
+    task_table_index: 'C',
     title: 'Changing the Sitting Arrangement',
   },
   {
     contest_id: 'ICPCPrelim2023',
     task_id: '1667',
-    task_table_index: '1667',
+    task_table_index: 'D',
     title: 'Efficient Problem Set',
   },
   {
     contest_id: 'ICPCPrelim2023',
     task_id: '1668',
-    task_table_index: '1668',
+    task_table_index: 'E',
     title: 'Tampered Records',
   },
   {
     contest_id: 'ICPCPrelim2023',
     task_id: '1669',
-    task_table_index: '1669',
+    task_table_index: 'F',
     title: 'Villa of Emblem Shape',
   },
   {
     contest_id: 'ICPCPrelim2023',
     task_id: '1670',
-    task_table_index: '1670',
+    task_table_index: 'G',
     title: 'Fair Deal of Dice',
   },
   {
     contest_id: 'ICPCPrelim2023',
     task_id: '1671',
-    task_table_index: '1671',
+    task_table_index: 'H',
     title: 'Planning Locations of Bus Stops',
   },
 ] as TaskResults;
@@ -88,56 +87,56 @@ const tasks2026: TaskResults = [
   {
     contest_id: 'ICPCPrelim2026',
     task_id: '1690',
-    task_table_index: '1690',
+    task_table_index: 'A',
     title: 'Find the Strongest Card',
   },
   {
     contest_id: 'ICPCPrelim2026',
     task_id: '1691',
-    task_table_index: '1691',
+    task_table_index: 'B',
     title: 'Vending Machines',
   },
   {
     contest_id: 'ICPCPrelim2026',
     task_id: '1692',
-    task_table_index: '1692',
+    task_table_index: 'C',
     title: 'Water Remaining',
   },
   {
     contest_id: 'ICPCPrelim2026',
     task_id: '1693',
-    task_table_index: '1693',
+    task_table_index: 'D',
     title: 'Frequency Sequence',
   },
   {
     contest_id: 'ICPCPrelim2026',
     task_id: '1694',
-    task_table_index: '1694',
+    task_table_index: 'E',
     title: 'Shopping Master',
   },
   {
     contest_id: 'ICPCPrelim2026',
     task_id: '1695',
-    task_table_index: '1695',
+    task_table_index: 'F',
     title: 'Optimizing a Map Application',
   },
   {
     contest_id: 'ICPCPrelim2026',
     task_id: '1696',
-    task_table_index: '1696',
+    task_table_index: 'G',
     title: 'Avoid Collision',
   },
   {
     contest_id: 'ICPCPrelim2026',
     task_id: '1697',
-    task_table_index: '1697',
+    task_table_index: 'H',
     title: 'Sorting Swim Rings',
   },
-  { contest_id: 'ICPCPrelim2026', task_id: '1698', task_table_index: '1698', title: 'Speed Limit' },
+  { contest_id: 'ICPCPrelim2026', task_id: '1698', task_table_index: 'I', title: 'Speed Limit' },
   {
     contest_id: 'ICPCPrelim2026',
     task_id: '1699',
-    task_table_index: '1699',
+    task_table_index: 'J',
     title: 'Maximum Scaling',
   },
 ] as TaskResults;
@@ -148,7 +147,7 @@ const mixedTasks: TaskResults = [
   {
     contest_id: 'ICPCPrelim2022',
     task_id: '1656',
-    task_table_index: '1656',
+    task_table_index: 'A',
     title: 'Counting Peaks of Infection',
   },
   // Non-ICPC contest, to verify contest-type filtering
@@ -199,16 +198,16 @@ describe('AojIcpcPrelimProvider', () => {
       test('stores raw titles (no letter prefix) for all 8 tasks', () => {
         const table = provider2023.generateTable(tasks2023);
 
-        expect(table['ICPCPrelim2023']['1664'].title).toBe(
+        expect(table['ICPCPrelim2023']['A'].title).toBe(
           'Which Team Should Receive the Sponsor Prize?',
         );
-        expect(table['ICPCPrelim2023']['1665'].title).toBe('Amidakuji');
-        expect(table['ICPCPrelim2023']['1666'].title).toBe('Changing the Sitting Arrangement');
-        expect(table['ICPCPrelim2023']['1667'].title).toBe('Efficient Problem Set');
-        expect(table['ICPCPrelim2023']['1668'].title).toBe('Tampered Records');
-        expect(table['ICPCPrelim2023']['1669'].title).toBe('Villa of Emblem Shape');
-        expect(table['ICPCPrelim2023']['1670'].title).toBe('Fair Deal of Dice');
-        expect(table['ICPCPrelim2023']['1671'].title).toBe('Planning Locations of Bus Stops');
+        expect(table['ICPCPrelim2023']['B'].title).toBe('Amidakuji');
+        expect(table['ICPCPrelim2023']['C'].title).toBe('Changing the Sitting Arrangement');
+        expect(table['ICPCPrelim2023']['D'].title).toBe('Efficient Problem Set');
+        expect(table['ICPCPrelim2023']['E'].title).toBe('Tampered Records');
+        expect(table['ICPCPrelim2023']['F'].title).toBe('Villa of Emblem Shape');
+        expect(table['ICPCPrelim2023']['G'].title).toBe('Fair Deal of Dice');
+        expect(table['ICPCPrelim2023']['H'].title).toBe('Planning Locations of Bus Stops');
       });
 
       test('title is unchanged when generateTable is called twice (structurally idempotent)', () => {
@@ -216,14 +215,14 @@ describe('AojIcpcPrelimProvider', () => {
         const secondInput = Object.values(firstTable['ICPCPrelim2023']) as TaskResults;
         const secondTable = provider2023.generateTable(secondInput);
 
-        expect(secondTable['ICPCPrelim2023']['1665'].title).toBe('Amidakuji');
+        expect(secondTable['ICPCPrelim2023']['B'].title).toBe('Amidakuji');
       });
 
       test('uses task_table_index as the inner key', () => {
         const table = provider2023.generateTable(tasks2023);
 
         expect(Object.keys(table['ICPCPrelim2023'])).toEqual(
-          expect.arrayContaining(['1664', '1665', '1666', '1667', '1668', '1669', '1670', '1671']),
+          expect.arrayContaining(['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']),
         );
       });
 
@@ -307,25 +306,25 @@ describe('AojIcpcPrelimProvider', () => {
 
   describe('getHeaderIdsForTask', () => {
     describe('successful cases', () => {
-      test('returns indices sorted numerically ascending regardless of input order', () => {
+      test('returns letters in ascending order regardless of input order', () => {
         const reversedTasks = [...tasks2023].reverse() as TaskResults;
 
         expect(provider2023.getHeaderIdsForTask(reversedTasks)).toEqual([
-          '1664',
-          '1665',
-          '1666',
-          '1667',
-          '1668',
-          '1669',
-          '1670',
-          '1671',
+          'A',
+          'B',
+          'C',
+          'D',
+          'E',
+          'F',
+          'G',
+          'H',
         ]);
       });
 
       test('deduplicates repeated task_table_index values', () => {
         const duplicateTasks = [tasks2023[0], tasks2023[0]] as TaskResults;
 
-        expect(provider2023.getHeaderIdsForTask(duplicateTasks)).toEqual(['1664']);
+        expect(provider2023.getHeaderIdsForTask(duplicateTasks)).toEqual(['A']);
       });
     });
 
@@ -348,12 +347,10 @@ describe('AojIcpcPrelimProvider', () => {
     test('oldest year 1998 stores raw titles for 4 tasks', () => {
       const table = provider1998.generateTable(tasks1998);
 
-      expect(table['ICPCPrelim1998']['1100'].title).toBe('Area of Polygons');
-      expect(table['ICPCPrelim1998']['1101'].title).toBe('A Simple Offline Text Editor');
-      expect(table['ICPCPrelim1998']['1102'].title).toBe('Calculation of Expressions');
-      expect(table['ICPCPrelim1998']['1103'].title).toBe(
-        'Board Arrangements for Concentration Games',
-      );
+      expect(table['ICPCPrelim1998']['A'].title).toBe('Area of Polygons');
+      expect(table['ICPCPrelim1998']['B'].title).toBe('A Simple Offline Text Editor');
+      expect(table['ICPCPrelim1998']['C'].title).toBe('Calculation of Expressions');
+      expect(table['ICPCPrelim1998']['D'].title).toBe('Board Arrangements for Concentration Games');
     });
 
     test('oldest year 1998 filter isolates its own contest_id', () => {
@@ -372,8 +369,8 @@ describe('AojIcpcPrelimProvider', () => {
     test('latest year 2026 stores raw titles (maximum problem count)', () => {
       const table = provider2026.generateTable(tasks2026);
 
-      expect(table['ICPCPrelim2026']['1690'].title).toBe('Find the Strongest Card');
-      expect(table['ICPCPrelim2026']['1699'].title).toBe('Maximum Scaling');
+      expect(table['ICPCPrelim2026']['A'].title).toBe('Find the Strongest Card');
+      expect(table['ICPCPrelim2026']['J'].title).toBe('Maximum Scaling');
     });
 
     test('latest year 2026 filter isolates its own contest_id', () => {
@@ -382,105 +379,6 @@ describe('AojIcpcPrelimProvider', () => {
 
       expect(filtered).toHaveLength(10);
       expect(filtered.every((task) => task.contest_id === 'ICPCPrelim2026')).toBe(true);
-    });
-  });
-
-  describe('override map path', () => {
-    const TEST_YEAR = 9999;
-    const TEST_CONTEST_ID = `ICPCPrelim${TEST_YEAR}`;
-
-    const overrideTasks: TaskResults = [
-      { contest_id: TEST_CONTEST_ID, task_id: '9001', task_table_index: '9001', title: 'Task One' },
-      { contest_id: TEST_CONTEST_ID, task_id: '9002', task_table_index: '9002', title: 'Task Two' },
-    ] as TaskResults;
-
-    beforeEach(() => {
-      AOJ_LABEL_OVERRIDES[TEST_CONTEST_ID] = {
-        '9001': 'X',
-        '9002': 'Y',
-      };
-    });
-
-    afterEach(() => {
-      delete AOJ_LABEL_OVERRIDES[TEST_CONTEST_ID];
-    });
-
-    test('generateTable stores raw titles even when override map is active', () => {
-      const provider = createProvider(TEST_YEAR);
-      const table = provider.generateTable(overrideTasks);
-
-      expect(table[TEST_CONTEST_ID]['9001'].title).toBe('Task One');
-      expect(table[TEST_CONTEST_ID]['9002'].title).toBe('Task Two');
-    });
-  });
-
-  describe('getTaskLabels', () => {
-    describe('successful cases', () => {
-      test('returns letter map for all 8 tasks in numeric ID order (A–H)', () => {
-        const labels = provider2023.getTaskLabels(tasks2023);
-
-        expect(labels['ICPCPrelim2023']['1664']).toBe('A');
-        expect(labels['ICPCPrelim2023']['1665']).toBe('B');
-        expect(labels['ICPCPrelim2023']['1666']).toBe('C');
-        expect(labels['ICPCPrelim2023']['1667']).toBe('D');
-        expect(labels['ICPCPrelim2023']['1668']).toBe('E');
-        expect(labels['ICPCPrelim2023']['1669']).toBe('F');
-        expect(labels['ICPCPrelim2023']['1670']).toBe('G');
-        expect(labels['ICPCPrelim2023']['1671']).toBe('H');
-      });
-
-      test('returns object keyed by contestId', () => {
-        const labels = provider2023.getTaskLabels(tasks2023);
-
-        expect(Object.keys(labels)).toEqual(['ICPCPrelim2023']);
-      });
-    });
-
-    describe('edge cases', () => {
-      test('returns empty inner object for empty input', () => {
-        const labels = provider2023.getTaskLabels([] as TaskResults);
-
-        expect(labels).toEqual({ ICPCPrelim2023: {} });
-      });
-    });
-
-    describe('override map path', () => {
-      const TEST_YEAR = 9999;
-      const TEST_CONTEST_ID = `ICPCPrelim${TEST_YEAR}`;
-
-      const overrideTasks: TaskResults = [
-        {
-          contest_id: TEST_CONTEST_ID,
-          task_id: '9001',
-          task_table_index: '9001',
-          title: 'Task One',
-        },
-        {
-          contest_id: TEST_CONTEST_ID,
-          task_id: '9002',
-          task_table_index: '9002',
-          title: 'Task Two',
-        },
-      ] as TaskResults;
-
-      beforeEach(() => {
-        AOJ_LABEL_OVERRIDES[TEST_CONTEST_ID] = {
-          '9001': 'X',
-          '9002': 'Y',
-        };
-      });
-
-      afterEach(() => {
-        delete AOJ_LABEL_OVERRIDES[TEST_CONTEST_ID];
-      });
-
-      test('returns custom labels from AOJ_LABEL_OVERRIDES', () => {
-        const provider = createProvider(TEST_YEAR);
-        const labels = provider.getTaskLabels(overrideTasks);
-
-        expect(labels[TEST_CONTEST_ID]['9001']).toBe('X');
-        expect(labels[TEST_CONTEST_ID]['9002']).toBe('Y');
-      });
     });
   });
 });
@@ -493,49 +391,49 @@ const regionalTasks1998: TaskResults = [
   {
     contest_id: 'ICPCRegional1998',
     task_id: '1200',
-    task_table_index: '1200',
+    task_table_index: 'A',
     title: "Goldbach's Conjecture",
   },
   {
     contest_id: 'ICPCRegional1998',
     task_id: '1201',
-    task_table_index: '1201',
+    task_table_index: 'B',
     title: 'Lattice Practices',
   },
   {
     contest_id: 'ICPCRegional1998',
     task_id: '1202',
-    task_table_index: '1202',
+    task_table_index: 'C',
     title: 'Mobile Phone Coverage',
   },
   {
     contest_id: 'ICPCRegional1998',
     task_id: '1203',
-    task_table_index: '1203',
+    task_table_index: 'D',
     title: "Napoleon's Grumble",
   },
   {
     contest_id: 'ICPCRegional1998',
     task_id: '1204',
-    task_table_index: '1204',
+    task_table_index: 'E',
     title: 'Pipeline Scheduling',
   },
   {
     contest_id: 'ICPCRegional1998',
     task_id: '1205',
-    task_table_index: '1205',
+    task_table_index: 'F',
     title: 'Triangle Partition',
   },
   {
     contest_id: 'ICPCRegional1998',
     task_id: '1206',
-    task_table_index: '1206',
+    task_table_index: 'G',
     title: 'BUT We Need a Diagram',
   },
   {
     contest_id: 'ICPCRegional1998',
     task_id: '1207',
-    task_table_index: '1207',
+    task_table_index: 'H',
     title: 'Digital Racing Circuil',
   },
 ] as TaskResults;
@@ -545,73 +443,73 @@ const regionalTasks2024: TaskResults = [
   {
     contest_id: 'ICPCRegional2024',
     task_id: '1455',
-    task_table_index: '1455',
+    task_table_index: 'A',
     title: 'Ribbon on the Christmas Present',
   },
   {
     contest_id: 'ICPCRegional2024',
     task_id: '1456',
-    task_table_index: '1456',
+    task_table_index: 'B',
     title: 'The Sparsest Number in Between',
   },
   {
     contest_id: 'ICPCRegional2024',
     task_id: '1457',
-    task_table_index: '1457',
+    task_table_index: 'C',
     title: 'Omnes Viae Yokohamam Ducunt?',
   },
   {
     contest_id: 'ICPCRegional2024',
     task_id: '1458',
-    task_table_index: '1458',
+    task_table_index: 'D',
     title: 'Tree Generators',
   },
   {
     contest_id: 'ICPCRegional2024',
     task_id: '1459',
-    task_table_index: '1459',
+    task_table_index: 'E',
     title: 'E-Circuit Is Now on Sale!',
   },
   {
     contest_id: 'ICPCRegional2024',
     task_id: '1460',
-    task_table_index: '1460',
+    task_table_index: 'F',
     title: 'The Farthest Point',
   },
   {
     contest_id: 'ICPCRegional2024',
     task_id: '1461',
-    task_table_index: '1461',
+    task_table_index: 'G',
     title: 'Beyond the Former Explorer',
   },
   {
     contest_id: 'ICPCRegional2024',
     task_id: '1462',
-    task_table_index: '1462',
+    task_table_index: 'H',
     title: 'Remodeling the Dungeon 2',
   },
   {
     contest_id: 'ICPCRegional2024',
     task_id: '1463',
-    task_table_index: '1463',
+    task_table_index: 'I',
     title: 'Greatest of the Greatest Common Divisors',
   },
   {
     contest_id: 'ICPCRegional2024',
     task_id: '1464',
-    task_table_index: '1464',
+    task_table_index: 'J',
     title: 'Mixing Solutions',
   },
   {
     contest_id: 'ICPCRegional2024',
     task_id: '1465',
-    task_table_index: '1465',
+    task_table_index: 'K',
     title: 'Scheduling Two Meetings',
   },
   {
     contest_id: 'ICPCRegional2024',
     task_id: '1466',
-    task_table_index: '1466',
+    task_table_index: 'L',
     title: 'Peculiar Protocol',
   },
 ] as TaskResults;
@@ -622,7 +520,7 @@ const mixedRegionalTasks: TaskResults = [
   {
     contest_id: 'ICPCRegional1999',
     task_id: '1208',
-    task_table_index: '1208',
+    task_table_index: 'A',
     title: 'Rational Irrationals',
   },
   // Non-ICPC contest, to verify contest-type filtering
@@ -672,8 +570,8 @@ describe('AojIcpcRegionalProvider', () => {
       test('stores raw titles (no letter prefix) for all 8 tasks', () => {
         const table = provider1998.generateTable(regionalTasks1998);
 
-        expect(table['ICPCRegional1998']['1200'].title).toBe("Goldbach's Conjecture");
-        expect(table['ICPCRegional1998']['1207'].title).toBe('Digital Racing Circuil');
+        expect(table['ICPCRegional1998']['A'].title).toBe("Goldbach's Conjecture");
+        expect(table['ICPCRegional1998']['H'].title).toBe('Digital Racing Circuil');
       });
 
       test('title is unchanged when generateTable is called twice (structurally idempotent)', () => {
@@ -681,14 +579,14 @@ describe('AojIcpcRegionalProvider', () => {
         const secondInput = Object.values(firstTable['ICPCRegional1998']) as TaskResults;
         const secondTable = provider1998.generateTable(secondInput);
 
-        expect(secondTable['ICPCRegional1998']['1201'].title).toBe('Lattice Practices');
+        expect(secondTable['ICPCRegional1998']['B'].title).toBe('Lattice Practices');
       });
 
       test('uses task_table_index as the inner key', () => {
         const table = provider1998.generateTable(regionalTasks1998);
 
         expect(Object.keys(table['ICPCRegional1998'])).toEqual(
-          expect.arrayContaining(['1200', '1201', '1202', '1203', '1204', '1205', '1206', '1207']),
+          expect.arrayContaining(['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']),
         );
       });
 
@@ -772,25 +670,25 @@ describe('AojIcpcRegionalProvider', () => {
 
   describe('getHeaderIdsForTask', () => {
     describe('successful cases', () => {
-      test('returns indices sorted numerically ascending regardless of input order', () => {
+      test('returns letters in ascending order regardless of input order', () => {
         const reversedTasks = [...regionalTasks1998].reverse() as TaskResults;
 
         expect(provider1998.getHeaderIdsForTask(reversedTasks)).toEqual([
-          '1200',
-          '1201',
-          '1202',
-          '1203',
-          '1204',
-          '1205',
-          '1206',
-          '1207',
+          'A',
+          'B',
+          'C',
+          'D',
+          'E',
+          'F',
+          'G',
+          'H',
         ]);
       });
 
       test('deduplicates repeated task_table_index values', () => {
         const duplicateTasks = [regionalTasks1998[0], regionalTasks1998[0]] as TaskResults;
 
-        expect(provider1998.getHeaderIdsForTask(duplicateTasks)).toEqual(['1200']);
+        expect(provider1998.getHeaderIdsForTask(duplicateTasks)).toEqual(['A']);
       });
     });
 
@@ -812,8 +710,8 @@ describe('AojIcpcRegionalProvider', () => {
     test('latest year 2024 stores raw titles (maximum problem count)', () => {
       const table = provider2024.generateTable(regionalTasks2024);
 
-      expect(table['ICPCRegional2024']['1455'].title).toBe('Ribbon on the Christmas Present');
-      expect(table['ICPCRegional2024']['1466'].title).toBe('Peculiar Protocol');
+      expect(table['ICPCRegional2024']['A'].title).toBe('Ribbon on the Christmas Present');
+      expect(table['ICPCRegional2024']['L'].title).toBe('Peculiar Protocol');
     });
 
     test('latest year 2024 filter isolates its own contest_id', () => {
@@ -822,81 +720,6 @@ describe('AojIcpcRegionalProvider', () => {
 
       expect(filtered).toHaveLength(12);
       expect(filtered.every((task) => task.contest_id === 'ICPCRegional2024')).toBe(true);
-    });
-  });
-
-  describe('getTaskLabels', () => {
-    describe('successful cases', () => {
-      test('returns letter map for all 8 tasks in numeric ID order (A–H)', () => {
-        const labels = provider1998.getTaskLabels(regionalTasks1998);
-
-        expect(labels['ICPCRegional1998']['1200']).toBe('A');
-        expect(labels['ICPCRegional1998']['1201']).toBe('B');
-        expect(labels['ICPCRegional1998']['1202']).toBe('C');
-        expect(labels['ICPCRegional1998']['1203']).toBe('D');
-        expect(labels['ICPCRegional1998']['1204']).toBe('E');
-        expect(labels['ICPCRegional1998']['1205']).toBe('F');
-        expect(labels['ICPCRegional1998']['1206']).toBe('G');
-        expect(labels['ICPCRegional1998']['1207']).toBe('H');
-      });
-
-      test('returns letter map A–L for 12 tasks (2024)', () => {
-        const provider2024 = createRegionalProvider(2024);
-        const labels = provider2024.getTaskLabels(regionalTasks2024);
-
-        expect(labels['ICPCRegional2024']['1455']).toBe('A');
-        expect(labels['ICPCRegional2024']['1466']).toBe('L');
-      });
-
-      test('returns object keyed by contestId', () => {
-        const labels = provider1998.getTaskLabels(regionalTasks1998);
-
-        expect(Object.keys(labels)).toEqual(['ICPCRegional1998']);
-      });
-    });
-
-    describe('edge cases', () => {
-      test('returns empty inner object for empty input', () => {
-        const labels = provider1998.getTaskLabels([] as TaskResults);
-
-        expect(labels).toEqual({ ICPCRegional1998: {} });
-      });
-    });
-
-    describe('override map path', () => {
-      const TEST_YEAR = 8888;
-      const TEST_CONTEST_ID = `ICPCRegional${TEST_YEAR}`;
-
-      const overrideTasks: TaskResults = [
-        {
-          contest_id: TEST_CONTEST_ID,
-          task_id: '8001',
-          task_table_index: '8001',
-          title: 'Task One',
-        },
-        {
-          contest_id: TEST_CONTEST_ID,
-          task_id: '8002',
-          task_table_index: '8002',
-          title: 'Task Two',
-        },
-      ] as TaskResults;
-
-      beforeEach(() => {
-        AOJ_LABEL_OVERRIDES[TEST_CONTEST_ID] = { '8001': 'X', '8002': 'Y' };
-      });
-
-      afterEach(() => {
-        delete AOJ_LABEL_OVERRIDES[TEST_CONTEST_ID];
-      });
-
-      test('returns custom labels from AOJ_LABEL_OVERRIDES', () => {
-        const provider = createRegionalProvider(TEST_YEAR);
-        const labels = provider.getTaskLabels(overrideTasks);
-
-        expect(labels[TEST_CONTEST_ID]['8001']).toBe('X');
-        expect(labels[TEST_CONTEST_ID]['8002']).toBe('Y');
-      });
     });
   });
 });

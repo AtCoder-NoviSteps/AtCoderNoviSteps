@@ -17,7 +17,13 @@ import type {
   ChallengeContest,
   ChallengeParams,
 } from './types';
-import { buildEndpoint, mapToContest, mapToTask, getCourseName } from './utils';
+import {
+  buildEndpoint,
+  mapToContest,
+  assignProblemLetters,
+  mapToTask,
+  getCourseName,
+} from './utils';
 
 export class AojCoursesApiClient {
   constructor(
@@ -93,13 +99,27 @@ export class AojChallengesApiClient {
       validateResponse: (data) =>
         'contests' in data && Array.isArray(data.contests) && data.contests.length > 0,
       transformer: (data) =>
-        data.contests.flatMap((contest: ChallengeContest) =>
-          contest.days.flatMap((day) =>
-            day.problems.map((problem) => mapToTask(problem, contest.abbr)),
-          ),
-        ),
+        data.contests.flatMap((contest: ChallengeContest) => {
+          const problems = contest.days.flatMap((day) => day.problems);
+
+          if (!this.usesProblemLetters(params)) {
+            return problems.map((problem) => mapToTask(problem, contest.abbr));
+          }
+
+          // Letters span all days because contest_id is per contest (abbr), not per day.
+          const letters = assignProblemLetters(problems.map((problem) => problem.id));
+
+          return problems.map((problem) =>
+            mapToTask(problem, contest.abbr, letters.get(problem.id)),
+          );
+        }),
       label: `AOJ ${contestType} ${round}`,
     });
+  }
+
+  // Scope of the problem-letter migration; JAG Regional and PCK keep the problem id for now.
+  private usesProblemLetters({ contestType, round }: ChallengeParams): boolean {
+    return contestType === 'ICPC' || (contestType === 'JAG' && round === 'PRELIM');
   }
 
   private getCacheKey({ contestType, round }: ChallengeParams): string {

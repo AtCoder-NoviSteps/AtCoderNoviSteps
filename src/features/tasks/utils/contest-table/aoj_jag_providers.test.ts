@@ -13,37 +13,37 @@ const tasks2005: TaskResults = [
   {
     contest_id: 'JAGPrelim2005',
     task_id: '2006',
-    task_table_index: '2006',
+    task_table_index: 'A',
     title: 'Keitai Message',
   },
   {
     contest_id: 'JAGPrelim2005',
     task_id: '2007',
-    task_table_index: '2007',
+    task_table_index: 'B',
     title: 'Make Purse Light',
   },
   {
     contest_id: 'JAGPrelim2005',
     task_id: '2008',
-    task_table_index: '2008',
+    task_table_index: 'C',
     title: 'Dragon Fantasy',
   },
   {
     contest_id: 'JAGPrelim2005',
     task_id: '2009',
-    task_table_index: '2009',
+    task_table_index: 'D',
     title: 'Area Separation',
   },
   {
     contest_id: 'JAGPrelim2005',
     task_id: '2010',
-    task_table_index: '2010',
+    task_table_index: 'E',
     title: 'Poor Mail Forwarding',
   },
   {
     contest_id: 'JAGPrelim2005',
     task_id: '2011',
-    task_table_index: '2011',
+    task_table_index: 'F',
     title: 'Gather the Maps!',
   },
 ] as TaskResults;
@@ -53,77 +53,77 @@ const tasks2023: TaskResults = [
   {
     contest_id: 'JAGPrelim2023',
     task_id: '3358',
-    task_table_index: '3358',
+    task_table_index: 'A',
     title: 'Sorting Crayons',
   },
   {
     contest_id: 'JAGPrelim2023',
     task_id: '3359',
-    task_table_index: '3359',
+    task_table_index: 'B',
     title: 'Everyday is Holiday',
   },
-  { contest_id: 'JAGPrelim2023', task_id: '3360', task_table_index: '3360', title: 'Game' },
-  { contest_id: 'JAGPrelim2023', task_id: '3361', task_table_index: '3361', title: 'IPvK' },
+  { contest_id: 'JAGPrelim2023', task_id: '3360', task_table_index: 'C', title: 'Game' },
+  { contest_id: 'JAGPrelim2023', task_id: '3361', task_table_index: 'D', title: 'IPvK' },
   {
     contest_id: 'JAGPrelim2023',
     task_id: '3362',
-    task_table_index: '3362',
+    task_table_index: 'E',
     title: 'Watch the Marathon',
   },
   {
     contest_id: 'JAGPrelim2023',
     task_id: '3363',
-    task_table_index: '3363',
+    task_table_index: 'F',
     title: 'Frog in a Well',
   },
   {
     contest_id: 'JAGPrelim2023',
     task_id: '3364',
-    task_table_index: '3364',
+    task_table_index: 'G',
     title: 'Watch the Movie',
   },
-  { contest_id: 'JAGPrelim2023', task_id: '3365', task_table_index: '3365', title: 'Orienteering' },
+  { contest_id: 'JAGPrelim2023', task_id: '3365', task_table_index: 'H', title: 'Orienteering' },
 ] as TaskResults;
 
 // JAGPrelim2026: 9 problems (A–I), latest year and maximum problem count.
 const tasks2026: TaskResults = [
-  { contest_id: 'JAGPrelim2026', task_id: '3452', task_table_index: '3452', title: 'Booby Prize' },
-  { contest_id: 'JAGPrelim2026', task_id: '3453', task_table_index: '3453', title: 'Rearrange' },
+  { contest_id: 'JAGPrelim2026', task_id: '3452', task_table_index: 'A', title: 'Booby Prize' },
+  { contest_id: 'JAGPrelim2026', task_id: '3453', task_table_index: 'B', title: 'Rearrange' },
   {
     contest_id: 'JAGPrelim2026',
     task_id: '3454',
-    task_table_index: '3454',
+    task_table_index: 'C',
     title: 'Loooong Vacation',
   },
-  { contest_id: 'JAGPrelim2026', task_id: '3455', task_table_index: '3455', title: 'Box Tower' },
+  { contest_id: 'JAGPrelim2026', task_id: '3455', task_table_index: 'D', title: 'Box Tower' },
   {
     contest_id: 'JAGPrelim2026',
     task_id: '3456',
-    task_table_index: '3456',
+    task_table_index: 'E',
     title: 'Secret Numbers and the Greatest Common Divisor',
   },
   {
     contest_id: 'JAGPrelim2026',
     task_id: '3457',
-    task_table_index: '3457',
+    task_table_index: 'F',
     title: 'ICPC is a Contest',
   },
   {
     contest_id: 'JAGPrelim2026',
     task_id: '3458',
-    task_table_index: '3458',
+    task_table_index: 'G',
     title: 'XOR Travel Plans',
   },
   {
     contest_id: 'JAGPrelim2026',
     task_id: '3459',
-    task_table_index: '3459',
+    task_table_index: 'H',
     title: 'Stone-Picking Game',
   },
   {
     contest_id: 'JAGPrelim2026',
     task_id: '3460',
-    task_table_index: '3460',
+    task_table_index: 'I',
     title: "Let's Build an Evil Robot Army",
   },
 ] as TaskResults;
@@ -133,33 +133,33 @@ const tasks2016A: TaskResults = [
   {
     contest_id: 'JAGPrelim2016A',
     task_id: '2738',
-    task_table_index: '2738',
+    task_table_index: 'A',
     title: 'A-un Breathing',
   },
   {
     contest_id: 'JAGPrelim2016A',
     task_id: '2739',
-    task_table_index: '2739',
+    task_table_index: 'B',
     title: 'Delivery to a Luxurious House',
   },
   {
     contest_id: 'JAGPrelim2016A',
     task_id: '2740',
-    task_table_index: '2740',
+    task_table_index: 'C',
     title: 'Rooted Tree for Misawa-san',
   },
-  { contest_id: 'JAGPrelim2016A', task_id: '2741', task_table_index: '2741', title: 'Invisible' },
-  { contest_id: 'JAGPrelim2016A', task_id: '2742', task_table_index: '2742', title: 'Campaign' },
+  { contest_id: 'JAGPrelim2016A', task_id: '2741', task_table_index: 'D', title: 'Invisible' },
+  { contest_id: 'JAGPrelim2016A', task_id: '2742', task_table_index: 'E', title: 'Campaign' },
   {
     contest_id: 'JAGPrelim2016A',
     task_id: '2743',
-    task_table_index: '2743',
+    task_table_index: 'F',
     title: 'Land Inheritance',
   },
   {
     contest_id: 'JAGPrelim2016A',
     task_id: '2744',
-    task_table_index: '2744',
+    task_table_index: 'G',
     title: 'Rings and Strings',
   },
 ] as TaskResults;
@@ -168,30 +168,30 @@ const tasks2016B: TaskResults = [
   {
     contest_id: 'JAGPrelim2016B',
     task_id: '2745',
-    task_table_index: '2745',
+    task_table_index: 'A',
     title: 'Curry Making',
   },
-  { contest_id: 'JAGPrelim2016B', task_id: '2746', task_table_index: '2746', title: 'jfen' },
-  { contest_id: 'JAGPrelim2016B', task_id: '2747', task_table_index: '2747', title: 'Curtain' },
+  { contest_id: 'JAGPrelim2016B', task_id: '2746', task_table_index: 'B', title: 'jfen' },
+  { contest_id: 'JAGPrelim2016B', task_id: '2747', task_table_index: 'C', title: 'Curtain' },
   {
     contest_id: 'JAGPrelim2016B',
     task_id: '2748',
-    task_table_index: '2748',
+    task_table_index: 'D',
     title: 'Early Morning Work at Summer Camp',
   },
   {
     contest_id: 'JAGPrelim2016B',
     task_id: '2749',
-    task_table_index: '2749',
+    task_table_index: 'E',
     title: 'The Most Powerful Bed',
   },
   {
     contest_id: 'JAGPrelim2016B',
     task_id: '2750',
-    task_table_index: '2750',
+    task_table_index: 'F',
     title: 'Hyakunin Isshu',
   },
-  { contest_id: 'JAGPrelim2016B', task_id: '2751', task_table_index: '2751', title: 'Baseball' },
+  { contest_id: 'JAGPrelim2016B', task_id: '2751', task_table_index: 'G', title: 'Baseball' },
 ] as TaskResults;
 
 describe('JagPrelimProvider', () => {
@@ -243,8 +243,8 @@ describe('JagPrelimProvider', () => {
       test('stores raw titles (no letter prefix) for all 8 tasks', () => {
         const table = provider2023.generateTable(tasks2023);
 
-        expect(table['JAGPrelim2023']['3358'].title).toBe('Sorting Crayons');
-        expect(table['JAGPrelim2023']['3365'].title).toBe('Orienteering');
+        expect(table['JAGPrelim2023']['A'].title).toBe('Sorting Crayons');
+        expect(table['JAGPrelim2023']['H'].title).toBe('Orienteering');
       });
 
       test('title is unchanged when generateTable is called twice (structurally idempotent)', () => {
@@ -252,7 +252,7 @@ describe('JagPrelimProvider', () => {
         const secondInput = Object.values(firstTable['JAGPrelim2023']) as TaskResults;
         const secondTable = provider2023.generateTable(secondInput);
 
-        expect(secondTable['JAGPrelim2023']['3358'].title).toBe('Sorting Crayons');
+        expect(secondTable['JAGPrelim2023']['A'].title).toBe('Sorting Crayons');
       });
 
       test('creates table keyed by contest_id', () => {
@@ -311,57 +311,31 @@ describe('JagPrelimProvider', () => {
 
   describe('getHeaderIdsForTask', () => {
     describe('successful cases', () => {
-      test('returns indices sorted numerically ascending regardless of input order', () => {
+      test('returns letters in ascending order regardless of input order', () => {
         const reversedTasks = [...tasks2023].reverse() as TaskResults;
 
         expect(provider2023.getHeaderIdsForTask(reversedTasks)).toEqual([
-          '3358',
-          '3359',
-          '3360',
-          '3361',
-          '3362',
-          '3363',
-          '3364',
-          '3365',
+          'A',
+          'B',
+          'C',
+          'D',
+          'E',
+          'F',
+          'G',
+          'H',
         ]);
       });
 
       test('deduplicates repeated task_table_index values', () => {
         const duplicateTasks = [tasks2023[0], tasks2023[0]] as TaskResults;
 
-        expect(provider2023.getHeaderIdsForTask(duplicateTasks)).toEqual(['3358']);
+        expect(provider2023.getHeaderIdsForTask(duplicateTasks)).toEqual(['A']);
       });
     });
 
     describe('edge cases', () => {
       test('returns empty array for empty input', () => {
         expect(provider2023.getHeaderIdsForTask([] as TaskResults)).toEqual([]);
-      });
-    });
-  });
-
-  describe('getTaskLabels', () => {
-    describe('successful cases', () => {
-      test('returns letter map for all 8 tasks in numeric ID order (A–H)', () => {
-        const labels = provider2023.getTaskLabels(tasks2023);
-
-        expect(labels['JAGPrelim2023']['3358']).toBe('A');
-        expect(labels['JAGPrelim2023']['3359']).toBe('B');
-        expect(labels['JAGPrelim2023']['3365']).toBe('H');
-      });
-
-      test('returns object keyed by contestId', () => {
-        const labels = provider2023.getTaskLabels(tasks2023);
-
-        expect(Object.keys(labels)).toEqual(['JAGPrelim2023']);
-      });
-    });
-
-    describe('edge cases', () => {
-      test('returns empty inner object for empty input', () => {
-        const labels = provider2023.getTaskLabels([] as TaskResults);
-
-        expect(labels).toEqual({ JAGPrelim2023: {} });
       });
     });
   });
@@ -391,8 +365,8 @@ describe('JagPrelimProvider', () => {
     test('latest year 2026 stores raw titles (maximum problem count)', () => {
       const table = provider2026.generateTable(tasks2026);
 
-      expect(table['JAGPrelim2026']['3452'].title).toBe('Booby Prize');
-      expect(table['JAGPrelim2026']['3460'].title).toBe("Let's Build an Evil Robot Army");
+      expect(table['JAGPrelim2026']['A'].title).toBe('Booby Prize');
+      expect(table['JAGPrelim2026']['I'].title).toBe("Let's Build an Evil Robot Army");
     });
   });
 
@@ -438,18 +412,14 @@ describe('JagPrelimProvider', () => {
       expect(filtered.every((task) => task.contest_id === 'JAGPrelim2016B')).toBe(true);
     });
 
-    test('2016 A labels A–G keyed by JAGPrelim2016A', () => {
-      const labels = provider2016A.getTaskLabels(tasks2016A);
+    test('2016 A and B tables are each keyed by letters A–G', () => {
+      const tableA = provider2016A.generateTable(tasks2016A);
+      const tableB = provider2016B.generateTable(tasks2016B);
 
-      expect(labels['JAGPrelim2016A']['2738']).toBe('A');
-      expect(labels['JAGPrelim2016A']['2744']).toBe('G');
-    });
-
-    test('2016 B labels A–G keyed by JAGPrelim2016B (letters restart from A)', () => {
-      const labels = provider2016B.getTaskLabels(tasks2016B);
-
-      expect(labels['JAGPrelim2016B']['2745']).toBe('A');
-      expect(labels['JAGPrelim2016B']['2751']).toBe('G');
+      expect(tableA['JAGPrelim2016A']['A'].title).toBe('A-un Breathing');
+      expect(tableA['JAGPrelim2016A']['G'].title).toBe('Rings and Strings');
+      expect(tableB['JAGPrelim2016B']['A'].title).toBe('Curry Making');
+      expect(tableB['JAGPrelim2016B']['G'].title).toBe('Baseball');
     });
   });
 });

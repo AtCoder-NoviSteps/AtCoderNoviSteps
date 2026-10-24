@@ -52,18 +52,39 @@ export function mapToContest(contestId: string, title: string): ContestForImport
 }
 
 /**
+ * Assigns problem letters (A, B, C...) to the problems of one contest.
+ *
+ * The AOJ API does not tell a problem's position in its contest, so this follows the basic rule:
+ * letters in ascending numeric order of problem ids. A problem missing from AOJ's contest listing
+ * shifts the later letters, which cannot be detected here.
+ *
+ * @param problemIds - Numeric AOJ problem ids of one contest.
+ * @returns A map from problem id to problem letter.
+ */
+export function assignProblemLetters(problemIds: string[]): Map<string, string> {
+  const sortedIds = [...problemIds].sort((first, second) => Number(first) - Number(second));
+
+  return new Map(sortedIds.map((problemId, i) => [problemId, String.fromCharCode(65 + i)]));
+}
+
+/**
  * Maps the AOJTaskAPI problem object to a task object.
  *
  * @param problem - The problem object from AOJTaskAPI.
  * @param contestId - The ID of the contest.
+ * @param problemIndex - The problem index. Defaults to the problem id.
  * @returns An object representing the task.
  */
-export function mapToTask(problem: AOJTaskAPI, contestId: string) {
+export function mapToTask(
+  problem: AOJTaskAPI,
+  contestId: string,
+  problemIndex: string = problem.id, // AtCoder Problems API uses the same substitute for old JOI problems.
+) {
   return {
     id: problem.id,
     contest_id: contestId,
-    problem_index: problem.id, // Using task.id as a substitute since there's no equivalent to problem_index. Similar approach is used in AtCoder Problems API for old JOI problems.
-    task_id: problem.id, // Same as above
+    problem_index: problemIndex,
+    task_id: problem.id,
     title: problem.name.trim(),
   };
 }
