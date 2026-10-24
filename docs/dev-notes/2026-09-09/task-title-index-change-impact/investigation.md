@@ -239,7 +239,24 @@ SQL A（[plan-pr2.md](./plan-pr2.md#着手前の確認2026-10-24-に回答済み
 
 - staging には模擬地区が 2 コンテストしか無い。PR2 の前に staging で取り込み、本番とそろえる
 - 本番の模擬地区 158 問（SQL B）は、AOJ の一覧のスクリーンショットと問題名・問題 ID がすべて一致した。grade が付いているのは 6 問
-- 本番の 3355 だけ、title の末尾にタブがある（`Most distant point from the stations\t`）。今の取り込みは `trim()` するので、それ以前に入った行と見られる
+- 本番の 3355 の title の末尾にタブがある（`Most distant point from the stations\t`）。前後に空白のある title はほかにもある（下記）
+
+## 前後に空白のある title
+
+本番で `title <> btrim(title, E' \t\r\n')` の行を数えると 46 件あった（2026-10-24）。
+
+| 範囲                                    | 件数 | 例                                                       |
+| --------------------------------------- | ---- | -------------------------------------------------------- |
+| JAG 模擬国内（3202 / 3250 / 3299）      | 3    | `"Chains of Explosions "`（末尾の空白）                  |
+| JAG 模擬地区（3355）                    | 1    | `"Most distant point from the stations\t"`（末尾のタブ） |
+| AtCoder（ABC / AGC / ARC / JOI / TTPC） | 42   | `"A. Weather Prediction "`（末尾の空白）                 |
+
+- **出どころは上流のデータ**。AOJ の API が返す名前そのものに空白がある（2026-05 に記録した fixture の `jag_prelim` / `jag_regional` にも同じ空白がある）。AtCoder Problems も同様
+- **再発はしない**。取り込みが title を `trim()` するようになった（2026-05-18、`0e1ec4e7`）。46 件はそれより前に入った行。seed の値は trim 済み
+- **実害は無い**。HTML の表示では末尾の空白が潰れる。title を比べるコードは `removeTaskIndexFromTitle` の `startsWith`（先頭の `A. ` を見るだけ）しか無く、完全一致で比べる箇所は無い。検索は部分一致なので、空白で終わる検索語でなければ影響しない
+- **起こりうる害**: 将来 title の完全一致で照合する処理（#4018 のコンテスト情報の同期など）を書くと、この 46 件だけが食い違う。CSV の `id` は `sha256(contest_id + title)` だが、既存行の `id` は再計算されないので関係ない
+
+PR2 では直さず、残タスクとした（[plan.md](./plan.md#スコープ外)）。
 
 ## 欠落は機械的に検出できない
 

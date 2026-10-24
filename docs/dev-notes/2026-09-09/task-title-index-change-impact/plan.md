@@ -1,11 +1,12 @@
 # AOJ ICPC / JAG の `problem_index` を A/B/C 形式へ変更する
 
-**日付**: 2026-09-09 作成、2026-10-24 に PR2 以降を再構成／ **状態**: PR0・PR1 完了。PR2 以降は未着手
+**日付**: 2026-09-09 作成、2026-10-24 に PR2 以降を再構成／ **状態**: PR0・PR1 完了。PR1.5 以降は未着手
 
 このファイルは全体像と、PR をまたぐ決定・手順だけを書く。各 PR の作業はそれぞれのファイルにある。
 
 | ファイル                               | 内容                                                 |
 | -------------------------------------- | ---------------------------------------------------- |
+| [plan-pr1-5.md](./plan-pr1-5.md)       | PR1.5: AOJ API の移転に追従する（#4028）             |
 | [plan-pr2.md](./plan-pr2.md)           | PR2: 合宿系と JAG 模擬地区を記号にする（データ移行） |
 | [plan-pr2-1.md](./plan-pr2-1.md)       | PR2.1: DB に無い 10 コンテストを入れる               |
 | [plan-pr2-5.md](./plan-pr2-5.md)       | PR2.5: コンテスト表に出す（Provider）                |
@@ -34,10 +35,13 @@
 
 表示側の変換は PR1 で削除済みで、コンテスト表のセルは `task_table_index` から `A. タイトル` を組み立てる。出典欄の書式（G1）は AOJ 全体に入っているので、合宿系・模擬地区の出典欄は今 `JAG 夏合宿 2024 Day3 - 3644（AOJ）` のように問題 ID を出している。
 
+AOJ の API は 2026-09-07 に別のホストへ移り、旧ホストは 410 を返す。このため**今は管理画面から AOJ を取り込めない**（PR1.5 で直す）。
+
 ## PR の分割と順序
 
 |                          | 範囲                                                    | コンテスト | 問題数                    | 内容                                                      |
 | ------------------------ | ------------------------------------------------------- | ---------- | ------------------------- | --------------------------------------------------------- |
+| [PR1.5](./plan-pr1-5.md) | AOJ の API クライアント                                 | —          | —                         | ベース URL を新しいホストへ変える（#4028）                |
 | [PR2](./plan-pr2.md)     | JAG 夏合宿 / 冬合宿 / 春合宿 + JAG 模擬地区             | 66         | 625                       | 既存データを記号にする（seed・移行 SQL・title・取り込み） |
 | [PR2.1](./plan-pr2-1.md) | 2025 / 2026 の夏合宿（AOJ）+ in AtCoder の 4 コンテスト | 10         | 114（スプレッドシート上） | 新しいデータを入れる（`ATCODER_JAG` の新設を含む）        |
 | [PR2.5](./plan-pr2-5.md) | PR2 / PR2.1 の 76 コンテスト                            | 76         | —                         | グループ「JAG 模擬地区」でコンテスト表に出す              |
@@ -45,6 +49,7 @@
 
 PR1 と PR2 で、記号にするのは 1,257 問 / 145 コンテストになる。PR2 で完結し、PR3 に進まなくても機能として成立する。
 
+- **PR1.5 → staging で JAG REGIONAL を取り込む → PR2 の順にする**。PR2 の件数チェックを staging で通すには、staging の模擬地区を本番と同じ 16 / 158 にそろえる必要があり、それには AOJ の取り込みが動いている必要がある。取り込みは PR2 のコードが入る前に行う（PR2 のコードで取り込むと基本ルールの記号が入り、2005 / 2013 がずれる）
 - **PR2 → PR2.5 は守る**。Provider を先に出すと、合宿系の数値の index と `'2389. …'` の title がそのまま表に出る
 - **PR2.1 は PR2 / PR2.5 と前後してよい**。PR2 の移行 SQL は index が問題 ID のままの行しか書き換えず、Provider はデータの無いコンテストを表示しない（`TaskTable.svelte` の `prepareContestTable` が `null` を返す）
 - **PR3 は独立**。PR2 で記号を補正するので、欠落を後から足しても既存の記号はずれない
@@ -52,6 +57,8 @@ PR1 と PR2 で、記号にするのは 1,257 問 / 145 コンテストになる
 ### スコープ外
 
 次の AOJ は数値の index のまま残し、別タスクとする（本番の件数、2026-10-21）。PR1 から残っているタスクは [done.md](./done.md#残タスク)。
+
+本番の title のうち 46 件は前後に空白がある（AOJ 4 件、AtCoder 42 件。[詳細](./investigation.md#前後に空白のある-title)）。実害が無く再発もしないので、本件では直さず残タスクとする。直すときは、1 本の UPDATE（`btrim`、46 件の件数チェック付き）で済む。
 
 | 範囲        | 本番（コンテスト / 問題） | 今の出典欄                                            | 残す理由                                                   |
 | ----------- | ------------------------- | ----------------------------------------------------- | ---------------------------------------------------------- |
@@ -89,7 +96,6 @@ PR1 と PR2 で、記号にするのは 1,257 問 / 145 コンテストになる
 | M16 | PR2.5 | テーブル名は `getContestNameLabel` の名称に括弧書き（`JAG` / `有志` / `in JAG 夏合宿 20xx Day3`）を付ける。出典欄は変えない | 名称は現行の `JAG_TRANSLATIONS` に合わせる。「過去問」「in AtCoder」「AMATSUKAZE2025」は括弧ごと書かない。出典欄とそろえるのは #4018（コンテスト情報の DB 化）で行う |
 | M17 | PR2.1 | AtCoder 上の 4 つは `ATCODER_JAG` を新設し、AOJ の 2025 / 2026 は seed と Supabase の CSV で入れる                          | `ATCODER_JAG` は enum・優先度・分類ルールのいずれも `UNIVERSITY` の直前に置き、4 つを完全一致で分類する。CSV は移行の後に記号付きで入れる                            |
 | M18 | PR2   | seed の記号の検査では、補正したコンテストだけ期待値を literal で書く                                                        | 補正していないコンテストは `assignProblemLetters` と一致することを見る                                                                                               |
-| M19 | PR2   | 本番の 3355 の title 末尾のタブを、PR2 の移行で除く                                                                         | 本番だけにある（2026-10-24 に判明）。seed は trim した title で入れる。今の取り込みは `trim()` するので再発しない                                                    |
 
 OPTIONAL は 1 件のみ。**O5**: `createTask` の check-then-act を upsert 化 — 本件と独立の既存課題で別ブランチ推奨（[詳細](./investigation.md#check-then-act-の競合)）。
 
@@ -111,16 +117,21 @@ PR2（記号の移行）と PR2.1（enum の追加）、PR3 に当てはまる�
 
 ### CI での適用
 
-CI が `github.ref` でジョブを分け、staging と production の両方に `prisma migrate deploy` を実行している（`.github/workflows/ci.yml`）。
+`.github/workflows/ci.yml` の流れ（2026-10-24 に確認）:
 
-| ブランチ    | 適用先                    |
-| ----------- | ------------------------- |
-| `main` 以外 | `PREVIEW_DATABASE_URL`    |
-| `main`      | `PRODUCTION_DATABASE_URL` |
+1. `main` / `staging` への push と、`pull_request` で起動する
+2. build / lint / check / unit-test が並列に走る
+3. 4 つとも通ると、`main` 以外では `preview` ジョブ、`main` では `production` ジョブが走る。どちらも `vercel build` の**後**・Vercel デプロイの**前**に `prisma migrate deploy` を流す（build が失敗すれば DB に触れない）
 
-いずれも build / lint / check / unit-test ジョブの成功後、`vercel build` の**後**・Vercel デプロイの**前**に走る（build が失敗すれば DB に触れない）。`main` へ昇格した時点で production に適用されるため、**staging での確認が自然にゲートになる**。
+| 起動したもの                                                | ジョブ       | 適用先                                  |
+| ----------------------------------------------------------- | ------------ | --------------------------------------- |
+| PR の CI（ref は `refs/pull/N/merge`）、`staging` への push | `preview`    | `PREVIEW_DATABASE_URL`（staging の DB） |
+| `main` への push                                            | `production` | `PRODUCTION_DATABASE_URL`               |
 
-> **要確認**: CI は `pull_request` でも起動し、preview ジョブの条件は `github.ref != 'refs/heads/main'` だけである。YAML 上は、**同一リポジトリのブランチから PR を開いた時点で** `PREVIEW_DATABASE_URL` に適用される（staging へのマージ前）。Actions の実行履歴で確かめること。このため SQL の確認は PR を開く前にローカルで済ませる。
+- **PR の CI でも staging の DB に適用される**。PR を開いた瞬間ではなく、その PR の CI で 4 ジョブが通った後だが、**staging へのマージより前**である。`preview` ジョブの条件は `github.ref != 'refs/heads/main'` だけで、PR の ref も当たる。実際、#4217 の `pull_request` の実行でも `preview` ジョブが成功している（ログはログインしないと見られないので、`migrate deploy` の出力までは確かめていない）。staging へマージしたときにも走るが、適用済みなので何もしない
+- このため SQL の確認は PR を開く前にローカルで済ませる。PR に push し直すたびに CI が走るが、適用済みのマイグレーションは編集しても再適用されない
+- `main` へ昇格した時点で production に適用されるため、**staging での確認が自然にゲートになる**
+- 本件の範囲外だが、`preview` ジョブの「Assign staging domain」の手順は、コメントに「if staging branch」とあるのに条件は `github.ref != 'refs/heads/main'` である。PR のデプロイにも staging のドメインが付け替わる
 
 ### 手順
 
