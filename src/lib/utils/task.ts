@@ -124,6 +124,10 @@ export const removeTaskIndexFromTitle = (title: string, taskTableIndex: string =
   return title.replace(`${taskTableIndex}. `, '');
 };
 
+// Strip first so titles that already carry the index (AtCoder) are not prefixed twice.
+export const buildTitleWithTaskIndex = (title: string, taskTableIndex: string): string =>
+  `${taskTableIndex}. ${removeTaskIndexFromTitle(title, taskTableIndex)}`;
+
 export const taskGradeOrderInfinity = 9999;
 
 // order: 1 (first) - 17 (last)、9999: Infinity

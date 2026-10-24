@@ -24,6 +24,7 @@ import {
   areAllTasksAccepted,
   compareByContestIdAndTaskId,
   removeTaskIndexFromTitle,
+  buildTitleWithTaskIndex,
   getTaskTableHeaderName,
 } from '#lib/utils/task.js';
 
@@ -707,6 +708,64 @@ describe('Task', () => {
         testCases,
         ({ title, taskTableIndex, expected }: TestCaseForNewTitle) => {
           expect(removeTaskIndexFromTitle(title, taskTableIndex)).toBe(expected);
+        },
+      );
+    });
+  });
+
+  describe('build title with task index', () => {
+    describe('when the title already starts with the task index (AtCoder)', () => {
+      const testCases: TestCasesForNewTitle = [
+        {
+          title: 'A. Jiro',
+          taskTableIndex: 'A',
+          expected: 'A. Jiro',
+        },
+        {
+          title: 'EX10. 1.10',
+          taskTableIndex: 'EX10',
+          expected: 'EX10. 1.10',
+        },
+        {
+          title: '001. Yokan Party（★4）',
+          taskTableIndex: '001',
+          expected: '001. Yokan Party（★4）',
+        },
+      ];
+
+      runTests(
+        'buildTitleWithTaskIndex',
+        testCases,
+        ({ title, taskTableIndex, expected }: TestCaseForNewTitle) => {
+          expect(buildTitleWithTaskIndex(title, taskTableIndex)).toBe(expected);
+        },
+      );
+    });
+
+    describe('when the title has no task index (AOJ ICPC / JAG Prelim)', () => {
+      const testCases: TestCasesForNewTitle = [
+        {
+          title: 'Snacks within 300 Yen',
+          taskTableIndex: 'A',
+          expected: 'A. Snacks within 300 Yen',
+        },
+        {
+          title: 'Billiards',
+          taskTableIndex: 'F',
+          expected: 'F. Billiards',
+        },
+        {
+          title: 'Peculiar Protocol',
+          taskTableIndex: 'L',
+          expected: 'L. Peculiar Protocol',
+        },
+      ];
+
+      runTests(
+        'buildTitleWithTaskIndex',
+        testCases,
+        ({ title, taskTableIndex, expected }: TestCaseForNewTitle) => {
+          expect(buildTitleWithTaskIndex(title, taskTableIndex)).toBe(expected);
         },
       );
     });

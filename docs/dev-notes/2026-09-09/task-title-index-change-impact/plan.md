@@ -1,6 +1,6 @@
 # AOJ ICPC / JAG の `problem_index` を A/B/C 形式へ変更する
 
-**日付**: 2026-09-09（2026-10-21 に現行コードと再照合し、参照・数値を更新）／ **状態**: 調査完了・実装未承認 **実測データと検討の経緯は** [investigation.md](./investigation.md)
+**日付**: 2026-09-09（2026-10-21 に現行コードと再照合し、参照・数値を更新）／ **状態**: PR0 完了（#4212）・PR1 実装済み（2026-10-24、[実施記録](#pr1-の実施記録2026-10-24)） **実測データと検討の経緯は** [investigation.md](./investigation.md)
 
 ## ゴール
 
@@ -129,7 +129,7 @@ WITH letters AS (
          chr(64 + row_number() OVER (
            PARTITION BY contest_id      -- Restart numbering for each contest.
            ORDER BY task_id::int        -- AOJ problem ids are numeric.
-         )) AS letter
+         )::int) AS letter
   FROM "task"
   WHERE contest_type = 'AOJ_ICPC'
      -- AOJ_JAG also covers training camps, so narrow it by contest_id.
@@ -146,6 +146,8 @@ WHERE t."task_id" = letters.task_id
     OR (t."contest_type" = 'AOJ_JAG' AND t."contest_id" LIKE 'JAGPrelim%')
   );
 ```
+
+`row_number()` は `bigint` を返し、`chr(bigint)` は存在しない（`ERROR: function chr(bigint) does not exist`）。このため `::int` が要る（2026-10-24 にローカルで確認。当初の SQL には無かった）。
 
 **範囲は `contest_type` だけでは絞れない。** 合宿系（`JAGSummer` / `JAGWinter` / `JAGSpring`）も模擬国内と同じ `AOJ_JAG` に分類される（`src/lib/contests/utils/classification.ts:76` の `regexForJag`）。`contest_type IN ('AOJ_ICPC', 'AOJ_JAG')` のままだと PR1 で合宿系 467 件まで更新される。そうなると破壊的変更 5 が PR1 で起き、欠落確認前の記号が合宿系に入る。このため `contest_id` の接頭辞で絞る。
 
@@ -202,15 +204,15 @@ WHERE "contest_type" = 'AOJ_JAG'
 
 ### 事故対策
 
-| 観点                     | 内容                                                                                                                                                                                               |
-| ------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **爆発半径**             | 復元できるのは AOJ ICPC/JAG の 1,099 件のみ。WHERE 句が壊れて AtCoder 系に波及すると**一括復元の手段が無くなる**（[実測](./investigation.md#復元可能性の実測)）。外側 `WHERE` の重複条件はこのため |
-| **復元**                 | 一度目の適用に限り、`task_table_index` も `title` のプレフィックスも `task_id` から再構成できる                                                                                                    |
-| **バックアップ**         | Supabase Pro のため PITR が利用可。復元トリックが効くのは一度目だけなので、**再修正時は PITR が唯一の手段**                                                                                        |
-| **`updated_at`**         | `@updatedAt` は Prisma Client 側の実装で DB トリガーではない。生 SQL では更新されない。**意図的に含めない**                                                                                        |
-| **キャッシュ**           | TTL 1 時間（`src/lib/clients/cache.ts:157`）。生 SQL は `invalidateTaskCaches()` を経由しない。ローカル / staging で「更新したのに表示が変わらない」ときはこれを疑う                               |
-| **トランザクション境界** | Prisma は PostgreSQL でマイグレーションファイル単位のトランザクションを張る挙動だが**本リポジトリでは未確認**。ローカル（手順 4）で先に確認すること                                                |
-| **デプロイ直前の数分**   | マイグレーションの適用から Vercel のデプロイ完了までの間は、旧コードが記号のデータを `Number()` で並べるため、記号がずれて表示されうる。数分で解消するので**許容する**                             |
+| 観点                     | 内容                                                                                                                                                                                                      |
+| ------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **爆発半径**             | 復元できるのは AOJ ICPC/JAG の 1,099 件のみ。WHERE 句が壊れて AtCoder 系に波及すると**一括復元の手段が無くなる**（[実測](./investigation.md#復元可能性の実測)）。外側 `WHERE` の重複条件はこのため        |
+| **復元**                 | 一度目の適用に限り、`task_table_index` も `title` のプレフィックスも `task_id` から再構成できる                                                                                                           |
+| **バックアップ**         | Supabase Pro のため PITR が利用可。復元トリックが効くのは一度目だけなので、**再修正時は PITR が唯一の手段**                                                                                               |
+| **`updated_at`**         | `@updatedAt` は Prisma Client 側の実装で DB トリガーではない。生 SQL では更新されない。**意図的に含めない**                                                                                               |
+| **キャッシュ**           | TTL 1 時間（`src/lib/clients/cache.ts:157`）。生 SQL は `invalidateTaskCaches()` を経由しない。ローカル / staging で「更新したのに表示が変わらない」ときはこれを疑う                                      |
+| **トランザクション境界** | マイグレーションファイル単位で原子的に適用される。2026-10-24 にローカルの別スキーマで、3 文目が失敗するマイグレーションを `prisma migrate deploy` し、1–2 文目（CREATE / INSERT）も残らないことを確認した |
+| **デプロイ直前の数分**   | マイグレーションの適用から Vercel のデプロイ完了までの間は、旧コードが記号のデータを `Number()` で並べるため、記号がずれて表示されうる。数分で解消するので**許容する**                                    |
 
 ## フェーズ
 
@@ -314,6 +316,31 @@ AtCoder 側の表示は変わらない。`isShownTaskIndex: true` の Provider�
 #### PR1 の範囲の本番データ
 
 本番の ICPC 国内予選 / アジア地区 / JAG 模擬国内は 79 コンテスト / 632 問で、seed と一致する（2026-10-21 に集計、[内訳](./investigation.md#本番の件数2026-10-21)）。本番の `AOJ_JAG` が seed より多い分（16 コンテスト / 158 問）は JAG 模擬地区で、PR1 / PR2 の移行 SQL の条件から外れる。
+
+#### PR1 の実施記録（2026-10-24）
+
+移行 SQL は `prisma/migrations/20261024033928_update_aoj_task_table_index/migration.sql`。
+
+適用前の確認（ローカル DB、手順 3）:
+
+- `migration.sql` の CTE と外側の `WHERE` をそのまま使い、`UPDATE` を `SELECT` に置き換えて「現在値 → 変更後」を出した。632 行 / 79 コンテスト、`task_id` の重複なし、全行で現在値 = `task_id`（数値）
+- 生成スクリプトの JSON（632 件）と突き合わせ: 片側にしか無い ID 0、記号の不一致 0
+- 現行の表示ロジック（`buildAojLetterMap`）を現在値に当てた記号とも突き合わせ: 不一致 0。各コンテストの記号は A から連続
+- 2279 の title 更新対象は 1 行
+- `EXPLAIN`: `task` の Seq Scan 2 回（CTE と外側。`contest_type` に索引が無いため想定どおり）+ Hash Join
+
+適用後の確認（手順 4）:
+
+- 632 行がプレビューの記号と一致。範囲外の AOJ（合宿系・模擬地区 518 行、PCK、Courses、大学系）は数値の index のまま。2279 は `I` / `Mountain`
+- 旧コード（`Number` ソート + `buildAojLetterMap` + `formatAojTitle`）で適用前のデータを描画した結果と、新コード（`localeCompare` + `buildTitleWithTaskIndex`）で適用後のデータを描画した結果が、79 コンテストすべてで列順・セルの文字列とも一致した。スクリーンショットによる目視確認（1-7 の手動）は未実施
+- `removeTaskIndexFromTitle` は `"{index}. "` の最初の出現を位置を問わず消すため、title の途中に `"{記号}. "` を含む問題が無いことを seed と DB の両方で確認した（0 件）
+
+計画からの差分:
+
+- `buildTitleWithTaskIndex` のテストは、新設せず既存の `src/test/lib/utils/task.test.ts` に足した（`task.ts` のテストが既にそこにあるため）
+- AOJ API の JAG 模擬国内には 2 日開催のコンテスト（fixture の `JAGPrelim20162`、2738–2751）がある。取り込み時の `contest_id` は日ではなくコンテスト単位なので A–N になる（日ごとに振ると同じ `contest_id` に A–G が重複する）。seed / 本番は `JAGPrelim2016A` / `B` に分かれており、取り込みは既存 ID を skip するため影響しない
+
+テストの検出力（`verify-test-strength`）: 次の 15 個の変異をすべて検出した。`assignProblemLetters` の数値→辞書順ソート / 降順 / 記号の開始位置 / 入力の破壊、`mapToTask` が `problemIndex` を無視、`getTasks` の JAG 条件の反転 / 全種別に記号 / 1 日目だけで記号付与、seed の 1 件を数値に戻す / A・B の入れ替え、`sortAojHeaderIds` の降順 / `Number` 比較 / 重複除去なし、`buildTitleWithTaskIndex` の除去なし / title をそのまま返す。単独で検出する変異が無いテストは seed 整合テストの `ICPC Prelim 2024 F is problem 1677` だけだが、このファイルで唯一の literal な期待値（対応表とデータが一緒にずれた場合の歯止め）なので残した。
 
 ### PR2 — JAG 夏 / 冬 / 春合宿（50 コンテスト / 467 問）
 

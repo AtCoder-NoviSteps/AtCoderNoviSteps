@@ -81,8 +81,8 @@ Step 0 (seed check) is already done. Confirm the following before touching code:
 - [ ] Export `OLDEST_YEAR` / `LATEST_YEAR` constants. Use `super(contestType, String(param))` for unique provider key
 - [ ] Tests: `getSize() === LATEST - OLDEST + 1`, etc.
 - [ ] **RED** → implement → **GREEN**
-- [ ] If display label needed: use `getTaskLabels` — do NOT mutate title inside `generateTable` (optimistic update + `$derived` re-run causes prefix accumulation)
-- [ ] For AOJ-specific options (`getTaskLabels` / override map / `titleStyle` / `columnWrapThreshold`), see `aoj_icpc_providers.ts` / `aoj_jag_providers.ts`
+- [ ] If cells need an index prefix (e.g. `A. title`): set `isShownTaskIndex: true` so the cell builds it from `task_table_index` — do NOT mutate title inside `generateTable` (optimistic update + `$derived` re-run causes prefix accumulation)
+- [ ] For AOJ-specific options (`titleStyle` / `columnWrapThreshold`), see `aoj_icpc_providers.ts` / `aoj_jag_providers.ts`
 
 ---
 

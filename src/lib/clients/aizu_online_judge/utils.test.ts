@@ -1,6 +1,12 @@
 import { describe, test, expect } from 'vitest';
 
-import { buildEndpoint, mapToContest, mapToTask, getCourseName } from './utils';
+import {
+  buildEndpoint,
+  mapToContest,
+  assignProblemLetters,
+  mapToTask,
+  getCourseName,
+} from './utils';
 import { PENDING } from './types';
 import type { AOJTaskAPI } from './types';
 
@@ -77,6 +83,55 @@ describe('mapToContest', () => {
   });
 });
 
+describe('assignProblemLetters', () => {
+  describe('successful cases', () => {
+    test('assigns letters A, B, C... in ascending problem id order', () => {
+      const result = assignProblemLetters(['1665', '1664', '1666']);
+
+      expect(result).toEqual(
+        new Map([
+          ['1664', 'A'],
+          ['1665', 'B'],
+          ['1666', 'C'],
+        ]),
+      );
+    });
+
+    test('assigns letters A through L to the 12 problems of ICPC Regional 2024', () => {
+      const problemIds = Array.from({ length: 12 }, (_, i) => String(1455 + i));
+      const result = assignProblemLetters(problemIds);
+
+      expect(result.get('1455')).toBe('A');
+      expect(result.get('1466')).toBe('L');
+      expect(result.size).toBe(12);
+    });
+
+    test('sorts problem ids numerically, not lexicographically', () => {
+      const result = assignProblemLetters(['10000', '9999']);
+
+      expect(result.get('9999')).toBe('A');
+      expect(result.get('10000')).toBe('B');
+    });
+
+    test('does not mutate the input array', () => {
+      const problemIds = ['1665', '1664'];
+      assignProblemLetters(problemIds);
+
+      expect(problemIds).toEqual(['1665', '1664']);
+    });
+  });
+
+  describe('edge cases', () => {
+    test('returns an empty map for empty input', () => {
+      expect(assignProblemLetters([]).size).toBe(0);
+    });
+
+    test('assigns A to a single problem', () => {
+      expect(assignProblemLetters(['1100'])).toEqual(new Map([['1100', 'A']]));
+    });
+  });
+});
+
 describe('mapToTask', () => {
   const baseTask: AOJTaskAPI = {
     id: 'ITP1_1_A',
@@ -115,6 +170,14 @@ describe('mapToTask', () => {
 
       expect(result.problem_index).toBe(baseTask.id);
       expect(result.task_id).toBe(baseTask.id);
+    });
+
+    test('uses the given problemIndex instead of the problem id', () => {
+      const icpcTask: AOJTaskAPI = { ...baseTask, id: '1677', name: 'Billiards' };
+      const result = mapToTask(icpcTask, 'ICPCPrelim2024', 'F');
+
+      expect(result.problem_index).toBe('F');
+      expect(result.task_id).toBe('1677');
     });
 
     test('uses problem.name as title', () => {

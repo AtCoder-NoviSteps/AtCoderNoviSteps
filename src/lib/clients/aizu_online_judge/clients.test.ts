@@ -33,6 +33,18 @@ function buildChallengesClient(): AojChallengesApiClient {
   return new AojChallengesApiClient(httpClient, buildCache());
 }
 
+// task_id -> problem_index for the tasks of one contest.
+function getProblemIndicesByTaskId(
+  tasks: TasksForImport,
+  contestId: string,
+): Record<string, string> {
+  return Object.fromEntries(
+    tasks
+      .filter((task) => task.contest_id === contestId)
+      .map((task) => [task.task_id, task.problem_index]),
+  );
+}
+
 const FIXTURE_PATHS = {
   courses: {
     contests: './src/lib/clients/fixtures/aizu_online_judge/courses/contests.json',
@@ -176,6 +188,12 @@ describe('AojChallengesApiClient', () => {
       expect(tasks.length).toBe(expectedCount);
     });
 
+    test('keeps the problem id as problem_index for PCK PRELIM tasks', async () => {
+      const tasks = await client.getTasks({ contestType: 'PCK', round: 'PRELIM' });
+
+      expect(tasks.every((task) => task.problem_index === task.task_id)).toBe(true);
+    });
+
     test('each PCK PRELIM task has required fields', async () => {
       const tasks = await client.getTasks({ contestType: 'PCK', round: 'PRELIM' });
       tasks.forEach((task) => {
@@ -232,6 +250,32 @@ describe('AojChallengesApiClient', () => {
         .flatMap((day) => day.problems).length;
       expect(tasks.length).toBe(expectedCount);
     });
+
+    test('assigns problem letters per contest in ascending problem id order', async () => {
+      const tasks = await client.getTasks({ contestType: 'JAG', round: 'PRELIM' });
+
+      expect(getProblemIndicesByTaskId(tasks, 'JAGPrelim2023')).toEqual({
+        '3358': 'A',
+        '3359': 'B',
+        '3360': 'C',
+        '3361': 'D',
+        '3362': 'E',
+        '3363': 'F',
+        '3364': 'G',
+        '3365': 'H',
+      });
+    });
+
+    // contest_id comes from contest.abbr, so letters must be unique across all days of a contest.
+    test('assigns letters across all days of a multi-day contest', async () => {
+      const tasks = await client.getTasks({ contestType: 'JAG', round: 'PRELIM' });
+      const indices = getProblemIndicesByTaskId(tasks, 'JAGPrelim20162');
+
+      expect(indices['2738']).toBe('A');
+      expect(indices['2744']).toBe('G');
+      expect(indices['2745']).toBe('H');
+      expect(indices['2751']).toBe('N');
+    });
   });
 
   describe('JAG REGIONAL', () => {
@@ -255,6 +299,19 @@ describe('AojChallengesApiClient', () => {
         .flatMap((contest) => contest.days)
         .flatMap((day) => day.problems).length;
       expect(tasks.length).toBe(expectedCount);
+    });
+
+    test('keeps the problem id as problem_index for JAG REGIONAL tasks', async () => {
+      const tasks = await client.getTasks({ contestType: 'JAG', round: 'REGIONAL' });
+
+      expect(getProblemIndicesByTaskId(tasks, 'JAGRegional2005')).toEqual({
+        '2024': '2024',
+        '2025': '2025',
+        '2026': '2026',
+        '2027': '2027',
+        '2028': '2028',
+        '2029': '2029',
+      });
     });
   });
 
@@ -280,6 +337,28 @@ describe('AojChallengesApiClient', () => {
         .flatMap((day) => day.problems).length;
       expect(tasks.length).toBe(expectedCount);
     });
+
+    test('assigns problem letters per contest in ascending problem id order', async () => {
+      const tasks = await client.getTasks({ contestType: 'ICPC', round: 'PRELIM' });
+
+      expect(getProblemIndicesByTaskId(tasks, 'ICPCPrelim1998')).toEqual({
+        '1100': 'A',
+        '1101': 'B',
+        '1102': 'C',
+        '1103': 'D',
+      });
+      expect(getProblemIndicesByTaskId(tasks, 'ICPCPrelim2025')).toEqual({
+        '1681': 'A',
+        '1682': 'B',
+        '1683': 'C',
+        '1684': 'D',
+        '1685': 'E',
+        '1686': 'F',
+        '1687': 'G',
+        '1688': 'H',
+        '1689': 'I',
+      });
+    });
   });
 
   describe('ICPC REGIONAL', () => {
@@ -303,6 +382,16 @@ describe('AojChallengesApiClient', () => {
         .flatMap((contest) => contest.days)
         .flatMap((day) => day.problems).length;
       expect(tasks.length).toBe(expectedCount);
+    });
+
+    test('assigns problem letters A through L for ICPC Regional 2024', async () => {
+      const tasks = await client.getTasks({ contestType: 'ICPC', round: 'REGIONAL' });
+      const indices = getProblemIndicesByTaskId(tasks, 'ICPCRegional2024');
+
+      expect(Object.keys(indices)).toHaveLength(12);
+      expect(indices['1455']).toBe('A');
+      expect(indices['1460']).toBe('F');
+      expect(indices['1466']).toBe('L');
     });
 
     test('each ICPC REGIONAL task has required fields', async () => {

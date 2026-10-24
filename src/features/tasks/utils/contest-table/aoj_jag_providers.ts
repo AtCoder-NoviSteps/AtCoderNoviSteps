@@ -6,12 +6,7 @@ import {
 } from '#features/tasks/types/contest-table/contest_table_provider.js';
 
 import { ContestTableProviderBase } from './contest_table_provider_base';
-import {
-  buildAojLetterMap,
-  sortAojHeaderIds,
-  AOJ_TITLE_STYLE,
-  buildAojDisplayConfig,
-} from './aoj_labels';
+import { sortAojHeaderIds, AOJ_TITLE_STYLE, buildAojDisplayConfig } from './aoj_labels';
 
 /**
  * One JAG Domestic Preliminary (JAG 模擬国内) table, keyed by year.
@@ -54,15 +49,6 @@ export class JagPrelimProvider extends ContestTableProviderBase {
 
   getContestRoundLabel(_contestId: string): string {
     return this.buildTitle();
-  }
-
-  override getTaskLabels(filtered: TaskResults): Record<string, Record<string, string>> {
-    const letterMap = buildAojLetterMap(
-      this.contestId,
-      filtered.map((taskResult) => taskResult.task_table_index),
-    );
-
-    return { [this.contestId]: Object.fromEntries(letterMap) };
   }
 
   private buildTitle(): string {

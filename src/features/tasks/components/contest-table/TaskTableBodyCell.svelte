@@ -6,15 +6,17 @@
   import ExternalLinkWrapper from '#lib/components/ExternalLinkWrapper.svelte';
   import UpdatingDropdown from '#lib/components/SubmissionStatus/UpdatingDropdown.svelte';
 
-  import { getTaskUrl, removeTaskIndexFromTitle } from '#lib/utils/task.js';
-  import { formatAojTitle } from '#features/tasks/utils/contest-table/aoj_labels.js';
+  import {
+    getTaskUrl,
+    removeTaskIndexFromTitle,
+    buildTitleWithTaskIndex,
+  } from '#lib/utils/task.js';
 
   interface Props {
     taskResult: TaskResult;
     isLoggedIn: boolean;
     isAtCoderVerified: boolean;
     isShownTaskIndex: boolean;
-    taskLabel?: string;
     voteResults: VoteStatisticsMap;
     showNeutralBadge?: boolean;
     onupdate?: (updatedTask: TaskResult) => void; // Ensure to update task result in parent component.
@@ -25,24 +27,17 @@
     isLoggedIn,
     isAtCoderVerified,
     isShownTaskIndex,
-    taskLabel,
     voteResults,
     showNeutralBadge = true,
     onupdate = () => {},
   }: Props = $props();
 
   let estimatedGrade = $derived(voteResults.get(taskResult.task_id)?.grade);
-  let displayTitle = $derived.by(() => {
-    if (taskLabel) {
-      return formatAojTitle(taskResult.title, taskLabel);
-    }
-
-    if (isShownTaskIndex) {
-      return taskResult.title;
-    }
-
-    return removeTaskIndexFromTitle(taskResult.title, taskResult.task_table_index);
-  });
+  let displayTitle = $derived(
+    isShownTaskIndex
+      ? buildTitleWithTaskIndex(taskResult.title, taskResult.task_table_index)
+      : removeTaskIndexFromTitle(taskResult.title, taskResult.task_table_index),
+  );
 </script>
 
 <div

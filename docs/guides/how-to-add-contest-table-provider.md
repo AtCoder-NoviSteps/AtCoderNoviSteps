@@ -80,7 +80,7 @@ protected setFilterCondition(): (taskResult: TaskResult) => boolean {
 - 年度範囲定数（`OLDEST_YEAR` / `LATEST_YEAR`）を `export` してテストでも参照
 - グループ登録は最新年→古い年の降順（`addProvider` 順 = 表示順、先 = 上）
 
-AOJ/JAG 固有の詳細（`AOJ_LABEL_OVERRIDES`、`titleStyle`、同一年2回開催の `suffix` 分割など）は `aoj_icpc_providers.ts` / `aoj_jag_providers.ts` を参照。
+AOJ/JAG 固有の詳細（`titleStyle`、同一年2回開催の `suffix` 分割など）は `aoj_icpc_providers.ts` / `aoj_jag_providers.ts` を参照。
 
 ### 補足: 固定セクションによる同一 ContestType 内の共存
 

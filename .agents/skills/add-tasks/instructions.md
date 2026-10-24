@@ -17,6 +17,7 @@
 - Source: `https://kenkoooo.com/atcoder/resources/problems.json`
 - atcoder.jp is unreachable and WebFetch truncates problems.json, so a miss there is not evidence of absence — ask the user to paste the rows
 - Use `id` / `problem_index` / `name` / `title` verbatim; do not derive `id` from contest_id
+- ICPC Prelim / ICPC Regional / JAG Prelim: set `problem_index` to the problem letter, not the AOJ problem id — A, B, C... in ascending problem id within the contest, as `assignProblemLetters` does on import. `seed_problem_letters.test.ts` checks this
 
 ## Tests
 
