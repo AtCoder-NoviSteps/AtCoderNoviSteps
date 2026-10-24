@@ -333,11 +333,10 @@ AtCoder 側の表示は変わらない。`isShownTaskIndex: true` の Provider�
 
 - 632 行がプレビューの記号と一致。範囲外の AOJ（合宿系・模擬地区 518 行、PCK、Courses、大学系）は数値の index のまま。2279 は `I` / `Mountain`
 - 旧コード（`Number` ソート + `buildAojLetterMap` + `formatAojTitle`）で適用前のデータを描画した結果と、新コード（`localeCompare` + `buildTitleWithTaskIndex`）で適用後のデータを描画した結果が、79 コンテストすべてで列順・セルの文字列とも一致した。スクリーンショットによる目視確認（1-7 の手動）は未実施
-- `removeTaskIndexFromTitle` は `"{index}. "` の最初の出現を位置を問わず消すため、title の途中に `"{記号}. "` を含む問題が無いことを seed と DB の両方で確認した（0 件）
+- `removeTaskIndexFromTitle` は当初 `"{index}. "` の最初の出現を位置を問わず消していた。title の途中に `"{記号}. "` を含む問題は seed にも DB にも無い（0 件）が、レビューを受けて先頭のプレフィックスだけを消すよう直した（下記）
 
 計画からの差分:
 
-- `buildTitleWithTaskIndex` のテストは、新設せず既存の `src/test/lib/utils/task.test.ts` に足した（`task.ts` のテストが既にそこにあるため）
 - AOJ API の JAG 模擬国内には 2 日開催のコンテスト（fixture の `JAGPrelim20162`、2738–2751）がある。取り込み時の `contest_id` は日ではなくコンテスト単位なので A–N になる（日ごとに振ると同じ `contest_id` に A–G が重複する）。seed / 本番は `JAGPrelim2016A` / `B` に分かれており、取り込みは既存 ID を skip するため影響しない
 
 テストの検出力（`verify-test-strength`）: 次の 15 個の変異をすべて検出した。`assignProblemLetters` の数値→辞書順ソート / 降順 / 記号の開始位置 / 入力の破壊、`mapToTask` が `problemIndex` を無視、`getTasks` の JAG 条件の反転 / 全種別に記号 / 1 日目だけで記号付与、seed の 1 件を数値に戻す / A・B の入れ替え、`sortAojHeaderIds` の降順 / `Number` 比較 / 重複除去なし、`buildTitleWithTaskIndex` の除去なし / title をそのまま返す。単独で検出する変異が無いテストは seed 整合テストの `ICPC Prelim 2024 F is problem 1677` だけだが、このファイルで唯一の literal な期待値（対応表とデータが一緒にずれた場合の歯止め）なので残した。
@@ -349,6 +348,14 @@ AtCoder 側の表示は変わらない。`isShownTaskIndex: true` の Provider�
 | Moderate: API の `JAGPrelim20162`（2 回開催）を取り込むと、2745 が seed の `A` ではなく `H` になる                                              | **残タスク**。本番には影響しない: 本番の `contest_id` は `JAGPrelim2016A` / `B` が各 7 問に分かれており（2026-10-24 に本番で確認）、移行 SQL は `contest_id` ごとに採番するので各 A–G になる。取り込みは既存の `task_id` を skip する。直すなら、取り込み時に 2 回開催を seed と同じ `A` / `B` の `contest_id` に分け、それぞれ A から振る |
 | Minor: seed 整合テストの期待値を本番関数 `assignProblemLetters` で作っており、testing.md の「期待値は literal」に合わない                       | **残タスク**。記号自体の正しさは生成スクリプトの照合で確認済みで、このテストは取り込みとの整合を見るもの。literal な fixture（632 件）を足すかは別途判断する                                                                                                                                                                               |
 | 潜在リスク: `src/lib/services/tasks.ts` の `title.replace(task_table_index, …)` は、AOJ の問題に ContestTaskPair を作るとタイトル本文を置換する | **残タスク**。AOJ の pair は現在 0 件。直すときは先頭の `${index}. ` だけを置換し、`Amidakuji` のような本文と `A. Title` の両方を回帰テストに含める                                                                                                                                                                                        |
+
+CodeRabbit のレビュー（2026-10-24）:
+
+| 指摘                                                                                            | 扱い                                                                                                                                                                                             |
+| ----------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `clients.ts`: 2016 年の 2 回開催を `JAGPrelim2016A` / `B` に分けて取り込み、それぞれ A から振る | **見送り**。Codex の Moderate と同じ指摘で、上表のとおり残タスク。直すなら `getContests` 側も同じ `contest_id` に揃える必要がある                                                                |
+| `task.ts`: `removeTaskIndexFromTitle` は先頭のプレフィックスだけを消す                          | **対応**。index が空のときに title 途中の `. ` まで消えていた（`Dr. Podboq` → `DrPodboq`）点も直る。seed と DB（ローカル 2,832 件）に途中だけに現れる title は無く、既存データの表示は変わらない |
+| `buildTitleWithTaskIndex` のテストを `task.ts` に隣接するファイルへ移す                         | **対応**。`src/lib/utils/task.test.ts` を新設（`task_grade` と同じく、新しいテストは隣接、既存は `src/test/` に残す）。`removeTaskIndexFromTitle` の先頭限定のテストもここに置いた               |
 
 ### PR2 — JAG 夏 / 冬 / 春合宿（50 コンテスト / 467 問）
 

@@ -121,7 +121,10 @@ export const getTaskTableHeaderName = (contestType: ContestType, taskResult: Tas
 // 理由: 問題を解くときに、プレフィックスからの先入観を受けないようにするため
 // その他: プレフィックスは、同じテーブルの出典に記載する
 export const removeTaskIndexFromTitle = (title: string, taskTableIndex: string = '') => {
-  return title.replace(`${taskTableIndex}. `, '');
+  const prefix = `${taskTableIndex}. `;
+
+  // Only a leading prefix: letter indices (e.g. "B") can also occur inside the title body.
+  return title.startsWith(prefix) ? title.slice(prefix.length) : title;
 };
 
 // Strip first so titles that already carry the index (AtCoder) are not prefixed twice.
