@@ -155,7 +155,7 @@ END $$;
 - PR2 の seed の模擬地区は記号で入っている（2-1 で足し、2-4 で記号にする）ので、seed から作った DB では移行 SQL の模擬地区の分を確かめられない。PR2 のコードに切り替える前の DB に、管理画面から JAG REGIONAL を取り込んでおく（問題 ID のまま入る）。そうすればローカルでも 625 / 45 / 467 になる
 - 補正する 8 コンテストは、「現在値 → 変更後」を全行見る
 - 問題一覧の出典欄で、合宿系・模擬地区が `JAG 夏合宿 2024 Day3 - H（AOJ）` のように記号になり、title に問題 ID が出ていないこと（この範囲のコンテストテーブルは PR2.5 まで無い）
-- **PR を開く前に**、staging で次の SQL を流し、上の表と同じ件数であることを確かめる。PR の CI は、staging へのマージ前に staging の DB へマイグレーションを流す（[CI での適用](./plan.md#ci-での適用)）。件数が違うと RAISE でデプロイが止まる
+- **PR を開く前に**、staging で次の SQL を流し、上の表と同じ件数であることを確かめる。PR の CI は、staging へのマージ前に staging の DB へマイグレーションを流す（[CI での適用](./plan.md#ci-での適用)）。件数が違うと RAISE でデプロイが止まる。**済（2026-10-24）**: 上の表と同じ件数だった（Regional 16 / 158、Spring 4 / 42、Summer 36 / 338、Winter 10 / 87。index は全行が問題 ID のまま、title の問題 ID は合宿系の全行だけ）。PR を開くまでに staging の AOJ の問題を足したり消したりした場合は、もう一度流す
 
 ```sql
 -- State of the PR2 scope (run on staging before opening the PR).
