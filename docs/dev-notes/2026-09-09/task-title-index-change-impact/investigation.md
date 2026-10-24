@@ -1,31 +1,214 @@
 # 調査の根拠データと検討の経緯
 
-[plan.md](./plan.md) の各主張の裏付け。単独では読まず、plan.md から参照される想定。
+[plan.md](./plan.md) と PR ごとの計画（`plan-pr*.md`）の裏付け。単独では読まず、計画から参照される想定。**計画の決定が常に優先される。**
 
-**plan.md の決定が常に優先される。** ここに残した検討過程は、後から「なぜその案を採らなかったか」を辿るための記録であり、決定そのものではない。
+| 章                                              | 内容                                                | 主に使う PR         |
+| ----------------------------------------------- | --------------------------------------------------- | ------------------- |
+| [1](#1-pr2-の照合2026-10-24)                    | スプレッドシートとの照合、補正、欠落、表示順        | PR2 / 2.1 / 2.5 / 3 |
+| [2](#2-実測データ)                              | 件数、title の形、復元可能性、一意性                | PR2                 |
+| [3](#3-sql-の解説)                              | 基本ルールの SQL の読み方と計算量                   | PR2                 |
+| [4](#4-検討の経緯採らなかった案)                | 採らなかった案の理由                                | —                   |
+| [5](#5-task-テーブルへの書き込み経路の全数調査) | Task への書き込み経路（移行 UPDATE の安全性の根拠） | PR2 / PR3           |
+| [6](#6-調査中の誤りと訂正自戒)                  | 調査中の誤り                                        | —                   |
 
-2026-10-21 に現行コードと再照合し、行番号と件数を更新した（5 章の既存項目は当時の記録のため据え置き、6・7 項目めを追記）。
+PR0 / PR1 だけに関わる調査（出典欄の呼び出し元、テストの影響範囲など）は、コードと #4212 / #4217 の差分から読めるので削除した。判断の要約は [done.md](./done.md)。
 
 ---
 
-# 1. 実測データ
+# 1. PR2 の照合（2026-10-24）
+
+メンテナのスプレッドシート（スクリーンショット 16 枚、行 2〜1025。上が新しい）と、本番の問題一覧の JAG 模擬地区（スクリーンショット 10 枚、158 問）を目視で突き合わせた。**目視による暫定の結果**であり、確定は [plan-pr2.md](./plan-pr2.md#2-0-照合) のスクリプトで行う。
+
+スプレッドシートで折りたたまれた行（40–50 ほか 19 か所）は JAG 模擬国内だけで、合宿系・模擬地区は含まない（メンテナに確認済み）。
+
+## 対応の確認
+
+- seed の合宿系 50 コンテストは、すべてスプレッドシートにある。問題名は記号の位置ごとに一致した
+- 本番の模擬地区 16 コンテスト（2005〜2017 と 2020〜2022）も、すべてある。問題 ID は 2024〜3357 で、すべて数値
+- スプレッドシートにあって DB に無いのは 10 コンテスト（[下記](#db-に無いコンテスト)）
+
+## 記号の補正が要るコンテスト
+
+基本ルール（問題 ID の昇順に A, B, C…）と、スプレッドシートの位置が食い違うコンテスト。いずれも先頭か途中に、AOJ に無い問題がある。末尾だけの欠落（模擬地区 2008 の J）は記号がずれないので含めない。
+
+| contest_id           | 問題 ID → 記号                                             | 欠けている記号      |
+| -------------------- | ---------------------------------------------------------- | ------------------- |
+| `JAGSummer2006-day1` | 2057 → B                                                   | A, C                |
+| `JAGSummer2006-day3` | 2067〜2072 → B〜G                                          | A                   |
+| `JAGWinter2006-day2` | 2073 → D、2074 → F                                         | A, B, C, E, G, H, I |
+| `JAGWinter2006-day3` | 2075 → A、2076 → D、2077 → G、2078 → H                     | B, C, E, F, I, J    |
+| `JAGWinter2007-day3` | 2122〜2125 → A〜D、2126〜2130 → F〜J                       | E                   |
+| `JAGSummer2024-day3` | 3637〜3642 → A〜F、3644〜3647 → H〜K                       | G                   |
+| `JAGRegional2005`    | 2024 → A、2025 → B、2026 → D、2027 → E、2028 → G、2029 → I | C, F, H             |
+| `JAGRegional2013`    | 2568〜2574 → D〜J                                          | A, B, C             |
+
+8 コンテスト / 45 行（合宿系 32、模擬地区 13）。基本ルールから値が変わるのは 32 行（合宿系 21、模擬地区 11）。
+
+## 欠落の一覧（PR3）
+
+スプレッドシートで「AOJ 未収録」と書かれている問題。22 問（合宿系 18、模擬地区 4）。
+
+| コンテスト           | 記号と問題名                                                                                                         |
+| -------------------- | -------------------------------------------------------------------------------------------------------------------- |
+| JAG 夏合宿 2006 Day1 | A Monkey Business、C Sort that Queue                                                                                 |
+| JAG 夏合宿 2006 Day3 | A Rolling Cubes                                                                                                      |
+| JAG 冬合宿 2006 Day2 | A Cells、B Japan、C Maximum、E Payment System、G Roof、H Seminar Room、I String Compression                          |
+| JAG 冬合宿 2006 Day3 | B Widget Factory、C Hills、E Safe Packing、F The "Shortest" Pair of Paths、I Counting Triangles、J Wireing Assistant |
+| JAG 冬合宿 2007 Day3 | E Networking Company                                                                                                 |
+| JAG 夏合宿 2024 Day3 | G Interactive String Guessing                                                                                        |
+| JAG 模擬地区 2005    | C Geometry?! Why Not??、F University Rankings、H Tiling Polygons                                                     |
+| JAG 模擬地区 2008    | J Colony Maintenance                                                                                                 |
+
+一覧に無い問題について、メンテナが AOJ で確かめた結果（2026-10-24）:
+
+- **JAG 夏合宿 2024 Day3 の G（Interactive String Guessing）**: スプレッドシートでは「AOJ 未収録」だが、AOJ に 3643 の問題ページがある（`onlinejudge.u-aizu.ac.jp/challenges/search/titles/3643`）。コンテスト一覧から外れているだけで、ICPC 国内予選 2002 の E（AOJ 1123）と同じ種類。**スプレッドシートの「AOJ 未収録」は、AOJ に無いことの保証にならない**
+- **JAG 模擬地区 2013 の A Broken Audio Signal / B Restore Calculation / C SIRO Challenge**: スプレッドシートではリンク付き（未収録の表記が無い）で、リンク先は AOJ 2565 / 2566 / 2567。ただし AOJ 側で title が見つからない。AOJ の模擬地区 2013 の一覧（本番の 7 問、2568〜2574）にも無い
+
+どちらも PR2 の記号（2013 は D〜J、2024 Day3 は H〜K）には影響しない。AOJ へのアクセスは、この環境からは拒否された（`judgeapi.u-aizu.ac.jp` が HTTP 410）。
+
+## DB に無いコンテスト
+
+PR2.1 で入れる。contest_id と問題番号は 2026-10-24 にメンテナから受け取った。
+
+| スプレッドシートの見出し                            | contest_id                | 問題（task_id）                   | 入手元  |
+| --------------------------------------------------- | ------------------------- | --------------------------------- | ------- |
+| JAG 夏合宿 2026 Day1（JAG）                         | `JAGSummer2026-day1`      | 3684〜3695                        | AOJ     |
+| JAG 夏合宿 2026 Day2（有志）（AMATSUKAZE2025）      | `JAGSummer2026-day2`      | 3696〜3707                        | AOJ     |
+| JAG 夏合宿 2026 Day3（JAG）                         | `JAGSummer2026-day3`      | 3708〜3719                        | AOJ     |
+| JAG 夏合宿 2025 Day1（有志）                        | `JAGSummer2025-day1`      | 3648〜3659                        | AOJ     |
+| JAG 夏合宿 2025 Day2（JAG）                         | `JAGSummer2025-day2`      | 3660〜3671                        | AOJ     |
+| JAG 夏合宿 2025 Day3（有志）                        | `JAGSummer2025-day3`      | 3672〜3683                        | AOJ     |
+| JAG 夏合宿 2018 Day2（有志）（in AtCoder）          | `jag2018summer-day2`      | `jag2018summer_day2_a`〜`k`       | AtCoder |
+| JAG 夏合宿 2017 Day1（有志）（in AtCoder）          | `jag2017summer-day1`      | `jag2017summer_day1_a`〜`k`       | AtCoder |
+| JAG 夏合宿 2015 Day3（過去問）（in AtCoder）        | `jag2015summer-day3`      | `icpc2015summer_day3_a`〜`j`      | AtCoder |
+| JAG 夏合宿 2013 Day2 WarmUp（過去問）（in AtCoder） | `jag2013summer-warmingup` | `icpc2013summer_warmingUp_a`〜`j` | AtCoder |
+
+計 114 問（AOJ 72 は各 12 問、AtCoder 42）。いずれも「AOJ 未収録」の表記は無く、受け取った問題名はスプレッドシートと記号の位置ごとに一致した（目視）。AOJ の 6 コンテストは問題 ID が連番で、記号は基本ルールと一致する。
+
+AtCoder Problems の `contests.json` には、ほかに `JAG2013Spring` / `JAG2014Spring` もある。AOJ の `JAGSpring2013` / `JAGSpring2014` と同じコンテストなので対象外とする。
+
+## 表示順（76 コンテスト）
+
+PR2.5 の配列の元。スプレッドシートの行順そのまま（上が新しい）。括弧書きは M16 に従う（「過去問」「in AtCoder」「AMATSUKAZE2025」は書かない）。「DB」列の「無し」は PR2.1 で入るもの、「補正」は上の 8 コンテスト。
+
+| #   | 行   | contest_id                           | 括弧書き                | DB   |
+| --- | ---- | ------------------------------------ | ----------------------- | ---- |
+| 1   | 2    | `JAGSummer2026-day1`                 | JAG                     | 無し |
+| 2   | 15   | `JAGSummer2026-day2`                 | 有志                    | 無し |
+| 3   | 28   | `JAGSummer2026-day3`                 | JAG                     | 無し |
+| 4   | 51   | `JAGSummer2025-day1`                 | 有志                    | 無し |
+| 5   | 64   | `JAGSummer2025-day2`                 | JAG                     | 無し |
+| 6   | 77   | `JAGSummer2025-day3`                 | 有志                    | 無し |
+| 7   | 100  | `JAGSummer2024-day2`                 | 有志                    |      |
+| 8   | 115  | `JAGSummer2024-day3`                 | JAG                     | 補正 |
+| 9   | 137  | `JAGSummer2023-day2`                 | 有志                    |      |
+| 10  | 150  | `JAGSummer2023-day3`                 | JAG                     |      |
+| 11  | 171  | `JAGRegional2022`                    | JAG                     |      |
+| 12  | 193  | `JAGRegional2021`                    | JAG                     |      |
+| 13  | 214  | `JAGRegional2020`                    | JAG                     |      |
+| 14  | 235  | `JAGSummer2019-day1`                 | JAG                     |      |
+| 15  | 247  | `JAGSummer2019-day2`                 | 有志                    |      |
+| 16  | 258  | `JAGSummer2019-day3`                 | 有志                    |      |
+| 17  | 278  | `jag2018summer-day2`（AtCoder）      | 有志                    | 無し |
+| 18  | 290  | `JAGSummer2018-day3`                 | JAG                     |      |
+| 19  | 311  | `JAGRegional2017`                    | JAG                     |      |
+| 20  | 323  | `jag2017summer-day1`（AtCoder）      | 有志                    | 無し |
+| 21  | 335  | `JAGSummer2017-day3`                 | JAG                     |      |
+| 22  | 356  | `JAGRegional2016`                    | in JAG 夏合宿 2016 Day3 |      |
+| 23  | 384  | `JAGRegional2015`                    | JAG                     |      |
+| 24  | 396  | `JAGSummer2015-day2`                 | 有志                    |      |
+| 25  | 408  | `jag2015summer-day3`（AtCoder）      | なし                    | 無し |
+| 26  | 419  | `JAGSummer2015-day4`                 | JAG                     |      |
+| 27  | 438  | `JAGSpring2015`                      | JAG                     |      |
+| 28  | 451  | `JAGSummer2014-day2`                 | 有志                    |      |
+| 29  | 462  | `JAGRegional2014`                    | in JAG 夏合宿 2014 Day3 |      |
+| 30  | 474  | `JAGSummer2014-day4`                 | 有志                    |      |
+| 31  | 493  | `JAGSpring2014`                      | JAG                     |      |
+| 32  | 504  | `JAGRegional2013`                    | JAG                     | 補正 |
+| 33  | 515  | `jag2013summer-warmingup`（AtCoder） | なし                    | 無し |
+| 34  | 526  | `JAGSummer2013-day2`                 | 有志                    |      |
+| 35  | 534  | `JAGSummer2013-day3`                 | 有志                    |      |
+| 36  | 547  | `JAGSummer2013-day4`                 | JAG                     |      |
+| 37  | 566  | `JAGSpring2013`                      | JAG                     |      |
+| 38  | 577  | `JAGRegional2012`                    | JAG                     |      |
+| 39  | 588  | `JAGSummer2012-day2`                 | 有志                    |      |
+| 40  | 599  | `JAGSummer2012-day3A`                | 有志                    |      |
+| 41  | 606  | `JAGSummer2012-day3B`                | 有志                    |      |
+| 42  | 614  | `JAGSummer2012-day4`                 | JAG                     |      |
+| 43  | 633  | `JAGSpring2012`                      | JAG                     |      |
+| 44  | 644  | `JAGWinter2011`                      | JAG                     |      |
+| 45  | 655  | `JAGRegional2011`                    | JAG                     |      |
+| 46  | 674  | `JAGSummer2011-day2`                 | 有志                    |      |
+| 47  | 685  | `JAGSummer2011-day3`                 | JAG                     |      |
+| 48  | 696  | `JAGSummer2011-day4`                 | 有志                    |      |
+| 49  | 707  | `JAGWinter2010-day3`                 | 有志                    |      |
+| 50  | 718  | `JAGWinter2010-day4`                 | JAG                     |      |
+| 51  | 729  | `JAGRegional2010`                    | JAG                     |      |
+| 52  | 740  | `JAGSummer2010-day2`                 | 有志                    |      |
+| 53  | 751  | `JAGSummer2010-day3`                 | 有志                    |      |
+| 54  | 762  | `JAGSummer2010-day4`                 | JAG                     |      |
+| 55  | 781  | `JAGWinter2009`                      | JAG                     |      |
+| 56  | 792  | `JAGRegional2009`                    | JAG                     |      |
+| 57  | 803  | `JAGSummer2009-day2`                 | JAG                     |      |
+| 58  | 814  | `JAGSummer2009-day3`                 | JAG                     |      |
+| 59  | 832  | `JAGWinter2008-day2`                 | JAG                     |      |
+| 60  | 844  | `JAGWinter2008-day3`                 | JAG                     |      |
+| 61  | 856  | `JAGRegional2008`                    | JAG                     |      |
+| 62  | 867  | `JAGSummer2008-day2`                 | JAG                     |      |
+| 63  | 878  | `JAGSummer2008-day4`                 | JAG                     |      |
+| 64  | 894  | `JAGWinter2007-day2`                 | JAG                     |      |
+| 65  | 905  | `JAGWinter2007-day3`                 | JAG                     | 補正 |
+| 66  | 916  | `JAGRegional2007`                    | JAG                     |      |
+| 67  | 926  | `JAGSummer2007-day1`                 | JAG                     |      |
+| 68  | 932  | `JAGSummer2007-day2`                 | JAG                     |      |
+| 69  | 942  | `JAGSummer2007-day3`                 | JAG                     |      |
+| 70  | 957  | `JAGWinter2006-day2`                 | JAG                     | 補正 |
+| 71  | 967  | `JAGWinter2006-day3`                 | JAG                     | 補正 |
+| 72  | 978  | `JAGRegional2006`                    | JAG                     |      |
+| 73  | 988  | `JAGSummer2006-day1`                 | JAG                     | 補正 |
+| 74  | 992  | `JAGSummer2006-day2`                 | JAG                     |      |
+| 75  | 1002 | `JAGSummer2006-day3`                 | JAG                     | 補正 |
+| 76  | 1017 | `JAGRegional2005`                    | JAG                     | 補正 |
+
+内訳: 合宿系 50、模擬地区 16、DB に無いもの 10（AOJ 6、AtCoder 4）。
+
+### 年の中での並び
+
+contest_id から並びを導けない例（スプレッドシートの上から順）。冬合宿・冬コンテストは、年の数字が同じ夏合宿・模擬地区より上にある。
+
+- 2014: 夏合宿 Day2 → 模擬地区（夏合宿の Day3 として開催）→ 夏合宿 Day4 → 春コンテスト 2014
+- 2012: 模擬地区 2012 → 夏合宿 2012 → 春コンテスト 2012 → 冬コンテスト 2011 → 模擬地区 2011 → 夏合宿 2011
+- 2010: 冬合宿 2010 → 模擬地区 2010 → 夏合宿 2010
+
+## 名称の違い
+
+| スプレッドシート | 現行のコード（`JAG_TRANSLATIONS`） | 対象                                              |
+| ---------------- | ---------------------------------- | ------------------------------------------------- |
+| 春コンテスト     | 春合宿                             | `JAGSpring2012`〜`2015`                           |
+| 冬コンテスト     | 冬合宿                             | `JAGWinter2009` / `JAGWinter2011`（日の無いもの） |
+| 模擬アジア地区   | 模擬地区                           | `JAGRegional*`                                    |
+
+テーブル名は現行のコードに合わせる（M16）。出典欄と同じ名称になり、違うのは括弧書きの有無だけになる。
+
+---
+
+# 2. 実測データ
 
 ## 対象規模
 
-`prisma/tasks.ts` の実データ集計。**1,099 問 / 129 コンテスト**（2026-10-21 の再集計でも内訳まで同値）。
+`prisma/tasks.ts` の集計（2026-10-21）と、本番だけにある JAG 模擬地区。
 
-| 種別         | コンテスト | 問題数 | Provider |
-| ------------ | ---------- | ------ | -------- |
-| ICPCPrelim   | 29         | 197    | あり     |
-| ICPCRegional | 27         | 266    | あり     |
-| JAGPrelim    | 23         | 169    | あり     |
-| JAGSummer    | 36         | 338    | **なし** |
-| JAGWinter    | 10         | 87     | **なし** |
-| JAGSpring    | 4          | 42     | **なし** |
+| 種別         | コンテスト | 問題数 | 所在        | PR  |
+| ------------ | ---------- | ------ | ----------- | --- |
+| ICPCPrelim   | 29         | 197    | seed と本番 | PR1 |
+| ICPCRegional | 27         | 266    | seed と本番 | PR1 |
+| JAGPrelim    | 23         | 169    | seed と本番 | PR1 |
+| JAGSummer    | 36         | 338    | seed と本番 | PR2 |
+| JAGWinter    | 10         | 87     | seed と本番 | PR2 |
+| JAGSpring    | 4          | 42     | seed と本番 | PR2 |
+| JAGRegional  | 16         | 158    | 本番のみ    | PR2 |
 
-合宿系（Summer / Winter / Spring）は **seed にデータが入っているが Provider が無い**ためコンテスト表に出ていない。移行対象からは外せない。
-
-全 1,099 問で `problem_index` == `task_id`（AOJ 問題ID）。
+PR1 / PR2 の合計は 1,257 問 / 145 コンテスト。PR1 の前は、seed の 1,099 問すべてで `problem_index` == `task_id`（AOJ 問題 ID）だった。
 
 ## 本番の件数（2026-10-21）
 
@@ -39,35 +222,57 @@
 | `AOJ_COURSES`    | 8 / 247                   | 0 / 0                     |
 | `AOJ_PCK`        | 1 / 12                    | 0 / 0                     |
 
-`AOJ_ICPC` / `AOJ_JAG` を `contest_id` の接頭辞で分けると次のとおり。`AOJ_JAG` の差（16 コンテスト / 158 問）はすべて JAG 模擬地区（管理画面から取り込める。seed には 0 件）で、PR1 / PR2 の対象範囲は本番と seed で一致する。
-
-| 接頭辞         | 本番（コンテスト / 問題） | seed（コンテスト / 問題） |
-| -------------- | ------------------------- | ------------------------- |
-| `ICPCPrelim`   | 29 / 197                  | 29 / 197                  |
-| `ICPCRegional` | 27 / 266                  | 27 / 266                  |
-| `JAGPrelim`    | 23 / 169                  | 23 / 169                  |
-| `JAGRegional`  | 16 / 158                  | 0 / 0                     |
-| `JAGSummer`    | 36 / 338                  | 36 / 338                  |
-| `JAGWinter`    | 10 / 87                   | 10 / 87                   |
-| `JAGSpring`    | 4 / 42                    | 4 / 42                    |
+`AOJ_JAG` の差（16 コンテスト / 158 問）はすべて JAG 模擬地区（管理画面から取り込める。seed には 0 件）。接頭辞ごとに分けると、ほかはすべて本番と seed で一致した。
 
 AtCoder 側（`AOJ_*` 以外）で title が `${task_table_index}. ` で始まらない問題は、本番でも `abs` の practice_1 の 1 件だけだった。
 
+## PR2 の範囲の本番と staging（2026-10-24）
+
+SQL A（[plan-pr2.md](./plan-pr2.md#着手前の確認2026-10-24-に回答済み)）の結果。
+
+| 範囲     | 本番     | staging    | index が問題 ID のまま | title が問題 ID 付き |
+| -------- | -------- | ---------- | ---------------------- | -------------------- |
+| Regional | 16 / 158 | **2 / 16** | 全行                   | 0 行                 |
+| Spring   | 4 / 42   | 4 / 42     | 全行                   | 全行                 |
+| Summer   | 36 / 338 | 36 / 338   | 全行                   | 全行                 |
+| Winter   | 10 / 87  | 10 / 87    | 全行                   | 全行                 |
+
+- staging には模擬地区が 2 コンテストしか無い。PR2 の前に staging で取り込み、本番とそろえる
+- 本番の模擬地区 158 問（SQL B）は、AOJ の一覧のスクリーンショットと問題名・問題 ID がすべて一致した。grade が付いているのは 6 問
+- 本番の 3355 の title の末尾にタブがある（`Most distant point from the stations\t`）。前後に空白のある title はほかにもある（下記）
+
+## 前後に空白のある title
+
+本番で `title <> btrim(title, E' \t\r\n')` の行を数えると 46 件あった（2026-10-24）。
+
+| 範囲                                    | 件数 | 例                                                       |
+| --------------------------------------- | ---- | -------------------------------------------------------- |
+| JAG 模擬国内（3202 / 3250 / 3299）      | 3    | `"Chains of Explosions "`（末尾の空白）                  |
+| JAG 模擬地区（3355）                    | 1    | `"Most distant point from the stations\t"`（末尾のタブ） |
+| AtCoder（ABC / AGC / ARC / JOI / TTPC） | 42   | `"A. Weather Prediction "`（末尾の空白）                 |
+
+- **出どころは上流のデータ**。AOJ の API が返す名前そのものに空白がある（2026-05 に記録した fixture の `jag_prelim` / `jag_regional` にも同じ空白がある）。AtCoder Problems も同様
+- **再発はしない**。取り込みが title を `trim()` するようになった（2026-05-18、`0e1ec4e7`）。46 件はそれより前に入った行。seed の値は trim 済み
+- **実害は無い**。HTML の表示では末尾の空白が潰れる。title を比べるコードは `removeTaskIndexFromTitle` の `startsWith`（先頭の `A. ` を見るだけ）しか無く、完全一致で比べる箇所は無い。検索は部分一致なので、空白で終わる検索語でなければ影響しない
+- **起こりうる害**: 将来 title の完全一致で照合する処理（#4018 のコンテスト情報の同期など）を書くと、この 46 件だけが食い違う。CSV の `id` は `sha256(contest_id + title)` だが、既存行の `id` は再計算されないので関係ない
+
+PR2 では直さず、残タスクとした（[plan.md](./plan.md#スコープ外)）。
+
 ## 欠落は機械的に検出できない
 
-AOJ 問題ID の連番性を調べると 129 コンテスト中 128 が連番。**だが欠落が無い証拠にならない。** AOJ に登録されていない問題なら ID も無いため、残った問題の ID は連番のままになる。AOJ に問題はあるのにコンテスト一覧（取り込み元）から外れている場合も同じである。ICPC 国内予選 2002 の E（Enclosing Circles）は AOJ に問題 1123 として存在するが一覧に無く、取り込まれていない。2002 年の A〜D は 1119〜1122 で連番のままであり、1123 の次の 1124 は 2003 年の A である。
+AOJ 問題 ID の連番性を調べると、seed の 129 コンテスト中 128 が連番。**だが欠落が無い証拠にならない。** AOJ に登録されていない問題なら ID も無いため、残った問題の ID は連番のままになる。AOJ に問題はあるのにコンテスト一覧（取り込み元）から外れている場合も同じである。ICPC 国内予選 2002 の E（Enclosing Circles）は AOJ に問題 1123 として存在するが一覧に無く、取り込まれていない。2002 年の A〜D は 1119〜1122 で連番のままであり、1123 の次の 1124 は 2003 年の A である。
 
-データから欠落を示唆するのは**問題数の異常**の方:
+連番でない 1 コンテストは `JAGSummer2024-day3`（3643 が無い）で、スプレッドシートの G（Interactive String Guessing）に当たる。スプレッドシートでは「AOJ 未収録」だが、AOJ に 3643 はあり、コンテスト一覧から外れているだけだった。
 
-| コンテスト                 | 問題数 | 同種の中央値 |
-| -------------------------- | ------ | ------------ |
-| `JAGSummer2006-day1`       | 1      | 10           |
-| `JAGWinter2006-day2`       | 2      | 10           |
-| `JAGWinter2006-day3`       | 4      | 10           |
-| `JAGSummer2007-day1`       | 5      | 10           |
-| `ICPCPrelim1998/2000/2002` | 各 4   | 8            |
+データから欠落を示唆するのは**問題数の異常**の方だが、それも決め手にならない:
 
-古い回ほど少ない。ただし**当時は本当に問題数が少なかった**可能性も同程度にあり、データだけでは判別できない。
+| コンテスト                 | 問題数 | 同種の中央値 | スプレッドシートとの照合                                      |
+| -------------------------- | ------ | ------------ | ------------------------------------------------------------- |
+| `JAGSummer2006-day1`       | 1      | 10           | 公式は 3 問。A・C が AOJ 未収録                               |
+| `JAGWinter2006-day2`       | 2      | 10           | 公式は 9 問。7 問が AOJ 未収録                                |
+| `JAGWinter2006-day3`       | 4      | 10           | 公式は 10 問。6 問が AOJ 未収録                               |
+| `JAGSummer2007-day1`       | 5      | 10           | 公式も 5 問（欠落なし）                                       |
+| `ICPCPrelim1998/2000/2002` | 各 4   | 8            | 1998 / 2000 は公式も 4 問。2002 は E が一覧に無い（AOJ 1123） |
 
 ## `title` の持ち方が AOJ 内で割れている
 
@@ -75,31 +280,32 @@ AOJ 問題ID の連番性を調べると 129 コンテスト中 128 が連番。
 | ------------------------------------------ | ----- | ------------------------------- | --------------------------------- |
 | ICPC国内 / アジア / JAG模擬国内（**PR1**） | 632   | 素                              | `'Peculiar Protocol'`             |
 | JAG 合宿系（**PR2**）                      | 467   | **数値ID のプレフィックス付き** | `'2389. Asynchronous Exceptions'` |
+| JAG 模擬地区（**PR2**、本番のみ）          | 158   | 素                              | `'Restriction Enzyme'`            |
 | AtCoder 等（対象外）                       | 1,366 | index のプレフィックス付き      | `'EX8. たくさんのA足すB問題'`     |
 
-632 / 467 の分かれ目が PR1 / PR2 の境界と**完全に一致**する。
+**プレフィックスは合宿系の 467 件すべてで `task_id` と完全に一致していた（不一致 0 件）。** したがって除去も復元も機械的に安全に行える。
 
-退行の機序:
+模擬地区は管理画面の取り込みで本番に入っており、取り込みは導入時（2024-10、`7dcc5e4c`）から `problem.name` をそのまま title にしている。SQL A でもプレフィックスは 0 行だった（本番・staging）。
+
+退行の機序（title を直さずに index だけ記号にした場合）:
 
 ```
 現在:   index='2389', title='2389. Asynchronous Exceptions'
-        → replace('2389. ', '') → 'Asynchronous Exceptions'   正常
+        → 先頭の '2389. ' を除去 → 'Asynchronous Exceptions'   正常
 
 PR2 後: index='A',    title='2389. Asynchronous Exceptions'
-        → replace('A. ', '')    → 空振り
+        → 先頭の 'A. ' を除去 → 空振り
         → '2389. Asynchronous Exceptions' が露出           退行
 ```
-
-`removeTaskIndexFromTitle`（`src/lib/utils/task.ts:123`）は `${index}. ` の決め打ち置換のため、 `task_table_index` だけを更新すると空振りする。
-
-**プレフィックスは 467 件すべてで `task_id` と完全に一致していた（不一致 0 件）。** したがって除去も復元も機械的に安全に行える。
 
 ## 復元可能性の実測
 
 | 対象                     | 件数  | 復元                                                                                     |
 | ------------------------ | ----- | ---------------------------------------------------------------------------------------- |
-| AOJ ICPC/JAG（更新対象） | 1,099 | **無条件に可能**。`task_table_index == task_id` が例外ゼロで成立                         |
+| AOJ ICPC/JAG（更新対象） | 1,099 | **無条件に可能**。`task_table_index == task_id` が例外ゼロで成立（seed、PR1 の前）       |
 | その他（AtCoder 等）     | 1,367 | **条件付き**。84.2%（1,151 件）は `task_id` のサフィックスから導出できるが、216 件は例外 |
+
+本番だけにある模擬地区 158 件も、SQL A で全行 `task_table_index == task_id` だった（2026-10-24）。
 
 導出できない 216 件の内訳: `abc` 41（`abc318_h` に対し index は `Ex`）、`typical` 32、 `APG` 27（`APG4bPython_co` に対し index は `EX8`）、`arc` 27、`tdpc` 20、 `math-and-algorithm` 15、ほか（`task_id` にサフィックスが無い AOJ 大学系 29 件を含む）。
 
@@ -108,13 +314,11 @@ PR2 後: index='A',    title='2389. Asynchronous Exceptions'
 1. 「84% は規則で戻せるが 16% は個別対応」という状態は、復旧手順として使えない
 2. `task_table_index` を上書きした後では、**どの行が元から `A` だったのかを区別できない**
 
-AOJ ICPC/JAG の 1,099 件が「無条件に一括復元できる」のとは質的に異なる。
-
 ## 既存 DB は自動更新されない
 
-- seed: `prisma/seed.ts:192-199` で `findUnique(task_id)` → 既存なら **skip**
-- インポート: `src/lib/services/tasks.ts:175-180` で `isExistsTask(task_id)` → 既存なら **silent return**
-- `updateTask`（`src/lib/services/tasks.ts:206`）は `grade` しか触らない
+- seed: `prisma/seed.ts` で `findUnique(task_id)` → 既存なら **skip**
+- 取り込み: `src/lib/services/tasks.ts` の `createTask` で `isExistsTask(task_id)` → 既存なら **silent return**。`classifyContest` が `null` を返す contest_id も黙って捨てる
+- `updateTask` は `grade` しか触らない
 
 ## 一意性は壊れない
 
@@ -125,52 +329,13 @@ AOJ ICPC/JAG の 1,099 件が「無条件に一括復元できる」のとは質
 | `id` (@id @unique)  | `sha256(contest_id + task.id)` |
 | `task_id` (@unique) | `task.id` をそのまま           |
 
-どちらも入力は contest_id と AOJ 問題ID のみ。`problem_index` は混ざらない。FK も全て `task_id` 参照（`TaskTag` / `TaskAnswer` / `WorkBookTask` / `VoteGrade` / `VotedGradeCounter` / `VotedGradeStatistics`）。ハッシュの `id` を FK にしている箇所は無い。
+どちらも入力は contest_id と AOJ 問題 ID のみ。`problem_index` は混ざらない。FK も全て `task_id` 参照（`TaskTag` / `TaskAnswer` / `WorkBookTask` / `VoteGrade` / `VotedGradeCounter` / `VotedGradeStatistics`）。ハッシュの `id` を FK にしている箇所は無い。
 
-**性質の変化**: `task_table_index` は現状「全 DB でユニーク」だが変更後は **「コンテスト内でのみユニーク」**になる。unique 制約は無く、コンテスト横断で index をキーにしている箇所も無い（`getTaskLabels` は contestId で名前空間を切り、 `sortAojHeaderIds` は単一コンテスト内で閉じる）ため問題ない。
-
-## 変更しても安全な箇所
-
-- **`formatAojTitle`** … PR1 範囲は `title` に index プレフィックスが無いため二重化しない
-- **`getTaskUrl(contest_id, task_id)`** … index 非依存
-- **`ContestTaskPair` のマージ** … `prisma/contest_task_pairs.ts` に ICPC/JAG のエントリは **0 件**
-- **`columnWrapThreshold: 6`** … 問題数は変わらないので影響なし
-
-## 出典欄の呼び出し元
-
-`addContestNameToTaskIndex`（`src/lib/contests/utils/task_index_label.ts:4-12`）は 1 関数で、呼び出し元 6 箇所は自動的に揃う。
-
-- `src/lib/components/TaskList.svelte:124`
-- `src/lib/components/TaskListSorted.svelte:55`
-- `src/lib/components/TaskForm.svelte:51`
-- `src/routes/(admin)/tasks/grade/_components/TaskGradeTable.svelte:106`
-- `src/features/workbooks/components/detail/WorkBookTasksTable.svelte:202`
-- `src/routes/workbooks/[slug]/+page.svelte:52`
-
-`getAojContestLabel`（`src/lib/contests/utils/labels/aoj.ts:52`）と `getAojUniversityContestLabel`（同 `:63`）から全角括弧を外す場合（M11）に巻き込まれる箇所 — `getContestNameLabel` を AOJ コンテストに直接使っている:
-
-- `src/lib/utils/task_filter.ts:39` — 検索マッチ
-- `src/lib/components/SubmissionStatus/UpdatingModal.svelte:69` — `"{label} - {title}"` （現状 `"（…） - title"` で元々不格好）
-- `src/lib/components/TagForm.svelte:99`
-- `src/routes/votes/+page.svelte:114`
-- `src/routes/(admin)/tasks/_components/TaskTableForImport.svelte:53`
-
-## テストの影響範囲
-
-| ファイル                     | 行数 | 関連                        |
-| ---------------------------- | ---- | --------------------------- |
-| `aoj_icpc_providers.test.ts` | 902  | comparator / ヘルパー       |
-| `aoj_jag_providers.test.ts`  | 455  | 同上                        |
-| `aoj_labels.test.ts`         | 186  | 同上                        |
-| `task_index_label.test.ts`   | 213  | 出典欄                      |
-| `labels/index.test.ts`       | 184  | 出典欄（M11）               |
-| `labels/aoj.test.ts`         | 82   | 出典欄（M11、大学系を含む） |
-
-期待値の多くは fixture 側にある。`src/lib/contests/fixtures/contest_name_labels.ts`（349 行）と `contest_name_and_task_index.ts`（986 行）の AOJ 部分（大学系を含む）が全角括弧と数値 index を前提にしている。
+**性質の変化**: `task_table_index` は「全 DB でユニーク」から**「コンテスト内でのみユニーク」**になる。unique 制約は無く、コンテスト横断で index をキーにしている箇所も無い（`sortAojHeaderIds` は単一コンテスト内で閉じる）ため問題ない。
 
 ---
 
-# 2. SQL の解説
+# 3. SQL の解説
 
 ## SQL の読み方
 
@@ -189,17 +354,15 @@ AOJ ICPC/JAG の 1,099 件が「無条件に一括復元できる」のとは質
 
 これが分かれば `UPDATE` 側は単純で、「`task` と `letters` を `task_id` で突き合わせ、一致した行に `letter` を書き込む」だけ。
 
-| 句                             | 意味                                                                   |
-| ------------------------------ | ---------------------------------------------------------------------- |
-| `PARTITION BY contest_id`      | **コンテストごとにグループ分けし、番号を 1 から振り直す**              |
-| `ORDER BY task_id::int`        | 各グループ内で問題ID の数値昇順に並べる                                |
-| `row_number()`                 | 並べた順に 1, 2, 3… を返す（**1 始まり**）                             |
-| `chr(64 + n)`                  | 文字コード変換。`chr(65)` = `A` なので `n=1 → A`、`n=2 → B`            |
-| `contest_id LIKE 'JAGPrelim%'` | `AOJ_JAG` には合宿系も含まれるため、PR1 では接頭辞で模擬国内だけに絞る |
+| 句                               | 意味                                                                       |
+| -------------------------------- | -------------------------------------------------------------------------- |
+| `PARTITION BY contest_id`        | **コンテストごとにグループ分けし、番号を 1 から振り直す**                  |
+| `ORDER BY task_id::int`          | 各グループ内で問題 ID の数値昇順に並べる                                   |
+| `row_number()`                   | 並べた順に 1, 2, 3… を返す（**1 始まり**、`bigint` なので `::int` が要る） |
+| `chr(64 + n)`                    | 文字コード変換。`chr(65)` = `A` なので `n=1 → A`、`n=2 → B`                |
+| `contest_id ~ '^JAG(Summer\|…)'` | `AOJ_JAG` には PR1 で済んだ模擬国内も含まれるため、接頭辞で範囲を絞る      |
 
-`64` は 1 始まりの分を引いた値。現行の `buildAojLetterMap` は 0 始まりのループ変数で `String.fromCharCode(65 + i)` としており、結果は同じになる。
-
-`PARTITION BY` が無いと対象の全問題（PR1 なら 632 問）に通し番号が振られ、2 つ目以降のコンテストが `Z` を超えて壊れる。
+`PARTITION BY` が無いと対象の全問題に通し番号が振られ、2 つ目以降のコンテストが `Z` を超えて壊れる。
 
 > **SQL は書かれた順に評価されない。** 論理的な処理順序は `FROM`（サブクエリと別名の確定）→ `WHERE` → `SELECT` / `SET`。このため別名を定義より前に参照しているように見えても正しい（`SELECT u.name FROM users AS u` と同じ理屈）。
 
@@ -207,27 +370,27 @@ AOJ ICPC/JAG の 1,099 件が「無条件に一括復元できる」のとは質
 
 ## 計算量 — O(N²) にはならない
 
-- 外側の `AND (t.contest_type = … OR …)` は **join ではなくフィルタ**。1 行あたり O(1) で評価され、行数を減らす方向にしか働かない。`AND` は「同じ 1 行に対する複数の判定」であって集合同士の組み合わせではない
-- join 側も、`task_id` に UNIQUE インデックスがある（`prisma/migrations/0_init/migration.sql:134` `task_task_id_key`）ため、Nested Loop + Index Scan なら O(M log N)、Hash Join なら O(N + M)。二乗にはならない
-- 支配項はウィンドウ関数のソート O(K log K)（K = PR1 で 632、PR2 で 467）。実行時間はミリ秒台
+- `WHERE` の条件は **join ではなくフィルタ**。1 行あたり O(1) で評価され、行数を減らす方向にしか働かない
+- join 側も、`task_id` に UNIQUE インデックスがある（`prisma/migrations/0_init/migration.sql` の `task_task_id_key`）ため、Nested Loop + Index Scan なら O(M log N)、Hash Join なら O(N + M)。二乗にはならない
+- 支配項はウィンドウ関数のソート O(K log K)（K = PR2 で 625）。実行時間はミリ秒台
 
-**推測ではなく実行計画で確認すること。** staging で `EXPLAIN ANALYZE` を付けて実行し、内側ループに `Seq Scan` が出ていないかを見る。
+**推測ではなく実行計画で確認すること。** PR1 では `task` の Seq Scan 2 回 + Hash Join だった（`contest_type` に索引が無いため想定どおり）。
 
 ---
 
-# 3. 検討の経緯（採らなかった案）
+# 4. 検討の経緯（採らなかった案）
 
-**以下はいずれも plan.md で却下・保留と決定済み。** 判断の理由を残すための記録。
+**以下はいずれも計画で却下・保留と決定済み。** 判断の理由を残すための記録。
 
 ## `title` に記号を入れる案を採らない理由
 
 `title` を `'A. Peculiar Protocol'` に揃えれば AtCoder 側 1,366 件と形式が揃うが、採らない。
 
 - **同じ情報を 2 列に持つとドリフトする。** 欠落判断の誤りを修正するとき（修正は起こる前提）、両方を更新しないと不整合になる
-- **G2 に逆行する。** title にプレフィックスを埋め込む設計は、表示側に `removeTaskIndexFromTitle` という文字列 replace を要求する。除去したかった種類の変換そのもの
-- **`replace` は脆い。** 破壊的変更 5 の退行がその実例
+- **G2 に逆行する。** title にプレフィックスを埋め込む設計は、表示側に文字列の除去を要求する。除去したかった種類の変換そのもの
+- **除去は脆い。** 合宿系の title の退行がその実例
 
-「入れない」を選んでも AtCoder と AOJ で title の意味は揃わないが、 **どちらを選んでも不整合は残る**（AtCoder 側を触るのはスコープ外）。コードは既に `formatAojTitle`（AOJ・付与）と `removeTaskIndexFromTitle`（AtCoder・除去）で経路が分かれているため、AOJ を「素の title」に寄せる方が既存の設計と整合する。
+「入れない」を選んでも AtCoder と AOJ で title の意味は揃わないが、 **どちらを選んでも不整合は残る**（AtCoder 側を触るのはスコープ外）。AOJ を「素の title」に寄せ、セルで `A. ` を付ける方が、PR1 の設計（`buildTitleWithTaskIndex`）と整合する。
 
 ## 管理画面案を保留にした理由
 
@@ -236,80 +399,73 @@ AOJ ICPC/JAG の 1,099 件が「無条件に一括復元できる」のとは質
 - **再実行できる。** マイグレーションは適用後 immutable なので、欠落判断の誤りが後から見つかると新しいマイグレーションを積むことになる
 - 欠落判断は人間が行う（M6）以上、**修正は起こる前提**であるべき
 
-一方で、この案は**問題記号の入力元が定義できないと成立しない**。手入力なら 1,099 回の手作業に戻り、難所 1 で否定したものに戻る。コード上の対応表を読むなら prefix / problem_id は入力ではなくなり、実質「対応表を DB に同期するボタン」になる。
+一方で、この案は**問題記号の入力元が定義できないと成立しない**。手入力なら 1,000 回超の手作業に戻り、難所 1 で否定したものに戻る。コード上の対応表を読むなら、実質「対応表を DB に同期するボタン」になる。
 
-さらに、素直に実装すると **N+1 になりやすい**。既存の `createTask` がまさにその形で（`src/routes/(admin)/tasks/+page.server.ts:85` の `Promise.all` + check-then-act）、トランザクションが無いため途中で失敗すると部分適用が残る。採るなら `updateMany` か `$executeRaw` で一括処理する設計が前提になる。
+さらに、素直に実装すると **N+1 になりやすい**。既存の `createTask` がまさにその形で（`src/routes/(admin)/tasks/+page.server.ts` の `Promise.all` + check-then-act）、トランザクションが無いため途中で失敗すると部分適用が残る。採るなら `updateMany` か `$executeRaw` で一括処理する設計が前提になる。
 
-**再検討のタイミング**: PR2 で例外が多く、修正が繰り返し発生すると分かった時点。PR1 は欠落が少ない見込みなのでマイグレーション 1 本で足りる。
-
-## 逆順（合宿系を先）を採らなかった理由
-
-「動いているものへの改修を後に回す方が PR のレビュー負荷が低い」という利点はある。実際、合宿系を先にすれば既存コードへの変更は `mapToTask` の分岐追加だけで済む。
-
-ただし出典欄の反映が PR2 まで持ち越しになり、対応表のフォーマットを最も判断の重い 50 コンテストで作ることになる。**仕様反映の速さを優先して順序を決めた。**
+**再検討の結果（2026-10-24）**: PR2 の照合で補正が要るのは 8 コンテストと分かり、マイグレーション 1 本で足りると判断した。補正の誤りが繰り返し見つかるようなら再検討する。
 
 ---
 
-# 4. Task テーブルへの書き込み経路の全数調査
+# 5. Task テーブルへの書き込み経路の全数調査
 
 リポジトリ全体（`src` / `prisma` / `e2e`）を確認した結果。移行 UPDATE の安全性の根拠。
 
 ## 書き込み経路は 3 つだけ、削除経路はゼロ
 
-| 経路                 | 実装                            | 書き込むフィールド                                                              |
-| -------------------- | ------------------------------- | ------------------------------------------------------------------------------- |
-| 管理画面インポート   | `src/lib/services/tasks.ts:182` | `id` / `task_id` / `contest_id` / `contest_type` / `task_table_index` / `title` |
-| 管理画面の難易度更新 | `src/lib/services/tasks.ts:208` | `grade` のみ                                                                    |
-| seed                 | `prisma/seed.ts:217`            | 上記 + `grade`（`id` は未指定）                                                 |
+| 経路                 | 実装                                        | 書き込むフィールド                                                              |
+| -------------------- | ------------------------------------------- | ------------------------------------------------------------------------------- |
+| 管理画面の取り込み   | `src/lib/services/tasks.ts` の `createTask` | `id` / `task_id` / `contest_id` / `contest_type` / `task_table_index` / `title` |
+| 管理画面の難易度更新 | `src/lib/services/tasks.ts` の `updateTask` | `grade` のみ                                                                    |
+| seed                 | `prisma/seed.ts`                            | 上記 + `grade`（`id` は未指定）                                                 |
 
-- `updateTask` の呼び出し元は 2 つ（`src/routes/(admin)/tasks/[task_id]/+page.server.ts:73`、 `src/routes/(admin)/tasks/grade/+page.server.ts:34`）。いずれも `grade` のみ
+- `updateTask` の呼び出し元は 2 つ（`src/routes/(admin)/tasks/[task_id]/+page.server.ts`、 `src/routes/(admin)/tasks/grade/+page.server.ts`）。いずれも `grade` のみ
 - `task.delete` / `deleteMany` / `upsert` / `createMany` は**リポジトリ全体に存在しない**
 - 生 SQL（`$executeRaw` / `$queryRaw`）による Task への書き込みもなし
 - 他モデルからのネストした `task: { create: ... }` もなし
 
-⇒ **一意フィールドを UPDATE するコードは構造的に存在しない。**
+⇒ **一意フィールドを UPDATE するコードは構造的に存在しない。** リポジトリの外では、staging / production に Supabase の CSV で行を入れることがある（既存の合宿系、PR2.1）。
 
-## `id` の採番規則がインポートと seed で不一致
+## `id` の採番規則が経路ごとに違う
 
-- インポート: `sha256(contest_id + task.id)` — 決定的
-- seed: `id` 未指定のため fabbrica の自動採番（`prisma/.fabbrica/index.ts:915`）で連番文字列
+- 取り込み: `sha256(contest_id + task.id)`（16 進）— 決定的
+- Supabase の CSV（既存の合宿系、PR2.1）: `sha256(contest_id + title)`（16 進）。メンテナが別プロジェクトのスクリプトで作る（2026-10-24 にメンテナが説明）
+- seed: `id` 未指定のため fabbrica の自動採番で連番文字列
 
-一意性は破れないが「`Task.id` はハッシュ」という前提は**開発環境では成立しない**。ただし **`Task.id` を再計算して引く箇所はゼロ**で、全ルックアップは `task_id` 経由。現状の実害はないが、将来 `Task.id` に決定性を期待するコードを書くと静かに壊れる。
+一意性は破れないが「`Task.id` は `task_id` から決まるハッシュ」という前提は**取り込み以外では成立しない**。ただし **`Task.id` を再計算して引く箇所はゼロ**で、全ルックアップは `task_id` 経由。現状の実害はないが、将来 `Task.id` に決定性を期待するコードを書くと静かに壊れる。
 
 ## check-then-act の競合
 
-`createTask` は `isExistsTask`（`findMany`）→ `create` の check-then-act で、 `src/routes/(admin)/tasks/+page.server.ts:85` がこれを `Promise.all` で並列実行している。
+`createTask` は `isExistsTask`（`findMany`）→ `create` の check-then-act で、 `src/routes/(admin)/tasks/+page.server.ts` がこれを `Promise.all` で並列実行している。
 
-同一 `task_id` が 1 回のインポート JSON に 2 件含まれると、両方がチェックを通過して 2 件目が P2002 で落ちる。`Promise.all` 全体が reject して 500 を返すが、 **トランザクションが無いため先に成功した分はロールバックされない**（部分適用）。
+同一 `task_id` が 1 回の取り込み JSON に 2 件含まれると、両方がチェックを通過して 2 件目が P2002 で落ちる。`Promise.all` 全体が reject して 500 を返すが、 **トランザクションが無いため先に成功した分はロールバックされない**（部分適用）。
 
-`prisma/seed.ts:192-199` も同じ形で PQueue concurrency 3 で並列実行しており同種のレースがある。
+`prisma/seed.ts` も同じ形で PQueue concurrency 3 で並列実行しており同種のレースがある。
 
 一意性は DB 制約が守るので壊れはしないが、エラー時の挙動が中途半端。 `docs/guides/agent-rules/prisma-db.md` の「Idempotent Writes」に該当し、本来は `createMany({ skipDuplicates: true })` か `upsert` が解。**本件とは独立の既存課題**（O5）。
 
 ## 他の sha256 決定的 ID は Task から独立
 
-`src/lib/services/answers.ts:86,105` と `src/features/votes/services/vote_grade.ts:107,120,146` はいずれも入力が `Task.id` ではなく `task_id`。`vote_grade.ts` は全て `upsert` で `where` に複合ユニークを使うため id 衝突の経路もない。
+`src/lib/services/answers.ts` と `src/features/votes/services/vote_grade.ts` はいずれも入力が `Task.id` ではなく `task_id`。`vote_grade.ts` は全て `upsert` で `where` に複合ユニークを使うため id 衝突の経路もない。
 
 ## 削除経路がないことの帰結
 
-Task を削除するコードが存在しないため、関連テーブルが孤児 FK を持つ事故は現状起こらない。将来 Task 削除機能を追加する場合、6 つの関連のうち `TaskTag` / `TaskAnswer` / `WorkBookTask` は `onDelete` 未指定なので要注意（投票系 3 つは `Cascade`）。
+Task を削除するコードが存在しないため、関連テーブルが孤児 FK を持つ事故は現状起こらない。将来 Task 削除機能を追加する場合（PR3 のダミーの扱いなど）、6 つの関連のうち `TaskTag` / `TaskAnswer` / `WorkBookTask` は `onDelete` 未指定なので要注意（投票系 3 つは `Cascade`）。
 
 ---
 
-# 5. 調査中の誤りと訂正（自戒）
+# 6. 調査中の誤りと訂正（自戒）
 
 1. **対象を 632 問と集計した** — Provider が存在する 3 種のみを数え、seed にデータがある合宿系 467 問を落としていた。正しくは 1,099 問。 _教訓: 「実装がある範囲」と「データがある範囲」は一致しない。集計条件は後者で取る。_
 
-2. **「問題ID が連番だから欠落なし、機械生成できる」と結論した** — 欠落問題は ID も採番されないため、連番性は欠落の有無について何も語らない。検証が問いに答えていなかった。 _教訓: 「観測できる範囲に異常が無い」ことを「異常が無い」と読み替えない。欠落は定義上、観測できない側にある。_
+2. **「問題 ID が連番だから欠落なし、機械生成できる」と結論した** — 欠落問題は ID も採番されないため、連番性は欠落の有無について何も語らない。検証が問いに答えていなかった。 _教訓: 「観測できる範囲に異常が無い」ことを「異常が無い」と読み替えない。欠落は定義上、観測できない側にある。_
 
 3. **抽出スクリプトのバグを、データの欠落として提示しかけた** — `prisma/tasks.ts` からタスクを抜き出す正規表現がシングルクォート前提だったため、 `name: "A Bug That's Not a Pill Bug"`（アポストロフィを含むためダブルクォート）を取りこぼし、`ICPCPrelim2024` が 8 問に見えた。実際は 9 問で、欠番は存在しなかった。 _教訓: 抽出スクリプトを書いたら、まず総数が既知の値と一致するかを確認する。1 と同じ「観測範囲を実際の範囲と取り違える」失敗であり、本件では欠落の誤検出に直結する。_
 
-4. **移行 SQL を seed 由来の対応表から生成する案を出した** — production のタスクは管理画面インポート経由で入っており seed と一致する保証がないため、production にしか無い行が取り残される。しかも `UPDATE` は該当行が無くてもエラーにならない。 _教訓: 2 と同じ型。「seed で見えている範囲」を「production の実態」と取り違えた。_
+4. **移行 SQL を seed 由来の対応表から生成する案を出した** — production のタスクは管理画面の取り込み経由で入っており seed と一致する保証がないため、production にしか無い行が取り残される。しかも `UPDATE` は該当行が無くてもエラーにならない。 _教訓: 2 と同じ型。「seed で見えている範囲」を「production の実態」と取り違えた。_
 
 5. **AtCoder 系の復元を「不可能」と断定した** — 実際は `task_id` のサフィックスから 83.4% が導出できる。ただし事故対応としては成立しないという結論自体は変わらない。 _教訓: 断定する前に測る。結論が同じでも、根拠が誤っていると次の判断で誤用される。_
 
 6. **PR を分けた後も、移行 SQL の範囲を 1,099 件のままにしていた**（2026-10-21 に発見）— `contest_type IN ('AOJ_ICPC', 'AOJ_JAG')` は合宿系も含むため、PR1 で 467 件を余計に更新するところだった。 _教訓: 範囲を分割したら、範囲を表す条件をすべて追従させる。分類（`contest_type`）と分割の単位が一致しているとは限らない。_
 
 7. **欠落した問題を「AOJ に存在しない（ID も無い）」と決めつけていた**（2026-10-21 に発見）— ICPC 国内予選 2002 の E は AOJ に問題 1123 として存在し、コンテスト一覧（取り込み元）から外れているだけだった。PR3 でダミーを作るという前提は、この問題には当てはまらない。 _教訓: 「一覧に無い」と「存在しない」は別。データの取得元の範囲を、対象が実在する範囲と取り違えない（1・4 と同じ型）。_
-
-なお本調査は当初「上流が `title` / `problem_index` を変更した場合」という別の問いから始まったため、初版には鉄則本の章分類（`tessoku_book_providers.ts`）や `ContestTaskPair` の `replace` 誤置換に関する記述があった。いずれも本件では対象外のため削除済み。

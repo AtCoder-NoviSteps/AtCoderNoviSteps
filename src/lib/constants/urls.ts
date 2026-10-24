@@ -6,12 +6,13 @@ export const ATCODER_PROBLEMS_URL: string = 'https://kenkoooo.com/atcoder/#/';
 
 export const ATCODER_PROBLEMS_API_BASE_URL: string = 'https://kenkoooo.com/atcoder/resources/';
 
-export const AOJ_API_BASE_URL: string = 'https://judgeapi.u-aizu.ac.jp/';
-
 // Note:
 // AIZU ONLINE JUDGE (AOJ) has multiple versions: v1.0, v2.0, and v3.0.
 // As of late October 2024, we are using v2.0, which appears to be the main site.
 export const AOJ_BASE_URL: string = 'https://onlinejudge.u-aizu.ac.jp';
+
+// Moved from judgeapi.u-aizu.ac.jp on 2026-09-07; without the trailing slash, new URL() drops /api.
+export const AOJ_API_BASE_URL: string = `${AOJ_BASE_URL}/api/`;
 
 export const AOJ_TASKS_URL: string = `${AOJ_BASE_URL}/problems`;
 
