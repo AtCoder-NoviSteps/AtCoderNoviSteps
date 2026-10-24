@@ -392,7 +392,7 @@ PR2 完了時点で G1 / G2 が全 129 コンテストに行き渡る。
 
 **生成スクリプトには総数のアサーションを入れる。** 抽出漏れが欠落の誤検出に直結する（調査中に実際に踏んだ。[事例](./investigation.md#5-調査中の誤りと訂正自戒)）。抽出件数が対象範囲の既知の値（PR1 は **79 コンテスト / 632 問**、PR2 は 50 / 467）と一致しなければ**エラーで停止**する。欠落として扱わない。
 
-PR1 は [generate_aoj_problem_letters.ts](./generate_aoj_problem_letters.ts) で行う。`prisma/tasks.ts` を直接 import するので、正規表現による抜き出しで取りこぼすことはない。
+PR1 は `generate_aoj_problem_letters.ts` で行う（1-9 で削除済み。`git show 171bf3c9:docs/dev-notes/2026-09-09/task-title-index-change-impact/generate_aoj_problem_letters.ts` で参照できる）。`prisma/tasks.ts` を直接 import するので、正規表現による抜き出しで取りこぼすことはない。
 
 照合の内容:
 
