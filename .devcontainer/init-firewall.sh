@@ -21,7 +21,7 @@ allowed_domains=(
   vscode.download.prss.microsoft.com
   # External APIs the app calls (src/lib/constants/urls.ts)
   kenkoooo.com
-  judgeapi.u-aizu.ac.jp
+  onlinejudge.u-aizu.ac.jp
   # CodeRabbit CLI
   cli.coderabbit.ai
   app.coderabbit.ai
