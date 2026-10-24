@@ -18,7 +18,7 @@
 | `JAG 夏合宿 2015 Day3`                         | なし（in AtCoder・過去問）                 |
 
 - 出典欄は変えない。この配列は #4018 でコンテスト情報を DB に移すときの移行元になる
-- 配列には PR2.1 の 10 件も入れる。データが無い間は表示されないので、PR2.1 より先に出してよい（contest_id は PR2.1 の Q3 / Q4 で確定させる）
+- 配列には PR2.1 の 10 件も入れる。データが無い間は表示されないので、PR2.1 より先に出してよい（contest_id は確定済み。[plan-pr2-1.md](./plan-pr2-1.md#範囲)）
 - Provider の `contestType` は全件 `AOJ_JAG` にする。provider key の名前空間として使うだけで、`getTaskTableHeaderName` での違いは ABC の H/Ex だけなので、in AtCoder の 4 件も同じでよい。`ATCODER_JAG` に依存しないので、PR2.1 と順序を問わない
 
 関係する決定: M15 / M16（[plan.md](./plan.md#決定事項)）。

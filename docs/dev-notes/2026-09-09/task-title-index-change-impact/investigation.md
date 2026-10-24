@@ -59,31 +59,31 @@ PR0 / PR1 だけに関わる調査（出典欄の呼び出し元、テストの�
 | JAG 模擬地区 2005    | C Geometry?! Why Not??、F University Rankings、H Tiling Polygons                                                     |
 | JAG 模擬地区 2008    | J Colony Maintenance                                                                                                 |
 
-要確認（AOJ に問題がある可能性があるもの）:
+一覧に無い問題について、メンテナが AOJ で確かめた結果（2026-10-24）:
 
-- **JAG 模擬地区 2013 の A Broken Audio Signal / B Restore Calculation / C SIRO Challenge**: スプレッドシートではリンク付き（未収録の表記が無い）だが、AOJ の模擬地区 2013 の一覧（本番の 7 問、2568〜2574）に無い。ICPC 国内予選 2002 の E と同じく、一覧から外れているだけの可能性がある。AOJ の問題番号を確かめる
-- **JAG 夏合宿 2024 Day3 の G**: 問題 ID 3643 が欠番になっている。AOJ に 3643 があるかを確かめる
+- **JAG 夏合宿 2024 Day3 の G（Interactive String Guessing）**: スプレッドシートでは「AOJ 未収録」だが、AOJ に 3643 の問題ページがある（`onlinejudge.u-aizu.ac.jp/challenges/search/titles/3643`）。コンテスト一覧から外れているだけで、ICPC 国内予選 2002 の E（AOJ 1123）と同じ種類。**スプレッドシートの「AOJ 未収録」は、AOJ に無いことの保証にならない**
+- **JAG 模擬地区 2013 の A Broken Audio Signal / B Restore Calculation / C SIRO Challenge**: スプレッドシートではリンク付き（未収録の表記が無い）で、リンク先は AOJ 2565 / 2566 / 2567。ただし AOJ 側で title が見つからない。AOJ の模擬地区 2013 の一覧（本番の 7 問、2568〜2574）にも無い
 
-AOJ へのアクセスは、この環境からは拒否された（`judgeapi.u-aizu.ac.jp` が HTTP 410）。
+どちらも PR2 の記号（2013 は D〜J、2024 Day3 は H〜K）には影響しない。AOJ へのアクセスは、この環境からは拒否された（`judgeapi.u-aizu.ac.jp` が HTTP 410）。
 
 ## DB に無いコンテスト
 
-PR2.1 で入れる。
+PR2.1 で入れる。contest_id と問題番号は 2026-10-24 にメンテナから受け取った。
 
-| スプレッドシートの見出し                            | 問題数 | 入手元  |
-| --------------------------------------------------- | ------ | ------- |
-| JAG 夏合宿 2026 Day1（JAG）                         | 12     | AOJ     |
-| JAG 夏合宿 2026 Day2（有志）（AMATSUKAZE2025）      | 12     | AOJ     |
-| JAG 夏合宿 2026 Day3（JAG）                         | 12     | AOJ     |
-| JAG 夏合宿 2025 Day1（有志）                        | 12     | AOJ     |
-| JAG 夏合宿 2025 Day2（JAG）                         | 12     | AOJ     |
-| JAG 夏合宿 2025 Day3（有志）                        | 12     | AOJ     |
-| JAG 夏合宿 2018 Day2（有志）（in AtCoder）          | 11     | AtCoder |
-| JAG 夏合宿 2017 Day1（有志）（in AtCoder）          | 11     | AtCoder |
-| JAG 夏合宿 2015 Day3（過去問）（in AtCoder）        | 10     | AtCoder |
-| JAG 夏合宿 2013 Day2 WarmUp（過去問）（in AtCoder） | 10     | AtCoder |
+| スプレッドシートの見出し                            | contest_id                | 問題（task_id）                   | 入手元  |
+| --------------------------------------------------- | ------------------------- | --------------------------------- | ------- |
+| JAG 夏合宿 2026 Day1（JAG）                         | `JAGSummer2026-day1`      | 3684〜3695                        | AOJ     |
+| JAG 夏合宿 2026 Day2（有志）（AMATSUKAZE2025）      | `JAGSummer2026-day2`      | 3696〜3707                        | AOJ     |
+| JAG 夏合宿 2026 Day3（JAG）                         | `JAGSummer2026-day3`      | 3708〜3719                        | AOJ     |
+| JAG 夏合宿 2025 Day1（有志）                        | `JAGSummer2025-day1`      | 3648〜3659                        | AOJ     |
+| JAG 夏合宿 2025 Day2（JAG）                         | `JAGSummer2025-day2`      | 3660〜3671                        | AOJ     |
+| JAG 夏合宿 2025 Day3（有志）                        | `JAGSummer2025-day3`      | 3672〜3683                        | AOJ     |
+| JAG 夏合宿 2018 Day2（有志）（in AtCoder）          | `jag2018summer-day2`      | `jag2018summer_day2_a`〜`k`       | AtCoder |
+| JAG 夏合宿 2017 Day1（有志）（in AtCoder）          | `jag2017summer-day1`      | `jag2017summer_day1_a`〜`k`       | AtCoder |
+| JAG 夏合宿 2015 Day3（過去問）（in AtCoder）        | `jag2015summer-day3`      | `icpc2015summer_day3_a`〜`j`      | AtCoder |
+| JAG 夏合宿 2013 Day2 WarmUp（過去問）（in AtCoder） | `jag2013summer-warmingup` | `icpc2013summer_warmingUp_a`〜`j` | AtCoder |
 
-計 114 問（AOJ 72、AtCoder 42）。いずれも「AOJ 未収録」の表記は無い。
+計 114 問（AOJ 72 は各 12 問、AtCoder 42）。いずれも「AOJ 未収録」の表記は無く、受け取った問題名はスプレッドシートと記号の位置ごとに一致した（目視）。AOJ の 6 コンテストは問題 ID が連番で、記号は基本ルールと一致する。
 
 AtCoder Problems の `contests.json` には、ほかに `JAG2013Spring` / `JAG2014Spring` もある。AOJ の `JAGSpring2013` / `JAGSpring2014` と同じコンテストなので対象外とする。
 
@@ -91,84 +91,84 @@ AtCoder Problems の `contests.json` には、ほかに `JAG2013Spring` / `JAG20
 
 PR2.5 の配列の元。スプレッドシートの行順そのまま（上が新しい）。括弧書きは M16 に従う（「過去問」「in AtCoder」「AMATSUKAZE2025」は書かない）。「DB」列の「無し」は PR2.1 で入るもの、「補正」は上の 8 コンテスト。
 
-| #   | 行   | contest_id                                 | 括弧書き                | DB   |
-| --- | ---- | ------------------------------------------ | ----------------------- | ---- |
-| 1   | 2    | `JAGSummer2026-day1`（仮）                 | JAG                     | 無し |
-| 2   | 15   | `JAGSummer2026-day2`（仮）                 | 有志                    | 無し |
-| 3   | 28   | `JAGSummer2026-day3`（仮）                 | JAG                     | 無し |
-| 4   | 51   | `JAGSummer2025-day1`（仮）                 | 有志                    | 無し |
-| 5   | 64   | `JAGSummer2025-day2`（仮）                 | JAG                     | 無し |
-| 6   | 77   | `JAGSummer2025-day3`（仮）                 | 有志                    | 無し |
-| 7   | 100  | `JAGSummer2024-day2`                       | 有志                    |      |
-| 8   | 115  | `JAGSummer2024-day3`                       | JAG                     | 補正 |
-| 9   | 137  | `JAGSummer2023-day2`                       | 有志                    |      |
-| 10  | 150  | `JAGSummer2023-day3`                       | JAG                     |      |
-| 11  | 171  | `JAGRegional2022`                          | JAG                     |      |
-| 12  | 193  | `JAGRegional2021`                          | JAG                     |      |
-| 13  | 214  | `JAGRegional2020`                          | JAG                     |      |
-| 14  | 235  | `JAGSummer2019-day1`                       | JAG                     |      |
-| 15  | 247  | `JAGSummer2019-day2`                       | 有志                    |      |
-| 16  | 258  | `JAGSummer2019-day3`                       | 有志                    |      |
-| 17  | 278  | 夏合宿 2018 Day2（AtCoder、要確認）        | 有志                    | 無し |
-| 18  | 290  | `JAGSummer2018-day3`                       | JAG                     |      |
-| 19  | 311  | `JAGRegional2017`                          | JAG                     |      |
-| 20  | 323  | 夏合宿 2017 Day1（AtCoder、要確認）        | 有志                    | 無し |
-| 21  | 335  | `JAGSummer2017-day3`                       | JAG                     |      |
-| 22  | 356  | `JAGRegional2016`                          | in JAG 夏合宿 2016 Day3 |      |
-| 23  | 384  | `JAGRegional2015`                          | JAG                     |      |
-| 24  | 396  | `JAGSummer2015-day2`                       | 有志                    |      |
-| 25  | 408  | 夏合宿 2015 Day3（AtCoder、要確認）        | なし                    | 無し |
-| 26  | 419  | `JAGSummer2015-day4`                       | JAG                     |      |
-| 27  | 438  | `JAGSpring2015`                            | JAG                     |      |
-| 28  | 451  | `JAGSummer2014-day2`                       | 有志                    |      |
-| 29  | 462  | `JAGRegional2014`                          | in JAG 夏合宿 2014 Day3 |      |
-| 30  | 474  | `JAGSummer2014-day4`                       | 有志                    |      |
-| 31  | 493  | `JAGSpring2014`                            | JAG                     |      |
-| 32  | 504  | `JAGRegional2013`                          | JAG                     | 補正 |
-| 33  | 515  | 夏合宿 2013 Day2 WarmUp（AtCoder、要確認） | なし                    | 無し |
-| 34  | 526  | `JAGSummer2013-day2`                       | 有志                    |      |
-| 35  | 534  | `JAGSummer2013-day3`                       | 有志                    |      |
-| 36  | 547  | `JAGSummer2013-day4`                       | JAG                     |      |
-| 37  | 566  | `JAGSpring2013`                            | JAG                     |      |
-| 38  | 577  | `JAGRegional2012`                          | JAG                     |      |
-| 39  | 588  | `JAGSummer2012-day2`                       | 有志                    |      |
-| 40  | 599  | `JAGSummer2012-day3A`                      | 有志                    |      |
-| 41  | 606  | `JAGSummer2012-day3B`                      | 有志                    |      |
-| 42  | 614  | `JAGSummer2012-day4`                       | JAG                     |      |
-| 43  | 633  | `JAGSpring2012`                            | JAG                     |      |
-| 44  | 644  | `JAGWinter2011`                            | JAG                     |      |
-| 45  | 655  | `JAGRegional2011`                          | JAG                     |      |
-| 46  | 674  | `JAGSummer2011-day2`                       | 有志                    |      |
-| 47  | 685  | `JAGSummer2011-day3`                       | JAG                     |      |
-| 48  | 696  | `JAGSummer2011-day4`                       | 有志                    |      |
-| 49  | 707  | `JAGWinter2010-day3`                       | 有志                    |      |
-| 50  | 718  | `JAGWinter2010-day4`                       | JAG                     |      |
-| 51  | 729  | `JAGRegional2010`                          | JAG                     |      |
-| 52  | 740  | `JAGSummer2010-day2`                       | 有志                    |      |
-| 53  | 751  | `JAGSummer2010-day3`                       | 有志                    |      |
-| 54  | 762  | `JAGSummer2010-day4`                       | JAG                     |      |
-| 55  | 781  | `JAGWinter2009`                            | JAG                     |      |
-| 56  | 792  | `JAGRegional2009`                          | JAG                     |      |
-| 57  | 803  | `JAGSummer2009-day2`                       | JAG                     |      |
-| 58  | 814  | `JAGSummer2009-day3`                       | JAG                     |      |
-| 59  | 832  | `JAGWinter2008-day2`                       | JAG                     |      |
-| 60  | 844  | `JAGWinter2008-day3`                       | JAG                     |      |
-| 61  | 856  | `JAGRegional2008`                          | JAG                     |      |
-| 62  | 867  | `JAGSummer2008-day2`                       | JAG                     |      |
-| 63  | 878  | `JAGSummer2008-day4`                       | JAG                     |      |
-| 64  | 894  | `JAGWinter2007-day2`                       | JAG                     |      |
-| 65  | 905  | `JAGWinter2007-day3`                       | JAG                     | 補正 |
-| 66  | 916  | `JAGRegional2007`                          | JAG                     |      |
-| 67  | 926  | `JAGSummer2007-day1`                       | JAG                     |      |
-| 68  | 932  | `JAGSummer2007-day2`                       | JAG                     |      |
-| 69  | 942  | `JAGSummer2007-day3`                       | JAG                     |      |
-| 70  | 957  | `JAGWinter2006-day2`                       | JAG                     | 補正 |
-| 71  | 967  | `JAGWinter2006-day3`                       | JAG                     | 補正 |
-| 72  | 978  | `JAGRegional2006`                          | JAG                     |      |
-| 73  | 988  | `JAGSummer2006-day1`                       | JAG                     | 補正 |
-| 74  | 992  | `JAGSummer2006-day2`                       | JAG                     |      |
-| 75  | 1002 | `JAGSummer2006-day3`                       | JAG                     | 補正 |
-| 76  | 1017 | `JAGRegional2005`                          | JAG                     | 補正 |
+| #   | 行   | contest_id                           | 括弧書き                | DB   |
+| --- | ---- | ------------------------------------ | ----------------------- | ---- |
+| 1   | 2    | `JAGSummer2026-day1`                 | JAG                     | 無し |
+| 2   | 15   | `JAGSummer2026-day2`                 | 有志                    | 無し |
+| 3   | 28   | `JAGSummer2026-day3`                 | JAG                     | 無し |
+| 4   | 51   | `JAGSummer2025-day1`                 | 有志                    | 無し |
+| 5   | 64   | `JAGSummer2025-day2`                 | JAG                     | 無し |
+| 6   | 77   | `JAGSummer2025-day3`                 | 有志                    | 無し |
+| 7   | 100  | `JAGSummer2024-day2`                 | 有志                    |      |
+| 8   | 115  | `JAGSummer2024-day3`                 | JAG                     | 補正 |
+| 9   | 137  | `JAGSummer2023-day2`                 | 有志                    |      |
+| 10  | 150  | `JAGSummer2023-day3`                 | JAG                     |      |
+| 11  | 171  | `JAGRegional2022`                    | JAG                     |      |
+| 12  | 193  | `JAGRegional2021`                    | JAG                     |      |
+| 13  | 214  | `JAGRegional2020`                    | JAG                     |      |
+| 14  | 235  | `JAGSummer2019-day1`                 | JAG                     |      |
+| 15  | 247  | `JAGSummer2019-day2`                 | 有志                    |      |
+| 16  | 258  | `JAGSummer2019-day3`                 | 有志                    |      |
+| 17  | 278  | `jag2018summer-day2`（AtCoder）      | 有志                    | 無し |
+| 18  | 290  | `JAGSummer2018-day3`                 | JAG                     |      |
+| 19  | 311  | `JAGRegional2017`                    | JAG                     |      |
+| 20  | 323  | `jag2017summer-day1`（AtCoder）      | 有志                    | 無し |
+| 21  | 335  | `JAGSummer2017-day3`                 | JAG                     |      |
+| 22  | 356  | `JAGRegional2016`                    | in JAG 夏合宿 2016 Day3 |      |
+| 23  | 384  | `JAGRegional2015`                    | JAG                     |      |
+| 24  | 396  | `JAGSummer2015-day2`                 | 有志                    |      |
+| 25  | 408  | `jag2015summer-day3`（AtCoder）      | なし                    | 無し |
+| 26  | 419  | `JAGSummer2015-day4`                 | JAG                     |      |
+| 27  | 438  | `JAGSpring2015`                      | JAG                     |      |
+| 28  | 451  | `JAGSummer2014-day2`                 | 有志                    |      |
+| 29  | 462  | `JAGRegional2014`                    | in JAG 夏合宿 2014 Day3 |      |
+| 30  | 474  | `JAGSummer2014-day4`                 | 有志                    |      |
+| 31  | 493  | `JAGSpring2014`                      | JAG                     |      |
+| 32  | 504  | `JAGRegional2013`                    | JAG                     | 補正 |
+| 33  | 515  | `jag2013summer-warmingup`（AtCoder） | なし                    | 無し |
+| 34  | 526  | `JAGSummer2013-day2`                 | 有志                    |      |
+| 35  | 534  | `JAGSummer2013-day3`                 | 有志                    |      |
+| 36  | 547  | `JAGSummer2013-day4`                 | JAG                     |      |
+| 37  | 566  | `JAGSpring2013`                      | JAG                     |      |
+| 38  | 577  | `JAGRegional2012`                    | JAG                     |      |
+| 39  | 588  | `JAGSummer2012-day2`                 | 有志                    |      |
+| 40  | 599  | `JAGSummer2012-day3A`                | 有志                    |      |
+| 41  | 606  | `JAGSummer2012-day3B`                | 有志                    |      |
+| 42  | 614  | `JAGSummer2012-day4`                 | JAG                     |      |
+| 43  | 633  | `JAGSpring2012`                      | JAG                     |      |
+| 44  | 644  | `JAGWinter2011`                      | JAG                     |      |
+| 45  | 655  | `JAGRegional2011`                    | JAG                     |      |
+| 46  | 674  | `JAGSummer2011-day2`                 | 有志                    |      |
+| 47  | 685  | `JAGSummer2011-day3`                 | JAG                     |      |
+| 48  | 696  | `JAGSummer2011-day4`                 | 有志                    |      |
+| 49  | 707  | `JAGWinter2010-day3`                 | 有志                    |      |
+| 50  | 718  | `JAGWinter2010-day4`                 | JAG                     |      |
+| 51  | 729  | `JAGRegional2010`                    | JAG                     |      |
+| 52  | 740  | `JAGSummer2010-day2`                 | 有志                    |      |
+| 53  | 751  | `JAGSummer2010-day3`                 | 有志                    |      |
+| 54  | 762  | `JAGSummer2010-day4`                 | JAG                     |      |
+| 55  | 781  | `JAGWinter2009`                      | JAG                     |      |
+| 56  | 792  | `JAGRegional2009`                    | JAG                     |      |
+| 57  | 803  | `JAGSummer2009-day2`                 | JAG                     |      |
+| 58  | 814  | `JAGSummer2009-day3`                 | JAG                     |      |
+| 59  | 832  | `JAGWinter2008-day2`                 | JAG                     |      |
+| 60  | 844  | `JAGWinter2008-day3`                 | JAG                     |      |
+| 61  | 856  | `JAGRegional2008`                    | JAG                     |      |
+| 62  | 867  | `JAGSummer2008-day2`                 | JAG                     |      |
+| 63  | 878  | `JAGSummer2008-day4`                 | JAG                     |      |
+| 64  | 894  | `JAGWinter2007-day2`                 | JAG                     |      |
+| 65  | 905  | `JAGWinter2007-day3`                 | JAG                     | 補正 |
+| 66  | 916  | `JAGRegional2007`                    | JAG                     |      |
+| 67  | 926  | `JAGSummer2007-day1`                 | JAG                     |      |
+| 68  | 932  | `JAGSummer2007-day2`                 | JAG                     |      |
+| 69  | 942  | `JAGSummer2007-day3`                 | JAG                     |      |
+| 70  | 957  | `JAGWinter2006-day2`                 | JAG                     | 補正 |
+| 71  | 967  | `JAGWinter2006-day3`                 | JAG                     | 補正 |
+| 72  | 978  | `JAGRegional2006`                    | JAG                     |      |
+| 73  | 988  | `JAGSummer2006-day1`                 | JAG                     | 補正 |
+| 74  | 992  | `JAGSummer2006-day2`                 | JAG                     |      |
+| 75  | 1002 | `JAGSummer2006-day3`                 | JAG                     | 補正 |
+| 76  | 1017 | `JAGRegional2005`                    | JAG                     | 補正 |
 
 内訳: 合宿系 50、模擬地区 16、DB に無いもの 10（AOJ 6、AtCoder 4）。
 
@@ -226,11 +226,26 @@ PR1 / PR2 の合計は 1,257 問 / 145 コンテスト。PR1 の前は、seed �
 
 AtCoder 側（`AOJ_*` 以外）で title が `${task_table_index}. ` で始まらない問題は、本番でも `abs` の practice_1 の 1 件だけだった。
 
+## PR2 の範囲の本番と staging（2026-10-24）
+
+SQL A（[plan-pr2.md](./plan-pr2.md#着手前の確認2026-10-24-に回答済み)）の結果。
+
+| 範囲     | 本番     | staging    | index が問題 ID のまま | title が問題 ID 付き |
+| -------- | -------- | ---------- | ---------------------- | -------------------- |
+| Regional | 16 / 158 | **2 / 16** | 全行                   | 0 行                 |
+| Spring   | 4 / 42   | 4 / 42     | 全行                   | 全行                 |
+| Summer   | 36 / 338 | 36 / 338   | 全行                   | 全行                 |
+| Winter   | 10 / 87  | 10 / 87    | 全行                   | 全行                 |
+
+- staging には模擬地区が 2 コンテストしか無い。PR2 の前に staging で取り込み、本番とそろえる
+- 本番の模擬地区 158 問（SQL B）は、AOJ の一覧のスクリーンショットと問題名・問題 ID がすべて一致した。grade が付いているのは 6 問
+- 本番の 3355 だけ、title の末尾にタブがある（`Most distant point from the stations\t`）。今の取り込みは `trim()` するので、それ以前に入った行と見られる
+
 ## 欠落は機械的に検出できない
 
 AOJ 問題 ID の連番性を調べると、seed の 129 コンテスト中 128 が連番。**だが欠落が無い証拠にならない。** AOJ に登録されていない問題なら ID も無いため、残った問題の ID は連番のままになる。AOJ に問題はあるのにコンテスト一覧（取り込み元）から外れている場合も同じである。ICPC 国内予選 2002 の E（Enclosing Circles）は AOJ に問題 1123 として存在するが一覧に無く、取り込まれていない。2002 年の A〜D は 1119〜1122 で連番のままであり、1123 の次の 1124 は 2003 年の A である。
 
-連番でない 1 コンテストは `JAGSummer2024-day3`（3643 が無い）で、スプレッドシートの G（Interactive String Guessing、AOJ 未収録）に当たる。
+連番でない 1 コンテストは `JAGSummer2024-day3`（3643 が無い）で、スプレッドシートの G（Interactive String Guessing）に当たる。スプレッドシートでは「AOJ 未収録」だが、AOJ に 3643 はあり、コンテスト一覧から外れているだけだった。
 
 データから欠落を示唆するのは**問題数の異常**の方だが、それも決め手にならない:
 
@@ -248,12 +263,12 @@ AOJ 問題 ID の連番性を調べると、seed の 129 コンテスト中 128 
 | ------------------------------------------ | ----- | ------------------------------- | --------------------------------- |
 | ICPC国内 / アジア / JAG模擬国内（**PR1**） | 632   | 素                              | `'Peculiar Protocol'`             |
 | JAG 合宿系（**PR2**）                      | 467   | **数値ID のプレフィックス付き** | `'2389. Asynchronous Exceptions'` |
-| JAG 模擬地区（**PR2**、本番のみ）          | 158   | 素の見込み（**要確認**）        | `'Restriction Enzyme'`            |
+| JAG 模擬地区（**PR2**、本番のみ）          | 158   | 素                              | `'Restriction Enzyme'`            |
 | AtCoder 等（対象外）                       | 1,366 | index のプレフィックス付き      | `'EX8. たくさんのA足すB問題'`     |
 
 **プレフィックスは合宿系の 467 件すべてで `task_id` と完全に一致していた（不一致 0 件）。** したがって除去も復元も機械的に安全に行える。
 
-模擬地区は管理画面の取り込みで本番に入っている。取り込みは導入時（2024-10、`7dcc5e4c`）から `problem.name` をそのまま title にしているので、プレフィックスは無い見込み。本番の問題一覧の表示（`removeTaskIndexFromTitle` を通した後）からは判別できないため、PR2 の着手前に SQL A で確かめる。
+模擬地区は管理画面の取り込みで本番に入っており、取り込みは導入時（2024-10、`7dcc5e4c`）から `problem.name` をそのまま title にしている。SQL A でもプレフィックスは 0 行だった（本番・staging）。
 
 退行の機序（title を直さずに index だけ記号にした場合）:
 
@@ -273,7 +288,7 @@ PR2 後: index='A',    title='2389. Asynchronous Exceptions'
 | AOJ ICPC/JAG（更新対象） | 1,099 | **無条件に可能**。`task_table_index == task_id` が例外ゼロで成立（seed、PR1 の前）       |
 | その他（AtCoder 等）     | 1,367 | **条件付き**。84.2%（1,151 件）は `task_id` のサフィックスから導出できるが、216 件は例外 |
 
-模擬地区 158 件は本番のみなので、SQL A で `task_table_index == task_id` を確かめる。
+本番だけにある模擬地区 158 件も、SQL A で全行 `task_table_index == task_id` だった（2026-10-24）。
 
 導出できない 216 件の内訳: `abc` 41（`abc318_h` に対し index は `Ex`）、`typical` 32、 `APG` 27（`APG4bPython_co` に対し index は `EX8`）、`arc` 27、`tdpc` 20、 `math-and-algorithm` 15、ほか（`task_id` にサフィックスが無い AOJ 大学系 29 件を含む）。
 
@@ -394,12 +409,13 @@ PR2 後: index='A',    title='2389. Asynchronous Exceptions'
 
 ⇒ **一意フィールドを UPDATE するコードは構造的に存在しない。** リポジトリの外では、staging / production に Supabase の CSV で行を入れることがある（既存の合宿系、PR2.1）。
 
-## `id` の採番規則が取り込みと seed で不一致
+## `id` の採番規則が経路ごとに違う
 
 - 取り込み: `sha256(contest_id + task.id)`（16 進）— 決定的
+- Supabase の CSV（既存の合宿系、PR2.1）: `sha256(contest_id + title)`（16 進）。メンテナが別プロジェクトのスクリプトで作る（2026-10-24 にメンテナが説明）
 - seed: `id` 未指定のため fabbrica の自動採番で連番文字列
 
-一意性は破れないが「`Task.id` はハッシュ」という前提は**開発環境では成立しない**。ただし **`Task.id` を再計算して引く箇所はゼロ**で、全ルックアップは `task_id` 経由。現状の実害はないが、将来 `Task.id` に決定性を期待するコードを書くと静かに壊れる。
+一意性は破れないが「`Task.id` は `task_id` から決まるハッシュ」という前提は**取り込み以外では成立しない**。ただし **`Task.id` を再計算して引く箇所はゼロ**で、全ルックアップは `task_id` 経由。現状の実害はないが、将来 `Task.id` に決定性を期待するコードを書くと静かに壊れる。
 
 ## check-then-act の競合
 
