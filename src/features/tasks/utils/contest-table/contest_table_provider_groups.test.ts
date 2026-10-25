@@ -267,4 +267,52 @@ describe('prepareContestProviderPresets', () => {
       expect(group.getProvider(ContestType.AOJ_JAG, '2016B')).toBeDefined();
     });
   });
+
+  describe('explicit-order presets', () => {
+    const getProviderKeys = () =>
+      presets
+        .AojJagRegional()
+        .getAllProviders()
+        .map((provider) => provider.getProviderKey());
+
+    test('AojJagRegional registers one provider per contest, newest first', () => {
+      const group = presets.AojJagRegional();
+      const providerKeys = getProviderKeys();
+
+      expect(group.getGroupName()).toBe('JAG 模擬地区');
+      expect(group.getMetadata()).toEqual({
+        buttonLabel: 'JAG 模擬地区',
+        ariaLabel: 'Filter JAG Regional and Training Camps',
+      });
+      expect(group.getSize()).toBe(76);
+      expect(providerKeys.at(0)).toBe('AOJ_JAG::JAGSummer2026-day1');
+      expect(providerKeys.at(-1)).toBe('AOJ_JAG::JAGRegional2005');
+    });
+
+    test('AojJagRegional places the 2014 regional between Day2 and Day4 of that summer camp', () => {
+      const providerKeys = getProviderKeys();
+      const day2Index = providerKeys.indexOf('AOJ_JAG::JAGSummer2014-day2');
+
+      expect(providerKeys.slice(day2Index, day2Index + 3)).toEqual([
+        'AOJ_JAG::JAGSummer2014-day2',
+        'AOJ_JAG::JAGRegional2014',
+        'AOJ_JAG::JAGSummer2014-day4',
+      ]);
+    });
+
+    test('AojJagRegional registers the contests held on AtCoder under ATCODER_JAG', () => {
+      const group = presets.AojJagRegional();
+      const atCoderContestIds = [
+        'jag2018summer-day2',
+        'jag2017summer-day1',
+        'jag2015summer-day3',
+        'jag2013summer-warmingup',
+      ];
+
+      for (const contestId of atCoderContestIds) {
+        expect(group.getProvider(ContestType.ATCODER_JAG, contestId)).toBeDefined();
+      }
+      expect(group.getProvider(ContestType.AOJ_JAG, 'JAGSummer2015-day4')).toBeDefined();
+    });
+  });
 });

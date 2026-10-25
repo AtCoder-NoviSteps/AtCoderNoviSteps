@@ -1,5 +1,6 @@
 import { ContestType } from '#lib/contests/types/contest.js';
 import type { TaskResult, TaskResults } from '#lib/types/task.js';
+import { getContestNameLabel } from '#lib/contests/index.js';
 import {
   type ContestTableMetaData,
   type ContestTableDisplayConfig,
@@ -7,6 +8,7 @@ import {
 
 import { ContestTableProviderBase } from './contest_table_provider_base';
 import { sortAojHeaderIds, AOJ_TITLE_STYLE, buildAojDisplayConfig } from './aoj_labels';
+import type { AojJagRegionalEntry } from './aoj_jag_regional_entries';
 
 /**
  * One JAG Domestic Preliminary (JAG 模擬国内) table, keyed by year.
@@ -53,5 +55,47 @@ export class JagPrelimProvider extends ContestTableProviderBase {
 
   private buildTitle(): string {
     return this.suffix ? `JAG 模擬国内 ${this.year} ${this.suffix}` : `JAG 模擬国内 ${this.year}`;
+  }
+}
+
+/**
+ * One table per JAG camp or regional contest (JAG 模擬地区 group), including those held on AtCoder.
+ */
+export class JagRegionalProvider extends ContestTableProviderBase {
+  private readonly entry: AojJagRegionalEntry;
+
+  constructor(contestType: ContestType, entry: AojJagRegionalEntry) {
+    super(contestType, entry.contestId); // provider key: AOJ_JAG::JAGSummer2024-day2
+    this.entry = entry;
+  }
+
+  protected setFilterCondition(): (taskResult: TaskResult) => boolean {
+    return (taskResult: TaskResult) => taskResult.contest_id === this.entry.contestId;
+  }
+
+  override getHeaderIdsForTask(filtered: TaskResults): string[] {
+    return sortAojHeaderIds(filtered);
+  }
+
+  getMetadata(): ContestTableMetaData {
+    return {
+      title: this.buildTitle(),
+      abbreviationName: this.entry.contestId,
+      titleStyle: AOJ_TITLE_STYLE,
+    };
+  }
+
+  getDisplayConfig(): ContestTableDisplayConfig {
+    return buildAojDisplayConfig();
+  }
+
+  getContestRoundLabel(_contestId: string): string {
+    return this.buildTitle();
+  }
+
+  private buildTitle(): string {
+    const name = getContestNameLabel(this.entry.contestId);
+
+    return this.entry.note ? `${name}（${this.entry.note}）` : name;
   }
 }
