@@ -312,6 +312,7 @@ enum ContestType {
   ARC_LIKE // AtCoder Regular Contest (ARC) 相当のコンテスト
   AGC_LIKE // AtCoder Grand Contest (AGC) 相当のコンテスト
   AWC // AtCoder Weekday Contest
+  ATCODER_JAG // JAG (ICPC Japan Alumni Group) contests held on AtCoder (e.g., summer camp days)
   UNIVERSITY // University Programming Contests in AtCoder (e.g., UTPC)
   FPS_24 // 24 Problems on Formal Power Series
   GAME_24 // 24 Problems on Combinatorial Games

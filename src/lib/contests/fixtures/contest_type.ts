@@ -399,6 +399,25 @@ export const awc = awcContestIds.map((contestId) =>
 //
 // See:
 // https://kenkoooo.com/atcoder/resources/contests.json
+export const atCoderJag = [
+  createTestCaseForContestType('JAG Summer Camp 2018 Day2')({
+    contestId: 'jag2018summer-day2',
+    expected: ContestType.ATCODER_JAG,
+  }),
+  createTestCaseForContestType('JAG Summer Camp 2017 Day1')({
+    contestId: 'jag2017summer-day1',
+    expected: ContestType.ATCODER_JAG,
+  }),
+  createTestCaseForContestType('JAG Summer Camp 2015 Day3')({
+    contestId: 'jag2015summer-day3',
+    expected: ContestType.ATCODER_JAG,
+  }),
+  createTestCaseForContestType('JAG Summer Camp 2013 Day2 WarmUp')({
+    contestId: 'jag2013summer-warmingup',
+    expected: ContestType.ATCODER_JAG,
+  }),
+];
+
 const universityContestIds = [
   'fuka5',
   'kupc2012',

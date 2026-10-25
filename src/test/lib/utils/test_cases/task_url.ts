@@ -83,6 +83,20 @@ const educationalTasks = [
 
 export const atCoderTasks = [...abc365Tasks, ...beginnersTasks, ...educationalTasks];
 
+// JAG contests held on AtCoder; some task ids start with "icpc" but still belong to AtCoder.
+export const atCoderJagTasks = [
+  createTestCaseForTaskUrl('JAG Summer Camp 2018 Day2, task A')({
+    contestId: 'jag2018summer-day2',
+    taskId: 'jag2018summer_day2_a',
+    expected: `${ATCODER_BASE_CONTEST_URL}/jag2018summer-day2/tasks/jag2018summer_day2_a`,
+  }),
+  createTestCaseForTaskUrl('JAG Summer Camp 2013 Day2 WarmUp, task A')({
+    contestId: 'jag2013summer-warmingup',
+    taskId: 'icpc2013summer_warmingUp_a',
+    expected: `${ATCODER_BASE_CONTEST_URL}/jag2013summer-warmingup/tasks/icpc2013summer_warmingUp_a`,
+  }),
+];
+
 const courses = [
   {
     contestId: 'ITP1',

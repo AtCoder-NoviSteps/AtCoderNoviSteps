@@ -176,6 +176,21 @@ describe('classify contest', () => {
       });
     });
 
+    describe('when contest_id means a JAG contest held on AtCoder', () => {
+      TestCasesForContestType.atCoderJag.forEach(({ name, value }) => {
+        runTests(`${name}`, [value], ({ contestId, expected }: TestCaseForContestType) => {
+          expect(classifyContest(contestId)).toEqual(expected);
+        });
+      });
+    });
+
+    // The same contests as AOJ JAGSpring2013 / 2014; importing them from AtCoder would duplicate the problems.
+    describe('when contest_id is a JAG contest on AtCoder that AOJ already covers', () => {
+      test.each(['JAG2013Spring', 'JAG2014Spring'])('returns null for %s', (contestId) => {
+        expect(classifyContest(contestId)).toBeNull();
+      });
+    });
+
     describe('when contest_id matches contests held by university students', () => {
       TestCasesForContestType.universities.forEach(({ name, value }) => {
         runTests(`${name}`, [value], ({ contestId, expected }: TestCaseForContestType) => {

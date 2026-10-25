@@ -17,6 +17,7 @@ const contestIdsInDisplayOrder = [
   'acl1',
   'cf16-final',
   'awc0001',
+  'jag2018summer-day2',
   'utpc2023',
   'atc001',
   'ITP1',
@@ -131,6 +132,10 @@ describe('contest type priorities', () => {
 
     test('ranks AALC directly below GAME_24', () => {
       expect(priorityOf(ContestType.AALC)).toBe(priorityOf(ContestType.GAME_24) + 1);
+    });
+
+    test('ranks ATCODER_JAG directly above UNIVERSITY', () => {
+      expect(priorityOf(ContestType.ATCODER_JAG)).toBe(priorityOf(ContestType.UNIVERSITY) - 1);
     });
   });
 });

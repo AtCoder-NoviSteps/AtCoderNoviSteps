@@ -122,6 +122,14 @@ describe('get contest name label', () => {
       });
     });
 
+    describe('when contest_id means a JAG contest held on AtCoder', () => {
+      TestCasesForContestNameLabel.atCoderJag.forEach(({ name, value }) => {
+        runTests(`${name}`, [value], ({ contestId, expected }: TestCaseForContestNameLabel) => {
+          expect(getContestNameLabel(contestId)).toEqual(expected);
+        });
+      });
+    });
+
     describe('when contest_id means AtCoder official onsite finals (e.g., World Tour Finals, CodeQUEEN)', () => {
       TestCasesForContestNameLabel.atCoderMainOfficialOnsite.forEach(({ name, value }) => {
         runTests(`${name}`, [value], ({ contestId, expected }: TestCaseForContestNameLabel) => {

@@ -35,6 +35,25 @@ export const aclPractice = [
   }),
 ];
 
+export const atCoderJag = [
+  createTestCaseForContestNameLabel('JAG Summer Camp 2018 Day2')({
+    contestId: 'jag2018summer-day2',
+    expected: 'JAG 夏合宿 2018 Day2',
+  }),
+  createTestCaseForContestNameLabel('JAG Summer Camp 2017 Day1')({
+    contestId: 'jag2017summer-day1',
+    expected: 'JAG 夏合宿 2017 Day1',
+  }),
+  createTestCaseForContestNameLabel('JAG Summer Camp 2015 Day3')({
+    contestId: 'jag2015summer-day3',
+    expected: 'JAG 夏合宿 2015 Day3',
+  }),
+  createTestCaseForContestNameLabel('JAG Summer Camp 2013 Day2 WarmUp')({
+    contestId: 'jag2013summer-warmingup',
+    expected: 'JAG 夏合宿 2013 Day2 WarmUp',
+  }),
+];
+
 export const atCoderOthers = [
   createTestCaseForContestNameLabel('Chokudai SpeedRun 001')({
     contestId: 'chokudai_S001',
