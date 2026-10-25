@@ -191,6 +191,16 @@ describe('classify contest', () => {
       });
     });
 
+    // Matched exactly, so a new JAG contest on AtCoder must be listed explicitly.
+    describe('when contest_id extends a listed JAG contest held on AtCoder', () => {
+      test.each(['jag2018summer-day2-extra', 'jag2017summer-day1b'])(
+        'returns null for %s',
+        (contestId) => {
+          expect(classifyContest(contestId)).toBeNull();
+        },
+      );
+    });
+
     describe('when contest_id matches contests held by university students', () => {
       TestCasesForContestType.universities.forEach(({ name, value }) => {
         runTests(`${name}`, [value], ({ contestId, expected }: TestCaseForContestType) => {

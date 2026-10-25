@@ -5,7 +5,7 @@ export const regexForAojUniversity = /^AOJ-[A-Z]+PC\d{4}/;
 
 // HACK: As of October 2026, the following contests are applicable.
 // Note: The classification logic may need to be revised when new contests are added.
-// ABC_LIKE / ARC_LIKE / ATCODER_MAIN_OFFICIAL_ONSITE: exact match — add sequels (e.g. diverta2019-2) explicitly. Others: prefix match.
+// ABC_LIKE / ARC_LIKE / ATCODER_JAG / ATCODER_MAIN_OFFICIAL_ONSITE: exact match — add sequels (e.g. diverta2019-2) explicitly. Others: prefix match.
 export const ABC_LIKE: ContestPrefix = {
   'tenka1-2017-beginner': 'Tenka1 Programmer Beginner Contest 2017',
   abl: 'ACL Beginner Contest',
