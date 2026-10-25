@@ -89,14 +89,14 @@ describe('problem_index of AOJ ICPC / JAG tasks in prisma/tasks.ts', () => {
   const indicesByContest = groupProblemIndicesByContest();
 
   // Guards against the filter silently matching fewer tasks.
-  test('covers 145 contests and 1257 tasks', () => {
+  test('covers 151 contests and 1329 tasks', () => {
     const taskCount = [...indicesByContest.values()].reduce(
       (sum, indices) => sum + indices.size,
       0,
     );
 
-    expect(indicesByContest.size).toBe(145);
-    expect(taskCount).toBe(1257);
+    expect(indicesByContest.size).toBe(151);
+    expect(taskCount).toBe(1329);
   });
 
   test.each(
