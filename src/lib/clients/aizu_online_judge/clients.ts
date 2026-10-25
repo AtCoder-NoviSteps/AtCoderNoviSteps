@@ -117,9 +117,9 @@ export class AojChallengesApiClient {
     });
   }
 
-  // Scope of the problem-letter migration; JAG Regional and PCK keep the problem id for now.
-  private usesProblemLetters({ contestType, round }: ChallengeParams): boolean {
-    return contestType === 'ICPC' || (contestType === 'JAG' && round === 'PRELIM');
+  // Scope of the problem-letter migration; PCK keeps the problem id for now.
+  private usesProblemLetters({ contestType }: ChallengeParams): boolean {
+    return contestType === 'ICPC' || contestType === 'JAG';
   }
 
   private getCacheKey({ contestType, round }: ChallengeParams): string {
