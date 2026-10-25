@@ -79,6 +79,10 @@ Import from `flowbite-svelte`. Use Tailwind v4 `dark:` prefix. When copying butt
 
 `ButtonGroup` uses `flex` internally (no wrap). For wrapping, use `<div class="flex flex-wrap gap-1">` with individual `Button` components.
 
+## Lucide Icons
+
+Import per icon: `import ArrowRight from '@lucide/svelte/icons/arrow-right'`. The package root re-exports all ~1,900 icons, so named imports from it slow builds and the dev server.
+
 ## Component Structure
 
 - Extract conditional logic to private functions: `function isCrossRouteNavigation() { ... }`
