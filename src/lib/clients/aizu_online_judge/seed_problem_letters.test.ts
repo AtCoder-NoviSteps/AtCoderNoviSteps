@@ -116,13 +116,12 @@ describe('problem_index of AOJ ICPC / JAG tasks in prisma/tasks.ts', () => {
     expect(indicesByContest.get('ICPCPrelim2024')?.get('1677')).toBe('F');
   });
 
-  test('no title starts with its problem id', () => {
-    const prefixedTaskIds = tasks
-      .filter(
-        (task) => usesProblemLetters(task.contest_id) && task.title.startsWith(`${task.id}. `),
-      )
+  // AOJ titles are the plain problem name: no "<problem id>. " prefix and nothing lost when it was stripped.
+  test('every title equals the problem name', () => {
+    const mismatchedTaskIds = tasks
+      .filter((task) => usesProblemLetters(task.contest_id) && task.title !== task.name)
       .map((task) => task.id);
 
-    expect(prefixedTaskIds).toEqual([]);
+    expect(mismatchedTaskIds).toEqual([]);
   });
 });

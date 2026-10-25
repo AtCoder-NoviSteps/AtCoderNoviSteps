@@ -19,8 +19,6 @@ BEGIN
     FROM "task"
     WHERE contest_type = 'AOJ_JAG'
       AND contest_id ~ '^JAG(Summer|Winter|Spring|Regional)'
-      -- Rows that already hold a letter (added later with letters) are left as they are.
-      AND task_table_index = task_id
   )
   UPDATE "task" AS t
   SET "task_table_index" = letters.letter
@@ -28,7 +26,9 @@ BEGIN
   WHERE t."task_id" = letters.task_id
     -- Redundant with the CTE filter, but keeps the blast radius fixed.
     AND t."contest_type" = 'AOJ_JAG'
-    AND t."contest_id" ~ '^JAG(Summer|Winter|Spring|Regional)';
+    AND t."contest_id" ~ '^JAG(Summer|Winter|Spring|Regional)'
+    -- Rank every row above, but leave rows that already hold a letter (added with letters) as they are.
+    AND t."task_table_index" = t."task_id";
 
   GET DIAGNOSTICS updated_count = ROW_COUNT;
   IF updated_count NOT IN (0, 467, 625) THEN
