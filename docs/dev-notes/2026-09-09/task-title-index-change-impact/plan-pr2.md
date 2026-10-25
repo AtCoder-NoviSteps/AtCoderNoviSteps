@@ -4,7 +4,7 @@ AOJ の JAG 合宿系（夏 / 冬 / 春）と JAG 模擬地区の `task_table_in
 
 全体の目的・共通の決定（M 番号）・データ移行の共通手順は [plan.md](./plan.md)、根拠データは [investigation.md](./investigation.md)。
 
-**状態**: 未着手。着手に必要なデータと環境（staging の件数）はそろっている。
+**状態**: 実装済み（ブランチ `#4030`、未マージ）。[実施記録](#実施記録2026-10-25)
 
 ## 範囲
 
@@ -97,13 +97,15 @@ BEGIN
     FROM "task"
     WHERE contest_type = 'AOJ_JAG'
       AND contest_id ~ '^JAG(Summer|Winter|Spring|Regional)'
-      -- Leaves rows that already have letters (PR2.1 data) untouched.
-      AND task_table_index = task_id
   )
   UPDATE "task" AS t
   SET "task_table_index" = letters.letter
   FROM letters
-  WHERE t."task_id" = letters.task_id;
+  WHERE t."task_id" = letters.task_id
+    AND t."contest_type" = 'AOJ_JAG'
+    AND t."contest_id" ~ '^JAG(Summer|Winter|Spring|Regional)'
+    -- Rank every row above, but leave rows that already hold a letter (added with letters) as they are.
+    AND t."task_table_index" = t."task_id";
 
   GET DIAGNOSTICS updated_count = ROW_COUNT;
   -- 0: empty DB (migrate reset), 467: seed without JAG Regional, 625: staging / production.
@@ -145,7 +147,7 @@ END $$;
 - **範囲は `contest_id` の接頭辞で絞る**。`AOJ_JAG` には、PR1 で記号にした模擬国内も含まれる
 - **件数の想定値**: staging / 本番は 625 / 45 / 467（上の表から）。0 を含めるのは、`prisma migrate reset`（ローカル）が空の DB にマイグレーションを流してから seed を入れるため。開発者の既存の DB は合宿系だけを持つので 467 / 32 / 467 になる
 - **title の条件**: 「自分の `task_id` + `. `」で始まるものだけを対象にする。`~ '^[0-9]+\. '` だと、番号で始まる本来の title まで削りうる
-- **`task_table_index = task_id` の条件**: PR2.1 の行（記号付き・素の title で入る）が先にあっても、(1)(3) の対象にならない。PR2.1 と順序を問わないための保険
+- **`task_table_index = task_id` の条件**: PR2.1 の行（記号付き・素の title で入る）が先にあっても、(1)(3) の対象にならない。PR2.1 と順序を問わないための保険。順位はコンテストの全行で付け、更新だけをこの条件で絞る。順位を付ける側でも絞ると、記号の行と問題 ID の行が混ざったコンテストで A から振り直してしまう（Codex のレビューで指摘）
 - `task_id::int` は安全（範囲の問題 ID はすべて数値）。1 コンテスト最大 14 問なので、`chr(64 + n)` は A〜Z に収まる。SQL の読み方は [investigation.md](./investigation.md#sql-の読み方)
 
 #### 確かめ方
@@ -173,6 +175,27 @@ ORDER BY kind;
 
 ### 2-6 テスト
 
-- `src/lib/clients/aizu_online_judge/seed_problem_letters.test.ts` の範囲を 145 コンテスト / 1,257 問に広げる。補正していないコンテストは `assignProblemLetters` と一致すること、補正した 8 コンテストは literal の期待値と一致することを見る（M18）。合宿系の title が `${problem id}. ` で始まらないことも見る
+- `src/lib/clients/aizu_online_judge/seed_problem_letters.test.ts` の範囲を 145 コンテスト / 1,257 問に広げる。補正していないコンテストは `assignProblemLetters` と一致すること、補正した 8 コンテストは literal の期待値と一致することを見る（M18）。title が問題名（`name`）と同じであることも見る（`${problem id}. ` の付け忘れ・除き過ぎの両方を検出する）
 - `clients.test.ts`: JAG REGIONAL の取り込みで記号が付くこと。`usesProblemLetters` の JAG の条件を PRELIM だけに戻す変異を検出できること
 - 書き換えたテストと足したテストに `verify-test-strength` を当てる。期待値を新しい形へ一括置換すると、テストが仕様を検証しなくなるので、`testing.md` の Test integrity に従う
+
+## 実施記録（2026-10-25）
+
+コミットは `c605d3bd`（照合スクリプト）→ `4c7b9763`（実装）→ `c835754b`（レビュー対応）→ `597104fd`（スクリプトの削除）。照合スクリプトは `git show c605d3bd:docs/dev-notes/2026-09-09/task-title-index-change-impact/generate_aoj_jag_problem_letters.ts` で参照できる。
+
+- **seed の模擬地区**: 本番から取り出した 158 問は、AOJ の fixture（2026-05 記録）と問題 ID・コンテスト・名前がすべて一致した
+- **照合**: スプレッドシートの書き写し（66 コンテスト）と 625 問の title が、記号の位置ですべて一致した。補正は 8 コンテスト / 45 行で、目視の暫定値どおり。わざと誤りを入れたコピー 5 種類（欠落の記号を外す、順番の入れ替え、途中の title の誤り、欠落の数の不足、切れた title の前半の誤り）は、すべて検出された
+- **ローカルでの移行**: 管理画面で模擬地区を取り込み、本番と同じ状態（16 / 158、index は問題 ID のまま）にしてから確かめた。`SELECT` のプレビューは 625 行すべてで照合の結果と一致し、適用後もプレビューと 625 / 625 で一致した。範囲外の AOJ（PCK、大学系、PR1 の範囲）は変わらない。`EXPLAIN` は CTE 側の Seq Scan 1 回と、`task_task_id_key` の Index Scan を使う Nested Loop
+- **テストの検出力**: 6 つの変異をすべて検出した（JAG の記号を PRELIM だけ / ICPC だけにする、補正した記号を基本ルールに戻す、基本ルールのコンテストで A・B を入れ替える、title に問題 ID を付け直す、模擬地区の記号を問題 ID に戻す）。title のテストは、空の title・別の問題の title・問題 ID の付け直しも検出する
+- **title の空白**: ローカルの 3355 にも末尾のタブがあった（取り込みが trim する前に入った行）。本件では直さない（[plan.md](./plan.md#スコープ外)）
+
+Codex のクロスレビュー（2026-10-25）:
+
+| 指摘                                                                                                          | 扱い                                                                                                                                                                                                                            |
+| ------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Moderate: 取り込みは記号がずれる 8 コンテストでも基本ルールで振る                                             | **対応しない**。M14 の決定どおり。8 コンテストは本番・staging・seed のすべてにあり、取り込みは既存の問題を skip する                                                                                                            |
+| Minor: title のテストが「問題 ID が前に付いていない」しか見ない                                               | **対応**。「title が name と同じ」を見るテストに変えた（seed の 1,257 問すべてで成り立つ）                                                                                                                                      |
+| Moderate（条件付き）: (1) が問題 ID の行だけで順位を付けるので、記号の行と混ざったコンテストで A から振り直す | **対応**。順位は全行で付け、更新だけ問題 ID の行に絞った。混ざったコンテストを読み取り専用で再現し、直した SQL が正しく振ることを確かめた。ローカルは移行前の状態に戻してから、プレビューと適用をやり直した（625 / 625 で一致） |
+| Moderate（条件付き）: `task_id` だけで結合している                                                            | **対応しない**。`task_id` は schema で `@unique`                                                                                                                                                                                |
+
+残っている確認: staging（PR の CI）と本番で、移行が想定の件数（625 / 45 / 467）で通ること。問題一覧の出典欄の表示。
