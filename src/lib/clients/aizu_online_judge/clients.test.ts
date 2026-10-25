@@ -321,16 +321,22 @@ describe('AojChallengesApiClient', () => {
       expect(tasks.length).toBe(expectedCount);
     });
 
-    test('keeps the problem id as problem_index for JAG REGIONAL tasks', async () => {
+    test('assigns problem letters per contest in ascending problem id order', async () => {
       const tasks = await client.getTasks({ contestType: 'JAG', round: 'REGIONAL' });
 
-      expect(getProblemIndicesByTaskId(tasks, 'JAGRegional2005')).toEqual({
-        '2024': '2024',
-        '2025': '2025',
-        '2026': '2026',
-        '2027': '2027',
-        '2028': '2028',
-        '2029': '2029',
+      expect(getProblemIndicesByTaskId(tasks, 'JAGRegional2022')).toEqual({
+        '3346': 'A',
+        '3347': 'B',
+        '3348': 'C',
+        '3349': 'D',
+        '3350': 'E',
+        '3351': 'F',
+        '3352': 'G',
+        '3353': 'H',
+        '3354': 'I',
+        '3355': 'J',
+        '3356': 'K',
+        '3357': 'L',
       });
     });
   });

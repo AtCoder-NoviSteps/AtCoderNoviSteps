@@ -1,4 +1,4 @@
-# PR2.5 — 合宿系と JAG 模擬地区をコンテスト表に出す
+# PR2.5 — 合宿系と JAG 模擬地区のコンテスト別のテーブルを作る
 
 前提と共通の決定は [plan.md](./plan.md)。並び順の一覧は [investigation.md](./investigation.md#表示順76-コンテスト)。
 

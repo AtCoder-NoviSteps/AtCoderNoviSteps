@@ -1,6 +1,6 @@
 # 完了分（PR0 / PR1 / PR1.5）— 意思決定の要約
 
-**状態**: PR0 完了（#4212）・PR1 完了（#4217）・PR1.5 実装済み（ブランチ `#4028`、`471ad20c`）。全体像は [plan.md](./plan.md)、根拠データは [investigation.md](./investigation.md)。
+**状態**: PR0 完了（#4212）・PR1 完了（#4217）・PR1.5 完了（#4219）。全体像は [plan.md](./plan.md)、根拠データは [investigation.md](./investigation.md)。
 
 コードと git の履歴から読み取れない判断と事実だけを残す。変更したファイルや関数は #4212 / #4217 と `471ad20c` の差分を見る。PR1.5 は [末尾](#pr15--aoj-api-の移転に追従する4028)。
 
@@ -41,7 +41,7 @@ PR2 以降の計画には含めていない。
 - 2016 年の JAG 模擬国内を API から取り込むと、記号が seed と食い違う（Codex / CodeRabbit）。直すなら、取り込みで 2 回開催を `A` / `B` の `contest_id` に分け、それぞれ A から振る。`getContests` 側もそろえる
 - seed 整合テストの期待値を `assignProblemLetters` で作っている（Codex）。testing.md の「期待値は literal」に合わない。PR2 では補正したコンテストだけを literal にする（M18）。全件を literal にするかは未判断
 - `src/lib/services/tasks.ts` の `title.replace(task_table_index, …)` は、AOJ の問題に ContestTaskPair を作るとタイトル本文を置換する（Codex）。AOJ の pair は現在 0 件。直すときは先頭の `${index}. ` だけを置換し、`Amidakuji` のような本文と `A. Title` の両方を回帰テストに含める
-- コンテスト表のスクリーンショットでの目視確認
+- コンテストテーブルのスクリーンショットでの目視確認
 
 ---
 
@@ -76,4 +76,4 @@ PR2 以降の計画には含めていない。
 ### 残っている確認
 
 - ~~コンテナを再ビルドした後、ローカルの管理画面で AOJ から取得できること~~ — 2026-10-24 にメンテナが確認した
-- staging に入った後の JAG REGIONAL の取り込み（PR2 の前提）が、Vercel 上での実地の確認を兼ねる（[plan-pr2.md](./plan-pr2.md#着手前にすること)）。念のため、こちらからの取得ツールは新しいホストへの接続を拒否され（`ECONNREFUSED`）、旧ホストには届いて 410 を受けた。新しいホストが一部の送信元を拒んでいる可能性があるので、staging で失敗したら接続元の制限を疑う
+- ~~staging（Vercel）での取り込み~~ — 2026-10-24 にメンテナが JAG REGIONAL を取り込み、16 / 158 になった（[plan-pr2.md](./plan-pr2.md#範囲)）。こちらの取得ツールが新しいホストに `ECONNREFUSED` で拒まれたことから送信元の制限を心配していたが、Vercel からは問題なく取得できた
