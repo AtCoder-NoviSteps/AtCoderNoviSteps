@@ -98,7 +98,53 @@
 ### 本番で気をつけること
 
 - AtCoder の 4 コンテストの取り込みは、本番のデプロイが終わってから行う
-- 取り込みの後に PR2.1 より前の版へロールバックすると、旧版の Prisma Client は `ATCODER_JAG` を知らないので、該当行を読む処理が失敗しうる。ロールバックする前に、該当行の `contest_type` を旧版にある値（例: `OTHERS`）に変える
+- 取り込みの後に PR2.1 より前の版へロールバックすると、旧版の Prisma Client は `ATCODER_JAG` を知らないので、該当行を読む処理が失敗しうる。ロールバックする前に、該当行の `contest_type` を `OTHERS` に変える
+- その後に PR2.1 以降へ戻したら（ロールフォワード）、下の SQL で該当行を `ATCODER_JAG` に戻す。取り込みは既存の task_id を skip するので、取り込み直しても `OTHERS` のまま残る。いまは DB の `contest_type` を読む箇所が無いので表示は壊れないが、分類と DB の値がずれたままになる
+
+#### ロールバックとロールフォワードの復旧手順
+
+1. ロールバック前に、対象環境で次の SQL を実行し、返された `expected_count` を環境名とともに作業記録へ保存する。これは実際に `OTHERS` へ変更した件数で、全問を取り込んでいれば 42、一部だけならその件数になる。以降、復旧の確認が終わるまでは対象 4 コンテストの追加・削除・分類変更を行わない。
+
+```sql
+WITH changed AS (
+  UPDATE "task"
+  SET "contest_type" = 'OTHERS'
+  WHERE "contest_id" IN ('jag2018summer-day2', 'jag2017summer-day1', 'jag2015summer-day3', 'jag2013summer-warmingup')
+    AND "contest_type" = 'ATCODER_JAG'
+  RETURNING "id"
+)
+SELECT count(*) AS expected_count FROM changed;
+```
+
+2. SQL の成功と件数の保存を確認してから旧版へロールバックする。復旧時は、先に PR2.1 以降をデプロイし、新しい Prisma Client が動作する状態にする。
+3. 次の `expected_count` の 42 を、手順 1 で保存した件数に置き換えて実行する。復旧直前の行数を期待値にするのではなく、ロールバック時の記録と照合する。
+
+```sql
+DO $$
+DECLARE
+  expected_count integer := 42; -- Replace with the recorded rollback count.
+  restored_count integer;
+BEGIN
+  UPDATE "task"
+  SET "contest_type" = 'ATCODER_JAG'
+  WHERE "contest_id" IN ('jag2018summer-day2', 'jag2017summer-day1', 'jag2015summer-day3', 'jag2013summer-warmingup')
+    AND "contest_type" = 'OTHERS';
+
+  GET DIAGNOSTICS restored_count = ROW_COUNT;
+  IF restored_count <> expected_count THEN
+    RAISE EXCEPTION 'restored % rows, expected %', restored_count, expected_count;
+  END IF;
+  RAISE NOTICE 'restored % rows, expected %', restored_count, expected_count;
+END $$;
+
+-- Expected: ATCODER_JAG only, with the recorded rollback count.
+SELECT "contest_type", count(*) FROM "task"
+WHERE "contest_id" IN ('jag2018summer-day2', 'jag2017summer-day1', 'jag2015summer-day3', 'jag2013summer-warmingup')
+GROUP BY "contest_type";
+```
+
+4. `GET DIAGNOSTICS` で取得した実更新件数と期待件数が一致したことを NOTICE で確認する。不一致なら例外で DO ブロック内の UPDATE 全体が取り消されるため、期待件数を書き換えて通すのではなく、作業記録と対象行を調べる。
+5. 最後の SELECT が `ATCODER_JAG` の 1 行だけを返し、その件数が手順 1 の記録と一致すれば復旧完了とする（全問なら `ATCODER_JAG | 42`）。記録が 0 件の場合は、SELECT も 0 行であることを確認する。`OTHERS` など別の分類が残る場合は復旧未完了として調査する。
 
 ### クロスレビュー（Codex）
 
