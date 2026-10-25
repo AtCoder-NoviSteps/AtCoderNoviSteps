@@ -46,6 +46,7 @@ export const ContestType: { [key in ContestTypeOrigin]: key } = {
   ARC_LIKE: 'ARC_LIKE', // AtCoder Regular Contest (ARC) 相当のコンテスト
   AGC_LIKE: 'AGC_LIKE', // AtCoder Grand Contest (AGC) 相当のコンテスト
   AWC: 'AWC', // AtCoder Weekday Contest
+  ATCODER_JAG: 'ATCODER_JAG', // JAG (ICPC Japan Alumni Group) contests held on AtCoder (e.g., summer camp days)
   UNIVERSITY: 'UNIVERSITY', // University Programming Contests in AtCoder (e.g., UTPC)
   FPS_24: 'FPS_24', // 24 Problems on Formal Power Series
   GAME_24: 'GAME_24', // 24 Problems on Combinatorial Games

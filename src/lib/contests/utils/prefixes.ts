@@ -5,7 +5,7 @@ export const regexForAojUniversity = /^AOJ-[A-Z]+PC\d{4}/;
 
 // HACK: As of October 2026, the following contests are applicable.
 // Note: The classification logic may need to be revised when new contests are added.
-// ABC_LIKE / ARC_LIKE / ATCODER_MAIN_OFFICIAL_ONSITE: exact match — add sequels (e.g. diverta2019-2) explicitly. Others: prefix match.
+// ABC_LIKE / ARC_LIKE / ATCODER_JAG / ATCODER_MAIN_OFFICIAL_ONSITE: exact match — add sequels (e.g. diverta2019-2) explicitly. Others: prefix match.
 export const ABC_LIKE: ContestPrefix = {
   'tenka1-2017-beginner': 'Tenka1 Programmer Beginner Contest 2017',
   abl: 'ACL Beginner Contest',
@@ -49,6 +49,14 @@ export const AGC_LIKE: ContestPrefix = {
   'code-festival-2017-qual': 'CODE FESTIVAL 2017 qual',
   'cf16-final': 'CODE FESTIVAL 2016 final',
   'cf17-final': 'CODE FESTIVAL 2017 final',
+} as const;
+
+// JAG contests held on AtCoder, matched exactly: AtCoder's JAG2013Spring / JAG2014Spring duplicate AOJ JAGSpring2013 / 2014.
+export const ATCODER_JAG: ContestPrefix = {
+  'jag2018summer-day2': 'JAG 夏合宿 2018 Day2',
+  'jag2017summer-day1': 'JAG 夏合宿 2017 Day1',
+  'jag2015summer-day3': 'JAG 夏合宿 2015 Day3',
+  'jag2013summer-warmingup': 'JAG 夏合宿 2013 Day2 WarmUp',
 } as const;
 
 // HACK: As of October 2026, KUPC, QUPC, UTPC, TTPC, TUPC, WUPC, fuka and bogosort contests are included.
@@ -143,6 +151,7 @@ export function getContestPrefixes(contestPrefixes: Record<string, string>) {
 export const abcLikePrefixes = new Set(getContestPrefixes(ABC_LIKE));
 export const arcLikePrefixes = new Set(getContestPrefixes(ARC_LIKE));
 export const agcLikePrefixes = getContestPrefixes(AGC_LIKE);
+export const atCoderJagPrefixes = new Set(getContestPrefixes(ATCODER_JAG));
 export const atCoderUniversityPrefixes = getContestPrefixes(ATCODER_UNIVERSITIES);
 export const atCoderOthersPrefixes = getContestPrefixes(ATCODER_OTHERS);
 export const atCoderMainOfficialOnsitePrefixes = new Set(

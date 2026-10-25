@@ -5,6 +5,7 @@ import {
   abcLikePrefixes,
   arcLikePrefixes,
   agcLikePrefixes,
+  atCoderJagPrefixes,
   atCoderUniversityPrefixes,
   atCoderOthersPrefixes,
   atCoderMainOfficialOnsitePrefixes,
@@ -61,6 +62,7 @@ const CLASSIFICATION_RULES: readonly ClassificationRule[] = [
   { matches: (id) => arcLikePrefixes.has(id), type: ContestType.ARC_LIKE },
   // Prefix-based matches
   { matches: (id) => agcLikePrefixes.some((p) => id.startsWith(p)), type: ContestType.AGC_LIKE },
+  { matches: (id) => atCoderJagPrefixes.has(id), type: ContestType.ATCODER_JAG },
   {
     matches: (id) => atCoderUniversityPrefixes.some((p) => id.startsWith(p)),
     type: ContestType.UNIVERSITY,

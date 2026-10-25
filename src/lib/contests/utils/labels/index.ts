@@ -1,7 +1,7 @@
 import { ContestType } from '#lib/contests/types/contest.js';
 
 import { classifyContest } from '../classification';
-import { AOJ_COURSES, ATCODER_MAIN_OFFICIAL_ONSITE } from '../prefixes';
+import { AOJ_COURSES, ATCODER_JAG, ATCODER_MAIN_OFFICIAL_ONSITE } from '../prefixes';
 import { generateAxcLabel, generateAwcLabel } from './axc';
 import { getAtCoderUniversityContestLabel } from './universities';
 import { getWorldTourFinalsLabel, isWorldTourFinals } from './world_tour_finals';
@@ -41,6 +41,7 @@ export const LABEL_GENERATORS: ReadonlyMap<ContestType, LabelGenerator> = new Ma
     (id) =>
       isWorldTourFinals(id) ? getWorldTourFinalsLabel(id) : ATCODER_MAIN_OFFICIAL_ONSITE[id],
   ],
+  [ContestType.ATCODER_JAG, (id) => ATCODER_JAG[id]],
   [ContestType.UNIVERSITY, (id) => getAtCoderUniversityContestLabel(id)],
   [ContestType.OTHERS, generateOthersLabel],
   [ContestType.AOJ_COURSES, (id) => getAojContestLabel(AOJ_COURSES, id)],

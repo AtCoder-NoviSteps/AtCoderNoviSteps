@@ -76,6 +76,14 @@ describe('Task', () => {
       });
     });
 
+    describe('when contest ids and task ids for JAG contests held on AtCoder are given', () => {
+      TestCasesForTaskUrl.atCoderJagTasks.forEach(({ name, value }) => {
+        runTests(`${name}`, [value], ({ contestId, taskId, expected }: TestCaseForTaskUrl) => {
+          expect(getTaskUrl(contestId, taskId)).toBe(expected);
+        });
+      });
+    });
+
     describe('when contest ids and task ids for AOJ courses are given', () => {
       TestCasesForTaskUrl.aojCourses.forEach(({ name, value }) => {
         runTests(`${name}`, [value], ({ contestId, taskId, expected }: TestCaseForTaskUrl) => {
