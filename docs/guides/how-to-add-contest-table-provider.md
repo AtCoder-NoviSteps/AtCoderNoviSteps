@@ -7,7 +7,7 @@
 ## 事前確認
 
 - [ ] `ContestType`（`src/lib/contests/types/contest.ts`）— 既存で対応できるか？複数 contest_id を統一表示するなら複合型
-- [ ] `classifyContest()`（`src/lib/contests/utils/classification.ts`）— 新 contest_id に正しい ContestType を返すか。`prefixes.ts` の `ABC_LIKE` / `ARC_LIKE` は完全一致、他グループは前方一致なので、続編（例: `diverta2019-2`）は完全一致グループでは個別にキーを追加する
+- [ ] `classifyContest()`（`src/lib/contests/utils/classification.ts`）— 新 contest_id に正しい ContestType を返すか。`prefixes.ts` の `ABC_LIKE` / `ARC_LIKE` / `ATCODER_JAG` / `ATCODER_MAIN_OFFICIAL_ONSITE` は完全一致、他グループは前方一致なので、続編（例: `diverta2019-2`）は完全一致グループでは個別にキーを追加する
 - [ ] `prisma/tasks.ts` にデータが存在するか（複合型は `prisma/contest_task_pairs.ts` も）
 - [ ] 実装パターン判定（後述4パターン）
 - [ ] JOI: 2026 年より `joi{YYYY}ho` → `joi{YYYY}sf`。regex は `(ho|sf)` 対応済み
@@ -82,6 +82,18 @@ protected setFilterCondition(): (taskResult: TaskResult) => boolean {
 
 AOJ/JAG 固有の詳細（`titleStyle`、同一年2回開催の `suffix` 分割など）は `aoj_icpc_providers.ts` / `aoj_jag_providers.ts` を参照。
 
+**変形: 明示的な配列で並べる（JAG 模擬地区）** — 並びを contest_id から導けないとき（例: 模擬地区 2014 は夏合宿 2014 の Day2 と Day4 の間）は、コンテストごとのエントリの配列（`aoj_jag_regional_entries.ts`）を持ち、1 エントリ = 1 Provider でインスタンス化する。provider key の section は contest_id（例: `AOJ_JAG::JAGSummer2024-day2`）。新しい回は seed（`prisma/tasks.ts`）と配列の両方に足す。配列の書き漏れは seed との整合テスト（`aoj_jag_regional_entries.test.ts`）で落ちる。
+
+#### 注意: JAG 模擬地区は AOJ と AtCoder が混在する
+
+配列には AOJ のコンテスト（`AOJ_JAG`）と AtCoder 上の 4 コンテスト（`ATCODER_JAG`）が並ぶ。新しい回を足すときは次を確かめる。
+
+- **分類**: AOJ は `regexForJag` に一致する contest_id、AtCoder は `prefixes.ts` の `ATCODER_JAG` の完全一致で決まる。AOJ の contest_id がこの regex に合わないと、ラベルが崩れ、リンクも AtCoder に飛ぶ。AtCoder 側を前方一致にしない（AtCoder Problems の `JAG2013Spring` / `JAG2014Spring` は AOJ の `JAGSpring2013` / `2014` と同じコンテストで、問題が二重になる）
+- **contestType**: Provider には `classifyContest` の結果を渡す（例: `ATCODER_JAG::jag2018summer-day2`）。効くのは provider key だけで、表示は変わらない
+- **title**: AtCoder は `A. ` 付き、AOJ は素。セル（`buildTitleWithTaskIndex`）がどちらにも記号を付け直すので、Provider で title を加工しない
+- **データ**: AOJ の合宿系は管理画面から取り込めないので、seed と Supabase の CSV で記号付きで入れる。AtCoder 側は管理画面から取り込む
+- **記号**: AOJ は問題 ID の昇順で A, B, C… と振るが、問題が AOJ に無いコンテストではずれる。新しい回はメンテナのスプレッドシートと照合する
+
 ### 補足: 固定セクションによる同一 ContestType 内の共存
 
 同一 `ContestType` で異なるプロバイダを共存させる場合、config の `section` フィールドで provider key を一意化する（例: `AWC::0100`）。AWC は `AWCRangeProvider`（通常回）と `AWCSpecialContestProvider`（特殊回）の2クラスを config で使い分けており、すべて同じ `ContestType.AWC` グループに登録される。新しい AWC 回の追加は `contest_table_provider_groups.ts` で `new AWCRangeProvider(...)` または `new AWCSpecialContestProvider(...)` をインスタンス化するだけでよい。
@@ -127,14 +139,15 @@ AOJ/JAG 固有の詳細（`titleStyle`、同一年2回開催の `suffix` 分割�
 
 ### コンストラクタパラメータ型 / regex フィルタ型
 
-| コンテスト      | フィルタ方式    | 備考                                   |
-| --------------- | --------------- | -------------------------------------- |
-| ICPC 国内予選   | 年度パラメータ  | `AojIcpcPrelimProvider(type, year)`    |
-| ICPC アジア地区 | 年度パラメータ  | `AojIcpcRegionalProvider(type, year)`  |
-| JAG 模擬国内    | 年度パラメータ  | 同一年2回開催は suffix 分割            |
-| JOI 一次予選    | regex           | `joi{YYYY}yo1{a\|b\|c}`                |
-| JOI 二次予選    | regex + section | 2020 以降 / 2006-2019 で Provider 分離 |
-| JOI 本選        | regex           | 2026 年より `ho` → `sf` サフィックス   |
+| コンテスト      | フィルタ方式    | 備考                                                                            |
+| --------------- | --------------- | ------------------------------------------------------------------------------- |
+| ICPC 国内予選   | 年度パラメータ  | `AojIcpcPrelimProvider(type, year)`                                             |
+| ICPC アジア地区 | 年度パラメータ  | `AojIcpcRegionalProvider(type, year)`                                           |
+| JAG 模擬国内    | 年度パラメータ  | 同一年2回開催は suffix 分割                                                     |
+| JAG 模擬地区    | 明示的な配列    | 合宿系・模擬地区・AtCoder 上の JAG の 76 件。`JagRegionalProvider(type, entry)` |
+| JOI 一次予選    | regex           | `joi{YYYY}yo1{a\|b\|c}`                                                         |
+| JOI 二次予選    | regex + section | 2020 以降 / 2006-2019 で Provider 分離                                          |
+| JOI 本選        | regex           | 2026 年より `ho` → `sf` サフィックス                                            |
 
 ### 複合ソース型
 
@@ -154,6 +167,7 @@ AOJ/JAG 固有の詳細（`titleStyle`、同一年2回開催の `suffix` 分割�
 3. **contestTypePriorities の JSDoc カテゴリ名** — 4カテゴリ名（`Educational` / `Contests for genius` / `Special contests` / `External platforms`）は変更不可。括弧内の数値範囲のみ変更可
 4. **addProvider の順序** — 呼び出し順 = 表示順（先 = 上）。新しい回が上に来るように
 5. **分類 regex の拡張** — 新形状の contest_id を追加するとき、regex を広げると `getContestNameLabel`・`AojGenerator.canHandle` にも波及する
+6. **データの無い Provider** — `TaskTable.svelte` は、データの無い Provider でも見出しと空の枠を描画する（`prepareContestTable` が `null` を返して消えるのは行だけ）。データを入れる前に Provider を出すと、空の枠が並ぶ
 
 ---
 
@@ -170,4 +184,4 @@ AOJ/JAG 固有の詳細（`titleStyle`、同一年2回開催の `suffix` 分割�
 
 ---
 
-**最終更新**: 2026-10-13
+**最終更新**: 2026-10-25

@@ -3,7 +3,7 @@ import { describe, test, expect } from 'vitest';
 import { ContestType } from '#lib/contests/types/contest.js';
 import type { TaskResults } from '#lib/types/task.js';
 
-import { JagPrelimProvider } from './aoj_jag_providers';
+import { JagPrelimProvider, JagRegionalProvider } from './aoj_jag_providers';
 
 const createProvider = (year: number, suffix: '' | 'A' | 'B' = '') =>
   new JagPrelimProvider(ContestType.AOJ_JAG, year, suffix);
@@ -420,6 +420,200 @@ describe('JagPrelimProvider', () => {
       expect(tableA['JAGPrelim2016A']['G'].title).toBe('Rings and Strings');
       expect(tableB['JAGPrelim2016B']['A'].title).toBe('Curry Making');
       expect(tableB['JAGPrelim2016B']['G'].title).toBe('Baseball');
+    });
+  });
+});
+
+// JAGSummer2024-day2: 7 problems (A–G), set by volunteers (有志).
+const tasksSummer2024Day2: TaskResults = [
+  {
+    contest_id: 'JAGSummer2024-day2',
+    task_id: '3623',
+    task_table_index: 'A',
+    title: 'Add Add Add',
+  },
+  {
+    contest_id: 'JAGSummer2024-day2',
+    task_id: '3624',
+    task_table_index: 'B',
+    title: 'Broken Parentheses',
+  },
+  {
+    contest_id: 'JAGSummer2024-day2',
+    task_id: '3625',
+    task_table_index: 'C',
+    title: 'Convenient Banknotes',
+  },
+  {
+    contest_id: 'JAGSummer2024-day2',
+    task_id: '3626',
+    task_table_index: 'D',
+    title: 'Do Make Segment Tree',
+  },
+  {
+    contest_id: 'JAGSummer2024-day2',
+    task_id: '3627',
+    task_table_index: 'E',
+    title: 'Expression Sum',
+  },
+  {
+    contest_id: 'JAGSummer2024-day2',
+    task_id: '3628',
+    task_table_index: 'F',
+    title: 'Flip Path on Rooted Tree',
+  },
+  {
+    contest_id: 'JAGSummer2024-day2',
+    task_id: '3629',
+    task_table_index: 'G',
+    title: 'Give Me a Lot of Triangles',
+  },
+] as TaskResults;
+
+// jag2018summer-day2 is held on AtCoder, so its titles carry the letter prefix.
+const tasksAtCoderSummer2018Day2: TaskResults = [
+  {
+    contest_id: 'jag2018summer-day2',
+    task_id: 'jag2018summer_day2_a',
+    task_table_index: 'A',
+    title: 'A. 10^N+7',
+  },
+  {
+    contest_id: 'jag2018summer-day2',
+    task_id: 'jag2018summer_day2_b',
+    task_table_index: 'B',
+    title: 'B. Coins',
+  },
+] as TaskResults;
+
+describe('JagRegionalProvider', () => {
+  const providerSummer2024Day2 = new JagRegionalProvider(ContestType.AOJ_JAG, {
+    contestId: 'JAGSummer2024-day2',
+    note: '有志',
+  });
+  const providerAtCoderSummer2018Day2 = new JagRegionalProvider(ContestType.ATCODER_JAG, {
+    contestId: 'jag2018summer-day2',
+    note: '有志',
+  });
+
+  describe('filter', () => {
+    describe('successful cases', () => {
+      test('returns only tasks belonging to the given contest', () => {
+        const mixedTasks = [
+          ...tasksSummer2024Day2,
+          ...tasksAtCoderSummer2018Day2,
+          ...tasks2023,
+        ] as TaskResults;
+        const filtered = providerSummer2024Day2.filter(mixedTasks);
+
+        expect(filtered).toHaveLength(7);
+        expect(filtered.every((task) => task.contest_id === 'JAGSummer2024-day2')).toBe(true);
+      });
+
+      test('returns tasks of a contest held on AtCoder', () => {
+        const mixedTasks = [...tasksSummer2024Day2, ...tasksAtCoderSummer2018Day2] as TaskResults;
+
+        expect(providerAtCoderSummer2018Day2.filter(mixedTasks)).toEqual(
+          tasksAtCoderSummer2018Day2,
+        );
+      });
+    });
+
+    describe('edge cases', () => {
+      test('returns empty array for empty input', () => {
+        expect(providerSummer2024Day2.filter([] as TaskResults)).toEqual([]);
+      });
+    });
+  });
+
+  describe('getProviderKey', () => {
+    test('uses the contest id as the section', () => {
+      expect(providerSummer2024Day2.getProviderKey()).toBe('AOJ_JAG::JAGSummer2024-day2');
+    });
+
+    test('keeps the given contest type for a contest held on AtCoder', () => {
+      expect(providerAtCoderSummer2018Day2.getProviderKey()).toBe(
+        'ATCODER_JAG::jag2018summer-day2',
+      );
+    });
+  });
+
+  describe('getMetadata', () => {
+    test.each([
+      {
+        contestType: ContestType.AOJ_JAG,
+        entry: { contestId: 'JAGSummer2024-day2', note: '有志' },
+        expected: 'JAG 夏合宿 2024 Day2（有志）',
+      },
+      {
+        contestType: ContestType.AOJ_JAG,
+        entry: { contestId: 'JAGSpring2015', note: 'JAG' },
+        expected: 'JAG 春合宿 2015（JAG）',
+      },
+      {
+        contestType: ContestType.AOJ_JAG,
+        entry: { contestId: 'JAGRegional2016', note: 'in JAG 夏合宿 2016 Day3' },
+        expected: 'JAG 模擬地区 2016（in JAG 夏合宿 2016 Day3）',
+      },
+      {
+        contestType: ContestType.ATCODER_JAG,
+        entry: { contestId: 'jag2015summer-day3' },
+        expected: 'JAG 夏合宿 2015 Day3',
+      },
+    ])('title of $entry.contestId is "$expected"', ({ contestType, entry, expected }) => {
+      const provider = new JagRegionalProvider(contestType, entry);
+
+      expect(provider.getMetadata().title).toBe(expected);
+      expect(provider.getContestRoundLabel(entry.contestId)).toBe(expected);
+    });
+
+    test('returns the contest id as abbreviationName', () => {
+      expect(providerSummer2024Day2.getMetadata().abbreviationName).toBe('JAGSummer2024-day2');
+    });
+
+    test('returns titleStyle with text-xl font size, font-bold weight, pb-1 gap, h2 heading tag', () => {
+      expect(providerSummer2024Day2.getMetadata().titleStyle).toEqual({
+        headingTag: 'h2',
+        fontSize: 'text-xl',
+        fontWeight: 'font-bold',
+        bottomGap: 'pb-1',
+      });
+    });
+  });
+
+  describe('getDisplayConfig', () => {
+    test('hides the header and shows the letter before each title', () => {
+      expect(providerSummer2024Day2.getDisplayConfig()).toMatchObject({
+        isShownHeader: false,
+        isShownRoundLabel: false,
+        isShownTaskIndex: true,
+        columnWrapThreshold: 6,
+      });
+    });
+  });
+
+  describe('getHeaderIdsForTask', () => {
+    test('returns letters in ascending order regardless of input order', () => {
+      const reversedTasks = [...tasksSummer2024Day2].reverse() as TaskResults;
+
+      expect(providerSummer2024Day2.getHeaderIdsForTask(reversedTasks)).toEqual([
+        'A',
+        'B',
+        'C',
+        'D',
+        'E',
+        'F',
+        'G',
+      ]);
+    });
+  });
+
+  describe('generateTable', () => {
+    test('keeps AtCoder titles as stored, leaving the prefix to the cell', () => {
+      const table = providerAtCoderSummer2018Day2.generateTable(tasksAtCoderSummer2018Day2);
+
+      expect(table['jag2018summer-day2']['A'].title).toBe('A. 10^N+7');
+      expect(table['jag2018summer-day2']['B'].title).toBe('B. Coins');
     });
   });
 });

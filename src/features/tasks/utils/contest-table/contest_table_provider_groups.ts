@@ -1,4 +1,5 @@
 import { ContestType } from '#lib/contests/types/contest.js';
+import { classifyContest } from '#lib/contests/index.js';
 
 import { ABSProvider } from './abs_provider';
 import {
@@ -35,7 +36,8 @@ import {
   JOISemiFinalRoundProvider,
 } from './joi_providers';
 import { AojIcpcPrelimProvider, AojIcpcRegionalProvider } from './aoj_icpc_providers';
-import { JagPrelimProvider } from './aoj_jag_providers';
+import { JagPrelimProvider, JagRegionalProvider } from './aoj_jag_providers';
+import { AOJ_JAG_REGIONAL_ENTRIES } from './aoj_jag_regional_entries';
 import { ContestTableProviderGroup } from './contest_table_provider_group';
 
 export const ICPC_PRELIM_OLDEST_YEAR = 1998;
@@ -330,6 +332,23 @@ export const prepareContestProviderPresets = () => {
 
       return group;
     },
+
+    AojJagRegional: () => {
+      const group = new ContestTableProviderGroup('JAG 模擬地区', {
+        buttonLabel: 'JAG 模擬地区',
+        ariaLabel: 'Filter JAG Regional and Training Camps',
+      });
+      // addProvider order = display order (first = top).
+      for (const entry of AOJ_JAG_REGIONAL_ENTRIES) {
+        const contestType =
+          classifyContest(entry.contestId) === ContestType.ATCODER_JAG
+            ? ContestType.ATCODER_JAG
+            : ContestType.AOJ_JAG;
+        group.addProvider(new JagRegionalProvider(contestType, entry));
+      }
+
+      return group;
+    },
   };
 };
 
@@ -358,6 +377,7 @@ export const contestTableProviderGroups = {
   aojIcpcPrelim: presets.AojIcpcPrelim(),
   aojIcpcRegional: presets.AojIcpcRegional(),
   aojJagPrelim: presets.AojJagPrelim(),
+  aojJagRegional: presets.AojJagRegional(),
 };
 
 export type ContestTableProviderGroups = keyof typeof contestTableProviderGroups;
