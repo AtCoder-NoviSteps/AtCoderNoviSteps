@@ -19,6 +19,7 @@ Fetch the official migration guide via WebFetch. For each breaking change, grep 
 Key areas to check:
 
 - Runtime requirements (`engines.node` in `package.json`)
+- Node.js runtime bumps: follow the file set of `ac78bee2`, and also update Vercel Dashboard > Project Settings > Build and Deployment > Node.js Version (not in the repo).
 - Config file format changes (flat config vs legacy, etc.)
 - Deprecated/removed APIs used in `src/`
 - Directive comments that become errors in the new version (e.g., `/* eslint-env */` in ESLint v10)
