@@ -26,7 +26,7 @@ Use `$props()`, `$state()`, `$derived()`, `$effect()` in all components:
 
 - Components: `PascalCase.svelte`
 - Stores: `snake_case.svelte.ts`; class-based with `$state()`, singleton export
-- Values persisted to `localStorage` or URL params are a contract: rename display labels freely, but changing a stored key/value (e.g. preset key `dps`) silently drops users' saved state
+- Values persisted to `localStorage` or URL params are a contract: rename display labels freely, but changing a stored key/value (e.g. preset key `dps`) silently drops users' saved state. On load, validate the stored value against the current allowed set and fall back to the default (a stale key once crashed `TaskTable`)
 
 ## Props & Reactivity
 
