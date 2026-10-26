@@ -98,6 +98,10 @@ user   User @relation(fields: [userId], references: [id])
 
 Add `CHECK` constraints via manual migration SQL. Document with inline `schema.prisma` comments (e.g., `/// CHECK: count >= 0`). Note: `prisma generate` (via `prisma-markdown`) overwrites `ERD.md`—always keep the constraint definition in `schema.prisma` as the source of truth.
 
+## Out-of-App Data Imports
+
+Supabase Dashboard CSV imports and raw SQL bypass Prisma Client, so `@default(uuid())` and `@updatedAt` are not filled: include `id` and `updatedAt` explicitly. Include `createdAt` too — the Supabase CSV import left it empty despite its DB default.
+
 ## Service Layer Error Handling
 
 Catch Prisma errors in service functions, return domain values:
