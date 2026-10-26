@@ -77,6 +77,8 @@ pnpm exec prisma generate
 pnpm exec prisma migrate dev --name <description>
 ```
 
+Run project tools with `pnpm exec`, never `pnpm dlx`: `dlx` downloads the latest release and ignores the pinned version (CI once ran Prisma v7 against the v5 schema).
+
 Lefthook runs Prettier, oxlint for JS/TS, and ESLint for Svelte before commit.
 
 ## Verification and Cross-review Before a PR
