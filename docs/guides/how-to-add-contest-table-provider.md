@@ -70,7 +70,7 @@ protected setFilterCondition(): (taskResult: TaskResult) => boolean {
 
 複数の異なる contest/task_id を1つのテーブルに表示。`classifyContest()` のみでフィルタ。セクション分割が必要な場合は `task_table_index` の先頭文字でサブフィルタ（Tessoku Book 参照）。
 
-`getMergedTasksMap()` が複数コンテスト由来の task_id を自動統合。テストデータは [prisma/contest_task_pairs.ts](../../prisma/contest_task_pairs.ts) 参照。
+`getMergedTasksMap()` が複数コンテスト由来の task_id を自動統合。テストデータは [prisma/contest_task_pairs.ts](../../prisma/contest_task_pairs.ts) 参照。ペアの追加手順と本番環境への投入は [how-to-add-contest-task-pairs.md](./how-to-add-contest-task-pairs.md) を参照。
 
 ### パターン4: コンストラクタパラメータ型（ICPC / JAG / JOI）
 
