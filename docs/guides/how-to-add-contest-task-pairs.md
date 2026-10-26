@@ -101,7 +101,7 @@ data_frame.write_csv("contest_task_pairs_for_import.csv")
 - **`Task.task_id` の一意制約は維持**: 回答・問題集・投票など多くのテーブルが `task_id` を参照するため。同じ問題の別コンテストでの登場は、別テーブル（`ContestTaskPair`）で表す
 - **キーは文字列 `"contestId:taskId"`**: JavaScript の `Map` は配列やオブジェクトを値で比較しないため、テンプレートリテラル型の文字列にした
 - **問題集（workbooks）は `taskId` だけをキーにする**: 1 つの問題集に、同じ `taskId` が別のコンテストとして入ることは無いと判断した。入れたくなった場合は、`WorkBookTask` に `contest_id` を持たせ、`getTaskResultsByTaskId()` の Map キーと `/workbooks/[slug]` の参照を `createContestTaskPairKey()` に揃える
-- **管理画面からの取り込みは作らない**: 追加は低頻度で、seed と Supabase の CSV で足りるため。`createContestTaskPair()` / `updateContestTaskPair()` は現在呼び出し元が無い
+- **管理画面用のUIは作らない**: 追加は低頻度で、seed と Supabase の CSV で足りるため。`createContestTaskPair()` / `updateContestTaskPair()` は現在呼び出し元が無い
 - **互換レイヤを挟まずに移行した**: 計画段階の `TaskMapAdapter` や Feature Flag は採用せず、`/problems` 系の Map キーを一度に `ContestTaskPairKey` へ切り替えた
 
 ---
