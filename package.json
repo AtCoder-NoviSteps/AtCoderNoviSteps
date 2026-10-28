@@ -77,7 +77,7 @@
   "dependencies": {
     "@dnd-kit/helpers": "0.5.1",
     "@dnd-kit/svelte": "0.5.1",
-    "@lucide/svelte": "1.61.0",
+    "@lucide/svelte": "1.62.0",
     "@prisma/client": "5.22.0",
     "@types/node": "25.9.9",
     "debug": "4.4.3",
