@@ -48,7 +48,7 @@
         <TableBodyRow>
           <TableBodyCell>出典</TableBodyCell>
           <TableBodyCell>
-            {addContestNameToTaskIndex(task.contest_id, task.task_table_index)}
+            {addContestNameToTaskIndex(task.contest_id, task.task_table_index, task.task_id)}
           </TableBodyCell>
         </TableBodyRow>
         <TableBodyRow>

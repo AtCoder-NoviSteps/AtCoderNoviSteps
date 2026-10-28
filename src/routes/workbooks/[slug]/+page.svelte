@@ -49,7 +49,7 @@
     const contestId = getContestIdFrom(taskId);
     const taskTableIndex = getTaskTableIndex(taskId);
 
-    return addContestNameToTaskIndex(contestId, taskTableIndex);
+    return addContestNameToTaskIndex(contestId, taskTableIndex, taskId);
   };
 
   const getTaskName = (taskId: string): string => {

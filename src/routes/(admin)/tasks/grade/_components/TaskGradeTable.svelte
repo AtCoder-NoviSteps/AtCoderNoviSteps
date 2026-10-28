@@ -103,7 +103,7 @@
             </TableBodyCell>
 
             <TableBodyCell class="text-sm">
-              {addContestNameToTaskIndex(task.contest_id, task.task_table_index)}
+              {addContestNameToTaskIndex(task.contest_id, task.task_table_index, task.task_id)}
             </TableBodyCell>
 
             {@render adminGradeCell(task)}

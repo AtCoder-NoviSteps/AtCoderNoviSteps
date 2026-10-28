@@ -191,6 +191,20 @@ export const aojJag = jagContests.flatMap((jag) =>
   }),
 );
 
+// NoJudge tasks share JAG contest ids with AOJ tasks; the task id decides the url.
+export const noJudgeJag = [
+  createTestCaseForTaskUrl('NoJudge, JAGWinter2006-day2 task A')({
+    contestId: 'JAGWinter2006-day2',
+    taskId: 'NoJudge-JAGWinter2006-day2_a',
+    expected: 'https://jag-icpc.org/?2006%2FPractice%2F%E5%86%AC%E5%90%88%E5%AE%BF',
+  }),
+  createTestCaseForTaskUrl('AOJ, JAGWinter2006-day2 task D')({
+    contestId: 'JAGWinter2006-day2',
+    taskId: '2073',
+    expected: `${AOJ_TASKS_URL}/2073`,
+  }),
+];
+
 // ICPC contests follow these patterns:
 // - Contest ID format: ICPC(Prelim|Regional)<YEAR>
 const icpcContests = [

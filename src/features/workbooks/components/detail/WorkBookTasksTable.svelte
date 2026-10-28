@@ -202,6 +202,7 @@
               {addContestNameToTaskIndex(
                 task.contestId,
                 getTaskTableIndex(tasksMapByIds, task.taskId),
+                task.taskId,
               )}
             </TableBodyCell>
 

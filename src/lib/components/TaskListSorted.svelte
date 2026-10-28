@@ -52,7 +52,11 @@
             </a>
           </TableBodyCell>
           <TableBodyCell>
-            {addContestNameToTaskIndex(taskResult.contest_id, taskResult.task_table_index)}
+            {addContestNameToTaskIndex(
+              taskResult.contest_id,
+              taskResult.task_table_index,
+              taskResult.task_id,
+            )}
           </TableBodyCell>
           <TableBodyCell>{taskResult.updated_at.toLocaleString()}</TableBodyCell>
         </TableBodyRow>
