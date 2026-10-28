@@ -46,7 +46,7 @@ PR0 / PR1 だけに関わる調査（出典欄の呼び出し元、テストの�
 
 ## 欠落の一覧（PR3）
 
-スプレッドシートで「AOJ 未収録」と書かれている問題。22 問（合宿系 18、模擬地区 4）。
+スプレッドシートで「AOJ 未収録」と書かれている問題。22 問（合宿系 18、模擬地区 4）。うち Interactive String Guessing は AOJ 3643 にあると確認済み（下記）。残る 21 問は、問題一覧 API で問題名を部分一致で検索しても ID が見つからなかった（2026-10-28 にメンテナが確認。表記ゆれのありうる Wireing / "Shortest" / Geometry?! も部分一致で確認）。
 
 | コンテスト           | 記号と問題名                                                                                                         |
 | -------------------- | -------------------------------------------------------------------------------------------------------------------- |
@@ -55,16 +55,16 @@ PR0 / PR1 だけに関わる調査（出典欄の呼び出し元、テストの�
 | JAG 冬合宿 2006 Day2 | A Cells、B Japan、C Maximum、E Payment System、G Roof、H Seminar Room、I String Compression                          |
 | JAG 冬合宿 2006 Day3 | B Widget Factory、C Hills、E Safe Packing、F The "Shortest" Pair of Paths、I Counting Triangles、J Wireing Assistant |
 | JAG 冬合宿 2007 Day3 | E Networking Company                                                                                                 |
-| JAG 夏合宿 2024 Day3 | G Interactive String Guessing                                                                                        |
+| JAG 夏合宿 2024 Day3 | G Interactive String Guessing（AOJ 3643。確認済み）                                                                  |
 | JAG 模擬地区 2005    | C Geometry?! Why Not??、F University Rankings、H Tiling Polygons                                                     |
 | JAG 模擬地区 2008    | J Colony Maintenance                                                                                                 |
 
 一覧に無い問題について、メンテナが AOJ で確かめた結果（2026-10-24。模擬地区 2013 は 2026-10-28）:
 
-- **JAG 夏合宿 2024 Day3 の G（Interactive String Guessing）**: スプレッドシートでは「AOJ 未収録」だが、AOJ に 3643 の問題ページがある（`onlinejudge.u-aizu.ac.jp/challenges/search/titles/3643`）。コンテスト一覧から外れているだけで、ICPC 国内予選 2002 の E（AOJ 1123）と同じ種類。**スプレッドシートの「AOJ 未収録」は、AOJ に無いことの保証にならない**
+- **JAG 夏合宿 2024 Day3 の G（Interactive String Guessing）**: スプレッドシートでは「AOJ 未収録」だが、AOJ に 3643 の問題ページがある（`onlinejudge.u-aizu.ac.jp/challenges/search/titles/3643`）。コンテスト一覧から外れているだけで、ICPC 国内予選 2002 の E（AOJ 1123）と同じ種類。**スプレッドシートの「AOJ 未収録」は、AOJ に無いことの保証にならない**。問題一覧 API にも載っているが、`available` が 4（2565〜2567 は 1）で、正解者・提出がともに 0。AOJ への登録日（created at）が 2026-10-10 なので、追加されたばかりで公開前の状態と考えられる（2026-10-28 に確認。`available` の値の意味は未確認）。スプレッドシートの「未収録」は記入時点では正しく、その後に AOJ に追加されたとみられる
 - **JAG 模擬地区 2013 の A Broken Audio Signal / B Restore Calculation / C SIRO Challenge**: スプレッドシートではリンク付き（未収録の表記が無い）で、リンク先は AOJ 2565 / 2566 / 2567。AOJ の模擬地区 2013 の一覧（`challenges/cl/jag/regional`、本番の 7 問、2568〜2574）には無いが、問題一覧 API に同じ ID・同じ問題名で載っている。コンテスト一覧から外れているだけで、1123・3643 と同じ種類。A〜J が 2565〜2574 の連番になる
 
-どちらも PR2 の記号（2013 は D〜J、2024 Day3 は H〜K）には影響しない。AOJ のドメインは `https://onlinejudge.u-aizu.ac.jp/` に変わった（旧 API の `judgeapi.u-aizu.ac.jp` は HTTP 410）。API の向き先（`/api/`）と開発コンテナの許可リストは PR1.5 で新ドメインに更新済みなので、PR3 の 3-0 の確認は新ドメインで行う。
+どちらも PR2 の記号（2013 は D〜J、2024 Day3 は H〜K）には影響しない。AOJ のドメインは `https://onlinejudge.u-aizu.ac.jp/` に変わった（旧 API の `judgeapi.u-aizu.ac.jp` は HTTP 410）。API の向き先（`/api/`）と開発コンテナの許可リストは PR1.5 で新ドメインに更新済み。
 
 ## DB に無いコンテスト
 
