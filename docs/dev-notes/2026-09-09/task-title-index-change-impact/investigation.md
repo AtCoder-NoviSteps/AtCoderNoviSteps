@@ -48,16 +48,26 @@ PR0 / PR1 だけに関わる調査（出典欄の呼び出し元、テストの�
 
 スプレッドシートで「AOJ 未収録」と書かれている問題。22 問（合宿系 18、模擬地区 4）。うち Interactive String Guessing は AOJ 3643 にあると確認済み（下記）。残る 21 問は、問題一覧 API で問題名を部分一致で検索しても ID が見つからなかった（2026-10-28 にメンテナが確認。表記ゆれのありうる Wireing / "Shortest" / Geometry?! も部分一致で確認）。
 
-| コンテスト           | 記号と問題名                                                                                                         |
-| -------------------- | -------------------------------------------------------------------------------------------------------------------- |
-| JAG 夏合宿 2006 Day1 | A Monkey Business、C Sort that Queue                                                                                 |
-| JAG 夏合宿 2006 Day3 | A Rolling Cubes                                                                                                      |
-| JAG 冬合宿 2006 Day2 | A Cells、B Japan、C Maximum、E Payment System、G Roof、H Seminar Room、I String Compression                          |
-| JAG 冬合宿 2006 Day3 | B Widget Factory、C Hills、E Safe Packing、F The "Shortest" Pair of Paths、I Counting Triangles、J Wireing Assistant |
-| JAG 冬合宿 2007 Day3 | E Networking Company                                                                                                 |
-| JAG 夏合宿 2024 Day3 | G Interactive String Guessing（AOJ 3643。確認済み）                                                                  |
-| JAG 模擬地区 2005    | C Geometry?! Why Not??、F University Rankings、H Tiling Polygons                                                     |
-| JAG 模擬地区 2008    | J Colony Maintenance                                                                                                 |
+| コンテスト           | 記号と問題名                                                                                                         | jag-icpc.org の年度ページ                       |
+| -------------------- | -------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------- |
+| JAG 夏合宿 2006 Day1 | A Monkey Business、C Sort that Queue                                                                                 | [2006/Practice/夏合宿][jag-2006-summer]         |
+| JAG 夏合宿 2006 Day3 | A Rolling Cubes                                                                                                      | [2006/Practice/夏合宿][jag-2006-summer]         |
+| JAG 冬合宿 2006 Day2 | A Cells、B Japan、C Maximum、E Payment System、G Roof、H Seminar Room、I String Compression                          | [2006/Practice/冬合宿][jag-2006-winter]         |
+| JAG 冬合宿 2006 Day3 | B Widget Factory、C Hills、E Safe Packing、F The "Shortest" Pair of Paths、I Counting Triangles、J Wireing Assistant | [2006/Practice/冬合宿][jag-2006-winter]         |
+| JAG 冬合宿 2007 Day3 | E Networking Company                                                                                                 | [2007/Practice/冬合宿][jag-2007-winter]         |
+| JAG 夏合宿 2024 Day3 | G Interactive String Guessing（AOJ 3643。確認済み）                                                                  | —                                               |
+| JAG 模擬地区 2005    | C Geometry?! Why Not??、F University Rankings、H Tiling Polygons                                                     | [2005/Practice/模擬地区予選][jag-2005-regional] |
+| JAG 模擬地区 2008    | J Colony Maintenance                                                                                                 | [2008/Practice/模擬地区予選][jag-2008-regional] |
+
+[jag-2006-summer]: https://jag-icpc.org/?2006%2FPractice%2F%E5%A4%8F%E5%90%88%E5%AE%BF
+[jag-2006-winter]: https://jag-icpc.org/?2006%2FPractice%2F%E5%86%AC%E5%90%88%E5%AE%BF
+[jag-2007-winter]: https://jag-icpc.org/?2007%2FPractice%2F%E5%86%AC%E5%90%88%E5%AE%BF
+[jag-2005-regional]: https://jag-icpc.org/?2005%2FPractice%2F%E6%A8%A1%E6%93%AC%E5%9C%B0%E5%8C%BA%E4%BA%88%E9%81%B8
+[jag-2008-regional]: https://jag-icpc.org/?2008%2FPractice%2F%E6%A8%A1%E6%93%AC%E5%9C%B0%E5%8C%BA%E4%BA%88%E9%81%B8
+
+AOJ に無い 21 問は、すべてのコンテストに JAG のサイト（jag-icpc.org、スプレッドシートの情報源の一つ）の年度ページがあり、5 ページとも問題文へのリンクがある（2026-10-28 にメンテナが確認）。2006 年夏合宿では、問題文は日ごとの PDF で、ジャッジデータも収録されている。
+
+サイトは URL の形式（`?plugin=attach&refer=...&openfile=...`）から PukiWiki とみられる。構成は `年度/Practice/大会区分/問題文とデータセット/`（その下に PDF と注釈）。`問題文とデータセット` と同じ階層に講評などの別のページもある。添付ファイル名は揃っていない（2006 年夏合宿は `day1.pdf` など日ごと、2008 年模擬地区予選は `problems.pdf`）。2008 年の PDF の URL は `https://jag-icpc.org/?plugin=attach&refer=2008%2FPractice%2F%E6%A8%A1%E6%93%AC%E5%9C%B0%E5%8C%BA%E4%BA%88%E9%81%B8%2F%E5%95%8F%E9%A1%8C%E6%96%87%E3%81%A8%E3%83%87%E3%83%BC%E3%82%BF%E3%82%BB%E3%83%83%E3%83%88&openfile=problems.pdf`（2026-10-28 にメンテナが共有）。
 
 一覧に無い問題について、メンテナが AOJ で確かめた結果（2026-10-24。模擬地区 2013 は 2026-10-28）:
 
