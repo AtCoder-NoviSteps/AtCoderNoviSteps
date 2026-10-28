@@ -177,7 +177,7 @@ AOJ の JAG / ICPC で、公式の問題なのに seed に無い 26 問を足す
 CSV を入れたら、次の SQL で確かめる。seed はテストが守るが、CSV は守らない。
 
 - 記号: `(contest_id, task_table_index)` には一意制約が無く、同じコンテストで記号が重なると、表で片方の問題が黙って消える
-- 26 行の中身: 記号の集計だけでは `task_id` の打ち間違いが通る。`NoJudge-` の綴りを誤ると `（AOJ）` と開けない AOJ のリンクで出て、AOJ の ID を誤ると別の問題に飛ぶ。最後の SQL で `prisma/tasks.ts` の値と 1 行ずつ突き合わせる
+- 26 行の中身: 記号の集計だけでは `task_id` の打ち間違いが通る。`NoJudge-` の綴りを誤ると `（AOJ）` と開けない AOJ のリンクで出て、AOJ の ID を誤ると別の問題に飛ぶ。`contest_type` の列を CSV から落とすと、DB の既定値 `ABC` で黙って入る。最後の SQL で `prisma/tasks.ts` の値（`contest_type` は `classifyContest()` の結果）と 1 行ずつ突き合わせる
 
 ```sql
 -- Expect no rows: a duplicated letter hides one problem in the contest table.
@@ -195,36 +195,37 @@ GROUP BY contest_id
 ORDER BY contest_id;
 
 -- Expect no rows: every inserted row matches prisma/tasks.ts (catches task_id typos the letter checks miss).
+-- The first row casts contest_type to the enum; comparing text with "ContestType" fails.
 SELECT expected.*
 FROM (VALUES
-  ('1123', 'ICPCPrelim2002', 'E', 'Enclosing Circles'),
-  ('NoJudge-JAGRegional2005_c', 'JAGRegional2005', 'C', 'Geometry?! Why Not??'),
-  ('NoJudge-JAGRegional2005_f', 'JAGRegional2005', 'F', 'University Rankings'),
-  ('NoJudge-JAGRegional2005_h', 'JAGRegional2005', 'H', 'Tiling Polygons'),
-  ('NoJudge-JAGRegional2008_j', 'JAGRegional2008', 'J', 'Colony Maintenance'),
-  ('2565', 'JAGRegional2013', 'A', 'Broken Audio Signal'),
-  ('2566', 'JAGRegional2013', 'B', 'Restore Calculation'),
-  ('2567', 'JAGRegional2013', 'C', 'SIRO Challenge'),
-  ('NoJudge-JAGSummer2006-day1_a', 'JAGSummer2006-day1', 'A', 'Monkey Business'),
-  ('NoJudge-JAGSummer2006-day1_c', 'JAGSummer2006-day1', 'C', 'Sort that Queue'),
-  ('NoJudge-JAGSummer2006-day3_a', 'JAGSummer2006-day3', 'A', 'Rolling Cubes'),
-  ('3643', 'JAGSummer2024-day3', 'G', 'Interactive String Guessing'),
-  ('NoJudge-JAGWinter2006-day2_a', 'JAGWinter2006-day2', 'A', 'Cells'),
-  ('NoJudge-JAGWinter2006-day2_b', 'JAGWinter2006-day2', 'B', 'Japan'),
-  ('NoJudge-JAGWinter2006-day2_c', 'JAGWinter2006-day2', 'C', 'Maximum'),
-  ('NoJudge-JAGWinter2006-day2_e', 'JAGWinter2006-day2', 'E', 'Payment System'),
-  ('NoJudge-JAGWinter2006-day2_g', 'JAGWinter2006-day2', 'G', 'Roof'),
-  ('NoJudge-JAGWinter2006-day2_h', 'JAGWinter2006-day2', 'H', 'Seminar Room'),
-  ('NoJudge-JAGWinter2006-day2_i', 'JAGWinter2006-day2', 'I', 'String Compression'),
-  ('NoJudge-JAGWinter2006-day3_b', 'JAGWinter2006-day3', 'B', 'Widget Factory'),
-  ('NoJudge-JAGWinter2006-day3_c', 'JAGWinter2006-day3', 'C', 'Hills'),
-  ('NoJudge-JAGWinter2006-day3_e', 'JAGWinter2006-day3', 'E', 'Safe Packing'),
-  ('NoJudge-JAGWinter2006-day3_f', 'JAGWinter2006-day3', 'F', 'The "Shortest" Pair of Paths'),
-  ('NoJudge-JAGWinter2006-day3_i', 'JAGWinter2006-day3', 'I', 'Counting Triangles'),
-  ('NoJudge-JAGWinter2006-day3_j', 'JAGWinter2006-day3', 'J', 'Wireing Assistant'),
-  ('NoJudge-JAGWinter2007-day3_e', 'JAGWinter2007-day3', 'E', 'Networking Company')
-) AS expected(task_id, contest_id, task_table_index, title)
-LEFT JOIN task USING (task_id, contest_id, task_table_index, title)
+  ('1123', 'ICPCPrelim2002', 'AOJ_ICPC'::"ContestType", 'E', 'Enclosing Circles'),
+  ('NoJudge-JAGRegional2005_c', 'JAGRegional2005', 'AOJ_JAG', 'C', 'Geometry?! Why Not??'),
+  ('NoJudge-JAGRegional2005_f', 'JAGRegional2005', 'AOJ_JAG', 'F', 'University Rankings'),
+  ('NoJudge-JAGRegional2005_h', 'JAGRegional2005', 'AOJ_JAG', 'H', 'Tiling Polygons'),
+  ('NoJudge-JAGRegional2008_j', 'JAGRegional2008', 'AOJ_JAG', 'J', 'Colony Maintenance'),
+  ('2565', 'JAGRegional2013', 'AOJ_JAG', 'A', 'Broken Audio Signal'),
+  ('2566', 'JAGRegional2013', 'AOJ_JAG', 'B', 'Restore Calculation'),
+  ('2567', 'JAGRegional2013', 'AOJ_JAG', 'C', 'SIRO Challenge'),
+  ('NoJudge-JAGSummer2006-day1_a', 'JAGSummer2006-day1', 'AOJ_JAG', 'A', 'Monkey Business'),
+  ('NoJudge-JAGSummer2006-day1_c', 'JAGSummer2006-day1', 'AOJ_JAG', 'C', 'Sort that Queue'),
+  ('NoJudge-JAGSummer2006-day3_a', 'JAGSummer2006-day3', 'AOJ_JAG', 'A', 'Rolling Cubes'),
+  ('3643', 'JAGSummer2024-day3', 'AOJ_JAG', 'G', 'Interactive String Guessing'),
+  ('NoJudge-JAGWinter2006-day2_a', 'JAGWinter2006-day2', 'AOJ_JAG', 'A', 'Cells'),
+  ('NoJudge-JAGWinter2006-day2_b', 'JAGWinter2006-day2', 'AOJ_JAG', 'B', 'Japan'),
+  ('NoJudge-JAGWinter2006-day2_c', 'JAGWinter2006-day2', 'AOJ_JAG', 'C', 'Maximum'),
+  ('NoJudge-JAGWinter2006-day2_e', 'JAGWinter2006-day2', 'AOJ_JAG', 'E', 'Payment System'),
+  ('NoJudge-JAGWinter2006-day2_g', 'JAGWinter2006-day2', 'AOJ_JAG', 'G', 'Roof'),
+  ('NoJudge-JAGWinter2006-day2_h', 'JAGWinter2006-day2', 'AOJ_JAG', 'H', 'Seminar Room'),
+  ('NoJudge-JAGWinter2006-day2_i', 'JAGWinter2006-day2', 'AOJ_JAG', 'I', 'String Compression'),
+  ('NoJudge-JAGWinter2006-day3_b', 'JAGWinter2006-day3', 'AOJ_JAG', 'B', 'Widget Factory'),
+  ('NoJudge-JAGWinter2006-day3_c', 'JAGWinter2006-day3', 'AOJ_JAG', 'C', 'Hills'),
+  ('NoJudge-JAGWinter2006-day3_e', 'JAGWinter2006-day3', 'AOJ_JAG', 'E', 'Safe Packing'),
+  ('NoJudge-JAGWinter2006-day3_f', 'JAGWinter2006-day3', 'AOJ_JAG', 'F', 'The "Shortest" Pair of Paths'),
+  ('NoJudge-JAGWinter2006-day3_i', 'JAGWinter2006-day3', 'AOJ_JAG', 'I', 'Counting Triangles'),
+  ('NoJudge-JAGWinter2006-day3_j', 'JAGWinter2006-day3', 'AOJ_JAG', 'J', 'Wireing Assistant'),
+  ('NoJudge-JAGWinter2007-day3_e', 'JAGWinter2007-day3', 'AOJ_JAG', 'E', 'Networking Company')
+) AS expected(task_id, contest_id, contest_type, task_table_index, title)
+LEFT JOIN task USING (task_id, contest_id, contest_type, task_table_index, title)
 WHERE task.id IS NULL;
 ```
 
