@@ -18,6 +18,8 @@
 - atcoder.jp is unreachable and WebFetch truncates problems.json, so a miss there is not evidence of absence — ask the user to paste the rows
 - Use `id` / `problem_index` / `name` / `title` verbatim; do not derive `id` from contest_id
 - AOJ ICPC and every AOJ JAG contest (Prelim, Regional, training camps): set `problem_index` to the problem letter, not the AOJ problem id — A, B, C... in ascending problem id within the contest, as `assignProblemLetters` does on import. When a problem before the last one is missing from AOJ, take the letters from the maintainer's problem list and add the contest to `LETTERS_OF_SHIFTED_CONTESTS`. Keep `title` plain, without a `<problem id>. ` prefix. `seed_problem_letters.test.ts` checks both
+- A problem the maintainer's list has but AOJ lacks (even a trailing one): add it with `id` `NoJudge-{contest_id}_{lowercase letter}`, register its jag-icpc.org page in `NO_JUDGE_PAGES` (`src/lib/contests/utils/no_judge.ts`), and add the contest to `LETTERS_OF_SHIFTED_CONTESTS` — `Number()` cannot sort these ids. This is the exception to "do not derive `id` from contest_id". A problem that exists on AOJ but is missing from the contest list keeps its AOJ problem id
+- `addContestNameToTaskIndex` takes `taskId` (required); `contest_name_and_task_index.ts` cases set it only for NoJudge
 
 ## Tests
 

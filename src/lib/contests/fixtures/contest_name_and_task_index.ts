@@ -9,6 +9,8 @@ import {
 export type TestCaseForContestNameAndTaskIndex = {
   contestId: string;
   taskTableIndex: string;
+  // Only NoJudge cases set it; the label otherwise depends on contestId alone.
+  taskId?: string;
   expected: string;
 };
 
@@ -994,3 +996,19 @@ export const aojUniversity = AOJ_UNIVERSITY_TEST_DATA.map(
       expected,
     }),
 );
+
+// NoJudge tasks share AOJ contest ids but have no judge, so the label ends with （No Judge）.
+export const noJudge = [
+  createTestCaseForContestNameAndTaskIndex('NoJudge, JAGWinter2006-day2 - A')({
+    contestId: 'JAGWinter2006-day2',
+    taskTableIndex: 'A',
+    taskId: 'NoJudge-JAGWinter2006-day2_a',
+    expected: 'JAG 冬合宿 2006 Day2 - A（No Judge）',
+  }),
+  createTestCaseForContestNameAndTaskIndex('NoJudge, JAGRegional2005 - C')({
+    contestId: 'JAGRegional2005',
+    taskTableIndex: 'C',
+    taskId: 'NoJudge-JAGRegional2005_c',
+    expected: 'JAG 模擬地区 2005 - C（No Judge）',
+  }),
+];

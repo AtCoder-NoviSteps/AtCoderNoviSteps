@@ -2,7 +2,7 @@
 
 前提と共通の決定は [plan.md](./plan.md)。調べた結果と根拠は [investigation.md の 7 章](./investigation.md#7-pr3-欠けている問題)。採らなかった案は、すべて[下の節](#採らなかった案)にまとめた。
 
-**状態**: 設計は決定（2026-10-28）。[実装計画](#実装計画)は承認待ち。
+**状態**: 実装済み、未マージ（2026-10-28。ユニットテスト・lint・check は通過）。残りは、開発サーバーでの目視、Codex のクロスレビュー、マージ後の [CSV 投入](#staging--本番への投入メンテナ)。実装の決定は [done.md](./done.md#pr3) に要約した。
 
 ## 概要
 
@@ -59,85 +59,14 @@ AOJ の JAG / ICPC のコンテストで、公式の問題なのに seed に無�
 | 見た目             | 表のタイトルにコンテスト単位で書く（`note`）                      | `note` は主催者（JAG / 有志）の欄なので意味が混ざり、どの問題が対象かも分からない                                                                                                                                   |
 | 見た目             | 問題の詳細ページに一文添える                                      | 表から直接開く人の目には入らない                                                                                                                                                                                    |
 
-## 実装計画
+## 実装
 
-1 つの PR で入れる。リスクの低い順に 5 段階で、各段階はテストを先に書く。
+5 段階（ダミーの判定と URL → URL ジェネレータ → 出典のラベル → seed → 仕上げ）で、テストを先に書いて入れた。内容と計画からの変更は [done.md](./done.md#pr3)。
 
-### 段階 1: ダミーの判定と URL（新しいモジュール。既存のコードには影響しない）
+未了:
 
-本体を `src/lib/contests/utils/no_judge.ts` に置き、外から使うものを `src/lib/contests/index.ts` から再 export する。
-
-```typescript
-export const NO_JUDGE_TASK_ID_PREFIX = 'NoJudge-';
-
-export function isNoJudgeTask(taskId: string): boolean;
-
-// Built from a private { url, taskIds }[] of the 5 jag-icpc.org pages.
-export const NO_JUDGE_TASK_URLS: ReadonlyMap<string, string>;
-```
-
-- map は、5 ページ分の `{ url, taskIds }` の配列（外には出さない）から組み立てる
-- URL はブラウザで開けたものを、パーセントエンコードのまま貼る
-- テスト（`src/lib/contests/utils/no_judge.test.ts`）:
-  - `returns true for task ids starting with NoJudge-`
-  - `returns false for AOJ and AtCoder task ids`（`'1123'`、`'abc300_a'`、小文字の `'nojudge-...'`）
-  - `maps each NoJudge task to its jag-icpc.org page url verbatim`（5 ページそれぞれ。期待値は URL のリテラル）
-  - `has no entry for AOJ task ids`
-
-### 段階 2: URL ジェネレータ（共有の型を変えるが、既存の実装は書き換えない）
-
-- `src/lib/types/url.ts`: `canHandle(contestId: string, taskId: string): boolean` に広げ、TSDoc も直す。既存の `AojGenerator` / `AtCoderGenerator` は引数が少ないままでも型を満たす
-- `src/lib/utils/task.ts`: `NoJudgeGenerator` を足して `AojGenerator` より前に置き、`getTaskUrl()` から `taskId` も渡す。`canHandle` は `isNoJudgeTask(taskId)`、`generateUrl` は `NO_JUDGE_TASK_URLS.get(taskId) ?? ''` を返す（map に漏れがあっても AOJ のジェネレータには回さない）
-- テスト（`src/test/lib/utils/test_cases/task_url.ts` に足す）:
-  - `returns the jag-icpc.org page for a NoJudge task in a JAG contest`
-  - `returns the AOJ problem url for an AOJ task in the same JAG contest`（並び順の固定）
-
-### 段階 3: 出典のラベル（汎用関数のシグネチャを変え、呼び出し元 6 ファイルに波及する）
-
-```typescript
-export const addContestNameToTaskIndex = (
-  contestId: string,
-  taskTableIndex: string,
-  taskId: string,
-): string;
-```
-
-- ダミーなら `` `${contestName} - ${taskTableIndex}（No Judge）` `` を返す
-- `taskId` は省略できない引数にする。呼び出し元 6 ファイル（各 1 か所）で `task_id` を渡し、漏れは `pnpm check` が見つける: `TaskList.svelte`、`TaskListSorted.svelte`、`TaskForm.svelte`、`WorkBookTasksTable.svelte`、`src/routes/workbooks/[slug]/+page.svelte`、`TaskGradeTable.svelte`
-- テスト: `src/lib/contests/fixtures/contest_name_and_task_index.ts` の型に `taskId` を足して既存のケースを直し、ダミーのケースを足す（`appends （No Judge） for a NoJudge task in a JAG contest`）
-
-### 段階 4: seed のデータ（26 行）
-
-`prisma/tasks.ts` に 26 行を足す。`name` と `title` は同じ値にする。
-
-| 種類       | `id`                                  | `contest_id` と記号                                                 |
-| ---------- | ------------------------------------- | ------------------------------------------------------------------- |
-| AOJ にある | `1123`                                | `ICPCPrelim2002` E                                                  |
-| AOJ にある | `3643`                                | `JAGSummer2024-day3` G                                              |
-| AOJ にある | `2565` / `2566` / `2567`              | `JAGRegional2013` A / B / C                                         |
-| ダミー     | `NoJudge-{contest_id}_{記号の小文字}` | 7 コンテストの 21 問（[一覧](./investigation.md#aoj-に無い-21-問)） |
-
-先にテストの期待値を直す:
-
-- `src/lib/clients/aizu_online_judge/seed_problem_letters.test.ts`
-  - 件数を 1,329 問から 1,355 問にする（151 コンテストは変わらない）
-  - `LETTERS_OF_SHIFTED_CONTESTS`: ダミーのある 7 コンテストを載せる。6 つは既にあるのでダミーの ID と記号を足し、`JAGRegional2008` は新しく足す。`assignProblemLetters()` は ID を `Number()` で並べるので、`NoJudge-` を含むコンテストは基本ルールの検査に通せない
-  - `JAGRegional2013`（2565〜2574）と `JAGSummer2024-day3`（3637〜3647）は、ID が連番になって基本ルールに戻るので、`LETTERS_OF_SHIFTED_CONTESTS` から外す。`ICPCPrelim2002`（1119〜1123）は基本ルールのまま
-  - テストを足す: `every contest with NoJudge tasks is in LETTERS_OF_SHIFTED_CONTESTS`（入れ忘れると基本ルールの検査が `NaN` を含む並べ替えになり、落ちるとは限らない）
-  - `LETTERS_OF_SHIFTED_CONTESTS` の上のコメントに、`NoJudge-` の ID は `Number()` で並べられないことを書き足す
-- `src/lib/contests/utils/no_judge.test.ts` に seed との突き合わせを足す
-  - `every NoJudge task in prisma/tasks.ts has a page url`
-  - `every task id with a page url exists in prisma/tasks.ts`（map のキーの打ち間違いを見つける）
-
-### 段階 5: 仕上げ
-
-- CSV 用の 26 行の一覧（`task_id`、`contest_id`、`contest_type`、`task_table_index`、`title`）を、下の「[staging / 本番への投入](#staging--本番への投入メンテナ)」に足す。`contest_type` は 1123 だけ `AOJ_ICPC`、ほかの 25 行は `AOJ_JAG`
-- ガイドとスキルに、AOJ に無い問題をダミーで入れる手順を書く
-  - `.agents/skills/add-tasks/instructions.md`（Collect rows）: AOJ に無い問題は末尾でも `NoJudge-` の行で入れ、`no_judge.ts` にページを登録し、コンテストを `LETTERS_OF_SHIFTED_CONTESTS` に足す。「`id` を contest_id から導かない」の例外であることも書く。AOJ にあるがコンテスト一覧に無い問題は、問題 ID のまま入れる。`contest_name_and_task_index.ts` は `taskId` が必須になる
-  - `docs/guides/how-to-add-contest-table-provider.md`（「JAG 模擬地区は AOJ と AtCoder が混在する」の「記号」）: 同じ手順を 1 行で足す
-- `pnpm format`、`pnpm lint`、`pnpm check`、`pnpm test:unit`、`git diff --check`
 - 開発サーバーで JAG 冬合宿 2006 Day2 の表と問題一覧を開き、ダミーのリンク先と出典のラベルを目で確かめる
-- 共有の型と汎用関数のシグネチャを変えるので、Codex でクロスレビューする
+- 共有の型（`UrlGenerator`）と汎用関数（`addContestNameToTaskIndex`）のシグネチャを変えたので、Codex でクロスレビューする
 
 ### staging / 本番への投入（メンテナ）
 
@@ -146,7 +75,36 @@ export const addContestNameToTaskIndex = (
 - 列は `id`・`contest_type`・`created_at`・`updated_at` も明示する。Supabase の CSV は Prisma の既定値を使わず、`created_at` は DB に既定値があっても空になった例がある（`docs/guides/agent-rules/prisma-db.md`）
 - `id` は PR2.1 と同じく、メンテナのスクリプトで `sha256(contest_id + title)` にする
 - CSV の投入は `invalidateTaskCaches()` を経ないので、画面に出るのはタスクのキャッシュの有効期限（1 時間）が切れた後
-- 行の一覧は段階 5 でここに足す
+- 行の一覧は下の表（seed の 26 行と同じ）
+
+| `task_id`                    | `contest_id`       | `contest_type` | `task_table_index` | `title`                      |
+| ---------------------------- | ------------------ | -------------- | ------------------ | ---------------------------- |
+| 1123                         | ICPCPrelim2002     | AOJ_ICPC       | E                  | Enclosing Circles            |
+| NoJudge-JAGRegional2005_c    | JAGRegional2005    | AOJ_JAG        | C                  | Geometry?! Why Not??         |
+| NoJudge-JAGRegional2005_f    | JAGRegional2005    | AOJ_JAG        | F                  | University Rankings          |
+| NoJudge-JAGRegional2005_h    | JAGRegional2005    | AOJ_JAG        | H                  | Tiling Polygons              |
+| NoJudge-JAGRegional2008_j    | JAGRegional2008    | AOJ_JAG        | J                  | Colony Maintenance           |
+| 2565                         | JAGRegional2013    | AOJ_JAG        | A                  | Broken Audio Signal          |
+| 2566                         | JAGRegional2013    | AOJ_JAG        | B                  | Restore Calculation          |
+| 2567                         | JAGRegional2013    | AOJ_JAG        | C                  | SIRO Challenge               |
+| NoJudge-JAGSummer2006-day1_a | JAGSummer2006-day1 | AOJ_JAG        | A                  | Monkey Business              |
+| NoJudge-JAGSummer2006-day1_c | JAGSummer2006-day1 | AOJ_JAG        | C                  | Sort that Queue              |
+| NoJudge-JAGSummer2006-day3_a | JAGSummer2006-day3 | AOJ_JAG        | A                  | Rolling Cubes                |
+| 3643                         | JAGSummer2024-day3 | AOJ_JAG        | G                  | Interactive String Guessing  |
+| NoJudge-JAGWinter2006-day2_a | JAGWinter2006-day2 | AOJ_JAG        | A                  | Cells                        |
+| NoJudge-JAGWinter2006-day2_b | JAGWinter2006-day2 | AOJ_JAG        | B                  | Japan                        |
+| NoJudge-JAGWinter2006-day2_c | JAGWinter2006-day2 | AOJ_JAG        | C                  | Maximum                      |
+| NoJudge-JAGWinter2006-day2_e | JAGWinter2006-day2 | AOJ_JAG        | E                  | Payment System               |
+| NoJudge-JAGWinter2006-day2_g | JAGWinter2006-day2 | AOJ_JAG        | G                  | Roof                         |
+| NoJudge-JAGWinter2006-day2_h | JAGWinter2006-day2 | AOJ_JAG        | H                  | Seminar Room                 |
+| NoJudge-JAGWinter2006-day2_i | JAGWinter2006-day2 | AOJ_JAG        | I                  | String Compression           |
+| NoJudge-JAGWinter2006-day3_b | JAGWinter2006-day3 | AOJ_JAG        | B                  | Widget Factory               |
+| NoJudge-JAGWinter2006-day3_c | JAGWinter2006-day3 | AOJ_JAG        | C                  | Hills                        |
+| NoJudge-JAGWinter2006-day3_e | JAGWinter2006-day3 | AOJ_JAG        | E                  | Safe Packing                 |
+| NoJudge-JAGWinter2006-day3_f | JAGWinter2006-day3 | AOJ_JAG        | F                  | The "Shortest" Pair of Paths |
+| NoJudge-JAGWinter2006-day3_i | JAGWinter2006-day3 | AOJ_JAG        | I                  | Counting Triangles           |
+| NoJudge-JAGWinter2006-day3_j | JAGWinter2006-day3 | AOJ_JAG        | J                  | Wireing Assistant            |
+| NoJudge-JAGWinter2007-day3_e | JAGWinter2007-day3 | AOJ_JAG        | E                  | Networking Company           |
 
 CSV を入れたら、次の SQL で記号を確かめる。`(contest_id, task_table_index)` には一意制約が無く、同じコンテストで記号が重なると、表で片方の問題が黙って消える。seed はテストが守るが、CSV は守らない。
 

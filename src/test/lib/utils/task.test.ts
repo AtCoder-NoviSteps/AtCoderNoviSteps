@@ -108,6 +108,14 @@ describe('Task', () => {
       });
     });
 
+    describe('when a NoJudge task and an AOJ task share a JAG contest id', () => {
+      TestCasesForTaskUrl.noJudgeJag.forEach(({ name, value }) => {
+        runTests(`${name}`, [value], ({ contestId, taskId, expected }: TestCaseForTaskUrl) => {
+          expect(getTaskUrl(contestId, taskId)).toBe(expected);
+        });
+      });
+    });
+
     describe('when contest ids and task ids for AOJ ICPC (Prelim and Regional) are given', () => {
       TestCasesForTaskUrl.aojIcpc.forEach(({ name, value }) => {
         runTests(`${name}`, [value], ({ contestId, taskId, expected }: TestCaseForTaskUrl) => {

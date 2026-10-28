@@ -121,7 +121,11 @@
               <TableBodyCell
                 class="w-1/3 hidden sm:table-cell text-left truncate pl-0 xs:text-lg text-gray-700 dark:text-gray-300"
               >
-                {addContestNameToTaskIndex(taskResult.contest_id, taskResult.task_table_index)}
+                {addContestNameToTaskIndex(
+                  taskResult.contest_id,
+                  taskResult.task_table_index,
+                  taskResult.task_id,
+                )}
               </TableBodyCell>
               <TableBodyCell class="w-6 px-0">
                 <!-- TODO: 解説を閲覧できるようにする -->

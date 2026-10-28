@@ -7,6 +7,8 @@ import { type WorkBookTaskBase } from '#features/workbooks/types/workbook.js';
 import { ATCODER_BASE_CONTEST_URL, AOJ_TASKS_URL } from '#lib/constants/urls.js';
 import {
   getPrefixForAojCourses,
+  isNoJudgeTask,
+  NO_JUDGE_TASK_URLS,
   getContestPriority,
   regexForAojUniversity,
   regexForJag,
@@ -21,7 +23,7 @@ import {
  * @returns The generated URL or empty string if no suitable generator is found
  */
 export const getTaskUrl = (contestId: string, taskId: string): string => {
-  const generators = urlGenerators.find((generator) => generator.canHandle(contestId));
+  const generators = urlGenerators.find((generator) => generator.canHandle(contestId, taskId));
   return generators?.generateUrl(contestId, taskId) ?? '';
 };
 
@@ -53,9 +55,25 @@ class AojGenerator implements UrlGenerator {
   }
 }
 
+class NoJudgeGenerator implements UrlGenerator {
+  canHandle(_: string, taskId: string): boolean {
+    return isNoJudgeTask(taskId);
+  }
+
+  // Empty on a missing entry so the task never falls through to a dead AOJ link.
+  generateUrl(_: string, taskId: string): string {
+    return NO_JUDGE_TASK_URLS.get(taskId) ?? '';
+  }
+}
+
 // Note:
+// NoJudge must precede AOJ: its tasks share JAG contest ids.
 // Default generator last
-const urlGenerators: UrlGenerators = [new AojGenerator(), new AtCoderGenerator()];
+const urlGenerators: UrlGenerators = [
+  new NoJudgeGenerator(),
+  new AojGenerator(),
+  new AtCoderGenerator(),
+];
 
 export const countAcceptedTasks = (taskResults: TaskResults) => {
   const acceptedResults = taskResults.filter((taskResult: TaskResult) => taskResult.is_ac);

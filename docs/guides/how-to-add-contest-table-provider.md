@@ -93,6 +93,7 @@ AOJ/JAG 固有の詳細（`titleStyle`、同一年2回開催の `suffix` 分割�
 - **title**: AtCoder は `A. ` 付き、AOJ は素。セル（`buildTitleWithTaskIndex`）がどちらにも記号を付け直すので、Provider で title を加工しない
 - **データ**: AOJ の合宿系は管理画面から取り込めないので、seed と Supabase の CSV で記号付きで入れる。AtCoder 側は管理画面から取り込む
 - **記号**: AOJ は問題 ID の昇順で A, B, C… と振るが、問題が AOJ に無いコンテストではずれる。新しい回はメンテナのスプレッドシートと照合する
+- **AOJ に無い問題**: `NoJudge-{contest_id}_{小文字の記号}` の task_id でダミーを足し、`no_judge.ts` にリンク先（jag-icpc.org のページ）を登録し、コンテストを `LETTERS_OF_SHIFTED_CONTESTS` に入れる。出典欄は `（No Judge）` になる
 
 ### 補足: 固定セクションによる同一 ContestType 内の共存
 

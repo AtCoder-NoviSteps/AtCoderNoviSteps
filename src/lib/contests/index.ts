@@ -12,6 +12,9 @@ export { getJoiContestLabel } from './utils/labels/joi';
 export { getAtCoderUniversityContestLabel } from './utils/labels/universities';
 export { getAojContestLabel } from './utils/labels/aoj';
 
+// No Judge tasks (missing from AOJ)
+export { isNoJudgeTask, NO_JUDGE_TASK_URLS } from './utils/no_judge';
+
 // Task index label
 export { addContestNameToTaskIndex } from './utils/task_index_label';
 

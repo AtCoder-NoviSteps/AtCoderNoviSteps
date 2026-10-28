@@ -5,6 +5,9 @@ import * as TestCasesForContestNameAndTaskIndex from '#lib/contests/fixtures/con
 import { type TestCaseForContestNameAndTaskIndex } from '#lib/contests/fixtures/contest_name_and_task_index.js';
 import { addContestNameToTaskIndex } from '#lib/contests/utils/task_index_label.js';
 
+// Any id that is not a NoJudge task.
+const ORDINARY_TASK_ID = '1';
+
 describe('add contest name to task index', () => {
   describe('AtCoder', () => {
     describe('when contest_id contains abc', () => {
@@ -12,8 +15,10 @@ describe('add contest name to task index', () => {
         runTests(
           `${name}`,
           [value],
-          ({ contestId, taskTableIndex, expected }: TestCaseForContestNameAndTaskIndex) => {
-            expect(addContestNameToTaskIndex(contestId, taskTableIndex)).toEqual(expected);
+          ({ contestId, taskTableIndex, taskId, expected }: TestCaseForContestNameAndTaskIndex) => {
+            expect(
+              addContestNameToTaskIndex(contestId, taskTableIndex, taskId ?? ORDINARY_TASK_ID),
+            ).toEqual(expected);
           },
         );
       });
@@ -24,8 +29,10 @@ describe('add contest name to task index', () => {
         runTests(
           `${name}`,
           [value],
-          ({ contestId, taskTableIndex, expected }: TestCaseForContestNameAndTaskIndex) => {
-            expect(addContestNameToTaskIndex(contestId, taskTableIndex)).toEqual(expected);
+          ({ contestId, taskTableIndex, taskId, expected }: TestCaseForContestNameAndTaskIndex) => {
+            expect(
+              addContestNameToTaskIndex(contestId, taskTableIndex, taskId ?? ORDINARY_TASK_ID),
+            ).toEqual(expected);
           },
         );
       });
@@ -36,8 +43,10 @@ describe('add contest name to task index', () => {
         runTests(
           `${name}`,
           [value],
-          ({ contestId, taskTableIndex, expected }: TestCaseForContestNameAndTaskIndex) => {
-            expect(addContestNameToTaskIndex(contestId, taskTableIndex)).toEqual(expected);
+          ({ contestId, taskTableIndex, taskId, expected }: TestCaseForContestNameAndTaskIndex) => {
+            expect(
+              addContestNameToTaskIndex(contestId, taskTableIndex, taskId ?? ORDINARY_TASK_ID),
+            ).toEqual(expected);
           },
         );
       });
@@ -48,8 +57,10 @@ describe('add contest name to task index', () => {
         runTests(
           `${name}`,
           [value],
-          ({ contestId, taskTableIndex, expected }: TestCaseForContestNameAndTaskIndex) => {
-            expect(addContestNameToTaskIndex(contestId, taskTableIndex)).toEqual(expected);
+          ({ contestId, taskTableIndex, taskId, expected }: TestCaseForContestNameAndTaskIndex) => {
+            expect(
+              addContestNameToTaskIndex(contestId, taskTableIndex, taskId ?? ORDINARY_TASK_ID),
+            ).toEqual(expected);
           },
         );
       });
@@ -60,8 +71,10 @@ describe('add contest name to task index', () => {
         runTests(
           `${name}`,
           [value],
-          ({ contestId, taskTableIndex, expected }: TestCaseForContestNameAndTaskIndex) => {
-            expect(addContestNameToTaskIndex(contestId, taskTableIndex)).toEqual(expected);
+          ({ contestId, taskTableIndex, taskId, expected }: TestCaseForContestNameAndTaskIndex) => {
+            expect(
+              addContestNameToTaskIndex(contestId, taskTableIndex, taskId ?? ORDINARY_TASK_ID),
+            ).toEqual(expected);
           },
         );
       });
@@ -72,8 +85,10 @@ describe('add contest name to task index', () => {
         runTests(
           `${name}`,
           [value],
-          ({ contestId, taskTableIndex, expected }: TestCaseForContestNameAndTaskIndex) => {
-            expect(addContestNameToTaskIndex(contestId, taskTableIndex)).toEqual(expected);
+          ({ contestId, taskTableIndex, taskId, expected }: TestCaseForContestNameAndTaskIndex) => {
+            expect(
+              addContestNameToTaskIndex(contestId, taskTableIndex, taskId ?? ORDINARY_TASK_ID),
+            ).toEqual(expected);
           },
         );
       });
@@ -84,8 +99,10 @@ describe('add contest name to task index', () => {
         runTests(
           `${name}`,
           [value],
-          ({ contestId, taskTableIndex, expected }: TestCaseForContestNameAndTaskIndex) => {
-            expect(addContestNameToTaskIndex(contestId, taskTableIndex)).toEqual(expected);
+          ({ contestId, taskTableIndex, taskId, expected }: TestCaseForContestNameAndTaskIndex) => {
+            expect(
+              addContestNameToTaskIndex(contestId, taskTableIndex, taskId ?? ORDINARY_TASK_ID),
+            ).toEqual(expected);
           },
         );
       });
@@ -96,8 +113,10 @@ describe('add contest name to task index', () => {
         runTests(
           `${name}`,
           [value],
-          ({ contestId, taskTableIndex, expected }: TestCaseForContestNameAndTaskIndex) => {
-            expect(addContestNameToTaskIndex(contestId, taskTableIndex)).toEqual(expected);
+          ({ contestId, taskTableIndex, taskId, expected }: TestCaseForContestNameAndTaskIndex) => {
+            expect(
+              addContestNameToTaskIndex(contestId, taskTableIndex, taskId ?? ORDINARY_TASK_ID),
+            ).toEqual(expected);
           },
         );
       });
@@ -108,8 +127,10 @@ describe('add contest name to task index', () => {
         runTests(
           `${name}`,
           [value],
-          ({ contestId, taskTableIndex, expected }: TestCaseForContestNameAndTaskIndex) => {
-            expect(addContestNameToTaskIndex(contestId, taskTableIndex)).toEqual(expected);
+          ({ contestId, taskTableIndex, taskId, expected }: TestCaseForContestNameAndTaskIndex) => {
+            expect(
+              addContestNameToTaskIndex(contestId, taskTableIndex, taskId ?? ORDINARY_TASK_ID),
+            ).toEqual(expected);
           },
         );
       });
@@ -120,8 +141,10 @@ describe('add contest name to task index', () => {
         runTests(
           `${name}`,
           [value],
-          ({ contestId, taskTableIndex, expected }: TestCaseForContestNameAndTaskIndex) => {
-            expect(addContestNameToTaskIndex(contestId, taskTableIndex)).toEqual(expected);
+          ({ contestId, taskTableIndex, taskId, expected }: TestCaseForContestNameAndTaskIndex) => {
+            expect(
+              addContestNameToTaskIndex(contestId, taskTableIndex, taskId ?? ORDINARY_TASK_ID),
+            ).toEqual(expected);
           },
         );
       });
@@ -132,8 +155,10 @@ describe('add contest name to task index', () => {
         runTests(
           `${name}`,
           [value],
-          ({ contestId, taskTableIndex, expected }: TestCaseForContestNameAndTaskIndex) => {
-            expect(addContestNameToTaskIndex(contestId, taskTableIndex)).toEqual(expected);
+          ({ contestId, taskTableIndex, taskId, expected }: TestCaseForContestNameAndTaskIndex) => {
+            expect(
+              addContestNameToTaskIndex(contestId, taskTableIndex, taskId ?? ORDINARY_TASK_ID),
+            ).toEqual(expected);
           },
         );
       });
@@ -146,8 +171,10 @@ describe('add contest name to task index', () => {
         runTests(
           `${name}`,
           [value],
-          ({ contestId, taskTableIndex, expected }: TestCaseForContestNameAndTaskIndex) => {
-            expect(addContestNameToTaskIndex(contestId, taskTableIndex)).toEqual(expected);
+          ({ contestId, taskTableIndex, taskId, expected }: TestCaseForContestNameAndTaskIndex) => {
+            expect(
+              addContestNameToTaskIndex(contestId, taskTableIndex, taskId ?? ORDINARY_TASK_ID),
+            ).toEqual(expected);
           },
         );
       });
@@ -158,8 +185,10 @@ describe('add contest name to task index', () => {
         runTests(
           `${name}`,
           [value],
-          ({ contestId, taskTableIndex, expected }: TestCaseForContestNameAndTaskIndex) => {
-            expect(addContestNameToTaskIndex(contestId, taskTableIndex)).toEqual(expected);
+          ({ contestId, taskTableIndex, taskId, expected }: TestCaseForContestNameAndTaskIndex) => {
+            expect(
+              addContestNameToTaskIndex(contestId, taskTableIndex, taskId ?? ORDINARY_TASK_ID),
+            ).toEqual(expected);
           },
         );
       });
@@ -170,8 +199,10 @@ describe('add contest name to task index', () => {
         runTests(
           `${name}`,
           [value],
-          ({ contestId, taskTableIndex, expected }: TestCaseForContestNameAndTaskIndex) => {
-            expect(addContestNameToTaskIndex(contestId, taskTableIndex)).toEqual(expected);
+          ({ contestId, taskTableIndex, taskId, expected }: TestCaseForContestNameAndTaskIndex) => {
+            expect(
+              addContestNameToTaskIndex(contestId, taskTableIndex, taskId ?? ORDINARY_TASK_ID),
+            ).toEqual(expected);
           },
         );
       });
@@ -181,7 +212,9 @@ describe('add contest name to task index', () => {
       test.each(['JAGSummer-day2', 'JAGPrelim', 'JAGRegional-day1'])(
         'does not produce AOJ format for %s',
         (contestId) => {
-          expect(addContestNameToTaskIndex(contestId, '1')).not.toMatch(/（AOJ）$/);
+          expect(addContestNameToTaskIndex(contestId, '1', ORDINARY_TASK_ID)).not.toMatch(
+            /（AOJ）$/,
+          );
         },
       );
     });
@@ -191,8 +224,10 @@ describe('add contest name to task index', () => {
         runTests(
           `${name}`,
           [value],
-          ({ contestId, taskTableIndex, expected }: TestCaseForContestNameAndTaskIndex) => {
-            expect(addContestNameToTaskIndex(contestId, taskTableIndex)).toEqual(expected);
+          ({ contestId, taskTableIndex, taskId, expected }: TestCaseForContestNameAndTaskIndex) => {
+            expect(
+              addContestNameToTaskIndex(contestId, taskTableIndex, taskId ?? ORDINARY_TASK_ID),
+            ).toEqual(expected);
           },
         );
       });
@@ -203,11 +238,27 @@ describe('add contest name to task index', () => {
         runTests(
           `${name}`,
           [value],
-          ({ contestId, taskTableIndex, expected }: TestCaseForContestNameAndTaskIndex) => {
-            expect(addContestNameToTaskIndex(contestId, taskTableIndex)).toEqual(expected);
+          ({ contestId, taskTableIndex, taskId, expected }: TestCaseForContestNameAndTaskIndex) => {
+            expect(
+              addContestNameToTaskIndex(contestId, taskTableIndex, taskId ?? ORDINARY_TASK_ID),
+            ).toEqual(expected);
           },
         );
       });
+    });
+  });
+
+  describe('when task_id means a task missing from AOJ', () => {
+    TestCasesForContestNameAndTaskIndex.noJudge.forEach(({ name, value }) => {
+      runTests(
+        `appends （No Judge） for a NoJudge task in a JAG contest: ${name}`,
+        [value],
+        ({ contestId, taskTableIndex, taskId, expected }: TestCaseForContestNameAndTaskIndex) => {
+          expect(addContestNameToTaskIndex(contestId, taskTableIndex, taskId ?? '')).toEqual(
+            expected,
+          );
+        },
+      );
     });
   });
 });
