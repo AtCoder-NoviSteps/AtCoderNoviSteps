@@ -194,11 +194,10 @@ WHERE contest_id IN ('ICPCPrelim2002', 'JAGRegional2005', 'JAGRegional2008', 'JA
 GROUP BY contest_id
 ORDER BY contest_id;
 
--- Expect no rows: every inserted row matches prisma/tasks.ts (catches task_id typos the letter checks miss).
--- The first row casts contest_type to the enum; comparing text with "ContestType" fails.
+-- Read-only. Expect no rows: the 26 rows match prisma/tasks.ts (catches task_id typos the letter checks miss).
 SELECT expected.*
 FROM (VALUES
-  ('1123', 'ICPCPrelim2002', 'AOJ_ICPC'::"ContestType", 'E', 'Enclosing Circles'),
+  ('1123', 'ICPCPrelim2002', 'AOJ_ICPC', 'E', 'Enclosing Circles'),
   ('NoJudge-JAGRegional2005_c', 'JAGRegional2005', 'AOJ_JAG', 'C', 'Geometry?! Why Not??'),
   ('NoJudge-JAGRegional2005_f', 'JAGRegional2005', 'AOJ_JAG', 'F', 'University Rankings'),
   ('NoJudge-JAGRegional2005_h', 'JAGRegional2005', 'AOJ_JAG', 'H', 'Tiling Polygons'),
@@ -225,7 +224,12 @@ FROM (VALUES
   ('NoJudge-JAGWinter2006-day3_j', 'JAGWinter2006-day3', 'AOJ_JAG', 'J', 'Wireing Assistant'),
   ('NoJudge-JAGWinter2007-day3_e', 'JAGWinter2007-day3', 'AOJ_JAG', 'E', 'Networking Company')
 ) AS expected(task_id, contest_id, contest_type, task_table_index, title)
-LEFT JOIN task USING (task_id, contest_id, contest_type, task_table_index, title)
+LEFT JOIN task
+  ON task.task_id = expected.task_id
+  AND task.contest_id = expected.contest_id
+  AND task.contest_type::text = expected.contest_type
+  AND task.task_table_index = expected.task_table_index
+  AND task.title = expected.title
 WHERE task.id IS NULL;
 ```
 
