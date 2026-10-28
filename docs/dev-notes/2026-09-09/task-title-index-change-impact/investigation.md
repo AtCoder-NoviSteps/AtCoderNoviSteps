@@ -59,12 +59,12 @@ PR0 / PR1 だけに関わる調査（出典欄の呼び出し元、テストの�
 | JAG 模擬地区 2005    | C Geometry?! Why Not??、F University Rankings、H Tiling Polygons                                                     |
 | JAG 模擬地区 2008    | J Colony Maintenance                                                                                                 |
 
-一覧に無い問題について、メンテナが AOJ で確かめた結果（2026-10-24）:
+一覧に無い問題について、メンテナが AOJ で確かめた結果（2026-10-24。模擬地区 2013 は 2026-10-28）:
 
 - **JAG 夏合宿 2024 Day3 の G（Interactive String Guessing）**: スプレッドシートでは「AOJ 未収録」だが、AOJ に 3643 の問題ページがある（`onlinejudge.u-aizu.ac.jp/challenges/search/titles/3643`）。コンテスト一覧から外れているだけで、ICPC 国内予選 2002 の E（AOJ 1123）と同じ種類。**スプレッドシートの「AOJ 未収録」は、AOJ に無いことの保証にならない**
-- **JAG 模擬地区 2013 の A Broken Audio Signal / B Restore Calculation / C SIRO Challenge**: スプレッドシートではリンク付き（未収録の表記が無い）で、リンク先は AOJ 2565 / 2566 / 2567。ただし AOJ 側で title が見つからない。AOJ の模擬地区 2013 の一覧（本番の 7 問、2568〜2574）にも無い
+- **JAG 模擬地区 2013 の A Broken Audio Signal / B Restore Calculation / C SIRO Challenge**: スプレッドシートではリンク付き（未収録の表記が無い）で、リンク先は AOJ 2565 / 2566 / 2567。AOJ の模擬地区 2013 の一覧（`challenges/cl/jag/regional`、本番の 7 問、2568〜2574）には無いが、問題一覧 API に同じ ID・同じ問題名で載っている。コンテスト一覧から外れているだけで、1123・3643 と同じ種類。A〜J が 2565〜2574 の連番になる
 
-どちらも PR2 の記号（2013 は D〜J、2024 Day3 は H〜K）には影響しない。AOJ へのアクセスは、この環境からは拒否された（`judgeapi.u-aizu.ac.jp` が HTTP 410）。
+どちらも PR2 の記号（2013 は D〜J、2024 Day3 は H〜K）には影響しない。AOJ のドメインは `https://onlinejudge.u-aizu.ac.jp/` に変わった（旧 API の `judgeapi.u-aizu.ac.jp` は HTTP 410）。API の向き先（`/api/`）と開発コンテナの許可リストは PR1.5 で新ドメインに更新済みなので、PR3 の 3-0 の確認は新ドメインで行う。
 
 ## DB に無いコンテスト
 
