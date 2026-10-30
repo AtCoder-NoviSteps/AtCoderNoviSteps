@@ -82,9 +82,9 @@ protected setFilterCondition(): (taskResult: TaskResult) => boolean {
 
 AOJ/JAG 固有の詳細（`titleStyle`、同一年2回開催の `suffix` 分割など）は `aoj_icpc_providers.ts` / `aoj_jag_providers.ts` を参照。
 
-**変形: 明示的な配列で並べる（JAG 模擬地区）** — 並びを contest_id から導けないとき（例: 模擬地区 2014 は夏合宿 2014 の Day2 と Day4 の間）は、コンテストごとのエントリの配列（`aoj_jag_regional_entries.ts`）を持ち、1 エントリ = 1 Provider でインスタンス化する。provider key の section は contest_id（例: `AOJ_JAG::JAGSummer2024-day2`）。新しい回は seed（`prisma/tasks.ts`）と配列の両方に足す。配列の書き漏れは seed との整合テスト（`aoj_jag_regional_entries.test.ts`）で落ちる。
+**変形: 明示的な配列で並べる（JAG 夏合宿・模擬地区など）** — 並びを contest_id から導けないとき（例: 模擬地区 2014 は夏合宿 2014 の Day2 と Day4 の間）は、コンテストごとのエントリの配列（`aoj_jag_regional_entries.ts`）を持ち、1 エントリ = 1 Provider でインスタンス化する。provider key の section は contest_id（例: `AOJ_JAG::JAGSummer2024-day2`）。新しい回は seed（`prisma/tasks.ts`）と配列の両方に足す。配列の書き漏れは seed との整合テスト（`aoj_jag_regional_entries.test.ts`）で落ちる。
 
-#### 注意: JAG 模擬地区は AOJ と AtCoder が混在する
+#### 注意: 「JAG 夏合宿・模擬地区など」は AOJ と AtCoder が混在する
 
 配列には AOJ のコンテスト（`AOJ_JAG`）と AtCoder 上の 4 コンテスト（`ATCODER_JAG`）が並ぶ。新しい回を足すときは次を確かめる。
 
@@ -140,15 +140,15 @@ AOJ/JAG 固有の詳細（`titleStyle`、同一年2回開催の `suffix` 分割�
 
 ### コンストラクタパラメータ型 / regex フィルタ型
 
-| コンテスト      | フィルタ方式    | 備考                                                                            |
-| --------------- | --------------- | ------------------------------------------------------------------------------- |
-| ICPC 国内予選   | 年度パラメータ  | `AojIcpcPrelimProvider(type, year)`                                             |
-| ICPC アジア地区 | 年度パラメータ  | `AojIcpcRegionalProvider(type, year)`                                           |
-| JAG 模擬国内    | 年度パラメータ  | 同一年2回開催は suffix 分割                                                     |
-| JAG 模擬地区    | 明示的な配列    | 合宿系・模擬地区・AtCoder 上の JAG の 76 件。`JagRegionalProvider(type, entry)` |
-| JOI 一次予選    | regex           | `joi{YYYY}yo1{a\|b\|c}`                                                         |
-| JOI 二次予選    | regex + section | 2020 以降 / 2006-2019 で Provider 分離                                          |
-| JOI 本選        | regex           | 2026 年より `ho` → `sf` サフィックス                                            |
+| コンテスト               | フィルタ方式    | 備考                                                                            |
+| ------------------------ | --------------- | ------------------------------------------------------------------------------- |
+| ICPC 国内予選            | 年度パラメータ  | `AojIcpcPrelimProvider(type, year)`                                             |
+| ICPC アジア地区          | 年度パラメータ  | `AojIcpcRegionalProvider(type, year)`                                           |
+| JAG 模擬国内             | 年度パラメータ  | 同一年2回開催は suffix 分割                                                     |
+| JAG 夏合宿・模擬地区など | 明示的な配列    | 合宿系・模擬地区・AtCoder 上の JAG の 76 件。`JagRegionalProvider(type, entry)` |
+| JOI 一次予選             | regex           | `joi{YYYY}yo1{a\|b\|c}`                                                         |
+| JOI 二次予選             | regex + section | 2020 以降 / 2006-2019 で Provider 分離                                          |
+| JOI 本選                 | regex           | 2026 年より `ho` → `sf` サフィックス                                            |
 
 ### 複合ソース型
 

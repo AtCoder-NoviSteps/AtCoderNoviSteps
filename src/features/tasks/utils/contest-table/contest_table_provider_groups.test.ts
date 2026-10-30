@@ -279,9 +279,9 @@ describe('prepareContestProviderPresets', () => {
       const group = presets.AojJagRegional();
       const providerKeys = getProviderKeys();
 
-      expect(group.getGroupName()).toBe('JAG 模擬地区');
+      expect(group.getGroupName()).toBe('JAG 夏合宿・模擬地区など');
       expect(group.getMetadata()).toEqual({
-        buttonLabel: 'JAG 模擬地区',
+        buttonLabel: 'JAG 夏合宿・模擬地区など',
         ariaLabel: 'Filter JAG Regional and Training Camps',
       });
       expect(group.getSize()).toBe(76);
