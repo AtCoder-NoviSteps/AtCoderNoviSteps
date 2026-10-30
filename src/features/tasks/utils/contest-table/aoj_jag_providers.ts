@@ -59,7 +59,7 @@ export class JagPrelimProvider extends ContestTableProviderBase {
 }
 
 /**
- * One table per JAG camp or regional contest (JAG 模擬地区 group), including those held on AtCoder.
+ * One table per JAG camp or regional contest (JAG 夏合宿・模擬地区など group), including those held on AtCoder.
  */
 export class JagRegionalProvider extends ContestTableProviderBase {
   private readonly entry: AojJagRegionalEntry;

@@ -334,8 +334,8 @@ export const prepareContestProviderPresets = () => {
     },
 
     AojJagRegional: () => {
-      const group = new ContestTableProviderGroup('JAG 模擬地区', {
-        buttonLabel: 'JAG 模擬地区',
+      const group = new ContestTableProviderGroup('JAG 夏合宿・模擬地区など', {
+        buttonLabel: 'JAG 夏合宿・模擬地区など',
         ariaLabel: 'Filter JAG Regional and Training Camps',
       });
       // addProvider order = display order (first = top).
