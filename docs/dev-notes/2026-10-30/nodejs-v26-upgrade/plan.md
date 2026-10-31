@@ -2,7 +2,7 @@
 
 **作成日**: 2026-10-30（最終更新: 2026-10-31）
 
-**ステータス**: 計画中（実装は未着手・未承認）
+**ステータス**: 実装中（Phase 1 のファイル変更はコミット済み。devcontainer の rebuild 後に Node 26 で検証する）
 
 ## 概要
 
@@ -13,14 +13,14 @@ v24 は Maintenance 期間（EOL 2028-04-30）に入ったが、まだ急ぐ必�
 
 ### 前提条件（満たし済み）
 
-Node 26 でビルド・デプロイするには、次の 2 つが必要だった。どちらも Renovate の PR で staging にマージ済み。
+Node 26 でビルド・デプロイするには、次の 2 つが必要だった。どちらも staging にマージ済み。
 
-| パッケージ                 | 必要なバージョン | 理由                                                                                                              | 対応 PR         |
-| -------------------------- | ---------------- | ----------------------------------------------------------------------------------------------------------------- | --------------- |
-| `@sveltejs/adapter-vercel` | 7.0.2 以上       | 7.0.1 以下は Node 26 でのビルドをエラーにする                                                                     | #4256           |
-| `vercel`（CLI）            | 65.8.0 以上      | CI の prebuilt deploy（`vercel build` → `vercel deploy --prebuilt`）で Node 26 の Function を deploy するのに必要 | #4252（65.9.0） |
+| パッケージ                 | 必要なバージョン | 理由                                                                                                              | 対応 PR                                                                                                                                 |
+| -------------------------- | ---------------- | ----------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
+| `@sveltejs/adapter-vercel` | 7.0.2 以上       | 7.0.1 以下は Node 26 でのビルドをエラーにする                                                                     | #4256                                                                                                                                   |
+| Vercel CLI                 | 65.8.0 以上      | CI の prebuilt deploy（`vercel build` → `vercel deploy --prebuilt`）で Node 26 の Function を deploy するのに必要 | #4252 で 65.9.0。#4262 で同じバージョンのネイティブ版 `@vercel/vc-native` 65.9.0 に置き換え（バイナリに `nodejs26.x` を含むことを確認） |
 
-その他の依存は、インストール済みの全 703 パッケージで `engines.node` が Node 26 を許容していることを確認した（`engineStrict: true` でも install は止まらない）。
+その他の依存は、インストール済みの全 457 パッケージ（#4262 後）で `engines.node` が Node 26 を許容していることを確認した（`engineStrict: true` でも install は止まらない）。
 
 ## 影響調査
 
@@ -71,18 +71,21 @@ Node.js 26.0.0 の公式リリースノートにある破壊的変更（Semver-M
 
 ### Phase 1: リポジトリ内の Node.js を 26 にする（中リスク）
 
-- [ ] `Dockerfile`: `ARG NODE_VERSION=26`
-- [ ] `.github/workflows/ci.yml`: build job の matrix を `[26]` にする
-- [ ] `.github/actions/setup/action.yml`: `node-version` の既定値を `'26'` にする
-- [ ] `package.json`: `engines.node` を `26.x`、`@types/node` を 26.x にする
-- [ ] `CONTRIBUTING.md`: 必要な Node.js のバージョンを `v26.x` にする
-- [ ] `.agents/skills/dep-upgrade/instructions.md`: Node 更新時の対象ファイルに `.github/actions/setup/action.yml` を追記する
+- [x] `package.json`: `@types/node` を 26.6.6 にする。Node 24 で `pnpm check` は 0 errors、`pnpm test:unit` は 2940 tests pass
+- [x] `Dockerfile`: `ARG NODE_VERSION=26`
+- [x] `.github/workflows/ci.yml`: build job の matrix を `[26]` にする
+- [x] `.github/actions/setup/action.yml`: `node-version` の既定値を `'26'` にする
+- [x] `package.json`: `engines.node` を `26.x` にする（ルートの `engines` は lockfile に記録されないので lockfile は変更なし）
+- [x] `CONTRIBUTING.md`: 必要な Node.js のバージョンを `v26.x` にする
+- [x] `.agents/skills/dep-upgrade/instructions.md`: Node 更新時の対象に `.github/actions/setup/action.yml` と `@types/node` を追記する
 - [ ] devcontainer を rebuild し、下記の検証手順を実行する
+
+`engines.node` を `26.x` にした後は、Node 24 の環境だと `pnpm exec` などの実行前に `ERR_PNPM_UNSUPPORTED_ENGINE` が出る（`engineStrict: true` による想定どおりの挙動）。検証は rebuild 後の Node 26 環境で行う。
 
 ### Phase 2: Vercel に反映する（高リスク）
 
 - [ ] PR を staging にマージし、preview deploy が成功することを確認する
-- [ ] Vercel Dashboard > Project Settings > Build and Deployment > Node.js Version を 26.x にする
+- [x] Vercel Dashboard > Project Settings > Build and Deployment > Node.js Version を 26.x にする（2026-10-31 設定済み）
 - [ ] staging で動作確認する: ログイン、AtCoder Problems / AOJ からの取得、`/workbooks/{slug}`（メモリ使用量が大きいページ）、DB の読み書き
 - [ ] production に deploy し、Vercel の Function logs にエラーや DeprecationWarning が出ていないことを確認する
 - [ ] 問題が出たら PR を revert し、Dashboard を 24.x に戻す
