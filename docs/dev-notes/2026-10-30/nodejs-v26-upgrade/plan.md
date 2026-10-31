@@ -2,7 +2,7 @@
 
 **作成日**: 2026-10-30（最終更新: 2026-10-31）
 
-**ステータス**: 実装中（Phase 1 のファイル変更はコミット済み。devcontainer の rebuild 後に Node 26 で検証する）
+**ステータス**: Phase 1 完了（Node 26 で検証済み）。Phase 2（staging・production への反映）待ち
 
 ## 概要
 
@@ -78,9 +78,9 @@ Node.js 26.0.0 の公式リリースノートにある破壊的変更（Semver-M
 - [x] `package.json`: `engines.node` を `26.x` にする（ルートの `engines` は lockfile に記録されないので lockfile は変更なし）
 - [x] `CONTRIBUTING.md`: 必要な Node.js のバージョンを `v26.x` にする
 - [x] `.agents/skills/dep-upgrade/instructions.md`: Node 更新時の対象に `.github/actions/setup/action.yml` と `@types/node` を追記する
-- [ ] devcontainer を rebuild し、下記の検証手順を実行する
+- [x] devcontainer を rebuild し、下記の検証手順を実行する（2026-10-31、結果は「検証結果」を参照）
 
-`engines.node` を `26.x` にした後は、Node 24 の環境だと `pnpm exec` などの実行前に `ERR_PNPM_UNSUPPORTED_ENGINE` が出る（`engineStrict: true` による想定どおりの挙動）。検証は rebuild 後の Node 26 環境で行う。
+`engines.node` を `26.x` にした後は、Node 24 の環境だと `pnpm exec` などの実行前に `ERR_PNPM_UNSUPPORTED_ENGINE` が出る（`engineStrict: true` による想定どおりの挙動）。検証は rebuild 後の Node 26 環境で行った。
 
 ### Phase 2: Vercel に反映する（高リスク）
 
@@ -110,6 +110,26 @@ git diff --check
 
 - `localStorage`: `src/test/lib/stores/active_problem_list_tab.svelte.test.ts`、`src/features/tasks/stores/active_contest_type.svelte.test.ts`、`src/features/workbooks/stores/replenishment_workbook.test.ts`
 - fetch（nock）: `src/lib/clients/atcoder/atcoder_problems.test.ts`、`src/lib/clients/aizu_online_judge/clients.test.ts`、`src/features/votes/internal_clients/vote_grade.test.ts`
+
+## 検証結果
+
+2026-10-31、rebuild 後の devcontainer（Node v26.12.1、Undici 8.12.2）で実行した。
+devcontainer image の `javascript-node:26` はまだ 26.12.1 で、LTS 版の 26.13.0 ではない。CI は `check-latest: true` なので最新の 26.x を使う。
+
+| 手順                                     | 結果                                                                                                  |
+| ---------------------------------------- | ----------------------------------------------------------------------------------------------------- |
+| `pnpm install --force --frozen-lockfile` | ✅ 成功。postinstall で Prisma Client 5.22.0 を生成できた                                             |
+| `pnpm format`                            | ✅ 差分なし                                                                                           |
+| `pnpm lint`                              | ✅ エラーなし（既存の oxlint 警告 1 件のみ）                                                          |
+| `pnpm check`                             | ✅ 0 errors（既存の Svelte 警告 30 件。Node 24 のときと同数）                                         |
+| `pnpm test:unit`                         | ✅ 101 files / 2940 tests pass。`localStorage` と nock の 6 ファイル（95 tests）も個別に実行して pass |
+| `pnpm build`                             | ✅ 成功。`.vc-config.json` の `runtime` は `nodejs26.x`                                               |
+| `pnpm db:seed`                           | ✅ 成功。DeprecationWarning なし                                                                      |
+| `pnpm test:e2e`                          | ✅ 119 passed / 1 skipped（skip は DB に該当データがないときの votes のテスト）                       |
+| `git diff --check`                       | ✅ 問題なし                                                                                           |
+
+Node 由来の DeprecationWarning（`[DEP0xxx]`）は、どの手順でも出なかった。
+e2e のログには Flowbite Svelte の `Tabs` の props（`ulClass`、`contentClass`）の非推奨警告が出るが、Node のバージョンとは関係ない既存の警告なので、今回は対応しない。
 
 ## 参考資料
 
