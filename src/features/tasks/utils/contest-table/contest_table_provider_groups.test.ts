@@ -231,30 +231,37 @@ describe('prepareContestProviderPresets', () => {
   describe('year-range presets', () => {
     test('AojIcpcPrelim registers one provider per year', () => {
       const group = presets.AojIcpcPrelim();
+      const providerKeys = group.getAllProviders().map((provider) => provider.getProviderKey());
 
       expect(group.getGroupName()).toBe('ICPC 国内予選');
       expect(group.getMetadata()).toEqual({
         buttonLabel: 'ICPC 国内予選',
         ariaLabel: 'Filter ICPC Domestic Preliminary',
       });
+      expect(providerKeys.at(0)).toBe('AOJ_ICPC::2026');
+      expect(providerKeys.at(-1)).toBe('AOJ_ICPC::1998');
       expect(group.getSize()).toBe(ICPC_PRELIM_LATEST_YEAR - ICPC_PRELIM_OLDEST_YEAR + 1);
       expect(group.getProvider(ContestType.AOJ_ICPC, '2023')).toBeDefined();
     });
 
     test('AojIcpcRegional registers one provider per year', () => {
       const group = presets.AojIcpcRegional();
+      const providerKeys = group.getAllProviders().map((provider) => provider.getProviderKey());
 
       expect(group.getGroupName()).toBe('ICPC アジア地区');
       expect(group.getMetadata()).toEqual({
         buttonLabel: 'ICPC アジア地区',
         ariaLabel: 'Filter ICPC Asia Regional',
       });
+      expect(providerKeys.at(0)).toBe('AOJ_ICPC::2024');
+      expect(providerKeys.at(-1)).toBe('AOJ_ICPC::1998');
       expect(group.getSize()).toBe(ICPC_REGIONAL_LATEST_YEAR - ICPC_REGIONAL_OLDEST_YEAR + 1);
       expect(group.getProvider(ContestType.AOJ_ICPC, '2024')).toBeDefined();
     });
 
     test('AojJagPrelim registers providers including A/B split for 2016', () => {
       const group = presets.AojJagPrelim();
+      const providerKeys = group.getAllProviders().map((provider) => provider.getProviderKey());
 
       expect(group.getGroupName()).toBe('JAG 模擬国内');
       expect(group.getMetadata()).toEqual({
@@ -262,6 +269,8 @@ describe('prepareContestProviderPresets', () => {
         ariaLabel: 'Filter JAG Domestic Preliminary',
       });
       // 2016 was held twice (A/B), adding one extra provider beyond the year span.
+      expect(providerKeys.at(0)).toBe('AOJ_JAG::2026');
+      expect(providerKeys.at(-1)).toBe('AOJ_JAG::2005');
       expect(group.getSize()).toBe(JAG_PRELIM_LATEST_YEAR - JAG_PRELIM_OLDEST_YEAR + 1 + 1);
       expect(group.getProvider(ContestType.AOJ_JAG, '2023')).toBeDefined();
       expect(group.getProvider(ContestType.AOJ_JAG, '2016A')).toBeDefined();
