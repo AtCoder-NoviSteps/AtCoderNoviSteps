@@ -31,6 +31,18 @@ describe('get PAST contest label', () => {
 describe('getPastContestId', () => {
   test.each([
     [1, 'past201912-open'],
+    [2, 'past202004-open'],
+    [3, 'past202005-open'],
+    [4, 'past202010-open'],
+    [5, 'past202012-open'],
+    [6, 'past202104-open'],
+    [7, 'past202107-open'],
+    [8, 'past202109-open'],
+    [9, 'past202112-open'],
+    [10, 'past202203-open'],
+    [11, 'past202206-open'],
+    [12, 'past202209-open'],
+    [13, 'past202212-open'],
     [14, 'past202303-open'],
     [15, 'past15-open'],
     [24, 'past24-open'],

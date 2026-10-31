@@ -11,8 +11,6 @@ import {
   ICPC_REGIONAL_LATEST_YEAR,
   JAG_PRELIM_OLDEST_YEAR,
   JAG_PRELIM_LATEST_YEAR,
-  PAST_OLDEST_ROUND,
-  PAST_LATEST_ROUND,
   contestTableProviderGroups,
   prepareContestProviderPresets,
 } from './contest_table_provider_groups';
@@ -281,9 +279,32 @@ describe('prepareContestProviderPresets', () => {
         buttonLabel: 'PAST',
         ariaLabel: 'Filter PAST (Practical Algorithm Skill Test)',
       });
-      expect(group.getSize()).toBe(PAST_LATEST_ROUND - PAST_OLDEST_ROUND + 1);
-      expect(providerKeys.at(0)).toBe(`PAST::${PAST_LATEST_ROUND}`);
-      expect(providerKeys.at(-1)).toBe('PAST::1');
+      expect(providerKeys).toEqual([
+        'PAST::24',
+        'PAST::23',
+        'PAST::22',
+        'PAST::21',
+        'PAST::20',
+        'PAST::19',
+        'PAST::18',
+        'PAST::17',
+        'PAST::16',
+        'PAST::15',
+        'PAST::14',
+        'PAST::13',
+        'PAST::12',
+        'PAST::11',
+        'PAST::10',
+        'PAST::9',
+        'PAST::8',
+        'PAST::7',
+        'PAST::6',
+        'PAST::5',
+        'PAST::4',
+        'PAST::3',
+        'PAST::2',
+        'PAST::1',
+      ]);
       expect(group.getProvider(ContestType.PAST, '15')).toBeDefined();
     });
   });
