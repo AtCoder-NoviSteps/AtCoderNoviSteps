@@ -14,8 +14,9 @@ A web service for tracking submissions on AtCoder and other competitive programm
 1. Before implementation, create a lower-risk-to-higher-risk phased plan at `docs/dev-notes/YYYY-MM-DD/{task-name-en}/plan.md`. Keep it concise without omitting the overview, design rationale, rejected alternatives, or per-phase summary; split it only when that makes the plan easier to understand. For new features, show the proposed signatures of key functions and interfaces, and the props and events contracts of key components.
 2. Planning does not authorize implementation. Wait for explicit approval such as "implement" or "let's start".
 3. Before each task, identify its layer and single responsibility, search for an existing util/service/type, and state the test name. Split tasks that span multiple layers.
-4. Write tests first, implement production code, then run `pnpm test:unit`. Configuration, documentation, type-only changes, and exploratory spikes may skip test-first when they have no branching behavior.
+4. Write tests first, implement production code, then run `pnpm test:unit`; commit each phase once it passes. Configuration, documentation, type-only changes, and exploratory spikes may skip test-first when they have no branching behavior.
 5. Review the result for YAGNI violations, over-abstraction, and missing tests.
+6. When the work is done, rewrite `plan.md` into decisions (with rejected alternatives), facts the code and git history do not show (data sources, verification and review results, what was left unchecked), and remaining tasks; drop phase checklists and signatures.
 
 Before adding a function, search `src/lib/utils/`, `src/lib/services/`, `src/features/*/utils/`, and `src/features/*/services/`. Extract shared logic when it is used in two or more places.
 

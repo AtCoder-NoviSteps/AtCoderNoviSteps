@@ -31,7 +31,7 @@ Step 0 (seed check) is already done. Confirm the following before touching code:
 
 ## Layers 1–2 — Add ContestType
 
-> Skip when an existing ContestType already covers this contest family (e.g. `AOJ_JAG` for JAG Prelim).
+> Skip when an existing ContestType already covers this contest family (e.g. `AOJ_JAG` for JAG Prelim, `PAST`). Its classification, priority, and label then exist too, so Layer 3 needs only fixture cases for contest_ids not yet covered.
 
 - [ ] Add to `prisma/schema.prisma` ContestType enum → `pnpm exec prisma migrate dev --name add_<type>_to_contest_type` (also regenerates the client)
 - [ ] Add to `ContestType` in `src/lib/contests/types/contest.ts` (same position as schema)
