@@ -4,7 +4,7 @@ description: Install pnpm and Node.js, then install dependencies
 inputs:
   node-version:
     description: Node.js version to install
-    default: '24'
+    default: '26'
 
 runs:
   using: composite
