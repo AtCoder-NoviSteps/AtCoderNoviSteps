@@ -11,7 +11,7 @@ paths:
 
 - **Tests ship with implementation** — same commit; feature not done until tests pass. Never defer tests for non-trivial logic
 - **English only** — describe expected behavior (e.g., `'returns empty array when workbooks is empty'`)
-- **Test integrity** — never weaken assertions to make tests pass; fix implementation instead. Never let the expected value be computed by the code under test: `expect(f(x)).toBe(map.get(expected))` where `f` is `map.get(classify(x))`, or a fixture whose `expected` calls a production function. Both pass unconditionally. Expected values are literals
+- **Test integrity** — never weaken assertions to make tests pass; fix implementation instead. Never let the expected value come from the code under test: `expect(f(x)).toBe(map.get(expected))` where `f` is `map.get(classify(x))`, a fixture whose `expected` calls a production function, a count from production constants (`LATEST - OLDEST + 1`) unless the same test asserts both boundaries as literals (e.g. the first and last provider keys), or a round trip (`decode(encode(x))`) over data both sides share. None can catch an error in the shared source. Expected values are literals; for a hand-maintained table, list every entry
 - **Unused imports** — signal missing tests, not dead code — add the test case first
 - **TDD exceptions** — skip test-first for exploratory spikes, type-only changes, and config files with no branching logic
 - **Component testing** — extract logic to `utils/`; omit component Vitest if template-only **and** E2E covers rendering paths

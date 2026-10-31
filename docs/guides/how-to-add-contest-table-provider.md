@@ -72,7 +72,7 @@ protected setFilterCondition(): (taskResult: TaskResult) => boolean {
 
 `getMergedTasksMap()` が複数コンテスト由来の task_id を自動統合。テストデータは [prisma/contest_task_pairs.ts](../../prisma/contest_task_pairs.ts) 参照。ペアの追加手順と本番環境への投入は [how-to-add-contest-task-pairs.md](./how-to-add-contest-task-pairs.md) を参照。
 
-### パターン4: コンストラクタパラメータ型（ICPC / JAG / JOI）
+### パターン4: コンストラクタパラメータ型（ICPC / JAG / JOI / PAST）
 
 年度などのパラメータを受け取る1クラスを N 回インスタンス化。
 
@@ -149,6 +149,7 @@ AOJ/JAG 固有の詳細（`titleStyle`、同一年2回開催の `suffix` 分割�
 | JOI 一次予選             | regex           | `joi{YYYY}yo1{a\|b\|c}`                                                         |
 | JOI 二次予選             | regex + section | 2020 以降 / 2006-2019 で Provider 分離                                          |
 | JOI 本選                 | regex           | 2026 年より `ho` → `sf` サフィックス                                            |
+| PAST                     | 回数パラメータ  | `PastProvider(type, round)`。回数 → contest_id は `getPastContestId`            |
 
 ### 複合ソース型
 
@@ -185,4 +186,4 @@ AOJ/JAG 固有の詳細（`titleStyle`、同一年2回開催の `suffix` 分割�
 
 ---
 
-**最終更新**: 2026-10-25
+**最終更新**: 2026-10-31

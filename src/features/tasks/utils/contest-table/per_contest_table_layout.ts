@@ -4,7 +4,7 @@ import type {
   ContestTableTitleStyle,
 } from '#features/tasks/types/contest-table/contest_table_provider.js';
 
-export const AOJ_TITLE_STYLE: ContestTableTitleStyle = {
+export const PER_CONTEST_TITLE_STYLE: ContestTableTitleStyle = {
   headingTag: 'h2',
   fontSize: 'text-xl',
   fontWeight: 'font-bold',
@@ -12,13 +12,13 @@ export const AOJ_TITLE_STYLE: ContestTableTitleStyle = {
 };
 
 // Return unique task_table_index values (problem letters) in ascending order.
-export function sortAojHeaderIds(filtered: TaskResults): string[] {
+export function sortHeaderIdsByTaskTableIndex(filtered: TaskResults): string[] {
   return Array.from(new Set(filtered.map((taskResult) => taskResult.task_table_index))).sort(
     (first, second) => first.localeCompare(second),
   );
 }
 
-export function buildAojDisplayConfig(): ContestTableDisplayConfig {
+export function buildPerContestDisplayConfig(): ContestTableDisplayConfig {
   return {
     isShownHeader: false,
     isShownRoundLabel: false,

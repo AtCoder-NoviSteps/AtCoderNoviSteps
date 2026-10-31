@@ -78,6 +78,7 @@ const pastContestData = [
   { name: 'PAST 15th', contestId: 'past15-open' },
   { name: 'PAST 16th', contestId: 'past16-open' },
   { name: 'PAST 17th', contestId: 'past17-open' },
+  { name: 'PAST 24th', contestId: 'past24-open' },
   { name: '典型アルゴリズム問題集 上級〜エキスパート編', contestId: 'pastbook2022' },
 ];
 

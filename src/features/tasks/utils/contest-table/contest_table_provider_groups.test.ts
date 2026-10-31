@@ -11,6 +11,7 @@ import {
   ICPC_REGIONAL_LATEST_YEAR,
   JAG_PRELIM_OLDEST_YEAR,
   JAG_PRELIM_LATEST_YEAR,
+  contestTableProviderGroups,
   prepareContestProviderPresets,
 } from './contest_table_provider_groups';
 
@@ -230,30 +231,37 @@ describe('prepareContestProviderPresets', () => {
   describe('year-range presets', () => {
     test('AojIcpcPrelim registers one provider per year', () => {
       const group = presets.AojIcpcPrelim();
+      const providerKeys = group.getAllProviders().map((provider) => provider.getProviderKey());
 
       expect(group.getGroupName()).toBe('ICPC 国内予選');
       expect(group.getMetadata()).toEqual({
         buttonLabel: 'ICPC 国内予選',
         ariaLabel: 'Filter ICPC Domestic Preliminary',
       });
+      expect(providerKeys.at(0)).toBe('AOJ_ICPC::2026');
+      expect(providerKeys.at(-1)).toBe('AOJ_ICPC::1998');
       expect(group.getSize()).toBe(ICPC_PRELIM_LATEST_YEAR - ICPC_PRELIM_OLDEST_YEAR + 1);
       expect(group.getProvider(ContestType.AOJ_ICPC, '2023')).toBeDefined();
     });
 
     test('AojIcpcRegional registers one provider per year', () => {
       const group = presets.AojIcpcRegional();
+      const providerKeys = group.getAllProviders().map((provider) => provider.getProviderKey());
 
       expect(group.getGroupName()).toBe('ICPC アジア地区');
       expect(group.getMetadata()).toEqual({
         buttonLabel: 'ICPC アジア地区',
         ariaLabel: 'Filter ICPC Asia Regional',
       });
+      expect(providerKeys.at(0)).toBe('AOJ_ICPC::2024');
+      expect(providerKeys.at(-1)).toBe('AOJ_ICPC::1998');
       expect(group.getSize()).toBe(ICPC_REGIONAL_LATEST_YEAR - ICPC_REGIONAL_OLDEST_YEAR + 1);
       expect(group.getProvider(ContestType.AOJ_ICPC, '2024')).toBeDefined();
     });
 
     test('AojJagPrelim registers providers including A/B split for 2016', () => {
       const group = presets.AojJagPrelim();
+      const providerKeys = group.getAllProviders().map((provider) => provider.getProviderKey());
 
       expect(group.getGroupName()).toBe('JAG 模擬国内');
       expect(group.getMetadata()).toEqual({
@@ -261,10 +269,52 @@ describe('prepareContestProviderPresets', () => {
         ariaLabel: 'Filter JAG Domestic Preliminary',
       });
       // 2016 was held twice (A/B), adding one extra provider beyond the year span.
+      expect(providerKeys.at(0)).toBe('AOJ_JAG::2026');
+      expect(providerKeys.at(-1)).toBe('AOJ_JAG::2005');
       expect(group.getSize()).toBe(JAG_PRELIM_LATEST_YEAR - JAG_PRELIM_OLDEST_YEAR + 1 + 1);
       expect(group.getProvider(ContestType.AOJ_JAG, '2023')).toBeDefined();
       expect(group.getProvider(ContestType.AOJ_JAG, '2016A')).toBeDefined();
       expect(group.getProvider(ContestType.AOJ_JAG, '2016B')).toBeDefined();
+    });
+  });
+
+  describe('round-range presets', () => {
+    test('PAST registers one provider per round, newest first', () => {
+      const group = presets.PAST();
+      const providerKeys = group.getAllProviders().map((provider) => provider.getProviderKey());
+
+      expect(group.getGroupName()).toBe('PAST');
+      expect(group.getMetadata()).toEqual({
+        buttonLabel: 'PAST',
+        ariaLabel: 'Filter PAST (Practical Algorithm Skill Test)',
+      });
+      expect(providerKeys).toEqual([
+        'PAST::24',
+        'PAST::23',
+        'PAST::22',
+        'PAST::21',
+        'PAST::20',
+        'PAST::19',
+        'PAST::18',
+        'PAST::17',
+        'PAST::16',
+        'PAST::15',
+        'PAST::14',
+        'PAST::13',
+        'PAST::12',
+        'PAST::11',
+        'PAST::10',
+        'PAST::9',
+        'PAST::8',
+        'PAST::7',
+        'PAST::6',
+        'PAST::5',
+        'PAST::4',
+        'PAST::3',
+        'PAST::2',
+        'PAST::1',
+      ]);
+      expect(group.getProvider(ContestType.PAST, '15')).toBeDefined();
     });
   });
 
@@ -314,5 +364,13 @@ describe('prepareContestProviderPresets', () => {
       }
       expect(group.getProvider(ContestType.AOJ_JAG, 'JAGSummer2015-day4')).toBeDefined();
     });
+  });
+});
+
+describe('contestTableProviderGroups', () => {
+  test('places the PAST button right after AWC 0001 onwards', () => {
+    const groupKeys = Object.keys(contestTableProviderGroups);
+
+    expect(groupKeys.indexOf('past')).toBe(groupKeys.indexOf('awc0001Onwards') + 1);
   });
 });

@@ -1,36 +1,56 @@
 import type { ContestLabelTranslations } from '#lib/contests/types/contest.js';
 
 /**
- * A mapping of contest dates to their respective Japanese translations.
- * Each key represents a date in the format 'YYYYMM', and the corresponding value
- * is the Japanese translation indicating the contest number.
+ * Year-months ('YYYYMM') in the contest ids of the 1st to 14th PAST contests; index + 1 is the round.
  *
  * Note:
  * After the 15th contest, the URL includes the number of times the contest has been held
  *
  * See:
  * https://atcoder.jp/contests/archive?ratedType=0&category=50
+ */
+const PAST_YEAR_MONTHS = [
+  '201912',
+  '202004',
+  '202005',
+  '202010',
+  '202012',
+  '202104',
+  '202107',
+  '202109',
+  '202112',
+  '202203',
+  '202206',
+  '202209',
+  '202212',
+  '202303',
+] as const;
+
+/**
+ * A mapping of contest dates to their respective Japanese translations.
+ * Each key represents a date in the format 'YYYYMM', and the corresponding value
+ * is the Japanese translation indicating the contest number.
  *
  * Example:
  * - '201912': ' 第 1 回' (The 1st contest in December 2019)
  * - '202303': ' 第 14 回' (The 14th contest in March 2023)
  */
-export const PAST_TRANSLATIONS = {
-  '201912': ' 第 1 回',
-  '202004': ' 第 2 回',
-  '202005': ' 第 3 回',
-  '202010': ' 第 4 回',
-  '202012': ' 第 5 回',
-  '202104': ' 第 6 回',
-  '202107': ' 第 7 回',
-  '202109': ' 第 8 回',
-  '202112': ' 第 9 回',
-  '202203': ' 第 10 回',
-  '202206': ' 第 11 回',
-  '202209': ' 第 12 回',
-  '202212': ' 第 13 回',
-  '202303': ' 第 14 回',
-};
+export const PAST_TRANSLATIONS: ContestLabelTranslations = Object.fromEntries(
+  PAST_YEAR_MONTHS.map((yearMonth, index) => [yearMonth, ` 第 ${index + 1} 回`]),
+);
+
+/**
+ * Returns the contest id of the given PAST round.
+ *
+ * Example:
+ * - 1 → 'past201912-open'
+ * - 15 → 'past15-open'
+ */
+export function getPastContestId(round: number): string {
+  const yearMonth = PAST_YEAR_MONTHS[round - 1];
+
+  return yearMonth ? `past${yearMonth}-open` : `past${round}-open`;
+}
 
 /**
  * A regular expression to match strings that representing the 15th or later PAST contests.
