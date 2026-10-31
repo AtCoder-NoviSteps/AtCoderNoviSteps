@@ -7,7 +7,11 @@ import {
 } from '#features/tasks/types/contest-table/contest_table_provider.js';
 
 import { ContestTableProviderBase } from './contest_table_provider_base';
-import { sortAojHeaderIds, AOJ_TITLE_STYLE, buildAojDisplayConfig } from './aoj_labels';
+import {
+  sortHeaderIdsByTaskTableIndex,
+  PER_CONTEST_TITLE_STYLE,
+  buildPerContestDisplayConfig,
+} from './per_contest_table_layout';
 import type { AojJagRegionalEntry } from './aoj_jag_regional_entries';
 
 /**
@@ -34,19 +38,19 @@ export class JagPrelimProvider extends ContestTableProviderBase {
   }
 
   override getHeaderIdsForTask(filtered: TaskResults): string[] {
-    return sortAojHeaderIds(filtered);
+    return sortHeaderIdsByTaskTableIndex(filtered);
   }
 
   getMetadata(): ContestTableMetaData {
     return {
       title: this.buildTitle(),
       abbreviationName: `jagPrelim${this.year}${this.suffix}`,
-      titleStyle: AOJ_TITLE_STYLE,
+      titleStyle: PER_CONTEST_TITLE_STYLE,
     };
   }
 
   getDisplayConfig(): ContestTableDisplayConfig {
-    return buildAojDisplayConfig();
+    return buildPerContestDisplayConfig();
   }
 
   getContestRoundLabel(_contestId: string): string {
@@ -74,19 +78,19 @@ export class JagRegionalProvider extends ContestTableProviderBase {
   }
 
   override getHeaderIdsForTask(filtered: TaskResults): string[] {
-    return sortAojHeaderIds(filtered);
+    return sortHeaderIdsByTaskTableIndex(filtered);
   }
 
   getMetadata(): ContestTableMetaData {
     return {
       title: this.buildTitle(),
       abbreviationName: this.entry.contestId,
-      titleStyle: AOJ_TITLE_STYLE,
+      titleStyle: PER_CONTEST_TITLE_STYLE,
     };
   }
 
   getDisplayConfig(): ContestTableDisplayConfig {
-    return buildAojDisplayConfig();
+    return buildPerContestDisplayConfig();
   }
 
   getContestRoundLabel(_contestId: string): string {
