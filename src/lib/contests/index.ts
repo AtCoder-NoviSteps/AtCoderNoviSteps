@@ -7,7 +7,7 @@ export { getContestPriority, contestTypePriorities } from './utils/priority';
 
 // Labels
 export { getContestNameLabel } from './utils/labels/index';
-export { getPastContestLabel, PAST_TRANSLATIONS } from './utils/labels/past';
+export { getPastContestId, getPastContestLabel, PAST_TRANSLATIONS } from './utils/labels/past';
 export { getJoiContestLabel } from './utils/labels/joi';
 export { getAtCoderUniversityContestLabel } from './utils/labels/universities';
 export { getAojContestLabel } from './utils/labels/aoj';
