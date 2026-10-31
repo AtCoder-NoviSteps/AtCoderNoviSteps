@@ -11,6 +11,9 @@ import {
   ICPC_REGIONAL_LATEST_YEAR,
   JAG_PRELIM_OLDEST_YEAR,
   JAG_PRELIM_LATEST_YEAR,
+  PAST_OLDEST_ROUND,
+  PAST_LATEST_ROUND,
+  contestTableProviderGroups,
   prepareContestProviderPresets,
 } from './contest_table_provider_groups';
 
@@ -268,6 +271,23 @@ describe('prepareContestProviderPresets', () => {
     });
   });
 
+  describe('round-range presets', () => {
+    test('PAST registers one provider per round, newest first', () => {
+      const group = presets.PAST();
+      const providerKeys = group.getAllProviders().map((provider) => provider.getProviderKey());
+
+      expect(group.getGroupName()).toBe('PAST');
+      expect(group.getMetadata()).toEqual({
+        buttonLabel: 'PAST',
+        ariaLabel: 'Filter PAST (Practical Algorithm Skill Test)',
+      });
+      expect(group.getSize()).toBe(PAST_LATEST_ROUND - PAST_OLDEST_ROUND + 1);
+      expect(providerKeys.at(0)).toBe(`PAST::${PAST_LATEST_ROUND}`);
+      expect(providerKeys.at(-1)).toBe('PAST::1');
+      expect(group.getProvider(ContestType.PAST, '15')).toBeDefined();
+    });
+  });
+
   describe('explicit-order presets', () => {
     const getProviderKeys = () =>
       presets
@@ -314,5 +334,13 @@ describe('prepareContestProviderPresets', () => {
       }
       expect(group.getProvider(ContestType.AOJ_JAG, 'JAGSummer2015-day4')).toBeDefined();
     });
+  });
+});
+
+describe('contestTableProviderGroups', () => {
+  test('places the PAST button right after AWC 0001 onwards', () => {
+    const groupKeys = Object.keys(contestTableProviderGroups);
+
+    expect(groupKeys.indexOf('past')).toBe(groupKeys.indexOf('awc0001Onwards') + 1);
   });
 });

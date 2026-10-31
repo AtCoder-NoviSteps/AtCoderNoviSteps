@@ -38,6 +38,7 @@ import {
 import { AojIcpcPrelimProvider, AojIcpcRegionalProvider } from './aoj_icpc_providers';
 import { JagPrelimProvider, JagRegionalProvider } from './aoj_jag_providers';
 import { AOJ_JAG_REGIONAL_ENTRIES } from './aoj_jag_regional_entries';
+import { PastProvider } from './past_provider';
 import { ContestTableProviderGroup } from './contest_table_provider_group';
 
 export const ICPC_PRELIM_OLDEST_YEAR = 1998;
@@ -51,6 +52,9 @@ export const JAG_PRELIM_LATEST_YEAR = 2026;
 // 2016 was held twice in the same year, split into JAGPrelim2016A / JAGPrelim2016B.
 // Kept as data so future split years only need to be added to this set.
 const JAG_PRELIM_YEARS_HELD_AS_A_AND_B = new Set([2016]);
+
+export const PAST_OLDEST_ROUND = 1;
+export const PAST_LATEST_ROUND = 24;
 
 /**
  * Prepare predefined provider groups
@@ -209,6 +213,20 @@ export const prepareContestProviderPresets = () => {
           }),
         ),
 
+    PAST: () => {
+      const group = new ContestTableProviderGroup('PAST', {
+        buttonLabel: 'PAST',
+        ariaLabel: 'Filter PAST (Practical Algorithm Skill Test)',
+      });
+
+      // Iterate from latest to oldest so the newest round's table renders on top.
+      for (let round = PAST_LATEST_ROUND; round >= PAST_OLDEST_ROUND; round--) {
+        group.addProvider(new PastProvider(ContestType.PAST, round));
+      }
+
+      return group;
+    },
+
     /**
      * Single group for Typical 90 Problems
      */
@@ -365,6 +383,7 @@ export const contestTableProviderGroups = {
   agc001Onwards: presets.AGC001Onwards(),
   abcLike: presets.ABCLike(),
   awc0001Onwards: presets.AWC0001Onwards(),
+  past: presets.PAST(),
   fromAbc001ToAbc041: presets.ABC001ToABC041(),
   fromArc001ToArc057: presets.ARC001ToARC057(),
   typical90: presets.Typical90(),
