@@ -93,6 +93,7 @@ PAST: () => {
     buttonLabel: 'PAST',
     ariaLabel: 'Filter PAST (Practical Algorithm Skill Test)',
   });
+
   // Iterate from latest to oldest so the newest round's table renders on top.
   for (let round = PAST_LATEST_ROUND; round >= PAST_OLDEST_ROUND; round--) {
     group.addProvider(new PastProvider(ContestType.PAST, round));
