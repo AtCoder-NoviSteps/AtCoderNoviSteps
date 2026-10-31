@@ -1,135 +1,69 @@
-# Node.js v24 → v26 アップグレード計画
+# Node.js v24 → v26 アップグレード
 
 **作成日**: 2026-10-30（最終更新: 2026-10-31）
 
-**ステータス**: Phase 1 完了（Node 26 で検証済み）。Phase 2（staging・production への反映）待ち
+**ステータス**: リポジトリ側の変更は完了し、Node 26 で検証済み（issue #4263）。staging・production への反映待ち
 
 ## 概要
 
-devcontainer・CI・Vercel の Node.js を v24.x から v26.x へ上げる。
-Node.js 26 は 2026-10-28 に LTS になり（26.13.0 'Lithium'）、EOL は 2029-04-30。Vercel も 2026-10-29 に Node.js 26 を正式サポートした。
-v24 は Maintenance 期間（EOL 2028-04-30）に入ったが、まだ急ぐ必要はない。依存の対応が揃い、差分が小さい今のうちに上げる。
-変更するファイルは前回の v22 → v24（PR #3125）とほぼ同じで、その後に追加された CI の composite action が加わる。
+devcontainer・CI・Vercel の Node.js を v24.x から v26.x へ上げた。
+Node.js 26 は 2026-10-28 に LTS（26.13.0 'Lithium'、EOL 2029-04-30）になり、Vercel も 2026-10-29 に正式サポートした。
+変更したファイルは前回の v22 → v24（PR #3125）とほぼ同じで、`dep-upgrade` skill の Node 更新手順に従った。
 
-### 前提条件（満たし済み）
+## 意思決定
 
-Node 26 でビルド・デプロイするには、次の 2 つが必要だった。どちらも staging にマージ済み。
+- **今のうちに上げる**: v24 の EOL は 2028-04-30 で急ぐ必要はない。ただし Maintenance 期間中はセキュリティ修正などに限られるうえ、依存の対応が揃った今が最も移行コストが小さい。
+- **adapter の `runtime` は指定しない**: adapter がビルド時の Node のバージョンから `nodejs26.x` を自動で選ぶ。明示すると、Node を上げるたびに書き換える箇所が増える（PR #3125 と同じ判断）。
+- **CI は Node 26 だけでテストする**: `engines.node: 26.x` と `engineStrict: true` の組み合わせでは Node 24 の install が失敗する。本番は単一のランタイムなので、両方をテストする価値も小さい。
+- **Prisma は 5.22.0 のまま**: 5 → 8 の更新は影響範囲が別で、同時に行うと問題の切り分けが難しくなるため、別タスクにする。
+- **Node 26 の新機能（Temporal、`Map.prototype.getOrInsert()` など）は今回採用しない**: 今回の目的はランタイムの更新だけ。Temporal はブラウザ側の対応が揃うまでサーバー限定になる。
 
-| パッケージ                 | 必要なバージョン | 理由                                                                                                              | 対応 PR                                                                                                                                 |
-| -------------------------- | ---------------- | ----------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
-| `@sveltejs/adapter-vercel` | 7.0.2 以上       | 7.0.1 以下は Node 26 でのビルドをエラーにする                                                                     | #4256                                                                                                                                   |
-| Vercel CLI                 | 65.8.0 以上      | CI の prebuilt deploy（`vercel build` → `vercel deploy --prebuilt`）で Node 26 の Function を deploy するのに必要 | #4252 で 65.9.0。#4262 で同じバージョンのネイティブ版 `@vercel/vc-native` 65.9.0 に置き換え（バイナリに `nodejs26.x` を含むことを確認） |
+## コードから読めない事実
 
-その他の依存は、インストール済みの全 457 パッケージ（#4262 後）で `engines.node` が Node 26 を許容していることを確認した（`engineStrict: true` でも install は止まらない）。
+### 前提条件
 
-## 影響調査
+Node 26 でビルド・デプロイするには、次の 2 つが必要だった。どちらも本タスクの前に staging へマージ済み。
 
-Node.js 26.0.0 の公式リリースノートにある破壊的変更（Semver-Major 87 件）について、リポジトリ内の使用箇所を grep で調べた。
+- `@sveltejs/adapter-vercel` 7.0.2 以上（#4256）: 7.0.1 以下は、Node 26 でのビルドをエラーにする。
+- Vercel CLI 65.8.0 以上（#4252 で 65.9.0）: CI の prebuilt deploy（`vercel build` → `vercel deploy --prebuilt`）で Node 26 の Function を deploy するのに必要。その後 #4262 で、同じバージョンのネイティブ版 `@vercel/vc-native` に置き換えた。バイナリに `nodejs26.x` が含まれることを確認済み。
 
-### 対応不要
+Vercel Dashboard > Project Settings > Build and Deployment > Node.js Version は、2026-10-31 に 26.x へ変更済み（リポジトリ外の設定）。
 
-| 変更                                                                                                    | 対応不要の理由                                                                                                          |
-| ------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
-| 削除された API（`http` の `writeHeader`、`_stream_*` モジュール、`--experimental-transform-types`）     | 使用箇所なし                                                                                                            |
-| 非推奨化された API（`module.register()`、`crypto` の DEP0182 / DEP0203 / DEP0204、`stream` の DEP0201） | リポジトリでは未使用。tsx・vite・vitest・playwright は後継の `module.registerHooks()` を優先して使う                    |
-| `type: module` パッケージでの拡張子なし CJS ファイルの扱い                                              | 拡張子なしの実行スクリプトなし                                                                                          |
-| ネイティブアドオンの ABI 変更（`NODE_MODULE_VERSION` 147）                                              | Prisma engines・lightningcss・rolldown などの `.node` はすべて Node-API 製で、Node のバージョンが変わっても再ビルド不要 |
-| `Temporal` のグローバル化、`util.inspect` の表示変更など                                                | 使用箇所なし、またはデバッグ出力のみに影響                                                                              |
-| vercel CLI が proxy 環境で失敗する不具合（vercel/vercel#17629、未修正）                                 | devcontainer と CI には `HTTP(S)_PROXY` を設定していない                                                                |
+### 影響調査
 
-### Node 26 で動かして確認するもの
+- Node.js 26.0.0 の破壊的変更（Semver-Major 87 件）のうち、リポジトリに該当するものはなかった。削除・非推奨化された API（`writeHeader`、`_stream_*`、`module.register()` など）は使っていない。tsx・vite・vitest・playwright は、後継の `module.registerHooks()` を優先して使う。
+- ネイティブアドオン（Prisma engines・lightningcss・rolldown など）はすべて Node-API 製なので、Node のバージョンが変わっても再ビルドは不要。
+- インストール済みの全 457 パッケージ（#4262 後）の `engines.node` が、Node 26 を許容している。
+- Prisma 5.22.0 は Node 26 を公式にはサポートしていない（Node 26 の公式サポートは Prisma 8 から）。engine が Node-API 製なので、ローカルでは問題なく動いた。
+- vercel CLI には、`HTTP(S)_PROXY` があると Node 26 で通信が全部失敗する未修正の不具合がある（vercel/vercel#17629）。devcontainer と CI には proxy 変数がないので影響しない。
 
-| 項目              | 懸念                                                                                | 確認方法                                                                                      | リスク |
-| ----------------- | ----------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- | ------ |
-| Prisma 5.22.0     | Node 26 を公式サポートするのは Prisma 8 から。engine は Node-API 製なので動く見込み | `prisma generate`・`db:seed`・unit test・staging での DB 読み書き                             | Medium |
-| fetch（Undici 8） | 内蔵の HTTP クライアントが更新され、fetch が既定で HTTP/2 を使う                    | 外部 API クライアントと nock を使う unit test、staging での AtCoder Problems / AOJ からの取得 | Medium |
-| `localStorage`    | ファイル指定なしの `localStorage` が `undefined` を返すようになった                 | jsdom 環境で `localStorage` を使う unit test                                                  | Low    |
+### 運用上の注意
 
-## 設計方針
+- `engines.node: 26.x` と `engineStrict: true` により、Node 24 の環境では `pnpm exec` やコミット時の lefthook で `ERR_PNPM_UNSUPPORTED_ENGINE` が出る。devcontainer を rebuild すれば解消する。
+- ルートの `engines` は lockfile に記録されないので、`engines` を変えても lockfile は変わらない。
+- devcontainer image `javascript-node:26` は、2026-10-31 時点で 26.12.1（LTS 版の 26.13.0 ではない）。CI は `check-latest: true` なので最新の 26.x を使う。
 
-- adapter の `runtime` オプションは指定しない。adapter がビルド時の Node のバージョンから `nodejs26.x` を自動で選ぶ（PR #3125 と同じ）。
-- CI の各 job は composite action `.github/actions/setup/action.yml` の既定値で Node を選ぶので、ここも更新する。
-- Prisma は 5.22.0 のまま動作確認だけ行う。5 → 8 への更新は影響範囲が別なので、別タスクにする。
+### 検証結果（2026-10-31、devcontainer の Node v26.12.1）
 
-## 却下した代替案
+- install（`--force --frozen-lockfile`）、format、lint、check、unit test（2940 tests）、build、seed、e2e（119 passed / 1 skipped）がすべて成功した。
+- 生成された関数のランタイムは `nodejs26.x`。
+- Node 由来の DeprecationWarning は、どの手順でも出なかった。
+- 懸念していた fetch（Undici 8）と `localStorage` の挙動変更についても、該当する unit test（nock を使う 3 ファイル、jsdom で `localStorage` を使う 3 ファイル）が pass した。
+- e2e の skip 1 件は、DB に該当データがないときに skip される votes のテスト。
+- lint の警告 1 件と check の警告 30 件は既存のもので、Node 24 のときと同数。
 
-- **adapter に `runtime: 'nodejs26.x'` を明示する**: Node を上げるたびに書き換える箇所が増える。
-- **CI で Node 24 と 26 の両方をテストする**: `engines.node: 26.x` と `engineStrict: true` の組み合わせでは、Node 24 の install が失敗する。本番は単一のランタイムなので、両方をテストする価値も小さい。
-- **Node 24 の EOL（2028-04）まで据え置く**: Maintenance 期間中はセキュリティ修正などに限られる。依存の対応が揃った今のほうが移行コストが小さい。
-- **Prisma も同時に上げる**: 問題が起きたときに原因を切り分けにくくなる。
+## 残りタスク
 
-## 便利な新機能（採用検討）
-
-| 機能                               | 説明                                    | 推奨度                                        |
-| ---------------------------------- | --------------------------------------- | --------------------------------------------- |
-| Temporal API                       | `Date` に代わる不変の日時 API           | Low（ブラウザ側の対応が揃うまでサーバー限定） |
-| `Map.prototype.getOrInsert()` など | 「なければ作って入れる」を 1 行で書ける | Low                                           |
-
-今回は採用しない。
-
-## 実装フェーズ
-
-### Phase 1: リポジトリ内の Node.js を 26 にする（中リスク）
-
-- [x] `package.json`: `@types/node` を 26.6.6 にする。Node 24 で `pnpm check` は 0 errors、`pnpm test:unit` は 2940 tests pass
-- [x] `Dockerfile`: `ARG NODE_VERSION=26`
-- [x] `.github/workflows/ci.yml`: build job の matrix を `[26]` にする
-- [x] `.github/actions/setup/action.yml`: `node-version` の既定値を `'26'` にする
-- [x] `package.json`: `engines.node` を `26.x` にする（ルートの `engines` は lockfile に記録されないので lockfile は変更なし）
-- [x] `CONTRIBUTING.md`: 必要な Node.js のバージョンを `v26.x` にする
-- [x] `.agents/skills/dep-upgrade/instructions.md`: Node 更新時の対象に `.github/actions/setup/action.yml` と `@types/node` を追記する
-- [x] devcontainer を rebuild し、下記の検証手順を実行する（2026-10-31、結果は「検証結果」を参照）
-
-`engines.node` を `26.x` にした後は、Node 24 の環境だと `pnpm exec` などの実行前に `ERR_PNPM_UNSUPPORTED_ENGINE` が出る（`engineStrict: true` による想定どおりの挙動）。検証は rebuild 後の Node 26 環境で行った。
-
-### Phase 2: Vercel に反映する（高リスク）
-
-- [ ] PR を staging にマージし、preview deploy が成功することを確認する
-- [x] Vercel Dashboard > Project Settings > Build and Deployment > Node.js Version を 26.x にする（2026-10-31 設定済み）
+- [ ] ブランチを push して PR を作成し、staging にマージする。preview deploy の成功を確認する
 - [ ] staging で動作確認する: ログイン、AtCoder Problems / AOJ からの取得、`/workbooks/{slug}`（メモリ使用量が大きいページ）、DB の読み書き
 - [ ] production に deploy し、Vercel の Function logs にエラーや DeprecationWarning が出ていないことを確認する
-- [ ] 問題が出たら PR を revert し、Dashboard を 24.x に戻す
 
-## 検証手順
+問題が出たら PR を revert し、Vercel Dashboard の Node.js Version を 24.x に戻す。
 
-```bash
-node -v  # v26.x
-pnpm install
-pnpm format
-pnpm lint
-pnpm check
-pnpm test:unit
-pnpm build
-find .vercel/output/functions -name .vc-config.json -exec grep -h '"runtime"' {} + | sort -u  # "nodejs26.x" のみ
-pnpm test:e2e
-pnpm db:seed  # ローカル DB。DeprecationWarning が出ないこと
-git diff --check
-```
+### 範囲外（別タスク）
 
-`pnpm test:unit` では、特に次のテストの結果を確認する。
-
-- `localStorage`: `src/test/lib/stores/active_problem_list_tab.svelte.test.ts`、`src/features/tasks/stores/active_contest_type.svelte.test.ts`、`src/features/workbooks/stores/replenishment_workbook.test.ts`
-- fetch（nock）: `src/lib/clients/atcoder/atcoder_problems.test.ts`、`src/lib/clients/aizu_online_judge/clients.test.ts`、`src/features/votes/internal_clients/vote_grade.test.ts`
-
-## 検証結果
-
-2026-10-31、rebuild 後の devcontainer（Node v26.12.1、Undici 8.12.2）で実行した。
-devcontainer image の `javascript-node:26` はまだ 26.12.1 で、LTS 版の 26.13.0 ではない。CI は `check-latest: true` なので最新の 26.x を使う。
-
-| 手順                                     | 結果                                                                                                  |
-| ---------------------------------------- | ----------------------------------------------------------------------------------------------------- |
-| `pnpm install --force --frozen-lockfile` | ✅ 成功。postinstall で Prisma Client 5.22.0 を生成できた                                             |
-| `pnpm format`                            | ✅ 差分なし                                                                                           |
-| `pnpm lint`                              | ✅ エラーなし（既存の oxlint 警告 1 件のみ）                                                          |
-| `pnpm check`                             | ✅ 0 errors（既存の Svelte 警告 30 件。Node 24 のときと同数）                                         |
-| `pnpm test:unit`                         | ✅ 101 files / 2940 tests pass。`localStorage` と nock の 6 ファイル（95 tests）も個別に実行して pass |
-| `pnpm build`                             | ✅ 成功。`.vc-config.json` の `runtime` は `nodejs26.x`                                               |
-| `pnpm db:seed`                           | ✅ 成功。DeprecationWarning なし                                                                      |
-| `pnpm test:e2e`                          | ✅ 119 passed / 1 skipped（skip は DB に該当データがないときの votes のテスト）                       |
-| `git diff --check`                       | ✅ 問題なし                                                                                           |
-
-Node 由来の DeprecationWarning（`[DEP0xxx]`）は、どの手順でも出なかった。
-e2e のログには Flowbite Svelte の `Tabs` の props（`ulClass`、`contentClass`）の非推奨警告が出るが、Node のバージョンとは関係ない既存の警告なので、今回は対応しない。
+- Prisma 5 → 8 の更新（Node 26 の公式サポートを得るため）
+- Flowbite Svelte の `Tabs` の非推奨 props（`ulClass`、`contentClass`）の置き換え。e2e のログに警告が出ているが、Node のバージョンとは関係ない
 
 ## 参考資料
 
