@@ -2,6 +2,7 @@ allowBuilds:
   '@prisma/client': true
   '@prisma/engines': true
   esbuild: true
+  koffi: false
   lefthook: true
   pnpm: true
   prisma: true
