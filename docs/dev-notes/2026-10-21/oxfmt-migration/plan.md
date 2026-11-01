@@ -58,6 +58,14 @@
 - `pnpm why prettier` で、Prettier に依存する package が残っていないことを確かめた。`prisma generate` も通る。
 - devcontainer を Rebuild したあと、`.ts`・`.svelte` とも保存時に Oxc の拡張機能で整形された（ユーザーが確認）。
 
+### cross-review
+
+firewall の許可リストを変えたので、Codex（`codex exec -s read-only`、diff と関係するファイルを prompt に埋め込んだ）に review を頼んだ。指摘は Critical から Nit まで0件だった。Codex が検証できないとした3点は、次のとおり。
+
+- Oxc の拡張機能が実行時にほかのホストから binary を取得しないか: container に入った `oxc.oxc-vscode` 1.64.1 は `out/main.js` だけ（736 KB）で URL も含まず、oxfmt・oxlint は `node_modules` から使う。Rebuild のあとに `oxc` の CDN から入り、動いた。
+- Prettier の拡張機能が残っていて、`esbenp` の CDN が要らないか: container の拡張機能は `oxc.oxc-vscode` だけで、Prettier の拡張機能は入っていない。
+- 保存時に oxlint の自動修正が走るか: 未確認（「確認していないこと」に記載）。
+
 ### 情報源
 
 oxc.rs は dev container の firewall で取得できなかった。公式の情報は、npm の tarball の `--help`・`configuration_schema.json` と、検索で得た公式ページ（formatter・language support・editor setup・compatibility）の内容で確かめた。
