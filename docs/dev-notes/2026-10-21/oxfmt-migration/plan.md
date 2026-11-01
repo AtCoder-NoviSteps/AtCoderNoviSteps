@@ -56,6 +56,7 @@
 - `Footer.svelte` を崩すと `pnpm lint` が exit 1 で失敗する。lefthook の pre-commit に渡すと整形し直される。
 - lefthook に ignore の対象（`prisma/ERD.md`）だけを渡すと、format の job は exit 0 で終わる。
 - `pnpm why prettier` で、Prettier に依存する package が残っていないことを確かめた。`prisma generate` も通る。
+- devcontainer を Rebuild したあと、`.ts`・`.svelte` とも保存時に Oxc の拡張機能で整形された（ユーザーが確認）。
 
 ### 情報源
 
@@ -63,14 +64,11 @@ oxc.rs は dev container の firewall で取得できなかった。公式の情
 
 ## 確認していないこと
 
-- devcontainer を Rebuild したあとの動作。firewall の変更は Rebuild しないと反映されない。
-  - `.ts`・`.svelte` を保存したときに、Oxc の拡張機能で整形されるか。拡張機能は `.svelte` も oxfmt に渡すと release notes（oxc-vscode #111）にあるが、試していない。
-  - Oxc の拡張機能は oxlint も動かす。`editor.codeActionsOnSave` の `source.fixAll` によって、保存時に oxlint の自動修正も走るはず。
+- Oxc の拡張機能は oxlint も動かす。`editor.codeActionsOnSave` の `source.fixAll` によって、保存時に oxlint の自動修正も走るはず。
 - `.md` は `[markdown]` の `formatOnSave: false` のままで、保存時には整形されない（移行前と同じ）。
 
 ## 残りの作業
 
-- devcontainer を Rebuild して、上の「確認していないこと」を確かめる。
 - lefthook の glob（`**/*.{js,jsx,ts,tsx,md,svelte}`）が、root のファイル（`AGENTS.md`・`vite.config.ts` など）に当たっていない。Prettier のときからある問題で、CI の `lint` では検出される。直すかを決める。
 - Tailwind のクラスの並べ替え: `sortTailwindcss` を有効にするかを別 PR で決める。
 - ESLint から oxlint への完全な移行: oxlint が Svelte のテンプレートの lint に対応したら、使っている41個のルールが揃うかを確かめて判断する。2026-11-01 時点では未対応で、言語 plugin の issue（oxc-project/oxc#23207）は open のまま。
