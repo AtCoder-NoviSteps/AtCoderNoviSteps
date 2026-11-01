@@ -2,89 +2,31 @@
 
 ## 概要
 
-Zod 4 で非推奨になった `z.nativeEnum()` が 4 か所に残っている。
-votes のスキーマには Zod 3 形式の `{ message }` も 1 か所ある。
-これらを Zod 4 の構文（`z.enum()` / `.exclude()`）に置き換える。
-再発防止として `coding-style.md` の Validation 行に 1 行追記する。
+Zod 4 で非推奨になった `z.nativeEnum()` 4 か所と、Zod 3 形式の `{ message }` 1 か所を Zod 4 の構文に置き換えた。
 
-対象:
+- workbooks（`workBookType`、`taskGrade`、`solutionCategory`）: `z.nativeEnum(X)` を `z.enum(X)` に置き換えた
+- votes（`grade`）: `z.nativeEnum(TaskGrade).refine(val !== PENDING, { message })` を `z.enum(TaskGrade).exclude([TaskGrade.PENDING])` に置き換えた
+- 再発防止として、`coding-style.md` の Validation 行に「enum は `z.enum()`、エラー文言は `{ error }`」を追記した
 
-- `src/features/workbooks/zod/schema.ts:38` `workBookType: z.nativeEnum(WorkBookType)`
-- `src/features/workbooks/zod/schema.ts:69` `taskGrade: z.nativeEnum(TaskGrade).nullable()`
-- `src/features/workbooks/zod/schema.ts:70` `solutionCategory: z.nativeEnum(SolutionCategory).nullable()`
-- `src/features/votes/zod/schema.ts:7-8` `z.nativeEnum(TaskGrade).refine(..., { message })`
+## 決定と不採用の案
 
-調査で確認したこと:
+- **votes は `.exclude()` を使う**: 「PENDING を除いた選択肢」をスキーマの宣言だけで表せる。推論型 `VoteAbsoluteGradeInput['grade']` からも PENDING が外れる。`.refine()` を残して `{ message }` を `{ error }` に変えるだけの案は、差分が最小で文言も残る。しかし推論型に PENDING が残り冗長なので採らなかった（ユーザー判断）
+- **`.exclude()` にカスタム文言を渡さない**: `error` を渡すと、PENDING 以外の不正値（`'INVALID'` や `null`）にも同じ文言が出てしまう。以前の文言 `'Cannot vote for PENDING grade'` は UI に表示されていなかったので、Zod 既定の `Invalid option: expected one of ...` に任せた
+- **再発防止はドキュメントへの 1 行追記にとどめる**: 型情報付き lint の `no-deprecated` は、ESLint または oxlint を型情報付きで動かす必要があり、規模が大きいので見送った（ユーザー判断）
+- **votes の `TaskGrade` の import 元（`@prisma/client`）はそのままにする**: workbooks は `#lib/types/task.js` を使っていて不揃いだが、挙動は同じで、この Issue の目的とは関係ない
 
-- `z.nativeEnum` はこの 4 か所だけで使われている。Zod の `{ message }` も votes の 1 か所だけである（`src/**/zod/` 以外の `message:` は SvelteKit の `fail()` やフォームのメッセージで、Zod とは関係ない）。
-- `.email()`、`errorMap`、`invalid_type_error` など、ほかの Zod 3 時代の非推奨 API は `src/` に残っていない。
-- Zod 4.6.7 の `z.enum()` は、enum 風のオブジェクト（`{ [key in X]: key }` 形式の自前定数や Prisma の enum オブジェクト）をそのまま受け取れる。
-- `z.enum(TaskGrade).exclude([TaskGrade.PENDING])` を Node で実行して確かめた。Q11 と D6 は通る。PENDING、`'INVALID'`、`null` はどれも `invalid_value` として拒否される。
-- votes の PENDING 用エラー文言（`'Cannot vote for PENDING grade'`）は UI に表示されない（ルートは `fail(BAD_REQUEST, { form })` を返すだけで、`grade` のエラーを描画していない）。
-- 不正な `workBookType` を拒否するテストがまだない（`taskGrade` と `solutionCategory` にはある）。
+## コードと履歴からは分からない事実
 
-## 設計判断
+- **置き換えの範囲**: 着手時点で、`z.nativeEnum` は上の 4 か所だけ、Zod の `{ message }` も votes の 1 か所だけだった。`.email()`、`errorMap`、`invalid_type_error` など、ほかの Zod 3 時代の非推奨 API は `src/` に残っていなかった
+- **votes の挙動の変化**: PENDING を拒否したときのエラーコードは `custom` から `invalid_value` に、文言は Zod 既定のものに変わった。どちらにも依存するコードはない（ルートは `fail(BAD_REQUEST, { form })` を返すだけで、`grade` のエラーを描画していない）
+- **検証結果**:
+  - `pnpm test:unit`（2994 件）が通った。`pnpm lint` と `pnpm check` のエラーは 0 件で、`pnpm check` の警告 30 件は今回触っていないファイルのもの
+  - 変異テスト: workbooks の `workBookType` を `z.string()` に変えると、追加した `when an invalid workbook type is given` だけが落ちた。votes の `.exclude()` を外すと、既存の `PENDING grade is rejected` だけが落ちた
+  - Superforms の `zod4()` アダプタ経由でも、Q7 と D6 は受け付け、PENDING と `'INVALID'` は拒否されることを、Vitest の一時テストで確かめた（確認後に削除した）
+- **`pnpm format` は流していない**: `prettier --write .` は未追跡の `docs/dev-notes/` まで書き換えるため。代わりに、変更したファイルに `prettier --check` をかけて通ることを確かめた
+- **確かめていないこと**: ブラウザでの投票操作。`e2e/votes.spec.ts` は投票ボタンの表示までしか確認せず、フォームを送信していないため、今回は実行していない
+- **クロスレビュー**: 対象は 5 ファイルで、認証、DB スキーマ、共有の公開インターフェースのどれにも当たらないため行っていない
 
-### workbooks: `z.nativeEnum(X)` を `z.enum(X)` に置き換える
+## 残りのタスク
 
-Zod 4 では `z.nativeEnum` は `z.enum` の非推奨エイリアスで、実行時の挙動と推論型は変わらない。
-変更は呼び出し名だけで、`.nullable()` もそのまま使える。
-
-### votes: `.refine()` をやめて `.exclude([TaskGrade.PENDING])` を使う
-
-```typescript
-grade: z.enum(TaskGrade).exclude([TaskGrade.PENDING]),
-```
-
-- 「PENDING を除いた選択肢」をスキーマの宣言だけで表せる。
-- 推論型 `VoteAbsoluteGradeInput['grade']` から PENDING が外れる。投票処理（`vote_actions.ts`）の受け取り側では型が狭まるだけなので、呼び出し側を変える必要はない。
-- カスタム文言は付けず、Zod 既定の `Invalid option: expected one of ...` に任せる。`.exclude()` に `error` を渡すと、PENDING 以外の不正値（`'INVALID'` や `null`）にも同じ文言が出てしまうためである。もともと UI に出ていない文言なので、ユーザーから見た変化はない。
-- PENDING を拒否したときのエラーコードは `custom` から `invalid_value` に変わる。このコードに依存するコードはない。
-
-### 再発防止: `coding-style.md` の Validation 行に追記する
-
-いまの lint 設定には非推奨 API を検出するルールがない。
-Validation 行の制約に「enum は `z.enum()`（`z.nativeEnum()` は使わない）、エラー文言は `{ error }`（`{ message }` は使わない）」を足す。
-
-## 採用しなかった案
-
-- **votes で `.refine()` を残し、`{ message }` を `{ error }` に変えるだけにする**: 差分は最小で文言も残る。しかし推論型に PENDING が残り、Zod 4 の書き方としても冗長なので採用しなかった（ユーザーの判断）。
-- **`.exclude()` に `error: 'Cannot vote for PENDING grade'` を渡す**: 不正値全般に PENDING 用の文言が出て誤解を招くため、採用しなかった。
-- **型情報付き lint の `no-deprecated` を導入する**: ESLint または oxlint を型情報付きで動かす必要があり、lint の実行時間と設定変更の規模が大きい。この Issue の範囲を超えるため見送る（必要なら別 Issue にする）。
-- **votes の `TaskGrade` の import 元を `@prisma/client` から `#lib/types/task.js` にそろえる**: 挙動は同じで、この Issue の目的とは関係ないため見送る。
-
-## フェーズ
-
-### Phase 1: workbooks の 3 か所を置き換える（リスク低）
-
-- レイヤー: Validation（`src/features/workbooks/zod/`）
-- 責務: workbook 関連の enum フィールドを Zod 4 の構文で検証する
-- テスト（先に追加する）: `src/features/workbooks/zod/schema.test.ts` の `describe('an incorrect workbook is given')` に次を追加する
-  - `test('when an invalid workbook type is given', ...)`。`workBookType: 'INVALID' as WorkBookType` を渡し、`success` が `false` になることを確かめる
-  - 置き換え前のコードでも通る特性テストである。置き換え後に挙動が変わっていないことの保証に使う
-- 実装: 3 か所の `z.nativeEnum(` を `z.enum(` に置き換える
-- 確認: `pnpm test:unit`、`pnpm check`
-- コミット: `refactor(workbooks): replace deprecated z.nativeEnum with z.enum (#4231)`
-
-### Phase 2: votes を `.exclude()` に置き換える（リスク低〜中: 推論型とエラーコードが変わる）
-
-- レイヤー: Validation（`src/features/votes/zod/`）
-- 責務: 投票できるグレード（PENDING 以外）だけを受け付ける
-- テスト: `src/features/votes/zod/schema.test.ts` の既存ケースで十分である
-  - `PENDING grade is rejected`、`unknown grade string is rejected`、`null grade is rejected`、`Q11 (first valid grade) is accepted`、`D6 (last valid grade) is accepted` がそのまま回帰テストになる
-  - エラーの文言とコードは契約にしないので、テストでも固定しない
-- 実装: `z.nativeEnum(TaskGrade).refine(...)` を `z.enum(TaskGrade).exclude([TaskGrade.PENDING])` に置き換える
-- 確認: `pnpm test:unit`、`pnpm check`（`VoteAbsoluteGradeInput` が狭まっても型エラーが出ないこと）、`e2e/votes.spec.ts`（Superforms の `zod4()` アダプタが `.exclude()` 付きのスキーマを変換できること）
-- コミット: `refactor(votes): replace z.nativeEnum and refine with z.enum().exclude() (#4231)`
-
-### Phase 3: `coding-style.md` に追記する（ドキュメントのみ）
-
-- `docs/guides/agent-rules/coding-style.md` の Layer 表の Validation 行に、`` `z.enum()` for enums (not `z.nativeEnum()`); `{ error }` (not `{ message }`) `` を追記する
-- 表の列幅は `pnpm format` で整える
-- コミット: `docs: require Zod 4 enum and error syntax in validation layer (#4231)`
-
-## 完了前の確認
-
-- `pnpm format`、`pnpm lint`、`pnpm check`、`pnpm test:unit`、`git diff --check`
-- `grep -rn 'nativeEnum' --exclude-dir=node_modules --exclude-dir=.git .` でリポジトリ全体に残りがないこと（`docs/dev-notes/` のこの計画は除く。この環境には `rg` がない）
-- クロスレビュー: 対象は 5 ファイルで、認証、DB スキーマ、共有の公開インターフェースのどれにも当たらないため不要（機械的なチェックだけ通す）
+1. ローカルのブラウザで投票し、PENDING 以外のグレードに投票できることを確かめる（任意）
