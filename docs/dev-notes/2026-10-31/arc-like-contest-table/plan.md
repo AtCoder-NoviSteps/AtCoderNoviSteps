@@ -26,12 +26,12 @@
   - `pnpm test:unit`（2993 件）が通り、`pnpm lint` / `pnpm check` のエラーは 0。警告はすべて今回触っていないファイルのもの
   - ローカルで `pnpm db:seed` を流し、新しいタスク 76 件と caddi2018 のペア 2 件が登録された。76 件の `contest_type` はすべて `ARC_LIKE`。「タスクが無いのでペアを飛ばした」警告は変更前と同じ 158 件で、増えていない
   - ローカル DB のタスクとペアを `ARCLikeProvider` に通し、21 行・ヘッダー A〜F・tenka1 と caddi2018 は C〜F・dwacon は A〜E・acl1 無しになることを確かめた
-- **確かめていないこと**: ブラウザでの見た目（開発サーバーへのアクセスが許可されなかった）。本番のデータ
+  - ローカルのブラウザで、ボタンと表の見た目をユーザーが確かめた
+- **確かめていないこと**: 本番のデータ
 
 ## 残りのタスク
 
-1. ローカルのブラウザで、ARC-Like ボタンが ABC-Like の直後にあり、表が上の検証どおりに出ることを確かめる
-2. デプロイ前に、本番の登録状況を確かめる
+1. デプロイ前に、本番の登録状況を確かめる
 
 ```sql
 SELECT contest_id, COUNT(*) AS task_count
@@ -46,6 +46,6 @@ GROUP BY contest_id
 ORDER BY contest_id;
 ```
 
-3. デプロイ後、2 で行の無かったコンテスト（少なくとも tokiomarine2020 / nomura2020 / hitachi2020 / exawizards2019）を管理画面から取り込む
-4. `contesttaskpair` に caddi2018 の 2 件（`caddi2018_a` → C、`caddi2018_b` → D）を Supabase の CSV で入れる（`id`・`createdAt`・`updatedAt` を含める。手順は `docs/guides/how-to-add-contest-task-pairs.md`）。キャッシュ（TTL 1 時間）が切れるまで表示に出ないことがある
-5. 本番で、ARC-Like の表に 21 行が出ること、caddi2018 の行が C〜F になること、acl1 が出ないことを確かめる
+2. デプロイ後、1 で行の無かったコンテスト（少なくとも tokiomarine2020 / nomura2020 / hitachi2020 / exawizards2019）を管理画面から取り込む
+3. `contesttaskpair` に caddi2018 の 2 件（`caddi2018_a` → C、`caddi2018_b` → D）を Supabase の CSV で入れる（`id`・`createdAt`・`updatedAt` を含める。手順は `docs/guides/how-to-add-contest-task-pairs.md`）。キャッシュ（TTL 1 時間）が切れるまで表示に出ないことがある
+4. 本番で、ARC-Like の表に 21 行が出ること、caddi2018 の行が C〜F になること、acl1 が出ないことを確かめる
