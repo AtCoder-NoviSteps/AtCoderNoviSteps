@@ -509,9 +509,9 @@ return {
 `EDIT_PROFILE_PAGE` は `$lib/constants/navbar-links` からインポートし、`<script>` 内で `editProfileHref` として事前計算する（`svelte/no-navigation-without-resolve` ルール対応）:
 
 ```svelte
-import {EDIT_PROFILE_PAGE} from '$lib/constants/navbar-links'; // ... // @ts-expect-error svelte-check
-TS2554: AppTypes declaration merging causes RouteId to resolve as string, requiring params. Runtime behavior
-is correct. const editProfileHref = resolve(EDIT_PROFILE_PAGE);
+import {EDIT_PROFILE_PAGE} from '$lib/constants/navbar-links'; // ... // @ts-expect-error
+svelte-check TS2554: AppTypes declaration merging causes RouteId to resolve as string, requiring
+params. Runtime behavior is correct. const editProfileHref = resolve(EDIT_PROFILE_PAGE);
 ```
 
 ```svelte

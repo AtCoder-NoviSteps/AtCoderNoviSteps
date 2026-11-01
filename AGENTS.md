@@ -22,7 +22,7 @@ Before adding a function, search `src/lib/utils/`, `src/lib/services/`, `src/fea
 
 ## Architecture
 
-SvelteKit 3 + Svelte 5 Runes + TypeScript | PostgreSQL + Prisma | Flowbite Svelte + Tailwind 4 | Vitest + Playwright | oxlint + ESLint
+SvelteKit 3 + Svelte 5 Runes + TypeScript | PostgreSQL + Prisma | Flowbite Svelte + Tailwind 4 | Vitest + Playwright | oxfmt + oxlint + ESLint
 
 Layers: `prisma/` | `src/**/server/` | `src/**/zod/` | `src/**/types/`, `src/**/fixtures/` | `src/**/services/` | `src/**/utils/` | `src/**/stores/` | `src/routes/` | `src/**/*.svelte`. Each layer's constraints are in the layer table of `coding-style.md`; read it before writing logic.
 
@@ -80,7 +80,9 @@ pnpm exec prisma migrate dev --name <description>
 
 Run project tools with `pnpm exec`, never `pnpm dlx`: `dlx` downloads the latest release and ignores the pinned version (CI once ran Prisma v7 against the v5 schema).
 
-Lefthook runs Prettier, oxlint for JS/TS, and ESLint for Svelte before commit.
+Lefthook runs oxfmt, oxlint for JS/TS, and ESLint for Svelte before commit.
+
+Formatting belongs to oxfmt alone. Do not add ESLint or oxlint rules whose `meta.type` is `layout` (e.g. `svelte/indent`), because they would conflict with the formatter.
 
 ## Verification and Cross-review Before a PR
 

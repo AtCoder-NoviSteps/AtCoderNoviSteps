@@ -49,7 +49,7 @@
 - 文法およびフォーマットチェッカー
   - [oxlint](https://oxc.rs/docs/guide/usage/linter.html): JS/TS ファイルの高速リンター（50–100x 高速）
   - [ESLint](https://eslint.org/): Svelte ファイル専用リンター（eslint-plugin-svelte）のみ使用
-  - [Prettier](https://prettier.io/)
+  - [oxfmt](https://oxc.rs/docs/guide/usage/formatter.html): Prettier 互換のフォーマッター。整形は oxfmt だけが担当し、ESLint・oxlint には整形のルール（`meta.type` が `layout`）を入れない
   - [lefthook](https://github.com/evilmartians/lefthook): Git hooks 管理ツール（コミット前の自動フォーマット・リント）
 - Search Engine Optimization (SEO) 対策
   - [Svelte Meta Tags](https://github.com/oekazuma/svelte-meta-tags): メタタグ、Open Graph などの設定
@@ -164,7 +164,7 @@ Claude Code と Codex は用途や利用可能な契約に応じて選択でき�
 - ホストの VS Code のユーザー設定に `"dev.containers.gitCredentialHelperConfigLocation": "none"` を追加し、GitHub のトークンをコンテナに共有しないようにします。
 - コンテナ内の `sudo` はファイアウォール専用です。apt のパッケージや Playwright のブラウザは `Dockerfile` を変更して Rebuild します。
 - インターネット向けの通信は [init-firewall.sh](.devcontainer/init-firewall.sh) の許可リストに限られ、Docker ネットワーク内では `web` から `db:5432` への通信を許可します。許可リストの宛先が突然つながらないときは CDN の IP が変わった可能性があるので、コンテナを Rebuild します。スクリプトを変更した場合も Rebuild が必要です。宛先の追加は、持ち出し経路が増えるため必要なものだけにします。
-- `devcontainer.json` に VS Code の拡張機能を追加したときは、`init-firewall.sh` の `vscode_extension_publishers` にも発行者 ID（`esbenp.prettier-vscode` なら `esbenp`）を追加します。
+- `devcontainer.json` に VS Code の拡張機能を追加したときは、`init-firewall.sh` の `vscode_extension_publishers` にも発行者 ID（`oxc.oxc-vscode` なら `oxc`）を追加します。拡張機能を外したときは、その発行者の拡張機能がほかに無ければ発行者 ID も消します。
 
 #### ホスト側で SSH の鍵を ssh-agent へ登録
 
@@ -315,7 +315,7 @@ Set-Service ssh-agent -StartupType Automatic; Start-Service ssh-agent
 本プロジェクトでは、[lefthook](https://github.com/evilmartians/lefthook)を使用して、コミット前に自動的にコードの書式チェック・フォーマットを行います。
 
 - **Pre-commit Hook**: ステージ済みファイルのみに対して以下を実行
-  - `prettier --write`: コード書式の自動修正（JavaScript、TypeScript、Markdown、Svelte）
+  - `oxfmt`: コード書式の自動修正（JavaScript、TypeScript、Markdown、Svelte）
   - `oxlint`: JS/TS ファイルのリント（JavaScript、TypeScript）
   - `eslint`: Svelte ファイルのリント（.svelte のみ）
 
