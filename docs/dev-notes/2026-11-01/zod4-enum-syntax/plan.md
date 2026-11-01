@@ -23,10 +23,11 @@ Zod 4 で非推奨になった `z.nativeEnum()` 4 か所と、Zod 3 形式の `{
   - `pnpm test:unit`（2994 件）が通った。`pnpm lint` と `pnpm check` のエラーは 0 件で、`pnpm check` の警告 30 件は今回触っていないファイルのもの
   - 変異テスト: workbooks の `workBookType` を `z.string()` に変えると、追加した `when an invalid workbook type is given` だけが落ちた。votes の `.exclude()` を外すと、既存の `PENDING grade is rejected` だけが落ちた
   - Superforms の `zod4()` アダプタ経由でも、Q7 と D6 は受け付け、PENDING と `'INVALID'` は拒否されることを、Vitest の一時テストで確かめた（確認後に削除した）
+  - ローカルのブラウザで投票できることを、ユーザーが確かめた
 - **`pnpm format` は流していない**: `prettier --write .` は未追跡の `docs/dev-notes/` まで書き換えるため。代わりに、変更したファイルに `prettier --check` をかけて通ることを確かめた
-- **確かめていないこと**: ブラウザでの投票操作。`e2e/votes.spec.ts` は投票ボタンの表示までしか確認せず、フォームを送信していないため、今回は実行していない
+- **E2E は実行していない**: `e2e/votes.spec.ts` は投票ボタンの表示までしか確認せず、フォームを送信しないため。投票の送信はブラウザでの確認で代えた
 - **クロスレビュー**: 対象は 5 ファイルで、認証、DB スキーマ、共有の公開インターフェースのどれにも当たらないため行っていない
 
 ## 残りのタスク
 
-1. ローカルのブラウザで投票し、PENDING 以外のグレードに投票できることを確かめる（任意）
+なし。
