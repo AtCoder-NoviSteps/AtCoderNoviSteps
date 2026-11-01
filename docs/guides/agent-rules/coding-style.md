@@ -6,19 +6,19 @@
 
 Before writing logic, decide which layer it belongs to:
 
-| Layer          | Directory                                   | Constraints                                             |
-| -------------- | ------------------------------------------- | ------------------------------------------------------- |
-| DB schema      | `prisma/`                                   | Migrations immutable after apply                        |
-| DB access      | `src/lib/server/`                           | Server-only; never in client                            |
-| Validation     | `src/**/zod/`                               | `z.number().int()` for Int; dual-enforce with SQL CHECK |
-| Domain types   | `src/**/types/`                             | Plural aliases; TSDoc; avoid `any`                      |
-| Test data      | `src/**/fixtures/`                          | Write before impl (TDD); realistic values               |
-| Business logic | `src/**/services/`                          | Pure values/`null`; no `Response`/`json()`              |
-| External APIs  | `src/lib/clients/` or `*/internal_clients/` | Shared → `lib`; feature-scoped → `internal_clients`     |
-| Utilities      | `src/**/utils/`                             | No side effects; adjacent unit test required            |
-| State          | `src/**/stores/`                            | `.svelte.ts`; class + `$state()`; singleton export      |
-| Route handlers | `src/routes/`                               | Page: `redirect()`; API: `error()`                      |
-| Components     | `src/**/*.svelte`                           | Svelte 5 Runes; logic → `utils/`                        |
+| Layer          | Directory                                   | Constraints                                                                                                                           |
+| -------------- | ------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
+| DB schema      | `prisma/`                                   | Migrations immutable after apply                                                                                                      |
+| DB access      | `src/lib/server/`                           | Server-only; never in client                                                                                                          |
+| Validation     | `src/**/zod/`                               | `z.number().int()` for Int; dual-enforce with SQL CHECK; `z.enum()` for enums (not `z.nativeEnum()`); `{ error }` (not `{ message }`) |
+| Domain types   | `src/**/types/`                             | Plural aliases; TSDoc; avoid `any`                                                                                                    |
+| Test data      | `src/**/fixtures/`                          | Write before impl (TDD); realistic values                                                                                             |
+| Business logic | `src/**/services/`                          | Pure values/`null`; no `Response`/`json()`                                                                                            |
+| External APIs  | `src/lib/clients/` or `*/internal_clients/` | Shared → `lib`; feature-scoped → `internal_clients`                                                                                   |
+| Utilities      | `src/**/utils/`                             | No side effects; adjacent unit test required                                                                                          |
+| State          | `src/**/stores/`                            | `.svelte.ts`; class + `$state()`; singleton export                                                                                    |
+| Route handlers | `src/routes/`                               | Page: `redirect()`; API: `error()`                                                                                                    |
+| Components     | `src/**/*.svelte`                           | Svelte 5 Runes; logic → `utils/`                                                                                                      |
 
 ## Naming
 
