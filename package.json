@@ -23,8 +23,8 @@
     "coverage": "vitest run --coverage"
   },
   "devDependencies": {
-    "@dnd-kit/abstract": "0.5.1",
-    "@dnd-kit/dom": "0.5.1",
+    "@dnd-kit/abstract": "0.5.3",
+    "@dnd-kit/dom": "0.5.3",
     "@eslint/eslintrc": "3.3.7",
     "@playwright/test": "1.64.1",
     "@quramy/prisma-fabbrica": "2.3.3",
@@ -72,8 +72,8 @@
     "#features/*": "./src/features/*"
   },
   "dependencies": {
-    "@dnd-kit/helpers": "0.5.1",
-    "@dnd-kit/svelte": "0.5.1",
+    "@dnd-kit/helpers": "0.5.3",
+    "@dnd-kit/svelte": "0.5.3",
     "@lucide/svelte": "1.66.0",
     "@prisma/client": "5.22.0",
     "@types/node": "26.6.6",
