@@ -219,9 +219,8 @@ describe('auth_forms', () => {
     });
 
     test('expect to use fallback ID generation when crypto.randomUUID is unavailable', async () => {
-      // Mock crypto.randomUUID to be undefined (preserve other properties)
-      const prevCrypto = globalThis.crypto;
-      vi.stubGlobal('crypto', { ...(prevCrypto ?? {}), randomUUID: undefined });
+      // Drop randomUUID to force the timestamp-based fallback ID
+      vi.stubGlobal('crypto', { randomUUID: undefined });
 
       vi.mocked(superValidate).mockRejectedValueOnce(new Error('Primary strategy failed'));
 
