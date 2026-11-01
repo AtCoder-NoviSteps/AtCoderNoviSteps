@@ -1015,6 +1015,16 @@ export const contest_task_pairs = [
     problem_index: 'C',
   },
   {
+    contest_id: 'caddi2018',
+    problem_id: 'caddi2018_b',
+    problem_index: 'D',
+  },
+  {
+    contest_id: 'caddi2018',
+    problem_id: 'caddi2018_a',
+    problem_index: 'C',
+  },
+  {
     contest_id: 'tessoku-book',
     problem_id: 'typical90_s',
     problem_index: 'C18',

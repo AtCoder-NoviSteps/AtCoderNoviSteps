@@ -15,7 +15,7 @@ import {
   ARC001ToARC057Provider,
 } from './arc_providers';
 import { AGC001OnwardsProvider } from './agc_provider';
-import { ABCLikeProvider } from './axc_like_provider';
+import { ABCLikeProvider, ARCLikeProvider } from './axc_like_provider';
 import { AWCRangeProvider, AWCSpecialContestProvider } from './awc_provider';
 import { Typical90Provider } from './typical90_provider';
 import {
@@ -160,6 +160,15 @@ export const prepareContestProviderPresets = () => {
         buttonLabel: 'ABC-Like',
         ariaLabel: 'Filter contests from ABC-Like',
       }).addProvider(new ABCLikeProvider(ContestType.ABC_LIKE)),
+
+    /**
+     * Single group for ARC-Like Contests
+     */
+    ARCLike: () =>
+      new ContestTableProviderGroup('ARC-Like', {
+        buttonLabel: 'ARC-Like',
+        ariaLabel: 'Filter contests from ARC-Like',
+      }).addProvider(new ARCLikeProvider(ContestType.ARC_LIKE)),
 
     /**
      * Single group for AWC 0001 onwards
@@ -382,6 +391,7 @@ export const contestTableProviderGroups = {
   fromArc058ToArc103: presets.ARC058ToARC103(),
   agc001Onwards: presets.AGC001Onwards(),
   abcLike: presets.ABCLike(),
+  arcLike: presets.ARCLike(),
   awc0001Onwards: presets.AWC0001Onwards(),
   past: presets.PAST(),
   fromAbc001ToAbc041: presets.ABC001ToABC041(),
