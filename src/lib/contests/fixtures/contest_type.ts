@@ -344,6 +344,26 @@ export const arcLike = [
     contestId: 'ddcc2020-qual',
     expected: ContestType.ARC_LIKE,
   }),
+  createTestCaseForContestType('M-SOLUTIONS 2019')({
+    contestId: 'm-solutions2019',
+    expected: ContestType.ARC_LIKE,
+  }),
+  createTestCaseForContestType('エクサウィザーズ 2019')({
+    contestId: 'exawizards2019',
+    expected: ContestType.ARC_LIKE,
+  }),
+  createTestCaseForContestType('Tokio Marine 2020')({
+    contestId: 'tokiomarine2020',
+    expected: ContestType.ARC_LIKE,
+  }),
+  createTestCaseForContestType('NOMURA 2020')({
+    contestId: 'nomura2020',
+    expected: ContestType.ARC_LIKE,
+  }),
+  createTestCaseForContestType('HITACHI 2020')({
+    contestId: 'hitachi2020',
+    expected: ContestType.ARC_LIKE,
+  }),
   createTestCaseForContestType('ACL1')({
     contestId: 'acl1',
     expected: ContestType.ARC_LIKE,
