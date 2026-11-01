@@ -15,7 +15,7 @@ dwacon5th-prelims / dwacon6th-prelims は A〜E の 5 問なので F 列が空�
 - `ContestType.ARC_LIKE` は既にある（schema・`contestTypePriorities`・ラベル）。ラベルは大文字の contest_id に落ちるので、`contest_name_labels.ts` は不要。新しい ContestType とマイグレーションは要らない
 - `ARC_LIKE`（`src/lib/contests/utils/prefixes.ts`、完全一致）には 16 コンテストと acl1 がある。m-solutions2019, exawizards2019, tokiomarine2020, nomura2020, hitachi2020 の 5 件が無く、`classifyContest` は `null` を返す
 - 分類が `null` のコンテストは管理画面の取り込み（`filterUnregisteredTasks`）でも `createTask` でも飛ばされる。この 5 件を本番に入れるには、分類のデプロイが先になる
-- seed（`prisma/tasks.ts`）にあるのは 21 件中 8 件（ddcc2020-qual, nikkei2019-2-qual, diverta2019-2, tenka1-2019, yahoo-procon2019-qual, caddi2018, tenka1-2018, tenka1-2017）。13 件（76 問）が無い
+- seed（`prisma/tasks.ts`）にあるのは 21 件中 8 件（ddcc2020-qual, nikkei2019-2-qual, diverta2019-2, tenka1-2019, yahoo-procon2019-qual, caddi2018, tenka1-2018, tenka1-2017）。残る 13 件（76 問）の行は、メンテナが用意した `tasks.json` にある。スプレッドシートと問題名まで照合し、欠落・重複が無く、seed の既存行とも重ならないことを確かめた
 - tenka1-2017/2018/2019 の C・D は、本来のコンテストが tenka1-201x で、`-beginner` へのペアが既にある。そのため ARC-Like の行には C〜F が出る
 - caddi2018 の C・D（`caddi2018_a` / `caddi2018_b`）は、本来のコンテストが caddi2018b で、caddi2018 へのペアが無い。`contest_task_pair.json` の 2 件を足すと、caddi2018 の行も C〜F になる
 - acl1 は `ARC_LIKE` に分類されるが、ACL グループ（`ACLProvider`）で表示している
@@ -57,7 +57,7 @@ arcLike: presets.ARCLike(),
 | contest_id        | 名前                                                       |
 | ----------------- | ---------------------------------------------------------- |
 | `m-solutions2019` | M-SOLUTIONS プロコンオープン                               |
-| `exawizards2019`  | ExaWizards 2019                                            |
+| `exawizards2019`  | エクサウィザーズ 2019                                      |
 | `tokiomarine2020` | 東京海上日動 プログラミングコンテスト2020                  |
 | `nomura2020`      | NOMURA プログラミングコンテスト 2020                       |
 | `hitachi2020`     | 日立製作所 社会システム事業部 プログラミングコンテスト2020 |
@@ -67,38 +67,27 @@ arcLike: presets.ARCLike(),
 - **行の並びは contest_id の降順**: ABC-Like と同じ規則で、追加のコードが要らない。開催日順（スプレッドシートの並び）は、Provider に contest_id の配列を持たせて `getContestRoundIds` を上書きする必要があり、新しいコンテストのたびに配列も直すことになるので採らない（ユーザー判断）
 - **共有問題は ARC-Like の行にも出す**: ABC042–125 / ARC058–103 と同じく、共有問題は両方の表に出す。スプレッドシートで tenka1・caddi2018 が E・F だけなのは、C・D を ABC-Like 側に載せているためと解釈した。caddi2018 のペアはこのために足す
 - **acl1 は除く**: ACL グループで表示済み。ABC-Like が abl を除くのと揃える
-- **seed に 13 件すべて足す**: ローカルの表を本番と揃える（ユーザー判断）。tasks.json の 4 件だけだと、ローカルの表は 21 件中 12 件になる
+- **seed に 13 件すべて足す**: ローカルの表を本番と揃える（ユーザー判断）。本番に無いと分かっていた 4 件だけだと、ローカルの表は 21 件中 12 件になる
 - **ABCLikeProvider との共通基底クラスは作らない**: 既存の Provider はクラスごとに設定を持つ慣習で、差分は除外する contest_id と metadata だけ。抽象化の利得が小さい
 - **`ARC_LIKE` を前方一致にしない**: `diverta2019` / `diverta2019-2` のように続編がある。完全一致の規則（`prefixes.ts` のコメント）を守る
 - **新しい ContestType は作らない**: 既存の `ARC_LIKE` で足りる
-
-## 着手前にユーザーへ依頼すること
-
-1. seed に無い 9 件の problems.json の行を貼る。期待値は 52 行（keyence2021 / keyence2020 / jsc2019-qual / m-solutions2019 / diverta2019 / nikkei2019-qual / keyence2019 が各 6、dwacon6th-prelims / dwacon5th-prelims が各 5）
-
-```bash
-curl -s https://kenkoooo.com/atcoder/resources/problems.json \
-  | jq '[.[] | select(.contest_id | IN("keyence2021","keyence2020","dwacon6th-prelims","jsc2019-qual","m-solutions2019","diverta2019","nikkei2019-qual","keyence2019","dwacon5th-prelims"))]'
-```
-
-貼ってもらった行は `tasks_for_seed.json` としてこの計画の隣に保存し、件数・`id` の重複・`title` = `{problem_index}. {name}` を確かめてから seed を作る。
 
 ## フェーズ
 
 ### フェーズ 1: 分類（Layer 3）
 
 - 層: `src/lib/contests/utils/`（分類）と `src/lib/contests/fixtures/`。既存の `ARC_LIKE` に 5 件を足すだけで、新しい関数は作らない
-- テスト: `contest_type.ts` の `arcLike` に 5 件（`M-SOLUTIONS 2019` / `ExaWizards 2019` / `Tokio Marine 2020` / `NOMURA 2020` / `HITACHI 2020`、いずれも `expected: ContestType.ARC_LIKE`）を足す。`classification.test.ts` が `arcLike` を回すので、テスト本体は変えない
+- テスト: `contest_type.ts` の `arcLike` に 5 件（`M-SOLUTIONS 2019` / `エクサウィザーズ 2019` / `Tokio Marine 2020` / `NOMURA 2020` / `HITACHI 2020`、いずれも `expected: ContestType.ARC_LIKE`）を足す。`classification.test.ts` が `arcLike` を回すので、テスト本体は変えない
 - `pnpm test:unit src/lib/contests/` で RED → `prefixes.ts` の `ARC_LIKE` に 5 件を足す → GREEN
 - コミット: `feat(contests): classify five more contests as ARC-Like (#4259)`
 
 ### フェーズ 2: seed
 
 - 分類を先に入れておく。seed は `classifyContest` が `null` だと `contest_type` を既定の `ABC` にするため
-- `prisma/tasks.ts`: 13 件（76 問）を ARC-Like のブロック（acl1〜tenka1-2017）に、開催日の新しい順で差し込む。コンテスト内は F → A。スクリプトで生成し、`grep -c` で件数を確かめる
+- `prisma/tasks.ts`: `tasks.json` の 13 件（76 問）を ARC-Like のブロック（acl1〜tenka1-2017）に、開催日の新しい順で差し込む。コンテスト内は F → A。スクリプトで生成し、`grep -c` で件数を確かめる
 - `prisma/contest_task_pairs.ts`: caddi2018 ↔ `caddi2018_a`（C）・`caddi2018_b`（D）の 2 件を足す
 - `pnpm db:seed` が通ること
-- `tasks.json` / `contest_task_pair.json` / `tasks_for_seed.json` はこのコミットで消す
+- `tasks.json` / `contest_task_pair.json` はこのコミットで消す
 - データだけでテストは書かない
 - コミット: `chore(seed): add ARC-Like tasks and caddi2018 pairs (#4259)`
 
@@ -147,6 +136,6 @@ GROUP BY contest_id
 ORDER BY contest_id;
 ```
 
-2. デプロイ後、行の無いコンテスト（少なくとも tokiomarine2020 / nomura2020 / hitachi2020 / exawizards2019）を管理画面から取り込む。分類のデプロイ前は取り込みで飛ばされる
+2. デプロイ後、1 で行の無かったコンテスト（少なくとも tokiomarine2020 / nomura2020 / hitachi2020 / exawizards2019）を管理画面から取り込む。今回分類に足す 5 件（m-solutions2019 を含む）は、デプロイ前だと取り込みで飛ばされる
 3. `contesttaskpair` に caddi2018 の 2 件を Supabase の CSV で入れる（`id`・`createdAt`・`updatedAt` を含める。手順は `docs/guides/how-to-add-contest-task-pairs.md`）。キャッシュ（TTL 1 時間）が切れるまで表示に出ないことがある
 4. 本番で、ARC-Like の表に 21 行が出ること、caddi2018 の行が C〜F になること、acl1 が出ないことを確かめる
