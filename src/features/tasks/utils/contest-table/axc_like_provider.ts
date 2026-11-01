@@ -38,3 +38,34 @@ export class ABCLikeProvider extends ContestTableProviderBase {
     return contestId.toUpperCase();
   }
 }
+
+export class ARCLikeProvider extends ContestTableProviderBase {
+  protected setFilterCondition(): (taskResult: TaskResult) => boolean {
+    return (taskResult: TaskResult) => {
+      const contestId = taskResult.contest_id;
+      // Note: ACL Contest 1 (ACL1) will be shown in ACL provider, so exclude it here.
+      return classifyContest(contestId) === this.contestType && contestId !== 'acl1';
+    };
+  }
+
+  getMetadata(): ContestTableMetaData {
+    return {
+      title: 'ARC-Like Contest',
+      abbreviationName: 'arcLike',
+    };
+  }
+
+  getDisplayConfig(): ContestTableDisplayConfig {
+    return {
+      isShownHeader: true,
+      isShownRoundLabel: true,
+      roundLabelWidth: 'xl:w-28',
+      tableBodyCellsWidth: 'w-1/2 xs:w-1/3 sm:w-1/4 md:w-1/5 lg:w-1/6 px-1 py-1',
+      isShownTaskIndex: false,
+    };
+  }
+
+  getContestRoundLabel(contestId: string): string {
+    return contestId.toUpperCase();
+  }
+}

@@ -3,8 +3,12 @@ import { describe, test, expect } from 'vitest';
 import { ContestType } from '#lib/contests/types/contest.js';
 import type { TaskResults } from '#lib/types/task.js';
 
-import { ABCLikeProvider } from './axc_like_provider';
-import { taskResultsForABCLikeProvider } from '#features/tasks/fixtures/contest-table/contest_table_provider.js';
+import { ABCLikeProvider, ARCLikeProvider } from './axc_like_provider';
+import {
+  taskResultsForABCLikeProvider,
+  taskResultsForARCLikeProvider,
+  taskResultsForACLProvider,
+} from '#features/tasks/fixtures/contest-table/contest_table_provider.js';
 
 describe('ABCLikeProvider', () => {
   test('expects to filter tasks to include only ABC-Like contests', () => {
@@ -150,6 +154,86 @@ describe('ABCLikeProvider', () => {
 
   test('expects to handle empty task results', () => {
     const provider = new ABCLikeProvider(ContestType.ABC_LIKE);
+    const filtered = provider.filter([] as TaskResults);
+
+    expect(filtered).toEqual([] as TaskResults);
+  });
+});
+
+describe('ARCLikeProvider', () => {
+  test('expects to filter tasks to include only ARC-Like contests', () => {
+    const provider = new ARCLikeProvider(ContestType.ARC_LIKE);
+    const filtered = provider.filter(taskResultsForARCLikeProvider);
+
+    expect(new Set(filtered.map((task) => task.contest_id))).toEqual(
+      new Set(['tenka1-2017', 'caddi2018', 'keyence2021', 'dwacon5th-prelims', 'm-solutions2019']),
+    );
+  });
+
+  test('expects to exclude ACL Contest 1 because the ACL provider shows it', () => {
+    const provider = new ARCLikeProvider(ContestType.ARC_LIKE);
+    const filtered = provider.filter([
+      ...taskResultsForARCLikeProvider,
+      ...taskResultsForACLProvider,
+    ]);
+
+    expect(filtered).toEqual(taskResultsForARCLikeProvider);
+    expect(filtered).not.toContainEqual(expect.objectContaining({ contest_id: 'acl1' }));
+  });
+
+  test('expects to keep shared problems in the ARC-Like row (tenka1-2017, caddi2018)', () => {
+    const provider = new ARCLikeProvider(ContestType.ARC_LIKE);
+    const table = provider.generateTable(provider.filter(taskResultsForARCLikeProvider));
+
+    expect(table['tenka1-2017']['C'].task_id).toBe('tenka1_2017_c');
+    expect(table['caddi2018']['C'].task_id).toBe('caddi2018_a');
+    expect(Object.keys(table['caddi2018']).sort()).toEqual(['C', 'F']);
+  });
+
+  test('expects to filter out non-ARC-Like contests', () => {
+    const provider = new ARCLikeProvider(ContestType.ARC_LIKE);
+    const mixedTasks = [
+      ...taskResultsForARCLikeProvider,
+      { contest_id: 'tenka1-2017-beginner', task_id: 'tenka1_2017_a', task_table_index: 'A' },
+      { contest_id: 'abc212', task_id: 'abc212_a', task_table_index: 'A' },
+      { contest_id: 'arc100', task_id: 'arc100_a', task_table_index: 'A' },
+      { contest_id: 'agc001', task_id: 'agc001_a', task_table_index: 'A' },
+    ];
+    const filtered = provider.filter(mixedTasks as TaskResults);
+
+    expect(filtered).toEqual(taskResultsForARCLikeProvider);
+  });
+
+  test('expects to get correct metadata', () => {
+    const provider = new ARCLikeProvider(ContestType.ARC_LIKE);
+    const metadata = provider.getMetadata();
+
+    expect(metadata.title).toBe('ARC-Like Contest');
+    expect(metadata.abbreviationName).toBe('arcLike');
+  });
+
+  test('expects to get correct display configuration', () => {
+    const provider = new ARCLikeProvider(ContestType.ARC_LIKE);
+    const displayConfig = provider.getDisplayConfig();
+
+    expect(displayConfig).toEqual({
+      isShownHeader: true,
+      isShownRoundLabel: true,
+      roundLabelWidth: 'xl:w-28',
+      tableBodyCellsWidth: 'w-1/2 xs:w-1/3 sm:w-1/4 md:w-1/5 lg:w-1/6 px-1 py-1',
+      isShownTaskIndex: false,
+    });
+  });
+
+  test('expects to format contest ID as round label', () => {
+    const provider = new ARCLikeProvider(ContestType.ARC_LIKE);
+    const label = provider.getContestRoundLabel('nikkei2019-2-qual');
+
+    expect(label).toBe('NIKKEI2019-2-QUAL');
+  });
+
+  test('expects to handle empty task results', () => {
+    const provider = new ARCLikeProvider(ContestType.ARC_LIKE);
     const filtered = provider.filter([] as TaskResults);
 
     expect(filtered).toEqual([] as TaskResults);

@@ -98,6 +98,13 @@ describe('prepareContestProviderPresets', () => {
         contestType: ContestType.ABC_LIKE,
       },
       {
+        name: 'ARCLike',
+        groupName: 'ARC-Like',
+        buttonLabel: 'ARC-Like',
+        ariaLabel: 'Filter contests from ARC-Like',
+        contestType: ContestType.ARC_LIKE,
+      },
+      {
         name: 'Typical90',
         groupName: '競プロ典型 90 問',
         buttonLabel: '競プロ典型 90 問',
@@ -372,5 +379,11 @@ describe('contestTableProviderGroups', () => {
     const groupKeys = Object.keys(contestTableProviderGroups);
 
     expect(groupKeys.indexOf('past')).toBe(groupKeys.indexOf('awc0001Onwards') + 1);
+  });
+
+  test('places the ARC-Like button right after ABC-Like', () => {
+    const groupKeys = Object.keys(contestTableProviderGroups);
+
+    expect(groupKeys.indexOf('arcLike')).toBe(groupKeys.indexOf('abcLike') + 1);
   });
 });
