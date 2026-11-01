@@ -93,7 +93,6 @@
 ### 🍨 Ice Cream Supporter
 
 - ia7ck
-- ngtkana
 - tomii9273
 
 ## 注意事項
