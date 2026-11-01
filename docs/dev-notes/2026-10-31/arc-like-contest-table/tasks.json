@@ -166,5 +166,215 @@
     "problem_index": "F",
     "name": "More Realistic Manhattan Distance",
     "title": "F. More Realistic Manhattan Distance"
+  },
+  {
+    "id": "m_solutions2019_a",
+    "contest_id": "m-solutions2019",
+    "problem_index": "A",
+    "name": "Sum of Interior Angles",
+    "title": "A. Sum of Interior Angles"
+  },
+  {
+    "id": "m_solutions2019_b",
+    "contest_id": "m-solutions2019",
+    "problem_index": "B",
+    "name": "Sumo",
+    "title": "B. Sumo"
+  },
+  {
+    "id": "m_solutions2019_c",
+    "contest_id": "m-solutions2019",
+    "problem_index": "C",
+    "name": "Best-of-(2n-1)",
+    "title": "C. Best-of-(2n-1)"
+  },
+  {
+    "id": "m_solutions2019_d",
+    "contest_id": "m-solutions2019",
+    "problem_index": "D",
+    "name": "Maximum Sum of Minimum",
+    "title": "D. Maximum Sum of Minimum"
+  },
+  {
+    "id": "m_solutions2019_e",
+    "contest_id": "m-solutions2019",
+    "problem_index": "E",
+    "name": "Product of Arithmetic Progression",
+    "title": "E. Product of Arithmetic Progression"
+  },
+  {
+    "id": "m_solutions2019_f",
+    "contest_id": "m-solutions2019",
+    "problem_index": "F",
+    "name": "Random Tournament",
+    "title": "F. Random Tournament"
+  },
+  {
+    "id": "exawizards2019_a",
+    "contest_id": "exawizards2019",
+    "problem_index": "A",
+    "name": "Regular Triangle",
+    "title": "A. Regular Triangle"
+  },
+  {
+    "id": "exawizards2019_b",
+    "contest_id": "exawizards2019",
+    "problem_index": "B",
+    "name": "Red or Blue",
+    "title": "B. Red or Blue"
+  },
+  {
+    "id": "exawizards2019_c",
+    "contest_id": "exawizards2019",
+    "problem_index": "C",
+    "name": "Snuke the Wizard",
+    "title": "C. Snuke the Wizard"
+  },
+  {
+    "id": "exawizards2019_d",
+    "contest_id": "exawizards2019",
+    "problem_index": "D",
+    "name": "Modulo Operations",
+    "title": "D. Modulo Operations"
+  },
+  {
+    "id": "exawizards2019_e",
+    "contest_id": "exawizards2019",
+    "problem_index": "E",
+    "name": "Black or White",
+    "title": "E. Black or White"
+  },
+  {
+    "id": "exawizards2019_f",
+    "contest_id": "exawizards2019",
+    "problem_index": "F",
+    "name": "More Realistic Manhattan Distance",
+    "title": "F. More Realistic Manhattan Distance"
+  },
+  {
+    "id": "tokiomarine2020_a",
+    "contest_id": "tokiomarine2020",
+    "problem_index": "A",
+    "name": "Nickname",
+    "title": "A. Nickname"
+  },
+  {
+    "id": "tokiomarine2020_b",
+    "contest_id": "tokiomarine2020",
+    "problem_index": "B",
+    "name": "Tag",
+    "title": "B. Tag"
+  },
+  {
+    "id": "tokiomarine2020_c",
+    "contest_id": "tokiomarine2020",
+    "problem_index": "C",
+    "name": "Lamps",
+    "title": "C. Lamps"
+  },
+  {
+    "id": "tokiomarine2020_d",
+    "contest_id": "tokiomarine2020",
+    "problem_index": "D",
+    "name": "Knapsack Queries on a tree",
+    "title": "D. Knapsack Queries on a tree"
+  },
+  {
+    "id": "tokiomarine2020_e",
+    "contest_id": "tokiomarine2020",
+    "problem_index": "E",
+    "name": "O(rand)",
+    "title": "E. O(rand)"
+  },
+  {
+    "id": "tokiomarine2020_f",
+    "contest_id": "tokiomarine2020",
+    "problem_index": "F",
+    "name": "Triangles",
+    "title": "F. Triangles"
+  },
+  {
+    "id": "nomura2020_a",
+    "contest_id": "nomura2020",
+    "problem_index": "A",
+    "name": "Study Scheduling",
+    "title": "A. Study Scheduling"
+  },
+  {
+    "id": "nomura2020_b",
+    "contest_id": "nomura2020",
+    "problem_index": "B",
+    "name": "Postdocs",
+    "title": "B. Postdocs"
+  },
+  {
+    "id": "nomura2020_c",
+    "contest_id": "nomura2020",
+    "problem_index": "C",
+    "name": "Folia",
+    "title": "C. Folia"
+  },
+  {
+    "id": "nomura2020_d",
+    "contest_id": "nomura2020",
+    "problem_index": "D",
+    "name": "Urban Planning",
+    "title": "D. Urban Planning"
+  },
+  {
+    "id": "nomura2020_e",
+    "contest_id": "nomura2020",
+    "problem_index": "E",
+    "name": "Binary Programming",
+    "title": "E. Binary Programming"
+  },
+  {
+    "id": "nomura2020_f",
+    "contest_id": "nomura2020",
+    "problem_index": "F",
+    "name": "Sorting Game",
+    "title": "F. Sorting Game"
+  },
+  {
+    "id": "hitachi2020_a",
+    "contest_id": "hitachi2020",
+    "problem_index": "A",
+    "name": "Hitachi String",
+    "title": "A. Hitachi String"
+  },
+  {
+    "id": "hitachi2020_b",
+    "contest_id": "hitachi2020",
+    "problem_index": "B",
+    "name": "Nice Shopping",
+    "title": "B. Nice Shopping"
+  },
+  {
+    "id": "hitachi2020_c",
+    "contest_id": "hitachi2020",
+    "problem_index": "C",
+    "name": "ThREE",
+    "title": "C. ThREE"
+  },
+  {
+    "id": "hitachi2020_d",
+    "contest_id": "hitachi2020",
+    "problem_index": "D",
+    "name": "Manga Market",
+    "title": "D. Manga Market"
+  },
+  {
+    "id": "hitachi2020_e",
+    "contest_id": "hitachi2020",
+    "problem_index": "E",
+    "name": "Odd Sum Rectangles",
+    "title": "E. Odd Sum Rectangles"
+  },
+  {
+    "id": "hitachi2020_f",
+    "contest_id": "hitachi2020",
+    "problem_index": "F",
+    "name": "Preserve Diameter",
+    "title": "F. Preserve Diameter"
   }
 ]
