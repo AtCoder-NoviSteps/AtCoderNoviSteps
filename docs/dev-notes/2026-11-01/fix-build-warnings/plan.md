@@ -30,16 +30,16 @@
 
 ### Phase 2: 表示にだけ使う値を `$derived` にする（14件、残り16件）
 
-- [ ] `InputFieldWrapper.svelte:29`・`(admin)/tags/+page.svelte:6`・`(admin)/tags/[tag_id]/+page.svelte:6-7`・`(admin)/tasks/[task_id]/+page.svelte:8-9`・`problems/[slug]/+page.svelte:15-16`・`users/[username]/+page.svelte:11-14`・`workbooks/[slug]/+page.svelte:31,36` を、`let tags = $derived(data.tags);` の形にする。
-- [ ] `workbooks/[slug]` の `$effect` は、今も `taskResults` を通じて `data` が変わるたびに再実行されている。`workBook` を `$derived` にしても、表示は変わらない見込み。
-- [ ] 確認: E2E の `submission_status`・`workbooks_list`・`redirect_after_login` が通り、上の6画面を開いて表示が変わっていない。
+- [x] `InputFieldWrapper.svelte:29`・`(admin)/tags/+page.svelte:6`・`(admin)/tags/[tag_id]/+page.svelte:6-7`・`(admin)/tasks/[task_id]/+page.svelte:8-9`・`problems/[slug]/+page.svelte:15-16`・`users/[username]/+page.svelte:11-14`・`workbooks/[slug]/+page.svelte:31,36` を、`let tags = $derived(data.tags);` の形にする。
+- [x] `workbooks/[slug]` の `$effect` は、今も `taskResults` を通じて `data` が変わるたびに再実行されている。`workBook` を `$derived` にしても、表示は変わらない見込み。
+- [x] 確認: E2E の `submission_status`・`workbooks_list`・`redirect_after_login` が通り、上の6画面を開いて表示が変わっていない。結果: `pnpm check` は30件から16件（Phase 2 の7ファイルは0件）。E2E は50件 pass・1件 skip（データが無いときの条件付き skip）。admin で6画面と `/workbooks/create` の本文と input（`readonly`・value）を変更の前後で書き出し、差分は無かった。
 
 ### Phase 3: コンポーネントの props（5件、残り11件）
 
-- [ ] `KanbanColumn.svelte:21,23`: `type`・`accept` も `id` と同じく getter にする。`@dnd-kit/svelte` の `createDroppable` は、getter の値を `$effect` の中で読み直す。
-- [ ] `VotableGrade.svelte:63`: `componentId` を `$derived` にする。
-- [ ] `VotableGrade.svelte:59`: 投票後の表示に使う state の初期値なので、`untrack` で包む（同じファイルの78行目と同じ形）。
-- [ ] 確認: E2E の `workbook_order`・`votes`・`workbooks_list` が通る。
+- [x] `KanbanColumn.svelte:21,23`: `type`・`accept` も `id` と同じく getter にする。`@dnd-kit/svelte` の `createDroppable` は、getter の値を `$effect` の中で読み直す。
+- [x] `VotableGrade.svelte:63`: `componentId` を `$derived` にする。
+- [x] `VotableGrade.svelte:59`: 投票後の表示に使う state の初期値なので、`untrack` で包む（同じファイルの78行目と同じ形）。
+- [x] 確認: E2E の `workbook_order`・`votes`・`workbooks_list` が通る。結果: `pnpm check` は16件から11件。E2E は54件のうち53件 pass・1件 skip（Phase 2 と同じ条件付き skip）。`VotableGrade:59` は、78行目に揃えて `initialGrade` を消し、`$state(untrack(() => ...))` にまとめた。
 
 ### Phase 4: a11y（1件、残り10件）
 
