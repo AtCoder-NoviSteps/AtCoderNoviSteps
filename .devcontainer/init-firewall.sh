@@ -111,6 +111,43 @@ if ! db_addresses="$(getent ahostsv4 db | awk '$2 == "STREAM" { print $1 }' | so
   exit 1
 fi
 
+
+# Obtain Docker's upstream DNS servers before applying firewall rules.
+# Docker records them in the ExtServers comment in /etc/resolv.conf.
+upstream_dns_line="$(
+  sed -n 's/^# ExtServers: \[\(.*\)\]$/\1/p' /etc/resolv.conf
+)"
+
+if [[ -z "${upstream_dns_line}" ]]; then
+  echo 'Failed to obtain Docker upstream DNS servers' >&2
+  exit 1
+fi
+
+IFS=',' read -r -a upstream_dns_servers <<< "${upstream_dns_line}"
+
+# Validate upstream DNS addresses before changing firewall policies.
+for i in "${!upstream_dns_servers[@]}"; do
+  dns="${upstream_dns_servers[$i]}"
+  dns="${dns//[[:space:]]/}"
+
+  if [[ ! "${dns}" =~ ^([0-9]{1,3}\.){3}[0-9]{1,3}$ ]]; then
+    echo "Unsupported upstream DNS address: ${dns}" >&2
+    exit 1
+  fi
+
+  IFS='.' read -r -a octets <<< "${dns}"
+  for octet in "${octets[@]}"; do
+    if (( 10#${octet} > 255 )); then
+      echo "Invalid upstream DNS address: ${dns}" >&2
+      exit 1
+    fi
+  done
+
+  upstream_dns_servers[$i]="${dns}"
+done
+
+printf 'Docker upstream DNS: %s\n' "${upstream_dns_servers[@]}"
+
 # Rebuild on every start so an interrupted IPv4 or IPv6 installation is repaired.
 # Set policies first so a failed rule insertion leaves outbound traffic blocked.
 ip6tables -P OUTPUT DROP
@@ -130,9 +167,19 @@ iptables -A NOVISTEPS_INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
 iptables -A NOVISTEPS_INPUT -j DROP
 iptables -A NOVISTEPS_OUTPUT -o lo -j ACCEPT
 
-# Only Docker's embedded DNS; port 53 to any other IP would bypass the allowlist.
+# Allow Docker's embedded DNS.
 iptables -A NOVISTEPS_OUTPUT -p udp -d 127.0.0.11/32 --dport 53 -j ACCEPT
 iptables -A NOVISTEPS_OUTPUT -p tcp -d 127.0.0.11/32 --dport 53 -j ACCEPT
+
+# Allow DNS forwarding only to Docker's configured upstream servers.
+# Do not permit port 53 to arbitrary destinations.
+for dns in "${upstream_dns_servers[@]}"; do
+  iptables -A NOVISTEPS_OUTPUT \
+    -p udp -d "${dns}/32" --dport 53 -j ACCEPT
+
+  iptables -A NOVISTEPS_OUTPUT \
+    -p tcp -d "${dns}/32" --dport 53 -j ACCEPT
+done
 
 while IFS= read -r db_address; do
   iptables -A NOVISTEPS_OUTPUT -p tcp -d "${db_address}" --dport 5432 -j ACCEPT
