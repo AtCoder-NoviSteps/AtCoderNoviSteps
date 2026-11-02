@@ -43,8 +43,9 @@
 
 ### Phase 4: a11y（1件、残り10件）
 
-- [ ] `votes/+page.svelte:69` の `<span role="img" tabindex="0">` を `<button type="button" aria-label="暫定グレード">` にする。`id`・`class` はそのまま残す。flowbite-svelte の `Tooltip` はトリガーの `focusin` で開くので、この `tabindex` はキーボードで Tooltip を開くためのもの。`<button>` にしても、フォーカスで開く挙動は変わらない。
-- [ ] 確認: Tab でアイコンにフォーカスすると Tooltip が開き、見た目（cursor・色・位置）が変わらない。E2E の `votes` が通る。
+- [x] `votes/+page.svelte:69` の `<span role="img">` から `tabindex="0"` を消す。flowbite-svelte 1.33.1 の `Popper.svelte:201` が、`Tooltip` のトリガーに実行時に `tabIndex = 0` を付けるので、markup の `tabindex` は重複している。`VotableGrade.svelte` の同じフラスコのアイコンも、`tabindex` を書かずにトリガーにしている。
+- [x] 実行時の DOM は今と同じく「フォーカスできる `role="img"`」のままで、a11y の状態は良くも悪くもならない。キーボードで Tooltip の説明を読むには、フォーカスできる必要がある。
+- [x] 確認: Tab でアイコンにフォーカスすると Tooltip が開き、見た目（cursor・色・位置）が変わらない。E2E の `votes` が通る。結果: `pnpm check` は11件から10件。E2E の `votes` は15件 pass。dev の DB に暫定グレードの問題が無いので、Playwright で `/votes/__data.json` を書き換えて PENDING の問題1件に `estimatedGrade` を足し、アイコンを出して確かめた。dev server のコンパイル結果に `tabindex` は無いが、実行時の要素には `tabindex="0"` が付き、Tab でフォーカスすると Tooltip が開いて、フォーカスが離れると閉じた。`cursor: help` と色も変わらない。E2E にはこのアイコンのテストが無い。
 
 ### Phase 5: Superforms の初期値（10件、残り0件）
 
@@ -64,7 +65,7 @@
 - **Superforms に渡す値を `$derived` にする:** `superForm` は初期化した後、自分で state を持つ。`AuthForm` は呼び出し側が template の式で `superForm(data?.form)` を渡すので、子で読み直すと初期化の外で `superForm()` が呼ばれうる。
 - **`VotableGrade` の `displayGrade` を上書きできる `$derived` にする:** 親が新しい `taskResult` を渡すと、投票した直後の表示が元に戻る。挙動の変更を chore に混ぜない。
 - **`{#key}` でコンポーネントを作り直す:** `$derived` で足りる。
-- **a11y の警告を `tabindex` を消して直す:** キーボードで Tooltip を開けなくなる。
+- **a11y の警告を、アイコンを `<button>` にして直す:** 押しても何も起きないのに、スクリーンリーダーに「ボタン」と読まれる。flowbite-svelte がトリガーにフォーカスを付けるので、`<button>` にする必要も無い（当初はこの案だったが、`Popper.svelte` を読んで変えた）。
 - **ESLint にも `--max-warnings 0` を付ける:** 今の警告は0件で、今回の警告の出どころでもない。
 
 ## 範囲外: chunk size の警告
