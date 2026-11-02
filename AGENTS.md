@@ -14,14 +14,15 @@ A web service for tracking submissions on AtCoder and other competitive programm
 1. Before implementation, create a lower-risk-to-higher-risk phased plan at `docs/dev-notes/YYYY-MM-DD/{task-name-en}/plan.md`. Keep it concise without omitting the overview, design rationale, rejected alternatives, or per-phase summary; split it only when that makes the plan easier to understand. For new features, show the proposed signatures of key functions and interfaces, and the props and events contracts of key components.
 2. Planning does not authorize implementation. Wait for explicit approval such as "implement" or "let's start".
 3. Before each task, identify its layer and single responsibility, search for an existing util/service/type, and state the test name. Split tasks that span multiple layers.
-4. Write tests first, implement production code, then run `pnpm test:unit`. Configuration, documentation, type-only changes, and exploratory spikes may skip test-first when they have no branching behavior.
+4. Write tests first, implement production code, then run `pnpm test:unit`; commit each phase once it passes. Configuration, documentation, type-only changes, and exploratory spikes may skip test-first when they have no branching behavior.
 5. Review the result for YAGNI violations, over-abstraction, and missing tests.
+6. When the work is done, rewrite `plan.md` into decisions (with rejected alternatives), facts the code and git history do not show (data sources, verification and review results, what was left unchecked), and remaining tasks; drop phase checklists and signatures.
 
 Before adding a function, search `src/lib/utils/`, `src/lib/services/`, `src/features/*/utils/`, and `src/features/*/services/`. Extract shared logic when it is used in two or more places.
 
 ## Architecture
 
-SvelteKit 3 + Svelte 5 Runes + TypeScript | PostgreSQL + Prisma | Flowbite Svelte + Tailwind 4 | Vitest + Playwright | oxlint + ESLint
+SvelteKit 3 + Svelte 5 Runes + TypeScript | PostgreSQL + Prisma | Flowbite Svelte + Tailwind 4 | Vitest + Playwright | oxfmt + oxlint + ESLint
 
 Layers: `prisma/` | `src/**/server/` | `src/**/zod/` | `src/**/types/`, `src/**/fixtures/` | `src/**/services/` | `src/**/utils/` | `src/**/stores/` | `src/routes/` | `src/**/*.svelte`. Each layer's constraints are in the layer table of `coding-style.md`; read it before writing logic.
 
@@ -79,7 +80,9 @@ pnpm exec prisma migrate dev --name <description>
 
 Run project tools with `pnpm exec`, never `pnpm dlx`: `dlx` downloads the latest release and ignores the pinned version (CI once ran Prisma v7 against the v5 schema).
 
-Lefthook runs Prettier, oxlint for JS/TS, and ESLint for Svelte before commit.
+Lefthook runs oxfmt, oxlint for JS/TS, and ESLint for Svelte before commit.
+
+Formatting belongs to oxfmt alone. Do not add ESLint or oxlint rules whose `meta.type` is `layout` (e.g. `svelte/indent`), because they would conflict with the formatter.
 
 ## Verification and Cross-review Before a PR
 

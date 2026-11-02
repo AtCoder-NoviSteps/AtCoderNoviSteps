@@ -36,10 +36,10 @@ vscode_extension_publishers=(
   christian-kohler
   csstools
   dbaeumer
-  esbenp
   formulahendry
   ms-playwright
   openai
+  oxc
   prisma
   streetsidesoftware
   svelte

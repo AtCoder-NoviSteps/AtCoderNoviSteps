@@ -6,7 +6,11 @@ import {
 } from '#features/tasks/types/contest-table/contest_table_provider.js';
 
 import { ContestTableProviderBase } from './contest_table_provider_base';
-import { sortAojHeaderIds, AOJ_TITLE_STYLE, buildAojDisplayConfig } from './aoj_labels';
+import {
+  sortHeaderIdsByTaskTableIndex,
+  PER_CONTEST_TITLE_STYLE,
+  buildPerContestDisplayConfig,
+} from './per_contest_table_layout';
 
 export class AojIcpcPrelimProvider extends ContestTableProviderBase {
   private readonly year: number;
@@ -23,19 +27,19 @@ export class AojIcpcPrelimProvider extends ContestTableProviderBase {
   }
 
   getHeaderIdsForTask(filtered: TaskResults): string[] {
-    return sortAojHeaderIds(filtered);
+    return sortHeaderIdsByTaskTableIndex(filtered);
   }
 
   getMetadata(): ContestTableMetaData {
     return {
       title: `ICPC 国内予選 ${this.year}`,
       abbreviationName: `icpcPrelim${this.year}`,
-      titleStyle: AOJ_TITLE_STYLE,
+      titleStyle: PER_CONTEST_TITLE_STYLE,
     };
   }
 
   getDisplayConfig(): ContestTableDisplayConfig {
-    return buildAojDisplayConfig();
+    return buildPerContestDisplayConfig();
   }
 
   getContestRoundLabel(_contestId: string): string {
@@ -58,19 +62,19 @@ export class AojIcpcRegionalProvider extends ContestTableProviderBase {
   }
 
   getHeaderIdsForTask(filtered: TaskResults): string[] {
-    return sortAojHeaderIds(filtered);
+    return sortHeaderIdsByTaskTableIndex(filtered);
   }
 
   getMetadata(): ContestTableMetaData {
     return {
       title: `ICPC アジア地区 ${this.year}`,
       abbreviationName: `icpcRegional${this.year}`,
-      titleStyle: AOJ_TITLE_STYLE,
+      titleStyle: PER_CONTEST_TITLE_STYLE,
     };
   }
 
   getDisplayConfig(): ContestTableDisplayConfig {
-    return buildAojDisplayConfig();
+    return buildPerContestDisplayConfig();
   }
 
   getContestRoundLabel(_contestId: string): string {

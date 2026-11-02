@@ -293,6 +293,13 @@ describe('workbook schema', () => {
       validateWorkBookSchema(workBookSchema, workbook);
     });
 
+    test('when an invalid workbook type is given', () => {
+      const workbook: WorkBook = createWorkBookBase({
+        workBookType: 'INVALID' as WorkBookType,
+      });
+      validateWorkBookSchema(workBookSchema, workbook);
+    });
+
     test('when an invalid url slug is given 31 characters', () => {
       const workbook: WorkBook = createWorkBookBase({
         authorId: '1',
