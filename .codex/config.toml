@@ -7,10 +7,7 @@ extends = ":workspace"
 
 [permissions.project-edit.filesystem]
 glob_scan_max_depth = 8
-# openai/codex#43929: masking two or more files aborts the sandbox at startup, while directory
-# denies are unaffected. Credentials are therefore denied by directory, keeping the single
-# file slot for `.env`.
-"~/.codex" = "deny"
+"~/.codex/auth.json" = "deny"
 "~/.claude" = "deny"
 "~/.ssh/**" = "deny"
 
