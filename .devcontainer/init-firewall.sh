@@ -130,9 +130,19 @@ iptables -A NOVISTEPS_INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
 iptables -A NOVISTEPS_INPUT -j DROP
 iptables -A NOVISTEPS_OUTPUT -o lo -j ACCEPT
 
-# Only Docker's embedded DNS; port 53 to any other IP would bypass the allowlist.
+# Only Docker's DNS servers; port 53 to any other IP would bypass the allowlist.
 iptables -A NOVISTEPS_OUTPUT -p udp -d 127.0.0.11/32 --dport 53 -j ACCEPT
 iptables -A NOVISTEPS_OUTPUT -p tcp -d 127.0.0.11/32 --dport 53 -j ACCEPT
+
+# Docker queries bare ExtServers addresses from the container's namespace and host(...) ones from the host's.
+read -r -a upstream_dns_entries <<<"$(sed -n 's/^# ExtServers: \[\(.*\)\]$/\1/p' /etc/resolv.conf)"
+
+for upstream_dns in "${upstream_dns_entries[@]}"; do
+  if [[ "${upstream_dns}" =~ ^[0-9.]+$ ]]; then
+    iptables -A NOVISTEPS_OUTPUT -p udp -d "${upstream_dns}" --dport 53 -j ACCEPT
+    iptables -A NOVISTEPS_OUTPUT -p tcp -d "${upstream_dns}" --dport 53 -j ACCEPT
+  fi
+done
 
 while IFS= read -r db_address; do
   iptables -A NOVISTEPS_OUTPUT -p tcp -d "${db_address}" --dport 5432 -j ACCEPT
