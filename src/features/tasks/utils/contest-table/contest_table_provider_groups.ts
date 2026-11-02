@@ -15,7 +15,7 @@ import {
   ARC001ToARC057Provider,
 } from './arc_providers';
 import { AGC001OnwardsProvider } from './agc_provider';
-import { ABCLikeProvider } from './axc_like_provider';
+import { ABCLikeProvider, ARCLikeProvider } from './axc_like_provider';
 import { AWCRangeProvider, AWCSpecialContestProvider } from './awc_provider';
 import { Typical90Provider } from './typical90_provider';
 import {
@@ -38,6 +38,7 @@ import {
 import { AojIcpcPrelimProvider, AojIcpcRegionalProvider } from './aoj_icpc_providers';
 import { JagPrelimProvider, JagRegionalProvider } from './aoj_jag_providers';
 import { AOJ_JAG_REGIONAL_ENTRIES } from './aoj_jag_regional_entries';
+import { PastProvider } from './past_provider';
 import { ContestTableProviderGroup } from './contest_table_provider_group';
 
 export const ICPC_PRELIM_OLDEST_YEAR = 1998;
@@ -51,6 +52,9 @@ export const JAG_PRELIM_LATEST_YEAR = 2026;
 // 2016 was held twice in the same year, split into JAGPrelim2016A / JAGPrelim2016B.
 // Kept as data so future split years only need to be added to this set.
 const JAG_PRELIM_YEARS_HELD_AS_A_AND_B = new Set([2016]);
+
+export const PAST_OLDEST_ROUND = 1;
+export const PAST_LATEST_ROUND = 24;
 
 /**
  * Prepare predefined provider groups
@@ -158,6 +162,15 @@ export const prepareContestProviderPresets = () => {
       }).addProvider(new ABCLikeProvider(ContestType.ABC_LIKE)),
 
     /**
+     * Single group for ARC-Like Contests
+     */
+    ARCLike: () =>
+      new ContestTableProviderGroup('ARC-Like', {
+        buttonLabel: 'ARC-Like',
+        ariaLabel: 'Filter contests from ARC-Like',
+      }).addProvider(new ARCLikeProvider(ContestType.ARC_LIKE)),
+
+    /**
      * Single group for AWC 0001 onwards
      */
     AWC0001Onwards: () =>
@@ -208,6 +221,20 @@ export const prepareContestProviderPresets = () => {
             abbreviationName: 'awc0001To0099',
           }),
         ),
+
+    PAST: () => {
+      const group = new ContestTableProviderGroup('PAST', {
+        buttonLabel: 'PAST',
+        ariaLabel: 'Filter PAST (Practical Algorithm Skill Test)',
+      });
+
+      // Iterate from latest to oldest so the newest round's table renders on top.
+      for (let round = PAST_LATEST_ROUND; round >= PAST_OLDEST_ROUND; round--) {
+        group.addProvider(new PastProvider(ContestType.PAST, round));
+      }
+
+      return group;
+    },
 
     /**
      * Single group for Typical 90 Problems
@@ -364,7 +391,9 @@ export const contestTableProviderGroups = {
   fromArc058ToArc103: presets.ARC058ToARC103(),
   agc001Onwards: presets.AGC001Onwards(),
   abcLike: presets.ABCLike(),
+  arcLike: presets.ARCLike(),
   awc0001Onwards: presets.AWC0001Onwards(),
+  past: presets.PAST(),
   fromAbc001ToAbc041: presets.ABC001ToABC041(),
   fromArc001ToArc057: presets.ARC001ToARC057(),
   typical90: presets.Typical90(),

@@ -2,9 +2,12 @@ import { describe, test, expect } from 'vitest';
 
 import type { TaskResults } from '#lib/types/task.js';
 
-import { buildAojDisplayConfig, sortAojHeaderIds } from './aoj_labels';
+import {
+  buildPerContestDisplayConfig,
+  sortHeaderIdsByTaskTableIndex,
+} from './per_contest_table_layout';
 
-describe('sortAojHeaderIds', () => {
+describe('sortHeaderIdsByTaskTableIndex', () => {
   test('returns unique task_table_index values in ascending letter order', () => {
     const filtered = [
       { task_table_index: 'C' },
@@ -12,7 +15,7 @@ describe('sortAojHeaderIds', () => {
       { task_table_index: 'B' },
     ] as TaskResults;
 
-    expect(sortAojHeaderIds(filtered)).toEqual(['A', 'B', 'C']);
+    expect(sortHeaderIdsByTaskTableIndex(filtered)).toEqual(['A', 'B', 'C']);
   });
 
   test('sorts letters A through L for the 12 problems of ICPC Regional 2024', () => {
@@ -20,7 +23,7 @@ describe('sortAojHeaderIds', () => {
       task_table_index: letter,
     })) as TaskResults;
 
-    expect(sortAojHeaderIds(filtered)).toEqual([
+    expect(sortHeaderIdsByTaskTableIndex(filtered)).toEqual([
       'A',
       'B',
       'C',
@@ -39,17 +42,17 @@ describe('sortAojHeaderIds', () => {
   test('deduplicates repeated task_table_index values', () => {
     const filtered = [{ task_table_index: 'A' }, { task_table_index: 'A' }] as TaskResults;
 
-    expect(sortAojHeaderIds(filtered)).toEqual(['A']);
+    expect(sortHeaderIdsByTaskTableIndex(filtered)).toEqual(['A']);
   });
 
   test('returns empty array for empty input', () => {
-    expect(sortAojHeaderIds([] as TaskResults)).toEqual([]);
+    expect(sortHeaderIdsByTaskTableIndex([] as TaskResults)).toEqual([]);
   });
 });
 
-describe('buildAojDisplayConfig', () => {
-  test('returns the shared AOJ display config', () => {
-    const config = buildAojDisplayConfig();
+describe('buildPerContestDisplayConfig', () => {
+  test('returns the shared per-contest display config', () => {
+    const config = buildPerContestDisplayConfig();
 
     expect(config.isShownHeader).toBe(false);
     expect(config.isShownRoundLabel).toBe(false);

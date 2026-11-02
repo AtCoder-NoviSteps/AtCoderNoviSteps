@@ -48,7 +48,7 @@
         "editor.codeActionsOnSave": {
           "source.fixAll": true
         },
-        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "editor.defaultFormatter": "oxc.oxc-vscode",
         "editor.formatOnSave": true,
         "editor.formatOnPaste": false,
         "editor.quickSuggestions": {
@@ -67,13 +67,13 @@
         "files.trimFinalNewlines": true,
         "files.trimTrailingWhitespace": true,
         "[javascript]": {
-          "editor.defaultFormatter": "esbenp.prettier-vscode"
+          "editor.defaultFormatter": "oxc.oxc-vscode"
         },
         "[typescript]": {
-          "editor.defaultFormatter": "esbenp.prettier-vscode"
+          "editor.defaultFormatter": "oxc.oxc-vscode"
         },
         "[svelte]": {
-          "editor.defaultFormatter": "svelte.svelte-vscode"
+          "editor.defaultFormatter": "oxc.oxc-vscode"
         },
         "[prisma]": {
           "editor.defaultFormatter": "Prisma.prisma"
@@ -90,10 +90,10 @@
         "christian-kohler.path-intellisense",
         "csstools.postcss",
         "dbaeumer.vscode-eslint",
-        "esbenp.prettier-vscode",
         "formulahendry.auto-rename-tag",
         "ms-playwright.playwright",
         "openai.chatgpt",
+        "oxc.oxc-vscode",
         "Prisma.prisma",
         "streetsidesoftware.code-spell-checker",
         "svelte.svelte-vscode",

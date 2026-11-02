@@ -35,7 +35,7 @@ export const workBookSchema = z.object({
   isPublished: z.boolean(),
   isOfficial: z.boolean(),
   isReplenished: z.boolean(), // カリキュラムの【補充】を識別するために使用
-  workBookType: z.nativeEnum(WorkBookType),
+  workBookType: z.enum(WorkBookType),
   urlSlug: z
     .string()
     .nullable()
@@ -66,8 +66,8 @@ export const workBookPlacementSchema = z
   .object({
     id: z.number().int().positive(),
     priority: z.number().int().positive(),
-    taskGrade: z.nativeEnum(TaskGrade).nullable(),
-    solutionCategory: z.nativeEnum(SolutionCategory).nullable(),
+    taskGrade: z.enum(TaskGrade).nullable(),
+    solutionCategory: z.enum(SolutionCategory).nullable(),
   })
   // Note: XOR constraint: dual enforcement via Zod (early validation) and a CHECK in migration.sql (last line of defence).
   // Prisma lacks @@check, so the SQL constraint is maintained manually. Keep both in sync.

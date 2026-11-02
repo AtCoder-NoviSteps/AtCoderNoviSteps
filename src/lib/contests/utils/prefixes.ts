@@ -3,7 +3,7 @@ import type { ContestPrefix } from '#lib/contests/types/contest.js';
 export const regexForJag = /^JAG(Prelim|Regional|Summer|Winter|Spring)\d{4}(-day\d+)?[A-Z]?$/;
 export const regexForAojUniversity = /^AOJ-[A-Z]+PC\d{4}/;
 
-// HACK: As of October 2026, the following contests are applicable.
+// HACK: As of November 2026, the following contests are applicable.
 // Note: The classification logic may need to be revised when new contests are added.
 // ABC_LIKE / ARC_LIKE / ATCODER_JAG / ATCODER_MAIN_OFFICIAL_ONSITE: exact match — add sequels (e.g. diverta2019-2) explicitly. Others: prefix match.
 export const ABC_LIKE: ContestPrefix = {
@@ -41,6 +41,11 @@ export const ARC_LIKE: ContestPrefix = {
   'nikkei2019-qual': '全国統一プログラミング王決定戦予選',
   'nikkei2019-2-qual': '第二回全国統一プログラミング王決定戦予選',
   'ddcc2020-qual': 'DISCO presents ディスカバリーチャンネル コードコンテスト2020 予選',
+  'm-solutions2019': 'M-SOLUTIONS プロコンオープン',
+  exawizards2019: 'エクサウィザーズ 2019',
+  tokiomarine2020: '東京海上日動 プログラミングコンテスト2020',
+  nomura2020: 'NOMURA プログラミングコンテスト 2020',
+  hitachi2020: '日立製作所 社会システム事業部 プログラミングコンテスト2020',
   acl1: 'ACL Contest 1',
 } as const;
 

@@ -66,4 +66,4 @@ pnpm test:unit
 
 > **`pnpm check` tip:** If type errors appear and you have uncommitted changes, run `git stash && pnpm check 2>&1 | tail -5` to confirm whether errors are pre-existing. Restore with `git stash pop`. If there is nothing to stash, skip this check — without a baseline to compare against, it gives no useful signal.
 
-Update the plan.md `- [ ]` checklist and add a verification results table when done.
+When done, rewrite plan.md as `AGENTS.md` Implementation Workflow step 6 describes, recording the verification results among the facts.

@@ -78,6 +78,7 @@ const pastContestData = [
   { name: 'PAST 15th', contestId: 'past15-open' },
   { name: 'PAST 16th', contestId: 'past16-open' },
   { name: 'PAST 17th', contestId: 'past17-open' },
+  { name: 'PAST 24th', contestId: 'past24-open' },
   { name: '典型アルゴリズム問題集 上級〜エキスパート編', contestId: 'pastbook2022' },
 ];
 
@@ -341,6 +342,26 @@ export const arcLike = [
   }),
   createTestCaseForContestType('DDCC2020 QUAL')({
     contestId: 'ddcc2020-qual',
+    expected: ContestType.ARC_LIKE,
+  }),
+  createTestCaseForContestType('M-SOLUTIONS 2019')({
+    contestId: 'm-solutions2019',
+    expected: ContestType.ARC_LIKE,
+  }),
+  createTestCaseForContestType('エクサウィザーズ 2019')({
+    contestId: 'exawizards2019',
+    expected: ContestType.ARC_LIKE,
+  }),
+  createTestCaseForContestType('Tokio Marine 2020')({
+    contestId: 'tokiomarine2020',
+    expected: ContestType.ARC_LIKE,
+  }),
+  createTestCaseForContestType('NOMURA 2020')({
+    contestId: 'nomura2020',
+    expected: ContestType.ARC_LIKE,
+  }),
+  createTestCaseForContestType('HITACHI 2020')({
+    contestId: 'hitachi2020',
     expected: ContestType.ARC_LIKE,
   }),
   createTestCaseForContestType('ACL1')({

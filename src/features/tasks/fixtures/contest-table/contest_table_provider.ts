@@ -815,6 +815,50 @@ export const taskResultsForABCLikeProvider: TaskResults = [
   jsc2025advance_final_h,
 ];
 
+// ARC-Like task_ids use underscores, so pass them explicitly instead of deriving from contest_id.
+const [tenka1_2017_e, tenka1_2017_f] = createContestTasks('tenka1-2017', [
+  { taskId: 'tenka1_2017_e', taskTableIndex: 'E', statusName: AC_WITH_EDITORIAL },
+  { taskId: 'tenka1_2017_f', taskTableIndex: 'F', statusName: PENDING },
+]);
+
+// caddi2018 C comes from a contest task pair: the task belongs to caddi2018b.
+const [caddi2018_c, caddi2018_f] = createContestTasks('caddi2018', [
+  { taskId: 'caddi2018_a', taskTableIndex: 'C', statusName: AC },
+  { taskId: 'caddi2018_d', taskTableIndex: 'F', statusName: TRYING },
+]);
+
+const [keyence2021_a, keyence2021_f] = createContestTasks('keyence2021', [
+  { taskTableIndex: 'A', statusName: AC },
+  { taskTableIndex: 'F', statusName: PENDING },
+]);
+
+const [dwacon5th_prelims_a, dwacon5th_prelims_e] = createContestTasks('dwacon5th-prelims', [
+  { taskId: 'dwacon5th_prelims_a', taskTableIndex: 'A', statusName: AC },
+  { taskId: 'dwacon5th_prelims_e', taskTableIndex: 'E', statusName: TRYING },
+]);
+
+const [m_solutions2019_a] = createContestTasks('m-solutions2019', [
+  { taskId: 'm_solutions2019_a', taskTableIndex: 'A', statusName: AC },
+]);
+
+export const taskResultsForARCLikeProvider: TaskResults = [
+  // tenka1-2017 (C-F; C and D are shared with tenka1-2017-beginner)
+  tenka1_2017_c,
+  tenka1_2017_e,
+  tenka1_2017_f,
+  // caddi2018 (C-F; C and D are shared with caddi2018b)
+  caddi2018_c,
+  caddi2018_f,
+  // keyence2021 (6 problems: A-F)
+  keyence2021_a,
+  keyence2021_f,
+  // dwacon5th-prelims (5 problems: A-E)
+  dwacon5th_prelims_a,
+  dwacon5th_prelims_e,
+  // m-solutions2019 (6 problems: A-F)
+  m_solutions2019_a,
+];
+
 // ACL Contest 1: 6 tasks (A～F)
 const [acl1_a, acl1_b, acl1_c, acl1_d, acl1_e, acl1_f] = createContestTasks('acl1', [
   { taskTableIndex: 'A', statusName: AC },

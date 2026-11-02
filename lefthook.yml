@@ -4,7 +4,8 @@ pre-commit:
   parallel: true
   jobs:
     - name: format
-      run: pnpm exec prettier --write {staged_files}
+      # Without the flag, oxfmt exits 2 when every staged file is ignored (e.g. prisma/ERD.md)
+      run: pnpm exec oxfmt --no-error-on-unmatched-pattern {staged_files}
       glob: '**/*.{js,jsx,ts,tsx,md,svelte}'
 
     - name: oxlint
