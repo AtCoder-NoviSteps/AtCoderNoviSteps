@@ -5,8 +5,8 @@
 
   let { data } = $props();
 
-  let task = data.task;
-  let tags = data.tags;
+  let task = $derived(data.task);
+  let tags = $derived(data.tags);
 </script>
 
 <div class="container mx-auto w-5/6 md:w-1/2">
