@@ -82,6 +82,8 @@ Run project tools with `pnpm exec`, never `pnpm dlx`: `dlx` downloads the latest
 
 Lefthook runs oxfmt, oxlint for JS/TS, and ESLint for Svelte before commit.
 
+`check` and `lint` fail on warnings: fix them or disable with a reason. oxlint skips `.svelte`, so set lint rules in ESLint too.
+
 Formatting belongs to oxfmt alone. Do not add ESLint or oxlint rules whose `meta.type` is `layout` (e.g. `svelte/indent`), because they would conflict with the formatter.
 
 ## Verification and Cross-review Before a PR

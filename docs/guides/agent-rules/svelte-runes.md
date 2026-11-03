@@ -12,6 +12,8 @@ paths:
 
 - `let` captures initial value only; use `$derived` for props/server data
 - Referencing `$props()` in `$state()` initializer? Wrap with `untrack` if intentional (seed-only)
+- Superforms: `superForm(untrack(() => data.form))`, never `$derived`
+- Pass reactive library options as getters: `get id() { return id; }`
 - `pnpm check` warns: "This reference only captures the initial value"
 
 ## `SvelteMap<K, V>` — Always Type

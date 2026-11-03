@@ -33,6 +33,8 @@ When `{#if}` reveals a modal, dialog, or focus-trap region, move focus programma
 
 Icon-only `<Button>` variants require an explicit `aria-label`; Flowbite Svelte does not generate one automatically. Omitting `color` only applies the `'primary'` default style — it has no effect on `aria-label`.
 
+`Tooltip`/`Popover` already make their trigger focusable; no `tabindex` or `<button>` needed.
+
 ## Form Labels
 
 Every `<input>`, `<select>`, and `<textarea>` must have an associated `<label>` (via `for`/`id`) or `aria-label`. Placeholder text does not substitute for a label.
