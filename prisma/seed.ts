@@ -680,10 +680,12 @@ async function addAnswer(
   });
 }
 
-// Demo data: tasks with VotedGradeStatistics so the ±0 badge is visible in the UI.
-// grade matches the task's official grade → diff=0 → ±0 badge displayed.
+// Demo data: tasks with VotedGradeStatistics so vote-based UI is visible.
+// APG4bPython_co: grade matches the official grade → diff=0 → ±0 badge displayed.
+// zone2021_f: PENDING task with a median → provisional grade icon displayed (used by E2E).
 const VOTE_STATS_DEMO_DATA = [
   { id: 'demo-vote-stat-apg4b-co', taskId: 'APG4bPython_co', grade: 'Q8' },
+  { id: 'demo-vote-stat-zone2021-f', taskId: 'zone2021_f', grade: 'D3' },
 ] as const;
 
 async function addVoteStatisticsDemoData() {

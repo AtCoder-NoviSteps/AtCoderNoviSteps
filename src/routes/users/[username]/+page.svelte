@@ -8,10 +8,10 @@
 
   let { data } = $props();
 
-  let username = data.username;
-  let atcoder_username = data.atcoder_username;
-  let isLoggedIn = data.isLoggedIn;
-  let taskResults = data.taskResults;
+  let username = $derived(data.username);
+  let atcoder_username = $derived(data.atcoder_username);
+  let isLoggedIn = $derived(data.isLoggedIn);
+  let taskResults = $derived(data.taskResults);
 
   const problemsHref = resolve(PROBLEMS_PAGE);
 </script>

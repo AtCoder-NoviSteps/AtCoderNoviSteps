@@ -26,7 +26,7 @@
     message = '',
   }: Props = $props();
 
-  let isReadOnly = !isEditable;
+  let isReadOnly = $derived(!isEditable);
 </script>
 
 <Label class="flex flex-col gap-2">

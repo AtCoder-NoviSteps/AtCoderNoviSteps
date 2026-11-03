@@ -3,7 +3,7 @@
   import TagListForEdit from '#lib/components/TagListForEdit.svelte';
 
   let { data } = $props();
-  let tags = data.tags;
+  let tags = $derived(data.tags);
 </script>
 
 <div class="container mx-auto w-5/6">
