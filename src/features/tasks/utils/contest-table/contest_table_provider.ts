@@ -16,5 +16,6 @@ export * from './acl_providers';
 export * from './joi_providers';
 export * from './aoj_icpc_providers';
 export * from './aoj_jag_providers';
+export * from './aoj_pck_providers';
 export * from './past_provider';
 export * from './per_contest_table_layout';

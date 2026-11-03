@@ -12,6 +12,39 @@ const XDPC_GROUP_TABLE_TITLES = [
 const ABC319_ONWARDS_GROUP_ARIA_LABEL = 'Filter contests from ABC 319 onwards';
 const ABC319_ONWARDS_TABLE_TITLES = ['AtCoder Beginner Contest 319 〜（7 問制）'];
 
+test.describe('PCK groups in contest table', () => {
+  for (const { round, ariaLabel, years } of [
+    {
+      round: '予選',
+      ariaLabel: 'Filter PCK Preliminary',
+      years: [
+        2026, 2025, 2024, 2023, 2022, 2021, 2020, 2019, 2018, 2017, 2016, 2015, 2014, 2013, 2012,
+        2011, 2010, 2009, 2008, 2007, 2006, 2005, 2004,
+      ],
+    },
+    {
+      round: '本選',
+      ariaLabel: 'Filter PCK Final',
+      years: [
+        2025, 2024, 2023, 2022, 2021, 2020, 2019, 2018, 2017, 2016, 2015, 2014, 2013, 2012, 2011,
+        2010, 2009, 2008, 2007, 2006, 2005, 2004, 2003,
+      ],
+    },
+  ]) {
+    test(`shows ${round} tables newest first and preserves the selection after reload`, async ({
+      page,
+    }) => {
+      await page.goto('/problems');
+      await page.getByRole('button', { name: ariaLabel }).click();
+
+      const titles = years.map((year) => `PCK ${year} ${round}`);
+      await expect(page.getByRole('heading', { level: 2 })).toHaveText(titles);
+      await page.reload();
+      await expect(page.getByRole('heading', { level: 2 })).toHaveText(titles);
+    });
+  }
+});
+
 test.describe('xDPC group in contest table', () => {
   test('shows Game 24 and AAL Contest 001 tables after FPS 24 in the xDPC group', async ({
     page,

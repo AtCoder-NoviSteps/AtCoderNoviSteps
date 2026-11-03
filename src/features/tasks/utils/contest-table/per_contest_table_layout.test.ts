@@ -8,6 +8,14 @@ import {
 } from './per_contest_table_layout';
 
 describe('sortHeaderIdsByTaskTableIndex', () => {
+  test('sorts numeric task indices in numeric order', () => {
+    const filtered = ['12', '2', '10', '1', '3'].map((index) => ({
+      task_table_index: index,
+    })) as TaskResults;
+
+    expect(sortHeaderIdsByTaskTableIndex(filtered)).toEqual(['1', '2', '3', '10', '12']);
+  });
+
   test('returns unique task_table_index values in ascending letter order', () => {
     const filtered = [
       { task_table_index: 'C' },
