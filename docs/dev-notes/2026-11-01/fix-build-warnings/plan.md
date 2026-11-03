@@ -26,6 +26,11 @@
   - svelte-check は CI でだけ走り、pre-commit では走らない。
   - ESLint のフラグは当初は不要としたが、付けた。oxlint は `.svelte` を lint しないので、付けないと `.svelte` の `no-explicit-any` だけが止まらないため。
 - **テスト:** 挙動の分岐を足さないので test-first は省いた。各 phase で、`pnpm check` の件数・既存の E2E・変更前後の比較で確かめた。
+- **手での確認を E2E にする基準:** テストが無く、ライブラリの更新で何度も流す価値があり、安定して書けるものだけにした。当てはまったのは2件。
+  - `votes.spec.ts`: フラスコのアイコンに focus すると Tooltip が開く。そのために、seed の `VOTE_STATS_DEMO_DATA` に、PENDING の `zone2021_f` を足した（中央値は本番のデータの D3）。
+  - `workbook_create.spec.ts`（新規）: admin の作成画面で、`userId`・`isOfficial`・「問題集の種類」の初期値を見る。送信しないので DB は汚れない。
+  - 画面の文字の比較はデータで変わり、同じ route の中での移動は経路が無いので、テストにしなかった。
+- **ルールへの追記:** 今回の教訓を英語で1行ずつ足した。警告でも CI が落ちることと ESLint 側のルール（AGENTS.md）、Superforms と getter（`svelte-runes.md`）、Tooltip のフォーカス（`accessibility.md`）、`rg` の `|`（`coding-style.md`）。
 
 ## 事実（コードや git に残らない）
 
@@ -41,22 +46,23 @@
 - **変更前後の比較（Playwright）:**
   - 表示: 6画面と `/workbooks/create` の本文と input に、差分は無かった。
   - 問題集の作成・編集: input の値と送信内容（`__superform_json`）に、差分は無かった。送信は abort した。
-- **フラスコのアイコン:** DB に暫定グレードの問題が無いので、`/votes/__data.json` を書き換えてアイコンを出した。実行時に `tabindex="0"` が付き、Tab でフォーカスすると Tooltip が開いて、フォーカスが離れると閉じた。
+- **フラスコのアイコン:** 最初は、`/votes/__data.json` を書き換えてアイコンを出し、手で確かめた。実行時に `tabindex="0"` が付き、Tab でフォーカスすると Tooltip が開いて、フォーカスが離れると閉じた。その後、E2E にした。
+- **足した E2E:** 2件とも通り、E2E 全体も121件 pass した（1件は条件付きの skip）。production のコードを壊すと、2件とも失敗した。Tooltip を消すと `tabindex` が付かずに失敗し、`$form.isOfficial` の代入を消すと `isOfficial` が `false` になって失敗した。
 - **警告で失敗するか:** 警告が無ければ `check`・`lint` は exit 0 だった。`let x = data.x`、`any` を書いた `.ts`・`.svelte` を一時的に足すと exit 1 になった。lefthook と同じ形の呼び出しでも、同じ結果だった。
 - **確かめていないこと:**
   - DB に実際に保存したときの値
   - 同じ route の中での移動
   - SSR の HTML で、JS が読み込まれる前のフォーカス
   - `pnpm dev` の出力
-  - フラスコのアイコンの E2E（今はテストが無く、手での確認1回のみ）
+  - E2E は CI でコメントアウトされているので、足した E2E はローカルでしか流れない
 
 ## レビュー
 
-Codex（`codex exec -s read-only`、0.166.0）に頼んだ。sandbox が起動しないので、必要なファイルは prompt に埋め込んだ。Critical・Severe の指摘は無かった。次の3件は、ユーザーの選択待ち。
+Codex（`codex exec -s read-only`、0.166.0）に頼んだ。sandbox が起動しないので、必要なファイルは prompt に埋め込んだ。Critical・Severe の指摘は無かった。ユーザーが直すのに選んだのは、Minor の1件だけ。
 
-- **Moderate:** pre-commit で svelte-check が走らない。指摘どおり。`pnpm check` は staged のファイルだけに絞れず、11秒かかる。
-- **Minor:** ESLint が除外するディレクトリの `.svelte` を lefthook が渡すと、「ignored」の警告で失敗する。再現し、`--no-warn-ignored` で避けられる。ただし、該当する git 管理の `.svelte` は0件。
-- **未検証:** 編集画面 A から B へ移ると、見出しは B に追従するが、form は A のまま残りうる。初期値を固定する構造は変更前からあり、今はこの移動をする経路が無い。
+- **Minor（直した）:** ESLint が除外するディレクトリの `.svelte` を lefthook が渡すと、「ignored」の警告で失敗する。再現したので、lefthook の eslint に `--no-warn-ignored` を足した。該当する git 管理の `.svelte` は0件。
+- **Moderate（直していない）:** pre-commit で svelte-check が走らない。指摘どおりで、svelte-check の警告は CI でだけ止まる。`pnpm check` は staged のファイルだけに絞れず、11秒かかる。
+- **未検証（直していない）:** 編集画面 A から B へ移ると、見出しは B に追従するが、form は A のまま残りうる。初期値を固定する構造は変更前からあり、今はこの移動をする経路が無い。
 
 ## 残る作業
 
