@@ -21,6 +21,7 @@ import {
   buildEndpoint,
   mapToContest,
   assignProblemLetters,
+  assignProblemNumbers,
   mapToTask,
   getCourseName,
 } from './utils';
@@ -102,24 +103,17 @@ export class AojChallengesApiClient {
         data.contests.flatMap((contest: ChallengeContest) => {
           const problems = contest.days.flatMap((day) => day.problems);
 
-          if (!this.usesProblemLetters(params)) {
-            return problems.map((problem) => mapToTask(problem, contest.abbr));
-          }
-
-          // Letters span all days because contest_id is per contest (abbr), not per day.
-          const letters = assignProblemLetters(problems.map((problem) => problem.id));
+          // Indices span all days because contest_id is per contest (abbr), not per day.
+          const ids = problems.map((problem) => problem.id);
+          const indices =
+            contestType === 'PCK' ? assignProblemNumbers(ids) : assignProblemLetters(ids);
 
           return problems.map((problem) =>
-            mapToTask(problem, contest.abbr, letters.get(problem.id)),
+            mapToTask(problem, contest.abbr, indices.get(problem.id)),
           );
         }),
       label: `AOJ ${contestType} ${round}`,
     });
-  }
-
-  // Scope of the problem-letter migration; PCK keeps the problem id for now.
-  private usesProblemLetters({ contestType }: ChallengeParams): boolean {
-    return contestType === 'ICPC' || contestType === 'JAG';
   }
 
   private getCacheKey({ contestType, round }: ChallengeParams): string {

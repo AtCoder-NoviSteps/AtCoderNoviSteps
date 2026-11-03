@@ -208,10 +208,41 @@ describe('AojChallengesApiClient', () => {
       expect(tasks.length).toBe(expectedCount);
     });
 
-    test('keeps the problem id as problem_index for PCK PRELIM tasks', async () => {
+    test('assigns numeric indices to preliminary tasks and resets them each year', async () => {
       const tasks = await client.getTasks({ contestType: 'PCK', round: 'PRELIM' });
 
-      expect(tasks.every((task) => task.problem_index === task.task_id)).toBe(true);
+      expect(tasks.find((task) => task.task_id === '4084')).toMatchObject({
+        contest_id: 'PCKPrelim2026',
+        problem_index: '1',
+        title: '2026',
+      });
+      expect(tasks.find((task) => task.task_id === '4086')).toMatchObject({
+        contest_id: 'PCKPrelim2026',
+        problem_index: '3',
+        title: 'Chessboard Distance',
+      });
+      expect(getProblemIndicesByTaskId(tasks, 'PCKPrelim2025')).toEqual({
+        '4060': '1',
+        '4061': '2',
+        '4062': '3',
+        '4063': '4',
+        '4064': '5',
+        '4065': '6',
+        '4066': '7',
+        '4067': '8',
+        '4068': '9',
+        '4069': '10',
+        '4070': '11',
+      });
+      expect(tasks.find((task) => task.task_id === '4036')).toMatchObject({
+        id: '4036',
+        contest_id: 'PCKPrelim2024',
+        problem_index: '1',
+      });
+      expect(tasks.find((task) => task.task_id === '4060')).toMatchObject({
+        id: '4060',
+        title: 'Server Load Prediction',
+      });
     });
 
     test('each PCK PRELIM task has required fields', async () => {
@@ -245,6 +276,31 @@ describe('AojChallengesApiClient', () => {
         .flatMap((contest) => contest.days)
         .flatMap((day) => day.problems).length;
       expect(tasks.length).toBe(expectedCount);
+    });
+
+    test('assigns numeric indices to final tasks independently of the preliminary round', async () => {
+      const tasks = await client.getTasks({ contestType: 'PCK', round: 'FINAL' });
+
+      expect(getProblemIndicesByTaskId(tasks, 'PCKFinal2025')).toEqual({
+        '4071': '1',
+        '4072': '2',
+        '4073': '3',
+        '4074': '4',
+        '4075': '5',
+        '4076': '6',
+        '4077': '7',
+        '4078': '8',
+        '4079': '9',
+        '4080': '10',
+        '4081': '11',
+        '4082': '12',
+        '4083': '13',
+      });
+      expect(tasks.find((task) => task.task_id === '4048')).toMatchObject({
+        id: '4048',
+        contest_id: 'PCKFinal2024',
+        problem_index: '1',
+      });
     });
   });
 

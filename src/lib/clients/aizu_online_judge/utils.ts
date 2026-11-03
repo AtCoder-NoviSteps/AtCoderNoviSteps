@@ -62,9 +62,20 @@ export function mapToContest(contestId: string, title: string): ContestForImport
  * @returns A map from problem id to problem letter.
  */
 export function assignProblemLetters(problemIds: string[]): Map<string, string> {
-  const sortedIds = [...problemIds].sort((first, second) => Number(first) - Number(second));
+  return new Map(
+    sortProblemIds(problemIds).map((problemId, i) => [problemId, String.fromCharCode(65 + i)]),
+  );
+}
 
-  return new Map(sortedIds.map((problemId, i) => [problemId, String.fromCharCode(65 + i)]));
+/** Assigns one-based numeric indices in ascending AOJ problem id order within a contest. */
+export function assignProblemNumbers(problemIds: string[]): Map<string, string> {
+  return new Map(
+    sortProblemIds(problemIds).map((problemId, index) => [problemId, String(index + 1)]),
+  );
+}
+
+function sortProblemIds(problemIds: string[]): string[] {
+  return [...problemIds].sort((first, second) => Number(first) - Number(second));
 }
 
 /**

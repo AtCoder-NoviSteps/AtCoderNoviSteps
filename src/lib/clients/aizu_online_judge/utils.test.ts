@@ -4,6 +4,7 @@ import {
   buildEndpoint,
   mapToContest,
   assignProblemLetters,
+  assignProblemNumbers,
   mapToTask,
   getCourseName,
 } from './utils';
@@ -129,6 +130,47 @@ describe('assignProblemLetters', () => {
     test('assigns A to a single problem', () => {
       expect(assignProblemLetters(['1100'])).toEqual(new Map([['1100', 'A']]));
     });
+  });
+});
+
+describe('assignProblemNumbers', () => {
+  test('assigns one-based numeric indices in ascending problem id order', () => {
+    const ids = ['0098', '0001', '0000', '0096'];
+
+    expect(assignProblemNumbers(ids)).toEqual(
+      new Map([
+        ['0000', '1'],
+        ['0001', '2'],
+        ['0096', '3'],
+        ['0098', '4'],
+      ]),
+    );
+    expect(ids).toEqual(['0098', '0001', '0000', '0096']);
+  });
+
+  test('keeps indices numeric after nine problems', () => {
+    const ids = [
+      '4070',
+      '4069',
+      '4068',
+      '4067',
+      '4066',
+      '4065',
+      '4064',
+      '4063',
+      '4062',
+      '4061',
+      '4060',
+    ];
+    const result = assignProblemNumbers(ids);
+
+    expect(result.get('4060')).toBe('1');
+    expect(result.get('4069')).toBe('10');
+    expect(result.get('4070')).toBe('11');
+  });
+
+  test('returns an empty map for no problems', () => {
+    expect(assignProblemNumbers([])).toEqual(new Map());
   });
 });
 
