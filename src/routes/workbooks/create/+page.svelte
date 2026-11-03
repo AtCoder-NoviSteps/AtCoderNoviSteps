@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { untrack } from 'svelte';
   import { superForm } from 'sveltekit-superforms/client';
 
   import type { Task } from '#lib/types/task.js';
@@ -8,22 +9,23 @@
 
   let { data } = $props();
 
+  // superForm owns the form state after init, so seed it once from the load data.
   // See:
   // https://superforms.rocks/concepts/nested-data
-  const initialData = {
+  const initialData = untrack(() => ({
     ...data.form,
     workBookTasks: [] as WorkBookTasksBase,
-  };
+  }));
   const superFormObject = superForm(initialData, {
     dataType: 'json',
   });
   const { form } = superFormObject;
 
-  $form.authorId = data.author.id;
-  $form.isOfficial = data.isAdmin;
+  $form.authorId = untrack(() => data.author.id);
+  $form.isOfficial = untrack(() => data.isAdmin);
   $form.workBookType = $form.isOfficial ? WorkBookType.CURRICULUM : WorkBookType.CREATED_BY_USER;
 
-  const tasksMapByIds: Map<string, Task> = data.tasksMapByIds;
+  const tasksMapByIds: Map<string, Task> = $derived(data.tasksMapByIds);
 </script>
 
 <WorkBookForm

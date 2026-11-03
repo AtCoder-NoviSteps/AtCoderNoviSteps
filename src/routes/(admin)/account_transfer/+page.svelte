@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { onMount, onDestroy } from 'svelte';
+  import { onMount, onDestroy, untrack } from 'svelte';
   import { run } from 'svelte/legacy';
 
   import { superForm } from 'sveltekit-superforms';
@@ -28,7 +28,7 @@
 
   let { data }: Props = $props();
 
-  const { form, errors, message, submitting, enhance } = superForm(data.form);
+  const { form, errors, message, submitting, enhance } = superForm(untrack(() => data.form));
 
   let accountTransferMessages: FloatingMessages = $state([]);
 

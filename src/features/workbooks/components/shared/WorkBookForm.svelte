@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { untrack } from 'svelte';
+
   import { Breadcrumb, BreadcrumbItem } from 'flowbite-svelte';
 
   import HeadingOne from '#lib/components/HeadingOne.svelte';
@@ -38,7 +40,7 @@
     submitButtonLabel = '',
   }: Props = $props();
 
-  const { form, message, errors, enhance } = superFormObject;
+  const { form, message, errors, enhance } = untrack(() => superFormObject);
 
   let workBookTasksForTable: WorkBookTasksCreate | WorkBookTasksEdit = $derived(
     $form.workBookTasks
