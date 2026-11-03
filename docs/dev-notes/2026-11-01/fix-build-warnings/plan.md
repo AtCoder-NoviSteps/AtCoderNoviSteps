@@ -49,9 +49,9 @@
 
 ### Phase 5: Superforms の初期値（10件、残り0件）
 
-- [ ] `untrack` で包む: `(admin)/account_transfer/+page.svelte:31`、`AuthForm.svelte:43`・`WorkBookForm.svelte:41`（受け取った superForm の object を分割代入する所）、`workbooks/create/+page.svelte:14,22,23`、`workbooks/edit/[slug]/+page.svelte:21`。
-- [ ] `$derived` にする: `workbooks/create/+page.svelte:26`、`workbooks/edit/[slug]/+page.svelte:16,29`。
-- [ ] 確認: E2E の `account_transfer`・`signin`・`redirect_after_login`・`workbook_edit`・`error_pages` が通る。問題集を作ると `authorId`・`isOfficial`・`workBookType` が今と同じ値で保存され、編集画面に今の値が入っている。
+- [x] `untrack` で包む: `(admin)/account_transfer/+page.svelte:31`、`AuthForm.svelte:43`・`WorkBookForm.svelte:41`（受け取った superForm の object を分割代入する所）、`workbooks/create/+page.svelte:14,22,23`、`workbooks/edit/[slug]/+page.svelte:21`。
+- [x] `$derived` にする: `workbooks/create/+page.svelte:26`、`workbooks/edit/[slug]/+page.svelte:16,29`。
+- [x] 確認: E2E の `account_transfer`・`signin`・`redirect_after_login`・`workbook_edit`・`error_pages` が通る。問題集を作ると `authorId`・`isOfficial`・`workBookType` が今と同じ値で保存され、編集画面に今の値が入っている。結果: `pnpm check` は10件から0件。E2E は38件 pass。`workbooks/create`・`edit` の `initialData` は、object 全体を `untrack` で包んだ（`edit` は `$derived` にした `workBook` も初期化で読むため）。admin で作成・編集の画面を開き、input の値と送信内容（`__superform_json`）を変更の前後で書き出して比べ、差分は無かった（毎回変わる `__superform_id` は除いた）。送信は Playwright で abort したので、DB には保存していない。`workbooks/create` は admin 専用（`+page.server.ts` が admin 以外に 403 を返す）なので、`isOfficial` は実際には常に `true` で、`CREATED_BY_USER` の分岐はこの画面からは通らない。
 
 ### Phase 6: CI で警告を止める
 
