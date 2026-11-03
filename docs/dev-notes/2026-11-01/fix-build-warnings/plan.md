@@ -2,94 +2,65 @@
 
 ## 概要
 
-`pnpm build`・`pnpm check`・`pnpm lint` の警告31件を0件にし、警告が出たら CI（`pnpm check`・`pnpm lint`）で失敗するようにした（2026-11-01 着手、staging `3eb7eadd`）。pre-commit では oxlint と ESLint の警告だけを止め、svelte-check（`state_referenced_locally` など）は走らせていない。oxlint の1件は #4277 で、残りはブランチ `#4285` で直した。
-
-| 警告                                    | 出どころ                        | 件数 |
-| --------------------------------------- | ------------------------------- | ---- |
-| `state_referenced_locally`              | Svelte（build と `pnpm check`） | 29   |
-| `a11y_no_noninteractive_tabindex`       | 同上                            | 1    |
-| `unicorn/no-useless-fallback-in-spread` | oxlint（`pnpm lint`）           | 1    |
-
-- build は SSR と client で2回 compile するので Svelte の警告は60個表示されるが、ユニークなのは30件で `pnpm check` と一致する。
-- svelte-check・oxlint・ESLint は、既定では警告があっても exit 0 を返す。そのため、警告が溜まっていても CI は通っていた。
-- `state_referenced_locally` は、Svelte 5.45.3 から props にも出るようになった。メンテナーは「props の初期値を使うのはほとんどの場合バグ」として、この変更を戻さない（[sveltejs/svelte#17289](https://github.com/sveltejs/svelte/issues/17289)）。実害は、同じ route の中で移動すると SvelteKit がコンポーネントを再利用し、`let x = data.x` が古い値のまま残ること（[SvelteKit docs](https://svelte.dev/docs/kit/state-management#Component-and-page-state-is-preserved)）。今はそうした移動をするリンクが無く、潜在的なバグにとどまる。
+- `pnpm check`・`pnpm lint` の警告31件（`state_referenced_locally` 29、`a11y_no_noninteractive_tabindex` 1、oxlint 1）を0件にし、警告が出たら CI で失敗するようにした（2026-11-01 着手、staging `3eb7eadd`）。oxlint の1件は #4277、残りはブランチ `#4285`。
+- svelte-check・oxlint・ESLint は、既定では警告があっても exit 0 を返す。そのため、警告が溜まっても CI は通っていた。
+- `state_referenced_locally` は、Svelte 5.45.3 から props にも出る（[sveltejs/svelte#17289](https://github.com/sveltejs/svelte/issues/17289)）。実害は、同じ route の中で移動するとコンポーネントが再利用され、`let x = data.x` が古い値のまま残ること。今はそうしたリンクが無く、潜在的なバグにとどまる。
 
 ## 決めたこと
 
 - **値の使い方で書き方を分ける:**
-  - 表示や検索に使うだけで、今の値に追従すべきもの（`data.*`・props）は `$derived` にする。
-  - 受け取った値を初期値にして、その後は自分で書き換える state は `untrack(() => ...)` で包む。Superforms の初期値（`superForm(untrack(() => data.form))`、[superforms#667](https://github.com/ciscoheat/sveltekit-superforms/issues/667)）と、`VotableGrade` の `displayGrade` がこれに当たる。実行時の挙動は `untrack` が無い時と同じで、「初期値だけを使うのは意図したことだ」とコードに残すために使う。
-  - ライブラリに渡す option のうち、ライブラリが自分の `$effect` の中で読み直すもの（`createDroppable` の `id`・`type`・`accept`）は getter で渡す。
+  - 表示や検索に使うだけの `data.*`・props は `$derived` にする。
+  - 初期値にして、その後は自分で持つ state は `untrack(() => ...)` で包む（Superforms の初期値、`VotableGrade` の `displayGrade`）。実行時の挙動は変わらず、「初期値だけを使うのは意図したことだ」とコードに残す。
+  - ライブラリが自分の `$effect` で読み直す option（`createDroppable` の `type`・`accept`）は getter で渡す。
   - 迷う所は、今の挙動を保つ `untrack` にする。
-- **Superforms の初期値:** `workbooks/create`・`edit` の `initialData` は、object 全体を `untrack` で包んだ。`edit` では、`$derived` にした `workBook` も初期化のときに読むため。`AuthForm`・`WorkBookForm` で受け取った superForm の object を分割代入する所も、`untrack` で包んだ。
-- **a11y の警告:** `votes/+page.svelte` のフラスコのアイコンから、`tabindex="0"` を消すだけにした。flowbite-svelte 1.33.1 の `Popper.svelte:201` が、`Tooltip` のトリガーに実行時に `tabIndex = 0` を付けるので、markup の `tabindex` は重複していた。実行時の DOM は今と同じく「フォーカスできる `role="img"`」のままで、a11y の状態は良くも悪くもならない。`VotableGrade.svelte` の同じアイコンも、`tabindex` を書かずにトリガーにしている。
-- **警告で失敗させる:** `check` に `--fail-on-warnings` を付けた。`lint` では、oxlint に `--deny-warnings` を、ESLint に `--max-warnings 0` を付けた。`lefthook.yml` の oxlint と eslint の job にも同じフラグを付けた。CI（`ci.yml`）は `pnpm lint`・`pnpm check` を呼ぶので、workflow は変えていない。`check:watch` も変えていない。
-- **ESLint の扱い:** ESLint に `--max-warnings 0` を付けるのは、当初は不要とした。しかし oxlint は `.svelte` を見ないので、付けないと `.svelte` の `no-explicit-any` だけが CI で止まらず、`.ts` と扱いが揃わない。それがわかったので付けた。今ある `any` には、すべて disable コメントが付いている。
-- **テスト:** 挙動の分岐を足さないので test-first は省いた。phase ごとに `pnpm check` の残りの件数・既存の E2E・変更前後の画面の比較で確かめてから commit した。
+  - 採らなかった案:
+    - `warningFilter`・`svelte-ignore`: 本物のバグも隠れてしまう。
+    - `{#key}`: `$derived` で足りる。
+    - Superforms の値を `$derived` にする: `superForm` は初期化した後、自分で state を持つ。
+    - `displayGrade` を `$derived` にする: 投票した直後の表示が、親の値で元に戻る。
+- **a11y:** `tabindex="0"` を消すだけにした。flowbite-svelte 1.33.1 の `Popper.svelte:201` が、Tooltip のトリガーに実行時に `tabIndex = 0` を付けるので、キーボードでの操作は変わらない。
+  - 採らなかった案: `<button>` にする（当初の plan）。押しても何も起きないのに、スクリーンリーダーに「ボタン」と読まれる。
+- **警告で失敗させる:**
+  - `check` に `--fail-on-warnings` を付けた。
+  - `lint` の oxlint に `--deny-warnings` を、ESLint に `--max-warnings 0` を付け、lefthook の同じ job にも付けた。
+  - svelte-check は CI でだけ走り、pre-commit では走らない。
+  - ESLint のフラグは当初は不要としたが、付けた。oxlint は `.svelte` を lint しないので、付けないと `.svelte` の `no-explicit-any` だけが止まらないため。
+- **テスト:** 挙動の分岐を足さないので test-first は省いた。各 phase で、`pnpm check` の件数・既存の E2E・変更前後の比較で確かめた。
 
-## 採らなかった案
+## 事実（コードや git に残らない）
 
-- **`warningFilter`・`svelte-ignore` で消す:** 本物のバグも隠れてしまう。意図的な所も、`untrack` の方が意図をコードで表せる。
-- **Superforms に渡す値を `$derived` にする:** `superForm` は初期化した後、自分で state を持つ。`AuthForm` は呼び出し側が template の式で `superForm(data?.form)` を渡すので、子で読み直すと初期化の外で `superForm()` が呼ばれうる。
-- **`VotableGrade` の `displayGrade` を上書きできる `$derived` にする:** 親が新しい `taskResult` を渡すと、投票した直後の表示が元に戻る。挙動の変更を chore に混ぜない。
-- **`{#key}` でコンポーネントを作り直す:** `$derived` で足りる。
-- **a11y の警告を、アイコンを `<button>` にして直す:** 当初の plan はこの案だった。押しても何も起きないのに、スクリーンリーダーに「ボタン」と読まれる。flowbite-svelte がトリガーにフォーカスを付けるので、`<button>` にする必要も無い。
-- **a11y の警告を、`tabindex` を消すとキーボードで開けなくなるとして残す:** 当初の plan の前提だったが誤り。上の `Popper.svelte:201` のとおり、消しても実行時に付く。
+- `let x = data.x` は、Svelte 4 の時も追従していなかった（追従させるには `$:` が要った）。runes に移した `01fffb99` は、`export let data` を `$props()` に置き換えただけ。つまり v5 で壊れたのではなく、v4 の頃からある潜在的なバグに警告が出るようになった。
+- `@dnd-kit/svelte` 0.5.1 の `createDroppable` は、`id`・`accept`・`type` を内部の `$effect` で読み直す。`KanbanBoard` は `group` に固定の文字列を渡すので、getter にしても今の動きは変わらない。
+- `workbooks/create` は admin 専用（admin 以外には 403）。そのため、`isOfficial` は常に `true` になる。
+- svelte.dev・dndkit.com には devcontainer から接続できなかった。代わりに、手元の Svelte 5.57.3 の型定義と、GitHub 上の docs の source を見た。Superforms は issue（[#667](https://github.com/ciscoheat/sveltekit-superforms/issues/667)）で確かめた。
 
-## わかったこと（コードや git に残らない事実）
+## 検証
 
-- `let x = data.x` は、Svelte 4 の時も初期値を写すだけで、追従していなかった（追従させるには `$: x = data.x` が要った）。`users/[username]`・`problems/[slug]` は作った時から `export let data; let x = data.x;` で、runes に移した `01fffb99`（2025-02-22）は `export let data` を `$props()` に置き換えただけ。そのため、v5 で壊れたのではなく、v4 の頃からある潜在的なバグに警告が出るようになった、というのが実態。
-- `@dnd-kit/svelte` 0.5.1 の `createDroppable` は、input の `id`・`accept`・`type` を内部の `$effect` で読み直す。dnd-kit の docs には、「reactive な値と同期させたい option は getter で定義する」とある。一方、quickstart では `createDroppable({id})` と値をそのまま渡している。`KanbanBoard.svelte` は `group` に固定の文字列を渡すので、getter にしても今の動きは変わらない。
-- `workbooks/create` は admin 専用で、`+page.server.ts` が admin 以外に 403 を返す。そのため `isOfficial` は実際には常に `true` で、`CREATED_BY_USER` の分岐はこの画面からは通らない。
-- oxlint は `.svelte` を lint しない。`.svelte` の lint は ESLint だけが担っている。
-- **調べた資料:** svelte.dev・dndkit.com には devcontainer から接続できなかった。代わりに、手元の Svelte 5.57.3 の型定義（`untrack` の JSDoc）と、GitHub 上の source（Svelte の `compile-warnings.md`・`$effect.md`、dnd-kit の `create-droppable.mdx`・`quickstart.mdx`）を見た。Superforms は issue で確かめた。
-
-## 確かめたこと
-
-- **警告の件数:** `pnpm check` は30件 → 16件（`$derived`）→ 11件（props）→ 10件（a11y）→ 0件（Superforms）になった。
-- **E2E:** 各 phase で関係する spec を流した。次以外はすべて pass した。`workbooks_list` の1件は、データが無いときに飛ばす条件付きの skip。
-  - Phase 2: `submission_status`・`workbooks_list`・`redirect_after_login`
-  - Phase 3: `workbook_order`・`votes`・`workbooks_list`
-  - Phase 4: `votes`
-  - Phase 5: `account_transfer`・`signin`・`redirect_after_login`・`workbook_edit`・`error_pages`
-- **unit テスト:** 各 phase で `pnpm test:unit` の2994件が pass した。
-- **Phase 2 の画面:** admin で6画面と `/workbooks/create` を開き、本文と input（`readonly`・value）を Playwright で書き出した。変更前・変更後・2回目の変更後で比べ、差分は無かった。
-- **Phase 4 のアイコン:** dev の DB に暫定グレードの問題が無いので、Playwright で `/votes/__data.json` を書き換え、PENDING の問題1件に `estimatedGrade` を足してアイコンを出した。dev server のコンパイル結果に `tabindex` は無かった。それでも実行時の要素には `tabindex="0"` が付き、Tab でフォーカスすると Tooltip が開いて、フォーカスが離れると閉じた。`cursor: help` と色も変わらない。
-- **Phase 5 の form:** admin で作成・編集の画面を開き、input の値と送信内容（`__superform_json`）を変更の前後で書き出して比べた。差分は無かった（毎回変わる `__superform_id` は除いた）。
-- **警告で失敗するか:**
-  - 警告が無い今の状態では、`pnpm check`・`pnpm lint` はどちらも exit 0。
-  - `let tagsSnapshot = data.tags;` を1行足すと、`pnpm check` は exit 1。
-  - `any` を書いた一時的な `.ts` では、`pnpm lint` も lefthook と同じ形の `oxlint --deny-warnings <file>` も exit 1。
-  - `any` を書いた一時的な `.svelte` では、ESLint にフラグを付ける前は `pnpm lint` が exit 0 だった。付けた後は、`pnpm lint` も lefthook と同じ形の `eslint --max-warnings 0 <file>` も exit 1。
-  - 足した行と一時ファイルは消した。
-
-## 確かめていないこと
-
-- 問題集を実際に保存した時の値。Phase 5 では送信を Playwright で abort したので、DB には保存していない。
-- 同じ route の中での移動（`/users/a` → `/users/b` など）で、`$derived` にした値が新しくなること。今はそうしたリンクが無い。
-- フラスコのアイコンの E2E。今は E2E にこのアイコンのテストが無く、Phase 4 の確認は手で動かした1回だけ。
-- JS が読み込まれる前の SSR の HTML では、アイコンにフォーカスできない。これは実際に困ることがまず無いとして、見ていない。
-- `pnpm dev` と E2E の警告の出力。
+- **警告:** `pnpm check` は 30 → 16 → 11 → 10 → 0 件になった。
+- **テスト:** 各 phase で、関係する E2E と unit テスト（2994件）がすべて pass した。例外は `workbooks_list` の1件で、データが無いときに飛ばす条件付きの skip。
+- **変更前後の比較（Playwright）:**
+  - 表示: 6画面と `/workbooks/create` の本文と input に、差分は無かった。
+  - 問題集の作成・編集: input の値と送信内容（`__superform_json`）に、差分は無かった。送信は abort した。
+- **フラスコのアイコン:** DB に暫定グレードの問題が無いので、`/votes/__data.json` を書き換えてアイコンを出した。実行時に `tabindex="0"` が付き、Tab でフォーカスすると Tooltip が開いて、フォーカスが離れると閉じた。
+- **警告で失敗するか:** 警告が無ければ `check`・`lint` は exit 0 だった。`let x = data.x`、`any` を書いた `.ts`・`.svelte` を一時的に足すと exit 1 になった。lefthook と同じ形の呼び出しでも、同じ結果だった。
+- **確かめていないこと:**
+  - DB に実際に保存したときの値
+  - 同じ route の中での移動
+  - SSR の HTML で、JS が読み込まれる前のフォーカス
+  - `pnpm dev` の出力
+  - フラスコのアイコンの E2E（今はテストが無く、手での確認1回のみ）
 
 ## レビュー
 
-- ユーザーの依頼で、Codex（`codex exec -s read-only`、codex-cli 0.166.0）にクロスレビューを頼んだ（2026-11-03）。Codex の sandbox は devcontainer で起動しない（`bwrap: No permissions to create a new namespace`）。そのため、plan・差分・変更したファイルの全文・関係するライブラリの source・ルールを prompt に埋め込んで渡した。
-- Critical・Severe の指摘は無かった。dnd-kit の getter、`untrack` の追加、`tabindex` の削除、`package.json` のフラグと CI の呼び出し経路は、問題無しとされた。
-- 指摘は次の3件で、どれを直すかはユーザーの選択待ち。
-  - **Moderate: pre-commit で svelte-check が走らない（`lefthook.yml`）。** 指摘どおりで、`.svelte` に `let x = data.x` を足しても commit できる。止まるのは CI の `pnpm check`。`pnpm check` は全体を見るので staged のファイルだけには絞れず、devcontainer で11秒かかった。
-  - **Minor: ESLint が除外するディレクトリの `.svelte` を、lefthook が明示的に渡すと失敗する（`lefthook.yml`）。** 再現した。`package/` に一時的な `.svelte` を置いて `eslint --max-warnings 0 <file>` を呼ぶと、「File ignored because of a matching ignore pattern」の警告で exit 1 になり、通常のファイルと混ぜても exit 1 だった。`--no-warn-ignored` を付けると exit 0。ただし、ESLint の `ignores`（`build`・`coverage`・`.svelte-kit`・`package` など）の下にある git 管理の `.svelte` は0件で、今は起きない。
-  - **未検証（Codex 自身が断定していない）: 編集画面 A から B へ、コンポーネントを使い回したまま移ると、見出しと `tasksMapByIds` は B に追従するが、form は A の値のまま残りうる（`workbooks/edit/[slug]/+page.svelte`）。** 初期値を固定する構造は変更前からある。編集画面へのリンクは一覧（`WorkbookAuthorActionsCell`）にしか無く、編集画面の中には `/workbooks` へのパンくずリストしか無い。更新に成功すると `/workbooks` に redirect する。そのため、今はこの移動をする経路が無い。Superforms がページデータの変化で form を同期するかは確かめていない。
-- Codex は、plan の「ESLint にも付ける案を採らなかった」が最終のコードと矛盾するとも指摘した。これは Codex に渡した後に plan を書き直した時に解消した。
+Codex（`codex exec -s read-only`、0.166.0）に頼んだ。sandbox が起動しないので、必要なファイルは prompt に埋め込んだ。Critical・Severe の指摘は無かった。次の3件は、ユーザーの選択待ち。
 
-## 範囲外: chunk size の警告
-
-- devcontainer でだけ出る。`compose.yaml` の `NODE_ENV=development` のため Vite が dev モードで build し、Svelte が dev モードでだけ出す `Component[FILENAME] = ...` を Rolldown が副作用として扱う。その結果、flowbite-svelte の使っていないコンポーネント（135個、約 158 kB）が残る。本番モードでは最大の chunk は 301 kB で、警告は出ない。
-- flowbite-svelte を Rolldown の `treeshake.moduleSideEffects` で副作用なしと宣言しても、本番では 75 kB（約9%）しか減らない。upstream が止まっているので、この設定はずっと残り、flowbite-svelte を上げるたびに確認が要る。
-- deep import（`flowbite-svelte/Button.svelte`）にしても、`Button.svelte` 自体がルートの barrel を読み込むので縮まない。`chunkSizeWarningLimit` を上げるのは、本番では出ない警告のために本番の設定を変えることになる。
+- **Moderate:** pre-commit で svelte-check が走らない。指摘どおり。`pnpm check` は staged のファイルだけに絞れず、11秒かかる。
+- **Minor:** ESLint が除外するディレクトリの `.svelte` を lefthook が渡すと、「ignored」の警告で失敗する。再現し、`--no-warn-ignored` で避けられる。ただし、該当する git 管理の `.svelte` は0件。
+- **未検証:** 編集画面 A から B へ移ると、見出しは B に追従するが、form は A のまま残りうる。初期値を固定する構造は変更前からあり、今はこの移動をする経路が無い。
 
 ## 残る作業
 
-- devcontainer の `pnpm build` と E2E（Playwright の `webServer`）は dev モードのまま。本番と揃えるなら、`compose.yaml` の `NODE_ENV=development` を消す。`NODE_ENV` を読むコードは無いが、devcontainer の作り直しが要る。
-- `.coderabbit.yaml` の `src/**/*utils/**` の指示（「Must be pure functions with no side effects」）はテストファイルにも当たるので、`auth_forms.test.ts` の `vi.stubGlobal` を副作用として指摘された（Phase 1 の review）。直すなら、指示の文面に「本番コード向けで、テストでは `afterEach` で戻すなら `vi.stubGlobal` を使ってよい」と1行足す。この glob に当たるテストは63ファイルあるが、global を stub しているのはこのファイルだけ。`path_instructions` の glob が `!` による除外に対応しているかは確かめていない。
-- UI の3層構造（Tailwind CSS → Flowbite → flowbite-svelte）の見直しは、別の task・PR にする。flowbite-svelte は2026-04-07から release も merge も無く、66ファイルが46コンポーネントを import している。flowbite は3.1.2のまま（最新は v4.0.2）。
-- `(admin)/account_transfer` に残っている `svelte/legacy` の `run` は、今回の範囲外として残した。
+- **chunk size の警告（範囲外）:** devcontainer でだけ出る。原因は `compose.yaml` の `NODE_ENV=development` で、Vite が dev モードで build し、flowbite-svelte の使っていないコンポーネント（約 158 kB）が残る。本番では出ない。直すなら `NODE_ENV` を消す（devcontainer の作り直しが要る）。`treeshake.moduleSideEffects`・deep import・`chunkSizeWarningLimit` は、効果が小さいか、本番の設定を変えることになる。
+- **`.coderabbit.yaml`:** `src/**/*utils/**` の「pure functions」の指示がテストにも当たり、`vi.stubGlobal` が指摘された。直すなら、テストは除くと1行足す。
+- **UI の3層構造:** Tailwind → Flowbite → flowbite-svelte の見直しは、別の PR にする。flowbite-svelte は2026-04-07から更新が止まっている。
+- **`account_transfer`:** `svelte/legacy` の `run` が残っている。
