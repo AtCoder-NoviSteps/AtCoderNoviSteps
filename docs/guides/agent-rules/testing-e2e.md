@@ -96,6 +96,7 @@ Prefer in order:
 
 ## Debugging
 
+- Traces are off by default for speed; rerun failures with `pnpm test:e2e --last-failed --trace on`
 - `page.screenshot()` to capture state at assertion
 - `page.pause()` for interactive debugging
 - Logs: `page.on('console', msg => console.log(msg.text()))`

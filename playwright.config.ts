@@ -9,7 +9,8 @@ const config: PlaywrightTestConfig = {
   },
   use: {
     baseURL: process.env.BASE_URL ?? 'http://localhost:4173',
-    trace: 'retain-on-failure-and-retries',
+    // Recording every test cost about 25% of the run; rerun failures with `--last-failed --trace on`.
+    trace: 'off',
   },
   testDir: 'e2e',
   projects: [
