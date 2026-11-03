@@ -9,7 +9,7 @@ pre-commit:
       glob: '**/*.{js,jsx,ts,tsx,md,svelte}'
 
     - name: oxlint
-      run: pnpm exec oxlint {staged_files}
+      run: pnpm exec oxlint --deny-warnings {staged_files}
       glob: '**/*.{js,jsx,ts,tsx}'
 
     - name: eslint
