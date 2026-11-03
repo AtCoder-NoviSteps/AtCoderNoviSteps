@@ -7,6 +7,7 @@ const VOTES_LIST_URL = '/votes';
 const TASKS_GRADE_URL = '/tasks/grade';
 const KNOWN_TASK_ID = 'abc422_a'; // From prisma/tasks.ts seed data
 const KNOWN_VOTE_DETAIL_URL = '/votes/abc422_a'; // From prisma/tasks.ts seed data
+const PROVISIONAL_TASK_ID = 'zone2021_f'; // PENDING task with a median in prisma/seed.ts
 
 // ---------------------------------------------------------------------------
 // Votes list page (/votes)
@@ -50,6 +51,24 @@ test.describe('votes list page (/votes)', () => {
     await expect(page.getByText('該当する問題が見つかりませんでした')).toBeVisible({
       timeout: TIMEOUT,
     });
+  });
+
+  test('provisional grade icon opens its tooltip on keyboard focus', async ({ page }) => {
+    await page.goto(VOTES_LIST_URL);
+    const searchInput = page.getByPlaceholder('問題名・問題ID・出典で検索');
+    await expect(searchInput).toBeVisible({ timeout: TIMEOUT });
+    await searchInput.fill(PROVISIONAL_TASK_ID);
+
+    const icon = page.getByRole('img', { name: '暫定グレード' });
+    const tooltip = page.getByRole('tooltip');
+    await expect(icon).toBeVisible({ timeout: TIMEOUT });
+    await expect(tooltip).toBeHidden();
+
+    // The markup has no tabindex; flowbite-svelte's Tooltip adds it to the trigger at runtime.
+    await expect(icon).toHaveAttribute('tabindex', '0');
+    await icon.focus();
+    await expect(icon).toBeFocused();
+    await expect(tooltip).toContainText('暫定グレード');
   });
 });
 

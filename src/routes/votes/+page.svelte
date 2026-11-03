@@ -69,7 +69,6 @@
                     <span
                       id="flask-{task.task_id}"
                       class="cursor-help text-gray-500 dark:text-gray-400"
-                      tabindex="0"
                       role="img"
                       aria-label="暫定グレード"
                     >

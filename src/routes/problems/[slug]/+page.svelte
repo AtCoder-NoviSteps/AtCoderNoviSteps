@@ -12,8 +12,8 @@
 
   let { data } = $props();
 
-  let taskResult = data.taskResult;
-  let buttons = data.buttons;
+  let taskResult = $derived(data.taskResult);
+  let buttons = $derived(data.buttons);
 </script>
 
 <!-- TODO: 回答状況は、一覧表のリストやテーブルから更新する -->

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { tick } from 'svelte';
+  import { tick, untrack } from 'svelte';
   import { goto } from '$app/navigation';
   import { resolve } from '$app/paths';
 
@@ -40,7 +40,7 @@
     alternativePageLink,
   }: Props = $props();
 
-  const { form, message, errors, submitting, enhance } = formProperties;
+  const { form, message, errors, submitting, enhance } = untrack(() => formProperties);
 
   const homeHref = resolve(HOME_PAGE);
   const forgotPasswordHref = resolve(FORGOT_PASSWORD_PAGE);

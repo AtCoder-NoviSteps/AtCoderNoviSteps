@@ -18,9 +18,13 @@
     get id() {
       return columnId;
     },
-    type: group,
+    get type() {
+      return group;
+    },
     collisionPriority: 1, // CollisionPriority.Low
-    accept: group,
+    get accept() {
+      return group;
+    },
   });
 
   function attachDroppable(node: HTMLElement): { destroy: () => void } {

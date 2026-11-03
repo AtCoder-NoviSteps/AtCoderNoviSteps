@@ -9,11 +9,11 @@ pre-commit:
       glob: '**/*.{js,jsx,ts,tsx,md,svelte}'
 
     - name: oxlint
-      run: pnpm exec oxlint {staged_files}
+      run: pnpm exec oxlint --deny-warnings {staged_files}
       glob: '**/*.{js,jsx,ts,tsx}'
 
     - name: eslint
-      run: pnpm exec eslint {staged_files}
+      run: pnpm exec eslint --max-warnings 0 --no-warn-ignored {staged_files}
       glob: '**/*.svelte'
 
     - name: plan-lambda-check

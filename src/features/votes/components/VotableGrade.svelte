@@ -56,11 +56,12 @@
   // 表示用のグレード（投票後に画面リロードなしで差し替えるためのローカル状態）
   // PENDING かつ estimatedGrade（集計済み中央値）があればそれを優先表示。
   // DBグレード付与済みの場合はそちらを優先。
-  const initialGrade = resolveDisplayGrade(taskResult.grade, estimatedGrade);
-  let displayGrade = $state<TaskGrade | string>(initialGrade);
+  let displayGrade = $state<TaskGrade | string>(
+    untrack(() => resolveDisplayGrade(taskResult.grade, estimatedGrade)),
+  );
 
   // Use task_id as a deterministic component ID to avoid SSR/hydration mismatches.
-  const componentId = taskResult.task_id;
+  const componentId = $derived(taskResult.task_id);
 
   const editProfileHref = `${resolve(EDIT_PROFILE_PAGE)}?tab=atcoder`;
 

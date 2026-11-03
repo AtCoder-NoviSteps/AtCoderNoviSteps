@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { untrack } from 'svelte';
   import { superForm } from 'sveltekit-superforms/client';
 
   import ErrorMessageAndReturnButton from '#lib/components/Messages/ErrorMessageAndReturnButton.svelte';
@@ -13,20 +14,21 @@
   let { data } = $props();
   let canView = $derived(data.status === FORBIDDEN ? false : true);
 
-  let workBook = data.workBook;
+  let workBook = $derived(data.workBook);
 
+  // superForm owns the form state after init, so seed it once from the load data.
   // See:
   // https://superforms.rocks/concepts/nested-data
-  const initialData = {
+  const initialData = untrack(() => ({
     ...data.form,
     workBookTasks: workBook.workBookTasks as WorkBookTasksBase,
-  };
+  }));
   const superFormObject = superForm(initialData, {
     dataType: 'json',
   });
 
   // Create data of workbook for edit based on database.
-  const tasksMapByIds: Map<string, Task> = data.tasksMapByIds;
+  const tasksMapByIds: Map<string, Task> = $derived(data.tasksMapByIds);
 </script>
 
 {#if canView}

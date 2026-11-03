@@ -28,12 +28,12 @@
 
   let { data } = $props();
 
-  let workBook = data.workBook;
+  let workBook = $derived(data.workBook);
   let workBookTasks: WorkBookTaskBase[] = $state([]);
   let taskResults: Map<string, TaskResult> = $derived(data.taskResults);
   let voteStatisticsMap = $derived(data.voteStatisticsMap);
 
-  let isLoggedIn = data.isLoggedIn;
+  let isLoggedIn = $derived(data.isLoggedIn);
   let isAtCoderVerified = $derived(data.isAtCoderVerified);
 
   // TODO: 関数をutilへ移動させる

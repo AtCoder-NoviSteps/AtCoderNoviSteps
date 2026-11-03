@@ -37,6 +37,19 @@ export default defineConfig({
       },
     }),
   ],
+  build: {
+    rolldownOptions: {
+      treeshake: {
+        // flowbite-svelte omits `sideEffects` and imports its own root barrel, so every component ended up in all pages
+        moduleSideEffects: [
+          { test: /\/node_modules\/flowbite-svelte\/.*\.(js|svelte)$/, sideEffects: false },
+        ],
+      },
+      experimental: {
+        lazyBarrel: true,
+      },
+    },
+  },
   optimizeDeps: {
     exclude: ['@prisma/client'],
   },
