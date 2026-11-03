@@ -13,7 +13,7 @@
     "test": "npm run test:e2e && npm run test:unit",
     "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --fail-on-warnings",
     "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
-    "lint": "oxfmt --check && oxlint --deny-warnings . && eslint .",
+    "lint": "oxfmt --check && oxlint --deny-warnings . && eslint --max-warnings 0 .",
     "format": "oxfmt",
     "test:e2e": "playwright test",
     "test:unit": "vitest",

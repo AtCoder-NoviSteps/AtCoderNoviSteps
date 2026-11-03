@@ -13,7 +13,7 @@ pre-commit:
       glob: '**/*.{js,jsx,ts,tsx}'
 
     - name: eslint
-      run: pnpm exec eslint {staged_files}
+      run: pnpm exec eslint --max-warnings 0 {staged_files}
       glob: '**/*.svelte'
 
     - name: plan-lambda-check
