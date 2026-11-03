@@ -13,9 +13,10 @@ const ABC319_ONWARDS_GROUP_ARIA_LABEL = 'Filter contests from ABC 319 onwards';
 const ABC319_ONWARDS_TABLE_TITLES = ['AtCoder Beginner Contest 319 〜（7 問制）'];
 
 test.describe('PCK groups in contest table', () => {
-  for (const { round, ariaLabel, years } of [
+  for (const { roundName, roundLabel, ariaLabel, years } of [
     {
-      round: '予選',
+      roundName: 'preliminary',
+      roundLabel: '予選',
       ariaLabel: 'Filter PCK Preliminary',
       years: [
         2026, 2025, 2024, 2023, 2022, 2021, 2020, 2019, 2018, 2017, 2016, 2015, 2014, 2013, 2012,
@@ -23,7 +24,8 @@ test.describe('PCK groups in contest table', () => {
       ],
     },
     {
-      round: '本選',
+      roundName: 'final',
+      roundLabel: '本選',
       ariaLabel: 'Filter PCK Final',
       years: [
         2025, 2024, 2023, 2022, 2021, 2020, 2019, 2018, 2017, 2016, 2015, 2014, 2013, 2012, 2011,
@@ -31,13 +33,13 @@ test.describe('PCK groups in contest table', () => {
       ],
     },
   ]) {
-    test(`shows ${round} tables newest first and preserves the selection after reload`, async ({
+    test(`shows ${roundName} tables newest first and preserves the selection after reload`, async ({
       page,
     }) => {
       await page.goto('/problems');
       await page.getByRole('button', { name: ariaLabel }).click();
 
-      const titles = years.map((year) => `PCK ${year} ${round}`);
+      const titles = years.map((year) => `PCK ${year} ${roundLabel}`);
       await expect(page.getByRole('heading', { level: 2 })).toHaveText(titles);
       await page.reload();
       await expect(page.getByRole('heading', { level: 2 })).toHaveText(titles);
