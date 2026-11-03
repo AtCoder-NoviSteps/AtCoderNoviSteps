@@ -4,7 +4,8 @@ const config: PlaywrightTestConfig = {
   webServer: {
     command: 'pnpm build && pnpm preview',
     port: 4173,
-    timeout: 10000 * 1000,
+    reuseExistingServer: !process.env.CI,
+    timeout: 180 * 1000,
   },
   use: {
     baseURL: process.env.BASE_URL ?? 'http://localhost:4173',

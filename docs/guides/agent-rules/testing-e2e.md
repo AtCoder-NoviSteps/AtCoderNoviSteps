@@ -10,6 +10,7 @@ paths:
 ## Setup
 
 - File extension: **must** be `.spec.ts` (`.test.ts` not detected by `playwright.config.ts`)
+- Outside CI, `pnpm test:e2e` reuses a server already listening on port 4173. Restart `pnpm build && pnpm preview` after changing app code, or the tests run against the stale build.
 - No runtime imports through subpath imports (`#lib/*.js` and `#features/*.js` resolve to `src/**/*.js`, but the Playwright runner does not map them to the `.ts` source). Use relative imports, or type-only imports for types:
 
 ```typescript
