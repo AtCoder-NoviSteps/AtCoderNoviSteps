@@ -55,9 +55,9 @@
 
 ### Phase 6: CI で警告を止める
 
-- [ ] `package.json` の `check` に `--fail-on-warnings` を、`lint` の oxlint に `--deny-warnings` を付ける。`check:watch` は変えない。`lefthook.yml` の oxlint の job にも `--deny-warnings` を付ける。
-- [ ] 確認: どちらも exit 0 で終わる。試しに `let x = data.x` を1行足すと `pnpm check` が exit 1 になる（`rtk bypass` で確かめ、元に戻す）。
-- [ ] これ以後、`no-explicit-any`（`warn`）も disable コメントが無ければ CI で失敗する。今ある `any` には、すべて disable コメントが付いている。
+- [x] `package.json` の `check` に `--fail-on-warnings` を、`lint` の oxlint に `--deny-warnings` を付ける。`check:watch` は変えない。`lefthook.yml` の oxlint の job にも `--deny-warnings` を付ける。CI（`ci.yml`）は `pnpm lint`・`pnpm check` を呼ぶので、workflow は変えなくてよい。
+- [x] 確認: どちらも exit 0 で終わる。試しに `let x = data.x` を1行足すと `pnpm check` が exit 1 になる（`rtk bypass` で確かめ、元に戻す）。結果: 警告が無いと `pnpm check`・`pnpm lint` はどちらも exit 0。`(admin)/tags/+page.svelte` に `let tagsSnapshot = data.tags;` を足すと、`pnpm check` は exit 1。`any` を書いた一時的な `.ts` では、`pnpm lint` も lefthook と同じ形の `oxlint --deny-warnings <file>` も exit 1。足した行と一時ファイルは消した。
+- [x] これ以後、`no-explicit-any`（`warn`）も、JS/TS のファイルでは disable コメントが無ければ CI で失敗する。`.svelte` は oxlint が見ず、ESLint の警告だけになるので、`any` を書いた一時的な `.svelte` でも `pnpm lint` は exit 0 のまま（下の「ESLint にも `--max-warnings 0` を付ける」）。今ある `any` には、すべて disable コメントが付いている。
 
 ## 採らなかった案
 
@@ -66,7 +66,7 @@
 - **`VotableGrade` の `displayGrade` を上書きできる `$derived` にする:** 親が新しい `taskResult` を渡すと、投票した直後の表示が元に戻る。挙動の変更を chore に混ぜない。
 - **`{#key}` でコンポーネントを作り直す:** `$derived` で足りる。
 - **a11y の警告を、アイコンを `<button>` にして直す:** 押しても何も起きないのに、スクリーンリーダーに「ボタン」と読まれる。flowbite-svelte がトリガーにフォーカスを付けるので、`<button>` にする必要も無い（当初はこの案だったが、`Popper.svelte` を読んで変えた）。
-- **ESLint にも `--max-warnings 0` を付ける:** 今の警告は0件で、今回の警告の出どころでもない。
+- **ESLint にも `--max-warnings 0` を付ける:** 今の警告は0件で、今回の警告の出どころでもない。ただし付けないので、`.svelte` の `no-explicit-any` は CI で止まらず、`.ts` と扱いが揃わない。
 
 ## 範囲外: chunk size の警告
 
