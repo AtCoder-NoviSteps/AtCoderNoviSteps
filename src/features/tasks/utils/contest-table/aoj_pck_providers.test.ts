@@ -49,15 +49,15 @@ describe('AojPckProvider', () => {
   });
 
   test.each([
-    [2026, 'Prelim', 'PCK 2026 予選', 'PCKPrelim2026'],
-    [2025, 'Final', 'PCK 2025 本選', 'PCKFinal2025'],
-    [2003, 'Final', 'PCK 2003 本選', 'PCKFinal2003'],
-  ] as const)('labels the %i %s table', (year, round, title, contestId) => {
+    [2026, 'Prelim', 'PCK 2026 予選', 'PCKPrelim2026', 'pckPrelim2026'],
+    [2025, 'Final', 'PCK 2025 本選', 'PCKFinal2025', 'pckFinal2025'],
+    [2003, 'Final', 'PCK 2003 本選', 'PCKFinal2003', 'pckFinal2003'],
+  ] as const)('labels the %i %s table', (year, round, title, contestId, abbreviationName) => {
     const provider = new AojPckProvider(ContestType.AOJ_PCK, year, round);
 
     expect(provider.getMetadata()).toEqual({
       title,
-      abbreviationName: contestId,
+      abbreviationName,
       titleStyle: {
         headingTag: 'h2',
         fontSize: 'text-xl',

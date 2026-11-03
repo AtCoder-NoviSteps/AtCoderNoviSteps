@@ -36,7 +36,7 @@ export class AojPckProvider extends ContestTableProviderBase {
   getMetadata(): ContestTableMetaData {
     return {
       title: this.getContestRoundLabel(this.contestId),
-      abbreviationName: this.contestId,
+      abbreviationName: `pck${this.round}${this.year}`,
       titleStyle: PER_CONTEST_TITLE_STYLE,
     };
   }
