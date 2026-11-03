@@ -42,15 +42,16 @@ staging・本番にも未登録のPCK問題がPENDINGで追加されることは
 - `pnpm format`、`pnpm lint`、`git diff --check` は成功した。
 - 現行の `staging` とマージした状態で、警告も失敗扱いの `pnpm check` はエラー・警告とも0件、`pnpm lint` と単体テストも成功した。
 - `.env` の読み取り拒否は解除せず、秘密情報を含まない一時コピーで単体テスト・型チェック・ビルドを実行した。SvelteKitの生成型設定とPrismaの生成ファクトリもそのコピーに配置した。
-- ホストNode 25.2.1ではVercelアダプターが奇数バージョンを拒否した。既存のNode 24.15.0による一時コピーのビルドは、Vercelアダプターを含めて完走した。プロジェクト指定のNode 26でのCI検証は残る。
-- PCK両グループの切替と再読み込み後の選択保持を確認するE2Eを追加したが、通常のE2E起動は同じホストNode 25のビルド制約によりWebServerの起動前に失敗した。
-- 2026-11-03にClaudeがレビューし、Codexがクロスレビューした。Codexの指摘は0件だった。ユーザーの選択により、E2Eのテスト名の英語化とSQLiteテストの削除を反映した。
+- ホストNode 25.2.1ではVercelアダプターが奇数バージョンを拒否し、E2EもWebServerの起動前に失敗した。
+- devcontainer（Node 26.12.1）のローカルDBに `pnpm exec prisma migrate deploy` で適用し、PCK 46大会581問、旧形式0件、全タスク4018件（485件追加）を確認した。
+- 適用後のローカルDBで、PCK両グループの切替と再読み込み後の選択保持を確認するE2E 2件がビルドを含めて成功した。
+- 2026-11-03にClaudeがレビューし、Codexがクロスレビューした。Codexの指摘は0件だった。ユーザーの選択により、E2Eのテスト名の英語化、SQLiteテストの削除、表の `abbreviationName` をICPC・JAGと同じ `pckPrelim2026` 形式に揃える変更を反映した。
 - 別コンテスト・別ContestTypeに同じtask_idがある行を通知なしでスキップする点は、現状起こり得ないため対応しない。シードのテストをAOJクライアントの隣に置くのは意図どおりである。
 
 ## 残タスク
 
-- ローカルDBへの反映は `pnpm exec prisma migrate deploy` を実行する。適用先は `.env` の `DIRECT_URL` のDBである。resetやseedは不要だが、問題一覧のサーバーキャッシュが1時間残るため `pnpm dev` を再起動する。
-- Node 26のCIでbuild・lint・check・unitを確認し、追加E2Eを実環境で確認する。
+- 他の開発環境では `pnpm exec prisma migrate deploy` で適用する。適用先は `.env` の `DIRECT_URL` のDBである。resetやseedは不要だが、問題一覧のサーバーキャッシュが1時間残るため `pnpm dev` を再起動する。
+- CIでbuild・lint・check・unitを確認する。
 - pushは行っていない。
 
 診断上の知見はこの文書に記録済みであり、extract-approachの省略条件に従って重複するlearning.mdは作成しない。
