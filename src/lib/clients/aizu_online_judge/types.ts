@@ -23,6 +23,9 @@ export type ChallengeParams =
   | { contestType: 'JAG'; round: JagRound }
   | { contestType: 'ICPC'; round: IcpcRound };
 
+/** Represents AOJ challenge contest types */
+export type ChallengeContestType = ChallengeParams['contestType'];
+
 /** Represents PCK contest rounds */
 export type PckRound = 'PRELIM' | 'FINAL';
 

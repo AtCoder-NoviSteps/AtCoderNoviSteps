@@ -11,6 +11,10 @@ import {
   ICPC_REGIONAL_LATEST_YEAR,
   JAG_PRELIM_OLDEST_YEAR,
   JAG_PRELIM_LATEST_YEAR,
+  PCK_PRELIM_OLDEST_YEAR,
+  PCK_PRELIM_LATEST_YEAR,
+  PCK_FINAL_OLDEST_YEAR,
+  PCK_FINAL_LATEST_YEAR,
   contestTableProviderGroups,
   prepareContestProviderPresets,
 } from './contest_table_provider_groups';
@@ -236,6 +240,39 @@ describe('prepareContestProviderPresets', () => {
   });
 
   describe('year-range presets', () => {
+    test('registers separate PCK preliminary and final groups in descending year order', () => {
+      const prelim = presets.AojPckPrelim();
+      const final = presets.AojPckFinal();
+      const prelimKeys = prelim.getAllProviders().map((provider) => provider.getProviderKey());
+      const finalKeys = final.getAllProviders().map((provider) => provider.getProviderKey());
+
+      expect(prelim.getGroupName()).toBe('PCK 予選');
+      expect(final.getGroupName()).toBe('PCK 本選');
+      expect(prelim.getMetadata()).toEqual({
+        buttonLabel: 'PCK 予選',
+        ariaLabel: 'Filter PCK Preliminary',
+      });
+      expect(final.getMetadata()).toEqual({
+        buttonLabel: 'PCK 本選',
+        ariaLabel: 'Filter PCK Final',
+      });
+      expect(prelimKeys.at(0)).toBe('AOJ_PCK::Prelim2026');
+      expect(prelimKeys.at(1)).toBe('AOJ_PCK::Prelim2025');
+      expect(prelimKeys.at(-1)).toBe('AOJ_PCK::Prelim2004');
+      expect(finalKeys.at(0)).toBe('AOJ_PCK::Final2025');
+      expect(finalKeys.at(-1)).toBe('AOJ_PCK::Final2003');
+      expect(prelim.getSize()).toBe(PCK_PRELIM_LATEST_YEAR - PCK_PRELIM_OLDEST_YEAR + 1);
+      expect(final.getSize()).toBe(PCK_FINAL_LATEST_YEAR - PCK_FINAL_OLDEST_YEAR + 1);
+      expect(prelim.getProvider(ContestType.AOJ_PCK, 'Prelim2025')).toBeDefined();
+      expect(final.getProvider(ContestType.AOJ_PCK, 'Final2025')).toBeDefined();
+      expect(Object.keys(contestTableProviderGroups).slice(-4)).toEqual([
+        'aojJagPrelim',
+        'aojJagRegional',
+        'aojPckPrelim',
+        'aojPckFinal',
+      ]);
+    });
+
     test('AojIcpcPrelim registers one provider per year', () => {
       const group = presets.AojIcpcPrelim();
       const providerKeys = group.getAllProviders().map((provider) => provider.getProviderKey());

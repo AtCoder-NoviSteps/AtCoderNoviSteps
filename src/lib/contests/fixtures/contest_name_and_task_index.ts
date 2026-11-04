@@ -669,45 +669,47 @@ export const aojCourses = Object.entries(AOJ_COURSES_TEST_DATA).flatMap(([contes
 /**
  * Test cases for AOJ PCK (パソコン甲子園) contests
  * Includes both preliminary (予選) and final (本選) rounds
- * Format: {round}{year} - {problemId}
+ * Format: {round}{year} - {problemIndex}
  */
 const AOJ_PCK_TEST_DATA = {
+  Prelim2026: { contestId: 'Prelim2026', tasks: ['1', '3', '12'] },
+  Final2025: { contestId: 'Final2025', tasks: ['1', '13'] },
   Prelim2004: {
     contestId: 'Prelim2004',
-    tasks: ['0027', '0043'],
+    tasks: ['1', '17'],
   },
   Prelim2005: {
     contestId: 'Prelim2005',
-    tasks: ['0073', '0092'],
+    tasks: ['1', '20'],
   },
   Prelim2022: {
     contestId: 'Prelim2022',
-    tasks: ['0479', '0489'],
+    tasks: ['1', '11'],
   },
   Prelim2023: {
     contestId: 'Prelim2023',
-    tasks: ['4012', '4013', '4022'],
+    tasks: ['1', '2', '11'],
   },
   Final2003: {
     contestId: 'Final2003',
-    tasks: ['0000', '0098'],
+    tasks: ['1', '29'],
   },
   Final2004: {
     contestId: 'Final2004',
-    tasks: ['0044', '0097'],
+    tasks: ['1', '30'],
   },
   Final2022: {
     contestId: 'Final2022',
-    tasks: ['4000', '4011'],
+    tasks: ['1', '12'],
   },
   Final2023: {
     contestId: 'Final2023',
-    tasks: ['4023', '4035'],
+    tasks: ['1', '13'],
   },
 };
 
 type PckRound = 'Prelim' | 'Final';
-type PckYear = '2003' | '2004' | '2005' | '2022' | '2023';
+type PckYear = '2003' | '2004' | '2005' | '2022' | '2023' | '2025' | '2026';
 type PckContestId = `${PckRound}${PckYear}`;
 type PckContestIds = PckContestId[];
 

@@ -148,6 +148,8 @@ export const aojCourses = courses.flatMap((course) =>
 //   - Recent contests (2023+): 4xxx
 //   - Older contests: 0xxx
 const pckContests = [
+  { contestId: 'PCKPrelim2026', tasks: ['4084', '4086', '4095'] },
+  { contestId: 'PCKFinal2025', tasks: ['4071', '4083'] },
   { contestId: 'PCKPrelim2023', tasks: ['4012', '4013', '4022'] },
   { contestId: 'PCKPrelim2022', tasks: ['0479', '0489'] },
   { contestId: 'PCKPrelim2005', tasks: ['0073', '0092'] },

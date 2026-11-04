@@ -37,6 +37,7 @@ import {
 } from './joi_providers';
 import { AojIcpcPrelimProvider, AojIcpcRegionalProvider } from './aoj_icpc_providers';
 import { JagPrelimProvider, JagRegionalProvider } from './aoj_jag_providers';
+import { AojPckProvider } from './aoj_pck_providers';
 import { AOJ_JAG_REGIONAL_ENTRIES } from './aoj_jag_regional_entries';
 import { PastProvider } from './past_provider';
 import { ContestTableProviderGroup } from './contest_table_provider_group';
@@ -52,6 +53,11 @@ export const JAG_PRELIM_LATEST_YEAR = 2026;
 // 2016 was held twice in the same year, split into JAGPrelim2016A / JAGPrelim2016B.
 // Kept as data so future split years only need to be added to this set.
 const JAG_PRELIM_YEARS_HELD_AS_A_AND_B = new Set([2016]);
+
+export const PCK_PRELIM_OLDEST_YEAR = 2004;
+export const PCK_PRELIM_LATEST_YEAR = 2026;
+export const PCK_FINAL_OLDEST_YEAR = 2003;
+export const PCK_FINAL_LATEST_YEAR = 2025;
 
 export const PAST_OLDEST_ROUND = 1;
 export const PAST_LATEST_ROUND = 24;
@@ -341,6 +347,28 @@ export const prepareContestProviderPresets = () => {
       return group;
     },
 
+    AojPckPrelim: () => {
+      const group = new ContestTableProviderGroup('PCK 予選', {
+        buttonLabel: 'PCK 予選',
+        ariaLabel: 'Filter PCK Preliminary',
+      });
+      for (let year = PCK_PRELIM_LATEST_YEAR; year >= PCK_PRELIM_OLDEST_YEAR; year--) {
+        group.addProvider(new AojPckProvider(ContestType.AOJ_PCK, year, 'Prelim'));
+      }
+      return group;
+    },
+
+    AojPckFinal: () => {
+      const group = new ContestTableProviderGroup('PCK 本選', {
+        buttonLabel: 'PCK 本選',
+        ariaLabel: 'Filter PCK Final',
+      });
+      for (let year = PCK_FINAL_LATEST_YEAR; year >= PCK_FINAL_OLDEST_YEAR; year--) {
+        group.addProvider(new AojPckProvider(ContestType.AOJ_PCK, year, 'Final'));
+      }
+      return group;
+    },
+
     AojJagPrelim: () => {
       const group = new ContestTableProviderGroup('JAG 模擬国内', {
         buttonLabel: 'JAG 模擬国内',
@@ -407,6 +435,8 @@ export const contestTableProviderGroups = {
   aojIcpcRegional: presets.AojIcpcRegional(),
   aojJagPrelim: presets.AojJagPrelim(),
   aojJagRegional: presets.AojJagRegional(),
+  aojPckPrelim: presets.AojPckPrelim(),
+  aojPckFinal: presets.AojPckFinal(),
 };
 
 export type ContestTableProviderGroups = keyof typeof contestTableProviderGroups;

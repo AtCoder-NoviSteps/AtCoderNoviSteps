@@ -3,7 +3,7 @@ import { describe, test, expect } from 'vitest';
 import {
   buildEndpoint,
   mapToContest,
-  assignProblemLetters,
+  assignProblemIndices,
   mapToTask,
   getCourseName,
 } from './utils';
@@ -83,23 +83,37 @@ describe('mapToContest', () => {
   });
 });
 
-describe('assignProblemLetters', () => {
-  describe('successful cases', () => {
-    test('assigns letters A, B, C... in ascending problem id order', () => {
-      const result = assignProblemLetters(['1665', '1664', '1666']);
-
-      expect(result).toEqual(
-        new Map([
+describe('assignProblemIndices', () => {
+  describe('letters for ICPC and JAG', () => {
+    test.each([
+      [
+        'ICPC',
+        ['1665', '1664', '1666'],
+        [
           ['1664', 'A'],
           ['1665', 'B'],
           ['1666', 'C'],
-        ]),
-      );
-    });
+        ],
+      ],
+      [
+        'JAG',
+        ['3454', '3452', '3453'],
+        [
+          ['3452', 'A'],
+          ['3453', 'B'],
+          ['3454', 'C'],
+        ],
+      ],
+    ] as const)(
+      'assigns letters A, B, C... in ascending problem id order for %s',
+      (contestType, problemIds, expected) => {
+        expect(assignProblemIndices(contestType, [...problemIds])).toEqual(new Map(expected));
+      },
+    );
 
     test('assigns letters A through L to the 12 problems of ICPC Regional 2024', () => {
       const problemIds = Array.from({ length: 12 }, (_, i) => String(1455 + i));
-      const result = assignProblemLetters(problemIds);
+      const result = assignProblemIndices('ICPC', problemIds);
 
       expect(result.get('1455')).toBe('A');
       expect(result.get('1466')).toBe('L');
@@ -107,27 +121,64 @@ describe('assignProblemLetters', () => {
     });
 
     test('sorts problem ids numerically, not lexicographically', () => {
-      const result = assignProblemLetters(['10000', '9999']);
+      const result = assignProblemIndices('ICPC', ['10000', '9999']);
 
       expect(result.get('9999')).toBe('A');
       expect(result.get('10000')).toBe('B');
     });
 
-    test('does not mutate the input array', () => {
-      const problemIds = ['1665', '1664'];
-      assignProblemLetters(problemIds);
+    test('assigns A to a single problem', () => {
+      expect(assignProblemIndices('JAG', ['1100'])).toEqual(new Map([['1100', 'A']]));
+    });
+  });
 
-      expect(problemIds).toEqual(['1665', '1664']);
+  describe('numbers for PCK', () => {
+    test('assigns one-based numbers in ascending problem id order', () => {
+      expect(assignProblemIndices('PCK', ['0098', '0001', '0000', '0096'])).toEqual(
+        new Map([
+          ['0000', '1'],
+          ['0001', '2'],
+          ['0096', '3'],
+          ['0098', '4'],
+        ]),
+      );
+    });
+
+    test('keeps numbers numeric after nine problems', () => {
+      const problemIds = [
+        '4070',
+        '4069',
+        '4068',
+        '4067',
+        '4066',
+        '4065',
+        '4064',
+        '4063',
+        '4062',
+        '4061',
+        '4060',
+      ];
+      const result = assignProblemIndices('PCK', problemIds);
+
+      expect(result.get('4060')).toBe('1');
+      expect(result.get('4069')).toBe('10');
+      expect(result.get('4070')).toBe('11');
     });
   });
 
   describe('edge cases', () => {
-    test('returns an empty map for empty input', () => {
-      expect(assignProblemLetters([]).size).toBe(0);
-    });
+    test.each(['ICPC', 'JAG', 'PCK'] as const)(
+      'returns an empty map for empty input for %s',
+      (contestType) => {
+        expect(assignProblemIndices(contestType, [])).toEqual(new Map());
+      },
+    );
 
-    test('assigns A to a single problem', () => {
-      expect(assignProblemLetters(['1100'])).toEqual(new Map([['1100', 'A']]));
+    test('does not mutate the input array', () => {
+      const problemIds = ['0098', '0001', '0000'];
+      assignProblemIndices('PCK', problemIds);
+
+      expect(problemIds).toEqual(['0098', '0001', '0000']);
     });
   });
 });

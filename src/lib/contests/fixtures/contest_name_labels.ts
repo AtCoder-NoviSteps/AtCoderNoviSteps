@@ -212,6 +212,14 @@ export const aojCourses = [
 ];
 
 export const aojPck = [
+  createTestCaseForContestNameLabel('AOJ, PCK Prelim 2026')({
+    contestId: 'PCKPrelim2026',
+    expected: 'パソコン甲子園 予選 2026',
+  }),
+  createTestCaseForContestNameLabel('AOJ, PCK Final 2025')({
+    contestId: 'PCKFinal2025',
+    expected: 'パソコン甲子園 本選 2025',
+  }),
   createTestCaseForContestNameLabel('AOJ, PCK Prelim 2024')({
     contestId: 'PCKPrelim2024',
     expected: 'パソコン甲子園 予選 2024',

@@ -712,6 +712,8 @@ export const aojCourses = aojCoursesData.map(({ name, contestId }) =>
 );
 
 const aojPckContestData = [
+  { name: 'AOJ, PCK Prelim 2026', contestId: 'PCKPrelim2026' },
+  { name: 'AOJ, PCK Final 2025', contestId: 'PCKFinal2025' },
   { name: 'AOJ, PCK Prelim 2004', contestId: 'PCKPrelim2004' },
   { name: 'AOJ, PCK Prelim 2005', contestId: 'PCKPrelim2005' },
   { name: 'AOJ, PCK Prelim 2009', contestId: 'PCKPrelim2009' },

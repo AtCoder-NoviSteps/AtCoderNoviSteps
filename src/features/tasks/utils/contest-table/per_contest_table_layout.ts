@@ -11,10 +11,10 @@ export const PER_CONTEST_TITLE_STYLE: ContestTableTitleStyle = {
   bottomGap: 'pb-1',
 };
 
-// Return unique task_table_index values (problem letters) in ascending order.
+// Sort both problem letters and numeric PCK indices, including two-digit indices.
 export function sortHeaderIdsByTaskTableIndex(filtered: TaskResults): string[] {
   return Array.from(new Set(filtered.map((taskResult) => taskResult.task_table_index))).sort(
-    (first, second) => first.localeCompare(second),
+    (first, second) => first.localeCompare(second, undefined, { numeric: true }),
   );
 }
 
