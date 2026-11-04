@@ -47,5 +47,7 @@ overrides:
   'minimatch@>=10.0.0 <10.2.3': '10.2.6'
   'effect@>=3.0.0 <3.20.0': '3.22.4'
   'defu@<6.1.5': '6.1.7'
+  # Crosses a major on purpose: @prisma/config 6.x pins 7.1.5; remove with @quramy/prisma-fabbrica
+  'deepmerge-ts@<8.0.0': '8.0.2'
   # moderate
   'postcss@>=8.0.0 <8.5.10': '8.5.32'
