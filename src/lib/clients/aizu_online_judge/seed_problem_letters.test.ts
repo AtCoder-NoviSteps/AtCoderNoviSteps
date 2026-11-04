@@ -6,7 +6,7 @@ import { classifyContest } from '#lib/contests/utils/classification.js';
 
 import { tasks } from '../../../../prisma/tasks';
 
-import { assignProblemLetters } from './utils';
+import { assignProblemIndices } from './utils';
 
 // Same scope as the problem-letter migrations: every AOJ ICPC and JAG contest.
 function usesProblemLetters(contestId: string): boolean {
@@ -124,8 +124,10 @@ describe('problem_index of AOJ ICPC / JAG tasks in prisma/tasks.ts', () => {
 
   test.each(
     [...indicesByContest].filter(([contestId]) => !(contestId in LETTERS_OF_SHIFTED_CONTESTS)),
-  )('%s follows the basic rule (ascending problem ids)', (_contestId, indices) => {
-    expect(indices).toEqual(assignProblemLetters([...indices.keys()]));
+  )('%s follows the basic rule (ascending problem ids)', (contestId, indices) => {
+    const contestType = classifyContest(contestId) === ContestType.AOJ_ICPC ? 'ICPC' : 'JAG';
+
+    expect(indices).toEqual(assignProblemIndices(contestType, [...indices.keys()]));
   });
 
   test.each(Object.entries(LETTERS_OF_SHIFTED_CONTESTS))(

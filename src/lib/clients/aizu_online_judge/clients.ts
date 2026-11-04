@@ -20,8 +20,7 @@ import type {
 import {
   buildEndpoint,
   mapToContest,
-  assignProblemLetters,
-  assignProblemNumbers,
+  assignProblemIndices,
   mapToTask,
   getCourseName,
 } from './utils';
@@ -104,9 +103,10 @@ export class AojChallengesApiClient {
           const problems = contest.days.flatMap((day) => day.problems);
 
           // Indices span all days because contest_id is per contest (abbr), not per day.
-          const ids = problems.map((problem) => problem.id);
-          const indices =
-            contestType === 'PCK' ? assignProblemNumbers(ids) : assignProblemLetters(ids);
+          const indices = assignProblemIndices(
+            contestType,
+            problems.map((problem) => problem.id),
+          );
 
           return problems.map((problem) =>
             mapToTask(problem, contest.abbr, indices.get(problem.id)),

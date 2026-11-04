@@ -1,7 +1,7 @@
 import type { ContestForImport } from '#lib/contests/types/contest.js';
 
 import { PENDING } from './types';
-import type { AOJTaskAPI } from './types';
+import type { AOJTaskAPI, ChallengeContestType } from './types';
 
 /**
  * Constructs an endpoint URL by encoding each segment and joining them with a '/'.
@@ -52,31 +52,38 @@ export function mapToContest(contestId: string, title: string): ContestForImport
 }
 
 /**
- * Assigns problem letters (A, B, C...) to the problems of one contest.
+ * Assigns problem indices to the problems of one contest: numbers (1, 2, 3...) for PCK and
+ * letters (A, B, C...) for ICPC and JAG.
  *
  * The AOJ API does not tell a problem's position in its contest, so this follows the basic rule:
- * letters in ascending numeric order of problem ids. A problem missing from AOJ's contest listing
- * shifts the later letters, which cannot be detected here.
+ * indices in ascending numeric order of problem ids. A problem missing from AOJ's contest listing
+ * shifts the later indices, which cannot be detected here.
  *
+ * @param contestType - AOJ challenge contest type, which decides the index format.
  * @param problemIds - Numeric AOJ problem ids of one contest.
- * @returns A map from problem id to problem letter.
+ * @returns A map from problem id to problem index.
  */
-export function assignProblemLetters(problemIds: string[]): Map<string, string> {
-  return new Map(
-    sortProblemIds(problemIds).map((problemId, i) => [problemId, String.fromCharCode(65 + i)]),
-  );
+export function assignProblemIndices(
+  contestType: ChallengeContestType,
+  problemIds: string[],
+): Map<string, string> {
+  const formatIndex = PROBLEM_INDEX_FORMATTERS[contestType];
+  const sortedIds = [...problemIds].sort((first, second) => Number(first) - Number(second));
+
+  return new Map(sortedIds.map((problemId, position) => [problemId, formatIndex(position)]));
 }
 
-/** Assigns one-based numeric indices in ascending AOJ problem id order within a contest. */
-export function assignProblemNumbers(problemIds: string[]): Map<string, string> {
-  return new Map(
-    sortProblemIds(problemIds).map((problemId, index) => [problemId, String(index + 1)]),
-  );
-}
+type ProblemIndexFormatter = (position: number) => string;
 
-function sortProblemIds(problemIds: string[]): string[] {
-  return [...problemIds].sort((first, second) => Number(first) - Number(second));
-}
+const toProblemLetter: ProblemIndexFormatter = (position) =>
+  String.fromCharCode('A'.charCodeAt(0) + position);
+
+// Keyed by every contest type so that a new type fails to compile until its format is chosen.
+const PROBLEM_INDEX_FORMATTERS = {
+  PCK: (position) => String(position + 1),
+  JAG: toProblemLetter,
+  ICPC: toProblemLetter,
+} satisfies Record<ChallengeContestType, ProblemIndexFormatter>;
 
 /**
  * Maps the AOJTaskAPI problem object to a task object.
