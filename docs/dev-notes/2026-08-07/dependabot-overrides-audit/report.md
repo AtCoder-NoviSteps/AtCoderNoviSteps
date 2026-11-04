@@ -12,7 +12,7 @@ open だった 23 件（high 11 / moderate 10 / low 2）は全て開発用ツー
 | `7293ad96` | 未使用の `@eslint/eslintrc` と brace-expansion 1 系の override を削除 | 3 件                |
 | `6c2c263c` | override `'deepmerge-ts@<8.0.0': '8.0.2'` を追加                      | 1 件（最後の high） |
 
-残る 4 件のうち、uuid と deepmerge は dismiss する。minimatch と glob は、dismiss するか override 4 行で解消するかの判断待ち（後述）。
+残る 4 件は、どれも発火する経路がないか修正版がないので、全て dismiss する（後述）。
 
 ## アラート一覧
 
@@ -25,8 +25,8 @@ open だった 23 件（high 11 / moderate 10 / low 2）は全て開発用ツー
 | #239〜#244 の 3 件       | high 2 / moderate 1 | brace-expansion 1.1.18 → 1.1.21       | `@eslint/eslintrc` → `minimatch@3.1.5`                | 解消（`7293ad96`） |
 | #234                     | high                | deepmerge-ts 7.1.5 → 8.0.2            | fabbrica → `@prisma/config@6.19.0`（完全固定）        | 解消（`6c2c263c`） |
 | #200                     | moderate            | uuid 9.0.1 → 11.1.1                   | fabbrica → `short-uuid@5.2.0`（完全固定）             | dismiss 予定       |
-| #257                     | moderate            | minimatch 10.2.6 → 11.0.1 以降        | eslint 系 3 経路、nft → glob                          | 判断待ち           |
-| #256                     | moderate            | glob 13.0.6 → 14.0.2 以降             | adapter-vercel → `@vercel/nft@1.10.2`（`^13.0.0`）    | 判断待ち           |
+| #257                     | moderate            | minimatch 10.2.6 → 11.0.1 以降        | eslint 系 3 経路、nft → glob                          | dismiss 予定       |
+| #256                     | moderate            | glob 13.0.6 → 14.0.2 以降             | adapter-vercel → `@vercel/nft@1.10.2`（`^13.0.0`）    | dismiss 予定       |
 | #255                     | low                 | deepmerge 4.3.1 → なし                | `@sveltejs/vite-plugin-svelte`・`flowbite-datepicker` | dismiss 予定       |
 
 #239〜#244 は同じ GHSA の 1 系・5 系の組で、どちらが 1 系かは画面から判別できない。
@@ -49,7 +49,7 @@ open だった 23 件（high 11 / moderate 10 / low 2）は全て開発用ツー
 
 **deepmerge は dismiss。** 修正版が存在しない。vite-plugin-svelte はビルド時に自前の設定をマージするだけで、外部入力は渡らない。
 
-## minimatch と glob（判断待ち）
+## minimatch と glob: dismiss に決定
 
 公式 advisory によると、minimatch（#257）が発火するには、`optimizationLevel >= 2` であることと、攻撃者が glob パターンを指定できることの両方が必要。
 
@@ -57,7 +57,9 @@ open だった 23 件（high 11 / moderate 10 / low 2）は全て開発用ツー
 - nft 経由の glob は level 2 を設定するが、パターンを攻撃者は指定できない。本プロジェクトのビルドで nft が glob を呼ぶのは 2 回だけで、どちらも Prisma のクエリエンジンを探す定数パターン（`<@prisma/client>/.prisma/**/*.so?(.*)`）だった。ほかの呼び出し元も、トレース対象のソースコードを静的に評価してパターンを作る
 - glob（#256）は、AbortSignal で中断した後も探索が続く問題で、nft は `signal` を渡していない
 
-修正の手段も、隔離した worktree で検証済み。次の override を足し、不要になる `'minimatch@>=10.0.0 <10.2.3': '10.2.6'` を消すと、minimatch 10 系と glob 13 が lockfile から消え、残りは uuid と deepmerge だけになった。
+発火する経路がないので、#257 と #256 は dismiss する。設定に何も残らず、eslint と nft が新しい版に追従すれば、lockfile の更新だけで消える。
+
+**採らなかった案: override 4 行で解消する。** 隔離した worktree で動くことは検証した。次の override を足し、不要になる `'minimatch@>=10.0.0 <10.2.3': '10.2.6'` を消すと、minimatch 10 系と glob 13 が lockfile から消え、残りは uuid と deepmerge だけになった。
 
 ```yaml
 '@vercel/nft>glob': '14.0.3'
@@ -66,12 +68,9 @@ open だった 23 件（high 11 / moderate 10 / low 2）は全て開発用ツー
 '@typescript-eslint/typescript-estree>minimatch': '11.0.4'
 ```
 
-この構成で、ESLint の対象ファイルの選び方（波括弧・`**`・括弧つきの ignore を含む 4 パターン）、ESLint の出力、ユニットテスト、ビルド成果物、nft の glob 呼び出しごとの結果が、変更前と全て一致した。
+この構成で、ESLint の対象ファイルの選び方（波括弧・`**`・括弧つきの ignore を含む 4 パターン）、ESLint の出力、ユニットテスト、ビルド成果物、nft の glob 呼び出しごとの結果が、変更前と全て一致した。それでも採らなかったのは、依存元の宣言レンジ（eslint の `^10.2.6`、nft の `glob@^13`）を越えて版を固定し続けることになるためである。上流の更新に追従できず、上流が追いついたら手で外す必要がある。また glob 14 は Vercel 上で Prisma のエンジンを見つける処理に効くので、採るなら preview デプロイでの確認も要る。上記の override は、将来アラートを再評価するときにそのまま使える。
 
-- **案 1（推奨）: #257 と #256 を dismiss。** 発火条件を満たす経路がない。設定に何も残らず、eslint と nft が新しい版に追従すれば lockfile の更新だけで消える
-- **案 2: 上記の override 4 行で解消。** 出力の一致は確かめたが、依存元の宣言レンジ（eslint の `^10.2.6`、nft の `glob@^13`）を越えて版を固定し続ける。上流の更新に追従できず、上流が追いついたら手で外す必要がある。glob 14 は Vercel 上で Prisma のエンジンを見つける処理に効くので、採るなら preview デプロイでの確認が要る
-- PR #4295 は、override の版を v11 に変えるだけで 10.2.6 が残るので、どちらの案でもクローズする
-- 採らない案: glob 13 に minimatch 11 を強制する（例外を出さずにワイルドカードの検出結果が空になる）、全 minimatch を一律に v11 にする、glob 13 の同梱コピーごと `pnpm patch` で直す（保守が重い）
+ほかに採らなかった案: glob 13 に minimatch 11 を強制する（例外を出さずにワイルドカードの検出結果が空になる）、全 minimatch を一律に v11 にする、glob 13 の同梱コピーごと `pnpm patch` で直す（保守が重い）。override の版を v11 に変えるだけの PR #4295 は、10.2.6 が残って解消にならないのでクローズした。
 
 ## 検証の方法と結果
 
@@ -94,9 +93,7 @@ open だった 23 件（high 11 / moderate 10 / low 2）は全て開発用ツー
 ## 残タスクと未検証
 
 - [ ] push と PR の作成（人間が実施）
-- [ ] uuid（#200）と deepmerge（#255）の dismiss
-- [ ] minimatch（#257）と glob（#256）の案の選択。案 1 なら dismiss、案 2 なら override を入れて preview で Prisma の動作を確認
-- [ ] PR #4295 のクローズ
+- [ ] GitHub 上での dismiss（人間が実施）。理由は、#200 uuid と #256 glob が Vulnerable code is not actually used、#257 minimatch と #255 deepmerge が Risk is tolerable to this project（minimatch は nft の経路で脆弱なコード自体は実行されるため、not used ではなく tolerable にする）
 - [ ] 任意: `lockFileMaintenance` の採否（差分の大きさと `minimumReleaseAge` などとの相互作用は未検証）
 - [ ] fabbrica の廃止時に、deepmerge-ts・effect・defu の override を外す
 - 未検証: preview・production での動作、Windows でのローカルビルド（CI と Vercel は Linux）、flowbite-datepicker 経路の deepmerge が実行時に読まれるか、アラートが一斉に開いた原因
