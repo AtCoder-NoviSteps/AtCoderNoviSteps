@@ -66,4 +66,10 @@ pnpm test:unit
 
 > **`pnpm check` tip:** If type errors appear and you have uncommitted changes, run `git stash && pnpm check 2>&1 | tail -5` to confirm whether errors are pre-existing. Restore with `git stash pop`. If there is nothing to stash, skip this check — without a baseline to compare against, it gives no useful signal.
 
+**Compare outputs, not only exit codes.** Passing commands do not prove that nothing changed. Before the change, save the outputs: ESLint JSON, the list and hashes of build files, and generated files. After the change, compare them.
+
+- First build twice with no change. Some files always differ (e.g. version stamps); leave them out of the comparison.
+- Check that the code you care about actually ran, for example by logging calls to the updated package during the build. If it never ran, "identical output" proves nothing.
+- A new version in the lockfile does not prove that the running code changed. Some packages bundle their own copy of a dependency, so check the entry point that is actually loaded.
+
 When done, rewrite plan.md as `AGENTS.md` Implementation Workflow step 6 describes, recording the verification results among the facts.

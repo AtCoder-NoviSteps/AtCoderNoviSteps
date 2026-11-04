@@ -41,17 +41,18 @@ See `docs/guides/architecture.md` for detailed placement rules.
 
 Before planning or changing a matching path, read the corresponding document under `docs/guides/agent-rules/`.
 
-| Path                                 | Rules                                                         |
-| ------------------------------------ | ------------------------------------------------------------- |
-| All source and plans                 | `coding-style.md`                                             |
-| `prisma/**`, server and service code | `prisma-db.md`                                                |
-| `**/*.test.ts`, `src/test/**`        | `testing.md`                                                  |
-| `**/*.spec.ts`, `e2e/**`             | `testing-e2e.md`                                              |
-| Svelte components and stores         | `svelte-components.md`, `svelte-runes.md`, `accessibility.md` |
-| SvelteKit routes                     | `sveltekit.md`                                                |
-| Authentication and admin paths       | `auth.md`                                                     |
-| Server cache modules                 | `server-cache.md`                                             |
-| `.github/workflows/**`               | `github-actions.md`                                           |
+| Path                                                   | Rules                                                         |
+| ------------------------------------------------------ | ------------------------------------------------------------- |
+| All source and plans                                   | `coding-style.md`                                             |
+| `prisma/**`, server and service code                   | `prisma-db.md`                                                |
+| `**/*.test.ts`, `src/test/**`                          | `testing.md`                                                  |
+| `**/*.spec.ts`, `e2e/**`                               | `testing-e2e.md`                                              |
+| Svelte components and stores                           | `svelte-components.md`, `svelte-runes.md`, `accessibility.md` |
+| SvelteKit routes                                       | `sveltekit.md`                                                |
+| Authentication and admin paths                         | `auth.md`                                                     |
+| Server cache modules                                   | `server-cache.md`                                             |
+| `.github/workflows/**`                                 | `github-actions.md`                                           |
+| `package.json`, `pnpm-workspace.yaml`, `renovate.json` | `dependencies.md`                                             |
 
 Use project-specific workflows from `.agents/skills/` when a task matches a skill description. Each `.agents/skills/<name>/instructions.md` is a plain Markdown checklist — read it directly when doing that task by hand, not only when an agent loads it automatically.
 
