@@ -1,0 +1,1 @@
+../../docs/guides/agent-rules/dependencies.md

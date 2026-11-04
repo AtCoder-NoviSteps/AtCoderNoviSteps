@@ -25,7 +25,6 @@
   "devDependencies": {
     "@dnd-kit/abstract": "0.5.3",
     "@dnd-kit/dom": "0.5.3",
-    "@eslint/eslintrc": "3.3.7",
     "@playwright/test": "1.64.1",
     "@quramy/prisma-fabbrica": "2.3.3",
     "@sveltejs/adapter-vercel": "7.0.2",
