@@ -50,7 +50,7 @@
     "nock": "15.0.5",
     "oxfmt": "0.76.0",
     "oxlint": "1.91.0",
-    "pnpm": "12.16.1",
+    "pnpm": "12.18.0",
     "prisma": "5.22.0",
     "prisma-markdown": "1.0.9",
     "super-sitemap": "1.0.12",
@@ -82,7 +82,7 @@
     "tailwind-merge": "3.7.0",
     "xss": "1.0.17"
   },
-  "packageManager": "pnpm@12.16.1",
+  "packageManager": "pnpm@12.18.0",
   "engines": {
     "node": "26.x"
   }
