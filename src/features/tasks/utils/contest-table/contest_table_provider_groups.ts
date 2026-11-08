@@ -203,12 +203,20 @@ export const prepareContestProviderPresets = () => {
         ariaLabel: 'Filter contests from AWC 0001 onwards',
       })
         .addProvider(
+          new AWCSpecialContestProvider(ContestType.AWC, {
+            section: '0200',
+            contestId: 'awc0200',
+            title: 'AtCoder Weekday Contest 0200',
+            abbreviationName: 'awc0200',
+          }),
+        )
+        .addProvider(
           new AWCRangeProvider(ContestType.AWC, {
-            section: '0151Onwards',
+            section: '0151To0199',
             minRound: 151,
-            maxRound: 9999,
-            title: 'AtCoder Weekday Contest 0151 〜',
-            abbreviationName: 'awc0151Onwards',
+            maxRound: 199,
+            title: 'AtCoder Weekday Contest 0151 〜 0199',
+            abbreviationName: 'awc0151To0199',
           }),
         )
         .addProvider(

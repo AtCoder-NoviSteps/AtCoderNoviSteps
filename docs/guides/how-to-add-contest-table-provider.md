@@ -42,7 +42,7 @@ protected setFilterCondition(): (taskResult: TaskResult) => boolean {
 }
 ```
 
-### パターン2: 単一ソース型（EDPC / TDPC / AWC0100 / AWC0150）
+### パターン2: 単一ソース型（EDPC / TDPC / AWC0100 / AWC0150 / AWC0200）
 
 単一 `contest_id` のみフィルタ。問題 id 表示、ラウンド名・ヘッダー非表示。
 
@@ -125,23 +125,23 @@ AtCoder Japan Open と、その前身の全国統一プログラミング王決�
 | AGC 001-      | 001～      | 4～7問     | -             |
 | AWC 0001-0099 | 0001～0099 | A～E       | -             |
 | AWC 0101-0149 | 0101～0149 | A～E       | -             |
-| AWC 0151-     | 0151～     | A～E       | -             |
+| AWC 0151-0199 | 0151～0199 | A～E       | -             |
 
 ### 単一ソース型
 
-| コンテスト                  | contest_id              | 問題数 | フォーマット |
-| --------------------------- | ----------------------- | ------ | ------------ |
-| EDPC                        | `'dp'`                  | 26問   | A～Z         |
-| TDPC                        | `'tdpc'`                | 26問   | A～Z         |
-| NDPC                        | `'ndpc'`                | 20問   | A～T         |
-| FPS_24                      | `'fps-24'`              | 24問   | A～X         |
-| GAME_24‡                    | `'game-24'`             | 24問   | A～X         |
-| AALC                        | `'aalc001'`             | 24問   | A～X         |
-| ACL_PRACTICE                | `'practice2'`           | 12問   | A～L         |
-| ACL_BEGINNER / ACL_CONTEST1 | `'abl'`/`'acl1'`        | 6問    | A～F         |
-| AWC0100 / AWC0150†          | `'awc0100'`/`'awc0150'` | 15問   | A～O         |
+| コンテスト                   | contest_id                          | 問題数 | フォーマット |
+| ---------------------------- | ----------------------------------- | ------ | ------------ |
+| EDPC                         | `'dp'`                              | 26問   | A～Z         |
+| TDPC                         | `'tdpc'`                            | 26問   | A～Z         |
+| NDPC                         | `'ndpc'`                            | 20問   | A～T         |
+| FPS_24                       | `'fps-24'`                          | 24問   | A～X         |
+| GAME_24‡                     | `'game-24'`                         | 24問   | A～X         |
+| AALC                         | `'aalc001'`                         | 24問   | A～X         |
+| ACL_PRACTICE                 | `'practice2'`                       | 12問   | A～L         |
+| ACL_BEGINNER / ACL_CONTEST1  | `'abl'`/`'acl1'`                    | 6問    | A～F         |
+| AWC0100 / AWC0150 / AWC0200† | `'awc0100'`/`'awc0150'`/`'awc0200'` | 15問   | A～O         |
 
-†注: ContestType.AWC を再利用し、section（`'0100'`, `'0150'`, `'0151Onwards'`）で provider key を一意化。ACL 系は `Acl` グループ、DP 系と x 24 題系（FPS_24 / GAME_24 / AALC）は `dps` グループで統一管理。
+†注: ContestType.AWC を再利用し、section（`'0100'`, `'0150'`, `'0200'`, `'0151To0199'`）で provider key を一意化。ACL 系は `Acl` グループ、DP 系と x 24 題系（FPS_24 / GAME_24 / AALC）は `dps` グループで統一管理。
 
 ‡注: task_id は `game_a`〜`game_x` で、contest_id の数字を含まない（`fps-24` は `fps_24_a`）。
 

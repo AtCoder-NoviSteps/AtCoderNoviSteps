@@ -3,6 +3,14 @@ import { describe, test, expect } from 'vitest';
 import { ContestType } from '#lib/contests/types/contest.js';
 
 import { TESSOKU_SECTIONS } from '#features/tasks/types/contest-table/contest_table_provider.js';
+import {
+  taskResultsForAWC0001To0099Provider,
+  taskResultsForAWC0100Provider,
+  taskResultsForAWC0101To0149Provider,
+  taskResultsForAWC0150Provider,
+  taskResultsForAWC0151To0199Provider,
+  taskResultsForAWC0200Provider,
+} from '#features/tasks/fixtures/contest-table/contest_table_provider.js';
 
 import {
   ICPC_PRELIM_OLDEST_YEAR,
@@ -143,21 +151,53 @@ describe('prepareContestProviderPresets', () => {
   });
 
   describe('multi-provider presets', () => {
-    test('AWC0001Onwards registers 5 providers with correct keys', () => {
+    test('AWC0001Onwards registers 6 providers in display order', () => {
       const group = presets.AWC0001Onwards();
+      const providerKeys = group.getAllProviders().map((provider) => provider.getProviderKey());
 
       expect(group.getGroupName()).toBe('AWC 0001 Onwards');
       expect(group.getMetadata()).toEqual({
         buttonLabel: 'AWC 0001 〜 ',
         ariaLabel: 'Filter contests from AWC 0001 onwards',
       });
-      expect(group.getSize()).toBe(5);
+      expect(providerKeys).toEqual([
+        'AWC::0200',
+        'AWC::0151To0199',
+        'AWC::0150',
+        'AWC::0101To0149',
+        'AWC::0100',
+        'AWC::0001To0099',
+      ]);
+    });
 
-      const sections = ['0151Onwards', '0150', '0101To0149', '0100', '0001To0099'];
+    test.each([
+      { contestId: 'awc0001', providerKey: 'AWC::0001To0099' },
+      { contestId: 'awc0099', providerKey: 'AWC::0001To0099' },
+      { contestId: 'awc0100', providerKey: 'AWC::0100' },
+      { contestId: 'awc0101', providerKey: 'AWC::0101To0149' },
+      { contestId: 'awc0149', providerKey: 'AWC::0101To0149' },
+      { contestId: 'awc0150', providerKey: 'AWC::0150' },
+      { contestId: 'awc0151', providerKey: 'AWC::0151To0199' },
+      { contestId: 'awc0199', providerKey: 'AWC::0151To0199' },
+      { contestId: 'awc0200', providerKey: 'AWC::0200' },
+    ])('AWC0001Onwards shows $contestId only in $providerKey', ({ contestId, providerKey }) => {
+      const allAWCTaskResults = [
+        ...taskResultsForAWC0001To0099Provider,
+        ...taskResultsForAWC0100Provider,
+        ...taskResultsForAWC0101To0149Provider,
+        ...taskResultsForAWC0150Provider,
+        ...taskResultsForAWC0151To0199Provider,
+        ...taskResultsForAWC0200Provider,
+      ];
+      const matchedProviderKeys = presets
+        .AWC0001Onwards()
+        .getAllProviders()
+        .filter((provider) =>
+          provider.filter(allAWCTaskResults).some((task) => task.contest_id === contestId),
+        )
+        .map((provider) => provider.getProviderKey());
 
-      for (const section of sections) {
-        expect(group.getProvider(ContestType.AWC, section)).toBeDefined();
-      }
+      expect(matchedProviderKeys).toEqual([providerKey]);
     });
 
     test('TessokuBook registers 3 section providers', () => {

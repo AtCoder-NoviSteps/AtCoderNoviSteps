@@ -9,7 +9,8 @@ import {
   taskResultsForAWC0100Provider,
   taskResultsForAWC0101To0149Provider,
   taskResultsForAWC0150Provider,
-  taskResultsForAWC0151OnwardsProvider,
+  taskResultsForAWC0151To0199Provider,
+  taskResultsForAWC0200Provider,
 } from '#features/tasks/fixtures/contest-table/contest_table_provider.js';
 
 const allAWCTaskResults: TaskResults = [
@@ -17,7 +18,8 @@ const allAWCTaskResults: TaskResults = [
   ...taskResultsForAWC0100Provider,
   ...taskResultsForAWC0101To0149Provider,
   ...taskResultsForAWC0150Provider,
-  ...taskResultsForAWC0151OnwardsProvider,
+  ...taskResultsForAWC0151To0199Provider,
+  ...taskResultsForAWC0200Provider,
 ];
 
 const RANGE_PROBLEMS = ['A', 'B', 'C', 'D', 'E'];
@@ -42,20 +44,20 @@ const SPECIAL_PROBLEMS = [
 describe('AWCRangeProvider', () => {
   const rangeProviderCases = [
     {
-      name: 'AWC0151Onwards',
+      name: 'AWC0151To0199',
       config: {
-        section: '0151Onwards',
+        section: '0151To0199',
         minRound: 151,
-        maxRound: 9999,
-        title: 'AtCoder Weekday Contest 0151 〜',
-        abbreviationName: 'awc0151Onwards',
+        maxRound: 199,
+        title: 'AtCoder Weekday Contest 0151 〜 0199',
+        abbreviationName: 'awc0151To0199',
       },
-      includedContestIds: ['awc0151', 'awc0152'],
-      excludedContestIds: ['awc0150', 'awc0149', 'awc0100'],
-      fixtureData: taskResultsForAWC0151OnwardsProvider,
+      includedContestIds: ['awc0151', 'awc0152', 'awc0199'],
+      excludedContestIds: ['awc0149', 'awc0150', 'awc0200'],
+      fixtureData: taskResultsForAWC0151To0199Provider,
       roundLabelCases: [
         { contestId: 'awc0151', expected: '0151' },
-        { contestId: 'awc0200', expected: '0200' },
+        { contestId: 'awc0199', expected: '0199' },
       ],
     },
     {
@@ -168,6 +170,18 @@ describe('AWCRangeProvider', () => {
 
 describe('AWCSpecialContestProvider', () => {
   const specialContestCases = [
+    {
+      name: 'AWC0200',
+      config: {
+        section: '0200',
+        contestId: 'awc0200',
+        title: 'AtCoder Weekday Contest 0200',
+        abbreviationName: 'awc0200',
+      },
+      fixtureData: taskResultsForAWC0200Provider,
+      mixedData: [...taskResultsForAWC0151To0199Provider, ...taskResultsForAWC0200Provider],
+      excludedContestIds: ['awc0151', 'awc0199'],
+    },
     {
       name: 'AWC0150',
       config: {
