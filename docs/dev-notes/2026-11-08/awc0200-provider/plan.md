@@ -20,6 +20,7 @@ awc0200 を `AWCSpecialContestProvider` で単独のテーブルにし、`0151On
 ## コードと履歴に残らない事実
 
 - seed と fixture の awc0200 はダミー（`Dummy Problem A`〜`O`）。15 問は awc0100 / awc0150 に合わせた仮定で、実際の問題数は未確認。
+- 計画外の対応として、seed の awc0151 A〜E のダミー名を、ユーザー提供の JSON にある実問題名に差し替えた。同じ JSON の awc0150 は seed とすでに一致していたので、変更していない。
 - `maxRound: 199` を `9999` に戻す変異は、`AWC0001Onwards shows awc0200 only in AWC::0200` が検出した（41 件中 1 件が失敗）。
 - `pnpm format` / `pnpm lint` / `pnpm check` / `pnpm test:unit`（3069 件）/ `git diff --check` はすべて通過した。
 - 未確認: `pnpm db:seed` 後の dev サーバーでの目視（0200 の表が 0151〜0199 の上に出ること）。ローカル DB への書き込みになるため実施していない。
