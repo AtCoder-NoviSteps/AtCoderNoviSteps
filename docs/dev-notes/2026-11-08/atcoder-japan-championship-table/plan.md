@@ -4,18 +4,18 @@
 
 「旧 ARC」と「競プロ典型 90 問」の間に「AtCoder 日本大会」ボタンを足し、次の 10 コンテストをコンテストごとのテーブル（ICPC 国内予選と同じレイアウト）で上から順に並べる。
 
-| #   | contest_id         | 見出し                                               | ContestType（現在 → 変更後）           | seed           |
-| --- | ------------------ | ---------------------------------------------------- | -------------------------------------- | -------------- |
-| 1   | arc232             | 第三回 AtCoder Japan Open -予選-（ARC 232）          | ARC（変更なし）                        | 無し → 5 問    |
-| 2   | ajo2025-final-open | 第二回 AtCoder Japan Open -決勝-                     | 未分類 → ATCODER_MAIN_OFFICIAL_ONSITE  | 無し → 5 問    |
-| 3   | arc207             | 第二回 AtCoder Japan Open -予選-（ARC 207）          | ARC（変更なし）                        | 無し → 5 問    |
-| 4   | ajo2024-final      | 第一回 AtCoder Japan Open -決勝-                     | 未分類 → ATCODER_MAIN_OFFICIAL_ONSITE  | 無し → 6 問    |
-| 5   | arc186             | AtCoder Japan Open -予選-（ARC 186）                 | ARC（変更なし）                        | 無し → 5 問    |
-| 6   | nikkei2019-2-final | 第二回全国統一プログラミング王決定戦本戦             | 未分類 → ATCODER_MAIN_OFFICIAL_ONSITE  | 無し → 8 問    |
-| 7   | nikkei2019-2-qual  | 第二回全国統一プログラミング王決定戦予選（ARC-like） | ARC_LIKE（変更なし）                   | 6 問（一致）   |
-| 8   | nikkei2019-ex      | 全国統一プログラミング王決定戦 エキシビジョン        | 未分類 → ATCODER_MAIN_OFFICIAL_ONSITE  | 無し → 8 問    |
-| 9   | nikkei2019-final   | 全国統一プログラミング王決定戦本戦                   | OTHERS → ATCODER_MAIN_OFFICIAL_ONSITE  | 無し → 8 問    |
-| 10  | nikkei2019-qual    | 全国統一プログラミング王決定戦予選（ARC-like）       | ARC_LIKE（変更なし）                   | 6 問（一致）   |
+| #   | contest_id         | 見出し                                               | ContestType（現在 → 変更後）          | seed         |
+| --- | ------------------ | ---------------------------------------------------- | ------------------------------------- | ------------ |
+| 1   | arc232             | 第三回 AtCoder Japan Open -予選-（ARC 232）          | ARC（変更なし）                       | 無し → 5 問  |
+| 2   | ajo2025-final-open | 第二回 AtCoder Japan Open -決勝-                     | 未分類 → ATCODER_MAIN_OFFICIAL_ONSITE | 無し → 5 問  |
+| 3   | arc207             | 第二回 AtCoder Japan Open -予選-（ARC 207）          | ARC（変更なし）                       | 無し → 5 問  |
+| 4   | ajo2024-final      | 第一回 AtCoder Japan Open -決勝-                     | 未分類 → ATCODER_MAIN_OFFICIAL_ONSITE | 無し → 6 問  |
+| 5   | arc186             | AtCoder Japan Open -予選-（ARC 186）                 | ARC（変更なし）                       | 無し → 5 問  |
+| 6   | nikkei2019-2-final | 第二回全国統一プログラミング王決定戦本戦             | 未分類 → ATCODER_MAIN_OFFICIAL_ONSITE | 無し → 8 問  |
+| 7   | nikkei2019-2-qual  | 第二回全国統一プログラミング王決定戦予選（ARC-like） | ARC_LIKE（変更なし）                  | 6 問（一致） |
+| 8   | nikkei2019-ex      | 全国統一プログラミング王決定戦 エキシビジョン        | 未分類 → ATCODER_MAIN_OFFICIAL_ONSITE | 無し → 8 問  |
+| 9   | nikkei2019-final   | 全国統一プログラミング王決定戦本戦                   | OTHERS → ATCODER_MAIN_OFFICIAL_ONSITE | 無し → 8 問  |
+| 10  | nikkei2019-qual    | 全国統一プログラミング王決定戦予選（ARC-like）       | ARC_LIKE（変更なし）                  | 6 問（一致） |
 
 - 問題データはメンテナが貼った AtCoder Problems の行を [tasks.json](./tasks.json) に保存した（62 行、ID 重複なし、`title` = `{problem_index}. {name}`、seed にある 12 行と一致）。seed に足すのは 50 行。
 - nikkei2019-ex では task_id の末尾と記号が食い違う（`nikkei2019ex_e` が F のコラッツ問題、`nikkei2019ex_f` が E のスーパーFizzBuzz）。AtCoder 側の問題 URL と記号の対応がそうなっているためで（AtCoder Problems の title も `F. コラッツ問題`）、スプレッドシートの記号・問題名とは一致する。そのまま使う。リンクは task_id から作るので正しい問題に飛び、テーブルは `task_table_index` 順なので E → F と並ぶ。`-ex` はエキシビジョンの略で、ABC 212〜318 の記号「Ex」とは関係ない。
