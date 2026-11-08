@@ -44,6 +44,12 @@ const tasksNikkei2019Qual: TaskResults = [
     task_table_index: 'A',
     title: 'A. Subscribers',
   },
+  {
+    contest_id: 'nikkei2019-qual',
+    task_id: 'nikkei2019_qual_b',
+    task_table_index: 'B',
+    title: 'B. Touitsu',
+  },
 ] as TaskResults;
 
 // On AtCoder, nikkei2019ex_e is problem F and nikkei2019ex_f is problem E.
@@ -199,5 +205,44 @@ describe('AtCoderJapanChampionshipProvider', () => {
       expect(table['nikkei2019-ex']['E'].task_id).toBe('nikkei2019ex_f');
       expect(table['nikkei2019-ex']['F'].task_id).toBe('nikkei2019ex_e');
     });
+
+    // generateTable passes contestType to getTaskTableHeaderName, which renames H only for ABC.
+    test.each([
+      {
+        name: 'an ARC qualifier',
+        entry: { contestId: 'arc232', contestType: ContestType.ARC, title: 'ARC qualifier' },
+        tasks: tasksArc232,
+        expected: ['A', 'B', 'C', 'D', 'E'],
+      },
+      {
+        name: 'an ARC-like qualifier',
+        entry: {
+          contestId: 'nikkei2019-qual',
+          contestType: ContestType.ARC_LIKE,
+          title: 'ARC-like qualifier',
+        },
+        tasks: tasksNikkei2019Qual,
+        expected: ['A', 'B'],
+      },
+      {
+        name: 'an onsite contest with problem H',
+        entry: {
+          contestId: 'nikkei2019-ex',
+          contestType: ContestType.ATCODER_MAIN_OFFICIAL_ONSITE,
+          title: 'onsite contest',
+        },
+        tasks: tasksNikkei2019Ex,
+        expected: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'],
+      },
+    ])(
+      'keys the cells of $name by the same letters as the header',
+      ({ entry, tasks, expected }) => {
+        const provider = new AtCoderJapanChampionshipProvider(entry);
+        const table = provider.generateTable(tasks);
+
+        expect(provider.getHeaderIdsForTask(tasks)).toEqual(expected);
+        expect(Object.keys(table[entry.contestId]).toSorted()).toEqual(expected);
+      },
+    );
   });
 });

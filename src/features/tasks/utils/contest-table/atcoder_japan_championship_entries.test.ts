@@ -25,4 +25,34 @@ describe('ATCODER_JAPAN_CHAMPIONSHIP_ENTRIES', () => {
   test('has tasks in the seed for every entry', () => {
     expect(entryContestIds.filter((contestId) => !seedContestIds.has(contestId))).toEqual([]);
   });
+
+  test('seeds every problem of each entry, matching the maintainer spreadsheet', () => {
+    const problemCounts = Object.fromEntries(
+      entryContestIds.map((contestId) => [
+        contestId,
+        tasks.filter((task) => task.contest_id === contestId).length,
+      ]),
+    );
+
+    expect(problemCounts).toEqual({
+      arc232: 5,
+      'ajo2025-final-open': 5,
+      arc207: 5,
+      'ajo2024-final': 6,
+      arc186: 5,
+      'nikkei2019-2-final': 8,
+      'nikkei2019-2-qual': 6,
+      'nikkei2019-ex': 8,
+      'nikkei2019-final': 8,
+      'nikkei2019-qual': 6,
+    });
+  });
+
+  // On AtCoder, these two task ids carry each other's letters.
+  test('keeps the letters of nikkei2019ex_e (F) and nikkei2019ex_f (E) as AtCoder lists them', () => {
+    const letterByTaskId = new Map(tasks.map((task) => [task.id, task.problem_index]));
+
+    expect(letterByTaskId.get('nikkei2019ex_e')).toBe('F');
+    expect(letterByTaskId.get('nikkei2019ex_f')).toBe('E');
+  });
 });

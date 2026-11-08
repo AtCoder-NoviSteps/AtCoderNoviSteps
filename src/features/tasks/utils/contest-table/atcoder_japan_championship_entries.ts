@@ -2,7 +2,7 @@ import { ContestType } from '#lib/contests/types/contest.js';
 
 export type AtCoderJapanChampionshipEntry = {
   contestId: string;
-  // Only builds the provider key (e.g. ARC::arc232); the table filters by contestId alone.
+  // Builds the provider key (e.g. ARC::arc232); cell keys depend on it only for ABC, which no entry uses.
   contestType: ContestType;
   title: string;
 };
