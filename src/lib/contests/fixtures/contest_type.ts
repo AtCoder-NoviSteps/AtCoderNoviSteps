@@ -637,10 +637,6 @@ export const atCoderOthers = [
     contestId: 'iroha2019-day4',
     expected: ContestType.OTHERS,
   }),
-  createTestCaseForContestType('全国統一プログラミング王決定戦本戦')({
-    contestId: 'nikkei2019-final',
-    expected: ContestType.OTHERS,
-  }),
   createTestCaseForContestType('第一回日本最強プログラマー学生選手権決勝')({
     contestId: 'jsc2019-final',
     expected: ContestType.OTHERS,
@@ -687,6 +683,26 @@ export const atCoderMainOfficialOnsite = [
   }),
   createTestCaseForContestType('CodeQUEEN 2023 決勝')({
     contestId: 'codequeen2023-final-open',
+    expected: ContestType.ATCODER_MAIN_OFFICIAL_ONSITE,
+  }),
+  createTestCaseForContestType('全国統一プログラミング王決定戦本戦')({
+    contestId: 'nikkei2019-final',
+    expected: ContestType.ATCODER_MAIN_OFFICIAL_ONSITE,
+  }),
+  createTestCaseForContestType('全国統一プログラミング王決定戦 エキシビジョン')({
+    contestId: 'nikkei2019-ex',
+    expected: ContestType.ATCODER_MAIN_OFFICIAL_ONSITE,
+  }),
+  createTestCaseForContestType('第二回全国統一プログラミング王決定戦本戦')({
+    contestId: 'nikkei2019-2-final',
+    expected: ContestType.ATCODER_MAIN_OFFICIAL_ONSITE,
+  }),
+  createTestCaseForContestType('第一回 AtCoder Japan Open -決勝-')({
+    contestId: 'ajo2024-final',
+    expected: ContestType.ATCODER_MAIN_OFFICIAL_ONSITE,
+  }),
+  createTestCaseForContestType('第二回 AtCoder Japan Open -決勝-')({
+    contestId: 'ajo2025-final-open',
     expected: ContestType.ATCODER_MAIN_OFFICIAL_ONSITE,
   }),
 ];
