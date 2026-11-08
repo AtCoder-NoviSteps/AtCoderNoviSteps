@@ -95,6 +95,13 @@ AOJ/JAG 固有の詳細（`titleStyle`、同一年2回開催の `suffix` 分割�
 - **記号**: AOJ は問題 ID の昇順で A, B, C… と振るが、問題が AOJ に無いコンテストではずれる。新しい回はメンテナのスプレッドシートと照合する
 - **AOJ に無い問題**: `NoJudge-{contest_id}_{小文字の記号}` の task_id でダミーを足し、`no_judge.ts` にリンク先（jag-icpc.org のページ）を登録し、コンテストを `LETTERS_OF_SHIFTED_CONTESTS` に入れる。出典欄は `（No Judge）` になる
 
+#### 「AtCoder 日本大会」も明示的な配列を使う
+
+AtCoder Japan Open と、その前身の全国統一プログラミング王決定戦の 10 コンテストを並べる（`atcoder_japan_championship_entries.ts`）。予選は ARC（例: `arc186`）や ARC_LIKE（例: `nikkei2019-qual`）のまま残し、決勝とエキシビジョンは `ATCODER_MAIN_OFFICIAL_ONSITE` に分類する。
+
+- **エントリ**: `{ contestId, contestType, title }`。ARC の回は `getContestNameLabel` が `ARC 232` を返し、ARC_LIKE にはラベル生成が無いので、見出しはエントリに書く。`contestType` は provider key（例: `ARC::arc232`）にだけ効く
+- **新しい回**: 決勝を `prefixes.ts` の `ATCODER_MAIN_OFFICIAL_ONSITE` に足し、予選の ARC と決勝を seed と配列の両方に足す。`ajo` / `nikkei2019` で始まる contest_id の配列への書き漏れと、配列の contest_id の seed 漏れは `atcoder_japan_championship_entries.test.ts` で落ちる。予選の ARC を配列に足し忘れても、このテストは落ちない
+
 ### 補足: 固定セクションによる同一 ContestType 内の共存
 
 同一 `ContestType` で異なるプロバイダを共存させる場合、config の `section` フィールドで provider key を一意化する（例: `AWC::0100`）。AWC は `AWCRangeProvider`（通常回）と `AWCSpecialContestProvider`（特殊回）の2クラスを config で使い分けており、すべて同じ `ContestType.AWC` グループに登録される。新しい AWC 回の追加は `contest_table_provider_groups.ts` で `new AWCRangeProvider(...)` または `new AWCSpecialContestProvider(...)` をインスタンス化するだけでよい。
@@ -140,16 +147,17 @@ AOJ/JAG 固有の詳細（`titleStyle`、同一年2回開催の `suffix` 分割�
 
 ### コンストラクタパラメータ型 / regex フィルタ型
 
-| コンテスト               | フィルタ方式    | 備考                                                                            |
-| ------------------------ | --------------- | ------------------------------------------------------------------------------- |
-| ICPC 国内予選            | 年度パラメータ  | `AojIcpcPrelimProvider(type, year)`                                             |
-| ICPC アジア地区          | 年度パラメータ  | `AojIcpcRegionalProvider(type, year)`                                           |
-| JAG 模擬国内             | 年度パラメータ  | 同一年2回開催は suffix 分割                                                     |
-| JAG 夏合宿・模擬地区など | 明示的な配列    | 合宿系・模擬地区・AtCoder 上の JAG の 76 件。`JagRegionalProvider(type, entry)` |
-| JOI 一次予選             | regex           | `joi{YYYY}yo1{a\|b\|c}`                                                         |
-| JOI 二次予選             | regex + section | 2020 以降 / 2006-2019 で Provider 分離                                          |
-| JOI 本選                 | regex           | 2026 年より `ho` → `sf` サフィックス                                            |
-| PAST                     | 回数パラメータ  | `PastProvider(type, round)`。回数 → contest_id は `getPastContestId`            |
+| コンテスト               | フィルタ方式    | 備考                                                                                                   |
+| ------------------------ | --------------- | ------------------------------------------------------------------------------------------------------ |
+| ICPC 国内予選            | 年度パラメータ  | `AojIcpcPrelimProvider(type, year)`                                                                    |
+| ICPC アジア地区          | 年度パラメータ  | `AojIcpcRegionalProvider(type, year)`                                                                  |
+| JAG 模擬国内             | 年度パラメータ  | 同一年2回開催は suffix 分割                                                                            |
+| JAG 夏合宿・模擬地区など | 明示的な配列    | 合宿系・模擬地区・AtCoder 上の JAG の 76 件。`JagRegionalProvider(type, entry)`                        |
+| AtCoder 日本大会         | 明示的な配列    | AtCoder Japan Open と全国統一プログラミング王決定戦の 10 件。`AtCoderJapanChampionshipProvider(entry)` |
+| JOI 一次予選             | regex           | `joi{YYYY}yo1{a\|b\|c}`                                                                                |
+| JOI 二次予選             | regex + section | 2020 以降 / 2006-2019 で Provider 分離                                                                 |
+| JOI 本選                 | regex           | 2026 年より `ho` → `sf` サフィックス                                                                   |
+| PAST                     | 回数パラメータ  | `PastProvider(type, round)`。回数 → contest_id は `getPastContestId`                                   |
 
 ### 複合ソース型
 
@@ -187,4 +195,4 @@ AOJ/JAG 固有の詳細（`titleStyle`、同一年2回開催の `suffix` 分割�
 
 ---
 
-**最終更新**: 2026-11-01
+**最終更新**: 2026-11-08

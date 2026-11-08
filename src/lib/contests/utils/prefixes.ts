@@ -115,7 +115,6 @@ export const ATCODER_OTHERS: ContestPrefix = {
   gigacode: 'GigaCode',
   cpsco2019: 'CPSCO 2019',
   'iroha2019-day4': 'いろはちゃんコンテスト Day4',
-  'nikkei2019-final': '全国統一プログラミング王決定戦本戦',
   'jsc2019-final': '第一回日本最強プログラマー学生選手権決勝',
   'jsc2025-final': '第六回日本最強プログラマー学生選手権 -決勝-',
   DEGwer2023: 'DEGwer さんの D 論応援コンテスト',
@@ -125,6 +124,11 @@ export const ATCODER_OTHERS: ContestPrefix = {
 // World Tour Finals are matched by regex in labels/world_tour_finals.ts; other onsite finals are listed here.
 export const ATCODER_MAIN_OFFICIAL_ONSITE: ContestPrefix = {
   'codequeen2023-final-open': 'CodeQUEEN 2023 決勝',
+  'nikkei2019-final': '全国統一プログラミング王決定戦本戦',
+  'nikkei2019-ex': '全国統一プログラミング王決定戦 エキシビジョン',
+  'nikkei2019-2-final': '第二回全国統一プログラミング王決定戦本戦',
+  'ajo2024-final': '第一回 AtCoder Japan Open -決勝-',
+  'ajo2025-final-open': '第二回 AtCoder Japan Open -決勝-',
 } as const;
 
 // AIZU ONLINE JUDGE AOJ Courses
