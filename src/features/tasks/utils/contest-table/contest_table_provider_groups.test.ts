@@ -408,6 +408,30 @@ describe('prepareContestProviderPresets', () => {
       }
       expect(group.getProvider(ContestType.AOJ_JAG, 'JAGSummer2015-day4')).toBeDefined();
     });
+
+    test('AtCoderJapanChampionship registers one provider per contest in the spreadsheet order', () => {
+      const group = presets.AtCoderJapanChampionship();
+      const providerKeys = group.getAllProviders().map((provider) => provider.getProviderKey());
+
+      expect(group.getGroupName()).toBe('AtCoder 日本大会');
+      expect(group.getMetadata()).toEqual({
+        buttonLabel: 'AtCoder 日本大会',
+        ariaLabel: 'Filter AtCoder Japan Championship',
+      });
+      expect(providerKeys).toEqual([
+        'ARC::arc232',
+        'ATCODER_MAIN_OFFICIAL_ONSITE::ajo2025-final-open',
+        'ARC::arc207',
+        'ATCODER_MAIN_OFFICIAL_ONSITE::ajo2024-final',
+        'ARC::arc186',
+        'ATCODER_MAIN_OFFICIAL_ONSITE::nikkei2019-2-final',
+        'ARC_LIKE::nikkei2019-2-qual',
+        'ATCODER_MAIN_OFFICIAL_ONSITE::nikkei2019-ex',
+        'ATCODER_MAIN_OFFICIAL_ONSITE::nikkei2019-final',
+        'ARC_LIKE::nikkei2019-qual',
+      ]);
+      expect(group.getProvider(ContestType.ARC, 'arc207')).toBeDefined();
+    });
   });
 });
 
@@ -422,5 +446,16 @@ describe('contestTableProviderGroups', () => {
     const groupKeys = Object.keys(contestTableProviderGroups);
 
     expect(groupKeys.indexOf('arcLike')).toBe(groupKeys.indexOf('abcLike') + 1);
+  });
+
+  test('places the AtCoder 日本大会 button right after 旧 ARC and before 競プロ典型 90 問', () => {
+    const groupKeys = Object.keys(contestTableProviderGroups);
+    const index = groupKeys.indexOf('atcoderJapanChampionship');
+
+    expect(groupKeys.slice(index - 1, index + 2)).toEqual([
+      'fromArc001ToArc057',
+      'atcoderJapanChampionship',
+      'typical90',
+    ]);
   });
 });
