@@ -1,8 +1,8 @@
 // World Tour Finals (AtCoder official onsite finals), Algorithm division only.
 //
 // Seeded contest_id values carry a trailing "-open" (e.g. wtf19-open), except
-// wtf22-day2 which AtCoder Problems records without it; strip it before matching
-// so both forms work and it never leaks into the display label.
+// wtf22-day2 and awtf2026algo which AtCoder Problems records without it; strip it
+// before matching so both forms work and it never leaks into the display label.
 //
 // From 2025 the id gains an "algo" infix (awtf2025algo-open) to disambiguate
 // from the new Heuristic division (awtf2025heuristic), which stays out of scope.

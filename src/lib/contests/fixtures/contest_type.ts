@@ -677,8 +677,9 @@ export const atCoderMainOfficialOnsite = [
     contestId: 'awtf2025algo-open',
     expected: ContestType.ATCODER_MAIN_OFFICIAL_ONSITE,
   }),
+  // Note: Like wtf22-day2, the actual seeded contest_id has no "-open" suffix.
   createTestCaseForContestType('World Tour Finals 2026 Algorithm')({
-    contestId: 'awtf2026algo-open',
+    contestId: 'awtf2026algo',
     expected: ContestType.ATCODER_MAIN_OFFICIAL_ONSITE,
   }),
   createTestCaseForContestType('CodeQUEEN 2023 決勝')({
