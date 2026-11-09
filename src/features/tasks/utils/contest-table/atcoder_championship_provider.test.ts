@@ -3,7 +3,7 @@ import { describe, test, expect } from 'vitest';
 import { ContestType } from '#lib/contests/types/contest.js';
 import type { TaskResults } from '#lib/types/task.js';
 
-import { AtCoderJapanChampionshipProvider } from './atcoder_japan_championship_provider';
+import { AtCoderChampionshipProvider } from './atcoder_championship_provider';
 
 const tasksArc232: TaskResults = [
   {
@@ -104,13 +104,43 @@ const tasksNikkei2019Ex: TaskResults = [
   },
 ] as TaskResults;
 
-describe('AtCoderJapanChampionshipProvider', () => {
-  const providerArc232 = new AtCoderJapanChampionshipProvider({
+// Problem C is split into C1 and C2.
+const tasksWtf19: TaskResults = [
+  { contest_id: 'wtf19-open', task_id: 'wtf19_a', task_table_index: 'A', title: 'A. Magic' },
+  {
+    contest_id: 'wtf19-open',
+    task_id: 'wtf19_b',
+    task_table_index: 'B',
+    title: 'B. Multiple of Nine',
+  },
+  {
+    contest_id: 'wtf19-open',
+    task_id: 'wtf19_c1',
+    task_table_index: 'C1',
+    title: 'C1. Triangular Lamps Easy',
+  },
+  {
+    contest_id: 'wtf19-open',
+    task_id: 'wtf19_c2',
+    task_table_index: 'C2',
+    title: 'C2. Triangular Lamps Hard',
+  },
+  {
+    contest_id: 'wtf19-open',
+    task_id: 'wtf19_d',
+    task_table_index: 'D',
+    title: 'D. Distinct Boxes',
+  },
+  { contest_id: 'wtf19-open', task_id: 'wtf19_e', task_table_index: 'E', title: 'E. e' },
+] as TaskResults;
+
+describe('AtCoderChampionshipProvider', () => {
+  const providerArc232 = new AtCoderChampionshipProvider({
     contestId: 'arc232',
     contestType: ContestType.ARC,
     title: '第三回 AtCoder Japan Open -予選-（ARC 232）',
   });
-  const providerNikkei2019Ex = new AtCoderJapanChampionshipProvider({
+  const providerNikkei2019Ex = new AtCoderChampionshipProvider({
     contestId: 'nikkei2019-ex',
     contestType: ContestType.ATCODER_MAIN_OFFICIAL_ONSITE,
     title: '全国統一プログラミング王決定戦 エキシビジョン',
@@ -234,10 +264,20 @@ describe('AtCoderJapanChampionshipProvider', () => {
         tasks: tasksNikkei2019Ex,
         expected: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'],
       },
+      {
+        name: 'an onsite contest with problems C1 and C2',
+        entry: {
+          contestId: 'wtf19-open',
+          contestType: ContestType.ATCODER_MAIN_OFFICIAL_ONSITE,
+          title: 'onsite contest',
+        },
+        tasks: tasksWtf19,
+        expected: ['A', 'B', 'C1', 'C2', 'D', 'E'],
+      },
     ])(
       'keys the cells of $name by the same letters as the header',
       ({ entry, tasks, expected }) => {
-        const provider = new AtCoderJapanChampionshipProvider(entry);
+        const provider = new AtCoderChampionshipProvider(entry);
         const table = provider.generateTable(tasks);
 
         expect(provider.getHeaderIdsForTask(tasks)).toEqual(expected);
