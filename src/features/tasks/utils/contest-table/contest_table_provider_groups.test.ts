@@ -472,6 +472,28 @@ describe('prepareContestProviderPresets', () => {
       ]);
       expect(group.getProvider(ContestType.ARC, 'arc207')).toBeDefined();
     });
+
+    test('AtCoderWorldTourFinals registers one provider per contest in the spreadsheet order', () => {
+      const group = presets.AtCoderWorldTourFinals();
+      const providerKeys = group.getAllProviders().map((provider) => provider.getProviderKey());
+
+      expect(group.getGroupName()).toBe('AtCoder 世界大会');
+      expect(group.getMetadata()).toEqual({
+        buttonLabel: 'AtCoder 世界大会',
+        ariaLabel: 'Filter AtCoder World Tour Finals',
+      });
+      expect(providerKeys).toEqual([
+        'ATCODER_MAIN_OFFICIAL_ONSITE::awtf2026algo',
+        'ATCODER_MAIN_OFFICIAL_ONSITE::awtf2025algo-open',
+        'ATCODER_MAIN_OFFICIAL_ONSITE::awtf2024-open',
+        'ATCODER_MAIN_OFFICIAL_ONSITE::wtf22-day2',
+        'ATCODER_MAIN_OFFICIAL_ONSITE::wtf22-day1-open',
+        'ATCODER_MAIN_OFFICIAL_ONSITE::wtf19-open',
+      ]);
+      expect(
+        group.getProvider(ContestType.ATCODER_MAIN_OFFICIAL_ONSITE, 'wtf19-open'),
+      ).toBeDefined();
+    });
   });
 });
 
@@ -488,12 +510,13 @@ describe('contestTableProviderGroups', () => {
     expect(groupKeys.indexOf('arcLike')).toBe(groupKeys.indexOf('abcLike') + 1);
   });
 
-  test('places the AtCoder 日本大会 button right after 旧 ARC and before 競プロ典型 90 問', () => {
+  test('places the AtCoder 世界大会 and 日本大会 buttons right after 旧 ARC and before 競プロ典型 90 問', () => {
     const groupKeys = Object.keys(contestTableProviderGroups);
-    const index = groupKeys.indexOf('atcoderJapanChampionship');
+    const index = groupKeys.indexOf('fromArc001ToArc057');
 
-    expect(groupKeys.slice(index - 1, index + 2)).toEqual([
+    expect(groupKeys.slice(index, index + 4)).toEqual([
       'fromArc001ToArc057',
+      'atcoderWorldTourFinals',
       'atcoderJapanChampionship',
       'typical90',
     ]);

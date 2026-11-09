@@ -41,6 +41,7 @@ import { AojPckProvider } from './aoj_pck_providers';
 import { AOJ_JAG_REGIONAL_ENTRIES } from './aoj_jag_regional_entries';
 import { AtCoderChampionshipProvider } from './atcoder_championship_provider';
 import { ATCODER_JAPAN_CHAMPIONSHIP_ENTRIES } from './atcoder_japan_championship_entries';
+import { ATCODER_WORLD_TOUR_FINALS_ENTRIES } from './atcoder_world_tour_finals_entries';
 import { PastProvider } from './past_provider';
 import { ContestTableProviderGroup } from './contest_table_provider_group';
 
@@ -150,6 +151,22 @@ export const prepareContestProviderPresets = () => {
         buttonLabel: '旧 ARC',
         ariaLabel: 'Filter contests from ARC 001 to ARC 057',
       }).addProvider(new ARC001ToARC057Provider(ContestType.ARC)),
+
+    /**
+     * Group for AtCoder World Tour Finals (Algorithm division), one table per contest
+     */
+    AtCoderWorldTourFinals: () => {
+      const group = new ContestTableProviderGroup('AtCoder 世界大会', {
+        buttonLabel: 'AtCoder 世界大会',
+        ariaLabel: 'Filter AtCoder World Tour Finals',
+      });
+      // addProvider order = display order (first = top).
+      for (const entry of ATCODER_WORLD_TOUR_FINALS_ENTRIES) {
+        group.addProvider(new AtCoderChampionshipProvider(entry));
+      }
+
+      return group;
+    },
 
     /**
      * Group for AtCoder Japan Open and the NIKKEI contests before it, one table per contest
@@ -450,6 +467,7 @@ export const contestTableProviderGroups = {
   past: presets.PAST(),
   fromAbc001ToAbc041: presets.ABC001ToABC041(),
   fromArc001ToArc057: presets.ARC001ToARC057(),
+  atcoderWorldTourFinals: presets.AtCoderWorldTourFinals(),
   atcoderJapanChampionship: presets.AtCoderJapanChampionship(),
   typical90: presets.Typical90(),
   tessokuBook: presets.TessokuBook(),

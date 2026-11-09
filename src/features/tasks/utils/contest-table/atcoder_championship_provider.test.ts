@@ -104,6 +104,36 @@ const tasksNikkei2019Ex: TaskResults = [
   },
 ] as TaskResults;
 
+// Problem C is split into C1 and C2.
+const tasksWtf19: TaskResults = [
+  { contest_id: 'wtf19-open', task_id: 'wtf19_a', task_table_index: 'A', title: 'A. Magic' },
+  {
+    contest_id: 'wtf19-open',
+    task_id: 'wtf19_b',
+    task_table_index: 'B',
+    title: 'B. Multiple of Nine',
+  },
+  {
+    contest_id: 'wtf19-open',
+    task_id: 'wtf19_c1',
+    task_table_index: 'C1',
+    title: 'C1. Triangular Lamps Easy',
+  },
+  {
+    contest_id: 'wtf19-open',
+    task_id: 'wtf19_c2',
+    task_table_index: 'C2',
+    title: 'C2. Triangular Lamps Hard',
+  },
+  {
+    contest_id: 'wtf19-open',
+    task_id: 'wtf19_d',
+    task_table_index: 'D',
+    title: 'D. Distinct Boxes',
+  },
+  { contest_id: 'wtf19-open', task_id: 'wtf19_e', task_table_index: 'E', title: 'E. e' },
+] as TaskResults;
+
 describe('AtCoderChampionshipProvider', () => {
   const providerArc232 = new AtCoderChampionshipProvider({
     contestId: 'arc232',
@@ -233,6 +263,16 @@ describe('AtCoderChampionshipProvider', () => {
         },
         tasks: tasksNikkei2019Ex,
         expected: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'],
+      },
+      {
+        name: 'an onsite contest with problems C1 and C2',
+        entry: {
+          contestId: 'wtf19-open',
+          contestType: ContestType.ATCODER_MAIN_OFFICIAL_ONSITE,
+          title: 'onsite contest',
+        },
+        tasks: tasksWtf19,
+        expected: ['A', 'B', 'C1', 'C2', 'D', 'E'],
       },
     ])(
       'keys the cells of $name by the same letters as the header',
