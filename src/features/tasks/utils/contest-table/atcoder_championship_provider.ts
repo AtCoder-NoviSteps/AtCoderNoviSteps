@@ -1,3 +1,4 @@
+import { ContestType } from '#lib/contests/types/contest.js';
 import type { TaskResult, TaskResults } from '#lib/types/task.js';
 import {
   type ContestTableMetaData,
@@ -10,16 +11,24 @@ import {
   PER_CONTEST_TITLE_STYLE,
   buildPerContestDisplayConfig,
 } from './per_contest_table_layout';
-import type { AtCoderJapanChampionshipEntry } from './atcoder_japan_championship_entries';
+
+export type AtCoderChampionshipEntry = {
+  contestId: string;
+  // Builds the provider key (e.g. ARC::arc232); cell keys depend on it only for ABC, which no entry uses.
+  contestType: ContestType;
+  title: string;
+};
+
+export type AtCoderChampionshipEntries = AtCoderChampionshipEntry[];
 
 /**
- * One table per contest in the AtCoder 日本大会 group: AtCoder Japan Open and the NIKKEI contests before it.
- * The group mixes ARC / ARC-like qualifiers with onsite finals.
+ * One table per contest in the AtCoder championship groups (AtCoder 日本大会 and AtCoder 世界大会).
+ * An entry may be an ARC / ARC-like qualifier or an onsite final.
  */
-export class AtCoderJapanChampionshipProvider extends ContestTableProviderBase {
-  private readonly entry: AtCoderJapanChampionshipEntry;
+export class AtCoderChampionshipProvider extends ContestTableProviderBase {
+  private readonly entry: AtCoderChampionshipEntry;
 
-  constructor(entry: AtCoderJapanChampionshipEntry) {
+  constructor(entry: AtCoderChampionshipEntry) {
     super(entry.contestType, entry.contestId); // provider key: ARC::arc232
     this.entry = entry;
   }

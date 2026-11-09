@@ -1,16 +1,9 @@
 import { ContestType } from '#lib/contests/types/contest.js';
 
-export type AtCoderJapanChampionshipEntry = {
-  contestId: string;
-  // Builds the provider key (e.g. ARC::arc232); cell keys depend on it only for ABC, which no entry uses.
-  contestType: ContestType;
-  title: string;
-};
-
-export type AtCoderJapanChampionshipEntries = AtCoderJapanChampionshipEntry[];
+import type { AtCoderChampionshipEntries } from './atcoder_championship_provider';
 
 // Newest first, following the maintainer's spreadsheet; qualifiers held as ARC rounds sit between finals, so contest ids cannot give this order.
-export const ATCODER_JAPAN_CHAMPIONSHIP_ENTRIES: Readonly<AtCoderJapanChampionshipEntries> = [
+export const ATCODER_JAPAN_CHAMPIONSHIP_ENTRIES: Readonly<AtCoderChampionshipEntries> = [
   {
     contestId: 'arc232',
     contestType: ContestType.ARC,

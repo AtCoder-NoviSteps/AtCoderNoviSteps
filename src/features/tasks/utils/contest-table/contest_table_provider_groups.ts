@@ -39,7 +39,7 @@ import { AojIcpcPrelimProvider, AojIcpcRegionalProvider } from './aoj_icpc_provi
 import { JagPrelimProvider, JagRegionalProvider } from './aoj_jag_providers';
 import { AojPckProvider } from './aoj_pck_providers';
 import { AOJ_JAG_REGIONAL_ENTRIES } from './aoj_jag_regional_entries';
-import { AtCoderJapanChampionshipProvider } from './atcoder_japan_championship_provider';
+import { AtCoderChampionshipProvider } from './atcoder_championship_provider';
 import { ATCODER_JAPAN_CHAMPIONSHIP_ENTRIES } from './atcoder_japan_championship_entries';
 import { PastProvider } from './past_provider';
 import { ContestTableProviderGroup } from './contest_table_provider_group';
@@ -161,7 +161,7 @@ export const prepareContestProviderPresets = () => {
       });
       // addProvider order = display order (first = top).
       for (const entry of ATCODER_JAPAN_CHAMPIONSHIP_ENTRIES) {
-        group.addProvider(new AtCoderJapanChampionshipProvider(entry));
+        group.addProvider(new AtCoderChampionshipProvider(entry));
       }
 
       return group;

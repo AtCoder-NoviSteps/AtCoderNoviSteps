@@ -3,7 +3,7 @@ import { describe, test, expect } from 'vitest';
 import { ContestType } from '#lib/contests/types/contest.js';
 import type { TaskResults } from '#lib/types/task.js';
 
-import { AtCoderJapanChampionshipProvider } from './atcoder_japan_championship_provider';
+import { AtCoderChampionshipProvider } from './atcoder_championship_provider';
 
 const tasksArc232: TaskResults = [
   {
@@ -104,13 +104,13 @@ const tasksNikkei2019Ex: TaskResults = [
   },
 ] as TaskResults;
 
-describe('AtCoderJapanChampionshipProvider', () => {
-  const providerArc232 = new AtCoderJapanChampionshipProvider({
+describe('AtCoderChampionshipProvider', () => {
+  const providerArc232 = new AtCoderChampionshipProvider({
     contestId: 'arc232',
     contestType: ContestType.ARC,
     title: '第三回 AtCoder Japan Open -予選-（ARC 232）',
   });
-  const providerNikkei2019Ex = new AtCoderJapanChampionshipProvider({
+  const providerNikkei2019Ex = new AtCoderChampionshipProvider({
     contestId: 'nikkei2019-ex',
     contestType: ContestType.ATCODER_MAIN_OFFICIAL_ONSITE,
     title: '全国統一プログラミング王決定戦 エキシビジョン',
@@ -237,7 +237,7 @@ describe('AtCoderJapanChampionshipProvider', () => {
     ])(
       'keys the cells of $name by the same letters as the header',
       ({ entry, tasks, expected }) => {
-        const provider = new AtCoderJapanChampionshipProvider(entry);
+        const provider = new AtCoderChampionshipProvider(entry);
         const table = provider.generateTable(tasks);
 
         expect(provider.getHeaderIdsForTask(tasks)).toEqual(expected);

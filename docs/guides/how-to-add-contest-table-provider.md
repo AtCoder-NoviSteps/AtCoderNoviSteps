@@ -147,17 +147,17 @@ AtCoder Japan Open と、その前身の全国統一プログラミング王決�
 
 ### コンストラクタパラメータ型 / regex フィルタ型
 
-| コンテスト               | フィルタ方式    | 備考                                                                                                   |
-| ------------------------ | --------------- | ------------------------------------------------------------------------------------------------------ |
-| ICPC 国内予選            | 年度パラメータ  | `AojIcpcPrelimProvider(type, year)`                                                                    |
-| ICPC アジア地区          | 年度パラメータ  | `AojIcpcRegionalProvider(type, year)`                                                                  |
-| JAG 模擬国内             | 年度パラメータ  | 同一年2回開催は suffix 分割                                                                            |
-| JAG 夏合宿・模擬地区など | 明示的な配列    | 合宿系・模擬地区・AtCoder 上の JAG の 76 件。`JagRegionalProvider(type, entry)`                        |
-| AtCoder 日本大会         | 明示的な配列    | AtCoder Japan Open と全国統一プログラミング王決定戦の 10 件。`AtCoderJapanChampionshipProvider(entry)` |
-| JOI 一次予選             | regex           | `joi{YYYY}yo1{a\|b\|c}`                                                                                |
-| JOI 二次予選             | regex + section | 2020 以降 / 2006-2019 で Provider 分離                                                                 |
-| JOI 本選                 | regex           | 2026 年より `ho` → `sf` サフィックス                                                                   |
-| PAST                     | 回数パラメータ  | `PastProvider(type, round)`。回数 → contest_id は `getPastContestId`                                   |
+| コンテスト               | フィルタ方式    | 備考                                                                                              |
+| ------------------------ | --------------- | ------------------------------------------------------------------------------------------------- |
+| ICPC 国内予選            | 年度パラメータ  | `AojIcpcPrelimProvider(type, year)`                                                               |
+| ICPC アジア地区          | 年度パラメータ  | `AojIcpcRegionalProvider(type, year)`                                                             |
+| JAG 模擬国内             | 年度パラメータ  | 同一年2回開催は suffix 分割                                                                       |
+| JAG 夏合宿・模擬地区など | 明示的な配列    | 合宿系・模擬地区・AtCoder 上の JAG の 76 件。`JagRegionalProvider(type, entry)`                   |
+| AtCoder 日本大会         | 明示的な配列    | AtCoder Japan Open と全国統一プログラミング王決定戦の 10 件。`AtCoderChampionshipProvider(entry)` |
+| JOI 一次予選             | regex           | `joi{YYYY}yo1{a\|b\|c}`                                                                           |
+| JOI 二次予選             | regex + section | 2020 以降 / 2006-2019 で Provider 分離                                                            |
+| JOI 本選                 | regex           | 2026 年より `ho` → `sf` サフィックス                                                              |
+| PAST                     | 回数パラメータ  | `PastProvider(type, round)`。回数 → contest_id は `getPastContestId`                              |
 
 ### 複合ソース型
 
