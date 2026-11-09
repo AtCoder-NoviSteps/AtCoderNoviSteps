@@ -95,12 +95,20 @@ AOJ/JAG 固有の詳細（`titleStyle`、同一年2回開催の `suffix` 分割�
 - **記号**: AOJ は問題 ID の昇順で A, B, C… と振るが、問題が AOJ に無いコンテストではずれる。新しい回はメンテナのスプレッドシートと照合する
 - **AOJ に無い問題**: `NoJudge-{contest_id}_{小文字の記号}` の task_id でダミーを足し、`no_judge.ts` にリンク先（jag-icpc.org のページ）を登録し、コンテストを `LETTERS_OF_SHIFTED_CONTESTS` に入れる。出典欄は `（No Judge）` になる
 
-#### 「AtCoder 日本大会」も明示的な配列を使う
+#### 「AtCoder 日本大会」と「AtCoder 世界大会」も明示的な配列を使う
 
-AtCoder Japan Open と、その前身の全国統一プログラミング王決定戦の 10 コンテストを並べる（`atcoder_japan_championship_entries.ts`）。予選は ARC（例: `arc186`）や ARC_LIKE（例: `nikkei2019-qual`）のまま残し、決勝とエキシビジョンは `ATCODER_MAIN_OFFICIAL_ONSITE` に分類する。
+どちらも `AtCoderChampionshipProvider(entry)` を、エントリ `{ contestId, contestType, title }` 1 件につき 1 個作る。`contestType` は provider key（例: `ARC::arc232`）にだけ効く。
 
-- **エントリ**: `{ contestId, contestType, title }`。ARC の回は `getContestNameLabel` が `ARC 232` を返し、ARC_LIKE にはラベル生成が無いので、見出しはエントリに書く。`contestType` は provider key（例: `ARC::arc232`）にだけ効く
+**AtCoder 日本大会**: AtCoder Japan Open と、その前身の全国統一プログラミング王決定戦の 10 コンテストを並べる（`atcoder_japan_championship_entries.ts`）。予選は ARC（例: `arc186`）や ARC_LIKE（例: `nikkei2019-qual`）のまま残し、決勝とエキシビジョンは `ATCODER_MAIN_OFFICIAL_ONSITE` に分類する。
+
+- **見出し**: ARC の回は `getContestNameLabel` が `ARC 232` を返し、ARC_LIKE にはラベル生成が無いので、エントリに書く
 - **新しい回**: 決勝を `prefixes.ts` の `ATCODER_MAIN_OFFICIAL_ONSITE` に足し、予選の ARC と決勝を seed と配列の両方に足す。`ajo` / `nikkei2019` で始まる contest_id の配列への書き漏れと、配列の contest_id の seed 漏れは `atcoder_japan_championship_entries.test.ts` で落ちる。予選の ARC を配列に足し忘れても、このテストは落ちない
+
+**AtCoder 世界大会**: World Tour Finals の Algorithm 部門を新しい順に並べる（`atcoder_world_tour_finals_entries.ts`）。分類は `world_tour_finals.ts` の正規表現で、Heuristic 部門は対象外。
+
+- **見出し**: `getContestNameLabel`（例: `World Tour Finals 2026 Algorithm`）から作るので、配列には contest_id だけを書く
+- **contest_id**: `-open` が付く回（`wtf19-open`）と付かない回（`wtf22-day2` / `awtf2026algo`）がある。AtCoder Problems の値をそのまま使う
+- **新しい回**: 正規表現が `awtf20XXalgo` を拾うので分類は変えず、seed と配列の両方に足す。配列への書き漏れと seed 漏れは `atcoder_world_tour_finals_entries.test.ts` で落ちる
 
 ### 補足: 固定セクションによる同一 ContestType 内の共存
 
@@ -154,6 +162,7 @@ AtCoder Japan Open と、その前身の全国統一プログラミング王決�
 | JAG 模擬国内             | 年度パラメータ  | 同一年2回開催は suffix 分割                                                                       |
 | JAG 夏合宿・模擬地区など | 明示的な配列    | 合宿系・模擬地区・AtCoder 上の JAG の 76 件。`JagRegionalProvider(type, entry)`                   |
 | AtCoder 日本大会         | 明示的な配列    | AtCoder Japan Open と全国統一プログラミング王決定戦の 10 件。`AtCoderChampionshipProvider(entry)` |
+| AtCoder 世界大会         | 明示的な配列    | World Tour Finals（Algorithm 部門）の 6 件。`AtCoderChampionshipProvider(entry)`                  |
 | JOI 一次予選             | regex           | `joi{YYYY}yo1{a\|b\|c}`                                                                           |
 | JOI 二次予選             | regex + section | 2020 以降 / 2006-2019 で Provider 分離                                                            |
 | JOI 本選                 | regex           | 2026 年より `ho` → `sf` サフィックス                                                              |
@@ -195,4 +204,4 @@ AtCoder Japan Open と、その前身の全国統一プログラミング王決�
 
 ---
 
-**最終更新**: 2026-11-08
+**最終更新**: 2026-11-09
