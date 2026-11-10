@@ -1,20 +1,16 @@
 import { ContestType } from '#lib/contests/types/contest.js';
-import type { TaskResult, TaskResults } from '#lib/types/task.js';
+import type { TaskResult } from '#lib/types/task.js';
 import {
   type ContestTableMetaData,
   type ContestTableDisplayConfig,
 } from '#features/tasks/types/contest-table/contest_table_provider.js';
 
 import { ContestTableProviderBase } from './contest_table_provider_base';
-import {
-  sortHeaderIdsByTaskTableIndex,
-  PER_CONTEST_TITLE_STYLE,
-  buildPerContestDisplayConfig,
-} from './per_contest_table_layout';
+import { PER_CONTEST_TITLE_STYLE, buildPerContestDisplayConfig } from './per_contest_table_layout';
 
 export type AtCoderChampionshipEntry = {
   contestId: string;
-  // Builds the provider key (e.g. ARC::arc232); cell keys depend on it only for ABC, which no entry uses.
+  // Builds the provider key (e.g. ARC::arc232); for ABC it also renames problem H to the H/Ex cell key.
   contestType: ContestType;
   title: string;
 };
@@ -22,8 +18,10 @@ export type AtCoderChampionshipEntry = {
 export type AtCoderChampionshipEntries = AtCoderChampionshipEntry[];
 
 /**
- * One table per contest in the AtCoder championship groups (AtCoder 日本大会 and AtCoder 世界大会).
- * An entry may be an ARC / ARC-like qualifier or an onsite final.
+ * One table per contest in the AtCoder championship groups
+ * (AtCoder 世界大会, AtCoder 日本大会 and 日本最強プログラマー学生選手権).
+ * An entry may be an ABC / ARC / ABC-like / ARC-like qualifier or an onsite final.
+ * Header ids come from the base class, which keys Ex as H/Ex like generateTable so it sorts last.
  */
 export class AtCoderChampionshipProvider extends ContestTableProviderBase {
   private readonly entry: AtCoderChampionshipEntry;
@@ -35,10 +33,6 @@ export class AtCoderChampionshipProvider extends ContestTableProviderBase {
 
   protected setFilterCondition(): (taskResult: TaskResult) => boolean {
     return (taskResult: TaskResult) => taskResult.contest_id === this.entry.contestId;
-  }
-
-  override getHeaderIdsForTask(filtered: TaskResults): string[] {
-    return sortHeaderIdsByTaskTableIndex(filtered);
   }
 
   getMetadata(): ContestTableMetaData {
