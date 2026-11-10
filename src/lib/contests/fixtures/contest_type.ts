@@ -637,14 +637,6 @@ export const atCoderOthers = [
     contestId: 'iroha2019-day4',
     expected: ContestType.OTHERS,
   }),
-  createTestCaseForContestType('第一回日本最強プログラマー学生選手権決勝')({
-    contestId: 'jsc2019-final',
-    expected: ContestType.OTHERS,
-  }),
-  createTestCaseForContestType('第六回日本最強プログラマー学生選手権 -決勝-')({
-    contestId: 'jsc2025-final',
-    expected: ContestType.OTHERS,
-  }),
   createTestCaseForContestType('DEGwer さんの D 論応援コンテスト')({
     contestId: 'DEGwer2023',
     expected: ContestType.OTHERS,
@@ -704,6 +696,34 @@ export const atCoderMainOfficialOnsite = [
   }),
   createTestCaseForContestType('第二回 AtCoder Japan Open -決勝-')({
     contestId: 'ajo2025-final-open',
+    expected: ContestType.ATCODER_MAIN_OFFICIAL_ONSITE,
+  }),
+  createTestCaseForContestType('第一回日本最強プログラマー学生選手権決勝')({
+    contestId: 'jsc2019-final',
+    expected: ContestType.ATCODER_MAIN_OFFICIAL_ONSITE,
+  }),
+  createTestCaseForContestType('第二回日本最強プログラマー学生選手権 エキシビジョン')({
+    contestId: 'jsc2021ex',
+    expected: ContestType.ATCODER_MAIN_OFFICIAL_ONSITE,
+  }),
+  createTestCaseForContestType('第三回日本最強プログラマー学生選手権 -決勝-')({
+    contestId: 'jsc2022-final-open',
+    expected: ContestType.ATCODER_MAIN_OFFICIAL_ONSITE,
+  }),
+  createTestCaseForContestType('第四回日本最強プログラマー学生選手権 -決勝-')({
+    contestId: 'jsc2023-final',
+    expected: ContestType.ATCODER_MAIN_OFFICIAL_ONSITE,
+  }),
+  createTestCaseForContestType('第五回日本最強プログラマー学生選手権 -決勝-')({
+    contestId: 'jsc2024-final',
+    expected: ContestType.ATCODER_MAIN_OFFICIAL_ONSITE,
+  }),
+  createTestCaseForContestType('第六回日本最強プログラマー学生選手権 -決勝-')({
+    contestId: 'jsc2025-final',
+    expected: ContestType.ATCODER_MAIN_OFFICIAL_ONSITE,
+  }),
+  createTestCaseForContestType('第七回日本最強プログラマー学生選手権 -決勝-')({
+    contestId: 'jsc2026-final',
     expected: ContestType.ATCODER_MAIN_OFFICIAL_ONSITE,
   }),
 ];
