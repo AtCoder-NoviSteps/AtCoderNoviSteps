@@ -494,6 +494,35 @@ describe('prepareContestProviderPresets', () => {
         group.getProvider(ContestType.ATCODER_MAIN_OFFICIAL_ONSITE, 'wtf19-open'),
       ).toBeDefined();
     });
+
+    test('JapaneseStudentChampionship registers one provider per contest in the spreadsheet order', () => {
+      const group = presets.JapaneseStudentChampionship();
+      const providerKeys = group.getAllProviders().map((provider) => provider.getProviderKey());
+
+      expect(group.getGroupName()).toBe('日本最強プログラマー学生選手権');
+      expect(group.getMetadata()).toEqual({
+        buttonLabel: '日本最強プログラマー学生選手権',
+        ariaLabel: 'Filter Japanese Student Championship',
+      });
+      expect(providerKeys).toEqual([
+        'ATCODER_MAIN_OFFICIAL_ONSITE::jsc2026-final',
+        'ARC::arc222',
+        'ABC_LIKE::jsc2025advance-final',
+        'ATCODER_MAIN_OFFICIAL_ONSITE::jsc2025-final',
+        'ARC::arc201',
+        'ATCODER_MAIN_OFFICIAL_ONSITE::jsc2024-final',
+        'ARC::arc180',
+        'ATCODER_MAIN_OFFICIAL_ONSITE::jsc2023-final',
+        'ABC::abc313',
+        'ATCODER_MAIN_OFFICIAL_ONSITE::jsc2022-final-open',
+        'ABC::abc262',
+        'ATCODER_MAIN_OFFICIAL_ONSITE::jsc2021ex',
+        'ABC_LIKE::jsc2021',
+        'ATCODER_MAIN_OFFICIAL_ONSITE::jsc2019-final',
+        'ARC_LIKE::jsc2019-qual',
+      ]);
+      expect(group.getProvider(ContestType.ABC, 'abc313')).toBeDefined();
+    });
   });
 });
 
@@ -510,14 +539,15 @@ describe('contestTableProviderGroups', () => {
     expect(groupKeys.indexOf('arcLike')).toBe(groupKeys.indexOf('abcLike') + 1);
   });
 
-  test('places the AtCoder 世界大会 and 日本大会 buttons right after 旧 ARC and before 競プロ典型 90 問', () => {
+  test('places the AtCoder 世界大会, AtCoder 日本大会 and 日本最強プログラマー学生選手権 buttons right after 旧 ARC and before 競プロ典型 90 問', () => {
     const groupKeys = Object.keys(contestTableProviderGroups);
     const index = groupKeys.indexOf('fromArc001ToArc057');
 
-    expect(groupKeys.slice(index, index + 4)).toEqual([
+    expect(groupKeys.slice(index, index + 5)).toEqual([
       'fromArc001ToArc057',
       'atcoderWorldTourFinals',
       'atcoderJapanChampionship',
+      'japaneseStudentChampionship',
       'typical90',
     ]);
   });

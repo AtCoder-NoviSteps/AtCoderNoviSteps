@@ -42,6 +42,7 @@ import { AOJ_JAG_REGIONAL_ENTRIES } from './aoj_jag_regional_entries';
 import { AtCoderChampionshipProvider } from './atcoder_championship_provider';
 import { ATCODER_JAPAN_CHAMPIONSHIP_ENTRIES } from './atcoder_japan_championship_entries';
 import { ATCODER_WORLD_TOUR_FINALS_ENTRIES } from './atcoder_world_tour_finals_entries';
+import { JAPANESE_STUDENT_CHAMPIONSHIP_ENTRIES } from './japanese_student_championship_entries';
 import { PastProvider } from './past_provider';
 import { ContestTableProviderGroup } from './contest_table_provider_group';
 
@@ -178,6 +179,22 @@ export const prepareContestProviderPresets = () => {
       });
       // addProvider order = display order (first = top).
       for (const entry of ATCODER_JAPAN_CHAMPIONSHIP_ENTRIES) {
+        group.addProvider(new AtCoderChampionshipProvider(entry));
+      }
+
+      return group;
+    },
+
+    /**
+     * Group for 日本最強プログラマー学生選手権 (Japanese Student Championship), one table per contest
+     */
+    JapaneseStudentChampionship: () => {
+      const group = new ContestTableProviderGroup('日本最強プログラマー学生選手権', {
+        buttonLabel: '日本最強プログラマー学生選手権',
+        ariaLabel: 'Filter Japanese Student Championship',
+      });
+      // addProvider order = display order (first = top).
+      for (const entry of JAPANESE_STUDENT_CHAMPIONSHIP_ENTRIES) {
         group.addProvider(new AtCoderChampionshipProvider(entry));
       }
 
@@ -469,6 +486,7 @@ export const contestTableProviderGroups = {
   fromArc001ToArc057: presets.ARC001ToARC057(),
   atcoderWorldTourFinals: presets.AtCoderWorldTourFinals(),
   atcoderJapanChampionship: presets.AtCoderJapanChampionship(),
+  japaneseStudentChampionship: presets.JapaneseStudentChampionship(),
   typical90: presets.Typical90(),
   tessokuBook: presets.TessokuBook(),
   mathAndAlgorithm: presets.MathAndAlgorithm(),
