@@ -95,9 +95,9 @@ AOJ/JAG 固有の詳細（`titleStyle`、同一年2回開催の `suffix` 分割�
 - **記号**: AOJ は問題 ID の昇順で A, B, C… と振るが、問題が AOJ に無いコンテストではずれる。新しい回はメンテナのスプレッドシートと照合する
 - **AOJ に無い問題**: `NoJudge-{contest_id}_{小文字の記号}` の task_id でダミーを足し、`no_judge.ts` にリンク先（jag-icpc.org のページ）を登録し、コンテストを `LETTERS_OF_SHIFTED_CONTESTS` に入れる。出典欄は `（No Judge）` になる
 
-#### 「AtCoder 日本大会」と「AtCoder 世界大会」も明示的な配列を使う
+#### 「AtCoder 世界大会」「AtCoder 日本大会」「日本最強プログラマー学生選手権」も明示的な配列を使う
 
-どちらも `AtCoderChampionshipProvider(entry)` を、エントリ `{ contestId, contestType, title }` 1 件につき 1 個作る。`contestType` は provider key（例: `ARC::arc232`）にだけ効く。
+いずれも `AtCoderChampionshipProvider(entry)` を、エントリ `{ contestId, contestType, title }` 1 件につき 1 個作る。`contestType` は provider key（例: `ARC::arc232`）を作り、ABC ではセルのキーにも効く（記号 H を `H/Ex` にする）。見出し ID は基底クラスの `getHeaderIdsForTask` を使うので、セルのキーと揃い、Ex は G の後に並ぶ。
 
 **AtCoder 日本大会**: AtCoder Japan Open と、その前身の全国統一プログラミング王決定戦の 10 コンテストを並べる（`atcoder_japan_championship_entries.ts`）。予選は ARC（例: `arc186`）や ARC_LIKE（例: `nikkei2019-qual`）のまま残し、決勝とエキシビジョンは `ATCODER_MAIN_OFFICIAL_ONSITE` に分類する。
 
@@ -109,6 +109,12 @@ AOJ/JAG 固有の詳細（`titleStyle`、同一年2回開催の `suffix` 分割�
 - **見出し**: `getContestNameLabel`（例: `World Tour Finals 2026 Algorithm`）から作るので、配列には contest_id だけを書く
 - **contest_id**: `-open` が付く回（`wtf19-open`）と付かない回（`wtf22-day2` / `awtf2026algo`）がある。AtCoder Problems の値をそのまま使う
 - **新しい回**: 正規表現が `awtf20XXalgo` を拾うので分類は変えず、seed と配列の両方に足す。配列への書き漏れと seed 漏れは `atcoder_world_tour_finals_entries.test.ts` で落ちる
+
+**日本最強プログラマー学生選手権**: 決勝・予選・エキシビジョンなど 15 コンテストを新しい順に並べる（`japanese_student_championship_entries.ts`）。予選は ABC（例: `abc313`）・ARC（例: `arc222`）・ABC_LIKE（`jsc2021`）・ARC_LIKE（`jsc2019-qual`）のまま残し、決勝とエキシビジョンは `ATCODER_MAIN_OFFICIAL_ONSITE` に分類する。
+
+- **見出し**: 日本大会と同じ理由で、エントリに書く
+- **ABC の問題を流用した回**: `jsc2021ex` と `jsc2025advance-final` は Task を持たず、ContestTaskPair だけで表示する（[how-to-add-contest-task-pairs.md](./how-to-add-contest-task-pairs.md)）。ペアが指す ABC の問題が seed に無いと、seed は警告を出してペアを飛ばすので、ABC の問題として seed に足す
+- **新しい回**: 決勝を `prefixes.ts` の `ATCODER_MAIN_OFFICIAL_ONSITE` に足し、予選と決勝を seed と配列の両方に足す。`jsc` で始まる contest_id の配列への書き漏れ、問題数のずれ、ペアが指す Task の seed 漏れは `japanese_student_championship_entries.test.ts` で落ちる。予選の ABC / ARC を配列に足し忘れても、このテストは落ちない
 
 ### 補足: 固定セクションによる同一 ContestType 内の共存
 
@@ -155,18 +161,19 @@ AOJ/JAG 固有の詳細（`titleStyle`、同一年2回開催の `suffix` 分割�
 
 ### コンストラクタパラメータ型 / regex フィルタ型
 
-| コンテスト               | フィルタ方式    | 備考                                                                                              |
-| ------------------------ | --------------- | ------------------------------------------------------------------------------------------------- |
-| ICPC 国内予選            | 年度パラメータ  | `AojIcpcPrelimProvider(type, year)`                                                               |
-| ICPC アジア地区          | 年度パラメータ  | `AojIcpcRegionalProvider(type, year)`                                                             |
-| JAG 模擬国内             | 年度パラメータ  | 同一年2回開催は suffix 分割                                                                       |
-| JAG 夏合宿・模擬地区など | 明示的な配列    | 合宿系・模擬地区・AtCoder 上の JAG の 76 件。`JagRegionalProvider(type, entry)`                   |
-| AtCoder 日本大会         | 明示的な配列    | AtCoder Japan Open と全国統一プログラミング王決定戦の 10 件。`AtCoderChampionshipProvider(entry)` |
-| AtCoder 世界大会         | 明示的な配列    | World Tour Finals（Algorithm 部門）の 6 件。`AtCoderChampionshipProvider(entry)`                  |
-| JOI 一次予選             | regex           | `joi{YYYY}yo1{a\|b\|c}`                                                                           |
-| JOI 二次予選             | regex + section | 2020 以降 / 2006-2019 で Provider 分離                                                            |
-| JOI 本選                 | regex           | 2026 年より `ho` → `sf` サフィックス                                                              |
-| PAST                     | 回数パラメータ  | `PastProvider(type, round)`。回数 → contest_id は `getPastContestId`                              |
+| コンテスト                     | フィルタ方式    | 備考                                                                                              |
+| ------------------------------ | --------------- | ------------------------------------------------------------------------------------------------- |
+| ICPC 国内予選                  | 年度パラメータ  | `AojIcpcPrelimProvider(type, year)`                                                               |
+| ICPC アジア地区                | 年度パラメータ  | `AojIcpcRegionalProvider(type, year)`                                                             |
+| JAG 模擬国内                   | 年度パラメータ  | 同一年2回開催は suffix 分割                                                                       |
+| JAG 夏合宿・模擬地区など       | 明示的な配列    | 合宿系・模擬地区・AtCoder 上の JAG の 76 件。`JagRegionalProvider(type, entry)`                   |
+| AtCoder 日本大会               | 明示的な配列    | AtCoder Japan Open と全国統一プログラミング王決定戦の 10 件。`AtCoderChampionshipProvider(entry)` |
+| AtCoder 世界大会               | 明示的な配列    | World Tour Finals（Algorithm 部門）の 6 件。`AtCoderChampionshipProvider(entry)`                  |
+| 日本最強プログラマー学生選手権 | 明示的な配列    | 決勝・予選・エキシビジョンなど 15 件。`AtCoderChampionshipProvider(entry)`                        |
+| JOI 一次予選                   | regex           | `joi{YYYY}yo1{a\|b\|c}`                                                                           |
+| JOI 二次予選                   | regex + section | 2020 以降 / 2006-2019 で Provider 分離                                                            |
+| JOI 本選                       | regex           | 2026 年より `ho` → `sf` サフィックス                                                              |
+| PAST                           | 回数パラメータ  | `PastProvider(type, round)`。回数 → contest_id は `getPastContestId`                              |
 
 ### 複合ソース型
 
@@ -188,6 +195,7 @@ AOJ/JAG 固有の詳細（`titleStyle`、同一年2回開催の `suffix` 分割�
 4. **addProvider の順序** — 呼び出し順 = 表示順（先 = 上）。新しい回が上に来るように
 5. **分類 regex の拡張** — 新形状の contest_id を追加するとき、regex を広げると `getContestNameLabel`・`AojGenerator.canHandle` にも波及する
 6. **データの無い Provider** — `TaskTable.svelte` は、データの無い Provider でも見出しと空の枠を描画する（`prepareContestTable` が `null` を返して消えるのは行だけ）。データを入れる前に Provider を出すと、空の枠が並ぶ
+7. **ABC の Ex と見出し ID** — `generateTable` は `getTaskTableHeaderName` で記号 Ex（と ABC の H）を `H/Ex` に変えてセルのキーにする。`getHeaderIdsForTask` を `task_table_index` のまま返すように上書きすると、見出しとキーがずれて Ex のセルが空になり、数値比較のソートでは Ex が E と F の間に並ぶ。ABC を含みうる Provider では上書きしない
 
 ---
 
@@ -204,4 +212,4 @@ AOJ/JAG 固有の詳細（`titleStyle`、同一年2回開催の `suffix` 分割�
 
 ---
 
-**最終更新**: 2026-11-09
+**最終更新**: 2026-11-10
