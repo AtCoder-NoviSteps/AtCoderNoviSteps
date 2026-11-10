@@ -54,6 +54,29 @@ describe('JAPANESE_STUDENT_CHAMPIONSHIP_ENTRIES', () => {
     });
   });
 
+  test('maps each letter of jsc2021ex to the ABC problem it reused, matching the maintainer spreadsheet', () => {
+    const problemIdByLetter = Object.fromEntries(
+      contest_task_pairs
+        .filter((pair) => pair.contest_id === 'jsc2021ex')
+        .map((pair) => [pair.problem_index, pair.problem_id]),
+    );
+
+    expect(problemIdByLetter).toEqual({
+      A: 'abc152_b',
+      B: 'abc167_b',
+      C: 'abc188_b',
+      D: 'abc174_b',
+      E: 'abc181_c',
+      F: 'abc155_c',
+      G: 'abc159_c',
+      H: 'abc182_c',
+      I: 'abc150_d',
+      J: 'abc162_d',
+      K: 'abc180_d',
+      L: 'abc167_d',
+    });
+  });
+
   // The seed skips a pair whose task is missing, so a missing ABC problem would only log a warning.
   test('seeds the original task of every contest task pair in the group', () => {
     const seedTaskIds = new Set(tasks.map((task) => task.id));
