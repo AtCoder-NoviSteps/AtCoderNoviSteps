@@ -152,6 +152,34 @@ export const atCoderMainOfficialOnsite = [
     contestId: 'ajo2025-final-open',
     expected: '第二回 AtCoder Japan Open -決勝-',
   }),
+  createTestCaseForContestNameLabel('第一回日本最強プログラマー学生選手権決勝')({
+    contestId: 'jsc2019-final',
+    expected: '第一回日本最強プログラマー学生選手権決勝',
+  }),
+  createTestCaseForContestNameLabel('第二回日本最強プログラマー学生選手権 エキシビジョン')({
+    contestId: 'jsc2021ex',
+    expected: '第二回日本最強プログラマー学生選手権 エキシビジョン',
+  }),
+  createTestCaseForContestNameLabel('第三回日本最強プログラマー学生選手権 -決勝-')({
+    contestId: 'jsc2022-final-open',
+    expected: '第三回日本最強プログラマー学生選手権 -決勝-',
+  }),
+  createTestCaseForContestNameLabel('第四回日本最強プログラマー学生選手権 -決勝-')({
+    contestId: 'jsc2023-final',
+    expected: '第四回日本最強プログラマー学生選手権 -決勝-',
+  }),
+  createTestCaseForContestNameLabel('第五回日本最強プログラマー学生選手権 -決勝-')({
+    contestId: 'jsc2024-final',
+    expected: '第五回日本最強プログラマー学生選手権 -決勝-',
+  }),
+  createTestCaseForContestNameLabel('第六回日本最強プログラマー学生選手権 -決勝-')({
+    contestId: 'jsc2025-final',
+    expected: '第六回日本最強プログラマー学生選手権 -決勝-',
+  }),
+  createTestCaseForContestNameLabel('第七回日本最強プログラマー学生選手権 -決勝-')({
+    contestId: 'jsc2026-final',
+    expected: '第七回日本最強プログラマー学生選手権 -決勝-',
+  }),
 ];
 
 export const mathAndAlgorithm = [

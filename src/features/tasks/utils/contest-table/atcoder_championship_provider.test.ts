@@ -134,6 +134,28 @@ const tasksWtf19: TaskResults = [
   { contest_id: 'wtf19-open', task_id: 'wtf19_e', task_table_index: 'E', title: 'E. e' },
 ] as TaskResults;
 
+// ABC 313 was held as a qualifier; its 8th problem is lettered Ex, not H.
+const tasksAbc313: TaskResults = [
+  { contest_id: 'abc313', task_id: 'abc313_a', task_table_index: 'A', title: 'A. To Be Saikyo' },
+  { contest_id: 'abc313', task_id: 'abc313_b', task_table_index: 'B', title: 'B. Who is Saikyo?' },
+  {
+    contest_id: 'abc313',
+    task_id: 'abc313_c',
+    task_table_index: 'C',
+    title: 'C. Approximate Equalization 2',
+  },
+  { contest_id: 'abc313', task_id: 'abc313_d', task_table_index: 'D', title: 'D. Odd or Even' },
+  { contest_id: 'abc313', task_id: 'abc313_e', task_table_index: 'E', title: 'E. Duplicate' },
+  { contest_id: 'abc313', task_id: 'abc313_f', task_table_index: 'F', title: 'F. Flip Machines' },
+  {
+    contest_id: 'abc313',
+    task_id: 'abc313_g',
+    task_table_index: 'G',
+    title: 'G. Redistribution of Piles',
+  },
+  { contest_id: 'abc313', task_id: 'abc313_h', task_table_index: 'Ex', title: 'Ex. Group Photo' },
+] as TaskResults;
+
 describe('AtCoderChampionshipProvider', () => {
   const providerArc232 = new AtCoderChampionshipProvider({
     contestId: 'arc232',
@@ -236,8 +258,18 @@ describe('AtCoderChampionshipProvider', () => {
       expect(table['nikkei2019-ex']['F'].task_id).toBe('nikkei2019ex_e');
     });
 
-    // generateTable passes contestType to getTaskTableHeaderName, which renames H only for ABC.
+    // generateTable passes contestType to getTaskTableHeaderName, which renames H (ABC only) and Ex to H/Ex.
     test.each([
+      {
+        name: 'an ABC qualifier with problem Ex',
+        entry: {
+          contestId: 'abc313',
+          contestType: ContestType.ABC,
+          title: 'ABC qualifier',
+        },
+        tasks: tasksAbc313,
+        expected: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H/Ex'],
+      },
       {
         name: 'an ARC qualifier',
         entry: { contestId: 'arc232', contestType: ContestType.ARC, title: 'ARC qualifier' },

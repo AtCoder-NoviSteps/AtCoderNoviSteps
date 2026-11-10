@@ -8,7 +8,7 @@
 
 `Task.task_id` は一意で、`Task` 行が持つ `contest_id` は 1 つだけ（以下「本来のコンテスト」）。同じ問題が別のコンテストにも出題されているとき、その「別のコンテストでの登場」を 1 行ずつ `ContestTaskPair` に足す。
 
-例: ABC042-125 と ARC058-103 の共有問題、ABS、鉄則本（`tessoku-book`）、アルゴリズムと数学（`math-and-algorithm`）、ABC-Like、`jsc2025advance-final`。
+例: ABC042-125 と ARC058-103 の共有問題、ABS、鉄則本（`tessoku-book`）、アルゴリズムと数学（`math-and-algorithm`）、ABC-Like、`jsc2025advance-final`、`jsc2021ex`。
 
 本来のコンテストと同じ `(contestId, taskId)` のペアは無視されるので、足す必要はない。
 
