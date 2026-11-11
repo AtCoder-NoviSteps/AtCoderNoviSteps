@@ -132,6 +132,18 @@ export const atCoderMainOfficialOnsite = [
     contestId: 'codequeen2023-final-open',
     expected: 'CodeQUEEN 2023 決勝',
   }),
+  createTestCaseForContestNameLabel('CodeQUEEN 2024 決勝')({
+    contestId: 'codequeen2024-final-N9tn8QqD',
+    expected: 'CodeQUEEN 2024 決勝',
+  }),
+  createTestCaseForContestNameLabel('CodeQUEEN 2025 決勝')({
+    contestId: 'codequeen2025-final-Public',
+    expected: 'CodeQUEEN 2025 決勝',
+  }),
+  createTestCaseForContestNameLabel('CodeQUEEN 2026 決勝')({
+    contestId: 'codequeen2026-final-Public',
+    expected: 'CodeQUEEN 2026 決勝',
+  }),
   createTestCaseForContestNameLabel('全国統一プログラミング王決定戦本戦')({
     contestId: 'nikkei2019-final',
     expected: '全国統一プログラミング王決定戦本戦',

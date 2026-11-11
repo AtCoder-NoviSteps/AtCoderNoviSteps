@@ -678,6 +678,18 @@ export const atCoderMainOfficialOnsite = [
     contestId: 'codequeen2023-final-open',
     expected: ContestType.ATCODER_MAIN_OFFICIAL_ONSITE,
   }),
+  createTestCaseForContestType('CodeQUEEN 2024 決勝')({
+    contestId: 'codequeen2024-final-N9tn8QqD',
+    expected: ContestType.ATCODER_MAIN_OFFICIAL_ONSITE,
+  }),
+  createTestCaseForContestType('CodeQUEEN 2025 決勝')({
+    contestId: 'codequeen2025-final-Public',
+    expected: ContestType.ATCODER_MAIN_OFFICIAL_ONSITE,
+  }),
+  createTestCaseForContestType('CodeQUEEN 2026 決勝')({
+    contestId: 'codequeen2026-final-Public',
+    expected: ContestType.ATCODER_MAIN_OFFICIAL_ONSITE,
+  }),
   createTestCaseForContestType('全国統一プログラミング王決定戦本戦')({
     contestId: 'nikkei2019-final',
     expected: ContestType.ATCODER_MAIN_OFFICIAL_ONSITE,
