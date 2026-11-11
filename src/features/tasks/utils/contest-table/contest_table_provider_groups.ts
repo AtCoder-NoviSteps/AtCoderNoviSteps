@@ -43,6 +43,7 @@ import { AtCoderChampionshipProvider } from './atcoder_championship_provider';
 import { ATCODER_JAPAN_CHAMPIONSHIP_ENTRIES } from './atcoder_japan_championship_entries';
 import { ATCODER_WORLD_TOUR_FINALS_ENTRIES } from './atcoder_world_tour_finals_entries';
 import { JAPANESE_STUDENT_CHAMPIONSHIP_ENTRIES } from './japanese_student_championship_entries';
+import { CODE_QUEEN_ENTRIES } from './code_queen_entries';
 import { PastProvider } from './past_provider';
 import { ContestTableProviderGroup } from './contest_table_provider_group';
 
@@ -195,6 +196,22 @@ export const prepareContestProviderPresets = () => {
       });
       // addProvider order = display order (first = top).
       for (const entry of JAPANESE_STUDENT_CHAMPIONSHIP_ENTRIES) {
+        group.addProvider(new AtCoderChampionshipProvider(entry));
+      }
+
+      return group;
+    },
+
+    /**
+     * Group for CodeQUEEN finals and their ABC qualifiers, one table per contest
+     */
+    CodeQueen: () => {
+      const group = new ContestTableProviderGroup('CodeQUEEN', {
+        buttonLabel: 'CodeQUEEN',
+        ariaLabel: 'Filter CodeQUEEN',
+      });
+      // addProvider order = display order (first = top).
+      for (const entry of CODE_QUEEN_ENTRIES) {
         group.addProvider(new AtCoderChampionshipProvider(entry));
       }
 
@@ -487,6 +504,7 @@ export const contestTableProviderGroups = {
   atcoderWorldTourFinals: presets.AtCoderWorldTourFinals(),
   atcoderJapanChampionship: presets.AtCoderJapanChampionship(),
   japaneseStudentChampionship: presets.JapaneseStudentChampionship(),
+  codeQueen: presets.CodeQueen(),
   typical90: presets.Typical90(),
   tessokuBook: presets.TessokuBook(),
   mathAndAlgorithm: presets.MathAndAlgorithm(),

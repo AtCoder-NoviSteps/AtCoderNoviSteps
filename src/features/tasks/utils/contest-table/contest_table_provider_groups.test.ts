@@ -523,6 +523,28 @@ describe('prepareContestProviderPresets', () => {
       ]);
       expect(group.getProvider(ContestType.ABC, 'abc313')).toBeDefined();
     });
+
+    test('CodeQueen registers one provider per contest in the spreadsheet order', () => {
+      const group = presets.CodeQueen();
+      const providerKeys = group.getAllProviders().map((provider) => provider.getProviderKey());
+
+      expect(group.getGroupName()).toBe('CodeQUEEN');
+      expect(group.getMetadata()).toEqual({
+        buttonLabel: 'CodeQUEEN',
+        ariaLabel: 'Filter CodeQUEEN',
+      });
+      expect(providerKeys).toEqual([
+        'ATCODER_MAIN_OFFICIAL_ONSITE::codequeen2026-final-Public',
+        'ABC::abc462',
+        'ATCODER_MAIN_OFFICIAL_ONSITE::codequeen2025-final-Public',
+        'ABC::abc410',
+        'ATCODER_MAIN_OFFICIAL_ONSITE::codequeen2024-final-N9tn8QqD',
+        'ABC::abc358',
+        'ATCODER_MAIN_OFFICIAL_ONSITE::codequeen2023-final-open',
+        'ABC::abc308',
+      ]);
+      expect(group.getProvider(ContestType.ABC, 'abc308')).toBeDefined();
+    });
   });
 });
 
@@ -539,15 +561,16 @@ describe('contestTableProviderGroups', () => {
     expect(groupKeys.indexOf('arcLike')).toBe(groupKeys.indexOf('abcLike') + 1);
   });
 
-  test('places the AtCoder 世界大会, AtCoder 日本大会 and 日本最強プログラマー学生選手権 buttons right after 旧 ARC and before 競プロ典型 90 問', () => {
+  test('places the AtCoder 世界大会, AtCoder 日本大会, 日本最強プログラマー学生選手権 and CodeQUEEN buttons right after 旧 ARC and before 競プロ典型 90 問', () => {
     const groupKeys = Object.keys(contestTableProviderGroups);
     const index = groupKeys.indexOf('fromArc001ToArc057');
 
-    expect(groupKeys.slice(index, index + 5)).toEqual([
+    expect(groupKeys.slice(index, index + 6)).toEqual([
       'fromArc001ToArc057',
       'atcoderWorldTourFinals',
       'atcoderJapanChampionship',
       'japaneseStudentChampionship',
+      'codeQueen',
       'typical90',
     ]);
   });
