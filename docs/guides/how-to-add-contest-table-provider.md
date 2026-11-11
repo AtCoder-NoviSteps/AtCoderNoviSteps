@@ -111,7 +111,7 @@ AOJ/JAG 固有の詳細（`titleStyle`、同一年2回開催の `suffix` 分割�
 - **contest_id**: 回ごとに形が違う（`wtf19-open` / `awtf2026algo`、`codequeen2024-final-N9tn8QqD` / `codequeen2026-final-Public`）。AtCoder Problems の値をそのまま使う
 - **ABC の問題を流用した回**: Task を持たず、ContestTaskPair だけで表示する（[how-to-add-contest-task-pairs.md](./how-to-add-contest-task-pairs.md)）。ペアが指す ABC の問題が seed に無いと、seed は警告を出してペアを飛ばすので、ABC の問題として seed に足す（足し忘れは `japanese_student_championship_entries.test.ts` で落ちる）
 - **ADT で再出題された問題**: AtCoder Problems では `adt_*` の contest_id と ADT の記号で載るので、task_id から本来の contest_id と記号に戻して seed に足す。管理画面の取り込みは contest_id ごとなので、本番にまだ無い問題は取り込めず、データ migration で入れる（例: `add_codequeen_final_tasks`）
-- **新しい回**: 決勝と予選を seed と配列の両方に足す。各 `*_entries.test.ts` は、シリーズの contest_id（`ajo` / `nikkei2019` / `jsc` / `codequeen` など）の配列への書き漏れと、seed の漏れや問題数・記号のずれで落ちる。予選の ABC / ARC は通常回と contest_id を共有するので、配列に足し忘れてもテストは落ちない
+- **新しい回**: 決勝と予選を seed と配列の両方に足す。各 `*_entries.test.ts` は、シリーズの contest_id（`ajo` / `nikkei2019` / `jsc` / `codequeen` など）の配列への書き漏れと、問題数のずれで落ちる（CodeQUEEN は記号の並びも比べる）。新しい回の予選（ABC / ARC）は通常回と contest_id を共有するので、配列に足し忘れてもテストは落ちない
 
 ### 補足: 固定セクションによる同一 ContestType 内の共存
 
