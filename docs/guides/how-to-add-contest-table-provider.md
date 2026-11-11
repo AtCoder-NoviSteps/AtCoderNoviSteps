@@ -95,26 +95,23 @@ AOJ/JAG 固有の詳細（`titleStyle`、同一年2回開催の `suffix` 分割�
 - **記号**: AOJ は問題 ID の昇順で A, B, C… と振るが、問題が AOJ に無いコンテストではずれる。新しい回はメンテナのスプレッドシートと照合する
 - **AOJ に無い問題**: `NoJudge-{contest_id}_{小文字の記号}` の task_id でダミーを足し、`no_judge.ts` にリンク先（jag-icpc.org のページ）を登録し、コンテストを `LETTERS_OF_SHIFTED_CONTESTS` に入れる。出典欄は `（No Judge）` になる
 
-#### 「AtCoder 世界大会」「AtCoder 日本大会」「日本最強プログラマー学生選手権」も明示的な配列を使う
+#### 「AtCoder 世界大会」「AtCoder 日本大会」「日本最強プログラマー学生選手権」「CodeQUEEN」も明示的な配列を使う
 
-いずれも `AtCoderChampionshipProvider(entry)` を、エントリ `{ contestId, contestType, title }` 1 件につき 1 個作る。`contestType` は provider key（例: `ARC::arc232`）を作り、ABC ではセルのキーにも効く（記号 H を `H/Ex` にする）。見出し ID は基底クラスの `getHeaderIdsForTask` を使うので、セルのキーと揃い、Ex は G の後に並ぶ。
+いずれも `AtCoderChampionshipProvider(entry)` を、エントリ `{ contestId, contestType, title }` 1 件につき 1 個作る。`contestType` は provider key（例: `ARC::arc232`）を作り、ABC ではセルのキーにも効く（記号 H を `H/Ex` にする）。見出し ID は基底クラスの `getHeaderIdsForTask` を使うので、セルのキーと揃い、Ex は G の後に並ぶ。配列の順（新しい順）がそのまま表示順になる。
 
-**AtCoder 日本大会**: AtCoder Japan Open と、その前身の全国統一プログラミング王決定戦の 10 コンテストを並べる（`atcoder_japan_championship_entries.ts`）。予選は ARC（例: `arc186`）や ARC_LIKE（例: `nikkei2019-qual`）のまま残し、決勝とエキシビジョンは `ATCODER_MAIN_OFFICIAL_ONSITE` に分類する。
+| グループ                       | 配列                                       | 予選の ContestType              | グループ固有の点                                                                                                                                                          |
+| ------------------------------ | ------------------------------------------ | ------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| AtCoder 日本大会               | `atcoder_japan_championship_entries.ts`    | ARC / ARC_LIKE                  | -                                                                                                                                                                         |
+| AtCoder 世界大会               | `atcoder_world_tour_finals_entries.ts`     | （予選なし）                    | 分類は `world_tour_finals.ts` の正規表現（Heuristic 部門は対象外、新しい回も分類は変えない）。見出しは `getContestNameLabel` から作るので、配列には contest_id だけを書く |
+| 日本最強プログラマー学生選手権 | `japanese_student_championship_entries.ts` | ABC / ARC / ABC_LIKE / ARC_LIKE | `jsc2021ex` と `jsc2025advance-final` は ABC の問題の流用                                                                                                                 |
+| CodeQUEEN                      | `code_queen_entries.ts`                    | ABC                             | 2024〜2026 の決勝の一部は ADT で再出題された                                                                                                                              |
 
-- **見出し**: ARC の回は `getContestNameLabel` が `ARC 232` を返し、ARC_LIKE にはラベル生成が無いので、エントリに書く
-- **新しい回**: 決勝を `prefixes.ts` の `ATCODER_MAIN_OFFICIAL_ONSITE` に足し、予選の ARC と決勝を seed と配列の両方に足す。`ajo` / `nikkei2019` で始まる contest_id の配列への書き漏れと、配列の contest_id の seed 漏れは `atcoder_japan_championship_entries.test.ts` で落ちる。予選の ARC を配列に足し忘れても、このテストは落ちない
-
-**AtCoder 世界大会**: World Tour Finals の Algorithm 部門を新しい順に並べる（`atcoder_world_tour_finals_entries.ts`）。分類は `world_tour_finals.ts` の正規表現で、Heuristic 部門は対象外。
-
-- **見出し**: `getContestNameLabel`（例: `World Tour Finals 2026 Algorithm`）から作るので、配列には contest_id だけを書く
-- **contest_id**: `-open` が付く回（`wtf19-open`）と付かない回（`wtf22-day2` / `awtf2026algo`）がある。AtCoder Problems の値をそのまま使う
-- **新しい回**: 正規表現が `awtf20XXalgo` を拾うので分類は変えず、seed と配列の両方に足す。配列への書き漏れと seed 漏れは `atcoder_world_tour_finals_entries.test.ts` で落ちる
-
-**日本最強プログラマー学生選手権**: 決勝・予選・エキシビジョンなど 15 コンテストを新しい順に並べる（`japanese_student_championship_entries.ts`）。予選は ABC（例: `abc313`）・ARC（例: `arc222`）・ABC_LIKE（`jsc2021`）・ARC_LIKE（`jsc2019-qual`）のまま残し、決勝とエキシビジョンは `ATCODER_MAIN_OFFICIAL_ONSITE` に分類する。
-
-- **見出し**: 日本大会と同じ理由で、エントリに書く
-- **ABC の問題を流用した回**: `jsc2021ex` と `jsc2025advance-final` は Task を持たず、ContestTaskPair だけで表示する（[how-to-add-contest-task-pairs.md](./how-to-add-contest-task-pairs.md)）。ペアが指す ABC の問題が seed に無いと、seed は警告を出してペアを飛ばすので、ABC の問題として seed に足す
-- **新しい回**: 決勝を `prefixes.ts` の `ATCODER_MAIN_OFFICIAL_ONSITE` に足し、予選と決勝を seed と配列の両方に足す。`jsc` で始まる contest_id の配列への書き漏れ、問題数のずれ、ペアが指す Task の seed 漏れは `japanese_student_championship_entries.test.ts` で落ちる。予選の ABC / ARC を配列に足し忘れても、このテストは落ちない
+- **分類**: 予選は元の ContestType のまま残し、通常回のテーブルにも出す。決勝とエキシビジョンは `prefixes.ts` の `ATCODER_MAIN_OFFICIAL_ONSITE` に足す
+- **見出し**: 世界大会以外はエントリに書く（例: `CodeQUEEN 2026 予選（ABC 462）`）。ABC / ARC の `getContestNameLabel` は `ARC 232` しか返さず、ABC_LIKE / ARC_LIKE にはラベル生成が無い
+- **contest_id**: 回ごとに形が違う（`wtf19-open` / `awtf2026algo`、`codequeen2024-final-N9tn8QqD` / `codequeen2026-final-Public`）。AtCoder Problems の値をそのまま使う
+- **ABC の問題を流用した回**: Task を持たず、ContestTaskPair だけで表示する（[how-to-add-contest-task-pairs.md](./how-to-add-contest-task-pairs.md)）。ペアが指す ABC の問題が seed に無いと、seed は警告を出してペアを飛ばすので、ABC の問題として seed に足す（足し忘れは `japanese_student_championship_entries.test.ts` で落ちる）
+- **ADT で再出題された問題**: AtCoder Problems では `adt_*` の contest_id と ADT の記号で載るので、task_id から本来の contest_id と記号に戻して seed に足す。管理画面の取り込みは contest_id ごとなので、本番にまだ無い問題は取り込めず、データ migration で入れる（例: `add_codequeen_final_tasks`）
+- **新しい回**: 決勝と予選を seed と配列の両方に足す。各 `*_entries.test.ts` は、シリーズの contest_id（`ajo` / `nikkei2019` / `jsc` / `codequeen` など）の配列への書き漏れと、問題数のずれで落ちる（CodeQUEEN は記号の並びも比べる）。新しい回の予選（ABC / ARC）は通常回と contest_id を共有するので、配列に足し忘れてもテストは落ちない
 
 ### 補足: 固定セクションによる同一 ContestType 内の共存
 
@@ -170,6 +167,7 @@ AOJ/JAG 固有の詳細（`titleStyle`、同一年2回開催の `suffix` 分割�
 | AtCoder 日本大会               | 明示的な配列    | AtCoder Japan Open と全国統一プログラミング王決定戦の 10 件。`AtCoderChampionshipProvider(entry)` |
 | AtCoder 世界大会               | 明示的な配列    | World Tour Finals（Algorithm 部門）の 6 件。`AtCoderChampionshipProvider(entry)`                  |
 | 日本最強プログラマー学生選手権 | 明示的な配列    | 決勝・予選・エキシビジョンなど 15 件。`AtCoderChampionshipProvider(entry)`                        |
+| CodeQUEEN                      | 明示的な配列    | 決勝と予選（ABC）の 8 件。`AtCoderChampionshipProvider(entry)`                                    |
 | JOI 一次予選                   | regex           | `joi{YYYY}yo1{a\|b\|c}`                                                                           |
 | JOI 二次予選                   | regex + section | 2020 以降 / 2006-2019 で Provider 分離                                                            |
 | JOI 本選                       | regex           | 2026 年より `ho` → `sf` サフィックス                                                              |
@@ -212,4 +210,4 @@ AOJ/JAG 固有の詳細（`titleStyle`、同一年2回開催の `suffix` 分割�
 
 ---
 
-**最終更新**: 2026-11-10
+**最終更新**: 2026-11-11

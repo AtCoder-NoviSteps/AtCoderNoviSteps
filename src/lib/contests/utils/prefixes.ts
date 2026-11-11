@@ -122,6 +122,9 @@ export const ATCODER_OTHERS: ContestPrefix = {
 // World Tour Finals are matched by regex in labels/world_tour_finals.ts; other onsite finals are listed here.
 export const ATCODER_MAIN_OFFICIAL_ONSITE: ContestPrefix = {
   'codequeen2023-final-open': 'CodeQUEEN 2023 決勝',
+  'codequeen2024-final-N9tn8QqD': 'CodeQUEEN 2024 決勝',
+  'codequeen2025-final-Public': 'CodeQUEEN 2025 決勝',
+  'codequeen2026-final-Public': 'CodeQUEEN 2026 決勝',
   'nikkei2019-final': '全国統一プログラミング王決定戦本戦',
   'nikkei2019-ex': '全国統一プログラミング王決定戦 エキシビジョン',
   'nikkei2019-2-final': '第二回全国統一プログラミング王決定戦本戦',
