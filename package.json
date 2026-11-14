@@ -40,7 +40,7 @@
     "@vercel/vc-native": "65.16.0",
     "@vitest/coverage-v8": "5.1.0",
     "@vitest/ui": "5.1.0",
-    "eslint": "10.14.0",
+    "eslint": "10.15.0",
     "eslint-plugin-svelte": "3.24.1",
     "flowbite": "3.1.2",
     "flowbite-svelte": "1.33.1",
