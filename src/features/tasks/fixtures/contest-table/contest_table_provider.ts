@@ -1170,3 +1170,33 @@ export const taskResultsForAWC0200Provider: TaskResults = [
   awc0200_n,
   awc0200_o,
 ];
+
+// AWC 0201 onwards: 5 tasks (A-E)
+const [awc0201_a, awc0201_b, awc0201_c, awc0201_d, awc0201_e] = createContestTasks('awc0201', [
+  { taskTableIndex: 'A', statusName: AC },
+  { taskTableIndex: 'B', statusName: AC_WITH_EDITORIAL },
+  { taskTableIndex: 'C', statusName: TRYING },
+  { taskTableIndex: 'D', statusName: PENDING },
+  { taskTableIndex: 'E', statusName: PENDING },
+]);
+
+const [awc0202_a, awc0202_b, awc0202_c, awc0202_d, awc0202_e] = createContestTasks('awc0202', [
+  { taskTableIndex: 'A', statusName: AC },
+  { taskTableIndex: 'B', statusName: AC },
+  { taskTableIndex: 'C', statusName: AC_WITH_EDITORIAL },
+  { taskTableIndex: 'D', statusName: TRYING },
+  { taskTableIndex: 'E', statusName: PENDING },
+]);
+
+export const taskResultsForAWC0201OnwardsProvider: TaskResults = [
+  awc0201_a,
+  awc0201_b,
+  awc0201_c,
+  awc0201_d,
+  awc0201_e,
+  awc0202_a,
+  awc0202_b,
+  awc0202_c,
+  awc0202_d,
+  awc0202_e,
+];

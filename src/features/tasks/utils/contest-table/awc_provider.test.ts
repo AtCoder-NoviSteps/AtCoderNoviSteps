@@ -11,6 +11,7 @@ import {
   taskResultsForAWC0150Provider,
   taskResultsForAWC0151To0199Provider,
   taskResultsForAWC0200Provider,
+  taskResultsForAWC0201OnwardsProvider,
 } from '#features/tasks/fixtures/contest-table/contest_table_provider.js';
 
 const allAWCTaskResults: TaskResults = [
@@ -20,6 +21,7 @@ const allAWCTaskResults: TaskResults = [
   ...taskResultsForAWC0150Provider,
   ...taskResultsForAWC0151To0199Provider,
   ...taskResultsForAWC0200Provider,
+  ...taskResultsForAWC0201OnwardsProvider,
 ];
 
 const RANGE_PROBLEMS = ['A', 'B', 'C', 'D', 'E'];
@@ -43,6 +45,23 @@ const SPECIAL_PROBLEMS = [
 
 describe('AWCRangeProvider', () => {
   const rangeProviderCases = [
+    {
+      name: 'AWC0201Onwards',
+      config: {
+        section: '0201Onwards',
+        minRound: 201,
+        maxRound: 9999,
+        title: 'AtCoder Weekday Contest 0201 〜',
+        abbreviationName: 'awc0201Onwards',
+      },
+      includedContestIds: ['awc0201', 'awc0202'],
+      excludedContestIds: ['awc0199', 'awc0200'],
+      fixtureData: taskResultsForAWC0201OnwardsProvider,
+      roundLabelCases: [
+        { contestId: 'awc0201', expected: '0201' },
+        { contestId: 'awc0202', expected: '0202' },
+      ],
+    },
     {
       name: 'AWC0151To0199',
       config: {
