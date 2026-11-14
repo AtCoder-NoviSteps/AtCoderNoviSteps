@@ -10,6 +10,7 @@ import {
   taskResultsForAWC0150Provider,
   taskResultsForAWC0151To0199Provider,
   taskResultsForAWC0200Provider,
+  taskResultsForAWC0201OnwardsProvider,
 } from '#features/tasks/fixtures/contest-table/contest_table_provider.js';
 
 import {
@@ -151,7 +152,7 @@ describe('prepareContestProviderPresets', () => {
   });
 
   describe('multi-provider presets', () => {
-    test('AWC0001Onwards registers 6 providers in display order', () => {
+    test('AWC0001Onwards registers 7 providers in display order', () => {
       const group = presets.AWC0001Onwards();
       const providerKeys = group.getAllProviders().map((provider) => provider.getProviderKey());
 
@@ -161,6 +162,7 @@ describe('prepareContestProviderPresets', () => {
         ariaLabel: 'Filter contests from AWC 0001 onwards',
       });
       expect(providerKeys).toEqual([
+        'AWC::0201Onwards',
         'AWC::0200',
         'AWC::0151To0199',
         'AWC::0150',
@@ -180,6 +182,8 @@ describe('prepareContestProviderPresets', () => {
       { contestId: 'awc0151', providerKey: 'AWC::0151To0199' },
       { contestId: 'awc0199', providerKey: 'AWC::0151To0199' },
       { contestId: 'awc0200', providerKey: 'AWC::0200' },
+      { contestId: 'awc0201', providerKey: 'AWC::0201Onwards' },
+      { contestId: 'awc0202', providerKey: 'AWC::0201Onwards' },
     ])('AWC0001Onwards shows $contestId only in $providerKey', ({ contestId, providerKey }) => {
       const allAWCTaskResults = [
         ...taskResultsForAWC0001To0099Provider,
@@ -188,6 +192,7 @@ describe('prepareContestProviderPresets', () => {
         ...taskResultsForAWC0150Provider,
         ...taskResultsForAWC0151To0199Provider,
         ...taskResultsForAWC0200Provider,
+        ...taskResultsForAWC0201OnwardsProvider,
       ];
       const matchedProviderKeys = presets
         .AWC0001Onwards()
