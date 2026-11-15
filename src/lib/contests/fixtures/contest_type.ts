@@ -273,8 +273,12 @@ export const abcLike = [
     contestId: 'zone2021',
     expected: ContestType.ABC_LIKE,
   }),
-  createTestCaseForContestType('日本最強プログラマー学生選手権～Advance～')({
+  createTestCaseForContestType('第六回日本最強プログラマー学生選手権～Advance～')({
     contestId: 'jsc2025advance-final',
+    expected: ContestType.ABC_LIKE,
+  }),
+  createTestCaseForContestType('第七回日本最強プログラマー学生選手権～Advance～')({
+    contestId: 'jsc2026advance-final',
     expected: ContestType.ABC_LIKE,
   }),
 ];

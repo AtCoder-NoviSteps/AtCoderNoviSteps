@@ -21,7 +21,8 @@ export const ABC_LIKE: ContestPrefix = {
   panasonic2020: 'パナソニックプログラミングコンテスト 2020',
   jsc2021: '第二回日本最強プログラマー学生選手権',
   zone2021: 'ZONeエナジー プログラミングコンテスト "HELLO SPACE"',
-  'jsc2025advance-final': '日本最強プログラマー学生選手権～Advance～',
+  'jsc2025advance-final': '第六回日本最強プログラマー学生選手権～Advance～',
+  'jsc2026advance-final': '第七回日本最強プログラマー学生選手権～Advance～',
 } as const;
 
 export const ARC_LIKE: ContestPrefix = {
