@@ -97,7 +97,7 @@ AOJ/JAG 固有の詳細（`titleStyle`、同一年2回開催の `suffix` 分割�
 
 #### 「AtCoder 世界大会」「AtCoder 日本大会」「日本最強プログラマー学生選手権」「CodeQUEEN」も明示的な配列を使う
 
-いずれも `AtCoderChampionshipProvider(entry)` を、エントリ `{ contestId, contestType, title }` 1 件につき 1 個作る。`contestType` は provider key（例: `ARC::arc232`）を作り、ABC ではセルのキーにも効く（記号 H を `H/Ex` にする）。見出し ID は基底クラスの `getHeaderIdsForTask` を使うので、セルのキーと揃い、Ex は G の後に並ぶ。配列の順（新しい順）がそのまま表示順になる。
+いずれも `AtCoderChampionshipProvider(entry)` を、エントリ `{ contestId, contestType, title }` 1 件につき 1 個作る。`contestType` は provider key（例: `ARC::arc232`）を作り、ABC ではセルのキーにも効く（記号 H を `H/Ex` にする）。見出し ID は基底クラスの `getHeaderIdsForTask` を使うので、セルのキーと揃い、Ex は G の後に並ぶ。配列の順（新しい順）がそのまま表示順になる。同じ大会が複数日あるときは、日は Day1, Day2, Day3 の順に並べる（例: World Tour Finals 2022 は Day1 が上。JAG 夏合宿も同じ）。
 
 | グループ                       | 配列                                       | 予選の ContestType              | グループ固有の点                                                                                                                                                          |
 | ------------------------------ | ------------------------------------------ | ------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |

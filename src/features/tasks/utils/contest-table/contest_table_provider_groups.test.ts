@@ -491,8 +491,8 @@ describe('prepareContestProviderPresets', () => {
         'ATCODER_MAIN_OFFICIAL_ONSITE::awtf2026algo',
         'ATCODER_MAIN_OFFICIAL_ONSITE::awtf2025algo-open',
         'ATCODER_MAIN_OFFICIAL_ONSITE::awtf2024-open',
-        'ATCODER_MAIN_OFFICIAL_ONSITE::wtf22-day2',
         'ATCODER_MAIN_OFFICIAL_ONSITE::wtf22-day1-open',
+        'ATCODER_MAIN_OFFICIAL_ONSITE::wtf22-day2',
         'ATCODER_MAIN_OFFICIAL_ONSITE::wtf19-open',
       ]);
       expect(

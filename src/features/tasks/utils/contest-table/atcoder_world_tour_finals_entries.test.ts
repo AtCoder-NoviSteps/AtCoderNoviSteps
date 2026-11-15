@@ -41,8 +41,8 @@ describe('ATCODER_WORLD_TOUR_FINALS_ENTRIES', () => {
       'World Tour Finals 2026 Algorithm',
       'World Tour Finals 2025 Algorithm',
       'World Tour Finals 2024',
-      'World Tour Finals 2022 Day2',
       'World Tour Finals 2022 Day1',
+      'World Tour Finals 2022 Day2',
       'World Tour Finals 2019',
     ]);
   });
