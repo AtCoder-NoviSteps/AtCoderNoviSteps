@@ -231,8 +231,8 @@ describe('classify contest', () => {
       });
     });
 
-    describe('when contest_id lacks the "-open" suffix seen in most seeded data', () => {
-      test.each(['wtf19', 'wtf22-day1', 'awtf2024', 'awtf2025algo'])(
+    describe('when contest_id carries the "-open" suffix that AtCoder Problems records', () => {
+      test.each(['wtf19-open', 'wtf22-day1-open', 'awtf2024-open', 'awtf2025algo-open'])(
         'still classifies %s as ATCODER_MAIN_OFFICIAL_ONSITE',
         (contestId) => {
           expect(classifyContest(contestId)).toEqual(ContestType.ATCODER_MAIN_OFFICIAL_ONSITE);

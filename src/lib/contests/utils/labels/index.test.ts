@@ -137,6 +137,17 @@ describe('get contest name label', () => {
         });
       });
     });
+
+    describe('when a World Tour Finals contest_id carries the "-open" suffix that AtCoder Problems records', () => {
+      test.each([
+        ['wtf19-open', 'World Tour Finals 2019'],
+        ['wtf22-day1-open', 'World Tour Finals 2022 Day1'],
+        ['awtf2024-open', 'World Tour Finals 2024'],
+        ['awtf2025algo-open', 'World Tour Finals 2025 Algorithm'],
+      ])('labels %s as %s', (contestId, expected) => {
+        expect(getContestNameLabel(contestId)).toBe(expected);
+      });
+    });
   });
 
   describe('AOJ', () => {

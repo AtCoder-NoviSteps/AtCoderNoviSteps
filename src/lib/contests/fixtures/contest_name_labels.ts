@@ -103,27 +103,25 @@ export const atCoderOthers = [
 
 export const atCoderMainOfficialOnsite = [
   createTestCaseForContestNameLabel('World Tour Finals 2019')({
-    contestId: 'wtf19-open',
+    contestId: 'wtf19',
     expected: 'World Tour Finals 2019',
   }),
   createTestCaseForContestNameLabel('World Tour Finals 2022 Day1')({
-    contestId: 'wtf22-day1-open',
+    contestId: 'wtf22-day1',
     expected: 'World Tour Finals 2022 Day1',
   }),
-  // Note: Unlike wtf22-day1, the actual seeded contest_id has no "-open" suffix.
   createTestCaseForContestNameLabel('World Tour Finals 2022 Day2')({
     contestId: 'wtf22-day2',
     expected: 'World Tour Finals 2022 Day2',
   }),
   createTestCaseForContestNameLabel('World Tour Finals 2024')({
-    contestId: 'awtf2024-open',
+    contestId: 'awtf2024',
     expected: 'World Tour Finals 2024',
   }),
   createTestCaseForContestNameLabel('World Tour Finals 2025 Algorithm')({
-    contestId: 'awtf2025algo-open',
+    contestId: 'awtf2025algo',
     expected: 'World Tour Finals 2025 Algorithm',
   }),
-  // Note: Like wtf22-day2, the actual seeded contest_id has no "-open" suffix.
   createTestCaseForContestNameLabel('World Tour Finals 2026 Algorithm')({
     contestId: 'awtf2026algo',
     expected: 'World Tour Finals 2026 Algorithm',

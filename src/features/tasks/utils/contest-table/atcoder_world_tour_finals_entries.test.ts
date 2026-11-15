@@ -28,11 +28,11 @@ describe('ATCODER_WORLD_TOUR_FINALS_ENTRIES', () => {
 
     expect(problemCounts).toEqual({
       awtf2026algo: 5,
-      'awtf2025algo-open': 5,
-      'awtf2024-open': 5,
+      awtf2025algo: 5,
+      awtf2024: 5,
+      'wtf22-day1': 5,
       'wtf22-day2': 5,
-      'wtf22-day1-open': 5,
-      'wtf19-open': 6,
+      wtf19: 6,
     });
   });
 

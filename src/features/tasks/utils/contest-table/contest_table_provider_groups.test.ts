@@ -489,15 +489,13 @@ describe('prepareContestProviderPresets', () => {
       });
       expect(providerKeys).toEqual([
         'ATCODER_MAIN_OFFICIAL_ONSITE::awtf2026algo',
-        'ATCODER_MAIN_OFFICIAL_ONSITE::awtf2025algo-open',
-        'ATCODER_MAIN_OFFICIAL_ONSITE::awtf2024-open',
-        'ATCODER_MAIN_OFFICIAL_ONSITE::wtf22-day1-open',
+        'ATCODER_MAIN_OFFICIAL_ONSITE::awtf2025algo',
+        'ATCODER_MAIN_OFFICIAL_ONSITE::awtf2024',
+        'ATCODER_MAIN_OFFICIAL_ONSITE::wtf22-day1',
         'ATCODER_MAIN_OFFICIAL_ONSITE::wtf22-day2',
-        'ATCODER_MAIN_OFFICIAL_ONSITE::wtf19-open',
+        'ATCODER_MAIN_OFFICIAL_ONSITE::wtf19',
       ]);
-      expect(
-        group.getProvider(ContestType.ATCODER_MAIN_OFFICIAL_ONSITE, 'wtf19-open'),
-      ).toBeDefined();
+      expect(group.getProvider(ContestType.ATCODER_MAIN_OFFICIAL_ONSITE, 'wtf19')).toBeDefined();
     });
 
     test('JapaneseStudentChampionship registers one provider per contest in the spreadsheet order', () => {
