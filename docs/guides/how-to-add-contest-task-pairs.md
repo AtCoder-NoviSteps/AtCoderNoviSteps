@@ -51,7 +51,7 @@
 
 ### データ migration
 
-空の migration（`prisma migrate dev --create-only`）に `INSERT ... ON CONFLICT ("contestId", "taskId") DO NOTHING` を書き、`id`（`CAST(gen_random_uuid() AS TEXT)`）と `updatedAt` を明示する（例: `add_jsc2026advance_final_contest_task_pairs`）。CI がデプロイ前に流すので、手作業もキャッシュの遅れも無い。
+空の migration（`prisma migrate dev --create-only`）に `INSERT ... ON CONFLICT ("contestId", "taskId") DO NOTHING` を書き、`id`（`CAST(gen_random_uuid() AS TEXT)`）と `updatedAt` を明示する（例: `add_jsc2026advance_final_contest_task_pairs`）。CI がデプロイ前に流し、新しいデプロイはメモリキャッシュが空で始まるので、手作業もキャッシュの遅れも無い。
 
 ### Supabase CSV
 
