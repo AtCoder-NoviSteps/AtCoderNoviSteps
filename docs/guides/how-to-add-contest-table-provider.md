@@ -97,7 +97,7 @@ AOJ/JAG 固有の詳細（`titleStyle`、同一年2回開催の `suffix` 分割�
 
 #### 「AtCoder 世界大会」「AtCoder 日本大会」「日本最強プログラマー学生選手権」「CodeQUEEN」も明示的な配列を使う
 
-いずれも `AtCoderChampionshipProvider(entry)` を、エントリ `{ contestId, contestType, title }` 1 件につき 1 個作る。`contestType` は provider key（例: `ARC::arc232`）を作り、ABC ではセルのキーにも効く（記号 H を `H/Ex` にする）。見出し ID は基底クラスの `getHeaderIdsForTask` を使うので、セルのキーと揃い、Ex は G の後に並ぶ。配列の順（新しい順）がそのまま表示順になる。同じ大会が複数日あるときは、日は Day1, Day2, Day3 の順に並べる（例: World Tour Finals 2022 は Day1 が上。JAG 夏合宿も同じ）。
+いずれも `AtCoderChampionshipProvider(entry)` を、エントリ `{ contestId, contestType, title }` 1 件につき 1 個作る。`contestType` は provider key（例: `ARC::arc232`）を作り、ABC ではセルのキーにも効く（記号 H を `H/Ex` にする）。見出し ID は基底クラスの `getHeaderIdsForTask` を使うので、セルのキーと揃い、Ex は G の後に並ぶ。配列の順（新しい順）がそのまま表示順になる。同じ大会の複数日は Day1, Day2, … の順にする（World Tour Finals 2022、JAG 夏合宿）。
 
 | グループ                       | 配列                                       | 予選の ContestType              | グループ固有の点                                                                                                                                                          |
 | ------------------------------ | ------------------------------------------ | ------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -109,7 +109,7 @@ AOJ/JAG 固有の詳細（`titleStyle`、同一年2回開催の `suffix` 分割�
 - **分類**: 予選は元の ContestType のまま残し、通常回のテーブルにも出す。決勝とエキシビジョンは `prefixes.ts` の `ATCODER_MAIN_OFFICIAL_ONSITE` に足す
 - **見出し**: 世界大会以外はエントリに書く（例: `CodeQUEEN 2026 予選（ABC 462）`）。ABC / ARC の `getContestNameLabel` は `ARC 232` しか返さず、ABC_LIKE / ARC_LIKE にはラベル生成が無い
 - **contest_id**: 回ごとに形が違う（`wtf19` / `awtf2026algo`、`codequeen2024-final-N9tn8QqD` / `codequeen2026-final-Public`）。AtCoder Problems の値を使うが、世界大会は本体のページから提出できるので `-open` を外す（task_id は共通）。管理画面の取り込みでは `-open` 付きで入るので、データ migration で直す（例: `remove_open_suffix_from_wtf_contest_ids`）
-- **ABC の問題を流用した回**: Task を持たず、ContestTaskPair だけで表示する（[how-to-add-contest-task-pairs.md](./how-to-add-contest-task-pairs.md)）。ペアが指す ABC の問題が seed に無いと、seed は警告を出してペアを飛ばすので、ABC の問題として seed に足す（足し忘れは `japanese_student_championship_entries.test.ts` で落ちる）。流用した回の contest_id も分類に足す（例: `jsc2026advance-final` は `prefixes.ts` の `ABC_LIKE`）。分類が `null` だとペアは黙って捨てられる。本番のペアはデータ migration で入れる（例: `add_jsc2026advance_final_contest_task_pairs`）
+- **ABC の問題を流用した回**: Task を持たず、ContestTaskPair だけで表示する（[how-to-add-contest-task-pairs.md](./how-to-add-contest-task-pairs.md)）。ペアが指す ABC の問題が seed に無いと、seed は警告を出してペアを飛ばすので、ABC の問題として seed に足す（足し忘れは `japanese_student_championship_entries.test.ts` で落ちる）。流用した回の contest_id も分類に足す（例: `jsc2026advance-final` は `ABC_LIKE`）
 - **ADT で再出題された問題**: AtCoder Problems では `adt_*` の contest_id と ADT の記号で載るので、task_id から本来の contest_id と記号に戻して seed に足す。管理画面の取り込みは contest_id ごとなので、本番にまだ無い問題は取り込めず、データ migration で入れる（例: `add_codequeen_final_tasks`）
 - **新しい回**: 決勝と予選を seed と配列の両方に足す。各 `*_entries.test.ts` は、シリーズの contest_id（`ajo` / `nikkei2019` / `jsc` / `codequeen` など）の配列への書き漏れと、問題数のずれで落ちる（CodeQUEEN は記号の並びも比べる）。新しい回の予選（ABC / ARC）は通常回と contest_id を共有するので、配列に足し忘れてもテストは落ちない
 

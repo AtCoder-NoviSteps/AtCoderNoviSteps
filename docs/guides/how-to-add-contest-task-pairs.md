@@ -51,11 +51,7 @@
 
 ### データ migration
 
-`pnpm exec prisma migrate dev --create-only --name <description>` で空の migration を作り、`INSERT ... ON CONFLICT ("contestId", "taskId") DO NOTHING` を書く（例: `add_jsc2026advance_final_contest_task_pairs`）。
-
-- main へのマージで CI が流すので、手作業が要らず、PR でレビューできる。デプロイ前に流れるので、キャッシュが古いまま残ることも無い
-- `id` は `CAST(gen_random_uuid() AS TEXT)`、`updatedAt` は `CURRENT_TIMESTAMP` を明示する（DB に既定値が無い）
-- `ON CONFLICT` にしておけば、seed で先に入った開発環境では何も変えない
+空の migration（`prisma migrate dev --create-only`）に `INSERT ... ON CONFLICT ("contestId", "taskId") DO NOTHING` を書き、`id`（`CAST(gen_random_uuid() AS TEXT)`）と `updatedAt` を明示する（例: `add_jsc2026advance_final_contest_task_pairs`）。CI がデプロイ前に流すので、手作業もキャッシュの遅れも無い。
 
 ### Supabase CSV
 
