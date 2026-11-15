@@ -36,9 +36,12 @@ describe('JAPANESE_STUDENT_CHAMPIONSHIP_ENTRIES', () => {
     );
 
     expect(problemCounts).toEqual({
+      'jsc2026advance-final': 7,
+      abc464: 7,
       'jsc2026-final': 7,
       arc222: 6,
       'jsc2025advance-final': 7,
+      abc412: 7,
       'jsc2025-final': 6,
       arc201: 6,
       'jsc2024-final': 6,

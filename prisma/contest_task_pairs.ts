@@ -950,6 +950,41 @@ export const contest_task_pairs = [
     problem_index: 'C',
   },
   {
+    contest_id: 'jsc2026advance-final',
+    problem_id: 'abc474_g',
+    problem_index: 'G',
+  },
+  {
+    contest_id: 'jsc2026advance-final',
+    problem_id: 'abc474_f',
+    problem_index: 'F',
+  },
+  {
+    contest_id: 'jsc2026advance-final',
+    problem_id: 'abc474_e',
+    problem_index: 'E',
+  },
+  {
+    contest_id: 'jsc2026advance-final',
+    problem_id: 'abc474_d',
+    problem_index: 'D',
+  },
+  {
+    contest_id: 'jsc2026advance-final',
+    problem_id: 'abc474_c',
+    problem_index: 'C',
+  },
+  {
+    contest_id: 'jsc2026advance-final',
+    problem_id: 'abc474_b',
+    problem_index: 'B',
+  },
+  {
+    contest_id: 'jsc2026advance-final',
+    problem_id: 'abc474_a',
+    problem_index: 'A',
+  },
+  {
     contest_id: 'jsc2025advance-final',
     problem_id: 'abc422_g',
     problem_index: 'G',

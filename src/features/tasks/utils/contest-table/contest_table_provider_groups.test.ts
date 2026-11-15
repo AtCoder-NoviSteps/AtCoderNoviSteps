@@ -510,9 +510,12 @@ describe('prepareContestProviderPresets', () => {
         ariaLabel: 'Filter Japanese Student Championship',
       });
       expect(providerKeys).toEqual([
+        'ABC_LIKE::jsc2026advance-final',
+        'ABC::abc464',
         'ATCODER_MAIN_OFFICIAL_ONSITE::jsc2026-final',
         'ARC::arc222',
         'ABC_LIKE::jsc2025advance-final',
+        'ABC::abc412',
         'ATCODER_MAIN_OFFICIAL_ONSITE::jsc2025-final',
         'ARC::arc201',
         'ATCODER_MAIN_OFFICIAL_ONSITE::jsc2024-final',
