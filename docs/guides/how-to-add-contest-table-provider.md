@@ -137,6 +137,7 @@ AOJ/JAG 固有の詳細（`titleStyle`、同一年2回開催の `suffix` 分割�
 | AWC 0001-0099 | 0001～0099 | A～E       | -             |
 | AWC 0101-0149 | 0101～0149 | A～E       | -             |
 | AWC 0151-0199 | 0151～0199 | A～E       | -             |
+| AWC 0201-     | 0201～     | A～E       | -             |
 
 ### 単一ソース型
 
@@ -152,7 +153,7 @@ AOJ/JAG 固有の詳細（`titleStyle`、同一年2回開催の `suffix` 分割�
 | ACL_BEGINNER / ACL_CONTEST1  | `'abl'`/`'acl1'`                    | 6問    | A～F         |
 | AWC0100 / AWC0150 / AWC0200† | `'awc0100'`/`'awc0150'`/`'awc0200'` | 15問   | A～O         |
 
-†注: ContestType.AWC を再利用し、section（`'0100'`, `'0150'`, `'0200'`, `'0151To0199'`）で provider key を一意化。ACL 系は `Acl` グループ、DP 系と x 24 題系（FPS_24 / GAME_24 / AALC）は `dps` グループで統一管理。
+†注: ContestType.AWC を再利用し、section（`'0100'`, `'0150'`, `'0200'`, `'0151To0199'`, `'0201Onwards'`）で provider key を一意化。ACL 系は `Acl` グループ、DP 系と x 24 題系（FPS_24 / GAME_24 / AALC）は `dps` グループで統一管理。
 
 ‡注: task_id は `game_a`〜`game_x` で、contest_id の数字を含まない（`fps-24` は `fps_24_a`）。
 
@@ -210,4 +211,4 @@ AOJ/JAG 固有の詳細（`titleStyle`、同一年2回開催の `suffix` 分割�
 
 ---
 
-**最終更新**: 2026-11-11
+**最終更新**: 2026-11-14
