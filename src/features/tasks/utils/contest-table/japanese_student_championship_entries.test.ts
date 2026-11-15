@@ -80,6 +80,67 @@ describe('JAPANESE_STUDENT_CHAMPIONSHIP_ENTRIES', () => {
     });
   });
 
+  test.each([
+    {
+      contestId: 'jsc2025advance-final',
+      expected: {
+        A: 'abc422_a',
+        B: 'abc422_b',
+        C: 'abc422_c',
+        D: 'abc422_d',
+        E: 'abc422_e',
+        F: 'abc422_f',
+        G: 'abc422_g',
+      },
+    },
+    {
+      contestId: 'jsc2026advance-final',
+      expected: {
+        A: 'abc474_a',
+        B: 'abc474_b',
+        C: 'abc474_c',
+        D: 'abc474_d',
+        E: 'abc474_e',
+        F: 'abc474_f',
+        G: 'abc474_g',
+      },
+    },
+  ])(
+    'maps each letter of $contestId to the same letter of the ABC it reused',
+    ({ contestId, expected }) => {
+      const problemIdByLetter = Object.fromEntries(
+        contest_task_pairs
+          .filter((pair) => pair.contest_id === contestId)
+          .map((pair) => [pair.problem_index, pair.problem_id]),
+      );
+
+      expect(problemIdByLetter).toEqual(expected);
+    },
+  );
+
+  test('titles each table as the maintainer specified', () => {
+    expect(JAPANESE_STUDENT_CHAMPIONSHIP_ENTRIES.map((entry) => entry.title)).toEqual([
+      '第七回日本最強プログラマー学生選手権～Advance～（ABC 474）',
+      '第七回日本最強プログラマー学生選手権～Advance～ -予選-（ABC 464）',
+      '第七回日本最強プログラマー学生選手権 -決勝-',
+      '第七回日本最強プログラマー学生選手権 -予選-（ARC 222）',
+      '第六回日本最強プログラマー学生選手権～Advance～（ABC 422）',
+      '第六回日本最強プログラマー学生選手権～Advance～ -予選-（ABC 412）',
+      '第六回日本最強プログラマー学生選手権 -決勝-',
+      '第六回日本最強プログラマー学生選手権 -予選-（ARC 201）',
+      '第五回日本最強プログラマー学生選手権 -決勝-',
+      '第五回日本最強プログラマー学生選手権 -予選-（ARC 180）',
+      '第四回日本最強プログラマー学生選手権 -決勝-',
+      '第四回日本最強プログラマー学生選手権 -予選-（ABC 313）',
+      '第三回日本最強プログラマー学生選手権 -決勝-',
+      '第三回日本最強プログラマー学生選手権 -予選-（ABC 262）',
+      '第二回日本最強プログラマー学生選手権 エキシビジョン',
+      '第二回日本最強プログラマー学生選手権（ABC-like）',
+      '第一回日本最強プログラマー学生選手権決勝',
+      '第一回日本最強プログラマー学生選手権-予選-（ARC-like）',
+    ]);
+  });
+
   // The seed skips a pair whose task is missing, so a missing ABC problem would only log a warning.
   test('seeds the original task of every contest task pair in the group', () => {
     const seedTaskIds = new Set(tasks.map((task) => task.id));
