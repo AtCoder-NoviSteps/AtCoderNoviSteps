@@ -2,9 +2,19 @@ import { ContestType } from '#lib/contests/types/contest.js';
 
 import type { AtCoderChampionshipEntries } from './atcoder_championship_provider';
 
-// Newest first, following the maintainer's spreadsheet (jsc2025advance-final placed by the maintainer);
+// Newest first, following the maintainer's spreadsheet (each Advance final and its qualifier sit above that year's final);
 // qualifiers held as ABC / ARC rounds sit between finals, so contest ids cannot give this order.
 export const JAPANESE_STUDENT_CHAMPIONSHIP_ENTRIES: Readonly<AtCoderChampionshipEntries> = [
+  {
+    contestId: 'jsc2026advance-final',
+    contestType: ContestType.ABC_LIKE,
+    title: '第七回日本最強プログラマー学生選手権～Advance～（ABC 474）',
+  },
+  {
+    contestId: 'abc464',
+    contestType: ContestType.ABC,
+    title: '第七回日本最強プログラマー学生選手権～Advance～ -予選-（ABC 464）',
+  },
   {
     contestId: 'jsc2026-final',
     contestType: ContestType.ATCODER_MAIN_OFFICIAL_ONSITE,
@@ -18,7 +28,12 @@ export const JAPANESE_STUDENT_CHAMPIONSHIP_ENTRIES: Readonly<AtCoderChampionship
   {
     contestId: 'jsc2025advance-final',
     contestType: ContestType.ABC_LIKE,
-    title: '日本最強プログラマー学生選手権～Advance～',
+    title: '第六回日本最強プログラマー学生選手権～Advance～（ABC 422）',
+  },
+  {
+    contestId: 'abc412',
+    contestType: ContestType.ABC,
+    title: '第六回日本最強プログラマー学生選手権～Advance～ -予選-（ABC 412）',
   },
   {
     contestId: 'jsc2025-final',

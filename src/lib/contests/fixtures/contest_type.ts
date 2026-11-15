@@ -273,8 +273,12 @@ export const abcLike = [
     contestId: 'zone2021',
     expected: ContestType.ABC_LIKE,
   }),
-  createTestCaseForContestType('日本最強プログラマー学生選手権～Advance～')({
+  createTestCaseForContestType('第六回日本最強プログラマー学生選手権～Advance～')({
     contestId: 'jsc2025advance-final',
+    expected: ContestType.ABC_LIKE,
+  }),
+  createTestCaseForContestType('第七回日本最強プログラマー学生選手権～Advance～')({
+    contestId: 'jsc2026advance-final',
     expected: ContestType.ABC_LIKE,
   }),
 ];
@@ -649,27 +653,25 @@ export const atCoderOthers = [
 
 export const atCoderMainOfficialOnsite = [
   createTestCaseForContestType('World Tour Finals 2019')({
-    contestId: 'wtf19-open',
+    contestId: 'wtf19',
     expected: ContestType.ATCODER_MAIN_OFFICIAL_ONSITE,
   }),
   createTestCaseForContestType('World Tour Finals 2022 Day1')({
-    contestId: 'wtf22-day1-open',
+    contestId: 'wtf22-day1',
     expected: ContestType.ATCODER_MAIN_OFFICIAL_ONSITE,
   }),
-  // Note: Unlike wtf22-day1, the actual seeded contest_id has no "-open" suffix.
   createTestCaseForContestType('World Tour Finals 2022 Day2')({
     contestId: 'wtf22-day2',
     expected: ContestType.ATCODER_MAIN_OFFICIAL_ONSITE,
   }),
   createTestCaseForContestType('World Tour Finals 2024')({
-    contestId: 'awtf2024-open',
+    contestId: 'awtf2024',
     expected: ContestType.ATCODER_MAIN_OFFICIAL_ONSITE,
   }),
   createTestCaseForContestType('World Tour Finals 2025 Algorithm')({
-    contestId: 'awtf2025algo-open',
+    contestId: 'awtf2025algo',
     expected: ContestType.ATCODER_MAIN_OFFICIAL_ONSITE,
   }),
-  // Note: Like wtf22-day2, the actual seeded contest_id has no "-open" suffix.
   createTestCaseForContestType('World Tour Finals 2026 Algorithm')({
     contestId: 'awtf2026algo',
     expected: ContestType.ATCODER_MAIN_OFFICIAL_ONSITE,

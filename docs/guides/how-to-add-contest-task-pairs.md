@@ -8,7 +8,7 @@
 
 `Task.task_id` は一意で、`Task` 行が持つ `contest_id` は 1 つだけ（以下「本来のコンテスト」）。同じ問題が別のコンテストにも出題されているとき、その「別のコンテストでの登場」を 1 行ずつ `ContestTaskPair` に足す。
 
-例: ABC042-125 と ARC058-103 の共有問題、ABS、鉄則本（`tessoku-book`）、アルゴリズムと数学（`math-and-algorithm`）、ABC-Like、`jsc2025advance-final`、`jsc2021ex`。
+例: ABC042-125 と ARC058-103 の共有問題、ABS、鉄則本（`tessoku-book`）、アルゴリズムと数学（`math-and-algorithm`）、ABC-Like、`jsc2025advance-final`、`jsc2026advance-final`、`jsc2021ex`。
 
 本来のコンテストと同じ `(contestId, taskId)` のペアは無視されるので、足す必要はない。
 
@@ -35,7 +35,7 @@
 2. **分類**: `classifyContest(contestId)` が正しい `ContestType` を返すこと。`null` だとペアは黙って捨てられる
 3. **データ**: `prisma/contest_task_pairs.ts` に行を足す。フィールド名は AtCoder Problems の `contest-problem.json` と同じ形で、DB の列名とは異なる
 4. **テーブル**: 新しい表示先が必要なら Provider を追加する（[how-to-add-contest-table-provider.md](./how-to-add-contest-table-provider.md)）
-5. **検証用・本番環境**: Supabase に CSV で取り込む（次節）
+5. **検証用・本番環境**: データ migration で入れるか、Supabase に CSV で取り込む（次節）
 
 | `contest_task_pairs.ts` | DB 列（`contesttaskpair`） | 例             |
 | ----------------------- | -------------------------- | -------------- |
@@ -45,9 +45,17 @@
 
 ---
 
-## 検証用・本番環境への投入（Supabase CSV）
+## 検証用・本番環境への投入
 
-管理画面からは取り込めない。Supabase Dashboard の Table Editor で `contesttaskpair` テーブルを開き、CSV を Import する。
+管理画面からは取り込めない。
+
+### データ migration
+
+空の migration（`prisma migrate dev --create-only`）に `INSERT ... ON CONFLICT ("contestId", "taskId") DO NOTHING` を書き、`id`（`CAST(gen_random_uuid() AS TEXT)`）と `updatedAt` を明示する（例: `add_jsc2026advance_final_contest_task_pairs`）。CI がデプロイ前に流し、新しいデプロイはメモリキャッシュが空で始まるので、手作業もキャッシュの遅れも無い。
+
+### Supabase CSV
+
+Supabase Dashboard の Table Editor で `contesttaskpair` テーブルを開き、CSV を Import する。
 
 - `id`・`createdAt`・`updatedAt` は手元で生成して CSV に必ず含める。`id`（`@default(uuid())`）と `updatedAt`（`@updatedAt`）は Prisma Client 側で埋める値で、DB に既定値が無い。`createdAt` には DB 既定値（`CURRENT_TIMESTAMP`）があるが、Supabase の CSV 取り込みでは自動で入らなかった
 - 日時は `YYYY-MM-DD HH:MM:SS.mmm`（ミリ秒まで）の形式で入れる
@@ -106,4 +114,4 @@ data_frame.write_csv("contest_task_pairs_for_import.csv")
 
 ---
 
-**最終更新**: 2026-10-26
+**最終更新**: 2026-11-15
