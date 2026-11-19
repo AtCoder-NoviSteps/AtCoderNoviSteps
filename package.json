@@ -28,7 +28,7 @@
     "@playwright/test": "1.65.1",
     "@quramy/prisma-fabbrica": "2.3.3",
     "@sveltejs/adapter-vercel": "7.0.4",
-    "@sveltejs/kit": "3.3.0",
+    "@sveltejs/kit": "3.3.1",
     "@sveltejs/vite-plugin-svelte": "7.3.1",
     "@tailwindcss/forms": "0.5.11",
     "@tailwindcss/vite": "4.3.5",
