@@ -190,8 +190,8 @@ importers:
         specifier: 0.5.3
         version: 0.5.3(svelte@5.58.0(@typescript-eslint/types@8.73.0))
       '@lucide/svelte':
-        specifier: 1.75.0
-        version: 1.75.0(svelte@5.58.0(@typescript-eslint/types@8.73.0))
+        specifier: 1.76.0
+        version: 1.76.0(svelte@5.58.0(@typescript-eslint/types@8.73.0))
       '@prisma/client':
         specifier: 5.22.0
         version: 5.22.0(prisma@5.22.0)
@@ -665,8 +665,8 @@ packages:
   '@keyv/serialize@1.1.1':
     resolution: {integrity: sha512-dXn3FZhPv0US+7dtJsIi2R+c7qWYiReoEh5zUntWCf4oSpMNib8FDhSoed6m3QyZdx5hK7iLFkYk3rNxwt8vTA==}
 
-  '@lucide/svelte@1.75.0':
-    resolution: {integrity: sha512-iGFP2m718jy26FrCXMxSbzz8WCDL4kx5lWN2jeXg1jzM0GcSLoQ9ygzDF++bpUjw5WHXNVCw90lBh0mvTAih+Q==}
+  '@lucide/svelte@1.76.0':
+    resolution: {integrity: sha512-cDlhnZsqXm/ktY7ZBir7baKJhvSRRADQe7iZyMYks5qeZeQqTfeH9M+BVsyInt3DrERBYiPrfxf5RmRSgPnUzA==}
     peerDependencies:
       svelte: ^5
 
@@ -3248,7 +3248,7 @@ snapshots:
 
   '@keyv/serialize@1.1.1': {}
 
-  '@lucide/svelte@1.75.0(svelte@5.58.0(@typescript-eslint/types@8.73.0))':
+  '@lucide/svelte@1.76.0(svelte@5.58.0(@typescript-eslint/types@8.73.0))':
     dependencies:
       svelte: 5.58.0(@typescript-eslint/types@8.73.0)
 
