@@ -202,8 +202,8 @@ importers:
         specifier: 10.0.0
         version: 10.0.0
       tailwind-merge:
-        specifier: 3.7.0
-        version: 3.7.0
+        specifier: 3.7.1
+        version: 3.7.1
       xss:
         specifier: 1.0.17
         version: 1.0.17
@@ -2664,8 +2664,8 @@ packages:
       '@sveltejs/kit': ^2.12.0 || ^3.0.0
       svelte: ^5.56.4
 
-  tailwind-merge@3.7.0:
-    resolution: {integrity: sha512-XPPUyAc+cvspz3lHTcR/QgPfW2A0lv/xQNIjX3HGhLR+Nq2lHaLq5MtTesHn8GUr3W3DguT2KT5x3NVgRtYwmA==}
+  tailwind-merge@3.7.1:
+    resolution: {integrity: sha512-v7y4BV4FUlO8exj/4M5UXKeoowDiuugVUg3tkMNIyOUCOHy5xp8+5aWQeXCtZ2491sUV1YPsVeM9EveZ6/xuZQ==}
 
   tailwind-variants@3.3.1:
     resolution: {integrity: sha512-4pAvwUtM4HKBiRZftncAbpn6V9Hhwoa5Fl7O2u5zbp7Z5Cvu+/o/6+176WY3WCEES209543quG8zFIcXCsc5Jw==}
@@ -4431,8 +4431,8 @@ snapshots:
       esm-env: 1.2.2
       flowbite: 3.1.2
       svelte: 5.58.0(@typescript-eslint/types@8.73.0)
-      tailwind-merge: 3.7.0
-      tailwind-variants: 3.3.1(tailwind-merge@3.7.0)(tailwindcss@4.3.5)
+      tailwind-merge: 3.7.1
+      tailwind-variants: 3.3.1(tailwind-merge@3.7.1)(tailwindcss@4.3.5)
       tailwindcss: 4.3.5
     transitivePeerDependencies:
       - rollup
@@ -5153,11 +5153,11 @@ snapshots:
       - '@types/json-schema'
       - typescript
 
-  tailwind-merge@3.7.0: {}
+  tailwind-merge@3.7.1: {}
 
-  tailwind-variants@3.3.1(tailwind-merge@3.7.0)(tailwindcss@4.3.5):
+  tailwind-variants@3.3.1(tailwind-merge@3.7.1)(tailwindcss@4.3.5):
     optionalDependencies:
-      tailwind-merge: 3.7.0
+      tailwind-merge: 3.7.1
       tailwindcss: 4.3.5
 
   tailwindcss@4.3.5: {}

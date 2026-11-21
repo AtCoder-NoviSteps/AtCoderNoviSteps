@@ -79,7 +79,7 @@
     "@prisma/client": "5.22.0",
     "debug": "4.4.3",
     "p-queue": "10.0.0",
-    "tailwind-merge": "3.7.0",
+    "tailwind-merge": "3.7.1",
     "xss": "1.0.17"
   },
   "packageManager": "pnpm@12.21.0",
