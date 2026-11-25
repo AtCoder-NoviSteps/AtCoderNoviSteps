@@ -37,7 +37,7 @@
     "@types/node": "26.6.6",
     "@typescript-eslint/eslint-plugin": "8.74.0",
     "@typescript-eslint/parser": "8.74.0",
-    "@vercel/vc-native": "66.6.0",
+    "@vercel/vc-native": "67.0.0",
     "@vitest/coverage-v8": "5.1.1",
     "@vitest/ui": "5.1.1",
     "eslint": "10.15.0",
