@@ -29,4 +29,4 @@ export const GITHUB_URL: string = 'https://github.com/AtCoder-NoviSteps/AtCoderN
 export const GITHUB_SPONSORS_URL: string = 'https://github.com/sponsors/KATO-Hiro';
 
 export const TASK_GRADE_CRITERIA_SHEET_URL: string =
-  'https://docs.google.com/spreadsheets/d/1GJbTRRBsoBaY-CXIr3dIXmxkwacV4nHOTOIMCmo__Ug/';
+  'https://docs.google.com/spreadsheets/d/1s16tFRvwbzUkp0EccO3f0R69ABQbMi4Hh1T_dr3ndjg';
