@@ -50,4 +50,4 @@ overrides:
   # Crosses a major on purpose: @prisma/config 6.x pins 7.1.5; remove with @quramy/prisma-fabbrica
   'deepmerge-ts@<8.0.0': '8.0.2'
   # moderate
-  'postcss@>=8.0.0 <8.5.10': '8.5.33'
+  'postcss@>=8.0.0 <8.5.10': '8.5.34'
